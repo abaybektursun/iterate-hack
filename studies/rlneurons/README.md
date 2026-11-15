@@ -779,7 +779,36 @@ cannot read, e.g. 135, 165, 447); one is a math fix (372, 75 -> 90). Every break
 156; RL 71, 193, 236). RL fixes none of its 35 wrong finished drafts. Raw rows in frustea's Modal Volume
 `iterate-runs/<job>/answers.jsonl`; drafts in `iterate-runs/inputs/critique/` (`prep/critique_drafts.py`).
 
-## Solved examples in context: who wrote them decides the gain (shots1, board work-be7af1)
+## Solved examples in context: no gain that survives a second draw or the 328 (shots1, board work-be7af1)
+
+**Correction (2026-11-15 05:20 UTC).** The first draw below gave +5.6 points for RL-written examples (result-6d422d). A second
+draw of 3 examples (MATH-500 problems 3, 5, 6, same rule, `data/shots1/{base_b,rl_b}.json`) gave none, and the first draw gave
+none on the 328. Counts on the 494 MATH-500 problems that are no example of any arm (`results/shots1b/readout.json`):
+
+| cell | right of 494 | vs no examples (points, 95 %) | cap hits | generated tokens per problem |
+|---|---|---|---|---|
+| base, cue, no examples (T1) | 404 | | 27 | 3,966 |
+| base-written, draw 1 | 411 | +1.4 [-2.0, 4.7] | 17 | 3,395 |
+| base-written, draw 2 | 403 | -0.2 [-3.9, 3.4] | 16 | 3,741 |
+| Code-RL-written, draw 1 | 409 | +1.0 [-2.6, 4.5] | 19 | 3,848 |
+| Math-RL-written, draw 1 | 432 | +5.7 [2.6, 8.7] | 31 | 4,418 |
+| Math-RL-written, draw 2 | 401 | -0.6 [-4.5, 3.2] | 32 | 4,361 |
+
+RL-written draw 1 minus draw 2: +6.3 [2.6, 9.9]. So the gain belongs to those three texts, not to their writer. On the 328
+(`results/shots1b/hard328_rl-01/readout.json`, seed 3000000, paired with the cued base's job -151534-e72c): RL-written draw 1
+164 of 328 against 164, 0.0 [-4.3, 4.3]; 26 problems only with examples, 26 only without; cap hits 107 against 77; generated
+tokens 9,933 against 9,344. Reading: three examples in context do not move the cued base toward RL on hard problems. What
+remains open is why one set of three texts gave 28 more right answers on MATH-500 than another set by the same writer.
+`analysis/shots_hard328.py` makes the 328 readout; `analysis/shots1.py shots1b <arm>=<job> ...` the five-arm table (jobs:
+base e840, rl fd89, code d9d6, base_b abaybektursun-1114-195357-6936, rl_b abaybektursun-1114-195350-bc00).
+
+The loop planned on top of this (specs/SPEC_shots2.md, `jobs/shots_loop.py`, board work-eb10d7) stopped in round 0: on the 36
+hard problems outside the 328, at cap 8,192, 124 of 144 base answers hit the cap, 12 were right, and 1 problem had 3 agreeing
+finished answers (vast.ai job abaybektursun-1114-203934-5e03, rows not committed). No examples could be picked. Not rerun,
+because both hypotheses it rested on (long own answers help; RL-like text helps) lost their support above.
+
+The first readout, as posted:
+
 
 Spec `specs/SPEC_shots1.md`. The cued base on MATH-500 at T 1.0 / top-p 1.0, grader v3, with 3 solved problems (MATH-500
 indices 0, 1, 2) in front of every prompt. The arms hold the same 3 problems and differ only in which model wrote the 3 answers.
