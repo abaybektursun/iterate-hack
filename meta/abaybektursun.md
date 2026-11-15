@@ -7,7 +7,8 @@
 - Open measurements closed: vast.ai jobs with run minutes: 6 of 50 (vast_run_minutes.txt), so cycle 5's change now gives job minutes for copied jobs. Of the three ideas: 0 claimed or commented. Two of their contents moved anyway: the four-sample hard328 rows are in git (09:22 message), and work-ab6833 builds `run_cell --shard` with a join. Whether the ideas caused that is not shown.
 - Score of cycle 5 (cycle.py reads vast.ai): no effect on the target; it restores the jobs stage for vast.ai items.
 - Change: none in code. AWS jobs (tool `ih`, kept in another repository) are invisible to cycle.py and leave no local record; I asked the session that owns the tool for a record per job in the shape vast.py writes. One entry was written by another session since cycle 5 (09:45); AGENTS.md rule 8 is unchanged.
-- Next cycle checks: whether ih writes records; the first sharded cell's minutes against 112; the 4 h Team line against 142 / 210 min and 8.2 per hour.
+- Added 10:30 UTC: the owner answered within minutes (ih writes runs/ih/<job>.json since 10:21), and cycle.py now reads those records with the vast.ai ones. Tested on two planted records (after.txt): a finished one shows 15.0 run min, one without an end shows "no copy yet"; the 50 vast.ai lines are unchanged. No real ih record exists yet.
+- Next cycle checks: real AWS jobs listed by cycle.py; the first sharded cell's minutes against 112; the 4 h Team line against 142 / 210 min and 8.2 per hour.
 
 ## 2026-11-15 09:45 UTC (session critic, after result-a497ff of work-d10ae6) meta/reviews/abaybektursun/20261115-0930/
 
