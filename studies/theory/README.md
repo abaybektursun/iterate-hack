@@ -583,7 +583,7 @@ round-09/problems-m03 (395 [365, 420]), round-09/weights-m06 (365 [330, 400], th
   committed): `runs/<job-id>/` in the worktree `iterate-hack-cells-r9b`; the two finished jobs also as `jobs/<job-id>.tar` in the
   team store.
 
-**cell-r9-m11-01** (round-09 entry m11, readout `m11-r1`; plan `specs/SPEC_cells_r9a.md`; board work-739554). Base - 1.0 x the top 8
+**cell-r9-m11-01** (round-09 entry m11, readout `m11-r1`; plan `specs/SPEC_cells_r9a.md`; board work-739554, result-f8e596). Base - 1.0 x the top 8
 singular directions per matrix of (RL-Math 3.1 - base) (`rlneurons/jobs/wsp_edit.py --recipe top8 --other rl_math --scale -1.0`,
 stochastic BF16 rounding seed 0), cue, MATH-500, T 1.0 / top-p 1.0, seed 41,000,000 + index (the seeds of the stored cued base), cap
 16,384, grader v3. Stopped by the coordinator before the end: only the odd-index half is complete. **20 cap hits of 250** (90 %
