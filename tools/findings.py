@@ -194,6 +194,10 @@ TABLE = {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.RATIO:.0f}×", "the shift",
                              f"of the activations at layer 24 (root mean square): 8 RL directions {m.DATA['edits']['top8_math31']['rms_shift']:.2f}, 8 random directions of equal weight norm {m.DATA['edits']['rand8_math31']['rms_shift']:.3f}"]},
+    "the-base-amplifies-rl": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.HEADLINE}×", "growth",
+                             f"of the activation shift from layer 0 to layer 24 when only layer 0 gets RL's paired directions; {m.GROWTH[0]['rin']:.1f}× with RL's inputs and random outputs; one run, activations only"]},
     "two-jobs-in-the-edit": {
         "group": WEIGHTS,
         "figure": lambda m: [signed(m.DATA["math"]["L0"]["vs_base"]["right"][0]), "points",

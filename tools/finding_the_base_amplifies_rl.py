@@ -139,7 +139,7 @@ def _read(L):
             "lines": [f"Similar start: {_v(L, 'paired', L):.3g} and {_v(L, 'rin', L):.3g} RMS",
                       f"{GROWTH[L]['paired']:.1f} ÷ {GROWTH[L]['rin']:.1f} = {OVER[L]:.1f}×; predicted ≥ {DATA['predicted']}×",
                       f"At layer 24: {_v(L, 'paired', 24):.3f} against {_v(L, 'rin', 24):.3f} RMS",
-                      f"Random directions: {d[0]:.2g} → {_v(L, 'rand', 24):.2g}",
+                      f"Random: {d[0]:.2g} → {_v(L, 'rand', 24):.2g} ({GROWTH[L]['rand']:.1f}×)",
                       f"{DATA['inputs']} Base + cue answers, no sampling"]}
 
 
