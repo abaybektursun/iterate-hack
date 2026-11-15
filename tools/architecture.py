@@ -266,7 +266,7 @@ const WALK = [
   "It writes the code on its own branch.",
   "It starts a GPU job from the pushed commit.",
   "It posts the result with its number, sample size and file path.",
-  "A review reads the logs and changes the harness.",
+  "A review reads the logs for inefficiencies and optimizes the research harness.",
 ];
 const cnt = n => n >= 60 ? "60+" : n;  // /data returns the newest 60 of each kind
 
