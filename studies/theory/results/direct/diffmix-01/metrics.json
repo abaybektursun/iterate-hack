@@ -1,0 +1,54 @@
+{
+ "mechanism": "round-09/grader-m04",
+ "statistic": "Delta = (rho_H - rho_E)_plain - (rho_H - rho_E)_C2; rho_s = arm-right / T1-right in stratum s",
+ "strata": {
+  "E": "levels 1-2",
+  "H": "levels 4-5"
+ },
+ "problems": {
+  "E": 133,
+  "H": 262
+ },
+ "t1_right": {
+  "E": 120,
+  "H": 197
+ },
+ "t3_right": {
+  "E": 71,
+  "H": 99
+ },
+ "c2_right": {
+  "E": 123,
+  "H": 189
+ },
+ "rho_plain": {
+  "E": 0.5916666666666667,
+  "H": 0.5025380710659898
+ },
+ "rho_c2": {
+  "E": 1.025,
+  "H": 0.9593908629441624
+ },
+ "D_plain": -0.08912859560067687,
+ "D_null": -0.06560913705583749,
+ "Delta": -0.02351945854483939,
+ "interval90": [
+  -0.1431314292352134,
+  0.09474844054359263
+ ],
+ "bootstrap": "10,000 resamples of problems within each stratum, numpy default_rng(0), 5th/95th percentiles",
+ "n": 120,
+ "n_note": "smaller stratum's T1-right count (verdict needs >= 50)",
+ "null_value": 0.0,
+ "threshold": -0.05,
+ "verdict": "undecided",
+ "checks": {
+  "t3_total": 224,
+  "t1_total": 410,
+  "c2_total": 405,
+  "t1_c2_agree": 441,
+  "shifted_join_failed": true
+ },
+ "n_to_decide": "interval half-width 0.119 vs 0.026 from threshold: about 21x the problems (~2,500 T1-right in the smaller stratum), more than MATH-500 holds; more plain and cued samples per problem would also narrow it",
+ "raw_rows_read": "Read problems 0,1,5,7,12,13,14,15,17,22 (T1-right): plain losses are often non-attempts, e.g. #12 (L5) 15 tokens, nothing extracted; #15 (L5) 155 tokens 'I don't show every step'. Of T1-right plain-wrong rows, nothing extracted / under 500 tokens: E 35/55, 43/55; H 47/110, 56/110."
+}

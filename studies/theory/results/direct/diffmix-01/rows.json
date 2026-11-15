@@ -1,0 +1,10 @@
+[
+ {
+  "mechanism": "round-09/grader-m04",
+  "claim": "On MATH-500 the base's plain-right / cue-right ratio falls from levels 1-2 to levels 4-5 by more than a second cued sample's ratio to the same cue sample falls (by more than 0.05).",
+  "result": "result-887689",
+  "verdict": "undecided",
+  "measured": "Delta = -0.024 [90 %: -0.143, +0.095] (plain 0.592 -> 0.503, C2 1.025 -> 0.959), n = 120 T1-right in L1-2 / 197 in L4-5, null 0, threshold -0.05; ~21x the problems to decide",
+  "added": "2026-11-15T22:41:42Z"
+ }
+]

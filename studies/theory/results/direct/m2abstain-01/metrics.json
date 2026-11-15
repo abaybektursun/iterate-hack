@@ -1,0 +1,160 @@
+{
+ "mechanism": "run-02/f2-m04",
+ "statistic": "D = VR_ThinkSFT(0,1,2) - VR_M2: mean vote score (1/m tie credit) over problems with exactly 1 right of 3 samples, hard328 + fresh2026 pooled, cap 16,384, cue",
+ "D": 0.1909,
+ "D_ci90": [
+  0.0804,
+  0.303
+ ],
+ "vote_rate_lone_right": {
+  "think_012": 0.8211,
+  "think_123": 0.8375,
+  "m2": 0.6302,
+  "think_cap32_012": 0.2817
+ },
+ "vote_rate_ci90": {
+  "think_012": [
+   0.7561,
+   0.8862
+  ],
+  "think_123": [
+   0.7625,
+   0.9042
+  ],
+  "m2": [
+   0.5417,
+   0.7188
+  ],
+  "think_cap32_012": [
+   0.246,
+   0.3175
+  ]
+ },
+ "n_lone_right": {
+  "think_012": 41,
+  "think_123": 40,
+  "m2": 32,
+  "think_cap32_012": 42
+ },
+ "n_lone_right_by_set": {
+  "think_012": {
+   "hard328": 29,
+   "fresh2026": 12
+  },
+  "think_123": {
+   "hard328": 25,
+   "fresh2026": 15
+  },
+  "m2": {
+   "hard328": 16,
+   "fresh2026": 16
+  },
+  "think_cap32_012": {
+   "hard328": 30,
+   "fresh2026": 12
+  }
+ },
+ "vote_score_counts": {
+  "think_012": {
+   "0.333": 2,
+   "0.5": 12,
+   "1.0": 27
+  },
+  "think_123": {
+   "0.0": 1,
+   "0.333": 3,
+   "0.5": 7,
+   "1.0": 29
+  },
+  "m2": {
+   "0.0": 2,
+   "0.333": 5,
+   "0.5": 13,
+   "1.0": 12
+  },
+  "think_cap32_012": {
+   "0.0": 8,
+   "0.333": 31,
+   "0.5": 3
+  }
+ },
+ "lone_right_share_of_464": {
+  "think_012": 0.0884,
+  "think_123": 0.0862,
+  "m2": 0.069,
+  "think_cap32_012": 0.0905
+ },
+ "null": {
+  "D_null": -0.0164,
+  "D_null_ci90": [
+   -0.1101,
+   0.0819
+  ],
+  "D_minus_D_null": 0.2073,
+  "D_minus_D_null_ci90": [
+   0.0906,
+   0.3219
+  ]
+ },
+ "budget_route_reported_only": {
+  "D_cap32": -0.3485,
+  "D_cap32_ci90": [
+   -0.4469,
+   -0.2495
+  ]
+ },
+ "mediation_reported_only": {
+  "think_012": {
+   "companions": 82,
+   "no_answer_share": 0.8049,
+   "stored_cap_hit_share": 0.8537,
+   "finished_wrong_share": 0.1951,
+   "problems_two_companions_same_wrong_answer_share": 0.0
+  },
+  "think_123": {
+   "companions": 80,
+   "no_answer_share": 0.8125,
+   "stored_cap_hit_share": 0.8625,
+   "finished_wrong_share": 0.1875,
+   "problems_two_companions_same_wrong_answer_share": 0.025
+  },
+  "m2": {
+   "companions": 64,
+   "no_answer_share": 0.5781,
+   "stored_cap_hit_share": 0.7031,
+   "finished_wrong_share": 0.4219,
+   "problems_two_companions_same_wrong_answer_share": 0.0625
+  },
+  "think_cap32_012": {
+   "companions": 84,
+   "no_answer_share": 0.0357,
+   "stored_cap_hit_share": 0.0119,
+   "finished_wrong_share": 0.9643,
+   "problems_two_companions_same_wrong_answer_share": 0.1905
+  }
+ },
+ "threshold": 0.15,
+ "n_min": 50,
+ "verdict_rule": "holds if min n >= 50, D 90 % interval wholly above 0.15 and D - D_null 90 % interval wholly above 0; refuted if D 90 % interval wholly below 0.15; else undecided",
+ "verdict": "undecided",
+ "n_to_decide": {
+  "scale_factor": 7.39,
+  "lone_right_n": {
+   "think_012": 304,
+   "m2": 237
+  },
+  "problems_with_3_samples_per_arm": 3432,
+  "problems_for_n_50_only": 725
+ },
+ "raw_rows_read": "First 10 M(2) lone-right problems (fresh2026 9-77): 6 have both companions with no answer at 16,384 tokens and the lone right sample wins (1.0); 4 have one companion with a finished wrong answer, a 1-1 tie (0.5), never an outvote; 2 of those 4 wrong answers were written right at the 16,384 cut (stored cap_hit true, 412026 and 1456).",
+ "bootstrap": "10,000 resamples of problems, each arm's lone-right set resampled independently, numpy default_rng(0), 5th/95th percentiles",
+ "instrument_checks": "passed: per-sample right counts 234/229/237, 69/75/70, 212/212/211/201, 65/59/56/60; M(2) hard328 vote over 3 with day1_vote tie rule 246/328; synthetic votes 0, 1, 1/3, 0",
+ "inputs": [
+  "studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl",
+  "studies/rlneurons/results/fresh/sft1_cue_s4-01/rows.jsonl",
+  "studies/rlneurons/results/transplant/hard328-02/rows.jsonl (sft1_rl20, seeds 3.0M/3.1M/3.2M)",
+  "studies/rlneurons/results/transplant/fresh2026-02/rows.jsonl (sft1_rl20, seeds 7.00M/7.01M/7.02M)",
+  "studies/rlneurons/results/cap32vote/hard328_sft1_cue_s4-01/rows.jsonl",
+  "studies/rlneurons/results/cap32vote/fresh2026_sft1_cue_s4-01/rows.jsonl"
+ ]
+}

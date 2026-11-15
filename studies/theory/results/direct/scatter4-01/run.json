@@ -1,0 +1,9 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_scatter4.md",
+ "commit": "cab30e3956af8a1736f12e14904ac8ad35625b73",
+ "board": "work-bc42f2",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.theory.analysis.direct_scatter4",
+ "inputs": [
+  "studies/rlneurons/results/votek/math500_base_cue-01/rows.jsonl"
+ ]
+}
