@@ -101,6 +101,7 @@ def main():
     assert not (out / "metrics.json").exists(), "one fresh directory per run"
     layers = [int(x) for x in a.layers.split(",")]
     parts = a.parts.split(",")
+    torch.set_grad_enabled(False)
     t0 = time.time()
 
     fz = json.loads((M.D4 / "frozen4.json").read_text())
@@ -167,6 +168,10 @@ def main():
     if "readout" in parts:
         sets = {s: json.loads((DATA / "jlens_581d398" / f"lens-eval-{s}.json").read_text())["items"] for s in SETS}
         sets["chains"] = json.loads((DATA / "math_stimuli_v1.json").read_text())["chains"]
+        # most multihop prompts end in a space, which is its own token here and forces the answer to come without its usual
+        # leading space; the -nospace sets drop that final space (the readout position is then the last word of the prompt)
+        for s in ("multihop", "multilingual"):
+            sets[f"{s}-nospace"] = [{**it, "prompt": it["prompt"][:-1]} for it in sets[s] if it["prompt"].endswith(" ")]
         res = {}
         for s, items in sets.items():
             rows = []
@@ -181,7 +186,8 @@ def main():
                 pos = len(ids) - 1
                 if s == "poetry":
                     pos = max(i for i, t in enumerate(ids) if "\n" in strings[t])
-                gold = it.get("target") if GRADED.get(s, "target") == "target" else it["intermediates"][0]
+                base_set = s.replace("-nospace", "")
+                gold = it.get("target") if GRADED.get(base_set, "target") == "target" else it["intermediates"][0]
                 row = {"name": it["name"], "n_tokens": len(ids), "readout_position": pos, "intermediates": inter,
                        "null_intermediates": pick(other), "n_candidates": [len(c) for c in cs], "correct": {}, "next_token": {},
                        "ranks": {}}                # ranks[model][variant][k][layer]; k runs over intermediates, then null ones
@@ -189,7 +195,7 @@ def main():
                     acts, logits = run(model[name], recs[name], ids, dev)
                     nxt = strings[int(logits[-1].argmax())]
                     row["next_token"][name] = nxt
-                    row["correct"][name] = None if s not in GRADED and s != "chains" else bool(nxt.lstrip() and gold.startswith(nxt.lstrip()))
+                    row["correct"][name] = None if base_set not in GRADED and s != "chains" else bool(nxt.lstrip() and gold.startswith(nxt.lstrip()))
                     row["ranks"][name] = {}
                     for v in variants:
                         per_inter = [[] for _ in cs]
@@ -217,8 +223,10 @@ def main():
         items = []
         for it in probe[:a.limit]:
             other = rng.choice([o for o in probe if o["category"] != it["category"]])
-            items.append({"name": it["name"], "set": "probe-swap", "prompt": it["prompt"], "src": it["intermediate"], "dst": it["swap_to"],
-                          "null": other["swap_to"], "answer": it["answer"], "swap_answer": it["swap_answer"]})
+            for label, prompt in (("probe-swap", it["prompt"]), ("probe-swap-nospace", it["prompt"][:-1])):
+                if label == "probe-swap" or it["prompt"].endswith(" "):
+                    items.append({"name": it["name"], "set": label, "prompt": prompt, "src": it["intermediate"], "dst": it["swap_to"],
+                                  "null": other["swap_to"], "answer": it["answer"], "swap_answer": it["swap_answer"]})
         for it in json.loads((DATA / "math_stimuli_v1.json").read_text())["chains"]:
             if "swap_to" in it and (a.limit is None or sum(x["set"] == "chains" for x in items) < a.limit):
                 items.append({"name": it["name"], "set": "chains", "prompt": it["prompt"], "src": it["swap_from"], "dst": it["swap_to"],
@@ -266,7 +274,7 @@ def main():
             rows.append(row)
         M.dump(out / "swap.json", rows)
         for name in NAMES:
-            for s in ("probe-swap", "chains"):
+            for s in ("probe-swap", "probe-swap-nospace", "chains"):
                 el = [r for r in rows if r["set"] == s and r["models"][name]["eligible"]]
                 best = {v: max((sum(r["models"][name]["arms"][f"{v}|swap|{al}"]["is_swap_answer"] for r in el), al) for al in ALPHAS) for v in variants}
                 print(f"swap {s} {name}: eligible {len(el)} of {sum(r['set'] == s for r in rows)}; flips (best strength) {best}", flush=True)
