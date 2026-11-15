@@ -1,0 +1,294 @@
+{
+ "note": "The unedited run was stopped by its 4-hour time limit. Every problem has attempt 0 of all 4 samples, but the restarts of cap hits are incomplete. So this readout uses attempt 0 only, in both runs.",
+ "setting": {
+  "model": "base",
+  "prompt": "cue",
+  "set": "math500",
+  "temperature": 0.6,
+  "top_p": 1.0,
+  "max_tokens": 16384,
+  "seed": 1000000,
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index"
+ },
+ "grader": "v3 (score_v3 as written by run_cell)",
+ "runs": {
+  "unedited": {
+   "dir": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-auto-research-harness-hackathon-bbd59e/25ae40cc-2e8a-47af-8f2b-c73aa0b7149f/scratchpad/submit/runs/sameraslan-1114-225555-5d2f",
+   "job_id": "sameraslan-1114-225555-5d2f",
+   "commit": "63a76e65743754b1894e2ad15e764a3c25c8295c",
+   "status": "running"
+  },
+  "edited": {
+   "dir": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-auto-research-harness-hackathon-bbd59e/25ae40cc-2e8a-47af-8f2b-c73aa0b7149f/scratchpad/submit/runs/sameraslan-1114-220952-aa97",
+   "job_id": "sameraslan-1114-220952-aa97",
+   "commit": "132d10fa8ddadbf91f5ae9ddb242ede4e7e8d64c",
+   "status": "done",
+   "edit_file": "studies/cleanneurons/results/loops/real-02/edit_attr1000.json"
+  }
+ },
+ "per_sample": [
+  {
+   "sample": 0,
+   "unedited": {
+    "right_v3": 382,
+    "cap_hits": 99,
+    "loops_rule_A": 72,
+    "tokens_per_problem": 4682.92
+   },
+   "edited": {
+    "right_v3": 415,
+    "cap_hits": 24,
+    "loops_rule_A": 4,
+    "tokens_per_problem": 3501.218
+   },
+   "points_edited_minus_unedited": 6.6,
+   "interval95": [
+    2.6000000000000023,
+    10.399999999999999
+   ]
+  },
+  {
+   "sample": 1,
+   "unedited": {
+    "right_v3": 371,
+    "cap_hits": 99,
+    "loops_rule_A": 73,
+    "tokens_per_problem": 4639.076
+   },
+   "edited": {
+    "right_v3": 397,
+    "cap_hits": 26,
+    "loops_rule_A": 10,
+    "tokens_per_problem": 3634.406
+   },
+   "points_edited_minus_unedited": 5.2,
+   "interval95": [
+    1.4000000000000012,
+    9.200000000000008
+   ]
+  },
+  {
+   "sample": 2,
+   "unedited": {
+    "right_v3": 388,
+    "cap_hits": 85,
+    "loops_rule_A": 66,
+    "tokens_per_problem": 4433.048
+   },
+   "edited": {
+    "right_v3": 401,
+    "cap_hits": 28,
+    "loops_rule_A": 5,
+    "tokens_per_problem": 3580.78
+   },
+   "points_edited_minus_unedited": 2.6,
+   "interval95": [
+    -1.0000000000000009,
+    6.2000000000000055
+   ]
+  },
+  {
+   "sample": 3,
+   "unedited": {
+    "right_v3": 391,
+    "cap_hits": 88,
+    "loops_rule_A": 59,
+    "tokens_per_problem": 4418.018
+   },
+   "edited": {
+    "right_v3": 400,
+    "cap_hits": 17,
+    "loops_rule_A": 9,
+    "tokens_per_problem": 3682.092
+   },
+   "points_edited_minus_unedited": 1.8,
+   "interval95": [
+    -2.0000000000000018,
+    5.599999999999994
+   ]
+  }
+ ],
+ "singles_right": {
+  "unedited": [
+   382,
+   371,
+   388,
+   391
+  ],
+  "edited": [
+   415,
+   397,
+   401,
+   400
+  ]
+ },
+ "extra_pairs": {
+  "seed2": {
+   "unedited": {
+    "dir": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-auto-research-harness-hackathon-bbd59e/25ae40cc-2e8a-47af-8f2b-c73aa0b7149f/scratchpad/submit/runs/sameraslan-1114-220631-bbdc",
+    "job_id": "sameraslan-1114-220631-bbdc",
+    "right_v3": 394,
+    "cap_hits": 87,
+    "loops_rule_A": 61,
+    "tokens_per_problem": 4356.786
+   },
+   "edited": {
+    "dir": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-auto-research-harness-hackathon-bbd59e/25ae40cc-2e8a-47af-8f2b-c73aa0b7149f/scratchpad/submit/runs/sameraslan-1114-220830-d05c",
+    "job_id": "sameraslan-1114-220830-d05c",
+    "right_v3": 399,
+    "cap_hits": 26,
+    "loops_rule_A": 9,
+    "tokens_per_problem": 3523.178
+   },
+   "points_edited_minus_unedited": 1.0,
+   "interval95": [
+    -2.7999999999999914,
+    4.799999999999994
+   ]
+  }
+ },
+ "pooled_points_edited_minus_unedited": {
+  "4 samples": {
+   "draws": 4,
+   "points": 4.05,
+   "interval95": [
+    1.9987500000000005,
+    6.15
+   ]
+  },
+  "4 samples + seed2": {
+   "draws": 5,
+   "points": 3.44,
+   "interval95": [
+    1.6,
+    5.36
+   ]
+  }
+ },
+ "samples_right_of_4_histogram": {
+  "index": "number of problems right in 0, 1, 2, 3, 4 of the 4 samples",
+  "unedited": [
+   47,
+   42,
+   35,
+   84,
+   292
+  ],
+  "edited": [
+   40,
+   21,
+   48,
+   68,
+   323
+  ]
+ },
+ "vote_over_4_attempt0_samples": {
+  "unedited": {
+   "right": 441,
+   "n": 500,
+   "percent": 88.2,
+   "wilson95": [
+    85.0768011869262,
+    90.7406991926919
+   ],
+   "tokens_per_problem": 18173.062
+  },
+  "edited": {
+   "right": 441,
+   "n": 500,
+   "percent": 88.2,
+   "wilson95": [
+    85.0768011869262,
+    90.7406991926919
+   ],
+   "tokens_per_problem": 14398.496
+  },
+  "points_edited_minus_unedited": 0.0,
+  "interval95": [
+   -2.400000000000002,
+   2.400000000000002
+  ],
+  "check": {
+   "readout": "studies/cleanneurons/results/gen/vote_attr1000r2_t06-01/readout.json",
+   "right": 441,
+   "tokens_per_problem": 14398.496,
+   "result": "equal per problem and in tokens"
+  }
+ },
+ "examples": {
+  "edited_right_more_often": {
+   "problem_index": 462,
+   "gold": "59",
+   "samples_right": {
+    "unedited": 0,
+    "edited": 4
+   },
+   "scores_by_sample": {
+    "unedited": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "edited": [
+     1,
+     1,
+     1,
+     1
+    ]
+   },
+   "shown_sample": 0,
+   "unedited": {
+    "extracted_v3": null,
+    "n_new": 16384,
+    "cap_hit": true,
+    "loop_A": true,
+    "text_last_300": "s, converting all the coins into bills would result in $126.00 in bills and $0.00 in coins. But that seems like the answer would be 0 cents. \n\nWait, maybe the problem is that they have a certain number of coins, and they want to convert as many as possible into bills. But since the total amount is $"
+   },
+   "edited": {
+    "extracted_v3": "59",
+    "n_new": 1434,
+    "cap_hit": false,
+    "loop_A": false,
+    "text_last_300": "s:\n\\[\n126.59 \\times 100 = 12659 \\text{ cents}\n\\]\n\nTo find the remainder when 12659 is divided by 100 (the remainder will be the leftover cents after converting as many coins as possible into bills):\n\\[\n12659 \\div 100 = 126 \\text{ remainder } 59\n\\]\n\nThus, the amount of money left is \\boxed{59} cents."
+   }
+  },
+  "unedited_right_more_often": {
+   "problem_index": 189,
+   "gold": "160",
+   "samples_right": {
+    "unedited": 4,
+    "edited": 1
+   },
+   "scores_by_sample": {
+    "unedited": [
+     1,
+     1,
+     1,
+     1
+    ],
+    "edited": [
+     0,
+     0,
+     0,
+     1
+    ]
+   },
+   "shown_sample": 0,
+   "unedited": {
+    "extracted_v3": "160",
+    "n_new": 3400,
+    "cap_hit": false,
+    "loop_A": false,
+    "text_last_300": "ting \\(x = 90\\) into the first equation:\n\\[ h^2 + 90^2 = 22500 \\]\n\\[ h^2 = 22500 - 8100 \\]\n\\[ h^2 = 14400 \\]\n\\[ h = 120 \\]\n\nThe minimal length of \\(HP\\) is 120 m. The savings is:\n\\[ (150 + 130) - 120 = 280 - 120 = 160 \\]\n\nThus, the greatest length of rope that can be saved is \\(\\boxed{160}\\) meters."
+   },
+   "edited": {
+    "extracted_v3": "130",
+    "n_new": 3583,
+    "cap_hit": false,
+    "loop_A": false,
+    "text_last_300": "}{\\sqrt{3^2 + (-4)^2}} = \\frac{|-600|}{5} = 120\n     \\]\n\n4. **Savings Calculation**:\n   - The original rope lengths are \\(HC = 150\\) m and \\(HD = 130\\) m.\n   - The new rope length \\(HP = 120\\) m.\n   - The greatest length of rope saved is:\n     \\[\n     150 + 100 - 120 = 130\n     \\]\n\n\\[\n\\boxed{130}\n\\]"
+   }
+  }
+ }
+}

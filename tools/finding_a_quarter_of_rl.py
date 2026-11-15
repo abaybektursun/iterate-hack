@@ -946,6 +946,7 @@ _m, _h = DATA["right"]["math500"], DATA["right"]["hard328"]
 _LATE = ("a0.5", "a0.75", "a1", "a1.25", "a1.5")
 _gap = 100 * (_m["a1"] - _m["a0"]) / 500  # RL's gain on MATH-500 in points
 _LO, _HI = (int(round(100 * v / _gap, -1)) for v in INTERVALS["math500"]["a0.25"])  # 30, 100
+_M = lambda v, k=1: f"{v:.{k}f}".replace("-", "−")  # a number with the minus sign of the site
 
 TITLE = "A quarter of RL"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "How much of the RL weight change does the math gain need?"
@@ -962,7 +963,7 @@ PANELS = [
      "\"Reasoning Vectors\" (arXiv 2509.01363, Sec. 4.4): half of a GRPO weight difference gave 2.1 of 4.9 points on GSM8K.",
      [f"Here the curve rises far earlier: a = 0.25 gives {Q_M} % of the gain and a = 0.5 gives {H_M} %, on Olmo 3 7B and its "
       "RL-Zero-Math model, with a random change of the same norm as the control.",
-      f"On harder problems the early rise is smaller: {Q_H} % at a = 0.25 and {H_H} % at a = 0.5.",
+      f"On the 328 harder problems the early rise is smaller: {Q_H} % of the gain at a = 0.25 and {H_H} % at a = 0.5.",
       "The page \"Eight directions\" asks which directions of the same weight change carry the gain. This page keeps all "
       "directions and changes only the length of the step."]],
     ["why", "Why it matters",
@@ -971,26 +972,26 @@ PANELS = [
      [f"Going past the RL model does not help: a = 1.25 and 1.5 score {_m['a1.25']} and {_m['a1.5']} of 500, and a crude "
       f"check flags {DATA['salad']['a1.5']} answers at a = 1.5 as ending in word salad.",
       f"On the 328 harder problems the later part of the change still counts: a = 0.5 scores {_h['a0.5']}, RL {_h['a1']} with "
-      f"the cue and {DATA['rl_plain']['hard328']} without it ({DATA['d_half_rlplain_hard'][0]:+.1f} points, 95 % interval "
-      f"{DATA['d_half_rlplain_hard'][1]:.1f} to {DATA['d_half_rlplain_hard'][2]:.1f})."]],
+      f"the cue and {DATA['rl_plain']['hard328']} without it ({_M(DATA['d_half_rlplain_hard'][0])} points against RL without the cue, "
+      f"95 % interval {_M(DATA['d_half_rlplain_hard'][1])} to {_M(DATA['d_half_rlplain_hard'][2])})."]],
     ["how", "How we know",
-     "Each model was written as base + a (RL - base), tensor by tensor, and sampled once per problem at temperature 1.0 and "
-     "top-p 1.0, up to 16,384 tokens, graded by grader v3. The cue makes each answer start with \"line!\", two line breaks "
+     "Each model was written as base + a (RL − base), tensor by tensor, and sampled once per problem at T 1.0 (top-p 1.0), "
+     "cut off at 16,384 tokens, graded by grader v3. The cue makes each answer start with \"line!\", two line breaks "
      "and \"Okay\".",
-     [f"Base: Olmo 3 7B (allenai/Olmo-3-1025-7B). RL: Olmo 3.1 7B RL-Zero-Math. MATH-500 has 500 problems; the harder set is "
-      f"328 AIME, AMC, HMMT and OlympiadBench problems.",
+     [f"Base: Olmo 3 7B (allenai/Olmo-3-1025-7B). RL: Olmo 3.1 7B RL-Zero-Math. MATH-500 has 500 problems; the 328 harder problems "
+      f"are from AIME, AMC, HMMT and OlympiadBench.",
       f"Control: a random change with the norm of the RL change scores {_m['random']} of 500 against {_m['a0']} "
-      f"(+{DATA['d_random'][0]} points, 95 % interval {DATA['d_random'][1]} to +{DATA['d_random'][2]}).",
+      f"(+{DATA['d_random'][0]} points, 95 % interval {_M(DATA['d_random'][1])} to {_M(DATA['d_random'][2])}).",
       f"The RL model trained on code (Code-RL), with the cue, scores {_m['code']} of 500 on math, as much as a = 0.5 to 1.5 "
       f"({min(_m[k] for k in _LATE)} to {max(_m[k] for k in _LATE)})."]],
     ["limits", "What it does not show",
      f"The intervals are wide: the gain at a = 0.25 is {100 * (_m['a0.25'] - _m['a0']) / 500:.1f} points, 95 % interval "
      f"{INTERVALS['math500']['a0.25'][0]} to {INTERVALS['math500']['a0.25'][1]}, so its share of RL's gain lies between about "
      f"{_LO} % and {_HI} %.",
-     [f"The base model with the cue, sampled four more times, scores {DATA['base_runs'][0]} to {DATA['base_runs'][-1]} of 500.",
+     [f"Base + cue, sampled four more times, scores {DATA['base_runs'][0]} to {DATA['base_runs'][-1]} of 500.",
       f"At a = 0.25 the stored weights are not a quarter of the change: rounding to bf16 leaves a change with "
       f"{DATA['norm_q']:.2f} of the full norm and cosine {DATA['cos_q']:.2f} to it.",
-      f"On the harder set a = 0.5 hits the token limit on {DATA['caps_hard']['a0.5']} problems, RL on "
+      f"On the 328 harder problems, a = 0.5 is cut off at 16,384 tokens on {DATA['caps_hard']['a0.5']} problems, RL + cue on "
       f"{DATA['caps_hard']['a1']}; the random control was not run there. One base model, one RL model, one sample per problem."]],
     ["run", "How to reproduce it",
      "The specs are studies/rlneurons/specs/DAY1_wdiff_2026-11-14.md and DAY1_wdiff328_2026-11-14.md; jobs/merge_weights.py "
@@ -1249,10 +1250,10 @@ const MINUS = s => String(s).replace(/-/g, "−");
 /* The two benchmarks. An arm is one measured model: a step a along the RL change (a = 0 is the base model, a = 1 the RL
    model, both with the cue), or a reference mark of full size (random, code). A problem row is [index, label, text,
    reference answer, outcomes], with one character per arm in the order of D.arms[bench]: 1 right, 0 wrong. */
-const BENCH = ["math500", "hard328"], NAME = { math500: "MATH-500", hard328: "the 328 harder problems" };
+const BENCH = ["math500", "hard328"], NAME = { math500: "MATH-500", hard328: "328 harder problems" };
 const LEVELS = 9, AS = [0, .25, .5, .75, 1, 1.25, 1.5], REFS = ["random", "code"];
 const REFNAME = { random: ["Random", "same size"], code: ["Code-RL", "model"] };
-const REFLONG = { random: "a random change with the RL change's norm", code: "the RL model trained on code" };
+const REFLONG = { random: "a random change with the RL change's norm", code: "the RL model trained on code (Code-RL)" };
 const B = {};
 for (const b of BENCH) {
   const arms = D.arms[b], keys = arms.map(x => x[0]), n = D.n[b], r = D.right[b];
@@ -1267,7 +1268,7 @@ const has = (b, k) => B[b].keys.includes(k);
 const right = (b, p, k) => p.o[B[b].keys.indexOf(k)] === "1";
 const aText = a => String(a);
 const S = { b: "math500", k: "a0.25", open: null, g: null, el: {}, shown: {}, t: 0, last: 0, drag: false,
-  t0: -1e9, kt0: -1e9, from: [], to: [], n0: 0, n1: 0, s0: 0, s1: 0, kx0: 0, kx1: 0, m0: 0, mfrom: "math500", tb: -1e9, fieldT0: -1e9, pos: [] };
+  t0: -1e9, kt0: -1e9, from: [], to: [], n0: 0, n1: 0, s0: 0, s1: 0, kx0: 0, kx1: 0, m0: 0, mfrom: "math500", kfrom: "a0.25", tb: -1e9, fieldT0: -1e9, pos: [] };
 
 /* Geometry, in a small 3D space around the plate's centre (x right, y down, z toward the viewer). X0..X1: a from 0 to
    1.5; refX: the two reference marks; Yt..Yb: the chart, where share s of RL's gain runs from LO to HI; strip: the dots. */
@@ -1277,13 +1278,13 @@ function geo() {
     ? { w: 480, h: 1146, cx: 240, cy: 573, D: 2000, a: [6, 8, 474, 1138], r: 22, deep: 30, blur: 12,
         X0: 72, X1: 290, refX: { random: 348, code: 430 }, div: 314, Yt: 118, Yb: 338, axY: 358, tickY: 388, titleY: 440,
         fs: 18, fss: 17, fl: 19, ytx: 56, ytitle: [30, 98], formula: [30, 58], short: true,
-        bigX: 30, bigY: 560, fb: 104, l1: 600, l2: 628, l3: 654, l4: 680,
+        bigX: 30, bigY: 560, fb: 104, fr: 18, l1: 600, l2: 628, l3: 654, l4: 680,
         stripLab: [30, 730], gx: 40, gy: 756, cols: { math500: 25, hard328: 21 }, pitch: 16.2, box: [24 * 16.2, 19 * 16.2], d: [4, 10.4],
         key: [[40, 1092], [130, 1092], [40, 1116], [130, 1116]] }
     : { w: 1000, h: 690, cx: 500, cy: 345, D: 2200, a: [24, 16, 976, 668], r: 30, deep: 40, blur: 16,
         X0: 118, X1: 518, refX: { random: 574, code: 656 }, div: 546, Yt: 100, Yb: 326, axY: 346, tickY: 372, titleY: 418,
         fs: 16, fss: 15, fl: 18, ytx: 102, ytitle: [70, 80], formula: [70, 50],
-        bigX: 698, bigY: 200, fb: 112, l1: 238, l2: 266, l3: 292, l4: 316,
+        bigX: 684, bigY: 200, fb: 112, fr: 14.5, l1: 238, l2: 266, l3: 292, l4: 316,
         stripLab: [110, 450], gx: 116, gy: 474, cols: { math500: 50, hard328: 41 }, pitch: 15.7, box: [49 * 15.7, 9 * 15.7], d: [3.6, 9.4],
         key: [[116, 642], [200, 642], [396, 642], [488, 642]] };
 }
@@ -1352,7 +1353,7 @@ function build() {
     T("ptlab", "ptlab", g.fs + 1, "") +
     `<circle class="knobglow" id="kg" r="22"/><circle class="knob" id="kn" r="${narrow.matches ? 11 : 9.5}"/>` +
     `<path class="ring" id="ring"/>${lv("ink")}${lv("nb")}<circle class="sel" id="sel" r="0"/></g>` +
-    `<g class="read">${T("big", "big", g.fb, "")}${T("l1", "l1", g.fl, "")}${T("l2", "l2", g.fs, "")}${T("l3", "l3", g.fs, "")}${T("l4", "l3", g.fs, "")}` +
+    `<g class="read">${T("big", "big", g.fb, "")}${T("l1", "l1", g.fl, "")}${T("l2", "l2", g.fr, "")}${T("l3", "l3", g.fr, "")}${T("l4", "l3", g.fr, "")}` +
     T("striplab", "lab", g.fs, "") + `</g>` +
     `<g class="key"><circle class="kd0" id="kd0" r="${g.d[1] / 2}"/>${T("kt0", "lab", g.fss, "")}` +
     `<circle class="kd1" id="kd1" r="${g.d[1] / 2}"/>${T("kt1", "lab", g.fss, "")}` +
@@ -1428,9 +1429,10 @@ function place(t, now) {
   E.cv.setAttribute("d", d); E.cg.setAttribute("d", d);
   E.ghost.setAttribute("d", path(CURVE[other], 9)); E.ghost.style.opacity = (.9 * m).toFixed(2);
   const up = other === "math500";  // MATH-500's curve runs above the harder set's, so its name goes above it
-  text("ghostt", up ? (g.short ? "MATH-500" : "On MATH-500") : "On 328 harder problems");
-  // MATH-500's trace is named under its dip at a = 1.25, which the harder set does not reach; the harder set's under its rise
-  at(E.ghostt, up ? P(g.short ? XA(g, 1) + 8 : XA(g, 1.25), YS(g, sAt(other, 1.25)) + g.fs * 1.4, 9) : P(XA(g, .39), YS(g, sAt(other, .39)) + g.fs * 1.4, 9));
+  text("ghostt", up ? (g.short ? "MATH-500" : "On MATH-500") : g.short ? "328 harder" : "On 328 harder problems");
+  // MATH-500's trace is named under its dip at a = 1.25, which the harder set does not reach; the harder set's under its
+  // rise at a = 0.6, clear of the count beside the point at a = 0.25
+  at(E.ghostt, up ? P(g.short ? XA(g, 1) + 8 : XA(g, 1.25), YS(g, sAt(other, 1.25)) + g.fs * 1.4, 9) : P(XA(g, .6), YS(g, sAt(other, .6)) + g.fs * 1.4, 9));
   E.ghostt.setAttribute("text-anchor", up && !g.short ? "middle" : "start");
   E.ghostt.style.opacity = (.95 * m).toFixed(2);
 
@@ -1468,21 +1470,28 @@ function place(t, now) {
   [E.kn, E.kg].forEach(el => { el.setAttribute("cx", f(kn[0])); el.setAttribute("cy", f(kn[1])); el.style.visibility = onRef ? "hidden" : "visible"; });
   E.kg.setAttribute("r", f(19 + 2 * Math.sin(t * 1.3)));
   E.stem.setAttribute("d", onRef ? "" : seg(kx, g.axY - 10, kx, YS(g, ks) + 9, 16));
+  // During a switch of benchmark the count keeps the old benchmark's number until the axis changes, at mid-morph.
   const nNow = mix(S.n0, S.n1, ease(clamp((now - S.t0) / 900, 0, 1)));
-  text("ptlab", fmt(nNow));
-  const left = S.k !== "a0";  // left of the point and above it, where the curve is not (it rises from the left)
-  E.ptlab.setAttribute("text-anchor", left ? "end" : "start");
-  at(E.ptlab, P(xOf(g, S.k) + (left ? -11 : 13), YS(g, ks) + (left ? -9 : 22), 18));
+  text("ptlab", m < .5 ? String(B[S.mfrom].r[S.kfrom]) : fmt(nNow));
+  E.ptlab.style.opacity = fadeTo.toFixed(2);
+  // Where the count goes: below and right of a point up to a = 0.75 (the curve rises from the left, so it is clear there),
+  // above a point from a = 1 on, and left and above a control mark.
+  const ka = REFS.includes(S.k) ? null : aOf(S.b, S.k), below = ka !== null && ka <= .75, above = ka !== null && ka >= 1;
+  E.ptlab.setAttribute("text-anchor", above ? "middle" : below ? "start" : "end");
+  at(E.ptlab, P(xOf(g, S.k) + (above ? 0 : below ? 12 : -11), YS(g, ks) + (above ? -14 : below ? 24 : -9), 18));
 
   // The count: share of RL's gain, the right answers and the interval.
   const sh = mix(S.s0, S.s1, ease(clamp((now - S.t0) / 900, 0, 1)));
   text("big", MINUS(Math.round(100 * sh)) + " %");
   at(E.big, P(g.bigX, g.bigY, 12)); at(E.l1, P(g.bigX + 4, g.l1, 12)); at(E.l2, P(g.bigX + 4, g.l2, 12)); at(E.l3, P(g.bigX + 4, g.l3, 12)); at(E.l4, P(g.bigX + 4, g.l4, 12));
-  text("l1", "of RL's gain over base + cue");
-  const iv = C.intervals[S.b][S.k], diff = 100 * (bb.r[S.k] - bb.r.a0) / bb.n;
-  text("l2", onRef ? `${S.k === "random" ? "Random change" : "Code-RL model"}: ${bb.r[S.k]} of ${bb.n} right` : `a = ${aText(aOf(S.b, S.k))}: ${bb.r[S.k]} of ${bb.n} right`);
-  text("l3", S.k === "a0" ? "The base model with the cue" : `Gain over a = 0: ${sgn(diff)} points`);
-  text("l4", S.k === "a0" ? "" : `95 % interval: ${MINUS(iv[0].toFixed(1))} to ${MINUS(iv[1].toFixed(1))} points`);
+  const rb = m < .5 ? B[S.mfrom] : bb, rk = m < .5 ? S.kfrom : S.k, iv = C.intervals[rb.b][rk], diff = 100 * (rb.r[rk] - rb.r.a0) / rb.n;
+  const gain = 100 * (rb.r.a1 - rb.r.a0) / rb.n, ref = REFS.includes(rk);
+  text("l1", "of RL's gain over Base + cue");
+  text("l2", rk === "a0" ? "Base + cue itself" : rk === "a1" ? "RL + cue itself" :
+    `95 % interval ${MINUS(Math.round(100 * iv[0] / gain))} to ${MINUS(Math.round(100 * iv[1] / gain))} % of the gain`);
+  text("l3", (ref ? `${rk === "random" ? "Random change" : "Code-RL"}` : `a = ${aText(aOf(rb.b, rk))}`) + `: ${rb.r[rk]} of ${rb.n} right, T 1.0`);
+  text("l4", rk === "a0" ? `RL + cue: ${rb.r.a1} of ${rb.n}` : `${sgn(diff)} points, 95 % interval ${MINUS(iv[0].toFixed(1))} to ${MINUS(iv[1].toFixed(1))}`);
+  ["l2", "l3", "l4"].forEach(id => { E[id].style.opacity = fadeTo.toFixed(2); });
 
   // The dots, batched by look into LEVELS paths per colour, so a frame sets a few attributes, not one per dot.
   const ink = Array(LEVELS).fill(""), nb = Array(LEVELS).fill(""), stored = new Set(C.examples.filter(e => e[0] === S.b && e[1] === S.k).map(e => e[2]));
@@ -1531,7 +1540,7 @@ function setState(b, k, opts = {}) {
   const kq = ease(clamp((now - S.kt0) / 600, 0, 1)), kx = S.drag ? S.kx1 : mix(S.kx0, S.kx1, kq);
   const newBench = b !== S.b;
   const cur = newBench || quick ? null : B[b].P.map((p, j) => { const [v, c] = dotAt(j, now); return [v, c]; });
-  if (newBench) { S.mfrom = quick ? b : S.b; S.tb = quick ? -1e9 : now; S.fieldT0 = quick ? -1e9 : now; }
+  if (newBench) { S.mfrom = quick ? b : S.b; S.kfrom = S.k; S.tb = quick ? -1e9 : now; S.fieldT0 = quick ? -1e9 : now; }
   S.b = b; S.k = k;
   const bb = B[b];
   S.to = bb.P.map(p => right(b, p, k) ? [1, right(b, p, "a0") ? 0 : 1] : [0, 0]);
@@ -1567,13 +1576,13 @@ function problemPane(k) {
   const texts = C.examples.filter(e => e[0] === b && e[2] === p.i).sort((x, y) => (y[1] === S.k) - (x[1] === S.k)).slice(0, 3);
   const name = key => REFS.includes(key) ? REFLONG[key] : `a = ${aText(aOf(b, key))}`;
   const block = texts.map(e => `<div class="txt${e[1] === S.k ? " cur" : ""}"><p class="cap">Saved answer, ${esc(name(e[1]))}: its last part. ` +
-    `${e[6] ? `It reached the ${fmt(16384)}-token limit` : `Answer read: ${esc(e[4] || "none")}`}, ${e[3] ? "right" : "wrong"}, ${fmt(e[5])} tokens.</p>` +
-    `<p class="body">… ${esc(e[7])}</p></div>`).join("");
-  const title = b === "math500" ? `Problem ${p.i} of MATH-500` : `${esc(p.label)}`;
+    `${e[6] ? `Cut off at ${fmt(16384)} tokens` : `Answer read: <span data-math>${esc(e[4] || "none")}</span>`}, ${e[3] ? "right" : "wrong"}, ${fmt(e[5])} tokens.</p>` +
+    `<p class="body" data-math>… ${esc(e[7])}</p></div>`).join("");
+  const title = b === "math500" ? `MATH-500, problem ${p.i}` : `328 harder problems, ${esc(p.label.replace(", Problem ", " problem "))}`;
   return `<div class="dhead"><h2>${title}</h2><button class="close" data-open="">Close</button></div>` +
-    `<p class="lead q">${esc(p.q)}</p>` +
-    `<ul class="facts"><li>Reference answer: <span class="verdict">${esc(p.gold)}</span>. ${who} answered it <span class="verdict">${here ? "right" : "wrong"}</span>; ` +
-    `the base model with the cue (a = 0) answered it ${baseR ? "right" : "wrong"}.</li></ul>` +
+    `<p class="lead q" data-math>${esc(p.q)}</p>` +
+    `<ul class="facts"><li>Reference answer: <span class="verdict" data-math>${esc(p.gold)}</span>. ${who} answered it <span class="verdict">${here ? "right" : "wrong"}</span>; ` +
+    `Base + cue (a = 0) answered it ${baseR ? "right" : "wrong"}. One sample each, T 1.0.</li></ul>` +
     `<ol class="arms" aria-label="Right or wrong at each measured model">${cells}</ol>` +
     (block || `<p class="facts" style="margin-top:14px">No answer text of this problem is saved; only its score is.</p>`) +
     `<div class="steps"><button data-step="-1">‹ Previous problem</button><button data-step="1">Next problem ›</button></div>`;
@@ -1672,7 +1681,10 @@ svg.addEventListener("click", e => {
 });
 document.addEventListener("click", e => {
   const w = e.target.closest("[data-bench]"), o = e.target.closest("[data-open]"), s = e.target.closest("[data-step]"), a = e.target.closest("[data-arm]");
-  if (w && w.dataset.bench !== S.b) { setState(w.dataset.bench, S.k); address(false); }
+  if (w && w.dataset.bench !== S.b) {
+    if (S.open && S.open[0] === "p") S.open = null;  // both sets reuse problem numbers, so an open problem closes
+    setState(w.dataset.bench, S.k); address(false); pane();
+  }
   if (a) choose(a.dataset.arm);
   if (o) open(o.dataset.open);
   if (s) {
@@ -1689,8 +1701,10 @@ document.addEventListener("keydown", e => {
     choose(st[clamp(i + (e.key === "ArrowRight" ? 1 : -1), 0, st.length - 1)]);
   }
   if (e.key === "Enter" && document.activeElement === svg) {
+    e.preventDefault();
     const st = new Set(C.examples.filter(x => x[0] === S.b && x[1] === S.k).map(x => x[2])), bb = B[S.b], k = bb.P.findIndex(p => st.has(p.i));
     open("p" + bb.P[k >= 0 ? k : bb.order[0]].i);
+    if (narrow.matches) $("pane").scrollIntoView({ behavior: still.matches ? "auto" : "smooth", block: "start" });
   }
 });
 addEventListener("hashchange", fromHash);
