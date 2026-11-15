@@ -346,7 +346,10 @@ The home page is https://invariant.team (`tools/home.py`; the same Lambda, which
 `invariant.team`, and `/home` on any host). It leads to every page of the monitor: Findings, Board, Proof, Design, Talk
 (`/demo`), Papers, Lab, Exa, past.dev, GPU prices (gpu.invariant.team) and Psychosis. Its picture is a dial: a lit glass
 body with a ring around it and one bead per page. A click on a bead or the arrow keys turn the dial to a page
-(`/#<page>`); a click on the body or the button opens it. Beside the picture the same pages are a plain list of links.
+(`/#<page>`); a click on the body or the button opens it. Beside the picture are one sentence with the Board's two live
+MATH-500 scores (the best untrained-base score and the best RL score in the `scores` rows of `/data`; no numbers before
+the first read), the button, and the same pages as a plain list of links in three groups (Findings, Papers, Talk, Team;
+Board, Design, Proof, Values; the rest under "Also"); on a phone the list comes before the picture.
 About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
 line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and adds the
 link "More" to it after the four tabs; a page with no header gets a small link "Invariant" at its lower left; pinch
