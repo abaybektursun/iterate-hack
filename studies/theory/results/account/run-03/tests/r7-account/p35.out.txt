@@ -1,0 +1,2 @@
+{"info": {"cell": "math500-code-T1", "gap_count": 57, "base_only_count": 17, "included_problems": 500}}
+{"measured": 40, "n": 500, "interval": [26, 54], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": null, "not_computable": null, "example_row": {"problem_index": 0, "subject": "precalculus", "level5": false, "cell": "both", "t1_right": 1, "t2_right": 1, "t1_cap_hit": false, "t2_cap_hit": false, "t1_generated_tokens": 504, "t2_generated_tokens": 1420, "failure_type": null, "label_from_tail_only": false}}
