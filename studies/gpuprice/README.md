@@ -185,6 +185,6 @@ are not independent; every truth is inside the pack, so it is development feedba
 ## Public page
 
 https://gpu.invariant.team shows the main results. Source: `site/` (`index.html` reads `data.json`; `build.py` writes
-`data.json` from `site/content.json`, `results/ledger/`, the locked metrics and the submission CSV, so a new ledger
+`data.json` (generated, not committed) from `site/content.json`, `results/ledger/`, the locked metrics and the submission CSV, so a new ledger
 entry appears without editing the page). Publish after every new result: `studies/gpuprice/site/deploy.sh`
 (CloudFormation stack `gpuprice-site`, AWS profile `fuelos`, `site/template.yaml`: a private S3 bucket behind CloudFront).
