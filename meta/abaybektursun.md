@@ -1,5 +1,22 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 05:30 UTC (after result-5227b9 closed work-be7af1; two fifth-job notices included) meta/reviews/abaybektursun/20261115-0530/
+
+- Last entry's checks (04:15, another session's line): not mine to read; this entry covers the shots session (work-be7af1, work-eb10d7, work-3d68e2).
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md). 6 MATH-500 cells and one 328 cell tested solved examples in context; the base-written arms test the mission's sentence, the RL-written arms explain the gain. Scored once on the 328 as the mission asks: 164 against 164. Next step work-3d68e2 (closing cue) aims at the 184 base answers over 8,000 tokens on the 328; best alternative, vote after restart on the 328, is owned by work-1a972a.
+- Research: told to the owner and narrowed: "+5.6 pts from RL-written examples" (result-6d422d, 03:53) was one draw of 3 texts; the second draw gave -0.6 and the result was corrected at 05:18 (result-5227b9). The spec named the single draw as a limit, but the number went out 85 min before the second draw. What would have caught it: both draws in the first submission (2 more cells, same wall time).
+- Turnaround (`cycle.py --hours 3.5`, cycle.txt): 72 jobs, 13 failed or cancelled, median wait 0.7 min. work-be7af1: to-job 0, jobs 182, to-answer 2 min. The three smokes waited 16.6-16.9 min and the first cells 17.8-24.2 min in the queue; the later cells 0.1 min. Slowest stage: jobs (cells of 33-82 min at 550-930 tokens/s, KV cache 94-98 % full with an 8,240-token prefix).
+- Failure 1 (class: a planned check skipped): shots_loop ran its first round without a smoke; 124 of 144 answers hit the 8,192 cap and no examples could be picked (27 A100 min, vast.ai job 5e03). One `--pool 4` minute would have shown it.
+- Failure 2, fixed in code (step 2: delete the cause): setup_vllm.sh died on vast.ai's default image (pip refuses the externally managed Python). Change: the script sets PIP_BREAK_SYSTEM_PACKAGES=1 for its pip call.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | setup_vllm.sh on a vast.ai default box | exit 1 | not measured yet (box destroyed) | - | 1 and 0 | before.txt, after.txt |
+  | engine versions on Modal (must not change) | pass | pass | same | jobs f08c, d6d2 | run_cell / commit_cue start |
+
+- Failures 3-5, not fixed, rows added to meta/FAILURES.md: `vast.py wait` dies on one failed ssh call; `gpu.py submit` refuses a tree with an untracked file, and this skill tells the reviewer to write cycle.txt into the tree before committing; `vast.py up` took over 19 min on two boxes at 02:20 (image pull) and 91 s at 04:37.
+- Next entry checks: setup_vllm.sh on a vast.ai box with the plain command; whether work-3d68e2 ran its smoke before the full job (it did: f08c, 1.7 min) and posted its headline only with the configuration fixed by the MATH-500 rule.
+
 ## 2026-11-15 04:15 UTC (optimization round asked by the person) meta/reviews/abaybektursun/20261115-0403/
 
 - Last entry's checks (03:53): not due yet. No multi-cell submit, idea-eec971 job or hard328 rows commit since then (board, 04:03).
