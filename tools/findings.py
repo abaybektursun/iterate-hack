@@ -139,7 +139,7 @@ TABLE = {
     "rl-learns-the-opening-first": {
         "group": ANSWERS,
         "figure": lambda m: [signed(m.DATA["t10"]["s100_vs_cue"][0]), "points",
-                             f"MATH-500, T 1.0, RL step 100 ({m.DATA['t10']['right'][2]} of 500) over Base + cue ({m.DATA['t10']['right'][1]}); the interval includes 0"]},
+                             f"MATH-500, T 1.0, mean of 4 samples, RL step 100 ({m.DATA['t10']['right'][2]} of 500) over Base + cue ({m.DATA['t10']['right'][1]}); the interval includes 0"]},
     "rl-avoids-the-slip": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.DATA['D']['math31']['factor']:.2f}", "times as likely",
