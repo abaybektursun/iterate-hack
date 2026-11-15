@@ -1,6 +1,6 @@
 """Derived or asserted (specs/SPEC_derived.md): a blind hosted judge labels the end of long finished hard328 answers.
 
-    P="uv run --no-project --with numpy --with math-verify==0.9.0 --with anthropic python -m studies.rlneurons.analysis.derived"
+    P="uv run --no-project --with numpy --with math-verify==0.9.0 --with anthropic --with brotli>=1.2.0 python -m studies.rlneurons.analysis.derived"   # brotli: httpx2 fails on the older one
     $P prep  --runs runs --work runs/derived          # items.json (with the shown text), hand.md + hand_key.json
     # the agent labels runs/derived/hand.md into runs/derived/hand.json before any judge call
     $P judge --work runs/derived --judge A            # claude-sonnet-5-5 on the 420 sampled rows and the 30 controls
