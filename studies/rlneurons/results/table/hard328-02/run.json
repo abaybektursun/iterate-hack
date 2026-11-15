@@ -1,0 +1,40 @@
+{
+ "commit": "9254eef8e834f6bc0279cd103f897ed6022a55ea",
+ "command": "python -m studies.rlneurons.analysis.config_table --out studies/rlneurons/results/table/hard328-02 --v4-rows studies/rlneurons/results/table/hard328-01/v4_rows.jsonl",
+ "job_id": null,
+ "where": "laptop, no GPU",
+ "spec": "studies/rlneurons/specs/SPEC_table.md (addendum 1)",
+ "sources": {
+  "hard328": {
+   "base": "day1_3/hard328_base_cue_s4r2-01",
+   "rl": "day1_3/hard328_rl_plain_s4r2-01",
+   "think": "thinkvote/hard328_sft1_cue_s4-01"
+  },
+  "math500": {
+   "base": "day1_3/math500_base_cue-01",
+   "rl": "day1_3/math500_rl-01",
+   "think": "thinkvote/math500_sft1_cue_s4-01"
+  }
+ },
+ "sources_addendum_1": {
+  "dial": "tools/finding_the_finish_dial.py",
+  "dial4": "day1_3/hard328_top8x1.5_cue_s4-01",
+  "dial_math500": "xreward/dial15_math500-01",
+  "transplant": "transplant/hard328-01",
+  "transplant_math500": "transplant/math500-01",
+  "fresh2026": {
+   "sft": "fresh/sft1_cue_s4-01",
+   "rl": "fresh/rl_plain_s4-01",
+   "base": "fresh/base_cue_s4-01"
+  }
+ },
+ "raw_answers_for_v4": {
+  "base": "abaybektursun-1114-200457-e8e6",
+  "rl": "abaybektursun-1114-200505-5ff2",
+  "think": "thinkvote_hard328_sft1_cue_s4"
+ },
+ "other_branch": {
+  "commit": "bdba62b6dc1e86a807986287b03347cf9b8c1747",
+  "path": "studies/rlneurons/results/wsp1/hard328/{}-01/per_problem.json"
+ }
+}
