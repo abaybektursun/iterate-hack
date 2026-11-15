@@ -1,0 +1,269 @@
+{
+ "findings": {
+  "result-4b0d5f": [
+   {
+    "slug": "a-quarter-of-rl",
+    "title": "A quarter of RL"
+   }
+  ],
+  "result-e45bf4": [
+   {
+    "slug": "a-quarter-of-rl",
+    "title": "A quarter of RL"
+   }
+  ],
+  "result-59ed1a": [
+   {
+    "slug": "cue-on-code",
+    "title": "Cue on code"
+   }
+  ],
+  "result-40ed3b": [
+   {
+    "slug": "equal-token-frontier",
+    "title": "More samples against RL"
+   }
+  ],
+  "result-389164": [
+   {
+    "slug": "how-much-of-the-gap",
+    "title": "Gap closed without reward"
+   }
+  ],
+  "result-32ff47": [
+   {
+    "slug": "imitation-beats-rl",
+    "title": "Imitation beats RL"
+   }
+  ],
+  "result-5251c9": [
+   {
+    "slug": "imitation-beats-rl",
+    "title": "Imitation beats RL"
+   }
+  ],
+  "result-b006f5": [
+   {
+    "slug": "imitation-beats-rl",
+    "title": "Imitation beats RL"
+   }
+  ],
+  "result-d484cb": [
+   {
+    "slug": "imitation-beats-rl",
+    "title": "Imitation beats RL"
+   }
+  ],
+  "result-f6a8bc": [
+   {
+    "slug": "imitation-beats-rl",
+    "title": "Imitation beats RL"
+   }
+  ],
+  "result-5da8a9": [
+   {
+    "slug": "one-difficulty-axis",
+    "title": "One difficulty order"
+   }
+  ],
+  "result-bf6124": [
+   {
+    "slug": "one-difficulty-axis",
+    "title": "One difficulty order"
+   }
+  ],
+  "result-d9d6f3": [
+   {
+    "slug": "one-difficulty-axis",
+    "title": "One difficulty order"
+   }
+  ],
+  "result-44b4df": [
+   {
+    "slug": "opening-cue",
+    "title": "The opening cue"
+   }
+  ],
+  "result-5c961a": [
+   {
+    "slug": "opening-cue",
+    "title": "The opening cue"
+   },
+   {
+    "slug": "restart-on-cap",
+    "title": "Restarting stuck answers"
+   },
+   {
+    "slug": "vote-over-four",
+    "title": "Vote over 4 samples"
+   }
+  ],
+  "result-60d899": [
+   {
+    "slug": "opening-cue",
+    "title": "The opening cue"
+   },
+   {
+    "slug": "vote-over-four",
+    "title": "Vote over 4 samples"
+   }
+  ],
+  "result-bac4fd": [
+   {
+    "slug": "opening-cue",
+    "title": "The opening cue"
+   }
+  ],
+  "result-c36598": [
+   {
+    "slug": "opening-cue",
+    "title": "The opening cue"
+   }
+  ],
+  "result-dadeec": [
+   {
+    "slug": "opening-cue",
+    "title": "The opening cue"
+   }
+  ],
+  "result-e78dfe": [
+   {
+    "slug": "opening-cue",
+    "title": "The opening cue"
+   }
+  ],
+  "result-51fd20": [
+   {
+    "slug": "restart-on-cap",
+    "title": "Restarting stuck answers"
+   }
+  ],
+  "result-5d032f": [
+   {
+    "slug": "restart-on-cap",
+    "title": "Restarting stuck answers"
+   },
+   {
+    "slug": "vote-over-four",
+    "title": "Vote over 4 samples"
+   }
+  ],
+  "result-e870a1": [
+   {
+    "slug": "restart-on-cap",
+    "title": "Restarting stuck answers"
+   }
+  ],
+  "result-855858": [
+   {
+    "slug": "rl-avoids-the-slip",
+    "title": "RL avoids the slip"
+   },
+   {
+    "slug": "rl-reliability",
+    "title": "Where RL's gain comes from"
+   },
+   {
+    "slug": "rl-wait-habit",
+    "title": "More Wait, same score"
+   }
+  ],
+  "result-faf15a": [
+   {
+    "slug": "rl-avoids-the-slip",
+    "title": "RL avoids the slip"
+   }
+  ],
+  "result-3387ce": [
+   {
+    "slug": "rl-change-on-imitation",
+    "title": "RL change on imitation"
+   }
+  ],
+  "result-818c20": [
+   {
+    "slug": "rl-change-on-imitation",
+    "title": "RL change on imitation"
+   }
+  ],
+  "result-32b7a8": [
+   {
+    "slug": "rl-learns-the-opening-first",
+    "title": "RL learns the opening first"
+   },
+   {
+    "slug": "theories-on-trial",
+    "title": "Theories on trial"
+   }
+  ],
+  "result-afc423": [
+   {
+    "slug": "rl-reliability",
+    "title": "Where RL's gain comes from"
+   },
+   {
+    "slug": "theories-on-trial",
+    "title": "Theories on trial"
+   }
+  ],
+  "result-51a0e7": [
+   {
+    "slug": "the-finish-dial",
+    "title": "The finish dial"
+   },
+   {
+    "slug": "theories-on-trial",
+    "title": "Theories on trial"
+   }
+  ],
+  "result-6f1bb7": [
+   {
+    "slug": "the-finish-dial",
+    "title": "The finish dial"
+   }
+  ],
+  "result-07f566": [
+   {
+    "slug": "theories-on-trial",
+    "title": "Theories on trial"
+   }
+  ],
+  "result-284db5": [
+   {
+    "slug": "theories-on-trial",
+    "title": "Theories on trial"
+   }
+  ],
+  "result-3a3af3": [
+   {
+    "slug": "theories-on-trial",
+    "title": "Theories on trial"
+   }
+  ],
+  "result-5115c5": [
+   {
+    "slug": "theories-on-trial",
+    "title": "Theories on trial"
+   }
+  ],
+  "result-6de887": [
+   {
+    "slug": "theories-on-trial",
+    "title": "Theories on trial"
+   }
+  ],
+  "result-8b0706": [
+   {
+    "slug": "theories-on-trial",
+    "title": "Theories on trial"
+   }
+  ],
+  "result-cbe0bc": [
+   {
+    "slug": "vote-over-four",
+    "title": "Vote over 4 samples"
+   }
+  ]
+ },
+ "pitch": "With no training, a three-token opening cue takes the Olmo 3 base model to 82 on MATH-500 at AI2's own sampling setting, against 93 for the RL-trained model. Without the cue the base scores 64 at our first setting and 45 at AI2's. The gap that RL has to explain is about 11 points."
+}

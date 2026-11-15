@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2884,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "Solving these equations:\n- Subtract: \\( 4b = -289 \\implies b = -\\frac{289}{4} \\)\n- Substitute \\( b \\) back: \\( c = 698 \\)\n\nThus, \\( P(x) = 2x^2 - \\frac{289}{4}x + 698 \\).\n\nFor polynomial \\( Q(x) \\):\n- General form: \\( Q(x) = -2x^2 + dx + e \\)\n\nUsing the points:\n1. At \\( x = 16 \\):\n   \\[\n   -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n   \\]\n\n2. At \\( x = 20 \\):\n   \\[\n   -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n   \\]\n\nSolving these equations:\n- Subtract: \\( 4d = 287 \\implies d = \\frac{287}{4} \\)\n- Substitute \\( d \\) back: \\( e = -582 \\)\n\nThus, \\( Q(x) = -2x^2 + \\frac{287}{4}x - 582 \\).\n\nFinally, we find \\( P(0) + Q(0) \\):\n- \\( P(0) = 698 \\)\n- \\( Q(0) = -582 \\)\n\nTherefore, \\( P(0) + Q(0) = 698 - 582 = 116 \\).\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 23,
+  "gold": "021",
+  "extracted_v3": "32",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 14704,
+  "prompt_tail": "ould be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nA right square pyramid with volume $54$ has a base with side length $6.$ The five vertices of the pyramid all lie on a sphere with radius $\\frac mn$, where $m$ and $n$ are relatively prime positive integers. Find $m+n$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " + (y - b)^2 + (z - c)^2 = R^2\\). Expanding and using the given points, we derive the equations for \\(a\\), \\(b\\), \\(c\\), and \\(R\\).\n\n4. **Symmetry Consideration**:\n   Due to the symmetry of the pyramid, the center of the sphere lies along the line perpendicular to the base through its center. Solving the system of equations derived from substituting the vertices into the sphere's equation, we find:\n   - \\(a = 6\\sqrt{2}\\)\n   - \\(b = 0\\)\n   - \\(c = \\frac{57}{4}\\)\n\n5. **Radius Calculation**:\n   Substituting \\(a\\), \\(b\\), and \\(c\\) into the sphere's equation, we find \\(R^2 = \\frac{3825}{16}\\). Thus, \\(R = \\frac{15\\sqrt{17}}{4}\\).\n\n6. **Result**:\n   The radius of the sphere is \\(\\frac{15\\sqrt{17}}{4}\\), leading to \\(m = 15\\) and \\(n = 17\\). Therefore, \\(m + n = 15 + 17 = 32\\).\n\n\\[\n\\boxed{32}\n\\]"
+ }
+}

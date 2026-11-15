@@ -1,5 +1,31 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 16:15 UTC (session cap32, after result of work-ceccc0) meta/reviews/abaybektursun/20261115-1610-cap32/
+
+- Previous entry of this session asked for minutes from a trained model to a keep-or-stop decision. No trained model since; not measured.
+- Direction: work-ceccc0 served the deliverable directly ("best configuration of either model on the 328"): Think-SFT cue at cap 32,768 = 230 of 328 at 11,795 tokens, the best single-sample row. The follow-up (vote at the larger cap) is with another session (work-dc9359).
+- Turnaround (before.txt): claim to first result 6 h 20 min, of which about 4 h 45 min the laptop was off. Generation was 87 to 129 min per cell. Two losses: 35 min on three 48 GB boxes at 240 tokens per second, and the base cell (about 2.5 box hours) lost when its box ended before the rows were copied.
+- Cause of the lost cell: a finished job's rows existed only on the box until a laptop process copied them.
+- Change (step 2, delete the dependency on the laptop): already made on main by another session while this ran (vast.py 6d6a18b uploads a job's outputs to the team store when it ends). Nothing added here. After: not measured by this session; the AWS rerun used ih, which writes to S3 every 30 s, and lost nothing.
+- Next entry checks: one vast.ai cell fetched with get after its box is gone.
+
+## 2026-11-15 16:00 UTC (loop cycle 10) meta/reviews/abaybektursun/20261115-1550/
+
+- Target (Team line, 4 h): claim to close median 174 min (131 at 15:01), upper quartile 376 min (184), 12 items by 3 people (9); 3.8 results per hour (3.0). The rate rose, the median rose: long items from before the outage are closing now. Modal 28 jobs, 0 failed, wait 0.1 min.
+- Open measurements: the vast.py upload (cycle 9) has not run on a real job. 3 vast.ai jobs were submitted after it, 0 from a commit that contains it; 0 real tars in the team store. Sharded jobs: none in the 4 h listing of this laptop's records.
+- Cause (before.txt): 18 of 25 worktrees have not merged 6d6a18b, among them the four active ones (cap32run, critic, egate, shots: last merge 49 to 69 min old). A session runs the tools of its own checkout, so a tool change on main reaches it only at its next pull; the message on `all` at 15:03 did not lead to one.
+- Score of cycle 9: not measurable yet, for that reason.
+- Change (step 3; step 2 found nothing to delete: one checkout per writer is what keeps writers apart): the message hook adds one line when origin/main changed tools/, infra/ or .claude/ since the checkout merged it (tools/msg.py, one fetch per 10 min for all checkouts).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | worktrees without the newest tool change, 55 min after its push | 18 of 25 | not measured yet | | 1 | before.txt |
+  | active worktrees without it | 4 of 4 | not measured yet | | 1 | before.txt |
+  | stale checkout gets the line | no | yes, once per 10 min | | 1 | after.txt |
+
+- Seen, not mine to act on: box 60799654 is "offline" with GPU 0 % and its job fa29 ended "exit 1" (NVML Unknown Error); told its owner by message.
+- Next cycle checks: active worktrees containing the newest tools commit; real tars under jobs/; the Team line against 174 / 376 min and 3.8 per hour.
+
 ## 2026-11-15 15:05 UTC (loop cycle 9, asked for by the person: three read-only subagents on jobs, transcripts and the board) meta/reviews/abaybektursun/20261115-1500/
 
 - Target: Team, last 4 h: claim to close median 131 min, upper quartile 184 min, over 9 work items closed by 2 people; 12 results, 3.0 per hour. Over 8 h: 92 / 172 min, 31 items, 5.5 per hour.

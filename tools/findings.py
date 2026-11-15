@@ -87,7 +87,8 @@ TABLE = {
         "figure": lambda m: [signed(m._best["gap"][0]), "points", f"MATH-500, against one RL sample, at {m._best['multiple']:.1f} times the tokens"]},
     "cue-on-code": {
         "group": NO_REWARD,
-        "figure": lambda m: [points(m.ST[0]["passed"], m.ST[2]["passed"], m.N), "points", f"{m.N} code problems"]},
+        "figure": lambda m: [signed(m.GAINS["general"]), "points",
+                             f"500 general questions, Base + cue over Base; code {signed(m.GAINS['code'])}, math {signed(m.GAINS['math'])}"]},
     "how-much-of-the-gap": {
         "group": NO_REWARD,
         "figure": lambda m: [m._pc(m._one["share"][0]), "of the gap",
@@ -111,8 +112,8 @@ TABLE = {
         "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap", "MATH-500, base finishes RL's answers"]},
     "rl-learns-the-opening-first": {
         "group": ANSWERS,
-        "figure": lambda m: [f"{m.DATA['okay'][2]} of {m.DATA['n']}", "answers",
-                             f"MATH-500, open with 'Okay' after 100 RL steps; Base {m.DATA['okay'][0]}"]},
+        "figure": lambda m: [signed(m.DATA["t10"]["s100_vs_cue"][0]), "points",
+                             f"MATH-500, T 1.0, RL step 100 ({m.DATA['t10']['right'][2]} of 500) over Base + cue ({m.DATA['t10']['right'][1]}); the interval includes 0"]},
     "rl-avoids-the-slip": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.DATA['D']['math31']['factor']:.2f}", "times as likely",
@@ -152,6 +153,10 @@ TABLE = {
         "group": THEORIES,
         "figure": lambda m: [f"{m.DATA['nearer']['all'][0]} of {m.DATA['nearer']['all'][1]}", "predictions",
                              "theory nearer the measured number than readers with no theory; half would be a tie"]},
+    "forecasts-before-results": {
+        "group": THEORIES,
+        "figure": lambda m: [f"{m.COUNTS['theory'][1]} of {m.COUNTS['theory'][0]}", "forecasts",
+                             f"theory nearer the reported number than both readers with no theory; {m.COUNTS['landed']} of {m.COUNTS['targets']} targets reported"]},
 }
 
 
