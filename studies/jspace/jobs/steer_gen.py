@@ -148,6 +148,7 @@ def main():
     ap.add_argument("--model", default="base", choices=sorted(C.MODELS))
     ap.add_argument("--n", type=int, default=None, help="the first n problems of the selection")
     ap.add_argument("--every", type=int, default=1, help="keep the problems whose index is a multiple of this")
+    ap.add_argument("--pick", default=None, help="comma-separated problem indices: only these (to finish an arm whose job ran out of time)")
     ap.add_argument("--max-tokens", type=int, default=None, help="default: frozen4.json cap (16,384)")
     ap.add_argument("--seed", type=int, default=None, help="default: frozen4.json seeds.T1")
     ap.add_argument("--samples", type=int, default=1)
@@ -170,7 +171,9 @@ def main():
 
     fz = json.loads((C.D4 / "frozen4.json").read_text())
     cap, seed0, pre = a.max_tokens or fz["cap"], a.seed if a.seed is not None else fz["seeds"]["T1"], fz["prefill_ids"]
-    probs = [p for p in C.problems("math500", fz) if int(p["index"]) % a.every == 0][: a.n]
+    pick = None if a.pick is None else {int(x) for x in a.pick.split(",")}
+    probs = [p for p in C.problems("math500", fz) if int(p["index"]) % a.every == 0 and (pick is None or int(p["index"]) in pick)][: a.n]
+    assert probs and (pick is None or len(probs) == len(pick)), "--pick names a problem outside the selection"
     sampling = {"temperature": 1.0, "top_p": 1.0, "repetition_penalty": 1.0}
     versions = {k: metadata.version(k) for k in C.PINS if k != "vllm" or not a.dry_run}
     assert a.dry_run or versions == C.PINS, f"package versions {versions} differ from the study's {C.PINS}: run setup_vllm.sh first"
