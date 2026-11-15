@@ -72,14 +72,14 @@ td.d { color: var(--grey); font-size: 16px; }
 /* the two scenes: one SVG under, an optional canvas for the many small dots, one SVG over */
 .scene { position: relative; width: 100%; overflow: hidden; touch-action: pan-y; }
 .scene svg, .scene canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
-.scene text { font: 600 12px/1 Archivo, Arial, sans-serif; fill: var(--ink); }
+.scene text { font: 600 13px/1 Archivo, Arial, sans-serif; fill: var(--ink); }
 .scene text.g { font-weight: 400; fill: var(--grey); }
 .scene text.b, .scene tspan.b { fill: var(--blue); }
 .scene tspan.n, .scene text.n { font-stretch: 62%; font-weight: 800; font-size: 15px; font-variant-numeric: tabular-nums; }
-.scene text.tag { font-size: 12px; font-weight: 600; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round; paint-order: stroke; }
-.scene text.ml { font-size: 12px; font-weight: 500; fill: var(--grey); }
+.scene text.tag { font-size: 13px; font-weight: 600; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round; paint-order: stroke; }
+.scene text.ml { font-size: 13px; font-weight: 500; fill: var(--grey); }
 .scene text.ml.on { font-weight: 600; fill: var(--ink); }
-.key { margin-top: calc(var(--u) * 2); font-size: 13px; color: var(--grey); max-width: 600px; }
+.key { margin-top: calc(var(--u) * 2); font-size: 14px; color: var(--grey); max-width: 600px; }
 
 /* the memory, with real reads replayed */
 .mem { display: grid; grid-template-columns: 7fr 5fr; gap: calc(var(--u) * 7); margin-top: calc(var(--u) * 6); align-items: start; }
@@ -445,6 +445,14 @@ function loop(el, step, onFirstView) {
     if (e.intersectionRatio >= 0.3 && !seen) { seen = true; if (onFirstView) onFirstView(); }
     sync();
   }, { threshold: [0, 0.3] }).observe(el);
+  /* The same test from the box itself on scroll, so a figure still starts where the observer is late or never fires. */
+  const check = () => {
+    const r = el.getBoundingClientRect(), shown = Math.min(r.bottom, innerHeight) - Math.max(r.top, 0);
+    vis = shown > 0;
+    if (shown >= 0.3 * Math.min(r.height, innerHeight) && !seen) { seen = true; if (onFirstView) onFirstView(); }
+    sync();
+  };
+  addEventListener("scroll", check, { passive: true }); addEventListener("resize", check); check();
   document.addEventListener("visibilitychange", sync);
 }
 function leaning(el) {  // a few degrees toward the pointer, eased; it settles back when the pointer leaves
@@ -731,7 +739,7 @@ function towers() {
   front.innerHTML = LANES.map((ln, i) =>
     `<text data-k="cnt${i}" class="cnt${ln.blue ? " b" : ""}" text-anchor="middle">${ln.cnt}</text>` +
     `<text data-k="lane${i}" class="lane${ln.blue ? " b" : ""}" text-anchor="middle">${ln.name}</text>` +
-    `<text data-k="tok${i}" class="tok${ln.blue ? " b" : ""}" text-anchor="middle"><tspan class="tn">${ln.tok}</tspan><tspan class="tw" dx="5">tokens</tspan></text>`).join("");
+    `<text data-k="tok${i}" class="tok${ln.blue ? " b" : ""}" text-anchor="middle"><tspan class="tn">${ln.tok}</tspan><tspan class="tw" dx="5">tokens to read</tspan></text>`).join("");
   const $ = (root, k) => root.querySelector(`[data-k="${k}"]`);
   const box = [0, 1].map(i => { const g = $(back, "box" + i), o = { g }; g.querySelectorAll("[data-f]").forEach(p => { o[p.dataset.f] = p; }); return o; });
   const T = [0, 1].map(i => ({ cnt: $(front, "cnt" + i), lane: $(front, "lane" + i), tok: $(front, "tok" + i), sh: $(back, "sh" + i), ca: $(back, "ca" + i), cs: $(back, "cs" + i) }));

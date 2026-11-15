@@ -164,7 +164,7 @@ footer { border-top: 2px solid var(--rule); padding-block: 18px 48px; font: 400 
         <canvas id="sc-dots" aria-hidden="true"></canvas>
         <svg id="sc" role="img" aria-label="Replay of search 1: three ideas reach Exa; two stop at the gate and one goes on to the board."></svg>
       </div>
-      <figcaption class="key">Every agent's work cycle passes Exa before a GPU run (AGENTS.md, rule 2). Each dot is one of the 677 pages Exa returned. A slab is an idea an agent was about to run.</figcaption>
+      <figcaption class="key">Every agent's work cycle passes Exa before a GPU run (AGENTS.md, rule 2). A slab is an idea an agent was about to run.</figcaption>
     </figure>
     <div class="cases">
       <div class="stack">
@@ -418,6 +418,7 @@ const stations = [["Idea", ST.idea, LBL.side], ["Exa", ST.gate, LBL.gate], ["GPU
   const e = mk("text", "", G0.text); e.textContent = w; e.setAttribute("text-anchor", "middle"); return { e, x, z };
 });
 const dotLabels = [0, 1, 2].map(() => mk("text", "", G0.text)), tags = [0, 1].map(() => mk("text", "", G0.text));
+const cloudLbl = mk("text", "", G0.text); cloudLbl.textContent = "677 pages Exa returned"; cloudLbl.setAttribute("text-anchor", "middle"); cloudLbl.style.fill = "var(--soft)"; cloudLbl.style.fontWeight = "500";  // names the cloud, so it is not read as decoration
 
 function ribbon(p, w) {  // a stroke whose width changes along it (as in architecture.py): w(point, index) is its full width
   const n = p.length, L = [], R = [];
@@ -483,7 +484,7 @@ const lean = { x: 0, y: 0, tx: 0, ty: 0 };
 function size() {
   const b = fig.getBoundingClientRect(), w = Math.max(1, b.width), h = Math.max(1, b.height), dpr = window.devicePixelRatio || 1;
   G = fitView(PTS, w, h, 14);
-  fs = Math.max(11, Math.min(15, 13 * G.s));
+  fs = Math.max(11, Math.min(16, 14 * G.s));
   G = fitView(PTS, w, h, fs);
   const s = G.s;
   svg.setAttribute("viewBox", `0 0 ${f1(w)} ${f1(h)}`);
@@ -491,6 +492,7 @@ function size() {
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   put(floorEl, "cx", f1(G.cx)); put(floorEl, "cy", f1(G.cy - 10 * s)); put(floorEl, "rx", f1(420 * s)); put(floorEl, "ry", f1(130 * s));
   stations.forEach(st => put(st.e, "font-size", f1(fs)));
+  put(cloudLbl, "font-size", f1(fs * .92));
   dotLabels.forEach(e => put(e, "font-size", f1(fs * .92)));
   tags.forEach(e => put(e, "font-size", f1(fs * .92)));
 }
@@ -591,6 +593,8 @@ function render(t, E) {
     const p = proj(V, G, [st.x, 0, st.z]);
     put(st.e, "x", f1(p[0])); put(st.e, "y", f1(p[1] + fs * .95)); put(st.e, "opacity", f1(ease((E - .5) / .5)));
   });
+  const pc = proj(V, G, [CL.x - CL.rx * .72, CL.y - 52, CL.z]);
+  put(cloudLbl, "x", f1(pc[0])); put(cloudLbl, "y", f1(pc[1])); put(cloudLbl, "opacity", f1(ease((E - .5) / .5)));
 }
 
 function frame(now) {
@@ -641,6 +645,9 @@ fig.addEventListener("pointerleave", () => { lean.tx = 0; lean.ty = 0; });
 new ResizeObserver(() => { size(); if (still) drawStill(); }).observe(fig);
 new IntersectionObserver(es => { onScreen = es[es.length - 1].isIntersecting; go(); }, { threshold: 0.05 }).observe(fig);
 document.addEventListener("visibilitychange", go);
+/* The same test from the box itself on scroll, so the scene still starts where the observer is late or never fires. */
+const seen = () => { const r = fig.getBoundingClientRect(); onScreen = r.bottom > 0 && r.top < innerHeight; go(); };
+addEventListener("scroll", seen, { passive: true }); addEventListener("resize", seen); seen();
 RM.addEventListener("change", () => { still = RM.matches; if (still) drawStill(); else go(); });
 
 size();
