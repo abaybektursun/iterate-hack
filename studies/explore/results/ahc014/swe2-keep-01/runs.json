@@ -1,0 +1,206 @@
+{
+ "fnf_keep-k2-s1": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf_keep",
+   "budget": 40,
+   "seed": 1,
+   "model": "devin:swe-2-medium",
+   "k": 2,
+   "branch_steps": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-keep-01/fnf_keep-k2-s1",
+   "commit": "e31b7b61c4683d3c70f2ae0e7d845bbbaee7d87e",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf_keep --k 2 --budget 40 --seed 1 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-keep-01/fnf_keep-k2-s1 --branch-steps 4"
+  },
+  "metrics": {
+   "strategy": "fnf_keep",
+   "task": "ahc014",
+   "seed": 1,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.587323,
+   "best_id": "s0035",
+   "best_test": 0.574545,
+   "spent": {
+    "prompt_tokens": 957235,
+    "completion_tokens": 62247,
+    "usd": 0.0
+   },
+   "valid_share": 1.0
+  }
+ },
+ "fnf_keep-k2-s2": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf_keep",
+   "budget": 40,
+   "seed": 2,
+   "model": "devin:swe-2-medium",
+   "k": 2,
+   "branch_steps": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-keep-01/fnf_keep-k2-s2",
+   "commit": "e31b7b61c4683d3c70f2ae0e7d845bbbaee7d87e",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf_keep --k 2 --budget 40 --seed 2 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-keep-01/fnf_keep-k2-s2 --branch-steps 4"
+  },
+  "metrics": {
+   "strategy": "fnf_keep",
+   "task": "ahc014",
+   "seed": 2,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.616142,
+   "best_id": "s0021",
+   "best_test": 0.583145,
+   "spent": {
+    "prompt_tokens": 1036581,
+    "completion_tokens": 71281,
+    "usd": 0.0
+   },
+   "valid_share": 0.975
+  }
+ },
+ "fnf_keep-k2-s3": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf_keep",
+   "budget": 40,
+   "seed": 3,
+   "model": "devin:swe-2-medium",
+   "k": 2,
+   "branch_steps": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-keep-01/fnf_keep-k2-s3",
+   "commit": "e31b7b61c4683d3c70f2ae0e7d845bbbaee7d87e",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf_keep --k 2 --budget 40 --seed 3 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-keep-01/fnf_keep-k2-s3 --branch-steps 4"
+  },
+  "metrics": {
+   "strategy": "fnf_keep",
+   "task": "ahc014",
+   "seed": 3,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.599538,
+   "best_id": "s0026",
+   "best_test": 0.587011,
+   "spent": {
+    "prompt_tokens": 981319,
+    "completion_tokens": 65215,
+    "usd": 0.0
+   },
+   "valid_share": 0.975
+  }
+ },
+ "fnf_keep-k8-s1": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf_keep",
+   "budget": 40,
+   "seed": 1,
+   "model": "devin:swe-2-medium",
+   "k": 8,
+   "branch_steps": 1,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-keep-01/fnf_keep-k8-s1",
+   "commit": "e31b7b61c4683d3c70f2ae0e7d845bbbaee7d87e",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf_keep --k 8 --budget 40 --seed 1 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-keep-01/fnf_keep-k8-s1 --branch-steps 1"
+  },
+  "metrics": {
+   "strategy": "fnf_keep",
+   "task": "ahc014",
+   "seed": 1,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.598965,
+   "best_id": "s0035",
+   "best_test": 0.57687,
+   "spent": {
+    "prompt_tokens": 749542,
+    "completion_tokens": 75610,
+    "usd": 0.0
+   },
+   "valid_share": 0.9
+  }
+ },
+ "fnf_keep-k8-s2": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf_keep",
+   "budget": 40,
+   "seed": 2,
+   "model": "devin:swe-2-medium",
+   "k": 8,
+   "branch_steps": 1,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-keep-01/fnf_keep-k8-s2",
+   "commit": "e31b7b61c4683d3c70f2ae0e7d845bbbaee7d87e",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf_keep --k 8 --budget 40 --seed 2 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-keep-01/fnf_keep-k8-s2 --branch-steps 1"
+  },
+  "metrics": {
+   "strategy": "fnf_keep",
+   "task": "ahc014",
+   "seed": 2,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.608894,
+   "best_id": "s0019",
+   "best_test": 0.579165,
+   "spent": {
+    "prompt_tokens": 816804,
+    "completion_tokens": 81883,
+    "usd": 0.0
+   },
+   "valid_share": 0.85
+  }
+ },
+ "fnf_keep-k8-s3": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf_keep",
+   "budget": 40,
+   "seed": 3,
+   "model": "devin:swe-2-medium",
+   "k": 8,
+   "branch_steps": 1,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-keep-01/fnf_keep-k8-s3",
+   "commit": "e31b7b61c4683d3c70f2ae0e7d845bbbaee7d87e",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf_keep --k 8 --budget 40 --seed 3 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-keep-01/fnf_keep-k8-s3 --branch-steps 1"
+  },
+  "metrics": {
+   "strategy": "fnf_keep",
+   "task": "ahc014",
+   "seed": 3,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.562349,
+   "best_id": "s0023",
+   "best_test": 0.549132,
+   "spent": {
+    "prompt_tokens": 709889,
+    "completion_tokens": 66957,
+    "usd": 0.0
+   },
+   "valid_share": 0.95
+  }
+ }
+}

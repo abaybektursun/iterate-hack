@@ -22,6 +22,7 @@ branching from an online basin signal (survey 2026-11-14). Public reimplementati
 | `analysis/best_of_k.py` | Expected best of K independent stored runs of each arm, and how many runs of one arm equal one run of another. |
 | `analysis/spread_test.py` | Two arms of one experiment folder: one-sided Brown-Forsythe permutation test on spread (all splits), exact one-sided rank-sum on validation and test, SD, worst run. Reproduces the swe2-seeds-01 numbers (p 0.0422, 0.197, 0.066). |
 | `analysis/ksweep_test.py` | Agent-count sweep: per-K cells (mean, SD, worst, gap fnf - parallel) and the exact one-sided stratified permutation test, labels permuted within K, on validation and test. |
+| `analysis/keep_test.py` | Fork without flush against fnf and parallel at K=2 and 8: cells, share of the fnf gap, the two stratified permutation tests (sharing, flush). |
 | `analysis/page/build.py` | The results page (private artifact https://claude.ai/artifact/XQwm42PhgcxWjtro4WXN1E): `python3 studies/explore/analysis/page/build.py <out.html>`; template in `analysis/page/template.html`. |
 | `tasks/circles26/` | 26 circles in the unit square, maximize the sum of radii; scorer checks validity (tol 1e-9). Starter 2.54138; best published about 2.636. |
 | `tasks/ahc014/` | AtCoder Heuristic Contest 014 (RectJoin) from Frontier-CS algorithmic problem 159, the task both papers report. Python program, 3 s per case (hard 4 s). Score: mean V / V_ref over cases 1-5 (test: 6-10), checked by the Frontier-CS checker `data/chk.cc` (commit in `data/SOURCE_COMMIT`). Starter (no operations) 0.2217. |
@@ -35,6 +36,28 @@ laptop's `/usr/bin/python3`, which has no numpy or scipy, although the circles26
 below is therefore a **pure-Python** run. Effect: 6 of 1,066 circles submissions (pilot-02, main-01) and 4 of 101
 (main-02) imported numpy/scipy, all invalid; those were the attempts at the optimizer approach. ahc014: 0 of 270
 imported them (unaffected). Programs now run in `runs/explore/.venv` (numpy 2.5.4, scipy 1.18.1), checked at start.
+
+### ahc014/swe2-keep-01: the win over a swarm comes from sharing the best program, not from the flush (SWE-2, 6 runs, 0 USD)
+
+Plan written before the runs: `specs/keep-ahc014-swe2.md`. New: fnf_keep (fork without flush) at K=2 and K=8,
+seeds 1-3; compared with the fnf and parallel cells of swe2-ksweep-02 (same K, seeds, 40 submissions).
+`results/ahc014/swe2-keep-01/summary.json` (from `analysis/keep_test.py`); examples: best fnf_keep-k2-s2, invalid
+fnf_keep-k8-s2. Check that the arm did what its name says: a branch's prompt grows from about 1.4k tokens at
+fork 0 to 14-18k at fork 1 and 31-41k at fork 2 (history kept).
+
+| K | parallel | fnf_keep (3 runs) | Mean | fnf | Share of the fnf gap |
+|---|---|---|---|---|---|
+| 2 | 0.528 | 0.587 0.616 0.600 | 0.601 | 0.612 | 0.87 |
+| 8 | 0.575 | 0.599 0.609 0.562 | 0.590 | 0.605 | 0.51 |
+
+- **Both predictions hold.** Sharing, fnf_keep > parallel: stratified permutation p = 0.0225 (400 splits; plan
+  p < 0.05). Flush, fnf > fnf_keep: p = 0.198 (plan: p >= 0.05). fnf is ahead of fnf_keep by 0.011 (K=2) and
+  0.015 (K=8), below what 3 runs per cell can detect (about 0.05).
+- Held-out test: sharing p = 0.070, flush p = 0.358; at K=8 parallel, fnf_keep and fnf are level (0.568, 0.568,
+  0.571), as in the sweep.
+- Reading: restarting every branch from the team's best program is what beats independent agents here. A fresh
+  chat on top of that is not shown to help SWE-2 on ahc014; it also costs nothing (fnf_keep prompts are up to 25x
+  longer, so with a paid model fnf is the cheaper of the two).
 
 ### ahc014/swe2-ksweep-02: fnf beats a parallel swarm at 2, 4 and 8 agents (SWE-2, equal 40 submissions, 0 USD)
 

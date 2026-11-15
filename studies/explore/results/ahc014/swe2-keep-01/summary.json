@@ -1,0 +1,223 @@
+{
+ "folders": [
+  "runs/explore/ahc014/swe2-keep-01",
+  "runs/explore/ahc014/swe2-ksweep-02"
+ ],
+ "runs": {
+  "2": {
+   "fnf_keep": [
+    {
+     "seed": 1,
+     "val": 0.587323,
+     "test": 0.574545
+    },
+    {
+     "seed": 2,
+     "val": 0.616142,
+     "test": 0.583145
+    },
+    {
+     "seed": 3,
+     "val": 0.599538,
+     "test": 0.587011
+    }
+   ],
+   "fnf": [
+    {
+     "seed": 1,
+     "val": 0.651524,
+     "test": 0.648287
+    },
+    {
+     "seed": 2,
+     "val": 0.606832,
+     "test": 0.58713
+    },
+    {
+     "seed": 3,
+     "val": 0.57752,
+     "test": 0.544322
+    }
+   ],
+   "parallel": [
+    {
+     "seed": 1,
+     "val": 0.583403,
+     "test": 0.563779
+    },
+    {
+     "seed": 2,
+     "val": 0.561651,
+     "test": 0.546064
+    },
+    {
+     "seed": 3,
+     "val": 0.438714,
+     "test": 0.450212
+    }
+   ]
+  },
+  "8": {
+   "fnf_keep": [
+    {
+     "seed": 1,
+     "val": 0.598965,
+     "test": 0.57687
+    },
+    {
+     "seed": 2,
+     "val": 0.608894,
+     "test": 0.579165
+    },
+    {
+     "seed": 3,
+     "val": 0.562349,
+     "test": 0.549132
+    }
+   ],
+   "fnf": [
+    {
+     "seed": 1,
+     "val": 0.584017,
+     "test": 0.523462
+    },
+    {
+     "seed": 2,
+     "val": 0.59884,
+     "test": 0.588389
+    },
+    {
+     "seed": 3,
+     "val": 0.631508,
+     "test": 0.599917
+    }
+   ],
+   "parallel": [
+    {
+     "seed": 1,
+     "val": 0.592184,
+     "test": 0.591874
+    },
+    {
+     "seed": 2,
+     "val": 0.576212,
+     "test": 0.552331
+    },
+    {
+     "seed": 3,
+     "val": 0.556304,
+     "test": 0.56105
+    }
+   ]
+  }
+ },
+ "cells": {
+  "val K=2": {
+   "share_of_fnf_gap": 0.8696074698145242,
+   "fnf_keep": {
+    "n": 3,
+    "mean": 0.601001,
+    "sd": 0.014465094780194112,
+    "worst": 0.587323
+   },
+   "fnf": {
+    "n": 3,
+    "mean": 0.6119586666666667,
+    "sd": 0.03726741253874934,
+    "worst": 0.57752
+   },
+   "parallel": {
+    "n": 3,
+    "mean": 0.5279226666666667,
+    "sd": 0.07801876077158194,
+    "worst": 0.438714
+   }
+  },
+  "val K=8": {
+   "share_of_fnf_gap": 0.5075335972787598,
+   "fnf_keep": {
+    "n": 3,
+    "mean": 0.5900693333333333,
+    "sd": 0.024514463492667636,
+    "worst": 0.562349
+   },
+   "fnf": {
+    "n": 3,
+    "mean": 0.6047883333333334,
+    "sd": 0.024297855303160643,
+    "worst": 0.584017
+   },
+   "parallel": {
+    "n": 3,
+    "mean": 0.5749,
+    "sd": 0.017975945260263793,
+    "worst": 0.556304
+   }
+  },
+  "test K=2": {
+   "share_of_fnf_gap": 0.8405072740845936,
+   "fnf_keep": {
+    "n": 3,
+    "mean": 0.581567,
+    "sd": 0.006381054144888597,
+    "worst": 0.574545
+   },
+   "fnf": {
+    "n": 3,
+    "mean": 0.5932463333333333,
+    "sd": 0.052251674196463135,
+    "worst": 0.544322
+   },
+   "parallel": {
+    "n": 3,
+    "mean": 0.5200183333333334,
+    "sd": 0.061099496203596754,
+    "worst": 0.450212
+   }
+  },
+  "test K=8": {
+   "share_of_fnf_gap": -0.013511438661135515,
+   "fnf_keep": {
+    "n": 3,
+    "mean": 0.568389,
+    "sd": 0.016716482674294892,
+    "worst": 0.549132
+   },
+   "fnf": {
+    "n": 3,
+    "mean": 0.5705893333333334,
+    "sd": 0.04121847712292796,
+    "worst": 0.523462
+   },
+   "parallel": {
+    "n": 3,
+    "mean": 0.5684183333333334,
+    "sd": 0.020775742208964113,
+    "worst": 0.552331
+   }
+  }
+ },
+ "val sharing: fnf_keep>parallel": {
+  "sum_of_gaps": 0.08824766666666672,
+  "p": 0.0225,
+  "splits": 400
+ },
+ "val flush: fnf>fnf_keep": {
+  "sum_of_gaps": 0.02567666666666668,
+  "p": 0.1975,
+  "splits": 400
+ },
+ "test sharing: fnf_keep>parallel": {
+  "sum_of_gaps": 0.06151933333333326,
+  "p": 0.07,
+  "splits": 400
+ },
+ "test flush: fnf>fnf_keep": {
+  "sum_of_gaps": 0.013879666666666735,
+  "p": 0.3575,
+  "splits": 400
+ },
+ "spec": "specs/keep-ahc014-swe2.md",
+ "verdict": "both predictions hold: sharing fnf_keep > parallel p = 0.0225 (passes); flush fnf > fnf_keep p = 0.1975 (does not pass). The win over a parallel swarm is from sharing the best program; a flush effect is not shown (fnf ahead by 0.011 at K=2, 0.015 at K=8).",
+ "history_check": "fnf_keep branches kept the chat: first-branch prompt about 1.4k tokens at fork 0, 14-18k at fork 1, 31-41k at fork 2 (log.jsonl prompt_tokens, estimated as chars/4)"
+}

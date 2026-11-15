@@ -1,0 +1,18 @@
+{
+ "scored_right": {
+  "run": "fnf_keep-k2-s2",
+  "id": "s0021",
+  "branch": "",
+  "idea": "Same top-k temperature/jitter solver (best at 0.612) but with faster internals \u2014 integer point ids, bytearray dots, int edge ids, and int dedup keys \u2014 so more restarts fit in the budget.",
+  "score": 0.616142,
+  "msg": "per-case V/V_best: 0.602, 0.406, 0.757, 0.742, 0.575"
+ },
+ "scored_wrong": {
+  "run": "fnf_keep-k8-s2",
+  "id": "s0000",
+  "branch": "f0b0",
+  "idea": "Greedy sweeps that place dots (preferring high-weight cells) using \"nearest-dot ray\" tables for O(1) rectangle discovery, tracking used unit edges for validity, repeated until no moves or time runs out.",
+  "score": null,
+  "msg": "case 1: exit 1; stderr:   File \"/var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/tmp9mmh5ohg/solution.py\", line 74\n    order = sorted((x,y) for x in range(N) for y in range(N) if not dot[x][y],\n                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nSyntaxError: Generator expression must be parenthesized\n"
+ }
+}
