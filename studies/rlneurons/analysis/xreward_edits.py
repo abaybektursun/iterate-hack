@@ -34,6 +34,17 @@ NEW = {
     "projc_math31_code30": ("abaybektursun-1115-012915-6618", "--recipe projc --donor code30 --other math31"),
     "top8_code30": ("abaybektursun-1115-012925-b15d", "--recipe top8 --other code30"),
     "rbulk_math31": ("abaybektursun-1115-012935-2836", "--recipe rbulk --other math31"),                      # amendment 4
+    "top8xm1_math31": ("abaybektursun-1115-031209-1273", "--recipe top8 --scale -1 --other math31"),          # amendment 5
+    "top8x0.5_math31": ("abaybektursun-1115-031219-19af", "--recipe top8 --scale 0.5 --other math31"),
+    "top8x1.5_math31": ("abaybektursun-1115-031229-5991", "--recipe top8 --scale 1.5 --other math31"),
+    "top8x3_math31": ("abaybektursun-1115-031240-1106", "--recipe top8 --scale 3 --other math31"),
+    "rand8xm1_math31": ("abaybektursun-1115-031249-1dcd", "--recipe rand8 --scale -1 --other math31"),
+    "rand8x2_math31": ("abaybektursun-1115-031304-cf34", "--recipe rand8 --scale 2 --other math31"),
+    "rand8x3_math31": ("abaybektursun-1115-031315-b328", "--recipe rand8 --scale 3 --other math31"),
+    "top8_math30": ("abaybektursun-1115-031326-369f", "--recipe top8 --other math30"),
+    "top8_if30": ("abaybektursun-1115-031336-56ff", "--recipe top8 --other if30"),
+    "top8_general30": ("abaybektursun-1115-031346-5113", "--recipe top8 --other general30"),
+    "top8_think_sft": ("abaybektursun-1115-031356-77f0", "--recipe top8 --other think_sft"),
 }
 REFS = {"base_cue_T1": OLD["base_cue_T1"][0], "rl_plain_T1": OLD["rl_plain_T1"][0], "rl_cue_T1": OLD["rl_cue_T1"][0],
         "theta0.25_cue": WDIFF["theta0.25_cue"][0], "theta0.5_cue": WDIFF["theta0.5_cue"][0], "code1_cue": WDIFF["code1_cue"][0]}
