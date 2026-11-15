@@ -39,17 +39,18 @@ limit therefore mixes two things: which model is right more often, and which mod
 them on four models of one family, Olmo~3~7B: the base with a fixed three-token opening (a cue), the model
 trained from it with reinforcement learning (RL), the supervised reasoning fine-tune (Think-SFT), and a sum of
 weights, Think-SFT plus twice the RL change. On 328 competition problems we generate up to 32{,}768 tokens and
-score the same answers at 16{,}384 and at 32{,}768, one sample per model. RL's gain over the base holds, 12.5
-points to 11.9. Think-SFT's lead over RL grows from 4.3 points to 10.7, a change of 6.4 \ci{3.7}{9.5}. The weight
-sum's gain over Think-SFT falls from 6.7 points to 3.4 \ci{-0.6}{7.0}; this change is suggestive only. What
+score the same answers at 16{,}384 and at 32{,}768, one sample per model. RL's gain over the base holds:
+12.5 percentage points at 16{,}384 tokens and 11.9 at 32{,}768. Think-SFT's lead over RL grows from 4.3 points to 10.7, a change of 6.4 \ci{3.7}{9.5}. The weight
+sum's gain over Think-SFT falls from 6.7 points to 3.4, a change of $-3.4$ \ci{-6.4}{-0.3} whose interval
+includes zero once widened for three comparisons; this change is suggestive only. What
 decides each change is how often answers past 16{,}384 tokens end right, not only how many there are:
-Think-SFT has 93 and 23 end right, the base has 64 and 4 end right. No ordering of models changes.
+Think-SFT has 93 answers longer than 16{,}384 tokens, of which 23 end right; the base has 64, of which 4 end right. No ordering of models changes.
 \end{minipage}\end{center}
 
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{fig_caps.pdf}
-\caption{\textbf{Two token limits.} Olmo~3~7B models on 328 competition problems at temperature 1.0. \textbf{Left:}
+\caption{\textbf{The longer limit helps Think-SFT most: a quarter of its answers past 16{,}384 tokens end right.} Olmo~3~7B models on 328 competition problems at temperature 1.0. \textbf{Left:}
 the gain of one model over another, in percentage points, when the same answers are scored at a limit of 16{,}384
 tokens and of 32{,}768; one sample per model, bars are 95\,\% intervals. \textbf{Right:} the answers longer than
 16{,}384 tokens, by how they end. Think-SFT, RL and the base are from one run (seed 3{,}000{,}000); the weight
@@ -62,7 +63,7 @@ sum and the Think-SFT sample it is compared with are from a second (seed 3{,}010
 Reasoning models write long answers, and every evaluation sets a limit on their length. An answer that reaches
 the limit is \emph{cut off}: it has no final answer and is scored wrong. Hochlehnert et al.\
 \cite{hochlehnert2025sober} showed that accuracy is sensitive to this limit and recommend 32{,}000 tokens or
-more. Rankings can also depend on the budget: between a prompting mode with and without thinking
+more. Rankings can also depend on the limit: between a prompting mode with and without thinking
 \cite{ma2025nothinking}, between prompting strategies once compute is matched \cite{wang2024tokeneconomies}, and
 between open-weight models from different developers at different maximum reasoning lengths
 \cite{samadi2025ioi}.
@@ -70,12 +71,13 @@ between open-weight models from different developers at different maximum reason
 We ask a narrower question, about the comparisons that research on training methods rests on: models of one
 family, fine-tuned from one base in different ways. If method A beats method B at one limit, is A right more
 often, or does A finish sooner? We take four such models and three comparisons that would be reported as gains
-at 16{,}384 tokens. Scored at twice the limit, one gain holds, one grows and one shrinks.
+at 16{,}384 tokens. Scored at twice the limit, RL's gain over the base stays near 12 points, Think-SFT's lead over RL grows from
+4.3 to 10.7 points, and the weight sum's gain over Think-SFT falls from 6.7 to 3.4.
 
 \section{Setup}
 
 \textbf{Models.} \emph{Base}: Olmo~3 Base 7B \cite{olmo2025olmo3}, answering with a fixed three-token opening
-prefilled, a cue after Wang et al.\ \cite{wang2026base}. \emph{RL}: Olmo~3.1~7B RL-Zero-Math, trained with RL
+prefilled, a cue adapted from Wang et al.\ \cite{wang2026base}. \emph{RL}: Olmo~3.1~7B RL-Zero-Math, trained with RL
 directly from the base, plain prompt. \emph{Think-SFT}: Olmo~3 Think SFT, the supervised fine-tune of the base,
 with the cue. \emph{Weight sum}: Think-SFT plus twice the RL model's change from the base, with the cue. Writing
 $\tau$ for a model's weights minus the base's, this is the base plus $\tau_{\mathrm{SFT}} + 2\,\tau_{\mathrm{RL}}$,
@@ -89,12 +91,12 @@ set of 400, less 72 flagged for overlap with the RL training data. We also repor
 \textbf{Two limits from one answer.} Each model is sampled at temperature 1.0 and top-$p$ 1.0 with up to 32{,}768
 generated tokens. The answer is scored twice: as written, and as it would be at a limit of 16{,}384, where it
 counts as right only if it finished within 16{,}384 tokens. The limit is the only setting that differs, so the
-first 16{,}384 tokens are a draw from the same distribution as a run at that limit, though not identical to
-one: a rerun at the same seed matches the stored token counts on at most 7 of 328 problems. Each comparison uses one sample per
+first 16{,}384 tokens are drawn from the same distribution as a run at that limit. They are not the same tokens:
+a rerun at the same seed matches the stored token counts on at most 7 of 328 problems. Each comparison uses one sample per
 model. Differences are in percentage points with 95\,\% intervals from a paired bootstrap over problems. Where we
 use the stored runs made at a limit of 16{,}384 (three or four samples per model), we say so.
 
-\section{Three comparisons}
+\section{At 32{,}768 tokens the Think-SFT lead grows and the weight-sum gain shrinks}
 
 \begin{table}[h]
 \centering\small
@@ -119,8 +121,8 @@ at 32{,}768, 195 and 156. In the stored four-sample runs at 16{,}384 the gain is
 
 \textbf{Think-SFT over RL: the lead grows.} At 16{,}384 Think-SFT is right on 207 problems and RL on 193. At
 32{,}768 Think-SFT is right on 230 and RL on 195. The change, $+6.4$ points, keeps its sign when the interval
-is widened for three comparisons \ci{3.1}{10.1}, and with a second Think-SFT sample ($+6.6$ \ci{4.6}{8.7}). Think-SFT in its own chat format shows a similar
-change (204 and 232 right: $+7.9$ points, from totals only, without an interval). The size of the lead is less certain than its growth: the RL sample of this run is low (see
+is widened for three comparisons (Bonferroni, 98.33\,\%) \ci{3.1}{10.1}, and with a second Think-SFT sample ($+6.6$ \ci{4.6}{8.7}). Think-SFT in its own chat format shows a similar
+change (204 right at 16{,}384 and 232 at 32{,}768; the change in its lead over RL is $+7.9$ points, from totals only, without an interval). The size of the lead is less certain than its growth: the RL sample of this run is low (see
 Limitations), and against RL's stored mean the lead at 32{,}768 is about 8.5 points. On MATH-500, where few
 answers are long, the two models tie at 16{,}384 ($+0.1$ \ci{-1.4}{1.5}).
 
@@ -128,17 +130,17 @@ answers are long, the two models tie at 16{,}384 ($+0.1$ \ci{-1.4}{1.5}).
 samples of the sum on the 328 problems, four elsewhere) the sum beats Think-SFT by 7.4 points \ci{5.2}{9.8}, and
 by 9.0 \ci{5.3}{12.9} on the 2026 problems. At 32{,}768 it is right on 245 problems against 234, a gain of 3.4
 points \ci{-0.6}{7.0}, with 14\,\% fewer tokens per problem (9{,}875 against 11{,}512). The point estimate of the
-gain falls by half. The change, $-3.4$ \ci{-6.4}{-0.3}, is fragile: widened for three
-comparisons its interval is \ci{-7.3}{0.3}, and one Think-SFT answer that reaches 32{,}768 tokens is graded right;
-scored wrong, the change is $-3.1$ \ci{-6.1}{0.0}. Before the run we recorded two tests of whether the sum adds
-right answers and does not only save tokens: 240 or more right, and a paired interval above zero. The count
+gain falls by half. The change, $-3.4$ \ci{-6.4}{-0.3}, is fragile for two reasons. Widened
+for three comparisons, its interval is \ci{-7.3}{0.3}. And one Think-SFT answer that reaches 32{,}768 tokens is
+graded right; scored wrong, it makes the change $-3.1$ \ci{-6.1}{0.0}. Before the run we recorded two tests of whether the sum adds
+right answers and does not only save tokens: 240 or more right, and a paired 95\,\% interval of the gain over Think-SFT at 32{,}768 that lies above zero. The count
 passes the first and the interval fails the second.
 
-\section{What happens past 16{,}384 tokens}
+\section{Past 16{,}384 tokens, how often an answer ends right decides each change}
 
 Each change follows from two counts (Figure~\ref{fig:caps}, right). Think-SFT has 93 answers longer than 16{,}384
-tokens (late answers); 91 finish by 32{,}768 and 23 end right. The base has 64 and 4 end right. RL has 20 and 2 end right. The
-weight sum has 56, all finish, and 13 end right. So the larger limit gives Think-SFT 7.0 points \ci{4.3}{9.8},
+tokens (late answers); 91 finish by 32{,}768 and 23 end right. The base has 64 late answers, of which 4 end right; RL has 20, of which 2
+end right. The weight sum has 56, all finish, and 13 end right. So the larger limit gives Think-SFT 7.0 points \ci{4.3}{9.8},
 the weight sum 4.0 \ci{2.1}{6.1}, the base 1.2 \ci{0.3}{2.4} and RL 0.6 \ci{0.0}{1.5}, and a comparison moves
 by the difference of two of these. (The sum is compared with a second Think-SFT sample, which has 90 late
 answers, 24 right, and gains 7.3.)
@@ -159,7 +161,7 @@ points.
 \section{Related work}
 
 The Olmo~3 developers evaluate at 32{,}768 tokens \cite{olmo2025olmo3}, so their comparisons do not have this
-problem; ours shows what a limit of 16{,}384, used for math by Yue et al.\ \cite{yue2025doesrl}, does to such comparisons.
+problem; this paper shows what a limit of 16{,}384, used for math by Yue et al.\ \cite{yue2025doesrl}, does to such comparisons.
 The AceReason model was trained with RL in stages of growing length and evaluated at 32{,}768 tokens
 \cite{chen2025acereason}, and its successor reports that masking cut-off answers during RL helps under limits of
 8{,}000 to 16{,}000 tokens and hurts at 32{,}000 \cite{liu2025acereason}. Within one model, wrong answers are
@@ -173,13 +175,13 @@ comparison is a reason to report such gains together with the share of answers c
 
 \begin{itemize}
 \item One model family and one problem set at the larger limit, with one sample per model in each comparison (two
-for Think-SFT). A second sample of the weight sum at 32{,}768 was running when this was written.
+for Think-SFT). We have one sample of the weight sum at 32{,}768.
 \item The 16{,}384 score is computed from the 32{,}768 run. It counts every cut-off answer as wrong, while a real
-run credits the few cut-off texts in which the grader still finds the answer (1 to 3.5 per sample by model). We
+run credits the few cut-off texts in which the grader still finds the answer (1 to 3.5 answers per sample, depending on the model). We
 estimate that this would move the three changes to about $-0.8$, $+5.9$ and $-2.9$.
 \item The RL sample of the 32{,}768 run scores 193 at 16{,}384; its four stored samples score 190 to 209, mean
-200. The plan for the run asked for a rerun of any cell more than 12 problems from its reference of 206. This
-cell is 13 away and was not rerun.
+200. Our plan, written before the run, said to rerun any model whose score differed by more than 12 problems
+from its earlier result (206 for RL). This RL sample is 13 problems away and was not rerun.
 \item RL runs without the cue; the base and Think-SFT run with it.
 \item The count of late answers was defined after the runs. The 32{,}768 run of the weight sum and its two tests
 were recorded in advance.
@@ -196,9 +198,9 @@ gain reported at one limit should come with the share of answers each model has 
 differs, with the same answers scored at a second limit.
 
 {\small
-\textbf{Reproducibility.} Code and the metrics of every run are in the project repository, in the folder
+\textbf{Reproducibility.} Code and the metrics of every run are in the team's repository, which is private and available on request, in the folder
 \texttt{studies/rlneurons/}. In its folder \texttt{paper-two-caps/}, the script \texttt{build\_facts.py}
-recomputes the numbers of this paper from the committed per-problem rows, or copies them from committed readouts
+recomputes the numbers of this paper from the committed per-problem rows, or copies them from the summary files of the runs
 (the run in Think-SFT's own chat format), and writes each with its source to \texttt{facts.json}, and
 \texttt{figs.py} draws the figure.
 }
