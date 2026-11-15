@@ -1380,6 +1380,26 @@ code text at about 0.54 of its drive on math text.
 | `analysis/direct_input.py` | Readout from trace-01's per-position drive (`runs/abaybektursun-1115-005830-2145/trace_00*.npz`) and 7 hard328 cells' `answers.jsonl` (Modal Volume `iterate-runs`). |
 | `results/direct/input-01/` | `readout.json`, `examples.json` (a high-drive and a low-drive problem that the edit shortens as much), `run.json`. |
 
+### short-01: run-02/f2-m01, "autobench buys votes with short samples" (board work-4c1119, result-ebf7a4, refuted)
+
+Claim tested (engine 12's plan, with the mechanism's own MATH-500 half added as control): hard328 solutions need 6,000-14,000
+tokens, so under 20 % of the hard328 problems the cued base solves have a right sample of 2,000 tokens or fewer, against over
+50 % on MATH-500. No other top mechanism predicts anything about the base's solution lengths. Readout from the committed
+day1_3 rows (base + cue, T 1.0 / top-p 1.0, 4 samples, cap hits resampled up to 2 times, every row counted), 90 % bootstrap
+over solved problems: hard328 72 of 220, 32.7 % [27.7, 38.2]; MATH-500 320 of 474, 67.5 % [63.9, 71.1]. Rule fixed in
+advance: refuted if the hard328 lower bound is 20 % or more. Median right length 3,921 tokens [3,541, 4,390] on hard328 (the
+cause says 6,000-14,000), 1,594 on MATH-500. At 1,100 tokens 12.7 % [9.1, 16.4] against 50.4 %; at 4,096, 56.4 % against
+84.0 %. The contrast holds in direction, not in size: the short right answers sit on easy problems inside hard328 (94.5 % of
+their samples right, against 56.6 % on the other solved problems). 10 raw rows read (`reading.md`): AMC and OlympiadBench
+problems, right values no guess would give, grading correct; answer texts are not committed. Row added to
+`results/refuted.json`. The mechanism was already not carried in round-12 (-1.77 nats).
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_short.md` | Claim, refuting observation, rule (pushed first, 00ccb83). |
+| `analysis/direct_short.py` | Readout from `studies/rlneurons/results/day1_3/{hard328_base_cue_s4r2-01,math500_base_cue-01}/rows.jsonl`. |
+| `results/direct/short-01/` | `readout.json`, `examples.json` (a solved problem with no short right sample, one with), `reading.md`, `run.json`. |
+
 ### ending-01: run-03/f2-m04, "accuracy depends on how the answer ends" (board work-8965b9, refuted)
 
 Claim tested (engine 12's plan): on code, RL-Math's 8 directions at 1.5x add at least 8 finished answers with no code block,

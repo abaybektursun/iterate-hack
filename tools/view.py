@@ -25,15 +25,15 @@ in an opened step and in the side panel. The page reads /data every 10 s and rew
 A click on an item opens its title, what, why and caveat, its full text, scores, votes, comments and message thread in
 a side panel whose address is /#<item id>; the filters are in the address too (/?who=<name>&q=<text>&idle=1). Keys:
 / filter, j and k move, 1 2 3 jump to the record steps, Now and Learned, Enter opens, Esc closes, ? lists the keys. A
-click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
+click on a person shows only that person. The look is that of architecture.py (.claude/skills/site-ui/SKILL.md).
 
   GET /demo            the talk as a deck of thirteen 16:9 slides (demo_deck.py): keys step, p prints one slide per page
   GET /demo/fig/<name> the pictures the deck embeds (climb, harness, exa, pastdev, fixes, beyond, efficiency, basins), with their
                        header, words column and key hidden (demo_deck.FIGS)
-  GET /demo/story      the stepped story of the talk over the Design page's picture (demo.py), fed by the same /data
+  GET /demo/story      the stepped story of the talk over the picture of architecture.py (demo.py), fed by the same /data
   GET /demo/ali/<name> Ali's slides of the talk, slide1 to slide3: the idea map, the idea tree and the accuracy climb
                        (demo_ali.py, with its data in demo_ali_data.py); /demo/ali leads to the first
-  GET /architecture    the Design tab, how the harness works: one interactive picture (architecture.py), fed by the same /data
+  GET /architecture    leads to /demo#harness, the deck slide that shows its picture (architecture.py); it was the Design tab
   GET /findings        the Findings tab: one tile per finding (findings.py), each a link to the page of that finding
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
   GET /proof           the Proof tab: one tile per experiment that tests the team's method itself (the page of findings.py)
@@ -75,7 +75,6 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from boto3.dynamodb.conditions import Key
 
-import architecture
 import board
 import climb
 import demo
@@ -263,9 +262,12 @@ NAME = '<h1 class="name">Invariant</h1>'
 NAME_LINKED = f'<h1 class="name"><a href="{SITE_HOME}" style="color:inherit;font-weight:inherit;text-decoration:none">Invariant</a></h1>'
 NAME_LINK = re.compile(r'<h1 class="name"><a href="[^"]*">Invariant</a></h1>')  # a header whose name already is a link (/values)
 FINDINGS_TAB = re.compile(r'<a (?:class="tab" )?href="/findings"[^>]*>Findings</a>')
+# The tab of the Design page, retired on 2026-11-15, is still in the header copied into each page module; it is taken out
+# as the page is sent. The deck's pictures (/demo/fig/) keep it: their header is hidden and their bytes stay as they were.
+DESIGN_TAB = re.compile(r'\n *<a (?:class="tab" )?href="/architecture"[^>]*>Design</a>')
 NO_ZOOM = re.compile(r',\s*(?:maximum-scale=[\d.]+|user-scalable=(?:no|0))')
 # The current tab is heavier and set tighter, so the links after it stay where they are on every page. On a phone the
-# six items of the header fit one row of 343 px; the name of a page that is no tab (HERE) has no room there.
+# five items of the header fit one row of 343 px; the name of a page that is no tab (HERE) has no room there.
 TAP = ("<style>@media (max-width: 900px) { .top a { padding-block: 10px; } } .top a[aria-current], .top .here { letter-spacing: -.022em; } "
        ".top .here { margin-left: 0; color: var(--ink, inherit); font-weight: 600; white-space: nowrap; } "
        "@media (max-width: 400px) { .top { column-gap: 9px !important; } .top .name { font-size: 14px !important; } .top .here { display: none; } }</style>\n</head>")
@@ -286,6 +288,8 @@ def chrome(body, path):
     if 'id="go"' in body and "const PAGES" in body:  # the home page
         return body
     body = NO_ZOOM.sub("", body)
+    if not path.startswith("/demo/fig/"):
+        body = DESIGN_TAB.sub("", body)
     body = body.replace('<span class="name">Invariant</span>', f'<a class="name" href="{SITE_HOME}" style="color:inherit;text-decoration:none">Invariant</a>', 1)  # lab pictures
     if NAME in body or HEADER in body:
         body = NAME_LINK.sub(NAME_LINKED, body.replace(NAME, NAME_LINKED, 1), count=1)
@@ -324,7 +328,6 @@ a { color: inherit; text-decoration: none; }
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
-    <a href="/architecture">Design</a>
     <a href="/proof">Proof</a>
     <a href="/findings">Findings</a>
   </header>
@@ -385,8 +388,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(302, "text/plain", "", [("Location", "/demo/ali/slide1")])
         if path.startswith("/demo/ali/") and path[len("/demo/ali/"):] in demo_ali.PAGES:
             return self.send(200, "text/html", demo_ali.PAGES[path[len("/demo/ali/"):]])
-        if path == "/architecture":
-            return self.send(200, "text/html", architecture.PAGE)
+        if path == "/architecture":  # the Design tab until 2026-11-15; its picture is a slide of the deck
+            return self.send(302, "text/plain", "", [("Location", "/demo#harness")])
         if path == "/findings":
             return self.send(200, "text/html", findings_page())
         if path.startswith("/finding/") and path[len("/finding/"):] in FINDING_PAGES:
@@ -823,7 +826,6 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/" aria-current="page">Board</a>
-    <a href="/architecture">Design</a>
     <a href="/proof">Proof</a>
     <a href="/findings">Findings</a>
     <span class="test" id="test" hidden>test table</span>

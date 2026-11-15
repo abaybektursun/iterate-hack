@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: what each result cost</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #100f0e; --sheet: #191715; --ink: #ebe5d8; --mute: #a59c8e; --faint: #7b7368; --rule: #2e2a25;
+  --brass: #c9a96e; --warn: #c9654c;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--ink); background: var(--paper); overflow: hidden;
+  font: 400 14px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+a { color: inherit; }
+:focus-visible { outline: 1px solid var(--brass); outline-offset: 4px; border-radius: 2px; }
+canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+canvas#gl.point { cursor: pointer; } canvas#gl.drag { cursor: grabbing; }
+.scrim { position: fixed; inset: 0; pointer-events: none;
+  background: radial-gradient(48% 78% at 0% 0%, rgba(16, 15, 14, .94), rgba(16, 15, 14, .82) 55%, rgba(16, 15, 14, 0) 100%),
+    radial-gradient(75% 80% at 52% 50%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .5) 100%); }
+.grain { position: fixed; inset: 0; pointer-events: none; opacity: .05; mix-blend-mode: overlay; }
+
+.head { position: fixed; left: 40px; top: 24px; width: min(430px, 30vw); pointer-events: none; }
+.head > * { pointer-events: auto; }
+.lab { font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); text-decoration: none; }
+.lab:hover { color: var(--ink); }
+.kicker { margin-top: 26px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--brass); }
+h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 27px; line-height: 1.2; letter-spacing: -.01em; margin: 10px 0 14px; text-wrap: pretty; }
+h1 b { font-weight: 400; color: var(--ink); border-bottom: 1px solid var(--brass); }
+.thin { font-size: 12.5px; line-height: 1.5; color: var(--mute); border-top: 1px solid var(--rule); padding-top: 10px; }
+.thin b { color: var(--ink); font-weight: 600; }
+.ctl { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px 22px; border-top: 1px solid var(--rule); padding-top: 10px; }
+.seg { display: flex; gap: 14px; }
+.seg button { color: var(--mute); font-size: 13px; padding: 2px 0; border-bottom: 1px solid transparent; }
+.seg button:hover { color: var(--ink); }
+.seg button[aria-pressed=true] { color: var(--ink); font-weight: 600; border-bottom-color: var(--brass); }
+.key { margin-top: 12px; display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 12px; color: var(--mute); align-items: center; }
+.key i { width: 12px; height: 12px; border-radius: 50%; display: block; background: var(--c); box-shadow: inset -2px -3px 4px rgba(0, 0, 0, .45), inset 1px 2px 2px rgba(255, 255, 255, .25); }
+.key i.sq { border-radius: 2px; } .key i.ring { background: none; box-shadow: none; border-radius: 0; width: 0; height: 0; border: 6px solid transparent; border-bottom: 10px solid #b89b62; border-top: 0; }
+
+.card { position: fixed; right: 40px; top: 24px; width: 330px; max-height: min(calc(100vh - 110px), 61vh); overflow: auto; background: rgba(22, 20, 18, .93);
+  border: 1px solid var(--rule); border-radius: 3px; padding: 18px 20px 16px; scrollbar-width: thin; }
+.card[hidden] { display: none; }
+.card .who { padding-right: 22px; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; }
+.card h2 { font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 17px; line-height: 1.25; margin: 8px 0 10px; overflow-wrap: anywhere;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.big { display: flex; align-items: baseline; gap: 10px; border-top: 1px solid var(--rule); padding-top: 8px; }
+.big strong { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 40px; line-height: 1; font-variant-numeric: lining-nums tabular-nums; }
+.big span { color: var(--mute); font-size: 13px; }
+dl { margin: 10px 0 0; display: grid; grid-template-columns: 1fr auto; gap: 0; font-size: 13px; }
+dt, dd { margin: 0; padding: 5px 0; border-top: 1px solid var(--rule); }
+dt { color: var(--mute); } dd { text-align: right; font-weight: 600; } dd small { font-weight: 400; color: var(--faint); font-size: 12px; margin-left: 6px; }
+dd.warn { color: var(--warn); } dd.good { color: var(--brass); }
+.sec { margin-top: 14px; font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--faint); }
+.rec { font-size: 12.5px; color: var(--mute); margin-top: 6px; overflow-wrap: anywhere; }
+.rec b { color: var(--ink); font-weight: 600; } .rec code { font: inherit; color: var(--ink); } .rec .none { color: var(--warn); }
+.rec ul { margin: 4px 0 0; padding: 0; list-style: none; } .rec li { padding: 3px 0; border-top: 1px solid var(--rule); }
+.rec p { margin: 6px 0 0; }
+.x { position: absolute; right: 10px; top: 8px; color: var(--faint); font-size: 18px; line-height: 1; padding: 4px 6px; }
+
+.tag { position: fixed; left: 0; top: 0; pointer-events: none; white-space: nowrap; will-change: transform; }
+.tip { font-size: 12px; background: rgba(22, 20, 18, .95); border: 1px solid var(--rule); border-radius: 3px; padding: 5px 9px; opacity: 0; transition: opacity .12s; max-width: 340px; white-space: normal; }
+.tip.on { opacity: 1; } .tip b { font-weight: 600; } .tip span { color: var(--mute); }
+.read { text-align: left; font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--mute); opacity: 0; transition: opacity .3s; }
+.read.on { opacity: 1; }
+.read strong { display: block; font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 26px; letter-spacing: -.01em; text-transform: none; color: var(--ink); line-height: 1.1; font-variant-numeric: lining-nums tabular-nums; }
+.read.over strong { color: var(--warn); } .read.under strong { color: var(--brass); }
+.hint { position: fixed; right: 40px; bottom: 16px; text-align: right; font-size: 12px; color: var(--faint); pointer-events: none; }
+.status { position: fixed; left: 40px; bottom: 16px; font-size: 12px; color: var(--faint); }
+.status.bad { color: var(--warn); }
+#err { position: fixed; left: 8px; bottom: 40px; color: var(--warn); font-size: 12px; white-space: pre-wrap; z-index: 9; }
+
+@media (max-width: 900px) {
+  .head { left: 0; right: 0; top: 0; width: auto; padding: 12px 16px 22px; background: linear-gradient(rgba(16, 15, 14, .96), rgba(16, 15, 14, .86) 78%, rgba(16, 15, 14, 0)); }
+  .kicker { margin-top: 8px; font-size: 11px; } h1 { font-size: 17px; margin: 4px 0 6px; }
+  .thin, .key, .status { display: none; } .ctl { margin-top: 6px; padding-top: 6px; }
+  .card { left: 10px; right: 10px; top: auto; bottom: 34px; width: auto; max-height: 34vh; padding: 12px 14px; }
+  .card h2 { font-size: 15px; margin: 4px 0 6px; } .big strong { font-size: 26px; }
+  .hint { right: 0; left: 0; text-align: center; bottom: 8px; font-size: 11px; } .read strong { font-size: 18px; }
+}
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="scrim"></div><div class="grain" id="grain"></div>
+<div class="head">
+  <a class="lab" href="../../">Lab</a>
+  <div class="kicker">What each result cost</div>
+  <h1 id="sentence">Reading the scores&hellip;</h1>
+  <div class="thin" id="thin"></div>
+  <div class="ctl">
+    <div class="seg" id="benches" role="group" aria-label="Benchmark"></div>
+    <div class="seg" id="views" role="group" aria-label="View">
+      <button data-v="balance">Balance</button><button data-v="bench">Bench</button>
+    </div>
+    <div class="seg"><button id="snd" aria-pressed="false">Sound</button></div>
+  </div>
+  <div class="key" id="key"></div>
+</div>
+<aside class="card" id="card" hidden></aside>
+<div class="tag tip" id="tip"></div>
+<div class="tag read" id="read"></div>
+<div class="hint" id="hint">Click a weight to weigh it, or carry it to the left pan &middot; &larr; &rarr; next &middot; B bench</div>
+<div class="status" id="status"></div>
+<div id="err"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const $ = (id) => document.getElementById(id);
+const fail = (m) => { $('err').textContent += m + '\n'; };
+window.addEventListener('error', (e) => fail(e.message));
+const STILL = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const nf = (x, d = 0) => x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const same = (b) => b.toLowerCase().replace(/[^a-z0-9]/g, '');
+function rng(seed) { return () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+
+// ---- data ----------------------------------------------------------------------------------------------------------
+let EXTRA = null, LIVE = null, SCORES = [], sig = '';
+const KIND = { base: 'Untrained base', rl: 'RL-Zero-Math', other: 'Edit or other model' };
+let B = null;            // the benchmark on the bench: {name, n, base, rl, rate, weights, blanks, order, best, top}
+let benches = [];
+
+function ledger(scores) {
+  const groups = {};
+  for (const s of scores) (groups[same(s.benchmark)] ??= []).push(s);
+  const out = [];
+  for (const rows0 of Object.values(groups)) {
+    const count = {}; for (const s of rows0) count[s.n] = (count[s.n] || 0) + 1;
+    const n = +Object.keys(count).sort((a, b) => count[b] - count[a])[0];
+    const seen = new Set(), rows = [];
+    for (const s of rows0.filter((s) => s.n === n).sort((a, b) => a.sk < b.sk ? -1 : 1)) {
+      const k = [s.model, s.right, s.tokens, s.config].join('|');
+      if (!seen.has(k)) { seen.add(k); rows.push(s); }
+    }
+    // the baseline every gain is counted from: the untrained base with the plain prompt at T 1.0, as first posted
+    const base = rows.find((s) => s.model === 'base' && /^plain, T 1\.0/.test(s.config));
+    // RL's own row: the RL checkpoint, plain prompt, one sample, with its token count
+    const rl = rows.find((s) => s.model === 'rl' && s.tokens && /^plain/.test(s.config) && !/vote|restart|cap 32|review/.test(s.config));
+    const weighed = rows.filter((s) => s.tokens);
+    if (!base || !rl || weighed.length < 8 || rl.right <= base.right) continue;
+    const pts = (s) => (s.right - base.right) / n * 100;
+    const rate = rl.tokens / pts(rl);
+    const maxTok = Math.max(...weighed.map((s) => s.tokens));
+    const weights = weighed.map((s) => ({ s, id: `${s.result.slice(-6)}.${s.right}.${s.tokens}`, tokens: s.tokens, gain: pts(s),
+      price: pts(s) > 0 ? s.tokens / pts(s) : null, over: s.tokens - Math.max(pts(s), 0) * rate, scale: 0.2 * Math.cbrt(s.tokens / maxTok) }));
+    let bestRight = -1;
+    for (const w of [...weights].sort((a, b) => a.tokens - b.tokens || b.s.right - a.s.right)) { w.frontier = w.s.right > bestRight; if (w.frontier) bestRight = w.s.right; }
+    const order = [...weights.filter((w) => w.price).sort((a, b) => a.price - b.price), ...weights.filter((w) => !w.price).sort((a, b) => a.tokens - b.tokens)];
+    order.forEach((w, i) => { w.i = i; });
+    const top = weights.filter((w) => w.s.right === bestRight).sort((a, b) => a.tokens - b.tokens)[0];
+    out.push({ name: rows[0].benchmark, n, base, rl, rate, weights, order, top, best: order[0],
+      rlw: weights.find((w) => w.s === rl), blanks: rows.filter((s) => !s.tokens) });
+  }
+  return out.sort((a, b) => b.n - a.n || b.weights.length - a.weights.length);
+}
+
+// ---- renderer, light, room -----------------------------------------------------------------------------------------
+const canvas = $('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.VSMShadowMap; renderer.shadowMap.autoUpdate = false;
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x0d0c0b);
+const camera = new THREE.PerspectiveCamera(30, 1, 0.5, 120);
+const pm = new THREE.PMREMGenerator(renderer);
+scene.environment = pm.fromScene(new RoomEnvironment(), 0.05).texture;
+
+const key = new THREE.SpotLight(0xfff0dc, 520, 60, 0.42, 0.8, 1.6);
+key.position.set(-7, 12.5, 9); key.target.position.set(0.4, 0.6, 1.6);
+key.castShadow = true; key.shadow.mapSize.set(1024, 1024); key.shadow.bias = -0.0004; key.shadow.radius = 3; key.shadow.blurSamples = 8;
+key.shadow.camera.near = 6; key.shadow.camera.far = 30;
+scene.add(key, key.target);
+const rim = new THREE.DirectionalLight(0xbfd0e6, 0.55); rim.position.set(7, 5, -6); scene.add(rim);
+scene.add(new THREE.HemisphereLight(0x8a8f99, 0x1a1512, 0.22));
+scene.environmentIntensity = 0.55;
+
+// ---- textures made here (decoration: none of them carries data) ----------------------------------------------------
+function canvasOf(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+function tex(c, srgb = true, rep) { const t = new THREE.CanvasTexture(c); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+  if (rep) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]); } return t; }
+function turned() {          // lathe-turned metal: fine rings along the axis, as a roughness map
+  const c = canvasOf(64, 512), g = c.getContext('2d'), r = rng(7);
+  for (let y = 0; y < 512; y++) { const v = 150 + r() * 70 | 0; g.fillStyle = `rgb(${v},${v},${v})`; g.fillRect(0, y, 64, 1); }
+  for (let i = 0; i < 300; i++) { g.fillStyle = `rgba(255,255,255,${r() * .25})`; g.fillRect(r() * 64, r() * 512, 1 + r() * 14, 1); }
+  return tex(c, false, [1, 1]);
+}
+function grainWood() {
+  const c = canvasOf(1024, 256), g = c.getContext('2d'), r = rng(11);
+  g.fillStyle = '#241710'; g.fillRect(0, 0, 1024, 256);
+  for (let i = 0; i < 900; i++) { const y = r() * 256, a = r() * .16; g.strokeStyle = r() < .5 ? `rgba(20,8,4,${a})` : `rgba(96,62,40,${a})`; g.lineWidth = .5 + r() * 1.6;
+    g.beginPath(); g.moveTo(0, y); for (let x = 0; x <= 1024; x += 64) g.lineTo(x, y + Math.sin(x * .004 + i) * 5 + (r() - .5) * 2); g.stroke(); }
+  return tex(c);
+}
+const roughTurned = turned();
+const metal = (color, rough) => new THREE.MeshStandardMaterial({ color, metalness: 1, roughness: rough, roughnessMap: roughTurned });
+const M = {
+  base: metal(0xb9955a, 0.42), rl: metal(0xc4c6c9, 0.34), other: metal(0xa9694c, 0.46),
+  brass: metal(0xb08c50, 0.38), brassDark: metal(0x7d6338, 0.55), brassFlat: new THREE.MeshStandardMaterial({ color: 0xb08c50, metalness: 1, roughness: 0.36 }),
+  wood: new THREE.MeshPhysicalMaterial({ map: grainWood(), roughness: 0.5, clearcoat: 0.6, clearcoatRoughness: 0.25 }),
+  porcelain: new THREE.MeshPhysicalMaterial({ color: 0x9d978b, roughness: 0.4, clearcoat: 0.5, clearcoatRoughness: 0.25, envMapIntensity: 0.6 }),
+  plaster: new THREE.MeshStandardMaterial({ color: 0x8f8a80, roughness: 0.95 }),
+  ivory: new THREE.MeshStandardMaterial({ color: 0x9c937f, roughness: 0.6 }),
+  agate: new THREE.MeshPhysicalMaterial({ color: 0x6b3a2e, roughness: 0.15, clearcoat: 1 }),
+  glass: new THREE.MeshPhysicalMaterial({ color: 0xcfd6d2, roughness: 0.05, metalness: 0, transparent: true, opacity: 0.16, side: THREE.DoubleSide, depthWrite: false, envMapIntensity: 0.35 }),
+  oil: new THREE.MeshStandardMaterial({ color: 0x4a2a08, roughness: 0.2, envMapIntensity: 0.4 }),
+  wall: new THREE.MeshStandardMaterial({ color: 0x2a2623, roughness: 1 }),
+};
+
+// ---- the bench: a slab of dark marble; its rulings are engraved from the data ---------------------------------------
+const BW = 22, Z0 = -3.4, BD = 13.2, CW = 4096, CH = Math.round(CW * BD / BW), PX = CW / BW;
+const marble = canvasOf(1024, Math.round(1024 * BD / BW));
+(function () {
+  const g = marble.getContext('2d'), r = rng(3), W = marble.width, H = marble.height;
+  g.fillStyle = '#1d1f1e'; g.fillRect(0, 0, W, H);
+  for (let i = 0; i < 40; i++) { g.fillStyle = `rgba(${r() < .4 ? '52,56,53' : '8,9,9'},${.04 + r() * .06})`; g.beginPath(); g.ellipse(r() * W, r() * H, 40 + r() * 160, 20 + r() * 70, r() * 3, 0, 7); g.fill(); }
+  g.filter = 'blur(0.5px)';
+  for (let i = 0; i < 90; i++) {
+    let x = r() * W, y = r() * H, a = -0.5 + r() * 0.9 + (r() < .3 ? 1.6 : 0); const big = r() < .12;
+    g.strokeStyle = `rgba(205,200,186,${big ? .22 + r() * .25 : .06 + r() * .12})`; g.lineWidth = big ? .5 + r() * 1.1 : .25 + r() * .4;
+    g.beginPath(); g.moveTo(x, y);
+    for (let k = 0; k < 40; k++) { a += (r() - .5) * .5; x += Math.cos(a) * (8 + r() * 14); y += Math.sin(a) * (8 + r() * 14); g.lineTo(x, y);
+      if (r() < .08) { g.stroke(); g.beginPath(); g.moveTo(x, y); g.lineWidth *= .7; } }
+    g.stroke();
+  }
+  g.filter = 'none';
+})();
+const noise = canvasOf(256, 256);
+(function () { const g = noise.getContext('2d'), d = g.createImageData(256, 256), r = rng(5);
+  for (let i = 0; i < d.data.length; i += 4) { const v = r() * 255; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 16; } g.putImageData(d, 0, 0); })();
+$('grain').style.backgroundImage = `url(${(() => { const c = canvasOf(160, 160), g = c.getContext('2d'), d = g.createImageData(160, 160), r = rng(9); for (let i = 0; i < d.data.length; i += 4) { d.data[i] = d.data[i + 1] = d.data[i + 2] = r() * 255; d.data[i + 3] = 255; } g.putImageData(d, 0, 0); return c.toDataURL(); })()})`;
+const benchCanvas = canvasOf(CW, CH), benchTex = tex(benchCanvas);
+const slabSide = new THREE.MeshStandardMaterial({ color: 0x151716, roughness: 0.4 });
+const slabTop = new THREE.MeshStandardMaterial({ map: benchTex, roughness: 0.33, metalness: 0.0, envMapIntensity: 0.8 });
+const slab = new THREE.Mesh(new THREE.BoxGeometry(BW, 0.7, BD), [slabSide, slabSide, slabTop, slabSide, slabSide, slabSide]);
+slab.position.set(0, -0.35, Z0 + BD / 2); slab.receiveShadow = true; scene.add(slab);
+const wall = new THREE.Mesh(new THREE.PlaneGeometry(60, 30), M.wall); wall.position.set(0, 8, Z0 - 0.6); scene.add(wall);
+const cx = (x) => (x + BW / 2) * PX, cz = (z) => (z - Z0) * PX;
+
+// ---- the balance ---------------------------------------------------------------------------------------------------
+const H = 3.3, L = 2.05, HANG = 1.95, PANR = 0.62, TH_MAX = 0.135, NEEDLE = 2.42, PLINTH = 0.34;
+const balance = new THREE.Group(); scene.add(balance);
+function shadowed(m) { m.castShadow = true; m.receiveShadow = true; return m; }
+function rod(a, b, r, mat) {
+  const d = new THREE.Vector3().subVectors(b, a), m = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(r, r, d.length(), 8), mat));
+  m.position.copy(a).addScaledVector(d, .5); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d.normalize()); return m;
+}
+const lathe = (pts, seg = 48) => new THREE.LatheGeometry(pts.map((p) => new THREE.Vector2(p[0], p[1])), seg);
+// plinth, feet, column
+const plinth = shadowed(new THREE.Mesh(new THREE.BoxGeometry(5.7, PLINTH - 0.06, 1.75), M.wood)); plinth.position.y = 0.06 + (PLINTH - 0.06) / 2; balance.add(plinth);
+const lip = shadowed(new THREE.Mesh(new THREE.BoxGeometry(5.82, 0.05, 1.87), M.wood)); lip.position.y = 0.085; balance.add(lip);
+for (const [x, z] of [[-2.6, -0.7], [2.6, -0.7], [-2.6, 0.7], [2.6, 0.7]]) { const f = shadowed(new THREE.Mesh(lathe([[0, 0], [0.13, 0], [0.14, 0.03], [0.09, 0.06], [0, 0.06]], 24), M.brass)); f.position.set(x, 0, z); balance.add(f); }
+const column = shadowed(new THREE.Mesh(lathe([[0, 0], [0.34, 0], [0.34, 0.05], [0.2, 0.09], [0.13, 0.2], [0.085, 0.3], [0.075, 1.6], [0.1, 1.64], [0.1, 1.7], [0.07, 1.74], [0.062, H - PLINTH - 0.32], [0.1, H - PLINTH - 0.28], [0.1, H - PLINTH - 0.2], [0.05, H - PLINTH - 0.17], [0, H - PLINTH - 0.17]]), M.brass));
+column.position.y = PLINTH; balance.add(column);
+const bearing = shadowed(new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.05, 0.22), M.agate)); bearing.position.y = H - 0.145; balance.add(bearing);
+// the scale the pointer reads: an ivory plate; its ticks are drawn from the balance's own constants (see drawScale)
+const scaleCanvas = canvasOf(1024, 384), scaleTex = tex(scaleCanvas);
+const plate = shadowed(new THREE.Mesh(new THREE.BoxGeometry(1.02, 0.36, 0.03), [M.ivory, M.ivory, M.ivory, M.ivory, new THREE.MeshStandardMaterial({ map: scaleTex, color: 0xb9b2a2, roughness: 0.6 }), M.ivory]));
+plate.position.set(0, H - NEEDLE + 0.1, 0.13); balance.add(plate);
+// the beam: a truss on a knife edge, with the pointer
+const beam = new THREE.Group(); beam.position.y = H; balance.add(beam);
+(function () {
+  const s = new THREE.Shape(); s.moveTo(-L - 0.06, -0.035); s.lineTo(-L - 0.06, 0.04); s.lineTo(-0.16, 0.25); s.lineTo(0.16, 0.25); s.lineTo(L + 0.06, 0.04); s.lineTo(L + 0.06, -0.035); s.lineTo(0.2, -0.1); s.lineTo(-0.2, -0.1); s.closePath();
+  for (const sg of [-1, 1]) for (const [a, b] of [[0.32, 0.95], [1.05, 1.6]]) {
+    const yTop = (x) => 0.25 - (x - 0.16) / (L - 0.1) * 0.21 - 0.05, yBot = (x) => -0.1 + (x - 0.2) / (L - 0.14) * 0.065 + 0.045;
+    const h = new THREE.Path(); h.moveTo(sg * a, yBot(a)); h.lineTo(sg * a, yTop(a)); h.lineTo(sg * b, yTop(b)); h.lineTo(sg * b, yBot(b)); h.closePath(); s.holes.push(h);
+  }
+  const g = new THREE.ExtrudeGeometry(s, { depth: 0.07, bevelEnabled: true, bevelSize: 0.008, bevelThickness: 0.008, bevelSegments: 2 }); g.translate(0, 0, -0.035);
+  beam.add(shadowed(new THREE.Mesh(g, M.brassFlat)));
+  const knife = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.26, 3), M.agate); knife.rotation.x = Math.PI / 2; knife.rotation.y = Math.PI; knife.position.y = -0.085; beam.add(knife);
+  const needle = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(0.004, 0.016, NEEDLE - 0.1, 6), M.brassDark)); needle.position.set(0, -(NEEDLE - 0.1) / 2 - 0.1, 0.16); beam.add(needle);
+  const fin = shadowed(new THREE.Mesh(lathe([[0, 0], [0.035, 0.02], [0.02, 0.07], [0.04, 0.12], [0, 0.17]], 16), M.brass)); fin.position.y = 0.25; beam.add(fin);
+  for (const sg of [-1, 1]) { const e = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.2, 3), M.agate); e.rotation.x = Math.PI / 2; e.position.set(sg * L, 0.035, 0); beam.add(e); }
+})();
+// the oil dashpot that damps the swing: a glass cup on a bracket, a vane on a rod from the beam
+const DX = 0.78, DY = 2.42;
+balance.add(rod(new THREE.Vector3(0.07, DY - 0.02, 0), new THREE.Vector3(DX + 0.14, DY - 0.02, 0), 0.018, M.brass));
+const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.15, 0.13, 0.36, 32, 1, true), M.glass); cup.position.set(DX, DY + 0.18, 0); balance.add(cup);
+const cupBase = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.15, 0.03, 32), M.brass)); cupBase.position.set(DX, DY, 0); balance.add(cupBase);
+const oil = new THREE.Mesh(new THREE.CylinderGeometry(0.135, 0.125, 0.22, 32), M.oil); oil.position.set(DX, DY + 0.125, 0); balance.add(oil);
+const plunger = new THREE.Group(); balance.add(plunger);
+plunger.add(rod(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, -(H - DY - 0.18), 0), 0.008, M.brassDark));
+const vane = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.09, 0.012, 20), M.brassDark); vane.position.y = -(H - DY - 0.18); plunger.add(vane);
+// pans
+function makePan(sign) {
+  const g = new THREE.Group();
+  g.add(rod(new THREE.Vector3(0, 0.02, 0), new THREE.Vector3(0, -0.3, 0), 0.012, M.brass));
+  const hook = shadowed(new THREE.Mesh(new THREE.TorusGeometry(0.05, 0.012, 8, 20), M.brass)); hook.position.y = 0.03; g.add(hook);
+  for (let k = 0; k < 3; k++) { const a = k * 2.094 + 0.52; g.add(rod(new THREE.Vector3(0, -0.3, 0), new THREE.Vector3(Math.cos(a) * (PANR - 0.01), -HANG + 0.07, Math.sin(a) * (PANR - 0.01)), 0.006, M.brassDark)); }
+  const dish = shadowed(new THREE.Mesh(lathe([[0, 0.012], [PANR - 0.12, 0.012], [PANR - 0.03, 0.04], [PANR, 0.08], [PANR + 0.012, 0.08], [PANR - 0.02, 0.022], [PANR - 0.12, -0.008], [0, -0.008]], 64), M.brass));
+  dish.position.y = -HANG; g.add(dish);
+  balance.add(g); return g;
+}
+const panL = makePan(-1), panR = makePan(1);
+// engraved brass plates on the plinth, under each pan
+function plateText(x, a, b) {
+  const c = canvasOf(768, 128), g = c.getContext('2d');
+  g.fillStyle = '#8f7444'; g.fillRect(0, 0, 768, 128); const r = rng(x * 9 + 20);
+  for (let i = 0; i < 500; i++) { g.fillStyle = `rgba(${r() < .5 ? '255,235,190' : '40,28,10'},${r() * .07})`; g.fillRect(0, r() * 128, 768, 1); }
+  g.fillStyle = '#1e1608'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.font = '700 46px Archivo'; g.letterSpacing = '10px'; g.fillText(a, 384, 42); g.font = '600 30px Archivo'; g.letterSpacing = '1px'; g.fillText(b, 384, 96);
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(1.62, 0.27), new THREE.MeshStandardMaterial({ map: tex(c), metalness: 0.85, roughness: 0.45 }));
+  m.position.set(x, 0.2, 0.876); balance.add(m); return { c, g, m, a };
+}
+let plateCost, plateGain;
+
+// ---- weights -------------------------------------------------------------------------------------------------------
+const WPROF = [[0, 0], [0.95, 0], [1, 0.05], [1, 1.34], [0.95, 1.4], [0.6, 1.43], [0.34, 1.5], [0.27, 1.62], [0.27, 1.7], [0.42, 1.8], [0.46, 1.9], [0.44, 2.0], [0.3, 2.08], [0, 2.1]];
+const weightGeo = lathe(WPROF, 40);
+const decalGeo = new THREE.CylinderGeometry(1.006, 1.006, 0.62, 28, 1, true, -0.85, 1.7); decalGeo.translate(0, 0.72, 0);
+const blankGeo = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+const decals = new Map();
+function decalFor(tokens) {
+  if (decals.has(tokens)) return decals.get(tokens);
+  const c = canvasOf(384, 140), g = c.getContext('2d'); g.fillStyle = '#000'; g.fillRect(0, 0, 384, 140);
+  g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.font = '640 86px Archivo'; g.fontStretch = 'condensed';
+  g.fillText(nf(tokens), 192, 76, 360);
+  const m = new THREE.MeshStandardMaterial({ color: 0x120d06, alphaMap: tex(c, false), transparent: true, roughness: 0.8, metalness: 0.3, polygonOffset: true, polygonOffsetFactor: -2 });
+  decals.set(tokens, m); return m;
+}
+const weightGroup = new THREE.Group(); scene.add(weightGroup);
+let casts = [], bodies = [], blanks = [], tray = null, onPan = null, held = null, layout = { cols: 19, pitch: 0.44, rows: 1, z0: 2.0, dz: 0.62, w: 8 };
+
+function slotOf(i) {
+  const r = Math.floor(i / layout.cols), c = i % layout.cols;
+  return new THREE.Vector3((c - (layout.cols - 1) / 2) * layout.pitch, 0, layout.z0 + r * layout.dz);
+}
+function relayout() {
+  const a = innerWidth / innerHeight;
+  layout.cols = a > 1.25 ? 19 : a > 0.8 ? 13 : 7;
+  layout.rows = Math.ceil(B.order.length / layout.cols);
+  layout.w = (layout.cols - 1) * layout.pitch;
+  for (const w of bodies) { w.home.copy(slotOf(w.d.i)); if (w.mode === 'bench') w.pos.copy(w.home); }
+  // blanks: plaster blocks on a wooden tray, off the ruled lines
+  const tx = a > 1.25 ? 4.55 : 0, tz = a > 1.25 ? 0.25 : layout.z0 + layout.rows * layout.dz + 0.95;
+  tray.position.set(tx, 0, tz);
+  drawBench(tx, tz);
+}
+function drawBench(tx, tz) {
+  const g = benchCanvas.getContext('2d');
+  g.drawImage(marble, 0, 0, CW, CH); g.fillStyle = g.createPattern(noise, 'repeat'); g.fillRect(0, 0, CW, CH);
+  const gilt = 'rgba(196,172,120,.9)', pale = 'rgba(190,186,170,.62)';
+  g.textAlign = 'center'; g.textBaseline = 'top';
+  const zLast = layout.z0 + (layout.rows - 1) * layout.dz;
+  for (let r = 0; r < layout.rows; r++) {
+    const z = layout.z0 + r * layout.dz + 0.27, n = Math.min(layout.cols, B.order.length - r * layout.cols);
+    const x0 = -layout.w / 2 - 0.2, x1 = (n - 1 - (layout.cols - 1) / 2) * layout.pitch + 0.2;
+    g.strokeStyle = pale; g.lineWidth = 1.5; g.beginPath(); g.moveTo(cx(x0), cz(z)); g.lineTo(cx(x1), cz(z)); g.stroke();
+    for (let c = 0; c < n; c++) {
+      const w = B.order[r * layout.cols + c], x = cx((c - (layout.cols - 1) / 2) * layout.pitch);
+      g.strokeStyle = w.frontier ? gilt : pale; g.lineWidth = w.frontier ? 2.5 : 1.5;
+      g.beginPath(); g.moveTo(x, cz(z) - 7); g.lineTo(x, cz(z) + 7); g.stroke();
+      g.fillStyle = w.frontier ? gilt : pale; g.font = `${w.frontier ? 700 : 500} 19px Archivo`;
+      g.fillText(w.price ? nf(w.price) : w.s === B.base ? 'the base' : 'no gain', x, cz(z) + 11);
+      if (w.frontier) { g.beginPath(); g.moveTo(x, cz(z) - 22); g.lineTo(x + 9, cz(z) - 9); g.lineTo(x - 9, cz(z) - 9); g.closePath(); g.fill(); }
+    }
+  }
+  g.textAlign = 'left'; g.fillStyle = pale; g.font = '600 22px Archivo'; g.letterSpacing = '1.5px';
+  g.fillText('TOKENS PER POINT GAINED, CHEAPEST FIRST', cx(-layout.w / 2 - 0.2), cz(zLast + 0.56));
+  g.textAlign = 'right'; g.fillStyle = gilt;
+  g.fillText('▲ GILT: ON THE FRONTIER', cx(layout.w / 2 + 0.2), cz(zLast + 0.56));
+  if (B.blanks.length) { g.textAlign = 'center'; g.fillStyle = pale; g.font = '600 19px Archivo';
+    g.fillText('NOT WEIGHED: NO TOKEN COUNT', cx(tx), cz(tz + 0.5)); }
+  g.letterSpacing = '0px';
+  benchTex.needsUpdate = true;
+}
+function drawScale() {
+  const g = scaleCanvas.getContext('2d'), W = 1024, Hh = 384, pxu = W / 1.02;
+  g.fillStyle = '#d9d0bb'; g.fillRect(0, 0, W, Hh);
+  const yTip = (0.18 - 0.1) * pxu + Hh / 2;      // where the needle's tip passes on the plate
+  g.strokeStyle = '#2a2318'; g.fillStyle = '#2a2318'; g.textAlign = 'center'; g.textBaseline = 'top';
+  const step = [100, 200, 250, 500, 1000, 2000, 2500, 5000].find((s) => S.K * Math.tan(TH_MAX) / L / s <= 9) || 10000;
+  for (let d = -40; d <= 40; d++) {
+    const th = Math.atan(d * step * L / S.K); if (Math.abs(th) > TH_MAX) continue;
+    const x = W / 2 + NEEDLE * Math.sin(th) * pxu, major = d % 2 === 0;
+    g.lineWidth = d === 0 ? 9 : major ? 6 : 4; g.beginPath(); g.moveTo(x, yTip - (major ? 84 : 52)); g.lineTo(x, yTip); g.stroke();
+    if (major && d !== 0) { g.font = '600 40px Archivo'; g.fillText(nf(Math.abs(d * step) / 1000, Math.abs(d * step) % 1000 ? 1 : 0) + 'k', x, yTip + 12); }
+  }
+  g.font = '700 34px Archivo'; g.letterSpacing = '3px'; g.textBaseline = 'alphabetic';
+  g.textAlign = 'left'; g.fillText('CHEAPER', 36, 60); g.textAlign = 'right'; g.fillText('DEARER', W - 36, 60);
+  g.letterSpacing = '0px';
+  scaleTex.needsUpdate = true;
+}
+
+function buildBench() {
+  weightGroup.clear(); casts = [];
+  if (tray) scene.remove(tray);
+  bodies = []; blanks = []; onPan = null; held = null; S.loadL = 0; S.loadR = 0; clearDiscs();
+  for (const kind of ['base', 'rl', 'other']) {      // one instanced mesh per metal: the bench is three draw calls
+    const of = B.weights.filter((d) => (M[d.s.model] ? d.s.model : 'other') === kind); if (!of.length) continue;
+    const im = shadowed(new THREE.InstancedMesh(weightGeo, M[kind], of.length)); im.frustumCulled = false; im.userData.list = [];
+    for (const d of of) {
+      const decal = new THREE.Mesh(decalGeo, decalFor(d.tokens)); decal.scale.setScalar(d.scale);
+      const w = { d, im, ii: im.userData.list.length, decal, rx: 0, rz: 0, pos: new THREE.Vector3(), vel: new THREE.Vector3(), home: new THREE.Vector3(), mode: 'bench', tilt: new THREE.Vector2() };
+      w.proxy = { userData: { w } }; im.userData.list.push(w); bodies.push(w); weightGroup.add(decal);
+    }
+    weightGroup.add(im); casts.push(im);
+  }
+  tray = new THREE.Group(); scene.add(tray);
+  const nb = B.blanks.length, cols = Math.max(1, Math.ceil(nb / 2));
+  if (nb) { const t = shadowed(new THREE.Mesh(new THREE.BoxGeometry(cols * 0.32 + 0.2, 0.05, 0.84), M.wood)); t.position.y = 0.025; tray.add(t); }
+  B.blanks.forEach((s, i) => {
+    const m = shadowed(new THREE.Mesh(blankGeo, M.plaster)); m.position.set((i % cols - (cols - 1) / 2) * 0.32, 0.15, (Math.floor(i / cols) - 0.5) * 0.34); m.rotation.y = (i * 0.7 % 0.5) - 0.25;
+    m.userData.blank = s; tray.add(m); blanks.push({ g: m, s });
+  });
+  // the balance's constants in this benchmark's tokens: 5 degrees of swing reads a difference of 0.32 x RL's tokens
+  S.K = 0.32 * B.rl.tokens * L / Math.tan(5 * Math.PI / 180);
+  S.mp = 0.25 * B.rl.tokens; S.Ib = 0.3 * B.rl.tokens * L * L;
+  const I0 = S.Ib + 2 * (S.mp + B.rl.tokens) * L * L;
+  S.c = 2 * 0.3 * Math.sqrt(S.G * S.K / I0) * I0;       // the dashpot: damping ratio 0.3 at RL's own load
+  drawScale(); relayout(); shadowDirty = true;
+  if (!plateCost) { plateCost = plateText(-L, 'COST', 'tokens a problem'); plateGain = plateText(L, 'GAIN', ''); }
+  const g = plateGain.g; g.fillStyle = '#8f7444'; g.fillRect(0, 70, 768, 58); g.fillStyle = '#1e1608'; g.font = '600 30px Archivo'; g.letterSpacing = '1px';
+  g.fillText(`points gained, ${nf(B.rate)} tokens each`, 384, 96); plateGain.m.material.map.needsUpdate = true;
+}
+
+// ---- gain discs: porcelain, one per point over the plain base, each as heavy as RL's price for a point ---------------
+const DISC_R = 0.27, UNIT = 0.0115;
+const discGroup = new THREE.Group(); discGroup.position.y = -HANG + 0.012; panR.add(discGroup);
+let discs = [];
+function clearDiscs() { for (const d of discs) discGroup.remove(d.m); discs = []; S.loadR = 0; }
+function dealDiscs(points, t0) {
+  clearDiscs(); if (points <= 0) return;
+  const parts = []; let p = points;
+  while (p >= 10) { parts.push(10); p -= 10; } while (p >= 1) { parts.push(1); p -= 1; } if (p > 1e-6) parts.push(p);
+  let y = 0;
+  parts.forEach((pt, i) => {
+    const h = pt * UNIT, m = shadowed(new THREE.Mesh(new THREE.CylinderGeometry(DISC_R, DISC_R, h, 40), M.porcelain));
+    const jx = (Math.sin(i * 12.9898) * 43758.5453 % 1) * 0.012;
+    m.position.set(jx, y + h / 2 + 1.1, jx * .7); m.visible = false; discGroup.add(m);
+    discs.push({ m, rest: y + h / 2, pts: pt, at: t0 + i * (pt >= 10 ? 0.1 : 0.045), v: 0, down: false });
+    y += h + 0.007;
+  });
+}
+
+// ---- physics: the beam is one rigid body on a knife edge; the pans are pendulums; masses are tokens ------------------
+const S = { th: 0, om: 0, loadL: 0, loadR: 0, K: 1, mp: 1, Ib: 1, c: 1, G: 22, swL: new THREE.Vector4(), swR: new THREE.Vector4() };   // sw: angle x, angle z, their rates
+function inertia() { return S.Ib + (2 * S.mp + S.loadL + S.loadR) * L * L; }
+function kick(side, mass, speed) { S.om += -side * mass * speed * L * Math.cos(S.th) / inertia(); }   // a mass landing on a pan: side -1 left
+function stepBeam(dt) {
+  const mL = S.mp + S.loadL, mR = S.mp + S.loadR, I = inertia();
+  const tau = S.G * ((mL - mR) * L * Math.cos(S.th) - S.K * Math.sin(S.th)) - S.c * S.om;
+  S.om += tau / I * dt; S.th += S.om * dt;
+  if (S.th > TH_MAX) { S.th = TH_MAX; if (S.om > 0) S.om = S.om > 0.03 ? -0.18 * S.om : 0; }      // the arrestment: the beam rests on its stop
+  if (S.th < -TH_MAX) { S.th = -TH_MAX; if (S.om < 0) S.om = S.om < -0.03 ? -0.18 * S.om : 0; }
+  for (const [sw, sg] of [[S.swL, -1], [S.swR, 1]]) {      // pendulum swing, driven by the sideways motion of its pivot
+    const ax = -sg * L * (Math.sin(S.th) * tau / I + Math.cos(S.th) * S.om * S.om) * -1;
+    sw.z += (-S.G / HANG * sw.x - ax / HANG * 0.6 - 1.1 * sw.z) * dt; sw.x += sw.z * dt;
+    sw.w += (-S.G / HANG * sw.y - 1.1 * sw.w) * dt; sw.y += sw.w * dt;
+  }
+}
+const tmp = new THREE.Vector3(), tmp2 = new THREE.Vector3(), dummy = new THREE.Object3D();
+function poseBalance() {
+  beam.rotation.z = S.th;
+  panL.position.set(-L * Math.cos(S.th), H - L * Math.sin(S.th) + 0.035, 0); panL.rotation.set(S.swL.y, 0, S.swL.x);
+  panR.position.set(L * Math.cos(S.th), H + L * Math.sin(S.th) + 0.035, 0); panR.rotation.set(S.swR.y, 0, S.swR.x);
+  plunger.position.set(DX, H + DX * Math.sin(S.th) + 0.02, 0);
+}
+function panSeat(out) { return panL.localToWorld(out.set(0, -HANG + 0.013, 0)); }
+
+function sendHome(w) { if (!w) return; if (w === onPan) { onPan = null; S.loadL = 0; clearDiscs(); } w.mode = 'home'; }
+function weigh(w, quiet) {
+  if (onPan && onPan !== w) sendHome(onPan);
+  for (const o of bodies) if (o !== w && (o.mode === 'toPan' || o.mode === 'fall')) o.mode = 'home';
+  if (w.mode === 'pan') return;
+  w.mode = 'toPan'; select(w, quiet);
+}
+function land(w, speed) {
+  w.mode = 'pan'; onPan = w; S.loadL = w.d.tokens; kick(-1, w.d.tokens, speed * 0.5);
+  S.swL.z += (w.pos.x - panL.position.x) * 1.2; S.swL.w += 0.25;
+  dealDiscs(w.d.gain, clock + 0.25); clink(w.d.tokens / B.rl.tokens, 0.5);
+}
+function stepWeights(dt) {
+  const seat = panSeat(tmp);
+  for (const w of bodies) {
+    if (w.mode === 'bench') continue;
+    if (w.mode === 'pan') { w.pos.copy(seat); w.rx = S.swL.y; w.rz = S.swL.x; continue; }
+    let target = null, k = 90, c = 17;
+    if (w.mode === 'held') { target = w.target; k = 140; c = 20; }
+    else if (w.mode === 'toPan') { target = tmp2.set(seat.x, seat.y + 0.55, seat.z); if (w.pos.distanceTo(target) < 0.12 && w.vel.length() < 1.4) { w.mode = 'fall'; } }
+    else if (w.mode === 'home') {
+      const far = Math.hypot(w.pos.x - w.home.x, w.pos.z - w.home.z) > 0.08;
+      target = tmp2.copy(w.home); if (far) target.y = Math.max(0.9, Math.min(w.pos.y + 0.4, 2.2));
+      if (!far && w.pos.y < 0.004 && w.vel.length() < 0.2) { w.mode = 'bench'; w.pos.copy(w.home); w.vel.set(0, 0, 0); w.rx = w.rz = 0; clink(w.d.tokens / B.rl.tokens, 0.25); continue; }
+    }
+    if (w.mode === 'fall') {
+      w.vel.x *= 0.9; w.vel.z *= 0.9; w.vel.y -= S.G * dt; w.pos.addScaledVector(w.vel, dt);
+      if (w.pos.y <= seat.y) { land(w, -w.vel.y); w.vel.set(0, 0, 0); }
+    } else {
+      w.vel.x += ((target.x - w.pos.x) * k - w.vel.x * c) * dt; w.vel.y += ((target.y - w.pos.y) * k - w.vel.y * c) * dt; w.vel.z += ((target.z - w.pos.z) * k - w.vel.z * c) * dt;
+      w.pos.addScaledVector(w.vel, dt); if (w.pos.y < 0) { w.pos.y = 0; w.vel.y = 0; }
+    }
+    w.tilt.x += (THREE.MathUtils.clamp(-w.vel.x * 0.05, -0.35, 0.35) - w.tilt.x) * Math.min(1, dt * 8);
+    w.tilt.y += (THREE.MathUtils.clamp(w.vel.z * 0.05, -0.35, 0.35) - w.tilt.y) * Math.min(1, dt * 8);
+    w.rx = w.tilt.y; w.rz = w.tilt.x;
+  }
+  for (const d of discs) {
+    if (d.down || clock < d.at) continue;
+    d.m.visible = true; d.v -= S.G * dt; d.m.position.y += d.v * dt;
+    if (d.m.position.y <= d.rest) { d.m.position.y = d.rest; d.down = true; const m = d.pts * B.rate; S.loadR += m; kick(1, m, -d.v * 0.5); clink(3, 0.12 + d.pts * 0.01); }
+  }
+}
+
+// ---- sound: a short struck-metal tick, only when the viewer turned it on ----------------------------------------------
+let ac = null, sound = false;
+function clink(size, vol) {
+  if (!sound || !ac || STILL) return;
+  const t = ac.currentTime, o = ac.createOscillator(), g = ac.createGain(), f = 2600 / Math.cbrt(Math.max(size, 0.2));
+  o.type = 'triangle'; o.frequency.setValueAtTime(f, t); o.frequency.exponentialRampToValueAtTime(f * 0.97, t + 0.2);
+  g.gain.setValueAtTime(vol * 0.12, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22); o.connect(g).connect(ac.destination); o.start(t); o.stop(t + 0.25);
+}
+$('snd').onclick = () => { sound = !sound; if (sound && !ac) ac = new AudioContext(); $('snd').setAttribute('aria-pressed', sound); $('snd').textContent = sound ? 'Sound on' : 'Sound'; };
+
+// ---- camera: two views, fitted to the frame; the viewer turns the room around them -------------------------------------
+let view = 'balance';
+const cam = { yaw: 0, pitch: 0, dist: 14, tx: 0, ty: 1.5, tz: 1, uy: 0, up: 0, uz: 1, vy: 0, vp: 0 }, goal = { yaw: 0, pitch: 0, dist: 14, tx: 0, ty: 1.5, tz: 1 };
+function place(c, o) {
+  const cp = Math.cos(o.pitch), d = o.dist;
+  c.position.set(o.tx + Math.sin(o.yaw) * cp * d, o.ty + Math.sin(o.pitch) * d, o.tz + Math.cos(o.yaw) * cp * d); c.lookAt(o.tx, o.ty, o.tz); c.updateMatrixWorld();
+}
+const probe = new THREE.PerspectiveCamera();
+function fit() {
+  const a = innerWidth / innerHeight, narrow = innerWidth <= 900, zEnd = layout.z0 + (layout.rows - 1) * layout.dz;
+  const hw = layout.w / 2 + 0.3;
+  let pts, box;
+  if (view === 'balance') {
+    Object.assign(goal, { yaw: 0, pitch: narrow ? 0.4 : 0.2, tx: 0, ty: narrow ? 1.3 : 1.55, tz: narrow ? 1.6 : 0.9 });
+    pts = [[-3, 0, 0], [3, 0, 0], [-2.9, 3.75, 0], [2.9, 3.75, 0], [-hw, 0, zEnd + 0.5], [hw, 0, zEnd + 0.5], [-hw, 0.4, layout.z0], [hw, 0.4, layout.z0]];
+    if (!narrow && B.blanks.length) pts.push([5.4, 0.3, 0.3]);
+    if (narrow && B.blanks.length) pts.push([0, 0, zEnd + 1.95]);
+    box = narrow ? [-0.97, 0.97, -0.86, 0.46] : [-0.97, 0.97, -0.86, 0.9];
+  } else {
+    Object.assign(goal, { yaw: 0, pitch: narrow ? 0.85 : 0.62, tx: 0, ty: 0, tz: (layout.z0 + zEnd) / 2 + (narrow ? 0 : -0.3) });
+    pts = [[-hw, 0, zEnd + 0.55], [hw, 0, zEnd + 0.55], [-hw, 0.45, layout.z0 - 0.5], [hw, 0.45, layout.z0 - 0.5]];
+    box = narrow ? [-0.97, 0.97, -0.9, 0.46] : [-0.42, 0.97, -0.84, -0.2];
+  }
+  probe.fov = camera.fov; probe.aspect = a; probe.updateProjectionMatrix();
+  const mid = (box[0] + box[1]) / 2; box[0] -= mid; box[1] -= mid;      // fit in a centred box of the same width, then slide the target
+  let lo = 3, hi = 80;
+  for (let i = 0; i < 22; i++) {
+    const d = (lo + hi) / 2; place(probe, { ...goal, dist: d });
+    let y0 = 9, y1 = -9;
+    const inX = pts.every((p) => { tmp.set(...p).project(probe); y0 = Math.min(y0, tmp.y); y1 = Math.max(y1, tmp.y); return tmp.x >= box[0] && tmp.x <= box[1]; });
+    const ok = inX && (view === 'bench' ? y1 - y0 <= box[3] - box[2] : y0 >= box[2] && y1 <= box[3]);
+    if (ok) hi = d; else lo = d;
+  }
+  goal.dist = hi;
+  const t = Math.tan(camera.fov * Math.PI / 360);
+  if (view === 'bench') {      // the rows sit in the middle of their box: raise the target by what that takes
+    place(probe, goal); let y0 = 9, y1 = -9; for (const p of pts) { tmp.set(...p).project(probe); y0 = Math.min(y0, tmp.y); y1 = Math.max(y1, tmp.y); }
+    goal.ty += ((y0 + y1) / 2 - (box[2] + box[3]) / 2) * goal.dist * t / Math.cos(goal.pitch);
+  }
+  goal.tx = -mid * goal.dist * t * a;
+}
+function stepCamera(dt, snap) {
+  const k = snap ? 1 : 1 - Math.exp(-dt * 3.2);
+  for (const f of ['yaw', 'pitch', 'dist', 'tx', 'ty', 'tz']) cam[f] += (goal[f] - cam[f]) * k;
+  cam.uy += cam.vy * dt; cam.up += cam.vp * dt; cam.vy *= Math.exp(-dt * 4); cam.vp *= Math.exp(-dt * 4);
+  cam.uy = THREE.MathUtils.clamp(cam.uy, -0.7, 0.7); cam.up = THREE.MathUtils.clamp(cam.up, -0.14, 0.5); cam.uz = THREE.MathUtils.clamp(cam.uz, 0.45, 1.5);
+  place(camera, { ...cam, yaw: cam.yaw + cam.uy, pitch: cam.pitch + cam.up, dist: cam.dist * cam.uz });
+}
+function setView(v) { view = v; for (const b of $('views').children) b.setAttribute('aria-pressed', b.dataset.v === v); cam.uy = cam.up = cam.vy = cam.vp = 0; cam.uz = 1; fit(); hash(); wake(); }
+for (const b of $('views').children) b.onclick = () => setView(b.dataset.v);
+
+// ---- words ---------------------------------------------------------------------------------------------------------
+function sentence() {
+  const t = B.top, x = t.price / B.rate, b = B.best;
+  $('sentence').innerHTML = `The top score on ${esc(B.name)}, <b>${t.s.right} of ${B.n}</b>, costs ${nf(t.tokens)} tokens a problem: <b>${nf(t.price)} tokens for each point</b> over the untrained base, ${nf(x, 1)} times what RL-Zero-Math pays (${nf(B.rate)}).`;
+  const j = EXTRA?.jobs, c = EXTRA?.coverage;
+  $('thin').innerHTML = (j ? `GPU time is recorded per job, not per result: <b>${nf(j.gpu_min / 60)} GPU-hours</b> in ${j.timed} jobs of one workspace, and only <b>${c.fully_timed} of ${c.results}</b> scored results name jobs with a recorded start and end. The cost of RL training is not recorded at all. ` : '')
+    + `So each weight is cast from what the score rows do store: its mass is the tokens generated per problem (${B.weights.length} of ${B.weights.length + B.blanks.length} rows here). Points are counted from the untrained base with the plain prompt, ${B.base.right} of ${B.n}. Cheapest per point: ${esc(short(b.s.config, 44))}, ${nf(b.price)} tokens.`;
+  $('key').innerHTML = `<i style="--c:#b9955a"></i><span>brass: the untrained base</span><i style="--c:#c4c6c9"></i><span>steel: RL-Zero-Math</span><i style="--c:#a9694c"></i><span>copper: a weight edit or another model</span>`
+    + `<i style="--c:#e9e3d6"></i><span>porcelain: one disc per point gained, ${nf(B.rate)} tokens each</span><i class="ring"></i><span>gilt mark: the frontier, nothing cheaper scores as high</span>`
+    + (B.blanks.length ? `<i class="sq" style="--c:#8f8a80"></i><span>plaster: ${B.blanks.length} scores with no token count, not weighed</span>` : '');
+}
+const short = (s, n) => s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s;
+let selected = null, itemCache = {};
+function records(id) {
+  const r = EXTRA?.results?.[id];
+  if (!r) return `<div class="rec"><span class="none">No run record for this result in this build.</span></div>`;
+  const jobs = [...r.runs.flatMap((x) => x.jobs), ...r.text_jobs];
+  let h = `<div class="rec">${r.title ? `<b>${esc(r.title)}</b><br>` : ''}`;
+  h += r.gpu_min != null ? `GPU time recorded: <b>${nf(r.gpu_min / 60, 1)} h</b> in ${r.n_jobs} job${r.n_jobs > 1 ? 's' : ''}. A job can have produced several scores.`
+    : r.n_jobs ? `<span class="none">GPU time not recorded:</span> ${r.n_timed} of ${r.n_jobs} named jobs have a start and an end.` : `<span class="none">No job named, no GPU time recorded.</span>`;
+  if (r.stated.length) h += `<br>Stated in its text: <b>${r.stated.map(esc).join(', ')}</b>.`;
+  h += '<ul>' + r.runs.map((x) => `<li><code>${esc(x.path)}</code></li>`).join('')
+    + jobs.slice(0, 8).map((j) => `<li><code>${esc(j.id)}</code><br>${j.gpu ? esc(j.gpu) : 'no record here'}${j.min != null ? ` &middot; ${nf(j.min)} min` : j.gpu ? ' &middot; no end recorded' : ''}</li>`).join('')
+    + (jobs.length > 8 ? `<li>and ${jobs.length - 8} more jobs</li>` : '') + '</ul></div>';
+  return h;
+}
+function card(s, d, fetchIt) {
+  const el = $('card'), acc = nf(s.right / s.n * 100, 1);
+  let h = `<button class="x" aria-label="Close">&times;</button><div class="who"><span>${KIND[s.model] || s.model}</span><span>${esc(s.who)}</span></div><h2>${esc(s.config)}</h2>`
+    + `<div class="big"><strong>${s.right}</strong><span>of ${s.n} on ${esc(B.name)} &middot; ${acc} %</span></div><dl>`;
+  if (d) {
+    const x = d.price ? d.price / B.rate : null;
+    h += `<dt>Tokens a problem</dt><dd>${nf(d.tokens)}<small>&times; ${s.n} = ${nf(d.tokens * s.n / 1e6, 1)} M</small></dd>`
+      + `<dt>Points over the plain base (${B.base.right})</dt><dd>${d.gain > 0 ? '+' : ''}${nf(d.gain, 1)}</dd>`
+      + `<dt>Tokens per point</dt><dd>${d.price ? nf(d.price) : 'no gain'}${x ? `<small>${nf(x, 2)}&times; RL</small>` : ''}</dd>`
+      + `<dt>On the balance</dt><dd class="${d.over > 0.5 ? 'warn' : d.over < -0.5 ? 'good' : ''}">${Math.abs(d.over) < 0.5 ? 'level: this is RL’s own row' : `${nf(Math.abs(d.over))} tokens ${d.over > 0 ? 'over' : 'under'} RL’s price`}</dd>`
+      + `<dt>Frontier</dt><dd>${d.frontier ? 'on it' : 'a cheaper row scores as high'}</dd>`;
+  } else h += `<dt>Tokens a problem</dt><dd class="warn">not recorded</dd><dt>On the balance</dt><dd>cannot be weighed</dd>`;
+  h += `</dl><div class="sec">Run records</div>${records(s.result)}<div class="sec">Board item ${esc(s.result)}</div><div class="rec" id="item"></div>`;
+  el.innerHTML = h; el.hidden = false; el.scrollTop = 0; el.querySelector('.x').onclick = () => { el.hidden = true; };
+  loadItem(s.result, fetchIt);
+}
+let itemTimer = 0;
+function loadItem(id, fetchIt) {      // words first from what /data already gave; the item itself is fetched only after a click, and not while stepping fast
+  const show = (d) => { if (!selected || selected.result !== id || !$('item')) return;
+    const p = d.plain?.[id] || {}, it = d.item;
+    $('item').innerHTML = (p.what ? `<p>${esc(p.what)}</p>` : '') + (p.why ? `<p>${esc(p.why)}</p>` : '') + (p.caveat ? `<p><b>Caveat.</b> ${esc(p.caveat)}</p>` : '')
+      + (!p.what && it?.text ? `<p>${esc(short(it.text, 420))}</p>` : '') + (it ? `<p>${esc((it.at || '').replace('T', ' ').replace('Z', ' UTC'))} &middot; ${it.n_comments || 0} comments</p>` : '')
+      || 'Click the weight to read its board item.'; };
+  clearTimeout(itemTimer);
+  if (itemCache[id]) return show(itemCache[id]);
+  show({ plain: LIVE?.plain || {} });
+  if (fetchIt) itemTimer = setTimeout(async () => {
+    try { const r = await fetch('/data/' + id); if (!r.ok) throw new Error(r.status); itemCache[id] = await r.json(); show(itemCache[id]); }
+    catch (e) { if ($('item') && selected?.result === id && !LIVE?.plain?.[id]?.what) $('item').innerHTML = '<span class="none">The item could not be read just now.</span>'; }
+  }, 450);
+}
+function select(w, quiet) { selected = w.d.s; if (!quiet || innerWidth > 900) card(w.d.s, w.d, !quiet); hash(); wake(); }
+function hash() {
+  const p = [`b=${encodeURIComponent(B.name)}`]; if (onPanOrGoing()) p.push('w=' + onPanOrGoing().d.id); if (view !== 'balance') p.push('v=' + view);
+  history.replaceState(null, '', '#' + p.join('&'));
+}
+const onPanOrGoing = () => bodies.find((w) => w.mode === 'toPan' || w.mode === 'fall') || onPan;
+
+// ---- pointer: carry a weight, click to weigh, turn the room ----------------------------------------------------------
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+let down = null, hover = null;
+function pick(e) {
+  ndc.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
+  const hit = ray.intersectObjects([...casts, ...blanks.map((b) => b.g)], false)[0];
+  return !hit ? null : hit.object.isInstancedMesh ? hit.object.userData.list[hit.instanceId].proxy : hit.object;
+}
+function carryTarget(e, w) {
+  ndc.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(ndc, camera);
+  // a plane facing the camera through the grab point, so the weight follows the hand; never below the bench
+  const n = camera.getWorldDirection(tmp).negate(); const pl = new THREE.Plane().setFromNormalAndCoplanarPoint(n, down.grab);
+  if (ray.ray.intersectPlane(pl, tmp2)) { w.target.copy(tmp2); w.target.y = Math.max(w.target.y - down.dy, 0.25); }
+  // over the left pan the weight is drawn to it: releasing there sets it down on the pan
+  const seat = panSeat(tmp), sx = seat.clone().project(camera), rx = seat.clone().setX(seat.x + PANR).project(camera);
+  const px = (sx.x + 1) / 2 * innerWidth, py = (1 - sx.y) / 2 * innerHeight, rad = Math.abs(rx.x - sx.x) / 2 * innerWidth;
+  w.magnet = Math.abs(e.clientX - px) < rad * 1.2 && e.clientY < py + rad * 0.6 && e.clientY > py - rad * 2.6;
+  if (w.magnet) w.target.set(seat.x, seat.y + 0.5, seat.z);
+}
+canvas.addEventListener('pointerdown', (e) => {
+  canvas.setPointerCapture(e.pointerId); const o = pick(e);
+  down = { x: e.clientX, y: e.clientY, o, moved: false, lx: e.clientX, ly: e.clientY };
+  if (o?.userData.w) { down.grab = o.userData.w.pos.clone(); down.grab.y += o.userData.w.d.scale; down.dy = o.userData.w.d.scale; }
+  wake();
+});
+canvas.addEventListener('pointermove', (e) => {
+  wake();
+  if (!down) { const o = pick(e); if (o !== hover) { hover = o; canvas.classList.toggle('point', !!o); } tipAt(e); return; }
+  const dx = e.clientX - down.lx, dy = e.clientY - down.ly; down.lx = e.clientX; down.ly = e.clientY;
+  if (!down.moved && Math.hypot(e.clientX - down.x, e.clientY - down.y) > 6) {
+    down.moved = true; canvas.classList.add('drag'); $('tip').classList.remove('on');
+    const w = down.o?.userData.w;
+    if (w) { if (w === onPan) { onPan = null; S.loadL = 0; clearDiscs(); } held = w; w.mode = 'held'; w.target = w.pos.clone(); }
+  }
+  if (!down.moved) return;
+  if (held) carryTarget(e, held);
+  else { cam.vy = -dx * 0.12; cam.vp = dy * 0.1; cam.uy -= dx * 0.0025; cam.up += dy * 0.0022; }
+});
+function release(e) {
+  if (!down) return; canvas.classList.remove('drag');
+  if (held) {
+    if (held.magnet) { held.magnet = false; held.mode = 'home'; weigh(held); }
+    else { held.mode = 'home'; hash(); }
+    held = null;
+  } else if (!down.moved && e.type === 'pointerup') {
+    const o = down.o;
+    if (o?.userData.w) { const w = o.userData.w; if (w === onPan) { select(w); } else weigh(w); }
+    else if (o?.userData.blank) { selected = o.userData.blank; card(selected, null, true); }
+  }
+  down = null;
+}
+canvas.addEventListener('pointerup', release); canvas.addEventListener('pointercancel', release);
+canvas.addEventListener('wheel', (e) => { e.preventDefault(); cam.uz *= Math.exp(e.deltaY * 0.0012); wake(); }, { passive: false });
+function tipAt(e) {
+  const t = $('tip'), o = hover; if (!o || down) { t.classList.remove('on'); return; }
+  const s = o.userData.w ? o.userData.w.d.s : o.userData.blank, d = o.userData.w?.d;
+  t.innerHTML = `<b>${esc(short(s.config, 90))}</b><br><span>${s.right}/${s.n} &middot; ${d ? `${nf(d.tokens)} tokens a problem &middot; ${d.price ? nf(d.price) + ' a point' : 'no gain'}` : 'no token count recorded'}</span>`;
+  const x = Math.min(e.clientX + 14, innerWidth - 350), y = e.clientY + 18;
+  t.style.transform = `translate(${x}px,${y}px)`; t.classList.add('on');
+}
+addEventListener('keydown', (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey || !B) return;
+  const cur = onPanOrGoing();
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const n = B.order.length, i = cur ? (cur.d.i + (e.key === 'ArrowRight' ? 1 : n - 1)) % n : 0; weigh(bodies.find((w) => w.d.i === i)); e.preventDefault(); }
+  else if (e.key === 'b' || e.key === 'B') setView(view === 'balance' ? 'bench' : 'balance');
+  else if (e.key === 'Escape') { sendHome(cur); $('card').hidden = true; hash(); wake(); }
+  else if (/^[1-9]$/.test(e.key) && benches[+e.key - 1]) setBench(benches[+e.key - 1].name);
+  else if (e.key === 's' || e.key === 'S') $('snd').click();
+});
+
+// ---- the pointer's reading: taken from the beam's angle as it settles -------------------------------------------------
+function reading() {
+  const el = $('read'), w = onPan;
+  if (!w) { el.classList.remove('on'); return; }
+  const narrow = innerWidth <= 900, tip = (narrow ? tmp.set(0, H - NEEDLE - 0.12, 0.2) : tmp.set(0.6, H - NEEDLE + 0.1, 0.2)).project(camera);
+  el.style.transform = narrow ? `translate(${innerWidth / 2}px,${$('views').getBoundingClientRect().bottom + 14}px) translate(-50%,0)`
+    : `translate(${(tip.x + 1) / 2 * innerWidth}px,${(1 - tip.y) / 2 * innerHeight}px) translate(0,-50%)`;
+  el.style.textAlign = narrow ? 'center' : 'left';
+  const stop = Math.abs(S.th) >= TH_MAX - 1e-4, d = S.K * Math.tan(S.th) / L;
+  el.className = 'tag read on ' + (S.th > 0.004 ? 'over' : S.th < -0.004 ? 'under' : '');
+  el.innerHTML = stop ? `<strong>${S.th > 0 ? 'over' : 'under'} the scale</strong>${nf(Math.abs(w.d.over))} tokens ${w.d.over > 0 ? 'dearer' : 'cheaper'} than RL’s price`
+    : Math.abs(d) < B.rl.tokens * 0.004 ? `<strong>level</strong>RL’s price exactly`
+    : `<strong>${nf(Math.abs(d))}</strong>tokens ${d > 0 ? 'dearer' : 'cheaper'} than RL’s price`;
+}
+
+// ---- loop ----------------------------------------------------------------------------------------------------------
+let clock = 0, last = performance.now(), awake = 0, started = false, slow = 0, res = 1;
+let stillTimer = 0;
+function wake() { awake = Math.max(awake, 2.5); if (STILL && !stillTimer) stillTimer = setTimeout(() => { stillTimer = 0; still(); }, 120); }
+function advance(dt) {
+  const n = 4; for (let i = 0; i < n; i++) { clock += dt / n; stepBeam(dt / n); poseBalance(); balance.updateMatrixWorld(true); stepWeights(dt / n); }
+  for (const w of bodies) {
+    dummy.position.copy(w.pos); dummy.rotation.set(w.rx, 0, w.rz); dummy.scale.setScalar(w.d.scale); dummy.updateMatrix();
+    w.im.setMatrixAt(w.ii, dummy.matrix); w.decal.position.copy(w.pos); w.decal.rotation.copy(dummy.rotation);
+  }
+  for (const im of casts) { im.instanceMatrix.needsUpdate = true; im.boundingSphere = null; }
+}
+function moving() {
+  return Math.abs(S.om) > 2e-4 || bodies.some((w) => w.mode !== 'bench' && w.mode !== 'pan') || discs.some((d) => !d.down)
+    || Math.abs(S.swL.z) + Math.abs(S.swL.w) + Math.abs(S.swR.z) + Math.abs(S.swR.w) > 2e-3;
+}
+let shadowDirty = true;
+let odd = false;
+function draw() {      // while things move the shadow map is redrawn every second frame; when only the camera moves, not at all
+  reading(); odd = !odd; if (shadowDirty && (odd || !moving())) { renderer.shadowMap.needsUpdate = true; shadowDirty = false; } renderer.render(scene, camera);
+}
+function frame(now) {
+  requestAnimationFrame(frame); if (!started) return;
+  now = performance.now();      // not the callback's own time: a browser without a frame limit hands out times that run slow
+  const dt = Math.min((now - last) / 1000, 1 / 20); last = now;
+  advance(dt); stepCamera(dt);
+  if (moving() || held) { awake = Math.max(awake, 1); shadowDirty = true; }      // at rest nothing changes: the last frame stays
+  if (awake > 0) {
+    awake -= dt; draw();
+    // a slow machine gets fewer pixels, not fewer frames: 40 drawn frames in a row under 42 a second lower the resolution one step
+    slow = dt > 0.024 ? slow + 1 : 0;
+    if (slow > 40 && res > 0.62) { res -= 0.19; slow = 0; renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5) * res); renderer.setSize(innerWidth, innerHeight, false); shadowDirty = true; }
+  } else slow = 0;
+}
+let stillBusy = false;
+function still() {       // reduced motion: run the physics to rest off screen, then show one frame
+  if (!started || stillBusy) return; stillBusy = true;
+  for (let i = 0; i < 900; i++) advance(1 / 60);
+  stepCamera(1, true); draw(); stillBusy = false;
+}
+function resize() {
+  res = 1; renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5)); renderer.setSize(innerWidth, innerHeight, false);
+  camera.aspect = innerWidth / innerHeight; camera.fov = innerWidth <= 900 ? 34 : 30; camera.updateProjectionMatrix();
+  if (B) { relayout(); fit(); shadowDirty = true; } wake();
+}
+addEventListener('resize', resize);
+
+// ---- start ---------------------------------------------------------------------------------------------------------
+function setBench(name, wid, quiet) {
+  B = benches.find((b) => same(b.name) === same(name)) || benches[0];
+  $('benches').innerHTML = benches.map((b, i) => `<button data-b="${esc(b.name)}" aria-pressed="${b === B}" title="key ${i + 1}">${esc(b.name)}</button>`).join('');
+  for (const el of $('benches').children) el.onclick = () => setBench(el.dataset.b);
+  buildBench(); sentence(); fit();
+  const w = bodies.find((x) => x.d.id === wid) || bodies.find((x) => x.d === B.top);
+  weigh(w, quiet); hash();
+}
+function status(ok) { const el = $('status'); el.classList.toggle('bad', !ok);
+  el.textContent = ok && LIVE ? `${SCORES.length} live score rows` : `live scores unreachable: showing the rows of ${EXTRA ? new Date(EXTRA.built * 1000).toISOString().slice(0, 16).replace('T', ' ') + ' UTC' : 'no build'}`; }
+function use(scores, first) {
+  const s = scores.map((x) => x.sk + x.right + x.tokens).join();
+  if (s !== sig && scores.length) {
+    sig = s; SCORES = scores; benches = ledger(scores);
+    if (!benches.length) { fail('no benchmark has a plain base row, an RL row with tokens and 8 weighed rows'); return; }
+    const h = new URLSearchParams(location.hash.slice(1));
+    if (first) { if (h.get('v') === 'bench') view = 'bench'; for (const b of $('views').children) b.setAttribute('aria-pressed', b.dataset.v === view); }
+    setBench(first ? h.get('b') || benches[0].name : B.name, first ? h.get('w') : onPanOrGoing()?.d.id, true);
+  }
+}
+async function refresh() {       // the live rows replace the build's rows; a failed read keeps what is shown and tries again
+  let ok = true;
+  try { const r = await fetch('/data'); if (!r.ok) throw new Error(r.status); LIVE = await r.json(); } catch (e) { ok = false; }
+  if (LIVE?.scores) use(LIVE.scores, !B);
+  status(ok);
+  setTimeout(refresh, ok ? 60000 : 15000);
+}
+(async function () {
+  try { const r = await fetch('data.json'); if (!r.ok) throw new Error(r.status); EXTRA = await r.json(); } catch (e) { fail('data.json is missing: run build.py'); }
+  await Promise.all([document.fonts.load('600 20px Archivo'), document.fonts.load('300 20px Newsreader')]).catch(() => {});
+  resize();
+  if (EXTRA?.scores) { use(EXTRA.scores, true); refresh(); } else await refresh();
+  if (!B) return;
+  stepCamera(1, true);
+  if (!STILL) for (let i = 0; i < 150; i++) advance(1 / 60);   // the first frame already has its weight on the pan
+  started = true; last = performance.now();
+  if (STILL) still(); else requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
