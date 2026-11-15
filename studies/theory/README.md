@@ -1400,6 +1400,28 @@ problems, right values no guess would give, grading correct; answer texts are no
 | `analysis/direct_short.py` | Readout from `studies/rlneurons/results/day1_3/{hard328_base_cue_s4r2-01,math500_base_cue-01}/rows.jsonl`. |
 | `results/direct/short-01/` | `readout.json`, `examples.json` (a solved problem with no short right sample, one with), `reading.md`, `run.json`. |
 
+### host-01: round-10/weights-m03, "an added RL change depends on its host" (board work-ae598b, holds, not distinctive)
+
+Claim tested (engine 12's plan, sharpened): Think-SFT's own weight change lies in RL-Math 3.1's top-8 input (right singular)
+subspace more than chance, and more than in the top-8 input subspace of the same rank in the same matrix from non-math
+changes. Readout: cap_right = ||d_ThinkSFT V||^2 / ||d_ThinkSFT||^2 per matrix (stored rows of job
+abaybektursun-1114-221259-0871), 224 matrices, 90 % bootstrap over matrices. Share inside Math 3.1's subspace 0.0088 =
+4.80x the random rank-8 expectation 8/n_in [4.55, 5.08] (over layers [4.35, 5.35]); the plan's 2x holds. Against
+structured nulls: 2.23x [2.12, 2.34] IF-RL 3.0's subspace, 1.99x [1.89, 2.08] General-RL 3.0's, but 1.33x [1.28, 1.39]
+the base matrix's own top-8 (above it in 188 of 224 matrices). Verdict by the frozen rule: holds, not distinctive (needed
+1.5x over every null). Positive control: Math 3.0's change sits 49x chance and 6.8x the base subspace, so the instrument
+shows a specific overlap where one exists. Think-SFT sits almost as much in Code 3.1's and Math 3.0's subspaces (Math 3.1
+over them 1.19x, 1.10x): it shares the input directions of reasoning RL in general, not of math RL. Output side (cap_left)
+1.11x to 1.32x the nulls. run-05/f2-m03 predicts the same overlap, and weights alone cannot show the overlap shrinks
+RL's effect; that needs Think-SFT + RL with the overlapping part projected out. Row added to `results/direct_tested.json`.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_host.md` | Claim, why the plan's chance level is weak, frozen verdict rule (pushed first, 07a692f). |
+| `analysis/direct_host.py` | `extract` (per-matrix caps from the job's `metrics.json`), `analyze` (readout). |
+| `data/direct_host/cap_v1.json` | Per-matrix cap_right, cap_left, cap_both of Think-SFT, Math 3.0, Code 3.1 against 11 subspaces (input). |
+| `results/direct/host-01/` | `readout.json`, `examples.json` (matrices with the largest and smallest ratio over the base subspace), `run.json`. |
+
 ## Paper: Theories on Trial (`paper/`, board work-184476)
 
 A short paper on the engine's rounds 1 to 7: the theories' own predictions against the two no-theory readers
