@@ -1,0 +1,68 @@
+{
+ "vote_wins": {
+  "problem_index": 21,
+  "gold": "13535",
+  "mean_single_right": 0.25,
+  "vote_right_order_averaged": 1.0,
+  "vote_right_plain": 1,
+  "samples": [
+   {
+    "sample": 0,
+    "extracted_v3": "13535",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 1,
+    "extracted_v3": null,
+    "score_v3": 0,
+    "cap_hit": true
+   },
+   {
+    "sample": 2,
+    "extracted_v3": null,
+    "score_v3": 0,
+    "cap_hit": true
+   },
+   {
+    "sample": 3,
+    "extracted_v3": null,
+    "score_v3": 0,
+    "cap_hit": true
+   }
+  ]
+ },
+ "vote_loses": {
+  "problem_index": 18,
+  "gold": "28",
+  "mean_single_right": 0.25,
+  "vote_right_order_averaged": 0.0,
+  "vote_right_plain": 0,
+  "samples": [
+   {
+    "sample": 0,
+    "extracted_v3": "56",
+    "score_v3": 0,
+    "cap_hit": false
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "56",
+    "score_v3": 0,
+    "cap_hit": false
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "28",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "56",
+    "score_v3": 0,
+    "cap_hit": false
+   }
+  ]
+ }
+}
