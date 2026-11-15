@@ -56,7 +56,7 @@ def main():
             c, e = m["config"], json.loads((RUNS / job / "edit.json").read_text())
             assert c["set"] == "hard328" and c["prompt"] == "cue" and c["temperature"] == c["top_p"] == 1.0 and c["seed"] == 3000000, (arm, c)
             ea = e["args"]
-            want = f"--recipe {ea['recipe']}" + "".join(f" --{f} {ea[f]}" for f in ("k", "mods", "scale", "donor") if ea.get(f) not in (None, 1.0)) + f" --other {ea['other']}"
+            want = f"--recipe {ea['recipe']}" + "".join(f" --{f} {ea[f]}" for f, dflt in (("k", 8), ("mods", None), ("scale", 1.0), ("donor", None)) if ea.get(f) != dflt) + f" --other {ea['other']}"
             assert c["model_label"] == arm and want == NEW[arm][1], (arm, c["model_label"], want)
             cells[arm]["edit"] = {"recipe": e["recipe"], "other": ea["other"], "donor": ea.get("donor"), "mods": ea.get("mods"), "scale": ea.get("scale", 1.0), "k": e["k"],
                                   "rounding": e["rounding"], "n_edited": e["n_edited"], **e["totals"]}
