@@ -1,0 +1,29 @@
+{
+ "rule": "lowest problem index scored right and scored wrong; text cut to its first and last 1500 characters",
+ "right": {
+  "problem_index": 3,
+  "unique_id": "test/number_theory/572.json",
+  "seed": 80000003,
+  "gold": "9",
+  "extracted_v3": "9",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 999,
+  "text_characters": 3020,
+  "text_truncated": true,
+  "text": " and to end the last line with simply \"\\boxed{Answer}\" You are not required to show any work for this problem\n\n\nOkay, so I need to figure out how many positive whole-number divisors 196 has. Hmm, let's start by recalling what a divisor is. A divisor of a number is another number that divides it without leaving a remainder. For example, 1 and 6 are divisors of 6 because 6 divided by 1 is 6 and 6 divided by 6 is 1. \n\nFirst, maybe I should factorize 196 into its prime factors. Prime factorization is crucial here because once I have the prime factors, I can use a formula to find the number of divisors. Let me try to break down 196.\n\nI know that 196 is an even number, so it's divisible by 2. Let's divide 196 by 2:\n\n196 \u00f7 2 = 98.\n\nThat's even again. Divide by 2 once more:\n\n98 \u00f7 2 = 49.\n\nNow, 49 is 7 times 7, right? So 49 \u00f7 7 = 7. So, the prime factors of 196 are 2 and 7, each appearing twice. So, the prime factorization is 2\u00b2 \u00d7 7\u00b2.\n\nWait, let me check that. Let's multiply 2 times 2 times 7 times 7. 2\u00d72 is 4, 7\u00d77 is 49, and 4\u00d749 is 196. Yep, that's correct. So, 196 = 2\u00b2 \u00d7 7\u00b2.\n\nNow, the formula for the number of positive divisors (I think it's called the divisor function) is that if a number is represented as the product of primes raised to exponents, like p\u2081^a multiplied by p\u2082^b multiplied by p\u2083^c... and so on, then the number of divisors is (a+1)(b+1)(c+1)... etc. So each exponent is increased by 1 and then multiplied together.\n\nIn this case, the prime factors are 2 with exponent 2\n[... 20 characters left out ...]\n 2. So, following the formula, the number of divisors should be (2+1)(2+1) = 3\u00d73 = 9. Let me verify that.\n\nWait, maybe I should list all the divisors to make sure. Let's see. If 196 is 2\u00b2\u00d77\u00b2, then divisors are all combinations of 2^a \u00d7 7^b where a can be 0,1,2 and b can be 0,1,2. So:\n\nWhen a=0:\n- 7^0 = 1\n- 7^1 = 7\n- 7^2 = 49\n\nWhen a=1:\n- 2^1 \u00d7 7^0 = 2\n- 2^1 \u00d7 7^1 = 14\n- 2^1 \u00d7 7^2 = 98\n\nWhen a=2:\n- 2^2 \u00d7 7^0 = 4\n- 2^2 \u00d7 7^1 = 28\n- 2^2 \u00d7 7^2 = 196\n\nListing them all: 1, 2, 4, 7, 14, 28, 49, 98, 196. Let's count: 1 (1), 2 (2), 4 (3), 7 (4), 14 (5), 28 (6), 49 (7), 98 (8), 196 (9). Yep, nine divisors. That matches the formula result. So the number of positive divisors is 9.\n\nBut wait, just to make sure I didn't make a mistake in the factorization. Let's verify 2\u00b2\u00d77\u00b2 again. 2\u00b2 is 4, 7\u00b2 is 49, 4\u00d749 is 196. Correct. So, no issue there.\n\nAnother way to think about divisors is that for each prime in the factorization, you pair them up. But since 196 is a square, maybe there's an odd number of divisors because squares have a middle divisor. Hmm, but in the case of 196, which is 14\u00b2, maybe that contributes to more divisors. But regardless, our formula works because it accounts for each prime's exponent.\n\nAlternatively, the formula works when the number is broken into primes with exponents. So, as long as the prime factorization is correct, the formula gives the right count. Since 196's prime factors are correct here, the formula applies.\n\nTherefore, the answer should be 9.\n\n**Answer: 9**"
+ },
+ "wrong": {
+  "problem_index": 0,
+  "unique_id": "test/precalculus/807.json",
+  "seed": 80000000,
+  "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 1,
+  "text_characters": 0,
+  "text_truncated": false,
+  "text": ""
+ }
+}

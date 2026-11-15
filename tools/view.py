@@ -16,7 +16,8 @@ text, scores, votes, comments and message thread in a side panel whose address i
 address too (/?who=<name>&q=<text>&idle=1). Keys: / filter, j and k move, 1 2 3 jump to a column, Enter opens, Esc
 closes, ? lists the keys. A click on a person shows only that person.
 
-  GET /architecture    how the harness works: one interactive picture (architecture.py), fed by the same /data
+  GET /architecture    the Design tab, how the harness works: one interactive picture (architecture.py), fed by the same /data
+  GET /findings        the Findings tab: one tile per finding (findings.py), each a link to the page of that finding
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
                        (board.py score), which the hill-climbing charts draw, the first line of each scored result's
@@ -43,14 +44,17 @@ from boto3.dynamodb.conditions import Key
 import architecture
 import board
 import climb
+import findings
 import team
 
 PORT = int(sys.argv[sys.argv.index("--port") + 1]) if "--port" in sys.argv else 8765
 HOURS = float(sys.argv[sys.argv.index("--hours") + 1]) if "--hours" in sys.argv else 6.0
 LISTS = ("work", "result", "idea", "knowledge", "skill", "work-closed")
-# One page per finding: every tools/finding_<slug>.py (TITLE, LINE, PAGE) is served at /finding/<slug>.
+# One page per finding: every tools/finding_<slug>.py (TITLE, LINE, PAGE) is served at /finding/<slug> and has a tile
+# on /findings. Its ICON, the JavaScript source of the tile's icon, is written into that page here (findings.py).
 FINDINGS = {os.path.basename(f)[len("finding_"):-3].replace("_", "-"): importlib.import_module(os.path.basename(f)[:-3])
             for f in sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "finding_*.py")))}
+FINDINGS_PAGE = findings.PAGE.replace("__ICONS__", "{" + ", ".join(f"{json.dumps(s)}: {m.ICON}" for s, m in FINDINGS.items() if hasattr(m, "ICON")) + "}")
 
 
 def newest(listed, n=60):
@@ -82,7 +86,7 @@ def snapshot():
         found = dict(zip(scored, pool.map(finding, scored)))
     return {"now_ns": time.time_ns(), "hours": HOURS, "test": team.TEST, "items": items, "messages": messages, "scores": scores,
             "last_comments": last, "finding": found,
-            "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items() if not getattr(m, "UNLISTED", False)]}
+            "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items()]}
 
 
 def detail(item_id):
@@ -111,6 +115,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", PAGE)
         if path == "/architecture":
             return self.send(200, "text/html", architecture.PAGE)
+        if path == "/findings":
+            return self.send(200, "text/html", FINDINGS_PAGE)
         if path.startswith("/finding/") and path[len("/finding/"):] in FINDINGS:
             return self.send(200, "text/html", FINDINGS[path[len("/finding/"):]].PAGE)
         if path != "/data" and not path.startswith("/data/"):
@@ -178,6 +184,7 @@ code { font: inherit; font-weight: 600; }
 .name { margin: 0; font-size: 15px; font-weight: 600; font-stretch: 112%; letter-spacing: .01em; white-space: nowrap; }
 .links { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 13px; color: var(--mute); min-width: 0; }
 .links a:hover { color: var(--ink); }
+.links a[aria-current] { color: var(--ink); font-weight: 600; }
 .test { color: var(--red); font-weight: 600; font-size: 13px; }
 .search { margin-left: auto; position: relative; display: flex; align-items: center; }
 .search input {
@@ -437,7 +444,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
 <div class="wrap">
   <header class="top">
     <h1 class="name">Team board</h1>
-    <nav class="links"><a href="/architecture">How it works</a><span id="finds" class="links"></span></nav>
+    <nav class="links"><a href="/" aria-current="page">Board</a><a href="/architecture">Design</a><a href="/findings">Findings</a></nav>
     <span class="test" id="test" hidden>test table</span>
     <label class="search"><input id="q" type="search" placeholder="Filter items and messages" aria-label="Filter items and messages" autocomplete="off"><kbd>/</kbd></label>
     <span class="status" id="status" role="status">Reading the board</span>
@@ -629,7 +636,6 @@ function render() {
     (S.idle ? `<span class="chip">Open work idle over an hour <button data-clear="idle" aria-label="Show all open work">✕</button></span>` : ""));
   if (!d) return;
   $("test").hidden = !d.test;
-  put($("finds"), (d.findings || []).map(f => `<a href="/finding/${esc(f.slug)}" title="${esc(f.line)}">${esc(f.title)}</a>`).join(""));
 
   people = [...new Set([...d.items, ...d.messages].map(r => r.who))].sort();
   S.scores = new Map();
