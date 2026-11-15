@@ -1,0 +1,9 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_merge328.md",
+ "commit": "c23a1896df7a7256fdbd51e1a835b6c2379e9ba8",
+ "board": "work-b38c6b",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.theory.analysis.direct_merge328",
+ "inputs": [
+  "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl"
+ ]
+}

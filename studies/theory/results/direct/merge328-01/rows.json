@@ -1,0 +1,9 @@
+[
+ {
+  "mechanism": "round-15/account-2/c1",
+  "claim": "On hard328 the cued base vote over 4 attempt-0 samples is right more often with its real finished wrong answers than with every finished wrong answer of a problem merged into one, by D in [0.06, 0.40].",
+  "result": "result-3394eb",
+  "verdict": "holds",
+  "measured": "D 0.109 [90 % 0.078, 0.142], n 88, null value 0 (null range [-0.03, 0.03]), account-2 range [0.06, 0.40]"
+ }
+]
