@@ -124,3 +124,13 @@ least 20 above `rand8` (36) if one direction per matrix is enough to switch the 
 Reruns on all 500 (right of 500): `top8` plain 427, `sft1` cue 454, `sft1` plain 440. Added before it runs: `rand8` plain on
 all 500, seed base 183,000,000, so that the matched control of `top8` exists at n = 500 as well. Prediction: within 5
 points of the plain base (T3, 224 of 500); refuted if it is more than 10 points above it.
+
+## Amendment 4, 2026-11-15 03:55 UTC: is the no-reward (Think-SFT) change also concentrated?
+
+Full-500 result so far: `sft1` cue 454, +8.8 points over T1 [5.4, 12.4] and -1.8 against T2 [-4.2, 0.6]. New screens, first
+100 problems, same seeds and references as the first screen: `sfttop8` and `sfttop64` plain (base + the top 8 or 64 singular
+directions per layer matrix of the Think-SFT delta; `--recipe top8 --other think_sft --k 8|64`), `sft025` plain and cue
+(base + 0.25 of the Think-SFT delta). Prediction from Part 1 (top-8 share 0.030 against RL's 0.118, no cue token in any
+readout): the Think-SFT change is not concentrated, so `sfttop8` plain stays within 10 points of the plain base (34);
+refuted if it is 20 or more above `rand8` (36). For comparison, a quarter of the RL delta gives 405 of 500 plain
+(`results/day1_wdiff/`); `sft025` plain tests whether a quarter of the imitation delta does the same.

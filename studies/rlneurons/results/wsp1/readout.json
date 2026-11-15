@@ -783,7 +783,178 @@
   }
  },
  "bootstrap": "paired by problem index, 5,000 resamples, seed 0, 95 % percentile, in points",
- "skipped": [],
+ "full500_vs_references": {
+  "references": {
+   "T1_base_cue": {
+    "n": 500,
+    "right_v3": 410,
+    "rows": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (t1_right)"
+   },
+   "T2_rl_plain": {
+    "n": 500,
+    "right_v3": 463,
+    "rows": "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (t2_right)"
+   },
+   "T3_base_plain": {
+    "n": 500,
+    "right_v3": 224,
+    "rows": null,
+    "count": "studies/rlneurons/results/day1_wdiff/readout.json"
+   },
+   "theta0.25_plain": {
+    "n": 500,
+    "right_v3": 405,
+    "rows": null,
+    "count": "studies/rlneurons/results/day1_wdiff/readout.json"
+   },
+   "theta0.5_plain": {
+    "n": 500,
+    "right_v3": 443,
+    "rows": null,
+    "count": "studies/rlneurons/results/day1_wdiff/readout.json"
+   }
+  },
+  "differences": {
+   "sft1_cue minus T1_base_cue": {
+    "n": 500,
+    "points": 8.8,
+    "ci95": [
+     5.4,
+     12.4
+    ],
+    "paired": true
+   },
+   "sft1_cue minus T2_rl_plain": {
+    "n": 500,
+    "points": -1.8,
+    "ci95": [
+     -4.2,
+     0.6
+    ],
+    "paired": true
+   },
+   "sft1_plain minus T2_rl_plain": {
+    "n": 500,
+    "points": -4.6,
+    "ci95": [
+     -7.8,
+     -1.4
+    ],
+    "paired": true
+   },
+   "top8_plain minus T2_rl_plain": {
+    "n": 500,
+    "points": -7.2,
+    "ci95": [
+     -10.2,
+     -4.2
+    ],
+    "paired": true
+   },
+   "top8_plain minus T3_base_plain": {
+    "n": 500,
+    "points": 40.6,
+    "ci95": [
+     35.08,
+     45.75
+    ],
+    "paired": false
+   }
+  },
+  "skipped": [
+   "top8_plain minus theta0.25_plain: no per-problem rows of theta0.25_plain in git, only its count 405 of 500",
+   "top8_plain minus theta0.5_plain: no per-problem rows of theta0.5_plain in git, only its count 443 of 500"
+  ],
+  "intervals": "paired: by problem index, bootstrap as above (5,000 resamples, seed 0, 95 % percentile); unpaired (the reference has no per-problem rows in git): Newcombe's interval from the two Wilson 95 % intervals; in points",
+  "sft1_cue_on_T1_T2_cells": {
+   "rl_only": {
+    "what": "T1 (cued base) wrong, T2 (RL) right",
+    "n": 65,
+    "solved": 58,
+    "by_failure_type": {
+     "cap_no_loop": {
+      "n": 16,
+      "solved": 14
+     },
+     "misread_problem_or_diagram": {
+      "n": 14,
+      "solved": 11
+     },
+     "slip_arithmetic_algebra": {
+      "n": 14,
+      "solved": 14
+     },
+     "wrong_method_or_incomplete": {
+      "n": 9,
+      "solved": 7
+     },
+     "right_answer_form_rejected": {
+      "n": 5,
+      "solved": 5
+     },
+     "right_in_text_final_line_garbled": {
+      "n": 3,
+      "solved": 3
+     },
+     "reached_gold_then_changed": {
+      "n": 2,
+      "solved": 2
+     },
+     "drift_no_answer": {
+      "n": 2,
+      "solved": 2
+     }
+    },
+    "failure_type": "hand label of T1's failure by one reader (t1_t2_items-01/notes.md)",
+    "unsolved_indices": [
+     4,
+     96,
+     103,
+     189,
+     222,
+     239,
+     279
+    ]
+   },
+   "both": {
+    "what": "T1 right, T2 right",
+    "n": 398,
+    "wrong": 17,
+    "wrong_indices": [
+     2,
+     6,
+     15,
+     70,
+     182,
+     234,
+     237,
+     247,
+     284,
+     323,
+     387,
+     432,
+     463,
+     470,
+     472,
+     487,
+     495
+    ]
+   }
+  },
+  "top8_plain_by_T2_rl_plain": {
+   "both": 414,
+   "only_top8": 13,
+   "only_rl": 49,
+   "neither": 24
+  }
+ },
+ "skipped": [
+  {
+   "cell": "full500/rand8_plain",
+   "job_id": "sameraslan-1114-193553-cf1f",
+   "why": "no answers.jsonl in runs/"
+  }
+ ],
  "notes": [
   "tokens are n_generated, which counts the stop token: one more than the job's n_new for an answer that stopped",
   "empty: n_generated <= 3",
