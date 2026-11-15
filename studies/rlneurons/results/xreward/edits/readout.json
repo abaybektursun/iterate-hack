@@ -74,6 +74,9 @@
    "edit": {
     "recipe": "top8",
     "other": "rl_math",
+    "donor": null,
+    "mods": null,
+    "scale": 1.0,
     "k": 8,
     "rounding": "stochastic",
     "n_edited": 224,
@@ -99,6 +102,9 @@
    "edit": {
     "recipe": "rand8",
     "other": "rl_math",
+    "donor": null,
+    "mods": null,
+    "scale": 1.0,
     "k": 8,
     "rounding": "stochastic",
     "n_edited": 224,
@@ -124,6 +130,9 @@
    "edit": {
     "recipe": "top8",
     "other": "rl_code",
+    "donor": null,
+    "mods": null,
+    "scale": 1.0,
     "k": 8,
     "rounding": "stochastic",
     "n_edited": 224,
@@ -149,6 +158,9 @@
    "edit": {
     "recipe": "bulk",
     "other": "rl_math",
+    "donor": null,
+    "mods": null,
+    "scale": 1.0,
     "k": 8,
     "rounding": "stochastic",
     "n_edited": 224,
@@ -178,6 +190,13 @@
     -0.3
    ]
   },
+  "top8_math31 minus rand8_math31": {
+   "points": 10.37,
+   "ci95": [
+    5.79,
+    14.94
+   ]
+  },
   "rand8_math31 minus base_cue_T1": {
    "points": -1.83,
    "ci95": [
@@ -190,6 +209,13 @@
    "ci95": [
     -19.21,
     -10.37
+   ]
+  },
+  "rand8_math31 minus top8_math31": {
+   "points": -10.37,
+   "ci95": [
+    -14.94,
+    -5.79
    ]
   },
   "top8_code31 minus base_cue_T1": {
@@ -206,6 +232,20 @@
     -4.57
    ]
   },
+  "top8_code31 minus rand8_math31": {
+   "points": 6.1,
+   "ci95": [
+    2.44,
+    10.06
+   ]
+  },
+  "top8_code31 minus top8_math31": {
+   "points": -4.27,
+   "ci95": [
+    -8.84,
+    0.0
+   ]
+  },
   "bulk_math31 minus base_cue_T1": {
    "points": 7.93,
    "ci95": [
@@ -220,11 +260,18 @@
     -1.22
    ]
   },
-  "top8_math31 minus rand8_math31": {
-   "points": 10.37,
+  "bulk_math31 minus rand8_math31": {
+   "points": 9.76,
    "ci95": [
     5.79,
-    14.94
+    13.72
+   ]
+  },
+  "bulk_math31 minus top8_math31": {
+   "points": -0.61,
+   "ci95": [
+    -4.88,
+    3.66
    ]
   },
   "top8_math31 minus theta0.5_cue": {
@@ -253,13 +300,6 @@
    "ci95": [
     -6.71,
     1.22
-   ]
-  },
-  "top8_code31 minus rand8_math31": {
-   "points": 6.1,
-   "ci95": [
-    2.44,
-    10.06
    ]
   }
  },

@@ -25,6 +25,14 @@ NEW = {
     "rand8_math31": ("abaybektursun-1114-221040-5f1e", "--recipe rand8 --other rl_math"),
     "top8_code31": ("abaybektursun-1114-221053-fb3f", "--recipe top8 --other rl_code"),
     "bulk_math31": ("abaybektursun-1114-221100-1e31", "--recipe bulk --other rl_math"),
+    "top1_math31": ("abaybektursun-1115-000358-d11a", "--recipe top8 --k 1 --other math31"),                 # amendment 3
+    "top64_math31": ("abaybektursun-1115-000407-47ec", "--recipe top8 --k 64 --other math31"),
+    "top8attn_math31": ("abaybektursun-1115-000418-6c62", "--recipe top8 --mods q,k,v,o --other math31"),
+    "top8mlp_math31": ("abaybektursun-1115-000433-93aa", "--recipe top8 --mods gate,up,down --other math31"),
+    "top8x2_math31": ("abaybektursun-1115-000444-2db4", "--recipe top8 --scale 2 --other math31"),
+    "proj_math31_code30": ("abaybektursun-1115-000458-9c58", "--recipe proj --donor code30 --other math31"),
+    "projc_math31_code30": ("abaybektursun-1115-000518-0cb7", "--recipe projc --donor code30 --other math31"),
+    "top8_code30": ("abaybektursun-1115-000529-4432", "--recipe top8 --other code30"),
 }
 REFS = {"base_cue_T1": OLD["base_cue_T1"][0], "rl_plain_T1": OLD["rl_plain_T1"][0], "rl_cue_T1": OLD["rl_cue_T1"][0],
         "theta0.25_cue": WDIFF["theta0.25_cue"][0], "theta0.5_cue": WDIFF["theta0.5_cue"][0], "code1_cue": WDIFF["code1_cue"][0]}
@@ -46,8 +54,11 @@ def main():
         if arm in NEW:
             c, e = m["config"], json.loads((RUNS / job / "edit.json").read_text())
             assert c["set"] == "hard328" and c["prompt"] == "cue" and c["temperature"] == c["top_p"] == 1.0 and c["seed"] == 3000000, (arm, c)
-            assert c["model_label"] == arm and f"--recipe {e['recipe']} " in NEW[arm][1] + " " and NEW[arm][1].endswith(e["args"]["other"]), (arm, c["model_label"], e["recipe"])
-            cells[arm]["edit"] = {"recipe": e["recipe"], "other": e["args"]["other"], "k": e["k"], "rounding": e["rounding"], "n_edited": e["n_edited"], **e["totals"]}
+            ea = e["args"]
+            want = f"--recipe {ea['recipe']}" + "".join(f" --{f} {ea[f]}" for f in ("k", "mods", "scale", "donor") if ea.get(f) not in (None, 1.0)) + f" --other {ea['other']}"
+            assert c["model_label"] == arm and want == NEW[arm][1], (arm, c["model_label"], want)
+            cells[arm]["edit"] = {"recipe": e["recipe"], "other": ea["other"], "donor": ea.get("donor"), "mods": ea.get("mods"), "scale": ea.get("scale", 1.0), "k": e["k"],
+                                  "rounding": e["rounding"], "n_edited": e["n_edited"], **e["totals"]}
             d = OUT / f"{arm}-01"
             if not d.exists():
                 d.mkdir(parents=True)
@@ -60,8 +71,9 @@ def main():
                 (d / "examples.json").write_text(json.dumps(examples(rows[arm], sc[arm]), indent=1) + "\n")
             cells[arm]["run_folder"] = f"studies/rlneurons/results/xreward/edits/{d.name}"
     new = [a for a in NEW if a in sc]
-    pairs = [(x, y) for x in new for y in (BASE, RL)] + [(x, y) for x, y in (("top8_math31", "rand8_math31"), ("top8_math31", "theta0.5_cue"), ("top8_math31", "top8_code31"),
-                                                                              ("bulk_math31", "rl_cue_T1"), ("top8_code31", "code1_cue"), ("top8_code31", "rand8_math31")) if x in sc and y in sc]
+    more = [("top8_math31", "theta0.5_cue"), ("top8_math31", "top8_code31"), ("bulk_math31", "rl_cue_T1"), ("top8_code31", "code1_cue"), ("top8mlp_math31", "top8attn_math31"),
+            ("proj_math31_code30", "projc_math31_code30"), ("top8_code30", "top8_code31")]
+    pairs = [(x, y) for x in new for y in (BASE, RL, "rand8_math31", "top8_math31") if x != y] + [(x, y) for x, y in more if x in sc and y in sc]
     diffs = {f"{x} minus {y}": diff(sc, x, y, clean) for x, y in pairs}
     churn = {a: {"fixed_of_base_cue_wrong": sum(sc[BASE][i]["v3"] == 0 and sc[a][i]["v3"] == 1 for i in clean),
                  "lost_of_base_cue_right": sum(sc[BASE][i]["v3"] == 1 and sc[a][i]["v3"] == 0 for i in clean),
