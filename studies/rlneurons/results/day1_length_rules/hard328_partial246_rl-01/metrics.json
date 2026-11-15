@@ -1,0 +1,162 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_day1_length_rules.md",
+ "mode": "fixed",
+ "grader": "v3 (score_v3 and extracted_v3 as written by run_cell)",
+ "samples_per_problem_allowed": 4,
+ "bootstrap_resamples": 5000,
+ "set": "hard328",
+ "n": 246,
+ "runs": {
+  "rl": {
+   "job_id": "join-partial(missing 2/4):sameraslan-1114-145256-f5ac+sameraslan-1114-145301-e465+sameraslan-1114-145311-d31f",
+   "commit": "34a8ccdfac152b85d0fd717682d5b9b62157db3a",
+   "model": "rl",
+   "prompt": "plain",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3000000,
+   "samples": 4,
+   "restarts": 0
+  }
+ },
+ "fixed_from": "studies/rlneurons/specs/day1_length_rules_chosen_prereg.json",
+ "partial": {
+  "rl": {
+   "missing_shard": "2/4",
+   "n_problems_of_set": 328,
+   "n_problems_missing": 82,
+   "reason": "RL shard 2/4 (sameraslan-1114-145306-26e0) hung after a container restart and was cancelled with about half its rows; none of its rows is used (a problem finishes late when its answer is long, so its finished rows are a biased sample)"
+  }
+ },
+ "models": {
+  "rl": {
+   "rows": {
+    "single": {
+     "S": null,
+     "L": null,
+     "right": 148,
+     "n": 246,
+     "percent": 60.16260162601626,
+     "wilson95": [
+      53.933832653726256,
+      66.07885868416571
+     ],
+     "tokens_per_problem": 9361.71544715447,
+     "minus_single": {
+      "points": 0.0,
+      "interval95": [
+       0.0,
+       0.0
+      ]
+     },
+     "fixed": 0,
+     "broke": 0,
+     "problems_with_a_check": 0,
+     "samples_stopped": 0
+    },
+    "D2000": {
+     "S": 2000,
+     "L": null,
+     "right": 148,
+     "n": 246,
+     "percent": 60.16260162601626,
+     "wilson95": [
+      53.933832653726256,
+      66.07885868416571
+     ],
+     "tokens_per_problem": 9461.121951219513,
+     "minus_single": {
+      "points": 0.0,
+      "interval95": [
+       0.0,
+       0.0
+      ]
+     },
+     "fixed": 0,
+     "broke": 0,
+     "problems_with_a_check": 12,
+     "samples_stopped": 0
+    },
+    "R12000": {
+     "S": null,
+     "L": 12000,
+     "right": 156,
+     "n": 246,
+     "percent": 63.41463414634146,
+     "wilson95": [
+      57.23220409932275,
+      69.18454846669462
+     ],
+     "tokens_per_problem": 18748.483739837397,
+     "minus_single": {
+      "points": 3.252032520325203,
+      "interval95": [
+       0.0,
+       6.514227642276277
+      ]
+     },
+     "fixed": 13,
+     "broke": 5,
+     "problems_with_a_check": 0,
+     "samples_stopped": 212
+    },
+    "D2000+R12000": {
+     "S": 2000,
+     "L": 12000,
+     "right": 156,
+     "n": 246,
+     "percent": 63.41463414634146,
+     "wilson95": [
+      57.23220409932275,
+      69.18454846669462
+     ],
+     "tokens_per_problem": 18914.4918699187,
+     "minus_single": {
+      "points": 3.252032520325203,
+      "interval95": [
+       0.0,
+       6.514227642276277
+      ]
+     },
+     "fixed": 13,
+     "broke": 5,
+     "problems_with_a_check": 13,
+     "samples_stopped": 212
+    }
+   },
+   "sample_0": {
+    "cap_hits": 15,
+    "finished_with_at_most": {
+     "1000": {
+      "n": 0,
+      "wrong": 0
+     },
+     "2000": {
+      "n": 12,
+      "wrong": 0
+     },
+     "4000": {
+      "n": 45,
+      "wrong": 0
+     }
+    },
+    "longer_than": {
+     "8000": {
+      "right": 47,
+      "wrong": 96
+     },
+     "10000": {
+      "right": 26,
+      "wrong": 90
+     },
+     "12000": {
+      "right": 15,
+      "wrong": 78
+     }
+    }
+   }
+  }
+ }
+}

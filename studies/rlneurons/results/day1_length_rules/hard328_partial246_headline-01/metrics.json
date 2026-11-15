@@ -1,0 +1,330 @@
+{
+ "set": "hard328",
+ "n": 246,
+ "samples": 4,
+ "restarts": 0,
+ "fixed_from": "studies/rlneurons/specs/day1_length_rules_chosen_prereg.json",
+ "partial": {
+  "missing_shard": "2/4",
+  "n_problems_of_set": 328,
+  "n_problems_missing": 82
+ },
+ "partial_reason": {
+  "base": "RL shard 2/4 (sameraslan-1114-145306-26e0) hung after a container restart and was cancelled with about half its rows; none of its rows is used (a problem finishes late when its answer is long, so its finished rows are a biased sample) Base shard 2/4 (sameraslan-1114-145246-73ad, done) is left out so that both models are joined on the same 246 problems.",
+  "rl": "RL shard 2/4 (sameraslan-1114-145306-26e0) hung after a container restart and was cancelled with about half its rows; none of its rows is used (a problem finishes late when its answer is long, so its finished rows are a biased sample)"
+ },
+ "bootstrap_resamples": 5000,
+ "sources": {
+  "rules_base": "studies/rlneurons/results/day1_length_rules/hard328_partial246_base-01",
+  "vote_base": "studies/rlneurons/results/day1_3/hard328_partial246_base_cue_s4r0-01",
+  "rules_rl": "studies/rlneurons/results/day1_length_rules/hard328_partial246_rl-01",
+  "vote_rl": "studies/rlneurons/results/day1_3/hard328_partial246_rl_plain_s4r0-01"
+ },
+ "rows": {
+  "base": {
+   "single": {
+    "right": 123,
+    "n": 246,
+    "percent": 50.0,
+    "wilson95": [
+     43.800083432876676,
+     56.19991656712333
+    ],
+    "tokens_per_problem": 9065.231707317073,
+    "minus_single": {
+     "points": 0.0,
+     "interval95": [
+      0.0,
+      0.0
+     ]
+    },
+    "fixed": 0,
+    "broke": 0
+   },
+   "D2000": {
+    "right": 126,
+    "n": 246,
+    "percent": 51.21951219512195,
+    "wilson95": [
+     45.00266094033608,
+     57.39886202021095
+    ],
+    "tokens_per_problem": 9529.08943089431,
+    "minus_single": {
+     "points": 1.2195121951219512,
+     "interval95": [
+      0.0,
+      2.8455284552845517
+     ]
+    },
+    "fixed": 3,
+    "broke": 0
+   },
+   "R12000": {
+    "right": 130,
+    "n": 246,
+    "percent": 52.84552845528455,
+    "wilson95": [
+     46.6117539253488,
+     58.991799649260955
+    ],
+    "tokens_per_problem": 19616.426829268294,
+    "minus_single": {
+     "points": 2.845528455284553,
+     "interval95": [
+      -0.40650406504064707,
+      6.0975609756097615
+     ]
+    },
+    "fixed": 12,
+    "broke": 5
+   },
+   "D2000+R12000": {
+    "right": 133,
+    "n": 246,
+    "percent": 54.0650406504065,
+    "wilson95": [
+     47.82282975825484,
+     60.18224677690195
+    ],
+    "tokens_per_problem": 20080.28455284553,
+    "minus_single": {
+     "points": 4.065040650406504,
+     "interval95": [
+      0.40650406504065817,
+      7.723577235772355
+     ]
+    },
+    "fixed": 15,
+    "broke": 5
+   },
+   "vote": {
+    "right": 138,
+    "n": 246,
+    "percent": 56.09756097560975,
+    "wilson95": [
+     49.8494522737892,
+     62.15816252894598
+    ],
+    "tokens_per_problem": 36477.81707317073,
+    "minus_single": {
+     "points": 6.097560975609756,
+     "interval95": [
+      2.8455284552845517,
+      9.359756097560835
+     ]
+    },
+    "fixed": 17,
+    "broke": 2
+   },
+   "pass_at_k": {
+    "right": 157,
+    "n": 246,
+    "percent": 63.82113821138211,
+    "wilson95": [
+     57.646497832713706,
+     69.57076238681935
+    ],
+    "tokens_per_problem": 36477.81707317073,
+    "minus_single": {
+     "points": 13.821138211382113,
+     "interval95": [
+      9.756097560975608,
+      18.29268292682927
+     ]
+    },
+    "fixed": 34,
+    "broke": 0
+   }
+  },
+  "rl": {
+   "single": {
+    "right": 148,
+    "n": 246,
+    "percent": 60.16260162601626,
+    "wilson95": [
+     53.933832653726256,
+     66.07885868416571
+    ],
+    "tokens_per_problem": 9361.71544715447,
+    "minus_single": {
+     "points": 0.0,
+     "interval95": [
+      0.0,
+      0.0
+     ]
+    },
+    "fixed": 0,
+    "broke": 0
+   },
+   "D2000": {
+    "right": 148,
+    "n": 246,
+    "percent": 60.16260162601626,
+    "wilson95": [
+     53.933832653726256,
+     66.07885868416571
+    ],
+    "tokens_per_problem": 9461.121951219513,
+    "minus_single": {
+     "points": 0.0,
+     "interval95": [
+      0.0,
+      0.0
+     ]
+    },
+    "fixed": 0,
+    "broke": 0
+   },
+   "R12000": {
+    "right": 156,
+    "n": 246,
+    "percent": 63.41463414634146,
+    "wilson95": [
+     57.23220409932275,
+     69.18454846669462
+    ],
+    "tokens_per_problem": 18748.483739837397,
+    "minus_single": {
+     "points": 3.252032520325203,
+     "interval95": [
+      0.0,
+      6.514227642276277
+     ]
+    },
+    "fixed": 13,
+    "broke": 5
+   },
+   "D2000+R12000": {
+    "right": 156,
+    "n": 246,
+    "percent": 63.41463414634146,
+    "wilson95": [
+     57.23220409932275,
+     69.18454846669462
+    ],
+    "tokens_per_problem": 18914.4918699187,
+    "minus_single": {
+     "points": 3.252032520325203,
+     "interval95": [
+      0.0,
+      6.514227642276277
+     ]
+    },
+    "fixed": 13,
+    "broke": 5
+   },
+   "vote": {
+    "right": 161,
+    "n": 246,
+    "percent": 65.44715447154472,
+    "wilson95": [
+     59.308244148174296,
+     71.11104668542147
+    ],
+    "tokens_per_problem": 36970.28048780488,
+    "minus_single": {
+     "points": 5.284552845528455,
+     "interval95": [
+      2.4390243902439046,
+      8.130081300813007
+     ]
+    },
+    "fixed": 13,
+    "broke": 0
+   },
+   "pass_at_k": {
+    "right": 175,
+    "n": 246,
+    "percent": 71.13821138211382,
+    "wilson95": [
+     65.18519598173812,
+     76.44120200107714
+    ],
+    "tokens_per_problem": 36970.28048780488,
+    "minus_single": {
+     "points": 10.975609756097562,
+     "interval95": [
+      7.317073170731703,
+      15.040650406504064
+     ]
+    },
+    "fixed": 27,
+    "broke": 0
+   }
+  }
+ },
+ "rl_minus_base": {
+  "single": {
+   "points": 10.16260162601626,
+   "interval95": [
+    5.691056910569103,
+    14.634146341463417
+   ]
+  },
+  "D2000": {
+   "points": 8.94308943089431,
+   "interval95": [
+    4.471544715447151,
+    13.414634146341465
+   ]
+  },
+  "R12000": {
+   "points": 10.56910569105691,
+   "interval95": [
+    6.097560975609751,
+    15.040650406504064
+   ]
+  },
+  "D2000+R12000": {
+   "points": 9.34959349593496,
+   "interval95": [
+    5.274390243902433,
+    13.41463414634147
+   ]
+  },
+  "vote": {
+   "points": 9.34959349593496,
+   "interval95": [
+    5.284552845528456,
+    13.414634146341465
+   ]
+  },
+  "pass_at_k": {
+   "points": 7.317073170731708,
+   "interval95": [
+    3.658536585365846,
+    11.382113821138207
+   ]
+  }
+ },
+ "equal_tokens": {
+  "budget_tokens_per_problem": 9361.71544715447,
+  "budget_is": "RL single row, same problems",
+  "candidates": [
+   "D2000",
+   "R12000",
+   "D2000+R12000"
+  ],
+  "within_budget": [],
+  "base_setting": null,
+  "base": null,
+  "same_rule_rl_minus_base": null,
+  "base_single_minus_rl_single": {
+   "points": -10.16260162601626,
+   "interval95": [
+    -14.634146341463417,
+    -5.691056910569103
+   ]
+  },
+  "base_vote_minus_rl_single": {
+   "points": -4.065040650406504,
+   "interval95": [
+    -8.536585365853655,
+    0.40650406504064707
+   ],
+   "base_vote_tokens_per_problem": 36477.81707317073,
+   "rl_single_tokens_per_problem": 9361.71544715447
+  }
+ }
+}

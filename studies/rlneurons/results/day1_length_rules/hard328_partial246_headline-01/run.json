@@ -1,0 +1,22 @@
+{
+ "analysis_commit": "1c4afe27dfbcb7147ad536c2969402899f5699b6",
+ "command": [
+  "/Users/saslan.19/Desktop/Tengs/codingMiscellaneous/iterate-hack/.claude/worktrees/past-dev-shared-memory-94c3d2/studies/rlneurons/analysis/day1_length_rules_headline.py",
+  "--rules-base",
+  "studies/rlneurons/results/day1_length_rules/hard328_partial246_base-01",
+  "--vote-base",
+  "studies/rlneurons/results/day1_3/hard328_partial246_base_cue_s4r0-01",
+  "--rules-rl",
+  "studies/rlneurons/results/day1_length_rules/hard328_partial246_rl-01",
+  "--vote-rl",
+  "studies/rlneurons/results/day1_3/hard328_partial246_rl_plain_s4r0-01",
+  "--out",
+  "studies/rlneurons/results/day1_length_rules/hard328_partial246_headline-01"
+ ],
+ "sources": {
+  "rules_base": "studies/rlneurons/results/day1_length_rules/hard328_partial246_base-01",
+  "vote_base": "studies/rlneurons/results/day1_3/hard328_partial246_base_cue_s4r0-01",
+  "rules_rl": "studies/rlneurons/results/day1_length_rules/hard328_partial246_rl-01",
+  "vote_rl": "studies/rlneurons/results/day1_3/hard328_partial246_rl_plain_s4r0-01"
+ }
+}

@@ -1,0 +1,40 @@
+{
+ "commit": "34a8ccdfac152b85d0fd717682d5b9b62157db3a",
+ "job_id": "join-partial(missing 2/4):sameraslan-1114-145256-f5ac+sameraslan-1114-145301-e465+sameraslan-1114-145311-d31f",
+ "config": {
+  "model": "rl",
+  "prompt": "plain",
+  "set": "hard328",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "max_tokens": 16384,
+  "seed": 3000000,
+  "n": null,
+  "samples": 4,
+  "restarts": 0,
+  "dry_run": false,
+  "commit": "34a8ccdfac152b85d0fd717682d5b9b62157db3a",
+  "model_repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+  "model_revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 246,
+  "partial": {
+   "missing_shard": "2/4",
+   "n_problems_of_set": 328,
+   "n_problems_missing": 82,
+   "reason": "RL shard 2/4 (sameraslan-1114-145306-26e0) hung after a container restart and was cancelled with about half its rows; none of its rows is used (a problem finishes late when its answer is long, so its finished rows are a biased sample)"
+  },
+  "out": "runs/hard328_rl_plain_s4_partial246_join-01"
+ },
+ "source": "runs/hard328_rl_plain_s4_partial246_join-01"
+}
