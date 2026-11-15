@@ -448,6 +448,20 @@ steadily. Three rival tests (`results/promoted/run-01/metrics_v5.json`, `rivals/
 
 ## GPU experiments
 
+**cell-m20-01** (cells-01 entry m20, readout `m20-r1`; plan `specs/SPEC_cell_m20.md`; board idea-e9dfd5, work-a68dfd, result-a74ac3). The
+untrained base (`allenai/Olmo-3-1025-7B` @ `a81bae42`), plain prompt (no opening cue), fresh2026 (136 problems), 1 sample, T 1.0 / top-p 1.0,
+seed 93,000,000 + index, cap 16,384, grader v3. **10 of 136** (90 % bootstrap [5, 15]), 13 cap hits, 4,732 generated tokens per problem
+(median 1,661), 44 answers with no extractable answer. With the cue the base gets 28, 28, 32, 30 per sample on the same problems. The
+training-data forecasts (run-06/f2-m02 3 [0, 8], run-06/f2-m06 2 [0, 7]) are refuted; the problem-structure and grader forecasts
+(run-07/f2-m06 16 [9, 23], run-08/f2-m01 14 [8, 20]) and both readers (14, 13) hold, all with centres above 10. Raw answers: 23 of 136 open
+with "Okay" in their first 60 characters on their own (6 right, 7 cap hits, 11,207 tokens on average); the other 113 are short (3,414 tokens),
+often off-format (code, "Answer:\n173" with no box, instructions to the reader) and give 4 right.
+- Files: `analysis/cell_m20.py` (readout); outputs `results/experiments/cell-m20-01/` (`run.json` with job and commit, `metrics.json`,
+  `per_problem.json`, `examples.json`); the count is in `results/forecast/cells-01/measured.json`.
+- Job `abaybektursun-1115-093940-3d06` (vast.ai, commit `1a004c1`, command in `run.json`; a 4-problem 256-token smoke run first, in
+  `smoke/`). Raw answers (not committed): `runs/abaybektursun-1115-093940-3d06/` on the laptop of the run and `jobs/<job-id>.tar` in the
+  team store.
+
 **selfopen-01** (round-05 entry `r5-m10:theory:intervention`; plan `specs/SPEC_selfopen01.md`). Rejection sampling on the plain base's own
 opening, no prefilled tokens: per problem up to 32 openings of 24 tokens, keep the first with '\nOkay' in its first 60 characters, continue it
 to 16,384 tokens (T 1.0 / top-p 1.0, grader v3). **411 of 500** (cap hits 20, 3,795 tokens per answer), against the stored plain T3 224 and the
