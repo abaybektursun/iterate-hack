@@ -656,3 +656,29 @@ Page of the engine's record: `tools/finding_theories_on_trial.py`, served at `/f
 Page of the self-opened draw (selfopen-01): `tools/finding_base_opens_itself.py`, served at `/finding/base-opens-itself`; running the file checks it against `results/experiments/selfopen-01/`.
 
 Page of the gap account (run-02): `tools/finding_where_the_gap_goes.py`, served at `/finding/where-the-gap-goes`; its numbers are read from `results/account/run-02/check/` and `python3 tools/finding_where_the_gap_goes.py` checks them.
+
+## Paper: Theories on Trial (`paper/`, board work-184476)
+
+A short paper on the engine's rounds 1 to 7: the theories' own predictions against the two no-theory readers
+(nearer count, interval coverage, log gain), the round-6 budget, the contests against rivals, the self-open
+experiment and the faults found in the engine's scores. Public at
+https://monitor.invariant.team/paper/theories-on-trial.pdf (`tools/view.py` serves `paper/theories-on-trial.pdf`;
+`infra/monitor/deploy.sh` ships it).
+
+- `paper/build_facts.py` (`uv run --no-project --with numpy python studies/theory/paper/build_facts.py`): reads the
+  committed round files and writes `paper/predictions.jsonl` (one row per prediction), `paper/facts.json` (every
+  number of the paper with its value, n, unit and source) and `paper/calibration.json`. Every stored gain is
+  recomputed and must match to 0.002. `paper/NOTES.md`: how each headline is computed and what weakens it.
+- `paper/figs.py` (`uv run --no-project --with matplotlib --with numpy python studies/theory/paper/figs.py`): draws
+  `fig_truth.pdf`, `fig_rounds.pdf`, `fig_duel.pdf` from those files; `paper/fonts/` is TeX Gyre Pagella (GUST font
+  licence).
+- `paper/paper.tex`, `paper/refs.bib`: the text; `tectonic paper.tex` builds `paper.pdf`, copied to
+  `theories-on-trial.pdf` for the site.
+- Headline: theories nearer than the readers in 190 of 394 comparisons (48.2 % [39.7, 55.1]); 90 % intervals held
+  164 of 236 (69.5 %) against 197 and 202 for the readers (gap -15.0 points [-27.6, -5.1]); log gain -58.85 nats on
+  236, -94.27 on 192 without the round-6 budget.
+- Review: four independent reviews of draft 1 (number audit, about 200 numbers, 13 corrected; skeptical review;
+  check of every description of the engine and every citation; visual review) and one final check of draft 2. The
+  main change: authors and readers had different prompts (authors chose the quantities, were asked for predictions
+  a reader would not guess, and were not told how intervals are scored), so the paper claims that the theories'
+  chosen predictions were no nearer and less often inside their intervals, not that writing a mechanism causes it.
