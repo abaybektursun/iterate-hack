@@ -1,0 +1,5 @@
+[
+ {"k": 1, "value": 0.31, "low": 0.20, "high": 0.43, "why": "theta0.5 cue fixes about 53 of the cued base's 90 misses (result-9b6af3). Under the mechanism its T 1.0 gap stays close to the null's composition (reliability 0.36), shifted toward the RL fit (0.26) because it carries half the RL direction. About a quarter of the gap goes to budget (base cap hits) and about 0.04 to answer statement."},
+ {"k": 2, "value": 0.40, "low": 0.28, "high": 0.52, "why": "The RL direction multiplies the deliberate-then-commit mode, so problems that neither plain decoding solves take a share between the null's 0.37 and the RL fit's 0.44, with loop at 0 at T 1.0 and budget about 0.25."},
+ {"k": 3, "value": 0.29, "low": 0.18, "high": 0.41, "why": "Think-SFT cue (454) fixes mostly problems the base already reaches, but its imitation-trained long-reasoning mode fixes problems no plain decoding solves at about RL's rate. Reliability therefore sits near the RL fit (0.26), a little higher if Think-SFT rescues fewer of the base's cap hits."}
+]

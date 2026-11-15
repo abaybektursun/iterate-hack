@@ -503,15 +503,23 @@ def standing(folder):
     (folder / "facts.json").write_text(json.dumps(facts, indent=1) + "\n")
     v4 = json.loads((prev / "metrics_v4.json").read_text())["theories"] if (prev / "metrics_v4.json").exists() else {}
     v5 = json.loads((prev / "metrics_v5.json").read_text())["theories"] if (prev / "metrics_v5.json").exists() else {}
-    # every account of the chain: the previous folder's own incumbents, then its accounts with their measured numbers
-    chain = json.loads((prev / "incumbent_account.json").read_text()) if (prev / "incumbent_account.json").exists() else []
-    mine = [{"name": n, "round": prev.name, "state": v4[n]["state"], "theory": json.loads((prev / "theories" / f"{n}.json").read_text()),
-             "measured": [{k: q.get(k) for k in ("k", "role", "cell", "part", "experiment", "value", "low", "high", "measured", "n", "interval",
-                                                  "by_construction")}
-                          for q in json.loads((prev / "tests" / f"{n}.json").read_text())["predictions"]],
-             "replication": list(replication(prev, n).values()), "duel": v5.get(n)}
-            for n in v4 if "-account" in n and not v4[n].get("carried_from") and (prev / "tests" / f"{n}.json").exists()]
-    incumbent = [a for a in chain if a.get("name") not in {b["name"] for b in mine}] + mine
+    # every account of the chain: a folder's own incumbents, then its accounts with their measured numbers
+    def accounts_of(src):
+        m4 = json.loads((src / "metrics_v4.json").read_text())["theories"] if (src / "metrics_v4.json").exists() else {}
+        m5 = json.loads((src / "metrics_v5.json").read_text())["theories"] if (src / "metrics_v5.json").exists() else {}
+        chain = json.loads((src / "incumbent_account.json").read_text()) if (src / "incumbent_account.json").exists() else []
+        mine = [{"name": n, "round": src.name, "state": m4[n]["state"], "theory": json.loads((src / "theories" / f"{n}.json").read_text()),
+                 "measured": [{k: q.get(k) for k in ("k", "role", "cell", "part", "experiment", "value", "low", "high", "measured", "n", "interval",
+                                                      "by_construction")}
+                              for q in json.loads((src / "tests" / f"{n}.json").read_text())["predictions"]],
+                 "replication": list(replication(src, n).values()), "duel": m5.get(n)}
+                for n in m4 if "-account" in n and not m4[n].get("carried_from") and (src / "tests" / f"{n}.json").exists()]
+        return [a for a in chain if a.get("name") not in {b["name"] for b in mine}] + mine
+    incumbent = accounts_of(prev)
+    if args.account_from:  # the accounts of another chain (results/account/run-<nn>), named with their folder
+        # an entry written by version 6.1 has no name or round
+        incumbent = [{**a, "name": f"{a.get('name', 'account')} ({a.get('round', 'an earlier run')})"}
+                     for a in accounts_of(Path(args.account_from))] + incumbent
     (folder / "incumbent_account.json").write_text(json.dumps(incumbent, indent=1) + "\n")
     print(f"  facts.json: {len(facts)} computed numbers of {prev.name}; incumbent_account.json: {len(incumbent)} accounts")
     metrics = json.loads((prev / "metrics_v3.json").read_text()) if (prev / "metrics_v3.json").exists() else None
@@ -1469,6 +1477,8 @@ if __name__ == "__main__":
     parser.add_argument("--cutoff")
     parser.add_argument("--skip", action="append", default=[])
     parser.add_argument("--from", dest="prev")
+    parser.add_argument("--account-from", help="standing: also give the account job the accounts of this folder's chain "
+                        "(for example studies/theory/results/account/run-03)")
     parser.add_argument("--starts", default="all,surprises,across,external,revise")
     parser.add_argument("--n-mechanisms", type=int, default=12)
     parser.add_argument("--model-all")
