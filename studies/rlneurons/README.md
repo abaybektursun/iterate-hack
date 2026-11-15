@@ -259,6 +259,60 @@ job's `$OUT_DIR` in abaybektursun's Modal workspace, not committed.
   45 rows, 5 restarts, single 8 of 10.
 - The harder 328 with this procedure is not run here (board work-140e13).
 
+## Label-free selector over the four stored samples (MATH-500, n = 500, laptop, board work-3095f1, idea-664670)
+
+Question: does a rule that sees no answer key beat the plurality vote on the four samples of Day-1 #3? Answer: one tie-break
+does on the base, by 7 problems, and the rule is not confirmed on RL or on the 328. `analysis/selector.py` scores 11 rules fixed
+in `specs/SPEC_selector.md` before scoring (written after reading the 21 problems the vote misses and pass@4 has, so the
+MATH-500 numbers are optimistic), and `cv_pick`: the best of the 12 on four folds scored on the fifth. All rules use the same
+tokens as the vote (16,034 base, 18,747 RL). Paired bootstrap against the vote, 5,000 resamples, seed 0, in points.
+
+| Rule | Base with cue: right [95 %] | minus vote [95 %], fixed / broken | RL plain: right | minus vote [95 %], fixed / broken |
+|---|---|---|---|---|
+| vote (baseline; a tie goes to the lowest sample) | 446 [86.2, 91.6] | | 474 | |
+| `tie_short`: a tie goes to the group with the shortest finished sample | 453 [87.7, 92.9] | +1.4 [0.4, 2.4], 7 / 0 | 475 | +0.2 [0.0, 0.6], 1 / 0 |
+| `tie_aprob`: a tie goes to the highest stored answer probability | 451 | +1.0 [-0.2, 2.2], 8 / 3 | 475 | +0.2 [-0.4, 1.0], 2 / 1 |
+| `tie_mlp`: a tie goes to the highest mean token log-probability | 450 | +0.8 [-0.4, 2.0], 7 / 3 | 477 | +0.6 [0.0, 1.4], 3 / 0 |
+| `tie_clean`, `drop_cap` | 446, 446 | 0 / 0 | 475, 475 | 1 / 0 |
+| `tie_restate` | 445 | -0.2 [-1.2, 0.8], 3 / 4 | 474 | 1 / 1 |
+| `w_invlen`: votes weighted 1 / tokens | 445 | -0.2 [-1.6, 1.2], 7 / 8 | 474 | 2 / 2 |
+| `w_aprob`: votes weighted by answer probability | 452 | +1.2 [0.0, 2.6], 9 / 3 | 474 | 1 / 1 |
+| `short1`: the shortest finished sample | 434 | -2.4 [-4.4, -0.4], 8 / 20 | 471 | -0.6 [-1.8, 0.6], 3 / 6 |
+| `max_aprob`: the most confident sample | 423 | -4.6 [-7.2, -2.2], 8 / 31 | 464 | -2.0 [-3.6, -0.4], 3 / 13 |
+| `max_mlp`: the most likely sample | 427 | -3.8 [-6.2, -1.4], 9 / 28 | 472 | -0.4 [-1.8, 1.0], 5 / 7 |
+| `cv_pick` (held-out folds) | 451 [87.3, 92.5] | +1.0 [0.0, 2.0], 6 / 1 | 477 | +0.6 [0.0, 1.4], 3 / 0 |
+| pass@4 (oracle) | 467 | | 482 | |
+| control: random tie-break, expected | 448.2 | | 474.3 | |
+| control: a tie goes to the longest finished sample | 446 | | 476 | |
+
+- Base: `tie_short` has 453, 3 below one RL sample (456) and 14 below pass@4. It only changes the 36 ties: 12 right, against 5
+  for the lowest sample, 5 for the longest and 7.2 expected for a random choice. So the gain over a fair tie-break is about 5
+  problems of 36, and all 7 fixed problems (11, 20, 71, 94, 189, 303, 352) were read before the rule was written. `cv_pick`
+  chose `tie_short` on four folds and `w_aprob` on one: 451, interval [0.0, 2.0].
+- RL: the same rule fixes 1 of 16 ties and the longest-sample control fixes 2. Shortness is not confirmed on RL; its `cv_pick`
+  chose `tie_mlp` (477, +3).
+- Choosing one sample by confidence or by length is below the vote on both models (423 to 434 on the base), as in arXiv
+  2507.18122 Table 1. `short1` with the other three samples stopped when the first finishes would cost 9,795 tokens per
+  problem on the base (434) and 14,504 on RL (471).
+- The 21 base problems the vote misses and pass@4 has: 15 ties the lowest sample lost (6 with four different answers, 3 with
+  three, 3 with two after cap hits, 3 ties of 2 against 2) and 6 with a wrong answer in the majority. No rule here touches the 6.
+- The 328: not scored. `tie_short` passes the spec's rule for going to the 328 (`cv_pick` above the vote, its interval above
+  0), but sameraslan's four-sample rows (board result-1dedfe) are in his Modal Volume; git has only per-problem 0/1 vectors and
+  token counts, not the extracted answers. With the joined `answers.jsonl` and `metrics.json` in `runs/<dir>`:
+  `python -m studies.rlneurons.analysis.selector --run runs/<dir> --out studies/rlneurons/results/selector/hard328_base_cue-01`
+  and read the `tie_short` row only (82 ties of 328 there, against 36 of 500 here).
+
+Run folders `results/selector/math500_base_cue-01/` and `results/selector/math500_rl-01/`: `run.json` (commit, command, source
+job), `readout.json` (rows, controls, per-problem 0/1 and chosen sample per rule, the rule chosen per fold), `examples.json` (one
+problem the best rule gets right against the vote, one it gets wrong although a sample is right: 11 and 39 on the base). Inputs:
+`runs/abaybektursun-1114-153825-208b/answers.jsonl` and `runs/abaybektursun-1114-183640-e828/answers.jsonl` (the rules need
+`text`, `answer_prob`, `mean_logprob`, which `rows.jsonl` lacks). Test (planted rows, rules that must fail, a planted oracle):
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.selector_test
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.selector --run runs/abaybektursun-1114-153825-208b --out studies/rlneurons/results/selector/math500_base_cue-01
+```
+
 ## Weight-difference line: base + a (RL - base), Code-RL and a random control (Day-1 #4, board work-d36669)
 
 All from `results/day1_wdiff/readout.json` (`analysis/day1_wdiff.py`, plan `specs/DAY1_wdiff_2026-11-14.md`). MATH-500, T 1.0 /
@@ -365,6 +419,84 @@ characters in the last 3,000 characters), descriptive only.
   T3 in `runs/s3/<key>` after `aws s3 cp s3://pg-lineage-769063704696/results/rlneurons/<key>`. The per-tensor rows are in
   `runs/abaybektursun-1114-152416-de10/merge_{rl,code}.json` (not committed).
   Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_wdiff`.
+
+### The same cells on the 328 harder problems (Day-1 #4b, board work-43d4a1)
+
+All from `results/day1_wdiff328/readout.json` (`analysis/day1_wdiff328.py`, plan `specs/DAY1_wdiff328_2026-11-14.md`). The 328
+problems of "Harder 328", T 1.0 / top-p 1.0, cue, one sample per problem, cap 16,384, grader v3. Merges as on MATH-500
+(`jobs/merge_weights.py`; theta cells stochastic rounding, effective a 0.2500 and 0.5000; the Code-RL merge is bit-identical to
+Code-RL in 355 of 355 tensors). All three jobs at commit `e7b86c8`. The four T 1.0 cells of "Harder 328" are reused, not rerun.
+Paired bootstrap, 5,000 resamples, seed 0, 95 % percentile interval, in points.
+
+| Cell (328 problems) | Right (v3) | Hand-read right of 20 | Cap hits | Rule-A loops | Mean tokens | Seed base | Job id, run folder |
+|---|---|---|---|---|---|---|---|
+| base, plain | 76 |  | 35 | 3 | 4,928 | 50,000,000 | `abaybektursun-1114-132922-7ba0`, `day1_hard328/base_plain_T1-01/` |
+| base, cue | 164 |  | 77 | 1 | 9,344 | 3,000,000 | `abaybektursun-1114-151534-e72c`, `day1/hard328_base_cue_t10-01/` |
+| theta(0.25), cue | 182 | 0 | 56 | 0 | 9,097 | 72,000,000 | `abaybektursun-1114-181222-a5f4`, `day1_wdiff328/theta0.25_cue-01/` |
+| theta(0.5), cue | 190 | 1 | 73 | 0 | 9,656 | 73,000,000 | `abaybektursun-1114-181228-34ad`, `day1_wdiff328/theta0.5_cue-01/` |
+| Code-RL, cue | 187 | 0 | 25 | 0 | 7,613 | 71,000,000 | `abaybektursun-1114-181216-a619`, `day1_wdiff328/code1_cue-01/` |
+| RL, plain | 206 |  | 20 | 0 | 9,315 | 3,000,000 | `abaybektursun-1114-151540-86ef`, `day1/hard328_rl_plain_t10-01/` |
+| RL, cue | 205 |  | 25 | 0 | 9,316 | 50,000,000 | `abaybektursun-1114-132929-a32d`, `day1_hard328/rl_cue_T1-01/` |
+
+Right per source (`per_source_right_v3`):
+
+| Source (n) | base cue | theta(0.25) cue | theta(0.5) cue | Code-RL cue | RL plain | RL cue |
+|---|---|---|---|---|---|---|
+| OlympiadBench (202) | 114 | 131 | 127 | 130 | 137 | 140 |
+| AIME 2024 (29) | 10 | 12 | 13 | 13 | 16 | 15 |
+| AIME 2025 (30) | 7 | 7 | 10 | 7 | 12 | 11 |
+| HMMT Feb 2025 (30) | 5 | 5 | 7 | 6 | 11 | 8 |
+| AMC 23 (28) | 22 | 21 | 26 | 25 | 23 | 25 |
+| AIME 2022 (6) | 5 | 5 | 5 | 5 | 5 | 4 |
+| AIME 2023 (3) | 1 | 1 | 2 | 1 | 2 | 2 |
+
+| Difference (paired, 328) | Points | 95 % interval |
+|---|---|---|
+| theta(0.25) cue minus base cue | 5.5 | [1.5, 9.5] |
+| theta(0.5) cue minus base cue | 7.9 | [3.7, 12.2] |
+| Code-RL cue minus base cue | 7.0 | [2.7, 11.3] |
+| theta(0.25) cue minus RL plain | -7.3 | [-11.6, -3.0] |
+| theta(0.5) cue minus RL plain | -4.9 | [-8.8, -1.2] |
+| Code-RL cue minus RL plain | -5.8 | [-10.1, -1.8] |
+| Code-RL cue minus theta(0.5) cue | -0.9 | [-5.5, 3.7] |
+| RL plain minus base cue | 12.8 | [8.5, 17.1] |
+
+Problems that change against base cue (164 right, 164 wrong; `fixed_lost_vs_base_cue`):
+
+| Cell | Base-cue wrong, now right | Base-cue right, now wrong |
+|---|---|---|
+| theta(0.25) cue | 33 | 15 |
+| theta(0.5) cue | 40 | 14 |
+| Code-RL cue | 37 | 14 |
+| RL plain | 49 | 7 |
+| RL cue | 49 | 8 |
+
+- The MATH-500 pattern holds in sign and roughly in size: every difference raises the cued base (+5.5 to +7.9 points; MATH-500
+  +6.2 to +8.4) and every one stays under RL plain. But on the 328 none comes within its interval of RL plain: theta(0.5) is
+  4.9 points under ([-8.8, -1.2]; MATH-500 -2.2, [-4.6, 0.2]) and Code-RL 5.8 under ([-10.1, -1.8]; MATH-500 -2.6). Half the
+  difference closes 62 % of the gap (26 of 42 problems), a quarter 43 % (18 of 42).
+- The new cells lose 14 to 15 of the base's right problems, twice RL's 7 to 8: one fresh sample changes some outcomes, and RL
+  loses fewer of them. Seed sharing does not explain this: RL cue, on its own seed base (50,000,000), also loses only 8, and base
+  cue and RL plain (both 3,000,000) have the same first 100 characters on only 8 of 328 problems, the same as pairs on different
+  seeds (6 to 13; `same_first_100_chars` in `results/day1_hard328/readout.json`, 13 for theta(0.25) against base cue).
+- Code-RL and theta(0.5) are indistinguishable (-0.9, [-5.5, 3.7]); the gain is not specific to the math-RL difference here
+  either. Code-RL writes shorter answers (7,613 tokens) and hits the cap as rarely as RL (25).
+- Cap hits do not fall with a: 77, 56, 73 for a = 0, 0.25, 0.5, then 20 to 25 for RL. theta(0.5)'s 73 cap hits are long
+  reasoning still in progress at the cap (rule-A loops 0), as in the base.
+- Predictions (spec): Q1 not refuted by its rule (RL plain minus Code-RL 5.8, interval [1.8, 10.1], lower end under 5), but
+  the interval excludes 0, so "within its interval of RL plain" did not happen. Q2 held at the edge (190 >= 190; 191 with the
+  hand-read correction). Q3 refuted (182 < 185). Q4 refuted (theta(0.5) has 17 more cap hits than theta(0.25)).
+- Hand read, per new cell: 20 finished answers that v3 scored wrong (numpy seed 0, `--hand <arm>`). Code-RL 0 of 20 and theta(0.25)
+  0 of 20 are in fact right; theta(0.5) 1 of 20: problem 207, gold `f(n)=n^{2}`, the model wrote `\boxed{f(m) = m^2}`, which
+  is the same answer with another variable name. Corrected counts: 187, 182, 191.
+- No two of the 7 cells share an identical non-empty completion for any problem (`identical_nonempty_texts`, 21 pairs, all 0).
+- One sample per cell: the three new cells differ by at most 8 of 328, inside one another's intervals.
+- Cost at 3.95 USD per H100-hour (start to end record of each job, H100 80GB HBM3): Code-RL 40.8 min 2.68 USD, theta(0.25)
+  50.4 min 3.32 USD, theta(0.5) 53.4 min 3.52 USD; 9.52 USD in all (limit 12 USD). Merges took 35 to 47 s.
+- Raw answers: `runs/<job-id>/answers.jsonl` after `uv run tools/gpu.py get <job-id>`, and
+  `s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/<job-id>/answers.jsonl` for the three new jobs; the four
+  reused cells as in "Harder 328" (`.../r5/day1_hard328-01/<job-id>/answers.jsonl`).
+  Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_wdiff328`.
 
 ## Truncation rules at T 1.0: min-p and top-p (board work-180a48, spec specs/SPEC_minp.md)
 

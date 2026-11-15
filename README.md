@@ -282,6 +282,10 @@ opens its text, scores, comments and thread in a side panel (`/#<item id>` is it
 (`/?who=<name>&q=<text>`). Keys: `/` filter, `j` `k` move, `1` `2` `3` jump to a column, Enter opens, Esc closes, `?`
 lists them. The same page is public at https://monitor.invariant.team (`infra/monitor/`).
 
+To see which finding raised the benchmark: `uv run tools/climb.py [benchmark] [--json]` lists, per benchmark, every
+record step of that chart (a base score strictly above all earlier ones, the same rule), newest first: the gain in
+points, previous best -> new best, the result id, who, the configuration and the first line of the result's text.
+
 The same server has a second page, `/architecture` (`tools/architecture.py`): one picture of the shared work setup for
 a first-time reader. The board is in the centre with one dot per live item, each person's agents are beside it with
 threads to the board (the Claude mark for a Claude Code session, the OpenAI mark for a Codex session), the "Chat"

@@ -1,0 +1,15 @@
+{"id": "t37", "value": 447, "low": 436, "high": 458, "why": "With leverage near 1 a random matched-norm difference moves the cued base as much as RL's delta does, so it recovers most of the 410-to-463 gain, as the random edit did on Qwen."}
+{"id": "t38", "value": 52, "low": 44, "high": 60, "why": "Recovering most of the gain means fixing most of the 65 problems RL fixes among the base's 90 wrong ones, offset by about 15 new losses, giving about 52 fixes."}
+{"id": "t47", "value": 4500, "low": 4250, "high": 4750, "why": "A generic perturbation of this norm shifts the base toward RL's longer, finished answers, so mean tokens move from the base's 3,933 most of the way to RL's 4,694."}
+{"id": "t32", "value": 450, "low": 440, "high": 460, "why": "The dose curve saturates early because the magnitude head acts at small scale, so a quarter dose already gives most of the 410-to-463 gain."}
+{"id": "t33", "value": 458, "low": 449, "high": 467, "why": "At half dose the saturating curve is near its plateau, close to RL's 463."}
+{"id": "t43", "value": 462, "low": 453, "high": 471, "why": "The curve peaks before a = 1, as the bytegraft curve does at 0.7-0.8, so a = 0.75 sits at or slightly above RL's level."}
+{"id": "t34", "value": 260, "low": 180, "high": 340, "why": "Past a = 1.1 the delta leaves its working range and the model collapses like the bytegraft dose curve, losing a large share of even the base's 410."}
+{"id": "t45", "value": 150, "low": 90, "high": 220, "why": "The collapse at a = 1.5 shows up as degenerate text, so a large minority of answers end in word salad."}
+{"id": "t40", "value": 420, "low": 395, "high": 445, "why": "Without the cue the saturating curve still delivers most of the plain base's 224-to-463 gain at a quarter dose."}
+{"id": "t41", "value": 447, "low": 430, "high": 462, "why": "At half dose the plain-prompt curve is near its plateau just below RL's 463."}
+{"id": "t39", "value": 60, "low": 52, "high": 68, "why": "Half dose reaches about 458, which with about 12 losses (RL's base-only count) means about 60 of the base's 90 wrong problems fixed."}
+{"id": "t36", "value": 453, "low": 442, "high": 464, "why": "Math-RL and Code-RL share the update mask and the function sits in where and how much weights move, not in signs, so Code-RL with the cue lands near Math-RL's level."}
+{"id": "t42", "value": 440, "low": 420, "high": 458, "why": "With function shared through the update mask, Code-RL carries most of the math gain without the cue too, landing a little below Math-RL's plain 463."}
+{"id": "t61", "value": 10, "low": 6, "high": 15, "why": "The function sits in large entries and high-magnitude units, so the always-on outlier neurons close far more than their 0.13 % share, about twice the best 0.1 % attribution set's 5.4 % on T1 text."}
+{"id": "t62", "value": 14, "low": 9, "high": 20, "why": "Same magnitude-concentration argument on RL text, scaled by the usual T2/T1 ratio of about 1.35 in the transplant curves."}

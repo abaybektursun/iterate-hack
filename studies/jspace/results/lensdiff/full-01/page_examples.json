@@ -1,0 +1,44 @@
+[
+ {
+  "problem_index": 36,
+  "position": 1563,
+  "title": "About to write a wrong answer",
+  "base_answer": "5",
+  "note": "The base has just concluded that x = 5 is the only root and goes on to write its answer. Two roots are missing. Both readouts hold Wait. In the RL readout it sits second, and Wait is also the single most likely next word the RL model would write. In the base readout it sits sixth, and the base's most likely next word starts the answer line."
+ },
+ {
+  "problem_index": 62,
+  "position": 854,
+  "title": "Committing to a wrong value",
+  "base_answer": "2",
+  "note": "About 75 tokens after a wrong matrix product, the base commits to C = 2 for the first time. Both readouts are full of Alternatively. Only the RL readout also holds Wait, three times."
+ },
+ {
+  "problem_index": 272,
+  "position": 138,
+  "title": "Misreading the problem",
+  "base_answer": "1130",
+  "note": "The base has just misread the repeating digits as 311. Neither model's next word shows doubt (base: Let, RL: The). The RL readout holds Wait in second place while the base readout holds only variants of Let. Here the readout shows something the output does not."
+ },
+ {
+  "problem_index": 46,
+  "position": 1799,
+  "title": "Rejecting the right answer",
+  "base_answer": "12",
+  "note": "The base uses a wrong root to reject n = 6, which is the right answer. The RL readout leads with Wait. The base readout holds Wait too, in last place, and the base itself writes Wait next: it has the doubt, more weakly."
+ },
+ {
+  "problem_index": 438,
+  "position": 1189,
+  "title": "A slip in a sum",
+  "base_answer": "7",
+  "note": "The base splits 137 into 100 + 38 + 1, which adds up to 139. The RL readout turns to wait, Wait, maybe, perhaps. The base readout holds ordinary continuation words. The base catches this slip itself a line later, and it is not what makes the final answer wrong."
+ },
+ {
+  "problem_index": 25,
+  "position": 2295,
+  "title": "Control: a right answer",
+  "base_answer": "-2, 1 (correct)",
+  "note": "The base has just stated the correct final answer. The RL model's most likely next word is still Wait, and both readouts are led by Wait. The signal is a general habit of pausing at conclusions. It does not mark errors only."
+ }
+]

@@ -1,0 +1,16 @@
+{"id": "t32", "value": 428, "low": 420, "high": 436, "why": "The budget controller is a monotone readout along the delta, so a quarter dose buys a proportional part of the gain, with the length change arriving with it."}
+{"id": "t33", "value": 447, "low": 438, "high": 456, "why": "Half the controller dose recovers most of the budget-allocation gain, above linear interpolation (436), because the gain saturates before a = 1."}
+{"id": "t43", "value": 457, "low": 450, "high": 464, "why": "At three quarters dose the controller is nearly complete, so accuracy is close to RL's 463."}
+{"id": "t34", "value": 450, "low": 438, "high": 460, "why": "Extrapolating the controller makes answers converge earlier instead of running away, so accuracy drops only slightly below RL instead of collapsing."}
+{"id": "t45", "value": 8, "low": 0, "high": 20, "why": "At a = 1.5 the stronger stop/convergence readout ends answers cleanly, so few answers degrade into word-salad tails."}
+{"id": "t46", "value": 4150, "low": 3980, "high": 4350, "why": "Length rises with the controller dose (more self-checking on short answers), so at a = 0.25 mean tokens rise above the cued base's 3,933 toward RL's 4,694."}
+{"id": "t39", "value": 50, "low": 42, "high": 58, "why": "Half dose nets about +37 over 410 plus resampling breaks of about 12, giving about 50 fixes among the base's 90 wrong problems."}
+{"id": "t36", "value": 428, "low": 418, "high": 438, "why": "Code-RL 3.1 was also trained with truncated rollouts as negatives, so it carries a budget controller (its delta also reads out deliberation tokens) and helps the cued base on math."}
+{"id": "t37", "value": 407, "low": 399, "high": 415, "why": "A random matched-norm difference carries no controller, so the cued base stays at its 410 level."}
+{"id": "t47", "value": 3950, "low": 3750, "high": 4150, "why": "Without the controller direction the length profile is the cued base's, 3,933 tokens."}
+{"id": "t19", "value": 0.81, "low": 0.77, "high": 0.86, "why": "The base has no budget control: its wrong answers are its long ones (263 answers under 2,000 tokens, 13 wrong), so length predicts error strongly."}
+{"id": "t22", "value": 10, "low": 3, "high": 20, "why": "RL's change is a stop/deliberation readout, not math content, so few of the base-RL difference peaks sit at the first wrong step."}
+{"id": "t57", "value": 25, "low": 15, "high": 35, "why": "A low-rank stop/deliberation readout is close to a constant bias toward deliberation and against early stopping, so one vector per layer closes a sizeable share of the KL."}
+{"id": "t58", "value": 30, "low": 20, "high": 42, "why": "On RL text the decisive positions are more often deliberation or stop decisions, so the constant controller bias closes more."}
+{"id": "t15", "value": 3.0, "low": 1.5, "high": 5.0, "why": "RL's late layers read out deliberation words more often than the base's, at a few percent of positions."}
+{"id": "t16", "value": 1.2, "low": 0.5, "high": 2.0, "why": "The base reads out deliberation words less often than RL on the same text, at about half RL's rate or less."}

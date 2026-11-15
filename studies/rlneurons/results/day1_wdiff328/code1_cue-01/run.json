@@ -1,0 +1,7 @@
+{
+ "job_id": "abaybektursun-1114-181216-a619",
+ "commit": "e7b86c89e9eac2651759dd30766f233c9fa78206",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.merge_weights --other code --alpha 1 --rounding nearest --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code1 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 71000000 --commit e7b86c89e9eac2651759dd30766f233c9fa78206",
+ "runner": "uv run tools/gpu.py submit h100 --hours 2.5",
+ "raw_answers": "runs/abaybektursun-1114-181216-a619/answers.jsonl (uv run tools/gpu.py get abaybektursun-1114-181216-a619)"
+}
