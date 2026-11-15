@@ -1,0 +1,13 @@
+# 1. DRY=1 on judge-0408 (all paid outputs present)
+== py studies.basins.analysis.swarm_analyze runs/swarm/judge-0408 studies/basins/results/swarm/main-03
+== py studies.basins.analysis.swarm_page studies/basins/results/swarm/main-03 gpt-6.1-sol
+
+# 2. DRY=1 on a copy without lineage.json and scores.json (judge-9999, deleted after)
+== py studies.basins.analysis.swarm_scores runs/swarm/judge-9999 --model gpt-6.1-sol
+== py studies.basins.analysis.swarm_lineage runs/swarm/judge-9999 --model gpt-6.1-sol --snapshot runs/swarm/board-9999.json
+== py studies.basins.analysis.swarm_analyze runs/swarm/judge-9999 /tmp/unused
+== py studies.basins.analysis.swarm_page /tmp/unused gpt-6.1-sol
+
+# 3. real run, resume on judge-0408: one command
+exit 0 in 3 s
+b5f9be6b3a0eab218b34b24e51320f31ebbb34f3f3f27c2054ef489fd3207c35  studies/basins/results/swarm/main-03/summary.json

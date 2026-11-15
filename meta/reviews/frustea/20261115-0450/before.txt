@@ -1,0 +1,33 @@
+invocations after the first (lines starting ---): 7
+exit lines: 8, of them nonzero: 6
+AssertionError: partition 0: 240 ids returned, 240 distinct, 240 expected
+exit 1
+--- retry partitions+triplets (partition-0 attempt 1 returned knowledge-814e47 for knowledge-814454)
+AssertionError: partition 0: 240 ids returned, 240 distinct, 240 expected
+exit 1
+--- retry 2 with --repair-ids (attempt 2 returned knowledge-814e7a for knowledge-814454)
+usage: swarm_judge.py [-h] [--backend {openai,claude}] --model MODEL
+exit 2
+--- retry 3 with --repair-ids
+AssertionError: score not in quote: {'item': 'result-afc423', 'model': 'base', 'method': 'opening cue, pooled single samples', 'setting': 'T 1.0; 4 sa
+exit 1
+--- scores rerun (thousands separator in quote)
+AssertionError: score not in quote: {'item': 'result-ef32ec', 'model': 'base', 'method': 'last_value_empirical', 'setting': 'dev / 37 series / 30 orig
+exit 1
+--- scores rerun 2 (rows whose score is not in the quote are dropped and listed)
+ModuleNotFoundError: No module named 'numpy'
+exit 1
+--- analyze + page under uv (numpy, scipy, scikit-learn)
+exit 0
+--- lineage, then analyze + page via run.sh (pinned env)
+exit 0
+04:08:51 runs/swarm/board-0408.json
+04:10:04 runs/swarm/judge-0408/coverage.jsonl
+04:11:49 runs/swarm/judge-0408/calls/partition-0.fail1.out
+04:13:48 runs/swarm/judge-0408/calls/partition-0.fail2.out
+04:16:42 runs/swarm/judge-0408/partitions.jsonl
+04:32:34 runs/swarm/judge-0408/triplets.jsonl
+04:38:55 runs/swarm/judge-0408/scores.json
+04:46:51 runs/swarm/judge-0408/lineage.json
+04:46:54 studies/basins/results/swarm/main-03/summary.json
+b5f9be6b3a0eab218b34b24e51320f31ebbb34f3f3f27c2054ef489fd3207c35  studies/basins/results/swarm/main-03/summary.json

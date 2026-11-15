@@ -1,0 +1,5 @@
+Jobs of frustea, last 2 h:  id  state  gpu  wait  run  command
+
+Work of frustea, last 2 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-8cc441  main  -  -  -  8  0  0  Basin Atlas, new landscape page (separate artifact, old page
+  work-dfd055  main  -  -  -  5 (open)  0  0  Basin Atlas Landscape, second design pass (same artifact): f
