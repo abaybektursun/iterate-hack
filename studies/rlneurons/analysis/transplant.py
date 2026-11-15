@@ -3,7 +3,8 @@
     uv run --with numpy python -m studies.rlneurons.analysis.transplant <run> --arm <label>=runs/<job-id>[,runs/<job-id>] [--arm ...] \
         --ref think=<rows.jsonl> --ref rl=<rows.jsonl>
 
-An arm with several jobs has one sample per job (different seeds). A reference is a committed rows.jsonl with a `sample` field.
+An arm with several jobs has one sample per job (different seeds). Where an arm or a reference has more than one sample, the
+plurality vote of day1_vote over its samples is added, and its paired difference where both sides have the same number. A reference is a committed rows.jsonl with a `sample` field.
 
 Writes results/transplant/<run>/: metrics.json and delta_sum.json of every arm's job, a slim rows.jsonl (arms and references),
 examples.json (one right and one wrong finished answer per arm, with the prompt) and readout.json: per arm and per reference
@@ -16,6 +17,7 @@ import collections
 import json
 import pathlib
 
+from studies.rlneurons.analysis.day1_vote import vote
 from studies.rlneurons.lib import n13_score as S
 
 STUDY = pathlib.Path(__file__).resolve().parents[1]
@@ -40,6 +42,14 @@ def per_problem(rows, key):
     return {i: sum(v) / len(v) for i, v in by.items()}
 
 
+def votes(rows):
+    """per problem, the score of the plurality vote (day1_vote.vote) over the rows in sample order (`_s`)"""
+    by = collections.defaultdict(list)
+    for r in sorted(rows, key=lambda r: r["_s"]):
+        by[r["problem_index"]].append(r)
+    return {i: vote(v)["score"] for i, v in by.items()}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("run")
@@ -56,13 +66,13 @@ def main():
         metrics[label] = [json.loads((pathlib.Path(d) / "metrics.json").read_text()) for d in ds]
         assert all(m["status"] == "done" for m in metrics[label]), label
         merges[label] = [json.loads((pathlib.Path(d) / "delta_sum.json").read_text()) for d in ds]
-        rows[label] = [r for d in ds for r in rows_of(d)]
+        rows[label] = [{**r, "_s": k} for k, d in enumerate(ds) for r in rows_of(d)]
         m = merges[label][0]
         ro["arms"][label] = {"jobs": [pathlib.Path(d).name for d in ds], "alpha": m["args"]["alpha"], "random": m["args"]["random"],
                              "effective_a": m["effective_a"], "written_norm_over_intended": m["written_norm_over_intended"],
                              "samples": {pathlib.Path(d).name: cell(rows_of(d)) for d in ds}, **cell(rows[label])}
     for name, f in refs.items():
-        rows[name] = rows_of(f)
+        rows[name] = [{**r, "_s": r["sample"]} for r in rows_of(f)]
         by = collections.defaultdict(list)
         for r in rows[name]:
             by[r["sample"]].append(r)
@@ -78,6 +88,18 @@ def main():
                 lo, hi = S.paired_bootstrap(xs, ys, n_boot=5000, seed=0)
                 ro["arms"][label]["minus"][f"{name} {key}"] = {"n_problems": len(idx), "arm": sum(xs), "reference": sum(ys),
                                                                "diff_points": 100 * (sum(xs) - sum(ys)) / len(idx), "ci95": [lo, hi]}
+    n_s = {k: len({r["_s"] for r in v}) for k, v in rows.items()}
+    v = {k: votes(rs) for k, rs in rows.items() if n_s[k] > 1}
+    for k in v:
+        (ro["arms"] if k in arms else ro["references"])[k]["vote"] = {"samples": n_s[k], "right": sum(v[k].values())}
+    for label in arms:
+        for name in refs:
+            if label in v and name in v and n_s[label] == n_s[name]:
+                idx = sorted(v[label])
+                xs, ys = [float(v[label][i]) for i in idx], [float(v[name][i]) for i in idx]
+                lo, hi = S.paired_bootstrap(xs, ys, n_boot=5000, seed=0)
+                ro["arms"][label]["minus"][f"{name} vote"] = {"n_problems": len(idx), "arm": sum(xs), "reference": sum(ys),
+                                                              "diff_points": 100 * (sum(xs) - sum(ys)) / len(idx), "ci95": [lo, hi]}
     for name, rs in rows.items():
         slim += [{"arm": name, **{k: r[k] for k in SLIM}} for r in rs]
     ex = {}

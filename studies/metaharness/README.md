@@ -226,3 +226,12 @@ people and all Codex sessions are missing. As a check, the transcripts hold 3,87
 `paper.py` against about 4,900 in the event log at 05:40 UTC, so they cover roughly 80% of the logged work and the
 tool-call count is a lower bound. A message can be one word or a page. Subagent sessions have no typed messages, and
 slash commands are not counted.
+
+## Exa use, counted from the transcripts
+
+- `analysis/exa_count.py` reads every Claude Code transcript of this repository (this laptop, and the team trace store
+  synced to `team_traces/` beside the script with `aws s3 sync s3://iterate-hack-team-769063704696/traces/ team_traces/`)
+  and writes one row per call of `tools/exa.py`, beside itself. Raw rows (`exa_calls.jsonl`, 0.7 MB) are not committed.
+- `results/exa_count-01/summary.json`: 586 calls, 381 returned (91 with a cost line, 146 with results shown, 144 written
+  to a file with no error), 202 failed (193 with no key, on one laptop), 0.619 USD on the 91 cost lines.
+  `results/exa_count-01/top25_queries.json`: 25 queries, verbatim. Counted Nov 15, about 15:50 UTC. Shown at `/exa`.
