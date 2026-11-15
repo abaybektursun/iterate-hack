@@ -1,0 +1,52 @@
+[
+ {
+  "id": "r7-account:p31",
+  "kind": "scored prediction, inside its interval",
+  "what": "Share of math500-code-T1 gap problems in the answer-statement part (cued base against Code-RL with the cue, MATH-500, T 1.0, grader v3)",
+  "script": "studies/theory/results/account/run-03/tests/r7-account/p31.py",
+  "output": "studies/theory/results/account/run-03/tests/r7-account/p31.out.txt",
+  "measured": 0.0351,
+  "n": 57,
+  "measured_interval_90": [0.0, 0.0702],
+  "predicted": 0.04,
+  "predicted_interval_90": [0.0, 0.10],
+  "readers": [{"value": 0.10, "interval": [0.03, 0.20]}, {"value": 0.13, "interval": [0.04, 0.25]}],
+  "gain_nats": 1.536,
+  "replication": "equal (replication/r7-account/p31.py)",
+  "example_row": {"problem_index": 180, "subject": "prealgebra", "t1_right": 0, "t2_right": 1, "t1_generated_tokens": 266, "t2_generated_tokens": 3923, "failure_type": "drift_no_answer"},
+  "note": "2 of 57. The example row is a base answer of 266 tokens with no answer line, which R3 takes. The gain comes from the account's text rule under grader v3, not from its mechanism."
+ },
+ {
+  "id": "r7-account:p33",
+  "kind": "scored prediction, outside within noise",
+  "what": "Share of math500-code-T1 gap problems in the deliberation part (no plain-base evidence row right)",
+  "script": "studies/theory/results/account/run-03/tests/r7-account/p33.py",
+  "output": "studies/theory/results/account/run-03/tests/r7-account/p33.out.txt",
+  "measured": 0.2632,
+  "n": 57,
+  "measured_interval_90": [0.1754, 0.3684],
+  "predicted": 0.43,
+  "predicted_interval_90": [0.30, 0.56],
+  "readers": [{"value": 0.31, "interval": [0.17, 0.46]}, {"value": 0.28, "interval": [0.15, 0.43]}],
+  "gain_nats": -2.060,
+  "replication": "equal (replication/r7-account/p33.py)",
+  "example_row": {"problem_index": 36, "subject": "intermediate_algebra", "t1_right": 0, "t2_right": 1, "t1_generated_tokens": 1592, "t2_generated_tokens": 5675, "failure_type": "slip_arithmetic_algebra", "row_note": "first gap problem of the cell, as printed by the script"},
+  "note": "15 of 57. The account predicted deliberation above the null (0.370); it is 0.107 below. The script prints refuted_by_met true (0.263 < 0.30); the engine counts it within noise because the intervals overlap. 14 of the 15 have a right answer among the 4 cued-base samples of day1_3 (p65)."
+ },
+ {
+  "id": "duel r7-account turn 1 p1",
+  "kind": "rival test",
+  "what": "Share of math500-theta05cue-T1 gap problems in the reliability part (cued base against base + 0.5 (RL - base) with the cue, MATH-500, T 1.0, v3)",
+  "script": "studies/theory/results/account/run-03/rivals/r7-account/p1.py",
+  "output": "studies/theory/results/account/run-03/rivals/r7-account/p1.out.txt",
+  "measured": 0.4808,
+  "n": 52,
+  "measured_interval_90": [0.3654, 0.5962],
+  "theory_defender": {"value": 0.31, "interval": [0.20, 0.43]},
+  "rival": {"value": 0.45, "interval": [0.33, 0.57]},
+  "gain_nats": -2.852,
+  "replication": "equal (replication/r7-account.duel/p1.py)",
+  "example_row": {"problem_index": 4, "subject": "algebra", "t1_right": 0, "t2_right": 1, "t1_generated_tokens": 3390, "failure_type": "misread_problem_or_diagram", "row_note": "first gap problem of the cell"},
+  "note": "25 of 52. With R3 read as grader-v3 equivalence instead of the literal box string, 24 of 52 (0.462) and the duel total is -4.20 instead of -5.16."
+ }
+]
