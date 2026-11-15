@@ -1,0 +1,28 @@
+{
+ "predictions": [],
+ "intervention": {
+  "change": "Adaptive vote over up to 8 cued-base samples instead of 4. Start from the 4 stored samples per problem (attempt 0, samples 0-3, studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl, field extracted_v3). A problem is contested if the plurality extracted_v3 answer among its non-cap-hit samples has at most 2 of the 4 votes (this includes problems with no finished answer). Only for contested problems, draw 4 new cued-base samples (samples 4-7) in the same setting, with no restarts. Final answer = plurality of extracted_v3 over all available non-cap-hit samples (4 on uncontested problems, 8 on contested ones). Ties go to the answer of the shortest finished sample (fewest n_new) among the tied answers. All choices are label-free and fixed before sampling.",
+  "model": "allenai/Olmo-3-1025-7B @ a81bae42 (base)",
+  "cell": {
+   "set": "MATH-500",
+   "prompt": "the standard base prompt with the 3 prefilled cue tokens [1584, 2268, 33413], as in job abaybektursun-1114-153825-208b",
+   "sampling": "T 1.0 / top-p 1.0",
+   "cap": 16384,
+   "grader": "v3",
+   "samples": 8,
+   "seeds": "samples 0-3: the stored seeds of job 153825-208b (attempt 0); new samples 4-7: seed 4,000,000 + 1,000*sample + problem_index"
+  },
+  "count": "Right answers over all 500 MATH-500 problems: the voted answer is graded with grader v3 against the gold. Cap-hit samples cast no vote. A problem with no finished sample among those available counts as wrong.",
+  "unit": "right of 500",
+  "value": 457,
+  "low": 449,
+  "high": 465,
+  "best_known": {
+   "value": 453,
+   "item": "result-cbe0bc",
+   "setting": "base + cue, T 1.0 / top-p 1.0, vote over the 4 stored samples with ties broken by the shortest finished sample (rule chosen on this set; the honest vote after restart is 450, result-e78dfe)"
+  },
+  "gpu_minutes": 30,
+  "why": "The mechanism says the largest open part at T 1.0, deliberation, consists mostly of problems that some cued-base samples still solve (pass@4 467 against vote@4 446), and that the base-only route to it is selection among more cued samples. Spending 4 more draws only on contested problems should move the vote toward the oracle, roughly as Wang's majority@4 to @8 went (+2.5 points), giving about 457."
+ }
+}
