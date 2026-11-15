@@ -30,6 +30,8 @@ fnf_undirected  Control for fnf_assign (SwarmResearch 2607.02807: do not prescri
           is asked to choose its own approach. No method is named for it.
 halving   Successive halving (2607.18235): `width` fresh chats from the best program, round robin; at 25, 50 and 75 %
           of the budget the weaker half (by best valid score) is dropped. Survivors keep their chats.
+forget_assign  forget, but at every epoch start (the first included) the fnf_assign list call gives K methods and each
+          agent's fresh chat is told to use one. Agents still see the team's best submissions.
 tree      Archive tree (DGM 2505.22954 parent rule): every step picks a parent from all valid submissions with weight
           sigmoid(10 * (rank score - 0.5)) / (1 + children), and starts a fresh chat from it.
 basin     Ours: K agents with growing chats; every `check` submissions an online judge groups the recent ideas into
@@ -183,22 +185,34 @@ def fnf(run, k=4, forks=(0, 1 / 3, 2 / 3), branch_steps=None, flush=True, assign
         lead_last = run.step(leader, "lead", lead_last)["id"]
 
 
-def forget(run, k=4, period=None, **_):
+def forget(run, k=4, period=None, assign=False, list_model=None, **_):
     """period: submissions between forgets (default: a quarter of the budget)."""
     period = period or max(k, run.budget // 4)
     run.peers = True
     epoch = 0
     while run.left() > 0:
-        _, _, bid = run.base()
+        code, score, bid = run.base()
         sessions = [fresh(run) for _ in range(k)]
+        names = [f"e{epoch}"] * k
+        if assign:
+            methods = list_methods(run, k, list_model or run.model, code, score, epoch)
+            names = [f"e{epoch}a{i}" for i in range(k)]  # one branch per agent, so the ledger has a score per method
+            sessions = [[{"role": "user", "content": first_message(
+                run.task, code, score, f"Use this method for your next versions: {m}\n")}] for m in methods]
+            run.assignments += [{"fork": epoch, "branch": names[i], "method": methods[i],
+                                 "list_model": list_model or run.model} for i in range(k)]
         last = [bid] * k
         start = len(run.archive)
         while run.left() > 0 and len(run.archive) - start < period:
             for i in range(k):
                 if run.left() <= 0 or len(run.archive) - start >= period:
                     break
-                last[i] = run.step(sessions[i], f"a{i}", last[i], branch=f"e{epoch}")["id"]
+                last[i] = run.step(sessions[i], f"a{i}", last[i], branch=names[i])["id"]
         epoch += 1
+
+
+def forget_assign(run, **kw):
+    forget(run, assign=True, **kw)
 
 
 def fnf_keep(run, **kw):
@@ -326,5 +340,5 @@ def tree(run, seed=0, **_):
         run.step(fresh(run, base, score), "t", parent)
 
 
-STRATEGIES = {"fnf_undirected": fnf_undirected, "halving": halving, "single_list": single_list, "rebase": rebase, "fnf_assign": fnf_assign, "single": single, "parallel": parallel, "fnf": fnf, "fnf_keep": fnf_keep, "forget": forget,
+STRATEGIES = {"forget_assign": forget_assign, "fnf_undirected": fnf_undirected, "halving": halving, "single_list": single_list, "rebase": rebase, "fnf_assign": fnf_assign, "single": single, "parallel": parallel, "fnf": fnf, "fnf_keep": fnf_keep, "forget": forget,
               "basin": basin, "randflush": randflush, "tree": tree}
