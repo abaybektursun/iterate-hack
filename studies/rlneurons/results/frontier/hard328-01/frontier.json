@@ -1,0 +1,366 @@
+{
+ "set": "hard328",
+ "n": 328,
+ "rows": [
+  {
+   "configuration": "one sample",
+   "rule": "single",
+   "model": "base",
+   "right": 161,
+   "n": 328,
+   "percent": 49.08536585365854,
+   "wilson95": [
+    43.7172089738396,
+    54.47469868585212
+   ],
+   "tokens_per_problem": 9073.762195121952,
+   "right_24": 158.5,
+   "tokens_per_problem_24": 9225.479420731708,
+   "samples_drawn": 1.0,
+   "ran_out": 0,
+   "signal": "none"
+  },
+  {
+   "configuration": "one sample, sampled again after a cap hit (up to 2 times)",
+   "rule": "restart",
+   "model": "base",
+   "right": 172,
+   "n": 328,
+   "percent": 52.4390243902439,
+   "wilson95": [
+    47.03748535196702,
+    57.78409422218843
+   ],
+   "tokens_per_problem": 13664.655487804877,
+   "right_24": 167.0,
+   "tokens_per_problem_24": 13826.572408536585,
+   "samples_drawn": 1.0,
+   "ran_out": 0,
+   "signal": "none"
+  },
+  {
+   "configuration": "one sample, abandoned at 8,000 tokens and drawn again",
+   "rule": "R8000",
+   "model": "base",
+   "right": 163,
+   "n": 328,
+   "percent": 49.69512195121951,
+   "wilson95": [
+    44.319115545008586,
+    55.07818700822198
+   ],
+   "tokens_per_problem": 18936.60975609756,
+   "right_24": 162.0,
+   "tokens_per_problem_24": 19145.41717479675,
+   "samples_drawn": 2.3719512195121952,
+   "ran_out": 121,
+   "signal": "none"
+  },
+  {
+   "configuration": "one sample, abandoned at 12,000 tokens and drawn again",
+   "rule": "R12000",
+   "model": "base",
+   "right": 170,
+   "n": 328,
+   "percent": 51.829268292682926,
+   "wilson95": [
+    46.432017548413334,
+    57.184167132203235
+   ],
+   "tokens_per_problem": 19713.149390243903,
+   "right_24": 168.91666666666666,
+   "tokens_per_problem_24": 20049.83231707317,
+   "samples_drawn": 1.978658536585366,
+   "ran_out": 79,
+   "signal": "none"
+  },
+  {
+   "configuration": "vote over 2, ties to the shortest finished sample",
+   "rule": "vote2_short",
+   "model": "base",
+   "right": 170,
+   "n": 328,
+   "percent": 51.829268292682926,
+   "wilson95": [
+    46.432017548413334,
+    57.184167132203235
+   ],
+   "tokens_per_problem": 18316.378048780487,
+   "right_24": 169.75,
+   "tokens_per_problem_24": 18450.958841463416,
+   "samples_drawn": 2.0,
+   "ran_out": 0,
+   "signal": "none"
+  },
+  {
+   "configuration": "vote over 4 after restart, ties to the shortest",
+   "rule": "vote4_restart_short",
+   "model": "base",
+   "right": 199,
+   "n": 328,
+   "percent": 60.670731707317074,
+   "wilson95": [
+    55.29005684615947,
+    65.80435379077058
+   ],
+   "tokens_per_problem": 55306.28963414634,
+   "right_24": 199.0,
+   "tokens_per_problem_24": 55306.28963414634,
+   "samples_drawn": 4.0,
+   "ran_out": 0,
+   "signal": "none"
+  },
+  {
+   "configuration": "sequential vote: stop when two agree, at most 3 samples",
+   "rule": "seq3",
+   "model": "base",
+   "right": 183,
+   "n": 328,
+   "percent": 55.792682926829265,
+   "wilson95": [
+    50.38179529090259,
+    61.0694561977166
+   ],
+   "tokens_per_problem": 25600.884146341465,
+   "right_24": 178.75,
+   "tokens_per_problem_24": 25567.336890243903,
+   "samples_drawn": 2.5792682926829267,
+   "ran_out": 0,
+   "signal": "none"
+  },
+  {
+   "configuration": "draw 2; if they differ draw 2 more; vote, ties to the shortest",
+   "rule": "seq_2then4_short",
+   "model": "base",
+   "right": 191,
+   "n": 328,
+   "percent": 58.23170731707317,
+   "wilson95": [
+    52.82933208751085,
+    63.443498975263765
+   ],
+   "tokens_per_problem": 32775.69207317073,
+   "right_24": 190.5,
+   "tokens_per_problem_24": 32683.71493902439,
+   "samples_drawn": 3.158536585365854,
+   "ran_out": 0,
+   "signal": "none"
+  },
+  {
+   "configuration": "sequential vote, at most 4, each sample restarted after a cap hit",
+   "rule": "seq4_restart",
+   "model": "base",
+   "right": 194,
+   "n": 328,
+   "percent": 59.146341463414636,
+   "wilson95": [
+    53.750540500507086,
+    64.3303829025758
+   ],
+   "tokens_per_problem": 46317.10975609756,
+   "right_24": 190.75,
+   "tokens_per_problem_24": 46817.10213414634,
+   "samples_drawn": 2.8719512195121952,
+   "ran_out": 0,
+   "signal": "none"
+  },
+  {
+   "configuration": "sequential vote, at most 4, restarts, ties to the shortest",
+   "rule": "seq4_restart_short",
+   "model": "base",
+   "right": 198,
+   "n": 328,
+   "percent": 60.36585365853659,
+   "wilson95": [
+    54.98173315985086,
+    65.50998003030976
+   ],
+   "tokens_per_problem": 46317.10975609756,
+   "right_24": 198.5,
+   "tokens_per_problem_24": 46817.10213414634,
+   "samples_drawn": 2.8719512195121952,
+   "ran_out": 0,
+   "signal": "none"
+  },
+  {
+   "configuration": "one sample",
+   "rule": "single",
+   "model": "rl",
+   "right": 207,
+   "n": 328,
+   "percent": 63.109756097560975,
+   "wilson95": [
+    57.76434994500751,
+    68.15164026607799
+   ],
+   "tokens_per_problem": 9436.564024390244,
+   "right_24": 200.0,
+   "tokens_per_problem_24": 9324.855945121952,
+   "samples_drawn": 1.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "one sample, sampled again after a cap hit (up to 2 times)",
+   "rule": "restart",
+   "model": "rl",
+   "right": 213,
+   "n": 328,
+   "percent": 64.9390243902439,
+   "wilson95": [
+    59.62927265438617,
+    69.90290223731593
+   ],
+   "tokens_per_problem": 11483.573170731708,
+   "right_24": 204.5,
+   "tokens_per_problem_24": 11027.060213414634,
+   "samples_drawn": 1.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "one sample, abandoned at 8,000 tokens and drawn again",
+   "rule": "R8000",
+   "model": "rl",
+   "right": 204,
+   "n": 328,
+   "percent": 62.19512195121951,
+   "wilson95": [
+    56.83487086340547,
+    67.27302700737174
+   ],
+   "tokens_per_problem": 22169.536585365855,
+   "right_24": 204.25,
+   "tokens_per_problem_24": 21854.199441056913,
+   "samples_drawn": 2.6402439024390243,
+   "ran_out": 160,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "one sample, abandoned at 12,000 tokens and drawn again",
+   "rule": "R12000",
+   "model": "rl",
+   "right": 215,
+   "n": 328,
+   "percent": 65.54878048780488,
+   "wilson95": [
+    60.25271661108559,
+    70.48485317415538
+   ],
+   "tokens_per_problem": 18360.728658536584,
+   "right_24": 213.25,
+   "tokens_per_problem_24": 18619.195376016258,
+   "samples_drawn": 1.8079268292682926,
+   "ran_out": 59,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "vote over 2, ties to the shortest finished sample",
+   "rule": "vote2_short",
+   "model": "rl",
+   "right": 212,
+   "n": 328,
+   "percent": 64.63414634146342,
+   "wilson95": [
+    59.31789198888783,
+    69.61158545604484
+   ],
+   "tokens_per_problem": 18689.170731707316,
+   "right_24": 210.33333333333334,
+   "tokens_per_problem_24": 18649.711890243903,
+   "samples_drawn": 2.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "vote over 4 after restart, ties to the shortest",
+   "rule": "vote4_restart_short",
+   "model": "rl",
+   "right": 220,
+   "n": 328,
+   "percent": 67.07317073170732,
+   "wilson95": [
+    61.81537522228785,
+    71.93568179680027
+   ],
+   "tokens_per_problem": 44108.240853658535,
+   "right_24": 220.0,
+   "tokens_per_problem_24": 44108.240853658535,
+   "samples_drawn": 4.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "sequential vote: stop when two agree, at most 3 samples",
+   "rule": "seq3",
+   "model": "rl",
+   "right": 216,
+   "n": 328,
+   "percent": 65.85365853658537,
+   "wilson95": [
+    60.564782676258,
+    70.77548455575237
+   ],
+   "tokens_per_problem": 23612.560975609755,
+   "right_24": 212.66666666666666,
+   "tokens_per_problem_24": 23574.882876016258,
+   "samples_drawn": 2.3810975609756095,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "draw 2; if they differ draw 2 more; vote, ties to the shortest",
+   "rule": "seq_2then4_short",
+   "model": "rl",
+   "right": 223,
+   "n": 328,
+   "percent": 67.98780487804878,
+   "wilson95": [
+    62.755808773210006,
+    72.80334058618638
+   ],
+   "tokens_per_problem": 28610.173780487807,
+   "right_24": 222.0,
+   "tokens_per_problem_24": 28500.053861788616,
+   "samples_drawn": 2.7621951219512195,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "sequential vote, at most 4, each sample restarted after a cap hit",
+   "rule": "seq4_restart",
+   "model": "rl",
+   "right": 224,
+   "n": 328,
+   "percent": 68.29268292682927,
+   "wilson95": [
+    63.069769791727104,
+    73.09207701443873
+   ],
+   "tokens_per_problem": 31326.064024390245,
+   "right_24": 218.25,
+   "tokens_per_problem_24": 31620.450203252032,
+   "samples_drawn": 2.548780487804878,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "sequential vote, at most 4, restarts, ties to the shortest",
+   "rule": "seq4_restart_short",
+   "model": "rl",
+   "right": 222,
+   "n": 328,
+   "percent": 67.6829268292683,
+   "wilson95": [
+    62.442090519852634,
+    72.51436139277433
+   ],
+   "tokens_per_problem": 31326.064024390245,
+   "right_24": 220.5,
+   "tokens_per_problem_24": 31620.450203252032,
+   "samples_drawn": 2.548780487804878,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  }
+ ]
+}

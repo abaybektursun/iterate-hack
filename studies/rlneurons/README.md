@@ -2450,3 +2450,44 @@ and v2 scores) in the owner's bucket, `s3://pg-lineage-769063704696/results/rlne
 RLN-1 and RLN-2 (neuron-statistics studies in the same source folder: `SPEC.md`, `SPEC2.md`, `label.py`, `overlap.py`,
 `analyze2.py`, `explain/`, the `.npz` statistics, label JSONL files up to 82 MB): a different question. The `pg` launcher
 (`infra/aws_pg/`), `pipeline.py`, and the rest of the modules that `hf_helpers.py` replaces.
+
+## The 328 with four samples and restarts: both models under the MATH-500 procedure (hard328, n = 328, T 1.0 / top-p 1.0, grader v3, board work-1a972a)
+
+Question (`specs/DAY1_hard328_vote_2026-11-14.md`, written before launch): what do both models score on the 328 with the
+procedure fixed on MATH-500 (four samples, each sampled again up to twice after a cap hit, plurality vote)? Answer: base +
+cue 195 of 328 (59.5 %), RL plain 224 of 328 (68.3 %); RL minus base 8.8 points [5.5, 12.5]. The vote narrows the gap from
+14.0 points [9.5, 18.9] on one sample; it does not close it. Nothing was chosen on the 328.
+
+Jobs `abaybektursun-1114-200457-e8e6` (base, 18.1 M generated tokens, 1,731 rows) and `-200505-5ff2` (RL, 14.5 M, 1,466 rows),
+`jobs/run_cell.py --set hard328 --samples 4 --restarts 2 --temperature 1.0 --top-p 1.0 --seed 3000000`. Raw answers: Volume
+`iterate-runs`, `<job id>/answers.jsonl`. Readout `analysis/day1_vote.py` (RL with `--minus` the base readout; paired
+bootstrap, 5,000 resamples, seed 0). Tokens = generated tokens per problem, restarts included.
+
+| Row | base + cue: right, percent | tokens | RL plain: right, percent | tokens | RL minus base, points [95 %] |
+|---|---|---|---|---|---|
+| single (sample 0, attempt 0) | 161, 49.1 | 9,074 | 207, 63.1 | 9,437 | +14.0 [9.5, 18.9] |
+| restart after a cap hit | 172, 52.4 | 13,665 | 213, 64.9 | 11,484 | +12.5 [7.9, 17.4] |
+| vote over 4 | 192, 58.5 | 36,902 | 221, 67.4 | 37,299 | +8.8 [5.2, 12.8] |
+| vote over 4 after restart | 195, 59.5 | 55,306 | 224, 68.3 | 44,108 | +8.8 [5.5, 12.5] |
+| pass@4 (oracle, not a method) | 207, 63.1 | 36,902 | 240, 73.2 | 37,299 | +10.1 [6.4, 14.0] |
+| pass@4 after restart (oracle) | 219, 66.8 | 55,306 | 243, 74.1 | 44,108 | +7.3 [4.0, 11.0] |
+| Run folder | `results/day1_3/hard328_base_cue_s4r2-01/` | | `results/day1_3/hard328_rl_plain_s4r2-01/` | | |
+
+- Instrument check: sample 0, attempt 0 repeats Day-1 #1 on its seeds: base 161 against 164, RL 207 against 206 (rule:
+  within 10). Each sample alone: base 161, 161, 152, 160 (cap hits 71, 66, 81, 68); RL 207, 190, 209, 194 (35, 26, 24, 29).
+  One-sample cells on this set differ by up to 9 (base) and 19 (RL) problems between seeds.
+- Prediction 1 (RL vote over 4 = 215, range 205 to 225): holds, 221.
+- Prediction 2 (base vote over 4 = 184, range 174 to 194): holds, 192.
+- Prediction 3 (restarts add at least 2.0 points to the base's vote): refuted, +0.9 (195 against 192). Restarts add 3.4
+  points [1.5, 5.5] to one sample but the vote already absorbs most cap hits; they cost 50 % more tokens.
+- Prediction 4 (RL ahead by 5 to 12 points under vote after restart, interval above 0): holds, 8.8 [5.5, 12.5].
+- Prediction 5 (`tie_short` beats the plain vote by at least 1.0 point on the base): refuted, 191 against 192, -0.3
+  [-2.1, +1.5] (`results/selector/hard328_base_cue-01/`, `analysis/selector.py`). The 453 of 500 of `tie_short` on MATH-500
+  was chosen on those problems; the plain vote's 446 (450 after restart) is the number to quote there.
+- Prediction 6 (stop when two agree is within 1.5 points of the vote and saves at least 20 % of the base's tokens):
+  accuracy holds (base 192 against 192; RL 218 against 221, -0.9 points), token saving refuted: 7.4 % for the base (34,162
+  against 36,902) and 5.9 % for RL (35,093 against 37,299). On this set fewer problems reach an early agreement.
+- No base rule reaches one RL sample at equal tokens: the base's vote after restart (195 at 55,306 tokens) is below one RL
+  sample (207 at 9,437; mean of the four samples 200.0). The nine rules chosen on MATH-500, scored once here:
+  `results/frontier/hard328-01/frontier.md` (the command at the end of "Token frontier").
+- The base loses 39 % of its single-sample accuracy from MATH-500 to the 328 (81.0 to 49.1 %), RL 31 % (91.2 to 63.1 %).
