@@ -3,6 +3,7 @@ Olmo 3 base, and their pairwise overlaps, per layer matrix. Weights only: no for
 
     uv run tools/gpu.py submit h100 --hours 1 -- "python -m studies.rlneurons.jobs.xreward_overlap --commit $(git rev-parse HEAD)"
 
+  --steps    also the step-100 checkpoint of each of the seven RL runs (STEP100; downloaded to /tmp, not to the model cache).
   --layers   comma list of layers (smoke: --layers 0,31); default all.
   --out      default $OUT_DIR; one fresh directory per run.
   --selftest only the instrument check (synthetic matrices, CPU ok). Every run does it first and stops if a check fails.
@@ -38,7 +39,13 @@ MODELS = {"base": ("allenai/Olmo-3-1025-7B", "a81bae42db3975be1671e27b9c9a56da1a
           "general30": ("allenai/Olmo-3-7B-RL-Zero-General", "24e5814cb36944d3eb36a49679d02c2b3bb46195"),
           "mix30": ("allenai/Olmo-3-7B-RL-Zero-Mix", "73b2b1a50d94aec859e22c9b4a524416b5a3a739"),
           "think_sft": ("allenai/Olmo-3-7B-Think-SFT", "6ff857587e040d6d523a3d5f3a56e918f5401d66")}
-KEYS = tuple(k for k in MODELS if k != "base") + ("base_w",)
+STEP100 = {"math31_s100": ("allenai/Olmo-3.1-7B-RL-Zero-Math", "0a45720ccbf23c0aa255a28119787538a48dd56b"),      # branch step_0100
+           "code31_s100": ("allenai/Olmo-3.1-7B-RL-Zero-Code", "0757ff941fe4c90f23b8d28780976102234ba1fa"),      # branch step_100, as the rest
+           "math30_s100": ("allenai/Olmo-3-7B-RL-Zero-Math", "3315e80ceb281ae2e6a20bd09e8594ba52d4f312"),
+           "code30_s100": ("allenai/Olmo-3-7B-RL-Zero-Code", "3c29f35610c9a0aef588736542c88911cc4094e8"),
+           "if30_s100": ("allenai/Olmo-3-7B-RL-Zero-IF", "fcc5f4aa422406d99660df7ee148ade531f2ddca"),
+           "general30_s100": ("allenai/Olmo-3-7B-RL-Zero-General", "1af5061a0bb609d7b1785133bfeb93bf4dbdb06d"),
+           "mix30_s100": ("allenai/Olmo-3-7B-RL-Zero-Mix", "5dfed3f73944d389f888506701e9d44f370b9f18")}
 
 
 def compare(ds):
@@ -94,7 +101,9 @@ def main():
     ap.add_argument("--layers", default=None)
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--steps", action="store_true")
     a = ap.parse_args()
+    models = {**MODELS, **(STEP100 if a.steps else {})}
     t0 = time.time()
     torch.set_grad_enabled(False)
     dev = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -107,29 +116,31 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     assert not (out / "metrics.json").exists(), f"{out / 'metrics.json'} exists: one fresh directory per run"
     info = {"status": "running", "commit": a.commit, "command": "python -m studies.rlneurons.jobs.xreward_overlap " + " ".join(sys.argv[1:]),
-            "job_id": os.environ.get("JOB_ID"), "models": {k: {"repo": r, "revision": v} for k, (r, v) in MODELS.items()}, "k": K,
+            "job_id": os.environ.get("JOB_ID"), "models": {k: {"repo": r, "revision": v} for k, (r, v) in models.items()}, "k": K,
             "torch": torch.__version__, "device": torch.cuda.get_device_name(0) if dev.type == "cuda" else "cpu", "started_utc": utc()}
     dump(out / "run.json", info)
 
     from huggingface_hub import snapshot_download
-    dirs = {k: snapshot_download(r, revision=v, allow_patterns=["*.safetensors", "*.json"]) for k, (r, v) in MODELS.items()}
+    dirs = {k: snapshot_download(r, revision=v, allow_patterns=["*.safetensors", "*.json"], cache_dir="/tmp/hf_steps" if k in STEP100 else None)
+            for k, (r, v) in models.items()}
     idx = index(dirs)
     names = [n for n in sorted(idx["base"], key=order) if kind(n)[0] in MATS]
     if a.layers is not None:
         keep = {int(x) for x in a.layers.split(",")}
         names = [n for n in names if kind(n)[1] in keep]
-    print(f"{len(names)} layer matrices, {len(KEYS)} keys, device {dev}, download and index {time.time() - t0:.0f}s", flush=True)
+    keys = [k for k in models if k != "base"] + ["base_w"]
+    print(f"{len(names)} layer matrices, {len(keys)} keys, device {dev}, download and index {time.time() - t0:.0f}s", flush=True)
     rows = []
     for i, name in enumerate(names):
         t1 = time.time()
         base = load(idx, "base", name, dev).float()
-        ds = {k: load(idx, k, name, dev).float() - base for k in MODELS if k != "base"}
+        ds = {k: load(idx, k, name, dev).float() - base for k in models if k != "base"}
         ds["base_w"] = base
         st, pairs = compare(ds)
         mod, layer = kind(name)
         rows.append({"name": name, "module": mod, "layer": layer, "shape": list(base.shape), "key": st, "pair": pairs})
         if (i + 1) % 16 == 0 or i + 1 == len(names):
-            dump(out / "metrics.json", {"n_done": i + 1, "n": len(names), "keys": list(KEYS), "k": K, "rows": rows}, "rows")
+            dump(out / "metrics.json", {"n_done": i + 1, "n": len(names), "keys": keys, "k": K, "rows": rows}, "rows")
         print(f"[{i + 1}/{len(names)}] {name} {time.time() - t1:.1f}s", flush=True)
     info.update(status="done", ended_utc=utc(), wall_s=time.time() - t0)
     dump(out / "run.json", info)

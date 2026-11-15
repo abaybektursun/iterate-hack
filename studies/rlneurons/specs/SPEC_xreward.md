@@ -57,3 +57,15 @@ P1. If the 8 directions carry the gain on hard problems, cell 1 is at least 182 
     Refuted if cell 1 is within 12 of cell 2: then the 8 directions write the cue and the hard-problem gain is in the rest.
 P2. If the gain is in the rest, cell 4 stays within 12 of 205.
 A paired difference on 328 problems resolves about 5 points (16 problems).
+
+## Amendment 2 (2026-11-15, before the job): the same table at RL step 100
+
+Part 1 found two groups by input-side overlap: {Math, Code} and {IF, General}, with Mix overlapping both, and each release pair
+(Math 3.0/3.1, Code 3.0/3.1) nearest to each other. `xreward_overlap --steps` adds the step-100 checkpoint of each of the seven runs
+(revisions pinned in `STEP100`).
+
+- S1. The reward is readable from the weights after 100 RL steps: for each step-100 checkpoint, the final model of another run with
+  the highest input-side overlap is the other release of the same reward (Math, Code), or Mix for IF and General, and IF for Mix
+  (the Part 1 neighbours). Refuted if fewer than 5 of 7 match.
+- S2. The rewards do not share an early phase: mean input-side overlap between step-100 checkpoints of different reward groups
+  (Math or Code against IF or General) is no higher than between their final models (0.03 to 0.10). Refuted if it is above 0.2.
