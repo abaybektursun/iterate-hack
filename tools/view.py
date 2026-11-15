@@ -141,7 +141,7 @@ def snapshot():
         FOUND.update(zip(scored, pool.map(lambda r: climb.finding(texts[r]) if r in texts else finding(r), scored)))
     return {"hours": HOURS, "test": team.TEST, "items": cols(items, ITEM), "messages": cols(messages, MESSAGE), "scores": cols(scores, SCORE),
             "last_comments": {k[0]: COMMENTS[k] for k in late}, "finding": {r: FOUND[r] for r in dict.fromkeys(s["result"] for s in scores)},
-            "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items()],
+            "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items() if not getattr(m, "UNLISTED", False)],
             "proofs": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in PROOFS.items()]}
 
 

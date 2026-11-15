@@ -317,7 +317,8 @@ The tab Findings is the page `/findings` (`tools/findings.py`): one tile per fin
 finding's title and one sentence. A tile opens the page of that finding. Every finding worth telling gets such a page:
 `tools/finding_<slug>.py`, copied from `.claude/skills/finding-page/template.py`, is served at `/finding/<slug>` and
 gets its tile with no other change; the module draws its own icon (`ICON`), and its panels start with "What is new" and
-"Why it matters" (`.claude/skills/finding-page/SKILL.md` says when and how). `.claude/skills/site-ui/SKILL.md` holds
+"Why it matters" (`.claude/skills/finding-page/SKILL.md` says when and how). A module with `UNLISTED = True` is served at its link
+and gets no tile, for a page that waits for review. `.claude/skills/site-ui/SKILL.md` holds
 the rules for anything visible on the site.
 
 The tab Proof is the page `/proof`: the same grid of tiles, for the experiments that test the team's method itself and
