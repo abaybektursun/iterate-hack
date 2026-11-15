@@ -231,7 +231,8 @@ LAB = (Path(__file__).with_name("sitelab"), Path(__file__).parent.parent / "stud
 LAB_FILE = re.compile(r"(prototypes/[a-z-]+/)?(index\.html|data\.json)?")
 PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / folder / name)
           for name, folder in (("the-finish-dial.pdf", "rlneurons/paper"), ("theories-on-trial.pdf", "theory/paper"),
-                               ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"))}
+                               ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"),
+                               ("no-early-warning.pdf", "rlneurons/paper-no-warning"))}
 DECK_PAGE = demo_deck.page(len(FINDINGS), PAPERS)  # the talk deck at /demo, with the number of finding pages and the papers
 
 
