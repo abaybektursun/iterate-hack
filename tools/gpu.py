@@ -88,7 +88,9 @@ def submit(args):
     assert rest[0] == "--", "put the command after --"
     cmd = rest[1] if len(rest) == 2 else shlex.join(rest[1:])
 
-    assert not git("status", "--porcelain"), "commit your changes first: a job runs one commit"
+    assert not git("status", "--porcelain", "--untracked-files=no"), "commit your changes first: a job runs one commit"
+    if untracked := git("ls-files", "--others", "--exclude-standard"):  # not in the commit, so not in the job
+        print(f"not in the job (untracked): {' '.join(untracked.split()[:5])}", file=sys.stderr)
     sha = git("rev-parse", "HEAD")
     assert git("branch", "-r", "--contains", sha), "push the commit first, so others can read the code"
     deployed, wanted = jobs.get(RUNNER_KEY), git("rev-parse", f"{sha}:infra/runner.py")
