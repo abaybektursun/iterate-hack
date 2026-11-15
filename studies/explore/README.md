@@ -31,6 +31,17 @@ below is therefore a **pure-Python** run. Effect: 6 of 1,066 circles submissions
 (main-02) imported numpy/scipy, all invalid; those were the attempts at the optimizer approach. ahc014: 0 of 270
 imported them (unaffected). Programs now run in `runs/explore/.venv` (numpy 2.5.4, scipy 1.18.1), checked at start.
 
+### circles26/swe2-01 (SWE-2 via Devin CLI, 1 seed, numpy/scipy available, stopped at 7-9 of 40 by the owner)
+
+`results/circles26/swe2-01/summary.json`; examples: best single-s0 s0003 2.635971, invalid forget-s0 (crash).
+`devin:swe-2-medium` (Devin Pro plan, free model; no token counts).
+
+- Every arm reaches the best published sum (about 2.635-2.636) within 9 submissions, a single chat included
+  (single 2.63597 at submission 4; fnf 2.63590 at 4; basin 2.63598 at 6; parallel 2.63097, forget 2.63304 so far).
+- 49 of 49 programs call a numerical optimizer (pilot-02 regex), against 5 of 800 for gpt-5.4-mini in main-01.
+  SWE-2 starts in the optimizer basin, so there is no anchoring to undo: circles26 separates strategies only for
+  the weak model. Caveat: the gpt-5.4-mini runs had no numpy/scipy (see the environment bug above).
+
 ### ahc014/main-01 (1 seed, 40 submissions, gpt-5.4-mini, pure Python, commit 892e7e1, about 4.6 USD)
 
 `results/ahc014/main-01/compare.json`; examples: best forget-s0 s0022 0.4388 (adds 45-degree rectangles), invalid

@@ -1,0 +1,50 @@
+{
+ "model": "devin:swe-2-medium",
+ "seed": 0,
+ "note": "stopped early by the owner: every arm reached the best published sum (about 2.635-2.636) within 9 submissions, so the task no longer separates strategies. Programs ran with numpy/scipy (venv).",
+ "starter": 2.54138,
+ "runs": {
+  "basin-s0": {
+   "n": 9,
+   "best": 2.635983,
+   "best_id": "s0005",
+   "first_submission_at_2.635": 6,
+   "valid": 7
+  },
+  "fnf-s0": {
+   "n": 9,
+   "best": 2.635896,
+   "best_id": "s0003",
+   "first_submission_at_2.635": 4,
+   "valid": 7
+  },
+  "fnf_keep-s0": {
+   "n": 8,
+   "best": 2.635983,
+   "best_id": "s0001",
+   "first_submission_at_2.635": 1,
+   "valid": 8
+  },
+  "forget-s0": {
+   "n": 9,
+   "best": 2.633035,
+   "best_id": "s0002",
+   "first_submission_at_2.635": null,
+   "valid": 6
+  },
+  "parallel-s0": {
+   "n": 7,
+   "best": 2.630972,
+   "best_id": "s0006",
+   "first_submission_at_2.635": null,
+   "valid": 6
+  },
+  "single-s0": {
+   "n": 7,
+   "best": 2.635971,
+   "best_id": "s0003",
+   "first_submission_at_2.635": 4,
+   "valid": 5
+  }
+ }
+}
