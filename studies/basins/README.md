@@ -29,6 +29,8 @@ All code runs from the repository root with the root on `PYTHONPATH`.
 | `analysis/swarm_lineage.py` | Laptop, one judge call (~0.06 USD). Idea tree: earlier items each item builds on, labelled variation / combination / refinement / result_of / claims / critique; ids teammates named are kept. |
 | `analysis/swarm_page.py` | Laptop. The swarm map page with replay and leaderboard. |
 | `analysis/swarm_landscape.py` | Laptop. The same map as one full-screen 3D surface (page "Basin Atlas Landscape", WebGL 2, no library): each judge group is a basin whose depth grows with its board items, each possible direction is a pin that disappears when a board item works on it, replay in board order. Reads `summary.json` and `map.json`, writes `swarm_landscape.html` (board text, not committed). Basin centres are the map centroids pushed at least 0.245 apart; item offsets are shrunk by 0.45. Names on the picture come from `SHORT` in the file; the panel shows the judge's names. |
+| `analysis/swarm_themes.py` | Laptop, 2 judge calls. Groups the clusters of a map run into 3 to 5 themes and gives each cluster a short name: `python3 -m studies.basins.analysis.swarm_themes <map run> <out run> --model <id>`. Two orders of the clusters and a planted copy of the fullest cluster as control. Plan: `specs/SPEC_themes.md`. |
+| `analysis/swarm_nested_layout.py` | Laptop, no judge call. Prints the layout of the site page `/proof/idea-basins` (`tools/proof_idea_basins.py`) as JSON with no board text: a disc per cluster, each item's cluster and place in it, and the places of the earlier items it builds on. |
 
 ## Run (strategy)
 
@@ -115,3 +117,18 @@ holds teammates' board text). `map.json` and `swarm_map.html` stay uncommitted, 
   the one missing id of the same kind and logged; anything else still stops the run); `swarm_scores.py` reads
   thousands separators and drops, with a list in `scores_dropped.json`, rows whose score is not in their quote
   (here 50 gpuprice skill values).
+
+### swarm/themes-01 (themes of the 12 clusters of main-03; judge gpt-6.1-sol, 2 calls, about 12,600 tokens)
+
+Plan written before the run: `specs/SPEC_themes.md`. Artifacts: `results/swarm/themes-01/metrics.json`, `run.json`
+(command; prompts and raw answers stay in `runs/swarm/themes-01-calls`, not committed, board text).
+
+- 5 themes: Model internals 97 items (4 clusters), Research operations 50 (2), Inference methods 40 (3), Price
+  forecasting 20 (2), Evaluation controls 11 (1).
+- Prediction held: the two orders of the clusters agree on 62 of 66 cluster pairs (plan: at least 56). In the second
+  order one cluster, "Trajectory comparisons", is in another theme.
+- Control passed: a planted copy of the fullest cluster is in the theme of its original in both orders.
+- Use: the short cluster names (`metrics.json` "short") and the layout of `analysis/swarm_nested_layout.py` are on
+  the site page `/proof/idea-basins` (`tools/proof_idea_basins.py`, 218 items, 12 basins, the idea tree with 151 of
+  450 links between two basins). The themes themselves are not shown on the page.
+- Weak points: one judge model, two orders, one snapshot; the number of themes was left to the judge within 3 to 5.
