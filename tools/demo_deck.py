@@ -163,6 +163,14 @@ header.top, .inv-home, .mast, .lede, .nums, .src-line, .fig-tw, .figlab, .key, .
 #mem { height: 100vh !important; }
 .scene text { font-size: 13px !important; }
 .scene text.tag { display: block !important; }"""),
+    # the side note of the sponsors slide: the towers of /pastdev alone (recall against grep, 20 questions)
+    "pasttw": embed(pastdev.PAGE, sponsor_theme(pastdev.PAGE) + """
+header.top, .inv-home, .mast, .lede, .nums, .src-line, .fig-mem, .figlab, .key, .figsay, .strip, section, .end { display: none !important; }
+.page { max-width: none !important; padding: 0 !important; }
+.first { padding: 0 !important; margin: 0 !important; border: 0 !important; }
+.figs { display: block !important; margin: 0 !important; }
+.fig-tw { margin: 0 !important; }
+#tw { height: 100vh !important; }"""),
 }
 
 # The numbers under the two sponsor figures, read from the first screens of /exa and /pastdev (label -> number).
@@ -262,6 +270,8 @@ def slides(papers):
         ("sponsors", '<div class="head"><h2>Search and memory before every experiment</h2></div>'
                      '<iframe class="fig-frame sponsor s-exa" data-fig="exa" data-replay title="Exa: searches at the gate before a GPU run" tabindex="-1"></iframe>'
                      '<iframe class="fig-frame sponsor s-past" data-fig="pastdev" data-replay title="past.dev: one agent writes, another reads" tabindex="-1"></iframe>'
+                     '<iframe class="fig-frame s-tw" data-fig="pasttw" data-replay title="past.dev recall against grep, 20 questions" tabindex="-1"></iframe>'
+                     '<p class="spon-note">Recall against grep, 20 questions</p>'
                      f'<p class="spon s-exa">{logo("exa")}<span><b>{esc(EXA_NUMS["arXiv papers surfaced"])}</b> arXiv papers surfaced · <b>{esc(EXA_NUMS["pages read in full"])}</b> pages read in full</span></p>'
                      f'<p class="spon s-past">{logo("past")}<span><b>{esc(PAST_NUMS["memories"])}</b> memories · <b>{esc(PAST_NUMS["median recall"])}</b> median recall</span></p>'),
         ("finding", '<h2 class="title top-title">Interpretable findings with hill climbing</h2>'
@@ -381,11 +391,14 @@ p, h1, h2, figure { margin: 0; }
 .rate { font: inherit; font-size: 15px; font-weight: 560; color: var(--ink); background: none; border: 1px solid var(--faint); border-radius: 999px; padding: 3px 12px; cursor: pointer; }
 .rate[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .fig-frame.wide { left: 220px; top: 205px; width: 1160px; height: 650px; }
-/* the sponsors slide: two scenes side by side, each drawn at 580 x 446 and shown 1.21 times larger so its labels read from the back of a room */
-.fig-frame.sponsor { top: 208px; width: 580px; height: 446px; transform: scale(1.21); transform-origin: 0 0; background: transparent; }
-.fig-frame.s-exa { left: 96px; } .fig-frame.s-past { left: 804px; }
-.spon { position: absolute; top: 772px; width: 702px; display: flex; align-items: center; justify-content: center; gap: 22px; font-size: 24px; font-weight: 500; color: var(--mute); }
-.spon.s-exa { left: 96px; } .spon.s-past { left: 804px; }
+/* the sponsors slide: two scenes side by side, each drawn at 580 x 446 and shown 1.04 times larger, with the towers of /pastdev as a smaller third picture on the right */
+.fig-frame.sponsor { top: 228px; width: 580px; height: 446px; transform: scale(1.04); transform-origin: 0 0; background: transparent; }
+.fig-frame.s-exa { left: 40px; } .fig-frame.s-past { left: 652px; }
+/* the side note: the towers of /pastdev (recall against grep), smaller, to the right of the memory scene */
+.fig-frame.s-tw { left: 1246px; top: 262px; width: 324px; height: 430px; background: transparent; }
+.spon-note { position: absolute; left: 1246px; top: 706px; width: 324px; text-align: center; font-size: 17px; font-weight: 500; color: var(--mute); }
+.spon { position: absolute; top: 772px; width: 603px; display: flex; align-items: center; justify-content: center; gap: 20px; font-size: 21px; white-space: nowrap; font-weight: 500; color: var(--mute); }
+.spon.s-exa { left: 40px; } .spon.s-past { left: 652px; }
 .spon b { font-weight: 640; color: var(--ink); }
 .fig-frame.fixes { left: 180px; top: 140px; width: 1240px; height: 694px; }
 .fig-frame.gapfig { left: 100px; top: 58px; width: 1400px; height: 784px; }

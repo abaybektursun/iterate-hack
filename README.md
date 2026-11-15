@@ -459,7 +459,7 @@ empty frame. Slides 4 and 7 show the picture of `tools/architecture.py` and the 
 `/demo/fig/harness` and `/demo/fig/tree`: those pages with their header, words column and key hidden
 (`demo_deck.FIGS`). The slide `#sponsors` shows the scene of `/exa` and the memory scene of `/pastdev` side by side in iframes of
 `/demo/fig/exa` and `/demo/fig/pastdev` (those pages with everything but the scene hidden; the dark deck shows them
-inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. The slide `#finding` shows `/demo/fig/fixes` (`tools/demo_fixes.py`): one MATH-500 problem
+inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. To the right of the memory scene, smaller, is `/demo/fig/pasttw`: the towers of `/pastdev` alone (recall against grep, 20 questions). The slide `#finding` shows `/demo/fig/fixes` (`tools/demo_fixes.py`): one MATH-500 problem
 answered four ways, each answer a glass sheet on a step as high as its configuration's score (base model, 3 opening
 tokens, sampling at T 1.0, 8 directions in the weights), with every quoted word checked against its run by
 `PYTHONPATH=.:tools python3 tools/demo_fixes.py`. The slide `#proof` shows `/demo/fig/review` (`tools/demo_review.py`): four glass

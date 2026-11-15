@@ -28,7 +28,7 @@ a side panel whose address is /#<item id>; the filters are in the address too (/
 click on a person shows only that person. The look is that of architecture.py (.claude/skills/site-ui/SKILL.md).
 
   GET /demo            the talk as a deck of thirteen 16:9 slides (demo_deck.py): keys step, p prints one slide per page
-  GET /demo/fig/<name> the pictures the deck embeds (gap, climb, harness, exa, pastdev, fixes, beyond,
+  GET /demo/fig/<name> the pictures the deck embeds (gap, climb, harness, exa, pastdev, pasttw, fixes, beyond,
                        efficiency, review, basins), with their
                        header, words column and key hidden (demo_deck.FIGS)
   GET /demo/story      the stepped story of the talk over the picture of architecture.py (demo.py), fed by the same /data
