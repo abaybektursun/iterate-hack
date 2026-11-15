@@ -1,21 +1,25 @@
 """The findings page of the team site. The tab Proof (/proof) is the same page for the experiments that test the team's
 method itself; PROOF at the end holds its differences.
 
-view.py serves PAGE at /findings, after writing the icons into it, and puts entry(slug, module) of every
-tools/finding_<slug>.py into `findings` of /data. The page reads /data once, and again every 10 s while a read fails.
+view.py serves PAGE at /findings, after writing into it the icons (__ICONS__) and the rows (__ROWS__): entry(slug,
+module) of every tools/finding_<slug>.py, with each mark that names a board score read from that score row by
+resolve(). The page reads nothing after it loads, so its picture is drawn at once. view.py also adds tools/sitekit.py
+(terms defined on click).
 
 The first view is the research question and one picture of it: a glass rail from 40 % to 100 % on MATH-500, on which
-the base model's scores without reward are drawn in one after another (plain prompt, cue, restart, vote over four, vote
-after restart) against the RL model's (one sample, then the same vote and restarts). Each mark opens the finding it
-comes from. Under the rail, the points by which RL still leads and one sentence on what remains. The marks come from
-the `steps` of the entries below: numbers read from each finding module's own values, or a score row of the board
-(`scores` of /data, the rows tools/climb.py reads) named by its result id and configuration. No number is typed here.
+the base model's scores without reward are drawn in one after another (Base, Base + cue, restart, vote over 4 samples,
+vote after restart) against RL's (one sample, then the same vote and restarts). Each mark opens the finding it comes
+from. Under the rail, the points by which RL still leads with the same vote and restarts, counted once to that value,
+and one sentence on what remains. The whole entrance takes about 2 s. The marks come from the `steps` of the entries
+below: numbers read from each finding module's own values, or a score row of the board (the rows tools/climb.py reads)
+named by its result id and configuration. No number is typed here.
 
-Under the picture, the findings in groups that follow the question (GROUPS). A row holds the finding's effect size as
-one figure, its TITLE, its LINE and its icon, and opens /finding/<slug>. A finding that TABLE does not name goes into
-the last group, "New", so a new page appears here without an edit. The looks are those of tools/architecture.py
-(.claude/skills/site-ui/SKILL.md): its tokens, one light from the upper left, a slow sway, and one still frame with
-reduced motion.
+Under the picture, the findings in groups that follow the story (GROUPS), each group headed by its question. A row
+holds the finding's effect size as one figure with its unit ("66 % of the gap", "+6.1 points") and a short tag for the
+set it was measured on, its TITLE, its LINE and its icon, and opens /finding/<slug>. A finding that TABLE does not name
+goes into the last group, "New", so a new page appears here without an edit. The looks are those of
+tools/architecture.py (.claude/skills/site-ui/SKILL.md): its tokens, one light from the upper left, a slow sway, and
+one still frame with reduced motion.
 
 One finding, one file: a module tools/finding_<slug>.py draws its own icon. It defines ICON, the source of a
 JavaScript arrow function `(kit, t, tilt) => "<svg markup>"`. view.py replaces __ICONS__ below with the object literal
@@ -26,13 +30,20 @@ slab, a lit face, a line, the theme tokens), `t` is the time in seconds, and `ti
 The icon's space is 112 by 80 units around the centre (56, 36). A module without ICON gets a plain glass slab.
 """
 
-GAIN, BEHAVIOUR, WEIGHTS = "Gains without reward", "What RL changes", "Inside the weights"
-GROUPS = [GAIN, BEHAVIOUR, WEIGHTS, "New"]
+
+NO_REWARD, ANSWERS, WEIGHTS = "What needs no reward?", "How does RL change the answers?", "Where does RL's change sit in the weights?"
+THEORIES = "Do our theories predict?"
+GROUPS = [NO_REWARD, ANSWERS, WEIGHTS, THEORIES, "New"]
+
+
+def signed(x, digits=1):
+    """A signed number with a true minus sign: "+37.2", "−1.2"."""
+    return f"{x:+.{digits}f}".replace("-", "−")
 
 
 def points(before, after, n):
     """The difference of two counts of n as signed points with one decimal: "+37.2"."""
-    return f"{100 * (after - before) / n:+.1f}"
+    return signed(100 * (after - before) / n)
 
 
 def step(name, model, right, n, source):
@@ -41,83 +52,115 @@ def step(name, model, right, n, source):
 
 
 def board_step(name, model, result, config):
-    """One mark read on the page from the board's score row of this result, model and configuration on MATH-500."""
+    """One mark whose count view.py reads from the board's score row of this result, model and configuration on MATH-500."""
     return {"name": name, "model": model, "find": {"result": result, "benchmark": "MATH-500", "model": model, "config": config},
             "source": f"board {result}"}
 
 
-# slug -> its group, its figure [value, what the value counts] and its marks on the rail, each read from the module m.
-# The rail shows MATH-500 at T 1.0 / top-p 1.0. Board result-e78dfe recounted the climb from the per-problem rows: the
-# honest best base score is the vote after restart (result-5d032f), not the tie rule chosen on the same problems.
+# slug -> its group, its figure [number, unit, tag of the set] and its marks on the rail, each read from the module m.
+# The order is the order on the page. The rail shows MATH-500 at T 1.0 / top-p 1.0. Board result-e78dfe recounted the
+# climb from the per-problem rows: the honest best base score is the vote after restart (result-5d032f), not the tie rule
+# chosen on the same problems.
 AFTER_RESTART = "T 1.0 / top-p 1.0, vote over 4 samples after restart"
 TABLE = {
     "opening-cue": {
-        "group": GAIN,
-        "figure": lambda m: [points(m.PLAIN, m.CUE, m.N), "points over the plain prompt, MATH-500, T 1.0"],
-        "steps": lambda m: [step("Plain prompt", "base", m.PLAIN, m.N, m.DATA["artifact"]),
-                            step("Opening cue", "base", m.CUE, m.N, m.DATA["artifact"]),
+        "group": NO_REWARD,
+        "figure": lambda m: [points(m.PLAIN, m.CUE, m.N), "points", "MATH-500, over Base"],
+        "steps": lambda m: [step("Base", "base", m.PLAIN, m.N, m.DATA["artifact"]),
+                            step("Base + cue", "base", m.CUE, m.N, m.DATA["artifact"]),
                             step("RL, one sample", "rl", m.RL, m.N, m.DATA["artifact"])]},
-    "cue-on-code": {
-        "group": GAIN,
-        "figure": lambda m: [points(m.ST[0]["passed"], m.ST[2]["passed"], m.N), f"points on {m.N} code problems"]},
+    "base-opens-itself": {
+        "group": NO_REWARD,
+        "figure": lambda m: [signed(m.DATA["diff_cue"][0]), "points", "MATH-500, the base's own opening with Okay against the prefilled cue"]},
     "restart-on-cap": {
-        "group": GAIN,
-        "figure": lambda m: [f"{m.GAIN:+.1f}", "points on MATH-500, T 0.6"],
-        "steps": lambda m: [step("Cue, restart", "base", m.T10["restart"], m.D["n"], m.T10["artifact"])]},
+        "group": NO_REWARD,
+        "figure": lambda m: [signed(m.GAIN), "points", "MATH-500, T 0.6"],
+        "steps": lambda m: [step("Base + cue, restart", "base", m.T10["restart"], m.D["n"], m.T10["artifact"])]},
     "vote-over-four": {
-        "group": GAIN,
-        "figure": lambda m: [f"{m.BASE['gain']:+.1f}", "points on MATH-500, T 1.0"],
-        "steps": lambda m: [step("Cue, vote of four", "base", m.BASE["vote"], m.N, m.DATA["artifact"]),
-                            board_step("Cue, vote, restart", "base", "result-5d032f", "cue, " + AFTER_RESTART),
-                            board_step("RL, vote, restart", "rl", "result-5d032f", "plain, " + AFTER_RESTART)]},
-    "rl-reliability": {
-        "group": BEHAVIOUR,
-        "figure": lambda m: [f"{m.SOME} %", "of the RL gain, on problems the base model solves sometimes"]},
-    "rl-wait-habit": {
-        "group": BEHAVIOUR,
-        "figure": lambda m: [m.PUSH_POINTS, "points on MATH-500 when the base says Wait as often as RL"]},
+        "group": NO_REWARD,
+        "figure": lambda m: [signed(m.BASE["gain"]), "points", "MATH-500, Base + cue"],
+        "steps": lambda m: [step("Vote over 4 samples", "base", m.BASE["vote"], m.N, m.DATA["artifact"]),
+                            board_step("Vote over 4 samples, restart", "base", "result-5d032f", "cue, " + AFTER_RESTART),
+                            board_step("RL, vote over 4 samples, restart", "rl", "result-5d032f", "plain, " + AFTER_RESTART)]},
     "equal-token-frontier": {
-        "group": GAIN,
-        "figure": lambda m: [f"{m._best['gap'][0]:+.1f}", f"points below one RL sample at {m._best['multiple']:.1f} times the tokens"]},
-    "one-difficulty-axis": {
-        "group": BEHAVIOUR,
-        "figure": lambda m: [f"{m.DATA['diff']['excess_mean']:+.2f}", "problems beyond one difficulty order, mean of 618 pairs of methods"]},
+        "group": NO_REWARD,
+        "figure": lambda m: [signed(m._best["gap"][0]), "points", f"MATH-500, against one RL sample, at {m._best['multiple']:.1f} times the tokens"]},
+    "cue-on-code": {
+        "group": NO_REWARD,
+        "figure": lambda m: [points(m.ST[0]["passed"], m.ST[2]["passed"], m.N), "points", f"{m.N} code problems"]},
+    "how-much-of-the-gap": {
+        "group": NO_REWARD,
+        "figure": lambda m: [m._pc(m._one["share"][0]), "of the gap",
+                             f"328 harder problems, Think-SFT + cue; best rule on untrained weights {m._pc(m._L['one'][1]['share'][0])}"]},
     "imitation-beats-rl": {
-        "group": BEHAVIOUR,
-        "figure": lambda m: [f"{m.DATA['diff']['hard328']['vote'][0]:+.1f}", "points, Think-SFT over RL, 328 harder problems, vote over 4"]},
+        "group": NO_REWARD,
+        "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over RL"]},
     "where-the-gap-goes": {
-        "group": BEHAVIOUR,
-        "figure": lambda m: [f"{m.pc(m._RL['parts']['reliability'][1])} %", "of the gap to RL, on problems the base solves in other samples"]},
+        "group": ANSWERS,
+        "figure": lambda m: [f"{m.pc(m._RL['parts']['reliability'][1])} %", "of the gap",
+                             f"MATH-500; a random weight change gives {m.pc(m._NULL['parts']['reliability'][1])} %"]},
+    "rl-reliability": {
+        "group": ANSWERS,
+        "figure": lambda m: [f"{m.SOME} %", "of the gain", "MATH-500, 4 samples each of Base + cue and RL"]},
     "rl-edge-comes-early": {
-        "group": BEHAVIOUR,
-        "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap closed when the base model finishes RL's half-written answers"]},
+        "group": ANSWERS,
+        "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap", "MATH-500, base finishes RL's answers"]},
+    "rl-learns-the-opening-first": {
+        "group": ANSWERS,
+        "figure": lambda m: [f"{m.DATA['okay'][2]} of {m.DATA['n']}", "answers",
+                             f"MATH-500, open with 'Okay' after 100 RL steps; Base {m.DATA['okay'][0]}"]},
+    "rl-avoids-the-slip": {
+        "group": ANSWERS,
+        "figure": lambda m: [f"{m.DATA['D']['math31']['factor']:.2f}", "times as likely",
+                             "MATH-500, RL writing the first wrong step of 51 wrong answers of Base + cue; the interval includes 1"]},
+    "rl-wait-habit": {
+        "group": ANSWERS,
+        "figure": lambda m: [m.PUSH_POINTS, "points", "MATH-500, at RL's rate of Wait"]},
+    "one-difficulty-axis": {
+        "group": ANSWERS,
+        "figure": lambda m: [signed(m.DATA["diff"]["excess_mean"], 2), "problems", "MATH-500, mean of 618 pairs of methods"]},
     "a-quarter-of-rl": {
         "group": WEIGHTS,
-        "figure": lambda m: [f"{m.Q_M} %", "of RL's gain on MATH-500 from the RL weight change scaled to a quarter"]},
+        "figure": lambda m: [f"{m.Q_M} %", "of the gain", "MATH-500, a = 0.25"]},
     "eight-directions": {
         "group": WEIGHTS,
-        "figure": lambda m: [points(*(next(s["right"] for s in m.DATA["states"] if s["key"] == k) for k in ("untrained", "rl-directions")), m.DATA["edit"]["n"]),
-                             f"points on MATH-500, {m.DATA['edit']['k']} RL directions per matrix"]},
+        "figure": lambda m: [signed(m.DATA["vs_cue_hard"]["points"]), "points",
+                             f"328 harder problems, over Base + cue; 8 random directions {signed(m.DATA['random_vs_cue_hard']['points'])}"]},
     "rl-every-neuron": {
         "group": WEIGHTS,
-        "figure": lambda m: [m.pct(m.mean(m.ONE["best"])), f"of the change, in the best {m.ONE['share']:g} % of neurons"]},
-    "loop-neurons": {
-        "group": WEIGHTS,
-        "figure": lambda m: [f"{m.DATA['states'][0]['loops']} → {m.DATA['states'][1]['loops']}", f"repetition loops in {m.DATA['n']} answers"]},
+        "figure": lambda m: [m.pct(m.mean(m.ONE["best"])), "of RL's effect", f"next-word predictions, RL's best {m.ONE['share']:g} % of neurons copied"]},
     "neurons-you-can-describe": {
         "group": WEIGHTS,
-        "figure": lambda m: [f"{round(100 * m.DATA['sets']['selected']['mean_accuracy'])} %",
-                             f"of firings found from one sentence; chance is {round(100 * m.DATA['chance'])} %"]},
+        "figure": lambda m: [f"{100 * m.DATA['sets']['selected']['mean_accuracy']:.1f} %", "of snippets sorted right",
+                             f"30 neurons, blind reader; chance is {round(100 * m.DATA['chance'])} %"]},
+    "loop-neurons": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.DATA['states'][0]['loops']} → {m.DATA['states'][1]['loops']}", "loops", f"of {m.DATA['n']} answers, MATH-500, T 0.6"]},
+    "theories-on-trial": {
+        "group": THEORIES,
+        "figure": lambda m: [f"{m.DATA['nearer']['all'][0]} of {m.DATA['nearer']['all'][1]}", "predictions",
+                             "theory nearer the measured number than readers with no theory; half would be a tie"]},
 }
 
 
 def entry(slug, m):
-    """What /data says of one finding: slug, title, line, group, rank (the order on the page), figure and steps."""
+    """What the page says of one finding: slug, title, line, group, rank (the order on the page), figure and steps."""
     row = TABLE.get(slug, {})
     return {"slug": slug, "title": m.TITLE, "line": m.LINE, "group": row.get("group", "New"),
             "rank": list(TABLE).index(slug) if slug in TABLE else len(TABLE),
             "figure": row["figure"](m) if "figure" in row else None,
             "steps": row["steps"](m) if "steps" in row else []}
+
+
+def resolve(rows, scores):
+    """The rows with the count of each board mark read from its one score row (scores: the board's rows of pk "scores")."""
+    def one(s):
+        if "find" not in s:
+            return s
+        found = [r for r in scores if all(r.get(k) == v for k, v in s["find"].items())]
+        assert len(found) == 1, f"{len(found)} score rows for {s['find']}"
+        return {"name": s["name"], "model": s["model"], "right": int(found[0]["right"]), "n": int(found[0]["n"]), "source": s["source"]}
+    return [{**r, "steps": [one(s) for s in r["steps"]]} for r in rows]
 
 
 PAGE = r"""<!doctype html>
@@ -165,7 +208,6 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .top a { color: var(--mute); text-decoration: none; white-space: nowrap; transition: color .15s ease; }
 .top a:hover { color: var(--ink); }
 .top a[aria-current] { color: var(--ink); font-weight: 600; }
-.status { margin-left: auto; color: var(--red); white-space: nowrap; }
 .say { margin: clamp(28px, 7vh, 76px) 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; }
 
 /* The first view: the question, the rail, what remains */
@@ -204,12 +246,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .key .kb { background: var(--core); box-shadow: 0 0 0 3px color-mix(in srgb, var(--blue) calc(var(--bloom) * 26%), transparent); }
 .key .kr { border: 2px solid var(--ink); background: var(--paper); }
 .remain { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 0 32px; margin-top: clamp(26px, 5vh, 48px); }
-.gap { margin: 0; white-space: nowrap; line-height: 1; }
+.gap { margin: 0; white-space: nowrap; line-height: 1; transition: opacity .25s ease; }
+.gap.wait { opacity: 0; }
 .gap b { font-size: clamp(52px, 5.4vw, 88px); font-weight: 300; letter-spacing: -.035em; font-stretch: 100%; }
-.gap span { display: block; margin-top: 8px; color: var(--mute); font-size: 14px; font-weight: 520; }
-.rest { margin: 6px 0 0; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; max-width: 46ch; transition: opacity .6s ease; }
+.gap > span { display: block; margin-top: 8px; color: var(--mute); font-size: 14px; font-weight: 520; }
+.rest { grid-column: 2; grid-row: 1 / span 2; margin: 6px 0 0; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; max-width: 46ch; transition: opacity .6s ease; }
 .rest.wait { opacity: 0; }
-.acts { grid-column: 2; display: flex; gap: 22px; margin-top: 12px; font-size: 13px; color: var(--mute); }
+.acts { grid-column: 1; display: flex; gap: 22px; margin-top: 16px; font-size: 13px; color: var(--mute); white-space: nowrap; }
 .acts summary { cursor: pointer; list-style: none; }
 .acts summary::-webkit-details-marker { display: none; }
 .acts button:hover, .acts summary:hover { color: var(--ink); }
@@ -220,20 +263,22 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
 /* The findings, in groups that follow the question */
 .groups { margin-top: clamp(64px, 12vh, 132px); }
 .groups.flat { margin-top: clamp(26px, 5vh, 52px); }
-.group { display: grid; grid-template-columns: minmax(170px, 15%) minmax(0, 1fr); gap: 0 40px; border-top: 1px solid var(--rule); padding-top: 4px; margin-top: 48px; }
+.group { display: grid; grid-template-columns: minmax(190px, 17%) minmax(0, 1fr); gap: 0 40px; border-top: 1px solid var(--rule); padding-top: 6px; margin-top: 44px; }
 .group:first-child { margin-top: 0; }
-.group h2 { margin: 18px 0 0; font-size: 15px; font-weight: 640; font-stretch: 112%; letter-spacing: .006em; }
-.rows { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 460px), 1fr)); gap: 0 52px; }
-.row { display: grid; grid-template-columns: 148px minmax(0, 1fr) 92px; gap: 0 20px; align-items: start; padding: 18px 0 22px; text-decoration: none; height: 100%; }
-.row.nofig { grid-template-columns: minmax(0, 1fr) 92px; }
+.group h2 { margin: 18px 0 0; max-width: 15ch; font-size: 19px; line-height: 1.22; font-weight: 400; font-stretch: 102%; letter-spacing: -.004em; }
+.rows { list-style: none; margin: 0; padding: 0; }
+.row { display: grid; grid-template-columns: 250px minmax(0, 58ch) 92px; justify-content: start; gap: 0 36px; align-items: baseline; padding: 16px 0 18px; text-decoration: none; }
+.row.nofig { grid-template-columns: minmax(0, 58ch) 92px; }
 .row.nofig .fig2 { display: none; }
 .row:focus-visible { outline-offset: 2px; border-radius: 4px; }
-.num { display: block; font-size: 31px; line-height: 1.05; font-weight: 300; letter-spacing: -.02em; white-space: nowrap; font-stretch: 100%; }
-.unit { display: block; margin-top: 6px; color: var(--mute); font-size: 12.5px; line-height: 1.32; }
-.title { margin: 2px 0 0; font-size: 17.5px; line-height: 1.22; font-weight: 600; font-stretch: 106%; letter-spacing: .004em; transition: color .15s ease; }
+.num { display: block; line-height: 1.05; }
+.num b { font-size: 31px; font-weight: 300; letter-spacing: -.02em; white-space: nowrap; font-stretch: 100%; }
+.num .u { margin-left: 5px; color: var(--mute); font-size: 15px; font-weight: 460; white-space: nowrap; }
+.unit { display: block; margin-top: 7px; color: var(--faint); font-size: 12.5px; line-height: 1.32; }
+.title { margin: 0; font-size: 17.5px; line-height: 1.22; font-weight: 600; font-stretch: 106%; letter-spacing: .004em; transition: color .15s ease; }
 .row:hover .title { color: var(--blue); }
 .line { margin: 6px 0 0; color: var(--mute); font-size: 14.5px; line-height: 1.42; }
-.icon { display: block; width: 92px; height: 66px; overflow: visible; }
+.icon { display: block; width: 92px; height: 66px; overflow: visible; align-self: center; }
 .flat .group { display: block; border-top: 0; }
 .flat .group h2 { display: none; }
 
@@ -258,7 +303,7 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
   .lval { font-size: 15px; font-weight: 520; }
   .key { font-size: 12px; justify-content: flex-start; }
   .remain { grid-template-columns: minmax(0, 1fr); gap: 12px; }
-  .rest { font-size: 17px; }
+  .rest { font-size: 17px; grid-column: 1; grid-row: auto; }
   .acts { grid-column: 1; }
   .groups { margin-top: 56px; }
   .group { display: block; margin-top: 40px; }
@@ -269,7 +314,8 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
   .row.nofig { grid-template-columns: minmax(0, 1fr) 72px; }
   .row.nofig .text { grid-column: 1; grid-row: 1; margin-top: 0; }
   .row .text { grid-column: 1 / -1; margin-top: 10px; }
-  .num { font-size: 27px; }
+  .num b { font-size: 27px; }
+  .group h2 { max-width: none; font-size: 18px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .rows li { animation: none; }
@@ -295,20 +341,19 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
     <a href="/architecture">Design</a>
     <a href="/proof">Proof</a>
     <a href="/findings" aria-current="page">Findings</a>
-    <span class="status" id="status" role="status" hidden>Offline</span>
   </header>
   <p class="say" id="say" hidden></p>
-  <section class="story" id="story" hidden>
+  <section class="story" id="story" data-terms hidden>
     <p class="ask" id="ask"></p>
     <div class="fig" id="fig">
       <svg id="rail" aria-hidden="true"></svg>
       <div class="labels" id="labels"></div>
     </div>
-    <div class="key"><span><i class="kb"></i>Base model, no reward</span><span><i class="kr"></i>RL-trained model</span><span id="setting"></span></div>
+    <div class="key"><span><i class="kb"></i>Base or Base + cue, no reward</span><span><i class="kr"></i>RL</span><span id="setting"></span></div>
     <div class="remain">
-      <p class="gap" id="gapbox"><b id="gap"></b><span id="gapunit">points to RL</span></p>
-      <p class="rest wait" id="rest"></p>
+      <p class="gap wait" id="gapbox"><b id="gap"></b><span id="gapunit"></span></p>
       <div class="acts"><button id="replay" type="button">Replay</button><details class="src" id="srcbox"><summary>Where each number comes from</summary></details></div>
+      <p class="rest wait" id="rest"></p>
     </div>
     <ul class="src" id="src" hidden></ul>
   </section>
@@ -407,8 +452,8 @@ function spread(xs, w, lo, hi) {  // centres for labels of width w near xs (sort
 function rgeo() {
   const W = $("fig").clientWidth, ph = W < 640, pad = ph ? 14 : 26;
   const x0 = pad, x1 = W - pad, x = s => x0 + (s - LO) / (HI - LO) * (x1 - x0);
-  const w = n => Math.min(ph ? 96 : 150, (W - 4) / Math.max(1, n));
-  const bw = w(R.base.length), rw = w(R.rl.length), lh = ph ? 48 : 52;
+  const w = n => Math.min(ph ? 96 : 180, (W - 4) / Math.max(1, n));
+  const bw = w(R.base.length), rw = w(R.rl.length), lh = ph ? 64 : 58;
   const g = { W, ph, x, x0, x1, bw, rw, lh, rh: ph ? 20 : 34, rr: ph ? 10 : 17, deep: ph ? 7 : 10 };
   g.rail = lh + (ph ? 44 : 60) + g.rh / 2;      // the centre line of the rail
   g.tick = g.rail + g.rh / 2 + (ph ? 17 : 20);  // the baseline of the scale under it
@@ -431,20 +476,17 @@ function plate(g, z) {  // the rail's outline at depth z
   corner(b - r, y0 + r, -90); corner(b - r, y1 - r, 0); corner(a + r, y1 - r, 90); corner(a + r, y0 + r, 180);
   return "M" + p.map(q => f(q[0]) + " " + f(q[1])).join("L") + "Z";
 }
-function plan() {  // the entrance: when each part appears and where the lit line and the RL mark are, in ms from the start
-  const steps = [], b = R.base, r = R.rl;
-  let t = 250;
-  steps.push({ from: LO, to: b[0].pct, t0: t, d: 650 }); t += 650;
-  const show = { b0: t, r0: t };
-  t += 650;
-  for (let i = 1; i < b.length; i++) {
-    const d = 420 + 14 * Math.abs(b[i].pct - b[i - 1].pct);
-    steps.push({ from: b[i - 1].pct, to: b[i].pct, t0: t, d }); t += d;
-    show["b" + i] = t; t += 420;
+function plan() {  // the entrance, about 2 s: when each part appears and where the lit line and the RL mark are, in ms from the start
+  const steps = [], b = R.base, r = R.rl, show = { r0: 0 };
+  let t = 150;
+  for (let i = 0; i < b.length; i++) {
+    const from = i ? b[i - 1].pct : LO, d = 160 + 6 * Math.abs(b[i].pct - from);
+    steps.push({ from, to: b[i].pct, t0: t, d }); t += d;
+    show["b" + i] = t; t += 70;
   }
   let move = null;
-  if (r.length > 1) { t += 350; move = { t0: t, d: 950 }; t += 950; show.r1 = t; }
-  return { steps, show, move, end: t + 200 };
+  if (r.length > 1) { move = { t0: t, d: 520 }; t += 520; show.r1 = t; }
+  return { steps, show, move, count: { t0: Math.max(0, t - 650), d: 650 }, end: t };  // the number counts once, to its final value
 }
 function moment(ms) {  // the state of the entrance at ms
   const P = R.plan;
@@ -534,25 +576,16 @@ function rdraw(now) {
     const k = c.dataset.i, s = k[0] === "b" ? R.base[+k.slice(1)] : R.rl[+k.slice(1)], q = at(s.pct);
     c.setAttribute("cx", f(q[0])); c.setAttribute("cy", f(q[1])); c.style.display = shown.has(k) ? "" : "none";
   }
-  if (M.target != null) {
-    const v = Math.max(0, M.target - M.head).toFixed(1);
+  if (R.rl.length) {
+    const c = P.count, v = (R.final * ease(Math.min(1, Math.max(0, (ms - c.t0) / c.d)))).toFixed(1);
     if ($("gap").textContent !== v) $("gap").textContent = v;
-    const u = M.moving ? "points to RL, same procedure" : "points to RL, one sample";
-    if ($("gapunit").textContent !== u) $("gapunit").textContent = u;
+    $("gapbox").classList.toggle("wait", ms < c.t0);
   }
   $("rest").classList.toggle("wait", !M.done);
 }
-function story(list, scores) {
+function story(list) {
   const marks = [];
-  for (const x of list) for (const s of x.steps || []) {
-    let m = s;
-    if (s.find) {
-      const row = scores.find(r => ["result", "benchmark", "model", "config"].every(k => r[k] === s.find[k]));
-      if (!row) { console.error("no score row for", s.find); continue; }
-      m = { ...s, right: row.right, n: row.n };
-    }
-    marks.push({ ...m, slug: x.slug, title: x.title, pct: 100 * m.right / m.n });
-  }
+  for (const x of list) for (const s of x.steps || []) marks.push({ ...s, slug: x.slug, title: x.title, pct: 100 * s.right / s.n });
   R.base = marks.filter(m => m.model === "base");
   R.rl = marks.filter(m => m.model === "rl");
   if (!R.base.length) return;
@@ -560,13 +593,15 @@ function story(list, scores) {
   const plain = R.base[0], rl = R.rl[0], last = R.base[R.base.length - 1], rlLast = R.rl[R.rl.length - 1];
   $("ask").innerHTML = rl ? `Olmo 3 7B scores <b>${pc(plain)}</b> on MATH-500 before RL training and <b>${pc(rl)}</b> after. ` +
     "What does RL add, and how much of it needs no reward?" : "";
-  $("setting").textContent = `MATH-500, ${plain.n} problems, T 1.0 / top-p 1.0. A mark opens its finding.`;
+  $("setting").textContent = `MATH-500, ${plain.n} problems, T 1.0. A mark opens its finding.`;
   $("gapbox").hidden = !rl;
+  R.final = rl ? Math.max(0, rlLast.pct - last.pct) : 0;
+  $("gapunit").textContent = R.rl.length > 1 ? "points to RL with the same vote and restarts" : "points to RL, one sample";
   $("rest").textContent = R.rl.length > 1
-    ? `RL still leads when both models get the same four samples and restarts: ${rlLast.right} against ${last.right} of ${last.n}. ` +
+    ? `RL still leads when both models get the same vote over 4 samples and restarts: ${rlLast.right} of ${rlLast.n} against ${last.right} of ${last.n}. ` +
       "What RL adds in these points is not yet explained."
     : "";
-  $("src").innerHTML = [...R.base, ...R.rl].map(s => `<li>${esc(s.name)} (${s.model === "rl" ? "RL" : "base"}): ${s.right} of ${s.n}, ${pc(s)}. ${esc(s.source)}</li>`).join("");
+  $("src").innerHTML = [...R.base, ...R.rl].map(s => `<li>${esc(s.name)}: ${s.right} of ${s.n}, ${pc(s)}. ${esc(s.source)}</li>`).join("");
   R.plan = plan();
   R.t0 = performance.now();
   rbuild();
@@ -592,7 +627,7 @@ function rows(list) {
   $("groups").innerHTML = groups.map(name => `<section class="group"><h2>${esc(name)}</h2><ul class="rows">` +
     sorted.filter(x => (x.group || "New") === name).map(x =>
       `<li style="--i:${n++}"><a class="row${x.figure ? "" : " nofig"}" href="/${KIND === "findings" ? "finding" : "proof"}/${esc(x.slug)}" data-slug="${esc(x.slug)}">` +
-      `<span class="fig2">${x.figure ? `<span class="num">${esc(x.figure[0])}</span><span class="unit">${nb(x.figure[1])}</span>` : ""}</span>` +
+      `<span class="fig2">${x.figure ? `<span class="num"><b>${esc(x.figure[0])}</b><span class="u">${esc(x.figure[1])}</span></span><span class="unit">${nb(x.figure[2])}</span>` : ""}</span>` +
       `<span class="text"><h3 class="title">${esc(x.title)}</h3><p class="line">${nb(x.line)}</p></span>` +
       `<svg class="icon" viewBox="0 0 ${G.w} ${G.h}" aria-hidden="true">` +
       `<ellipse class="atmo" cx="${G.cx}" cy="${G.cy + 3}" rx="70" ry="42" fill="url(#atmo)"/>` +
@@ -630,18 +665,10 @@ document.addEventListener("pointermove", e => {  // each icon leans toward a mou
 document.documentElement.addEventListener("pointerleave", () => { S.tiles.forEach(o => { o.tx = o.ty = 0; }); });
 still.addEventListener("change", () => { S.tiles.forEach(o => paint(o, 0)); if (R.plan) rdraw(performance.now()); });
 
-/* The list changes only when the site is deployed, so one read is enough. A failed read says so and is tried again. */
-function read() {
-  fetch("/data").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(d => {
-      $("status").hidden = true;
-      const list = d.findings || [];
-      if (KIND === "findings" && !R.plan) story(list, d.scores || []);
-      rows(list);
-    })
-    .catch(e => { console.error(e); $("status").hidden = false; setTimeout(read, 10000); });
-}
-read();
+/* The rows are written into the page by view.py, so the picture is drawn at once and nothing is read later. */
+const LIST = __ROWS__;
+if (KIND === "findings") story(LIST);
+rows(LIST);
 requestAnimationFrame(frame);
 </script>
 </body>
@@ -649,13 +676,12 @@ requestAnimationFrame(frame);
 """
 
 # The tab Proof (/proof) is the same page with these differences: its rows are the experiments that test the team's
-# method itself (tools/proof_<slug>.py, /proof/<slug>), read from `proofs` of /data, in one list with no picture and no
-# group names. view.py applies them.
+# method itself (tools/proof_<slug>.py, /proof/<slug>), written in by view.py as __ROWS__, in one list with no picture
+# and no group names. view.py applies them.
 PROOF = [
     ('<title>Invariant: Findings</title>', '<title>Invariant: Proof</title>'),
     ('<a href="/proof">Proof</a>\n    <a href="/findings" aria-current="page">Findings</a>',
      '<a href="/proof" aria-current="page">Proof</a>\n    <a href="/findings">Findings</a>'),
     ('<p class="say" id="say" hidden></p>', '<p class="say" id="say">Experiments on the harness itself.</p>'),
     ('const KIND = "findings";', 'const KIND = "proof";'),
-    ('const list = d.findings || [];', 'const list = d.proofs || [];'),
 ]

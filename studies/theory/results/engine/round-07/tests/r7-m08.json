@@ -1,0 +1,134 @@
+{
+ "theory": "r7-m08",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Mechanism test, concentration of Code 3.1's wrong-step lowering on Math 3.1's strongest-veto items: the share of the summed Code 3.1 D that falls on the third of items where Math 3.1's D is most negative. The uniform-partial-copy rival (Code 3.1's lowering spread over items independently of Math's) predicts about 0.33, and at most about 0.45 with shared item effects. The veto mechanism predicts most of the sum.",
+   "recipe": "File: studies/rlneurons/results/wrongstep/math500-01/items.json (a list of 51 item objects). For each item and model name m in {base, code31, math31}, read models[m].lp_span and models[m].lp_control. D_m = (lp_span_m - lp_control_m) - (lp_span_base - lp_control_base). Drop any item where any of these six numbers is missing or null. Sort the kept items by D_math31 ascending, ties broken by problem_index ascending, then by sample ascending. T = the first floor(n/3) items of that order, where n = number of kept items. Statistic C = (sum of D_code31 over T) / (sum of D_code31 over all kept items). If the denominator is >= 0, C is undefined and counts as refuted.",
+   "unit": "fraction of summed D",
+   "value": 0.72,
+   "low": 0.48,
+   "high": 1.05,
+   "refuted_by": "C below 0.45, or C undefined",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m08/p1.py",
+   "measured": 0.9786482311969817,
+   "n": 17,
+   "interval": [
+    0.6065578896336521,
+    2.0677269839166623
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.5874497879927469,
+   "not_computable": null,
+   "note": "File: studies/rlneurons/results/wrongstep/math500-01/items.json (in git; 51 items, all carry base/code31/math31 with float lp_span and lp_control, so no drops are expected). D uses whole-span summed log-probs, as the recipe says (same definition as metrics.json D.all). n = 51, so T = floor(51/3) = 17 items; n reported = 17 (the smaller group), groups line gives 17 and 51. Ties sorted by (D_math31, problem_index, sample). Other reading (alt_measured): the share of Code 3.1's lowering only, i.e. the same ratio with each D_code31 replaced by min(D_code31, 0), since 'lowering' could mean the negative part rather than the signed sum. In the signed reading positive D_code31 items outside T shrink the denominator and can push C above 1. Bootstrap resamples items (with replacement), re-sorts and re-takes floor(n/3) each time; a resample with denominator >= 0 is set to -inf (undefined counts as refuted). C can be unstable because the denominator is a sum of mixed-sign numbers.",
+   "example_row": {
+    "problem_index": 217,
+    "sample": 1,
+    "label": "slip",
+    "span_tokens": 44,
+    "position": 0.006,
+    "models": {
+     "base": {
+      "lp_span": -18.59762317679997,
+      "lp_control": -23.409592756984495,
+      "lp_head": -1.3556852244510083,
+      "lp_head_control": -2.697694506671469
+     },
+     "code31": {
+      "lp_span": -21.10051676646981,
+      "lp_control": -24.386320407076564,
+      "lp_head": -1.8362311801029136,
+      "lp_head_control": -2.8485712489346042
+     },
+     "math31": {
+      "lp_span": -28.381188275438035,
+      "lp_control": -26.137957284245932,
+      "lp_head": -2.4454256072058342,
+      "lp_head_control": -3.1020165734153853
+     }
+    }
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Where the effect should not appear: Code 3.1's mean wrong-step lowering on items labelled wrong plan. A reader who spreads Code 3.1's overall -0.45 evenly expects about -0.45. The veto mechanism, which places Code 3.1 at Math's positions, and Math 3.1 is +0.03 on these items, expects about 0.",
+   "recipe": "File: studies/rlneurons/results/wrongstep/math500-01/items.json. D_code31 per item as in the first recipe (models base and code31, lp_span and lp_control; drop items with any of the four missing or null). Keep items whose label field, lowercased, contains the substring 'plan'. Statistic = arithmetic mean of D_code31 over the kept items. If no item is kept, the statistic is undefined and counts as refuted.",
+   "unit": "nats (mean D over items)",
+   "value": 0.0,
+   "low": -0.3,
+   "high": 0.3,
+   "refuted_by": "mean below -0.35 or above 0.35, or no wrong-plan item",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m08/p2.py",
+   "measured": -0.27313356644510706,
+   "n": 16,
+   "interval": [
+    -0.8404061926810729,
+    0.34718239801525036
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": -0.07350200024549829,
+   "not_computable": null,
+   "note": "Same file. Labels present: slip, misread, wrong_plan; 'plan' matches only wrong_plan (16 items per metrics.json). D_code31 = (lp_span - lp_control)_code31 - (lp_span - lp_control)_base, whole-span sums. n = number of kept items. Bootstrap over the kept items. Other reading (alt_measured): the same mean using the head-5-token fields lp_head / lp_head_control instead of the whole span, since result-faf15a also reports a head-5-tokens D. metrics.json already holds a stored code31 wrong_plan mean, which the script does not read; the script recomputes from items.",
+   "example_row": {
+    "problem_index": 18,
+    "sample": 3,
+    "label": "wrong_plan",
+    "span_tokens": 29,
+    "position": 0.011,
+    "models": {
+     "base": {
+      "lp_span": -25.06160712129349,
+      "lp_control": -15.25506742524869,
+      "lp_head": -7.558160781860352,
+      "lp_head_control": -2.543309436552809
+     },
+     "code31": {
+      "lp_span": -23.463611993167433,
+      "lp_control": -15.911116948451381,
+      "lp_head": -6.851278483867645,
+      "lp_head_control": -2.649642715072623
+     }
+    }
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Where a veto cannot create a path: Code 3.1 cue single-sample accuracy on the MATH-500 problems where the cued base is right in none of its 4 stored samples. A veto removes the base's sampled wrong steps but installs no new solution route, so Code 3.1 should stay near a fresh base sample there and well below RL's own rate.",
+   "recipe": "File: studies/rlneurons/results/axis/math500-01/vectors.json. Use arms 'base_cue_s0', 'base_cue_s1', 'base_cue_s2', 'base_cue_s3' and 'code_cue' (Code-RL 3.1, cue), each a v3 0/1 vector aligned to problem_indices (cap hits are already 0). For each position, k = sum of the four base_cue_s arms. Set Z = positions with k == 0. Statistic = (sum of code_cue over Z) / |Z|. A missing or null entry counts as 0. If Z is empty, the statistic is undefined and counts as refuted.",
+   "unit": "fraction of problems",
+   "value": 0.18,
+   "low": 0.06,
+   "high": 0.33,
+   "refuted_by": "statistic above 0.36, or undefined",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m08/p3.py",
+   "measured": 0.2727272727272727,
+   "n": 33,
+   "interval": [
+    0.15151515151515152,
+    0.3939393939393939
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": null,
+   "not_computable": null,
+   "note": "File: studies/rlneurons/results/axis/math500-01/vectors.json (in git; 500 problems, v3 0/1 vectors per arm). Arms base_cue_s0..s3 and code_cue (Code-RL 3.1 cue). Z = positions where the four base_cue samples sum to 0; null/missing entries count as 0 (none were seen in a format check). Statistic = mean code_cue over Z, n = |Z|, bootstrap over Z positions. Recipe is unambiguous so alt_measured is None. Caveat: code_cue is one sample, and Z is chosen by the same base samples, so it includes problems where the base can solve the problem but missed 4 times (selection on base failure), which pushes the rate up relative to a fresh base sample.",
+   "example_row": {
+    "problem_index": 9,
+    "unique_id": "test/prealgebra/1139.json",
+    "base_cue_s0": 0,
+    "base_cue_s1": 0,
+    "base_cue_s2": 0,
+    "base_cue_s3": 0,
+    "code_cue": 0
+   }
+  }
+ ]
+}

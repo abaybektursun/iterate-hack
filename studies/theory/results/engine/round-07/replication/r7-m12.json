@@ -1,0 +1,15 @@
+{
+ "theory": "r7-m12",
+ "items": [
+  {
+   "k": 1,
+   "experiment": "Mechanism test: per-problem gain of the RL-written-examples arm (draw 1) over the mean of the 4 cued-base samples, averaged over problems in the subjects of example problems 0-2, minus the same average over all other subjects. The register-transfer rival (gain spread in proportion to base errors) predicts about 0.015; subject confinement predicts about 0.08.",
+   "original": -0.018489574809335205,
+   "replicated": -0.018489574809335205,
+   "status": "replicated",
+   "refuted_by_met": false,
+   "script": "replication/r7-m12/p1.py",
+   "not_computable": null
+  }
+ ]
+}

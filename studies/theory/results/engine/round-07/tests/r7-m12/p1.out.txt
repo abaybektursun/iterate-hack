@@ -1,0 +1,2 @@
+{"groups": {"matched (algebra,intermediate_algebra,precalculus)": 274, "unmatched": 223}}
+{"measured": -0.018489574809335205, "n": 223, "interval": [-0.05767259056732741, 0.021835075493612084], "interval_kind": "bootstrap", "refuted_by_met": true, "alt_measured": -0.017677551295597067, "not_computable": null, "example_row": {"problem_index": 3, "unique_id": "test/number_theory/572.json", "subject": "number_theory", "matched": false, "R": 1, "base_cue_s0": 1, "base_cue_s1": 1, "base_cue_s2": 1, "base_cue_s3": 1, "b": 1.0, "g": 0.0}}

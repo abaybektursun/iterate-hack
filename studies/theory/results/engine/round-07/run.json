@@ -1,0 +1,97 @@
+{
+ "commit": "034b01a",
+ "code_note": "round.py version 7.1 (main 6b21139 / branch theory 87d2d4f, owner abaybektursun), unchanged",
+ "work": "work-466a39 (taken over from work-8fd317)",
+ "spec": "studies/theory/specs/SPEC_round07.md (abaybektursun, before the run)",
+ "cutoff": "2026-11-15T09:09:43",
+ "command": "sh studies/theory/jobs/round.sh studies/theory/results/engine/round-07 --version 7 --cutoff 2026-11-15T09:09:43 --skip gpuprice --skip \"theory round\" --skip \"theory skill\" --skip \"Theory engine\" --from studies/theory/results/engine/round-06",
+ "runs": "one run, exit 0",
+ "items_before": 172,
+ "items_after": 26,
+ "graveyard": 61,
+ "theories_carried": [
+  "r5-m03-rival",
+  "r6-account-rival",
+  "r6-m06"
+ ],
+ "mechanisms": 12,
+ "abandoned": 5,
+ "abandoned_names": [
+  "r7-m01",
+  "r7-m02",
+  "r7-m04",
+  "r7-m06",
+  "r7-m10"
+ ],
+ "theories_new": 7,
+ "offline_predictions": 27,
+ "computed": 24,
+ "inside": 16,
+ "within_noise": 6,
+ "outside": 2,
+ "not_computable": 3,
+ "not_computable_causes": {
+  "field n_tok_p_lt_1e2 absent from stored hard328 rows (r6-m06, carried untested a second time)": 3
+ },
+ "states": {
+  "r5-m03-rival": "survives",
+  "r6-account-rival": "no gain",
+  "r6-m06": "untested",
+  "r7-m03": "refuted",
+  "r7-m05": "no gain",
+  "r7-m07": "no gain",
+  "r7-m08": "no gain",
+  "r7-m09": "no gain",
+  "r7-m11": "no gain",
+  "r7-m12": "refuted"
+ },
+ "gain": {
+  "r5-m03-rival": 0,
+  "r6-account-rival": 0,
+  "r6-m06": 0,
+  "r7-m03": -2.44,
+  "r7-m05": -0.3,
+  "r7-m07": -1.84,
+  "r7-m08": -0.52,
+  "r7-m09": -4.0,
+  "r7-m11": -1.09,
+  "r7-m12": -2.74
+ },
+ "duel": {
+  "survivors": 1,
+  "duel_tests_computed": 6,
+  "separating": 1,
+  "states": {
+   "r5-m03-rival": "not separated from rival"
+  },
+  "note": "the duel of r5-m03-rival is the round-06 duel carried and re-scored under the 7.1 rule; 5 of 5 decisive numbers replicated"
+ },
+ "reviews": {
+  "r5-m03-rival": "weak"
+ },
+ "experiments": {
+  "open": 1,
+  "top": "r5-m03-rival:rival:intervention, vote over 4 cued samples with a plain-sample tie-break, both sides predict 450 of 500 (separation 0.00 nats), best known base-only count 454"
+ },
+ "hypotheses": {
+  "G1": "holds: 55 minutes (13:18:47Z to 14:13:54Z)",
+  "G2": "refuted: 5 of 12 developers abandoned their mechanism",
+  "G3": "refuted: 0 duels with 2 or more separating tests",
+  "G4": "refuted: the one open experiment predicts 450, below the best known 454",
+  "G5": "refuted: r5-m03-rival stays not separated; r6-account-rival is 'no gain'"
+ },
+ "jobs_total": 37,
+ "jobs_note": "'done in' lines of the log; send-backs not counted",
+ "longest_job_s": {
+  "inventory": 826,
+  "external": 808,
+  "mechanisms": 497,
+  "develop": 374,
+  "test": 321
+ },
+ "wall_time": "55 minutes, 2026-11-15T13:18:47Z to 14:13:54Z; inventory.md and external.md both present after 828 s",
+ "log": "studies/theory/results/engine/round-07/round07.log",
+ "temp_folder": "/var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/theory-round-3pz5of34",
+ "row_files": "runs/theory-tests/ (not committed)",
+ "steps_not_run": "the open experiment (stored rows only, about 1 minute) was not run"
+}

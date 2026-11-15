@@ -1,0 +1,67 @@
+{"id": "t01", "what": "Olmo-3-1025-7B base + opening cue, harder 328, T 1.0 / top-p 1.0, seed 3000000, grader v3, 100 loop neurons zeroed; problems right", "unit": "right of 328"}
+{"id": "t02", "what": "Olmo-3-1025-7B base + opening cue, harder 328, T 1.0 / top-p 1.0, seed 3000000, grader v3, 1,000 loop neurons zeroed; problems right", "unit": "right of 328"}
+{"id": "t03", "what": "Same cell (T 1.0, 100 loop neurons zeroed): cap hits among 328 answers", "unit": "cap hits of 328"}
+{"id": "t04", "what": "Same cell (T 1.0, 1,000 loop neurons zeroed): cap hits among 328 answers", "unit": "cap hits of 328"}
+{"id": "t05", "what": "Same cell (T 1.0, 100 loop neurons zeroed): mean tokens per problem", "unit": "tokens per problem"}
+{"id": "t06", "what": "Same cell (T 1.0, 1,000 loop neurons zeroed): mean tokens per problem", "unit": "tokens per problem"}
+{"id": "t07", "what": "Olmo-3-1025-7B base + cue, harder 328, T 0.6 / top-p 1.0, grader v3, 100 loop neurons zeroed; problems right", "unit": "right of 328"}
+{"id": "t08", "what": "Same T 0.6 cell with 100 loop neurons zeroed: loops", "unit": "loops of 328"}
+{"id": "t09", "what": "xreward trace: ratio of base MLP-input drive on the 8 input directions of Math 3.1 difference vs random subspace with same singular values, lowest layer band", "unit": "times"}
+{"id": "t10", "what": "Same ratio for Math 3.1 difference, highest layer band", "unit": "times"}
+{"id": "t11", "what": "Same ratio for Code 3.1 difference, lowest layer band", "unit": "times"}
+{"id": "t12", "what": "Same ratio for Code 3.1 difference, highest layer band", "unit": "times"}
+{"id": "t13", "what": "Same ratio for IF difference, lowest layer band", "unit": "times"}
+{"id": "t14", "what": "Same ratio for IF difference, highest layer band", "unit": "times"}
+{"id": "t15", "what": "Ratio of drive at Wait/Hmm/perhaps positions to other positions, base on its own 328 hard328 answers", "unit": "ratio"}
+{"id": "t16", "what": "Ratio of drive at So/Therefore/Then positions to other positions", "unit": "ratio"}
+{"id": "t17", "what": "Swarm cue config through the Karpathy-arm runner, 100 dev MATH-500 problems, grader v3; problems right", "unit": "right of 100"}
+{"id": "t18", "what": "Same run: mean tokens per problem", "unit": "tokens per problem"}
+{"id": "t19", "what": "Olmo-3-1025-7B base + hand-written edit of layer-31 mlp.down_proj (6.6% of its norm), MATH-500 n=500, plain prompt, T 1.0 / top-p 1.0, grader v3, 1 sample", "unit": "right of 500"}
+{"id": "t20", "what": "Same edit with random values in place of the hand-written ones, MATH-500 n=500, plain prompt, T 1.0 / top-p 1.0, grader v3", "unit": "right of 500"}
+{"id": "t21", "what": "Hand-written edit minus random-valued edit, MATH-500 n=500, T 1.0, grader v3", "unit": "points"}
+{"id": "t22", "what": "Base + top-8 directions copied from RL, MATH-500 n=500, plain prompt, T 1.0 / top-p 1.0, grader v3", "unit": "right of 500"}
+{"id": "t23", "what": "Hand-written edit minus prefilled cue base (T 1.0), MATH-500 n=500, paired, grader v3", "unit": "points"}
+{"id": "t24", "what": "Hand-written edit minus top8 copied from RL, MATH-500 n=500, grader v3", "unit": "points"}
+{"id": "t25", "what": "Hand-written edit minus RL (Olmo-3.1-7B-RL-Zero-Math), MATH-500 n=500, T 1.0, grader v3", "unit": "points"}
+{"id": "t26", "what": "Hand-written edit, MATH-500, plain prompt, T 1.0: mean tokens per problem", "unit": "tokens per problem"}
+{"id": "t28", "what": "Share of plain T 0.6 answers of RL step 100 that open with 'line', MATH-500", "unit": "percent"}
+{"id": "t29", "what": "Think-SFT (cue), MATH-500 n=500: number of cap hits", "unit": "cap hits of 500"}
+{"id": "t30", "what": "Ratio of base revision rate after 'Wait' to RL's rate, MATH-500 stored rows", "unit": "ratio"}
+{"id": "t31", "what": "Median log ratio of base wrong-sample length to right sibling length on MATH Levels 1-3, cued base", "unit": "log ratio"}
+{"id": "t32", "what": "Base minus RL share of answers boxing a number from the problem statement, MATH-500", "unit": "share difference"}
+{"id": "t33", "what": "Per-sample solve rate of the cued base on RL-only problems (fresh independent samples), MATH-500 T 1.0", "unit": "rate"}
+{"id": "t34", "what": "Accuracy difference of Code-RL 3.1 marked answers (code-style markers) versus unmarked, MATH-500 T 1.0 grader v3", "unit": "accuracy difference"}
+{"id": "t35", "what": "Olmo-3 Code 3.0 (cue), MATH-500 n=500, T 1.0, grader v3: cap hits", "unit": "cap hits of 500"}
+{"id": "t36", "what": "Fraction of Code 3.1's lead over Code 3.0 (cue, MATH-500 T 1.0, v3) lying in the longest quartile by RL answer length", "unit": "fraction"}
+{"id": "t37", "what": "Code 3.0 cue right on the shorter half (250 problems by RL answer length), MATH-500 T 1.0 v3", "unit": "right of 250"}
+{"id": "t38", "what": "Code 3.1 cue right on the shorter half (250 problems by RL answer length), MATH-500 T 1.0 v3", "unit": "right of 250"}
+{"id": "t39", "what": "Code 3.0 cue minus cued base on the longest quartile by RL answer length, MATH-500 T 1.0 v3", "unit": "problems"}
+{"id": "t40", "what": "Of 17 problems RL solves and cued base missed 4 of 4, how many fresh independent base samples solve at least once", "unit": "of 17"}
+{"id": "t41", "what": "Base+top8 plain on MATH-500 T 1.0 v3: number of quick finished-wrong answers (at most 2,000 tokens)", "unit": "answers"}
+{"id": "t42", "what": "Think-SFT with cue on hard328 clean n=322, T 1.0, v3", "unit": "right of 322"}
+{"id": "t43", "what": "RL (Olmo-3.1-7B-RL-Zero-Math) plain on hard328 clean n=322, T 1.0, v3", "unit": "right of 322"}
+{"id": "t44", "what": "Cued base on hard328 clean n=322, T 1.0, v3", "unit": "right of 322"}
+{"id": "t45", "what": "Think-SFT cue minus RL plain on hard328 clean n=322, paired, T 1.0, v3", "unit": "points"}
+{"id": "t46", "what": "Think-SFT with cue on MATH-500 clean n=475, T 1.0, v3", "unit": "right of 475"}
+{"id": "t47", "what": "RL plain on MATH-500 clean n=475, T 1.0, v3", "unit": "right of 475"}
+{"id": "t48", "what": "Cued base on MATH-500 clean n=475, T 1.0, v3", "unit": "right of 475"}
+{"id": "t49", "what": "Think-SFT cue minus cued base on MATH-500 clean n=475, T 1.0, v3", "unit": "points"}
+{"id": "t50", "what": "Base + cue after signed self-training with vote as return (arm P), hard328, T 1.0 / top-p 1.0, v3, 1 sample", "unit": "right of 328"}
+{"id": "t51", "what": "Arm P (vote as return) cap hits on hard328, cue, T 1.0", "unit": "cap hits of 328"}
+{"id": "t52", "what": "Arm G (answer key as return) cap hits on hard328, cue, T 1.0", "unit": "cap hits of 328"}
+{"id": "t53", "what": "Arm P minus base cue on hard328 T 1.0, v3, paired", "unit": "points"}
+{"id": "t54", "what": "Arm P right among the 144 problems where both P and base cue finish, hard328", "unit": "right of 144"}
+{"id": "t55", "what": "Base + cue MATH-500, T 1.0 with T 0.6 only at forks: cap hits per 500", "unit": "cap hits per 500"}
+{"id": "t56", "what": "Base + cue MATH-500, T 1.0 with T 0.6 only at confident positions (entropy <= 0.9 nats): cap hits per 500", "unit": "cap hits per 500"}
+{"id": "t57", "what": "Base + cue MATH-500, plain T 1.0 / top-p 1.0: cap hits per 500 (mean)", "unit": "cap hits per 500"}
+{"id": "t58", "what": "Base + cue MATH-500, T 0.6 only at confident positions (entropy <= 0.9 nats), mean of 4 samples", "unit": "right of 500"}
+{"id": "t59", "what": "Base + cue MATH-500, T 0.6 only at forks minus plain T 1.0, paired/unpaired difference", "unit": "points"}
+{"id": "t60", "what": "Base + cue MATH-500, T 0.3 except 1,024 positions at T 1.0 after a repeat minus plain T 1.0", "unit": "points"}
+{"id": "t61", "what": "Base + RL-Math delta with 1 top singular direction per matrix, hard328, cue, T 1.0 / top-p 1.0, v3, seed 3000000", "unit": "right of 328"}
+{"id": "t62", "what": "Base + RL-Math delta with 8 top singular directions per matrix, hard328, cue, T 1.0, v3", "unit": "right of 328"}
+{"id": "t63", "what": "Base + RL-Math delta with 64 top singular directions per matrix, hard328, cue, T 1.0, v3", "unit": "right of 328"}
+{"id": "t64", "what": "Base + random rank-8 matched control, hard328, cue, T 1.0, v3", "unit": "right of 328"}
+{"id": "t65", "what": "Base + 8 directions of RL-Math delta at 2x scale, hard328, cue, T 1.0, v3: cap hits", "unit": "cap hits of 328"}
+{"id": "t66", "what": "Base + 8 directions at 2x scale, hard328, cue, T 1.0, v3: problems right", "unit": "right of 328"}
+{"id": "t67", "what": "RL-Math minus matched random rank-8, hard328, cue, T 1.0, v3: problems right", "unit": "right of 328"}
+{"id": "t68", "what": "Base + 8 directions of RL-Code 3.0 delta, hard328, cue, T 1.0, v3: cap hits", "unit": "cap hits of 328"}
