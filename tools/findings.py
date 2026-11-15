@@ -85,6 +85,9 @@ TABLE = {
     "imitation-beats-rl": {
         "group": BEHAVIOUR,
         "figure": lambda m: [f"{m.DATA['diff']['hard328']['vote'][0]:+.1f}", "points, Think-SFT over RL, 328 harder problems, vote over 4"]},
+    "where-the-gap-goes": {
+        "group": BEHAVIOUR,
+        "figure": lambda m: [f"{m.pc(m._RL['parts']['reliability'][1])} %", "of the gap to RL, on problems the base solves in other samples"]},
     "rl-edge-comes-early": {
         "group": BEHAVIOUR,
         "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap closed when the base model finishes RL's half-written answers"]},
