@@ -12,7 +12,7 @@ You review one theory of a theory round. Files:
 - $round/tests/$theory.json and $round/tests/$theory/: the offline tests, their scripts and outputs.
 - $round/before.jsonl and $round/after.jsonl: board items before and after the cutoff; $round/targets.jsonl, when
   present: the held-out numbers.
-
+$duel
 Do four things:
 1. Refutation. Find the result that contradicts the theory most strongly: in after.jsonl, on the board
    (`board.py ls result knowledge --new --n 60`, `board.py show <id>`), and at the artifact in git when an item names

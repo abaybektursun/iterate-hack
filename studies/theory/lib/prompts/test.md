@@ -2,8 +2,7 @@ You work in the repository at the current directory, on a laptop. Allowed: Read,
 reading and listing files and for fetching row files into runs/theory-tests/ (git ignores it). Never run a model
 forward pass, start a GPU job or download model weights. Write only into $out.
 
-$out/theory.json is a theory. $out/offline.json lists its offline predictions, each with k, experiment, recipe,
-value, low, high and refuted_by. $inventory lists the team's row files with the exact fetch command for each: S3
+$what $inventory lists the team's row files with the exact fetch command for each: S3
 needs `--profile $profile` (AWS_PROFILE is set to it), Modal Volume files come with `modal volume get`.
 
 For each offline prediction write one Python script, $out/tests/$theory/p<k>.py, that implements the recipe as
