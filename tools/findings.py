@@ -125,9 +125,8 @@ TABLE = {
         "group": NO_REWARD,
         "figure": lambda m: [f"{m.DATA['four_samples']['single_mean_at_16384']:.1f} → {m.DATA['four_samples']['single_mean_at_32768']:.1f}", "right of 328",
                              f"328 harder problems, one Think-SFT + cue sample (mean of 4), token limit raised from 16,384 to 32,768; the vote over 4 samples: {m.DATA['four_samples']['vote_at_16384']} → {m.DATA['four_samples']['vote_at_32768']}, not separated"],
-        "steps": lambda m: [step("Think-SFT + cue, 32,768\u00a0tokens", "free", m.DATA["four_samples"]["single_mean_at_32768"], m.DATA["n"],
-                                 f"{m.DATA['four_samples']['readout']}, mean of 4 samples at 32,768", "hard328"),
-                            step("Think-SFT + cue, 32,768\u00a0tokens, vote over 4 samples", "free", m.DATA["four_samples"]["vote_at_32768"], m.DATA["n"],
+        # one mark on the rail, the vote: a second mark for one sample at 32,768 tokens crowds the labels on a phone
+        "steps": lambda m: [step("Think-SFT + cue vote, 32,768\u00a0tokens", "free", m.DATA["four_samples"]["vote_at_32768"], m.DATA["n"],
                                  f"{m.DATA['four_samples']['readout']}, vote at 32,768", "hard328", vote=True)]},
     "where-the-gap-goes": {
         "group": ANSWERS,
