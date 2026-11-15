@@ -4675,7 +4675,7 @@ layer are edited (2 matrices), at 1.5; every later layer is the base. RMS shift,
 
 | Edit | Edited layer | At that layer | Next layer | Layer 12 | Layer 16 | Layer 24 | Growth to layer 24 |
 |---|---|---|---|---|---|---|---|
-| RL's paired directions | 0 | 0.0186 | 0.0267 | 0.0850 | 0.441 | 0.870 | 46.7 |
+| RL's paired directions | 0 | 0.0186 | 0.0267 | 0.0850 | 0.441 | 0.870 | 46.6 |
 | RL's inputs, random outputs | 0 | 0.0143 | 0.0142 | 0.0169 | 0.060 | 0.118 | 8.2 |
 | random | 0 | 0.0012 | 0.0012 | 0.0013 | 0.011 | 0.022 | 18.2 |
 | RL's paired directions | 8 | 0.0433 | 0.0560 | 0.0798 | 0.204 | 0.443 | 10.2 |
@@ -4708,6 +4708,30 @@ Branch `sharedsub` only. Weights only, `jobs/xlisten.py`, job `abaybektursun-111
   in layers 22 to 30. Being well read by the next layer is what top directions of the base do; RL's are less so, not more.
 - So the linear read gain (1.67 in squared norm, 1.29 in norm) does not account for run-04, where the base enlarged RL's written
   shift 3 to 6 times more than a random one. Not tested: attention routing and the MLP nonlinearity.
+
+#### xshift run-05 (SPEC_xshift amendment 5, work-864816): attention and MLP both answer RL's written directions about twice as strongly
+
+Branch `sharedsub` only. Job `abaybektursun-1115-171829-5934` (`--parts`; two earlier attempts ran out of GPU memory, smoke
+`...170619-dbf5`); `results/xshift/run-05/readout.json`. The six one-layer edits of run-04; per layer, the RMS change of what the
+layer's attention and its MLP add to the residual stream. The job checks on the base that each layer's output is its input plus
+these two additions.
+
+| One-layer write at 1.5 | Edited layer | Shift written | Next layer: attention change | MLP change | Attention per unit shift | MLP per unit shift |
+|---|---|---|---|---|---|---|
+| RL's paired directions | 0 | 0.0186 | 0.0180 | 0.0164 | 0.96 | 0.88 |
+| RL's inputs, random outputs | 0 | 0.0143 | 0.0066 | 0.0055 | 0.46 | 0.38 |
+| random | 0 | 0.0012 | 0.0003 | 0.0004 | 0.27 | 0.34 |
+| RL's paired directions | 8 | 0.0433 | 0.0337 | 0.0394 | 0.78 | 0.91 |
+| RL's inputs, random outputs | 8 | 0.0337 | 0.0175 | 0.0194 | 0.52 | 0.57 |
+| random | 8 | 0.0036 | 0.0013 | 0.0020 | 0.36 | 0.54 |
+
+- U1 refuted: for the paired write at layer 0 the attention change is the larger one in 2 of layers 1 to 12 (predicted at least
+  8); for the write at layer 8, in 0 of layers 9 to 20. The MLP additions change more, but not by much (0.0536 against 0.0348 at
+  layer 12).
+- U2 refuted narrowly: the random-output write stays below a third of the paired write's larger change in 9 of 12 layers
+  (predicted at least 10).
+- What holds in both layers: per unit of written shift, the next layer's attention and MLP each change 1.6 to 2.3 times more for
+  RL's written directions than for the same write with random outputs. No single sublayer type carries the growth.
 
 ## Drift: a switch to Chinese marks a cut-off Think-SFT answer but no label-free sign predicts one early (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-76a232, idea-e37da1)
 
