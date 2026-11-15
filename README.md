@@ -346,13 +346,15 @@ The home page is https://invariant.team (`tools/home.py`; the same Lambda, which
 `invariant.team`, and `/home` on any host). It leads to every page of the monitor: Findings, Board, Proof, Design, Talk
 (`/demo`), Papers, Lab, Exa, past.dev, GPU prices (gpu.invariant.team) and Psychosis. Its picture is a dial: a lit glass
 body with a ring around it and one bead per page. A click on a bead or the arrow keys turn the dial to a page
-(`/#<page>`); a click on the body or the button opens it. Beside the picture are one sentence with the Board's two live
-MATH-500 scores (the best untrained-base score and the best RL score in the `scores` rows of `/data`; no numbers before
-the first read), the button, and the same pages as a plain list of links in three groups (Findings, Papers, Talk, Team;
-Board, Design, Proof, Values; the rest under "Also"); on a phone the list comes before the picture.
+(`/#<page>`); a click on the body or the button opens it. Beside the picture are one sentence with the Board's live
+MATH-500 scores (the first and the best untrained-base score and the best RL score in the `scores` rows of `/data`; the
+words "a prompt cue and a vote" only when the best base row's configuration names them; no numbers before the first
+read), one line with the live number of people, the button, and the same pages as a plain list of links in three groups
+("Results": Findings, Papers, Talk; "How we work": Board, Design, Proof, Values, Team; the rest under "Also"); on a phone
+the list comes before the picture.
 About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
 line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and adds the
-link "All pages" to it after the four tabs; a page with no header gets a small link "Invariant" at the middle of its right edge; pinch
+link "All pages" to it after the four tabs, followed on a page that is none of the four tabs by that page's name (hidden at 400 px and below); a page with no header gets a small link "Invariant" at the middle of its right edge; pinch
 zoom is never switched off. An unknown address answers a short page with the header and links, and every address of invariant.team
 other than `/` and `/data` redirects to the monitor. The page `/team` (`tools/people.py`) lists the team: its three
 names are placeholders, each with the one line "Details to be added" until the people fill `PEOPLE` in; a filled field
@@ -637,7 +639,7 @@ session transcripts up to 05:25 UTC; the Exa dashboards hold the authoritative c
 with a 401 error, which is why the agents call the HTTP API. Early on, one person's agents had no Exa key and used another
 search tool. No count of GPU jobs avoided by a search exists.
 
-The page `/exa` (`tools/exa_page.py`; not a header tab, and its look is its own: white paper and one cyan marker) shows
+The page `/exa` (`tools/exa_page.py`; not a header tab; the site's tokens, typeface and header since 2026-11-15) shows
 four searches that changed a decision, and what the agents got from Exa up to Nov 15 15:29 UTC, without the number of
 calls. Its first screen is five numbers and one 3D scene of the four searches: a track with the stations Idea, Exa, GPU run and
 Board, a porcelain gate at Exa, and above it one dot for each of the 677 distinct pages Exa returned
@@ -691,7 +693,7 @@ memory before it starts an idea.
   output).
 - Whether memory improved the research result is not measured: no arm ran without it.
 
-The page `/pastdev` (`tools/pastdev.py`; not a header tab, and its look is its own: white paper and one blue for what
+The page `/pastdev` (`tools/pastdev.py`; not a header tab; the site's tokens, typeface and header since 2026-11-15; blue for what
 past.dev returned) shows this on its first screen: four usage numbers and two 3D scenes side by side. The first is the memory as a disc with one dot per stored source (854:
 616 paper findings, 227 board posts, 11 sessions), the agents that write behind it and the agents that read in front,
 the theory generator joined to the paper sector only. It replays four real reads (`/pastdev#read-1` is the read across

@@ -8,7 +8,9 @@ sentence, its quotes with their sources, and the line of AGENTS.md that states i
 sentence says what the six values are and what AGENTS.md is. A click on a bead,
 a name or a face, the arrow keys or the buttons at the bottom of the column select a value (address /values#speed).
 The prism sways a few degrees and leans toward the mouse; the tick ring drifts at its own slow rate. Nothing on the
-page is data and nothing replays. The text of each value is the person's own (2026-11-15), with typing errors fixed.
+page is data and nothing replays. The text of each value is the person's own (2026-11-15), with typing errors fixed; the
+lead of Speed is the first sentence of its line in AGENTS.md, because nothing on the site supports the sentence it
+replaced.
 """
 
 PAGE = r"""<!doctype html>
@@ -22,14 +24,15 @@ PAGE = r"""<!doctype html>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
 <style>
 /* The tokens, the light and the type of the Design page (architecture.py). --face is how much of a glass face hides
-   what is behind it: porcelain hides all of it, glass lets the inner rays show. */
+   what is behind it: porcelain hides all of it, glass lets the inner rays show. --far is the opacity of the farthest
+   bead and its name (the script reads it): higher on the light page, where a faint name loses its contrast. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #cbd2d8;
   --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
-  --glow: 0; --shadow: 1; --spec: 0; --bloom: .4; --core: var(--blue); --face: .97; --sheen: #ffffff; --sink: #101820;
+  --glow: 0; --shadow: 1; --spec: 0; --bloom: .4; --core: var(--blue); --face: .97; --sheen: #ffffff; --sink: #101820; --far: .66;
   --btn: linear-gradient(#27323e, #0d141b); --btn-ink: #f5f8fa; --btn-edge: rgba(255, 255, 255, .18); --btn-drop: rgba(16, 24, 32, .42);
 }
 @media (prefers-color-scheme: dark) {
@@ -38,7 +41,7 @@ PAGE = r"""<!doctype html>
     --blue: #8fb1ff; --red: #ff6b7c; --on-blue: #080c11;
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
     --rim-a: rgba(255, 255, 255, .92); --rim-b: rgba(255, 255, 255, .1); --rim-c: rgba(143, 177, 255, .45);
-    --glow: 1; --shadow: 0; --spec: 1; --bloom: 1; --core: #f6f9ff; --face: .74; --sheen: #ffffff; --sink: #000000;
+    --glow: 1; --shadow: 0; --spec: 1; --bloom: 1; --core: #f6f9ff; --face: .74; --sheen: #ffffff; --sink: #000000; --far: .5;
     --btn: linear-gradient(#f7fafc, #cbd5de); --btn-ink: #080c11; --btn-edge: rgba(255, 255, 255, .7); --btn-drop: rgba(0, 0, 0, .6);
   }
 }
@@ -62,7 +65,7 @@ a { color: inherit; }
 .top .name a, .top .name a:hover { color: var(--ink); }
 .top a { color: var(--mute); text-decoration: none; white-space: nowrap; transition: color .15s ease; }
 .top a:hover { color: var(--ink); }
-.here { margin-left: auto; color: var(--ink); font-weight: 600; white-space: nowrap; }
+.here { color: var(--ink); font-weight: 600; white-space: nowrap; }  /* the current page, after the last link */
 
 /* The picture */
 .stage { grid-column: 1; grid-row: 2; min-height: 0; min-width: 0; display: flex; padding: 8px 24px 0 0; }
@@ -123,14 +126,15 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
   grid-column: 2; grid-row: 2 / 4; min-width: 0; min-height: 0; overflow: hidden auto; scrollbar-width: thin;
   padding: clamp(20px, 5vh, 64px) 4px 24px 40px; border-left: 1px solid var(--rule);
 }
-.about { margin: 0 0 22px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); font-size: 13.5px; line-height: 1.45; color: var(--mute); max-width: 46ch; text-wrap: pretty; }
+.about { margin: 0 0 22px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); font-size: 13.5px; line-height: 1.45; color: var(--mute); text-wrap: pretty; }
+.about, .quotes, .rule { max-width: 396px; }  /* one width, so the column's hairlines end at the same place */
 .card { animation: rise .5s cubic-bezier(.2, .7, .2, 1) both; }
 .kick { margin: 0; font-size: 13px; color: var(--mute); font-weight: 500; }
 .kick b { color: var(--blue); font-weight: 650; }
 .title { margin: 6px 0 0; font-size: clamp(40px, 3.5vw, 62px); line-height: 1.02; font-weight: 300; font-stretch: 100%; letter-spacing: -.024em; max-width: 12ch; text-wrap: balance; }
 .lead { margin: 20px 0 0; font-size: clamp(17px, 1.24vw, 20px); line-height: 1.42; font-weight: 360; max-width: 34ch; text-wrap: pretty; }
 .lead + .lead { margin-top: 12px; }
-.quotes { list-style: none; margin: 26px 0 0; padding: 0; max-width: 46ch; }
+.quotes { list-style: none; margin: 26px 0 0; padding: 0; }
 .quotes li { padding: 16px 0 17px; border-top: 1px solid var(--rule); }
 .quotes .k { margin: 0 0 6px; font-size: 12.5px; font-weight: 600; color: var(--mute); }
 .quotes blockquote { margin: 0; font-size: 15.5px; line-height: 1.55; font-weight: 400; text-wrap: pretty; }
@@ -139,7 +143,7 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 .quotes .by b { color: var(--ink); font-weight: 600; }
 .quotes .by a { text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--faint); }
 .quotes .by a:hover { color: var(--ink); text-decoration-color: var(--blue); }
-.rule { margin: 4px 0 0; padding: 16px 0 0; border-top: 1px solid var(--ink); max-width: 46ch; }
+.rule { margin: 4px 0 0; padding: 16px 0 0; border-top: 1px solid var(--rule); }
 .rule h3 { margin: 0; font-size: 12.5px; font-weight: 600; color: var(--mute); }
 .rule p { margin: 4px 0 0; font-size: 14.5px; line-height: 1.5; color: var(--mute); }
 .nav { display: flex; align-items: center; gap: 10px; margin: 26px 0 8px; flex-wrap: wrap; }
@@ -151,7 +155,7 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
-  .stage { padding: 4px 0 0; display: block; }
+  .stage { padding: 4px 0 0; display: block; margin-inline: -16px; }  /* the picture runs to the screen's edges, so its names reach 12 px */
   svg { height: auto; }
   .side { border-left: 0; padding: 18px 0 0; overflow: visible; }
   .title { font-size: 42px; }
@@ -186,7 +190,7 @@ const $ = id => document.getElementById(id);
    line of AGENTS.md that states the value for the agents, word for word. */
 const VALUES = [
   { id: "speed", short: "Speed", title: "Speed",
-    lead: ["Across the AI labs, speed is recognized as the most important quality in a researcher."],
+    lead: ["Cycle time decides research output."],
     quotes: [{ q: "By far the best researchers I've seen, they all have the ability to try experiments really, really, really, really, really fast. That's cycle time at smaller scales. Cycle time separates people.", who: "Sholto Douglas" }],
     rule: "Cycle time decides research output. Prefer the experiment that answers in minutes over the one that answers in hours, and run it now." },
   { id: "enthusiasm", short: "Enthusiasm", title: "Enthusiasm",
@@ -231,7 +235,7 @@ const S = { sel: 0, rot: 0, to: 0, t: 30, last: 0, mx: 0, my: 0, lx: 0, ly: 0 };
    above and below the prism, so no name and no line ever crosses it. */
 function geo() {
   return narrow.matches
-    ? { w: 720, h: 486, cx: 360, cy: 258, a: 78, hh: 80, R: 222, D: 1700, pitch: 40, bead: 13, fs: 25, fn: 88, edge: 24 }
+    ? { w: 720, h: 486, cx: 360, cy: 258, a: 78, hh: 80, R: 222, D: 1700, pitch: 40, bead: 13, fs: 26, fn: 88, edge: -8 }
     : { w: 1000, h: 700, cx: 500, cy: 340, a: 106, hh: 108, R: 336, D: 2300, pitch: 37, bead: 8.5, fs: 16, fn: 84, edge: 1e4 };
 }
 let G = geo();
@@ -254,6 +258,7 @@ const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag)
 let E = {};
 function build() {
   G = geo();
+  G.far = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--far")) || .5;
   const svg = $("svg");
   svg.setAttribute("viewBox", `0 0 ${G.w} ${G.h}`);
   const stop = (o, c, a = 1) => `<stop offset="${o}" stop-color="${c}" stop-opacity="${a}"/>`;
@@ -428,11 +433,11 @@ function draw() {
     const ul = Math.hypot(ux, uy) || 1; ux /= ul; uy /= ul;
     const fs = G.fs * p[2], gap = r + 9, w = b.w * p[2];
     const tx = p[0] + ux * (gap + w / 2), cx = Math.max(w / 2 - G.edge, Math.min(G.w + G.edge - w / 2, tx));  // a name stays inside the page's edge
-    const clear = Math.sign(uy || 1) * Math.min(1, Math.abs(cx - tx) / gap) * (r + fs * .8);  // and, pushed in over its bead, moves above or below it
+    const clear = Math.sign(uy || 1) * Math.min(1, Math.abs(cx - tx) / gap) * (r + fs);  // and, pushed in over its bead, moves above or below it
     b.text.setAttribute("x", f(cx));
     b.text.setAttribute("y", f(p[1] + uy * (gap + fs * .55) + fs * .34 + clear));
     b.text.setAttribute("font-size", f(fs));
-    b.g.style.opacity = f(.5 + .5 * depth);
+    b.g.style.opacity = (G.far + (1 - G.far) * depth).toFixed(2);
   });
 
   /* The front face shows the selected value's number and name once the prism has turned to it. */
@@ -502,6 +507,7 @@ addEventListener("keydown", e => {
 addEventListener("popstate", () => select(fromHash(), false));
 addEventListener("pointermove", e => { if (e.pointerType === "mouse") { S.mx = e.clientX / innerWidth * 2 - 1; S.my = e.clientY / innerHeight * 2 - 1; } });
 narrow.addEventListener("change", build);
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", build);
 
 S.sel = fromHash(); S.rot = S.to = S.sel;
 build(); show();

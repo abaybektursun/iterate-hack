@@ -477,6 +477,23 @@ derail into off-topic text. The 37 cap hits have no loop (loop_A 0): they are st
   `abaybektursun-1115-092454-12d1`, 4 of 4 right). Raw answers (not committed): `runs/abaybektursun-1115-093138-81b3/` on the laptop of the run
   and `jobs/<job-id>.tar` in the team store.
 
+**cell-m29-01** (cells-01 entry m29, readout `m29-r1`; plan `specs/SPEC_cell_m29.md`; board idea-e9dfd5, work-290625, result-d82083).
+`allenai/Olmo-3-1025-7B` @ `a81bae42` + 2 x the top 8 singular directions per matrix of (`allenai/Olmo-3.1-7B-RL-Zero-Math` @ `364820b0` -
+base), written by `rlneurons/jobs/wsp_edit.py --recipe top8 --other math31 --scale 2 --rounding stochastic --seed 0`; opening cue, MATH-500
+(500), 1 sample, T 1.0 / top-p 1.0, seed 3,000,000 + index (the seed of the 1.5x cell; cells.md wrote 105,000,000), cap 16,384, grader v3.
+**448 of 500** (90 % bootstrap [437, 459]), 2 cap hits, 4,369 generated tokens per problem, 2 answers with no extractable answer. Paired with
+the 1.5x cell on the same seeds (`rlneurons/results/xreward/dial15_math500-01/`, 456): -8 problems [-16, 0], 17 right only at 1.5x, 9 right
+only at 2x. run-07/f2-m01 423 [410, 436] is refuted; run-04/f2-m06 455, run-05/f2-m01 449, run-05/f2-m02 455, run-08/f2-m01 450,
+r5-m03-rival 449 and both readers (445, 448) hold. Raw answers, 10 of the 52 wrong read: 6 finish with a confident structured write-up and a
+wrong boxed answer, 2 decay into word salad (problems 100, 103), 1 hits the cap while rechecking (problem 9), 1 is a format miss (`E` for
+`east`). The edit's added norm equals the stored hard328 2x edit (2.538); the written norm differs in the fourth digit because the stochastic
+rounding draws differ on another GPU.
+- Files: `analysis/cell_m29.py` (readout, paired against the 1.5x rows); outputs `results/experiments/cell-m29-01/` (`run.json` with job and
+  commit, `metrics.json`, `per_problem.json`, `examples.json`); the count is in `results/forecast/cells-01/measured.json`.
+- Job `abaybektursun-1115-094140-e5b5` (vast.ai, commit `620faa0`, command in `run.json`; a 4-problem 1,024-token smoke run first,
+  `abaybektursun-1115-092654-c975`, 2 of 4 right). Raw answers (not committed): `runs/abaybektursun-1115-094140-e5b5/` on the laptop of the
+  run and `jobs/<job-id>.tar` in the team store.
+
 **selfopen-01** (round-05 entry `r5-m10:theory:intervention`; plan `specs/SPEC_selfopen01.md`). Rejection sampling on the plain base's own
 opening, no prefilled tokens: per problem up to 32 openings of 24 tokens, keep the first with '\nOkay' in its first 60 characters, continue it
 to 16,384 tokens (T 1.0 / top-p 1.0, grader v3). **411 of 500** (cap hits 20, 3,795 tokens per answer), against the stored plain T3 224 and the

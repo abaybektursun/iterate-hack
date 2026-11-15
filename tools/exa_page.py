@@ -1,7 +1,8 @@
 """The page /exa: how the team's agents used Exa search, counted from the session transcripts.
 
 Numbers: studies/metaharness/results/exa_count-01/summary.json (studies/metaharness/analysis/exa_count.py).
-Not a header tab, and its look is its own (white paper, one cyan marker), by the person's choice.
+Not a header tab. It uses the site's tokens, header and type (architecture.py), in both themes; the one accent,
+--blue, marks the passage Exa returned.
 The first screen is the 3D scene plus five numbers, each read from studies/metaharness/results/exa_count-01/summary.json
 or the theory rounds as before. The scene replays four real cases, and its dot count 677 comes from
 summary.json `distinct_urls_in_search_results`.
@@ -12,145 +13,177 @@ PAGE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Exa in the Swarm</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
 <style>
-/* Idea: the query is the headline, and the only color on the page is the marker on the passage Exa returned.
-   Refused: stat tiles, tagged cards, a blue accent. One rule weight, no radius, one motion (the marker stroke). */
+/* The tokens, the header and the type of the Design page (architecture.py). The page's own colour names are mapped
+   onto the tokens, so the scene and the words follow both themes. The one accent is --blue: what Exa returned. */
 :root {
-  color-scheme: light;
-  --paper: #fbfcfc; --ink: #0b0d0e; --soft: #555d61; --rule: #0b0d0e; --hair: #cfd5d7; --marker: #6fe6f7;
-  --porc-hi: #ffffff; --porc: #eff2f3; --porc-mid: #e1e6e8; --porc-lo: #c4ccd0; --porc-rim: #8c979b; --porc-edge: #5d686d;
-  --display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
-  --text: "Newsreader", Georgia, "Times New Roman", serif;
-  --code: ui-monospace, Menlo, Consolas, monospace;
-  --gut: max(20px, env(safe-area-inset-left, 0px));
+  color-scheme: light dark;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
+  --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
+  --pl: .56; --pc: .15; --dim: .16;
+  --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
+  --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
+  --glow: 0; --shadow: 1; --spec: 0; --bloom: .4; --core: var(--blue); --lift: 38%;
+  --btn: linear-gradient(#27323e, #0d141b); --btn-ink: #f5f8fa; --btn-edge: rgba(255, 255, 255, .18); --btn-drop: rgba(16, 24, 32, .42);
+  --soft: var(--mute); --marker: var(--blue);
+  --porc-hi: var(--glass-hi); --porc: var(--glass); --porc-mid: color-mix(in srgb, var(--glass), var(--glass-lo)); --porc-lo: var(--glass-lo);
+  --porc-rim: var(--faint); --porc-edge: var(--mute);
 }
-* { box-sizing: border-box }
-html { scroll-behavior: smooth }
-body { margin: 0; background: var(--paper); color: var(--ink); font: 400 19px/1.5 var(--text) }
-.wrap { max-width: 1280px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)) }
-a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px }
-a:focus-visible { outline: 3px solid var(--marker); outline-offset: 3px }
-mark { color: inherit; background: linear-gradient(var(--marker), var(--marker)) no-repeat 0 0 / 100% 100%; padding: 0.04em 0.12em; margin: 0 -0.12em; -webkit-box-decoration-break: clone; box-decoration-break: clone }
-h1, h2, h3, .d { font-family: var(--display); margin: 0; letter-spacing: -0.02em; text-wrap: balance }
-p { margin: 0 }
-code { font: 0.78em var(--code) }
-.soft { color: var(--soft) }
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
+    --blue: #8fb1ff; --red: #ff6b7c; --on-blue: #080c11;
+    --pl: .78; --pc: .13; --dim: .24;
+    --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
+    --rim-a: rgba(255, 255, 255, .92); --rim-b: rgba(255, 255, 255, .1); --rim-c: rgba(143, 177, 255, .45);
+    --glow: 1; --shadow: 0; --spec: 1; --bloom: 1; --core: #f6f9ff; --lift: 55%;
+    --btn: linear-gradient(#f7fafc, #cbd5de); --btn-ink: #080c11; --btn-edge: rgba(255, 255, 255, .7); --btn-drop: rgba(0, 0, 0, .6);
+  }
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body {
+  margin: 0; color: var(--ink); background: var(--paper);
+  font: 400 15px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
+.top { display: flex; align-items: center; gap: 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+.name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
+.top a { color: var(--mute); text-decoration: none; white-space: nowrap; transition: color .15s ease; }
+.top a:hover { color: var(--ink); }
+html { scroll-behavior: smooth; }
+.wrap { max-width: 1840px; margin: 0 auto; padding: 20px 40px 56px; }
+mark { background: none; color: var(--blue); }
+.first h1, h2, .thesis { margin: 0; text-wrap: balance; font-weight: 300; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-stretch: 102%; letter-spacing: -.016em; }
+p { margin: 0; }
+code { font: inherit; font-weight: 600; }
+.soft { color: var(--soft); }
 
-nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 28px; padding-block: 18px; border-bottom: 2px solid var(--rule); font: 500 0.84rem var(--display) }
-nav b { font-weight: 700 }
-nav div { display: flex; flex-wrap: wrap; gap: 6px 22px }
-nav a { text-decoration: none }
-nav a:hover { text-decoration: underline }
+nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 26px; padding-top: 14px; font-size: 13px; color: var(--mute); }
+nav b { font-weight: 600; color: var(--ink); }
+nav div { display: flex; flex-wrap: wrap; gap: 6px 26px; }
+nav a { text-decoration: none; }
+nav a:hover { color: var(--ink); }
 
-.hero { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 44px 56px; padding-block: 44px 40px }
-.hero .ask p { font: 600 1.5rem/1.2 var(--display); letter-spacing: -0.015em; margin-bottom: 22px; max-width: 26em }
-.hero h2 { margin-bottom: 0; max-width: none; text-indent: -0.45em; padding-left: 0.45em; font-size: clamp(1.9rem, 3.5vw, 3.1rem); line-height: 1.04; font-weight: 600; overflow-wrap: anywhere }
-.answer { display: flex; flex-direction: column; gap: 22px; align-self: end }
-.step { border-top: 2px solid var(--rule); padding-top: 12px; display: flex; flex-direction: column; gap: 8px }
-.step .t { font: 600 0.92rem var(--display); font-variant-numeric: tabular-nums }
-.step .big { font-size: clamp(1.6rem, 2.5vw, 2.3rem); line-height: 1.2 }
-.step .src { font: 500 0.92rem var(--display) }
-.thesis { grid-column: 1 / -1; border-top: 2px solid var(--rule); padding-top: 18px; font: 600 clamp(1.5rem, 2.9vw, 2.5rem)/1.12 var(--display); letter-spacing: -0.02em }
-.hero mark { animation: stroke 0.9s 0.35s cubic-bezier(.3,.7,.2,1) backwards }
-@keyframes stroke { from { background-size: 0% 100% } }
-@media (prefers-reduced-motion: reduce) { .hero mark { animation: none } html { scroll-behavior: auto } .case, .case.on { transition: none } }
+.hero { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 44px 56px; padding-block: 44px 40px; }
+.hero .ask p { font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; margin-bottom: 22px; max-width: 34em; }
+.hero h2 { margin-bottom: 0; max-width: none; text-indent: -0.45em; padding-left: 0.45em; overflow-wrap: anywhere; }
+.answer { display: flex; flex-direction: column; gap: 22px; align-self: end; }
+.step { border-top: 1px solid var(--rule); padding-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+.step .big { font-size: clamp(20px, 1.56vw, 27px); line-height: 1.22; font-weight: 300; font-stretch: 102%; letter-spacing: -.012em; }
+.step .src { font-size: 13px; font-weight: 600; }
+.thesis { grid-column: 1 / -1; border-top: 1px solid var(--rule); padding-top: 18px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .case, .case.on { transition: none; } }
 
-section { padding-block: 56px; border-top: 2px solid var(--rule) }
-h2 { font-size: clamp(1.7rem, 3vw, 2.5rem); font-weight: 600; line-height: 1.08; margin-bottom: 28px; max-width: 32ch }
+section { padding-block: 56px; border-top: 1px solid var(--rule); }
+h2 { margin-bottom: 28px; max-width: 32ch; }
 
-.note { margin-top: 22px; max-width: 62ch; font-size: 1rem; color: var(--soft) }
+.note { margin-top: 22px; max-width: 76ch; font-size: 13.5px; color: var(--soft); }
 
 /* The first screen: the claim, five numbers on fine top rules, then the scene. Paddings stay tight so all of it fits 860px. */
-.top { padding-block: 22px 24px }
-.top h1 { font-size: clamp(1.9rem, 3.4vw, 3rem); font-weight: 600; line-height: 1.05; margin-bottom: 18px }
-.nums { list-style: none; margin: 0 0 22px; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0 28px }
-.nums li { border-top: 1px solid var(--rule); padding-top: 9px; display: flex; flex-direction: column; gap: 4px; min-width: 0 }
-.nums b { font: 600 clamp(1.8rem, 3vw, 2.7rem)/1 var(--display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums }
-.nums span { font: 400 0.9rem/1.3 var(--display); color: var(--soft) }
-.top .note { margin-top: 14px; max-width: 70ch; font-size: 0.9rem; line-height: 1.45 }
-.lbl { font: 600 0.84rem var(--display) }
-
+.first { padding-block: 22px 24px; }
+.first h1 { margin-bottom: 18px; }
+.nums { list-style: none; margin: 0 0 22px; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0 28px; }
+.nums li { border-top: 1px solid var(--rule); padding-top: 9px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.nums b { font-weight: 300; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-stretch: 102%; letter-spacing: -.016em; line-height: 1; }
+.nums span { font-size: 13.5px; line-height: 1.3; color: var(--soft); }
+.first .note { margin-top: 14px; line-height: 1.45; }
+.lbl { font-size: 13px; font-weight: 600; }
 
 /* The replay: one porcelain gate on a floor track, the 677 returned pages as a dot cloud above it. Drawn with our
    own projection; the caption column beside it holds the words. */
-.replay { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 28px 56px; align-items: start }
-.scene-wrap { margin: 0; min-width: 0 }
-.scene { position: relative; height: clamp(340px, 52vh, 520px); touch-action: pan-y }
-.scene canvas, .scene svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block }
-.key { margin-top: 10px; font: 400 0.9rem/1.45 var(--display); color: var(--soft); max-width: 60ch }
-.cases { display: flex; flex-direction: column; gap: 16px; min-width: 0 }
-.stack { display: grid }
-.case { grid-area: 1 / 1; display: flex; flex-direction: column; min-width: 0; visibility: hidden; opacity: 0; transition: opacity .3s ease, visibility 0s .3s }
-.case.on { visibility: visible; opacity: 1; transition: opacity .45s ease .1s, visibility 0s }
-.case .when { font: 600 0.95rem/1.35 var(--display); font-variant-numeric: tabular-nums; padding-bottom: 10px }
-.case .when span { display: block; font-weight: 400; color: var(--soft) }
-.blk { border-top: 1px solid var(--rule); padding-block: 10px 12px; overflow-wrap: anywhere; font-size: 0.95rem; line-height: 1.45 }
-.blk .cap { font: 600 0.84rem var(--display); margin-bottom: 4px }
-.blk .asked { font: 500 1.1rem/1.25 var(--display); letter-spacing: -0.01em }
-.pick { display: flex; gap: 10px }
-.pick button { appearance: none; min-width: 48px; height: 48px; padding: 0 14px; border: 1px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); font: 600 1rem var(--display); font-variant-numeric: tabular-nums; cursor: pointer }
-.pick button[aria-pressed="true"] { background: var(--ink); color: var(--paper) }
-.pick button:focus-visible { outline: 3px solid var(--marker); outline-offset: 3px }
-#sc text { font-family: var(--display); font-weight: 600; fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round }
-#sc .tube { fill: url(#sc-porc); stroke: var(--porc-rim); stroke-width: .7 }
-#sc .hi { fill: var(--porc-hi); opacity: .9 }
-#sc .sh { fill: var(--porc-lo); opacity: .4 }
-#sc .band { fill: var(--marker) }
-#sc .bandglow { fill: var(--marker); opacity: .25 }
-#sc .track { fill: var(--ink); opacity: .5 }
-#sc .pad { fill: none; stroke: var(--soft); stroke-width: .8 }
-#sc .trace { fill: none; stroke: var(--soft); stroke-width: 1; stroke-dasharray: 1.5 4 }
-#sc .shadow { fill: url(#sc-shade) }
-#sc .tok path { stroke: var(--porc-edge); stroke-width: .9; stroke-linejoin: round }
-#sc .tok.hollow path { stroke: var(--ink); stroke-width: 1.1; stroke-dasharray: 4 3 }
-#sc .tok .f0 { fill: var(--porc-hi) } #sc .tok .f1 { fill: var(--porc) } #sc .tok .f2 { fill: var(--porc-lo) } #sc .tok .f3 { fill: var(--porc-lo) } #sc .tok .f4 { fill: var(--porc-mid) }
-#sc .beam { fill: none; stroke: var(--marker); stroke-width: 3; stroke-linecap: round }
-#sc .beamcore { fill: none; stroke: color-mix(in oklch, var(--marker), var(--ink) 40%); stroke-width: 1.5; stroke-linecap: round }
-#sc .beamglow { fill: none; stroke: var(--marker); stroke-width: 7; stroke-linecap: round; opacity: .3 }
-#sc .head, #sc .lit { fill: var(--marker); stroke: var(--ink); stroke-width: .7 }
-#sc .glow { fill: url(#sc-glow) }
+.replay { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 28px 56px; align-items: start; }
+.scene-wrap { margin: 0; min-width: 0; }
+.scene { position: relative; height: clamp(340px, 52vh, 520px); touch-action: pan-y; }
+.scene canvas, .scene svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.key { margin-top: 10px; font-size: 13.5px; line-height: 1.45; color: var(--soft); max-width: 70ch; }
+.cases { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.stack { display: grid; }
+.case { grid-area: 1 / 1; display: flex; flex-direction: column; min-width: 0; visibility: hidden; opacity: 0; transition: opacity .3s ease, visibility 0s .3s; }
+.case.on { visibility: visible; opacity: 1; transition: opacity .45s ease .1s, visibility 0s; }
+.case .when { font-weight: 600; line-height: 1.35; padding-bottom: 10px; }
+.case .when span { display: block; font-weight: 400; color: var(--soft); }
+.blk { border-top: 1px solid var(--rule); padding-block: 10px 12px; overflow-wrap: anywhere; line-height: 1.45; }
+.blk .cap { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+.blk .asked { font-size: 17px; line-height: 1.3; font-weight: 380; }
+.pick { display: flex; gap: 6px; }
+.pick button { appearance: none; min-width: 44px; height: 44px; padding: 0 12px; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: none; color: var(--mute); font: inherit; font-weight: 600; cursor: pointer; }
+.pick button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--blue); }
+#sc text { font-weight: 600; fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round; }
+#sc .tube { fill: url(#sc-porc); stroke: var(--porc-rim); stroke-width: .7; }
+#sc .hi { fill: var(--porc-hi); opacity: .9; }
+#sc .sh { fill: var(--porc-lo); opacity: .4; }
+#sc .band { fill: var(--marker); }
+#sc .bandglow { fill: var(--marker); opacity: .25; }
+#sc .track { fill: var(--ink); opacity: .5; }
+#sc .pad { fill: none; stroke: var(--soft); stroke-width: .8; }
+#sc .trace { fill: none; stroke: var(--soft); stroke-width: 1; stroke-dasharray: 1.5 4; }
+#sc .shadow { fill: url(#sc-shade); }
+#sc .tok path { stroke: var(--porc-edge); stroke-width: .9; stroke-linejoin: round; }
+#sc .tok.hollow path { stroke: var(--ink); stroke-width: 1.1; stroke-dasharray: 4 3; }
+#sc .tok .f0 { fill: var(--porc-hi); } #sc .tok .f1 { fill: var(--porc); } #sc .tok .f2 { fill: var(--porc-lo); } #sc .tok .f3 { fill: var(--porc-lo); } #sc .tok .f4 { fill: var(--porc-mid); }
+#sc .beam { fill: none; stroke: var(--marker); stroke-width: 3; stroke-linecap: round; }
+#sc .beamcore { fill: none; stroke: color-mix(in oklch, var(--marker), var(--ink) 40%); stroke-width: 1.5; stroke-linecap: round; }
+#sc .beamglow { fill: none; stroke: var(--marker); stroke-width: 7; stroke-linecap: round; opacity: .3; }
+#sc .head, #sc .lit { fill: var(--marker); stroke: var(--ink); stroke-width: .7; }
+#sc .glow { fill: url(#sc-glow); }
 
-.asks { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 56px }
-.asks li { display: flex; flex-direction: column-reverse; break-inside: avoid; border-top: 1px solid var(--rule); padding-block: 14px 18px; font: 500 1.14rem/1.28 var(--display); letter-spacing: -0.01em }
-.asks time { display: block; font: 400 0.88rem var(--display); color: var(--soft); margin-top: 6px; font-variant-numeric: tabular-nums; letter-spacing: 0 }
+.asks { list-style: none; margin: 0; padding: 0; columns: 2; column-gap: 56px; }
+.asks li { display: flex; flex-direction: column-reverse; break-inside: avoid; border-top: 1px solid var(--rule); padding-block: 14px 18px; font-size: 16px; line-height: 1.36; }
+.asks time { display: block; font-size: 13px; color: var(--soft); margin-top: 6px; }
 
-.tw { overflow-x: auto }
-table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 1rem }
-th, td { text-align: left; vertical-align: top; padding: 14px 28px 14px 0; border-top: 1px solid var(--rule) }
-th { font: 600 0.9rem var(--display); border-top: 0; padding-top: 0 }
-td:first-child { font: 600 1.02rem var(--display); width: 22% }
-td:last-child { width: 26%; padding-right: 0 }
+.tw { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; }
+th, td { text-align: left; vertical-align: top; padding: 14px 28px 14px 0; border-top: 1px solid var(--rule); }
+th { font-size: 13px; font-weight: 600; border-top: 0; padding-top: 0; }
+td:first-child { font-weight: 600; width: 22%; }
+td:last-child { width: 26%; padding-right: 0; color: var(--soft); overflow-wrap: anywhere; }
+td:last-child code { font-weight: 400; }
 
-.limits { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px }
-.limits li { border-top: 1px solid var(--rule); padding-block: 14px 20px }
-.limits b { display: block; font: 600 1.08rem var(--display); margin-bottom: 4px }
-footer { border-top: 2px solid var(--rule); padding-block: 18px 48px; font: 400 0.84rem var(--display); color: var(--soft) }
+.limits { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 56px; }
+.limits li { border-top: 1px solid var(--rule); padding-block: 14px 20px; }
+.limits b { display: block; font-weight: 600; margin-bottom: 4px; }
+footer { border-top: 1px solid var(--rule); padding-top: 18px; font-size: 13px; color: var(--soft); }
 
-@media (max-width: 860px) {
-  body { font-size: 18px }
-  .hero { grid-template-columns: 1fr; gap: 32px; padding-block: 28px 32px }
-  .top { padding-block: 20px 28px }
-  .nums { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 20px }
-  section { padding-block: 40px }
-  .replay { grid-template-columns: 1fr; gap: 18px }
-  .scene { height: 320px }
-  table { min-width: 0 } tr { display: block; border-top: 1px solid var(--rule); padding-block: 12px } tr:first-child { display: none }
-  td, td:first-child, td:last-child { display: block; width: auto; border: 0; padding: 2px 0; overflow-wrap: anywhere }
-  .asks { columns: 1 }
-  .limits { grid-template-columns: 1fr }
+@media (max-width: 900px) {
+  .wrap { padding: 14px 16px 40px; }
+  .top { gap: 0 13px; padding-bottom: 2px; flex-wrap: wrap; }
+  .name { font-stretch: 112%; margin-right: 0; }
+  .hero { grid-template-columns: 1fr; gap: 32px; padding-block: 28px 32px; }
+  .first { padding-block: 20px 28px; }
+  .nums { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 20px; }
+  section { padding-block: 40px; }
+  .replay { grid-template-columns: 1fr; gap: 18px; }
+  .scene { height: 320px; }
+  table { min-width: 0; } tr { display: block; border-top: 1px solid var(--rule); padding-block: 12px; } tr:first-child { display: none; }
+  td, td:first-child, td:last-child { display: block; width: auto; border: 0; padding: 2px 0; overflow-wrap: anywhere; }
+  .asks { columns: 1; }
+  .limits { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 <div class="wrap">
 
+  <header class="top">
+    <h1 class="name">Invariant</h1>
+    <a href="/">Board</a>
+    <a href="/architecture">Design</a>
+    <a href="/proof">Proof</a>
+    <a href="/findings">Findings</a>
+  </header>
+
 <nav>
   <b>Exa in the Swarm</b>
   <div><a href="#searches">Four searches</a><a href="#story">One search</a><a href="#asked">How agents asked</a><a href="#wiring">Wiring</a><a href="#limits">Limits</a></div>
 </nav>
 
-<header class="top" id="searches">
+<div class="first" id="searches">
   <h1>Our agents ask Exa before they run an experiment.</h1>
   <ul class="nums">
     <li><b>61</b><span>agents and subagents searched</span></li>
@@ -201,7 +234,7 @@ footer { border-top: 2px solid var(--rule); padding-block: 18px 48px; font: 400 
     </div>
   </div>
   <p class="note">Read from the session transcripts on this laptop and in the team trace store, Nov 14, 21:37 to Nov 15, 15:29 UTC. $0.62 of the bill is read from the tool's own cost lines; the rest is estimated at $0.007 per search and $0.001 per page. Most of one teammate's sessions and every theory-engine run left no transcript, so the true figures are higher.</p>
-</header>
+</div>
 
 <section class="hero" id="story">
   <div class="ask">
@@ -397,7 +430,9 @@ function fitView(pts, w, h, fs) {
 
 const fig = document.getElementById("scene"), svg = document.getElementById("sc"), cvs = document.getElementById("sc-dots");
 if (!fig || !svg || !cvs) return;
-const ctx = cvs.getContext("2d"), NS = "http://www.w3.org/2000/svg", INK = "11,13,14";  // INK is the page's --ink
+const ctx = cvs.getContext("2d"), NS = "http://www.w3.org/2000/svg";
+const DARK = matchMedia("(prefers-color-scheme: dark)"), ink = () => getComputedStyle(document.documentElement).getPropertyValue("--ink").trim();
+let INK = ink();  // the dots are drawn on a canvas, which cannot read a token by itself
 const RM = matchMedia("(prefers-reduced-motion: reduce)");
 const PTS = cloud(), LIT = CASES.map(C => [...C.beams.map(b => nearest(PTS, b[1], b[2])), ...C.extra.map(e => nearest(PTS, e[0], e[1]))]);
 const f1 = v => v.toFixed(1);
@@ -407,7 +442,7 @@ const stop = (at, color, a) => `<stop offset="${at}" style="stop-color:${color}$
 
 svg.innerHTML = "<defs>" +
   `<radialGradient id="sc-porc" cx=".3" cy=".2" r=".95">${stop(0, "var(--porc-hi)")}${stop(.5, "var(--porc)")}${stop(1, "var(--porc-lo)")}</radialGradient>` +
-  `<radialGradient id="sc-shade">${stop(0, "var(--ink)", .2)}${stop(.55, "var(--ink)", .08)}${stop(1, "var(--ink)", 0)}</radialGradient>` +
+  `<radialGradient id="sc-shade">${stop(0, "var(--ink)", "calc(.2 * var(--shadow))")}${stop(.55, "var(--ink)", "calc(.08 * var(--shadow))")}${stop(1, "var(--ink)", 0)}</radialGradient>` +
   `<radialGradient id="sc-floor">${stop(0, "var(--ink)", .045)}${stop(1, "var(--ink)", 0)}</radialGradient>` +
   `<radialGradient id="sc-glow">${stop(0, "var(--marker)", .7)}${stop(1, "var(--marker)", 0)}</radialGradient>` +
   "</defs>";
@@ -498,7 +533,7 @@ const lean = { x: 0, y: 0, tx: 0, ty: 0 };
 function size() {
   const b = fig.getBoundingClientRect(), w = Math.max(1, b.width), h = Math.max(1, b.height), dpr = window.devicePixelRatio || 1;
   G = fitView(PTS, w, h, 14);
-  fs = Math.max(11, Math.min(16, 14 * G.s));
+  fs = Math.max(13.5, Math.min(16, 14 * G.s));  // the smaller labels are .92 of this: 12px or more
   G = fitView(PTS, w, h, fs);
   const s = G.s;
   svg.setAttribute("viewBox", `0 0 ${f1(w)} ${f1(h)}`);
@@ -517,9 +552,10 @@ function drawDots(E) {
   let kmin = Infinity, kmax = -Infinity;
   for (let i = 0; i < n; i++) { const p = proj(V, G, PTS[i]); P.push(p); kmin = Math.min(kmin, p[2]); kmax = Math.max(kmax, p[2]); }
   const span = kmax - kmin || 1, rs = Math.max(.6, G.s);
+  ctx.fillStyle = INK;
   for (let b = 0; b < 6; b++) {
     const q = b / 5;
-    ctx.fillStyle = `rgba(${INK},${(.13 + .45 * q).toFixed(3)})`;
+    ctx.globalAlpha = .13 + .45 * q;
     ctx.beginPath();
     for (const p of P) {
       if (Math.min(5, Math.round((p[2] - kmin) / span * 5)) !== b) continue;
@@ -528,6 +564,7 @@ function drawDots(E) {
     }
     ctx.fill();
   }
+  ctx.globalAlpha = 1;
 }
 
 function render(t, E) {
@@ -664,6 +701,7 @@ document.addEventListener("visibilitychange", go);
 const seen = () => { const r = fig.getBoundingClientRect(); onScreen = r.bottom > 0 && r.top < innerHeight; go(); };
 addEventListener("scroll", seen, { passive: true }); addEventListener("resize", seen); seen();
 RM.addEventListener("change", () => { still = RM.matches; if (still) drawStill(); else go(); });
+DARK.addEventListener("change", () => { INK = ink(); if (still) drawStill(); });
 
 size();
 const h0 = fromHash();
