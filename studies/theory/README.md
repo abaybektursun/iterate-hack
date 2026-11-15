@@ -461,6 +461,36 @@ draws), 3 never did (1 right).
 - Raw generations (not committed): `runs/abaybektursun-1115-021039-24f7/{s0,s2}`, `runs/ih-1115-095450-2b5a`, `runs/abaybektursun-1115-015601-2e73`
   on the laptop of the run; the AWS shard also in `s3://pg-lineage-769063704696/results/ih/ih-1115-095450-2b5a/out/`.
 
+**top8x4-01** (idea-7ca1fe, work-22359d; plan `specs/SPEC_top8x4.md`, written before any new row). Base + 1x the top-8 singular
+directions per matrix of the RL-Math weight change (`rlneurons/jobs/wsp_edit.py --recipe top8`), plain prompt, MATH-500, T 1.0 /
+top-p 1.0, cap 16,384, grader v3. 3 new samples per problem (seed 187,000,000 + 10,000 s + index) plus the stored sample of
+`rlneurons/results/wsp1/full500/top8_plain-01/`: 4 per problem, 2,000 samples. Short = 1,000 generated tokens or fewer. Solve bin =
+right answers of 4 of the cued base (`rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl`, attempt 0; bins 0-4 hold 33, 24, 28,
+98, 317 problems). **The smooth-blend prediction holds and the top-8 switch prediction (r5-m03-rival) is refuted: short samples are
+right 87.2 % of the time where the cued base solves 4 of 4 (252 of 289), and 81 % of short samples sit in that bin, which holds 63 %
+of all samples.**
+- Right per sample: 427 (stored), 426, 429, 445 of 500; cap hits 12, 14, 9, 13; mean tokens 3,962, 4,037, 3,810, 4,046.
+- Short share 17.8 % [15.7, 20.0] (356 of 2,000; 90 % bootstrap over problems). Predicted 10-15 % (P1a refuted).
+- Short accuracy 82.9 % [79.2, 86.2] (295 of 356). Predicted about 50 % (P1b refuted).
+- Short accuracy by bin 0-4: 0 of 5, 0 of 2, 8 of 14, 35 of 46, 252 of 289 (87.2 %): it rises with the bin, not flat (P1c refuted).
+  Long accuracy by bin: 34 of 127, 64 of 94, 66 of 98, 310 of 346, 958 of 979 (97.9 %).
+- Short samples per problem (0-4): 318, 88, 42, 24, 28 problems. 30.8 % of all problems have both a short and a long sample;
+  84.6 % of the 182 problems with a short sample also have a long one (P1d holds: short and long samples do share problems).
+- Thresholds: at 600 tokens 6.7 % short [5.7, 7.9], 62.7 % right (84 of 134), bin 4 71.0 % (76 of 107), bins 0-1 0 of 5; at
+  1,500 tokens 32.1 % short [29.3, 34.8], 89.2 % right (572 of 641), bin 4 92.3 % (488 of 529), bins 0-1 1 of 9. The 85 % line in
+  bin 4 holds at 1,000 and 1,500 tokens and fails at 600.
+- What the switch theory keeps: on bin-4 problems short samples are wrong 12.8 % of the time against 2.1 % for long ones. Of 44
+  short wrong new samples, 26 have no extracted answer (12 are empty, 2 tokens or fewer) and others continue the prompt, write code
+  with an invented output or a template without an answer (10 short samples read by hand): the plain base's formats, not wrong
+  math. One (`Answer: cot x`, gold `\cot x`) is scored wrong by v3 although it is right.
+- Caveat: the stored sample ran on an H100 and the new ones on RTX PRO 6000 boxes; the edit's `add_norm` is identical and its
+  BF16 stochastic rounding differs in the 6th digit of the written norm. Sample 0 alone gave the same picture (18.4 % short,
+  81.5 % right, bin 4 86.3 %).
+- Files: `analysis/top8x4.py` (readout; without `--runs` it reads the stored sample alone); outputs `results/experiments/top8x4-01/`
+  (`run.json` with the job ids, `metrics.json`, `per_problem.json`, `examples.json`: one short right and one short wrong new sample).
+- Raw generations (not committed): `runs/abaybektursun-1115-085111-e8c2`, `runs/abaybektursun-1115-085127-c0c4`,
+  `runs/abaybektursun-1115-085134-75f7` in the worktree `iterate-hack-top8x4` of the run, and `jobs/<job-id>.tar` in the team store.
+
 ## Round 06 (2026-11-15, cutoff 11-15 06:51:23 UTC, coordinator frustea)
 
 Plan `specs/SPEC_round06.md` (before the run), engine version 6.3 with `--account-from results/account/run-03`, work-a9a6dd, launched with
