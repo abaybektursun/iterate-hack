@@ -1,0 +1,40 @@
+# forecasts of run-02, scored for round-10
+
+Scored 2026-11-15T18:58:29 UTC. 9 of 17 targets measured. Gain: log density of the forecast minus log density of the equal mixture of reader-1 and reader-2 at the measured value, clipped to [-3, 3] nats.
+
+| forecaster | scored | inside interval | total gain | mean gain | outside both readers | of those inside |
+|---|---|---|---|---|---|---|
+| reader-1 | 9 | 6 | 0.27 | 0.03 | 0 | 0 |
+| reader-2 | 9 | 4 | -4.507 | -0.501 | 0 | 0 |
+| r5-m03-rival | 3 | 3 | 1.706 | 0.569 | 0 | 0 |
+| r6-account-rival | 0 | 0 | 0 | None | 0 | 0 |
+| r6-m06 | 0 | 0 | 0 | None | 0 | 0 |
+| r7-m05 | 0 | 0 | 0 | None | 0 | 0 |
+| r7-m08 | 0 | 0 | 0 | None | 0 | 0 |
+| r7-m11 | 0 | 0 | 0 | None | 0 | 0 |
+| f2-m01 | 6 | 4 | 5.101 | 0.85 | 3 | 3 |
+| f2-m02 | 4 | 1 | -8.624 | -2.156 | 1 | 0 |
+| f2-m03 | 5 | 2 | -5.446 | -1.089 | 3 | 0 |
+| f2-m04 | 3 | 2 | 1.431 | 0.477 | 0 | 0 |
+| f2-m05 | 3 | 1 | -5.885 | -1.962 | 1 | 0 |
+| f2-m06 | 4 | 2 | -0.2 | -0.05 | 0 | 0 |
+
+| target | measured | item | outside every interval |
+|---|---|---|---|
+| t01 | 418 | result-fad48d |  |
+| t02 | 1.8 | result-fad48d |  |
+| t03 | not posted yet |  |  |
+| t04 | not posted yet |  |  |
+| t05 | 156 | result-0c1eef |  |
+| t06 | not posted yet |  |  |
+| t07 | not posted yet |  |  |
+| t08 | not posted yet |  |  |
+| t09 | not posted yet |  |  |
+| t10 | 200.25 | result-95a4dc |  |
+| t11 | 214 | result-95a4dc |  |
+| t12 | 456 | result-95a4dc |  |
+| t13 | 84 | result-6e7b64 | yes |
+| t14 | 338 | result-6e7b64 |  |
+| t15 | 139 | result-6e7b64 |  |
+| t16 | not posted yet |  |  |
+| t17 | not posted yet |  |  |
