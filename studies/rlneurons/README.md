@@ -3311,6 +3311,117 @@ uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rln
 uv run --no-project --with numpy python -m studies.rlneurons.analysis.fresh_read --sft studies/rlneurons/results/fresh/sft1_cue_s4-01 --rl studies/rlneurons/results/fresh/rl_plain_s4-01 --base studies/rlneurons/results/fresh/base_cue_s4-01 --out studies/rlneurons/results/fresh/readout-01 --texts runs/fresh_sft1_cue_s4 runs/fresh_rl_plain_s4 runs/fresh_base_cue_s4
 ```
 
+## Vote at a cap of 32,768: doubling the cap adds 7 to 8 points to one sample and nothing separable to the vote over 4 (hard328 n = 328, fresh2026 n = 136, Think-SFT + cue, 4 samples, board work-dc9359, idea-01fe11)
+
+Question: one Think-SFT + cue sample gains 23 problems on the 328 when the cap goes from 16,384 to 32,768 generated tokens
+(section "Token cap 32,768"). Does the vote over 4 gain too, and is the higher cap a better use of tokens than more samples
+at the old cap? Answer: the vote does not gain separably. hard328: vote over 4 = 244 of 328 at 32,768 against 238 for the same
+answers cut at 16,384, +1.8 points [-0.9, +4.9]; one sample 232.8 against 210.8, +6.7 points [+5.0, +8.5]. fresh2026: vote 75
+of 136 against 73, +1.5 points [-2.9, +5.9]; one sample 70.2 against 59.0, +8.3 points [+5.5, +11.4]. The higher cap is the
+better use of tokens only below about 16,000 tokens per problem: one 32,768 sample (232.8 at 11,650 tokens) beats one 16,384
+sample drawn again after a cap hit (224.9 at 14,377), +2.4 points [+0.9, +4.0]. Spec and predictions, written before any job:
+`specs/SPEC_cap32vote.md` (commit `9d4ddf6`). T 1.0 / top-p 1.0, grader v3, no restarts, prompt `pair1` + cue.
+
+Method. Every answer is scored twice from the same text: as written at 32,768, and cut after its 16,384th generated token and
+graded by grader v3 as the cap hit a 16,384 run stores (`analysis/cap32vote.py`, `cut`). All differences are paired on these
+identical answers. The stored 16,384 runs cannot be paired: with the same seeds the text differs after a few hundred characters
+(2 of 944 finished hard328 rows and 0 of 284 fresh2026 rows have the stored run's tokens and answer), so they are a second,
+independent draw (hard328 vote 241, singles 209.0; fresh2026 vote 75, singles 60.0). The readout was tested on the stored
+16,384 rows with a planted cut at 8,192: the uncut view gave the stored 241 and 209.0. RL plain was not run at 32,768 with 4
+samples (its one-sample gain there is +0.6 points [0.0, 1.5]); RL's rows below are its stored 16,384 runs.
+
+| | hard328, cut at 16,384 | hard328, 32,768 | fresh2026, cut at 16,384 | fresh2026, 32,768 |
+|---|---|---|---|---|
+| one sample: the 4 samples; mean | 211, 212, 211, 209; 210.8 | 230, 234, 235, 232; 232.8 | 53, 61, 64, 58; 59.0 | 69, 70, 74, 68; 70.2 |
+| vote over 4 | 238 | 244 | 73 | 75 |
+| any of 4 right (pass@4) | 248 | 266 | 76 | 87 |
+| sequential vote, at most 4 (`seq4`): right (24 orders), tokens | 239.8, 30,807 | 245.2, 31,732 | 72.2, 43,509 | 75.8, 47,519 |
+| cap hits, share of samples | 368, 28.1 % | 6, 0.5 % | 260, 47.8 % | 1, 0.2 % |
+| precision of finished answers | 88.1 % (832 of 944) | 71.1 % (928 of 1,306) | 81.3 % (231 of 284) | 51.8 % (281 of 543) |
+| tokens per sample; per problem for the vote | 10,042; 40,169 | 11,650; 46,599 | 13,084; 52,336 | 15,900; 63,601 |
+| RL plain, stored 16,384 runs: one sample; vote | 200.0; 221 | | 50.5; 57 | |
+
+Differences in points, paired bootstrap over problems, 5,000 resamples (`results/cap32vote/*/readout.md` has every row):
+
+| | hard328 | fresh2026 |
+|---|---|---|
+| one sample, 32,768 minus 16,384 | +6.7 [+5.0, +8.5] | +8.3 [+5.5, +11.4] |
+| vote over 4, 32,768 minus 16,384 | +1.8 [-0.9, +4.9] | +1.5 [-2.9, +5.9] |
+| `seq4`, 32,768 minus 16,384 | +1.7 [-0.6, +4.1] | +2.6 [-1.3, +6.6] |
+| one sample at 32,768 minus one sample drawn again after a cap hit at 16,384 (`restart1`) | +2.4 [+0.9, +4.0] | +3.3 [+0.7, +6.2] |
+| one sample at 32,768 minus vote over 2 at 16,384 | +2.7 [+1.3, +4.3] | +3.3 [+0.7, +6.2] |
+| vote over 4 at 32,768 minus RL's stored vote | +7.0 [+3.7, +10.4] | +13.2 [+6.6, +19.9] |
+| vote over 4 at 16,384 (same answers) minus RL's stored vote | +5.2 [+1.8, +8.5] | +11.8 [+5.2, +18.4] |
+
+Subsets. hard328 without the 6 problems in Think-SFT's training prompts (n = 322): vote 238 against 232 (+1.9 [-1.2, +5.0]),
+one sample 226.8 against 205.0 (+6.8 [+5.0, +8.5]), RL's stored vote 215. fresh2026 published (AIME 2026 + HMMT Feb 2026,
+59): vote 31 against 29, one sample 28.0 against 22.8 (+8.9 [+4.7, +13.6]); transcribed (77): vote 44 against 44, one sample
+42.2 against 36.2 (+7.8 [+3.9, +12.0]).
+
+Token frontier (right over the 24 draw orders, generated tokens per problem). hard328: one sample at 32,768 232.8 at 11,650;
+at 16,384 (same answers) one sample 210.8 at 10,042, `restart1` 224.9 at 14,377, vote over 2 223.8 at 20,085, `seq3` 233.9 at
+25,972, `seq4` 239.8 at 30,807. So one 32,768 sample equals the 16,384 `seq3` at 45 % of its tokens, and the 16,384 rules pass
+it only from about 30,000 tokens. Above that the cap adds little: `seq4` 245.2 at 31,732 against 239.8 at 30,807, not separated.
+fresh2026: one 32,768 sample 70.2 at 15,900 against `restart1` 65.8 at 20,641, `seq3` 69.7 at 35,421 and `seq4` 72.2 at 43,509
+at 16,384.
+
+Post hoc, not in the spec, added after the hard328 rows were read (no score line; they need a held-out check): breaking ties
+to the shortest answer gives a vote over 4 of 252 at 32,768 against 246 at 16,384 on hard328 (+1.8 [-0.3, +4.0]) and 81
+against 75 on fresh2026 (+4.4 [0.0, +8.8]); a length gate (take a finished answer of at most 12,000 tokens at once, else draw
+until two agree, at most 4; suggested by the main session) gives 247.3 at 26,800 tokens against 239.9 at 25,674 on hard328 and
+76.2 at 43,598 against 71.8 at 39,053 on fresh2026.
+
+Hypotheses and predictions scored (`readout.json`, `predictions` and `hypotheses`; simulation `results/cap32vote/sim-01/`):
+
+- H1 (hard328 vote at least 250, gain over 16,384 with an interval above 0): refuted, 244 and +1.8 [-0.9, +4.9]. The offline
+  simulation predicted this: 239.5 [232, 248].
+- H2 (the gain is smaller under the vote than for one sample): held on both sets, +1.8 against +6.7 and +1.5 against +8.3.
+- H3 (larger one-sample gain on fresh2026): +8.3 [+5.5, +11.4] against +6.7 [+5.0, +8.5]; larger as predicted, the intervals
+  overlap, so not separated. Predicted +10.7.
+- H4 (one 32,768 sample above `restart1` at 16,384): held on both sets (table). Second part (no gain for `seq4` above about
+  26,000 tokens): held, +1.7 [-0.6, +4.1].
+- Simulation numbers: hard328 single 229.0 [224.5, 233.2] predicted, 232.8 observed; vote 239.5 [232, 248], 244; precision 70 %,
+  71.1 %; cap hits 0.6 %, 0.5 %; tokens 11,820, 11,650. fresh2026 vote 77.0 [71, 83], 75; precision 55 %, 51.8 %; single 74.5
+  [71.2, 78.0], 70.2: outside, the late answers are right less often there (50 of 260, 19 %, against 99 of 368, 27 %).
+- P5 (late wrong answers of one problem agree as often as stored wrong answers, 64 % and 75 %): refuted, 20.3 % of 261 pairs
+  and 13.0 % of 230. The simulation's vote was near the observed one for another reason than it assumed: see the rows below.
+- P7 (Chinese text in at least 20 % of the answers past 16,384): held, far above: 249 of 368 (68 %) and 196 of 260 (75 %).
+
+What the raw rows show (5 late right, 5 late wrong and all 7 answers still cut at 32,768 read; the four samples of 9 of the 13 problems
+where the vote changes from right to wrong printed):
+
+- Almost every cut answer finishes: 362 of 368 on hard328 (99 right, 27 %) and 259 of 260 on fresh2026 (50 right, 19 %). The
+  finished late answers end in a clean summary and a boxed answer, right or wrong.
+- Why the vote gains little. The late wrong answers do not agree with each other, but they are many: on a hard problem the
+  vote at 16,384 was one finished right answer and three abstentions; at 32,768 it is one right answer against three different
+  wrong ones, and a four-way tie goes to the lowest sample number. hard328 `76` (gold 468): 208, 364, 468, 312; `162`: 243,
+  1024, 20736, 1/576; fresh2026 `99`: two samples agree on the wrong 3 sqrt(3)/4 against one right. The vote changes wrong to
+  right on 15 and right to wrong on 9 problems of hard328 (6 and 4 on fresh2026). In the right-to-wrong cases the right answer
+  is the shortest one, which is why the post-hoc tie rule helps.
+- Long answers drift out of English. More than 20 Chinese characters: 249 of the 368 late answers on hard328 against 38 of the
+  944 that finish before 16,384; 42 of the 99 late right answers have them. The text mixes English, Chinese and some Russian
+  in one sentence and still computes.
+- The 7 answers still cut at 32,768: 3 are loops by the runner's rule A (one repeats the prompt's answer-format sentence, two
+  print a boxed answer and go on with tag-like text), 4 are mixed-language case work that has not converged.
+
+Jobs. Think-SFT built in each job by `wsp_edit --recipe interp --other think_sft --alpha 1.0`, `--max-tokens 32768` (vLLM
+context 34,816), commit `9d4ddf6`, commands in `specs/cap32vote_jobs.txt`. Smoke `abaybektursun-1115-071755-64d0` (fresh2026,
+10 problems: 8 right, two answers of 27,426 and 17,853 tokens, rows read). hard328: sample 0 is the cap32 job
+`abaybektursun-1115-005756-309b` (commit `1d9c97e`, seed 3000000); samples 1 to 3 as two shards each on vast.ai (RTX PRO 6000):
+`-082022-5d48` + `-093636-bb67`, `-082025-400e` + `-095405-4eec`, `-083537-f186` + `-100810-3922` (seeds 3010000, 3020000,
+3030000). fresh2026: samples 0, 2, 3 on vast.ai `-090519-e734`, `-082027-20e4`, `-094344-1848`; sample 1 on Modal H100
+`-151138-ecde` after vast.ai ran out of credit (seeds 7000000 + 10000 s). Raw answers:
+`s3://iterate-hack-team-769063704696/handoff/cap32vote/<job>/`. Run folders `results/cap32vote/{hard328,fresh2026}_sft1_cue_s4-01/`
+(`run.json`, `metrics.json`, `readout.json`, `readout.md`, `rows.jsonl` with both views, `examples.json`: one late right, one
+late wrong, one still cut), `sim-01/`.
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.cap32vote_sim
+uv run --no-project python -m studies.rlneurons.analysis.shard_join --runs runs/<shard 0> runs/<shard 1> --out runs/cap32vote_hard_s<k>
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.thinkvote_join --runs runs/<s0> runs/<s1> runs/<s2> runs/<s3> --out runs/cap32vote_<set>_s4
+uv run --no-project --with numpy --with math-verify==0.9.0 --with transformers==5.19.0 --with tokenizers==0.23.3 --with huggingface_hub --with jinja2 python -m studies.rlneurons.analysis.cap32vote --run runs/cap32vote_<set>_s4 --stored studies/rlneurons/results/<thinkvote/hard328_sft1_cue_s4-01 | fresh/sft1_cue_s4-01> --rl studies/rlneurons/results/<day1_3/hard328_rl_plain_s4r2-01 | fresh/rl_plain_s4-01> --out studies/rlneurons/results/cap32vote/<set>_sft1_cue_s4-01
+```
+
 ## Paper: The First Hundred Steps (`paper-first-steps/`, board work-184476)
 
 A 4-page paper: `paper-first-steps/the-first-hundred-steps.pdf`, served at

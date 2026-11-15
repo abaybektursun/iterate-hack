@@ -1,0 +1,190 @@
+== standing
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s2byvyng
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s2byvyng
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s2byvyng
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s2byvyng
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s2byvyng
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s2byvyng
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s2byvyng
+267 items before 2026-11-15T18:58:29, 48 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 67 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 67 at or after
+  running 1 jobs, 1 at a time
+231 items before 2026-11-15T14:53:16, 84 at or after
+  running 1 jobs, 1 at a time
+254 items before 2026-11-15T17:45:51, 61 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 67 at or after
+  running 1 jobs, 1 at a time
+295 items before 2026-11-15T20:38:56, 20 at or after
+  running 1 jobs, 1 at a time
+285 items before 2026-11-15T20:05:26, 30 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-12 (opus): done in 27 s
+248 items before 2026-11-15T16:32:52, 67 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-03 (opus): done in 47 s
+  forecast_score/measured-round-11 (opus): done in 46 s
+  forecast_score/measured-run-05 (opus): done in 47 s
+248 items before 2026-11-15T16:32:52, 67 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 67 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-02 (opus): done in 53 s
+  forecast_score/measured-run-04 (opus): done in 54 s
+  forecast_score/measured-round-09 (opus): done in 56 s
+  forecast_score/measured-round-10 (opus): done in 57 s
+  forecast_score/measured-run-06 (opus): done in 50 s
+  forecast_score/measured-run-07 (opus): done in 42 s
+  forecast_score/measured-run-08 (opus): done in 43 s
+315 items before 9999, 0 at or after
+  standing: 95 mechanisms, 93 scored, 44 carried, 18 to the graveyard; 290 forecasts written after their result, 0 measured rows not scored
+== direct facts
+  7 direct facts (1 hold)
+== surprises
+  14 surprises (7 outside every interval): studies/theory/results/wide/round-13/surprises.md
+== targets_open
+315 items before 9999, 0 at or after
+  running 1 jobs, 1 at a time
+  forecast_targets/targets (opus): done in 153 s
+  targets.json: 25 targets from 19 open work items, board snapshot 2026-11-15T21:27:03 UTC
+== direct_tests (carried)
+  running 5 jobs, 5 at a time
+  direct_test_plan/round-10-weights-m06 (opus): done in 68 s
+  direct_test_plan/round-09-grader-m01 (opus): done in 68 s
+  direct_test_plan/run-08-f2-m02 (opus): done in 71 s
+  direct_test_plan/round-09-training-m01 (opus): done in 89 s
+  direct_test_plan/run-08-f2-m06 (opus): done in 92 s
+  5 direct-test plans for carried mechanisms
+== propose
+Traceback (most recent call last):
+  File "/Users/abaybektursun/projects/iterate-hack-theory/studies/theory/lib/forecast.py", line 1040, in <module>
+    {"round": lambda: wide_round_v10(a.folder, a.runs, a.propose or 6) if a.propose_wide else round11(a.folder, a.runs, a.surprises, a.go), "make": lambda: make(a.folder, a.propose, a.lens),
+  File "/Users/abaybektursun/projects/iterate-hack-theory/studies/theory/lib/forecast.py", line 1040, in <lambda>
+    {"round": lambda: wide_round_v10(a.folder, a.runs, a.propose or 6) if a.propose_wide else round11(a.folder, a.runs, a.surprises, a.go), "make": lambda: make(a.folder, a.propose, a.lens),
+                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abaybektursun/projects/iterate-hack-theory/studies/theory/lib/forecast.py", line 866, in round11
+    engine.run([engine.job("surprise_propose", f"s{k}", {**common, "targets.json": folder / "targets.json", "facts.json": json.dumps(facts, indent=1),
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abaybektursun/projects/iterate-hack-theory/studies/theory/lib/round.py", line 201, in job
+    "prompt": prompt(stage if stage != "reverse-claims" else "claims", out=d, **values),
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abaybektursun/projects/iterate-hack-theory/studies/theory/lib/round.py", line 184, in prompt
+    return string.Template((LIB / "prompts" / f"{stage}.md").read_text()).substitute(values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abaybektursun/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/string.py", line 121, in substitute
+    return self.pattern.sub(convert, self.template)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abaybektursun/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/string.py", line 118, in convert
+    self._invalid(mo)
+  File "/Users/abaybektursun/.local/share/uv/python/cpython-3.12.12-macos-aarch64-none/lib/python3.12/string.py", line 101, in _invalid
+    raise ValueError('Invalid placeholder in string: line %d, col %d' %
+ValueError: Invalid placeholder in string: line 49, col 29
+EXIT 1
+== resume 21:49:16 after prompt fix
+== standing
+== direct facts
+  14 direct facts (2 hold)
+== surprises
+  14 surprises (7 outside every interval): studies/theory/results/wide/round-13/surprises.md
+== targets_open
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-oq2owqjs
+327 items before 9999, 0 at or after
+== direct_tests (carried)
+== propose
+  running 6 jobs, 6 at a time
+  surprise_propose/s4 (opus): done in 178 s
+  surprise_propose/s3: a: statement has 86 words; at most 80; sent back once
+  surprise_propose/s2: a: holds_against needs 2 entries {"item": <id of board.jsonl> or "fact": <index in facts.json>, "value": <the number>, "why": ...}; b: holds_against needs 2 entries {"item": <id of board.jsonl> or "fact": <index in facts.json>, "value": <the number>, "why": ...}; sent back once
+  surprise_propose/s1: a: statement has 83 words; at most 80; a: holds_against needs 2 entries {"item": <id of board.jsonl> or "fact": <index in facts.json>, "value": <the number>, "why": ...}; b: holds_against needs 2 entries {"item": <id of board.jsonl> or "fact": <index in facts.json>, "value": <the number>, "why": ...}; sent back once
+  surprise_propose/s3: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-oq2owqjs/surprise_propose/s3/out.sendback.txt
+  surprise_propose/s3 (opus): done in 222 s
+  surprise_propose/s2: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-oq2owqjs/surprise_propose/s2/out.sendback.txt
+  surprise_propose/s2 (opus): done in 245 s
+  surprise_propose/s1: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-oq2owqjs/surprise_propose/s1/out.sendback.txt
+  surprise_propose/s1 (opus): done in 247 s
+  surprise_propose/s6: a: holds_against needs 2 entries {"item": <id of board.jsonl> or "fact": <index in facts.json>, "value": <the number>, "why": ...}; b: holds_against needs 2 entries {"item": <id of board.jsonl> or "fact": <index in facts.json>, "value": <the number>, "why": ...}; sent back once
+  surprise_propose/s5: a: holds_against needs 2 entries {"item": <id of board.jsonl> or "fact": <index in facts.json>, "value": <the number>, "why": ...}; b: holds_against needs 2 entries {"item": <id of board.jsonl> or "fact": <index in facts.json>, "value": <the number>, "why": ...}; sent back once
+  surprise_propose/s6: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-oq2owqjs/surprise_propose/s6/out.sendback.txt
+  surprise_propose/s6 (opus): done in 337 s
+  surprise_propose/s5: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-oq2owqjs/surprise_propose/s5/out.sendback.txt
+  surprise_propose/s5 (opus): done in 352 s
+  running 1 jobs, 1 at a time
+  duplicates/judge (opus): done in 46 s
+  duplicate round-13/s1-a of run-02/f2-m01: a short per-sample token budget cuts off the long right answers that hard328 needs, so the vote never sees them and the cap sets the ceiling
+  duplicate round-13/s1-b of round-12/s1-b: the plain prompt at T 0.6 gives quick finished wrong answers that repeat across samples, so the plurality locks onto a wrong attractor; the cap is secondary
+  duplicate round-13/s2-b of round-10/problems-m06: Code-RL's finishing habit is calibrated to short code answers, so its directions make math answers commit and stop too early
+  duplicate round-13/s3-a of run-08/f2-m05: the base's wrong answers scatter while its right ones agree, so the vote rises toward the number of problems whose modal answer is right
+  duplicate round-13/s3-b of run-04/f2-m02: at even k, ties are broken by sample order; odd or larger k removes the ties and wins near-majority problems
+  duplicate round-13/s4-a of round-11/s2-b: RL-Code's code skill lives in its own top-8 directions (1.5x matches RL-Code), while other rewards' directions pass on only the shared finishing part
+  duplicate round-13/s4-b of round-11/s4-b: top RL directions sharpen the base onto its own most likely correct program, limited by base pass@k, and Math and Code directions add
+  duplicate round-13/s5-a of run-02/f2-m01: autobench's fixed generation budget forces short capped samples, so hard problems whose right answers run long stay lost however many votes are cast
+  duplicate round-13/s5-b of round-09/training-m04: the vote converges to each problem's modal value within about eight samples, so it saturates at the problems whose mode is right
+  duplicate round-13/s6-a of round-10/problems-m03: the base's code deficit is mostly format/contract failures (no closed block, cut off), not wrong logic, so writing the contract closes most of the gap
+  duplicate round-13/s6-b of round-11/s4-b: the code sets are problems the base already solves in some samples, so the gap is per-sample reliability, and the top directions recover it
+== gate: only mechanisms that hold a direct test go on
+  12 direct tests not run yet (round-13/s1-a, round-13/s1-b, round-13/s2-a, round-13/s2-b, round-13/s3-a, round-13/s3-b, round-13/s4-a, round-13/s4-b, round-13/s5-a, round-13/s5-b, round-13/s6-a, round-13/s6-b): run them from studies/theory/results/wide/round-13/direct_tests.md, add their rows, then run the same command again (or add --go to continue with the mechanisms that hold now)
+EXIT 0 21:56:04
+== resume past the gate 22:04:11
+== standing
+== direct facts
+  31 direct facts (7 hold)
+== surprises
+  14 surprises (7 outside every interval): studies/theory/results/wide/round-13/surprises.md
+== targets_open
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-8eag9hso
+342 items before 9999, 0 at or after
+== direct_tests (carried)
+== propose
+  skip surprise_propose/s1: its outputs exist
+  skip surprise_propose/s2: its outputs exist
+  skip surprise_propose/s3: its outputs exist
+  skip surprise_propose/s4: its outputs exist
+  skip surprise_propose/s5: its outputs exist
+  skip surprise_propose/s6: its outputs exist
+  skip duplicates/judge: its outputs exist
+  duplicate round-13/s1-a of run-02/f2-m01: a short per-sample token budget cuts off the long right answers that hard328 needs, so the vote never sees them and the cap sets the ceiling
+  duplicate round-13/s1-b of round-12/s1-b: the plain prompt at T 0.6 gives quick finished wrong answers that repeat across samples, so the plurality locks onto a wrong attractor; the cap is secondary
+  duplicate round-13/s2-b of round-10/problems-m06: Code-RL's finishing habit is calibrated to short code answers, so its directions make math answers commit and stop too early
+  duplicate round-13/s3-a of run-08/f2-m05: the base's wrong answers scatter while its right ones agree, so the vote rises toward the number of problems whose modal answer is right
+  duplicate round-13/s3-b of run-04/f2-m02: at even k, ties are broken by sample order; odd or larger k removes the ties and wins near-majority problems
+  duplicate round-13/s4-a of round-11/s2-b: RL-Code's code skill lives in its own top-8 directions (1.5x matches RL-Code), while other rewards' directions pass on only the shared finishing part
+  duplicate round-13/s4-b of round-11/s4-b: top RL directions sharpen the base onto its own most likely correct program, limited by base pass@k, and Math and Code directions add
+  duplicate round-13/s5-a of run-02/f2-m01: autobench's fixed generation budget forces short capped samples, so hard problems whose right answers run long stay lost however many votes are cast
+  duplicate round-13/s5-b of round-09/training-m04: the vote converges to each problem's modal value within about eight samples, so it saturates at the problems whose mode is right
+  duplicate round-13/s6-a of round-10/problems-m03: the base's code deficit is mostly format/contract failures (no closed block, cut off), not wrong logic, so writing the contract closes most of the gap
+  duplicate round-13/s6-b of round-11/s4-b: the code sets are problems the base already solves in some samples, so the gap is per-sample reliability, and the top directions recover it
+== gate: only mechanisms that hold a direct test go on
+== forecast
+  running 4 jobs, 4 at a time
+  forecast/round-09/training-m01 (opus): done in 68 s
+  forecast/round-10/weights-m03 (opus): done in 76 s
+  forecast/reader-2: forecasts.json must hold every target id exactly once: ['t01', 't02', 't03', 't04', 't05', 't06', 't07', 't08', 't09', 't10', 't11', 't12', 't13', 't14', 't15', 't16', 't17', 't18', 't19', 't20', 't21', 't22', 't23', 't24', 't25']; sent back once
+  forecast/reader-1 (opus): done in 94 s
+  forecast/reader-2: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-8eag9hso/forecast/reader-2/out.sendback.txt
+  forecast/reader-2 (opus): done in 113 s
+  2 carried and 5 new mechanisms hold a direct test and forecast (11 judged restatements), 6 pairs
+== cells
+  running 1 jobs, 1 at a time
+  routes_propose/s4 (opus): done in 78 s
+  running 1 jobs, 1 at a time
+  cells_check/check (opus): done in 61 s
+  running 8 jobs, 8 at a time
+  cells_forecast/training (opus): done in 17 s
+  cells_forecast/weights (opus): done in 19 s
+  cells_forecast/reader-1 (opus): done in 22 s
+  cells_forecast/reader-2 (opus): done in 22 s
+  cells_forecast/s4 (opus): done in 32 s
+  cells_forecast/s6 (opus): done in 46 s
+  cells_forecast/s3 (opus): done in 71 s
+  cells_forecast/s1 (opus): done in 79 s
+Left out of the ranking (record at or below -2 nats): none.
+
+- Routes: 1 of 1 have a median forecast above the stored subset count of the row at the nearest tokens (r13-n01); 0 have no baseline.
+- Cells: 0 of 0 have a readout that splits with 2 or more families on each side (none).
+studies/theory/results/wide/round-13/cells.md
+== experiments
+5.9 minutes
+EXIT 0 22:10:07

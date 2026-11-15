@@ -39,6 +39,7 @@ TAGLINE = "Symbiotic harness for resource-constrained researchers"  # what Invar
 SITE = "invariant.team"  # the address on the first and last slide
 # Slide "summary": what the team did, in Samer's words, in groups of lines.
 # Slide "built": what the team did, said once early and in full on the slide "summary".
+BUILT_WHY = "to empower resource-constrained researchers to make novel findings"  # slide "built": under its title
 BUILT = [("A symbiotic swarm", " with one shared brain"), ("More efficient", " than autoresearch"),
          ("Novel findings", " in machine learning and interpretability")]
 # The harness slide's efficiency points, shown one per click beside the picture.
@@ -261,22 +262,23 @@ def slides(papers):
         ("hook", f'<div class="mid">{hours_svg()}<h1 class="big">{hook_html()}</h1><p class="tagline"><b class="team">Invariant</b>: {esc(TAGLINE)}</p><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers</p>'
                      '<ul class="limits"><li>Limited token budget</li><li>Limited compute</li><li>Limited people</li></ul></div>'),
-        ("built", '<div class="recap"><h2 class="title">So we built <b class="team">Invariant</b></h2><div class="did one">'
-                  + "<ul>" + "".join(f"<li><b>{esc(bold)}</b>{esc(rest)}</li>" for bold, rest in BUILT) + "</ul>" + '</div></div>'),
-        ("gap", '<iframe class="fig-frame gapfig" data-fig="gap" data-replay title="Base model and RL-trained model" tabindex="-1"></iframe>'),
         ("powered", '<div class="versus">'
                     f'<div><p class="sub">The RL-trained model</p><p class="sub by">Powered by</p><p class="gpus">{RL_GPUS} H100 GPUs</p><p class="days">{RL_DAYS} days</p></div>'
                     f'<div><p class="sub">Invariant</p><p class="sub by">Powered by</p>{photo(demo_photos.COOK, "cook")}'
                     + (f'<p class="who">{esc(demo_photos.COOK_NAME)}</p>' if demo_photos.COOK_NAME else "") + '</div></div>'),
-        ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2></div>'
-                  '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'
-                  '<div class="replay"><input class="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Board time">'
-                  '<button class="rate" aria-pressed="false" aria-label="Half speed">0.5×</button></div>'),
+        ("built", '<div class="recap"><div><h2 class="title">So we built <b class="team">Invariant</b></h2>'
+                  f'<p class="sub why">{esc(BUILT_WHY)}</p></div><div class="did one">'
+                  + "<ul>" + "".join(f"<li><b>{esc(bold)}</b>{esc(rest)}</li>" for bold, rest in BUILT) + "</ul>" + '</div></div>'),
         ("harness", '<div class="head"><h2>Invariant</h2><p class="sub">Symbiotic research swarm</p></div>'
                     '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
                     + '<ul class="wins">' + "".join(f'<li class="step">{esc(w)}</li>' for w in WINS) + '</ul>'
                     f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span>'
                     '<span>Agents <b class="word">OpenAI</b><b class="word">Devin</b><b class="word">Anthropic</b></span></div>'),
+        ("gap", '<iframe class="fig-frame gapfig" data-fig="gap" data-replay title="Base model and RL-trained model" tabindex="-1"></iframe>'),
+        ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2></div>'
+                  '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'
+                  '<div class="replay"><input class="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Board time">'
+                  '<button class="rate" aria-pressed="false" aria-label="Half speed">0.5×</button></div>'),
         ("sponsors", '<div class="head"><h2>Search and memory before every experiment</h2></div>'
                      '<iframe class="fig-frame sponsor s-exa" data-fig="exa" data-replay title="Exa: searches at the gate before a GPU run" tabindex="-1"></iframe>'
                      '<iframe class="fig-frame sponsor s-past" data-fig="pastdev" data-replay title="past.dev: one agent writes, another reads" tabindex="-1"></iframe>'
@@ -353,6 +355,7 @@ p, h1, h2, figure { margin: 0; }
 .did.one li { font-size: 46px; }
 .did.one ul { gap: 22px; }
 .recap .sub { font-size: 30px; }
+.recap .why { margin-top: 14px; font-size: 38px; font-weight: 400; }  /* slide "built": why we built it */
 .nb { white-space: nowrap; }
 /* slide "hook": the 36 hours. A dot appears per hour when the slide comes on; the last one is the accent */
 .hours { width: 250px; height: 250px; display: block; overflow: visible; margin-bottom: 4px; }

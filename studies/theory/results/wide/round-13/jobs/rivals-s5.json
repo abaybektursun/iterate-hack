@@ -1,0 +1,80 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "Autobench gives each experiment a fixed generation budget (360 s, 3.6 s per dev problem). Within it, the agent's best affordable method was a vote over 12 plain-prompt T 0.6 samples capped at 4,096 tokens. The cap and the budget set the ceiling, not the vote. On the harder dev problems the plain base's right answers run past 4,096 tokens, or the samples are never run, so those problems stay lost however many short samples vote.",
+  "readers_wrong": "The readers carried over the board's vote gains (cued base vote over 4 = 446/500, over 12 = 466), all generated at a 16,384 cap with no time limit. They did not price the 4,096 cap or the 3.6 s/problem budget, which cost about 5 dev problems. Consistent with the direct fact on run-02/f2-m01 (short samples do reach 67.5 % of MATH-500 solutions): this needs only the ~5 % of dev problems whose right answers all exceed 4,096 tokens. f2-m01's 87 came nearest because it tracked this cap correlate, though its 6,000-14,000-token cause is false.",
+  "rests_on": ["result-6e7b64", "result-fa480f", "result-51fd20", "result-c8b994"],
+  "holds_against": [
+   {"item": "result-ebf7a4", "value": 67.5, "why": "67.5 % of MATH-500 solved problems have a right cued-base sample of <= 2,000 tokens, so short answers are enough on most problems. The 4,096 cut only has to bite on the ~5 dev problems whose right answers all run longer. Those sit inside the other 32.5 % (on hard328 the median right length is 3,921)."},
+   {"item": "result-fa480f", "value": 84, "why": "The swarm cue config scored 84/100 on dev100 in the same runner with 0 answers cut by the 360 s budget: one cue sample per problem (3,599 tokens) fits the budget, so it is not cut. The agent's method spends 2.7x the tokens (12 samples x 4,096 cap), and there cuts and unrun samples do bind. The cue's own vote over 4 was cut to about one sample on the 328 (result-6e7b64)."}
+  ],
+  "forecasts": [
+   {"id": "t01", "value": 236, "low": 224, "high": 248, "reason": "Cap 32,768 lets cut answers finish (Think-SFT cue 230 at 32k, native T 1.0 232); T 0.6 shortens chains a little; tokens, not temperature, set it."},
+   {"id": "t02", "value": 476, "low": 468, "high": 484, "reason": "MATH-500 rarely needs more than 16k tokens; native T 1.0 474, so little left for the cap to buy."},
+   {"id": "t09", "value": 228, "low": 216, "high": 240, "reason": "Same edit at a new seed; earlier 232 regresses toward the dose curve (227 at a=3) with about 8 problems of seed scatter."},
+   {"id": "t12", "value": 165, "low": 153, "high": 177, "reason": "0.2x in layers 0-10 barely moves cap hits (77), so the score stays at the cued base's 164."},
+   {"id": "t13", "value": 182, "low": 170, "high": 194, "reason": "dir-1 at 1x 181 and at 2x 184; 1.5x cuts cap hits to about 35, and about 30 % of the newly finished answers are right."},
+   {"id": "t14", "value": 182, "low": 170, "high": 194, "reason": "Second sample of the same cell as t13."},
+   {"id": "t17", "value": 198, "low": 192, "high": 205, "reason": "Two more samples at cap 16,384 add 50 % more tokens; on MATH-500 going from 4 to 6 samples gave +1.5 points; vote over 4 was 192."},
+   {"id": "t18", "value": 233, "low": 223, "high": 243, "reason": "M(2) singles 234, 229, 237 at the same cap; mean 233."},
+   {"id": "t19", "value": 248, "low": 241, "high": 255, "reason": "Vote over 3 is 246; a 4th finished sample adds about 2."},
+   {"id": "t20", "value": 466, "low": 458, "high": 474, "reason": "a=1 gives 467; on MATH-500 the cap rarely binds, so a=2 adds no finishing gain."},
+   {"id": "t21", "value": 244, "low": 235, "high": 253, "reason": "Seed 3,010,000 gave 245 at 32k vs 232 in the 16k view: the extra tokens finish M(2)'s cut answers."},
+   {"id": "t24", "value": 83, "low": 79, "high": 90, "reason": "46 % of Think-SFT samples are cut at 16k and they are unfinished work (91 of 93 finish on hard328), so at 32k right answers join the vote: 75 -> about 83."},
+   {"id": "t25", "value": 70, "low": 65, "high": 76, "reason": "About 62 cut answers per sample at 16k; roughly 16 % come out right once finished (25 % on hard328, fresh is harder), so +10 on 60."}
+  ],
+  "direct_test": {
+   "claim": "In the kept method's dev100 runs, the problems the vote loses are those whose samples were cut at 4,096 tokens or left unrun by the time budget, more than their difficulty explains.",
+   "files": ["studies/autobench/results/math500-loop/finals-01", "studies/autobench/results/math500-loop/karpathy-01"],
+   "computation": "1) Take the kept method's dev100 per-sample rows (7 seeds; finals-01 if it holds them, else the kept experiment's rows in karpathy-01). Per (seed, problem) there are up to 12 samples. 2) A sample is cut if finish_reason == 'length' or n_generated >= 4096. It is unrun if it is absent or marked skipped by the time budget. 3) Per (seed, problem): c = (cut + unrun) / 12; r = right samples (score_v3 == 1) / answer-bearing samples; the vote is a plurality with rln4_lib.agree grouping, and cut samples cast no vote. 4) W = vote-wrong (seed, problem) pairs. M = vote-right pairs with r <= 0.75 (difficulty-matched). 5) D = mean c over W minus mean c over M, with a 90 % interval from 2,000 bootstraps over problems.",
+   "refuted_if": "D is below the threshold, or fewer than half of the W pairs have c >= 0.25",
+   "threshold": "0.15",
+   "null": "Difficulty-matched vote-right problems of the same runs (per-sample right rate <= 0.75), not random problems."
+  }
+ },
+ {"id": "b",
+  "statement": "At T 0.6 with the plain prompt, the base's wrong answers to a problem do not scatter. They repeat one problem-specific value, the problem's modal answer in that register. By about 8-10 samples a plurality vote has converged to each problem's modal plain answer. The score then saturates at the share of dev problems whose mode is right (about 84), whatever the cap and however many more samples are added.",
+  "readers_wrong": "The readers scaled up the vote gains of the cued base at T 1.0 (405 -> 446 over 4, 466 over 12). There hot sampling scatters the wrong answers, so the vote keeps climbing. At plain T 0.6 the wrong answers share a mode, so the agent's vote stalled at experiment 15 (10 samples) near 84. No direct_facts row is about answer concentration. It is consistent with run-02/f2-m01's refutation because it puts no length requirement on solutions.",
+  "rests_on": ["result-6e7b64", "result-5d032f", "knowledge-dab63f", "result-faf15a"],
+  "holds_against": [
+   {"fact": 28, "value": 0.4286, "why": "Only 43 % of the cued base's vote failures (T 1.0, 4 samples) have a winning wrong group of 2 or more. This mechanism is about plain T 0.6, where sharper sampling concentrates the wrong values, and about 12 samples, where a mode can show; fact 26 (+0.135 within-prompt agreement) shows wrong values are tied to the prompt register."},
+   {"item": "result-5d032f", "value": 8.2, "why": "A vote over 4 adds 8.2 points to the cued base (405 -> 446). That is a large vote gain, but with the cue at T 1.0, where errors scatter. The agent's plain T 0.6 vote rose from 61 to 84 and then stopped after 10 samples (best at experiment 15 of 40): the saturation this predicts."}
+  ],
+  "forecasts": [
+   {"id": "t01", "value": 242, "low": 232, "high": 252, "reason": "T 0.6 pulls a single Think-SFT sample toward its per-problem mode, which is usually right (its vote is 241, precision 88 %); cap 32k adds finishing."},
+   {"id": "t02", "value": 478, "low": 471, "high": 485, "reason": "A single sample at T 0.6 comes close to Think-SFT's vote over 4 (481) because it sharpens to the mode."},
+   {"id": "t03", "value": 406, "low": 396, "high": 416, "reason": "Outcomes are problem-driven, so a new seed stays near the earlier 411 with less than binomial scatter."},
+   {"id": "t04", "value": 406, "low": 396, "high": 416, "reason": "As t03, second new seed."},
+   {"id": "t05", "value": 400, "low": 392, "high": 408, "reason": "RL-Code's outcomes per problem are stable; the earlier seed gave 401."},
+   {"id": "t06", "value": 400, "low": 392, "high": 408, "reason": "As t05, second new seed."},
+   {"id": "t07", "value": 387, "low": 378, "high": 396, "reason": "Code-alone 1x, earlier 386; problem-driven, small seed scatter."},
+   {"id": "t08", "value": 387, "low": 378, "high": 396, "reason": "As t07, second new seed."},
+   {"id": "t09", "value": 228, "low": 218, "high": 238, "reason": "New seed of a 232 cell; problem-driven outcomes keep it close, with a small regression toward the dose curve."},
+   {"id": "t13", "value": 182, "low": 173, "high": 191, "reason": "dir-1 at 1x 181 and at 2x 184; the same problems decide each sample."},
+   {"id": "t14", "value": 182, "low": 173, "high": 191, "reason": "Second sample of the t13 cell; it agrees closely with the first."},
+   {"id": "t17", "value": 194, "low": 189, "high": 199, "reason": "The vote has saturated: 26 of 36 RL-only problems have no right base sample, and failures are shared wrong values, so 2 more samples join the existing mode (192 over 4)."},
+   {"id": "t18", "value": 233, "low": 224, "high": 242, "reason": "M(2) singles 234, 229, 237."},
+   {"id": "t19", "value": 246, "low": 241, "high": 251, "reason": "The vote over 3 is already 246; a 4th sample mostly repeats each problem's mode."},
+   {"id": "t24", "value": 74, "low": 69, "high": 78, "reason": "Answers that finish late join shared wrong values, so the vote stays at about 75 and can lose a problem or two where abstention used to protect it."}
+  ],
+  "direct_test": {
+   "claim": "The kept method's vote-wrong dev problems are lost to one shared wrong value: its largest wrong-answer group is far more concentrated than the cued base's at the same sample count.",
+   "files": ["studies/autobench/results/math500-loop/finals-01", "studies/autobench/results/math500-loop/karpathy-01", "studies/rlneurons/results/votek/math500_base_cue-01"],
+   "computation": "1) Take the kept method's dev100 per-sample rows (finals-01, else the kept experiment's rows in karpathy-01), per (seed, problem). 2) Answer-bearing samples are finished ones with a non-empty extracted_v3. Group them with rln4_lib.agree (first-member rule, in sample order). 3) For each vote-wrong (seed, problem): g = size of the largest group whose answer is wrong / number of answer-bearing samples. G_plain = mean g. 4) Compute the same from votek/math500_base_cue-01 rows.jsonl (cued base, T 1.0, 12 samples) on its vote-wrong problems among the dev100 indices (on all 500 problems if fewer than 10 are vote-wrong): G_cue. 5) R = G_plain / G_cue, with a 90 % interval from 2,000 bootstraps over problems.",
+   "refuted_if": "G_plain < 0.40, or R is below the threshold",
+   "threshold": "1.3",
+   "null": "The cued base's own 12-sample votes on the same problems (votek rows), a stronger null than uniform scatter of wrong answers."
+  }
+ }
+],
+ "cell": {
+  "cell": {"model": "base Olmo-3-1025-7B", "prompt": "plain", "set": "MATH-500, first 100 problems", "n": 100, "sampling": "T 0.6 / top-p 1.0", "samples": 10, "grader": "v3", "cap": 16384},
+  "job": "studies/theory/jobs/free_cell.py",
+  "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model base --set math500 --n 100 --temperature 0.6 --top-p 1.0 --max-tokens 16384 --samples 10 --seed 97000000 --commit COMMIT_SHA\"",
+  "readout": "Right of 100 under a plurality vote over the 10 samples (rln4_lib.agree grouping, cap hits cast no vote) using the full answers, minus the same vote after every answer longer than 4,096 generated tokens is treated as cut (no vote). Both votes come from the same answers.jsonl.",
+  "unit": "problems of 100 (difference: cap 16,384 vote minus 4,096-truncated vote)",
+  "why": "Mechanism a says the 4,096 cap costs the plain T 0.6 vote several problems. Mechanism b says the vote has converged to each problem's mode and answers past 4,096 tokens rarely change it.",
+  "gpu_minutes": 95,
+  "a": {"value": 4, "low": 2, "high": 8},
+  "b": {"value": 0, "low": -1, "high": 1}
+ }
+}

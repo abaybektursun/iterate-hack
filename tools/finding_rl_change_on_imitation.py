@@ -13,9 +13,14 @@ to the 136 problems from 2026 (AIME and HMMT, held after the models' last weight
 run, with a = 2 fixed before the run: the slider stops at those two, the other stops are drawn as not run, and the
 marks travel between the sets (the 328 marks gather into 136 places by rank, and spread back out). A click on a mark
 shows that problem and its outcome at every a that was run, with the stored answer text where the run kept one.
-Address: /finding/rl-change-on-imitation#[fresh/][noise/]a<0-4>/<panel or p<problem>>; the 328 harder problems, a2 and
-no noise are the defaults and are left out; p<problem> is the problem's index in the set named. An empty address opens at
-a = 0 and steps to a = 2. The rules are in .claude/skills/finding-page/SKILL.md; the looks are those of
+A third, quieter switch on the 328 ("Whole RL change / 8 RL directions") adds only the 8 largest directions of RL's change
+per weight matrix (board result-6776d8, result-2a5195): stops at a = 0, 1.5 and 3 on the same axes, the control there is
+a random rank-8 edit at a = 3, the whole change stays as a dashed line, and the other stops are drawn as not run. Those
+runs keep counts, not per-problem rows, so past a = 0 the marks fill the bands to the first sample's stored counts in
+Think-SFT's order, drawn plain and not clickable. At a = 2 on the 328 the readout adds a = 2 allowed 32,768 tokens
+(result-42cc6c). Address: /finding/rl-change-on-imitation#[fresh/ or directions/][noise/]a<0, 1, 1.5, 2, 3 or 4>/<panel
+or p<problem>>; the 328 harder problems, the default a (2; 3 for the directions) and no noise are left out; p<problem> is
+the problem's index in the set named. An empty address opens at a = 0 and steps to a = 2. The rules are in .claude/skills/finding-page/SKILL.md; the looks are those of
 tools/architecture.py (.claude/skills/site-ui/SKILL.md). The finding is board item result-3387ce, the test on the 2026
 set is work-8b4030; the numbers are those of studies/rlneurons/README.md, section "Delta transplant".
 
@@ -26,7 +31,9 @@ with matched seeds at a = 0 and at a = 2), as in the readouts.
 
     PYTHONPATH=. uv run --no-project --with numpy --with math-verify==0.9.0 python tools/finding_rl_change_on_imitation.py
         checks DATA, PROBLEMS, TEXTS and their 2026 versions against the run folders (recomputes every count, the votes
-        and the bootstrap intervals)
+        and the bootstrap intervals), DATA["dirs"] against results/xreward/edits/ and the README, DATA["cap32"] against
+        results/transplant/cap32_m2_s1-01/; with the stored answers in runs/ (uv run tools/gpu.py get <job>) it also
+        rechecks the 8 directions' cut-off-right counts and their two intervals
     ... python tools/finding_rl_change_on_imitation.py --write    rewrites PROBLEMS and TEXTS from the run folder
 """
 import json
@@ -109,21 +116,62 @@ DATA = {
         "from_cut": [7, 12, 42],  # the 61 cut off at a = 0 (seed 7,000,000): finished right, finished wrong, cut off at a = 2
         "jobs": ["064456-33a0", "082840-a8f8-fresh_s1", "064540-7ae0", "064708-17f7"],  # each abaybektursun-1115-<id>, in seed order
     },
+    # Think-SFT + a x the 8 largest directions per weight matrix of RL's change (rank-8 part of RL - Base in each matrix),
+    # on the 328 with the cue, T 1.0 (board result-6776d8 and its replication result-2a5195; README "The directions on other
+    # hosts", part A and E2). The run folders keep metrics.json and edit.json, not per-problem rows.
+    "dirs": {
+        "folder": "studies/rlneurons/results/xreward/edits/",
+        "readout": "studies/rlneurons/results/xreward/edits/readout.json",  # the seed-3,000,000 cells
+        # a: [(run folder, job id)], one per sample; seeds 3,000,000 and (at a = 3) 3,100,000
+        "runs": {"1.5": [("sft_top8x1.5_math31-01", "130242-4696")],
+                 "3": [("sft_top8x3_math31-01", "130255-5098"), ("sft_top8x3_math31-02", "143344-809f")],
+                 "rand": [("sft_rand8x3_math31-01", "130307-5e33")]},  # a random rank-8 edit of the same norm at a = 3
+        # per sample: right of 328 (grader v3), cut off at 16,384 tokens, generated tokens per problem (metrics.json), and
+        # answers cut off with the right answer already in the cut text (counted right, drawn cut off; from the stored answers
+        # runs/abaybektursun-1115-<job>/answers.jsonl on the Modal Volume iterate-runs: uv run tools/gpu.py get <job>)
+        "each": {"1.5": [[220, 76, 9707, 2]], "3": [[232, 60, 9434, 3], [240, 42, 9333, 4]], "rand": [[213, 82, 9995, 2]]},
+        "edit_pct": {"1.5": 0.108, "3": 0.215},  # the edit's norm, % of Think-SFT's weight norm (edit.json add_rel)
+        # points of 328 [95 % paired bootstrap over problems, seed 0], from the README: a = 3 (2 samples) minus Think-SFT
+        # (4 samples), 10,000 resamples; a = 3 (seed 3,000,000) minus the random edit, 2,000 resamples (both recomputed
+        # from the stored answers on 2026-11-15)
+        "minus_think": [8.2, 5.6, 11.0], "minus_rand": [5.8, 2.1, 9.8],
+        "whole_same_seeds": [234, 229],  # the whole change at a = 2 on seeds 3,000,000 and 3,100,000 (= "a2_seeds")
+    },
+    # a = 2 allowed 32,768 tokens, one sample, seed 3,010,000, against Think-SFT + cue at the same seed and limit (board
+    # result-42cc6c, README "hard328, M(2) at cap 32,768", amendment 4 of SPEC_transplant; run folder from main 7f53b1a)
+    "cap32": {
+        "rows": "studies/rlneurons/results/transplant/cap32_m2_s1-01/rows.jsonl",
+        "readout": "studies/rlneurons/results/transplant/cap32_m2_s1-01/metrics.json",
+        "seed": 3010000, "cap": 32768,
+        "a2": {"right": 245, "cut": 0, "tokens": 9875, "right_16k": 232, "cut_16k": 56},  # _16k: the same answers counted at 16,384
+        "think": {"right": 234, "cut": 1, "tokens": 11512},
+        "minus_think": [3.4, -0.6, 7.0],  # points of 328 [95 % paired bootstrap over problems, 10,000 resamples, seed 0]
+    },
 }
 
 D = DATA
 TITLE = "RL change on imitation"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Does adding RL's weight change to Think-SFT help on hard math?"
-F = D["fresh"]
+F, G, K = D["fresh"], D["dirs"], D["cap32"]
+
+
+def _dir_cell(key):  # one 8-directions cell, means over its samples; bands: the first sample's finished right, wrong, cut off
+    e, n = G["each"][key], D["n"]
+    return {"samples": len(e), "right": sum(x[0] for x in e) / len(e), "cut": sum(x[1] for x in e) / len(e),
+            "share": round(100 * sum(x[0] - x[3] for x in e) / sum(n - x[1] for x in e), 1),
+            "tokens": round(sum(x[2] for x in e) / len(e)), "bands": [e[0][0] - e[0][3], n - e[0][1] - e[0][0] + e[0][3], e[0][1]]}
+
+
+DIR = {k: _dir_cell(k) for k in G["each"]}
 LINE = (f"Twice RL's weight change lifts Think-SFT from {D['right'][0]:g} to {D['right'][2]:g} of {D['n']}; "
-        f"RL scores {D['rl']['right']:g}. The gain holds on {F['n']} problems from 2026: +{F['minus_think'][0]} points.")
+        f"RL scores {D['rl']['right']:g}. 8 of its directions per matrix do as much ({DIR['3']['right']:g} of {D['n']}).")
 
 # Not from our runs: the closest published result, fetched with tools/exa.py on 2026-11-15: arXiv 2605.00610 (DoTS),
 # Qwen2.5-Math-7B, average of six math sets. Table 1: the SFT model 44.1, the On-Policy RL model 45.5, DoTS with searched
 # coefficients 49.3; Table 5: the plain sum with coefficients (1.0, 1.0) 47.8. Section 5.1: both models were trained from
 # the base on a subset of OpenR1-Math-220k.
 _m = lambda x: f"{x:g}".replace("-", "\u2212")  # the minus sign of the site
-_iv = lambda v: f"{_m(v[1])} to {_m(v[2])}"
+_iv = lambda v: f"{v[1]:.1f} to {v[2]:.1f}".replace("-", "\u2212")
 _m1 = lambda x: f"{x:.1f}".replace("-", "\u2212")
 _fc = D["from_cut"][1]
 _day = lambda iso: f"{int(iso[8:]):d} {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][int(iso[5:7]) - 1]} {iso[:4]}"
@@ -138,11 +186,13 @@ PANELS = [
       "New also: a followed past its best point, a = 0 to 4, with the cut-off count at each a, and a control of random "
       "noise in place of RL's change.",
       f"Then a = 2 was fixed before a test on {F['n']} problems from 2026, held after the models' last weights were "
-      "uploaded; the gain held there."]],
+      "uploaded; the gain held there.",
+      f"And only the 8 largest directions of RL's change in each weight matrix, added 3 times, give as much as the whole "
+      f"change at a = 2: {DIR['3']['right']:.1f} of {D['n']} over two samples, with less than half its norm."]],
     ["why", "Why it matters",
-     f"It is the team's highest one-sample score on the 328 harder problems: {D['right'][2]:g} of {D['n']} at a = 2, "
-     f"against {D['right'][0]:g} for Think-SFT and {D['rl']['right']:g} for RL. It needs no further training: the "
-     "weights of three released models are added.",
+     f"On the 328 harder problems it scores {D['right'][2]:g} of {D['n']} at a = 2, against {D['right'][0]:g} for Think-SFT "
+     f"and {D['rl']['right']:g} for RL, and 8 directions per matrix at a = 3 score {DIR['3']['right']:g}. It needs no "
+     "further training: the weights of three released models are added.",
      [f"a = 2 minus Think-SFT: +{D['minus_think']['2'][0]} points (95 % interval {_iv(D['minus_think']['2'])}). Minus RL: "
       f"+{D['minus_rl']['2'][0]} points ({_iv(D['minus_rl']['2'])}).",
       f"RL's change makes Think-SFT finish. Of the {sum(_fc)} answers cut off at a = 0, at a = 2 {_fc[0]} finish right, {_fc[1]} "
@@ -170,7 +220,19 @@ PANELS = [
       f"run. {F['samples']} samples at a = 0 and at a = 2, with the same seeds, so each difference is per problem and per seed.",
       f"On that set a = 2 cuts off {F['cut'][1]:.1f} answers per sample against {F['cut'][0]:.1f} for Think-SFT, "
       f"{_m1(F['cut_minus_think'][0])} points (95 % interval {_iv(F['cut_minus_think'])}). Of the {sum(F['from_cut'])} marks cut "
-      f"off at a = 0, {F['from_cut'][0]} finish right at a = 2, {F['from_cut'][1]} finish wrong, {F['from_cut'][2]} stay cut off."]],
+      f"off at a = 0, {F['from_cut'][0]} finish right at a = 2, {F['from_cut'][1]} finish wrong, {F['from_cut'][2]} stay cut off.",
+      f"8 directions: Think-SFT + a × the rank-8 part of RL's change in each of 224 weight matrices. a = 1.5: "
+      f"{G['each']['1.5'][0][0]} right, {G['each']['1.5'][0][1]} cut off. a = 3: {G['each']['3'][0][0]} and "
+      f"{G['each']['3'][1][0]} on two seeds ({G['each']['3'][0][1]} and {G['each']['3'][1][1]} cut off), mean "
+      f"{DIR['3']['right']:.1f}, +{G['minus_think'][0]} points over Think-SFT (95 % interval {_iv(G['minus_think'])}). The whole "
+      f"change at a = 2 on the same seeds: {G['whole_same_seeds'][0]} and {G['whole_same_seeds'][1]}.",
+      f"Control for the directions: a random rank-8 edit of the same norm at a = 3 gives {G['each']['rand'][0][0]} right and "
+      f"{G['each']['rand'][0][1]} cut off. The directions beat it by {G['minus_rand'][0]} points (95 % interval "
+      f"{_iv(G['minus_rand'])}, same seed). The edit at a = 3 is {G['edit_pct']['3']} % of Think-SFT's weight norm.",
+      f"Allowed {K['cap']:,} tokens (seed {K['seed']:,}, one sample): a = 2 gets {K['a2']['right']} of {D['n']} right, "
+      f"{K['a2']['cut']} cut off, in {K['a2']['tokens']:,} tokens per problem; the same answers counted at {D['cap']:,} give "
+      f"{K['a2']['right_16k']} with {K['a2']['cut_16k']} cut off. Think-SFT at {K['cap']:,} on the same seed: "
+      f"{K['think']['right']}, {K['think']['cut']} cut off."]],
     ["limits", "What it does not show",
      f"It does not show that a = 2 is the best a on new problems: a was chosen on the 328 harder problems, and on the "
      f"{F['n']} problems from 2026 only a = 0 and a = 2 were run.",
@@ -182,7 +244,12 @@ PANELS = [
       f"{min(D['m500']['rl'])} to {max(D['m500']['rl'])} for RL: +{D['m500']['minus_rl'][0]} points over RL "
       f"({_iv(D['m500']['minus_rl'])}), not separated.",
       f"The {F['n']} problems from 2026 give a wide interval: a = 2 minus Think-SFT is {_iv(F['minus_think'])} points per "
-      "sample."]],
+      "sample.",
+      f"With answers allowed {K['cap']:,} tokens, the lead over Think-SFT is not established: {K['a2']['right']} against "
+      f"{K['think']['right']} of {D['n']}, +{K['minus_think'][0]} points (95 % interval {_iv(K['minus_think'])}), one sample. "
+      f"Most of what RL's change adds at {D['cap']:,} tokens is that answers finish sooner.",
+      "The 8-direction runs keep no per-problem rows in the repository, so their marks show the stored counts, not which "
+      "problems. a = 1.5 and the random edit are one sample each."]],
     ["run", "How to reproduce it",
      "studies/rlneurons/jobs/delta_sum.py writes the model, jobs/run_cell.py samples it and analysis/transplant.py reads "
      "the rows. The plan is studies/rlneurons/specs/SPEC_transplant.md.",
@@ -192,6 +259,11 @@ PANELS = [
       "one wrong answer per model.",
       f"The {F['n']} problems from 2026: jobs/run_fresh.py, jobs abaybektursun-1115-" + ", -".join(F["jobs"]) + f"; rows {F['rows']}, with the "
       "references of results/fresh/ for the same seeds; amendment 2 of the plan.",
+      "8 directions: jobs/wsp_edit.py --recipe top8 (the control: rand8) --onto think_sft --other math31 --scale 1.5 or 3, "
+      "then jobs/run_cell.py, on Modal H100; jobs abaybektursun-1115-" + ", -".join(j for v in G["runs"].values() for _, j in v) +
+      f"; run folders {G['folder']}" + ", ".join(r for v in G["runs"].values() for r, _ in v) + ".",
+      f"Allowed {K['cap']:,} tokens: jobs/delta_sum.py and jobs/run_cell.py --max-tokens {K['cap']} in four shards; readout "
+      f"analysis/cap32_m2.py; rows {K['rows']}.",
       "Every mark and number on this page is copied from those folders and checked by running "
       "tools/finding_rl_change_on_imitation.py."]],
 ]
@@ -807,6 +879,89 @@ def _check_fresh(by):  # every number of DATA["fresh"] from the 2026 rows, the r
     assert [sum(p[6][j] in "rC" for p in FRESH_PROBLEMS) for j in (0, len(SEEDS_F))] == [F["each"]["think"][0], F["each"]["sft1_rl20"][0]]
 
 
+def _check_dirs(by):  # DATA["dirs"] from the run folders, the readout and the README; the stored answers when downloaded
+    import os
+    from studies.rlneurons.lib import n13_score
+    seeds = {"1.5": [3000000], "3": [3000000, 3100000], "rand": [3000000]}
+    scale = {"1.5": 1.5, "3": 3.0, "rand": 3.0}
+    ro = json.load(open(G["readout"]))["cells"]
+    think = {i: [by[c][i]["score_v3"] for c in COLS if c[0] == "think"] for i in by[COLS[0]]}
+    for key, runs in G["runs"].items():
+        for (folder, job), seed, e in zip(runs, seeds[key], G["each"][key]):
+            path = G["folder"] + folder + "/"
+            m, ed, rj = (json.load(open(path + f)) for f in ("metrics.json", "edit.json", "run.json"))
+            cf, ct = m["config"], m["counts"]
+            assert (cf["prompt"], cf["set"], cf["temperature"], cf["top_p"], cf["max_tokens"], cf["seed"]) == \
+                ("cue", "hard328", 1.0, 1.0, DATA["cap"], seed), path
+            assert m["job_id"] == rj["job_id"] == "abaybektursun-1115-" + job and ct["n"] == DATA["n"], path
+            assert (ed["recipe"], ed["k"], ed["scale"], ed["args"]["onto"], ed["args"]["other"]) == \
+                ("rand8" if key == "rand" else "top8", 8, scale[key], "think_sft", "math31"), path
+            assert [ct["correct_v3"], ct["cap_hits"], round(ct["mean_generated_tokens"])] == e[:3], (path, ct)
+            if key != "rand":
+                assert round(100 * ed["totals"]["add_rel"], 3) == G["edit_pct"][key], path
+            name = folder[:-3]
+            if seed == 3000000:  # the readout holds the seed-3,000,000 cells
+                assert (ro[name]["right_v3"], ro[name]["cap_hits"], ro[name]["job_id"]) == (e[0], e[1], m["job_id"]), name
+    readme = open("studies/rlneurons/README.md").read()
+    sec = readme[readme.index("#### The directions on other hosts"):readme.index("#### The dial on a second model pair")]
+    e3 = G["each"]["3"]
+    assert f"against the random edit at 3: +{G['minus_rand'][0]} points [{G['minus_rand'][1]}, {G['minus_rand'][2]}]" in sec
+    assert f"Two samples: {e3[0][0]} and {e3[1][0]}, mean {DIR['3']['right']:.1f}, against Think-SFT's" in sec.replace("\n", " ")
+    assert f"+{G['minus_think'][0]} points [{G['minus_think'][1]}, {G['minus_think'][2]}]" in sec
+    assert f"at 2 has {G['whole_same_seeds'][0]} and {G['whole_same_seeds'][1]} on the same two seeds" in sec.replace("\n", " ")
+    assert G["whole_same_seeds"] == DATA["a2_seeds"] and DIR["3"]["right"] == 236.0
+    # The answers cut off with the right answer in the cut text, and the two intervals, need the stored answers.
+    files = {(key, s): f"runs/abaybektursun-1115-{job}/answers.jsonl" for key, runs in G["runs"].items()
+             for (_, job), s in zip(runs, seeds[key])}
+    if not all(os.path.exists(f) for f in files.values()):
+        print("dirs: the cut-off-right counts and the two intervals were not rechecked; for that run uv run tools/gpu.py get "
+              "<job> for the jobs in DATA['dirs']['runs']")
+        return
+    ans = {}
+    for (key, s), f in files.items():
+        rows = {r["problem_index"]: r for r in map(json.loads, open(f))}
+        assert sorted(rows) == sorted(think) and all(r["seed"] == s + i for i, r in rows.items()), f
+        ans[(key, s)] = rows
+        e = G["each"][key][seeds[key].index(s)]
+        assert [sum(r["score_v3"] for r in rows.values()), sum(r["cap_hit"] for r in rows.values()),
+                sum(r["cap_hit"] and r["score_v3"] for r in rows.values())] == [e[0], e[1], e[3]], f
+    idx = sorted(think)
+    xs = [(ans[("3", 3000000)][i]["score_v3"] + ans[("3", 3100000)][i]["score_v3"]) / 2 for i in idx]
+    ys = [sum(think[i]) / len(think[i]) for i in idx]
+    got = [round(100 * (sum(xs) - sum(ys)) / len(idx), 1), *[round(v, 1) for v in n13_score.paired_bootstrap(xs, ys, n_boot=10000, seed=0)]]
+    assert got == G["minus_think"], got
+    xs, ys = ([float(ans[(k, 3000000)][i]["score_v3"]) for i in idx] for k in ("3", "rand"))
+    got = [round(100 * (sum(xs) - sum(ys)) / len(idx), 1), *[round(v, 1) for v in n13_score.paired_bootstrap(xs, ys, n_boot=2000, seed=0)]]
+    assert got == G["minus_rand"], got
+    print("DATA['dirs'] matches the stored answers in runs/ as well")
+
+
+def _check_cap32():  # DATA["cap32"] from its rows and metrics.json
+    from studies.rlneurons.lib import n13_score
+    rows = [json.loads(line) for line in open(K["rows"])]
+    assert len(rows) == DATA["n"] and all(r["seed"] == K["seed"] + r["problem_index"] for r in rows)
+    m = json.load(open(K["readout"]))
+    cell = lambda a: {"right": sum(r[a]["score_v3"] for r in rows), "cut": sum(r[a]["cap_hit"] for r in rows),
+                      "tokens": round(sum(r[a]["n_new"] for r in rows) / len(rows))}
+    fin16 = lambda r: not r["cap_hit"] and r["n_new"] <= DATA["cap"]  # the 16,384 view: right only if finished within it
+    a2 = {**cell("m2"), "right_16k": sum(r["m2"]["score_v3"] for r in rows if fin16(r["m2"])),
+          "cut_16k": sum(not fin16(r["m2"]) for r in rows)}
+    assert a2 == K["a2"] and cell("think_sft") == K["think"], (a2, cell("think_sft"))
+    assert (m["seed"], m["m2"]["right_at_32768"], m["m2"]["cap_hits_at_32768"], m["m2"]["right_at_16384_view"],
+            m["m2"]["cap_hits_at_16384_view"], m["think_sft"]["right_at_32768"]) == \
+        (K["seed"], K["a2"]["right"], K["a2"]["cut"], K["a2"]["right_16k"], K["a2"]["cut_16k"], K["think"]["right"])
+    r = m["m2_minus_think_at_32768"]
+    assert [round(r["points"], 1), *[round(v, 1) for v in r["ci95"]]] == K["minus_think"]
+    xs, ys = ([float(r[a]["score_v3"]) for r in rows] for a in ("m2", "think_sft"))
+    got = [round(100 * (sum(xs) - sum(ys)) / len(rows), 1), *[round(v, 1) for v in n13_score.paired_bootstrap(xs, ys, n_boot=10000, seed=0)]]
+    assert got == K["minus_think"], got
+    rj = json.load(open(K["rows"].replace("rows.jsonl", "run.json")))
+    for a in ("m2", "think_sft"):
+        cf = rj[a]["config"]
+        assert (cf["prompt"], cf["set"], cf["temperature"], cf["top_p"], cf["max_tokens"], cf["seed"]) == \
+            ("cue", "hard328", 1.0, 1.0, K["cap"], K["seed"]), a
+
+
 def _counts(by):  # every count of DATA from the rows
     cell = lambda rows: {"right": sum(r["score_v3"] for r in rows), "cut": sum(r["cap_hit"] for r in rows),
                          "fin": sum(not r["cap_hit"] for r in rows), "fin_right": sum(r["score_v3"] for r in rows if not r["cap_hit"]),
@@ -932,8 +1087,9 @@ svg * { pointer-events: none; }
 #a::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; margin-top: -9px; border-radius: 50%; background: var(--ink); border: 3px solid var(--paper); box-shadow: 0 0 0 1px var(--ink); }
 #a::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: var(--ink); border: 3px solid var(--paper); box-shadow: 0 0 0 1px var(--ink); }
 #a:focus-visible { outline-offset: 2px; }
-.ticks { grid-column: 2; display: flex; justify-content: space-between; padding: 0 3px; margin-top: -2px; }
-.ticks button { width: 28px; text-align: center; font-size: 14px; color: var(--mute); font-weight: 520; padding: 2px 0; transition: color .15s ease; }
+.ticks { grid-column: 2; position: relative; height: 25px; margin-top: -2px; }
+.ticks button { position: absolute; top: 0; left: calc(10px + (100% - 20px) * var(--v) / 4); width: 30px; margin-left: -15px; text-align: center; font-size: 14px; color: var(--mute); font-weight: 520; padding: 2px 0; transition: color .15s ease; }
+.ticks button[hidden] { display: none; }
 .ticks button:hover { color: var(--blue); }
 .ticks button[aria-pressed="true"] { color: var(--ink); font-weight: 700; }
 .ticks button:disabled { opacity: .35; cursor: default; color: var(--mute); }
@@ -942,6 +1098,14 @@ svg * { pointer-events: none; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--mute); color: var(--paper); }
 .setrow { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; padding: 0 0 4px 2.4%; }
+.setline { display: flex; align-items: center; gap: 10px 26px; flex-wrap: wrap; }
+/* The quieter second switch, on the 328 only: what is added, the whole change or its 8 largest directions per matrix */
+.which { display: inline-flex; gap: 16px; }
+.which button { font-size: 13.5px; font-weight: 540; color: var(--mute); padding: 4px 0 3px; border-bottom: 1.5px solid transparent; white-space: nowrap; transition: color .15s ease, border-color .15s ease; }
+.which button:hover { color: var(--blue); }
+.which button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.which button:disabled { opacity: .4; cursor: default; color: var(--mute); border-bottom-color: transparent; }
+.wl { fill: none; stroke: var(--mute); stroke-width: 1.4; stroke-dasharray: 2 4; stroke-linecap: round; }
 .setcap { margin: 0; font-size: 13px; color: var(--mute); }
 .switch button:disabled { opacity: .4; cursor: default; color: var(--mute); }
 .hint { align-self: center; margin: 10px 0 0; font-size: 13px; color: var(--mute); text-align: center; max-width: 72ch; }
@@ -1002,6 +1166,8 @@ svg * { pointer-events: none; }
   .control { display: flex; flex-direction: column; gap: 14px; }
   .dial { grid-template-columns: auto minmax(0, 1fr); width: 100%; }
   .setrow { align-items: stretch; padding: 0 0 6px; }
+  .setline { flex-direction: column; align-items: stretch; }
+  .which { justify-content: center; }
   .setrow .switch { display: grid; grid-template-columns: 1fr 1fr; border-radius: 22px; }
   .setrow .switch button { text-align: center; white-space: normal; line-height: 1.2; padding: 8px 6px; }
 }
@@ -1022,9 +1188,14 @@ svg * { pointer-events: none; }
   </header>
   <div class="stage" id="stage">
     <div class="setrow">
-      <div class="switch" role="group" aria-label="Which problems">
-        <button data-set="hard" aria-pressed="true">328 harder problems</button>
-        <button data-set="fresh" aria-pressed="false">136 problems from 2026</button>
+      <div class="setline">
+        <div class="switch" role="group" aria-label="Which problems">
+          <button data-set="hard" aria-pressed="true">328 harder problems</button>
+          <button data-set="fresh" aria-pressed="false">136 problems from 2026</button>
+        </div>
+        <div class="which" role="group" aria-label="What of RL's change is added">
+          <button data-w="whole" aria-pressed="true">Whole RL change</button><button data-w="dir" aria-pressed="false">8 RL directions</button>
+        </div>
       </div>
       <p class="setcap" id="setcap"></p>
     </div>
@@ -1032,9 +1203,9 @@ svg * { pointer-events: none; }
     <div class="control">
       <div class="dial">
         <label class="sym" for="a">a</label>
-        <input type="range" id="a" min="0" max="4" step="1" value="2" aria-label="a, how many times RL's weight change is added to Think-SFT">
+        <input type="range" id="a" min="0" max="4" step="0.5" value="2" aria-label="a, how many times RL's weight change is added to Think-SFT">
         <div class="ticks" role="group" aria-label="Measured values of a">
-          <button data-k="0" aria-pressed="false">0</button><button data-k="1" aria-pressed="false">1</button><button data-k="2" aria-pressed="false">2</button><button data-k="3" aria-pressed="false">3</button><button data-k="4" aria-pressed="false">4</button>
+          <button data-k="0" style="--v:0" aria-pressed="false">0</button><button data-k="1" style="--v:1" aria-pressed="false">1</button><button data-k="2" style="--v:1.5" aria-pressed="false" hidden>1.5</button><button data-k="3" style="--v:2" aria-pressed="false">2</button><button data-k="4" style="--v:3" aria-pressed="false">3</button><button data-k="5" style="--v:4" aria-pressed="false">4</button>
         </div>
       </div>
       <div class="switch" role="group" aria-label="What is added to Think-SFT">
@@ -1073,9 +1244,14 @@ const SRC = { olympiadbench: "OlympiadBench", amc23: "AMC 2023", aime2022: "AIME
 const BANDS = ["r", "w", "c"];
 const bandOf = (p, j) => p.o[j] === "C" ? "c" : p.o[j];
 const one = v => Number.isInteger(v) ? String(v) : v.toFixed(1);
+const neg = v => v.toFixed(1).replace("-", "−"), sgn = v => (v >= 0 ? "+" : "") + neg(v), iv = v => `${neg(v[1])} to ${neg(v[2])}`;
+/* The stops of every state sit on one axis of a: AX[k] is the value of stop k. The whole change was run at 0, 1, 2, 3 and
+   4, its 8 directions at 0, 1.5 and 3. Every array below has one entry per stop, null where that stop was not run. */
+const AX = [0, 1, 1.5, 2, 3, 4], six = v => [v[0], v[1], null, v[2], v[3], v[4]], DD = D.dirs, KC = D.cap32;
 const SETS = {
-  hard: { key: "hard", n: D.n, cols: [0, 4, 5, 7, 8], noise: 9, ks: [0, 1, 2, 3, 4], samples: D.samples,
-    right: D.right, cut: D.cut, share: D.share, rl: D.rl, texts: C.texts, easeCols: 10,
+  hard: { key: "hard", n: D.n, cols: six([0, 4, 5, 7, 8]), noise: 9, nzK: 1, nzv: D.noise, ks: [0, 1, 3, 4, 5], def: 3,
+    axis: [0, 1, 3, 4, 5], samples: six(D.samples),
+    right: six(D.right), cut: six(D.cut), share: six(D.share), rl: D.rl, texts: C.texts, easeCols: 10,
     pr: C.problems.map(([i, src, q, gold, o, ans, len]) => ({ i, src, q, gold, o, ans, len })),
     scale: [[196, 238], [25, 100], [64, 92]],  // the three rows of the trace: [low, high]
     rows: [["a = 0, Think-SFT", 0, [1, 2, 3]], ["a = 1", 4, []], ["a = 2", 5, [6]], ["a = 3", 7, []], ["a = 4", 8, []],
@@ -1083,8 +1259,8 @@ const SETS = {
     name: ["a = 0", "", "", "", "a = 1", "a = 2", "", "a = 3", "a = 4", "random noise"],
     cap: "AIME, AMC, HMMT and OlympiadBench problems that are not among RL's training prompts. a was chosen on these.",
     label: "harder problems" },
-  fresh: { key: "fresh", n: DF.n, cols: [0, null, 4, null, null], noise: null, ks: [0, 2],
-    samples: [DF.samples, 0, DF.samples, 0, 0], right: DF.right, cut: DF.cut, share: DF.share, rl: DF.rl, texts: C.ftexts, easeCols: 8,
+  fresh: { key: "fresh", n: DF.n, cols: [0, null, null, 4, null, null], noise: null, nzK: null, ks: [0, 3], def: 3,
+    axis: [0, 1, 3, 4, 5], samples: [DF.samples, 0, 0, DF.samples, 0, 0], right: DF.right, cut: DF.cut, share: DF.share, rl: DF.rl, texts: C.ftexts, easeCols: 8,
     pr: C.fproblems.map(([i, src, num, date, q, gold, o, ans, len]) => ({ i, src, num, date, q, gold, o, ans, len })),
     scale: [[46, 76], [15, 70], [38, 90]],
     rows: [["a = 0, Think-SFT", 0, [1, 2, 3]], ["a = 2", 4, [5, 6, 7]], ["RL (no cue)", 8, [9, 10, 11]]],
@@ -1092,22 +1268,30 @@ const SETS = {
     cap: `AIME and HMMT contests held in 2026, after the models' last weight upload (${day(DF.upload)}). a = 2 was fixed before this run.`,
     label: "problems from 2026" },
 };
+/* The 8 directions on the same 328 problems. Their run folders keep counts, not per-problem rows: past a = 0 (Think-SFT,
+   drawn per problem) a state is anonymous (anon), and its marks fill the bands to the first sample's stored counts, in
+   Think-SFT's order, drawn plain. bands[k]: [finished right, finished wrong, cut off] of that first sample. */
+SETS.dir = { ...SETS.hard, key: "dir", cols: [0, null, null, null, null, null], noise: null, nzK: 4, nzv: DD.rand,
+  nzBands: DD.rand.bands, bands: DD.bands, ks: [0, 2, 4], def: 4, axis: [0, 1, 2, 3, 4, 5], anon: true,
+  samples: DD.samples, right: DD.right, cut: DD.cut, share: DD.share,
+  cap: "The same problems, with only the 8 largest directions of RL's change in each weight matrix added." };
+const anonAt = (T, k) => !!T.anon && k !== 0;
 Object.values(SETS).forEach(T => {
   T.tx = {};
   T.texts.forEach(([j, i, t]) => { (T.tx[i] = T.tx[i] || []).push([j, t]); });
   T.lit = T.pr.map(p => bandOf(p, 0) === "c");  // cut off at a = 0: the answers RL's change acts on
   T.easeOrder = T.pr.map(p => [...p.o.slice(0, T.easeCols)].filter(x => x === "r").length);
 });
-const colOf = (T, k, nz) => nz && k === 1 ? T.noise : T.cols[k];
+const colOf = (T, k, nz) => nz && k === T.nzK ? T.noise : T.cols[k];
 const SERIES = [  // the three rows of the trace: data key, name, row height, unit
   { key: "right", name: n => `Right answers, of ${n}`, h: 84, u: "", think: true },
   { key: "cut", name: () => `Cut off at ${fmt(D.cap)} tokens`, h: 52, u: "" },
   { key: "share", name: () => "Finished answers that are right", h: 52, u: " %", fix: 1 },
 ];
 const val = (s, v) => (s.fix ? v.toFixed(s.fix) : one(v)) + s.u;
-const S = { k: 2, nz: false, set: "hard", open: null, g: null, el: {}, shown: {}, t: 0, last: 0, t0: -1e9, from: [], to: [],
+const S = { k: 3, nz: false, set: "hard", open: null, g: null, el: {}, shown: {}, t: 0, last: 0, t0: -1e9, from: [], to: [],
   fromBand: [], toBand: [], fromLit: [], toLit: [], who: [], rank: [], c0: [0, 0, 0, 0], c1: [0, 0, 0, 0], p0: 2, p1: 2,
-  q0: 0, q1: 0, pos: [], touched: false, kFrom: 2, nzFrom: false, setFrom: "hard" };
+  q0: 0, q1: 0, pos: [], touched: false, kFrom: 3, nzFrom: false, setFrom: "hard" };
 
 /* Geometry, in a small 3D space around the plate's centre (x right, y down, z toward the viewer). bands: the three
    outcome bands of marks of each set (label line, first row), the 136 in fewer columns at the same pitch so they fill
@@ -1116,28 +1300,33 @@ function geo() {
   if (narrow.matches) {
     return lay({ w: 480, h: 1400, cx: 240, cy: 700, D: 2400, a: [6, 8, 474, 1392], r: 22, deep: 30, blur: 12,
       cols: { hard: 24, fresh: 16 }, pitch: 17, gx: 44, d: [9, 6.4, 10], fs: 18, fb: 104,
-      bigX: 36, bigY: 118, labY: [154, 178, 202], bandTop: 262, bandGap: 50,
+      bigX: 36, bigY: 118, labY: [154, 178, 202, 228, 250, 272], bandTop: 326, bandGap: 50,
       tx: [172, 238, 304, 370, 436], fv: 17, phone: true });
   }
   return lay({ w: 1000, h: 600, cx: 500, cy: 300, D: 2200, a: [24, 18, 976, 582], r: 30, deep: 40, blur: 16,
     cols: { hard: 30, fresh: 20 }, pitch: 13.6, gx: 66, d: [8.2, 5.6, 9], fs: 15, fb: 112,
-    bigX: 540, bigY: 128, labY: [160, 181, 202], bandTop: 70, bandGap: 38,
-    tx: [592, 657, 722, 787, 852], rowY: [296, 414, 504], axisY: 552, fv: 13.5 });
+    bigX: 540, bigY: 124, labY: [154, 173, 192, 214, 233, 252], bandTop: 70, bandGap: 38,
+    tx: [592, 657, 722, 787, 852], rowY: [318, 430, 514], axisY: 558, fv: 13.5 });
 }
 function lay(g) {  // per set, band rows sized for the largest count each band reaches at any a of that set
   g.bands = {}; g.keyYs = {};
+  g.cols.dir = g.cols.hard;
+  const extra = [...SETS.dir.bands, SETS.dir.nzBands].filter(Boolean);  // the 8 directions share the bands of the 328
   Object.values(SETS).forEach(T => {
+    if (T.key === "dir") return;
     let y = g.bandTop;
     const cols = [...T.cols, T.noise].filter(j => j != null);
-    g.bands[T.key] = BANDS.map(b => {
-      const most = Math.max(...cols.map(j => T.pr.reduce((s, p) => s + (bandOf(p, j) === b ? 1 : 0), 0))), rows = Math.max(1, Math.ceil(most / g.cols[T.key]));
+    g.bands[T.key] = BANDS.map((b, bi) => {
+      const most = Math.max(...cols.map(j => T.pr.reduce((s, p) => s + (bandOf(p, j) === b ? 1 : 0), 0)),
+        ...(T.key === "hard" ? extra.map(x => x[bi]) : [])), rows = Math.max(1, Math.ceil(most / g.cols[T.key]));
       const out = { lab: y, y0: y + g.fs * 1.25, rows };
       y = out.y0 + (rows - 1) * g.pitch + g.bandGap;
       return out;
     });
     g.keyYs[T.key] = y - g.bandGap + g.fs * 2.4;
   });
-  if (g.phone) {  // on a phone the trace sits under the marks, at the same place for both sets
+  g.bands.dir = g.bands.hard; g.keyYs.dir = g.keyYs.hard;
+  if (g.phone) {  // on a phone the trace sits under the marks, at the same place for every set
     const ky = Math.max(...Object.values(g.keyYs));
     g.rowY = [ky + 200, ky + 360, ky + 490];
     g.axisY = g.rowY[2] + 70;
@@ -1178,22 +1367,24 @@ function build() {
     `<g class="marks"><path class="mk glow" id="mg" stroke-width="${g.d[0] + 7}"/>${marks}<circle class="sel" id="sel" r="0"/>` +
     BANDS.map(b => `<text class="band" id="b${b}" font-size="${g.fs}"><tspan class="n" id="bn${b}"></tspan><tspan id="bt${b}"></tspan></text>`).join("") + `</g>` +
     `<g class="key"><circle class="kd o" id="ko" r="${g.d[0] / 2}"/><text class="lab" id="kto" font-size="${g.fs}">Cut off by Think-SFT</text>` +
-    `<circle class="kd x" id="kx" r="${g.d[0] / 2}"/><text class="lab" id="ktx" font-size="${g.fs}">Finished by Think-SFT</text></g>` +
+    `<circle class="kd x" id="kx" r="${g.d[0] / 2}"/><text class="lab" id="ktx" font-size="${g.fs}">Finished by Think-SFT</text>` +
+    `<text class="lab" id="kan" font-size="${g.fs}" opacity="0">Marks show stored counts, not problems</text></g>` +
     `<g class="read"><text class="big" id="big" font-size="${g.fb}"></text>` +
-    [0, 1, 2].map(k => `<text class="lab" id="bl${k}" font-size="${g.fs}"></text>`).join("") + `</g>` +
+    [0, 1, 2, 3, 4, 5].map(k => `<text class="lab" id="bl${k}" font-size="${g.fs}"></text>`).join("") + `</g>` +
     `<g class="trace"><path class="now" id="now"/>` +
     SERIES.map((s, j) => `<text class="rowlab" id="rl${j}" font-size="${g.fs}"></text>` +
       `<path class="ref" id="rr${j}"/><text class="reflab" id="rt${j}" font-size="${rf}" text-anchor="${anchor}"></text>` +
       (s.think ? `<path class="ref" id="tr${j}"/><text class="reflab" id="tt${j}" font-size="${rf}" text-anchor="${anchor}"></text>` : "") +
-      `<path class="ghost" id="gh${j}"/><path class="tl" id="tl${j}"/><path class="tl nz" id="tn${j}"/>` +
+      `<path class="wl" id="wc${j}"/><path class="ghost" id="gh${j}"/><path class="tl" id="tl${j}"/><path class="tl nz" id="tn${j}"/>` +
       `<circle class="halo" id="ha${j}" r="0"/>` +
-      [0, 1, 2, 3, 4].map(k => `<circle class="pt" id="pt${j}_${k}" r="${g.fv * .3}"/>`).join("") +
+      AX.map((_, k) => `<circle class="pt" id="pt${j}_${k}" r="${g.fv * .3}"/>`).join("") +
       `<circle class="nzp" id="np${j}" r="${g.fv * .34}"/>` +
-      [0, 1, 2, 3, 4].map(k => `<text class="val" id="v${j}_${k}" font-size="${g.fv}" text-anchor="middle"></text>`).join("") +
+      AX.map((_, k) => `<text class="val" id="v${j}_${k}" font-size="${g.fv}" text-anchor="middle"></text>`).join("") +
       `<text class="val" id="nv${j}" font-size="${g.fv}" text-anchor="start"></text>`).join("") +
-    [0, 1, 2, 3, 4].map(k => `<text class="axis" id="ax${k}" font-size="${g.fv}" text-anchor="middle">a = ${k}</text>` +
+    AX.map((v, k) => `<text class="axis" id="ax${k}" font-size="${g.fv}" text-anchor="middle">${k ? v : "a = 0"}</text>` +
       `<text class="axis nr" id="nr${k}" font-size="${g.fv}" text-anchor="middle" opacity="0">not run</text>`).join("") +
-    `</g>`;
+    `<path class="wl" id="wlg"/><text class="lab" id="wlt" font-size="${g.fv}">whole change</text>` +
+    `<text class="val far" id="wpk" font-size="${g.fv}" text-anchor="middle"></text></g>`;
   S.el = {}; S.shown = {};
   svg.querySelectorAll("[id]").forEach(e => { S.el[e.id] = e; });
 }
@@ -1255,24 +1446,43 @@ function place(t, now) {
     E[dot].setAttribute("cx", f(q[0])); E[dot].setAttribute("cy", f(q[1]));
     at(E[lab], [q[0] + g.fs * .8, q[1]], g.fs * .35);
   });
+  const an0 = anonAt(SETS[S.setFrom], S.kFrom) ? 1 : 0, an1 = anonAt(SETS[S.set], S.k) ? 1 : 0, ka = mix(an0, an1, e);
+  ["ko", "kto", "kx", "ktx"].forEach(id => E[id].setAttribute("opacity", f(clamp(1 - 2 * ka, 0, 1))));  // one fades out, then the other in
+  E.kan.setAttribute("opacity", f(clamp(2 * ka - 1, 0, 1)));
+  at(E.kan, proj(g, g.gx - g.d[0] / 2, keyY, 4), g.fs * .35);
   const target = S.c1[0];
   text("big", Number.isInteger(target) && done ? String(target) : (done ? one(target) : (Number.isInteger(target) ? fmt(c[0]) : c[0].toFixed(1))));
   at(E.big, proj(g, g.bigX, g.bigY, 10));
-  const isNz = nzNow && kNow === 1, ns = W.samples[kNow];
-  text("bl0", `of ${W.n} right, ` + (isNz ? "Think-SFT + random noise" : kNow === 0 ? "Think-SFT alone" : kNow === 1 ? "Think-SFT + RL's change" : `Think-SFT + ${kNow} × RL's change`));
+  const isNz = nzNow && kNow === W.nzK, ns = W.samples[kNow], what = W.anon ? "RL's 8 directions" : "RL's change";
+  text("bl0", `of ${W.n} right, ` + (isNz ? (W.anon ? "Think-SFT + 3 × a random rank-8 edit" : "Think-SFT + random noise")
+    : kNow === 0 ? "Think-SFT alone" : AX[kNow] === 1 ? `Think-SFT + ${what}` : `Think-SFT + ${AX[kNow]} × ${what}`));
   text("bl1", isNz || ns === 1 ? "One sample." : `Mean of ${ns} samples; the marks show the first.`);
   text("bl2", `Think-SFT ${one(W.right[0])}, RL ${one(W.rl.right)} (no cue). T 1.0.`);
-  [0, 1, 2].forEach(k => at(E["bl" + k], proj(g, g.bigX + 4, g.labY[k], 10)));
+  // Two more lines where a further measurement belongs to the state: a = 2 allowed 32,768 tokens; the 8 directions at
+  // a = 3 against Think-SFT and the whole change; the random rank-8 edit against the directions.
+  const ph = !!g.phone, more = W.key === "hard" && kNow === 3
+    ? (ph ? [`Allowed ${fmt(KC.cap)} tokens: ${KC.a2} of ${W.n},`, `Think-SFT ${KC.think}; ${sgn(KC.minus[0])} points,`, `95 % interval ${iv(KC.minus)}. One sample.`]
+      : [`Allowed ${fmt(KC.cap)} tokens: ${KC.a2} of ${W.n}, Think-SFT ${KC.think};`, `${sgn(KC.minus[0])} points, 95 % interval ${iv(KC.minus)}. One sample.`])
+    : W.key === "dir" && isNz
+    ? (ph ? ["The 8 directions at a = 3 beat it", `by ${DD.minus_rand[0]} points (95 % interval ${iv(DD.minus_rand)}),`, "same seed."]
+      : [`The 8 directions at a = 3 beat it by ${DD.minus_rand[0]} points`, `(95 % interval ${iv(DD.minus_rand)}), same seed.`])
+    : W.key === "dir" && kNow === 4
+    ? (ph ? [`${sgn(DD.minus_think[0])} points over Think-SFT,`, `95 % interval ${iv(DD.minus_think)}. Whole change`, `at a = 2, same seeds: ${DD.whole[0]} and ${DD.whole[1]}.`]
+      : [`${sgn(DD.minus_think[0])} points over Think-SFT, 95 % interval ${iv(DD.minus_think)}.`, `Whole change at a = 2, same seeds: ${DD.whole[0]} and ${DD.whole[1]}.`])
+    : [];
+  [3, 4, 5].forEach(k => text("bl" + k, more[k - 3] || ""));
+  [0, 1, 2, 3, 4, 5].forEach(k => at(E["bl" + k], proj(g, g.bigX + 4, g.labY[k], 10)));
 
   // The trace: each row its own scale per set, the values printed. The line draws on to the chosen a (p, 0 to 4) through
   // the measured stops of the set; the noise is a hollow point at a = 1 with a dashed line from a = 0 (q, 0 to 1). RL and
   // Think-SFT are dashed levels. When the set changes, every point and level travels from its place on the old scale to
   // its place on the new one; a stop run on one set only fades.
-  const pr = mix(S.p0, S.p1, e), qn = mix(S.q0, S.q1, e), X = k => g.tx[k];
+  const pr = mix(S.p0, S.p1, e), qn = mix(S.q0, S.q1, e), X = k => g.tx[0] + AX[k] * (g.tx[1] - g.tx[0]);
   const line = pts => "M" + pts.map(q => f(q[0]) + " " + f(q[1])).join("L");
-  const x0 = g.tx[0] - 14, x1 = g.tx[4] + 14, labX = g.phone ? g.tx[0] - 24 : x1 + 8;
+  const x0 = g.tx[0] - 14, x1 = g.tx[4] + 8, labX = g.phone ? g.tx[0] - 24 : x1 + 8;
   const has = (T, k) => T.right[k] != null;
   const vis = k => has(A, k) && has(B, k) ? 1 : has(B, k) ? es : has(A, k) ? 1 - es : 0;
+  const isDir = T => T.key === "dir" ? 1 : 0, wv = mix(isDir(A), isDir(B), es), H = SETS.hard;  // the whole change, drawn under the 8 directions
   SERIES.forEach((s, j) => {
     const h = g.phone ? s.h * 1.2 : s.h, ya = v => rowY(g, A, j, v), yb = v => rowY(g, B, j, v);
     const Y = (va, vb) => va == null ? yb(vb) : vb == null ? ya(va) : mix(ya(va), yb(vb), es);
@@ -1280,6 +1490,16 @@ function place(t, now) {
     text("rl" + j, s.name(W.n));
     at(E["rl" + j], proj(g, g.phone ? 30 : g.tx[0] - 24, g.rowY[j] - h / 2 - g.fv * 1.9, 10));
     E["gh" + j].setAttribute("d", line(B.ks.map(P)));
+    E["wc" + j].setAttribute("d", wv > .01 ? line(H.ks.map(k => proj(g, X(k), rowY(g, H, j, H[s.key][k]), 10))) : "");
+    E["wc" + j].setAttribute("opacity", f(.75 * wv));
+    if (j === 0) {
+      const ly = g.rowY[0] - h / 2 - g.fv * 1.9, lx = g.phone ? 300 : g.tx[2] + 20;
+      E.wlg.setAttribute("d", line([proj(g, lx, ly - g.fv * .32, 10), proj(g, lx + 24, ly - g.fv * .32, 10)]));
+      at(E.wlt, proj(g, lx + 32, ly, 10));
+      E.wlg.setAttribute("opacity", f(.75 * wv)); E.wlt.setAttribute("opacity", f(wv));
+      const pk = proj(g, X(3), rowY(g, H, 0, H.right[3]), 10);  // the whole change's best count, at a = 2
+      at(E.wpk, pk, -g.fv * .75); text("wpk", one(H.right[3])); E.wpk.style.opacity = f(.6 * wv);
+    }
     const level = (path, lab, y, words) => {
       E[path].setAttribute("d", line([proj(g, x0, y, 10), proj(g, x1, y, 10)]));
       at(E[lab], proj(g, labX, y, 10), g.fv * .32);
@@ -1289,23 +1509,29 @@ function place(t, now) {
     if (s.think) level("tr" + j, "tt" + j, Y(A[s.key][0], B[s.key][0]), `Think-SFT ${val(s, W[s.key][0])}`);
     const pts = [P(B.ks[0])];
     for (let i = 1; i < B.ks.length; i++) {
-      const ka = B.ks[i - 1], kb = B.ks[i];
-      if (pr >= kb) pts.push(P(kb));
-      else if (pr > ka) { const a = P(ka), b = P(kb), u = (pr - ka) / (kb - ka); pts.push([mix(a[0], b[0], u), mix(a[1], b[1], u)]); break; }
+      const ka = B.ks[i - 1], kb = B.ks[i], va = AX[ka], vb = AX[kb];
+      if (pr >= vb) pts.push(P(kb));
+      else if (pr > va) { const a = P(ka), b = P(kb), u = (pr - va) / (vb - va); pts.push([mix(a[0], b[0], u), mix(a[1], b[1], u)]); break; }
       else break;
     }
     E["tl" + j].setAttribute("d", line(pts));
-    const nzv = D.noise[s.key], nq = proj(g, X(1), rowY(g, SETS.hard, j, nzv), 10), a0 = P(0);
+    // the control (noise at a = 1 for the whole change, a random rank-8 edit at a = 3 for the directions): a hollow point
+    const nzAt = T => T.nzK == null ? null : proj(g, X(T.nzK), rowY(g, T, j, T.nzv[s.key]), 10);
+    const na = nzAt(A), nb = nzAt(B), nq = na && nb ? [mix(na[0], nb[0], es), mix(na[1], nb[1], es)] : nb || na || [0, 0], a0 = P(0);
+    const NW = W.nzK == null ? (B.nzK == null ? A : B) : W;
     E["tn" + j].setAttribute("d", qn > .01 ? line([a0, [mix(a0[0], nq[0], qn), mix(a0[1], nq[1], qn)]]) : "");
     E["np" + j].setAttribute("cx", f(nq[0])); E["np" + j].setAttribute("cy", f(nq[1]));
     E["np" + j].setAttribute("class", "nzp" + (isNz ? " on" : "") + (nzNow ? "" : " hide"));
-    at(E["nv" + j], [nq[0] + g.fv * .7, nq[1]], g.fv * .35);
-    text("nv" + j, `noise ${val(s, nzv)}`);
+    // its value: right of the point for the noise at a = 1, above it for the random edit at a = 3 (the levels' names are to its right)
+    const up = mix(A.anon ? 1 : 0, B.anon ? 1 : 0, es);
+    at(E["nv" + j], [nq[0] + g.fv * .7 * (1 - up), nq[1]], g.fv * (.35 - 1.1 * up));
+    E["nv" + j].setAttribute("text-anchor", up > .5 ? "middle" : "start");
+    if (NW.nzv) text("nv" + j, `${NW.anon ? "random" : "noise"} ${val(s, NW.nzv[s.key])}`);
     E["nv" + j].setAttribute("class", "val" + (nzNow ? "" : " hide"));
-    for (let k = 0; k <= 4; k++) {
+    for (let k = 0; k < AX.length; k++) {
       const el = E[`pt${j}_${k}`], o = vis(k), v = E[`v${j}_${k}`];
       if (!o) { el.setAttribute("opacity", "0"); v.setAttribute("class", "val hide"); continue; }
-      const q = P(k), on = pr >= k - .02 && !(nzNow && k > 0);
+      const q = P(k), on = pr >= AX[k] - .02 && !(nzNow && k > 0);
       el.setAttribute("cx", f(q[0])); el.setAttribute("cy", f(q[1])); el.setAttribute("opacity", f(o));
       el.setAttribute("class", `pt${on ? "" : " off"}`);
       el.setAttribute("r", f(g.fv * (k === kNow && !isNz ? .42 : .3)));
@@ -1319,11 +1545,12 @@ function place(t, now) {
   });
   const nx = X(kNow), top = proj(g, nx, g.rowY[0] - SERIES[0].h / 2 - 6, 10), bot = proj(g, nx, g.axisY - g.fv * 1.2, 10);
   E.now.setAttribute("d", `M${f(top[0])} ${f(top[1])}L${f(bot[0])} ${f(bot[1])}`);
-  for (let k = 0; k <= 4; k++) {
-    const nr = (has(A, k) ? 0 : 1 - es) + (has(B, k) ? 0 : es);
+  for (let k = 0; k < AX.length; k++) {  // a stop of the axis that this state did not run is greyed and marked not run
+    const sh = T => T.axis.includes(k) ? 1 : 0, off = T => sh(T) && !has(T, k) ? 1 : 0;
+    const so = mix(sh(A), sh(B), es), nr = mix(off(A), off(B), es);
     at(E["ax" + k], proj(g, X(k), g.axisY, 10));
     E["ax" + k].setAttribute("class", "axis" + (k === kNow ? " on" : ""));
-    E["ax" + k].setAttribute("opacity", f(1 - .55 * nr));
+    E["ax" + k].setAttribute("opacity", f(so - .55 * nr));
     at(E["nr" + k], proj(g, X(k), g.axisY + g.fv * 1.15, 10));
     E["nr" + k].setAttribute("opacity", f(nr));
   }
@@ -1340,32 +1567,42 @@ function frame(now) {
   aim(4 * Math.sin(t * .13) + 3.5 * V.px, 2 * Math.sin(t * .09) - 2 * V.py);
   place(t, now);
 }
-function layout(T, j) {  // each problem's band and place for answer column j of set T
-  const g = S.g, band = T.pr.map(p => bandOf(p, j)), pos = [], rank = [];
+function layout(T, k, nz) {  // each problem's band and place at stop k of set T (nz: the control at its stop)
+  const g = S.g, pos = [], rank = [], idx = T.pr.map((p, i) => i);
+  let band, order;
+  if (anonAt(T, k)) {  // only counts are stored: fill the bands to them in Think-SFT's order
+    const cnt = nz && k === T.nzK ? T.nzBands : T.bands[k], base = layout(T, 0, false).rank;
+    order = idx.slice().sort((x, y) => base[x] - base[y]);
+    band = []; order.forEach((i, r) => { band[i] = r < cnt[0] ? "r" : r < cnt[0] + cnt[1] ? "w" : "c"; });
+  } else {
+    const j = colOf(T, k, nz);
+    band = T.pr.map(p => bandOf(p, j));
+    order = idx.slice().sort((x, y) => T.lit[y] - T.lit[x] || T.easeOrder[y] - T.easeOrder[x] || T.pr[x].i - T.pr[y].i);
+  }
   let r = 0;
-  BANDS.forEach(b => {
-    const ids = T.pr.map((p, k) => k).filter(k => band[k] === b)
-      .sort((x, y) => T.lit[y] - T.lit[x] || T.easeOrder[y] - T.easeOrder[x] || T.pr[x].i - T.pr[y].i);
-    ids.forEach((k, s) => { pos[k] = slot(g, T, b, s); rank[k] = r++; });
-  });
+  BANDS.forEach(b => order.filter(i => band[i] === b).forEach((i, s) => { pos[i] = slot(g, T, b, s); rank[i] = r++; }));
   return { band, pos, rank };
 }
 function counts(T, k, nz) {
+  const right = nz && k === T.nzK ? T.nzv.right : T.right[k];
+  if (anonAt(T, k)) return [right, ...(nz && k === T.nzK ? T.nzBands : T.bands[k])];
   const j = colOf(T, k, nz);
-  return [nz && k === 1 ? D.noise.right : T.right[k], ...BANDS.map(b => T.pr.reduce((s, p) => s + (bandOf(p, j) === b ? 1 : 0), 0))];
+  return [right, ...BANDS.map(b => T.pr.reduce((s, p) => s + (bandOf(p, j) === b ? 1 : 0), 0))];
 }
-const toward = (T, k) => T.ks.reduce((b, s) => {  // the measured stop nearest to k; a tie goes the way the reader moved
-  const d = Math.abs(s - k) - Math.abs(b - k);
-  return d < 0 || (d === 0 && (s - b) * (k - S.k) > 0) ? s : b;
+const allowed = (T, nz) => nz ? [0, T.nzK] : T.ks;  // the stops the slider can take: with the control, a = 0 and its stop
+const toward = (T, v, list = T.ks) => list.reduce((b, s) => {  // the stop nearest to a = v; a tie goes the way the reader moved
+  const d = Math.abs(AX[s] - v) - Math.abs(AX[b] - v);
+  return d < 0 || (d === 0 && (AX[s] - AX[b]) * (v - AX[S.k]) > 0) ? s : b;
 });
 function setState(k, nz, set, opts = {}) {
   const T = SETS[set];
-  if (set === "fresh") nz = false;
-  if (nz && k > 1) k = 1;
-  if (!T.ks.includes(k)) k = toward(T, k);
+  if (T.nzK == null) nz = false;
+  if (nz && k !== 0) k = T.nzK;
+  if (!T.ks.includes(k)) k = toward(T, AX[k]);
   const now = performance.now(), quick = still.matches || opts.instant;
-  const e = ease(clamp((now - S.t0) / 900, 0, 1)), L = layout(T, colOf(T, k, nz)), n = T.pr.length;
-  const who = T.pr.map((p, i) => i), to = L.pos.slice(), toBand = L.band.slice(), toLit = T.lit.slice(), rank = L.rank.slice();
+  const e = ease(clamp((now - S.t0) / 900, 0, 1)), L = layout(T, k, nz), n = T.pr.length;
+  const who = T.pr.map((p, i) => i), to = L.pos.slice(), toBand = L.band.slice(), rank = L.rank.slice();
+  const toLit = anonAt(T, k) ? T.pr.map(() => false) : T.lit.slice();  // anonymous marks are drawn plain
   let from = [], fromBand = [], fromLit = [];
   if (quick) { from = to.slice(); fromBand = toBand.slice(); fromLit = toLit.slice(); }
   else {
@@ -1386,30 +1623,42 @@ function setState(k, nz, set, opts = {}) {
   S.from = from; S.fromBand = fromBand; S.fromLit = fromLit; S.to = to; S.toBand = toBand; S.toLit = toLit; S.rank = rank; S.who = who;
   const c = S.c0.map((v, i) => mix(v, S.c1[i], e)), p = mix(S.p0, S.p1, e), q = mix(S.q0, S.q1, e);
   S.c1 = counts(T, k, nz); S.c0 = quick ? S.c1.slice() : c;
-  S.p1 = nz ? 0 : k; S.p0 = quick ? S.p1 : p;
-  S.q1 = nz && k === 1 ? 1 : 0; S.q0 = quick ? S.q1 : q;
+  S.p1 = nz ? 0 : AX[k]; S.p0 = quick ? S.p1 : p;
+  S.q1 = nz && k === T.nzK ? 1 : 0; S.q0 = quick ? S.q1 : q;
   S.kFrom = quick ? k : S.k; S.nzFrom = quick ? nz : S.nz; S.setFrom = quick ? set : S.set;
   S.k = k; S.nz = nz; S.set = set;
   S.t0 = quick ? -1e9 : now;
-  $("a").value = k;
-  document.querySelectorAll("[data-k]").forEach(b => {
+  $("a").value = AX[k];
+  const ok = allowed(T, nz), notRun = set === "fresh" ? "Not run on the 136 problems from 2026" : "Not run with the 8 directions";
+  document.querySelectorAll(".ticks [data-k]").forEach(b => {
     const kk = Number(b.dataset.k), off = !T.ks.includes(kk);
-    b.setAttribute("aria-pressed", kk === k); b.disabled = (nz && kk > 1) || off;
-    if (off) b.title = "Not run on the 136 problems from 2026"; else b.removeAttribute("title");
+    b.hidden = !T.axis.includes(kk);
+    b.setAttribute("aria-pressed", kk === k); b.disabled = off || !ok.includes(kk);
+    if (off) b.title = notRun; else b.removeAttribute("title");
   });
   document.querySelectorAll("[data-m]").forEach(b => {
-    b.setAttribute("aria-pressed", (b.dataset.m === "noise") === nz); b.disabled = set === "fresh" && b.dataset.m === "noise";
+    const isN = b.dataset.m === "noise";
+    b.textContent = isN ? (T.anon ? "Random rank-8 edit" : "Random noise") : (T.anon ? "RL's directions" : "RL's change");
+    b.setAttribute("aria-pressed", isN === nz); b.disabled = isN && T.nzK == null;
     if (b.disabled) b.title = "Not run on the 136 problems from 2026"; else b.removeAttribute("title");
   });
-  document.querySelectorAll("[data-set]").forEach(b => b.setAttribute("aria-pressed", b.dataset.set === set));
-  $("a").setAttribute("aria-valuetext", nz && k === 1 ? "random noise in place of RL's change" : `a = ${k}`);
+  document.querySelectorAll("[data-set]").forEach(b => b.setAttribute("aria-pressed", (b.dataset.set === "fresh") === (set === "fresh")));
+  document.querySelectorAll("[data-w]").forEach(b => {
+    b.setAttribute("aria-pressed", (b.dataset.w === "dir") === (set === "dir")); b.disabled = set === "fresh";
+    if (b.disabled) b.title = "Not run on the 136 problems from 2026"; else b.removeAttribute("title");
+  });
+  $("a").setAttribute("aria-valuetext", nz && k === T.nzK ? (T.anon ? "a random rank-8 edit at a = 3" : "random noise in place of RL's change") : `a = ${AX[k]}`);
   $("hint").textContent = nz
-    ? "Random noise of the size of RL's change at a = 1 was added once, so the slider stops at 1. Right answers and cut-offs stay at Think-SFT's values; the marks move as much as when Think-SFT answers again."
+    ? (T.anon ? "A random rank-8 edit of the same norm was added once, at a = 3, so the slider stops at 3. Its run keeps only counts, so the marks show counts, not which problems."
+      : "Random noise of the size of RL's change at a = 1 was added once, so the slider stops at 1. Right answers and cut-offs stay at Think-SFT's values; the marks move as much as when Think-SFT answers again.")
+    : set === "dir"
+      ? "RL's 8 largest directions per weight matrix, added a times to Think-SFT. Their runs keep only counts, so past a = 0 the marks show counts, not which problems."
     : set === "fresh"
       ? "One mark per problem, answered at a = 0 and a = 2 with the same seed; a = 1, 3 and 4 were not run on this set. Click a mark to see the problem."
       : "One mark per problem, answered at each a with the same seed. a = 0 is Think-SFT. Click a mark to see the problem.";
   const [r, nr, nw, nc] = S.c1;
-  $("svg").setAttribute("aria-label", `${T.n} ${T.label}, one mark each, ${nz && k === 1 ? "Think-SFT plus random noise" : `a = ${k}`}: ` +
+  $("svg").setAttribute("aria-label", `${T.n} ${T.label}, ${anonAt(T, k) ? "marks drawn from stored counts" : "one mark each"}, ` +
+    `${nz && k === T.nzK ? (T.anon ? "Think-SFT plus a random rank-8 edit at a = 3" : "Think-SFT plus random noise") : `a = ${AX[k]}${T.anon ? " times RL's 8 directions" : ""}`}: ` +
     `${one(r)} of ${T.n} right; the marks show ${nr} finished right, ${nw} finished wrong, ${nc} cut off at ${fmt(D.cap)} tokens. ` +
     `Think-SFT ${one(T.right[0])}, RL ${one(T.rl.right)}. Arrow keys change a; Enter opens a problem.`);
   if (still.matches) { aim(0, 0); place(0, now); }
@@ -1433,7 +1682,8 @@ function problemPane(n) {
     ? texts.map(([j, t]) => `<div class="txt"><p class="tcap">Stored text: the end of the answer at ${T.name[j]} (${word(p.o[j])})</p><p data-math>… ${esc(t)}</p></div>`).join("")
     : `<p class="gold">No answer text is stored for this problem: the rows keep each answer's final result, its length and whether it was cut off.</p>`;
   const head = fresh ? `${esc(SRC[p.src] || p.src)}, problem ${esc(p.num)}` : `Problem ${p.i}, ${esc(SRC[p.src] || p.src)}`;
-  const when = fresh ? `<p class="gold">Held ${day(p.date)}, after the models' last weights (${day(DF.upload)}). On this set only a = 0 and a = 2 were run, ${DF.samples} samples each, and the first is the mark.</p>` : "";
+  const when = fresh ? `<p class="gold">Held ${day(p.date)}, after the models' last weights (${day(DF.upload)}). On this set only a = 0 and a = 2 were run, ${DF.samples} samples each, and the first is the mark.</p>`
+    : T.anon ? `<p class="gold">The runs with RL's 8 directions keep only counts, so this problem's answers there are not known.</p>` : "";
   return `<div class="dhead"><h2>${head}</h2><button class="close" data-open="">Close</button></div>` + when +
     `<p class="lead q" data-math>${esc(p.q)}</p>` +
     `<p class="gold">Reference answer: <span data-math>${esc(p.gold)}</span></p>` +
@@ -1447,26 +1697,28 @@ function pane() {
       `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${esc(p[1])}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
-/* The state and what is open are one value in the address: #[fresh/][noise/]a<k>, then /<panel> or /p<problem>, the
-   problem's index in the set named. */
+/* The state and what is open are one value in the address: #[fresh/ or directions/][noise/]a<value of a>, then /<panel>
+   or /p<problem>, the problem's index in the set named. The default a of the state (2, or 3 for the directions) is left out. */
 function address(push) {
-  const parts = [S.set === "fresh" ? "fresh" : "", S.nz ? "noise" : "", S.k === 2 && !S.nz ? "" : "a" + S.k, S.open || ""].filter(Boolean);
+  const parts = [{ fresh: "fresh", dir: "directions" }[S.set] || "", S.nz ? "noise" : "", S.k === SETS[S.set].def && !S.nz ? "" : "a" + AX[S.k],
+    S.open || ""].filter(Boolean);
   const url = parts.length ? "#" + parts.join("/") : location.pathname;
   push ? history.pushState(null, "", url) : history.replaceState(null, "", url);
 }
 function fromHash(first) {
-  const parts = decodeURIComponent(location.hash.slice(1)).split("/"), set = parts.includes("fresh") ? "fresh" : "hard";
-  const T = SETS[set], nz = set === "hard" && parts.includes("noise");
-  const ak = parts.find(x => /^a[0-4]$/.test(x));
-  let k = ak ? Number(ak[1]) : nz ? 1 : 2;
-  if (!T.ks.includes(k)) k = 2;
+  const parts = decodeURIComponent(location.hash.slice(1)).split("/");
+  const set = parts.includes("fresh") ? "fresh" : parts.includes("directions") ? "dir" : "hard";
+  const T = SETS[set], nz = T.nzK != null && parts.includes("noise");
+  const ak = parts.find(x => /^a(0|1|1\.5|2|3|4)$/.test(x));
+  let k = ak ? AX.indexOf(Number(ak.slice(1))) : nz ? T.nzK : T.def;
+  if (!allowed(T, nz).includes(k)) k = nz ? T.nzK : T.def;
   S.open = parts.find(x => C.panels.some(p => p[0] === x) || T.pr.some(p => "p" + p.i === x)) || null;
   if (first === true) {
     // With an empty address the page opens on Think-SFT (a = 0) and steps to a = 1 and a = 2 by itself.
     if (!location.hash && !still.matches) {
       setState(0, false, "hard", { instant: true });
       setTimeout(() => { if (!S.touched) setState(1, false, "hard"); }, 1300);
-      setTimeout(() => { if (!S.touched) setState(2, false, "hard"); }, 2400);
+      setTimeout(() => { if (!S.touched) setState(3, false, "hard"); }, 2400);
     } else setState(k, nz, set, { instant: true });
   } else if (k !== S.k || nz !== S.nz || set !== S.set) setState(k, nz, set);
   pane();
@@ -1485,10 +1737,12 @@ function open(key) {
 function go(k, nz = S.nz, set = S.set) {
   S.touched = true;
   const T = SETS[set];
-  if (set === "fresh") nz = false;
-  if (nz && k > 1) k = 1;
-  if (!T.ks.includes(k)) k = set !== S.set ? 2 : toward(T, k);
-  if (k === S.k && nz === S.nz && set === S.set) { $("a").value = k; return; }
+  if (T.nzK == null) nz = false;
+  // between the whole change and its 8 directions the slider goes to the other state's headline stop (a = 2 or 3)
+  if ((set === "dir") !== (S.set === "dir") && set !== "fresh" && S.set !== "fresh" && k !== 0) k = T.def;
+  if (nz && k !== 0) k = T.nzK;
+  if (!T.ks.includes(k)) k = set !== S.set ? T.def : toward(T, AX[k]);
+  if (k === S.k && nz === S.nz && set === S.set) { $("a").value = AX[k]; return; }
   if (set !== S.set && S.open && S.open[0] === "p") { S.open = null; pane(); }  // a problem of the other set closes
   setState(k, nz, set);
   address(false);
@@ -1496,24 +1750,27 @@ function go(k, nz = S.nz, set = S.set) {
 
 /* The picture's controls: the slider, its stops, the two switches; click a mark to open its problem. */
 const svg = $("svg");
-$("a").addEventListener("input", e => go(Number(e.target.value)));
+$("a").addEventListener("input", e => go(toward(SETS[S.set], Number(e.target.value), allowed(SETS[S.set], S.nz))));
 function svgPoint(e) { const m = svg.getScreenCTM().inverse(); return [m.a * e.clientX + m.c * e.clientY + m.e, m.b * e.clientX + m.d * e.clientY + m.f]; }
 function nearest([x, y]) {
   let best = -1, bd = (S.g.pitch * .75) ** 2;
   S.pos.forEach((q, k) => { const d = (q[0] - x) ** 2 + (q[1] - y) ** 2; if (d < bd) { bd = d; best = k; } });
   return best;
 }
-svg.addEventListener("pointermove", e => { if (e.pointerType === "mouse") svg.style.cursor = nearest(svgPoint(e)) >= 0 ? "pointer" : "default"; });
+const anonNow = () => anonAt(SETS[S.set], S.k);  // marks drawn from counts are not problems and do not open
+svg.addEventListener("pointermove", e => { if (e.pointerType === "mouse") svg.style.cursor = !anonNow() && nearest(svgPoint(e)) >= 0 ? "pointer" : "default"; });
 svg.addEventListener("click", e => {
+  if (anonNow()) return;
   const k = nearest(svgPoint(e));
   if (k >= 0) { S.touched = true; open("p" + SETS[S.set].pr[S.who[k]].i); show(); }
 });
 document.addEventListener("click", e => {
-  const b = e.target.closest("[data-k]"), m = e.target.closest("[data-m]"), o = e.target.closest("[data-open]"), s = e.target.closest("[data-step]");
-  const st = e.target.closest("[data-set]");
+  const b = e.target.closest(".ticks [data-k]"), m = e.target.closest("[data-m]"), o = e.target.closest("[data-open]"), s = e.target.closest("[data-step]");
+  const st = e.target.closest("[data-set]"), w = e.target.closest("[data-w]");
   if (b) go(Number(b.dataset.k));
-  if (m) go(m.dataset.m === "noise" ? 1 : S.k, m.dataset.m === "noise");
-  if (st) go(S.k, S.nz, st.dataset.set);
+  if (m) go(m.dataset.m === "noise" ? SETS[S.set].nzK : S.k, m.dataset.m === "noise");
+  if (st) go(S.k, S.nz, st.dataset.set === "hard" && S.set === "dir" ? "dir" : st.dataset.set);
+  if (w && !w.disabled) go(S.k, S.nz, w.dataset.w === "dir" ? "dir" : "hard");
   if (o) open(o.dataset.open);
   if (s) {
     const PR = SETS[S.set].pr, j = PR.findIndex(p => "p" + p.i === S.open), n = (j + Number(s.dataset.step) + PR.length) % PR.length;
@@ -1524,9 +1781,11 @@ document.addEventListener("click", e => {
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.key === "Escape" && S.open) open("");
-  if ((e.key === "ArrowRight" || e.key === "ArrowLeft") && !/INPUT|TEXTAREA/.test(document.activeElement.tagName))
-    go(clamp(S.k + (e.key === "ArrowRight" ? 1 : -1), 0, S.nz ? 1 : 4));
-  if (e.key === "Enter" && document.activeElement === svg) {  // the first mark of the first band
+  if ((e.key === "ArrowRight" || e.key === "ArrowLeft") && !/INPUT|TEXTAREA/.test(document.activeElement.tagName)) {
+    const list = allowed(SETS[S.set], S.nz), i = list.indexOf(S.k);
+    go(list[clamp(i + (e.key === "ArrowRight" ? 1 : -1), 0, list.length - 1)]);
+  }
+  if (e.key === "Enter" && document.activeElement === svg && !anonNow()) {  // the first mark of the first band
     e.preventDefault();
     open("p" + SETS[S.set].pr[S.who[S.rank.indexOf(0)]].i);
     show();
@@ -1583,7 +1842,14 @@ PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
              "share": DATA["share"], "noise": DATA["noise"], "rl": DATA["rl"],
              # the 136 problems from 2026: a = 0 .. 4, None where a was not run
              "fresh": {"n": F["n"], "samples": F["samples"], "upload": F["upload"], "rl": F["rl"],
-                       **{k: [F[k][0], None, F[k][1], None, None] for k in ("right", "cut", "share")}}}}, ensure_ascii=False).replace("</", "<\\/"))
+                       **{k: [F[k][0], None, None, F[k][1], None, None] for k in ("right", "cut", "share")}},
+             # the 8 directions: one entry per stop a = 0, 1, 1.5, 2, 3, 4, None where not run; a = 0 is Think-SFT
+             "dirs": {**{k: [D[k][0], None, DIR["1.5"][k], None, DIR["3"][k], None] for k in ("right", "cut", "share", "samples")},
+                      "bands": [None, None, DIR["1.5"]["bands"], None, DIR["3"]["bands"], None],
+                      "rand": {k: DIR["rand"][k] for k in ("right", "cut", "share", "bands")},
+                      "minus_think": G["minus_think"], "minus_rand": G["minus_rand"], "whole": G["whole_same_seeds"]},
+             "cap32": {"cap": K["cap"], "a2": K["a2"]["right"], "think": K["think"]["right"], "minus": K["minus_think"]}}},
+    ensure_ascii=False).replace("</", "<\\/"))
 
 if __name__ == "__main__":  # run from the repository root with PYTHONPATH=. and numpy (see the docstring)
     problems, texts, by = _build()
@@ -1647,3 +1913,7 @@ if __name__ == "__main__":  # run from the repository root with PYTHONPATH=. and
     print("DATA, PROBLEMS and TEXTS match", RUN, "(rows, readout, examples, delta_sum, metrics),", DATA["math500"], "and", DATA["math500_think"])
     print("DATA['fresh'], FRESH_PROBLEMS and FRESH_TEXTS match", RUN_F, "(rows, readout, examples, metrics), the references in",
           "studies/rlneurons/results/fresh/ and the set", DATA["fresh"]["problems"])
+    _check_dirs(by)
+    print("DATA['dirs'] matches", G["folder"], "(metrics, edit, run, readout) and README 'The directions on other hosts'")
+    _check_cap32()
+    print("DATA['cap32'] matches", K["rows"], "and", K["readout"])

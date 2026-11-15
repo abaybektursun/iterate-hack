@@ -1,0 +1,17 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_drive.md",
+ "analysis_commit": "26d8dbb7c723299f33542c700ac27e37a9d23616",
+ "analysis_command": "uv run --no-project --with numpy python studies/theory/analysis/direct_drive.py --job ih-1115-214816-0563 --out studies/theory/results/direct/drive-01",
+ "job": {
+  "id": "ih-1115-214816-0563",
+  "commit": "26d8dbb7c723299f33542c700ac27e37a9d23616",
+  "command": "python -m studies.theory.jobs.drive_trace --commit 26d8dbb7c723299f33542c700ac27e37a9d23616",
+  "wall_s": 1233.409006357193,
+  "where": "runs/ih-1115-214816-0563/ (ih get), rows.jsonl metrics.json run.json log"
+ },
+ "inputs": {
+  "trace01": "abaybektursun-1115-005830-2145 (Modal Volume iterate-runs: index.json, trace_00{0..3}.npz)",
+  "studies/theory/data/drive/code_cue_answers_v1.jsonl.gz": "0a5b412218c82635e6c0ac3ae53f36feb24a159ab324e6ac0e42c24b70f55f03",
+  "studies/theory/data/drive/math_check_v1.jsonl.gz": "0141787487d5b0677eb2c18a64939c720297215cae83219dca1993a2473808bc"
+ }
+}

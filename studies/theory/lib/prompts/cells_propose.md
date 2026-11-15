@@ -27,7 +27,7 @@ Rules:
   rule), "samples" (per problem, and restarts), "grader", "cap" (token cap).
 - "job": the job file in studies/rlneurons/jobs/ that runs it, and "command": the command line as far as jobs.md lets
   you write it (several commands joined with " && " when the cell needs a merge or an edit first).
-- Never put git in a command ($(git rev-parse HEAD) or rev-parse): job machines have no .git folder. Where a job takes
+- Never put git in a command ($$(git rev-parse HEAD) or rev-parse): job machines have no .git folder. Where a job takes
   --commit, write --commit COMMIT_SHA; the coordinator replaces it with the pushed commit's full sha when submitting.
 - "readout": a number computable from the job's output rows (for example right answers with grader v3, cap hits,
   mean generated tokens, right answers among a named subset), and "unit".
