@@ -1,0 +1,14 @@
+{
+ "job_id": "sameraslan-1114-195047-4022",
+ "commit": "e455a8050015c3956268c5e28699ac30f6bbacc0",
+ "command": "python -m studies.cleanneurons.jobs.loop_neurons --commit e455a8050015c3956268c5e28699ac30f6bbacc0 --answers /runs/sameraslan-1114-184603-9d69/answers.jsonl --conditions none,attr100,attr1000,act100,act1000,rnd100_s0,rnd1000_s0,rnd1000_s1",
+ "runner": "tools/gpu.py h100 (Modal workspace sameraslan)",
+ "exit": "0",
+ "loop_source": "answers.jsonl of job sameraslan-1114-184603-9d69: base, cue, MATH-500, T 0.6 / top-p 1.0, seed 1000000, all 500 rows, 68 loops by detector 2 (34 for the ranking, 34 held out)",
+ "volume_only": [
+  "loops.json (4.5 MB)",
+  "heldout.json (3.8 MB)",
+  "rank.npz (7.9 MB)"
+ ],
+ "volume_path": "iterate-runs:sameraslan-1114-195047-4022/"
+}

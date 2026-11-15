@@ -261,7 +261,7 @@ PROOF = [
     ('<title>Invariant: Findings</title>', '<title>Invariant: Proof</title>'),
     ('<a href="/proof">Proof</a>\n    <a href="/findings" aria-current="page">Findings</a>',
      '<a href="/proof" aria-current="page">Proof</a>\n    <a href="/findings">Findings</a>'),
-    ('What the team has found so far.', 'Experiments that test the harness itself.'),
+    ('What the team has found so far.', 'Experiments on the harness itself.'),
     ('href="/finding/${esc(x.slug)}"', 'href="/proof/${esc(x.slug)}"'),
     ('tiles(d.findings || [])', 'tiles(d.proofs || [])'),
 ]
