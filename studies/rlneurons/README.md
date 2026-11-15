@@ -4668,6 +4668,27 @@ cells, each restricted to the matrices that write to the residual stream (`o`, `
   same amount written in a random direction mostly stays small. The test would be a random write at layer 0 scaled to the paired
   edit's layer-0 shift, followed to layer 24.
 
+#### xshift run-04 (SPEC_xshift amendment 4, work-5be9d2): one edited layer; the unedited base enlarges RL's written directions 3 to 6 times more
+
+Branch `sharedsub` only. Job `abaybektursun-1115-165351-05ce`; `results/xshift/run-04/readout.json`. Only `o` and `down` of one
+layer are edited (2 matrices), at 1.5; every later layer is the base. RMS shift, all positions, 48 stored base answers.
+
+| Edit | Edited layer | At that layer | Next layer | Layer 12 | Layer 16 | Layer 24 | Growth to layer 24 |
+|---|---|---|---|---|---|---|---|
+| RL's paired directions | 0 | 0.0186 | 0.0267 | 0.0850 | 0.441 | 0.870 | 46.7 |
+| RL's inputs, random outputs | 0 | 0.0143 | 0.0142 | 0.0169 | 0.060 | 0.118 | 8.2 |
+| random | 0 | 0.0012 | 0.0012 | 0.0013 | 0.011 | 0.022 | 18.2 |
+| RL's paired directions | 8 | 0.0433 | 0.0560 | 0.0798 | 0.204 | 0.443 | 10.2 |
+| RL's inputs, random outputs | 8 | 0.0337 | 0.0329 | 0.0328 | 0.057 | 0.113 | 3.3 |
+| random | 8 | 0.0036 | 0.0035 | 0.0035 | 0.005 | 0.008 | 2.3 |
+
+- T1 held: the paired edit's growth is 5.7 times the input-only edit's for layer 0 and 3.1 times for layer 8 (line: 3; refuted
+  below 1.5).
+- The paired shift grows in the very next layer (0.0186 to 0.0267; 0.0433 to 0.0560) while the two edits with random outputs stay
+  flat until about layer 12 and grow only after it.
+- Limits: one run; the random edit at layer 0 is 12 times smaller at the start and its growth of 18 rests on shifts of 0.001 to
+  0.02; no scored cell uses these single-layer edits.
+
 ## Drift: a switch to Chinese marks a cut-off Think-SFT answer but no label-free sign predicts one early (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-76a232, idea-e37da1)
 
 Question: Think-SFT + cue hits the 16,384 cap on 29 % (hard328) and 45.6 % (fresh2026) of its samples, and a quarter of those
