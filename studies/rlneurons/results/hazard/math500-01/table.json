@@ -1,0 +1,890 @@
+[
+ {
+  "arm": "rl_plain_vote4_restart",
+  "what": "RL plain, vote over 4 after restart",
+  "right": 475.0,
+  "tokens_per_problem": 19864,
+  "shift_logits": 2.349,
+  "shift_logits_interval95": [
+   1.988,
+   2.779
+  ],
+  "log_hazard_ratio": -1.65,
+  "hazard_ratio": 0.192,
+  "hazard_ratio_interval95": [
+   0.129,
+   0.262
+  ],
+  "hazard_ratio_vs_own_single": 0.575,
+  "hazard_ratio_vs_own_single_interval95": [
+   0.43,
+   0.706
+  ]
+ },
+ {
+  "arm": "rl_plain_vote4",
+  "what": "RL plain, vote over 4 samples",
+  "right": 474.0,
+  "tokens_per_problem": 18747,
+  "shift_logits": 2.283,
+  "shift_logits_interval95": [
+   1.914,
+   2.703
+  ],
+  "log_hazard_ratio": -1.604,
+  "hazard_ratio": 0.201,
+  "hazard_ratio_interval95": [
+   0.136,
+   0.275
+  ],
+  "hazard_ratio_vs_own_single": 0.602,
+  "hazard_ratio_vs_own_single_interval95": [
+   0.455,
+   0.736
+  ]
+ },
+ {
+  "arm": "rl_plain_vote3",
+  "what": "RL plain, vote over 3 samples (mean of the 4 subsets)",
+  "right": 468.5,
+  "tokens_per_problem": 14060,
+  "shift_logits": 1.95,
+  "shift_logits_interval95": [
+   1.676,
+   2.267
+  ],
+  "log_hazard_ratio": -1.372,
+  "hazard_ratio": 0.254,
+  "hazard_ratio_interval95": [
+   0.189,
+   0.323
+  ],
+  "hazard_ratio_vs_own_single": 0.759,
+  "hazard_ratio_vs_own_single_interval95": [
+   0.648,
+   0.856
+  ]
+ },
+ {
+  "arm": "rl_plain_s2",
+  "what": "RL-Zero-Math 3.1 plain, sample 2",
+  "right": 464.0,
+  "tokens_per_problem": 4741,
+  "shift_logits": 1.711,
+  "shift_logits_interval95": [
+   1.344,
+   2.129
+  ],
+  "log_hazard_ratio": -1.221,
+  "hazard_ratio": 0.295,
+  "hazard_ratio_interval95": [
+   0.213,
+   0.392
+  ]
+ },
+ {
+  "arm": "rl_plain_s1",
+  "what": "RL-Zero-Math 3.1 plain, sample 1",
+  "right": 462.0,
+  "tokens_per_problem": 4588,
+  "shift_logits": 1.613,
+  "shift_logits_interval95": [
+   1.211,
+   2.044
+  ],
+  "log_hazard_ratio": -1.188,
+  "hazard_ratio": 0.305,
+  "hazard_ratio_interval95": [
+   0.22,
+   0.407
+  ]
+ },
+ {
+  "arm": "rl_plain_pooled4",
+  "what": "rl_plain, 4 samples pooled",
+  "right": 460.0,
+  "tokens_per_problem": null,
+  "shift_logits": 1.52,
+  "shift_logits_interval95": [
+   1.299,
+   1.746
+  ],
+  "log_hazard_ratio": -1.097,
+  "hazard_ratio": 0.334,
+  "hazard_ratio_interval95": [
+   0.275,
+   0.4
+  ]
+ },
+ {
+  "arm": "rl_plain_vote2",
+  "what": "RL plain, vote over 2 samples (mean of the 6 subsets)",
+  "right": 459.7,
+  "tokens_per_problem": 9374,
+  "shift_logits": 1.505,
+  "shift_logits_interval95": [
+   1.257,
+   1.766
+  ],
+  "log_hazard_ratio": -1.089,
+  "hazard_ratio": 0.337,
+  "hazard_ratio_interval95": [
+   0.272,
+   0.409
+  ],
+  "hazard_ratio_vs_own_single": 1.008,
+  "hazard_ratio_vs_own_single_interval95": [
+   0.923,
+   1.105
+  ]
+ },
+ {
+  "arm": "rl_plain_s3",
+  "what": "RL-Zero-Math 3.1 plain, sample 3",
+  "right": 458.0,
+  "tokens_per_problem": 4743,
+  "shift_logits": 1.431,
+  "shift_logits_interval95": [
+   1.083,
+   1.822
+  ],
+  "log_hazard_ratio": -1.035,
+  "hazard_ratio": 0.355,
+  "hazard_ratio_interval95": [
+   0.265,
+   0.464
+  ]
+ },
+ {
+  "arm": "rl_plain_restart",
+  "what": "RL plain, restart up to 2",
+  "right": 458.0,
+  "tokens_per_problem": 4899,
+  "shift_logits": 1.431,
+  "shift_logits_interval95": [
+   1.092,
+   1.795
+  ],
+  "log_hazard_ratio": -1.014,
+  "hazard_ratio": 0.363,
+  "hazard_ratio_interval95": [
+   0.272,
+   0.473
+  ],
+  "hazard_ratio_vs_own_single": 0.94,
+  "hazard_ratio_vs_own_single_interval95": [
+   0.854,
+   1.0
+  ]
+ },
+ {
+  "arm": "rl_cue",
+  "what": "RL-Zero-Math 3.1, cue",
+  "right": 457.0,
+  "tokens_per_problem": 4696,
+  "shift_logits": 1.387,
+  "shift_logits_interval95": [
+   1.007,
+   1.778
+  ],
+  "log_hazard_ratio": -1.005,
+  "hazard_ratio": 0.366,
+  "hazard_ratio_interval95": [
+   0.272,
+   0.48
+  ]
+ },
+ {
+  "arm": "sft1_cue",
+  "what": "Olmo-3-7B-Think-SFT, cue",
+  "right": 454.0,
+  "tokens_per_problem": 4888,
+  "shift_logits": 1.263,
+  "shift_logits_interval95": [
+   0.853,
+   1.71
+  ],
+  "log_hazard_ratio": -1.0,
+  "hazard_ratio": 0.368,
+  "hazard_ratio_interval95": [
+   0.268,
+   0.491
+  ]
+ },
+ {
+  "arm": "rl_plain_s0",
+  "what": "RL-Zero-Math 3.1 plain, sample 0",
+  "right": 456.0,
+  "tokens_per_problem": 4675,
+  "shift_logits": 1.345,
+  "shift_logits_interval95": [
+   1.03,
+   1.72
+  ],
+  "log_hazard_ratio": -0.953,
+  "hazard_ratio": 0.386,
+  "hazard_ratio_interval95": [
+   0.289,
+   0.498
+  ]
+ },
+ {
+  "arm": "theta1.5_cue",
+  "what": "base + 1.5 (RL - base), cue",
+  "right": 453.0,
+  "tokens_per_problem": 4862,
+  "shift_logits": 1.223,
+  "shift_logits_interval95": [
+   0.879,
+   1.596
+  ],
+  "log_hazard_ratio": -0.904,
+  "hazard_ratio": 0.405,
+  "hazard_ratio_interval95": [
+   0.309,
+   0.521
+  ]
+ },
+ {
+  "arm": "base_cue_tie_short",
+  "what": "base + cue, vote over 4, ties to the shortest finished answer",
+  "right": 453.0,
+  "tokens_per_problem": 16034,
+  "shift_logits": 1.223,
+  "shift_logits_interval95": [
+   0.963,
+   1.534
+  ],
+  "log_hazard_ratio": -0.861,
+  "hazard_ratio": 0.423,
+  "hazard_ratio_interval95": [
+   0.337,
+   0.51
+  ],
+  "hazard_ratio_vs_own_single": 0.423,
+  "hazard_ratio_vs_own_single_interval95": [
+   0.337,
+   0.51
+  ]
+ },
+ {
+  "arm": "theta0.5_cue",
+  "what": "base + 0.5 (RL - base), cue",
+  "right": 452.0,
+  "tokens_per_problem": 4626,
+  "shift_logits": 1.184,
+  "shift_logits_interval95": [
+   0.844,
+   1.555
+  ],
+  "log_hazard_ratio": -0.852,
+  "hazard_ratio": 0.427,
+  "hazard_ratio_interval95": [
+   0.322,
+   0.552
+  ]
+ },
+ {
+  "arm": "theta0.75_cue",
+  "what": "base + 0.75 (RL - base), cue",
+  "right": 451.0,
+  "tokens_per_problem": 4654,
+  "shift_logits": 1.145,
+  "shift_logits_interval95": [
+   0.78,
+   1.525
+  ],
+  "log_hazard_ratio": -0.837,
+  "hazard_ratio": 0.433,
+  "hazard_ratio_interval95": [
+   0.32,
+   0.573
+  ]
+ },
+ {
+  "arm": "code_cue",
+  "what": "RL-Zero-Code 3.1, cue",
+  "right": 450.0,
+  "tokens_per_problem": 3336,
+  "shift_logits": 1.108,
+  "shift_logits_interval95": [
+   0.742,
+   1.518
+  ],
+  "log_hazard_ratio": -0.824,
+  "hazard_ratio": 0.438,
+  "hazard_ratio_interval95": [
+   0.324,
+   0.569
+  ]
+ },
+ {
+  "arm": "theta1.25_cue",
+  "what": "base + 1.25 (RL - base), cue",
+  "right": 450.0,
+  "tokens_per_problem": 4852,
+  "shift_logits": 1.108,
+  "shift_logits_interval95": [
+   0.772,
+   1.516
+  ],
+  "log_hazard_ratio": -0.797,
+  "hazard_ratio": 0.451,
+  "hazard_ratio_interval95": [
+   0.332,
+   0.586
+  ]
+ },
+ {
+  "arm": "base_cue_vote4_restart",
+  "what": "base + cue, vote over 4 after restart",
+  "right": 450.0,
+  "tokens_per_problem": 19697,
+  "shift_logits": 1.108,
+  "shift_logits_interval95": [
+   0.849,
+   1.429
+  ],
+  "log_hazard_ratio": -0.797,
+  "hazard_ratio": 0.451,
+  "hazard_ratio_interval95": [
+   0.352,
+   0.553
+  ],
+  "hazard_ratio_vs_own_single": 0.451,
+  "hazard_ratio_vs_own_single_interval95": [
+   0.352,
+   0.553
+  ]
+ },
+ {
+  "arm": "math30_cue",
+  "what": "Olmo-3-7B-RL-Zero-Math (3.0), cue",
+  "right": 448.0,
+  "tokens_per_problem": 4527,
+  "shift_logits": 1.034,
+  "shift_logits_interval95": [
+   0.659,
+   1.438
+  ],
+  "log_hazard_ratio": -0.783,
+  "hazard_ratio": 0.457,
+  "hazard_ratio_interval95": [
+   0.341,
+   0.605
+  ]
+ },
+ {
+  "arm": "sft1_plain",
+  "what": "Olmo-3-7B-Think-SFT, plain",
+  "right": 440.0,
+  "tokens_per_problem": 4492,
+  "shift_logits": 0.765,
+  "shift_logits_interval95": [
+   0.342,
+   1.219
+  ],
+  "log_hazard_ratio": -0.765,
+  "hazard_ratio": 0.465,
+  "hazard_ratio_interval95": [
+   0.342,
+   0.642
+  ]
+ },
+ {
+  "arm": "base_cue_vote4",
+  "what": "base + cue, vote over 4 samples",
+  "right": 446.0,
+  "tokens_per_problem": 16034,
+  "shift_logits": 0.964,
+  "shift_logits_interval95": [
+   0.743,
+   1.237
+  ],
+  "log_hazard_ratio": -0.667,
+  "hazard_ratio": 0.513,
+  "hazard_ratio_interval95": [
+   0.422,
+   0.612
+  ],
+  "hazard_ratio_vs_own_single": 0.513,
+  "hazard_ratio_vs_own_single_interval95": [
+   0.422,
+   0.612
+  ]
+ },
+ {
+  "arm": "theta0.5_plain",
+  "what": "base + 0.5 (RL - base), plain",
+  "right": 443.0,
+  "tokens_per_problem": 4536,
+  "shift_logits": 0.862,
+  "shift_logits_interval95": [
+   0.521,
+   1.221
+  ],
+  "log_hazard_ratio": -0.651,
+  "hazard_ratio": 0.521,
+  "hazard_ratio_interval95": [
+   0.402,
+   0.668
+  ]
+ },
+ {
+  "arm": "math30_plain",
+  "what": "Olmo-3-7B-RL-Zero-Math (3.0), plain",
+  "right": 443.0,
+  "tokens_per_problem": 4506,
+  "shift_logits": 0.862,
+  "shift_logits_interval95": [
+   0.511,
+   1.233
+  ],
+  "log_hazard_ratio": -0.621,
+  "hazard_ratio": 0.537,
+  "hazard_ratio_interval95": [
+   0.407,
+   0.699
+  ]
+ },
+ {
+  "arm": "theta0.25_cue",
+  "what": "base + 0.25 (RL - base), cue",
+  "right": 441.0,
+  "tokens_per_problem": 4036,
+  "shift_logits": 0.797,
+  "shift_logits_interval95": [
+   0.463,
+   1.127
+  ],
+  "log_hazard_ratio": -0.572,
+  "hazard_ratio": 0.564,
+  "hazard_ratio_interval95": [
+   0.441,
+   0.726
+  ]
+ },
+ {
+  "arm": "base_cue_vote3",
+  "what": "base + cue, vote over 3 samples (mean of the 4 subsets)",
+  "right": 441.5,
+  "tokens_per_problem": 12025,
+  "shift_logits": 0.813,
+  "shift_logits_interval95": [
+   0.652,
+   0.994
+  ],
+  "log_hazard_ratio": -0.565,
+  "hazard_ratio": 0.568,
+  "hazard_ratio_interval95": [
+   0.496,
+   0.64
+  ],
+  "hazard_ratio_vs_own_single": 0.568,
+  "hazard_ratio_vs_own_single_interval95": [
+   0.496,
+   0.64
+  ]
+ },
+ {
+  "arm": "mix30_cue",
+  "what": "Olmo-3-7B-RL-Zero-Mix (3.0), cue",
+  "right": 440.0,
+  "tokens_per_problem": 5203,
+  "shift_logits": 0.765,
+  "shift_logits_interval95": [
+   0.433,
+   1.132
+  ],
+  "log_hazard_ratio": -0.564,
+  "hazard_ratio": 0.569,
+  "hazard_ratio_interval95": [
+   0.431,
+   0.737
+  ]
+ },
+ {
+  "arm": "shots_rl",
+  "what": "base + cue + 3 solved problems written by Math-RL in context (n 497)",
+  "right": 437.6,
+  "tokens_per_problem": 4379,
+  "shift_logits": 0.699,
+  "shift_logits_interval95": [
+   0.39,
+   1.041
+  ],
+  "log_hazard_ratio": -0.532,
+  "hazard_ratio": 0.587,
+  "hazard_ratio_interval95": [
+   0.46,
+   0.741
+  ]
+ },
+ {
+  "arm": "top8_plain",
+  "what": "base + top 8 singular directions per matrix of the RL delta, plain",
+  "right": 427.0,
+  "tokens_per_problem": 3962,
+  "shift_logits": 0.392,
+  "shift_logits_interval95": [
+   0.017,
+   0.796
+  ],
+  "log_hazard_ratio": -0.438,
+  "hazard_ratio": 0.645,
+  "hazard_ratio_interval95": [
+   0.482,
+   0.867
+  ]
+ },
+ {
+  "arm": "general30_cue",
+  "what": "Olmo-3-7B-RL-Zero-General (3.0), cue",
+  "right": 429.0,
+  "tokens_per_problem": 3839,
+  "shift_logits": 0.445,
+  "shift_logits_interval95": [
+   0.142,
+   0.788
+  ],
+  "log_hazard_ratio": -0.342,
+  "hazard_ratio": 0.71,
+  "hazard_ratio_interval95": [
+   0.546,
+   0.901
+  ]
+ },
+ {
+  "arm": "random_cue",
+  "what": "base + random difference of the RL norm, cue (control)",
+  "right": 417.0,
+  "tokens_per_problem": 3944,
+  "shift_logits": 0.146,
+  "shift_logits_interval95": [
+   -0.168,
+   0.463
+  ],
+  "log_hazard_ratio": -0.163,
+  "hazard_ratio": 0.85,
+  "hazard_ratio_interval95": [
+   0.659,
+   1.089
+  ]
+ },
+ {
+  "arm": "base_cue_s3",
+  "what": "base + cue, sample 3",
+  "right": 418.0,
+  "tokens_per_problem": 4156,
+  "shift_logits": 0.169,
+  "shift_logits_interval95": [
+   -0.072,
+   0.447
+  ],
+  "log_hazard_ratio": -0.151,
+  "hazard_ratio": 0.86,
+  "hazard_ratio_interval95": [
+   0.7,
+   1.037
+  ]
+ },
+ {
+  "arm": "base_cue_vote2",
+  "what": "base + cue, vote over 2 samples (mean of the 6 subsets)",
+  "right": 418.5,
+  "tokens_per_problem": 8017,
+  "shift_logits": 0.181,
+  "shift_logits_interval95": [
+   0.067,
+   0.298
+  ],
+  "log_hazard_ratio": -0.14,
+  "hazard_ratio": 0.87,
+  "hazard_ratio_interval95": [
+   0.801,
+   0.945
+  ],
+  "hazard_ratio_vs_own_single": 0.87,
+  "hazard_ratio_vs_own_single_interval95": [
+   0.801,
+   0.945
+  ]
+ },
+ {
+  "arm": "shots_base",
+  "what": "base + cue + 3 solved problems written by the cued base in context (n 497)",
+  "right": 416.5,
+  "tokens_per_problem": 3365,
+  "shift_logits": 0.141,
+  "shift_logits_interval95": [
+   -0.162,
+   0.469
+  ],
+  "log_hazard_ratio": -0.132,
+  "hazard_ratio": 0.876,
+  "hazard_ratio_interval95": [
+   0.679,
+   1.127
+  ]
+ },
+ {
+  "arm": "shots_code",
+  "what": "base + cue + 3 solved problems written by Code-RL in context (n 497)",
+  "right": 414.5,
+  "tokens_per_problem": 3815,
+  "shift_logits": 0.095,
+  "shift_logits_interval95": [
+   -0.202,
+   0.412
+  ],
+  "log_hazard_ratio": -0.088,
+  "hazard_ratio": 0.916,
+  "hazard_ratio_interval95": [
+   0.715,
+   1.165
+  ]
+ },
+ {
+  "arm": "base_cue_restart",
+  "what": "base + cue, restart up to 2",
+  "right": 413.0,
+  "tokens_per_problem": 4852,
+  "shift_logits": 0.055,
+  "shift_logits_interval95": [
+   -0.186,
+   0.316
+  ],
+  "log_hazard_ratio": -0.054,
+  "hazard_ratio": 0.948,
+  "hazard_ratio_interval95": [
+   0.776,
+   1.15
+  ],
+  "hazard_ratio_vs_own_single": 0.864,
+  "hazard_ratio_vs_own_single_interval95": [
+   0.774,
+   0.949
+  ]
+ },
+ {
+  "arm": "code30_cue",
+  "what": "Olmo-3-7B-RL-Zero-Code (3.0), cue",
+  "right": 411.0,
+  "tokens_per_problem": 3069,
+  "shift_logits": 0.011,
+  "shift_logits_interval95": [
+   -0.274,
+   0.36
+  ],
+  "log_hazard_ratio": -0.047,
+  "hazard_ratio": 0.954,
+  "hazard_ratio_interval95": [
+   0.739,
+   1.215
+  ]
+ },
+ {
+  "arm": "base_cue_pooled4",
+  "what": "base_cue, 4 samples pooled",
+  "right": 410.5,
+  "tokens_per_problem": null,
+  "shift_logits": 0.0,
+  "shift_logits_interval95": [
+   0.0,
+   0.0
+  ],
+  "log_hazard_ratio": -0.0,
+  "hazard_ratio": 1.0,
+  "hazard_ratio_interval95": [
+   1.0,
+   1.0
+  ]
+ },
+ {
+  "arm": "theta0.25_plain",
+  "what": "base + 0.25 (RL - base), plain",
+  "right": 405.0,
+  "tokens_per_problem": 3653,
+  "shift_logits": -0.116,
+  "shift_logits_interval95": [
+   -0.43,
+   0.217
+  ],
+  "log_hazard_ratio": 0.001,
+  "hazard_ratio": 1.001,
+  "hazard_ratio_interval95": [
+   0.77,
+   1.302
+  ]
+ },
+ {
+  "arm": "base_cue_s1",
+  "what": "base + cue, sample 1",
+  "right": 409.0,
+  "tokens_per_problem": 4144,
+  "shift_logits": -0.032,
+  "shift_logits_interval95": [
+   -0.245,
+   0.189
+  ],
+  "log_hazard_ratio": 0.028,
+  "hazard_ratio": 1.028,
+  "hazard_ratio_interval95": [
+   0.859,
+   1.222
+  ]
+ },
+ {
+  "arm": "base_cue_s2",
+  "what": "base + cue, sample 2",
+  "right": 410.0,
+  "tokens_per_problem": 3926,
+  "shift_logits": -0.011,
+  "shift_logits_interval95": [
+   -0.232,
+   0.24
+  ],
+  "log_hazard_ratio": 0.029,
+  "hazard_ratio": 1.029,
+  "hazard_ratio_interval95": [
+   0.849,
+   1.231
+  ]
+ },
+ {
+  "arm": "base_cue_s0",
+  "what": "base + cue, sample 0",
+  "right": 405.0,
+  "tokens_per_problem": 3808,
+  "shift_logits": -0.116,
+  "shift_logits_interval95": [
+   -0.335,
+   0.111
+  ],
+  "log_hazard_ratio": 0.092,
+  "hazard_ratio": 1.096,
+  "hazard_ratio_interval95": [
+   0.924,
+   1.302
+  ]
+ },
+ {
+  "arm": "code_plain",
+  "what": "RL-Zero-Code 3.1, plain",
+  "right": 390.0,
+  "tokens_per_problem": 3066,
+  "shift_logits": -0.404,
+  "shift_logits_interval95": [
+   -0.731,
+   -0.066
+  ],
+  "log_hazard_ratio": 0.173,
+  "hazard_ratio": 1.189,
+  "hazard_ratio_interval95": [
+   0.918,
+   1.554
+  ]
+ },
+ {
+  "arm": "if30_cue",
+  "what": "Olmo-3-7B-RL-Zero-If (3.0), cue",
+  "right": 377.0,
+  "tokens_per_problem": 2667,
+  "shift_logits": -0.627,
+  "shift_logits_interval95": [
+   -0.901,
+   -0.346
+  ],
+  "log_hazard_ratio": 0.431,
+  "hazard_ratio": 1.539,
+  "hazard_ratio_interval95": [
+   1.234,
+   1.93
+  ]
+ },
+ {
+  "arm": "mix30_plain",
+  "what": "Olmo-3-7B-RL-Zero-Mix (3.0), plain",
+  "right": 372.0,
+  "tokens_per_problem": 4228,
+  "shift_logits": -0.707,
+  "shift_logits_interval95": [
+   -1.003,
+   -0.399
+  ],
+  "log_hazard_ratio": 0.464,
+  "hazard_ratio": 1.59,
+  "hazard_ratio_interval95": [
+   1.254,
+   2.027
+  ]
+ },
+ {
+  "arm": "code30_plain",
+  "what": "Olmo-3-7B-RL-Zero-Code (3.0), plain",
+  "right": 360.0,
+  "tokens_per_problem": 2630,
+  "shift_logits": -0.89,
+  "shift_logits_interval95": [
+   -1.157,
+   -0.617
+  ],
+  "log_hazard_ratio": 0.689,
+  "hazard_ratio": 1.992,
+  "hazard_ratio_interval95": [
+   1.602,
+   2.461
+  ]
+ },
+ {
+  "arm": "general30_plain",
+  "what": "Olmo-3-7B-RL-Zero-General (3.0), plain",
+  "right": 323.0,
+  "tokens_per_problem": 2303,
+  "shift_logits": -1.39,
+  "shift_logits_interval95": [
+   -1.645,
+   -1.096
+  ],
+  "log_hazard_ratio": 0.969,
+  "hazard_ratio": 2.634,
+  "hazard_ratio_interval95": [
+   2.089,
+   3.291
+  ]
+ },
+ {
+  "arm": "rand8_plain",
+  "what": "base + random rank-8 directions, plain (control)",
+  "right": 197.0,
+  "tokens_per_problem": 1968,
+  "shift_logits": -2.785,
+  "shift_logits_interval95": [
+   -3.049,
+   -2.529
+  ],
+  "log_hazard_ratio": 1.961,
+  "hazard_ratio": 7.105,
+  "hazard_ratio_interval95": [
+   5.715,
+   9.01
+  ]
+ },
+ {
+  "arm": "if30_plain",
+  "what": "Olmo-3-7B-RL-Zero-If (3.0), plain",
+  "right": 55.0,
+  "tokens_per_problem": 39,
+  "shift_logits": -4.769,
+  "shift_logits_interval95": [
+   -5.121,
+   -4.465
+  ],
+  "log_hazard_ratio": 3.298,
+  "hazard_ratio": 27.046,
+  "hazard_ratio_interval95": [
+   22.669,
+   32.95
+  ]
+ }
+]

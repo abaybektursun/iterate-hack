@@ -1,0 +1,163 @@
+{
+ "filed_utc": "2026-11-15T05:04:57+00:00",
+ "code_commit_parent": "d7fcc8ca01c1d7c996d99c22b1f71373dadc1c6b",
+ "rule": "Hc: sum_i exp(-exp(-(a_ref328 + c d + b_i))), d = the MATH-500 hazard shift (minus log hazard ratio); specs/SPEC_hazard.md",
+ "ridge_hard328": 0.3,
+ "c": 0.755,
+ "c_leave_one_out": [
+  0.744,
+  0.723,
+  0.755,
+  0.766,
+  0.782
+ ],
+ "calibration_arms": {
+  "rl_plain": {
+   "log_hazard_ratio_math500": -1.097,
+   "log_hazard_ratio_hard328": -0.856
+  },
+  "rl_cue": {
+   "log_hazard_ratio_math500": -1.005,
+   "log_hazard_ratio_hard328": -0.851
+  },
+  "theta0.25_cue": {
+   "log_hazard_ratio_math500": -0.572,
+   "log_hazard_ratio_hard328": -0.432
+  },
+  "theta0.5_cue": {
+   "log_hazard_ratio_math500": -0.852,
+   "log_hazard_ratio_hard328": -0.6
+  },
+  "code_cue": {
+   "log_hazard_ratio_math500": -0.824,
+   "log_hazard_ratio_hard328": -0.517
+  }
+ },
+ "logit_predictions_for_the_same_cells": "results/rate/predict-01/predictions.json, predict-02/predictions.json",
+ "cells": [
+  {
+   "cell": "base + cue, vote over 4 after restart",
+   "set": "hard328",
+   "n": 328,
+   "status": "prediction",
+   "note": "",
+   "log_hazard_ratio_math500": -0.797,
+   "hazard_ratio_math500": 0.451,
+   "predicted_right": 184.2,
+   "interval80": [
+    174.0,
+    195.0
+   ],
+   "c1_same_hazard_ratio": 193.8,
+   "MH_no_item_model": 225.0,
+   "baseline_point": 187.9,
+   "reference_right": 162.0
+  },
+  {
+   "cell": "RL plain, vote over 4 after restart",
+   "set": "hard328",
+   "n": 328,
+   "status": "prediction",
+   "note": "",
+   "log_hazard_ratio_math500": -0.553,
+   "hazard_ratio_math500": 0.575,
+   "predicted_right": 218.8,
+   "interval80": [
+    207.0,
+    232.0
+   ],
+   "c1_same_hazard_ratio": 226.2,
+   "MH_no_item_model": 246.4,
+   "baseline_point": 215.8,
+   "reference_right": 206.0
+  },
+  {
+   "cell": "base + cue + 3 RL-written solved problems (shots_rl)",
+   "set": "hard328",
+   "n": 328,
+   "status": "prediction",
+   "note": "shift of the first draw of examples (435 of 497); the second draw had 404 (rate section), known when this was filed; the rule's output is not adjusted",
+   "log_hazard_ratio_math500": -0.532,
+   "hazard_ratio_math500": 0.587,
+   "predicted_right": 174.7,
+   "interval80": [
+    164.0,
+    185.0
+   ],
+   "c1_same_hazard_ratio": 180.9,
+   "MH_no_item_model": 203.7,
+   "baseline_point": 179.8,
+   "reference_right": 162.0
+  },
+  {
+   "cell": "base + top 8 directions, cue",
+   "set": "hard328",
+   "n": 328,
+   "status": "prediction",
+   "note": "shift of top8_plain (no cue cell on MATH-500)",
+   "log_hazard_ratio_math500": -0.438,
+   "hazard_ratio_math500": 0.645,
+   "predicted_right": 171.3,
+   "interval80": [
+    159.0,
+    183.0
+   ],
+   "c1_same_hazard_ratio": 176.4,
+   "MH_no_item_model": 186.5,
+   "baseline_point": 172.8,
+   "reference_right": 162.0
+  },
+  {
+   "cell": "base + cue, vote over 4, no restart (sameraslan's run, result-1dedfe)",
+   "set": "hard328",
+   "n": 328,
+   "status": "computed after the observation",
+   "note": "observed 179, known to the author",
+   "log_hazard_ratio_math500": -0.667,
+   "hazard_ratio_math500": 0.513,
+   "predicted_right": 179.5,
+   "interval80": [
+    170.0,
+    189.0
+   ],
+   "c1_same_hazard_ratio": 187.4,
+   "MH_no_item_model": 217.9,
+   "baseline_point": 185.3,
+   "reference_right": 162.0
+  },
+  {
+   "cell": "RL plain, vote over 4, no restart, on the 246 problems that finished (result-1dedfe)",
+   "set": "hard328 subset",
+   "n": 246,
+   "status": "computed after the observation",
+   "note": "observed 161, known to the author",
+   "log_hazard_ratio_math500": -0.507,
+   "hazard_ratio_math500": 0.602,
+   "predicted_right": 161.6,
+   "interval80": [
+    152.0,
+    172.0
+   ],
+   "c1_same_hazard_ratio": 166.7,
+   "MH_no_item_model": 181.5,
+   "baseline_point": 159.9,
+   "reference_right": 153.0
+  },
+  {
+   "cell": "Think-SFT cue, vote over 4",
+   "set": "math500",
+   "n": 500,
+   "status": "prediction",
+   "note": "hazard ability of sft1_cue plus the base vote-over-4 log hazard ratio",
+   "log_hazard_ratio_math500": -0.667,
+   "hazard_ratio_math500": 0.513,
+   "predicted_right": 472.1,
+   "interval80": [
+    464.0,
+    480.0
+   ],
+   "MH_no_item_model": 472.8,
+   "baseline_point": 489.5
+  }
+ ]
+}

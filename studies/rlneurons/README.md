@@ -26,6 +26,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `jobs/modal_rln4_k.py` | The Modal app that ran K, T2 and T3 (`modal run ... --step download|check|k|t2|t3`). Runs the `rln4_gen` child on an H100. |
 | `analysis/axis.py`, `analysis/axis_test.py`, `specs/SPEC_axis.md` | One axis or several: per-problem vectors of every arm, pair overlap and oracle union against the rest-score null, Rasch against Rasch plus one bilinear term, the floor; planted checks. See "One axis or several?". |
 | `analysis/rate.py`, `analysis/rate_test.py`, `specs/SPEC_rate.md` | Exchange-rate table: each arm's ability shift in logits, tokens and training signal; leave-one-arm-out transfer to the 328; predictions filed before held-out cells were read. Outputs `results/rate/`. |
+| `analysis/hazard.py`, `analysis/hazard_test.py`, `specs/SPEC_hazard.md` | Slip-hazard law: hazard-link item model against the Rasch logit model held out, hazard ratio of every arm and its constancy over difficulty, transfer to the 328, chain length and independence of the 4 samples, filed predictions. Outputs `results/hazard/`. |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
 | `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
 | `jobs/rln3_gen.py` | RLN-3 generation job (arms P, F, C on MATH-500 and the harder set), AWS `pg` only. |
@@ -1329,6 +1330,137 @@ solved problems in context add prompt tokens that are not counted.
 
 Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.rate table|transfer|score`
 (`predict`, `predict2` refuse to overwrite the filed files); `... python -m studies.rlneurons.analysis.rate_test`.
+
+## Slip-hazard law: is the RL gain one constant hazard ratio? (MATH-500 n = 500, hard328 n = 328, laptop, board work-26c268, idea-7928c0)
+
+Question: is P(right) = exp(-h L_i), with each method multiplying the hazard h by one constant on every problem, a better
+description of the arms than the Rasch logit model? Answer: no. Held out, the hazard link fits worse than the logit link
+(-0.2854 against -0.2790 nats per cell, 17,991 cells, all 5 folds; the test separates the two links with power 1.0 at this
+size), and RL's hazard ratio is not constant: 0.48 on the hardest problems, 0.23 in the middle, 0.11 on the easiest. The
+law is refuted as stated. What survives: one number per method on the logit scale, and the size of the average ratio (RL
+0.33 to 0.37, matching the 0.39 ratio of located first wrong steps per token). Spec, hypotheses and amendments:
+`specs/SPEC_hazard.md`. Code: `analysis/hazard.py` (imports the fit and loaders of `axis.py` and `rate.py`); planted checks:
+`analysis/hazard_test.py`. Literature (read by a subagent, WebSearch because `tools/exa.py` had no key): the constant-hazard
+form is published for agent tasks against human task time (Ord, arXiv 2505.05115, tested only by eye and by T80/T50 = 0.322
+predicted against 0.25 measured) and was later found to fit worse than a declining hazard (Weibull shape about 0.6 for
+every model, Ord's post of 4 Feb 2026); no paper found compares a hazard link with a logit link on item-level LLM data or
+states a hazard ratio for a base-against-RL pair.
+
+Model. Hazard link: -log p_ij = exp(-(a_j + b_i)); hazard ratio of an arm against the pooled 4 base + cue samples =
+exp(-(a_arm - a_ref)). Logit link: `axis.fit`. Same parameters (one per arm, one per problem), same Adam loop, ridge on b
+chosen per link on the 5 folds of `axis.py` (logit 0.3, hazard 1.0). The 17 problems that every arm or no arm solves stay
+in both fits; on the 483 others alone the difference is the same (-0.0063).
+
+1. Link (H1, refuted). T = held-out log-likelihood per cell, hazard minus logit:
+
+| | T, nats per cell |
+|---|---|
+| Real matrix (36 arms x 500 problems) | -0.0064 (folds -0.0074, -0.0064, -0.0088, -0.0044, -0.0050; se 0.0008) |
+| 200 matrices simulated from the fitted logit model | -0.0026 [5 %, 95 %: -0.0048, -0.0010], minimum -0.0063 |
+| 200 matrices simulated from the fitted hazard model | +0.0031 [+0.0021, +0.0042], minimum +0.0011 |
+
+Verdict by the rule fixed in the spec: logit. Power at this size: 100 % of hazard-simulated matrices lie above the 95th
+percentile of the logit-simulated ones and the reverse, so 36 x 500 is enough to tell the links apart. The real T is lower
+than all 200 logit simulations: the data lie on the other side of the logit link from the hazard link. Post hoc (not in the
+spec): the mirrored hazard link, 1 - p = exp(-exp(a + b)), reaches -0.2807, 0.0017 below logit, where logit-simulated data
+put it 0.0069 below [0.0081, 0.0057]. The best link is between logit and the mirror; the hazard link is the worst of the
+three. Planted checks: a planted hazard matrix gives "hazard" and a planted logit matrix "logit" at 36 x 500 (also at the
+real fitted abilities, 4 of 4); 4 arms x 100 problems gives "cannot tell" (power 0.18 to 0.38).
+
+2. Hazard ratios (H2, refuted for RL). All rows: `results/hazard/math500-01/table.md`, `table.json`. Against the pooled base
++ cue samples (410.5 of 500), bootstrap over problems, 2,000 resamples:
+
+| Method (MATH-500) | Right of 500 | Hazard ratio [95 %] | Logit shift | By difficulty: hardest, middle, easiest | Hardest minus easiest, log scale (range if constant) |
+|---|---|---|---|---|---|
+| RL plain, 4 samples pooled | 460.0 | 0.33 [0.28, 0.40] | +1.52 | 0.48, 0.23, 0.11 | -1.47 (-0.55 to +0.30): not constant |
+| RL, cue | 457 | 0.37 [0.27, 0.48] | +1.39 | 0.48, 0.33, 0.11 | -1.47 (-0.85 to +0.59): not constant |
+| Think-SFT, cue | 454 | 0.37 [0.27, 0.49] | +1.26 | 0.33, 0.32, 0.55 | +0.52 (-1.19 to +0.67): constant |
+| base + 0.75 (RL - base), cue | 451 | 0.43 [0.32, 0.57] | +1.15 | 0.60, 0.38, 0.11 | -1.70 (-0.94 to +0.64): not constant |
+| base + 0.5 (RL - base), cue | 452 | 0.43 [0.32, 0.55] | +1.18 | 0.59, 0.36, 0.17 | -1.27 (-0.79 to +0.51): not constant |
+| Code-RL 3.1, cue | 450 | 0.44 [0.32, 0.57] | +1.11 | 0.51, 0.35, 0.39 | -0.27 (-0.92 to +0.47): constant |
+| base + 0.25 (RL - base), cue | 441 | 0.56 [0.44, 0.73] | +0.80 | 0.79, 0.44, 0.39 | -0.71 (-0.76 to +0.43): constant |
+| base + random difference, cue (control) | 417 | 0.85 [0.66, 1.09] | +0.15 | | |
+
+| Vote (against the model's own single samples) | Base + cue: hazard ratio [95 %] | RL plain: hazard ratio [95 %] |
+|---|---|---|
+| vote over 2 (mean of 6 subsets) | 0.87 [0.80, 0.95] | 1.01 [0.92, 1.11] |
+| vote over 3 (mean of 4 subsets) | 0.57 [0.50, 0.64] | 0.76 [0.65, 0.86] |
+| vote over 4 | 0.51 [0.42, 0.61] | 0.60 [0.46, 0.74] |
+| vote over 4 after restart | 0.45 [0.35, 0.55] | 0.57 [0.43, 0.71] |
+| vote over 4, ties to the shortest | 0.42 [0.34, 0.51] | |
+
+- Difficulty groups: problems sorted by b fitted on the 22 arms that are neither base samples nor a tested arm, cut so that
+  each group holds a third of those arms' wrong cells (46, 119, 335 problems; pooled base right 15 %, 73 %, 95 %). "Range if
+  constant" is the central 95 % of the same statistic on 100 matrices simulated from the fitted hazard model.
+- Raw counts behind the RL row (wrong cells of base, then RL, 4 samples each): hardest 157 and 117 of 184, middle 130 and
+  35 of 476, easiest 71 and 8 of 1,340. RL removes 89 % of the base's errors on the 335 easiest problems, 73 % on the middle
+  119 and 25 % on the hardest 46. A constant hazard ratio of 0.33 would leave about 24 errors in the easiest group, not 8.
+- Under the logit link the same statistic for RL plain is -0.93 (range if constant -0.72 to +0.50): also outside, by less.
+  RL cue, theta 0.25, 0.5 and Code-RL are inside the logit range; theta 0.75 (-1.28) and Think-SFT (+1.35: 1.95 logits on the
+  hardest group, 0.61 on the easiest) are outside. One sample per arm except RL plain; the hardest group has 46 problems.
+- Theta (H2b, refuted): log hazard is no more linear in theta than the logit. Hazard ratio at theta 0.25, 0.5, 0.75, 1, 1.25,
+  1.5: 0.56, 0.43, 0.43, 0.37, 0.45, 0.41. Theta 0.25 has 57 % of the log hazard ratio of theta 1 (logit: 57 %); theta 0.5 is
+  off the line by 3.3 sd of the base noise floor (logit: 4.1).
+
+3. Transfer to the 328 (H3, refuted; `results/hazard/transfer-01/readout.json`). The leave-one-arm-out procedure of the rate
+section with the hazard link (ridge on the 328: 0.3). The same code with the logit link reproduces 5.07 and 5.99.
+
+| Rule | Mean absolute error, problems of 328 (5 arms) |
+|---|---|
+| Hazard shift times c (the rule fixed in the spec; c 0.68 to 0.75) | 8.03 |
+| Same hazard ratio, c = 1 (the law verbatim) | 5.11 |
+| Point: same point gain | 5.14 |
+| Logit shift times c (rate section) | 5.07 |
+| Same hazard ratio on totals, no item model | 34.84 |
+
+Three rules tie at 5.1 problems (rerun noise 4, binomial sd 5.7); the hazard form predicts the 328 no better than the
+point rule. "Same hazard ratio" without an item model is 35 problems off.
+
+4. Chain length and independence (H4a holds in rank, fails in size; H4b mixed).
+- Fitted work against the length of right answers (b fitted without the model's own samples): Spearman 0.48 for base + cue
+  (467 problems) and 0.59 for RL (482), shuffled range -0.09 to +0.09. But the slope of log fitted work on log tokens is 0.45
+  [0.38, 0.53] for the base and 0.77 [0.67, 0.87] for RL, not 1: from the shortest to the longest third of problems the
+  right answers grow 7.3 times (849 to 6,167 tokens, base) and the fitted work 2.4 times. The implied slips per 1,000 tokens
+  fall with length: base 0.103, 0.049, 0.032; RL 0.018, 0.011, 0.011 (thirds by length). They bracket the located first
+  wrong steps per 1,000 tokens of the checks section (base 0.038, RL 0.015). Tokens are not the unit of work.
+- Independence of the 4 samples, p_i from the other 32 arms: the variance statistic D is 1.03 (base) and 0.90 (RL), inside
+  the range of 200 matrices with independent cells (95th percentile 1.17 and 1.15): no over-dispersion in the bulk. The
+  lower end is heavier than binomial: 33 problems with 0 of 4 right for the base against 25.1 expected (excess 7.9, 95th
+  percentile of the simulations 7.0) and 18 against 6.1 for RL (excess 11.9, 95th percentile 5.0). The vote over 4 is 10.0
+  (base, 446 against 456.0) and 9.3 (RL, 474 against 483.3) problems below what independent slips predict (5th percentile
+  of the simulations -6.9 and -5.0). About 8 to 12 problems per model fail in every sample for a reason the common
+  difficulty axis does not carry; the rest of the failures behave as independent draws.
+- `examples.json`: problem 180 (p 0.75, base 3 of 4, the wrong sample is the short one, 276 tokens) and problem 210 (p 0.82
+  from the other arms, base 0 of 4 with answers 3, 6, 6, 12 against gold 10, 4,468 to 12,087 tokens).
+
+5. Predictions (`results/hazard/predict-01/`, commit `1da4655`, pushed 05:05 UTC, before the board and `gpu.py ls` were read
+for finished cells). None of the blind cells had finished (hard328 vote jobs e8e6 and 5ff2 and the shots job 351b were
+still running). Filed rule Hc; c = 1 and the logit prediction of `results/rate/predict-0*` beside it:
+
+| Cell | Hazard Hc [80 %] | Hazard, c = 1 | Logit Lc | Point | Observed |
+|---|---|---|---|---|---|
+| hard328 base + cue, vote over 4 after restart | 184.2 [174, 195] | 193.8 | 192.3 | 187.9 | running |
+| hard328 RL plain, vote over 4 after restart | 218.8 [207, 232] | 226.2 | 227.1 | 215.8 | running |
+| hard328 base + cue + 3 RL-written solved problems | 174.7 [164, 185] | 180.9 | 181.4 | 179.8 | running |
+| hard328 base + top 8 directions, cue | 171.3 [159, 183] | 176.4 | 173.1 | 172.8 | not found |
+| MATH-500 Think-SFT cue, vote over 4 | 472.1 [464, 480] | | 473.1 | 489.5 | not run |
+| hard328 base + cue, vote over 4, no restart (computed after the observation) | 179.5 [170, 189] | 187.4 | 188.5 | 185.3 | 179 |
+| hard328 RL plain, vote over 4, no restart, 246 problems (computed after the observation) | 161.6 [152, 172] | 166.7 | 168.2 | 159.9 | 161 |
+
+On the two cells whose observation was already known (`results/hazard/scored-01/readout.json`) Hc misses by 0.6 problems
+on average, the point rule by 3.7, c = 1 by 7.1, logit Lc by 8.4. That is not a blind score, and on the 5-arm transfer the
+same rule is the worst (8.03). To score the blind cells: add the observed counts to `OBSERVED` in `analysis/hazard.py` and
+run `hazard score`.
+
+Limits. One sample per arm except base + cue and RL plain. The difficulty groups come from 22 arms and the hardest holds
+46 problems. The link test compares two fixed links; the post hoc mirror fit says the true link is not the logit either.
+The vote and zero-of-4 statistics use p_i estimated from other arms; their nulls come from simulation, not from a second
+set of samples.
+
+Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.hazard fit|transfer|score`
+(about 15 minutes for `fit`; `predict` refuses to overwrite the filed file); `... python -m studies.rlneurons.analysis.hazard_test`.
+Run folders: `results/hazard/math500-01/` (`readout.json`, `table.json`, `table.md`, `examples.json`, `run.json`),
+`transfer-01/`, `predict-01/`, `scored-01/`.
 
 ## How to run
 
