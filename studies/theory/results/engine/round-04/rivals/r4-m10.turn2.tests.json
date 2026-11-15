@@ -1,0 +1,153 @@
+{
+ "theory": "r4-m10",
+ "turn": 2,
+ "tests": [
+  {
+   "k": 4,
+   "experiment": "Per-token sharpness of RL step-100 finished answers relative to the cued base: share of step-100 plain finished answers whose mean_logprob exceeds the median mean_logprob of the cued base's finished answers, MATH-500, T 0.6 / top-p 0.95.",
+   "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (R, reference) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (X). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both files (set S). In each file, finished rows = rows in S with cap_hit false (if cap_hit is missing, finished only if finish_reason == 'stop'). Drop rows whose mean_logprob field is missing, null or non-finite. Let M = median of mean_logprob over R's finished rows (even count: mean of the two middle values). Statistic: (number of X finished rows with mean_logprob strictly greater than M) / (number of X finished rows). Ties with M count as not greater. Cap-hit rows are excluded from both files.",
+   "unit": "fraction of finished answers",
+   "refuted_by": null,
+   "script": "rivals/r4-m10.turn2/p4.py",
+   "measured": 0.5541561712846348,
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.5565217391304348,
+   "not_computable": null,
+   "note": "Files: s3 r3/base-01/out/F_math500.jsonl (R) and r3/s0400_s0100-01/out/s0100/P_math500.jsonl (X), fetched to runs/theory-tests/duel-r4-m10t2/. Rows have sample, problem_index, cap_hit (bool), finish_reason, mean_logprob. Main (literal): S = problem_index sets intersected after sample==0 and first-occurrence dedup; finished/valid filters applied per file independently, so R's median and X's denominator can use different problems. Alt: paired reading, only problems finished with finite mean_logprob in both files. Ties with M count as not greater. refuted_by is null so refuted_by_met is always false. Possible issues: mean_logprob is computed over the whole generation including any prefill/cue tokens differences between the F (cued, prefill_ids present) and P (plain) cells, so R vs X are not token-for-token comparable; if cap_hit is a non-bool string the script would treat it as not finished.",
+   "example_row": {
+    "cell": "P",
+    "bench": "math500",
+    "sample": 0,
+    "problem_index": 2,
+    "unique_id": "test/algebra/2584.json",
+    "seed": 1000002,
+    "prompt_n_tokens": 102,
+    "prefill_ids": [],
+    "text": ".\n\nOkay, so I need to find the value of f(-2) + f(-1) + f(0) where the function f(x) is given as (3x - 2)/(x - 2). Hmm, let me start by recalling how to evaluate a function at a specific point. For ea...",
+    "n_new": 1134,
+    "n_generated": 1135,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "finished_by_N": true,
+    "loop_ratio": 0.41262848751835535,
+    "n_special_ids": 0,
+    "mode": "boxed",
+    "extracted": "\\dfrac{14}{3}",
+    "gold": "\\frac{14}{3}",
+    "score": 1,
+    "parsed_gold": [
+     "14/3",
+     "\\frac{14}{3}"
+    ],
+    "parsed_answer": [
+     "14/3",
+     "\\frac{14}{3}"
+    ],
+    "answer_logprob": -0.000738378649657534,
+    "answer_prob": 0.9992618938847756,
+    "answer_tokens": 8,
+    "mean_logprob": -0.09130760629529355,
+    "utc": "2026-11-14T23:25:56Z"
+   }
+  },
+  {
+   "k": 5,
+   "experiment": "Same sharpness share at RL step 400: share of step-400 plain finished answers whose mean_logprob exceeds the median mean_logprob of the cued base's finished answers, MATH-500, T 0.6 / top-p 0.95.",
+   "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (R, reference) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (X). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both files (set S). In each file, finished rows = rows in S with cap_hit false (if cap_hit is missing, finished only if finish_reason == 'stop'). Drop rows whose mean_logprob field is missing, null or non-finite. Let M = median of mean_logprob over R's finished rows (even count: mean of the two middle values). Statistic: (number of X finished rows with mean_logprob strictly greater than M) / (number of X finished rows). Ties with M count as not greater. Cap-hit rows are excluded from both files.",
+   "unit": "fraction of finished answers",
+   "refuted_by": null,
+   "script": "rivals/r4-m10.turn2/p5.py",
+   "measured": 0.48009950248756217,
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.49002849002849,
+   "not_computable": null,
+   "note": "Same as k=4 with X = r3/s0400_s0100-01/out/s0400/P_math500.jsonl. Main: independent per-file finished filters on the common problem set S; alt: paired problems finished with finite mean_logprob in both files. Same caveats: cued (F) vs plain (P) cells; inventory notes step 400 is not scored, which does not affect this statistic (it uses no score).",
+   "example_row": {
+    "cell": "P",
+    "bench": "math500",
+    "sample": 0,
+    "problem_index": 1,
+    "unique_id": "test/intermediate_algebra/1994.json",
+    "seed": 1000001,
+    "prompt_n_tokens": 166,
+    "prefill_ids": [],
+    "text": "!\n\nOkay, so I need to find a way to express the double sum \\(\\sum_{j = 1}^\\infty \\sum_{k = 1}^\\infty \\frac{1}{(j + k)^3}\\) in terms of \\(p\\) and \\(q\\), where \\(p = \\sum_{k = 1}^\\infty \\frac{1}{k^2}\\) ...",
+    "n_new": 3391,
+    "n_generated": 3392,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "finished_by_N": true,
+    "loop_ratio": 0.30014877262583683,
+    "n_special_ids": 0,
+    "mode": "boxed",
+    "extracted": "p - q",
+    "gold": "p - q",
+    "score": 1,
+    "parsed_gold": [
+     "p - q",
+     "p - q"
+    ],
+    "parsed_answer": [
+     "p - q",
+     "p - q"
+    ],
+    "answer_logprob": -9.53672167725017e-06,
+    "answer_prob": 0.9999904633237972,
+    "answer_tokens": 3,
+    "mean_logprob": -0.12571625684338447,
+    "utc": "2026-11-14T04:18:55Z"
+   }
+  },
+  {
+   "k": 6,
+   "experiment": "Where step 400's median per-token log-prob on finished answers lies between the cued base and step 2,800, plain prompt for RL checkpoints, MATH-500, T 0.6 / top-p 0.95.",
+   "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (R), s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (M) and s3://pg-lineage-769063704696/results/rlneurons/r3/s2800-01/out/P_math500.jsonl (E). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in all three files (set S). In each file, finished rows = rows in S with cap_hit false (if cap_hit is missing, finished only if finish_reason == 'stop'). Drop rows whose mean_logprob is missing, null or non-finite. med_X = median of mean_logprob over X's finished rows (even count: mean of the two middle values). Statistic: (med_M - med_R) / (med_E - med_R). If med_E - med_R equals 0, report undefined.",
+   "unit": "fraction of the cued-base-to-step-2800 distance",
+   "refuted_by": null,
+   "script": "rivals/r4-m10.turn2/p6.py",
+   "measured": 0.06726598846379954,
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.052369435566534735,
+   "not_computable": null,
+   "note": "Files: R = r3/base-01/out/F_math500.jsonl, M = r3/s0400_s0100-01/out/s0400/P_math500.jsonl, E = r3/s2800-01/out/P_math500.jsonl. S = problems present (sample==0, first occurrence) in all three files; each median taken over that file's finished rows with finite mean_logprob in S independently (main). Alt: medians over problems finished with finite mean_logprob in all three files. If med_E == med_R the script reports not_computable 'undefined' as the recipe says. Ratio is sensitive to small denominators if med_E is close to med_R; values outside [0,1] are reported as is.",
+   "example_row": {
+    "cell": "P",
+    "bench": "math500",
+    "sample": 0,
+    "problem_index": 0,
+    "unique_id": "test/precalculus/807.json",
+    "seed": 1000000,
+    "prompt_n_tokens": 103,
+    "prefill_ids": [],
+    "text": " and resubmit.\n\nOkay, so I need to convert the point (0, 3) from rectangular coordinates to polar coordinates. Let me remember how polar coordinates work. Polar coordinates are represented as (r, \u03b8), ...",
+    "n_new": 890,
+    "n_generated": 891,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "finished_by_N": true,
+    "loop_ratio": 0.412303664921466,
+    "n_special_ids": 0,
+    "mode": "boxed",
+    "extracted": "\\left(3, \\dfrac{\\pi}{2}\\right)",
+    "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+    "score": 1,
+    "parsed_gold": [
+     "(3, pi/2)",
+     "( 3, \\frac{\\pi}{2} )"
+    ],
+    "parsed_answer": [
+     "(3, pi/2)",
+     "(3, \\frac{\\pi}{2})"
+    ],
+    "answer_logprob": -0.008263372907293842,
+    "answer_prob": 0.9917706749107913,
+    "answer_tokens": 15,
+    "mean_logprob": -0.19500558965184378,
+    "utc": "2026-11-14T04:16:24Z"
+   }
+  }
+ ]
+}

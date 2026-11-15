@@ -1,0 +1,1 @@
+{"measured": 0.26717557251908397, "refuted_by_met": true, "alt_measured": 0.26715686274509803, "not_computable": null, "example_row": {"problem_index": 9, "sample": 2, "attempt": 0, "seed": 45020009, "n_new": 14860, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "5", "score_v3": 0, "gold": "4"}, "numerator": 35, "denominator": 131}

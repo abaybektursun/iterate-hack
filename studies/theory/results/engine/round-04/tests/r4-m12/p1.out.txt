@@ -1,0 +1,1 @@
+{"measured": null, "refuted_by_met": false, "alt_measured": null, "not_computable": "The recipe's equivalence E(a, g) requires sympy.parsing.latex.parse_latex (with its antlr4 backend) and numpy.random.default_rng(0) sample points; test scripts are restricted to the standard library, and a substitute LaTeX parser or RNG would not be the recipe as written.", "example_row": null}

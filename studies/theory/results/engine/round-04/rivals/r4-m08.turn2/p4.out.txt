@@ -1,0 +1,2 @@
+{"measured": 0.5180097906045676, "refuted_by_met": false, "alt_measured": 0.5180097906045676, "not_computable": null, "example_row": {"problem_index": 0, "sample": 0, "attempt": 0, "seed": 41000000, "n_new": 450, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "$(3,\\frac{\\pi}{2})$", "score_v3": 1, "gold": "\\left( 3, \\frac{\\pi}{2} \\right)"}}
+n_short=214 alt_n_short=214
