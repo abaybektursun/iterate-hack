@@ -246,9 +246,10 @@ def down(args):
     # Jobs run on this box from this checkout whose outputs were not copied out in full: destroying deletes them
     # (an n=500 cell was lost when its box was destroyed 14 s after the job ended, during the copy, 2026-11-15)
     jobs = [f.stem for f in RECORDS.glob("*.json") if json.loads(f.read_text()).get("instance") == instance_id]
-    left = [j for j in jobs if not (RECORDS.parent / j / ".copied").exists()]
-    assert not left or "--force" in args, (f"{instance_id} holds jobs not copied out yet: {' '.join(left)}. "
-                                           f"Run get for each (it waits for the copy to finish), or down {instance_id} --force")
+    in_store = lambda j: subprocess.run(["aws", "s3", "ls", stored(j), "--profile", team.PROFILE], capture_output=True).returncode == 0
+    left = [j for j in jobs if not (RECORDS.parent / j / ".copied").exists() and not in_store(j)]
+    assert not left or "--force" in args, (f"{instance_id} holds jobs whose outputs are neither copied out nor in the team store: "
+                                           f"{' '.join(left)}. Run get for each, or down {instance_id} --force")
     sh("vastai", "destroy", "instance", instance_id, "-y")
     print(f"destroyed {instance_id}")
 
