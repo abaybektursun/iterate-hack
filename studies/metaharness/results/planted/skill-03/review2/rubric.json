@@ -1,0 +1,63 @@
+{
+ "pack": "r21",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 1,
+   "quote": "The venv row stays (22 s per job)."
+  },
+  "P2": {
+   "score": 1,
+   "quote": "2 of the 8 cap_hit jobs failed on hand-edited subject settings (`ci: 99`, `digits: \"3\"`), which cost a 3-minute fix loop."
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "Of the two runs since the last review, bench-rng tests no part of the mission. Its speed moved 7% between two runs, more than the 3% spread between generators, so it measures noise."
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/submit.sh (with the check added to studies/gapmap/prep/make_cells.py)"
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "subject intervals are 90% in accuracy and 99% in cap_hit with 4 and 3 digits, each set by hand, which undercuts comparing tables between batches",
+  "SPEC names no closest published experiment",
+  "the planned tokens batches only ask the next question about the last result; a mission-3 route (stop or restart a looping base answer at equal tokens) is the better next step",
+  "the fmt setting is unused and the per-batch digits setting is removable (owner's decision)"
+ ],
+ "change_summary": "Adds a settings check to make_cells.py (run when it writes cells and through --check) and makes submit.sh run it on the batch's cells file before launching a job."
+}

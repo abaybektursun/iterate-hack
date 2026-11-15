@@ -1,0 +1,11 @@
+<stdin>:8: DeprecationWarning: datetime.datetime.utcfromtimestamp() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.fromtimestamp(timestamp, datetime.UTC).
+abaybektursun-1114-222915-1f4a submit 04:29:15 start 05:02:37 | died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu
+abaybektursun-1114-222933-0d2e submit 04:29:33 start 05:02:38 | died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu
+abaybektursun-1114-204820-49ce submit 04:48:20 start 05:02:40 | died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu
+abaybektursun-1114-230347-df7b submit 05:03:47 start 05:03:47 | died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu
+abaybektursun-1114-230353-1383 submit 05:03:53 start 05:03:54 | died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu
+abaybektursun-1114-210413-f401 submit 05:04:13 start 05:04:13 | died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu
+abaybektursun-1114-210421-6663 submit 05:04:21 start 05:04:22 | died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu
+7 jobs died this way in 24 h
+holder ce39: {'start': '05:02:35', 'call': 'fc-01M7EQDG78P0KPYX7SEJCRN98E', 'job': '04:28:29', 'cancel': '04:29:05'}
+cycle.py counts a died job's run as now - start (tools/cycle.py:53-55, no end record); now 05:33:00

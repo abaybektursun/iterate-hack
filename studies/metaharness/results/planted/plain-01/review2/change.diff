@@ -1,0 +1,45 @@
+diff --git a/studies/gapmap/jobs/submit.sh b/studies/gapmap/jobs/submit.sh
+index 9a26182..5ab05ac 100755
+--- a/studies/gapmap/jobs/submit.sh
++++ b/studies/gapmap/jobs/submit.sh
+@@ -11,24 +11,30 @@ command="bash studies/gapmap/jobs/run_cell.sh $batch $cell $*"
+ # Catch bad settings and data paths here, not after a job's environment build and bootstrap.
+ python3 studies/gapmap/jobs/check_cell.py --cells "studies/gapmap/cells/$batch.json" --cell "$cell" --committed "$@"
+ 
+-launch() {
+-  local job state
++submit() {
++  local job
+   job=$(uv run --quiet tools/gpu.py submit cpu --hours 0.5 -- "$command" | head -1)
+   echo "$1 job $job" >&2
+-  state=$(uv run --quiet tools/gpu.py wait "$job")
++  echo "$job"
++}
++
++collect() {
++  local state
++  state=$(uv run --quiet tools/gpu.py wait "$2")
+   if [ "$(echo "$state" | head -1)" != "done" ]; then
+     echo "$state" >&2
+-    echo "$1 job $job failed" >&2
++    echo "$1 job $2 failed" >&2
+     return 1
+   fi
+-  uv run --quiet tools/gpu.py get "$job" >/dev/null 2>&1
+-  echo "$job"
++  uv run --quiet tools/gpu.py get "$2" >/dev/null 2>&1
+ }
+ 
+-first=$(launch cell)
+-
+-# Verification rerun: the same cell with the same seed, to confirm the number before it is posted.
+-second=$(launch check)
++# The cell and its verification rerun (same cell, same seed, to confirm the number before it is posted) are
++# independent, so both are launched at once: one job round-trip per cell instead of two.
++first=$(submit cell)
++second=$(submit check)
++collect cell "$first"
++collect check "$second"
+ python3 - "$first" "$second" <<'PY'
+ import json, sys
+ tables = [json.load(open(f"runs/{job}/metrics.json"))["table"] for job in sys.argv[1:3]]

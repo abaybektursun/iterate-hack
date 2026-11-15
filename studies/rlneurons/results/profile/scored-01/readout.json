@@ -1,0 +1,86 @@
+{
+ "scored": 2,
+ "not_finished": 0,
+ "mean_abs_error": {
+  "Lc": 21.25,
+  "L1": 17.35,
+  "P": 25.05,
+  "profile": 8.35,
+  "profile_corrected": 8.35,
+  "author_guess": 13.5
+ },
+ "cells": [
+  {
+   "cell": "hard328 Think-SFT, cue, one sample",
+   "filed_utc": "2026-11-15T05:46:55+00:00",
+   "Lc": 196.3,
+   "L1": 201.1,
+   "P": 190.5,
+   "profile": 217.6,
+   "profile_corrected": 209.2,
+   "Lc_interval80": [
+    186.0,
+    206.0
+   ],
+   "profile_interval80": [
+    204.0,
+    231.0
+   ],
+   "profile_corrected_interval80": [
+    195.6079094737621,
+    222.6079094737621
+   ],
+   "observed": 219,
+   "source": "board result-d9d6f3 (posted 05:48:33 UTC, after predict-01 was pushed at 05:47:01); jobs sameraslan-1114-204845-1055 (cue), -204852-d527 (plain); run folders not committed when scored",
+   "error": {
+    "Lc": -22.7,
+    "L1": -17.9,
+    "P": -28.5,
+    "profile": -1.4,
+    "profile_corrected": -9.8,
+    "author_guess": -19
+   },
+   "inside_interval80": {
+    "Lc": false,
+    "profile": true,
+    "profile_corrected": true
+   }
+  },
+  {
+   "cell": "hard328 Think-SFT, plain, one sample",
+   "filed_utc": "2026-11-15T05:46:55+00:00",
+   "Lc": 183.2,
+   "L1": 186.2,
+   "P": 181.4,
+   "profile": 218.3,
+   "profile_corrected": 209.9,
+   "Lc_interval80": [
+    172.0,
+    194.0
+   ],
+   "profile_interval80": [
+    204.0,
+    234.0
+   ],
+   "profile_corrected_interval80": [
+    195.6079094737621,
+    225.6079094737621
+   ],
+   "observed": 203,
+   "source": "board result-d9d6f3 (posted 05:48:33 UTC, after predict-01 was pushed at 05:47:01); jobs sameraslan-1114-204845-1055 (cue), -204852-d527 (plain); run folders not committed when scored",
+   "error": {
+    "Lc": -19.8,
+    "L1": -16.8,
+    "P": -21.6,
+    "profile": 15.3,
+    "profile_corrected": 6.9,
+    "author_guess": -8
+   },
+   "inside_interval80": {
+    "Lc": false,
+    "profile": false,
+    "profile_corrected": true
+   }
+  }
+ ]
+}

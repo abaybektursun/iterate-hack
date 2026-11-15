@@ -29,8 +29,12 @@ All four hold. If one fails, the board result is enough.
 
 1. Copy `.claude/skills/finding-page/template.py` to `tools/finding_<slug>.py`. `view.py` serves it at
    `/finding/<slug>` and gives it a tile on `/findings`, with no other change. The tile is the only way to the page:
-   the header has three tabs (Board, Design, Findings) and never links a single finding. One finding, one file, one
-   writer.
+   the header has four tabs (Board, Design, Proof, Findings) and never links a single finding. One finding, one file,
+   one writer.
+   An experiment that tests the team's method itself (the harness, a skill, a tool) is not a finding. It gets a proof
+   page, made in the same way and with the same checks: the file is `tools/proof_<slug>.py`, it is served at
+   `/proof/<slug>` with a tile on `/proof`, and in its header the tab Proof is the current one
+   (`tools/proof_review_cuts_waste.py` is the first).
 2. Fill the six values at the top:
    - `PROBLEM`: the problem as one question, at most 12 words, no term a newcomer would not know.
    - `LINE`: the finding in one sentence with its number, at most 16 words. It is also the sentence on the tile.

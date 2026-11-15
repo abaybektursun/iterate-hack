@@ -1,0 +1,63 @@
+{
+ "pack": "r07",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 0,
+   "quote": ""
+  },
+  "P2": {
+   "score": 0,
+   "quote": ""
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "Remove `bench-rng` from `queue.json` extras. Each batch would get one cell fewer, and the board would stop getting a noisy timing post every time."
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "All 4 batch results were posted to the board with a folder name and no numbers",
+  "Nobody had checked the SPEC prediction although the data already answered it",
+  "results/tokens-02/ is a copy of tokens-01 (same 6 job ids) posted as a second result, so it looks like a replication",
+  "bench-rng timings are noisy (56k/s to 37k/s under CPU contention) and filled 4 of the 8 newest board items"
+ ],
+ "change_summary": "Adds analysis/summarize.py (overall difference and the groups whose interval excludes it) and makes submit_batch.py print that board text at the end of a batch; README updated."
+}
