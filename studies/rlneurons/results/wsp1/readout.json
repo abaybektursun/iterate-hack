@@ -1,0 +1,529 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_wsp1.md",
+ "grader": "rln4_lib.grade_v3 (stored score_v3, equal to a rescore)",
+ "set": "the first n MATH-500 problems, T 1.0, top-p 1.0, one sample",
+ "cells": {
+  "screen100/base_plain": {
+   "experiment": "screen100",
+   "label": "base",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-154255-ff2f",
+   "seed_base": 80000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 100,
+   "right_v3": 34,
+   "acc_v3": 34.0,
+   "wilson95": [
+    25.5,
+    43.7
+   ],
+   "cap_hits": 1,
+   "mean_generated_tokens": 1834.7,
+   "median_generated_tokens": 469.5,
+   "median_tokens_right": 649.5,
+   "okay_first80": 13,
+   "okay_first80_share": 0.13,
+   "wait_per_answer": 5.78,
+   "empty": 4,
+   "empty_share": 0.04,
+   "run_folder": "studies/rlneurons/results/wsp1/screen100/base_plain-01"
+  },
+  "screen100/rl_plain": {
+   "experiment": "screen100",
+   "label": "rl",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-154304-be68",
+   "seed_base": 80000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 100,
+   "right_v3": 96,
+   "acc_v3": 96.0,
+   "wilson95": [
+    90.2,
+    98.4
+   ],
+   "cap_hits": 1,
+   "mean_generated_tokens": 3905.1,
+   "median_generated_tokens": 2754.5,
+   "median_tokens_right": 2615.0,
+   "okay_first80": 100,
+   "okay_first80_share": 1.0,
+   "wait_per_answer": 29.67,
+   "empty": 0,
+   "empty_share": 0.0,
+   "run_folder": "studies/rlneurons/results/wsp1/screen100/rl_plain-01"
+  },
+  "screen100/top8_plain": {
+   "experiment": "screen100",
+   "label": "top8",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-184550-429d",
+   "seed_base": 80000000,
+   "gpu": "NVIDIA H200",
+   "n": 100,
+   "right_v3": 88,
+   "acc_v3": 88.0,
+   "wilson95": [
+    80.2,
+    93.0
+   ],
+   "cap_hits": 2,
+   "mean_generated_tokens": 3663.1,
+   "median_generated_tokens": 2164.5,
+   "median_tokens_right": 2094.5,
+   "okay_first80": 90,
+   "okay_first80_share": 0.9,
+   "wait_per_answer": 27.92,
+   "empty": 0,
+   "empty_share": 0.0,
+   "edit": {
+    "recipe": "top8",
+    "k": 8,
+    "alpha": null,
+    "rounding": "stochastic",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 224,
+    "n_unchanged": 131,
+    "other": "rl_math",
+    "add_norm": 1.269214040907,
+    "written_norm": 2.5962500135967455,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.0007405910897278379,
+    "effective_scale": 0.9999600542119159,
+    "cos_written_add": 0.48884480866834484,
+    "share": 0.09821802434428129
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/screen100/top8_plain-01"
+  },
+  "screen100/bulk_plain": {
+   "experiment": "screen100",
+   "label": "bulk",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-184605-5e13",
+   "seed_base": 80000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 100,
+   "right_v3": 91,
+   "acc_v3": 91.0,
+   "wilson95": [
+    83.8,
+    95.2
+   ],
+   "cap_hits": 3,
+   "mean_generated_tokens": 4093.7,
+   "median_generated_tokens": 2452.5,
+   "median_tokens_right": 2389,
+   "okay_first80": 99,
+   "okay_first80_share": 0.99,
+   "wait_per_answer": 26.42,
+   "empty": 0,
+   "empty_share": 0.0,
+   "edit": {
+    "recipe": "bulk",
+    "k": 8,
+    "alpha": null,
+    "rounding": "stochastic",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "other",
+    "n_tensors": 355,
+    "n_edited": 224,
+    "n_unchanged": 131,
+    "other": "rl_math",
+    "add_norm": 1.269214040907,
+    "written_norm": 2.5956945096778563,
+    "ref_norm": 1713.7850457336401,
+    "add_rel": 0.0007405911517705376,
+    "effective_scale": 1.000034220170515,
+    "cos_written_add": 0.48898569107249207,
+    "share": 0.09821802434428129
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/screen100/bulk_plain-01"
+  },
+  "screen100/rand8_plain": {
+   "experiment": "screen100",
+   "label": "rand8",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-184610-37bf",
+   "seed_base": 80000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 100,
+   "right_v3": 36,
+   "acc_v3": 36.0,
+   "wilson95": [
+    27.3,
+    45.8
+   ],
+   "cap_hits": 0,
+   "mean_generated_tokens": 1292.9,
+   "median_generated_tokens": 493.0,
+   "median_tokens_right": 605.5,
+   "okay_first80": 15,
+   "okay_first80_share": 0.15,
+   "wait_per_answer": 3.9,
+   "empty": 4,
+   "empty_share": 0.04,
+   "edit": {
+    "recipe": "rand8",
+    "k": 8,
+    "alpha": null,
+    "rounding": "stochastic",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 224,
+    "n_unchanged": 131,
+    "other": "rl_math",
+    "add_norm": 1.269214040908555,
+    "written_norm": 2.6696750293659837,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.0007405910897287451,
+    "effective_scale": 0.9999744767984197,
+    "cos_written_add": 0.4754067939138481,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/screen100/rand8_plain-01"
+  },
+  "screen100/late3_plain": {
+   "experiment": "screen100",
+   "label": "late3",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-184615-7f7e",
+   "seed_base": 80000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 100,
+   "right_v3": 41,
+   "acc_v3": 41.0,
+   "wilson95": [
+    31.9,
+    50.8
+   ],
+   "cap_hits": 1,
+   "mean_generated_tokens": 1750.6,
+   "median_generated_tokens": 637.5,
+   "median_tokens_right": 725,
+   "okay_first80": 20,
+   "okay_first80_share": 0.2,
+   "wait_per_answer": 6.75,
+   "empty": 4,
+   "empty_share": 0.04,
+   "edit": {
+    "recipe": "late3",
+    "k": 3,
+    "alpha": null,
+    "rounding": "stochastic",
+    "seed": 0,
+    "late_layers": [
+     24,
+     25,
+     26,
+     27,
+     28,
+     29,
+     30,
+     31
+    ],
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 8,
+    "n_unchanged": 347,
+    "other": "rl_math",
+    "add_norm": 0.2335319767385752,
+    "written_norm": 0.511165024612064,
+    "ref_norm": 414.3545303840338,
+    "add_rel": 0.0005636042558099512,
+    "effective_scale": 0.9999925110084501,
+    "cos_written_add": 0.45685877666768526,
+    "share": 0.056077359677258694
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/screen100/late3_plain-01"
+  },
+  "screen100/sft1_plain": {
+   "experiment": "screen100",
+   "label": "sft1",
+   "prompt": "plain",
+   "job_id": "sameraslan-1114-184623-b0fc",
+   "seed_base": 80000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 100,
+   "right_v3": 91,
+   "acc_v3": 91.0,
+   "wilson95": [
+    83.8,
+    95.2
+   ],
+   "cap_hits": 6,
+   "mean_generated_tokens": 4488.5,
+   "median_generated_tokens": 2959.5,
+   "median_tokens_right": 2738,
+   "okay_first80": 28,
+   "okay_first80_share": 0.28,
+   "wait_per_answer": 22.31,
+   "empty": 0,
+   "empty_share": 0.0,
+   "edit": {
+    "recipe": "interp",
+    "k": null,
+    "alpha": 1.0,
+    "rounding": "nearest",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 0,
+    "n_unchanged": 355,
+    "other": "think_sft",
+    "add_norm": 0.0,
+    "written_norm": 0.0,
+    "ref_norm": 0.0,
+    "add_rel": null,
+    "effective_scale": null,
+    "cos_written_add": null,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/screen100/sft1_plain-01"
+  },
+  "screen100/base_cue": {
+   "experiment": "screen100",
+   "label": "base",
+   "prompt": "cue",
+   "job_id": "sameraslan-1114-154311-93e3",
+   "seed_base": 81000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 100,
+   "right_v3": 82,
+   "acc_v3": 82.0,
+   "wilson95": [
+    73.3,
+    88.3
+   ],
+   "cap_hits": 8,
+   "mean_generated_tokens": 4063.8,
+   "median_generated_tokens": 1530.5,
+   "median_tokens_right": 1355.0,
+   "okay_first80": 100,
+   "okay_first80_share": 1.0,
+   "wait_per_answer": 21.47,
+   "empty": 0,
+   "empty_share": 0.0,
+   "run_folder": "studies/rlneurons/results/wsp1/screen100/base_cue-01"
+  },
+  "screen100/sft1_cue": {
+   "experiment": "screen100",
+   "label": "sft1",
+   "prompt": "cue",
+   "job_id": "sameraslan-1114-184627-f7eb",
+   "seed_base": 81000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 100,
+   "right_v3": 92,
+   "acc_v3": 92.0,
+   "wilson95": [
+    85.0,
+    95.9
+   ],
+   "cap_hits": 5,
+   "mean_generated_tokens": 4552.2,
+   "median_generated_tokens": 3349.0,
+   "median_tokens_right": 3168.0,
+   "okay_first80": 100,
+   "okay_first80_share": 1.0,
+   "wait_per_answer": 28.4,
+   "empty": 0,
+   "empty_share": 0.0,
+   "edit": {
+    "recipe": "interp",
+    "k": null,
+    "alpha": 1.0,
+    "rounding": "nearest",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 0,
+    "n_unchanged": 355,
+    "other": "think_sft",
+    "add_norm": 0.0,
+    "written_norm": 0.0,
+    "ref_norm": 0.0,
+    "add_rel": null,
+    "effective_scale": null,
+    "cos_written_add": null,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/screen100/sft1_cue-01"
+  },
+  "screen100/sft05_cue": {
+   "experiment": "screen100",
+   "label": "sft05",
+   "prompt": "cue",
+   "job_id": "sameraslan-1114-184632-401b",
+   "seed_base": 81000000,
+   "gpu": "NVIDIA H100 80GB HBM3",
+   "n": 100,
+   "right_v3": 88,
+   "acc_v3": 88.0,
+   "wilson95": [
+    80.2,
+    93.0
+   ],
+   "cap_hits": 6,
+   "mean_generated_tokens": 3745.6,
+   "median_generated_tokens": 1754.5,
+   "median_tokens_right": 1608.5,
+   "okay_first80": 100,
+   "okay_first80_share": 1.0,
+   "wait_per_answer": 19.57,
+   "empty": 0,
+   "empty_share": 0.0,
+   "edit": {
+    "recipe": "interp",
+    "k": null,
+    "alpha": 0.5,
+    "rounding": "stochastic",
+    "seed": 0,
+    "late_layers": null,
+    "reference": "base",
+    "n_tensors": 355,
+    "n_edited": 355,
+    "n_unchanged": 0,
+    "other": "think_sft",
+    "add_norm": 233.72565156060665,
+    "written_norm": 233.80929469418962,
+    "ref_norm": 3126.469226854339,
+    "add_rel": 0.07475706127316245,
+    "effective_scale": 0.9999999974185121,
+    "cos_written_add": 0.9996422565790111,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/wsp1/screen100/sft05_cue-01"
+  }
+ },
+ "differences": {
+  "screen100: rl_plain minus base_plain": {
+   "n": 100,
+   "points": 62.0,
+   "ci95": [
+    52.0,
+    71.0
+   ]
+  },
+  "screen100: top8_plain minus base_plain": {
+   "n": 100,
+   "points": 54.0,
+   "ci95": [
+    43.0,
+    64.0
+   ]
+  },
+  "screen100: top8_plain minus rl_plain": {
+   "n": 100,
+   "points": -8.0,
+   "ci95": [
+    -14.0,
+    -2.0
+   ]
+  },
+  "screen100: bulk_plain minus base_plain": {
+   "n": 100,
+   "points": 57.0,
+   "ci95": [
+    47.0,
+    67.0
+   ]
+  },
+  "screen100: bulk_plain minus rl_plain": {
+   "n": 100,
+   "points": -5.0,
+   "ci95": [
+    -10.0,
+    -1.0
+   ]
+  },
+  "screen100: rand8_plain minus base_plain": {
+   "n": 100,
+   "points": 2.0,
+   "ci95": [
+    -5.0,
+    9.0
+   ]
+  },
+  "screen100: rand8_plain minus rl_plain": {
+   "n": 100,
+   "points": -60.0,
+   "ci95": [
+    -70.0,
+    -50.0
+   ]
+  },
+  "screen100: late3_plain minus base_plain": {
+   "n": 100,
+   "points": 7.0,
+   "ci95": [
+    -1.0,
+    16.0
+   ]
+  },
+  "screen100: late3_plain minus rl_plain": {
+   "n": 100,
+   "points": -55.0,
+   "ci95": [
+    -65.0,
+    -44.0
+   ]
+  },
+  "screen100: sft1_plain minus base_plain": {
+   "n": 100,
+   "points": 57.0,
+   "ci95": [
+    46.0,
+    67.0
+   ]
+  },
+  "screen100: sft1_plain minus rl_plain": {
+   "n": 100,
+   "points": -5.0,
+   "ci95": [
+    -10.0,
+    0.0
+   ]
+  },
+  "screen100: top8_plain minus rand8_plain": {
+   "n": 100,
+   "points": 52.0,
+   "ci95": [
+    40.98,
+    62.0
+   ]
+  },
+  "screen100: sft1_cue minus base_cue": {
+   "n": 100,
+   "points": 10.0,
+   "ci95": [
+    2.98,
+    18.0
+   ]
+  },
+  "screen100: sft05_cue minus base_cue": {
+   "n": 100,
+   "points": 6.0,
+   "ci95": [
+    -3.0,
+    15.0
+   ]
+  }
+ },
+ "bootstrap": "paired by problem index, 5,000 resamples, seed 0, 95 % percentile, in points",
+ "skipped": [],
+ "notes": [
+  "tokens are n_generated, which counts the stop token: one more than the job's n_new for an answer that stopped",
+  "empty: n_generated <= 3",
+  "okay_first80: 'Okay' in the first 80 characters of the text; the cue prompt forces ' line!\\n\\nOkay' as the first 3 tokens of the text, so the share is 1 in every cue cell by construction",
+  "wait_per_answer: occurrences of 'wait' plus 'Wait' as substrings, mean over all answers",
+  "sft1 is Think-SFT as released (interp, alpha 1, nearest rounding): its edit totals are empty, no tensor is edited"
+ ]
+}
