@@ -379,7 +379,7 @@ p, h1, h2, figure { margin: 0; }
 
 .photo { border-radius: 2px; overflow: hidden; }
 .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.photo.cook { width: 400px; height: 436px; }
+.photo.cook { width: 400px; height: 436px; border-radius: 28px; }
 /* slide "powered": what powered the RL training beside what powered the team, two equal columns */
 .versus { position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; align-items: center; padding: 0 120px; text-align: center; }
 .versus > div { display: flex; flex-direction: column; align-items: center; gap: 18px; }
