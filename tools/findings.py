@@ -123,11 +123,11 @@ TABLE = {
                              f"MATH-500, over Base + cue; {points(right_of(m, 'untrained'), right_of(m, 'rl-directions'), m.DATA['edit']['n'])} over Base"]},
     "rl-every-neuron": {
         "group": WEIGHTS,
-        "figure": lambda m: [m.pct(m.mean(m.ONE["best"])), "of the change", f"in the best {m.ONE['share']:g} % of neurons"]},
+        "figure": lambda m: [m.pct(m.mean(m.ONE["best"])), "of RL's effect", f"next-word predictions, RL's best {m.ONE['share']:g} % of neurons copied"]},
     "neurons-you-can-describe": {
         "group": WEIGHTS,
-        "figure": lambda m: [f"{round(100 * m.DATA['sets']['selected']['mean_accuracy'])} %", "of firings found",
-                             f"chance is {round(100 * m.DATA['chance'])} %"]},
+        "figure": lambda m: [f"{100 * m.DATA['sets']['selected']['mean_accuracy']:.1f} %", "of snippets sorted right",
+                             f"30 neurons, blind reader; chance is {round(100 * m.DATA['chance'])} %"]},
     "loop-neurons": {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.DATA['states'][0]['loops']} → {m.DATA['states'][1]['loops']}", "loops", f"of {m.DATA['n']} answers, MATH-500, T 0.6"]},
