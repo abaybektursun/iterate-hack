@@ -1,0 +1,18 @@
+{
+ "scored_right": {
+  "run": "assign_mini-s0",
+  "id": "s0031",
+  "branch": "f2b2",
+  "idea": "Region-aware greedy with segment occupancy maps; replaced exhaustive candidate generation by fast rectangle completion checks from high-weight empty points and added local future-potential scoring while keeping the same validity safeguards.",
+  "score": 0.371381,
+  "msg": "per-case V/V_best: 0.410, 0.268, 0.391, 0.432, 0.356"
+ },
+ "scored_wrong": {
+  "run": "assign_sol-s0",
+  "id": "s0000",
+  "branch": "f0b0",
+  "idea": "Greedy incremental rectangle expansion with a candidate heap, preferring high-weight new dots and short valid perimeters while checking segment conflicts efficiently.",
+  "score": null,
+  "msg": "case 1: checker rejected: wrong answer (10, 9) does not contain a dot (turn: 0)"
+ }
+}

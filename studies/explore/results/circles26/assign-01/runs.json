@@ -1,0 +1,203 @@
+{
+ "assign_mini-s0": {
+  "run": {
+   "task": "circles26",
+   "strategy": "fnf_assign",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/circles26/assign-01/assign_mini-s0",
+   "commit": "38acd85dbc8fc430714f2ab28572c3d29e6869f0",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task circles26 --budget 40 --seed 0 --model gpt-5.4-mini --strategy fnf_assign --out runs/explore/circles26/assign-01/assign_mini-s0"
+  },
+  "metrics": {
+   "strategy": "fnf_assign",
+   "task": "circles26",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 2.54138,
+   "best_val": 2.627644,
+   "best_id": "s0021",
+   "best_test": null,
+   "spent": {
+    "prompt_tokens": 321709,
+    "completion_tokens": 118625,
+    "usd": 0.7750942499999999
+   },
+   "valid_share": 0.7,
+   "list_usd": 0.007845000000000001
+  }
+ },
+ "assign_sol-s0": {
+  "run": {
+   "task": "circles26",
+   "strategy": "fnf_assign",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 4,
+   "flushes": 0,
+   "list_model": "gpt-6.1-sol",
+   "out": "runs/explore/circles26/assign-01/assign_sol-s0",
+   "commit": "38acd85dbc8fc430714f2ab28572c3d29e6869f0",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task circles26 --budget 40 --seed 0 --model gpt-5.4-mini --strategy fnf_assign --list-model gpt-6.1-sol --out runs/explore/circles26/assign-01/assign_sol-s0"
+  },
+  "metrics": {
+   "strategy": "fnf_assign",
+   "task": "circles26",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 2.54138,
+   "best_val": 2.635983,
+   "best_id": "s0019",
+   "best_test": 2.635983,
+   "spent": {
+    "prompt_tokens": 361448,
+    "completion_tokens": 125132,
+    "usd": 0.8341799999999999
+   },
+   "valid_share": 0.675,
+   "list_usd": 0.02579
+  }
+ },
+ "fnf-s0": {
+  "run": {
+   "task": "circles26",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/circles26/assign-01/fnf-s0",
+   "commit": "38acd85dbc8fc430714f2ab28572c3d29e6869f0",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task circles26 --budget 40 --seed 0 --model gpt-5.4-mini --strategy fnf --out runs/explore/circles26/assign-01/fnf-s0"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "circles26",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 2.54138,
+   "best_val": 2.535426,
+   "best_id": "s0038",
+   "best_test": 2.535426,
+   "spent": {
+    "prompt_tokens": 120654,
+    "completion_tokens": 47605,
+    "usd": 0.304713
+   },
+   "valid_share": 0.525
+  }
+ },
+ "rebase-s0": {
+  "run": {
+   "task": "circles26",
+   "strategy": "rebase",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/circles26/assign-01/rebase-s0",
+   "commit": "38acd85dbc8fc430714f2ab28572c3d29e6869f0",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task circles26 --budget 40 --seed 0 --model gpt-5.4-mini --strategy rebase --out runs/explore/circles26/assign-01/rebase-s0"
+  },
+  "metrics": {
+   "strategy": "rebase",
+   "task": "circles26",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 2.54138,
+   "best_val": 2.541421,
+   "best_id": "s0012",
+   "best_test": 2.541421,
+   "spent": {
+    "prompt_tokens": 511607,
+    "completion_tokens": 15569,
+    "usd": 0.4537657499999999
+   },
+   "valid_share": 0.95
+  }
+ },
+ "single-s0": {
+  "run": {
+   "task": "circles26",
+   "strategy": "single",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/circles26/assign-01/single-s0",
+   "commit": "38acd85dbc8fc430714f2ab28572c3d29e6869f0",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task circles26 --budget 40 --seed 0 --model gpt-5.4-mini --strategy single --out runs/explore/circles26/assign-01/single-s0"
+  },
+  "metrics": {
+   "strategy": "single",
+   "task": "circles26",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 2.54138,
+   "best_val": 2.044528,
+   "best_id": "s0012",
+   "best_test": 2.044528,
+   "spent": {
+    "prompt_tokens": 929307,
+    "completion_tokens": 44126,
+    "usd": 0.8955472500000002
+   },
+   "valid_share": 0.975
+  }
+ },
+ "single_list_mini-s0": {
+  "run": {
+   "task": "circles26",
+   "strategy": "single_list",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/circles26/assign-01/single_list_mini-s0",
+   "commit": "416bc0d2660b0e7558837410eceb16e05bdd1ab5",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --seed 0 --budget 40 --model gpt-5.4-mini --task circles26 --strategy single_list --out runs/explore/circles26/assign-01/single_list_mini-s0"
+  },
+  "metrics": {
+   "strategy": "single_list",
+   "task": "circles26",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 2.54138,
+   "best_val": 2.245675,
+   "best_id": "s0029",
+   "best_test": 2.245675,
+   "spent": {
+    "prompt_tokens": 642221,
+    "completion_tokens": 27939,
+    "usd": 0.60739125
+   },
+   "valid_share": 0.725,
+   "list_usd": 0.0038107500000000003
+  }
+ }
+}

@@ -49,7 +49,8 @@ for run in sorted(p for p in d.iterdir() if p.is_dir()):
     for r in rows:
         f = run / "code" / f"{r['id']}.py"
         opt += bool(f.exists() and OPT.search(f.read_text()))
-    arms[m["strategy"]].append({"seed": m["seed"], "best": m["best_val"], "starter": m.get("starter_score"),
+    arm = run.name.rsplit("-s", 1)[0]  # the folder's arm name: one strategy can run as several arms (fnf_assign)
+    arms[arm].append({"seed": m["seed"], "list_usd": m.get("list_usd", 0.0), "best": m["best_val"], "starter": m.get("starter_score"),
                                 "n": m["n"], "valid_share": m["valid_share"], "usd": usd, "curve": curve,
                                 "rows": rows, "optimizer": opt})
 
@@ -67,7 +68,7 @@ for arm, runs in sorted(arms.items()):
          "usd_matched": at_cut, "usd_matched_mean": statistics.mean(x or 0 for x in at_cut),
          "valid_share": statistics.mean(r["valid_share"] for r in runs),
          "optimizer": f"{sum(r['optimizer'] for r in runs)}/{sum(r['n'] for r in runs)}",
-         "usd_total": sum(r["usd"] for r in runs), "usd_per_run": statistics.mean(r["usd"] for r in runs),
+         "list_usd": sum(r["list_usd"] for r in runs), "usd_total": sum(r["usd"] for r in runs), "usd_per_run": statistics.mean(r["usd"] for r in runs),
          "curve_mean": {p: statistics.mean([r["curve"][p - 1] or 0 for r in runs]) for p in pts},
          "usd_curve_mean": {p: statistics.mean([best_until(r["rows"], lambda x: x["usd_cum"] <= p) or 0 for r in runs])
                             for p in usd_pts}}

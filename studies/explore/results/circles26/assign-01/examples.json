@@ -1,0 +1,18 @@
+{
+ "scored_right": {
+  "run": "assign_sol-s0",
+  "id": "s0019",
+  "branch": "f1b3",
+  "idea": "Population-based splicing search with repaired offspring and diversity-aware survivor selection, adding a stronger structured starting population and repeated local SLSQP refinement.",
+  "score": 2.635983,
+  "msg": "ok"
+ },
+ "scored_wrong": {
+  "run": "fnf-s0",
+  "id": "s0000",
+  "branch": "f0b0",
+  "idea": "Use a higher-quality hand-tuned nonuniform layout with four large corner-adjacent circles, edge fillers, and a central cluster to better exploit square area while preserving feasibility.",
+  "score": null,
+  "msg": "circles 0 and 8 overlap by 5.61e-02"
+ }
+}

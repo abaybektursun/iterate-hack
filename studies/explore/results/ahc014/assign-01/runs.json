@@ -1,0 +1,136 @@
+{
+ "assign_mini-s0": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf_assign",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/assign-01/assign_mini-s0",
+   "commit": "416bc0d2660b0e7558837410eceb16e05bdd1ab5",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --seed 0 --budget 40 --model gpt-5.4-mini --task ahc014 --strategy fnf_assign --out runs/explore/ahc014/assign-01/assign_mini-s0"
+  },
+  "metrics": {
+   "strategy": "fnf_assign",
+   "task": "ahc014",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.371381,
+   "best_id": "s0031",
+   "best_test": 0.381381,
+   "spent": {
+    "prompt_tokens": 305392,
+    "completion_tokens": 85635,
+    "usd": 0.6144014999999999
+   },
+   "valid_share": 0.8,
+   "list_usd": 0.0099285
+  }
+ },
+ "assign_sol-s0": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf_assign",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 4,
+   "flushes": 0,
+   "list_model": "gpt-6.1-sol",
+   "out": "runs/explore/ahc014/assign-01/assign_sol-s0",
+   "commit": "416bc0d2660b0e7558837410eceb16e05bdd1ab5",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --seed 0 --budget 40 --model gpt-5.4-mini --task ahc014 --strategy fnf_assign --list-model gpt-6.1-sol --out runs/explore/ahc014/assign-01/assign_sol-s0"
+  },
+  "metrics": {
+   "strategy": "fnf_assign",
+   "task": "ahc014",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.242212,
+   "best_id": "s0019",
+   "best_test": 0.22555,
+   "spent": {
+    "prompt_tokens": 293653,
+    "completion_tokens": 95150,
+    "usd": 0.6484147500000002
+   },
+   "valid_share": 0.45,
+   "list_usd": 0.023364000000000003
+  }
+ },
+ "fnf_undirected-s0": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf_undirected",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/assign-01/fnf_undirected-s0",
+   "commit": "ec14699ed289a3917f43a9b66b19491a8accbae6",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --seed 0 --budget 40 --model gpt-5.4-mini --task ahc014 --strategy fnf_undirected --out runs/explore/ahc014/assign-01/fnf_undirected-s0"
+  },
+  "metrics": {
+   "strategy": "fnf_undirected",
+   "task": "ahc014",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.294788,
+   "best_id": "s0015",
+   "best_test": 0.280002,
+   "spent": {
+    "prompt_tokens": 320083,
+    "completion_tokens": 92374,
+    "usd": 0.6557452500000002
+   },
+   "valid_share": 0.775
+  }
+ },
+ "halving-s0": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "halving",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/assign-01/halving-s0",
+   "commit": "ec14699ed289a3917f43a9b66b19491a8accbae6",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --seed 0 --budget 40 --model gpt-5.4-mini --task ahc014 --strategy halving --out runs/explore/ahc014/assign-01/halving-s0"
+  },
+  "metrics": {
+   "strategy": "halving",
+   "task": "ahc014",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.293971,
+   "best_id": "s0020",
+   "best_test": 0.280746,
+   "spent": {
+    "prompt_tokens": 466693,
+    "completion_tokens": 66848,
+    "usd": 0.6508357500000003
+   },
+   "valid_share": 0.7
+  }
+ }
+}

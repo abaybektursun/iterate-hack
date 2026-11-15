@@ -1,0 +1,74 @@
+[
+ {
+  "fork": 0,
+  "branch": "f0b0",
+  "method": "Maintain a priority queue of legal rectangles found from three existing dots, greedily select high-weight additions with short perimeters, and incrementally generate and revalidate candidates after each move using directional occupancy and used-segment tables.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b1",
+  "method": "Run randomized greedy constructions from scratch until the time budget expires, varying rectangle-selection priorities between short edges, outward expansion, and new-point weight, then output the highest-scoring complete construction.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b2",
+  "method": "Use bounded-width beam search over partial constructions, expanding each state with a small diverse set of legal rectangles and ranking states by accumulated weight plus estimated future expansion potential.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b3",
+  "method": "Start with a greedy construction and apply anytime suffix-rebuild search: retain a randomly chosen valid prefix, replace its next move with an alternative legal rectangle, greedily reconstruct the suffix, and keep improvements.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b0",
+  "method": "Use depth-limited Monte Carlo tree search with progressive widening over legal rectangles, evaluating leaves through fast greedy rollouts and committing the best root move before repeating.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b1",
+  "method": "Build a conflict graph of currently legal rectangles, select a high-weight independent set that also excludes new-dot/perimeter interference, execute that compatible batch, and regenerate candidates until no moves remain.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b2",
+  "method": "Plan backward from valuable empty target points by recursively finding rectangles whose missing prerequisite corners can themselves be constructed, then execute the highest-benefit feasible dependency plan with legality checks after every move.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b3",
+  "method": "Partition the board into small overlapping regions, enumerate short legal operation sequences within each region using depth-first search, and repeatedly commit the regional sequence with the best weight gain relative to consumed edge segments.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b0",
+  "method": "Continue the incremental legal-rectangle approach with corrected enumeration: for each occupied corner, find its nearest visible dot in every grid direction, combine perpendicular pairs into candidate rectangles, and greedily execute revalidated candidates ranked by added weight, perimeter cost, and remaining free directions.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b1",
+  "method": "Use evolutionary random-key search in which each genome assigns priorities to grid points and rectangle orientations, decoding each genome into a complete legal construction and retaining, mutating, and crossing over the highest-scoring genomes.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b2",
+  "method": "Search for outward-growing ladder and staircase motifs consisting of several rectangles, simulate each motif with exact legality checks, and repeatedly commit the feasible motif offering the greatest total added weight per consumed segment.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b3",
+  "method": "Improve a complete construction using dependency-aware large-neighborhood search: remove selected interior operations and any later operations invalidated by their removal, legally replay the survivors, refill the resulting openings, and retain improved constructions.",
+  "list_model": "gpt-6.1-sol"
+ }
+]

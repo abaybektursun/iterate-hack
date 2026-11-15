@@ -1,0 +1,74 @@
+[
+ {
+  "fork": 0,
+  "branch": "f0b0",
+  "method": "Use multistart SLSQP with analytic gradients to maximize the sum of 26 independent radii under exact boundary and pairwise non-overlap constraints, initializing from perturbed grids and staggered rows.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b1",
+  "method": "Apply basin hopping to locally optimized packings: repeatedly relocate a small circle or perturb a cluster, restore feasibility with constrained optimization, and retain improvements or occasional uphill moves.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b2",
+  "method": "Run a continuation-based soft-circle search using L-BFGS to minimize overlap and boundary penalties minus a radius reward, progressively increase penalty weights, then polish with exact constrained optimization.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b3",
+  "method": "Enumerate staggered-row layouts with different circle counts per row, optimize shared row heights, horizontal offsets, and radii, then release all coordinates and radii for final constrained optimization.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b0",
+  "method": "Use sequential convex programming: fix pairwise separation directions, maximize the sum of radii under linear projected-separation and boundary constraints plus a trust region, then update directions and repeat from several feasible initial packings.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b1",
+  "method": "Search contact-graph topologies by solving circle\u2013circle and circle\u2013wall tangency equations, checking all omitted non-overlap constraints, and generating neighboring candidates through contact-edge additions, deletions, and flips.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b2",
+  "method": "Construct packings from reflection- or rotation-symmetric circle orbits, optimize the reduced coordinates and radii for several orbit decompositions totaling 26 circles, then release symmetry for final constrained polishing.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b3",
+  "method": "Run a population-based genetic search that forms 26-circle offspring by spatially splicing complementary regions of two parent packings, repairs overlaps, locally optimizes each offspring, and retains high-scoring geometrically diverse survivors.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b0",
+  "method": "Use cardinality-changing search: optimize intermediate packings with 25\u201328 circles, insert circles at maximal-clearance points or delete circles according to their reoptimized removal cost, and return to 26 circles before exact constrained polishing.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b1",
+  "method": "Build packings with beam search over tangent-circle insertions, generating candidates tangent to triples of existing circles or square walls, retaining diverse partial packings, and jointly optimizing each completed 26-circle layout.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b2",
+  "method": "Use domain-shape continuation by optimizing packings in unit-area rectangles of varying aspect ratio, tracking multiple solution branches as each rectangle deforms back into the unit square, and polishing the resulting square packings.",
+  "list_model": "gpt-6.1-sol"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b3",
+  "method": "Continue the successful genetic search with geometry-aware crossover: align parents under square symmetries and minimum-cost circle matching, select complementary spatial subsets totaling exactly 26 circles, then repair and locally optimize while preserving contact-pattern diversity.",
+  "list_model": "gpt-6.1-sol"
+ }
+]

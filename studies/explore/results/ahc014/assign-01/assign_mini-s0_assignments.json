@@ -1,0 +1,74 @@
+[
+ {
+  "fork": 0,
+  "branch": "f0b0",
+  "method": "Greedily add dots by scanning all valid rectangles with one empty corner and choose the move that adds the highest-weight new dot while respecting the no-collinear-perimeter-dot and no-overlap constraints.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b1",
+  "method": "Build a candidate set of target high-weight empty grid points and for each target search all rectangles whose three occupied corners already exist, selecting the best feasible operation that places a dot at that target.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b2",
+  "method": "Use a randomized local search that repeatedly samples feasible rectangle operations, simulates their effect on the dot set and drawn edges, and keeps sequences that increase total weight the most under a time limit.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b3",
+  "method": "Precompute all axis-aligned and 45-degree rectangles on the grid, then run a best-first expansion from the initial dots where each newly reachable dot unlocks more rectangles, prioritizing operations by marginal score gain.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b0",
+  "method": "Precompute all legal rectangle moves as hyperedges over grid points, then run a beam search that expands multiple promising dot sets while scoring states by total weight and remaining feasible moves.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b1",
+  "method": "Use a two-phase strategy: first create a small set of strategically placed connector dots by choosing rectangles that maximize future move availability, then greedily exploit the enlarged structure to place high-weight dots.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b2",
+  "method": "Model the board as a graph of dots and rectangle-perimeter segments, and repeatedly pick moves that both add a high-weight dot and maximize the number of new legal rectangles unlocked in the next few steps.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b3",
+  "method": "Perform Monte Carlo rollouts from the current state by sampling feasible moves with a bias toward outer-ring points, evaluate each rollout by final weighted dot sum, and commit to the first move of the best rollout.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b0",
+  "method": "Use a dynamic candidate graph over empty cells where each possible rectangle move is an edge from the three existing corners to the new corner, then repeatedly perform best-first search on this graph with incremental updates to discover high-weight chain reactions.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b1",
+  "method": "Run a two-stage stochastic beam search: first sample several short feasible move prefixes biased toward boundary dots, then extend each prefix greedily while maintaining separate state copies of dot/segment sets and keeping the top beams by total weighted score.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b2",
+  "method": "Build a union-find-like decomposition of the grid into regions separated by drawn segments, and choose moves that bridge regions by placing new dots at high-weight points while explicitly maximizing the count of still-unblocked rectangle completions in adjacent regions.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b3",
+  "method": "Precompute all axis-aligned and diagonal rectangles involving each grid point, then use iterative deepening lookahead to evaluate the best immediate move by simulating a few future legal moves and selecting the one with the highest discounted cumulative weight gain.",
+  "list_model": "gpt-5.4-mini"
+ }
+]

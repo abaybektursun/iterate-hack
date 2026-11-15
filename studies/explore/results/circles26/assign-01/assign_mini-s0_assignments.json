@@ -1,0 +1,74 @@
+[
+ {
+  "fork": 0,
+  "branch": "f0b0",
+  "method": "Start from a hand-designed high-density seed packing, then run continuous optimization (e.g. scipy.optimize.minimize with penalties/barrier terms) on all centers and radii to increase total radius while enforcing non-overlap and boundary constraints.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b1",
+  "method": "Use a local-search / simulated-annealing loop that repeatedly perturbs one or a few circles, accepts only valid or improved configurations, and gradually shrinks step sizes to refine a dense packing.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b2",
+  "method": "Represent the square as a set of candidate contact graphs/topologies, solve each as a nonlinear system where many circles are tangent to neighbors or boundaries, and keep the feasible solution with the largest radius sum.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "f0b3",
+  "method": "Build the packing incrementally by placing circles one at a time into the largest remaining gaps using geometric search for maximal feasible radius at each insertion, then polish the whole configuration with local optimization.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b0",
+  "method": "Run several independent multi-start simulated-annealing / hill-climbing searches from different hand-built seeds, keep the best packing found, and periodically restart from perturbed copies of the current champion to escape local optima.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b1",
+  "method": "Optimize a small family of symmetry-based layout templates (e.g. grid, hexagonal, concentric-ring, and boundary-packed patterns) by moving only a few structural parameters, then locally relax all circle positions/radii for each template and select the best result.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b2",
+  "method": "Use a penalty-based continuous optimizer on all 78 variables (centers and radii) with adaptive weights for overlap and boundary violations, alternating global scipy.optimize passes with feasibility restoration steps that shrink offending circles and re-project them into the square.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "f1b3",
+  "method": "Model the packing as a contact-graph search problem by generating many candidate tangency graphs from the current packing, solving each graph with nonlinear root-finding to exact tangencies, and retaining any feasible solution with improved total radius.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b0",
+  "method": "Use automatic differentiation or finite-difference gradients to directly maximize the total radius under soft boundary and overlap penalties with a constrained optimizer such as L-BFGS-B or trust-constr, then project to feasibility and repair any remaining conflicts.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b1",
+  "method": "Construct the packing from a library of structured templates based on boundary layers and interior rings, fit each template by solving only a few geometric parameters, and then locally relax all circle variables around the best template.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b2",
+  "method": "Treat the current best packing as a contact graph, enumerate small perturbations of tangency relations by adding/removing likely contacts, solve each resulting nonlinear equality/inequality system for exact tangencies, and keep any feasible higher-scoring solution.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "f2b3",
+  "method": "Run a stochastic large-neighborhood search that repeatedly freezes most circles and re-optimizes only a randomly chosen subset with a short exact constrained solve, allowing the search to jump between distant basins while preserving good structure.",
+  "list_model": "gpt-5.4-mini"
+ }
+]

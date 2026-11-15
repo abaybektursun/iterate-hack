@@ -1,0 +1,14 @@
+[
+ {
+  "after": 10,
+  "from": "start"
+ },
+ {
+  "after": 20,
+  "from": "s0012"
+ },
+ {
+  "after": 30,
+  "from": "s0012"
+ }
+]

@@ -15,9 +15,10 @@ branching from an online basin signal (survey 2026-11-14). Public reimplementati
 | Path | What it is |
 |---|---|
 | `lib/loop.py` | One chat call (OpenAI, or Cognition for `swe-*` models), one scored submission, one JSONL log row; tokens and USD per call; 6 scoring slots shared by all runs on the machine, single-thread BLAS. The model sees the starting program's score and never its remaining budget. |
-| `lib/strategies.py` | single, parallel (best of K), fnf, forget, tree (DGM parent rule). Each only chooses chat history and start program. |
+| `lib/strategies.py` | single, parallel (best of K), fnf, forget, fnf_keep, basin, randflush, tree (DGM parent rule), and the assign-01 arms: fnf_assign (ours), single_list, rebase, fnf_undirected, halving. Each only chooses chat history and start program. |
 | `jobs/run_strategy.py` | One strategy run on one task: `python3 -m studies.explore.jobs.run_strategy --task circles26 --strategy fnf --budget 30 --seed 0 --model gpt-5.4-mini --out runs/explore/circles26/<exp>/<arm>-s<seed>` |
 | `analysis/compare.py` | Arms side by side: final best per seed, runs above the starter, best after the same USD spend (the smallest total of any run), optimizer share (pilot-02 regex), best-so-far curves. |
+| `analysis/export_results.py` | Copies an experiment's small files from `runs/` to `results/<task>/<experiment>/` (compare.json, runs.json, assignments, examples). |
 | `analysis/page/build.py` | The results page (private artifact https://claude.ai/artifact/XQwm42PhgcxWjtro4WXN1E): `python3 studies/explore/analysis/page/build.py <out.html>`; template in `analysis/page/template.html`. |
 | `tasks/circles26/` | 26 circles in the unit square, maximize the sum of radii; scorer checks validity (tol 1e-9). Starter 2.54138; best published about 2.636. |
 | `tasks/ahc014/` | AtCoder Heuristic Contest 014 (RectJoin) from Frontier-CS algorithmic problem 159, the task both papers report. Python program, 3 s per case (hard 4 s). Score: mean V / V_ref over cases 1-5 (test: 6-10), checked by the Frontier-CS checker `data/chk.cc` (commit in `data/SOURCE_COMMIT`). Starter (no operations) 0.2217. |
@@ -45,6 +46,67 @@ imported them (unaffected). Programs now run in `runs/explore/.venv` (numpy 2.5.
 - The task-neutral judge now over-splits: 14 basins in 40 submissions (`basin-s0_basins.json`), so the 4-in-a-row
   rule fired once; basin (1 flush) and randflush (1 flush) are the same arm in practice (0.571 vs 0.573). The
   basin trigger is not tested until the judge's granularity is calibrated (it lumped all 40 into one basin before).
+
+### assign-01 (gpt-5.4-mini, 1 seed, 40 submissions, numpy/scipy available, commits fde2f1b..HEAD of 2026-11-15)
+
+Question: a flush clears the chat, but the fresh chat samples from the same model. Does telling each fresh branch
+which method to use (`fnf_assign`: before each fork one call lists 4 methods, one per branch) beat the published
+strategies? Prediction: on circles26 the assigned arms end above the starter 2.54138 with more optimizer programs;
+refuted if they end at or below fnf. On ahc014: refuted if they end at or below forget's 0.439 (main-01).
+Files: `results/circles26/assign-01/`, `results/ahc014/assign-01/` (compare.json, runs.json with each run's command
+and commit, `*_assignments.json` with the listed methods, examples). Raw: `runs/explore/<task>/assign-01/`.
+The list calls are extra to the 40 submissions (3 per run, 0.004-0.026 USD per run).
+
+**circles26** (starter 2.54138, best published about 2.636; 3.9 USD). Examples: best assign_sol-s0 s0019 2.635983,
+invalid fnf-s0 s0000 (overlap).
+
+| Arm | Best | Optimizer code | Valid | USD |
+|---|---|---|---|---|
+| single | 2.045 | 0/40 | 0.97 | 0.90 |
+| single_list (same lists shown to one chat, "pick one") | 2.246 | 0/40 | 0.72 | 0.61 |
+| fnf | 2.535 | 1/40 | 0.53 | 0.30 |
+| rebase (chat kept, best program re-shown every 10) | 2.541 | 1/40 | 0.95 | 0.45 |
+| fnf_assign, list by gpt-5.4-mini | 2.628 | 29/40 | 0.70 | 0.78 |
+| fnf_assign, list by gpt-6.1-sol | 2.636 | 39/40 | 0.68 | 0.86 |
+
+- Prediction held: both assigned arms beat the starter (first at submission 3 and 1); the strong list reaches the
+  best published packing at submission 20. No other arm beats the starter (rebase's 2.541421 is a jitter of the
+  starter grid), also now that numpy and scipy are available.
+- The model knows the method and does not choose it: gpt-5.4-mini's own first list contains a scipy optimizer.
+  Shown the same lists in one chat and asked to pick, it wrote a hand-made template 40 of 40 times.
+- rebase 2.541 vs fnf 2.535: on this task the flush adds nothing over re-showing the best program.
+- Weak points: 1 seed (fnf ranged 2.19-2.54 over 5 seeds in main-01); the optimizer is a known answer for this
+  task; assigned arms lose 30 % of submissions to 60 s timeouts and shape errors; assign_mini's best program has no
+  test score (the rerun at close did not return a score).
+
+**ahc014** (starter 0.2217; 2.6 USD). Examples: best assign_mini-s0 s0031 0.3714, invalid assign_sol-s0 s0000
+(checker: no dot at a used corner). Earlier arms are main-01 (pure Python, which did not affect this task).
+
+| Arm | Best (val) | Test | Valid | USD |
+|---|---|---|---|---|
+| forget (main-01) | 0.439 | | | |
+| fnf_assign, list by gpt-5.4-mini | 0.371 | 0.381 | 0.80 | 0.62 |
+| basin (main-01) | 0.362 | | | |
+| fnf (main-01) | 0.296 | | | |
+| fnf_undirected (branches told what was tried, no method named; SwarmResearch 2607.02807) | 0.295 | 0.280 | 0.78 | 0.66 |
+| halving (8 chats, drop half at 25/50/75 %; 2607.18235) | 0.294 | 0.281 | 0.70 | 0.65 |
+| fnf_assign, list by gpt-6.1-sol | 0.242 | 0.226 | 0.45 | 0.67 |
+| single (main-01) | 0.240 | | | |
+
+- Prediction refuted: no assigned arm beats forget (0.371 vs 0.439).
+- fnf, fnf_undirected, halving and parallel (main-01) all stop at 0.294-0.296, the score of greedy rectangle
+  completion. assign_mini left it twice, each time on the first submission of an assigned branch (f1b2 0.368,
+  f2b2 0.371).
+- The strong list hurt: gpt-6.1-sol listed beam search, MCTS, large-neighbourhood search; gpt-5.4-mini's programs
+  for them were invalid or made no move (18 of 40 valid, 12 of those at the starter score). A list is only useful
+  if the agent can implement it.
+- Weak points: 1 seed; forget and basin were not rerun in this experiment.
+
+Literature checked 2026-11-15 (two subagent surveys with tools/exa.py, numbers not re-verified at the papers): no
+paper found uses Fork-and-Flush or Forgetting as a baseline, and none combines fork, flush and one listed method
+per fresh branch. Closest: SwarmResearch 2607.02807 (orchestrator told not to prescribe ideas), LEVI and
+HoliDivEvolve 2610.38407 (diverse seeds once at the start), Anthropic's weak-to-strong researcher blog (a pool of
+specific ideas did worse than loose directions).
 
 ### circles26/swe2-01 (SWE-2 via Devin CLI, 1 seed, numpy/scipy available, stopped at 7-9 of 40 by the owner)
 

@@ -1,0 +1,74 @@
+[
+ {
+  "fork": 0,
+  "branch": null,
+  "method": "Use a structured template packing (e.g. rings/rows of circles with a few different radii classes) and then locally optimize all centers and radii with nonlinear constrained optimization to maximize total radius.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": null,
+  "method": "Build an initial feasible packing by greedy random sequential placement with radius shrinking, then repeatedly perform simulated annealing or random perturbation moves accepted when they improve total radius or feasibility margins.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": null,
+  "method": "Formulate the problem as maximizing radii under non-overlap and boundary constraints and solve it with an iterative penalty-based optimizer (e.g. L-BFGS-B/SLSQP) from many randomized restarts, keeping the best feasible result.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": null,
+  "method": "Use a circle-packing heuristic based on tangency graph growth: start from a few large seed circles, then add circles one by one tangent to existing circles/boundaries and refine the whole configuration with constraint projection.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": null,
+  "method": "Use a multi-start deterministic pattern search that enumerates several hand-designed layouts (rows, hexagonal bands, corner clusters, and mixed-size templates), then selects the best feasible one by exact geometric scoring.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": null,
+  "method": "Run a global derivative-free optimizer such as differential evolution or CMA-ES over all circle centers and radii with a smooth overlap/boundary penalty, then project any near-feasible candidate back to a valid packing.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": null,
+  "method": "Construct the packing incrementally by solving tangency equations for each new circle against already placed circles and square boundaries, choosing placements from a backtracking search tree that maximizes remaining achievable radius.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": null,
+  "method": "Apply a physics-inspired relaxation where circles start overlapped or outside the box and are moved by repulsive forces plus boundary forces, gradually increasing target radii and freezing circles when they become well-separated.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": null,
+  "method": "Use a deterministic recursive subdivision strategy: split the unit square into regions, assign each region a circle radius bounded by its inradius, then locally adjust neighboring circles to exploit leftover gaps while preserving feasibility.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": null,
+  "method": "Model the packing as a graph of tangencies and solve it with an alternating optimization loop that repeatedly fixes tangency relations, solves the resulting nonlinear equations for circle positions/radii, and repairs any violated constraints.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": null,
+  "method": "Generate candidate packings from a library of geometric templates based on triangular, square, and staggered lattices with different crop offsets, then score each template and refine the best few using a constrained local optimizer.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": null,
+  "method": "Run a custom branch-and-bound search over circle ordering and placement choices, using upper bounds from remaining free area and boundary inradii to prune, and complete each partial packing with a fast greedy feasibility heuristic.",
+  "list_model": "gpt-5.4-mini"
+ }
+]
