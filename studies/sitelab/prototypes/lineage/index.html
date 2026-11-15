@@ -8,7 +8,7 @@
 <style>
 :root {
   color-scheme: dark;
-  --paper: #100f0e; --sheet: #181614; --ink: #e9e3d8; --mute: #a19a8e; --faint: #7b756b; --rule: #2b2824;
+  --paper: #0d0c0b; --sheet: #181614; --ink: #e9e3d8; --mute: #a19a8e; --faint: #7b756b; --rule: #2b2824;
   --blue: #cfa765; --red: #c8705f; --pl: .74; --pc: .048;  /* --blue is the one accent: brass */
 }
 * { box-sizing: border-box; }
@@ -22,6 +22,9 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .left::before { content: ""; position: absolute; inset: 0 -120px 0 0; background: linear-gradient(90deg, rgba(16, 15, 14, .92) 55%, rgba(16, 15, 14, 0)); z-index: -1; }
 .left > * { pointer-events: auto; }
 .tag { font-weight: 660; font-stretch: 114%; font-size: 13px; letter-spacing: .02em; color: var(--mute); }
+.tag a { color: var(--faint); text-decoration: none; margin-right: 10px; padding-right: 10px; border-right: 1px solid var(--rule); font-weight: 500; } .tag a:hover { color: var(--ink); }
+.finish { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(ellipse 75% 70% at 50% 46%, transparent 55%, rgba(0, 0, 0, .5) 100%); }
+.grainy { position: fixed; inset: 0; pointer-events: none; opacity: .055; }
 .cap { margin: 14px 0 0; font-family: "Newsreader", Georgia, serif; font-size: clamp(23px, 2vw, 34px); line-height: 1.13; font-weight: 300; letter-spacing: -.012em; text-wrap: balance; }
 .cap b { font-weight: 400; color: var(--blue); }
 .sub { margin: 12px 0 0; color: var(--mute); font-size: 13.5px; line-height: 1.45; max-width: 34ch; }
@@ -40,7 +43,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .panel { position: fixed; right: 0; top: 0; bottom: 0; width: min(400px, 92vw); padding: 28px 30px 60px 44px; overflow-y: auto; bottom: 100px;
   -webkit-mask-image: linear-gradient(#000 calc(100% - 50px), transparent); mask-image: linear-gradient(#000 calc(100% - 50px), transparent);
   background: rgba(16, 15, 14, .965); border-left: 1px solid var(--rule); transform: translateX(104%); transition: transform .55s cubic-bezier(.2, .8, .2, 1); scrollbar-width: thin; scrollbar-color: var(--rule) transparent; }
-.panel.open { transform: none; }
+.panel { visibility: hidden; } .panel.open { transform: none; visibility: visible; }
 .panel .x { position: absolute; right: 26px; top: 24px; color: var(--mute); font-size: 13px; }
 .panel .x:hover { color: var(--ink); }
 .meta { font-size: 13px; color: var(--mute); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding-right: 50px; }
@@ -79,7 +82,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .now span { font-size: 12.5px; color: var(--mute); }
 .feed { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); max-width: min(760px, 60vw); font-size: 13px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; transition: opacity .4s; }
 .feed i { font-style: normal; color: oklch(var(--pl) var(--pc) var(--h)); font-weight: 620; }
-.key { position: fixed; left: 32px; bottom: 100px; display: flex; gap: 16px; font-size: 12.5px; color: var(--faint); align-items: center; pointer-events: none; flex-wrap: wrap; max-width: 340px; }
+.key { margin-top: 22px; display: flex; gap: 16px; font-size: 12.5px; color: var(--faint); align-items: center; pointer-events: none; flex-wrap: wrap; max-width: 340px; }
 .key { row-gap: 6px; column-gap: 14px; }
 .key span { display: flex; gap: 6px; align-items: center; } .key .br { flex-basis: 100%; height: 0; }
 .key svg { width: 13px; height: 13px; overflow: visible; }
@@ -105,15 +108,16 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 </head>
 <body>
 <canvas id="gl"></canvas>
+<div class="finish"></div><div class="grainy" id="grainy"></div>
 <div id="labs"></div>
 <div class="left">
-  <div class="tag">Lineage</div>
+  <div class="tag"><a href="../../">Lab</a><span>Lineage</span></div>
   <p class="cap" id="cap">&nbsp;</p>
   <p class="sub" id="sub"></p>
   <div class="rank"><h3>Most descendants</h3><div id="rank"></div></div>
   <div class="opts"><label><input type="checkbox" id="sess" checked> Same-session links</label></div>
+  <div class="key" id="key"></div>
 </div>
-<div class="key" id="key"></div>
 <div class="feed" id="feed"></div>
 <div class="bar">
   <button class="play" id="play" aria-label="Replay"></button>
@@ -130,11 +134,6 @@ window.addEventListener("unhandledrejection", e => { document.getElementById("er
 
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
-import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
-import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 import { forceSimulation, forceLink, forceManyBody, forceX, forceY, forceZ } from "https://cdn.jsdelivr.net/npm/d3-force-3d@3.0.5/+esm";
 
@@ -183,16 +182,37 @@ const T0 = nodes[0].at;
 let T1 = Math.max(Date.now(), nodes[nodes.length - 1].at);  // the right end of the scrubber is now
 const TEND = () => Math.max(nodes[nodes.length - 1].at + 6e5, Math.min(T1, nodes[nodes.length - 1].at + 36e5));
 
-// ---------- layout: a force simulation in 3D; x is pulled toward the time an item was posted
+// ---------- lanes: the study an item belongs to. Its text names studies/<name>; an item that names none takes the
+// study most common among the items it is linked to by a reference
+const laneOf = n => { const m = n.text.match(/studies\/([a-z0-9_]+)/); return m ? m[1] : null; };
+let lanes = [];
+function setLanes() {
+  for (const n of nodes) n.study = n.study0 = n.study0 !== undefined ? n.study0 : laneOf(n);
+  for (let pass = 0; pass < 4; pass++) for (const n of nodes) if (!n.study) {
+    const c = {}; for (const e of n.inn) if (e.s.study) c[e.s.study] = (c[e.s.study] || 0) + 1; for (const e of n.out) if (e.t.study) c[e.t.study] = (c[e.t.study] || 0) + 1;
+    const best = Object.keys(c).sort((a, b) => c[b] - c[a])[0]; if (best) n.study = best;
+  }
+  const count = {}; for (const n of nodes) if (n.study) count[n.study] = (count[n.study] || 0) + 1;
+  const keep = Object.keys(count).filter(k => count[k] >= 8);
+  for (const n of nodes) if (!keep.includes(n.study)) n.study = "other";
+  const first = k => nodes.find(n => n.study === k).at;
+  lanes = [...keep.sort((a, b) => first(a) - first(b)), "other"].filter(k => nodes.some(n => n.study === k)).map(k => ({ name: k, n: nodes.filter(n => n.study === k).length }));
+  let z = 0; for (const l of lanes) { l.w = 26 + .95 * l.n; /* a lane is as deep as it has items */ l.z0 = z; z += l.w; }
+  for (const l of lanes) { l.z0 -= z / 2; l.zc = l.z0 + l.w / 2; }
+  for (const n of nodes) n.lz = lanes.find(l => l.name === n.study).zc;
+}
+setLanes();
+
+// ---------- layout: a force simulation in 3D; x is pulled toward the time an item was posted, z toward the lane of its study
 const XS = 52;  // world units per hour
 const tx = ms => ((ms - T0) / 36e5) * XS;
 const sim = forceSimulation(nodes, 3)
-  .force("link", forceLink(edges).distance(e => e.ref ? 26 : 34).strength(e => e.ref ? .34 / Math.min(e.s.out.length + e.s.inn.length, e.t.out.length + e.t.inn.length, 4) : .035))
-  .force("charge", forceManyBody().strength(-80).distanceMax(300).theta(.9))
+  .force("link", forceLink(edges).distance(e => e.ref ? 26 : 34).strength(e => e.ref ? .2 / Math.min(e.s.out.length + e.s.inn.length, e.t.out.length + e.t.inn.length, 4) : .035))
+  .force("charge", forceManyBody().strength(-70).distanceMax(220).theta(.9))
   .force("x", forceX(n => tx(n.at)).strength(.34))
-  .force("y", forceY(0).strength(.055)).force("z", forceZ(0).strength(.04))
+  .force("y", forceY(0).strength(.3)).force("z", forceZ(n => n.lz).strength(.22))
   .alphaDecay(.02).velocityDecay(.42).stop();
-nodes.forEach(n => { n.x = tx(n.at); n.y = (Math.random() - .5) * 120; n.z = (Math.random() - .5) * 120; });
+nodes.forEach(n => { n.x = tx(n.at); n.y = (Math.random() - .5) * 120; n.z = n.lz + (Math.random() - .5) * 30; });
 for (let i = 0; i < 260; i++) sim.tick();
 sim.alpha(.02).alphaTarget(0);  // at rest unless a body is being pulled
 
@@ -207,26 +227,26 @@ function countDesc() {
     n.desc = c;
   }
   shown = nodes.filter(n => n.at <= T).length;
-  top = nodes.filter(n => n.desc > 0).sort((a, b) => b.desc - a.desc || a.at - b.at).slice(0, 6);
+  top = nodes.filter(n => n.desc > 0).sort((a, b) => b.desc - a.desc || a.at - b.at).slice(0, innerHeight < 900 ? 4 : 6);
 }
-function lineage(n, dir) {  // dir "inn": what n stands on; "out": what stands on n
-  const seen = new Set(), st = [n];
-  while (st.length) for (const e of st.pop()[dir]) { const m = dir === "out" ? e.t : e.s; if (e.at <= T && !seen.has(m)) { seen.add(m); st.push(m); } }
+function lineage(n, dir) {  // dir "inn": what n stands on; "out": what stands on n. Item -> its number of steps from n
+  const seen = new Map(), q = [[n, 0]];
+  for (let i = 0; i < q.length; i++) for (const e of q[i][0][dir]) { const m = dir === "out" ? e.t : e.s; if (e.at <= T && !seen.has(m)) { seen.set(m, q[i][1] + 1); q.push([m, q[i][1] + 1]); } }
   return seen;
 }
 
 // ---------- scene
 const canvas = $("gl");
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+let PR = Math.min(devicePixelRatio, 2); renderer.setPixelRatio(PR);
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = .92;
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-const BG = new THREE.Color("#1b1917");
-const scene = new THREE.Scene(); scene.background = BG;  // a clear color set on the renderer is encoded twice through the composer
+const BG = new THREE.Color("#0d0c0b");
+const scene = new THREE.Scene(); scene.background = BG;
 scene.fog = new THREE.Fog(BG, 800, 4000);
 // the room: a procedural studio, seen only in reflections; one key from the upper left, a low fill, a rim from behind
 scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .04).texture;
-const key = new THREE.DirectionalLight(0xfff1dc, 2.6); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -.0004; key.shadow.normalBias = .6; key.shadow.radius = 5;
+const key = new THREE.DirectionalLight(0xfff1dc, 2.6); key.castShadow = true; key.shadow.mapSize.set(1024, 1024); key.shadow.bias = -.0004; key.shadow.normalBias = .6; key.shadow.radius = 5;
 const rim = new THREE.DirectionalLight(0xcfd8e6, .6), fill = new THREE.HemisphereLight(0xf2ebe0, 0x15120f, .28);
 scene.add(key, key.target, rim, rim.target, fill);
 function aimLights() {
@@ -235,24 +255,14 @@ function aimLights() {
   Object.assign(key.shadow.camera, { left: -h, right: h, top: 460, bottom: -460, near: 100, far: 1800 }); key.shadow.camera.updateProjectionMatrix();
   rim.target.position.set(c, 0, 0); rim.position.set(c + 500, 260, -700);
 }
-const camera = new THREE.PerspectiveCamera(36, 1, 1, 6000);
+const camera = new THREE.PerspectiveCamera(36, 1, 2, 24000);
 const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true; controls.dampingFactor = .07; controls.rotateSpeed = .6; controls.zoomSpeed = .8; controls.minDistance = 40; controls.maxDistance = 2600;
+controls.enableDamping = true; controls.dampingFactor = .07; controls.rotateSpeed = .6; controls.zoomSpeed = .8; controls.minDistance = 40; controls.maxDistance = 9000;
 controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
-const composer = new EffectComposer(renderer);
-composer.addPass(new RenderPass(scene, camera));
-const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), .1, .35, .92);  // a faint lens response on true highlights only
-const finish = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uT: { value: 0 } },
-  vertexShader: "varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }",
-  fragmentShader: `uniform sampler2D tDiffuse; uniform float uT; varying vec2 vUv;
-float h(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
-void main() {
-  vec3 c = texture2D(tDiffuse, vUv).rgb;
-  c *= mix(1.0, 0.7, smoothstep(0.38, 0.95, distance(vUv, vec2(0.5, 0.48))));          // vignette
-  c += (h(gl_FragCoord.xy + fract(uT) * 91.7) - 0.5) * 0.028;                           // film grain
-  gl_FragColor = vec4(c, 1.0);
-}` });
-composer.addPass(bloom); composer.addPass(new OutputPass()); composer.addPass(finish);
+// the finish (vignette, grain) is two still layers over the canvas, so the picture is one direct render pass
+{ const cv = document.createElement("canvas"); cv.width = cv.height = 160; const g = cv.getContext("2d"), im = g.createImageData(160, 160);
+  for (let i = 0; i < im.data.length; i += 4) { im.data[i] = im.data[i + 1] = im.data[i + 2] = Math.random() < .5 ? 0 : 255; im.data[i + 3] = Math.random() * 255; }
+  g.putImageData(im, 0, 0); $("grainy").style.backgroundImage = `url(${cv.toDataURL()})`; }
 
 const U = { uTime: { value: 0 }, uBg: { value: new THREE.Vector3(BG.r, BG.g, BG.b) }, uFog: { value: new THREE.Vector2(500, 2400) }, uRes: { value: new THREE.Vector2(1, 1) } };
 
@@ -267,9 +277,9 @@ function grainTex(size, streak) {
 const grain = grainTex(256, false), brushed = grainTex(256, true);
 const CAP = 1024;
 const KINDS = {
-  glazed: { geo: new THREE.SphereGeometry(1, 40, 28), mat: new THREE.MeshPhysicalMaterial({ roughness: .5, roughnessMap: grain, bumpMap: grain, bumpScale: .35, clearcoat: .85, clearcoatRoughness: .22, envMapIntensity: .55 }) },   // a result: glazed ceramic
-  clay: { geo: new THREE.SphereGeometry(1, 28, 20), mat: new THREE.MeshStandardMaterial({ roughness: .95, roughnessMap: grain, bumpMap: grain, bumpScale: .9, envMapIntensity: .35 }) },                                          // an idea: unglazed clay
-  ring: { geo: new THREE.TorusGeometry(1, .17, 14, 56), mat: new THREE.MeshStandardMaterial({ metalness: .92, roughness: .5, roughnessMap: brushed, envMapIntensity: .9 }) },                                                    // work: an anodized ring, open in the middle
+  glazed: { geo: new THREE.SphereGeometry(1, 28, 18), mat: new THREE.MeshPhysicalMaterial({ roughness: .5, roughnessMap: grain, bumpMap: grain, bumpScale: .35, clearcoat: .85, clearcoatRoughness: .22, envMapIntensity: .55 }) },   // a result: glazed ceramic
+  clay: { geo: new THREE.SphereGeometry(1, 18, 12), mat: new THREE.MeshStandardMaterial({ roughness: .95, roughnessMap: grain, bumpMap: grain, bumpScale: .9, envMapIntensity: .35 }) },                                          // an idea: unglazed clay
+  ring: { geo: new THREE.TorusGeometry(1, .17, 8, 40), mat: new THREE.MeshStandardMaterial({ metalness: .92, roughness: .5, roughnessMap: brushed, envMapIntensity: .9 }) },                                                    // work: an anodized ring, open in the middle
   stone: { geo: new THREE.OctahedronGeometry(1.25, 0), mat: new THREE.MeshStandardMaterial({ roughness: 1, flatShading: true, bumpMap: grain, bumpScale: 1.2, envMapIntensity: .3 }) },                                           // knowledge: a cut stone
   porcelain: { geo: new THREE.OctahedronGeometry(1.25, 0), mat: new THREE.MeshPhysicalMaterial({ roughness: .3, flatShading: true, clearcoat: 1, clearcoatRoughness: .1, envMapIntensity: .7 }) },                                // a finding page: white porcelain
   steel: { geo: new THREE.BoxGeometry(1.5, 1.5, 1.5), mat: new THREE.MeshStandardMaterial({ metalness: 1, roughness: .42, roughnessMap: brushed, envMapIntensity: 1 }) },                                                        // a theory round: brushed steel
@@ -281,7 +291,7 @@ for (const k in KINDS) {
   scene.add(m); meshes[k] = m;
 }
 const SHAPE = { result: "glazed", idea: "clay", skill: "clay", work: "ring", knowledge: "stone", finding: "porcelain", theory: "steel" };
-const BASE = { result: 3.3, idea: 2.1, skill: 2.1, work: 3.0, knowledge: 1.8, finding: 3.8, theory: 3.2 };
+const BASE = { result: 4.0, idea: 2.5, skill: 2.5, work: 3.6, knowledge: 2.2, finding: 4.6, theory: 3.8 };
 const DIMC = [.035, .032, .03];
 function placeNode(n) {
   n.mesh = meshes[SHAPE[n.kind]]; n.slot = n.mesh.count++;
@@ -309,7 +319,7 @@ void main() {
   vec2 ss = cs.xy / max(cs.w, 1e-3) * uRes, st = ct.xy / max(ct.w, 1e-3) * uRes;
   vec2 d = normalize(st - ss + vec2(1e-4)), nrm = vec2(-d.y, d.x);
   float u = position.x; vec4 c = mix(cs, ct, u);
-  float w = (aE.z > 0.5 ? 1.1 : 0.8) + (aE.y > 1.5 ? 0.45 : 0.0);
+  float w = (aE.z > 0.5 ? 1.5 : 0.9) + (aE.y > 1.5 ? 0.45 : 0.0);
   c.xy += nrm * position.y * w / uRes * c.w * 2.0;
   gl_Position = c;
   vU = u; vSide = position.y; vCol = mix(aCs, aCt, u); vE = aE; vLen = distance(aS, aT);
@@ -326,41 +336,52 @@ void main() {
   float pulse = pow(1.0 - f, 14.0) * vE.z;                                   // a short bright run on the wire, older item to newer
   float tip = smoothstep(0.06, 0.0, vE.x - vU) * step(vE.x, 0.999);
   vec3 wire = mix(vCol, vec3(0.55, 0.52, 0.47), 0.55);
-  vec3 col = mix(wire, vec3(0.78, 0.56, 0.24), hot * 0.85) * (0.55 + pulse * 1.6 + tip * 1.2 + hot * 0.5);
-  float a = (vE.z > 0.5 ? 0.36 : 0.13) + hot * 0.5 + pulse * 0.5 + tip * 0.5;
+  vec3 col = mix(wire, vec3(0.78, 0.56, 0.24), hot * 0.85) * (0.8 + pulse * 1.6 + tip * 1.2 + hot * 0.3);
+  float span = mix(1.0, 0.45, smoothstep(70.0, 240.0, vLen) * (1.0 - hot));   // a long wire is drawn fainter
+  float a = (vE.z > 0.5 ? 0.85 : 0.22) * span + hot * 0.5 + pulse * 0.5 + tip * 0.5;
   gl_FragColor = vec4(col, clamp(a, 0.0, 1.0) * across * lit * vFog);
 }` });
 const edgeMesh = new THREE.Mesh(eg, edgeMat); edgeMesh.frustumCulled = false; edgeMesh.renderOrder = 1; scene.add(edgeMesh);
 
 // plinth: a slate slab under the model; the hours are engraved in it and their numerals printed on it
-const FY = Math.min(...nodes.map(n => n.y)) - 34, FZ = Math.max(...nodes.map(n => Math.abs(n.z))) * .8 + 30, PAD = 46;  // just under the lowest body
+const FY = Math.min(...nodes.map(n => n.y)) - 22, PAD = 46, PADL = 150; let FZ = 0;  // just under the lowest body
 const floor = new THREE.Group(); scene.add(floor);
+const speckle = document.createElement("canvas"); speckle.width = speckle.height = 512;
+{ const g = speckle.getContext("2d"), im = g.createImageData(512, 512);
+  for (let y = 0; y < 512; y++) { let run = 0; for (let x = 0; x < 512; x++) { run = run * .97 + (Math.random() - .5); const v = (Math.random() - .5) * 26 + run * 9, i = (y * 512 + x) * 4; im.data[i] = im.data[i + 1] = im.data[i + 2] = v > 0 ? 255 : 0; im.data[i + 3] = Math.min(255, Math.abs(v) * 2.2); } }
+  g.putImageData(im, 0, 0); }
 function buildFloor() {
   floor.traverse(o => { if (o.geometry) o.geometry.dispose(); for (const m of [].concat(o.material || [])) { if (m.map) m.map.dispose(); m.dispose(); } }); floor.clear();
-  const w = tx(TEND()) + PAD * 2, d = FZ * 2, S = 2.4, cv = document.createElement("canvas"); cv.width = Math.min(4096, Math.round(w * S)); cv.height = Math.round(d * S * cv.width / (w * S));
-  const g = cv.getContext("2d"), k = cv.width / w, X = x => (x + PAD) * k;
+  FZ = -lanes[0].z0 + 48;
+  const w = tx(TEND()) + PAD + PADL, d = FZ * 2, S = 2.6, cv = document.createElement("canvas"); cv.width = Math.min(4096, Math.round(w * S)); cv.height = Math.round(d * S * cv.width / (w * S));
+  const g = cv.getContext("2d"), k = cv.width / w, X = x => (x + PADL) * k, Z = z => (z + FZ) * k;
   g.fillStyle = "#2f2d2a"; g.fillRect(0, 0, cv.width, cv.height);
-  const im = g.getImageData(0, 0, cv.width, cv.height), px = im.data;   // slate: fine speckle and long faint cleavage streaks
-  for (let y = 0; y < cv.height; y++) { let run = 0; for (let x = 0; x < cv.width; x++) { run = run * .985 + (Math.random() - .5) * 1.4; const v = (Math.random() - .5) * 13 + run * 3, i = (y * cv.width + x) * 4; px[i] += v; px[i + 1] += v; px[i + 2] += v * .95; } }
-  g.putImageData(im, 0, 0);
+  g.fillStyle = g.createPattern(speckle, "repeat"); g.fillRect(0, 0, cv.width, cv.height);   // slate: fine speckle with faint cleavage streaks
   g.font = `500 ${Math.round(11.5 * k)}px Archivo, sans-serif`; g.textBaseline = "alphabetic";
+  for (const l of lanes) {   // one lane per study: a fine cut between lanes, the study's name and its number of items at the left
+    if (l !== lanes[0]) { g.fillStyle = "rgba(0,0,0,.42)"; g.fillRect(0, Math.round(Z(l.z0)), cv.width, Math.max(1, k * .4)); g.fillStyle = "rgba(255,244,224,.1)"; g.fillRect(0, Math.round(Z(l.z0)) + Math.max(1, k * .4), cv.width, 1); }
+    g.font = `500 ${Math.round(15 * k)}px Archivo, sans-serif`; g.fillStyle = "rgba(233,227,216,.8)"; g.fillText(l.name, 10 * k, Z(l.zc) + 5 * k);
+    g.fillStyle = "rgba(233,227,216,.4)"; g.fillText(String(l.n), 10 * k + g.measureText(l.name + " ").width, Z(l.zc) + 5 * k);
+  }
+  g.font = `500 ${Math.round(13 * k)}px Archivo, sans-serif`;
   const h0 = Math.ceil(T0 / 36e5) * 36e5;
   for (let h = h0; h <= TEND(); h += 36e5) {
     const x = Math.round(X(tx(h))), mid = new Date(h).getHours() === 0 || h === h0;
-    g.fillStyle = "rgba(0,0,0,.5)"; g.fillRect(x, 0, Math.max(1, k * .5), cv.height - 30 * k);          // the cut
-    g.fillStyle = "rgba(255,244,224,.2)"; g.fillRect(x + Math.max(1, k * .5), 0, 1, cv.height - 30 * k);   // its lit edge
+    g.fillStyle = "rgba(0,0,0,.5)"; g.fillRect(x, 0, Math.max(1, k * .5), cv.height - 36 * k);          // the cut
+    g.fillStyle = "rgba(255,244,224,.2)"; g.fillRect(x + Math.max(1, k * .5), 0, 1, cv.height - 36 * k);   // its lit edge
     g.fillStyle = mid ? "rgba(233,227,216,.8)" : "rgba(233,227,216,.5)";
-    g.fillText(clock(h), x - 1, cv.height - 7 * k); if (mid) g.fillText(day(h), x - 1, cv.height - 19 * k);
+    g.fillText(clock(h), x - 1, cv.height - 8 * k); if (mid) g.fillText(day(h), x - 1, cv.height - 22 * k);
   }
   const map = new THREE.CanvasTexture(cv); map.colorSpace = THREE.SRGBColorSpace; map.anisotropy = renderer.capabilities.getMaxAnisotropy();
   const top = new THREE.MeshStandardMaterial({ map, roughness: .92, bumpMap: grain, bumpScale: .5, envMapIntensity: .22 });
   const side = new THREE.MeshStandardMaterial({ color: 0x2a2826, roughness: .85, envMapIntensity: .3 });
   const slab = new THREE.Mesh(new THREE.BoxGeometry(w, 16, d), [side, side, top, side, side, side]);
-  slab.position.set(w / 2 - PAD, FY - 8, 0); slab.receiveShadow = true; floor.add(slab);
+  slab.position.set(w / 2 - PADL, FY - 8, 0); slab.receiveShadow = true; floor.add(slab);
   aimLights();
 }
-buildFloor(); document.fonts.ready.then(buildFloor);
-const nowLine = new THREE.Mesh(new THREE.BoxGeometry(.7, .5, FZ * 2), new THREE.MeshStandardMaterial({ color: 0xb98d48, metalness: 1, roughness: .35 }));  // a brass inlay at the time shown
+await Promise.race([document.fonts.load('500 13px "Archivo"'), new Promise(r => setTimeout(r, 1200))]);  // the numerals on the plinth are set in Archivo
+buildFloor();
+const nowLine = new THREE.Mesh(new THREE.BoxGeometry(.7, .5, 1), new THREE.MeshStandardMaterial({ color: 0xb98d48, metalness: 1, roughness: .35 }));  // a brass inlay at the time shown
 nowLine.position.y = FY + .2; scene.add(nowLine);
 
 // rings: the selected item and the item under the pointer
@@ -369,17 +390,19 @@ const mkRing = o => { const m = new THREE.Mesh(ringGeo, new THREE.MeshBasicMater
 const selRing = mkRing(1), hovRing = mkRing(.55);
 
 // ---------- state
-let sel = null, hov = null, anc = new Set(), des = new Set(), playing = false, dragging = null, showSess = true, lastBorn = null;
+let sel = null, hov = null, anc = new Map(), des = new Map(), playing = false, dragging = null, showSess = true, lastBorn = null;
 const REPLAY_S = 22;
 const glide = { on: false, t: 0, p0: new THREE.Vector3(), p1: new THREE.Vector3(), q0: new THREE.Vector3(), q1: new THREE.Vector3() };
 let offNow = null, offYNow = 0;
 const offY = () => innerWidth <= 820 && sel ? innerHeight * .2 : 0;  // on a phone the panel covers the lower half
 const offX = () => innerWidth > 820 ? (Math.min(340, innerWidth * .3) + 40 - (sel ? Math.min(400, innerWidth * .92) : 0)) / 2 : 0;  // the picture is centred in the space right of the words
+let framed = true;   // until the viewer moves the camera, the whole plinth stays in frame
 let follow = false;  // the replay keeps the whole plinth in frame
-function frameFor(tEnd) {
-  const span = tx(tEnd), aspect = (innerWidth - Math.abs(offX()) * 2) / innerHeight, target = new THREE.Vector3(span / 2, FY * .42, 0);
-  const dist = Math.max(span * .56 / (Math.tan(camera.fov * Math.PI / 360) * Math.max(aspect, .5)) * 1.3, 820);
-  return { target, pos: target.clone().addScaledVector(new THREE.Vector3(-.26, .24, 1).normalize(), dist) };
+function frameFor(tEnd) {  // the whole plinth, seen from above its front edge
+  const span = tx(tEnd) + PADL + PAD, wide = (innerWidth - Math.abs(offX()) * 2) / innerHeight, t = Math.tan(camera.fov * Math.PI / 360);
+  const target = new THREE.Vector3(span / 2 - PADL, FY, FZ * .12);
+  const dist = Math.max(span * .62 / (t * Math.max(wide, .4)), FZ * 1.5 / t);
+  return { target, pos: target.clone().addScaledVector(new THREE.Vector3(-.16, .78, 1).normalize(), dist) };
 }
 const grown = () => Math.min(TEND(), Math.max(T + 5e6, T0 + 4 * 36e5));
 function home(instant) { const f = frameFor(playing && follow ? grown() : TEND()); fly(f.pos, f.target, instant); }
@@ -388,25 +411,26 @@ function fly(pos, target, instant) {
   glide.on = true; glide.t = 0; glide.p0.copy(camera.position); glide.p1.copy(pos); glide.q0.copy(controls.target); glide.q1.copy(target);
 }
 
-function setLit() {
-  for (const n of nodes) n.lit = !sel ? 1 : (n === sel || anc.has(n) || des.has(n)) ? 1 : .1;
+function setLit(reveal) {  // with reveal, the lineage lights up outward from the item, one step of references at a time
+  const t0 = performance.now(), step = d => reveal ? t0 + Math.min(d * 110, 1400) : 0, depth = m => m === sel ? 0 : anc.get(m) ?? des.get(m) ?? 0;
+  for (const n of nodes) { n.lit = !sel ? 1 : (n === sel || anc.has(n) || des.has(n)) ? 1 : .1; n.litAt = sel && n.lit === 1 ? step(depth(n)) : 0; }
   for (const e of edges) {
-    if (!sel) { e.lit = 1; continue; }
-    const up = e.ref && (anc.has(e.s) || e.s === sel) && (anc.has(e.t) || e.t === sel) && e.s !== e.t;
+    if (!sel) { e.lit = 1; e.litAt = 0; continue; }
+    const up = e.ref && (anc.has(e.s) || e.s === sel) && (anc.has(e.t) || e.t === sel);
     const dn = e.ref && (des.has(e.s) || e.s === sel) && (des.has(e.t) || e.t === sel);
-    e.lit = (up || dn) && e.at <= T ? 2 : .05;
+    e.lit = (up || dn) && e.at <= T ? 2 : .05; e.litAt = e.lit === 2 ? step(Math.max(depth(e.s), depth(e.t)) - .5) : 0;
   }
 }
 function select(n, move = true) {
-  sel = n; anc = n ? lineage(n, "inn") : new Set(); des = n ? lineage(n, "out") : new Set();
-  setLit(); drawPanel(); drawRank();
+  sel = n; anc = n ? lineage(n, "inn") : new Map(); des = n ? lineage(n, "out") : new Map();
+  setLit(snap <= 0); drawPanel(); drawRank();
   if (n && move) {
-    const box = new THREE.Box3(); [n, ...anc, ...des].forEach(m => box.expandByPoint(new THREE.Vector3(m.x, m.y, m.z)));
+    const box = new THREE.Box3(); [n, ...anc.keys(), ...des.keys()].forEach(m => box.expandByPoint(new THREE.Vector3(m.x, m.y, m.z)));
     const size = box.getSize(new THREE.Vector3()).length(), c = box.getCenter(new THREE.Vector3()).lerp(new THREE.Vector3(n.x, n.y, n.z), .45);
     const dir = camera.position.clone().sub(controls.target).normalize();
     const shift = innerWidth > 820 ? Math.min(size * .12, 40) : 0;
     c.x += shift;
-    fly(c.clone().addScaledVector(dir, Math.min(Math.max(size * 1.15, 150), 1500)), c);
+    fly(c.clone().addScaledVector(dir, Math.min(Math.max(size * 1.15, 260), 2400)), c);
   }
   if (!n && move) home();
 }
@@ -461,12 +485,13 @@ function setT(t, quiet) {
   T = Math.min(Math.max(t, T0), TEND());
   if (!quiet) refreshT();
 }
-let lastCount = 0;
+let lastCount = 0, nRefs = 0, liveNote = "";
+const countText = () => `${shown} items, ${nRefs} references`;
 function refreshT() {
   countDesc(); drawCap(); drawRank(); drawHist();
   $("clock").textContent = `${day(T)} ${clock(T)}`;
   const ne = edges.filter(e => e.ref && e.at <= T).length;
-  $("count").textContent = `${shown} items, ${ne} references`;
+  nRefs = ne; $("count").textContent = countText() + liveNote;
   if (sel) { if (sel.at > T) select(null, false); else { const was = anc.size + "," + des.size; anc = lineage(sel, "inn"); des = lineage(sel, "out"); setLit(); if (was !== anc.size + "," + des.size) drawPanel(); } }
   lastCount = performance.now();
 }
@@ -525,8 +550,8 @@ canvas.addEventListener("pointermove", e => {
     if (ray.ray.intersectPlane(plane, v3)) { dragging.fx = v3.x; dragging.fy = v3.y; dragging.fz = v3.z; }
   }
 });
-canvas.addEventListener("pointerdown", e => { ptr.down = true; ptr.moved = false; ptr.sx = e.clientX; ptr.sy = e.clientY; ptr.x = e.clientX; ptr.y = e.clientY; ptr.cand = pick(e.clientX, e.clientY); glide.on = false; follow = false; if (ptr.cand) controls.enabled = false; });
-canvas.addEventListener("wheel", () => { follow = false; glide.on = false; }, { passive: true });
+canvas.addEventListener("pointerdown", e => { ptr.down = true; ptr.moved = false; ptr.sx = e.clientX; ptr.sy = e.clientY; ptr.x = e.clientX; ptr.y = e.clientY; ptr.cand = pick(e.clientX, e.clientY); glide.on = false; framed = false; if (ptr.cand) controls.enabled = false; });
+canvas.addEventListener("wheel", () => { framed = false; glide.on = false; }, { passive: true });
 addEventListener("pointerup", e => {
   if (!ptr.down) return; ptr.down = false; if (e.pointerType === 'touch') setTimeout(() => { ptr.x = ptr.y = -1e4; hov = null; }, 0); controls.enabled = true; canvas.classList.remove("drag");
   if (dragging) { dragging.fx = dragging.fy = dragging.fz = null; dragging = null; sim.alphaTarget(0); return; }
@@ -539,7 +564,7 @@ addEventListener("keydown", e => { if (e.key === "Escape") select(null); if (e.k
 const labPool = Array.from({ length: 16 }, () => { const el = document.createElement("div"); el.className = "lab"; el.style.display = "none"; $("labs").append(el); return { el, n: null }; });
 function drawLabels() {
   let want = sel ? [sel, ...sel.inn.filter(e => e.at <= T).map(e => e.s), ...sel.out.filter(e => e.at <= T).map(e => e.t)].slice(0, 11) : top.slice(0, 5);
-  if (hov && !want.includes(hov)) want = [hov, ...want];
+  if (hov && !want.includes(hov) && ptr.x < -1e3) want = [hov, ...want];   // hovered from the list; under the pointer the tooltip names it
   const placed = []; let k = 0;
   for (const n of want) {
     if (k >= labPool.length || n.vis < .6 || n.sz < 0) continue;
@@ -578,13 +603,13 @@ const ease = t => 1 - Math.pow(1 - t, 3);
 let W = 1, H = 1;
 function resize() {
   W = innerWidth; H = innerHeight;
-  renderer.setSize(W, H, false); composer.setSize(W, H); bloom.setSize(W, H);
+  renderer.setSize(W, H, false);
   camera.aspect = W / H; offNow = offX(); offYNow = offY(); camera.setViewOffset(W, H, -offNow, offYNow, W, H);
   U.uRes.value.set(W * renderer.getPixelRatio(), H * renderer.getPixelRatio());
   drawHist();
 }
-addEventListener("resize", () => { resize(); if (!sel) home(true); });
-let prev = performance.now(), snap = 6;
+addEventListener("resize", () => { resize(); if (!sel) { home(true); framed = true; } });
+let prev = performance.now(), snap = 6, slow = 16, prev0 = performance.now(), nf = 0, strikes = 0;
 function frame(now) {
   const dt = Math.min(Math.max((now - prev) / 1000, 0), .1); prev = now; U.uTime.value += dt;
   const kk = snap > 0 ? (snap--, 1e3) : 1;  // a still view (?t=) starts settled
@@ -593,20 +618,17 @@ function frame(now) {
     if (now - lastCount > 120) refreshT();
     if (T >= TEND()) { setPlay(false); refreshT(); if (follow && !sel) home(); }
   }
-  sim.tick();
+  if (sim.alpha() > .0012 || dragging) sim.tick();
   if (glide.on) {
     glide.t = Math.min(1, glide.t + dt / 1.5); const k = glide.t < .5 ? 4 * glide.t ** 3 : 1 - Math.pow(-2 * glide.t + 2, 3) / 2;
     camera.position.lerpVectors(glide.p0, glide.p1, k); controls.target.lerpVectors(glide.q0, glide.q1, k); if (glide.t >= 1) glide.on = false;
   }
   if (playing && follow && !sel && !glide.on) { const f = frameFor(grown()), k = Math.min(1, dt * 1.6); camera.position.lerp(f.pos, k); controls.target.lerp(f.target, k); }
-  if (!STILL && !ptr.down && !glide.on) {  // the view sways slowly about its target
-    const a = Math.sin(now / 5200) * .00022; P.copy(camera.position).sub(controls.target).applyAxisAngle(THREE.Object3D.DEFAULT_UP, a); camera.position.copy(controls.target).add(P);
-  }
   if (Math.abs(offX() - offNow) + Math.abs(offY() - offYNow) > .5) { const k = Math.min(1, dt * 3.5 * kk); offNow += (offX() - offNow) * k; offYNow += (offY() - offYNow) * k; camera.setViewOffset(W, H, -offNow, offYNow, W, H); }
   controls.update(); camera.updateMatrixWorld();
   const d0 = camera.position.distanceTo(controls.target); U.uFog.value.set(d0 * .75, d0 * 2.6 + 500); scene.fog.near = d0 * .9; scene.fog.far = d0 * 3 + 800;
   const fl = H / (2 * Math.tan(camera.fov * Math.PI / 360));
-  nowLine.position.x = tx(T);
+  nowLine.position.x = tx(T); nowLine.scale.z = FZ * 2;
   spin.setFromAxisAngle(yAxis, now / 16000);
 
   // nodes
@@ -626,7 +648,7 @@ function frame(now) {
     const r = n.r * k * (n === hov ? 1.1 : 1);
     P.set(n.px, n.py, n.pz); S.setScalar(Math.max(r, 1e-4));
     M.compose(P, n.mesh === meshes.ring ? camera.quaternion : n.mesh === meshes.glazed || n.mesh === meshes.clay ? Qd : spin, S); n.mesh.setMatrixAt(n.slot, M);
-    const lit = n.litNow = (n.litNow ?? 1) + (n.lit - (n.litNow ?? 1)) * Math.min(1, dt * 6 * kk);
+    const lit = n.litNow = (n.litNow ?? 1) + ((now < (n.litAt || 0) ? .1 : n.lit) - (n.litNow ?? 1)) * Math.min(1, dt * 6 * kk);
     const gain = 1 + n.flash * .9 + (n === hov ? .2 : 0), ic = n.mesh.instanceColor.array, o = n.slot * 3;  // newly posted: briefly lighter
     for (let j = 0; j < 3; j++) ic[o + j] = (DIMC[j] + (n.col[j] - DIMC[j]) * lit) * gain;
     P.project(camera); n.sx = (P.x + 1) * W / 2; n.sy = (1 - P.y) * H / 2; n.sz = P.z > 1 ? -1 : P.z;
@@ -640,7 +662,7 @@ function frame(now) {
   for (const e of edges) {
     const on = e.at <= T && e.s.vis > .3 && (e.ref || showSess) ? 1 : 0;
     e.g += (on - e.g) * Math.min(1, dt * (on ? 2.2 : 9)); if (e.g < .004) { e.g = 0; continue; }
-    e.litNow = (e.litNow ?? 1) + (e.lit - (e.litNow ?? 1)) * Math.min(1, dt * 6 * kk);
+    e.litNow = (e.litNow ?? 1) + ((now < (e.litAt || 0) ? .05 : e.lit) - (e.litNow ?? 1)) * Math.min(1, dt * 6 * kk);
     const s = e.s, t = e.t;
     aS[c * 3] = s.px; aS[c * 3 + 1] = s.py; aS[c * 3 + 2] = s.pz; aT[c * 3] = t.px; aT[c * 3 + 1] = t.py; aT[c * 3 + 2] = t.pz;
     aCs.set(s.col, c * 3); aCt.set(t.col, c * 3);
@@ -655,14 +677,16 @@ function frame(now) {
     ring.position.set(n.px, n.py, n.pz); ring.quaternion.copy(camera.quaternion); ring.scale.setScalar(n.r * 1.25 + 1.2);
   }
   drawLabels(); drawTip();
-  finish.uniforms.uT.value = U.uTime.value; composer.render();
+  renderer.render(scene, camera);
+  if (now - prev0 < 100) slow = slow * .97 + (now - prev0) * .03; prev0 = now;   // frames steadily slow (not one stall): lower the internal resolution one step
+  if (++nf % 120 === 0) { strikes = slow > 20 ? strikes + 1 : 0; if (strikes >= 3 && PR > 1) { PR = Math.max(1, PR - .25); renderer.setPixelRatio(PR); renderer.setSize(W, H, false); U.uRes.value.set(W * PR, H * PR); slow = 16; strikes = 0; } }
   requestAnimationFrame(frame);
 }
 
 // ---------- live: the site's /data, every 45 s; an item that is not in data.json yet joins the graph
 async function poll() {
   const r = await fetch("/data"); if (!r.ok) throw new Error("/data " + r.status);
-  const live = await r.json(); let added = 0; const fresh = [];
+  const live = await r.json(); let added = 0; const fresh = [], wasEnd = T >= TEND() - 1;
   for (const it of live.items.slice().sort((a, b) => a.at_ns - b.at_ns)) {
     if (byId.has(it.id)) { byId.get(it.id).open = it.listed === "work"; continue; }
     const n = addNode({ id: it.id, kind: it.kind, who: it.who, branch: it.branch, text: it.text, at: Math.round(it.at_ns / 1e6), open: it.listed === "work", session: it.session || "", comments: [],
@@ -679,12 +703,16 @@ async function poll() {
     if (same) addEdge({ s: same.id, t: n.id, k: "session", via: "same agent session", at: n.at });
   }
   if (added) {
-    const wasEnd = T >= TEND() - 1; T1 = Date.now();
-    sim.nodes(nodes); sim.force("link").links(edges); sim.alpha(.25);
+    T1 = Date.now();
+    setLanes(); sim.nodes(nodes); sim.force("link").links(edges); sim.force("z", forceZ(n => n.lz).strength(.3)); sim.alpha(.2);
     buildFloor(); if (wasEnd && !playing) setT(TEND()); else refreshT();
+    if (!sel && framed) home();
   }
 }
 
+// a lost graphics context (the GPU process restarted) leaves no textures: say so, and start again when it is back
+canvas.addEventListener("webglcontextlost", e => { e.preventDefault(); $("count").textContent = "graphics context lost, reloading when it returns"; });
+canvas.addEventListener("webglcontextrestored", () => location.reload());
 resize(); home(true);
 setPlay(playing);
 const qt = Q.get("t");  // the page opens on the whole graph at now, holds it 2 s, then replays the growth unless the viewer has acted
@@ -695,7 +723,8 @@ setTimeout(() => { if (!touched) { setT(T0); setPlay(true); } }, 2000);
 if (Q.get("sel") && byId.has(Q.get("sel"))) { const n = byId.get(Q.get("sel")); select(n); glide.t = .999; }
 document.fonts.ready.then(drawHist);
 requestAnimationFrame(frame);
-poll().catch(e => console.warn(e)); setInterval(() => poll().catch(e => console.warn(e)), 45000);
+const tryPoll = () => poll().then(() => { liveNote = ""; }, () => { liveNote = `, live read failed at ${clock(Date.now())}, showing the last data`; }).then(() => { $("count").textContent = countText() + liveNote; });
+tryPoll(); setInterval(() => { if (!document.hidden) tryPoll(); }, 45000);
 </script>
 </body>
 </html>

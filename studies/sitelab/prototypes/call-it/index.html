@@ -1,0 +1,591 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: Call the number</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #12100d; --ink: #ece5d6; --mute: #a59d8e; --faint: #7d766a; --rule: #37312a;
+  --brass: #c9a868; --red: #cf6a50; --steel: #a9b9cb; --serif: "Newsreader", Georgia, serif;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; overflow: hidden; color: var(--ink); background: var(--paper);
+  font: 400 13px/1.45 "Archivo", ui-sans-serif, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; user-select: none; -webkit-user-select: none;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 2px; }
+canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+canvas#gl.drag { cursor: grabbing; } canvas#gl.pick { cursor: pointer; }
+.lens { position: fixed; inset: 0; pointer-events: none; z-index: 2;
+  background: radial-gradient(120% 95% at 50% 62%, transparent 55%, rgba(6,5,4,.55) 100%), linear-gradient(#12100df2, #12100d00 46%); }
+.grain { position: fixed; inset: 0; pointer-events: none; z-index: 2; opacity: .07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>"); }
+.ui { position: fixed; z-index: 3; }
+.cap { font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--faint); font-weight: 560; }
+.top { left: 40px; top: 20px; display: flex; gap: 14px; align-items: baseline; font-size: 13px; }
+.top a { color: var(--mute); text-decoration: none; } .top a:hover { color: var(--ink); }
+.top b { font-weight: 700; font-stretch: 118%; letter-spacing: .03em; }
+.exp { left: 40px; top: 58px; width: min(600px, 41vw); }
+.exp .fact { font-family: var(--serif); font-size: 15px; font-style: italic; color: var(--mute); margin: 0 0 16px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); text-wrap: pretty; }
+.exp h1 { font-family: var(--serif); font-weight: 300; font-size: 29px; line-height: 1.17; margin: 6px 0 10px; text-wrap: balance; }
+.exp.rev h1 { font-size: 17px; font-style: italic; color: var(--mute); margin: 4px 0 10px; }
+.exp .what { color: var(--mute); margin: 0 0 12px; text-wrap: pretty; }
+.list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
+.list li { padding: 5px 0; border-bottom: 1px solid var(--rule); display: flex; gap: 10px; align-items: baseline; }
+.list li .n { margin-left: auto; white-space: nowrap; }
+.list li.f { cursor: pointer; padding: 1.5px 0; } .list li.f:hover, .list li.f.on { color: var(--brass); }
+.list .g { width: 52px; text-align: right; font-weight: 600; }
+.neg { color: var(--red); } .pos { color: var(--ink); }
+.why { color: var(--mute); margin: 8px 0 0; font-size: 12.5px; max-height: 5.9em; overflow: auto; text-wrap: pretty; }
+.mid { left: calc(40px + min(600px, 41vw) + 48px); top: 58px; width: 250px; }
+.big { font-family: var(--serif); font-weight: 300; font-size: 76px; line-height: .95; letter-spacing: -.02em; margin: 6px 0 4px; }
+.big small { font-size: 17px; color: var(--mute); letter-spacing: 0; margin-left: 8px; font-style: italic; }
+.mid .row { display: flex; justify-content: space-between; border-top: 1px solid var(--rule); padding: 5px 0; color: var(--mute); }
+.mid .row b { color: var(--ink); font-weight: 560; }
+.go { margin-top: 12px; width: 100%; padding: 10px 14px; border: 1px solid var(--brass); color: var(--brass); letter-spacing: .14em; text-transform: uppercase;
+  font-size: 11.5px; font-weight: 620; display: flex; justify-content: space-between; transition: background .25s, color .25s; }
+.go:hover { background: var(--brass); color: var(--paper); }
+.go kbd { font: inherit; opacity: .7; }
+.lnk { margin-top: 9px; color: var(--mute); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--rule); font-size: 12px; }
+.lnk:hover { color: var(--ink); }
+.tab { right: 40px; top: 20px; width: 300px; }
+.tab .hd { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 8px; gap: 16px; }
+.tab ol { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--rule); }
+.tab li { display: grid; grid-template-columns: 20px 1fr 24px 56px; gap: 6px; padding: 2px 0; font-size: 12.5px; border-bottom: 1px solid var(--rule); color: var(--mute); }
+.tab li.you { color: var(--red); font-weight: 620; } .tab li.rd { color: var(--steel); }
+.tab li span:nth-child(3), .tab li span:nth-child(4) { text-align: right; }
+.tab .note { color: var(--faint); font-size: 11.5px; margin-top: 8px; text-wrap: pretty; }
+.pips { display: flex; gap: 4px; margin: 0 0 10px; }
+.pips i { flex: 1; height: 3px; background: var(--rule); } .pips i.d { background: var(--mute); } .pips i.c { background: var(--brass); }
+.snd { color: var(--faint); font-size: 11.5px; } .snd[aria-pressed="true"] { color: var(--brass); }
+.tag { position: fixed; z-index: 3; transform: translate(-50%, -50%); pointer-events: none; font-weight: 600; font-size: 13px; white-space: nowrap;
+  text-shadow: 0 1px 8px #000, 0 0 3px #000; }
+.tag.v { color: var(--red); font-size: 15px; } .tag.m { color: var(--steel); font-family: var(--serif); font-size: 30px; font-weight: 400; }
+.tag i { font-style: normal; font-weight: 500; color: var(--mute); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; margin-right: 6px; }
+.item { position: fixed; z-index: 5; right: 40px; bottom: 34px; width: min(460px, calc(100vw - 32px)); max-height: 52vh; overflow: auto; background: #1b1814f5;
+  border: 1px solid var(--rule); padding: 16px 18px; white-space: pre-wrap; user-select: text; -webkit-user-select: text; font-size: 12.5px; color: var(--mute); }
+.item b { color: var(--ink); }
+.item button { float: right; color: var(--faint); }
+.hint { left: 50%; bottom: 14px; transform: translateX(-50%); color: var(--faint); font-size: 11.5px; white-space: nowrap; }
+#err { position: fixed; left: 8px; bottom: 8px; z-index: 9; color: var(--red); font-size: 11px; white-space: pre-wrap; max-width: 90vw; }
+[hidden] { display: none !important; }
+@media (max-width: 760px) {
+  .top { left: 16px; top: 12px; }
+  .exp { left: 16px; right: 16px; top: 38px; width: auto; }
+  .exp .fact { display: none; }
+  .exp h1 { font-size: 19px; margin: 3px 0 5px; }
+  .exp .what { font-size: 11.5px; line-height: 1.35; margin-bottom: 6px; }
+  .list li { padding: 2.5px 0; font-size: 11.5px; } .why { font-size: 11.5px; max-height: 4.2em; }
+  .mid { left: 16px; right: 16px; top: auto; bottom: 14px; width: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; align-items: end; }
+  .mid .cap { grid-column: 1 / 3; } .big { font-size: 46px; margin: 0; } .big small { font-size: 12px; display: block; margin: 0; }
+  .mid .rows { align-self: end; } .mid .row { padding: 3px 0; font-size: 12px; }
+  .go { grid-column: 1 / 3; margin-top: 8px; } .lnk { grid-column: 1 / 3; margin-top: 6px; text-align: left; }
+  .tab { right: 16px; top: 34px; width: auto; } .exp { top: 58px; } .tab #tabh { display: block; } .why.dflt { display: none; } .tab ol, .tab .note, .tab .cap, .pips { display: none; }
+  .tab.open { left: 16px; background: #171411fa; padding: 10px 12px 12px; border: 1px solid var(--rule); z-index: 6; }
+  .tab.open ol { display: block; } .tab.open .note { display: block; }
+  .hint { display: none; } .tag.m { font-size: 22px; }
+  .item { right: 16px; bottom: 16px; }
+}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div class="lens"></div><div class="grain"></div>
+<div class="ui top"><a href="../../">Lab</a><b>Call the number before it lands</b></div>
+<div class="ui exp">
+  <p class="fact" id="fact"></p>
+  <div class="cap" id="rno"></div>
+  <h1 id="lead"></h1>
+  <p class="what" id="what"></p>
+  <div class="cap" id="lcap" style="margin-bottom:6px"></div>
+  <ul class="list" id="list"></ul>
+  <p class="why" id="why"></p>
+</div>
+<div class="ui mid">
+  <div class="cap" id="mcap">Your call</div>
+  <div class="big" id="big"></div>
+  <div class="rows" id="rows"></div>
+  <button class="go" id="go"><span id="gol">Commit</span><kbd>Enter</kbd></button>
+  <button class="lnk" id="read" hidden>Read the posted result</button>
+</div>
+<div class="ui tab" id="tab">
+  <div class="hd"><button class="cap" id="tabh">Standing</button><button class="snd" id="snd" aria-pressed="false">Clicks off</button></div>
+  <div class="pips" id="pips"></div>
+  <ol id="rank"></ol>
+  <div class="note" id="note"></div>
+</div>
+<div class="tag v" id="tv"></div><div class="tag" id="tl"></div><div class="tag" id="th"></div><div class="tag m" id="tm" hidden></div>
+<div class="item" id="item" hidden></div>
+<div class="ui hint" id="hint">Drag the slide, or use the arrow keys (Shift for ten). Drag a jaw, or Up and Down, to set the 90 % interval.</div>
+<div id="err"></div>
+<script>
+addEventListener('error', e => { document.getElementById('err').textContent += (e.message || e) + '\n'; });
+addEventListener('unhandledrejection', e => { document.getElementById('err').textContent += (e.reason && e.reason.stack || e.reason) + '\n'; });
+</script>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const $ = id => document.getElementById(id);
+const DATA = await (await fetch('data.json')).json();
+const ROUNDS = DATA.rounds, NR = ROUNDS.length;
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+await Promise.all(['600 40px Archivo', '500 40px Archivo', '400 40px Newsreader'].map(f => document.fonts.load(f)));
+
+// ---- the engine's rule, studies/theory/lib/round.py: log_density, clip3, capped, gain_rows (version 9)
+const logDensity = (x, c) => {
+  const sd = Math.max((c.high - c.low) / 3.29, 0.01 * Math.max(Math.abs(c.value), 1));
+  return -0.5 * ((x - c.value) / sd) ** 2 - Math.log(sd) - 0.5 * Math.log(2 * Math.PI);
+};
+const logNull = (x, nulls) => { const [a, b] = nulls.map(p => logDensity(x, p)); return Math.max(a, b) + Math.log(0.5 * (1 + Math.exp(-Math.abs(a - b)))); };
+function gain(x, c, nulls) {
+  const g = Math.min(3, Math.max(-3, logDensity(x, c) - logNull(x, nulls)));
+  return c.low <= x && x <= c.high ? g : Math.min(g, 0);
+}
+for (const r of ROUNDS) {                       // the page's rule must reproduce every gain the engine stored
+  const nulls = r.forecasts.filter(f => f.reader);
+  for (const f of r.forecasts) if (Math.abs(gain(r.measured, f, nulls) - f.gain) > 6e-4) throw new Error(`gain rule differs from the engine on ${r.run} ${r.target} ${f.who}`);
+}
+
+// ---- state: the commits live in the URL hash, finished games in localStorage
+const num = v => (+v).toLocaleString('en-US', { maximumFractionDigits: 2 });
+const sgn = g => (g >= 0 ? '+' : '−') + Math.abs(g).toFixed(2);
+const S = { commits: [], phase: 'aim', i: 0, p: 0, v: 0, dl: 0, dh: 0, goal: null, sel: null };
+function readHash() {
+  const q = new URLSearchParams(location.hash.slice(1));
+  S.commits = (q.get('c') || '').split(';').filter(Boolean).slice(0, NR).map(s => { const [value, low, high] = s.split(':').map(Number); return { value, low, high }; })
+    .filter(c => [c.value, c.low, c.high].every(Number.isFinite) && c.low <= c.value && c.value <= c.high);
+  return q;
+}
+function writeHash() {
+  const q = new URLSearchParams();
+  if (S.commits.length) q.set('c', S.commits.map(c => [c.value, c.low, c.high].join(':')).join(';'));
+  if (S.phase === 'reveal') q.set('v', '1'); else q.set('a', [S.p, S.dl, S.dh].map(x => +x.toFixed(2)).join(':'));
+  history.replaceState(null, '', '#' + q.toString().replace(/%3A/g, ':').replace(/%3B/g, ';'));
+}
+const store = { get() { try { return JSON.parse(localStorage.getItem('call-it') || '[]'); } catch { return []; } },
+                add(g) { try { localStorage.setItem('call-it', JSON.stringify([...store.get(), g].slice(-20))); } catch {} } };
+
+// ---- renderer, light, room
+const canvas = $('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.92;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.VSMShadowMap;
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x12100d);
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
+const camera = new THREE.PerspectiveCamera(34, 1, 1, 600);
+const key = new THREE.SpotLight(0xffe6c8, 5.6, 0, 0.5, 1, 0); key.position.set(-20, 44, 20); key.castShadow = true;
+key.shadow.mapSize.set(1024, 1024); key.shadow.radius = 3; key.shadow.blurSamples = 8; key.shadow.bias = -0.0003;
+key.shadow.camera.near = 20; key.shadow.camera.far = 90;
+const rim = new THREE.DirectionalLight(0xbfd0e6, 0.5); rim.position.set(30, 14, -30);
+scene.add(key, key.target, rim, new THREE.HemisphereLight(0xfff1dc, 0x15110c, 0.12));
+const MAXA = renderer.capabilities.getMaxAnisotropy();
+
+// ---- procedural surfaces
+function tex(w, h, draw, rx = 1, ry = 1, color = false) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry); t.anisotropy = MAXA;
+  if (color) t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const streaks = (base, tones, n, len, thick) => (g, w, h) => {
+  g.fillStyle = base; g.fillRect(0, 0, w, h);
+  for (let k = 0; k < n; k++) { g.globalAlpha = 0.04 + rnd() * 0.16; g.fillStyle = tones[k % tones.length];
+    const x = rnd() * w, y = rnd() * h, l = len * (0.3 + rnd()); g.fillRect(x, y, l, thick * (0.5 + rnd())); if (x + l > w) g.fillRect(x - w, y, l, thick); }
+  g.globalAlpha = 1;
+};
+const speck = (base, tones, n, r) => (g, w, h) => {
+  g.fillStyle = base; g.fillRect(0, 0, w, h);
+  for (let k = 0; k < n; k++) { g.globalAlpha = 0.05 + rnd() * 0.2; g.fillStyle = tones[k % tones.length]; g.beginPath(); g.arc(rnd() * w, rnd() * h, r * (0.3 + rnd()), 0, 7); g.fill(); }
+  g.globalAlpha = 1;
+};
+const woodMap = tex(1024, 256, streaks('#4a3324', ['#2a1a10', '#66493a', '#38241a', '#57402f'], 3200, 460, 1.5), 1, 1, true);
+const ebonyMap = tex(1024, 256, streaks('#1d1a17', ['#0e0c0a', '#2c2823', '#141210'], 2200, 420, 1.5), 1, 1, true);
+const woodBump = tex(1024, 256, streaks('#808080', ['#404040', '#c0c0c0'], 2200, 380, 1.4));
+const brushed = tex(512, 512, streaks('#8c8c8c', ['#3c3c3c', '#e8e8e8'], 5200, 300, 1));
+const leatherMap = tex(512, 512, speck('#1f1b16', ['#161310', '#29231c'], 16000, 1.5), 60, 26, true);
+const wood = (rx, src = woodMap) => { const m = src.clone(), b = woodBump.clone(); m.repeat.set(rx, 1); b.repeat.set(rx, 1); m.needsUpdate = b.needsUpdate = true;
+  return new THREE.MeshStandardMaterial({ map: m, bumpMap: b, bumpScale: 0.3, roughness: src === woodMap ? 0.38 : 0.7 }); };
+const metal = (color, rough, rx = 1, ry = 1) => { const b = brushed.clone(); b.repeat.set(rx, ry); b.needsUpdate = true;
+  return new THREE.MeshStandardMaterial({ color, metalness: 1, roughness: rough, roughnessMap: b, bumpMap: b, bumpScale: 0.12, envMapIntensity: 1.1 }); };
+const brass = metal(0xb89455, 0.62), brassLong = metal(0x9c7d48, 0.7, 30, 1), nickel = metal(0xc2c4c4, 0.55), blued = metal(0x4a607c, 0.5), black = metal(0x25231f, 0.78, 12, 1);
+const redEnamel = new THREE.MeshPhysicalMaterial({ color: 0xb23f29, roughness: 0.35, clearcoat: 0.6 });
+const ivory = new THREE.MeshStandardMaterial({ color: 0xe6dcc3, roughness: 0.42 });
+const box = (w, h, d, mat, r = 0.05) => { const m = new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 3, r), mat); m.castShadow = m.receiveShadow = true; return m; };
+
+// ---- the instrument. 1 scale unit = U world units; x runs along the rule, z toward the viewer.
+const U = 0.2, TILE = 25, H = 0.5, TW = 2.7, ZR = TW / 2 + 0.45, ROWS_Z0 = -(TW / 2 + 1.25), RACK_D = 4.2, BACK = ROWS_Z0 - RACK_D - 0.15, ZB = ZR + 1.1;
+const desk = new THREE.Mesh(new THREE.PlaneGeometry(700, 300), new THREE.MeshStandardMaterial({ map: leatherMap, roughness: 0.8, metalness: 0, envMapIntensity: 0.5 }));
+desk.rotation.x = -Math.PI / 2; desk.receiveShadow = true; scene.add(desk);
+const fixed = new THREE.Group(), sight = new THREE.Group(); scene.add(fixed, sight);
+for (const z of [ZR, -ZR]) { const r = box(420, H, 0.86, wood(52)); r.position.set(0, H / 2, z); fixed.add(r); }
+const beam = box(420, 0.18, 0.5, brassLong, 0.03); beam.position.set(0, 0.09, ZB); fixed.add(beam);
+// cursor: glass, two brass bridges, the red hairline
+const cursor = new THREE.Group(); sight.add(cursor);
+const glass = new THREE.Mesh(new RoundedBoxGeometry(2.3, 0.07, 2 * ZR + 0.9, 2, 0.03), new THREE.MeshPhysicalMaterial({ color: 0xf2f6f4, transparent: true, opacity: 0.16, roughness: 0.04, metalness: 0, clearcoat: 1, envMapIntensity: 1.6, depthWrite: false }));
+glass.position.y = H + 0.1; cursor.add(glass);
+for (const z of [ZR + 0.3, -ZR - 0.3]) { const b = box(2.6, 0.26, 0.34, brass, 0.06); b.position.set(0, H + 0.1, z); cursor.add(b);
+  for (const x of [-1.05, 1.05]) { const s = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.04, 16), nickel); s.position.set(x, H + 0.245, z); cursor.add(s); } }
+const hair = new THREE.Mesh(new THREE.BoxGeometry(0.03, 0.012, 2 * ZR + 0.3), new THREE.MeshBasicMaterial({ color: 0xc23a22 })); hair.position.y = H + 0.058; cursor.add(hair);
+// caliper jaws on the brass beam
+function jaw(side) {
+  const g = new THREE.Group();
+  const body = box(0.5, 0.62, 1.0, brass, 0.07); body.position.set(side * 0.25, 0.31, ZB); g.add(body);
+  const knob = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.16, 24), nickel); knob.position.set(side * 0.25, 0.7, ZB); knob.castShadow = true; g.add(knob);
+  const len = ZB + TW / 2 - 0.3, blade = box(0.05, 0.05, len, blued, 0.01); blade.position.set(0, H + 0.2, ZB - 0.4 - len / 2); g.add(blade);
+  const tooth = box(0.05, 0.3, 0.3, blued, 0.01); tooth.position.set(0, H + 0.08, ZB - 0.45); g.add(tooth);
+  sight.add(g); return g;
+}
+const jawL = jaw(-1), jawH = jaw(1);
+// the carriage: slide with the printed scale, the rack of forecasts under a lid, the steel needle
+const carriage = new THREE.Group(); scene.add(carriage);
+const tapeMat = () => new THREE.MeshStandardMaterial({ roughness: 0.4 });
+let tiles = [], body = null, tray = null, lidPivot = new THREE.Group(), rack = new THREE.Group(), needle = new THREE.Group();
+carriage.add(lidPivot, rack, needle);
+{ const bar = box(0.08, 0.08, TW / 2 - BACK + 0.2, blued, 0.015); bar.position.set(0, H + 0.42, (TW / 2 + BACK) / 2 - 0.1); needle.add(bar);
+  const head = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.3, 24), blued); head.position.set(0, H + 0.42, BACK + 0.05); head.castShadow = true; needle.add(head);
+  const edge = new THREE.Mesh(new THREE.BoxGeometry(0.025, 0.36, TW - 0.1), blued); edge.position.set(0, H + 0.22, 0); needle.add(edge); needle.visible = false; }
+
+function drawTile(g, W, Hh, r, t0) {
+  const px = W / TILE, X = v => (v - t0) * px, ink = '#2b2118';
+  g.fillStyle = '#e4d9bd'; g.fillRect(0, 0, W, Hh);
+  for (let k = 0; k < 900; k++) { g.globalAlpha = 0.03 + rnd() * 0.05; g.fillStyle = k % 2 ? '#bfae88' : '#f6efdc'; g.fillRect(rnd() * W, rnd() * Hh, 30 + rnd() * 160, 1); }
+  g.globalAlpha = 1; g.fillStyle = ink; g.textAlign = 'center'; g.textBaseline = 'alphabetic';
+  for (let v = Math.max(r.lo, t0 - 4); v <= Math.min(r.hi, t0 + TILE + 4); v++) {
+    const ten = v % 10 === 0, five = v % 5 === 0;
+    g.fillRect(X(v) - (ten ? 3.5 : 2.2), 0, ten ? 7 : 4.4, ten ? 150 : five ? 108 : 70);
+    if (ten) { g.font = '600 132px Archivo'; g.save(); g.translate(X(v), 356); g.scale(1, 1.5); g.fillText(String(v), 0, 0); g.restore(); }
+  }
+  // lower edge: the same scale in per cent of the set
+  g.fillStyle = '#3a2d20';
+  for (let q = 0; q <= 100; q++) { const v = q * r.n / 100; if (v < t0 - 4 || v > t0 + TILE + 4) continue;
+    g.fillRect(X(v) - 2.5, Hh - (q % 5 ? 50 : 90), 5, 90);
+    if (q % 5 === 0) { g.font = '600 76px Archivo'; g.save(); g.translate(X(v), Hh - 112); g.scale(1, 1.5); g.fillText(q + ' %', 0, 0); g.restore(); } }
+  // the reference numbers a forecaster had
+  let prev = -1e9, line = 0;
+  for (const [v, tag] of [...r.marks].sort((a, b) => a[0] - b[0])) { line = v - prev < 11 ? 1 - line : 0; prev = v; if (v < t0 - 14 || v > t0 + TILE + 14) continue;
+    const y = line ? 800 : 620;
+    g.fillStyle = '#9c3d27'; g.fillRect(X(v) - 3, 0, 6, y - 170); g.beginPath(); g.moveTo(X(v), y - 190); g.lineTo(X(v) - 24, y - 132); g.lineTo(X(v) + 24, y - 132); g.fill();
+    g.fillStyle = '#8a2f1c'; g.font = '700 80px Archivo'; g.save(); g.translate(X(v), y); g.scale(1, 1.5); if ('letterSpacing' in g) g.letterSpacing = '3px';
+    g.fillText(`${tag.toUpperCase()} ${v}`, 0, 0); g.restore(); }
+}
+const lidTex = tex(2048, 512, (g, w, h) => { streaks('#2a2723', ['#16140f', '#48433a'], 2600, 500, 1.2)(g, w, h);
+  g.fillStyle = '#8a7a58'; g.font = '560 44px Archivo'; g.textAlign = 'center'; if ('letterSpacing' in g) g.letterSpacing = '14px';
+  g.fillText('FORECASTS OF THE THEORIES AND THE TWO READERS', w / 2, h / 2 - 8); g.font = '500 30px Archivo'; g.fillStyle = '#6b5f47';
+  g.fillText('SEALED UNTIL YOU COMMIT', w / 2, h / 2 + 52); g.fillRect(60, 40, w - 120, 2); g.fillRect(60, h - 42, w - 120, 2); }, 1, 1, true);
+function free(o) { o.traverse(m => { if (m.isMesh) { m.geometry.dispose(); if (m.material.map && m.material.userData.own) m.material.map.dispose(); if (m.material.userData.own) m.material.dispose(); } }); o.clear(); }
+
+function buildRound(r) {
+  for (const o of [...tiles, body, tray]) if (o) { carriage.remove(o); o.geometry.dispose(); if (o.material.map && o.userData.own) { o.material.map.dispose(); o.material.dispose(); } }
+  free(lidPivot); free(rack); tiles = [];
+  const nt = Math.ceil((r.hi - r.lo) / TILE), L = nt * TILE * U;
+  body = box(L + 0.6, H - 0.04, TW, ivory, 0.04); body.position.set(L / 2, (H - 0.04) / 2, 0); carriage.add(body);
+  for (let k = 0; k < nt; k++) {
+    const t = tex(1024, 540, (g) => { g.scale(0.5, 0.5); drawTile(g, 2048, 1080, r, r.lo + k * TILE); }, 1, 1, true); t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+    const m = tapeMat(); m.map = t; const pl = new THREE.Mesh(new THREE.PlaneGeometry(TILE * U, TW - 0.06), m); pl.userData.own = true;
+    pl.rotation.x = -Math.PI / 2; pl.position.set((k + 0.5) * TILE * U, H - 0.038, 0); pl.receiveShadow = true; carriage.add(pl); tiles.push(pl);
+  }
+  tray = box(L + 0.6, 0.3, RACK_D + 0.5, wood(L / 8, ebonyMap), 0.04); tray.position.set(L / 2, 0.15, ROWS_Z0 - RACK_D / 2 + 0.05); carriage.add(tray);
+  const lt = lidTex.clone(); lt.repeat.set(L / 14, 1); lt.needsUpdate = true;
+  const lm = new THREE.MeshStandardMaterial({ map: lt, metalness: 0.75, roughness: 0.6, bumpMap: brushed, bumpScale: 0.05 }); lm.userData.own = true;
+  const lid = box(L + 0.6, 0.08, RACK_D + 0.5, lm, 0.03); lid.position.set(L / 2, 0.06, (RACK_D + 0.5) / 2);
+  lidPivot.add(lid); lidPivot.position.set(0, 0.36, ROWS_Z0 - RACK_D - 0.2 + 0.05);
+}
+function label(text, color, w = 512) {
+  const t = tex(w, 64, (g) => { g.fillStyle = '#211e1a'; g.fillRect(0, 0, w, 64); g.strokeStyle = '#5a5040'; g.lineWidth = 3; g.strokeRect(2.5, 2.5, w - 5, 59);
+    g.fillStyle = color; g.font = '600 46px Archivo'; g.textBaseline = 'middle'; g.scale(0.62, 1); g.fillText(text, 24, 35); }, 1, 1, true);
+  const m = new THREE.MeshStandardMaterial({ map: t, roughness: 0.6, metalness: 0.3 }); m.userData.own = true; return m;
+}
+let rows = [];
+function buildRack(r, mine) {
+  free(rack); rows = [];
+  const all = [{ ...mine, name: 'You', who: 'you', you: true }, ...r.forecasts], dz = Math.min(0.7, RACK_D / all.length);
+  all.forEach((f, k) => {
+    const g = new THREE.Group(), z = ROWS_Z0 - (RACK_D - dz * (all.length - 1)) / 2 - k * dz, mat = f.you ? redEnamel : f.reader ? nickel : brass, y = 0.42;
+    const x0 = (f.low - r.lo) * U, x1 = (f.high - r.lo) * U, xv = (f.value - r.lo) * U;
+    const rod = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.055, Math.max(x1 - x0, 0.02), 12), mat); rod.rotation.z = Math.PI / 2; rod.position.set((x0 + x1) / 2, y, z); rod.castShadow = true; g.add(rod);
+    for (const x of [x0, x1]) { const e = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.34, 0.34), mat); e.position.set(x, y, z); e.castShadow = true; g.add(e); }
+    const bead = new THREE.Mesh(new THREE.SphereGeometry(0.2, 24, 16), mat); bead.position.set(xv, y, z); bead.castShadow = true; g.add(bead);
+    const text = `${f.name}  ${num(f.value)}`, th = Math.min(0.5, dz * 1.2), w = th * (0.9 + text.length * 0.27), right = k % 2 === 0;
+    const tab = new THREE.Mesh(new THREE.PlaneGeometry(w, th), label(text, f.you ? '#e58a6e' : f.reader ? '#cfd6dc' : '#dcc48f', Math.round(w / th * 64)));
+    tab.rotation.x = -0.75; tab.position.set(right ? x1 + 0.3 + w / 2 : x0 - 0.3 - w / 2, 0.34 + th * 0.34, z); tab.castShadow = true; g.add(tab);   // a small plate tilted to the viewer
+    rack.add(g); rows.push({ f, g, x0: right ? x0 : x0 - 0.3 - w, x1: right ? x1 + 0.3 + w : x1, z, dz });
+  });
+}
+
+// ---- the gain dial
+const dial = new THREE.Group(); scene.add(dial);
+const dneedle = new THREE.Group();
+{ const R = 1.5;
+  const b = new THREE.Mesh(new THREE.CylinderGeometry(R, R * 1.05, 0.5, 72), brass); b.position.y = 0.25; b.castShadow = b.receiveShadow = true; dial.add(b);
+  const lip = new THREE.Mesh(new THREE.TorusGeometry(R * 0.95, 0.07, 16, 96), brass); lip.rotation.x = Math.PI / 2; lip.position.y = 0.52; lip.castShadow = true; dial.add(lip);
+  const face = tex(768, 768, (g, w) => { const c = w / 2; g.fillStyle = '#e6dcc3'; g.fillRect(0, 0, w, w);
+    const P = (v, rr) => { const a = v / 3 * 2 * Math.PI / 3; return [c + rr * Math.sin(a), c - rr * Math.cos(a) + 40]; };
+    g.strokeStyle = '#9c3d27'; g.lineWidth = 7; g.beginPath(); g.arc(c, c + 40, 300, -Math.PI / 2 - 2 * Math.PI / 3, -Math.PI / 2); g.stroke();
+    g.strokeStyle = '#2b2118'; g.beginPath(); g.arc(c, c + 40, 300, -Math.PI / 2, -Math.PI / 2 + 2 * Math.PI / 3); g.stroke();
+    g.fillStyle = '#2b2118'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    for (let v = -3; v <= 3.01; v += 0.25) { const whole = Math.abs(v - Math.round(v)) < 0.01, [x0, y0] = P(v, 300), [x1, y1] = P(v, whole ? 262 : 280);
+      g.lineWidth = whole ? 9 : 4; g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y1); g.stroke();
+      if (whole) { const [x, y] = P(v, 208); g.font = '600 62px Archivo'; g.fillText((v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(Math.round(v)), x, y); } }
+    g.font = '600 38px Archivo'; if ('letterSpacing' in g) g.letterSpacing = '8px'; g.fillText('GAIN, NATS', c, c + 200); g.font = '560 27px Archivo'; g.fillStyle = '#4a3a2a'; if ('letterSpacing' in g) g.letterSpacing = '3px';
+    g.fillText('0 = THE TWO READERS', c, c + 248); }, 1, 1, true);
+  const f = new THREE.Mesh(new THREE.CircleGeometry(R * 0.9, 72), new THREE.MeshPhysicalMaterial({ map: face, roughness: 0.55, clearcoat: 0.5 })); f.rotation.x = -Math.PI / 2; f.position.y = 0.505; f.receiveShadow = true; dial.add(f);
+  const off = 40 / 768 * 2 * R * 0.9;
+  const arm = box(0.07, 0.03, R * 0.74, black, 0.01); arm.position.set(0, 0, -R * 0.29); dneedle.add(arm);
+  const hub = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.11, 0.08, 24), brass); hub.castShadow = true; dneedle.add(hub);
+  dneedle.position.set(0, 0.57, off); dial.add(dneedle); }
+
+// ---- camera: half-width hw of the rule in view; the instrument sits in the lower part of the frame
+const V = { hw: 12, hwT: 12, w: 1, h: 1, narrow: false, base: 12 };
+function resize() {
+  V.w = innerWidth; V.h = innerHeight; V.narrow = V.w < 760;
+  V.base = Math.max(V.narrow ? 3.2 : 8.5, V.w / (2 * (V.narrow ? 0.5 : 0.56) * V.h / 9.9));      // the whole depth of the instrument fits the lower part
+  renderer.setSize(V.w, V.h, false); camera.aspect = V.w / V.h;
+  dial.position.set(V.base * (V.narrow ? 0.5 : 0.62), 0, ZB + 2.3); dial.scale.setScalar(V.narrow ? 0.62 : 1);
+  if (S.phase === 'aim') V.hwT = V.base; place(true);
+}
+function place() {
+  const el = 0.62, hf = 2 * Math.atan(Math.tan(camera.fov * Math.PI / 360) * camera.aspect), d = V.hw / Math.tan(hf / 2);
+  const zc = -0.2; camera.position.set(0, d * Math.sin(el), zc + d * Math.cos(el)); camera.lookAt(0, 0, zc);
+  camera.setViewOffset(V.w, V.h, 0, -V.h * (V.narrow ? 0.1 : V.h < 900 ? 0.19 : 0.175), V.w, V.h); camera.updateProjectionMatrix();
+}
+const scr = (x, y, z) => { const v = new THREE.Vector3(x, y, z).project(camera); return [(v.x + 1) / 2 * V.w, (1 - v.y) / 2 * V.h]; };
+
+// ---- sound: off until the switch is pressed
+let ac = null, lastClick = 0;
+function click(strength = 1, pitch = 1) {
+  if (!ac || performance.now() - lastClick < 22) return; lastClick = performance.now();
+  const t = ac.currentTime, o = ac.createOscillator(), g = ac.createGain(), f = ac.createBiquadFilter();
+  o.type = 'square'; o.frequency.setValueAtTime(1900 * pitch, t); o.frequency.exponentialRampToValueAtTime(420 * pitch, t + 0.018);
+  f.type = 'bandpass'; f.frequency.value = 2400 * pitch; f.Q.value = 1.2;
+  g.gain.setValueAtTime(0.05 * strength, t); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.035);
+  o.connect(f).connect(g).connect(ac.destination); o.start(t); o.stop(t + 0.04);
+}
+$('snd').onclick = () => { if (ac) { ac.close(); ac = null; } else { ac = new (window.AudioContext || window.webkitAudioContext)(); click(1); }
+  $('snd').setAttribute('aria-pressed', !!ac); $('snd').textContent = ac ? 'Clicks on' : 'Clicks off'; };
+
+// ---- rounds
+const R = () => ROUNDS[S.i];
+const snap = (x, st) => Math.round(x / st) * st;
+const A = { t: 0, lid: 0, lidV: 0, lidT: 0, nx: 0, nv: 0, nT: null, dial: 0, dialV: 0, dialT: 0, scored: false };   // the reveal's moving parts
+function startRound(i, aim) {
+  S.i = i; S.phase = 'aim'; S.sel = null; const r = R();
+  buildRound(r);
+  S.p = aim ? aim[0] : snap((r.lo + r.hi) / 2, r.step); S.v = 0; S.goal = null;
+  // the jaws start 5 % of the set apart from the call, or less when that would be outside the view
+  S.dl = aim ? aim[1] : Math.max(r.step, snap(Math.min(r.n * 0.05, V.base * 0.6 / U), r.step)); S.dh = aim ? aim[2] : S.dl;
+  Object.assign(A, { lid: 0, lidV: 0, lidT: 0, nT: null, dialT: 0, scored: false }); needle.visible = false; V.hwT = V.base;
+  $('tm').hidden = true; text(); table(); writeHash();
+}
+const mine = () => S.phase === 'reveal' ? S.commits[S.i] : { value: snap(S.p, R().step), low: snap(S.p, R().step) - S.dl, high: snap(S.p, R().step) + S.dh };
+function commit(instant) {
+  const r = R();
+  if (!instant) { S.goal = null; S.v = 0; S.p = snap(S.p, r.step); S.commits = S.commits.slice(0, S.i); S.commits.push(mine());
+    if (S.commits.length === NR) { const t = totals(); store.add({ at: new Date().toISOString().slice(0, 10), total: +t.find(x => x.you).total.toFixed(3), rank: t.findIndex(x => x.you) + 1, of: t.length }); } }
+  S.phase = 'reveal'; const c = S.commits[S.i]; S.p = c.value; S.v = 0; S.dl = c.value - c.low; S.dh = c.high - c.value;
+  buildRack(r, c); c.gain = gain(r.measured, c, r.forecasts.filter(f => f.reader));
+  const xm = (r.measured - r.lo) * U, far = Math.max(...rows.filter(o => !o.f.you).map(o => Math.max(Math.abs(o.x1 - xm), Math.abs(o.x0 - xm))));
+  V.hwT = Math.min(V.base * 1.45, Math.max(V.base, far + (V.narrow ? 0.4 : 1.2))); S.call = c.value;
+  Object.assign(A, { t: 0, lidT: 1, nx: c.value, nv: 0, nT: null, scored: false }); click(1.6, 0.6);
+  if (instant || still) { A.lid = 1; A.nx = r.measured; A.nT = r.measured; A.dial = A.dialT = c.gain; A.scored = true; A.t = 9; V.hw = V.hwT; needle.visible = true; S.p = r.measured; }
+  text(); table(); writeHash();
+}
+function next() { if (S.i + 1 >= NR) { S.commits = []; startRound(0); } else startRound(S.i + 1); }
+
+// ---- words
+function totals(upto = S.phase === 'reveal' && A.scored ? S.i + 1 : S.i) {
+  const m = new Map([['you', { name: 'You', you: true, n: 0, total: 0 }]]);
+  for (let k = 0; k < Math.min(upto, S.commits.length); k++) { const r = ROUNDS[k], c = S.commits[k];
+    m.get('you').n++; m.get('you').total += gain(r.measured, c, r.forecasts.filter(f => f.reader));
+    for (const f of r.forecasts) { if (!m.has(f.who)) m.set(f.who, { name: f.name, reader: f.reader, n: 0, total: 0 }); const o = m.get(f.who); o.n++; o.total += f.gain; } }
+  return [...m.values()].sort((a, b) => b.total - a.total || (b.you ? 1 : 0) - (a.you ? 1 : 0));
+}
+function table() {
+  const t = totals(), done = t[0].n || t.some(x => x.n);
+  const max = V.narrow || V.h >= 900 ? 99 : 11, cut = t.filter((x, k) => k < max - 1 || x.you || (k === max - 1 && t.findIndex(y => y.you) < max));
+  $('rank').innerHTML = done ? cut.map(x => [x, t.indexOf(x)]).map(([x, k]) => `<li class="${x.you ? 'you' : x.reader ? 'rd' : ''}"><span>${k + 1}</span><span>${x.name}</span><span>${x.n}</span><span>${sgn(x.total)}</span></li>`).join('')
+    : '<li><span></span><span>No round played yet</span><span></span><span></span></li>';
+  $('pips').innerHTML = ROUNDS.map((_, k) => `<i class="${k < S.i || (k === S.i && S.phase === 'reveal') ? 'd' : k === S.i ? 'c' : ''}"></i>`).join('');
+  const you = t.find(x => x.you), past = store.get();
+  $('tabh').textContent = V.narrow && done ? `Standing: ${t.indexOf(you) + 1} of ${t.length}, ${sgn(you.total)}` : 'Standing';
+  $('note').hidden = t.length > 9 && !V.narrow;
+  $('note').textContent = 'Total gain in nats over the rounds played, with the number of forecasts each made; a theory may abstain. 0 is the mixture of the two readers.'
+    + (past.length ? ` Your finished games: ${past.slice(-4).map(g => `${sgn(g.total)} (${g.rank} of ${g.of})`).join(', ')}.` : '');
+}
+function text() {
+  const r = R(), s = DATA.summary, rev = S.phase === 'reveal';
+  $('fact').textContent = `Before these ${NR} results were posted, the 90 % intervals of the two readers with no theory held the measured number ${s.readers_inside} times of ${s.readers}; those of the ${s.theory_names} theories held it ${s.theories_inside} times of ${s.theories}.`;
+  $('rno').textContent = `Experiment ${S.i + 1} of ${NR}` + (rev ? `, ${r.item}` : '');
+  $('lead').textContent = r.lead; $('what').textContent = r.what;
+  $('lcap').textContent = rev ? 'What each one called' : 'What the forecasters knew';
+  $('hint').hidden = rev; $('read').hidden = !rev; $('item').hidden = true; $('fact').hidden = $('what').hidden = rev && A.scored; document.querySelector('.exp').classList.toggle('rev', rev && A.scored);
+  $('gol').textContent = rev ? (S.i + 1 >= NR ? 'Play again' : 'Next experiment') : 'Commit';
+  $('why').classList.remove('dflt');
+  if (!rev) { $('list').innerHTML = r.refs.map(x => `<li>${x}</li>`).join(''); $('why').textContent = `The number to call: ${r.unit}.`; }
+  readout();
+}
+function readout() {
+  const r = R(), c = mine(), rev = S.phase === 'reveal';
+  if (!rev || !A.scored) {
+    $('mcap').textContent = rev ? 'Your call, committed' : 'Your call';
+    $('big').innerHTML = `${num(c.value)}<small>of ${r.n}</small>`;
+    $('rows').innerHTML = `<div class="row"><span>90 % interval</span><b>${num(c.low)} to ${num(c.high)}</b></div><div class="row"><span>Share of the set</span><b>${(100 * c.value / r.n).toFixed(1)} %</b></div>`;
+    if (rev) { $('list').innerHTML = ''; $('why').textContent = ''; }
+    return;
+  }
+  const inside = c.low <= r.measured && r.measured <= c.high, nulls = r.forecasts.filter(f => f.reader);
+  $('mcap').textContent = 'Measured';
+  $('big').innerHTML = `${num(r.measured)}<small>of ${r.n}</small>`;
+  $('rows').innerHTML = `<div class="row"><span>Your call</span><b>${num(c.value)}, ${num(c.low)} to ${num(c.high)}</b></div><div class="row"><span>Your gain</span><b class="${c.gain < 0 ? 'neg' : ''}">${sgn(c.gain)} nats</b></div>`;
+  const all = [{ ...c, name: 'You', who: 'you', you: true }, ...r.forecasts].sort((a, b) => b.gain - a.gain);
+  $('list').innerHTML = all.map(f => `<li class="f${S.sel === f.who ? ' on' : ''}${f.you ? ' neg' : ''}" data-who="${f.who}"><span>${f.name}</span><span class="n">${num(f.value)}, ${num(f.low)} to ${num(f.high)}${f.low <= r.measured && r.measured <= f.high ? '' : ', missed'}</span><span class="g ${f.gain < 0 ? 'neg' : ''}">${sgn(f.gain)}</span></li>`).join('');
+  const f = r.forecasts.find(x => x.who === S.sel); $('why').classList.toggle('dflt', !f);
+  $('why').textContent = f ? (f.theory ? `${f.name}: ${f.theory}. Its reason: ` : `${f.name}, no theory: `) + f.reason
+    : `Your log density at ${num(r.measured)} is ${logDensity(r.measured, c).toFixed(2)}; the readers' mixture gives ${logNull(r.measured, nulls).toFixed(2)}. The gain is the difference, held within 3 nats` + (inside ? '.' : ', and at most 0 because the number fell outside your own interval.') + ' Click a row or a rod for its reason.';
+}
+$('list').onclick = e => { const li = e.target.closest('li.f'); if (!li) return; S.sel = S.sel === li.dataset.who || li.dataset.who === 'you' ? null : li.dataset.who; readout(); if (still) frame(0); };
+$('go').onclick = () => { if (S.phase === 'aim') commit(); else if (A.scored) next(); if (still) frame(0); };
+$('tabh').onclick = () => $('tab').classList.toggle('open');
+$('read').onclick = async () => {          // the one request to the site, made on a click
+  const el = $('item'), r = R(); el.hidden = false; el.textContent = 'Reading ' + r.item;
+  try { const d = await (await fetch('/data/' + r.item)).json(), it = d.item || d;
+    el.innerHTML = '<button aria-label="Close">Close</button><b></b>\n'; el.querySelector('b').textContent = `${r.item}, posted by ${it.who || 'the team'}`;
+    el.append(document.createTextNode('\n' + (it.text || JSON.stringify(it)).slice(0, 2600))); el.querySelector('button').onclick = () => { el.hidden = true; };
+  } catch (err) { el.textContent = `The board did not answer for ${r.item}. Its stored line: ${r.quote}`; }
+};
+
+// ---- pointer and keys
+let drag = null;
+const perPx = () => 2 * V.hw / V.w / U;                // scale units per pixel at the rule
+function jawAt(x, y) {
+  if (S.phase !== 'aim') return 0;
+  for (const [g, side] of [[jawL, -1], [jawH, 1]]) { const [bx, by] = scr(g.position.x + side * 0.25, 0.5, ZB), [tx, ty] = scr(g.position.x, H, -TW / 2);
+    if (Math.hypot(x - bx, y - by) < 34 || (Math.abs(x - (bx + tx) / 2) < 12 && y > ty && y < by && Math.abs(g.position.x) > 0.7)) return side; }
+  return 0;
+}
+function rowAt(x, y) {
+  if (S.phase !== 'reveal' || !A.scored) return null;
+  for (const o of rows) { const [ax, ay] = scr(carriage.position.x + o.x0, 0.42, o.z), [bx] = scr(carriage.position.x + o.x1, 0.42, o.z);
+    if (x > ax - 8 && x < bx + 8 && Math.abs(y - ay) < Math.max(7, o.dz * V.w / V.hw / 4)) return o; }
+  return null;
+}
+canvas.addEventListener('pointerdown', e => {
+  const row = rowAt(e.clientX, e.clientY);
+  if (row) { S.sel = row.f.you || S.sel === row.f.who ? null : row.f.who; readout(); return; }
+  if (S.phase !== 'aim' && !A.scored) return;
+  const side = jawAt(e.clientX, e.clientY); canvas.setPointerCapture(e.pointerId); canvas.classList.add('drag');
+  drag = { side, x: e.clientX, p0: S.p, d0: side < 0 ? S.dl : S.dh, target: S.p }; S.goal = null; click(0.5, 1.4);
+});
+canvas.addEventListener('pointermove', e => {
+  if (!drag) { canvas.classList.toggle('pick', !!rowAt(e.clientX, e.clientY) || !!jawAt(e.clientX, e.clientY)); return; }
+  const dx = (e.clientX - drag.x) * perPx(), r = R();
+  if (!drag.side) drag.target = drag.p0 - dx;
+  else { const d = Math.max(r.step, Math.min(r.hi - r.lo, snap(drag.d0 + drag.side * dx, r.step))), was = drag.side < 0 ? S.dl : S.dh;
+    if (d !== was) { if (drag.side < 0) S.dl = d; else S.dh = d; click(0.7, 1.25); readout(); if (still) frame(0); } }
+});
+const up = () => { if (!drag) return; drag = null; canvas.classList.remove('drag'); writeHash(); };
+canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
+canvas.addEventListener('wheel', e => { if (S.phase !== 'aim') return; e.preventDefault(); S.goal = null; S.v += (e.deltaY + e.deltaX) * 0.25; }, { passive: false });
+addEventListener('keydown', e => {
+  if (e.target.closest && e.target.closest('button') && (e.key === 'Enter' || e.key === ' ')) return;
+  if (e.key === 'Enter') { e.preventDefault(); $('go').click(); return; }
+  if (S.phase !== 'aim') return;
+  const r = R(), k = e.altKey ? 1 : (e.shiftKey ? 10 : 1) / Math.min(1, r.step), dir = { ArrowRight: 1, ArrowLeft: -1, PageUp: 25, PageDown: -25 }[e.key], wid = { ArrowUp: 1, ArrowDown: -1 }[e.key];
+  if (dir) { e.preventDefault(); S.v = 0; S.goal = Math.max(r.lo, Math.min(r.hi, snap(S.goal ?? S.p, r.step) + dir * k * r.step)); click(0.8); }
+  if (wid) { e.preventDefault(); const lim = x => Math.max(r.step, Math.min(r.hi - r.lo, x + wid * k * r.step)); S.dl = lim(S.dl); S.dh = lim(S.dh); click(0.7, 1.25); readout(); writeHash(); }
+  if (still) frame(0);
+});
+addEventListener('hashchange', boot);
+canvas.addEventListener('webglcontextlost', e => e.preventDefault()); canvas.addEventListener('webglcontextrestored', () => location.reload());
+addEventListener('resize', () => { resize(); table(); if (still) frame(0); });
+
+// ---- motion
+const spring = (x, v, target, k, c, dt) => { v += (-k * (x - target) - c * v) * dt; return [x + v * dt, v]; };
+let jl = 0, jh = 0, lastDet = 0, shown = '';
+function step(dt) {
+  const r = R();
+  if (S.phase === 'aim') {
+    const before = S.p;
+    if (drag && !drag.side) { const np = S.p + (drag.target - S.p) * (1 - Math.exp(-dt * 16)); S.v = S.v * 0.6 + 0.4 * (np - S.p) / dt; S.p = np; }
+    else if (S.goal != null) { [S.p, S.v] = spring(S.p, S.v, S.goal, 420, 38, dt); if (Math.abs(S.p - S.goal) < 0.004 && Math.abs(S.v) < 0.05) { S.p = S.goal; S.v = 0; S.goal = null; writeHash(); } }
+    else { S.p += S.v * dt; S.v *= Math.exp(-dt * 1.9);                                  // coast, then fall into the nearest detent
+      if (Math.abs(S.v) < 14 * r.step + 4) { const t = snap(S.p, r.step); S.v += (-260 * (S.p - t) - 22 * S.v) * dt;
+        if (Math.abs(S.p - t) < 0.003 && Math.abs(S.v) < 0.05 && S.p !== t) { S.p = t; S.v = 0; writeHash(); } } }
+    if (S.p < r.lo) { S.p = r.lo; S.v = Math.abs(S.v) * 0.25; click(1.4, 0.5); } if (S.p > r.hi) { S.p = r.hi; S.v = -Math.abs(S.v) * 0.25; click(1.4, 0.5); }
+    const det = Math.round(S.p / Math.max(r.step, 1)); if (det !== lastDet) { lastDet = det; if (before !== S.p) click(Math.min(1, 0.35 + Math.abs(S.v) / 120)); }
+  } else {
+    A.t += dt; const c = S.commits[S.i];
+    if (drag) { const np = S.p + (drag.target - S.p) * (1 - Math.exp(-dt * 16)); S.v = S.v * 0.6 + 0.4 * (np - S.p) / dt; S.p = np; }
+    else if (!A.scored) S.p += (A.nx - S.p) * (1 - Math.exp(-dt * 3.2));
+    else { S.p += S.v * dt; S.v *= Math.exp(-dt * 2.4); }
+    S.p = Math.max(r.lo, Math.min(r.hi, S.p));
+    const det = Math.round(S.p); if (det !== lastDet) { lastDet = det; if (Math.abs(A.nv) > 3 || drag) click(0.4); }
+    if (A.t > 0.15) [A.lid, A.lidV] = spring(A.lid, A.lidV, A.lidT, 30, 9.5, dt);
+    if (A.t > 1.0 && A.nT == null) { A.nT = r.measured; needle.visible = true; click(1.2, 0.8); }
+    if (A.nT != null) { const k = 26, cc = 7.6; [A.nx, A.nv] = spring(A.nx, A.nv, A.nT, k, cc, dt);
+      if (!A.scored && ((Math.abs(A.nx - A.nT) < 0.3 && Math.abs(A.nv) < 2.5) || A.t > 3.8)) { A.scored = true; A.dialT = c.gain; click(1.6, 0.55); text(); table(); } }
+    [A.dial, A.dialV] = spring(A.dial, A.dialV, A.dialT, 38, 5.5, dt);
+  }
+  if (S.phase === 'aim') [A.dial, A.dialV] = spring(A.dial, A.dialV, 0, 38, 9, dt);
+  V.hw += (V.hwT - V.hw) * (1 - Math.exp(-dt * 2.6));
+  jl += (S.dl - jl) * (1 - Math.exp(-dt * 20)); jh += (S.dh - jh) * (1 - Math.exp(-dt * 20));
+}
+let sig = '';
+function draw(force) {
+  const r = R(), now = [S.p, jl, jh, A.lid, A.nx, A.dial, V.hw, V.w, V.h, S.i, S.phase, A.scored, needle.visible, S.sel].map(x => typeof x === 'number' ? x.toFixed(4) : x).join();
+  if (now === sig && !force) return;                    // nothing moved: no render
+  sig = now; place();
+  carriage.position.x = -(S.p - r.lo) * U;
+  sight.position.x = S.phase === 'reveal' ? (S.call - S.p) * U : 0;
+  jawL.position.x = -jl * U; jawH.position.x = jh * U;
+  lidPivot.scale.z = Math.max(0.05, 1 - 0.94 * A.lid);                   // the cover rolls back into its housing
+  needle.position.x = (A.nx - r.lo) * U;
+  for (const o of rows) o.g.position.y = o.f.who === S.sel ? 0.14 : 0;
+  dneedle.rotation.y = -Math.max(-3.15, Math.min(3.15, A.dial)) / 3 * 2 * Math.PI / 3;
+  key.target.position.set(0, 0, 0);
+  renderer.render(scene, camera);
+  const c = mine(), put = (el, [x, y], dy = 0) => { el.style.left = x + 'px'; el.style.top = y + dy + 'px'; };
+  const s = `${num(c.value)}|${num(c.low)}|${num(c.high)}`;
+  if (s !== shown && S.phase === 'aim') { shown = s; readout(); }
+  $('tv').textContent = num(c.value); $('tl').textContent = num(c.low); $('th').textContent = num(c.high);
+  const sx = sight.position.x, zt = ZB + 0.95;
+  put($('tv'), scr(sx, 0.2, zt), 0); put($('tl'), scr(sx + jawL.position.x - 0.25, 0.2, zt)); put($('th'), scr(sx + jawH.position.x + 0.25, 0.2, zt));
+  const near = (jl + jh) * U * V.w / (2 * V.hw) < 120; $('tv').style.opacity = near ? 0 : 1;
+  if (needle.visible) { $('tm').hidden = false; $('tm').innerHTML = `<i>Measured</i>${A.scored ? num(r.measured) : num(snap(A.nx, r.step))}`; put($('tm'), scr(needle.position.x + carriage.position.x, 0.6, ZR + 0.1)); }
+}
+let last = 0;
+const FPS = new URLSearchParams(location.search).has('fps') ? { n: 0, t0: 0, first: 0 } : null;      // ?fps prints the frame rate, for checking
+function frame(t) {
+  if (FPS) { FPS.first ||= Math.round(performance.now()); FPS.n++; if (t - FPS.t0 > 2000) { $('err').textContent = `${Math.round(FPS.n * 1000 / (t - FPS.t0))} fps, first frame at ${FPS.first} ms`; FPS.n = 0; FPS.t0 = t; } } const dt = Math.min(0.25, (t - last) / 1000 || 0.016); last = t;
+  if (still) { for (let k = 0; k < 240; k++) step(0.016); V.hw = V.hwT; jl = S.dl; jh = S.dh; draw(); return; }
+  for (let k = Math.max(1, Math.ceil(dt * 120)), h = dt / k; k > 0; k--) step(h);      // fixed small steps: the motion keeps real time at any frame rate
+  draw(); requestAnimationFrame(frame); }
+
+function boot() {
+  const q = readHash(), n = S.commits.length, a = (q.get('a') || '').split(':').map(Number);
+  if (q.get('v') && n) { S.i = n - 1; buildRound(R()); S.phase = 'aim'; commit(true); }
+  else if (n >= NR) { S.i = NR - 1; buildRound(R()); commit(true); }
+  else { const r = ROUNDS[n], ok = a.length === 3 && a.every(Number.isFinite) && a[0] >= r.lo && a[0] <= r.hi && a[1] >= r.step && a[2] >= r.step;
+    startRound(n, ok ? [snap(a[0], r.step), snap(a[1], r.step), snap(a[2], r.step)] : null); jl = S.dl; jh = S.dh; }
+  if (still) frame(0);
+}
+resize(); boot(); V.hw = V.hwT; jl = S.dl; jh = S.dh;
+if (still) frame(0); else requestAnimationFrame(frame);
+</script>
+</body>
+</html>

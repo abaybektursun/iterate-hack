@@ -22,13 +22,16 @@ body {
 }
 button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
-canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+canvas { background: var(--paper); position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
 canvas.drag { cursor: grabbing; }
-.room { position: fixed; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(19, 17, 16, .78), rgba(19, 17, 16, 0) 34%); }
+.room { position: fixed; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(19, 17, 16, .78), rgba(19, 17, 16, 0) 34%), radial-gradient(85% 80% at 58% 48%, transparent 45%, rgba(0, 0, 0, .42)); }
+.grain { position: fixed; inset: 0; pointer-events: none; opacity: .07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1.4 -.2'/></filter><rect width='220' height='220' filter='url(%23n)'/></svg>"); }
 
 .col { position: fixed; left: 0; top: 0; bottom: 0; width: var(--col); padding: 26px 0 22px 40px; display: flex; flex-direction: column; pointer-events: none; }
 .col > * { pointer-events: auto; }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; }
+.name a { font-weight: 400; font-stretch: 100%; letter-spacing: 0; font-size: 13px; color: var(--faint); text-decoration: none; margin-right: 14px; } .name a:hover { color: var(--ink); }
 .name span { color: var(--mute); font-weight: 400; font-stretch: 100%; margin-left: 10px; letter-spacing: 0; }
 h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 33px; line-height: 1.14; letter-spacing: -.012em; margin: 34px 0 22px; text-wrap: balance; min-height: 4.6em; }
 h1 b { font-weight: 300; color: var(--red); }
@@ -94,9 +97,9 @@ h1 i { font-style: normal; color: var(--ink); border-bottom: 1px solid var(--blu
 </head>
 <body>
 <canvas id="c"></canvas>
-<div class="room"></div>
+<div class="room"></div><div class="grain"></div>
 <div class="col">
-  <div class="name">Invariant<span>Answers that finish</span></div>
+  <div class="name"><a href="../../">Lab</a>Invariant<span>Answers that finish</span></div>
   <h1 id="h1"></h1>
   <div class="row"><div class="lab">Model</div><div class="models" id="models"></div></div>
   <div class="row"><div class="lab">Token cap</div>
@@ -119,11 +122,6 @@ addEventListener('unhandledrejection', e => { document.getElementById('err').tex
 </script>
 <script type="module">
 import * as THREE from 'three';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 const Q = new URLSearchParams(location.search);
@@ -139,35 +137,27 @@ const PER = +(Q.get('p') || 600);                       // particles per slot
 const COL = { ok: [0.80, 0.75, 0.64], bad: [0.20, 0.185, 0.17], cap: [0.44, 0.105, 0.055] };   // bone, slate, iron oxide
 
 // ---- state
-const st = { model: 'base_cue', run: 16, wall: 16384, wallCur: 16384, t0: 0, hot: -1, pin: -1 };
+const st = { model: 'base_cue', run: 16, wall: 16384, wallCur: 16384, wallV: 0, t0: 0, hot: -1, pin: -1 };
 { const h = location.hash.slice(1).split('/'); if (SETS[h[0]] && SETS[h[0]].per === 4) { st.model = h[0]; if (h[1] === '32768' && SETS[h[0] + '_cap32']) { st.run = 32; st.wall = st.wallCur = 32768; } } }
 const cur = () => st.run === 32 ? SETS[st.model + '_cap32'] : SETS[st.model];
 
 // ---- renderer
 const canvas = $('c');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.setClearColor(0x131110, 1); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: devicePixelRatio < 2, powerPreference: 'high-performance' });
+let dpr = Math.min(devicePixelRatio, 2); renderer.setPixelRatio(dpr);
+renderer.setClearColor(0x131110, 1); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false; let shadowW = -1;
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
 const scene = new THREE.Scene();
+canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); $('status').className = 'status bad'; $('status').textContent = 'Graphics context lost, waiting for it'; });
+canvas.addEventListener('webglcontextrestored', () => { $('status').className = 'status'; $('status').textContent = 'Graphics restored'; });
 const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 400);
-const composer = new EffectComposer(renderer);
-composer.addPass(new RenderPass(scene, camera));
-composer.addPass(new UnrealBloomPass(new THREE.Vector2(1, 1), 0.10, 0.35, 0.92));   // a faint lens response on true highlights only
-composer.addPass(new OutputPass());
-const finish = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uT: { value: 0 } },
-  vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }`,
-  fragmentShader: `uniform sampler2D tDiffuse; uniform float uT; varying vec2 vUv;
-float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
-void main(){ vec3 c = texture2D(tDiffuse, vUv).rgb; vec2 q = vUv - .5; c *= 1. - .34 * smoothstep(.25, .85, length(q * vec2(1.15, 1.)));
-  c += (h(gl_FragCoord.xy + fract(uT) * 91.) - .5) * .028; gl_FragColor = vec4(c, 1.); }` });
-composer.addPass(finish);
 scene.background = new THREE.Color(0x131110); scene.fog = new THREE.Fog(0x131110, 110, 300);
 scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .04).texture;
-const key = new THREE.DirectionalLight(0xfff1dc, 2.6); key.position.set(-22, 26, 30); key.castShadow = true; key.shadow.mapSize.set(2048, 2048);
-Object.assign(key.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30, near: 1, far: 120 }); key.shadow.radius = 9; key.shadow.bias = -.0005; scene.add(key);
+const key = new THREE.DirectionalLight(0xfff1dc, 2.6); key.position.set(-22, 26, 30); key.castShadow = true; key.shadow.mapSize.set(1024, 1024);
+Object.assign(key.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30, near: 1, far: 120 }); key.shadow.radius = 22; key.shadow.blurSamples = 16; key.shadow.bias = -.0005; scene.add(key);
 const rim = new THREE.DirectionalLight(0xcfd8e6, .9); rim.position.set(24, 6, -26); scene.add(rim);
 scene.add(new THREE.HemisphereLight(0xc8c0b4, 0x2a2420, .8));
+const fill = new THREE.DirectionalLight(0xe8dccb, .55); fill.position.set(8, -6, 40); scene.add(fill);
 
 // ---- slot texture: row 0 = u, length in tokens, z offset, kind (0 finished, 1 cut off, 2 loop); row 1 = stream colour; row 2 = end colour
 const tex = new Float32Array(NS * 3 * 4);
@@ -178,14 +168,14 @@ const zj = new Float32Array(NS);
 for (let i = 0; i < NS; i++) { zj[i] = (Math.sin(i * 127.1) * 43758.5453 % 1) * 1.5; tex[i * 4] = 0.5; }
 
 const COMMON = `
-uniform sampler2D uS; uniform float uTime, uFront, uPx, uHotA, uHotB, uDim;
+uniform sampler2D uS; uniform float uTime, uFront, uPx, uHotA, uHotB, uDim, uHotU, uHotW;
 const float YS = ${YS}, SPEED = ${SPEED.toFixed(1)}, CYCLE = ${CYCLE.toFixed(1)}, R = ${R.toFixed(1)}, SPAN = ${SPAN};
 uint pcg(uint v){ uint s = v * 747796405u + 2891336453u; uint w = ((s >> ((s >> 28u) + 4u)) ^ s) * 277803737u; return (w >> 22u) ^ w; }
 float rnd(uint v){ return float(pcg(v)) / 4294967295.0; }
-vec3 top(vec4 a){ float th = (a.x - .5) * SPAN; return vec3(R * sin(th), 0., R * (1. - cos(th)) + a.z); }
+vec3 top(vec4 a){ float du = a.x - uHotU; float th = (a.x + uHotW * sign(du) * .011 * exp(-abs(du) * 70.) - .5) * SPAN; return vec3(R * sin(th), 0., R * (1. - cos(th)) + a.z); }
 `;
 const partMat = new THREE.ShaderMaterial({
-  uniforms: { uS: { value: slotTex }, uTime: { value: 0 }, uFront: { value: 0 }, uPx: { value: 1 }, uHotA: { value: -1 }, uHotB: { value: -1 }, uDim: { value: 1 } },
+  uniforms: { uS: { value: slotTex }, uTime: { value: 0 }, uFront: { value: 0 }, uPx: { value: 1 }, uHotA: { value: -1 }, uHotB: { value: -1 }, uDim: { value: 1 }, uHotU: { value: .5 }, uHotW: { value: 0 } },
   vertexShader: COMMON + `
 varying vec3 vC; varying float vA, vS;
 void main(){
@@ -193,9 +183,10 @@ void main(){
   vec4 a = texelFetch(uS, ivec2(slot, 0), 0); vec3 c = texelFetch(uS, ivec2(slot, 1), 0).rgb; vec3 ce = texelFetch(uS, ivec2(slot, 2), 0).rgb;
   float h1 = rnd(id), h2 = rnd(id ^ 0x9e3779b9u), h3 = rnd(id * 3u + 17u), h4 = rnd(id * 5u + 91u);
   float d = fract(h1 + uTime * SPEED / CYCLE) * CYCLE, len = a.y, kind = a.w, fs = float(slot);
+  bool hot = fs >= uHotA && fs < uHotB;
   vec3 b = top(a), p; float al = 1., sz = .7 + .8 * h4; vS = 0.;
   if (d < len) {                                   // inside the answer: one step down per token
-    float w = .05 + .05 * h3;
+    float w = (.05 + .05 * h3) * (hot ? 1. + 4. * uHotW : 1.);
     p = b + vec3((h2 - .5) * w, -d * YS, (h3 - .5) * .22);
     float head = smoothstep(len - 700., len, d);
     al = 1.; c = mix(c, ce, head) * (.8 + .22 * h4) * (.84 + .3 * rnd(uint(slot) * 7u + 3u)) * (1. + .45 * head); vS = 1.; sz *= 1.5 + .5 * head;
@@ -204,11 +195,14 @@ void main(){
     if (kind < .5) {                               // finished: the stream stops here
       float life = .55, q = 1. - exp(-tau * 6.);
       p = e + vec3(cos(ang) * .09 * h3 * q, -.10 * q, sin(ang) * .09 * h3 * q); al = max(0., 1. - tau / life) * 1.5;
-    } else if (kind < 1.5) {                       // cut off: thrown off the plate
-      float life = min(1.5, (CYCLE - len) / SPEED), vh = .35 + 2.4 * h3 * h3, vy = .8 + 3.6 * h4 * h4, g = 9.;
-      float tb = 2. * vy / g, y = tau < tb ? vy * tau - .5 * g * tau * tau : 0.;
-      float r = vh * (1. - exp(-2.2 * tau)) / 2.2;
-      p = e + vec3(cos(ang) * r, y + .03, sin(ang) * r * .8); al = max(0., 1. - tau / life) * 1.5; sz *= 1.15;
+    } else if (kind < 1.5) {                       // cut off: the grain strikes the plate, bounces twice, slides and comes to rest in a heap
+      float life = (CYCLE - len) / SPEED, vh = .25 + 1.5 * h3 * h3, vy = 1.1 + 2.6 * h4 * h4, g = 9.8;
+      float t1 = 2. * vy / g, t2 = t1 * .38, y, r;
+      if (tau < t1) { y = vy * tau - .5 * g * tau * tau; r = vh * tau; }
+      else if (tau < t1 + t2) { float t = tau - t1; y = .38 * vy * t - .5 * g * t * t; r = vh * t1 + vh * .55 * t; }
+      else { float t = tau - t1 - t2, r0 = vh * t1 + vh * .55 * t2; r = r0 + vh * .3 * (1. - exp(-5. * t)) / 5.;          // friction
+        y = max(0., .34 - r * .5) * rnd(id * 11u + 5u) * (1. - exp(-6. * t)); }                                            // its place in the heap
+      p = e + vec3(cos(ang) * r, y + .035, sin(ang) * r * .85); al = clamp((life - tau) * 4., 0., 1.); sz *= 1.1;
     } else {                                       // flagged as a loop: circles
       float life = min(3.2, (CYCLE - len) / SPEED), rad;
       ang += tau * 4.2;
@@ -217,7 +211,6 @@ void main(){
     }
   }
   if (d > uFront || len < 1.) al = 0.;
-  bool hot = fs >= uHotA && fs < uHotB;
   if (hot) { c = vec3(1.35, .82, .28); sz *= 2.; } else c *= uDim;
   sz *= sqrt(clamp(al, 0., 1.));
   vec4 mv = modelViewMatrix * vec4(p, 1.);
@@ -232,7 +225,8 @@ void main(){ vec2 q = (gl_PointCoord - .5) * 2.; q.x *= 1. + 1.3 * vS; float r2 
   gl_FragColor = vec4(vC * (.20 + 1.05 * dif) + vec3(.55, .6, .7) * rimL * .12, 1.); }`
 });
 function points(n, mat) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3)); const p = new THREE.Points(g, mat); p.frustumCulled = false; return p; }
-scene.add(points(NS * PER, partMat));
+const grains = points(NS * PER, partMat); scene.add(grains);
+let perNow = Math.min(PER, 200), perCeil = PER, slow = 0, acc = 0, accN = 0, lastReal = performance.now();
 
 const beadMat = new THREE.ShaderMaterial({
   uniforms: partMat.uniforms,
@@ -286,7 +280,7 @@ const DEPTH = 32768 * YS, FLOOR = -DEPTH - 2.2;
   wall.position.set(0, FLOOR + 100, -15); wall.receiveShadow = true; scene.add(wall); }
 
 // ---- layout: which group an answer is in at the cap W, and where its stream stands
-let groups = [], info = [];                         // info[a] = {kind 0 right, 1 wrong, 2 cut, len, ok, loop}
+let groups = [], info = [], order = [];                         // info[a] = {kind 0 right, 1 wrong, 2 cut, len, ok, loop}
 function layout(W) {
   const S = cur(), n = S.tok.length, per = S.per, ord = [];
   info = new Array(n);
@@ -297,6 +291,7 @@ function layout(W) {
   }
   ord.sort((x, y) => info[x].kind - info[y].kind || S.tok[x] - S.tok[y] || info[y].ok - info[x].ok || x - y);
   const gap = n * 0.035, total = n + 2 * gap; groups = [0, 1, 2].map(() => ({ n: 0, u0: 1, u1: 0, okc: 0, loops: 0 }));
+  order = ord;
   ord.forEach((a, r) => {
     const f = info[a], u = (r + .5 + gap * f.kind) / total, g = groups[f.kind];
     g.n++; g.u0 = Math.min(g.u0, u); g.u1 = Math.max(g.u1, u); g.okc += f.ok; g.loops += f.loop; f.u = u;
@@ -379,7 +374,7 @@ async function readBoard() {
 readBoard(); setInterval(readBoard, 30000);
 
 function detail(a) {
-  const S = cur(), d = $('detail'); if (a < 0 || a >= S.tok.length) { d.innerHTML = '<div class="lab">Answer</div>Point at a stream, click to keep it.'; return; }
+  const S = cur(), d = $('detail'); if (a < 0 || a >= S.tok.length) { d.innerHTML = '<div class="lab">Answer</div>Point at a thread and click to keep it. The arrow keys step to its neighbours.'; return; }
   const pi = S.per === 4 ? a >> 2 : a, P = DATA.problems[pi], f = info[a];
   const state = f.kind === 2 ? (f.tok > f.len ? `cut off at ${fmt(f.len)} of ${fmt(f.tok)} tokens` : `cut off at ${fmt(f.len)} tokens`) : `finished after ${fmt(f.tok)} tokens`;
   const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
@@ -396,31 +391,38 @@ document.querySelectorAll('#caps button').forEach(b => b.onclick = () => setCap(
 $('replay').onclick = () => { st.t0 = clock.getElapsedTime(); };
 function apply() { if (st.run === 16) st.wall = 16384; history.replaceState(null, '', '#' + st.model + '/' + (st.run === 32 ? 32768 : 16384)); layout(Math.max(st.wallCur, 16384)); words(); detail(st.pin); }
 addEventListener('keydown', e => { const i = '1234'.indexOf(e.key); if (i >= 0 && MODELS[i]) choose(MODELS[i].key);
-  if (e.key === 'c') setCap(st.wall > 16384 ? 16384 : 32768); if (e.key === 'r') $('replay').click(); if (e.key === 'Escape') { st.pin = -1; detail(-1); } });
+  if (e.key === 'c') setCap(st.wall > 16384 ? 16384 : 32768); if (e.key === 'r') $('replay').click(); if (e.key === 'Escape') { st.pin = -1; detail(-1); }
+  if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && order.length) { const r = st.pin < 0 ? 0 : order.indexOf(st.pin) + (e.key === 'ArrowRight' ? 1 : -1); st.pin = order[(r + order.length) % order.length]; st.hot = -1; tip.classList.remove('on'); detail(st.pin); e.preventDefault(); } });
 
 // ---- camera: drag to turn, wheel or pinch to move in, leans toward the pointer
 const cam = { sx: 0, sy: 0, yaw: .2, pitch: .13, zoom: 1, vy: 0, vp: 0, lx: 0, ly: 0, depth: 16384 };
 const ptr = new Map(); let pinch = 0, moved = 0, mouse = [-1, -1];
-canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); ptr.set(e.pointerId, [e.clientX, e.clientY]); moved = 0; canvas.classList.add('drag'); });
+canvas.addEventListener('pointerdown', e => { if (onPlate(e.clientX, e.clientY) && capStart(e, canvas)) { moved = 99; return; } canvas.setPointerCapture(e.pointerId); ptr.set(e.pointerId, [e.clientX, e.clientY]); moved = 0; canvas.classList.add('drag'); });
 canvas.addEventListener('pointermove', e => {
-  mouse = [e.clientX, e.clientY]; const p = ptr.get(e.pointerId);
-  if (!p) { pick(); return; }
+  mouse = [e.clientX, e.clientY]; if (hdrag) { capMove(e); return; } const p = ptr.get(e.pointerId);
+  if (!p) { canvas.style.cursor = onPlate(e.clientX, e.clientY) ? 'ns-resize' : ''; pick(); return; }
   const dx = e.clientX - p[0], dy = e.clientY - p[1]; ptr.set(e.pointerId, [e.clientX, e.clientY]);
   if (ptr.size === 2) { const [a, b] = [...ptr.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (pinch) cam.zoom = Math.min(1.7, Math.max(.35, cam.zoom * pinch / d)); pinch = d; return; }
   moved += Math.abs(dx) + Math.abs(dy); cam.vy = -dx * .004; cam.vp = dy * .004; cam.yaw += cam.vy; cam.pitch += cam.vp;
 });
-const up = e => { ptr.delete(e.pointerId); pinch = 0; canvas.classList.remove('drag'); if (moved < 6) { mouse = [e.clientX, e.clientY]; pick(); st.pin = st.hot; detail(st.pin); } };
+const up = e => { if (hdrag) { capEnd(); return; } ptr.delete(e.pointerId); pinch = 0; canvas.classList.remove('drag'); if (moved < 6) { mouse = [e.clientX, e.clientY]; pick(); st.pin = st.hot; detail(st.pin); } };
 canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
 canvas.addEventListener('pointerleave', () => { mouse = [-1, -1]; st.hot = -1; tip.classList.remove('on'); });
 canvas.addEventListener('wheel', e => { e.preventDefault(); cam.zoom = Math.min(1.7, Math.max(.35, cam.zoom * Math.exp(e.deltaY * .0012))); }, { passive: false });
 addEventListener('pointermove', e => { cam.lx = e.clientX / innerWidth - .5; cam.ly = e.clientY / innerHeight - .5; });
 
 let hdrag = null;
-handle.addEventListener('pointerdown', e => { if (!SETS[st.model + '_cap32']) return; handle.setPointerCapture(e.pointerId);
+function capStart(e, el) { if (!SETS[st.model + '_cap32']) return false; el.setPointerCapture(e.pointerId);
   if (st.run !== 32) { st.run = 32; st.wall = 16384; st.pin = st.hot = -1; apply(); }
-  const a = px(15.5, 0, 7.2), b = px(15.5, -16384 * YS, 7.2); hdrag = { y: e.clientY, w: st.wallCur, k: 16384 / (b[1] - a[1]) }; st.wall = st.wallCur; });
-handle.addEventListener('pointermove', e => { if (!hdrag) return; st.wall = st.wallCur = Math.round(Math.min(32768, Math.max(16384, hdrag.w + (e.clientY - hdrag.y) * hdrag.k))); words(); });
-handle.addEventListener('pointerup', () => { hdrag = null; words(); });
+  const a = px(PW / 2, 0, PZ), b = px(PW / 2, -16384 * YS, PZ); hdrag = { y: e.clientY, w: st.wallCur, k: 16384 / (b[1] - a[1]), t: performance.now(), lw: st.wallCur }; st.wall = st.wallCur; st.wallV = 0; return true; }
+function capMove(e) { const w = Math.round(Math.min(32768, Math.max(16384, hdrag.w + (e.clientY - hdrag.y) * hdrag.k))), t = performance.now();
+  if (t > hdrag.t) st.wallV = st.wallV * .6 + .4 * (w - hdrag.lw) / (t - hdrag.t) * 1000; hdrag.t = t; hdrag.lw = w; st.wall = st.wallCur = w; words(); }
+function capEnd() { if (performance.now() - hdrag.t > 120) st.wallV = 0; st.wallV = Math.max(-SPEED * 2, Math.min(SPEED * 2, st.wallV)); hdrag = null; words(); }
+handle.addEventListener('pointerdown', e => capStart(e, handle));
+handle.addEventListener('pointermove', e => { if (hdrag) capMove(e); });
+handle.addEventListener('pointerup', () => { if (hdrag) capEnd(); });
+function onPlate(x, y) { if (!SETS[st.model + '_cap32']) return false; const a = px(-PW / 2, -st.wallCur * YS, PZ + PD / 2), b = px(PW / 2, -st.wallCur * YS, PZ + PD / 2);
+  const t = (x - a[0]) / (b[0] - a[0]); return t > 0 && t < 1 && Math.abs(y - (a[1] + t * (b[1] - a[1]))) < 13; }
 
 function pick() {
   const S = cur(), per = S.per, n = S.tok.length; let best = -1, bd = 14;
@@ -440,7 +442,7 @@ function pick() {
 
 function resize() {
   W = innerWidth; H = innerHeight; colW = W > 860 ? 372 : 0;
-  renderer.setSize(W, H, false); composer.setSize(W, H); composer.setPixelRatio(renderer.getPixelRatio());
+  renderer.setSize(W, H, false);
   camera.aspect = W / H; camera.setViewOffset(W, H, -colW / 2, W > 860 ? -H * .015 : -H * .07, W, H); camera.updateProjectionMatrix();
 }
 addEventListener('resize', resize); resize();
@@ -449,11 +451,23 @@ addEventListener('resize', resize); resize();
 const clock = new THREE.Clock(); let last = 0, lastW = -1;
 layout(st.wallCur); for (let s = 0; s < NS; s++) { tex[s * 4] = T.u[s]; tex[s * 4 + 1] = T.len[s]; for (let q = 0; q < 3; q++) { tex[NS * 4 + s * 4 + q] = T.c[s * 3 + q]; tex[NS * 8 + s * 4 + q] = T.e[s * 3 + q]; } }
 words(); detail(-1);
-const STILL = Q.get('t'), DROP = Q.get('drop');                                     // ?t=seconds renders one fixed moment (for checks)
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const STILL = Q.get('t') || (RM ? '20' : null), DROP = Q.get('drop');   // ?t=seconds, or reduced motion: one composed still frame, no replay
+let dirty = 60; for (const ev of ['pointermove', 'pointerdown', 'pointerup', 'wheel', 'keydown', 'resize', 'click']) addEventListener(ev, () => { dirty = 60; }, { passive: true });
+if (STILL) { perNow = PER; $('replay').style.display = 'none'; }                                     // ?t=seconds renders one fixed moment (for checks)
 function frame() {
+  requestAnimationFrame(frame);
+  if (document.hidden || (STILL && --dirty < 0)) return;
+  // keep 60 frames per second: draw fewer grains, then fewer pixels, when frames run slow; add grains back while they run fast
+  const real = performance.now(), rdt = real - lastReal; lastReal = real;
+  if (!STILL && rdt < 100) { acc += rdt; if (++accN === 30) { const avg = acc / 30; acc = accN = 0;
+    if (avg > 17.6) { if (perNow > 90) { perNow = Math.max(80, perNow * .78); perCeil = perNow; } else if (dpr > .75) { dpr = Math.max(.75, dpr - .25); renderer.setPixelRatio(dpr); resize(); } }
+    else if (avg < 17.1 && perNow < perCeil * .97) perNow = Math.min(perCeil, perNow * 1.2); } }
+  grains.geometry.setDrawRange(0, NS * Math.round(perNow));
   const now = STILL ? +STILL : clock.getElapsedTime(), dt = STILL ? .5 : Math.min(Q.has('fast') ? .4 : .05, now - last); last = now;
   // the cap moves at the speed the answers fall, so answers held by it fall with it
-  if (!hdrag && st.wallCur !== st.wall) { const d = st.wall - st.wallCur, sp = SPEED * (d > 0 ? 1 : 3) * dt; st.wallCur = Math.abs(d) <= sp ? st.wall : st.wallCur + Math.sign(d) * sp; }
+  if (!hdrag && Math.abs(st.wallV) > 40 && st.run === 32) { st.wall = st.wallCur = Math.min(32768, Math.max(16384, st.wallCur + st.wallV * dt)); st.wallV *= Math.exp(-dt * 3.5); if (st.wallCur <= 16384 || st.wallCur >= 32768) st.wallV = 0; }   // the plate keeps the speed it was let go with
+  else if (!hdrag && st.wallCur !== st.wall) { const d = st.wall - st.wallCur, sp = SPEED * (d > 0 ? 1 : 3) * dt; st.wallCur = Math.abs(d) <= sp ? st.wall : st.wallCur + Math.sign(d) * sp; }
   if (STILL) st.wallCur = st.wall;
   if (DROP && now > +DROP && st.run !== 32) setCap(32768);
   if (st.wallCur !== lastW) { lastW = st.wallCur; if (st.run === 32) { layout(st.wallCur); words(); if (st.pin >= 0) detail(st.pin); } }
@@ -462,8 +476,10 @@ function frame() {
   if (Q.get('pin') && st.pin < 0 && now > .2) { st.pin = +Q.get('pin'); detail(st.pin); }
   const hs = st.hot >= 0 ? st.hot : st.pin, per = cur().per;
   u.uHotA.value = hs < 0 ? -1 : per === 4 ? hs : hs * 4; u.uHotB.value = hs < 0 ? -1 : per === 4 ? hs + 1 : hs * 4 + 4;
-  u.uDim.value += ((hs < 0 ? 1 : .38) - u.uDim.value) * .1;
-  plate.position.y = -st.wallCur * YS; finish.uniforms.uT.value = now;
+  u.uDim.value += ((hs < 0 ? 1 : .45) - u.uDim.value) * (STILL ? 1 : .1);
+  if (hs >= 0) u.uHotU.value = tex[(per === 4 ? hs : hs * 4) * 4];
+  u.uHotW.value += ((hs < 0 ? 0 : 1) - u.uHotW.value) * (STILL ? 1 : .14);
+  plate.position.y = -st.wallCur * YS; 
 
   // camera
   if (!ptr.size) { cam.yaw += cam.vy; cam.pitch += cam.vp; cam.vy *= .92; cam.vp *= .92; cam.yaw += (.2 - cam.yaw) * .003; }
@@ -475,10 +491,10 @@ function frame() {
   const yaw = cam.yaw + (STILL ? 0 : Math.sin(now * .11) * .03) + cam.sx * .06, pitch = cam.pitch + cam.sy * .03, ty = -cam.depth * YS / 2 - .2;
   camera.position.set(Math.sin(yaw) * Math.cos(pitch) * dist, ty + Math.sin(pitch) * dist, 2.2 + Math.cos(yaw) * Math.cos(pitch) * dist);
   camera.lookAt(0, ty, 2.2); camera.updateMatrixWorld();
-  u.uPx.value = 2.0 * 40 * (H / 1000) * renderer.getPixelRatio();
+  u.uPx.value = 2.0 * 40 * (H / 1000) * renderer.getPixelRatio() * Math.min(1.7, Math.sqrt(600 / perNow));
   labels(dt);
-  composer.render();
-  requestAnimationFrame(frame);
+  renderer.shadowMap.needsUpdate = st.wallCur !== shadowW; shadowW = st.wallCur;
+  renderer.render(scene, camera);
 }
 frame();
 </script>

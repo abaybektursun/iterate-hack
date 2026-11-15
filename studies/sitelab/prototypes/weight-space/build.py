@@ -57,6 +57,9 @@ for a, name, res, key in [(-1, "top8xm1_math31", "result-6f1bb7", "m1"), (0.5, "
 for a, name, res, key in [(-1, "rand8xm1_math31", "result-6f1bb7", "rm1"), (1, "rand8_math31", "result-284db5", "r1"),
                           (2, "rand8x2_math31", "result-6f1bb7", "r2"), (3, "rand8x3_math31", "result-6f1bb7", "r3")]:
     cell("rand", a, name, f"base + {a:g} x 8 random directions", res, "dial|" + key, control=True)
+cell("rand", 1.5, "rand8x1.5_math31", "base + 1.5 x 8 random directions", "result-39497c", control=True)
+cell("sfttop8", 1, "top8x0.02_think_sft", "base + top 8 directions of the Think-SFT change, cut to the size of the RL edit", "result-39497c",
+     note="the directions scaled by 0.02")
 th = tp["references"]["think"]
 add("hard328", "sft", 0, "Think-SFT", th["right"] / 4, th["cap_hits"] / 4, th["tokens_per_problem"], 328,
     "transplant/hard328-01/readout.json [references.think]", "result-818c20", "think|single", note="mean of 4 samples")
