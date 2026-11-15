@@ -1,0 +1,25 @@
+{
+ "snapshot": "runs/swarm/board-1942.json (515 items, 603 comments, 2026-11-15 19:42 UTC, not committed)",
+ "judge": "gpt-6.1-sol",
+ "commands": [
+  "uv run studies/basins/prep/swarm_export.py runs/swarm/board-1942.json",
+  "python3 -m studies.basins.analysis.swarm_judge runs/swarm/board-1942.json runs/swarm/judge-1942 --model gpt-6.1-sol --reuse-directions runs/swarm/judge-2136 --repair-ids --workers 12  (stopped in coverage 0: one id not on the board; its answer is in runs/swarm/judge-1942/first-try)",
+  "python3 -m studies.basins.analysis.swarm_judge runs/swarm/board-1942.json runs/swarm/judge-1942 --model gpt-6.1-sol --reuse runs/swarm/judge-1942 --steps coverage --repair-ids",
+  "python3 -m studies.basins.analysis.swarm_judge runs/swarm/board-1942.json runs/swarm/judge-1942 --model gpt-6.1-sol --reuse runs/swarm/judge-1942 --steps partitions,triplets --repair-ids --workers 12  (third start; the first two stopped in partition 0 before the repairs below were in the code)",
+  "python3 -m studies.basins.analysis.swarm_scores runs/swarm/judge-1942 --model gpt-6.1-sol",
+  "bash studies/basins/run.sh studies.basins.analysis.swarm_lineage runs/swarm/judge-1942 --model gpt-6.1-sol --snapshot runs/swarm/board-1942.json --drop-bad --reuse-answer",
+  "bash studies/basins/run.sh studies.basins.analysis.swarm_analyze runs/swarm/judge-1942 studies/basins/results/swarm/main-04"
+ ],
+ "notes": [
+  "The judge's answers over 537 ids were not exact; every repair is logged. Partitions: [[{\"returned\": null, \"used\": \"result-a497ff\", \"placed_in\": \"Sampling distributions and temperature schedules\"}, {\"returned\": null, \"used\": \"result-afc423\", \"placed_in\": \"Failure analysis and correctness prediction\"}, {\"returned\": null, \"used\": \"work-f8ecb6\", \"placed_in\": \"Prompt cues and context interventions\"}], []].",
+  "Coverage: ids not on the board dropped: [[\"knowledge-035a30\"], []].",
+  "Lineage: 2 links dropped because the board rules them out (a parent posted after its child): [[\"work-09d814\", \"work-480b1f\"], [\"result-0f401d\", \"result-58c66d\"]].",
+  "The swarm map page (swarm_page) was not made for this run."
+ ],
+ "judge_tokens": {
+  "calls": 223,
+  "prompt": 6417003,
+  "completion": 397806,
+  "note": "all .out files in runs/swarm/judge-1942/calls and first-try; the two partition answers of the stopped starts were overwritten and are not counted"
+ }
+}

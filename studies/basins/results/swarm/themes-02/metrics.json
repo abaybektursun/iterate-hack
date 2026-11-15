@@ -1,0 +1,142 @@
+{
+ "map_run": "studies/basins/results/swarm/main-04",
+ "judge": "gpt-6.1-sol",
+ "n_clusters": 12,
+ "themes": [
+  {
+   "name": "Research tools",
+   "clusters": [
+    1,
+    0
+   ]
+  },
+  {
+   "name": "Model changes",
+   "clusters": [
+    5,
+    6,
+    4
+   ]
+  },
+  {
+   "name": "Answer generation",
+   "clusters": [
+    8,
+    7,
+    9
+   ]
+  },
+  {
+   "name": "Result checks",
+   "clusters": [
+    2,
+    11,
+    10
+   ]
+  },
+  {
+   "name": "Price forecasts",
+   "clusters": [
+    3
+   ]
+  }
+ ],
+ "short": {
+  "1": "Board design",
+  "5": "Neuron edits",
+  "6": "Workspace steering",
+  "2": "Theory tests",
+  "8": "Sampling settings",
+  "0": "Team tools",
+  "11": "Error analysis",
+  "3": "GPU prices",
+  "10": "Scoring audits",
+  "7": "Prompt cues",
+  "4": "Weight edits",
+  "9": "Sample selection"
+ },
+ "themes_order1": [
+  {
+   "name": "Evaluation",
+   "clusters": [
+    10,
+    2,
+    11
+   ]
+  },
+  {
+   "name": "Model changes",
+   "clusters": [
+    4,
+    5,
+    6
+   ]
+  },
+  {
+   "name": "Answer generation",
+   "clusters": [
+    8,
+    9,
+    7
+   ]
+  },
+  {
+   "name": "Price forecasting",
+   "clusters": [
+    3
+   ]
+  },
+  {
+   "name": "Research tools",
+   "clusters": [
+    1,
+    0
+   ]
+  }
+ ],
+ "pairs_agree": [
+  66,
+  66
+ ],
+ "control": {
+  "copy_of": 4,
+  "same_theme": [
+   true,
+   true
+  ]
+ },
+ "usage": [
+  {
+   "prompt_tokens": 5926,
+   "completion_tokens": 560,
+   "total_tokens": 6486,
+   "prompt_tokens_details": {
+    "cached_tokens": 5923,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 282,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   }
+  },
+  {
+   "prompt_tokens": 5926,
+   "completion_tokens": 442,
+   "total_tokens": 6368,
+   "prompt_tokens_details": {
+    "cached_tokens": 5923,
+    "cache_write_tokens": 0,
+    "audio_tokens": 0
+   },
+   "completion_tokens_details": {
+    "reasoning_tokens": 165,
+    "audio_tokens": 0,
+    "accepted_prediction_tokens": 0,
+    "rejected_prediction_tokens": 0
+   }
+  }
+ ]
+}

@@ -1,0 +1,6 @@
+{
+ "commit_of_code_before_this_commit": "21698d991cfba0c74190d54cb115ca8178a741eb",
+ "command": "python3 -m studies.basins.analysis.swarm_themes studies/basins/results/swarm/main-04 studies/basins/results/swarm/themes-02 --model gpt-6.1-sol",
+ "snapshot": "runs/swarm/board-1942.json (515 items, 603 comments, 2026-11-15 19:42 UTC, not committed)",
+ "calls": "runs/swarm/themes-02-calls (prompts and raw answers, board text, not committed)"
+}

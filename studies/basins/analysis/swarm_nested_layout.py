@@ -1,6 +1,6 @@
 """Swarm map, layout of two levels for a page (laptop, no judge call): where each cluster and each theme lies on a slab.
 
-    python3 -m studies.basins.analysis.swarm_nested_layout studies/basins/results/swarm/<map run> studies/basins/results/swarm/themes-<nn>
+    python3 -m studies.basins.analysis.swarm_nested_layout studies/basins/results/swarm/<map run> studies/basins/results/swarm/themes-<nn> [item radius]
 
 Prints JSON with no board text: the input of tools/proof_idea_basins.py (branch ali/basin-atlas-page). x runs 0 to 1
 and y 0 to wh. A cluster is a disc whose radius grows with the square root of its items; its items are packed in it
@@ -14,9 +14,10 @@ import math
 import pathlib
 import sys
 
-WH, S, SAME, OTHER, PAD, EDGE = 0.84, 0.0138, 0.042, 0.095, 0.026, 0.03
+WH, SAME, OTHER, PAD, EDGE = 0.84, 0.042, 0.095, 0.026, 0.03
 
 run, themes_run = pathlib.Path(sys.argv[1]), pathlib.Path(sys.argv[2])
+S = float(sys.argv[3]) if len(sys.argv) > 3 else 0.0138  # the radius of one item; 0.0138 fits 218 items, 0.009 fits 515
 SUM = json.loads((run / "summary.json").read_text())
 MAP = json.loads((run / "map.json").read_text())
 TH = json.loads((themes_run / "metrics.json").read_text())

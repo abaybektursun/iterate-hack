@@ -34,6 +34,8 @@ if __name__ == "__main__":
     ap.add_argument("judge")
     ap.add_argument("--model", required=True)
     ap.add_argument("--snapshot", default=None, help="board snapshot, for comments (default: the judge's own)")
+    ap.add_argument("--drop-bad", action="store_true", help="drop links the board rules out, at most 2 %% of the answer (kept in lineage.json 'dropped')")
+    ap.add_argument("--reuse-answer", action="store_true", help="read calls/lineage.out instead of asking the judge again")
     args = ap.parse_args()
     J.BACKEND, J.MODEL = "openai", args.model
     d = pathlib.Path(args.judge)
@@ -46,16 +48,24 @@ if __name__ == "__main__":
     explicit = {(n["id"], m) for n in nodes for m in set(re.findall(r"\b(?:idea|work|result|knowledge|skill)-[0-9a-f]{6}\b", full[n["id"]]))
                 if m in order and order[m] < order[n["id"]]}
     items = "\n\n".join(f"{n['id']} [{n['kind']}, {n['at']}]: {n['text']}" for n in nodes)
-    links = J.ask(PROMPT.format(items=items), d / "calls" / "lineage.txt")["links"]
+    if args.reuse_answer:  # the answer of an earlier call of this script on the same judge folder
+        links = json.loads(re.search(r"\{.*\}", (d / "calls" / "lineage.out").read_text().split("\n[usage]")[0], re.S).group(0))["links"]
+    else:
+        links = J.ask(PROMPT.format(items=items), d / "calls" / "lineage.txt")["links"]
+    # A link the board rules out (an id not on it, or a parent posted after its child) is dropped and kept in "dropped".
+    ok = lambda l: l["child"] in order and l["parent"] in order and order[l["parent"]] < order[l["child"]]
+    dropped = [l for l in links if not ok(l)]
+    assert not dropped or args.drop_bad, f"links the board rules out: {dropped}"
+    assert len(dropped) <= 0.02 * len(links), f"{len(dropped)} of {len(links)} links ruled out: too many to drop"
+    links = [l for l in links if ok(l)]
     for l in links:
-        assert l["child"] in order and l["parent"] in order, f"unknown id in {l}"
-        assert order[l["parent"]] < order[l["child"]], f"parent posted after child: {l}"
         assert l["relation"] in RELS, f"bad relation: {l}"
     got = {(l["child"], l["parent"]) for l in links}
     links += [{"child": c, "parent": p, "relation": "named", "why": "id named in the item"} for c, p in sorted(explicit - got)]
     for l in links:
         l["explicit"] = (l["child"], l["parent"]) in explicit
-    out = {"links": links, "n_explicit": len(explicit), "explicit_also_found_by_judge": len(explicit & got)}
+    out = {"links": links, "n_explicit": len(explicit), "explicit_also_found_by_judge": len(explicit & got), "dropped": dropped}
     (d / "lineage.json").write_text(json.dumps(out, indent=1))
     from collections import Counter
+    print(f"dropped {len(dropped)} links the board rules out")
     print(f"{len(links)} links ({dict(Counter(l['relation'] for l in links))}); explicit {len(explicit)}, judge found {len(explicit & got)} of them")

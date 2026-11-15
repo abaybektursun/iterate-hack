@@ -47,6 +47,16 @@ groups: merge close levers rather than making groups of one or two items.
 
 Reply with JSON only: {{"groups": [{{"name": "<3-6 words>", "ids": ["<id>", ...]}}, ...]}} with every id exactly once."""
 
+PLACE = """A research team's board items were grouped by APPROACH (the lever or method an item is about) into these groups:
+
+{groups}
+
+These items were left out. Put each into the one group whose approach is closest:
+
+{items}
+
+Reply with JSON only: {{"place": {{"<id>": <group number>, ...}}}} with every id exactly once."""
+
 COVERAGE = """Below are possible research directions (ids dir-..) and the items of a research team's work board.
 For each direction, list the board items that substantially pursue it: run it, plan it, claim it, or report a
 finding or result about it. Mentioning a direction in passing does not count. Tooling items pursue no direction.
@@ -119,7 +129,9 @@ if __name__ == "__main__":
     ap.add_argument("--reuse", default=None, help="judge folder whose directions.json and nodes.json to reuse (same nodes)")
     ap.add_argument("--steps", default="partitions,triplets,coverage", help="comma list of steps to run")
     ap.add_argument("--repair-ids", action="store_true",
-                    help="map one mistyped id in a partition answer to the one missing id of the same kind (logged in partitions.jsonl)")
+                    help="repair a partition answer: map one mistyped id to the one missing id of the same kind, else drop ids not on the "
+                         "board and ask the judge to place the ids it left out, at most 12 (logged in partitions.jsonl); "
+                         "drop up to 5 ids of a coverage answer that are not on the board (logged in coverage.jsonl)")
     ap.add_argument("--no-partitions", action="store_true", help="triplets only (to compare judges on the same questions)")
     ap.add_argument("--per-anchor", type=int, default=12)
     ap.add_argument("--batch", type=int, default=60)
@@ -170,9 +182,15 @@ if __name__ == "__main__":
                                           items="\n".join(f"{n['id']}: [{n['kind']}] {n['text']}" for n in order)),
                           out / "calls" / f"coverage-{r}.txt")["coverage"]
                 assert sorted(c["direction"] for c in cov) == sorted(n["id"] for n in dirs), f"coverage {r}: directions mismatch"
-                bad = [i for c in cov for i in c["items"] if i not in {n["id"] for n in real}]
-                assert not bad, f"coverage {r}: unknown ids {bad}"
-                f.write(json.dumps({"order": r, "coverage": cov}) + "\n")
+                known = {n["id"] for n in real}
+                bad = sorted({i for c in cov for i in c["items"] if i not in known})
+                assert not bad or args.repair_ids, f"coverage {r}: unknown ids {bad}"
+                assert len(bad) <= 5, f"coverage {r}: too many unknown ids to drop: {bad}"
+                for c in cov:  # --repair-ids: an id that is not on the board is dropped and logged in coverage.jsonl
+                    c["items"] = [i for i in c["items"] if i in known]
+                if bad:
+                    print(f"coverage {r}: dropped unknown ids {bad}", flush=True)
+                f.write(json.dumps({"order": r, "coverage": cov, "dropped": bad}) + "\n")
                 print(f"coverage {r}: {sum(bool(c['items']) for c in cov)}/{len(cov)} directions pursued", flush=True)
 
     with open(out / "partitions.jsonl", "w" if "partitions" in steps else "a") as f:
@@ -184,14 +202,31 @@ if __name__ == "__main__":
             got = sorted(i for g in groups for i in g["ids"])
             repairs = []
             if args.repair_ids and got != sorted(ids):
-                unknown, missing = sorted(set(got) - set(ids)), sorted(set(ids) - set(got))
-                assert len(unknown) == len(missing) == 1 and unknown[0].split("-")[0] == missing[0].split("-")[0], \
-                    f"partition {r}: not one mistyped id: unknown {unknown}, missing {missing}"
-                repairs = [{"returned": unknown[0], "used": missing[0]}]
+                twice = sorted({i for i in got if got.count(i) > 1})  # an id listed twice is taken out and placed again
                 for g in groups:
-                    g["ids"] = [missing[0] if i == unknown[0] else i for i in g["ids"]]
+                    g["ids"] = [i for i in g["ids"] if i not in twice]
+                got = [i for i in got if i not in twice]
+                unknown, missing = sorted(set(got) - set(ids)), sorted(set(ids) - set(got))
+                if not twice and len(unknown) == len(missing) == 1 and unknown[0].split("-")[0] == missing[0].split("-")[0]:
+                    repairs = [{"returned": unknown[0], "used": missing[0]}]
+                    for g in groups:
+                        g["ids"] = [missing[0] if i == unknown[0] else i for i in g["ids"]]
+                    print(f"partition {r}: repaired id {unknown[0]} -> {missing[0]}", flush=True)
+                else:  # ids not on the board are dropped; the judge places each id it left out into one of its own groups
+                    assert len(unknown) + len(missing) <= 12, f"partition {r}: too many to repair: unknown {unknown}, missing {missing}"
+                    for g in groups:
+                        g["ids"] = [i for i in g["ids"] if i not in unknown]
+                    repairs = [{"returned": u, "used": None} for u in unknown] + [{"listed_twice": i} for i in twice]
+                    if missing:
+                        placed = ask(PLACE.format(groups="\n".join(f"{k}: {g['name']}" for k, g in enumerate(groups)),
+                                                  items="\n".join(f"{i}: {node_text(by_id[i])}" for i in missing)),
+                                     out / "calls" / f"partition-{r}-place.txt")["place"]
+                        assert sorted(placed) == missing, f"partition {r}: placement answered {sorted(placed)} for {missing}"
+                        for i, k in placed.items():
+                            groups[int(k)]["ids"].append(i)
+                            repairs.append({"returned": None, "used": i, "placed_in": groups[int(k)]["name"]})
+                    print(f"partition {r}: dropped {unknown}, listed twice {twice}, placed {missing}", flush=True)
                 got = sorted(i for g in groups for i in g["ids"])
-                print(f"partition {r}: repaired id {unknown[0]} -> {missing[0]}", flush=True)
             assert got == sorted(ids), f"partition {r}: {len(got)} ids returned, {len(set(got))} distinct, {len(ids)} expected"
             f.write(json.dumps({"order": r, "groups": groups, "repairs": repairs}) + "\n")
             print(f"partition {r}: {len(groups)} groups", flush=True)
