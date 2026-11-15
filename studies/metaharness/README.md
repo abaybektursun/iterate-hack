@@ -26,6 +26,7 @@ which replaces Part C). Parts A and B and the planted-waste test have run; Part 
 | `analysis/planted_collect.py`, `analysis/planted_readout.py` | Copies each arena's records into `results/`; writes the summary table and the chart. |
 | `data/gapmap_overall_v1/`, `data/gapmap_reference_v1.json`, `data/planted_arenas_v1.json` | The stored overall result planted as P4; the reference tables of the 16 required cells (clean pilot); which arena is which run. |
 | `analysis/recall_pilot.py` | Recall pilot: N board score rows asked of the shared memory on past.dev (`tools/past.py`, `POST /recall`, 2,000 tokens) and of a grep over a local copy of the uploaded transcripts; counts how often the posted "<right>/<n>" is in the returned text. |
+| `analysis/human_turns.py` | Messages typed by people against assistant turns and tool calls (main agents and subagents), per person, from Claude Code transcripts; the rule for a typed message is in its docstring. |
 
 Run, from the repository root (the replay scripts need `uv run tools/gpu.py get <job>` for each job first):
 
@@ -43,6 +44,13 @@ git: a full board dump made with `uv run tools/board.py`, and the transcripts fr
 
 ```
 python3 -m studies.metaharness.analysis.recall_pilot --board <board dump .json> --traces <transcripts folder> --n 20 --out studies/metaharness/results/recall_pilot/recall_vs_grep-<nn>
+```
+
+The human-message count (reads only; same transcript copy, plus each local `~/.claude/projects/*iterate-hack*` folder
+of the person running it; prints and writes no message text):
+
+```
+python3 -m studies.metaharness.analysis.human_turns --store <transcripts folder> --local <person>=<project folder> ... --out studies/metaharness/results/human_turns/count-<nn>
 ```
 
 ## Numbers
@@ -204,3 +212,17 @@ and "164/328" is the answer of three rows. The only baseline is one naive grep (
 calls), and it searches transcripts while recall searches board posts and findings. The grep's second word is not
 fixed when two words have the same length (Python set order), so its token counts vary between runs; the hits were
 the same in both runs made. Seconds are wall time on one laptop. The memory is live, so recall output changes over time.
+
+### Human messages against agent work (`results/human_turns/count-01/`: `metrics.json`, `run.json`)
+
+From 2026-11-14 18:00 to 2026-11-15 07:08 UTC, 87 Claude Code sessions of the three people hold 357 messages typed by a
+person against 5,086 assistant turns and 14,560 tool calls (5,295 by the main agents, 9,265 by subagents): 40.8 tool
+calls per typed message. Per person, messages / tool calls / sessions: abaybektursun 160 / 6,294 / 23, frustea
+81 / 1,374 / 12, sameraslan 116 / 6,892 / 52 (24 of them headless review runs). Typed text: 55,715 characters in all,
+median 58 per message. The rule for a typed message is in the script's docstring and in `metrics.json`.
+
+Limits: other people's sessions are only those in the store copy of about 05:25 UTC; local-only sessions of other
+people and all Codex sessions are missing. As a check, the transcripts hold 3,873 calls of `board.py`, `gpu.py` and
+`paper.py` against about 4,900 in the event log at 05:40 UTC, so they cover roughly 80% of the logged work and the
+tool-call count is a lower bound. A message can be one word or a page. Subagent sessions have no typed messages, and
+slash commands are not counted.

@@ -1,0 +1,89 @@
+{
+ "window_utc": [
+  "2026-11-14T18:00:00+00:00",
+  "2026-11-15T07:08:13.875476+00:00"
+ ],
+ "rule": "1. type == \"user\", isSidechain false, isMeta not true, isCompactSummary not true, no `toolUseResult`, and no\n     tool_result block in its content;\n  2. entrypoint is not \"sdk-cli\" (headless `claude -p` runs, such as the scripted review runs, have no person typing);\n  3. if the record has an `origin` field, origin.kind == \"human\" (this drops task notifications and messages from peer\n     sessions); records without `origin` (older client versions) go on to rule 4;\n  4. its text (the string content, or the text blocks of a list content) with interruption markers\n     (\"[Request interrupted by user...]\") removed is not empty and does not start with a wrapper: <task-notification>,\n     <system-reminder>, <command-name>, <command-message>, <local-command-stdout>, <local-command-caveat>,\n     <bash-input>, <bash-stdout>, <bash-stderr>, <user-prompt-submit-hook>, \"Another Claude session sent a message\",\n     \"Base directory for this skill\", \"This session is being continued from a previous conversation\".\nA pasted block or an image with text counts as one message. Slash commands (<command-name>) do not count.",
+ "per_person": {
+  "abaybektursun": {
+   "sessions": 23,
+   "headless_sessions": 1,
+   "human_messages": 160,
+   "assistant_turns": 1697,
+   "main_tool_calls": 1483,
+   "subagent_tool_calls": 4811,
+   "tool_calls": 6294,
+   "chars_typed_total": 21302,
+   "chars_typed_median": 47.0,
+   "excluded_user_records": {
+    "compaction": 4,
+    "empty_or_interrupt": 4,
+    "headless": 1,
+    "meta": 68,
+    "origin:task-notification": 278,
+    "tool_result": 1482,
+    "wrapper": 44
+   }
+  },
+  "frustea": {
+   "sessions": 12,
+   "headless_sessions": 0,
+   "human_messages": 81,
+   "assistant_turns": 1078,
+   "main_tool_calls": 1208,
+   "subagent_tool_calls": 166,
+   "tool_calls": 1374,
+   "chars_typed_total": 13645,
+   "chars_typed_median": 37,
+   "excluded_user_records": {
+    "compaction": 2,
+    "empty_or_interrupt": 1,
+    "meta": 18,
+    "origin:task-notification": 48,
+    "tool_result": 1209,
+    "wrapper": 41
+   }
+  },
+  "sameraslan": {
+   "sessions": 52,
+   "headless_sessions": 24,
+   "human_messages": 116,
+   "assistant_turns": 2311,
+   "main_tool_calls": 2604,
+   "subagent_tool_calls": 4288,
+   "tool_calls": 6892,
+   "chars_typed_total": 20768,
+   "chars_typed_median": 88.0,
+   "excluded_user_records": {
+    "compaction": 2,
+    "empty_or_interrupt": 4,
+    "headless": 24,
+    "meta": 153,
+    "origin:task-notification": 73,
+    "tool_result": 2603,
+    "wrapper": 29
+   }
+  }
+ },
+ "total": {
+  "sessions": 87,
+  "headless_sessions": 25,
+  "human_messages": 357,
+  "assistant_turns": 5086,
+  "main_tool_calls": 5295,
+  "subagent_tool_calls": 9265,
+  "tool_calls": 14560,
+  "chars_typed_total": 55715,
+  "chars_typed_median": 58,
+  "excluded_user_records": {
+   "compaction": 8,
+   "empty_or_interrupt": 9,
+   "headless": 25,
+   "meta": 239,
+   "origin:task-notification": 399,
+   "tool_result": 5294,
+   "wrapper": 114
+  },
+  "tool_calls_per_human_message": 40.8
+ }
+}
