@@ -45,6 +45,8 @@ NEW = {
     "top8_if30": ("abaybektursun-1115-031336-56ff", "--recipe top8 --other if30"),
     "top8_general30": ("abaybektursun-1115-031346-5113", "--recipe top8 --other general30"),
     "top8_think_sft": ("abaybektursun-1115-031356-77f0", "--recipe top8 --other think_sft"),
+    "rand8x1.5_math31": ("abaybektursun-1115-090241-0229", "--recipe rand8 --scale 1.5 --other math31"),                              # amendment 6
+    "top8x0.02_think_sft": ("abaybektursun-1115-090252-65bf", "--recipe top8 --scale 0.02 --other think_sft"),
 }
 REFS = {"base_cue_T1": OLD["base_cue_T1"][0], "rl_plain_T1": OLD["rl_plain_T1"][0], "rl_cue_T1": OLD["rl_cue_T1"][0],
         "theta0.25_cue": WDIFF["theta0.25_cue"][0], "theta0.5_cue": WDIFF["theta0.5_cue"][0], "code1_cue": WDIFF["code1_cue"][0]}

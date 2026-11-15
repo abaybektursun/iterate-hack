@@ -1,5 +1,14 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 16:15 UTC (session cap32, after result of work-ceccc0) meta/reviews/abaybektursun/20261115-1610-cap32/
+
+- Previous entry of this session asked for minutes from a trained model to a keep-or-stop decision. No trained model since; not measured.
+- Direction: work-ceccc0 served the deliverable directly ("best configuration of either model on the 328"): Think-SFT cue at cap 32,768 = 230 of 328 at 11,795 tokens, the best single-sample row. The follow-up (vote at the larger cap) is with another session (work-dc9359).
+- Turnaround (before.txt): claim to first result 6 h 20 min, of which about 4 h 45 min the laptop was off. Generation was 87 to 129 min per cell. Two losses: 35 min on three 48 GB boxes at 240 tokens per second, and the base cell (about 2.5 box hours) lost when its box ended before the rows were copied.
+- Cause of the lost cell: a finished job's rows existed only on the box until a laptop process copied them.
+- Change (step 2, delete the dependency on the laptop): already made on main by another session while this ran (vast.py 6d6a18b uploads a job's outputs to the team store when it ends). Nothing added here. After: not measured by this session; the AWS rerun used ih, which writes to S3 every 30 s, and lost nothing.
+- Next entry checks: one vast.ai cell fetched with get after its box is gone.
+
 ## 2026-11-15 16:00 UTC (loop cycle 10) meta/reviews/abaybektursun/20261115-1550/
 
 - Target (Team line, 4 h): claim to close median 174 min (131 at 15:01), upper quartile 376 min (184), 12 items by 3 people (9); 3.8 results per hour (3.0). The rate rose, the median rose: long items from before the outage are closing now. Modal 28 jobs, 0 failed, wait 0.1 min.

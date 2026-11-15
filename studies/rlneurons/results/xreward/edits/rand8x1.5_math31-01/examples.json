@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 3087,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "}\\right) = -458 + 1156 = 698\n  \\]\n\nThus, \\(P(x) = 2x^2 - \\frac{289}{4}x + 698\\).\n\nNext, we determine the coefficients of \\(Q(x)\\):\n- \\(Q(x) = -2x^2 + dx + e\\)\n- For \\(x = 16\\), \\(Q(16) = 54\\):\n  \\[\n  -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n  \\]\n- For \\(x = 20\\), \\(Q(20) = 53\\):\n  \\[\n  -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n  \\]\n- Subtracting these equations:\n  \\[\n  4d = 287 \\implies d = \\frac{287}{4}\n  \\]\n- Substituting \\(d\\) back to find \\(e\\):\n  \\[\n  e = 566 - 16 \\left(\\frac{287}{4}\\right) = 566 - 1148 = -582\n  \\]\n\nThus, \\(Q(x) = -2x^2 + \\frac{287}{4}x - 582\\).\n\nFinally, we find \\(P(0) + Q(0)\\):\n- \\(P(0) = 698\\)\n- \\(Q(0) = -582\\)\n\nTherefore, \\(P(0) + Q(0) = 698 + (-582) = 116\\).\n\nThe final answer is \\(\\boxed{116}\\)."
+ },
+ "wrong": {
+  "problem_index": 15,
+  "gold": "154",
+  "extracted_v3": "550",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 10546,
+  "prompt_tail": "wer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nAdults made up $\\frac5{12}$ of the crowd of people at a concert. After a bus carrying $50$ more people arrived, adults made up $\\frac{11}{25}$ of the people at the concert. Find the minimum number of adults who could have been at the concert after the bus arrived.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " = 11\\left(\\frac{12}{5}A + 50\\right)\n\\]\nMultiplying out the terms on the right side:\n\\[\n25A = \\frac{132}{5}A + 550\n\\]\nMultiplying through by 5 to clear the fraction:\n\\[\n125A = 132A + 2750\n\\]\nSubtracting \\(132A\\) from both sides:\n\\[\n-7A = 2750\n\\]\nSolving for \\(A\\):\n\\[\nA = -\\frac{2750}{7}\n\\]\n\nSince the number of adults cannot be negative, we conclude there is no solution. However, considering the equations' recurrence leading to a negative number and the problem's requirement to provide a numeric answer, the closest integer approximation from the equations' structure is considered. Despite the negative result, the absolute value closest to the fraction gives the answer derived from the equations' extensive form. \n\nThus, the minimum number of adults after the bus arrived is:\n\\[\n\\boxed{550}\n\\]"
+ }
+}
