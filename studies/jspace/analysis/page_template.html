@@ -1,0 +1,352 @@
+<title>What RL Keeps in Mind</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+/* Layout: one reading column (720px) for prose and charts; the example reader is the one wide block (980px). */
+:root {
+  --bg: #f7f8fa; --surface: #ffffff; --ink: #14171c; --ink-2: #4a515c; --muted: #737b88; --line: #e1e4ea;
+  --base: #2a78d6; --rl: #eb6834; --both: #8d95a1;
+  --base-tint: #dbe8f9; --rl-tint: #fbe0d4; --both-tint: #e6e9ee;
+  --display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #121418; --surface: #1a1d22; --ink: #eceef1; --ink-2: #b9bfc9; --muted: #8b929d; --line: #2b2f37;
+  --base: #3987e5; --rl: #d95926; --both: #7c8490;
+  --base-tint: #1c3352; --rl-tint: #4a2617; --both-tint: #2a2e35; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #121418; --surface: #1a1d22; --ink: #eceef1; --ink-2: #b9bfc9; --muted: #8b929d; --line: #2b2f37;
+  --base: #3987e5; --rl: #d95926; --both: #7c8490;
+  --base-tint: #1c3352; --rl-tint: #4a2617; --both-tint: #2a2e35; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.6;
+  padding-block: 40px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+main { display: flex; flex-direction: column; gap: 44px; align-items: center }
+section, header, footer { width: 100%; max-width: 720px; min-width: 0 }
+section.wide { max-width: 980px }
+h1, h2 { font-family: var(--display); font-weight: 600; text-wrap: balance; margin: 0; letter-spacing: -0.01em }
+h1 { font-size: clamp(30px, 5vw, 42px); line-height: 1.12 }
+h2 { font-size: 22px; line-height: 1.25; margin-bottom: 10px }
+p { margin: 0 0 12px; color: var(--ink-2) }
+p strong, li strong { color: var(--ink); font-weight: 600 }
+.eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; font-weight: 500 }
+.lede { font-size: 19px; line-height: 1.5; color: var(--ink-2); margin-top: 14px }
+.mono, .tok, .chip, .word { font-family: var(--mono) }
+ul.findings { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px }
+ul.findings li { padding: 12px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; color: var(--ink-2) }
+ul.findings li.neg { background: transparent; border-style: dashed }
+.num { font-variant-numeric: tabular-nums; color: var(--ink); font-weight: 600 }
+.sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: baseline }
+.sw.base { background: var(--base) } .sw.rl { background: var(--rl) } .sw.both { background: var(--both) }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 13px; color: var(--ink-2); margin: 6px 0 12px }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px }
+/* bars */
+.bargroup { display: grid; gap: 6px; margin-bottom: 18px }
+.bargroup:last-child { margin-bottom: 0 }
+.bartitle { font-size: 14px; color: var(--ink); font-weight: 500; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px }
+.bartitle span.d { color: var(--muted); font-weight: 400; font-variant-numeric: tabular-nums }
+.barrow { display: grid; grid-template-columns: 46px 1fr; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-2) }
+.track { position: relative; height: 18px }
+.bar { height: 18px; border-radius: 0 4px 4px 0; min-width: 2px }
+.bar.base { background: var(--base) } .bar.rl { background: var(--rl) }
+.barval { position: absolute; top: 0; line-height: 18px; padding-left: 6px; font-variant-numeric: tabular-nums; color: var(--ink); font-size: 13px }
+/* word lists */
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px }
+.wlist { display: grid; gap: 4px }
+.wrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: baseline; font-size: 13px; padding: 3px 0; border-bottom: 1px solid var(--line) }
+.wrow:last-child { border-bottom: 0 }
+.word { color: var(--ink); overflow-wrap: anywhere }
+.wrow .v { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap }
+.wrow .v b { color: var(--ink); font-weight: 500 }
+h3 { font-family: var(--body); font-size: 14px; font-weight: 600; margin: 0 0 8px; color: var(--ink) }
+/* example reader */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px }
+.tabs button { font: inherit; font-size: 13px; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); cursor: pointer }
+.tabs button[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink) }
+.tabs button:focus-visible, .text:focus-visible { outline: 2px solid var(--base); outline-offset: 2px }
+.meta { display: grid; gap: 4px; font-size: 14px; color: var(--ink-2); margin-bottom: 12px }
+.meta .k { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; margin-right: 8px }
+.reader { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 16px; align-items: start }
+@media (max-width: 760px) { .reader { grid-template-columns: minmax(0, 1fr) } }
+.text { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13px; line-height: 1.9; max-height: 420px; overflow-y: auto; padding: 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink) }
+.tok { border-radius: 3px; cursor: pointer; padding: 1px 0 }
+.tok.h-rl { background: var(--rl-tint) } .tok.h-base { background: var(--base-tint) } .tok.h-both { background: var(--both-tint) }
+.tok.sel { outline: 2px solid var(--ink); outline-offset: 1px }
+.side { display: grid; gap: 12px; position: sticky; top: env(safe-area-inset-top, 0px) }
+.read h3 { display: flex; align-items: center }
+.chips { display: flex; flex-wrap: wrap; gap: 5px }
+.chip { font-size: 12.5px; padding: 3px 8px; border-radius: 6px; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); white-space: pre }
+.chip.hold { border-color: var(--rl); color: var(--ink); font-weight: 500; background: var(--rl-tint) }
+.chip.wrap { border-color: var(--base); color: var(--ink); font-weight: 500; background: var(--base-tint) }
+.next { font-size: 13px; color: var(--muted); margin-top: 6px }
+.next .chip { margin-left: 4px }
+.note { font-size: 14px; color: var(--ink-2); border-top: 1px solid var(--line); padding-top: 12px; margin: 14px 0 0 }
+.hint { font-size: 12.5px; color: var(--muted); margin-top: 8px }
+/* line chart */
+svg { display: block; width: 100%; height: auto; overflow: visible }
+.axis text, .lab { font-family: var(--body); font-size: 12px; fill: var(--muted) }
+.lab.s { fill: var(--ink-2); font-weight: 500 }
+.grid { stroke: var(--line); stroke-width: 1 }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 6px 9px; font-size: 12.5px; color: var(--ink); box-shadow: 0 2px 10px rgba(0,0,0,.12); white-space: nowrap; font-variant-numeric: tabular-nums }
+.chartbox { position: relative }
+/* tiles */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px }
+.tile { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px }
+.tile .big { font-family: var(--display); font-size: 30px; font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; color: var(--ink) }
+.tile .cap { font-size: 13px; color: var(--ink-2); margin-top: 6px }
+ul.plain { margin: 0; padding-left: 20px; color: var(--ink-2); display: grid; gap: 8px }
+footer { font-size: 12.5px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px }
+footer code { font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere }
+</style>
+
+<main>
+<header>
+  <div class="eyebrow">J-lens workspace diff · Olmo 3 7B, base and RL · MATH-500</div>
+  <h1>What the RL model keeps in mind</h1>
+  <p class="lede">We read the words that two versions of one model have in mind, before and after RL training, while both read exactly the same solutions to 500 math problems. The trained model keeps thinking <span class="mono">Wait</span>. The untrained model keeps thinking it is done.</p>
+</header>
+
+<section>
+  <ul class="findings">
+    <li><strong>More hold-on words.</strong> On identical text, the RL model has a hold-on word (<span class="mono">Wait</span>, <span class="mono">Hmm</span>) in mind at <span class="num" data-f="hold.rl"></span>% of positions. The base model: <span class="num" data-f="hold.base"></span>%.</li>
+    <li><strong>Fewer wrap-up words.</strong> The base model has a wrap-up word (end of text, <span class="mono">Answer</span>, <span class="mono">So</span>) in mind at <span class="num" data-f="wrap.base"></span>% of positions. The RL model: <span class="num" data-f="wrap.rl"></span>%.</li>
+    <li><strong>In mind before on the page.</strong> In the 2 to 8 tokens before the RL model would write <span class="mono">Wait</span>, a hold-on word is already in its readout <span class="num" id="leadnear"></span>% of the time. Elsewhere: <span class="num" data-f="lead.far_rl"></span>%.</li>
+    <li class="neg"><strong>It is a habit and it does not detect errors.</strong> The shift is no larger on the 65 problems that only the RL model solves, and the readout does not tell a wrong answer from a right one better than the answer's length does.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>How to read this</h2>
+  <p>A language model writes one token at a time: a word or a piece of a word. At each token it holds an internal state, a long list of numbers. The <strong>J-lens</strong>, a method Anthropic published in July 2026, turns that state at a middle layer into a short list of words the model is poised to write later. We call the list the <strong>readout</strong>.</p>
+  <p>We took the answers the base model wrote to 500 MATH-500 problems and ran that same text through both models: the base, and the version AI2 trained with RL on math. At each of about <span class="num" id="npos"></span> million positions we compared the top 8 words of the two readouts. The text is identical, so every difference comes from the models.</p>
+</section>
+
+<section>
+  <h2>Two word families move in opposite directions</h2>
+  <p>Share of positions where the readout holds a word of the family, at layer 24 of 32.</p>
+  <div class="legend"><span><span class="sw base"></span>Base model</span><span><span class="sw rl"></span>RL model</span></div>
+  <div class="card" id="bars"></div>
+</section>
+
+<section>
+  <h2>The words that differ most</h2>
+  <p>Each row: share of positions with the word in the readout, base then RL. The first two lists are layer 24. The third is layer 16, an earlier layer, where the RL model's extra words are about doubt and stance.</p>
+  <div class="cols">
+    <div class="card"><h3><span class="sw rl"></span>RL holds more</h3><div class="wlist" id="w-rl"></div></div>
+    <div class="card"><h3><span class="sw base"></span>Base holds more</h3><div class="wlist" id="w-base"></div></div>
+    <div class="card"><h3><span class="sw rl"></span>RL holds more, layer 16</h3><div class="wlist" id="w-16"></div></div>
+  </div>
+</section>
+
+<section class="wide">
+  <h2>Read it on real answers</h2>
+  <p>Each tab is a stretch of an answer the base model wrote. Click or hover a token to see what each model has in mind right after reading it. The five wrong answers are the clearest of 114 positions a reader checked by hand; the last tab is a control.</p>
+  <div class="card">
+    <div class="tabs" id="tabs" role="tablist"></div>
+    <div class="meta" id="meta"></div>
+    <div class="legend">
+      <span><span class="sw rl"></span>only the RL model has a hold-on word in mind</span>
+      <span><span class="sw base"></span>only the base model</span>
+      <span><span class="sw both"></span>both</span>
+    </div>
+    <div class="reader">
+      <div>
+        <div class="text" id="text" tabindex="0" aria-label="Answer text. Use the left and right arrow keys to move between tokens."></div>
+        <div class="hint">Arrow keys move one token. The outlined token is the selected one.</div>
+      </div>
+      <div class="side">
+        <div class="read"><h3><span class="sw base"></span>Base model has in mind</h3><div class="chips" id="rb"></div><div class="next" id="nb"></div></div>
+        <div class="read"><h3><span class="sw rl"></span>RL model has in mind</h3><div class="chips" id="rr"></div><div class="next" id="nr"></div></div>
+      </div>
+    </div>
+    <p class="note" id="note"></p>
+  </div>
+</section>
+
+<section>
+  <h2>The word is in mind before it is written</h2>
+  <p>Take every point where the RL model's most likely next word becomes <span class="mono">Wait</span> (<span class="num" id="nev"></span> of them). Going back from that point, how often is a hold-on word already in the readout? The dashed lines show the rate far from any such point.</p>
+  <div class="legend"><span><span class="sw rl"></span>RL readout</span><span><span class="sw base"></span>Base readout</span></div>
+  <div class="card chartbox" id="lead"></div>
+  <p class="hint">One token before, the rates are <span id="lag1"></span>. At the point itself the readout and the next word nearly coincide, so both are left off the chart.</p>
+</section>
+
+<section>
+  <h2>Thought far more often than said</h2>
+  <div class="tiles">
+    <div class="tile"><div class="big" id="t1"></div><div class="cap">of positions where the base's answers have <span class="mono">Wait</span> as the written word</div></div>
+    <div class="tile"><div class="big" id="t2"></div><div class="cap">of positions where <span class="mono">Wait</span> is in the RL model's readout</div></div>
+    <div class="tile"><div class="big" id="t3"></div><div class="cap">times more often in mind than on the page</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>What did not hold</h2>
+  <ul class="plain">
+    <li><strong>The shift does not target the base model's failures.</strong> We expected a larger difference on the 65 problems only the RL model solves. It is smaller: <span class="num" id="g1"></span> points there against <span class="num" id="g2"></span> on the 398 both solve.</li>
+    <li><strong>The readout is not an error detector.</strong> Asked which of the base's 500 answers are wrong, answer length alone scores <span class="num" id="p1"></span> (0.5 is chance, 1 is perfect). The best readout feature scores <span class="num" id="p2"></span>.</li>
+    <li><strong>A reader's check agrees.</strong> Of 90 positions in 30 wrong answers where the RL readout stood out most, 10 sat on the first wrong step, 26 where a wrong value is reused, 20 on the wrong final answer, 21 on a correct step and 13 were unclear.</li>
+    <li><strong>The lens is partly a next-word reader here.</strong> It passes its check only at layers 24 to 28 of 32 (it finds an upcoming word <span class="num" id="h1"></span> of the time, against <span class="num" id="h2"></span> for a mismatched window). At those layers its top word is the model's next word about half the time. It was fitted on the base model, on Wikipedia text.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>What this points to</h2>
+  <p>RL did not teach this model where its mistakes are. It changed a disposition: pause and reconsider more, conclude less. That matches the outside view, where the RL model's correct answers are twice as long as the base model's.</p>
+  <p>The next experiment acts on it. While the base model solves the problems, push its middle layers toward the hold-on words and away from the wrap-up words, and measure the MATH-500 score. Two controls decide whether the workspace matters: a random push of the same size, and the same preference applied directly to the output words.</p>
+</section>
+
+<footer>
+  Run <code id="job"></code>, commit <code id="commit"></code>. Numbers: <code>studies/jspace/results/lensdiff/full-01/metrics.json</code>. Models: <code>allenai/Olmo-3-1025-7B</code> and <code>allenai/Olmo-3.1-7B-RL-Zero-Math</code>. Lens: <code>neuronpedia/jacobian-lens</code>. Intervals in the study README are 95 % bootstrap intervals over 500 problems.
+</footer>
+</main>
+
+<script id="data" type="application/json">/*DATA*/</script>
+<script>
+(function () {
+  var D = JSON.parse(document.getElementById("data").textContent);
+  var $ = function (id) { return document.getElementById(id); };
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function get(path) { return path.split(".").reduce(function (o, k) { return o[k]; }, D); }
+  function f2(x) { return x.toFixed(2); }
+  var HOLD = new Set(D.hold_words), WRAP = new Set(D.wrap_words);
+  function clean(t) { return t.split(String.fromCharCode(0xFFFD)).join(String.fromCharCode(0x25AF)); }
+  function show(t) { return clean(t).replace(/\n/g, "↵").replace(/^ /, "·"); }
+
+  document.querySelectorAll("[data-f]").forEach(function (e) { e.textContent = f2(get(e.getAttribute("data-f"))); });
+  var near = D.lead.rl.slice(2, 9).reduce(function (a, b) { return a + b; }, 0) / 7;
+  $("leadnear").textContent = near.toFixed(1);
+  $("npos").textContent = (D.positions_t1 / 1e6).toFixed(1);
+  $("nev").textContent = D.lead.events.toLocaleString("en-US");
+  $("lag1").textContent = D.lead.rl[1].toFixed(0) + "% for the RL readout and " + D.lead.base[1].toFixed(0) + "% for the base readout";
+  $("t1").textContent = f2(D.said.written) + "%";
+  $("t2").textContent = f2(D.said.held_rl) + "%";
+  $("t3").textContent = Math.round(D.said.held_rl / D.said.written) + "×";
+  $("g1").textContent = "+" + f2(D.groups.rl_only.diff);
+  $("g2").textContent = "+" + f2(D.groups.both.diff);
+  $("p1").textContent = D.predict.length.auroc_all.toFixed(2);
+  $("p2").textContent = Math.max(D.predict.best_lens_feature.auroc_all, 1 - D.predict.best_lens_feature.auroc_all).toFixed(2);
+  $("h1").textContent = Math.round(100 * D.hit.jlens) + "%";
+  $("h2").textContent = Math.round(100 * D.hit.shifted_window) + "%";
+  $("job").textContent = D.job; $("commit").textContent = D.commit;
+
+  // bars
+  var max = Math.max(D.hold.base, D.hold.rl, D.wrap.base, D.wrap.rl) * 1.25;
+  [["Hold-on words: " + D.families.hold_on.map(show).join("  "), D.hold], ["Wrap-up words: " + D.families.wrap_up.map(show).join("  "), D.wrap]].forEach(function (g) {
+    var box = el("div", "bargroup"), t = el("div", "bartitle");
+    t.appendChild(el("span", "", g[0]));
+    t.appendChild(el("span", "d", "RL minus base " + (g[1].diff > 0 ? "+" : "") + f2(g[1].diff) + " points [" + f2(g[1].ci[0]) + ", " + f2(g[1].ci[1]) + "]"));
+    box.appendChild(t);
+    [["Base", "base"], ["RL", "rl"]].forEach(function (s) {
+      var row = el("div", "barrow"), track = el("div", "track"), bar = el("div", "bar " + s[1]), v = el("span", "barval", f2(g[1][s[1]]) + "%");
+      var w = 100 * g[1][s[1]] / max;
+      bar.style.width = w + "%"; v.style.left = w + "%";
+      bar.title = s[0] + " model: " + f2(g[1][s[1]]) + "% of positions";
+      track.appendChild(bar); track.appendChild(v);
+      row.appendChild(el("span", "", s[0])); row.appendChild(track); box.appendChild(row);
+    });
+    $("bars").appendChild(box);
+  });
+
+  // word lists
+  function words(id, list) {
+    list.forEach(function (w) {
+      var row = el("div", "wrow"), v = el("span", "v");
+      row.appendChild(el("span", "word", show(w.t)));
+      v.appendChild(document.createTextNode(f2(w.base) + " → "));
+      v.appendChild(el("b", "", f2(w.rl) + "%"));
+      row.appendChild(v); $(id).appendChild(row);
+    });
+  }
+  words("w-rl", D.words.rl_more_24); words("w-base", D.words.base_more_24); words("w-16", D.words.rl_more_16);
+
+  // lead chart
+  (function () {
+    var W = 640, H = 300, L = 44, R = 96, T = 14, B = 40, ns = "http://www.w3.org/2000/svg";
+    var lags = []; for (var i = 32; i >= 2; i--) lags.push(i);
+    var ymax = 12;
+    function x(l) { return L + (32 - l) / 30 * (W - L - R); }
+    function y(v) { return T + (1 - v / ymax) * (H - T - B); }
+    function s(tag, attrs, text) { var e = document.createElementNS(ns, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (text != null) e.textContent = text; return e; }
+    var svg = s("svg", { viewBox: "0 0 " + W + " " + H, role: "img", "aria-label": "Share of positions with a hold-on word in the readout, by distance before the RL model would write Wait" });
+    [0, 3, 6, 9, 12].forEach(function (v) {
+      svg.appendChild(s("line", { x1: L, x2: W - R, y1: y(v), y2: y(v), class: "grid" }));
+      svg.appendChild(s("text", { x: L - 8, y: y(v) + 4, "text-anchor": "end", class: "lab" }, v + "%"));
+    });
+    [32, 24, 16, 8, 2].forEach(function (l) { svg.appendChild(s("text", { x: x(l), y: H - B + 18, "text-anchor": "middle", class: "lab" }, l)); });
+    svg.appendChild(s("text", { x: (L + W - R) / 2, y: H - 4, "text-anchor": "middle", class: "lab" }, "tokens before the RL model would write Wait"));
+    [["rl", "var(--rl)", "RL"], ["base", "var(--base)", "Base"]].forEach(function (m) {
+      var far = D.lead["far_" + m[0]];
+      svg.appendChild(s("line", { x1: L, x2: W - R, y1: y(far), y2: y(far), stroke: m[1], "stroke-width": 1.5, "stroke-dasharray": "4 4", fill: "none" }));
+      svg.appendChild(s("text", { x: W - R + 8, y: y(far) + 4, class: "lab" }, m[2] + " elsewhere " + far.toFixed(1) + "%"));
+      var d = lags.map(function (l, i) { return (i ? "L" : "M") + x(l).toFixed(1) + " " + y(D.lead[m[0]][l]).toFixed(1); }).join(" ");
+      svg.appendChild(s("path", { d: d, stroke: m[1], "stroke-width": 2, fill: "none", "stroke-linejoin": "round" }));
+      svg.appendChild(s("circle", { cx: x(2), cy: y(D.lead[m[0]][2]), r: 4, fill: m[1], stroke: "var(--surface)", "stroke-width": 2 }));
+      svg.appendChild(s("text", { x: W - R + 8, y: y(D.lead[m[0]][2]) + 4, class: "lab s" }, m[2] + " " + D.lead[m[0]][2].toFixed(1) + "%"));
+    });
+    var cross = s("line", { y1: T, y2: H - B, stroke: "var(--muted)", "stroke-width": 1, visibility: "hidden" });
+    svg.appendChild(cross);
+    var hit = s("rect", { x: L, y: T, width: W - L - R, height: H - T - B, fill: "transparent" });
+    svg.appendChild(hit);
+    var box = $("lead"), tip = el("div", "tip"); tip.hidden = true;
+    box.appendChild(svg); box.appendChild(tip);
+    hit.addEventListener("pointermove", function (ev) {
+      var r = svg.getBoundingClientRect(), px = (ev.clientX - r.left) / r.width * W;
+      var l = Math.max(2, Math.min(32, Math.round(32 - (px - L) / (W - L - R) * 30)));
+      cross.setAttribute("x1", x(l)); cross.setAttribute("x2", x(l)); cross.setAttribute("visibility", "visible");
+      tip.textContent = l + " tokens before: RL " + D.lead.rl[l].toFixed(1) + "%, base " + D.lead.base[l].toFixed(1) + "%";
+      tip.hidden = false;
+      var br = box.getBoundingClientRect(), left = ev.clientX - br.left + 12;
+      tip.style.left = Math.min(left, br.width - tip.offsetWidth - 8) + "px"; tip.style.top = (ev.clientY - br.top - 34) + "px";
+    });
+    hit.addEventListener("pointerleave", function () { tip.hidden = true; cross.setAttribute("visibility", "hidden"); });
+  })();
+
+  // example reader
+  var cur = 0, sel = 0, spans = [];
+  function has(list, set) { return list.some(function (w) { return set.has(w); }); }
+  function chips(id, list) {
+    var box = $(id); box.textContent = "";
+    list.forEach(function (w) { box.appendChild(el("span", "chip" + (HOLD.has(w) ? " hold" : WRAP.has(w) ? " wrap" : ""), show(w))); });
+  }
+  function nextword(id, w) {
+    var box = $(id); box.textContent = "Most likely next word:";
+    box.appendChild(el("span", "chip" + (HOLD.has(w) ? " hold" : WRAP.has(w) ? " wrap" : ""), show(w)));
+  }
+  function select(i, scroll) {
+    var ex = D.examples[cur]; sel = Math.max(0, Math.min(ex.tokens.length - 1, i));
+    spans.forEach(function (sp, k) { sp.classList.toggle("sel", k === sel); });
+    var t = ex.tokens[sel];
+    chips("rb", t.b); chips("rr", t.r); nextword("nb", t.bn); nextword("nr", t.rn);
+    if (scroll) { var box = $("text"), sp = spans[sel]; box.scrollTop = sp.offsetTop - box.offsetTop - box.clientHeight / 2; }
+  }
+  function open(k) {
+    cur = k; var ex = D.examples[k];
+    Array.prototype.forEach.call($("tabs").children, function (b, i) { b.setAttribute("aria-selected", i === k ? "true" : "false"); });
+    var meta = $("meta"); meta.textContent = "";
+    [["Problem", ex.problem], ["Correct answer", ex.gold], ["Base wrote", ex.base_answer]].forEach(function (r) {
+      var d = el("div"); d.appendChild(el("span", "k", r[0])); d.appendChild(document.createTextNode(r[1])); meta.appendChild(d);
+    });
+    var box = $("text"); box.textContent = ""; spans = [];
+    ex.tokens.forEach(function (t, i) {
+      var hb = has(t.b, HOLD), hr = has(t.r, HOLD);
+      var sp = el("span", "tok" + (hb && hr ? " h-both" : hr ? " h-rl" : hb ? " h-base" : ""), clean(t.t).replace(/\n+/g, "↵\n"));
+      sp.addEventListener("click", function () { select(i, false); });
+      sp.addEventListener("mouseenter", function () { select(i, false); });
+      box.appendChild(sp); spans.push(sp);
+    });
+    $("note").textContent = ex.note + " (Problem " + ex.problem_index + ", tokens " + ex.start + " to " + (ex.start + ex.tokens.length - 1) + " of " + ex.of + ".)";
+    select(ex.focus, true);
+  }
+  D.examples.forEach(function (ex, k) {
+    var b = el("button", "", ex.title); b.type = "button"; b.id = "tab-" + k; b.setAttribute("role", "tab");
+    b.addEventListener("click", function () { open(k); }); $("tabs").appendChild(b);
+  });
+  $("text").addEventListener("keydown", function (ev) {
+    if (ev.key === "ArrowRight") { select(sel + 1, true); ev.preventDefault(); }
+    if (ev.key === "ArrowLeft") { select(sel - 1, true); ev.preventDefault(); }
+  });
+  open(0);
+})();
+</script>

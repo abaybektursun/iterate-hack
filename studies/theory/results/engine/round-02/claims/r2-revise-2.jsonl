@@ -1,0 +1,6 @@
+{"id": "t27", "value": 189, "low": 180, "high": 198, "why": "The cued base's 33 finished-wrong RL-only hard problems are sample-specific commitment errors, and abstaining cap hits let a single finished right answer win, so a 4-sample vote recovers about 25 of the 42-problem gap over its single 164."}
+{"id": "t28", "value": 222, "low": 210, "high": 235, "why": "Because base errors are sample-specific, most of the 49 RL-only problems and some of the 115 that both miss get at least one right answer in 4 samples, well above RL's single 206."}
+{"id": "t64", "value": 432, "low": 424, "high": 442, "why": "The base's MATH-500 errors (misreads, slips) are sample-specific, so a 4-sample plurality vote adds about 22 items over a single 410."}
+{"id": "t66", "value": 436, "low": 427, "high": 446, "why": "Vote gain as in t64, plus a few cap-hit problems turned into finished answers by restarts."}
+{"id": "t68", "value": 467, "low": 462, "high": 473, "why": "RL has already caught its sample-specific errors, so its remaining errors are tied to problems and voting adds only about 4 items to 463."}
+{"id": "t69", "value": 455, "low": 447, "high": 465, "why": "With sample-specific base errors, most of the 65 RL-only problems and some of the 25 both-miss get a right answer within 4 samples."}

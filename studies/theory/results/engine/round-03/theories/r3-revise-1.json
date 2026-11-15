@@ -1,0 +1,167 @@
+{
+ "name": "r3-revise-1",
+ "statement": "The RL-Zero gain over the base has two parts that separate by dose. The first is a domain-general 'deliberate, then commit' mode component. Any RL-Zero delta carries it, Math or Code, as a small shared, largely constant per-layer push. It saturates by a = 0.25 of the Math delta, the opening cue substitutes for it, and it acts by stopping the base from losing problems it can solve. The second is a math-specific long-horizon component. It grows roughly linearly with the Math delta up to a = 1, Code-RL lacks it, and it pays only on problems whose solutions run long (the top length quartile of MATH-500 and the harder 328).",
+ "scope": "Olmo-3-1025-7B base; Olmo-3.1-7B-RL-Zero-Math and merges base + a*(RL - base) for a in [0, 1.5]; Olmo-3.1-7B-RL-Zero-Code; constant per-layer push arms. MATH-500 and the clean harder 328, plain and cued prompts, T 1.0 / top-p 1.0, cap 16,384, grader v3. Revises r1-all-2. r1-all-2 put the whole gain in one saturating switch, missed Code-RL (it predicted 320 plain; 390 was measured), and left the last points past the cue unexplained. Here the switch is the shared part, and a second, non-saturating math-specific part sits only on long problems. Does not cover T 0.6 loops, sampler truncation, pass@k beyond 4, or code benchmarks.",
+ "parent": "r1-all-2",
+ "imports": [
+  {
+   "source": "2505.19439",
+   "finding": "Early in GRPO a format-only reward accounts for about 85 % of the improvement, then plateaus; adding a length reward is needed to go further.",
+   "how": "Identifies the saturating, domain-general component (presentation, commit, termination) that any RL-Zero run learns early, which is why Code-RL and a = 0.25 of the Math delta both carry it."
+  },
+  {
+   "source": "2506.14965",
+   "finding": "Cross-domain RL transfer is strong on easier benchmarks (MATH500, AMC) and much weaker on the hardest ones (AIME, LiveCodeBench).",
+   "how": "Puts the non-transferable, math-specific component on hard and long problems, so Code-RL ties Math-RL on MATH-500 but trails it on the 328 and in the longest quartile."
+  },
+  {
+   "source": "2509.06608",
+   "finding": "An RL-trained last-layer steering vector closes over half the base-to-RL gap and acts like a first-token prefix ('To' prefix gives ~75 % of its gain).",
+   "how": "Explains why the shared mode component can ride on a constant per-layer push and why the opening cue substitutes for it (cue rows gain far less from the delta than plain rows)."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-4b0d5f",
+   "quote": "a quarter of the RL weight difference gives most of the gain",
+   "how": "The mode component saturates near a = 0.25, so most of the cue-row and plain-row gain arrives at the first dose step."
+  },
+  {
+   "item": "result-4b0d5f",
+   "quote": "Plain: 224/405/443/463 at a=0/0.25/0.5/1",
+   "how": "Without the cue the mode component is worth about 180 items and is mostly flipped by a = 0.25. The rest of the climb mixes the end of saturation with the linear long-horizon part."
+  },
+  {
+   "item": "result-4b0d5f",
+   "quote": "Code-RL: plain 390, cue 450 (-1.4 vs RL cue [-4.0, 1.0])",
+   "how": "Code-RL carries the shared mode component (450 with the cue, close to theta0.5) but flips it less completely on the plain prompt, and it lacks the math-specific part, which MATH-500 barely rewards."
+  },
+  {
+   "item": "result-9b6af3",
+   "quote": "So most of the RL direction's gain is 24 fewer lost problems",
+   "how": "The mode component works by committing to answers the base can reach, so it shows up as fewer losses rather than new fixes."
+  },
+  {
+   "item": "result-9b6af3",
+   "quote": "Code-RL cue 450 (+8.0 [4.6, 11.4]) at 3,337 tokens/problem",
+   "how": "Code-RL gets the mode gain at fewer tokens than RL (4,694) because it lacks the long-horizon component, which is what makes RL's answers to long problems longer."
+  },
+  {
+   "item": "result-54f212",
+   "quote": "closes 23.4 / 31.2 % of KL(RL||base)",
+   "how": "A constant per-layer push carries a large share of the change, as expected if the shared mode component is input-independent."
+  },
+  {
+   "item": "result-e2482e",
+   "quote": "RL-Code delta 15 of 96, Think-SFT 0 of 96",
+   "how": "Both RL-Zero deltas write the cue token into late readouts, which marks the shared mode direction. SFT does not."
+  },
+  {
+   "item": "result-c9b27e",
+   "quote": "but agree in sign on 50.8 %",
+   "how": "The shared mode part is a small, low-dimensional piece of each delta (largely a constant push), so the overall entry-wise sign agreement stays near chance."
+  },
+  {
+   "item": "knowledge-8229be",
+   "quote": "Every arm that recovers accuracy also takes RL's format and length",
+   "how": "Recovery of the mode component is visible as the format switch. Partial and resampled arms still carry it because it is redundant and saturating."
+  },
+  {
+   "item": "knowledge-9e4147",
+   "quote": "largest on the longest problems",
+   "how": "The residual cued-base gap is mostly the long-horizon component, which only long solutions reward."
+  },
+  {
+   "item": "result-5de032",
+   "quote": "By RL-length quartile (82 each) base/RL right: 78/82, 52/67, 30/45, 4/12",
+   "how": "On the 328 the remaining gap grows with RL's solution length, as the long-horizon component predicts."
+  },
+  {
+   "item": "result-82b4dc",
+   "quote": "RL minus base 12.8 points, paired 95 % [8.5, 17.1]",
+   "how": "Harder problems hold more long solutions, so more of the math-specific component remains on the 328 than on MATH-500."
+  },
+  {
+   "item": "knowledge-0b450e",
+   "quote": "on its own in 168 of 500",
+   "how": "The plain base already enters the deliberative mode on about a third of answers, so the mode is a choice the base has, which a small dose or the cue makes the default."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-4b0d5f",
+   "quote": "34/500 word-salad tails",
+   "how": "If the long-horizon component were linear past a = 1, a = 1.5 would beat a = 1 on long problems. Instead the text degrades. The theory must cap linearity at a of about 1."
+  },
+  {
+   "item": "result-904bbf",
+   "quote": "the effects add up linearly",
+   "how": "Neuron contributions to KL add linearly, so any saturation must sit between distribution change and accuracy, not in the distribution."
+  },
+  {
+   "item": "knowledge-1497e8",
+   "quote": "restart - RL -10.0 points [-13.2, -7.0]",
+   "how": "This fits only if restarts cannot supply the long-horizon component. The theory asserts this rather than deriving it."
+  }
+ ],
+ "rival": "Generic termination calibration (r1-surprises-1 style): all of the post-cue gain is a domain-general commit/stop policy, so any RL-Zero delta with the same training horizon matches Math-RL everywhere. Separation: on the harder 328 with the cue, the rival puts Code-RL near RL (about 200-206 of 328). This theory puts Code-RL near theta0.5 (about 187), well below RL's 205-206. In MATH-500 rows the rival spreads the theta0.25-to-theta0.75 gain evenly over length quartiles. This theory puts most of it in the longest quartile.",
+ "predictions": [
+  {
+   "experiment": "Olmo-3.1-7B-RL-Zero-Code with the opening cue, the clean harder 328, T 1.0 / top-p 1.0, cap 16,384, one sample, grader v3: number right (base+cue 164, RL plain 206, RL cue 205)",
+   "unit": "right of 328",
+   "value": 187,
+   "low": 178,
+   "high": 196,
+   "refuted_by": "200 or more right (Code-RL matches Math-RL on hard problems, so there is no math-specific long-horizon component) or 172 or fewer (Code-RL lacks the shared mode component on hard problems)",
+   "gpu_minutes": 52
+  },
+  {
+   "experiment": "base + 0.25*(RL-Zero-Math - base) with the opening cue, the clean harder 328, T 1.0 / top-p 1.0, cap 16,384, one sample, grader v3: number right",
+   "unit": "right of 328",
+   "value": 182,
+   "low": 173,
+   "high": 191,
+   "refuted_by": "170 or fewer right (the dose-saturating component does not act on hard problems) or 198 or more (the hard-problem gain also saturates at a = 0.25, so there is no linear long-horizon part)",
+   "gpu_minutes": 52
+  },
+  {
+   "experiment": "Base Olmo-3-1025-7B plus one constant vector per layer (the 32 mean RL-layer minus base-layer output vectors of cleanneurons Part T3, no weight change), plain prompt (no cue), MATH-500 n=500, T 1.0 / top-p 1.0, cap 16,384, one sample, grader v3: number right (plain base 224, theta0.25 plain 405)",
+   "unit": "right of 500",
+   "value": 330,
+   "low": 265,
+   "high": 395,
+   "refuted_by": "250 or fewer right (the constant push does not carry the shared mode component)",
+   "gpu_minutes": 40
+  },
+  {
+   "experiment": "Offline: where the dose gain from a = 0.25 to a = 0.75 sits by problem length (cue rows, MATH-500).",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (field t2_generated_tokens per problem_index); iterate-runs answers.jsonl of theta0.25_cue (abaybektursun-1114-153102-b029) and theta0.75_cue (abaybektursun-1114-153106-af79). Q4 = the 125 problem_index values with the largest t2_generated_tokens (sort descending, break ties by smaller problem_index first). For each cell take one row per problem_index (the first row in file order if repeated). Right = score_v3 equal to 1 or true. Cap hits and missing rows count as wrong. Statistic: (number right in Q4 for theta0.75_cue) minus (number right in Q4 for theta0.25_cue). Whole-set difference is +10 (451 - 441).",
+   "unit": "right of 125 (difference)",
+   "value": 8,
+   "low": 3,
+   "high": 14,
+   "refuted_by": "difference of +2 or less (the dose gain past a = 0.25 is not concentrated on long problems)",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Offline: where Code-RL trails Math-RL with the cue on MATH-500, by problem length.",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (t2_generated_tokens); iterate-runs answers.jsonl of code_cue (abaybektursun-1114-162452-0203) and rl_cue (abaybektursun-1114-153110-e985). Q4 = the 125 problem_index values with the largest t2_generated_tokens (sort descending, ties by smaller problem_index first). One row per problem_index (first in file order). Right = score_v3 equal to 1 or true. Cap hits and missing rows count as wrong. Statistic: (number right in Q4 for code_cue) minus (number right in Q4 for rl_cue). Whole-set difference is -7 (450 - 457).",
+   "unit": "right of 125 (difference)",
+   "value": -8,
+   "low": -15,
+   "high": -2,
+   "refuted_by": "difference of 0 or more (Code-RL's deficit is not on long problems)",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Offline: mean generated tokens on the longest-quartile problems, Code-RL with the cue vs Math-RL with the cue.",
+   "recipe": "Same files and Q4 definition as above (code_cue 0203, rl_cue e985, Q4 by t2_generated_tokens). For each cell, mean of n_generated over the Q4 problems (cap hits included at their capped length; one row per problem_index, first in file order). Statistic: mean_code_cue_Q4 / mean_rl_cue_Q4.",
+   "unit": "ratio",
+   "value": 0.68,
+   "low": 0.55,
+   "high": 0.82,
+   "refuted_by": "ratio 0.9 or more (Code-RL writes long solutions as long as Math-RL on long problems, so its token saving is not a missing long-horizon component)",
+   "gpu_minutes": 0
+  }
+ ]
+}

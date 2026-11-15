@@ -1,0 +1,105 @@
+{
+ "status": "done",
+ "config": {
+  "model": "base",
+  "prefix_ids": "[]",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "seed": 51000000,
+  "n": null,
+  "grader_check_only": false,
+  "out": "/runs/abaybektursun-1114-170258-388e",
+  "commit": "be62e76037092aa61c244383215b06f256818e82"
+ },
+ "commit": "be62e76037092aa61c244383215b06f256818e82",
+ "job_id": "abaybektursun-1114-170258-388e",
+ "n_problems": 542,
+ "started_utc": "2026-11-15T01:24:52Z",
+ "grader_check": {
+  "n": 542,
+  "reference_failed": [
+   [
+    "HumanEval/32",
+    1,
+    "\n  File \"/tmp/tmps7ppwiuu/prog.py\", line 57, in check\n    assert _poly(*candidate(*inp), inp) <= 0.0001\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: Value after * must be an iterable, not float\n"
+   ]
+  ],
+  "wrong_passed": [
+   "Mbpp/737",
+   "Mbpp/787",
+   "Mbpp/794"
+  ],
+  "failed": [
+   "HumanEval/32",
+   "Mbpp/737",
+   "Mbpp/787",
+   "Mbpp/794"
+  ]
+ },
+ "n_scored": 538,
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 28749,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 20480
+ },
+ "model_repo": "allenai/Olmo-3-1025-7B",
+ "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+ "tokenizer": [
+  "allenai/Olmo-3.1-7B-RL-Zero-Code",
+  "1ca3bb30f0e51b7ef05f7d0fefcf0e6b14eefc90"
+ ],
+ "prefix_ids": [],
+ "prefix_text": "",
+ "sampling": {
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "repetition_penalty": 1.0
+ },
+ "max_tokens": 16384,
+ "first_prompt_ids": [
+  50,
+  4035,
+  279,
+  2768,
+  2082,
+  3575,
+  3094,
+  555
+ ],
+ "generation_s": 971.7309007644653,
+ "memory": {
+  "gpu_memory_used_mib": 73339,
+  "gpu_memory_total_mib": 81559,
+  "gpu": "NVIDIA H100 80GB HBM3"
+ },
+ "counts": {
+  "humanevalplus": {
+   "n": 163,
+   "passed": 72,
+   "cap_hits": 4,
+   "no_block": 14,
+   "timeouts": 1,
+   "mean_generated_tokens": 2222.20245398773
+  },
+  "mbppplus": {
+   "n": 375,
+   "passed": 150,
+   "cap_hits": 11,
+   "no_block": 29,
+   "timeouts": 2,
+   "mean_generated_tokens": 2248.8213333333333
+  },
+  "all": {
+   "n": 538,
+   "passed": 222,
+   "cap_hits": 15,
+   "no_block": 43,
+   "timeouts": 3,
+   "mean_generated_tokens": 2240.7565055762084
+  }
+ },
+ "wall_s": 1145.9713926315308
+}

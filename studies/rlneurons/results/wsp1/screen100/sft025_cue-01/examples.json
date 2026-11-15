@@ -1,0 +1,29 @@
+{
+ "rule": "lowest problem index scored right and scored wrong; text cut to its first and last 1500 characters",
+ "right": {
+  "problem_index": 0,
+  "unique_id": "test/precalculus/807.json",
+  "seed": 81000000,
+  "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+  "extracted_v3": "(3, \u03c0/2)",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_generated": 946,
+  "text_characters": 3302,
+  "text_truncated": true,
+  "text": " line!\n\nOkay, so I need to convert the point (0, 3) from rectangular coordinates to polar coordinates. Hmm, polar coordinates are usually given as (r, \u03b8), where r is the distance from the origin and \u03b8 is the angle from the positive x-axis. Let me recall how to convert between these two systems. \n\nIn rectangular coordinates, a point is given as (x, y), and in polar coordinates, it's (r, \u03b8). The formulas to convert from rectangular to polar are:\n\nr = \u221a(x\u00b2 + y\u00b2)\n\n\u03b8 = arctan(y/x)\n\nBut wait, I have to be careful with \u03b8 because it depends on the quadrant of the original point. In this case, the original point is (0, 3). Let me visualize where that is. On the Cartesian plane, x is 0 and y is 3, so that would be on the positive y-axis. So the point is directly above the origin. \n\nNow, for r, since it's the distance from the origin, I can just plug in x and y into the formula. Let's compute that:\n\nr = \u221a(0\u00b2 + 3\u00b2) = \u221a(0 + 9) = \u221a9 = 3. Okay, so r is 3. That makes sense because it's 3 units away on the y-axis.\n\nNow for \u03b8. Since the point is on the positive y-axis, what's the angle there? Normally, in polar coordinates, angles are measured from the positive x-axis going counterclockwise. So the positive y-axis is at 90 degrees, or \u03c0/2 radians. Therefore, \u03b8 should be \u03c0/2. Let me check using the arctangent method to make sure. \n\n\u03b8 = arctan(y/x). But here, x is 0, so y/x would be 3/0. Oh, division by zero. Hmm, right. So arctan(y/x) when x is 0 isn't defined, but geometrically we know the ang\n[... 302 characters left out ...]\n3\u03c0/2). But since in the problem statement it specifies that 0 \u2264 \u03b8 < 2\u03c0, we need to choose the angle in the first or last quadrant. Since our point is at (0, 3), which is above the origin, \u03b8 should be \u03c0/2. \n\nJust to confirm, if I was converting a point on the negative y-axis, like (0, -3), it would be 3\u03c0/2. But here it's positive y, so \u03c0/2. Yes, that seems right. \n\nTherefore, combining r and \u03b8, the polar coordinates should be (3, \u03c0/2). Let me double-check my steps. Calculated r correctly as 3, \u03b8 as \u03c0/2, which is within the required range. Yep, that looks good. I don't think there's any mistake here. \n\nAnother way to approach this conversion is to imagine the unit circle. The point (0, 3) in rectangular coordinates is three units up the y-axis, which corresponds exactly to the point (0, 3) on the unit circle scaled by r=3. The angle of that point on the unit circle is clearly \u03c0/2, so again, scaling doesn't affect the angle. Therefore, the answer should be (3, \u03c0/2). \n\nI think that's solid. I can't see any errors in this reasoning. Maybe if I check another example with the same idea? Suppose someone asked to convert (3,0) to polar coordinates. Then r would be \u221a(9 + 0) = 3, and \u03b8 would be 0, which matches (3,0). Similarly, (3,4) would have r=5 and \u03b8=arctan(4/3), which is less than \u03c0/2. So that formula works there. \n\nSo applying the same logic to a point on the y-axis, where x is zero, \u03b8 is \u03c0/2. Therefore, the conversion seems correct. \n\nFinal answer: (3, \u03c0/2)\n\n**Answer**: (3, \u03c0/2)"
+ },
+ "wrong": {
+  "problem_index": 3,
+  "unique_id": "test/number_theory/572.json",
+  "seed": 81000003,
+  "gold": "9",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_generated": 575,
+  "text_characters": 1918,
+  "text_truncated": false,
+  "text": " line!\n\nOkay, so I need to figure out how many positive whole-number divisors 196 has. Hmm, divisors are numbers that divide into 196 without leaving a remainder. Let me start by recalling how to determine the number of divisors for a number. I think it involves prime factorization. Right, because if you can break the number down into its prime factors, you can then use those to find all possible divisors.\n\nFirst, I need to factorize 196 into its prime components. Let me start by dividing 196 by the smallest prime number, which is 2. 196 divided by 2 is 98. Then 98 divided by 2 again is 49. So that's two 2s already. Now 49 isn't divisible by 2, so the next prime number is 3. But 49 divided by 3 doesn't give an integer. So moving on to 5, but 49 isn't a multiple of 5 either. Next prime is 7. 49 divided by 7 is 7. Then 7 divided by 7 again is 1. So, the prime factors of 196 are 2 squared times 7 squared, or written out, 2\u00b2 \u00d7 7\u00b2. Let me check that again: 2\u00d72\u00d77\u00d77 is indeed 196. Yes, that's correct.\n\nOnce I have the prime factorization, the formula for the number of divisors is to take the exponents of each prime, add one to each of them, and then multiply those together. So for 2\u00b2, the exponent is 2, add 1 to get 3. For 7\u00b2, the exponent is also 2, add 1 to get 3. Then multiply those two results: 3 \u00d7 3 equals 9. Therefore, 196 has 9 positive whole-number divisors. Let me verify this by listing all the divisors to make sure I haven't made a mistake.\n\nStarting with 1, since every number is divisible by 1. Then 2, since 196 divided by 2 is 98. 4, because 196 divided by 4 is 49. Then 7, because 196 divided by 7 is 28. 14, which divides into 196 giving 14. 28, which is another divisor. Then 49 is next, since 49 times 4 is 196. 98, because 98 times 2 is 196. And finally 196 itself. Let's count them: 1, 2, 4, 7, 14, 28, 49, 98, 196. That's nine numbers. Yep, that checks out. So the answer is 9.R 9"
+ }
+}

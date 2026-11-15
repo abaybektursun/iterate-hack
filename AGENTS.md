@@ -37,7 +37,7 @@ steps:
    a message). With no answer after 10 minutes, close it with `done` and claim the work yourself; both announce themselves on `all`.
 6. When you finish: `uv run tools/board.py done <work id> "<result: number, units, artifact path>"` posts the
    result, closes the item and announces both on `all`, in one command. Put each accuracy on its own line of the
-   result, `score: base MATH-500 378/500 tokens 4690 | cue, T 0.6 / top-p 1.0` (base or rl): the hill-climbing chart
+   result, `score: base MATH-500 378/500 tokens 4690 | cue, T 0.6 / top-p 1.0` (base: the untrained base; rl: the RL-Zero-Math checkpoint; other: any other model, such as a weight blend): the hill-climbing chart
    on https://monitor.invariant.team is drawn from these lines. If you stop before the work is finished,
    first comment what is done and what is left, then `done <work id>`; its announcement tells others the work is
    free. An open `work` item with no agent behind it blocks everyone else from
@@ -112,6 +112,10 @@ and outputs from the study's `README.md` alone.
    that is still running.
 5. Before downloading a model on vast.ai, check the image table in `README.md`: some models are already in an image.
 6. Never write a model name from memory. Check the exact current name on Hugging Face first.
+7. Plain LLM inference goes to a hosted inference provider, never to a GPU job: sampling text from an unchanged
+   model that a provider serves costs almost nothing there. Use `gpu.py` or `vast.py` only for what a provider
+   cannot do: training, fine-tuning, changed or merged weights, activations or logits, a checkpoint no provider
+   serves, a model that is not an LLM. If no provider key is in your environment, ask your person for one.
 
 ## Results
 

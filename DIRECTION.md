@@ -19,8 +19,8 @@ On AI2's Olmo 3.1 RL-Zero-Math:
 
 1. The size of the gain depends on a sampling choice. RL scores about 93 at either setting. The untrained base with
    the opening cue scores 71 at T 0.6 / top-p 0.95, where it loops, and 82 at T 1.0 / top-p 1.0, where the loops
-   disappear. Wang et al. (2610.06851) report 77.7 for the cue under a different setting (T 0.6, cap 31,744, their
-   grader).
+   disappear. Wang et al. (2610.06851, Table 6) report 77.9 for the cue under a different setting (T 0.6, cap 31,744,
+   their grader); under our grader v1, the closest to theirs, our T 1.0 cell is 76 to 79 (board result-60d899).
 2. About 11 points remain at AI2's setting, spread over problems of all lengths.
 3. The swarm looks for the cheapest route to those points that uses no reward, at equal generated tokens and with
    RL given the same procedure, and reports the route or that it found none.
@@ -49,6 +49,7 @@ harness then runs unchanged on the Code pair.
 
 - Harder set: the 328 is measured only for the base at 0.6.
 - Sampling: temperature and top-p are not yet separated.
-- Grader: no second model has read the v3 rescoring.
+- Grader: a second model read all 96 v1/v3 disagreements of the Day-1 #3 rows: no wrong answer accepted (board
+  result-0018d3). The 113 flips of the first table (raw answers in S3) are still read by one model only.
 - RL training steps: the three RL jobs at 0.6 are still running, so the step-400 and first-release rows are
   unscored.

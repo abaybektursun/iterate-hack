@@ -1,0 +1,345 @@
+{
+ "spec": "studies/rlneurons/specs/DAY1_wdiff328_2026-11-14.md",
+ "grader": "rln4_lib.grade_v3",
+ "n": 328,
+ "cells": {
+  "base_plain_T1": {
+   "n": 328,
+   "right_v3": 76,
+   "cap_hits": 35,
+   "loops_A": 3,
+   "mean_generated_tokens": 4928.4,
+   "seed_base": 50000000,
+   "job_id": "abaybektursun-1114-132922-7ba0",
+   "answers": "runs/abaybektursun-1114-132922-7ba0/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_hard328/base_plain_T1-01"
+  },
+  "base_cue_T1": {
+   "n": 328,
+   "right_v3": 164,
+   "cap_hits": 77,
+   "loops_A": 1,
+   "mean_generated_tokens": 9343.8,
+   "seed_base": 3000000,
+   "job_id": "abaybektursun-1114-151534-e72c",
+   "answers": "runs/abaybektursun-1114-151534-e72c/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1/hard328_base_cue_t10-01"
+  },
+  "rl_plain_T1": {
+   "n": 328,
+   "right_v3": 206,
+   "cap_hits": 20,
+   "loops_A": 0,
+   "mean_generated_tokens": 9315.4,
+   "seed_base": 3000000,
+   "job_id": "abaybektursun-1114-151540-86ef",
+   "answers": "runs/abaybektursun-1114-151540-86ef/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1/hard328_rl_plain_t10-01"
+  },
+  "rl_cue_T1": {
+   "n": 328,
+   "right_v3": 205,
+   "cap_hits": 25,
+   "loops_A": 0,
+   "mean_generated_tokens": 9316.4,
+   "seed_base": 50000000,
+   "job_id": "abaybektursun-1114-132929-a32d",
+   "answers": "runs/abaybektursun-1114-132929-a32d/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_hard328/rl_cue_T1-01"
+  },
+  "code1_cue": {
+   "n": 328,
+   "right_v3": 187,
+   "cap_hits": 25,
+   "loops_A": 0,
+   "mean_generated_tokens": 7612.8,
+   "seed_base": 71000000,
+   "job_id": "abaybektursun-1114-181216-a619",
+   "answers": "runs/abaybektursun-1114-181216-a619/answers.jsonl",
+   "s3_answers": "s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/abaybektursun-1114-181216-a619/answers.jsonl",
+   "alpha": 1.0,
+   "rounding": "nearest",
+   "effective_a": 1.0,
+   "merge_identity": {
+    "exact": 355,
+    "tensors": 355
+   },
+   "tokens_per_s": 1107.5934656550776,
+   "run_folder": "studies/rlneurons/results/day1_wdiff328/code1_cue-01",
+   "hand_read_right_of_20": [],
+   "right_corrected": 187
+  },
+  "theta0.25_cue": {
+   "n": 328,
+   "right_v3": 182,
+   "cap_hits": 56,
+   "loops_A": 0,
+   "mean_generated_tokens": 9096.9,
+   "seed_base": 72000000,
+   "job_id": "abaybektursun-1114-181222-a5f4",
+   "answers": "runs/abaybektursun-1114-181222-a5f4/answers.jsonl",
+   "s3_answers": "s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/abaybektursun-1114-181222-a5f4/answers.jsonl",
+   "alpha": 0.25,
+   "rounding": "stochastic",
+   "effective_a": 0.2500192231198832,
+   "merge_identity": null,
+   "tokens_per_s": 1053.8117250580276,
+   "run_folder": "studies/rlneurons/results/day1_wdiff328/theta0.25_cue-01",
+   "hand_read_right_of_20": [],
+   "right_corrected": 182
+  },
+  "theta0.5_cue": {
+   "n": 328,
+   "right_v3": 190,
+   "cap_hits": 73,
+   "loops_A": 0,
+   "mean_generated_tokens": 9656.1,
+   "seed_base": 73000000,
+   "job_id": "abaybektursun-1114-181228-34ad",
+   "answers": "runs/abaybektursun-1114-181228-34ad/answers.jsonl",
+   "s3_answers": "s3://pg-lineage-769063704696/results/rlneurons/r5/day1_wdiff328-01/abaybektursun-1114-181228-34ad/answers.jsonl",
+   "alpha": 0.5,
+   "rounding": "stochastic",
+   "effective_a": 0.5000255781511275,
+   "merge_identity": null,
+   "tokens_per_s": 1016.1390160073415,
+   "run_folder": "studies/rlneurons/results/day1_wdiff328/theta0.5_cue-01",
+   "hand_read_right_of_20": [
+    [
+     207,
+     "$f(n)=n^{2}$",
+     "'\\boxed{f(m) = m^2}' (the same function with the variable named m; v3 compares the expressions)"
+    ]
+   ],
+   "right_corrected": 191
+  }
+ },
+ "per_source_right_v3": {
+  "base_plain_T1": {
+   "aime2022": 3,
+   "aime2023": 0,
+   "aime2024": 1,
+   "aime2025": 5,
+   "amc23": 9,
+   "hmmt_feb2025": 3,
+   "olympiadbench": 55
+  },
+  "base_cue_T1": {
+   "aime2022": 5,
+   "aime2023": 1,
+   "aime2024": 10,
+   "aime2025": 7,
+   "amc23": 22,
+   "hmmt_feb2025": 5,
+   "olympiadbench": 114
+  },
+  "rl_plain_T1": {
+   "aime2022": 5,
+   "aime2023": 2,
+   "aime2024": 16,
+   "aime2025": 12,
+   "amc23": 23,
+   "hmmt_feb2025": 11,
+   "olympiadbench": 137
+  },
+  "rl_cue_T1": {
+   "aime2022": 4,
+   "aime2023": 2,
+   "aime2024": 15,
+   "aime2025": 11,
+   "amc23": 25,
+   "hmmt_feb2025": 8,
+   "olympiadbench": 140
+  },
+  "code1_cue": {
+   "aime2022": 5,
+   "aime2023": 1,
+   "aime2024": 13,
+   "aime2025": 7,
+   "amc23": 25,
+   "hmmt_feb2025": 6,
+   "olympiadbench": 130
+  },
+  "theta0.25_cue": {
+   "aime2022": 5,
+   "aime2023": 1,
+   "aime2024": 12,
+   "aime2025": 7,
+   "amc23": 21,
+   "hmmt_feb2025": 5,
+   "olympiadbench": 131
+  },
+  "theta0.5_cue": {
+   "aime2022": 5,
+   "aime2023": 2,
+   "aime2024": 13,
+   "aime2025": 10,
+   "amc23": 26,
+   "hmmt_feb2025": 7,
+   "olympiadbench": 127
+  },
+  "n": {
+   "aime2022": 6,
+   "aime2023": 3,
+   "aime2024": 29,
+   "aime2025": 30,
+   "amc23": 28,
+   "hmmt_feb2025": 30,
+   "olympiadbench": 202
+  }
+ },
+ "differences": {
+  "code1_cue minus base_cue_T1": {
+   "points": 7.01,
+   "ci95": [
+    2.74,
+    11.28
+   ]
+  },
+  "code1_cue minus rl_plain_T1": {
+   "points": -5.79,
+   "ci95": [
+    -10.06,
+    -1.83
+   ]
+  },
+  "theta0.25_cue minus base_cue_T1": {
+   "points": 5.49,
+   "ci95": [
+    1.52,
+    9.45
+   ]
+  },
+  "theta0.25_cue minus rl_plain_T1": {
+   "points": -7.32,
+   "ci95": [
+    -11.59,
+    -3.05
+   ]
+  },
+  "theta0.5_cue minus base_cue_T1": {
+   "points": 7.93,
+   "ci95": [
+    3.66,
+    12.2
+   ]
+  },
+  "theta0.5_cue minus rl_plain_T1": {
+   "points": -4.88,
+   "ci95": [
+    -8.84,
+    -1.22
+   ]
+  },
+  "code1_cue minus theta0.5_cue": {
+   "points": -0.91,
+   "ci95": [
+    -5.49,
+    3.66
+   ]
+  },
+  "rl_plain_T1 minus base_cue_T1": {
+   "points": 12.8,
+   "ci95": [
+    8.54,
+    17.07
+   ]
+  },
+  "rl_plain_T1 minus code1_cue": {
+   "points": 5.79,
+   "ci95": [
+    1.83,
+    10.06
+   ]
+  }
+ },
+ "bootstrap": "paired, 5,000 resamples, seed 0, 95 % percentile",
+ "fixed_lost_vs_base_cue": {
+  "code1_cue": {
+   "fixed_of_base_cue_wrong": 37,
+   "lost_of_base_cue_right": 14
+  },
+  "theta0.25_cue": {
+   "fixed_of_base_cue_wrong": 33,
+   "lost_of_base_cue_right": 15
+  },
+  "theta0.5_cue": {
+   "fixed_of_base_cue_wrong": 40,
+   "lost_of_base_cue_right": 14
+  },
+  "rl_plain_T1": {
+   "fixed_of_base_cue_wrong": 49,
+   "lost_of_base_cue_right": 7
+  },
+  "rl_cue_T1": {
+   "fixed_of_base_cue_wrong": 49,
+   "lost_of_base_cue_right": 8
+  },
+  "base_cue_wrong": 164,
+  "base_cue_right": 164
+ },
+ "identical_nonempty_texts": {
+  "base_cue_T1 | base_plain_T1": 0,
+  "base_cue_T1 | code1_cue": 0,
+  "base_cue_T1 | rl_cue_T1": 0,
+  "base_cue_T1 | rl_plain_T1": 0,
+  "base_cue_T1 | theta0.25_cue": 0,
+  "base_cue_T1 | theta0.5_cue": 0,
+  "base_plain_T1 | code1_cue": 0,
+  "base_plain_T1 | rl_cue_T1": 0,
+  "base_plain_T1 | rl_plain_T1": 0,
+  "base_plain_T1 | theta0.25_cue": 0,
+  "base_plain_T1 | theta0.5_cue": 0,
+  "code1_cue | rl_cue_T1": 0,
+  "code1_cue | rl_plain_T1": 0,
+  "code1_cue | theta0.25_cue": 0,
+  "code1_cue | theta0.5_cue": 0,
+  "rl_cue_T1 | rl_plain_T1": 0,
+  "rl_cue_T1 | theta0.25_cue": 0,
+  "rl_cue_T1 | theta0.5_cue": 0,
+  "rl_plain_T1 | theta0.25_cue": 0,
+  "rl_plain_T1 | theta0.5_cue": 0,
+  "theta0.25_cue | theta0.5_cue": 0
+ },
+ "predictions": {
+  "Q1": {
+   "text": "RL plain minus Code-RL cue: refuted if the interval's lower end is above 5 points",
+   "diff": {
+    "points": 5.79,
+    "ci95": [
+     1.83,
+     10.06
+    ]
+   },
+   "interval_includes_0": false,
+   "status": "not refuted by its rule, but the interval excludes 0"
+  },
+  "Q2": {
+   "text": "theta(0.5) cue >= 190 of 328",
+   "right": 190,
+   "status": "held"
+  },
+  "Q3": {
+   "text": "theta(0.25) cue >= 185 of 328",
+   "right": 182,
+   "status": "refuted"
+  },
+  "Q4": {
+   "text": "cap hits base cue > theta(0.25) > theta(0.5) > RL (plain 20, cue 25); refuted by any rise larger than 10",
+   "cap_hits": {
+    "base_cue_T1": 77,
+    "theta0.25_cue": 56,
+    "theta0.5_cue": 73,
+    "rl_plain_T1": 20,
+    "rl_cue_T1": 25
+   },
+   "rises": [
+    -21,
+    17,
+    -53,
+    -48
+   ],
+   "status": "refuted"
+  }
+ }
+}

@@ -75,7 +75,7 @@ class VllmEngine:
                      "gpu_memory_utilization": 0.90, "max_model_len": max_model_len}
 
     def add(self, rid, ids, sampling, seed, max_tokens):
-        sp = self.SP(**BASE_SAMPLING, **sampling, max_tokens=max_tokens, seed=seed)
+        sp = self.SP(**{**BASE_SAMPLING, **sampling}, max_tokens=max_tokens, seed=seed)     # sampling may override min_p, top_k
         bad = {k: getattr(sp, k) for k, ok in G.NEUTRAL.items() if hasattr(sp, k) and getattr(sp, k) not in ok}
         assert not bad, f"sampling fields not at their neutral value: {bad}"
         self.engine.add_request(rid, {"prompt_token_ids": ids}, sp)

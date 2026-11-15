@@ -1,0 +1,128 @@
+{
+ "name": "r3-surprises-2",
+ "statement": "Any outcome-reward RL difference on the Olmo 3 base has two parts. The first is a shared, low-dose part that gates the base's existing settle-or-switch behaviour: it keeps the model on one line of attack, has it verify, then stop. Math-RL and Code-RL both learn this part even though their weights are orthogonal, and it saturates by a = 0.25. The second is a high-dimensional, math-specific part that only pays off on long, hard problems. MATH-500 gains therefore come mostly from the shared part, while the hard-set and longest-quartile gap needs the math-specific part, which no decoding rule or neuron subset supplies.",
+ "scope": "Covers Olmo-3-1025-7B with the cue, base + a(RL - base) merges, Olmo-3.1 RL-Zero-Math and Olmo-3.1 RL-Zero-Code, at T 1.0 / top-p 1.0, cap 16,384, grader v3, on MATH-500 and the clean hard328. Does not cover T 0.6 looping, grader effects, code benchmarks, other model families, or the plain-prompt format gap (Code-RL plain 390 is a format failure the cue removes).",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2510.07364",
+   "finding": "RL teaches when to use behaviours the base already has. Steering base 'category vectors' at 5-12 % of tokens recovers about 76 % of an RL gap but only about 11 % of an SFT-distilled gap.",
+   "how": "This is the shared part. It works by gating existing base behaviours (hold, verify, wrap up), so any outcome-reward RL run, whether on math or code, converges on the same function through different weights. One gate needs only a small dose, so it saturates early. The Think-SFT difference installs new mechanisms instead, which is why it does not point along RL."
+  },
+  {
+   "source": "2501.18585",
+   "finding": "In o1-like models, wrong answers use 225 % more tokens than right ones because they switch thoughts 418 % more often, and many of the abandoned early thoughts were correct.",
+   "how": "This names what the shared gate removes: the base dropping a correct line of attack, and wandering until the cap on problems of moderate length. Problems that need long, correct reasoning chains are not fixed by staying on one line, so they need the math-specific part."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-4b0d5f",
+   "quote": "a=0.25 is +6.2 pts over base cue [3.0, 9.6], later steps flat",
+   "how": "The shared gate saturates at a small dose. MATH-500 is mostly measuring that gate, so the curve goes flat after a = 0.25."
+  },
+  {
+   "item": "result-4b0d5f",
+   "quote": "P5 refuted, P1-P4 and P6 held.",
+   "how": "A dose curve that keeps rising was not seen, as expected when one saturating gate dominates the benchmark."
+  },
+  {
+   "item": "result-9b6af3",
+   "quote": "Code-RL cue 450 (+8.0 [4.6, 11.4]) at 3,337 tokens/problem",
+   "how": "Code-RL learned the same settle gate, so with the cue fixing the format it matches Math-RL on MATH-500, and does so with shorter answers."
+  },
+  {
+   "item": "result-c9b27e",
+   "quote": "cos 0.014 over 7.3 B entries",
+   "how": "The two differences reach the same gate through different weights, so they match in function while being orthogonal in weights."
+  },
+  {
+   "item": "result-e2482e",
+   "quote": "RL-Code delta 15 of 96, Think-SFT 0 of 96",
+   "how": "Both RL differences read out to the same deliberation and cue tokens and the SFT difference reads out to none, which matches a shared RL-specific gate."
+  },
+  {
+   "item": "result-54f212",
+   "quote": "'the MLP change is mostly a constant vector' is refuted",
+   "how": "The gate depends on the current state (hold here, stop there), so a fixed push captures only part of it."
+  },
+  {
+   "item": "knowledge-69adda",
+   "quote": "random neurons matched on change energy (two kinds) 58.0-63.8: H_local REFUTED",
+   "how": "The gate is a direction spread over the whole difference, not a set of neurons, so the top neurons score like random ones."
+  },
+  {
+   "item": "result-156f7b",
+   "quote": "Hypothesis 'top 1 % closes >= 50 %' refuted.",
+   "how": "A distributed gate direction cannot sit in the 1 % most-changed neurons."
+  },
+  {
+   "item": "result-904bbf",
+   "quote": "Hypothesis 'best 1 % closes >= 30 %' not met.",
+   "how": "Even ranking neurons by attribution cannot gather a direction that is spread over nearly every neuron."
+  },
+  {
+   "item": "result-2c2cae",
+   "quote": "No base rule fits RL's single-answer tokens.",
+   "how": "Fixed length cutoffs cannot imitate a stop decision that depends on the state of the solution, so the length rules fail."
+  },
+  {
+   "item": "knowledge-9e4147",
+   "quote": "largest on the longest problems",
+   "how": "The math-specific part only pays off on long problems, so the gap that remains after the shared gate is largest in the top length quartile."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-b4c576",
+   "quote": "RL readout holds Wait/Hmm at 5.64 % of positions",
+   "how": "A 'commit' gate might be expected to lower hold-on words. The theory reads RL's extra holding as verifying within one line of attack, not switching, but the item does not tell holding and switching apart."
+  },
+  {
+   "item": "knowledge-c788b4",
+   "quote": "Edit minus norm-matched random: +1.7 points [-1.7, +5.0], not separated",
+   "how": "On a model limited by the cap, any edit that shortens answers raises accuracy, so Code-RL's equality could be a generic shortening effect rather than a shared gate (though the Olmo random control gives only +1.4)."
+  }
+ ],
+ "rival": "The strongest rival is generic disruption or shortening: any RL-trained difference simply shortens the base's answers, and the gain is censoring by the cap, not a shared, state-dependent gate. The rival predicts that Code-RL also matches Math-RL on hard328 and in the longest quartile, because shortening helps most where cap hits are most common. This theory predicts Code-RL and a = 0.25 fall far behind RL exactly there. The hard328 Code-RL cell and the Q4 gap-closure fraction separate the two.",
+ "predictions": [
+  {
+   "experiment": "allenai/Olmo-3.1-7B-RL-Zero-Code (1ca3bb30, RL-Math tokenizer) with the 3-token cue, clean hard328, T 1.0 / top-p 1.0, cap 16,384, one sample, seed base 3,000,000, grader v3, one H100 (or 4 shards).",
+   "unit": "right of 328",
+   "value": 177,
+   "low": 165,
+   "high": 190,
+   "refuted_by": "191 or more right (Code-RL within about 14 of RL's 205), which would mean the shared part also carries the hard-set gain.",
+   "gpu_minutes": 55
+  },
+  {
+   "experiment": "theta(0.25) = base + 0.25 (RL-Math - base), bf16 stochastic rounding as in work-d36669, with the cue, clean hard328, T 1.0 / top-p 1.0, cap 16,384, one sample, seed base 3,000,000, grader v3, 4 shards on H100.",
+   "unit": "right of 328",
+   "value": 176,
+   "low": 164,
+   "high": 189,
+   "refuted_by": "190 or more right: if a quarter dose recovered most of the hard-set gap as it does on MATH-500, the math-specific part would not be needed.",
+   "gpu_minutes": 58
+  },
+  {
+   "experiment": "Offline: the share of the RL-minus-base gap that Code-RL with the cue closes in the longest RL-length quartile of MATH-500, against the other three quartiles.",
+   "recipe": "Load studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (500 rows). Sort by t2_generated_tokens ascending, breaking ties by problem_index ascending, and call the last 125 rows Q4 and the first 375 Q1-3. Load iterate-runs:abaybektursun-1114-162452-0203/answers.jsonl (code_cue) and join on problem_index. Code right = score_v3 true; a missing score_v3 or a cap hit with no extracted answer counts as wrong; if there are several rows per problem_index, use attempt 1 or the first row. For each group compute f = (sum code_right - sum t1_right) / (sum t2_right - sum t1_right). Report f for Q4, and also f for Q1-3.",
+   "unit": "fraction of the T2-T1 gap closed in Q4",
+   "value": 0.4,
+   "low": 0.1,
+   "high": 0.7,
+   "refuted_by": "f in Q4 above 0.70, or f in Q4 greater than or equal to f in Q1-3.",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Offline: on problems where the cued base hit the cap and RL was right, does Code-RL with the cue fix more than a fresh base-like sample does?",
+   "recipe": "From studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json keep rows with cell == 'rl_only' and t1_cap_hit true. Join on problem_index with iterate-runs:abaybektursun-1114-162452-0203/answers.jsonl (code_cue) and iterate-runs:abaybektursun-1114-153047-6429/answers.jsonl (random_cue). Right = score_v3 true; a missing score_v3 counts as wrong; use the first row per problem_index. Report (code_cue right / n) - (random_cue right / n), where n is the number of kept rows.",
+   "unit": "difference in fraction right",
+   "value": 0.3,
+   "low": 0.08,
+   "high": 0.52,
+   "refuted_by": "A difference below 0.08: Code-RL would fix the base's moderate-length non-stopping no better than a fresh sample, so it would not carry a settle gate.",
+   "gpu_minutes": 0
+  }
+ ]
+}
