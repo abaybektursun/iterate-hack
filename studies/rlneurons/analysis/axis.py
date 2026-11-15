@@ -401,7 +401,8 @@ def main():
         r = analyse(name)
         out = OUT / f"{name}-01"
         (out / "readout.json").write_text(json.dumps(r, indent=1) + "\n")
-        (out / "run.json").write_text(json.dumps({"commit": head, "job_id": None, "gpu": "none (laptop, numpy)", "spec": "studies/rlneurons/specs/SPEC_axis.md",
+        (out / "run.json").write_text(json.dumps({"commit": head, "job_id": None, "gpu": "none (laptop, numpy)",
+                                                  "commit_note": "HEAD when it ran; analysis/axis.py is committed in the commit that adds this file", "spec": "studies/rlneurons/specs/SPEC_axis.md",
                                                   "command": ["uv run --no-project --with numpy python -m studies.rlneurons.analysis.axis --extract --runs <runs>",
                                                               "uv run --no-project --with numpy python -m studies.rlneurons.analysis.axis"],
                                                   "inputs": f"{RES}axis/{name}-01/manifest.json (path, commit, sha256, job id of every arm)"}, indent=1) + "\n")

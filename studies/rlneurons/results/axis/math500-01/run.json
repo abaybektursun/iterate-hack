@@ -2,6 +2,7 @@
  "commit": "0e64b4d96ee43e4165c23d370a01c076bf07d519",
  "job_id": null,
  "gpu": "none (laptop, numpy)",
+ "commit_note": "HEAD when it ran; analysis/axis.py is committed in the commit that adds this file",
  "spec": "studies/rlneurons/specs/SPEC_axis.md",
  "command": [
   "uv run --no-project --with numpy python -m studies.rlneurons.analysis.axis --extract --runs <runs>",
