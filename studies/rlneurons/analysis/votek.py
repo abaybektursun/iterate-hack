@@ -10,7 +10,8 @@ table per problem of which answers agree (rln4_lib.agree on norm_v3), so that a 
 that it equals day1_vote.vote on the first 4 samples of every problem. For each k: the mean over 200 random
 subsets of k samples (kept in sample order; all samples for k = K) of right problems, with a bootstrap over problems (2,000
 resamples) of that mean; at least one of k right; generated tokens per problem. Also the vote with an early stop at m agreeing
-samples (mean over 200 random orders). Writes metrics.json, rows.jsonl (compact fields,
+samples (mean over 200 random orders), and its difference to the smallest fixed vote that costs at least as many tokens (paired
+bootstrap over problems). Writes metrics.json, rows.jsonl (compact fields,
 no text), examples.json and run.json.
 """
 import argparse
@@ -87,6 +88,7 @@ def main():
     res = {"problems": len(probs), "samples": K, "runs": cfgs, "k": {}}
     stored4 = sum(vote(rows[p], same[p], range(4))["score"] for p in probs)
     res["vote_over_first_4_in_order"] = stored4
+    fixed = {}                                                                   # k -> (per-problem mean vote score, tokens per problem)
     for k in range(1, K + 1):
         subsets = [sorted(rng.choice(K, k, replace=False).tolist()) for _ in range(SUBSETS)] if k < K else [list(range(K))]
         v = np.array([[vote(rows[p], same[p], sub)["score"] for p in probs] for sub in subsets], dtype=float)      # subsets x problems
@@ -94,6 +96,7 @@ def main():
         tok = np.mean([[sum(per[p][s]["n_new"] for s in sub) for p in probs] for sub in subsets])
         pm = v.mean(0)
         b = pm[bs].sum(1)
+        fixed[k] = (pm, float(tok))
         res["k"][str(k)] = {"vote_right": round(float(pm.sum()), 1), "ci95": [round(float(np.percentile(b, 2.5)), 1), round(float(np.percentile(b, 97.5)), 1)],
                             "subset_min_max": [int(v.sum(1).min()), int(v.sum(1).max())], "any_right": round(float(anyr.mean(0).sum()), 1), "tokens_per_problem": round(float(tok))}
     # Early stop (the fixed-threshold form of adaptive self-consistency, Aggarwal et al. 2023, arXiv 2305.11860): draw samples in
@@ -101,15 +104,21 @@ def main():
     orders = [rng.permutation(K).tolist() for _ in range(SUBSETS)]
     res["stop_at_m_votes"] = {}
     for m in range(2, K // 2 + 1):
-        right = used = tok = 0
-        for p in probs:
+        used = tok = 0
+        pm = np.zeros(len(probs))
+        for i, p in enumerate(probs):
             for o in orders:
                 n = next((n for n in range(m, K + 1) if vote(rows[p], same[p], o[:n])["votes"] >= m), K)
-                right += vote(rows[p], same[p], o[:n])["score"]
+                pm[i] += vote(rows[p], same[p], o[:n])["score"] / SUBSETS
                 used += n
                 tok += sum(per[p][s]["n_new"] for s in o[:n])
-        res["stop_at_m_votes"][str(m)] = {"vote_right": round(right / SUBSETS, 1), "samples_per_problem": round(used / SUBSETS / len(probs), 2),
-                                          "tokens_per_problem": round(tok / SUBSETS / len(probs))}
+        tok /= SUBSETS * len(probs)
+        k = next((k for k in range(1, K + 1) if fixed[k][1] >= tok), K)          # the smallest fixed vote that costs at least as many tokens
+        d = (pm - fixed[k][0])[bs].sum(1)
+        res["stop_at_m_votes"][str(m)] = {"vote_right": round(float(pm.sum()), 1), "samples_per_problem": round(used / SUBSETS / len(probs), 2),
+                                          "tokens_per_problem": round(tok),
+                                          "minus_fixed_vote": {"k": k, "tokens_per_problem": round(fixed[k][1]), "problems": round(float((pm - fixed[k][0]).sum()), 1),
+                                                               "ci95": [round(float(np.percentile(d, 2.5)), 1), round(float(np.percentile(d, 97.5)), 1)]}}
     full = {p: vote(rows[p], same[p], range(K)) for p in probs}
     right_count = {p: sum(per[p][s]["score_v3"] for s in range(K)) for p in probs}
     res["vote_all_wrong_by_right_samples"] = {str(c): sum(1 for p in probs if not full[p]["score"] and right_count[p] == c) for c in range(K + 1)}
