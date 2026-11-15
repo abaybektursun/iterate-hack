@@ -4689,6 +4689,26 @@ layer are edited (2 matrices), at 1.5; every later layer is the base. RMS shift,
 - Limits: one run; the random edit at layer 0 is 12 times smaller at the start and its growth of 18 rests on shifts of 0.001 to
   0.02; no scored cell uses these single-layer edits.
 
+#### xlisten (specs/SPEC_xlisten.md, work-4846d5): the next layer's weights read RL's written directions 1.67 times an average one, less than the base's own
+
+Branch `sharedsub` only. Weights only, `jobs/xlisten.py`, job `abaybektursun-1115-170332-2668` (smoke on 3 layers:
+`...170213-23c6`); `results/xlisten/run-01/` (`readout.json`, `metrics.json`, `run.json`). 62 writers (`o`, `down` of layers 0 to
+30), 8 unit directions each; gain = ||W c||^2 / (||W||_F^2 / 4096) averaged over the next layer's `q`, `k`, `v`, `gate`, `up`.
+
+| Written directions | Mean next-layer gain | Writers in layers 0-10 | 11-21 | 22-30 | Mean over all later layers |
+|---|---|---|---|---|---|
+| RL-Zero Math's top 8 (left singular vectors of the difference) | 1.67 | 1.75 | 1.52 | 1.73 | 1.36 |
+| the base matrix's own top 8 | 3.25 | 4.39 | 3.31 | 1.79 | 1.58 |
+| random | 1.00 | 1.01 | 1.00 | 0.99 | 0.99 |
+
+- Instrument: the random set is at 1.00 (required 0.8 to 1.25); the synthetic planted read direction has gain 231.
+- L1 undecided: 1.67 lies between the refutation line (1.3) and the predicted 2. RL's directions are read more than an average
+  direction in every band; `down` 1.88, `o` 1.45.
+- L2 refuted: RL's directions exceed the base's own top written directions in 8 of 62 writers (predicted at least 40), 7 of the 8
+  in layers 22 to 30. Being well read by the next layer is what top directions of the base do; RL's are less so, not more.
+- So the linear read gain (1.67 in squared norm, 1.29 in norm) does not account for run-04, where the base enlarged RL's written
+  shift 3 to 6 times more than a random one. Not tested: attention routing and the MLP nonlinearity.
+
 ## Drift: a switch to Chinese marks a cut-off Think-SFT answer but no label-free sign predicts one early (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-76a232, idea-e37da1)
 
 Question: Think-SFT + cue hits the 16,384 cap on 29 % (hard328) and 45.6 % (fresh2026) of its samples, and a quarter of those
