@@ -211,7 +211,7 @@ footer code { font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere
   function get(path) { return path.split(".").reduce(function (o, k) { return o[k]; }, D); }
   function f2(x) { return x.toFixed(2); }
   var HOLD = new Set(D.hold_words), WRAP = new Set(D.wrap_words);
-  function clean(t) { return t.replace(/�/g, "▯"); }
+  function clean(t) { return t.split(String.fromCharCode(0xFFFD)).join(String.fromCharCode(0x25AF)); }
   function show(t) { return clean(t).replace(/\n/g, "↵").replace(/^ /, "·"); }
 
   document.querySelectorAll("[data-f]").forEach(function (e) { e.textContent = f2(get(e.getAttribute("data-f"))); });
