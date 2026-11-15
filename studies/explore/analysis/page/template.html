@@ -211,10 +211,21 @@ code { font-family: var(--mono); font-size: .9em; }
 </section>
 
 <section>
+  <div class="tag">Finding 6 · SWE-2 · AHC014 · 2, 4 and 8 agents · same 40 tries</div>
+  <h2>At every swarm size tested, Fork-and-Flush beats independent agents</h2>
+  <p class="answer">The fair baseline for Fork-and-Flush with K branches is a swarm of K independent agents with the same 40 tries in total. Fork-and-Flush is ahead at 2, 4 and 8 agents (gaps 0.084, 0.015, 0.030; planned test p = 0.004, and p = 0.010 on the two new sizes alone). The gap at 4 agents is the weak one: with the fresh runs of Finding 4 it is zero.</p>
+  <div class="figure"><div class="chart" id="kstrip"></div>
+  <p class="cap">Each dot is one 40-try run's best validation score; the tick is the cell mean. 2 and 8 agents: 3 new runs per arm. 4 agents: the first batch of Finding 4, as planned. Test: labels permuted within each swarm size, all 369,600 splits, one-sided.</p>
+  <div class="scroll"><table id="kTab"></table></div></div>
+  <div class="callout"><p><b>What this does not separate.</b> Independent agents never see each other's programs; Fork-and-Flush restarts every branch from the best one. So the win may come from sharing the best program, not from flushing the chat. On the held-out cases the gap at 8 agents is 0.002.</p></div>
+</section>
+
+<section>
   <div class="tag">Caveats</div>
   <h2>What these numbers do not show yet</h2>
   <ul class="plain">
     <li>Finding 5 is one seed per arm, and its Forgetting and Fork-and-Flush reference lines on AHC014 come from the earlier run. Literature arms follow the papers' descriptions, not their code.</li>
+  <li>Finding 6 has 3 runs per arm at 2 and 8 agents, on one task with one model. It shows the order at these three sizes, not for every swarm size.</li>
   <li>Six or twelve runs per arm in Finding 4, one elsewhere outside Finding 1. Differences of a few hundredths can be noise; seeds get added only for an arm that wins.</li>
     <li>Until the bug was found, programs ran on a Python without numpy and scipy. gpt-5.4-mini's 10 attempts to use them all failed; AHC014 was unaffected (no imports). SWE-2 ran with both.</li>
     <li>SWE-2 runs inside Devin's own agent prompt, so a model comparison also changes the harness.</li>
@@ -464,6 +475,30 @@ const meanCurve = runs => { const n = Math.min(...runs.map(r => r.curve.length))
   const last = k => { const c = D.a_mini[k][0].curve; return c[c.length - 1]; };
   tab("aAssignTab", "ahc014", ak, {forget: last("forget"), fnf: last("fnf")}, false);
   tile(document.getElementById("assignTile"), circlesSVG(D.circles.assign.circles), "gpt-5.4-mini, assigned method", fmt(D.circles.assign.score), "A fresh branch told to implement a listed method: the same model now writes an optimizer (basin hopping with an SLSQP polish).");
+}
+/* Finding 6 */
+{
+  const K = D.ksweep, ks = ["2", "4", "8"], arms = ["parallel", "fnf"], host = document.getElementById("kstrip");
+  const rows = ks.flatMap(k => arms.map(a => [k, a]));
+  const W = 720, H = 300, L = 190, R = 24, T = 14, B = 30, x0 = 0.42, x1 = 0.68, rh = (H - T - B - 2 * 14) / rows.length;
+  const s = el("svg", {viewBox: `0 0 ${W} ${H}`, role: "img"});
+  const X = v => L + (v - x0) / (x1 - x0) * (W - L - R), Y = i => T + Math.floor(i / 2) * 14 + (i + 0.5) * rh;
+  for (const t of [0.45, 0.5, 0.55, 0.6, 0.65]) { el("line", {x1: X(t), x2: X(t), y1: T, y2: H - B, stroke: "var(--grid)"}, s); el("text", {x: X(t), y: H - 10, "text-anchor": "middle"}, s).textContent = t.toFixed(2); }
+  const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true;
+  const name = (k, a) => a === "fnf" ? `Fork-and-Flush, ${k} branches` : `Parallel, ${k} agents`;
+  rows.forEach(([k, a], i) => {
+    const lab = el("text", {x: L - 12, y: Y(i) + 4, "text-anchor": "end"}, s); lab.textContent = name(k, a); lab.style.fill = "var(--fg2)";
+    const rs = K.runs[k][a], v = rs.map(r => r.val), m = v.reduce((p, q) => p + q) / v.length;
+    el("line", {x1: X(m), x2: X(m), y1: Y(i) - 15, y2: Y(i) + 15, stroke: "var(--fg)", "stroke-width": 2}, s);
+    rs.forEach((r, j) => {
+      const c = el("circle", {cx: X(r.val), cy: Y(i) + (j % 2 ? 5 : -5), r: 7, fill: ARM[a].c, stroke: "var(--panel)", "stroke-width": 2}, s);
+      c.addEventListener("pointerenter", ev => { tip.innerHTML = `<div class="t">${name(k, a)}, seed ${r.seed}</div><div class="r"><i>validation</i><span>${fmt(r.val)}</span></div><div class="r"><i>held-out test</i><span>${r.test ? fmt(r.test) : "invalid"}</span></div>`; tip.hidden = false; const hr = host.getBoundingClientRect(); let lx = ev.clientX - hr.left + 12; if (lx + 220 > hr.width) lx = ev.clientX - hr.left - 230; tip.style.left = lx + "px"; tip.style.top = (ev.clientY - hr.top + 10) + "px"; });
+      c.addEventListener("pointerleave", () => tip.hidden = true);
+    });
+  });
+  host.appendChild(s); host.appendChild(tip);
+  const sg = x => (x >= 0 ? "+" : "−") + Math.abs(x).toFixed(3);
+  document.getElementById("kTab").innerHTML = `<tr><th>Agents</th><th class="num">Runs per arm</th><th class="num">Parallel mean</th><th class="num">Fork-and-Flush mean</th><th class="num">Gap</th><th class="num">Gap on held-out test</th></tr>` + ks.map(k => { const c = K.cells[`val K=${k}`], te = K.cells[`test K=${k}`]; return `<tr><td>${k}</td><td class="num">${c.fnf.n}</td><td class="num">${fmt(c.parallel.mean)}</td><td class="num">${fmt(c.fnf.mean)}</td><td class="num"><b>${sg(c.gap)}</b></td><td class="num">${sg(te.gap)}${k === "4" ? " (2 parallel programs invalid)" : ""}</td></tr>`; }).join("");
 }
 /* Finding 3 */
 document.getElementById("optMini").textContent = "5 / 800";

@@ -106,6 +106,7 @@ circ["assign"] = {"score": row["score"], "id": row["id"], "idea": row["idea"][:2
                   "circles": json.loads([l for l in run_prog(p).splitlines() if l.strip().startswith("{")][-1])["circles"]}
 data["seeds"] = json.loads((ROOT / "studies/explore/results/ahc014/swe2-seeds-01/summary.json").read_text())
 data["spread"] = json.loads((ROOT / "studies/explore/results/ahc014/swe2-spread-02/summary.json").read_text())  # fresh seeds 6-11
+data["ksweep"] = json.loads((ROOT / "studies/explore/results/ahc014/swe2-ksweep-02/summary.json").read_text())  # K = 2, 4, 8
 import time
 tpl = (pathlib.Path(__file__).parent / "template.html").read_text()
 pathlib.Path(sys.argv[1]).write_text(tpl.replace("__DATA__", json.dumps(data).replace("</", "<\\/"))
