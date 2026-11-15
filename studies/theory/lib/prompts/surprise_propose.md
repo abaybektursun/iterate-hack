@@ -51,8 +51,9 @@ a's cause and b's cause put it in different ranges>", "statistic": "<the one num
 paths exactly as data.md lists them>"], "rows": "<which rows of those files enter>", "n": <the number of rows the
 statistic is computed on, at least 50>, "computation": "<step by step, including the 90 % interval>", "null": "<the
 comparison stronger than random where one exists: for example the base matrix's own top directions, another model's
-directions>", "ranges": {"a": [low, high], "b": [low, high], "null": [low, high]}}. The ranges of a and b must not
-overlap; "null" is the range the null gives. Verdict, applied by the test runner: a rival holds only if the statistic's
+directions>", "ranges": {"a": [low, high], "b": [low, high], "null": [low, high]}}. "null" is the range the null
+gives. The three ranges must not overlap: neither rival's range may contain or touch the null's range, so a rival
+holds only by beating the null. Verdict, applied by the test runner: a rival holds only if the statistic's
 90 % interval lies wholly inside its range and n is at least 50, else it is undecided; a value in neither rival's range
 refutes both. A pair without such a test is dropped.
 
@@ -61,7 +62,7 @@ Write rivals.json, one JSON object:
              "forecasts": [{"id": "t01", "value": 312, "low": 295, "high": 330, "reason": "..."}]},
             {"id": "b", ...}],
  "test": {"claim": "...", "statistic": "...", "files": ["studies/..."], "rows": "...", "n": 120, "computation": "...", "null": "...",
-          "ranges": {"a": [0.6, 1.0], "b": [0.0, 0.4], "null": [0.3, 0.5]}},
+          "ranges": {"a": [0.6, 1.0], "b": [0.0, 0.2], "null": [0.3, 0.5]}},
  "cell": null}
 
 Write only rivals.json. Reply with one line per mechanism and one for the test.

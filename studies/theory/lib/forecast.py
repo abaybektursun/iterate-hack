@@ -741,7 +741,7 @@ def check_rivals(d, tids, board_ids, n_facts, flags=None):
 
 def pair_test_errors(t):
     """Errors of a rival pair's shared direct test (version 14): claim, statistic, stored files that exist, the rows,
-    n of at least MIN_N, computation, null, and ranges a, b and null fixed in advance, with a and b disjoint."""
+    n of at least MIN_N, computation, null, and ranges a, b and null fixed in advance, all three pairwise disjoint."""
     e = [f"missing {k}" for k in ("claim", "statistic", "rows", "computation", "null") if not str(t.get(k, "")).strip()]
     files = t.get("files") or []
     e += [] if files else ["files: one or more stored paths whose rows give the statistic"]
@@ -750,7 +750,9 @@ def pair_test_errors(t):
     r = t.get("ranges") or {}
     if not all(isinstance(r.get(k), list) and len(r[k]) == 2 and all(engine.number(x) for x in r[k]) and r[k][0] <= r[k][1] for k in ("a", "b", "null")):
         return e + ['ranges needs "a", "b" and "null", each [low, high] in the statistic\'s unit with low <= high']
-    return e + ([] if r["a"][1] < r["b"][0] or r["b"][1] < r["a"][0] else [f"ranges a {r['a']} and b {r['b']} overlap; they must be disjoint"])
+    apart = lambda x, y: r[x][1] < r[y][0] or r[y][1] < r[x][0]
+    return e + [f"ranges {x} {r[x]} and {y} {r[y]} overlap; they must be disjoint (a rival whose range holds the null's could hold without beating the null)"
+                for x, y in (("a", "b"), ("a", "null"), ("b", "null")) if not apart(x, y)]
 
 
 def pair_apart(ms):
@@ -836,8 +838,8 @@ def tests_md(folder, plans):
     """direct_tests.md: every plan (carried mechanisms, and one shared test per rival pair), with its verdicts when rows exist."""
     verdict = {r["mechanism"]: r for r in direct_facts()}
     md = [f"# Direct tests, {folder.name}\n\nForecast gain does not confirm a cause. A carried mechanism's plan tests the one claim that follows from its "
-          "cause and from none of the others; a rival pair's plan is one statistic on one set of stored rows, for which the two rivals state disjoint "
-          "ranges. Offline on stored files, with the refuting observation, threshold or ranges and the null fixed here. Run each with one subagent: "
+          "cause and from none of the others; a rival pair's plan is one statistic on one set of stored rows, for which the two rivals and the null state "
+          "three disjoint ranges. Offline on stored files, with the refuting observation, threshold or ranges and the null fixed here. Run each with one subagent: "
           "spec committed first, offline only, then a row per mechanism in `studies/theory/results/direct_tested.json` (with `measured`, the 90 % "
           f"interval and n; refuted ones also in `refuted.json`). {VERDICT_RULE} Only mechanisms that hold one forecast the open targets; run the "
           "same round command again afterwards.\n"]
