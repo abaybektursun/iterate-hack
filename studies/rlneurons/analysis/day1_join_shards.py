@@ -15,6 +15,18 @@ complete run (day1_vote.chains: every problem has every sample, no duplicate row
 metrics.json of the joined folder: job_id is "join:" + the shard job ids; counts are sums over shards (generation_s is GPU
 seconds summed, tokens_per_s = generated tokens / that sum: a per-GPU rate); engine, memory and wall_s differ per shard and
 are kept per shard under joined_from.shards, not at the top level.
+
+An incomplete cell (one shard job has no usable output) is joined only with both flags:
+
+    --missing-shard k/N --missing-reason "<why shard k has no usable rows>"   and the other N - 1 shard folders, in shard order
+
+Asserted then, besides the checks above on every given shard: exactly N - 1 folders are given; the joined problems are the set
+minus exactly the positions k, k+N, ... (no row of the missing shard, every other problem complete with every sample). The
+joined folder then says it is partial in four places: PARTIAL.json (the missing positions, their problem_index values and the
+reason), metrics.json config.partial and joined_from.missing, and job_id, which starts with "join-partial(missing k/N):".
+config.n_problems is the number of problems joined; status stays "done" because every joined problem is complete. To put a
+second model on the same problems, join its shards with the same --missing-shard. Without the flags nothing changes: a missing
+shard is an assertion error.
 """
 from __future__ import annotations
 
@@ -39,14 +51,28 @@ def set_indices(name: str) -> list:
     return clean
 
 
-def join(shards: list) -> tuple:
-    """shards: [(source path, metrics, raw lines of answers.jsonl)] in shard order. Returns (joined metrics, joined lines)."""
-    n_sh = len(shards)
+def parse_shard(text: str) -> tuple:
+    k, n = text.split("/")
+    return int(k), int(n)
+
+
+def join(shards: list, missing=None, reason=None) -> tuple:
+    """shards: [(source path, metrics, raw lines of answers.jsonl)] in shard order. missing: None, or (k, N): shard k of N is
+    absent and shards holds the other N - 1 in shard order; reason says why. Returns (joined metrics, joined lines)."""
+    n_sh = len(shards) if missing is None else missing[1]
+    present = list(range(n_sh))
+    if missing is None:
+        assert reason is None, "--missing-reason without --missing-shard"
+    else:
+        assert reason and reason.strip(), "--missing-shard needs --missing-reason: why the shard has no usable rows"
+        assert 0 <= missing[0] < n_sh, f"--missing-shard {missing[0]}/{n_sh}: no such shard"
+        assert len(shards) == n_sh - 1, f"--missing-shard {missing[0]}/{n_sh}: {len(shards)} shard folders given, exactly {n_sh - 1} needed (every shard but the missing one)"
+        present.remove(missing[0])
     m0 = shards[0][1]
     c0 = m0["config"]
     whole = set_indices(c0["set"])
     joined, parts = [], []
-    for k, (src, m, lines) in enumerate(shards):
+    for k, (src, m, lines) in zip(present, shards):
         assert m["status"] == "done", f"{src}: status {m['status']!r}, not done"
         c = m["config"]
         assert m["commit"] == m0["commit"] == c["commit"], f"{src}: commit {m['commit']} differs from shard 0"
@@ -71,33 +97,54 @@ def join(shards: list) -> tuple:
                       "gpu": m["memory"]["gpu"], "wall_s": m["wall_s"], "started_utc": m["started_utc"], "updated_utc": m["updated_utc"]})
     joined.sort(key=lambda t: t[:3])
     lines = [t[3] for t in joined]
-    cfg = {**{x: v for x, v in c0.items() if x not in PER_SHARD}, "n_problems": len(whole)}
+    absent_pos = [] if missing is None else list(range(missing[0], len(whole), n_sh))
+    absent = [whole[p] for p in absent_pos]
+    kept = sorted(set(whole) - set(absent))
+    got = sorted({t[0] for t in joined})
+    assert got == kept, f"the joined problems are not the set minus the missing shard ({len(got)} joined, {len(kept)} expected, {len(set(got) ^ set(kept))} differ)"
+    assert not set(got) & set(absent), "a row of the missing shard is among the joined rows"
+    cfg = {**{x: v for x, v in c0.items() if x not in PER_SHARD}, "n_problems": len(kept)}
+    if missing is not None:
+        cfg["partial"] = {"missing_shard": f"{missing[0]}/{n_sh}", "n_problems_of_set": len(whole), "n_problems_missing": len(absent), "reason": reason}
     V.chains([json.loads(x) for x in lines], cfg["n_problems"], cfg["samples"], cfg["restarts"])       # asserts a complete run
     counts = {x: sum(p["counts"][x] for p in parts) for x in SUMMED}
     counts["mean_generated_tokens"] = counts["generated_tokens"] / counts["n"]
     counts["tokens_per_s"] = counts["generated_tokens"] / counts["generation_s"]
-    met = {"status": "done", "config": cfg, "commit": m0["commit"], "job_id": "join:" + "+".join(p["job_id"] for p in parts),
+    tag = "join:" if missing is None else f"join-partial(missing {missing[0]}/{n_sh}):"
+    met = {"status": "done", "config": cfg, "commit": m0["commit"], "job_id": tag + "+".join(p["job_id"] for p in parts),
            "versions": m0["versions"], "started_utc": min(p["started_utc"] for p in parts), "updated_utc": max(p["updated_utc"] for p in parts),
            "counts": counts,
            "joined_from": {"script": "studies/rlneurons/analysis/day1_join_shards.py", "entry_point": "studies/metaharness/jobs/shard_cell.py",
                            "counts_are": "sums over the shards; generation_s is GPU seconds summed; tokens_per_s is per GPU",
                            "shards": parts}}
+    if missing is not None:
+        met["joined_from"]["missing"] = {"shard": f"{missing[0]}/{n_sh}", "reason": reason, "positions_in_set": absent_pos, "problem_indices": absent,
+                                         "rule": "no row of the missing shard is joined; every other problem has every sample"}
     return met, lines
 
 
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", required=True)
+    ap.add_argument("--missing-shard", default=None, help="k/N: shard k of N has no usable rows; give the other N - 1 folders")
+    ap.add_argument("--missing-reason", default=None, help="why (required with --missing-shard); written into the joined folder")
     ap.add_argument("shards", nargs="+", help="the shard run folders, in shard order")
     a = ap.parse_args(argv)
     out = pathlib.Path(a.out)
     assert not out.exists(), f"{out} exists: a rerun gets a new folder"
     src = [pathlib.Path(p) for p in a.shards]
-    met, lines = join([(p, json.loads((p / "metrics.json").read_text()), (p / "answers.jsonl").read_text().splitlines()) for p in src])
+    met, lines = join([(p, json.loads((p / "metrics.json").read_text()), (p / "answers.jsonl").read_text().splitlines()) for p in src],
+                      parse_shard(a.missing_shard) if a.missing_shard else None, a.missing_reason)
     met["config"]["out"] = str(out)
     out.mkdir(parents=True)
     (out / "answers.jsonl").write_text("\n".join(lines) + "\n")
     (out / "metrics.json").write_text(json.dumps(met, indent=1) + "\n")
+    miss = met["joined_from"].get("missing")
+    if miss:
+        (out / "PARTIAL.json").write_text(json.dumps({**miss, "n_problems_joined": met["config"]["n_problems"],
+                                                      "n_problems_of_set": met["config"]["partial"]["n_problems_of_set"]}, indent=1) + "\n")
+        print(f"PARTIAL JOIN: shard {miss['shard']} is missing ({len(miss['problem_indices'])} problems, positions {miss['positions_in_set'][0]}, "
+              f"{miss['positions_in_set'][1]}, ...): {miss['reason']}")
     s0 = [r for r in map(json.loads, lines) if r["sample"] == 0 and r["attempt"] == 0]
     c = met["counts"]
     print(f"{out}: {len(src)} shards, {met['config']['n_problems']} problems, {c['n']} rows, {c['generated_tokens']} generated tokens")

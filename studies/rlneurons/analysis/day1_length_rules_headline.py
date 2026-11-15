@@ -2,7 +2,9 @@
 day1_vote.py run folders of the same joined runs: per model the rows single, the fixed rules, vote and pass@k, each with right,
 Wilson interval, tokens per problem and the paired difference against that model's single row. With the RL folders also RL
 minus base per row and the equal-tokens line: the base's fixed rule with the most right answers among those whose tokens per
-problem do not exceed RL's single row (ties: fewer tokens), against RL single. Without them the base's table alone.
+problem do not exceed RL's single row (ties: fewer tokens), against RL single, RL minus base under that same rule, and the
+base's vote against RL single with both token counts. Without them the base's table alone. A partial join
+(day1_join_shards --missing-shard) is carried as "partial": both models must be missing the same shard.
 It scores nothing itself: every 0/1 comes from per_problem.tsv and readout.json of the given folders.
 
     uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_length_rules_headline \
@@ -54,7 +56,8 @@ def model_rows(m: str, rules_dir: str, vote_dir: str) -> tuple:
         per[k] = v["per_problem"][k]
         rows[k] = {**v["rows"][k], "minus_single": diff(per[k], per["single"]),
                    "fixed": sum(q > p for p, q in zip(per["single"], per[k])), "broke": sum(q < p for p, q in zip(per["single"], per[k]))}
-    return rows, per, idx, {"set": rules["set"], "n": rules["n"], "samples": v["samples"], "restarts": v["restarts"], "fixed_from": rules["fixed_from"]}
+    return rows, per, idx, {"set": rules["set"], "n": rules["n"], "samples": v["samples"], "restarts": v["restarts"], "fixed_from": rules["fixed_from"],
+                            "partial": (rules.get("partial") or {}).get(m)}
 
 
 def main(argv=None):
@@ -71,7 +74,7 @@ def main(argv=None):
     table["base"], per["base"], idx["base"], info["base"] = model_rows("base", a.rules_base, a.vote_base)
     if a.rules_rl:
         table["rl"], per["rl"], idx["rl"], info["rl"] = model_rows("rl", a.rules_rl, a.vote_rl)
-        assert idx["rl"] == idx["base"] and info["rl"] == info["base"], "the two models are not on the same problems, samples and fixed setting"
+        assert idx["rl"] == idx["base"] and info["rl"] == info["base"], "the two models are not on the same problems, samples, fixed setting and missing shard"
     keys = list(table["base"])
     res = {**info["base"], "bootstrap_resamples": BOOT, "sources": {k: v for k, v in vars(a).items() if k != "out"}, "rows": table}
     if a.rules_rl:
@@ -85,7 +88,11 @@ def main(argv=None):
             "base_setting": best,
             "base": None if best is None else {**{f: table["base"][best][f] for f in ("right", "n", "percent", "wilson95", "tokens_per_problem")},
                                                "minus_rl_single": diff(per["base"][best], per["rl"]["single"])},
-            "base_single_minus_rl_single": diff(per["base"]["single"], per["rl"]["single"])}
+            "same_rule_rl_minus_base": None if best is None else res["rl_minus_base"][best],
+            "base_single_minus_rl_single": diff(per["base"]["single"], per["rl"]["single"]),
+            "base_vote_minus_rl_single": {**diff(per["base"]["vote"], per["rl"]["single"]),
+                                          "base_vote_tokens_per_problem": table["base"]["vote"]["tokens_per_problem"],
+                                          "rl_single_tokens_per_problem": budget}}
     commit = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True,
                             cwd=pathlib.Path(__file__).resolve().parent).stdout.strip()
     out.mkdir(parents=True)

@@ -199,7 +199,7 @@ def main(argv=None):
            "runs": {m: {"job_id": meta[m]["job_id"], "commit": meta[m]["commit"],
                         **{k: meta[m]["config"][k] for k in ("model", "prompt", "set", "temperature", "top_p", "max_tokens", "seed", "samples", "restarts")}}
                     for m in src},
-           "fixed_from": a.fixed, "models": summ}
+           "fixed_from": a.fixed, "partial": {m: meta[m]["config"].get("partial") for m in src}, "models": summ}
     if both:
         res["rl_minus_base"] = {k: {**diff(scores(per["rl"][k]), scores(per["base"][k])),
                                     "tokens_per_problem": summ["rl"]["rows"][k]["tokens_per_problem"] - summ["base"]["rows"][k]["tokens_per_problem"]}
