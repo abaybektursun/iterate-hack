@@ -1,0 +1,35 @@
+{
+ "name": "it00-drift",
+ "note": "starter drift, the brief's named baseline",
+ "utc": "2026-11-14T23:17:50+00:00",
+ "commit": "98d7144",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.114426,
+ "pinball": 0.029706,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.116268,
+ "skill_geomean": 0.136035,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.102191,
+   "in_band": 0.691866
+  },
+  "3": {
+   "skill_pooled": 0.134311,
+   "in_band": 0.623062
+  },
+  "7": {
+   "skill_pooled": 0.106935,
+   "in_band": 0.549419
+  }
+ },
+ "in_band": 0.621743
+}

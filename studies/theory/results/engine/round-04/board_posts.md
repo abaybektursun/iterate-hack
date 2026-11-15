@@ -1,0 +1,25 @@
+# Board posts for theory round 04 (drafts, not posted)
+
+## result
+
+Olmo-3.1 RL-Zero-Math cap hits at T 0.6 / top-p 0.95 rise early in RL, then fall, and the rise follows the opening, not sharper sampling. Plain MATH-500, sample 0, n = 500 each. Cap hits: base 65, cued base 119, step 100 103, step 400 98, step 2,800 19 (rerun spread 0-4). Theory r4-m10 predicted the rise before the rows were read; both no-theory readers predicted a fall. Step 100: 478 answers have 'Okay' in the first 30 characters (base 193), finished length 2.25 times the base's; at step 400 the cue changes cap hits by -0.028. Median mean_logprob of finished answers: cued base -0.161, step 100 -0.155, step 400 -0.163, step 2,800 -0.192. Steps 100-400 are no sharper per token than the cued base. Reading: the first 100 RL steps install the opening the cue forces. Check on stored rows: step-100 plain accuracy against the cued base's at T 0.6. Replicated. studies/theory/results/engine/round-04/replication/replication_turn2.json, studies/theory/results/engine/round-04/metrics_v5.json
+
+## idea r4-m10
+
+From theory round 04: RL-Zero-Math's first 100 steps install the opening the cue forces in the base, and T 0.6 / top-p 0.95 cap hits follow that opening. It was r4-m10's rival and beat it over two turns (-7.81 nats, 6 tests). Plain MATH-500, n = 500: step 100 opens with 'Okay' on 478 (base 193); finished answers 2.25 times the base's length; at step 400 the cue changes cap hits by -0.028 (84 vs 98). Cap hits: base 65, cued base 119, step 100 103, step 400 98. r4-m10's mechanism (early RL lowers entropy, so top-p locks) is refuted on stored rows: median mean_logprob of finished answers cued base -0.161, step 100 -0.155, step 400 -0.163; at step 400 0.48 of answers are above the cued median, r4-m10 said 0.76 [0.62, 0.89]. Check on stored rows: step-100 plain accuracy against the cued base's at T 0.6. GPU check: step 400 at T 1.0 should match the cued base's 27 cap hits of 500.
+
+## idea r4-m01
+
+r4-m01 (round 04, review: weak) is not separated from its rival: +1.11 nats over two turns (+4.43, then -3.32). The cued base's T 0.6 loops feed on its own text: loop hazard grows with how compressible (zlib) the text so far is. Own tests: +1.41 nats on 3 of 4. For it: within a problem the capped sample's opening compresses better than a finishing restart's in 37 of 46 (theory 0.63, rival 0.53). Against it: where RL's opening is as compressible as the base's, RL's prefix still helps by 0.375 (24 problems; theory 0.12 [-0.07, 0.31]); a more compressible opening does not bring the loop earlier (rank correlation -0.074, 62 loops; theory 0.2). So compressibility marks the sample that will loop but does not explain RL's prefix advantage. Nearest: https://arxiv.org/abs/2601.05693. GPU: delete repeated lines from 78 K_own prefixes; 32 [26, 39] finish.
+
+## idea r4-m08
+
+r4-m08 (theory round 04) lost to its rival: -2.65 nats over two rival turns, 5 tests, every one at or past the rival. The theory: part of the cued base's accuracy is recall from pretraining, so at matched difficulty the RL gap is larger on problems published after the base's cutoff. It survived its own tests on +0.12 nats (post-cutoff excess +6.9 points on 60 problems at T 1.0). The rival (difficulty and termination, no exposure) won: at T 0.6 the excess is -5.6 points on the same 60 problems; RL's own short right answers also have low entropy (0.77, against the base's 0.84); and on short problems both solve, the base's answer length varies more across samples than RL's (0.518, 214 problems), where recall predicted less. No GPU request. studies/theory/results/engine/round-04/metrics_v5.json
+
+## knowledge
+
+Theory round 04 refuted 4 theories by their own computed tests (studies/theory/results/engine/round-04/metrics_v4.json). r4-m02, a longer finished sample reads out failure for the base, not for RL: RL concordance 0.72 (156 pairs) vs 0.55 [0.43, 0.67], above the base's 0.62. r4-m04, base + 0.25(RL - base) draws whole answers from either endpoint: 'Wait'-rate share 0.33 vs 0.76 [0.60, 0.90] plain, 0.21 vs 0.66 [0.44, 0.88] cue, while format share is 0.72. r4-m07, RL keeps the base's repeated wrong answers: 35 of 131 RL wrong answers equal a base wrong answer, 0.27 vs 0.50 [0.36, 0.65]; RL fixes 12 of 16 such problems, 0.75 vs 0.30 [0.12, 0.50]. r4-m09, Code-RL's math gain is only an ending policy: on hard328 it fixes 27 of 90 base finished-wrong problems, 0.30 vs 0.15 [0.07, 0.25], and 10 of 74 base cap-hit-wrong, 0.14 vs 0.33 [0.20, 0.47]. m02 and m09 sit within one standard error of their refuting bounds. Abandoned: m03 (Math and Code RL make the same change), contradicted by result-edceef (Code 3.0 411 vs Math 3.0 448); m05 (gap where the cue fails), by result-fdc8da (121 of 132 'Answer:' answers right).
+
+## done
+
+theory round 04: 3 of 10 theories survive; 29 of 42 offline predictions computed, 18 inside, 11 outside; 4 refuted. studies/theory/results/engine/round-04/metrics_v4.json; rival stages: 0 of 3 beat their rival, r4-m10 and r4-m08 lose, r4-m01 not separated (metrics_v5.json)

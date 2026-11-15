@@ -1,0 +1,64 @@
+Prefix hand-off, MATH-500 pool of 183, T 1.0 / top-p 1.0, grader v3. right/n [Wilson 95 %], generated tokens per problem (total with prefix).
+
+base_writer|right|25                         base finisher 74/88 [75, 90] 3870 (4824)         RL finisher 84/88 [89, 98] 4271 (5226)         RL-base +11.4 [+3.4, +19.3]  fresh base 58 RL 92
+base_writer|right|50                         base finisher 83/88 [87, 98] 2788 (4697)         RL finisher 83/88 [87, 98] 2826 (4735)         RL-base +0.0 [-6.8, +5.7]  fresh base 58 RL 92
+base_writer|right|75                         base finisher 81/88 [84, 96] 1764 (4628)         RL finisher 82/88 [86, 97] 1736 (4600)         RL-base +1.1 [-4.5, +6.8]  fresh base 58 RL 92
+base_writer|wrong|25                         base finisher 25/70 [26, 47] 6752 (8559)         RL finisher 37/70 [41, 64] 5752 (7559)         RL-base +17.1 [+4.3, +30.0]  fresh base 53 RL 74
+base_writer|wrong|50                         base finisher 20/70 [19, 40] 4615 (8230)         RL finisher 32/70 [35, 57] 3934 (7549)         RL-base +17.1 [+5.7, +28.6]  fresh base 53 RL 74
+base_writer|wrong|75                         base finisher 17/70 [16, 35] 2928 (8349)         RL finisher 21/70 [21, 42] 2297 (7718)         RL-base +5.7 [-2.9, +14.3]  fresh base 53 RL 74
+base_writer|cap|25                           base finisher 8/25 [17, 52] 10760 (14857)        RL finisher 10/25 [23, 59] 8531 (12627)        RL-base +8.0 [-16.0, +32.0]  fresh base 29 RL 53
+base_writer|cap|50                           base finisher 3/25 [4, 30] 6815 (15009)          RL finisher 7/25 [14, 48] 4774 (12968)         RL-base +16.0 [+0.0, +36.0]  fresh base 29 RL 53
+base_writer|cap|75                           base finisher 2/25 [2, 25] 4002 (16292)          RL finisher 5/25 [9, 39] 2889 (15178)          RL-base +12.0 [+0.0, +28.0]  fresh base 29 RL 53
+base_writer|right_answer_not_in_prefix|25    base finisher 74/88 [75, 90] 3870 (4824)         RL finisher 84/88 [89, 98] 4271 (5226)         RL-base +11.4 [+3.4, +19.3]  fresh base 58 RL 92
+base_writer|right_answer_not_in_prefix|50    base finisher 83/88 [87, 98] 2788 (4697)         RL finisher 83/88 [87, 98] 2826 (4735)         RL-base +0.0 [-6.8, +5.7]  fresh base 58 RL 92
+base_writer|right_answer_not_in_prefix|75    base finisher 75/82 [83, 96] 1869 (4830)         RL finisher 76/82 [85, 97] 1830 (4790)         RL-base +1.2 [-4.9, +7.3]  fresh base 59 RL 92
+base_writer|wrong_answer|25                  base finisher 20/65 [21, 43] 7185 (9105)         RL finisher 32/65 [37, 61] 6037 (7958)         RL-base +18.5 [+4.6, +32.3]  fresh base 49 RL 72
+base_writer|wrong_answer|50                  base finisher 17/65 [17, 38] 4748 (8589)         RL finisher 28/65 [32, 55] 4118 (7959)         RL-base +16.9 [+4.6, +29.2]  fresh base 49 RL 72
+base_writer|wrong_answer|75                  base finisher 13/65 [12, 31] 3078 (8840)         RL finisher 16/65 [16, 36] 2356 (8118)         RL-base +4.6 [-4.6, +13.8]  fresh base 49 RL 72
+base_writer|wrong_no_answer|25               base finisher 5/5 [57, 100] 1127 (1459)          RL finisher 5/5 [57, 100] 2052 (2384)          RL-base +0.0 [+0.0, +0.0]  fresh base 100 RL 100
+base_writer|wrong_no_answer|50               base finisher 3/5 [23, 88] 2897 (3561)           RL finisher 4/5 [38, 96] 1546 (2210)           RL-base +20.0 [+0.0, +60.0]  fresh base 100 RL 100
+base_writer|wrong_no_answer|75               base finisher 4/5 [38, 96] 974 (1971)            RL finisher 5/5 [57, 100] 1526 (2523)          RL-base +20.0 [+0.0, +60.0]  fresh base 100 RL 100
+rl_writer|right|25                           base finisher 110/140 [71, 85] 5142 (6603)       RL finisher 131/140 [88, 97] 4783 (6245)       RL-base +15.0 [+8.6, +21.4]  fresh base 63 RL 93
+rl_writer|right|50                           base finisher 131/140 [88, 97] 3595 (6518)       RL finisher 134/140 [91, 98] 3227 (6150)       RL-base +2.1 [-2.1, +6.4]  fresh base 63 RL 93
+rl_writer|right|75                           base finisher 131/140 [88, 97] 2103 (6487)       RL finisher 136/140 [93, 99] 1664 (6049)       RL-base +3.6 [+0.7, +7.1]  fresh base 63 RL 93
+rl_writer|wrong|25                           base finisher 9/37 [13, 40] 11376 (14393)        RL finisher 8/37 [11, 37] 8689 (11706)         RL-base -2.7 [-21.6, +16.2]  fresh base 19 RL 40
+rl_writer|wrong|50                           base finisher 4/37 [4, 25] 8578 (14611)          RL finisher 8/37 [11, 37] 6263 (12296)         RL-base +10.8 [+2.7, +21.6]  fresh base 19 RL 40
+rl_writer|wrong|75                           base finisher 1/37 [0, 14] 5060 (14110)          RL finisher 3/37 [3, 21] 3441 (12492)          RL-base +5.4 [+0.0, +13.5]  fresh base 19 RL 40
+rl_writer|cap|25                             base finisher 3/6 [19, 81] 9700 (13796)          RL finisher 0/6 [0, 39] 10308 (14404)          RL-base -50.0 [-83.3, -16.7]  fresh base 6 RL 33
+rl_writer|cap|50                             base finisher 0/6 [0, 39] 8192 (16384)           RL finisher 0/6 [0, 39] 7513 (15704)           RL-base +0.0 [+0.0, +0.0]  fresh base 6 RL 33
+rl_writer|cap|75                             base finisher 0/6 [0, 39] 4097 (16384)           RL finisher 0/6 [0, 39] 3733 (16020)           RL-base +0.0 [+0.0, +0.0]  fresh base 6 RL 33
+rl_writer|right_answer_not_in_prefix|25      base finisher 110/140 [71, 85] 5142 (6603)       RL finisher 131/140 [88, 97] 4783 (6245)       RL-base +15.0 [+8.6, +21.4]  fresh base 63 RL 93
+rl_writer|right_answer_not_in_prefix|50      base finisher 122/131 [87, 96] 3593 (6490)       RL finisher 125/131 [90, 98] 3274 (6170)       RL-base +2.3 [-2.3, +6.9]  fresh base 64 RL 92
+rl_writer|right_answer_not_in_prefix|75      base finisher 79/88 [82, 95] 2448 (7141)         RL finisher 84/88 [89, 98] 1905 (6598)         RL-base +5.7 [+1.1, +11.4]  fresh base 63 RL 92
+rl_writer|wrong_answer|25                    base finisher 9/37 [13, 40] 11376 (14393)        RL finisher 8/37 [11, 37] 8689 (11706)         RL-base -2.7 [-21.6, +16.2]  fresh base 19 RL 40
+rl_writer|wrong_answer|50                    base finisher 4/37 [4, 25] 8578 (14611)          RL finisher 8/37 [11, 37] 6263 (12296)         RL-base +10.8 [+2.7, +21.6]  fresh base 19 RL 40
+rl_writer|wrong_answer|75                    base finisher 1/37 [0, 14] 5060 (14110)          RL finisher 3/37 [3, 21] 3441 (12492)          RL-base +5.4 [+0.0, +13.5]  fresh base 19 RL 40
+
+base_finisher|base_writer|25       107/183 [51, 65] cap hits 27 (wrong 27), no answer 2, tokens 5914 (7624)
+base_finisher|rl_writer|25         122/183 [60, 73] cap hits 39 (wrong 36), no answer 1, tokens 6552 (8414)
+rl_finisher|rl_writer|25           139/183 [69, 82] cap hits 10 (wrong 8), no answer 0, tokens 5754 (7616)
+rl_finisher|base_writer|25         131/183 [65, 78] cap hits 4 (wrong 4), no answer 1, tokens 5420 (7130)
+base_finisher|base_writer|50       106/183 [51, 65] cap hits 22 (wrong 22), no answer 4, tokens 4037 (7457)
+base_finisher|rl_writer|50         135/183 [67, 80] cap hits 36 (wrong 34), no answer 0, tokens 4753 (8478)
+rl_finisher|rl_writer|50           142/183 [71, 83] cap hits 12 (wrong 10), no answer 2, tokens 3981 (7706)
+rl_finisher|base_writer|50         122/183 [60, 73] cap hits 5 (wrong 5), no answer 1, tokens 3516 (6936)
+base_finisher|base_writer|75       100/183 [47, 62] cap hits 27 (wrong 26), no answer 3, tokens 2515 (7645)
+base_finisher|rl_writer|75         132/183 [65, 78] cap hits 32 (wrong 32), no answer 0, tokens 2766 (8353)
+rl_finisher|rl_writer|75           139/183 [69, 82] cap hits 9 (wrong 9), no answer 0, tokens 2091 (7678)
+rl_finisher|base_writer|75         108/183 [52, 66] cap hits 3 (wrong 3), no answer 1, tokens 2108 (7238)
+
+cross_minus_own base_finisher|25             122 vs 107 of 183: +8.2 [+0.5, +16.4]
+cross_minus_own rl_finisher|25               131 vs 139 of 183: -4.4 [-10.4, +2.2]
+cross_minus_own rl_own_minus_base_own|25     139 vs 107 of 183: +17.5 [+9.8, +25.1]
+cross_minus_own base_finisher|50             135 vs 106 of 183: +15.8 [+8.7, +23.0]
+cross_minus_own rl_finisher|50               122 vs 142 of 183: -10.9 [-18.0, -3.8]
+cross_minus_own rl_own_minus_base_own|50     142 vs 106 of 183: +19.7 [+12.6, +26.8]
+cross_minus_own base_finisher|75             132 vs 100 of 183: +17.5 [+9.3, +25.1]
+cross_minus_own rl_finisher|75               108 vs 139 of 183: -16.9 [-23.5, -10.4]
+cross_minus_own rl_own_minus_base_own|75     139 vs 100 of 183: +21.3 [+13.7, +29.0]
+control_own_minus_stored base|25                      92 vs 88 of 155: +2.6 [-4.5, +9.7]
+control_own_minus_stored rl|25                        139 vs 140 of 183: -0.5 [-4.9, +3.8]
+control_own_minus_stored base|50                      94 vs 88 of 155: +3.9 [-1.3, +9.0]
+control_own_minus_stored rl|50                        142 vs 140 of 183: +1.1 [-2.7, +4.9]
+control_own_minus_stored base|75                      90 vs 88 of 155: +1.3 [-3.9, +6.5]
+control_own_minus_stored rl|75                        139 vs 140 of 183: -0.5 [-3.3, +2.2]

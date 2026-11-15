@@ -1,0 +1,35 @@
+{
+ "name": "loc-09-lora-5seed-base-half",
+ "note": "Mean of two quantile functions per listing: the 5-seed LoRA mean (loc-04) and the zero-shot base, weight 1/2 each; fm2-19 post-processing. Training data: synthetic only (8,000 series per seed), no latest date. H: more base weight than loc-05 (1/6, +0.3163) gains beyond noise; refuted if below +0.321. Post-processing seed 1 moves loc-04 and loc-05 by -0.002",
+ "utc": "2026-11-15T04:49:44+00:00",
+ "commit": "04b0cf4",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.318307,
+ "pinball": 0.022867,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.309347,
+ "skill_geomean": 0.405859,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.209612,
+   "in_band": 0.819139
+  },
+  "3": {
+   "skill_pooled": 0.275713,
+   "in_band": 0.768411
+  },
+  "7": {
+   "skill_pooled": 0.370576,
+   "in_band": 0.674419
+  }
+ },
+ "in_band": 0.754262
+}

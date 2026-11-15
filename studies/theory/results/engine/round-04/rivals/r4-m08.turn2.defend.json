@@ -1,0 +1,4 @@
+[
+{"k": 4, "value": 0.05, "low": -0.35, "high": 0.45, "why": "Recalled short right answers should come out with a fixed, low-entropy length, which pulls the base's CV down toward RL's. The untruncated T 1.0 base still mixes answer formats ('Answer:' line versus box) more than the sharpened RL model, so I expect a log CV ratio near zero."},
+{"k": 5, "value": -0.15, "low": -0.55, "high": 0.25, "why": "Recall is concentrated in the base's short answers, so the base's length variability relative to RL's should be lower on short problems than on long ones, where both models work through a procedure. That gives a modestly negative difference, blurred by 4-sample CV noise."}
+]

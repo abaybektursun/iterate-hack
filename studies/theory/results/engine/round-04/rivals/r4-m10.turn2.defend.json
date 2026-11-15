@@ -1,0 +1,5 @@
+[
+{"k": 4, "value": 0.63, "low": 0.49, "high": 0.78, "why": "The mechanism has early RL steps concentrating the policy on the base's own high-probability paths, so step-100 finished answers already have higher per-token log-prob than the cued base's median. The shift is only partial because step 100 comes before most of the entropy drop (73 % by step 200 of 2,400) and sits at the neuron noise floor, so the share is above 0.5 but modest."},
+{"k": 5, "value": 0.76, "low": 0.62, "high": 0.89, "why": "By step 400, most of the early entropy collapse has happened (the first phase), so most step-400 finished answers should be sharper per token than the cued base's median, though not yet at the level of the fully trained model."},
+{"k": 6, "value": 0.75, "low": 0.42, "high": 1.08, "why": "If roughly three quarters of the entropy loss comes early (2505.22617), step 400's median per-token log-prob should cover most of the cued-base-to-step-2,800 distance. I widened the interval because the later loop removal and longer deliberation could move step 2,800's median either way."}
+]

@@ -1,0 +1,1 @@
+{"n_clean": 328, "literal_unique_id": {"value": 0.0701219512195122, "n": 328, "cap_hits_A": 160, "cap_hits_B": 137, "interval_90": [0.018292682926829267, 0.12195121951219512]}, "alt_problem_index": {"value": 0.0701219512195122, "n": 328, "cap_hits_A": 160, "cap_hits_B": 137, "interval_90": [0.021341463414634148, 0.12195121951219512]}, "same_problem_set": true}

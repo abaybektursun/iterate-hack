@@ -1,0 +1,6 @@
+{
+ "commit": "a20340d6287f96c9ce66ddb15bf59344cac16230",
+ "command": "SPEC2: gpu.py submit h100 'bash studies/gpuprice/jobs/fm2_chronos2.sh --origins locked' (job abaybektursun-1114-202025-ee44); fm2_post.py --origins locked --hurdle --hurdle-h 1 --scaleway --turnover own --enter abs; sim2_own.py --origin-start 2026-10-31 --origin-end 2026-11-05 --tau 14 --shrink 0.2 --abs-enter 2 --afh; quantile average; scorer.py --horizons 1,3,7 --tier headline --missing-as-baseline",
+ "job_id": "laptop (no GPU)",
+ "source_dir": "runs/gpuprice/spec2"
+}

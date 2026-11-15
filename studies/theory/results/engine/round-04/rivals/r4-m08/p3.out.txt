@@ -1,0 +1,2 @@
+{"measured": 0.7662885079105015, "refuted_by_met": false, "alt_measured": 0.7670204148782295, "not_computable": null, "example_row": {"problem_index": 374, "n_gen": 519, "retok_diff": 0, "cue_logprob_base": 0.0, "cue_logprob_rl": 0.0, "sum_logprob_own": -137.0640869140625, "sum_entropy_own": 158.92282104492188, "n_own": 520, "mean_logprob_generated": -0.26409247517585754, "stored_mean_logprob": -0.2637248781173353}}
+short=148 long=314
