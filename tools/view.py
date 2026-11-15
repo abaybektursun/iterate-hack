@@ -6,27 +6,37 @@
 
   uv run tools/view.py [--port 8765] [--hours 6]
 
-Opens http://127.0.0.1:8765 in the browser (only when started from a terminal). The page shows one sentence on the
-state of the board (and what changed since the reader's last visit, kept in localStorage), one hill-climbing chart per
-benchmark with 95% intervals and its record steps listed under it, each with its finding, then open work (longest idle
-first, red after 60 minutes, with its last comment), results with their scores and the messages on the channel `all`;
-below them one lane per person with every post and message of the last --hours, then ideas, knowledge and skills, and
-recently closed work. It reads /data every 10 s and rewrites only what changed. A click on an item opens its full
-text, scores, votes, comments and message thread in a side panel whose address is /#<item id>; the filters are in the
-address too (/?who=<name>&q=<text>&idle=1). Keys: / filter, j and k move, 1 2 3 jump to a column, Enter opens, Esc
-closes, ? lists the keys. A click on a person shows only that person.
+Opens http://127.0.0.1:8765 in the browser (only when started from a terminal). The page is the Board tab of the team
+site, for people. It shows one benchmark at a time (?bench=): one sentence with the best untrained-base score, the best
+RL score and the gap, under it what weakens that score (the last step within noise, the caveat of its plain row), the
+hill-climbing chart with 95% intervals, and beside the chart (under it below 1100 px) the ladder of record steps, one
+line each: the gain, the step's title, previous best -> new best, "within noise". A click on a step (?step=<right>)
+opens it under its line: what changed, why it works, is it real, cost, settings. The words come from the plain rows
+that agents write for a result (board.py plain); a step without them shows what its configuration gained and lost
+against the step before and the first sentence of the result's text. Below: Now (open work, longest idle first, red
+from 60 minutes) and Learned (results that set no record and announce nothing), one line per item; then one row, More
+(?more=), that opens one list at a time: results that announce a page or a tool (told apart by a rule on their text,
+ANNOUNCE in the page), ideas, knowledge and skills, closed work, the messages on `all`, and one lane per person with
+every post and message of the last --hours. A term of tools/glossary.py is explained in one sentence on click, in
+the sentence, in an opened step and in the side panel. The page reads /data every 10 s and rewrites only what changed.
+A click on an item opens its title, what, why and caveat, its full text, scores, votes, comments and message thread in
+a side panel whose address is /#<item id>; the filters are in the address too (/?who=<name>&q=<text>&idle=1). Keys:
+/ filter, j and k move, 1 2 3 jump to the record steps, Now and Learned, Enter opens, Esc closes, ? lists the keys. A
+click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
 
   GET /architecture    the Design tab, how the harness works: one interactive picture (architecture.py), fed by the same /data
   GET /findings        the Findings tab: one tile per finding (findings.py), each a link to the page of that finding
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
-                       (board.py score), which the hill-climbing charts draw, the first line of each scored result's
-                       finding (climb.finding) and the newest comment of each open work item idle over an hour (JSON),
-                       with only the fields the pages read. One snapshot serves every reader for 5 s. Its ETag comes from
+                       (board.py score), which the hill-climbing chart draws, the plain rows of those results
+                       (board.py plain: every title; what, why and caveat only of scored results), the first line of
+                       the finding of each scored result older than the newest 60 (climb.finding) and the newest comment
+                       of each open work item idle over an hour (JSON), with only the fields the pages read: 9 queries.
+                       One snapshot serves every reader for 5 s. Its ETag comes from
                        the content and its time is in the header X-Snapshot-Ns, so a browser that asks again with
                        If-None-Match gets 304 and no body while the board has not changed. The page stops reading while
                        its tab is hidden.
-  GET /data/<item id>  one item with its votes, comments and thread (JSON); 404 for an unknown id
+  GET /data/<item id>  one item with its votes, comments, thread and, for a result, its plain rows (JSON); 404 for an unknown id
 
 It reads the same DynamoDB table as board.py and msg.py, with Query and GetItem only, and never writes to it or moves an
 agent's message position. A failed read answers 500 with the error text; the page keeps the last data, says "Offline" in its
@@ -51,6 +61,7 @@ import architecture
 import board
 import climb
 import findings
+import glossary
 import team
 
 PORT = int(sys.argv[sys.argv.index("--port") + 1]) if "--port" in sys.argv else 8765
@@ -90,23 +101,37 @@ def finding(item_id):  # not BatchGetItem: the team key and the Lambda role (inf
     return climb.finding(team.table().get_item(Key={"pk": f"item#{item_id}", "sk": "item"})["Item"]["text"])
 
 
+def plain_rows(item_id=None):
+    """The plain-language rows of results (board.py plain): all of them in one Query, or those of one result."""
+    key = Key("pk").eq("plain")
+    return board.rows(KeyConditionExpression=key & Key("sk").begins_with(item_id) if item_id else key)
+
+
+def plain_words(rows, full=lambda row: True):
+    """{sk: {title, what, why, caveat}} of plain rows; only the title of a row for which full(row) is false."""
+    return {r["sk"]: {k: r[k] for k in (board.PLAIN if full(r) else ("title",)) if k in r} for r in rows}
+
+
 def snapshot():
     start = f"{time.time_ns() - int(HOURS * 3600 * 10**9):020d}"
-    with ThreadPoolExecutor(len(LISTS) + 2) as pool:  # every list, the messages and the scores at the same time
+    with ThreadPoolExecutor(len(LISTS) + 3) as pool:  # every list, the messages, the scores and the plain rows at the same time
         messages = pool.submit(board.rows, KeyConditionExpression=Key("pk").eq("chan#all") & Key("sk").gt(start))
         scores = pool.submit(board.rows, KeyConditionExpression=Key("pk").eq("scores"))  # every score, in the order its result was posted
+        plain = pool.submit(plain_rows)
         items = [item for page in pool.map(newest, LISTS) for item in page]
-        messages, scores = messages.result(), scores.result()
+        messages, scores, plain = messages.result(), scores.result(), plain.result()
         late = [(i["id"], i["n_comments"]) for i in items if i["listed"] == "work" and i.get("n_comments")
                 and time.time_ns() - int(i.get("active_ns", i["at_ns"])) >= LATE_NS]
         new = [k for k in late if k not in COMMENTS]
         COMMENTS.update(zip(new, pool.map(lambda k: last_comment(k[0]), new)))
         texts = {i["id"]: i["text"] for i in items}
-        scored = [r for r in dict.fromkeys(s["result"] for s in scores) if r not in FOUND]
-        # one GetItem per scored result that is not among the newest 60 results, once per process
-        FOUND.update(zip(scored, pool.map(lambda r: climb.finding(texts[r]) if r in texts else finding(r), scored)))
+        scored = set(s["result"] for s in scores)
+        old = [r for r in dict.fromkeys(s["result"] for s in scores) if r not in texts]  # scored results that are not among the newest 60
+        FOUND.update(zip([r for r in old if r not in FOUND], pool.map(finding, [r for r in old if r not in FOUND])))  # one GetItem each, once per process
+    # the page reads a result's title from "plain"; what, why and caveat only of scored results, the rest with /data/<item id>
     return {"hours": HOURS, "test": team.TEST, "items": cols(items, ITEM), "messages": cols(messages, MESSAGE), "scores": cols(scores, SCORE),
-            "last_comments": {k[0]: COMMENTS[k] for k in late}, "finding": {r: FOUND[r] for r in dict.fromkeys(s["result"] for s in scores)},
+            "last_comments": {k[0]: COMMENTS[k] for k in late}, "finding": {r: FOUND[r] for r in old},
+            "plain": plain_words([r for r in plain if r["item"] in scored or r["item"] in texts], lambda r: r["item"] in scored),
             "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items()]}
 
 
@@ -129,6 +154,7 @@ def detail(item_id):
     if not item:
         return None
     return {"item": item, "votes": [r for r in rows if r["sk"].startswith("vote#")],
+            "plain": plain_words(plain_rows(item_id)) if item["kind"] == "result" else {},
             "comments": sorted((r for r in rows if r["sk"].startswith("comment#")), key=lambda c: c["sk"]),
             "thread": board.rows(KeyConditionExpression=Key("pk").eq(f"chan#{item_id}"))}
 
@@ -189,31 +215,31 @@ PAGE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Team board</title>
+<title>Invariant: Board</title>
 <link rel="preload" href="/data" as="fetch" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" media="print" onload="this.media='all'">
 <style>
+/* The tokens and the type of architecture.py (.claude/skills/site-ui/SKILL.md). This page is lists and one chart, so it
+   has no lit object: the chart is its one picture. Blue means live, fresh or selected. Red means a problem. */
 :root {
   color-scheme: light dark;
   --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
-  --blue: #1f43d6; --red: #c41e34;
-  --pl: .56; --pc: .15;
-  --grid: color-mix(in srgb, var(--rule) 60%, var(--paper));
+  --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
+  --pl: .56; --pc: .15; --dim: .16;
   --blue-wash: color-mix(in srgb, var(--blue) 10%, transparent);
-  --red-wash: color-mix(in srgb, var(--red) 10%, transparent);
-  --scrim: rgb(16 24 32 / .18);
+  --gap: color-mix(in srgb, var(--ink) 5%, transparent);
+  --scrim: rgb(16 24 32 / .2);
 }
 @media (prefers-color-scheme: dark) {
   :root {
     --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
-    --blue: #8fb1ff; --red: #ff6b7c;
-    --pl: .78; --pc: .13;
-    --grid: color-mix(in srgb, var(--rule) 70%, var(--paper));
+    --blue: #8fb1ff; --red: #ff6b7c; --on-blue: #080c11;
+    --pl: .78; --pc: .13; --dim: .24;
     --blue-wash: color-mix(in srgb, var(--blue) 14%, transparent);
-    --red-wash: color-mix(in srgb, var(--red) 15%, transparent);
-    --scrim: rgb(0 0 0 / .4);
+    --gap: color-mix(in srgb, var(--ink) 7%, transparent);
+    --scrim: rgb(0 0 0 / .5);
   }
 }
 * { box-sizing: border-box; }
@@ -221,188 +247,196 @@ PAGE = r"""<!doctype html>
 html { background: var(--paper); }
 body {
   margin: 0; color: var(--ink); background: var(--paper); overflow-anchor: none;
-  font: 400 15px/1.45 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif; -webkit-font-smoothing: antialiased;
+  font: 400 15px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
 }
-button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
 a { color: inherit; text-decoration: none; }
 code { font: inherit; font-weight: 600; }
-:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; border-radius: 3px; }
-.num, .meta, .status, .count, .hp svg, .axis { font-variant-numeric: tabular-nums; }
-.wrap { max-width: 1840px; margin: 0 auto; padding: 20px 40px 72px; }
-
-/* Header: name, links, filter, status */
-.top { display: flex; align-items: center; gap: 8px 22px; flex-wrap: wrap; min-height: 36px; }
-.name { margin: 0; font-size: 15px; font-weight: 600; font-stretch: 112%; letter-spacing: .01em; white-space: nowrap; }
-.links { display: flex; flex-wrap: wrap; gap: 4px 18px; font-size: 13px; color: var(--mute); min-width: 0; }
-.links a:hover { color: var(--ink); }
-.links a[aria-current] { color: var(--ink); font-weight: 600; }
-.test { color: var(--red); font-weight: 600; font-size: 13px; }
-.search { margin-left: auto; position: relative; display: flex; align-items: center; }
-.search input {
-  width: 280px; font: inherit; font-size: 14px; color: var(--ink); background: var(--sheet);
-  border: 1px solid var(--rule); border-radius: 8px; padding: 6px 34px 6px 12px;
-}
-.search input::placeholder { color: var(--faint); }
-.search input:focus { outline: 2px solid var(--blue); outline-offset: 0; border-color: transparent; }
-kbd {
-  font: 400 12px/1 "Archivo", sans-serif; color: var(--mute); border: 1px solid var(--rule); border-radius: 4px;
-  padding: 3px 6px; background: var(--paper);
-}
-.search kbd { position: absolute; right: 8px; pointer-events: none; }
-.status { font-size: 13px; color: var(--mute); white-space: nowrap; display: flex; align-items: center; gap: 8px; }
-.status::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--faint); }
-.status.live::before { background: var(--blue); box-shadow: 0 0 0 3px var(--blue-wash); }
-.status.bad { color: var(--red); }
-.status.bad::before { background: var(--red); }
-
-/* One sentence on the state of the board; above it, what changed since the last visit */
-.lede { margin-top: 18px; min-height: 29px; }
-.since { margin: 0 0 6px; font-size: 15px; }
-.since::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); margin-right: 9px; vertical-align: .08em; }
+p, h1, h2, h3, dl, dd { margin: 0; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.since b { font-weight: 600; }
-.summary { margin: 0; font-size: 22px; line-height: 1.3; font-weight: 300; letter-spacing: -.005em; }
-.summary b { font-weight: 600; }
-.summary .warn { color: var(--red); }
-.summary button, .summary a { text-decoration: underline 1px; text-underline-offset: 4px; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); }
-.summary button:hover, .summary a:hover, .summary button[aria-pressed="true"] { text-decoration-color: currentColor; }
-.filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-.filters:empty { display: none; }
-.chip {
-  display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--mute);
-  border: 1px solid var(--rule); border-radius: 999px; padding: 3px 4px 3px 12px; background: var(--sheet);
-}
-.chip button { color: var(--mute); border-radius: 999px; padding: 0 7px; }
-.chip button:hover { color: var(--ink); }
+.wrap { max-width: 1840px; margin: 0 auto; padding: 20px 40px 56px; }
 
-/* Hill: per benchmark, the best untrained-base score so far against the best RL score */
-.hill { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 540px), 1fr)); gap: 24px 56px; margin-top: 26px; }
-.hp h2 { border-bottom-color: var(--rule); }
-.hp-body { display: grid; grid-template-columns: 230px minmax(0, 1fr); gap: 20px; margin-top: 14px; }
-.hp-stats { display: flex; flex-direction: column; gap: 12px; }
-.hp-stats p { margin: 2px 0 0; font-size: 13px; color: var(--mute); text-wrap: balance; }
-.hp-stats p.cfg { color: var(--ink); font-size: 12.5px; }
-.big { display: block; font-size: 40px; line-height: 1; font-weight: 600; font-stretch: 112%; letter-spacing: -.02em; color: var(--blue); width: max-content; }
-.big small { font-size: 17px; font-weight: 400; letter-spacing: 0; margin-left: 3px; color: var(--mute); }
-.togo { margin: 0 !important; font-size: 15px !important; color: var(--ink) !important; }
-.togo b { color: var(--red); font-weight: 600; font-size: 22px; font-stretch: 112%; letter-spacing: -.01em; margin-right: 2px; }
-.hp-chart { min-width: 0; height: 184px; }
-.hp svg { display: block; overflow: visible; }
-.hp svg text {
-  font: 400 11px "Archivo", ui-sans-serif, system-ui, sans-serif; fill: var(--mute);
+/* Header, as on the Design and Findings tabs */
+.top { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+.name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
+.top a { color: var(--mute); white-space: nowrap; transition: color .15s ease; }
+.top a:hover { color: var(--ink); }
+.top a[aria-current] { color: var(--ink); font-weight: 600; }
+.test { color: var(--red); font-weight: 600; }
+.status { margin-left: auto; color: var(--mute); white-space: nowrap; display: flex; align-items: center; gap: 10px; }
+.status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--faint); }
+.status.live::before { background: var(--blue); box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 20%, transparent); }
+.status.bad { color: var(--red); }
+.status.bad::before { background: var(--red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--red) 20%, transparent); }
+
+/* The one sentence: the best untrained-base score against RL on one benchmark */
+.lede { margin-top: clamp(14px, 2.8vh, 28px); min-height: 150px; }
+.say { font-size: clamp(26px, 2.3vw, 42px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 27em; text-wrap: balance; }
+.say b { font-weight: 560; }
+.say .base { color: var(--blue); }
+.say .term, .nb { white-space: nowrap; }
+.say .term { text-decoration-color: color-mix(in srgb, currentColor 32%, transparent); text-decoration-thickness: 1.5px; }
+.sub { margin-top: 12px; font-size: 13.5px; color: var(--mute); }
+.cav { display: block; margin-top: 4px; font-size: 13.5px; color: var(--ink); padding-left: 15px; position: relative; max-width: 100ch; }
+.cav::before, .cv::before { content: ""; position: absolute; left: 0; top: .62em; width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+.cav:hover { text-decoration: underline 1px; text-underline-offset: 3px; }
+.benches { display: flex; flex-wrap: wrap; gap: 4px 26px; margin-top: 12px; font-size: 13.5px; }
+.benches button { color: var(--mute); padding: 3px 0; border-bottom: 2px solid transparent; }
+.benches button:hover { color: var(--ink); }
+.benches button[aria-pressed="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--blue); }
+.benches b { font-weight: inherit; margin-left: 3px; }
+
+/* A term of the glossary: a click opens its one sentence */
+.term { cursor: pointer; text-decoration: underline dotted 1px; text-underline-offset: .22em; text-decoration-color: color-mix(in srgb, currentColor 55%, transparent); border-radius: 2px; font-weight: inherit; }
+.term:hover, .term[aria-expanded="true"] { text-decoration-color: var(--blue); text-decoration-style: solid; }
+.def {
+  position: fixed; z-index: 6; width: max-content; max-width: min(340px, calc(100vw - 32px)); padding: 10px 14px 11px; border-radius: 8px;
+  background: var(--sheet); border: 1px solid var(--rule); font-size: 13.5px; line-height: 1.45; color: var(--mute);
+}
+.def b { color: var(--ink); font-weight: 600; margin-right: 2px; }
+
+/* The chart and, beside it, the ladder of record steps */
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 56px; margin-top: clamp(12px, 2vh, 20px); align-items: start; }
+.chart { height: 320px; min-width: 0; }
+.chart svg { display: block; overflow: visible; }
+.chart svg text {
+  font: 400 11.5px "Archivo", ui-sans-serif, system-ui, sans-serif; fill: var(--mute);
   paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round;
 }
-.hp .brk { stroke: var(--paper); stroke-width: 5px; }
-.hp .brk-line { stroke: var(--blue); stroke-width: 1.4px; }
-.hp .grid { stroke: var(--rule); stroke-width: 1; }
-.hp .gap { fill: var(--red-wash); }
-.hp .target { stroke: var(--ink); stroke-width: 1.2; stroke-dasharray: 3 4; opacity: .6; }
-.hp text.rl { fill: var(--ink); }
-.hp text.rl tspan { font-weight: 600; }
-.hp .tread, .hp .rise { fill: none; stroke: var(--blue); stroke-width: 2.25; stroke-linecap: round; }
-.hp .rise.noise { opacity: .32; }
-.hp .ci { stroke: var(--faint); stroke-width: 1; opacity: .55; }
-.hp .ci.rec { stroke: var(--blue); opacity: .6; }
-.hp .dot { fill: var(--paper); stroke: var(--faint); stroke-width: 1.5; }
-.hp .dot.rec { fill: var(--blue); stroke: var(--paper); stroke-width: 2; }
-.hp .x { stroke: var(--faint); stroke-width: 1.6; stroke-linecap: round; }
-.hp .hit { fill: transparent; }
-.hp .under { fill: var(--paper); }
-.hp a:hover .dot, .hp a:focus-visible .dot { stroke: var(--ink); }
-.hp a:hover .x, .hp a:focus-visible .x { stroke: var(--ink); }
-.hp text.gain { fill: var(--ink); font-weight: 600; }
-.hp text.quiet { fill: var(--faint); }
-.steps { margin-top: 12px; font-size: 13px; }
-.steps a { display: grid; grid-template-columns: 3.4em minmax(0, 1fr); gap: 1px 12px; padding: 6px 0; border-top: 1px solid var(--rule); color: var(--mute); }
-.steps a > * { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.steps b { grid-row: span 2; color: var(--ink); font-weight: 600; }
-.steps .fin { color: var(--ink); }
-.steps .noise, .steps .noise b, .steps .noise .fin { color: var(--faint); }
-.steps a:hover .fin { text-decoration: underline 1px; text-underline-offset: 3px; }
-.hkey { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: -8px; font-size: 12.5px; color: var(--mute); }
-.hkey span { display: inline-flex; align-items: center; gap: 7px; }
-.hkey svg { overflow: visible; }
-
-/* Board columns */
-.board {
-  display: grid; gap: 0 48px; align-items: start; margin-top: 34px;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr) minmax(0, 1fr);
+.chart .brk { stroke: var(--paper); stroke-width: 5px; }
+.chart .brk-line { stroke: var(--blue); stroke-width: 1.4px; }
+.chart .grid { stroke: var(--rule); stroke-width: 1; }
+.chart .gap { fill: var(--gap); }
+.chart .target { stroke: var(--ink); stroke-width: 1.1; stroke-dasharray: 3 4; opacity: .6; }
+.chart text.rl { fill: var(--ink); }
+.chart text.rl tspan, .chart text.gain { font-weight: 600; }
+.chart text.gain { fill: var(--ink); }
+.chart text.lead { fill: var(--blue); font-weight: 600; }
+.chart text.quiet { fill: var(--faint); }
+.chart .tread, .chart .rise { fill: none; stroke: var(--blue); stroke-width: 2.25; stroke-linecap: round; }
+.chart .rise.noise { opacity: .32; }
+.chart .ci { stroke: var(--faint); stroke-width: .8; opacity: .5; }
+.chart .ci.rec { stroke: var(--blue); opacity: .6; }
+.chart .dot { fill: var(--paper); stroke: var(--faint); stroke-width: 1.2; }
+.chart .dot.rec { fill: var(--blue); stroke: var(--paper); stroke-width: 2; }
+.chart .x { stroke: var(--faint); stroke-width: 1.4; stroke-linecap: round; }
+.chart .hit { fill: transparent; }
+.chart .under { fill: var(--paper); }
+.chart a:hover .dot, .chart a:focus-visible .dot, .chart a:hover .x, .chart a:focus-visible .x { stroke: var(--ink); }
+.chart .has-sel .tread, .chart .has-sel .rise, .chart .has-sel .ci, .chart .has-sel .mark, .chart .has-sel text.gain { opacity: calc(var(--dim) + .12); transition: opacity .28s ease; }
+.chart .has-sel .on { opacity: 1; }
+h2 { font-size: 13px; font-weight: 600; color: var(--mute); display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; padding-bottom: 7px; }
+h2 .count { font-weight: 400; color: var(--faint); }
+.lrow {
+  display: grid; grid-template-columns: 3.5em minmax(0, 1fr) auto; column-gap: 14px; align-items: baseline; width: 100%;
+  padding: 8px 0; border-top: 1px solid var(--rule); font-size: 14.5px; line-height: 1.35;
 }
+.lrow > b { font-size: 15px; font-weight: 620; font-stretch: 108%; text-align: right; }
+.lrow .lt { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lrow .lt small { font-size: 13px; color: var(--mute); margin-left: 7px; }
+.lrow .lr { font-size: 13px; color: var(--mute); white-space: nowrap; }
+.lrow .flag { color: var(--faint); margin-left: 9px; }
+.lrow.noise > b { color: var(--faint); }
+.lrow:hover .lt { text-decoration: underline 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
+.lrow[aria-expanded="true"] > b { color: var(--blue); }
+.lrow[aria-expanded="true"] .lt { font-weight: 600; white-space: normal; }
+.sd { display: grid; grid-template-columns: 6.2em minmax(0, 1fr); gap: 7px 14px; margin: 0 0 13px; font-size: 14px; line-height: 1.45; animation: fade .2s ease-out; }
+.sd dt { font-size: 13px; font-weight: 600; color: var(--mute); padding-top: 1px; }
+.sd dd { max-width: 80ch; }
+.sd dd p + p { margin-top: 4px; }
+.sd .cv { position: relative; padding-left: 15px; }
+.sd .set { font-size: 13px; color: var(--mute); }
+.sd .raw { color: var(--mute); }
+.sd a.go { font-size: 13px; color: var(--mute); white-space: nowrap; margin-left: 8px; text-decoration: underline 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
+.sd a.go:hover { color: var(--ink); }
+@keyframes fade { from { opacity: 0; } }
+
+/* Above the lists: what is new since the last look, the people, the filter */
+.bar { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 26px; margin-top: 34px; min-height: 30px; font-size: 13px; color: var(--mute); }
+.since { color: var(--ink); }
+.since::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); margin-right: 9px; vertical-align: .1em; }
+.since b { font-weight: 600; }
+.people { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-left: auto; }
+.people button { display: inline-flex; align-items: center; gap: 7px; }
+.people button:hover, .people button[aria-pressed="true"] { color: var(--ink); }
+.people button[aria-pressed="true"] { font-weight: 600; }
+.people.picked button[aria-pressed="false"] { opacity: .45; }
+.search { position: relative; display: flex; align-items: center; }
+.search input {
+  width: 210px; font: inherit; font-size: 13.5px; color: var(--ink); background: none; border: 0; border-bottom: 1px solid var(--rule);
+  border-radius: 0; padding: 4px 26px 4px 0; -webkit-appearance: none; appearance: none;
+}
+.search input::placeholder { color: var(--faint); }
+.search input:focus { outline: none; border-bottom-color: var(--blue); }
+kbd { font: 400 12px/1 "Archivo", sans-serif; color: var(--mute); border: 1px solid var(--rule); border-radius: 4px; padding: 3px 6px; }
+.search kbd { position: absolute; right: 0; pointer-events: none; }
+
+/* Lists: one line per item */
+.board.main-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 56px; align-items: start; margin-top: 14px; }
 section { min-width: 0; }
-h2 {
-  margin: 0; font-size: 15px; font-weight: 600; font-stretch: 112%; letter-spacing: .005em;
-  display: flex; align-items: baseline; gap: 10px; padding-bottom: 9px; border-bottom: 1px solid var(--ink);
-}
-h2 .count { color: var(--faint); font-weight: 400; font-stretch: 100%; font-size: 13px; }
-h2 .toggle { margin-left: auto; font-size: 13px; font-weight: 400; font-stretch: 100%; color: var(--mute); white-space: nowrap; }
-h2 .toggle:hover { color: var(--ink); }
-.empty { color: var(--mute); font-size: 14px; padding: 14px 0; max-width: 46ch; margin: 0; }
-.more { display: block; padding: 10px 0; font-size: 13px; color: var(--mute); }
-.more:hover { color: var(--ink); }
-
-.row { position: relative; padding: 12px 0 12px 14px; border-bottom: 1px solid var(--rule); cursor: pointer; }
-.row::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 3px; border-radius: 2px; background: var(--pc-color); }
-.row:hover { background: linear-gradient(to right, var(--sheet), transparent 90%); }
-.row.current { background: var(--sheet); }
-.row .open { display: block; border-radius: 2px; }
-.text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; white-space: pre-line; }
-.result .text { -webkit-line-clamp: 3; }
-.n { font-weight: 600; font-variant-numeric: tabular-nums; }
-.closed .text { color: var(--mute); }
-.last { margin: 5px 0 0; font-size: 13px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.meta { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 14px; margin-top: 6px; font-size: 13px; color: var(--mute); }
-.meta .m { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.meta .m > * { margin-right: 12px; vertical-align: baseline; }
-.meta .m > :last-child { margin-right: 0; }
-.who { color: oklch(var(--pl) var(--pc) var(--h)); font-weight: 600; }
-.who:hover { text-decoration: underline; text-underline-offset: 3px; }
-.branch { display: inline-block; vertical-align: top !important; max-width: 14ch; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.id { color: var(--faint); }
-.fresh { color: var(--blue); }
-.idle { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
-.meter { width: 44px; height: 3px; border-radius: 2px; background: var(--rule); overflow: hidden; }
-.meter i { display: block; height: 100%; background: var(--faint); }
-.late .idle { color: var(--red); font-weight: 600; }
-.late .meter i { background: var(--red); }
-.scores { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin-top: 6px; font-size: 13px; color: var(--mute); }
-.score { white-space: nowrap; color: var(--mute); }
-.score b { color: var(--ink); font-weight: 600; }
-.new::after { content: ""; position: absolute; left: -11px; top: calc(13px + .75em - 3px); width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
-
-.msgs { list-style: none; margin: 0; padding: 0; }
-.msg { position: relative; padding: 11px 0; border-bottom: 1px solid var(--rule); cursor: pointer; }
-.msg .meta { display: flex; gap: 12px; margin: 0 0 3px; }
-.msg.full .text { display: block; }
+h2 .warn { color: var(--red); font-weight: 600; text-decoration: underline 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); }
+h2 .warn:hover, h2 .warn[aria-pressed="true"] { text-decoration-color: currentColor; }
+.empty { color: var(--mute); font-size: 14px; padding: 9px 0; max-width: 52ch; border-top: 1px solid var(--rule); }
+.all { display: block; padding: 9px 0; font-size: 13px; color: var(--mute); border-top: 1px solid var(--rule); width: 100%; }
+.all:hover { color: var(--ink); }
+.row, .msg { position: relative; border-top: 1px solid var(--rule); --c: oklch(var(--pl) var(--pc) var(--h)); break-inside: avoid; }
+.row .open, .msg { display: grid; grid-template-columns: 11px minmax(0, 1fr) auto; column-gap: 12px; align-items: center; min-height: 34px; font-size: 14.5px; line-height: 1.35; }
+.row .open { padding: 6px 0; border-radius: 2px; }
+.row .t { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.row .r, .msg .r { font-size: 12.5px; color: var(--mute); white-space: nowrap; }
+.row .r.late { color: var(--red); font-weight: 600; }
+.row .r.fresh { color: var(--blue); }
+.row:hover .t, .row.current .t { text-decoration: underline 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
+.row.current .t { font-weight: 600; }
+.shut .t { color: var(--mute); }
+.new::after { content: ""; position: absolute; left: -12px; top: calc(50% - 3px); width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
+.g { display: block; justify-self: center; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--mute)); }
+.g.ring { background: none; border: 1.5px solid var(--c, var(--mute)); }
+.late .g.ring { border-color: var(--red); }
+.g.shut { opacity: .45; }
+.g.small { width: 5px; height: 5px; opacity: .7; }
+.g.tick { width: 1px; height: 11px; border-radius: 0; background: var(--faint); }
+.msg { padding: 6px 0; cursor: pointer; align-items: start; }
+.msg .g { margin-top: 5px; }
+.msg .r { padding-top: 2px; }
+.msg .t { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.msg .t b { font-weight: 600; color: var(--c); margin-right: 5px; }
+.msg.full .t { white-space: pre-line; overflow: visible; overflow-wrap: anywhere; }
+.n { font-weight: 600; }
 a.ref { color: var(--blue); text-decoration: underline; text-decoration-color: var(--blue-wash); text-underline-offset: 3px; }
 a.ref:hover { text-decoration-color: var(--blue); }
+.arrived { animation: arrive 2.6s ease-out; }
+@keyframes arrive { from { background-color: var(--blue-wash); } }
 
-/* Placeholders before the first read */
-.ph { display: block; height: 10px; border-radius: 5px; background: var(--rule); }
-.ph-row { display: grid; gap: 10px; padding: 18px 0 18px 14px; border-bottom: 1px solid var(--rule); }
-.ph-row .ph:nth-child(2) { width: 70%; }
-.ph-row .ph:nth-child(3) { width: 40%; height: 8px; opacity: .7; }
+/* More: the other lists, one open at a time */
+.rest { margin-top: 34px; }
+.tabs { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 24px; font-size: 13.5px; padding-bottom: 9px; }
+.tabs .lab { font-size: 13px; font-weight: 600; color: var(--mute); }
+.tabs button { color: var(--mute); padding: 3px 0; border-bottom: 2px solid transparent; }
+.tabs button:hover { color: var(--ink); }
+.tabs button[aria-pressed="true"] { color: var(--ink); font-weight: 600; border-bottom-color: var(--blue); }
+.tabs .count { color: var(--faint); font-weight: 400; margin-left: 2px; }
+.mhead { font-size: 13px; color: var(--mute); padding-bottom: 8px; }
+.mhead button { text-decoration: underline 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
+.mhead button:hover { color: var(--ink); }
+.cols2 { columns: 2; column-gap: 56px; }
 
 /* Activity: one lane per person, every post and message of the last hours as a mark */
-.activity { margin-top: 44px; }
-.lanes { margin-top: 8px; }
-.lane { display: grid; grid-template-columns: 150px minmax(0, 1fr); align-items: center; height: 28px; }
-.lane > button {
-  font-size: 13px; color: var(--mute); padding-right: 12px; overflow: hidden; text-overflow: ellipsis;
-  white-space: nowrap; display: flex; align-items: center; gap: 8px;
-}
-.lane > button::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--pc-color); }
+.lane { display: grid; grid-template-columns: 150px minmax(0, 1fr); align-items: center; height: 28px; --c: oklch(var(--pl) var(--pc) var(--h)); }
+.lane > button { font-size: 13px; color: var(--mute); padding-right: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
 .lane > button:hover, .lane.on > button { color: var(--ink); }
 .lane.off { opacity: .28; }
 .track {
   position: relative; height: 100%;
   background: linear-gradient(var(--rule), var(--rule)) 0 50% / 100% 1px no-repeat,
-              linear-gradient(to right, var(--grid) 1px, transparent 1px) 0 0 / var(--hour) 100%;
+              linear-gradient(to right, color-mix(in srgb, var(--rule) 60%, var(--paper)) 1px, transparent 1px) 0 0 / var(--hour) 100%;
 }
-.mk { position: absolute; top: 50%; transform: translate(-50%, -50%); border-radius: 50%; --c: var(--pc-color); }
+.mk { position: absolute; top: 50%; transform: translate(-50%, -50%); border-radius: 50%; }
 .mk.res { width: 9px; height: 9px; background: var(--c); z-index: 3; }
-.mk.scored { box-shadow: 0 0 0 1.5px var(--paper), 0 0 0 3px var(--blue); }
 .mk.claim { width: 9px; height: 9px; border: 1.5px solid var(--c); background: var(--paper); z-index: 2; }
-.mk.idea { width: 5px; height: 5px; background: var(--c); z-index: 1; }
+.mk.idea { width: 5px; height: 5px; background: var(--c); opacity: .7; z-index: 1; }
 .mk.tick { width: 1px; height: 11px; border-radius: 0; background: var(--faint); opacity: .8; }
 a.mk::before { content: ""; position: absolute; inset: -6px; }
 a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
@@ -411,154 +445,175 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
 .axis div span { position: absolute; top: 4px; transform: translateX(-50%); white-space: nowrap; }
 .axis div span:first-child { transform: none; }
 .axis div span:last-child { transform: translateX(-100%); }
-.legend { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 10px 0 0 150px; font-size: 13px; color: var(--mute); }
-.legend span { display: inline-flex; align-items: center; gap: 8px; }
-.legend .mk { position: relative; top: auto; transform: none; flex: none; --c: var(--mute); }
 
-.rest { margin-top: 44px; }
+/* The key of the glyphs */
+.key { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 40px; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--mute); }
+.key span { display: inline-flex; align-items: center; gap: 8px; }
+.key .keys-hint { margin-left: auto; }
+
+/* Placeholders before the first read */
+.ph { display: block; height: 10px; border-radius: 5px; background: var(--rule); }
+.ph-row { display: block; padding: 12px 0; border-top: 1px solid var(--rule); }
+.ph-row .ph { width: 62%; }
 
 /* Item panel */
 .scrim { position: fixed; inset: 0; z-index: 2; background: var(--scrim); animation: fade .18s ease-out; }
-@keyframes fade { from { opacity: 0; } }
 .panel {
-  position: fixed; top: 0; right: 0; bottom: 0; width: min(620px, 100vw); z-index: 3;
-  background: var(--sheet); border-left: 1px solid var(--rule); overflow-y: auto;
-  box-shadow: -24px 0 60px -30px rgb(0 0 0 / .45); animation: slide .18s ease-out;
+  position: fixed; top: 0; right: 0; bottom: 0; width: min(600px, 100vw); z-index: 3;
+  background: var(--paper); border-left: 1px solid var(--rule); overflow-y: auto; animation: slide .18s ease-out;
 }
 @keyframes slide { from { transform: translateX(24px); opacity: 0; } }
-.phead {
-  position: sticky; top: 0; z-index: 1; background: var(--sheet); display: flex; align-items: center; gap: 12px;
-  padding: 18px 28px 14px; border-bottom: 1px solid var(--rule);
-}
+.phead { position: sticky; top: 0; z-index: 1; background: var(--paper); padding: 20px 32px 0; }
+.phead > div { display: flex; align-items: baseline; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
 #ptitle:focus { outline: none; }
-.phead h2 { border: 0; padding: 0; margin: 0; font-size: 17px; }
-.phead .kind { color: var(--mute); font-size: 13px; }
+.phead h2 { padding: 0; font-size: 17px; font-weight: 660; font-stretch: 114%; letter-spacing: .008em; color: var(--ink); white-space: nowrap; }
+.phead .kind { color: var(--mute); font-size: 13px; min-width: 0; }
 .phead .kind.warn { color: var(--red); font-weight: 600; }
-.phead .actions { margin-left: auto; display: flex; gap: 6px; }
-.phead .actions button { font-size: 13px; color: var(--mute); padding: 5px 10px; border-radius: 6px; border: 1px solid var(--rule); }
-.phead .actions button:hover { color: var(--ink); border-color: var(--faint); }
-.pbody { padding: 22px 28px 48px; }
-.full { font-size: 16px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0 0 26px; max-width: 70ch; }
-.facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 7px 20px; margin: 0 0 30px; font-size: 13.5px; }
+.phead .actions { margin-left: auto; display: flex; gap: 16px; white-space: nowrap; }
+.phead .actions button { font-size: 13px; color: var(--mute); }
+.phead .actions button:hover { color: var(--ink); }
+.pbody { padding: 18px 32px 48px; }
+.lead { font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; max-width: 30em; margin-bottom: 16px; }
+.pbody .sd { margin: 0 0 24px; grid-template-columns: 4.6em minmax(0, 1fr); animation: none; }
+.pbody h3 { font-size: 13px; font-weight: 600; color: var(--mute); margin: 0 0 4px; display: flex; gap: 10px; }
+.pbody h3 span { color: var(--faint); font-weight: 400; }
+.full { font-size: 14.5px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; margin: 0 0 26px; max-width: 70ch; }
+.full.only { font-size: 16px; }
+.facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 0 20px; margin: 0 0 28px; font-size: 13.5px; }
+.facts dt, .facts dd { padding: 7px 0; border-top: 1px solid var(--rule); }
 .facts dt { color: var(--mute); }
-.facts dd { margin: 0; overflow-wrap: anywhere; }
-.facts dd p { margin: 0 0 4px; }
-.pbody h3 { font-size: 14px; font-weight: 600; font-stretch: 112%; margin: 0 0 4px; display: flex; gap: 10px; }
-.pbody h3 span { color: var(--faint); font-weight: 400; font-stretch: 100%; }
-.pbody .msgs { margin-bottom: 28px; }
-.pbody .msg { cursor: auto; }
-.pbody .msg .text { display: block; }
-.note { color: var(--mute); font-size: 14px; margin: 6px 0 28px; }
+.facts dd { overflow-wrap: anywhere; }
+.facts dd p + p { margin-top: 4px; }
+.facts .who { color: oklch(var(--pl) var(--pc) var(--h)); font-weight: 600; }
+.facts small { font-size: inherit; color: var(--mute); }
+.pbody .msgs { margin-bottom: 26px; }
+.pmsg { padding: 9px 0; border-top: 1px solid var(--rule); font-size: 14.5px; --c: oklch(var(--pl) var(--pc) var(--h)); }
+.pmsg .meta { font-size: 12.5px; color: var(--mute); display: flex; gap: 10px; margin-bottom: 2px; }
+.pmsg .meta b { color: var(--c); font-weight: 600; }
+.pmsg .text { white-space: pre-line; overflow-wrap: anywhere; }
+.note { color: var(--mute); font-size: 14px; margin: 4px 0 26px; }
 
 /* Keys */
-.keys {
-  position: fixed; right: 24px; bottom: 24px; z-index: 4; background: var(--sheet); border: 1px solid var(--rule);
-  border-radius: 10px; padding: 16px 20px 18px; box-shadow: 0 20px 50px -24px rgb(0 0 0 / .5); font-size: 13px;
-}
-.keys h2 { border: 0; padding: 0 0 10px; }
-.keys dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 16px; margin: 0; align-items: center; }
+.keys { position: fixed; right: 24px; bottom: 24px; z-index: 5; background: var(--sheet); border: 1px solid var(--rule); border-radius: 10px; padding: 16px 20px 18px; font-size: 13px; }
+.keys h2 { color: var(--ink); padding-bottom: 10px; }
+.keys dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 16px; align-items: center; }
 .keys dt { display: flex; gap: 4px; }
-.keys dd { margin: 0; color: var(--mute); }
+.keys dd { color: var(--mute); }
 
-@media (max-width: 1400px) { .ncom { display: none; } }
-@media (max-width: 1100px) {
-  .board { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .board .s-msgs, .rest .s-closed { grid-column: 1 / -1; margin-top: 40px; }
+@media (max-width: 1099px) {
+  .hero { grid-template-columns: minmax(0, 1fr); }
+  .chart { height: 250px; }
 }
-@media (max-width: 820px) {
-  .wrap { padding: 16px 16px 48px; }
-  .status { margin-left: auto; order: 1; }
-  .links { order: 2; width: 100%; }
-  .search { order: 3; margin-left: 0; width: 100%; }
+@media (max-width: 900px) {
+  .wrap { padding: 16px 16px 40px; }
+  .top { gap: 6px 13px; padding-bottom: 12px; }
+  .name { font-stretch: 112%; margin-right: 0; }
+  .lede { min-height: 0; }
+  .chart { height: 200px; }
+  .board.main-cols { grid-template-columns: minmax(0, 1fr); }
+  .s-result { margin-top: 30px; }
+  .cols2 { columns: 1; }
+  .people { margin-left: 0; }
+  .search { width: 100%; }
   .search input { width: 100%; }
-  .summary { font-size: 20px; }
-  .hp-body { grid-template-columns: 1fr; gap: 12px; }
-  .hp-stats { flex-direction: row; flex-wrap: wrap; gap: 8px 36px; }
-  .hkey { display: grid; grid-template-columns: repeat(3, max-content); }  /* 3 + 2, no single item on a line */
-  .wrap { display: flex; flex-direction: column; }
-  .board.main-cols { display: contents; }
-  .s-work { order: 2; margin-top: 30px; } .s-result { order: 3; margin-top: 40px; }
-  .hill { order: 4; margin-top: 44px; } .s-msgs { order: 5; margin-top: 40px; }
-  .activity { order: 6; } .rest { order: 7; display: block; }
-  .rest section + section { margin-top: 40px; }
+  .lrow { grid-template-columns: 3.1em minmax(0, 1fr); }
+  .lrow .lt { white-space: normal; }
+  .lrow .lt small { display: block; margin-left: 0; }
+  .lrow .lr { grid-column: 2; }
+  .lrow .flag { margin-left: 0; }
+  .lrow .flag::before { content: " · "; }
+  .sd { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .sd dd { margin-bottom: 9px; }
+  .pbody .sd { grid-template-columns: minmax(0, 1fr); }
+  .phead { padding: 16px 16px 0; }
+  .pbody { padding: 16px 16px 40px; }
   .lane, .axis { grid-template-columns: 104px minmax(0, 1fr); }
-  .legend { margin-left: 0; }
+  .key .keys-hint { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .arrived, .panel, .scrim { animation: none; }
+  .arrived, .panel, .scrim, .sd { animation: none; }
+  .chart * { transition: none !important; }
 }
-.arrived { animation: arrive 2.6s ease-out; }
-@keyframes arrive { from { background-color: var(--blue-wash); } }
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <h1 class="name">Team board</h1>
-    <nav class="links"><a href="/" aria-current="page">Board</a><a href="/architecture">Design</a><a href="/findings">Findings</a></nav>
+    <h1 class="name">Invariant</h1>
+    <a href="/" aria-current="page">Board</a>
+    <a href="/architecture">Design</a>
+    <a href="/proof">Proof</a>
+    <a href="/findings">Findings</a>
     <span class="test" id="test" hidden>test table</span>
-    <label class="search"><input id="q" type="search" placeholder="Filter items and messages" aria-label="Filter items and messages" autocomplete="off"><kbd>/</kbd></label>
     <span class="status" id="status" role="status">Reading the board</span>
   </header>
-  <div class="lede">
-    <p class="since" id="since" hidden></p>
-    <span class="sr" id="live" aria-live="polite"></span>
-    <p class="summary" id="summary"><span class="ph" style="width:min(620px,80%);height:14px;margin-top:8px"></span></p>
-    <div class="filters" id="filters"></div>
+  <span class="sr" id="live" aria-live="polite"></span>
+  <section class="lede" id="lede" aria-label="The best untrained-base score against RL"><p class="say"><span class="ph" style="width:min(640px,80%);height:16px;margin-top:10px"></span></p></section>
+  <div class="hero">
+    <div class="chart" id="chart"></div>
+    <section class="ladder"><h2>Record steps <span class="count" id="n-steps"></span></h2><div id="ladder"><span class="ph-row"><span class="ph"></span></span><span class="ph-row"><span class="ph"></span></span><span class="ph-row"><span class="ph"></span></span></div></section>
   </div>
-  <div class="hill" id="hill" aria-label="Best untrained-base score per benchmark against RL">
-    <section class="hp"><h2>&nbsp;</h2><div class="hp-body"><div class="ph-row" style="border:0"><span class="ph"></span><span class="ph"></span><span class="ph"></span></div><div class="hp-chart"></div></div></section>
-    <section class="hp"><h2>&nbsp;</h2><div class="hp-body"><div class="ph-row" style="border:0"><span class="ph"></span><span class="ph"></span><span class="ph"></span></div><div class="hp-chart"></div></div></section>
+  <div class="bar">
+    <p class="since" id="since" hidden></p>
+    <div class="people" id="people" aria-label="Show one person"></div>
+    <label class="search"><input id="q" type="search" placeholder="Filter the lists" aria-label="Filter the lists" autocomplete="off"><kbd>/</kbd></label>
   </div>
   <main class="board main-cols">
-    <section class="s-work"><h2>Open work <span class="count" id="n-work"></span></h2><div id="work"></div><div id="work-more"></div></section>
-    <section class="s-result"><h2>Results <span class="count" id="n-result"></span></h2><div id="result"></div><div id="result-more"></div></section>
-    <section class="s-msgs"><h2>Messages on all <span class="count" id="n-msgs"></span><button class="toggle" id="autos" hidden></button></h2><ul class="msgs" id="msgs"></ul><div id="msgs-more"></div></section>
+    <section class="s-work"><h2>Now <span class="count" id="n-work"></span></h2><div id="work"></div><div id="work-all"></div></section>
+    <section class="s-result"><h2>Learned <span class="count" id="n-result"></span></h2><div id="result"></div><div id="result-all"></div></section>
   </main>
-  <section class="activity"><h2>Activity <span class="count" id="n-lanes"></span></h2><div class="lanes" id="lanes"></div>
-    <div class="legend" aria-label="Key">
-      <span><i class="mk res"></i>result</span><span><i class="mk res scored"></i>result with a score</span>
-      <span><i class="mk claim"></i>work claim</span><span><i class="mk idea"></i>idea or note</span><span><i class="mk tick"></i>message</span>
-    </div>
+  <section class="board rest" aria-label="More lists">
+    <div class="tabs" id="tabs"></div>
+    <div class="mhead" id="more-head"></div>
+    <div id="more"></div>
+    <div id="more-all"></div>
   </section>
-  <div class="board rest">
-    <section><h2>Ideas <span class="count" id="n-idea"></span></h2><div id="idea"></div><div id="idea-more"></div></section>
-    <section><h2>Knowledge and skills <span class="count" id="n-knowledge"></span></h2><div id="knowledge"></div><div id="knowledge-more"></div></section>
-    <section class="s-closed"><h2>Closed work <span class="count" id="n-closed"></span></h2><div id="closed"></div><div id="closed-more"></div></section>
-  </div>
+  <footer class="key" aria-label="Key">
+    <span><i class="g ring"></i>open work</span><span><i class="g"></i>result</span><span><i class="g small"></i>idea or note</span><span><i class="g tick"></i>message</span>
+    <span class="keys-hint"><kbd>?</kbd> keys</span>
+  </footer>
 </div>
+<div class="def" id="def" role="tooltip" hidden></div>
 <div class="scrim" id="scrim" hidden></div>
 <aside class="panel" id="panel" role="dialog" aria-labelledby="ptitle" hidden></aside>
 <div class="keys" id="keys" role="dialog" aria-label="Keys" hidden>
   <h2>Keys</h2>
   <dl>
-    <dt><kbd>/</kbd></dt><dd>Filter items and messages</dd>
-    <dt><kbd>j</kbd><kbd>k</kbd></dt><dd>Next and previous: open work, results, messages, ideas</dd>
-    <dt><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></dt><dd>Open work, results, messages</dd>
-    <dt><kbd>Enter</kbd></dt><dd>Open the item, or the whole message</dd>
+    <dt><kbd>/</kbd></dt><dd>Filter the lists</dd>
+    <dt><kbd>j</kbd><kbd>k</kbd></dt><dd>Next and previous line</dd>
+    <dt><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></dt><dd>Record steps, Now, Learned</dd>
+    <dt><kbd>Enter</kbd></dt><dd>Open the step, the item or the whole message</dd>
     <dt><kbd>Esc</kbd></dt><dd>Close</dd>
     <dt><kbd>?</kbd></dt><dd>These keys</dd>
   </dl>
 </div>
 <script>
 const $ = id => document.getElementById(id);
+const GLOSSARY = __GLOSSARY__;  // tools/glossary.py: term, match, definition
 const S = {
   lookedAt: 0, selAt: 0, changed: new Set(),
   data: null, readAt: 0, error: null, who: null, q: "", idle: false, open: null, detail: null, seen: null,
-  autos: false, more: new Set(), full: new Set(), since: null, acked: true, pointer: null,
+  bench: null, step: null, more: null, term: null,
+  autos: false, all: new Set(), full: new Set(), since: null, acked: true, pointer: null,
 };
 const HUES = [325, 150, 65, 195, 105, 45, 175, 350];  // far apart first; none in 230-310, where the data blue is
 const KINDS = { work: "Open work", "work-closed": "Closed work", result: "Result", idea: "Idea", knowledge: "Knowledge", skill: "Skill" };
-const LIMIT = { result: 12, msgs: 20, idea: 8, knowledge: 8, closed: 8 };
+const MORE = [["tools", "Tools and site"], ["idea", "Ideas"], ["knowledge", "Knowledge and skills"], ["closed", "Closed work"], ["msgs", "Messages"], ["activity", "Activity"]];
+const LIMIT = { result: 12, more: 20 };
 const ID = /\b((?:work|result|idea|knowledge|skill)-[0-9a-f]{6})\b|(?<![\w.-])(\d+(?:[.,]\d+)*(?: ?%)?)(?![\w-])/g;
 const AUTO = /^(started|done|closed) (work|idea|result|knowledge|skill)-[0-9a-f]{6}\b/;  // what board.py announces by itself
-const SEEN_KEY = "board.lastSeen";
-const small = matchMedia("(max-width: 820px)");
+/* The board stores no field that tells a research result from an announcement ("Live at https://..."). This rule on the
+   text was fitted on 60 results (10 announcements, all found, no other result): a result with no score whose first 160
+   characters name the site, an artifact link, a finding page or a tool, or say that something is live, on main or ready. */
+const ANNOUNCE = /monitor\.invariant\.team|claude\.ai\/artifact|\/finding\/\w|\bis (?:live|on main|on branch|ready)\b|\blive (?:at|on)\b|, live\b|\bpage built\b|\bis a team skill\b|\bskill ready\b|^(?:uv run |python3 )?tools\/\w+\.py/i;
+const META = /^(?:score|title|what|why|caveat):/;  // lines of a result's text that are not its finding (climb.finding)
+const SEEN_KEY = "board.lastSeen", TITLE = "Invariant: Board";
+const small = matchMedia("(max-width: 900px)");
 let people = [];
 
-const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);  // every attribute is in double quotes
 const hue = name => HUES[Math.max(0, people.indexOf(name)) % HUES.length];  // by sorted name: the same colors on every page
-const pstyle = name => `--h:${hue(name)};--pc-color:oklch(var(--pl) var(--pc) ${hue(name)})`;
+const pstyle = name => `--h:${hue(name)}`;
 const now = () => S.data ? S.data.now_ns + (Date.now() - S.readAt) * 1e6 : Date.now() * 1e6;
 const mins = ns => Math.max(0, Math.floor((now() - Number(ns)) / 6e10));
 const dur = m => m < 60 ? `${m}m` : m < 1440 ? `${Math.floor(m / 60)}h` : `${Math.floor(m / 1440)}d`;
@@ -571,6 +626,8 @@ const msgNs = m => Number(m.sk.slice(0, 20));
 const activeNs = i => Number(i.active_ns ?? i.at_ns);
 const plural = (n, word, many = word + "s") => `<b>${n}</b> ${n === 1 ? word : many}`;
 const f1 = v => v.toFixed(1);
+const num = v => Number(v).toLocaleString("en-US");
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 const store = {  // a private window throws on localStorage; the page works without it
   get(k) { try { return localStorage.getItem(k); } catch { return null; } },
   set(k, v) { try { localStorage.setItem(k, v); } catch {} },
@@ -612,16 +669,69 @@ function putRows(el, rows, empty) {  // rows: [key, html]; only changed rows are
   el._html = html;
 }
 
-/* Text from the board, escaped; item ids become links, and in results the numbers are set heavier. */
-function rich(text, { links = true, numbers = false } = {}) {
-  return esc(text).replace(ID, (all, id, num) =>
-    id ? (links ? `<a class="ref" href="#${id}">${id}</a>` : id) : numbers ? `<span class="n">${num}</span>` : num);
+/* The glossary. A spelling with a capital matches exactly, any other in either case; the longest spelling wins. */
+const SPELL = new Map();
+GLOSSARY.forEach(t => t.match.forEach(m => SPELL.set(/[A-Z]/.test(m) ? m : m.toLowerCase(), t)));
+const TERM = new RegExp("(?<![\\w-])(?:" + [...SPELL.keys()].sort((a, b) => b.length - a.length).map(s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|") + ")(?![\\w-])", "gi");
+const termOf = word => SPELL.get(word) ?? SPELL.get(word.toLowerCase());
+const termBtn = (t, word) => `<span class="term" role="button" tabindex="0" data-term="${esc(t.term)}" aria-expanded="false">${esc(word)}</span>`;  // a span wraps with its sentence; a button would not
+const tb = word => termOf(word) ? termBtn(termOf(word), word) : esc(word);  // one word of the page's own sentences
+
+/* Text from the board, escaped. Item ids become links, in results the numbers are set heavier, and where the text is
+   shown in full the first occurrence of each glossary term becomes a button. */
+function rich(text, { links = true, numbers = false, terms = false } = {}) {
+  const part = s => esc(s).replace(ID, (all, id, n) => id ? (links ? `<a class="ref" href="#${id}">${id}</a>` : id) : numbers ? `<span class="n">${n}</span>` : n);
+  if (!terms || !SPELL.size) return part(text);
+  const used = new Set();
+  let out = "", at = 0;
+  for (const m of String(text).matchAll(TERM)) {
+    const t = termOf(m[0]);
+    if (!t || used.has(t.term)) continue;
+    used.add(t.term);
+    out += part(text.slice(at, m.index)) + termBtn(t, m[0]);
+    at = m.index + m[0].length;
+  }
+  return out + part(text.slice(at));
 }
-const who = (name, branch) =>  // the branch only when it is not main
-  `<button class="who" style="${pstyle(name)}" data-who="${esc(name)}" title="Show only ${esc(name)}">${esc(name)}</button>` +
-  (branch && branch !== "main" ? `<span class="branch" title="${esc(branch)}">${esc(branch)}</span>` : "");
+function showDef(btn) {
+  const was = S.term;
+  hideDef();
+  if (was === btn) return;
+  const t = GLOSSARY.find(g => g.term === btn.dataset.term), d = $("def");
+  if (!t) return;
+  S.term = btn;
+  d.innerHTML = `<b>${esc(t.term)}</b> ${esc(t.definition)}`;
+  d.hidden = false;
+  btn.setAttribute("aria-expanded", "true");
+  btn.setAttribute("aria-describedby", "def");
+  const r = btn.getBoundingClientRect(), w = d.offsetWidth, h = d.offsetHeight;
+  const below = r.bottom + 8 + h <= innerHeight || r.top - 8 - h < 0;
+  d.style.left = Math.max(16, Math.min(innerWidth - 16 - w, r.left)) + "px";
+  d.style.top = (below ? r.bottom + 8 : r.top - 8 - h) + "px";
+}
+function hideDef() {
+  if (!S.term) return;
+  S.term.setAttribute("aria-expanded", "false");
+  S.term.removeAttribute("aria-describedby");
+  S.term = null;
+  $("def").hidden = true;
+}
+
+/* One line for an item: the title an agent wrote for a result (board.py plain), else the first clause of its text. */
+const plain = () => S.data?.plain ?? {};
+const body = text => String(text).split("\n").filter(l => l.trim() && !META.test(l.trim())).join("\n");
+function clause(text) {
+  const t = body(text).replace(/\s*\b(?:idea|work|result|knowledge|skill)-[0-9a-f]{6}\b/g, "").replace(/\s*\([^)]*\)/g, "").replace(/(?:\s*,)+/g, ",").trim();
+  const m = /: |; |\. |\? |\n/.exec(t.slice(16));
+  return (m ? t.slice(0, 16 + m.index) : t).replace(/[.:;]$/, "");
+}
+const sentence = text => { const t = body(text), m = /[.?!] (?=[A-Z])|\n/.exec(t.slice(40)); return m ? t.slice(0, 41 + m.index).trim() : t; };
+const firstSentence = text => text.split(/(?<=[.?!])\s+(?=[A-Z])/)[0];
+const title = i => (i.kind === "result" && plain()[i.id]?.title) || clause(i.text);
+const announcement = i => i.kind === "result" && !S.scores.has(i.id) && ANNOUNCE.test(i.text.slice(0, 160));
+
 const match = (...fields) => (!S.q || fields.join("\n").toLowerCase().includes(S.q));
-const shown = i => (!S.who || i.who === S.who) && match(i.id, i.text, i.who, i.branch);
+const shown = i => (!S.who || i.who === S.who) && match(i.id, i.text, i.who, i.branch, plain()[i.id]?.title ?? "");
 const filtering = () => Boolean(S.q || S.who || S.idle);
 const isNew = key => S.seen && !S.seen.has(key);
 /* What changed since the last look: new results, closed work, work that crossed an hour idle. The dots and the count use this. */
@@ -635,97 +745,97 @@ function changed(items) {
   };
 }
 
-const MODELS = { base: 0, rl: 1 };
-function scoreChips(id) {
-  const all = (S.scores.get(id) || []).slice().sort((a, b) => (MODELS[a.model] ?? 2) - (MODELS[b.model] ?? 2) || b.right / b.n - a.right / a.n);
-  const seen = new Set(), top = all.filter(s => !seen.has(s.model + s.benchmark) && seen.add(s.model + s.benchmark)).slice(0, 2);
-  return !top.length ? "" : `<div class="scores">` + top.map(s => `<span class="score">${esc(s.model)} ${esc(s.benchmark)} <b>${s.right}/${s.n}</b></span>`).join("") +
-    (all.length > top.length ? `<span>${all.length - top.length} more</span>` : "") + `</div>`;
-}
-
 function row(i) {
   const open = i.listed === "work", closed = i.listed === "work-closed";
-  const idle = open ? mins(activeNs(i)) : 0, late = idle >= 60;
-  const t = open ? activeNs(i) : i.at_ns, fresh = mins(t) < 10;
-  const last = open && late && S.data.last_comments?.[i.id];
-  const cls = ["row", i.kind, late && "late", closed && "closed", S.open === i.id && "current", isNew(i.id) && "arrived", S.changed.has(i.id) && "new"];
-  const meta = [
-    who(i.who, i.branch),
-    `<span class="id">${esc(i.id)}</span>`,
-    closed ? `<span>closed ${when(i.closed_ns ?? 0, " ago")}${i.closed_by ? " by " + esc(i.closed_by.split("/")[0]) : ""}</span>`
-           : open ? "" : `<span${fresh ? ' class="fresh"' : ""}>${when(t, " ago")}</span>`,
-    i.kind === "skill" ? "<span>skill</span>" : "",
-    i.ups || i.downs ? `<span>+${i.ups} −${i.downs}</span>` : "",
-    i.n_comments ? `<span class="ncom">${i.n_comments} comment${i.n_comments > 1 ? "s" : ""}</span>` : "",
-  ].join("");
-  const right = open ? `<span class="idle" title="Minutes since the item was posted or last commented on">idle ${dur(idle)}` +
-    `<span class="meter"><i style="width:${Math.min(100, idle / 60 * 100)}%"></i></span></span>` : "";
+  const idle = open ? mins(activeNs(i)) : 0, late = idle >= 60, t = closed ? i.closed_ns ?? 0 : i.at_ns;
+  const glyph = open ? "ring" : closed ? "ring shut" : i.kind === "result" && !announcement(i) ? "" : "small";
+  const right = open ? `<span class="r${late ? " late" : ""}">${late ? "idle " : ""}${durHM(idle)}</span>`
+    : `<span class="r${!closed && mins(t) < 10 ? " fresh" : ""}">${closed ? "closed " : ""}${rel(t)}</span>`;
+  const cls = ["row", i.kind, late && "late", closed && "shut", S.open === i.id && "current", isNew(i.id) && "arrived", S.changed.has(i.id) && "new"];
   return `<article class="${cls.filter(Boolean).join(" ")}" style="${pstyle(i.who)}" data-key="${esc(i.id)}">` +
-    `<a class="open" href="#${esc(i.id)}"><span class="text">${rich(i.text, { links: false, numbers: i.kind === "result" })}</span></a>` +
-    (last ? `<p class="last">Last comment: ${esc(last.text)}</p>` : "") + (i.kind === "result" ? scoreChips(i.id) : "") +
-    `<div class="meta"><div class="m">${meta}</div>${right}</div></article>`;
+    `<a class="open" href="#${esc(i.id)}"><i class="g ${glyph}"></i><span class="t">${esc(title(i))}</span>${right}<span class="sr">, ${esc(i.who)}</span></a></article>`;
 }
 
 function message(m) {
-  const cls = ["msg", isNew(m.sk) && "arrived", S.full.has(m.sk) && "full"];
-  return `<li class="${cls.filter(Boolean).join(" ")}" data-key="${esc(m.sk)}" tabindex="-1"><div class="meta">${who(m.who, m.branch)}${when(msgNs(m), " ago")}</div>` +
-    `<div class="text">${rich(m.text)}</div></li>`;
+  const full = S.full.has(m.sk), cls = ["msg", isNew(m.sk) && "arrived", full && "full"];
+  return `<article class="${cls.filter(Boolean).join(" ")}" style="${pstyle(m.who)}" data-key="${esc(m.sk)}" tabindex="0">` +
+    `<i class="g tick"></i><div class="t"><b>${esc(m.who)}</b> ${rich(m.text, { links: full })}</div><span class="r">${rel(msgNs(m))}</span></article>`;
 }
 
-function list(id, items, total, empty, draw = row) {
-  const cut = filtering() || S.more.has(id) || !LIMIT[id] ? items : items.slice(0, LIMIT[id]);
+function list(id, key, items, total, empty, draw = row) {
+  const cut = filtering() || S.all.has(key) || !LIMIT[id] ? items : items.slice(0, LIMIT[id]);
   putRows($(id), cut.map(i => [i.id ?? i.sk, draw(i)]), `<p class="empty">${empty}</p>`);
-  put($(id + "-more"), cut.length < items.length ? `<button class="more" data-more="${id}">Show all ${items.length}</button>` : "");
-  put($("n-" + id), filtering() ? `${items.length} of ${total}` : String(total));
+  put($(id + "-all"), cut.length < items.length ? `<button class="all" data-all="${key}">Show all ${items.length}</button>` : "");
+  return filtering() ? `${items.length} of ${total}` : String(total);
 }
 
 function render() {
   const d = S.data;
   const anchor = readingAnchor(), before = anchor?.getBoundingClientRect().top;
-  const focused = document.activeElement?.closest("[data-key]")?.dataset.key;
+  const focused = document.activeElement?.closest("[data-key]")?.dataset.key, fkey = document.activeElement?.dataset?.fkey;
   status();
-  put($("filters"), (S.who ? `<span class="chip">Showing ${esc(S.who)} only <button data-clear="who" aria-label="Show everyone">✕</button></span>` : "") +
-    (S.idle ? `<span class="chip">Open work idle over an hour <button data-clear="idle" aria-label="Show all open work">✕</button></span>` : ""));
   if (!d) return;
   $("test").hidden = !d.test;
 
   people = [...new Set([...d.items, ...d.messages].map(r => r.who))].sort();
   S.scores = new Map();
   (d.scores || []).forEach(s => S.scores.set(s.result, [...(S.scores.get(s.result) || []), s]));
+  S.benches = benches(d.scores || []);
   const items = d.items.map(i => ({ ...i, closed_ns: i.closed_at ? Date.parse(i.closed_at) * 1e6 : null }));
+  S.item = new Map(items.map(i => [i.id, i]));
   if (document.visibilityState === "visible" && document.hasFocus()) S.lookedAt = d.now_ns;  // the reader saw this read
   const ch = changed(items);
   S.changed = new Set([...ch.result, ...ch.closed, ...ch.idle].map(i => i.id));
   const of = kinds => items.filter(i => kinds.includes(i.listed));
-  const by = (kinds, order) => { const all = of(kinds).sort(order); return [all.filter(shown), all.length]; };
+  const by = (all, order) => { all.sort(order); return [all.filter(shown), all.length]; };
   const newest = (a, b) => b.at_ns - a.at_ns;
-  const [work, nWork] = by(["work"], (a, b) => activeNs(a) - activeNs(b));  // longest idle first; a row crossing an hour does not move
-  const workShown = S.idle ? work.filter(i => mins(activeNs(i)) >= 60) : work;
-  const [results, nResults] = by(["result"], newest);
-  const [ideas, nIdeas] = by(["idea"], newest);
-  const [notes, nNotes] = by(["knowledge", "skill"], newest);
-  const [closed, nClosed] = by(["work-closed"], (a, b) => (b.closed_ns ?? 0) - (a.closed_ns ?? 0));
+  const records = new Set(S.benches.flatMap(b => b.pts.filter(q => q.rec).map(q => q.s.result)));  // these results are the ladder
+  const results = of(["result"]).filter(i => !records.has(i.id));
+  const [work, nWork] = by(of(["work"]), (a, b) => activeNs(a) - activeNs(b));  // longest idle first; a row crossing an hour does not move
+  const idleN = work.filter(i => mins(activeNs(i)) >= 60).length;
+  const lists = {
+    result: by(results.filter(i => !announcement(i)), newest),
+    tools: by(results.filter(announcement), newest),
+    idea: by(of(["idea"]), newest),
+    knowledge: by(of(["knowledge", "skill"]), newest),
+    closed: by(of(["work-closed"]), (a, b) => (b.closed_ns ?? 0) - (a.closed_ns ?? 0)),
+  };
   const talk = d.messages.filter(m => (!S.who || m.who === S.who) && match(m.text, m.who, m.branch)).reverse();
-  const autos = talk.filter(m => AUTO.test(m.text)).length;
-  const msgs = S.autos ? talk : talk.filter(m => !AUTO.test(m.text));
+  const autos = talk.filter(m => AUTO.test(m.text)).length, nAutos = d.messages.filter(m => AUTO.test(m.text)).length;
   const none = filtering() ? "Nothing matches the filter." : "";
 
-  list("work", workShown, nWork, none || "No open work. An agent claims work with <code>board.py post work</code>.");
-  list("result", results, nResults, none || "No results yet.");
-  list("idea", ideas, nIdeas, none || "No ideas yet.");
-  list("knowledge", notes, nNotes, none || "No knowledge or skills yet.");
-  list("closed", closed, nClosed, none || "No work has been closed yet.");
-  list("msgs", msgs, d.messages.length - (S.autos ? 0 : d.messages.filter(m => AUTO.test(m.text)).length),
-    none || `No messages on all in the last ${d.hours} h.`, message);
-  $("autos").hidden = !autos;
-  put($("autos"), S.autos ? "Hide announcements" : `Show ${autos} announcement${autos > 1 ? "s" : ""}`);
-  $("autos").setAttribute("aria-pressed", S.autos);
+  hero();
+  since(items, ch, work.length, idleN);
+  put($("people"), people.map(p => `<button data-who="${esc(p)}" data-fkey="who-${esc(p)}" aria-pressed="${S.who === p}" style="${pstyle(p)};--c:oklch(var(--pl) var(--pc) var(--h))"><i class="g"></i>${esc(p)}</button>`).join(""));
+  $("people").classList.toggle("picked", Boolean(S.who));
 
-  summary(items, ch);
-  hill(d.scores || []);
-  lanes(items, d);
+  const nw = list("work", "work", S.idle ? work.filter(i => mins(activeNs(i)) >= 60) : work, nWork, none || "No open work. An agent claims work with <code>board.py post work</code>.");
+  put($("n-work"), nWork ? `${nw} open, longest idle first` + (idleN ? `, <button class="warn" id="idlebtn" data-fkey="idle" aria-pressed="${S.idle}">${idleN} idle over an hour</button>` : "") : "");
+  put($("n-result"), list("result", "result", lists.result[0], lists.result[1], none || "No results yet."));
+
+  const count = { msgs: [S.autos ? talk.length : talk.length - autos, d.messages.length - (S.autos ? 0 : nAutos)] };
+  Object.keys(lists).forEach(k => { count[k] = [lists[k][0].length, lists[k][1]]; });
+  put($("tabs"), `<span class="lab">More</span>` + MORE.map(([k, name]) => `<button data-more="${k}" data-fkey="more-${k}" aria-pressed="${S.more === k}">${name} ` +
+    `<span class="count">${k === "activity" ? `${d.hours} h` : filtering() ? `${count[k][0]} of ${count[k][1]}` : count[k][1]}</span></button>`).join(""));
+  const more = $("more"), head = $("more-head");
+  more.classList.toggle("cols2", Boolean(lists[S.more]) && S.more !== "result");
+  if (S.more === "activity") {
+    put(head, ""); put($("more-all"), "");
+    put(more, lanes(items, d));
+  } else if (S.more === "msgs") {
+    put(head, autos ? `<button id="autos" data-fkey="autos" aria-pressed="${S.autos}">${S.autos ? "Hide" : "Show"} ${autos} announcement${autos > 1 ? "s" : ""} of board.py</button>` : "");
+    list("more", "msgs", S.autos ? talk : talk.filter(m => !AUTO.test(m.text)), count.msgs[1], none || `No messages on all in the last ${d.hours} h.`, message);
+  } else if (lists[S.more]) {
+    put(head, S.more === "tools" ? "Results that announce a page, a tool or a skill. The page tells them apart by their words, so a few may be in the wrong list." : "");
+    list("more", S.more, lists[S.more][0], lists[S.more][1], none || "Nothing here yet.");
+  } else { put(head, ""); put($("more-all"), ""); put(more, ""); }
+
+  const open = items.filter(i => i.listed === "work");
+  put($("live"), `${open.length} open work items, ${idleN} idle over an hour, ${items.filter(i => i.kind === "result").length} results.`);  // changes only with the counts
   S.seen = new Set([...d.items.map(i => i.id), ...d.messages.map(m => m.sk)]);
+  if (S.term && !S.term.isConnected) { S.term = null; $("def").hidden = true; }
   if (focused && !document.activeElement?.closest("[data-key]")) document.querySelector(`[data-key="${CSS.escape(focused)}"] .open, .msg[data-key="${CSS.escape(focused)}"]`)?.focus({ preventScroll: true });
+  if (fkey && document.activeElement?.dataset?.fkey !== fkey) document.querySelector(`[data-fkey="${CSS.escape(fkey)}"]`)?.focus({ preventScroll: true });
   const after = anchor?.isConnected ? anchor : anchor && document.querySelector(`[data-key="${CSS.escape(anchor.dataset.key)}"]`);
   if (after && scrollY > 0) scrollBy(0, after.getBoundingClientRect().top - before);  // rows added above the reader do not push the text
 }
@@ -745,39 +855,18 @@ function status() {
   s.title = d ? `Last read ${utc(d.now_ns)}` : "";
 }
 
-function summary(items, ch) {
-  const open = items.filter(i => i.listed === "work");
-  const idle = open.filter(i => mins(activeNs(i)) >= 60).length;
-  const ppl = new Set(open.map(i => i.who)).size;
-  const last = items.filter(i => i.kind === "result").sort((a, b) => b.at_ns - a.at_ns)[0];
-  put($("summary"), (open.length
-      ? `${plural(open.length, "open work item")} from ${plural(ppl, "person", "people")}, ` +
-        (idle ? `<button class="warn" id="idlebtn" aria-pressed="${S.idle}" title="Show only open work idle over an hour"><b>${idle}</b> idle over an hour</button>.` : "none idle over an hour.")
-      : "No open work.") +
-    (last ? ` <a href="#${esc(last.id)}">Last result ${mins(last.at_ns) < 1 ? "just now" : `<b>${rel(last.at_ns)}</b> ago`}</a> from ${esc(last.who)}.` : " No results yet."));
-  put($("live"), `${open.length} open work items, ${idle} idle over an hour, ${items.filter(i => i.kind === "result").length} results.`);  // changes only with the counts
-  if (!S.since) { $("since").hidden = true; document.title = "Team board"; return; }
-  const since = S.since;
+function since(items, ch) {
+  const el = $("since");
+  if (!S.since) { el.hidden = true; document.title = TITLE; return; }
   const parts = [[ch.result.length, "result"], [ch.closed.length, "closed", "closed"], [ch.idle.length, "newly idle", "newly idle"]].filter(p => p[0]);
   const count = parts.reduce((a, p) => a + p[0], 0);
-  $("since").hidden = false;
-  put($("since"), `<span>${count ? `Since ${clock(since / 1e6)}: ${parts.map(p => plural(...p)).join(", ")}.` : `Nothing new since ${clock(since / 1e6)}.`}</span>`);
-  document.title = count && !S.acked ? `(${count}) Team board` : "Team board";
+  el.hidden = !count;
+  put(el, count ? `<span>Since ${clock(S.since / 1e6)}: ${parts.map(p => plural(...p)).join(", ")}.</span>` : "");
+  document.title = count && !S.acked ? `(${count}) ${TITLE}` : TITLE;
 }
 
-/* Hill chart */
+/* The scores of one benchmark: every untrained-base attempt in the order posted, the record steps among them, the best RL score. */
 const note = /\s*\(.*?\)/g;  // a parenthesised note on a configuration, such as "(reference, job 151534-e72c)"
-const shortConfig = (c, max = 30) => {
-  const s = c.replace(/,?\s*\bT \d[\d.]*(\s*\/\s*(top-p|min-p) [\d.]+)*/g, "").replace(note, "").replace(/^,\s*/, "") || c;  // sampling settings and notes are in the full text
-  return s.length > max ? s.slice(0, max - 1).trimEnd() + "…" : s;
-};
-let measure;
-function textWidth(t) {
-  measure ??= document.createElement("canvas").getContext("2d");
-  measure.font = '400 11px "Archivo", ui-sans-serif, system-ui, sans-serif';
-  return measure.measureText(t).width;
-}
-
 function benches(scores) {
   const pct = s => 100 * s.right / s.n;
   const names = [...new Set(scores.map(s => s.benchmark))].sort((a, b) => (b === "MATH-500") - (a === "MATH-500") || a.localeCompare(b));
@@ -797,55 +886,115 @@ function benches(scores) {
     const lo = Math.max(0, plains.length ? Math.round((Math.max(...plains) - 5) / 10) * 10 : Math.floor((Math.min(...vals) - 4) / 10) * 10);
     return { name, pts, lead, rl, rlP: rl && pct(rl), lo, hi: Math.min(100, Math.ceil((Math.max(...vals) + 2) / 10) * 10) };
   }).filter(Boolean);
-  const span = Math.max(...bs.map(b => b.hi - b.lo));  // every chart spans the same points, so heights compare
-  bs.forEach(b => { b.hi = Math.min(100, b.lo + span); b.lo = b.hi - span; });
   return bs;
 }
+const bench = () => S.benches.find(b => b.name === S.bench) ?? S.benches[0];
+const stepOf = b => S.step && b.pts.find(q => q.rec && String(q.s.right) === S.step);
 
-const KEY = `<div class="hp hkey" aria-label="Key to the charts">` +
-  `<span><svg width="12" height="12"><circle class="dot rec" cx="6" cy="6" r="4.5"/></svg>new best</span>` +
-  `<span><svg width="12" height="12"><circle class="dot" cx="6" cy="6" r="3.5"/></svg>other attempt</span>` +
-  `<span><svg width="12" height="12"><path class="x" d="M2.5,2.5l7,7m0,-7l-7,7"/></svg>plain prompt</span>` +
-  `<span><svg width="12" height="12"><line class="ci" x1="6" x2="6" y1="0" y2="12" style="opacity:1"/></svg>95% interval</span>` +
-  `<span><svg width="14" height="10"><rect class="gap" width="14" height="10"/></svg>gap to RL</span></div>`;
+/* The words of a record step: the plain row of its score, else the plain row of its result when that result holds no
+   other step of this benchmark (two steps of one result would otherwise show the same words). */
+function words(q, b) {
+  const p = plain(), own = p[`${q.s.result}#${b.name}#${q.s.right}/${q.s.n}`];
+  return own ?? (b.pts.filter(x => x.rec && x.s.result === q.s.result).length === 1 ? p[q.s.result] : null) ?? {};
+}
+/* Without those words: what the configuration gained and lost against the step before. Parts are split at ", " and " / ";
+   a part that only got longer or shorter shows the words that changed. */
+const parts = c => c.replace(note, "").split(/,\s+|\s+\/\s+/).map(s => s.trim()).filter(Boolean);
+function configDiff(q) {
+  const a = parts(q.s.config), b = parts(q.prev.s.config);
+  let added = a.filter(p => !b.includes(p)), removed = b.filter(p => !a.includes(p));
+  added = added.map(x => { const y = removed.find(y => x.startsWith(y + " ")); if (y) removed = removed.filter(r => r !== y); return y ? x.slice(y.length).trim() : x; })
+    .filter(x => { const y = removed.find(y => y.startsWith(x + " ")); if (y) removed = removed.map(r => r === y ? y.slice(x.length).trim() : r); return !y; });
+  return { added, removed };
+}
+function stepTitle(q, b) {
+  const w = words(q, b);
+  if (w.title) return w.title;
+  if (!q.prev) return cap(q.s.config.replace(note, ""));
+  const { added: all, removed } = configDiff(q), main = all.filter(p => !/^(?:T|top-p|min-p) [\d.]+$/.test(p)), added = main.length ? main : all;  // a sampling setting names the step only when nothing else was added
+  return added.length ? cap(added.join(", ")) : removed.length ? "Without " + removed.join(", ") : cap(q.s.config.replace(note, ""));
+}
+const rawOf = id => S.item.get(id)?.text ?? S.data.finding?.[id] ?? "";
 
-function hill(scores) {
-  const bs = benches(scores);
-  S.benches = bs;
-  put($("hill"), bs.map(b => {
-    const { lead, rl, rlP, pts } = b, after = pts.length - 1 - lead.i;
-    const gap = rl ? rlP - lead.p : null, ci = rl && diffCI(rl, lead.s);
-    return `<section class="hp"><h2>${esc(b.name)} <span class="count">untrained base against RL, n ${lead.s.n}</span></h2><div class="hp-body"><div class="hp-stats">` +
-      `<div><a class="big num" href="#${esc(lead.s.result)}" title="${esc(lead.s.config)}">${f1(lead.p)}<small>%</small></a>` +
-      `<p class="num">best base, ${lead.s.right}/${lead.s.n}</p><p class="cfg">${esc(lead.s.config)}</p>` +
-      `<p class="num">last record ${durHM(mins(Number(lead.s.sk.slice(0, 20))))} ago, ${after ? `${after} attempt${after > 1 ? "s" : ""}` : "no attempts"} since</p></div>` +
-      (rl ? `<div><p class="togo">${gap > 0 ? `<b class="num">${f1(gap)}</b> points below RL` : "<b>0</b> points below RL"}</p>` +
-            `<p class="num">95% interval ${f1(ci[0])} to ${f1(ci[1])}</p><p>RL: ${esc(shortConfig(rl.config, 60))}</p></div>`
-          : `<div><p>RL not measured on ${esc(b.name)}</p></div>`) +
-      `</div><div class="hp-chart" data-bench="${esc(b.name)}"></div></div>${steps(b)}</section>`;
-  }).join("") + (bs.length ? KEY : "") || `<p class="empty">No scores yet. Attach one to a result: <code>board.py score &lt;result id&gt; base MATH-500 410/500 "cue, T 1.0"</code></p>`);
-  charts();
+function hero() {
+  const b = bench();
+  if (!b) {
+    put($("lede"), `<p class="say">No scores yet.</p><p class="sub">Attach one to a result: <code>board.py score &lt;result id&gt; base MATH-500 410/500 "cue, T 1.0"</code></p>`);
+    put($("chart"), ""); put($("ladder"), ""); put($("n-steps"), "");
+    return;
+  }
+  const { lead, rl, rlP, pts } = b, gap = rl ? rlP - lead.p : null, ci = rl && diffCI(rl, lead.s), after = pts.length - 1 - lead.i;
+  const head = `The ${tb("untrained base")} model scores <b class="base">${f1(lead.p)} %</b> on <span class="nb">${tb(b.name)}</span>`, rlm = `the ${tb("RL-trained")} model`;
+  const say = !rl ? `${head}. No RL score is posted on this benchmark.`
+    : Math.abs(gap) < .05 ? `${head}, the same as ${rlm}.`
+    : gap > 0 ? `${head}, <b>${f1(gap)}</b> points below ${rlm} at <b>${f1(rlP)} %</b>.`
+    : `${head}, <b>${f1(-gap)}</b> points above ${rlm} at <b>${f1(rlP)} %</b>.`;
+  const sub = `${lead.s.right} of ${lead.s.n} right.` + (rl ? ` The gap's ${tb("95 % interval")} is ${f1(ci[0])} to ${f1(ci[1])} points.` : "") +
+    ` Last record ${durHM(mins(Number(lead.s.sk.slice(0, 20))))} ago, ${after ? `${after} attempt${after > 1 ? "s" : ""}` : "no attempts"} since.`;
+  const w = words(lead, b), noise = lead.prev && !lead.clears;  // what weakens the number in the sentence, said under it
+  const doubt = [noise ? `The last step, +${f1(lead.p - lead.prev.p)}, is within noise.` : "", w.caveat ? firstSentence(w.caveat) : ""].filter(Boolean).join(" ");
+  put($("lede"), `<p class="say">${say}</p><p class="sub">${sub}</p>` +
+    (doubt ? `<button class="cav" data-step="${lead.s.right}" data-keep="1" data-fkey="cav">${esc(doubt)}</button>` : "") +
+    (S.benches.length > 1 ? `<div class="benches" role="group" aria-label="Benchmark">` + S.benches.map(x =>
+      `<button data-bench="${esc(x.name)}" data-fkey="bench-${esc(x.name)}" aria-pressed="${x === b}">${esc(x.name)} <b>${f1(x.lead.p)}</b></button>`).join("") + `</div>` : ""));
+  put($("n-steps"), `${esc(b.name)}, newest first`);
+  ladder(b);
+  drawChart();
 }
 
-function steps(b) {  // the chart's record steps (q.rec, as in chart), newest first, each with the first line of its finding
-  return `<div class="steps">` + b.pts.filter(q => q.rec).reverse().map(q => {
-    const fin = S.data.finding[q.s.result] ?? "", noise = q.prev && !q.clears;
-    return `<a href="#${esc(q.s.result)}"${noise ? ' class="noise"' : ""}><b class="num">${q.prev ? "+" + f1(q.p - q.prev.p) : "first"}</b>` +
-      `<span class="fin" title="${esc(fin)}">${esc(fin)}</span><span class="num" title="${esc(q.s.config)}">` +
-      `${q.prev ? f1(q.prev.p) + " → " : ""}${f1(q.p)} %${noise ? ", within noise" : ""}, ${esc(q.s.config)}</span></a>`;
-  }).join("") + `</div>`;
-}
-
-function charts() {
-  document.querySelectorAll(".hp-chart[data-bench]").forEach(el => {
-    const b = S.benches.find(x => x.name === el.dataset.bench);
-    if (b && el.clientWidth) put(el, chart(b, el.clientWidth, small.matches));
+function ladder(b) {
+  const sel = stepOf(b);
+  const rows = b.pts.filter(q => q.rec).reverse().map(q => {
+    const noise = q.prev && !q.clears, on = q === sel, id = `step-${q.s.right}`;
+    return `<button class="lrow${noise ? " noise" : ""}" data-step="${q.s.right}" data-fkey="${id}" aria-expanded="${on}"${on ? ` aria-controls="sd-${q.s.right}"` : ""}>` +
+      `<b>${q.prev ? "+" + f1(q.p - q.prev.p) : "start"}</b><span class="lt">${esc(stepTitle(q, b))}</span>` +
+      `<span class="lr">${q.prev ? f1(q.prev.p) + " → " : ""}${f1(q.p)}${noise ? ` <span class="flag">within noise</span>` : ""}</span></button>` + (on ? detail(q, b) : "");
   });
+  const rl = b.rl ? `<a class="lrow rl" href="#${esc(b.rl.result)}" data-fkey="step-rl"><b>${f1(b.rlP)}</b><span class="lt">RL-trained model <small>${esc(b.rl.config.replace(note, ""))}</small></span><span class="lr"></span></a>` : "";
+  put($("ladder"), rl + rows.join(""));
 }
 
-function chart(b, W, narrow) {
-  const { pts, lead, rl, rlP } = b;
-  const { lo, hi } = b, H = 184, T = 18, B = 24, L = narrow ? 26 : 30, R = 60;
+/* An opened step: what changed, why it works, whether it is real, what it costs, and its exact configuration. */
+function detail(q, b) {
+  const w = words(q, b), s = q.s, prev = q.prev, item = S.item.get(s.result), T = { links: false, terms: true };
+  let what;
+  if (w.what) what = `<p>${rich(w.what, T)}</p>`;
+  else {
+    const d = prev && configDiff(q), raw = sentence(rawOf(s.result));
+    what = (prev ? `<p>${[d.added.length ? `Added to the configuration: ${rich(d.added.join(", "), T)}.` : "", d.removed.length ? `Removed: ${rich(d.removed.join(", "), T)}.` : ""].filter(Boolean).join(" ") ||
+      "The configuration differs from the step before only in its note."}</p>` : `<p>The first base score posted on this benchmark.</p>`) +
+      (raw ? `<p class="raw">From the result's text: ${rich(raw, T)}</p>` : "");
+  }
+  const why = w.why ? rich(w.why, T) : "No explanation in plain words is written for this step yet.";
+  const real = (prev ? `${prev.s.n === s.n ? `${prev.s.right} → ${s.right} of ${s.n}` : `${prev.s.right} of ${prev.s.n} → ${s.right} of ${s.n}`}. ` +
+      (q.clears ? `It clears the ${tb("95 % interval")} of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])}).`
+                : `${tb("Within noise")}: ${f1(q.p)} % is inside the 95 % interval of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])}).`)
+    : `${s.right} of ${s.n} right. Its ${tb("95 % interval")} is ${f1(q.ci[0])} to ${f1(q.ci[1])} %.`);
+  const cost = (s.tokens ? `${num(s.tokens)} ${tb("tokens per problem")}` + (prev ? (prev.s.tokens ? `; ${num(prev.s.tokens)} at the step before.` : "; not recorded at the step before.") : ".")
+    : "Tokens per problem are not recorded for this score.");
+  const nc = item?.n_comments;
+  return `<dl class="sd" id="sd-${s.right}"><dt>${prev ? "What changed" : "What it is"}</dt><dd>${what}</dd>` +
+    `<dt>Why it works</dt><dd>${why}</dd>` +
+    `<dt>Is it real</dt><dd><p>${real}</p>${w.caveat ? `<p class="cv">${rich(w.caveat, T)}</p>` : ""}</dd>` +
+    `<dt>Cost</dt><dd>${cost} <a class="go" href="#${esc(s.result)}">Raw result${nc ? ` and ${nc} comment${nc > 1 ? "s" : ""}` : ""}</a></dd>` +
+    `<dt>Settings</dt><dd class="set">${rich(s.config, T)}</dd></dl>`;
+}
+
+/* Hill chart */
+let measure;
+function textWidth(t) {
+  measure ??= document.createElement("canvas").getContext("2d");
+  measure.font = '400 11.5px "Archivo", ui-sans-serif, system-ui, sans-serif';
+  return measure.measureText(t).width;
+}
+function drawChart() {
+  const el = $("chart"), b = S.benches && bench();
+  if (b && el.clientWidth) put(el, chart(b, el.clientWidth, el.clientHeight, small.matches));
+}
+
+function chart(b, W, H, narrow) {
+  const { pts, lead, rl, rlP } = b, sel = stepOf(b);
+  const { lo, hi } = b, T = 18, B = 24, L = narrow ? 26 : 30, R = 60;
   const y = v => T + (hi - Math.max(lo, Math.min(hi, v))) / (hi - lo) * (H - T - B);
   const x = i => L + (i + .5) / pts.length * (W - L - R);
   const out = [], boxes = [];
@@ -860,6 +1009,7 @@ function chart(b, W, narrow) {
     boxes.push(box(at));
     out.push(`<text class="${cls}" x="${at[0].toFixed(1)}" y="${at[1].toFixed(1)}" text-anchor="${at[2]}">${esc(text)}</text>`);
   };
+  const on = q => q === sel ? " on" : "";
 
   const svg = [];
   for (let v = lo; v <= hi; v += 10) {
@@ -868,28 +1018,28 @@ function chart(b, W, narrow) {
   }
   svg.push(`<text x="${L - 8}" y="${T - 9}" text-anchor="end">%</text>`);
 
-  const recs = pts.filter(q => q.rec), shown = recs.filter(q => q.p >= lo);  // a best below the floor has no tread
-  const first = shown[0], start = first.prev ? x(first.i) : L;
+  const recs = pts.filter(q => q.rec), shownRecs = recs.filter(q => q.p >= lo);  // a best below the floor has no tread
+  const first = shownRecs[0], start = first.prev ? x(first.i) : L;
   const step = [[start, y(first.p)]];
-  shown.forEach((q, k) => { if (k) step.push([x(q.i), y(q.prev.p)], [x(q.i), y(q.p)]); });
+  shownRecs.forEach((q, k) => { if (k) step.push([x(q.i), y(q.prev.p)], [x(q.i), y(q.p)]); });
   step.push([W - R, y(lead.p)]);
   if (rl) {
     const top = y(rlP), poly = [[start, top], [W - R, top], ...step.slice().reverse().map(([px, py]) => [px, Math.max(py, top)])];
     svg.push(`<path class="gap" d="M${poly.map(p => p.map(n => n.toFixed(1)).join(",")).join("L")}Z"/>`);
     svg.push(`<line class="target" x1="${L}" x2="${W - R}" y1="${top}" y2="${top}"/>`);
     boxes.push({ x0: W - R + 4, x1: W, y0: top - 9, y1: top + 5 }, { x0: L, x1: W - R, y0: top - 1.5, y1: top + 1.5 });
-    svg.push(`<a href="#${esc(rl.result)}"><title>${esc(`RL, ${rl.config}: ${rl.right}/${rl.n}, ${rl.result}`)}</title>` +
+    svg.push(`<a href="#${esc(rl.result)}" aria-label="${esc(`RL, ${rl.config}: ${rl.right} of ${rl.n}, ${rl.result}`)}">` +
       `<text class="rl" x="${W - R + 8}" y="${top + 4}">RL <tspan>${f1(rlP)}</tspan></text></a>`);
   }
   recs.forEach((q, k) => {
     const x1 = k ? x(q.i) : L, x2 = recs[k + 1] ? x(recs[k + 1].i) : W - R;
     if (q.p >= lo) {
-      svg.push(`<line class="tread" x1="${x1}" x2="${x2}" y1="${y(q.p)}" y2="${y(q.p)}"/>`);
+      svg.push(`<line class="tread${on(q)}" x1="${x1}" x2="${x2}" y1="${y(q.p)}" y2="${y(q.p)}"/>`);
       boxes.push({ x0: x1, x1: x2, y0: y(q.p) - 2, y1: y(q.p) + 2 });
     }
     if (!k) return;
     boxes.push({ x0: x(q.i) - 2, x1: x(q.i) + 2, y0: y(q.p), y1: y(q.prev.p) });
-    svg.push(`<line class="rise${q.clears ? "" : " noise"}" x1="${x(q.i)}" x2="${x(q.i)}" y1="${y(q.prev.p)}" y2="${y(q.p)}"/>`);
+    svg.push(`<line class="rise${q.clears ? "" : " noise"}${on(q)}" x1="${x(q.i)}" x2="${x(q.i)}" y1="${y(q.prev.p)}" y2="${y(q.p)}"/>`);
     if (q.prev.p < lo) {  // the rise starts below the floor: an axis break where it leaves the chart
       const bx = x(q.i), by = y(lo) - 6;
       svg.push(`<path class="brk" d="M${bx - 5},${by + 2}l10,-4"/><path class="brk-line" d="M${bx - 5},${by}l10,-4M${bx - 5},${by + 4}l10,-4"/>`);
@@ -900,34 +1050,30 @@ function chart(b, W, narrow) {
     const cx = x(q.i), cy = y(q.p), clipped = q.p < lo;
     boxes.push({ x0: cx - 7, x1: cx + 7, y0: cy - 7, y1: cy + 7 });
     if (!clipped) boxes.push({ x0: cx - 1.5, x1: cx + 1.5, y0: y(q.ci[1]), y1: y(q.ci[0]) });
-    const ci = clipped ? "" : `<line class="ci${q.rec ? " rec" : ""}" x1="${cx}" x2="${cx}" y1="${y(q.ci[1])}" y2="${y(q.ci[0])}"/>`;
-    const tip = `${q.s.config}: ${q.s.right}/${q.s.n} (${f1(q.p)} %, 95% ${f1(q.ci[0])} to ${f1(q.ci[1])})` +
-      `${q.s.tokens ? `, ${Number(q.s.tokens).toLocaleString("en-US")} tokens per problem` : ""}, ${q.s.who}, ${q.s.result}`;
+    const ci = clipped ? "" : `<line class="ci${q.rec ? " rec" : ""}${on(q)}" x1="${cx}" x2="${cx}" y1="${y(q.ci[1])}" y2="${y(q.ci[0])}"/>`;
+    const tip = `${q.s.config}: ${q.s.right} of ${q.s.n} (${f1(q.p)} %, 95% ${f1(q.ci[0])} to ${f1(q.ci[1])})` +
+      `${q.s.tokens ? `, ${num(q.s.tokens)} tokens per problem` : ""}, ${q.s.who}, ${q.s.result}`;
     const x7 = `<circle class="under" cx="${cx}" cy="${cy}" r="4.5"/><path class="x" d="M${cx - 3.5},${cy - 3.5}l7,7m0,-7l-7,7"`;
     const mark = q.plain && !q.rec ? `${x7}/>` : q.plain ? `${x7} style="stroke:var(--blue)"/>`
-      : `<circle class="dot${q.rec ? " rec" : ""}" cx="${cx}" cy="${cy}" r="${q.rec ? 4.5 : 3.5}"/>`;
-    return { ci, a: `<a href="#${esc(q.s.result)}" aria-label="${esc(tip)}"><title>${esc(tip)}</title><circle class="hit" cx="${cx}" cy="${cy}" r="9"/>${mark}</a>` };
+      : `<circle class="dot${q.rec ? " rec" : ""}" cx="${cx}" cy="${cy}" r="${q.rec ? 4.5 : 3}"/>`;
+    const to = q.rec ? `href="${esc(address({ step: String(q.s.right) }))}" data-step="${q.s.right}" data-keep="1"` : `href="#${esc(q.s.result)}"`;  // a record opens its step, any other attempt its result
+    return { ci, a: `<a class="mark${on(q)}" ${to} aria-label="${esc(tip)}"><circle class="hit" cx="${cx}" cy="${cy}" r="9"/>${mark}</a>` };
   });
 
-  const caption = `${pts.length} attempts in the order posted`;
+  const caption = `${pts.length} attempt${pts.length > 1 ? "s" : ""} in the order posted`;
   boxes.push({ x0: W - R - textWidth(caption), x1: W - R, y0: H - 14, y1: H });
   out.push(`<text class="quiet" x="${W - R}" y="${H - 4}" text-anchor="end">${caption}</text>`);
-  recs.forEach(q => {  // a new record: its gain and short configuration, or "within noise" when it does not clear the last record's interval
+  label(f1(lead.p), "lead", [0, 14, -14, 28].map(dy => [W - R + 8, y(lead.p) + 4 + dy, "start"]), true);  // the best base score, at the end of its line
+  recs.forEach(q => {  // a record that clears the interval of the one before: its gain
     if (!q.prev || !q.clears) return;
-    const xr = x(q.i), mid = (y(q.prev.p) + y(q.p)) / 2 + 4, text = `+${f1(q.p - q.prev.p)} ${shortConfig(q.s.config)}`;
+    const xr = x(q.i), mid = (y(q.prev.p) + y(q.p)) / 2 + 4, text = `+${f1(q.p - q.prev.p)}`;
     const spots = [0, -14, 14, -28, 28].flatMap(dy => [[xr + 8, mid + dy, "start"], [xr - 8, mid + dy, "end"]]);
     label(text, "gain", [...spots, [xr + 8, y(q.p) - 10, "start"], [xr - 8, y(q.p) - 10, "end"], [xr + 8, y(q.p) + 18, "start"]], true);
   });
   pts.filter(q => q.p < lo).forEach(q =>  // below the floor: say its value
     label(`↓ ${f1(q.p)}`, "quiet", [[x(q.i), y(q.p) + 20, "middle"], [x(q.i) - 5, y(q.p) + 20, "start"], [x(q.i) + 12, y(q.p) + 4, "start"]], true));
-  if (!narrow) {
-    recs.filter(q => q.prev && !q.clears).forEach(q =>
-      label("within noise", "quiet", [[x(q.i) + 8, y(q.p) - 8, "start"], [x(q.i) - 8, y(q.p) - 8, "end"], [x(q.i) + 8, y(q.p) + 16, "start"]]));
-    if (pts.length <= 12) pts.filter(q => !q.rec).forEach(q =>
-      label(shortConfig(q.s.config), "quiet", [[x(q.i), y(q.p) + 20, "middle"], [x(q.i), y(q.p) - 12, "middle"], [x(q.i) + 12, y(q.p) + 4, "start"], [x(q.i) - 12, y(q.p) + 4, "end"]]));
-  }
 
-  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(b.name)}: best base ${f1(lead.p)} %, RL ${rl ? f1(rlP) + " %" : "not measured"}">` +
+  return `<svg class="${sel ? "has-sel" : ""}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="${esc(b.name)}: best base ${f1(lead.p)} %, RL ${rl ? f1(rlP) + " %" : "not measured"}">` +
     svg.join("") + marks.map(m => m.ci).join("") + marks.map(m => m.a).join("") + out.join("") + `</svg>`;
 }
 
@@ -941,20 +1087,18 @@ function lanes(items, d) {
     ...d.messages.filter(m => msgNs(m) >= start).map(m => ({ who: m.who, ns: msgNs(m), msg: m })),
   ];
   const lanePeople = [...new Set(events.map(e => e.who))].sort();
-  put($("n-lanes"), `last ${hours} h`);
-  put($("lanes"), lanePeople.map(p => {
+  return lanePeople.map(p => {
     const marks = events.filter(e => e.who === p).map(e => {
       if (e.msg) return `<span class="mk tick" style="left:${x(e.ns)}"></span>`;
       const i = e.item, k = i.kind === "result" ? "res" : i.kind === "work" ? "claim" : "idea";
-      return `<a class="mk ${k}${k === "res" && S.scores.has(i.id) ? " scored" : ""}" style="left:${x(e.ns)}" href="#${esc(i.id)}" tabindex="-1" ` +
-        `title="${esc(i.id)}, ${rel(e.ns)} ago: ${esc(i.text.slice(0, 140))}"></a>`;
+      return `<a class="mk ${k}" style="left:${x(e.ns)}" href="#${esc(i.id)}" tabindex="-1" aria-label="${esc(`${i.id}, ${rel(e.ns)} ago: ${title(i)}`)}"></a>`;
     }).join("");
     const cls = S.who ? (S.who === p ? "on" : "off") : "";
-    return `<div class="lane ${cls}" style="${pstyle(p)}"><button data-who="${esc(p)}" title="Show only ${esc(p)}">${esc(p)}</button>` +
+    return `<div class="lane ${cls}" style="${pstyle(p)}"><button data-who="${esc(p)}"><i class="g"></i>${esc(p)}</button>` +
       `<div class="track" style="--hour:calc(100% / ${hours})">${marks}</div></div>`;
   }).join("") + (lanePeople.length ? `<div class="axis"><i></i><div>${
     Array.from({ length: Math.floor(hours) + 1 }, (_, h) => `<span style="left:${(100 - h / hours * 100).toFixed(3)}%">${h ? h + "h ago" : "now"}</span>`)
-      .reverse().join("")}</div></div>` : `<p class="empty">No posts or messages in the last ${hours} h.</p>`));
+      .reverse().join("")}</div></div>` : `<p class="empty">No posts or messages in the last ${hours} h.</p>`);
 }
 
 /* Reading /data */
@@ -1011,25 +1155,30 @@ function renderPanel() {
   } else if (!base) {
     html = head(S.open, "") + `<div class="pbody"><p class="note">Reading ${esc(S.open)}</p></div>`;
   } else {
-    const i = base, d = S.detail;
+    const i = base, d = S.detail, T = { links: false, terms: true };
     const open = i.listed === "work", idle = mins(activeNs(i));
     const state = open ? `${KINDS.work}, ${idle ? "idle " + dur(idle) : "active now"}` :
       i.listed === "work-closed" ? `Closed by ${esc(i.closed_by)} ${when(Date.parse(i.closed_at) * 1e6, " ago")}` : KINDS[i.kind];
+    const w = i.kind === "result" ? d?.plain?.[i.id] ?? plain()[i.id] : null;  // the whole plain row comes with the item; its title is on the board already
+    const part = (name, text, cls = "") => text ? `<dt>${name}</dt><dd${cls}>${rich(text, T)}</dd>` : "";
+    const said = !w ? "" : (w.title ? `<p class="lead">${esc(w.title)}</p>` : "") +
+      (w.what || w.why || w.caveat ? `<dl class="sd">${part("What", w.what)}${part("Why", w.why)}${part("Caveat", w.caveat, ' class="cv"')}</dl>` : "");
     const votes = d ? d.votes.map(v => `${esc(v.who)} ${v.vote > 0 ? "+" : "−"}`).join(", ") : "";
-    const scores = (S.scores?.get(i.id) || []).map(s => `<p><span class="score">${esc(s.model)} ${esc(s.benchmark)} <b>${s.right}/${s.n}</b></span>, ` +
-      `${f1(100 * s.right / s.n)} %, ${esc(s.config)}${s.tokens ? `, ${Number(s.tokens).toLocaleString("en-US")} tokens per problem` : ""}</p>`).join("");
+    const scores = (S.scores?.get(i.id) || []).map(s => `<p>${esc(s.model)} ${esc(s.benchmark)} <b class="n">${s.right}/${s.n}</b>, ${f1(100 * s.right / s.n)} % ` +
+      `<small>${esc(s.config)}${s.tokens ? `, ${num(s.tokens)} tokens per problem` : ""}</small></p>`).join("");
     const facts = [
       ...(scores ? [["Scores", scores]] : []),
-      ["Posted by", who(i.who)], ["Branch", esc(i.branch || "not recorded")],
+      ["Posted by", `<span class="who" style="${pstyle(i.who)}">${esc(i.who)}</span>`], ["Branch", esc(i.branch || "not recorded")],
       ["Agent", esc([i.agent, (i.session || "").slice(0, 8)].filter(Boolean).join(", ") || "not recorded")],
       ["Posted", `${when(i.at_ns, " ago")}, ${utc(i.at_ns)}`],
       ["Votes", `+${i.ups} −${i.downs}${votes ? ": " + votes : ""}`],
     ].map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
-    const thread = (title, rows, empty) => `<h3>${title} <span>${d ? rows.length : ""}</span></h3>` + (!d ? `<p class="note">Reading</p>` :
-      rows.length ? `<ul class="msgs">${rows.map(r => `<li class="msg"><div class="meta">${who(r.who, r.branch)}` +
-        `${when(Date.parse(r.at) * 1e6, " ago")}</div><div class="text">${rich(r.text)}</div></li>`).join("")}</ul>` : `<p class="note">${empty}</p>`);
-    html = head(i.id, state, open && idle >= 60) +
-      `<div class="pbody"><p class="full">${rich(i.text, { numbers: i.kind === "result" })}</p><dl class="facts num">${facts}</dl>` +
+    const thread = (name, rows, empty) => `<h3>${name} <span>${d ? rows.length : ""}</span></h3>` + (!d ? `<p class="note">Reading</p>` :
+      rows.length ? `<div class="msgs">${rows.map(r => `<div class="pmsg" style="${pstyle(r.who)}"><div class="meta"><b>${esc(r.who)}</b>` +
+        `${when(Date.parse(r.at) * 1e6, " ago")}</div><div class="text">${rich(r.text)}</div></div>`).join("")}</div>` : `<p class="note">${empty}</p>`);
+    html = head(i.id, state, open && idle >= 60) + `<div class="pbody">${said}` +
+      (said ? `<h3>Raw text</h3>` : "") + `<p class="full${said ? "" : " only"}">${rich(i.text, { numbers: i.kind === "result", terms: true })}</p>` +
+      `<dl class="facts">${facts}</dl>` +
       thread("Comments", d?.comments ?? [], "No comments.") +
       thread("Messages on this item", d?.thread ?? [], `No messages sent to ${esc(i.id)}.`) + "</div>";
   }
@@ -1039,16 +1188,18 @@ function renderPanel() {
   put(panel, html);
   panel.scrollTop = scroll;
   if (focused) $(focused)?.focus({ preventScroll: true });
+  if (S.term && !S.term.isConnected) { S.term = null; $("def").hidden = true; }
 }
 
-const head = (id, state, warn) => `<div class="phead"><h2 id="ptitle" tabindex="-1">${esc(id)}</h2>` +
-  `<span class="kind${warn ? " warn" : ""}">${state}</span><div class="actions">` +
-  `<button id="copy">Copy link</button><button id="close" title="Esc">Close</button></div></div>`;
+const head = (id, state, warn) => `<div class="phead"><div><h2 id="ptitle" tabindex="-1">${esc(id)}</h2>` +
+  `<span class="kind${warn ? " warn" : ""}">${state}</span><span class="actions">` +
+  `<button id="copy">Copy link</button><button id="close">Close</button></span></div></div>`;
 
 function fromHash() {
   const id = decodeURIComponent(location.hash.slice(1)) || null;
   if (id === S.open) return;
   const was = S.open;
+  hideDef();
   S.open = id; S.detail = null;
   document.querySelectorAll(".row.current").forEach(r => r.classList.remove("current"));
   if (id) document.querySelector(`.row[data-key="${CSS.escape(id)}"]`)?.classList.add("current");
@@ -1060,19 +1211,23 @@ function fromHash() {
 
 function closePanel() { history.pushState(null, "", location.pathname + location.search); fromHash(); }
 
-/* Filters live in the address, beside the open item: /?who=frustea&q=cue#result-8b1c48 */
-function syncURL() {
-  const p = new URLSearchParams();
-  if (S.who) p.set("who", S.who);
-  if ($("q").value.trim()) p.set("q", $("q").value.trim());
-  if (S.idle) p.set("idle", "1");
+/* Every state is in the address, beside the open item: /?bench=hard328&step=164&more=idea&who=frustea&q=cue&idle=1#result-8b1c48 */
+function address(over = {}) {
+  const v = { bench: S.bench, step: S.step, more: S.more, who: S.who, q: $("q").value.trim(), idle: S.idle, ...over }, p = new URLSearchParams();
+  ["bench", "step", "more", "who", "q"].forEach(k => { if (v[k]) p.set(k, v[k]); });
+  if (v.idle) p.set("idle", "1");
   const qs = p.toString();
-  history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
+  return location.pathname + (qs ? "?" + qs : "") + location.hash;
 }
-function filter(change) { Object.assign(S, change); syncURL(); render(); }
+function set(change) {
+  hideDef();
+  Object.assign(S, change);
+  history.replaceState(null, "", address());
+  render();
+}
 
-/* Keys: j and k walk open work, results, ideas, messages; 1 2 3 jump to a column */
-const walk = () => [...$("work").querySelectorAll(".open"), ...$("result").querySelectorAll(".open"), ...$("msgs").querySelectorAll(".msg"), ...$("idea").querySelectorAll(".open")];
+/* Keys: j and k walk every visible line; 1 2 3 jump to the record steps, Now and Learned */
+const walk = () => [...document.querySelectorAll("#ladder .lrow, #work .open, #result .open, #more .open, #more .msg")];
 function move(step) {
   const links = walk();
   if (!links.length) return;
@@ -1089,23 +1244,35 @@ function go(el) {
 
 document.addEventListener("click", e => {
   const t = e.target;
-  const person = t.closest("[data-who]");
-  if (person) return filter({ who: S.who === person.dataset.who ? null : person.dataset.who });
-  if (t.closest("#idlebtn")) return filter({ idle: !S.idle });
-  const clear = t.closest("[data-clear]");
-  if (clear) return filter({ [clear.dataset.clear]: clear.dataset.clear === "who" ? null : false });
+  const term = t.closest(".term");
+  if (term) { e.preventDefault(); showDef(term); return; }
+  if (!t.closest("#def")) hideDef();
+  const step = t.closest("[data-step]");
+  if (step) {  // a ladder line closes its own step on a second click; the chart and the line under the sentence only open
+    e.preventDefault();
+    const n = step.dataset.step, keep = step.dataset.keep;
+    set({ step: S.step === n && !keep ? null : n });
+    if (keep) document.querySelector(`.lrow[data-step="${CSS.escape(n)}"]`)?.focus({ preventScroll: true });
+    $("sd-" + n)?.scrollIntoView({ block: "nearest" });  // the whole opened step, when it reaches below the screen
+    return;
+  }
+  const b = t.closest("[data-bench]");
+  if (b) return set({ bench: b.dataset.bench === S.benches[0]?.name ? null : b.dataset.bench, step: null });
   const more = t.closest("[data-more]");
-  if (more) { S.more.add(more.dataset.more); render(); return; }
+  if (more) return set({ more: S.more === more.dataset.more ? null : more.dataset.more });
+  const person = t.closest("[data-who]");
+  if (person) return set({ who: S.who === person.dataset.who ? null : person.dataset.who });
+  if (t.closest("#idlebtn")) return set({ idle: !S.idle });
+  const all = t.closest("[data-all]");
+  if (all) { S.all.add(all.dataset.all); render(); return; }
   if (t.closest("#autos")) { S.autos = !S.autos; render(); return; }
   if (t.closest("#close") || t.closest("#scrim")) { closePanel(); return; }
   if (t.closest("#copy")) {
     navigator.clipboard.writeText(location.href).then(() => { $("copy").textContent = "Copied"; });
     return;
   }
-  const m = t.closest("#msgs .msg");
-  if (m && !t.closest("a, button") && getSelection().isCollapsed) { toggleFull(m); return; }
-  const r = t.closest(".row");
-  if (r && !t.closest("a")) location.hash = r.dataset.key;
+  const m = t.closest("#more .msg");
+  if (m && !t.closest("a, button") && getSelection().isCollapsed) toggleFull(m);
 });
 function toggleFull(m) {
   const k = m.dataset.key;
@@ -1114,30 +1281,34 @@ function toggleFull(m) {
 }
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.target.matches?.(".term") && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); showDef(e.target); return; }
   if (e.target === $("q")) {
-    if (e.key === "Escape") { $("q").value = ""; filter({ q: "" }); $("q").blur(); }
-    if (e.key === "Enter" || e.key === "ArrowDown") { e.preventDefault(); $("q").blur(); move(1); }
+    if (e.key === "Escape") { $("q").value = ""; set({ q: "" }); $("q").blur(); }
+    if (e.key === "Enter" || e.key === "ArrowDown") { e.preventDefault(); $("q").blur(); go(document.querySelector("#work .open, #result .open, #more .open, #more .msg")); }
     return;
   }
   const inPanel = e.target.closest?.("#panel");
-  if (e.key === "/") { e.preventDefault(); $("q").focus(); $("q").select(); }
+  if (e.key === "/") { e.preventDefault(); $("q").scrollIntoView({ block: "center" }); $("q").focus(); $("q").select(); }
   else if (e.key === "?") { $("keys").hidden = !$("keys").hidden; }
   else if (e.key === "Escape") {
-    if (!$("keys").hidden) $("keys").hidden = true;
+    if (S.term) { const b = S.term; hideDef(); b.focus(); }
+    else if (!$("keys").hidden) $("keys").hidden = true;
     else if (S.open) closePanel();
-    else if (S.idle || S.who) filter({ idle: false, who: null });
+    else if (S.step) set({ step: null });
+    else if (S.idle || S.who) set({ idle: false, who: null });
   }
   else if (e.key === "j" || (e.key === "ArrowDown" && !inPanel)) { e.preventDefault(); move(1); }
   else if (e.key === "k" || (e.key === "ArrowUp" && !inPanel)) { e.preventDefault(); move(-1); }
-  else if ("123".includes(e.key) && e.key.length === 1) go({ 1: $("work"), 2: $("result"), 3: $("msgs") }[e.key].querySelector(".open, .msg"));
-  else if (e.key === "Enter" && e.target.matches?.("#msgs .msg")) toggleFull(e.target);
+  else if ("123".includes(e.key) && e.key.length === 1) go(document.querySelector({ 1: "#ladder .lrow[data-step]", 2: "#work .open", 3: "#result .open" }[e.key]));
+  else if (e.key === "Enter" && e.target.matches?.("#more .msg")) toggleFull(e.target);
 });
-$("q").addEventListener("input", () => filter({ q: $("q").value.trim().toLowerCase() }));
+$("q").addEventListener("input", () => set({ q: $("q").value.trim().toLowerCase() }));
 addEventListener("hashchange", fromHash);
+addEventListener("scroll", hideDef, { passive: true, capture: true });
 addEventListener("pointermove", e => { S.pointer = { x: e.clientX, y: e.clientY }; }, { passive: true });
-new ResizeObserver(() => S.benches && charts()).observe($("hill"));
+new ResizeObserver(() => { hideDef(); drawChart(); }).observe($("chart"));
 small.addEventListener("change", () => S.data && render());
-document.fonts.ready.then(() => S.benches && charts());
+document.fonts.ready.then(drawChart);
 
 /* Since the last look: the last read shown while the tab was visible and focused is kept when the reader leaves
    (blur, hidden, closed) and becomes the reference when the reader comes back (focus, visible). */
@@ -1153,18 +1324,18 @@ addEventListener("keydown", ack);
 
 const params = new URLSearchParams(location.search);
 S.who = params.get("who"); S.idle = params.get("idle") === "1";
+S.bench = params.get("bench"); S.step = params.get("step"); S.more = MORE.some(m => m[0] === params.get("more")) ? params.get("more") : null;
 $("q").value = params.get("q") ?? ""; S.q = $("q").value.trim().toLowerCase();
 S.since = Number(store.get(SEEN_KEY)) || null; S.acked = !S.since;
-const ph = tag => `<${tag} class="ph-row"><span class="ph"></span><span class="ph"></span><span class="ph"></span></${tag}>`;
-["work", "result", "idea", "knowledge", "closed"].forEach(id => { $(id).innerHTML = ph("div").repeat(3); });
-$("msgs").innerHTML = ph("li").repeat(4);
-$("lanes").innerHTML = `<div class="lane"><span class="ph" style="width:96px"></span><div class="track" style="--hour:16.6%"></div></div>`.repeat(3);
+["work", "result"].forEach(id => { $(id).innerHTML = `<span class="ph-row"><span class="ph"></span></span>`.repeat(4); });
 fromHash();
 poll();
 </script>
 </body>
 </html>
 """
+
+PAGE = PAGE.replace("__GLOSSARY__", json.dumps([{k: t[k] for k in ("term", "match", "definition")} for t in glossary.TERMS]))
 
 if __name__ == "__main__":
     if {"--help", "-h"} & set(sys.argv):

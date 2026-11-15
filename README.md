@@ -278,28 +278,68 @@ uv run tools/board.py done work-3fa21c "L12 probe: 0.41 AUC (n=500), studies/pro
 uv run tools/board.py done work-3fa21c   # closes and announces, without a result
 uv run tools/board.py done work-3fa21c "$(printf 'cue at T 0.6: 378/500 ...\nscore: base MATH-500 378/500 tokens 4690 | cue, T 0.6 / top-p 1.0')"   # a score line feeds the chart
 uv run tools/board.py score result-8b1c48 base MATH-500 410/500 "cue, T 1.0 / top-p 1.0" --tokens 3933   # a score for a result already posted
+uv run tools/board.py plain result-8b1c48 "<title>" "<what>" "<why>" ["<caveat>"]   # plain words for a result already posted
+uv run tools/board.py plain result-8b1c48 "<title>" "<what>" "<why>" --score MATH-500 410/500   # for one score of it
+uv run tools/board.py plain --file plain.json   # many at once; every entry is checked before any is written
 ```
 
+People read the board page, and most of them have not seen the project. So every result says what it is in plain
+words, on four lines of its text. `post` and `done` store them as `plain` rows, and the lines stay in the text:
+
+```
+title: Break vote ties with the shortest answer
+what: When the 4 sampled answers have no majority, take the shortest answer that finished.
+why: Not known yet.
+caveat: The rule was chosen after reading the problems it fixes; the held-out estimate is 451.
+score: base MATH-500 453/500 tokens 16034 | cue, T 1.0, vote over 4, ties to the shortest finished sample
+```
+
+| line | limit | content |
+|---|---|---|
+| `title:` | 60 characters | the change or the finding, without ids or settings |
+| `what:` | 240 | one or two sentences: what was changed or tested |
+| `why:` | 240 | one or two sentences: why the number moved or did not move. Only a mechanism that the result's text, its comments or its study README states or measures; otherwise exactly `Not known yet.` |
+| `caveat:` | 240 | optional, one sentence: what weakens the number (fitted on the test set, one draw, within noise, a later result that refuted it) |
+
+Lines before the first `score:` line describe the result as a whole. Lines directly after a `score:` line, up to the
+next one, describe that one score: use them when one result holds several scores. A line over its limit stops the
+post before anything is written. A result without `title:`, `what:` and `why:` is accepted, and `post` prints a
+reminder to add them with `board.py plain`. `plain` writes the same rows for a result already posted, and a second
+write for the same result and score replaces the first. The file of `plain --file` is a JSON list of
+`{"item": "result-8b1c48", "title": "...", "what": "...", "why": "...", "caveat": "...", "score": {"benchmark": "MATH-500", "right": 410, "n": 500}}`,
+where `caveat` and `score` are optional. A `score` must match a score row of that result.
+
 To watch the board and the `all` channel in a browser: `uv run tools/view.py` (a local, read-only page on
-http://127.0.0.1:8765). At the top is one sentence on the state of the board; above it, what changed since your last
-visit (kept in this browser only). Then one hill-climbing chart per benchmark: every untrained-base score
-(`board.py score`) in the order posted with its 95% Wilson interval, the best so far as a step line, and the best RL
-score as the target. A rise that does not clear the previous record's interval is drawn faint and labeled "within
-noise"; the shaded area is the gap to RL, and "points below RL" carries its 95% interval. Under each chart, its record
-steps, newest first: the gain in points, previous best -> new best, the configuration and the first line of the
-result's text (the finding, as in `climb.py`); a click opens the result. Below: open work (longest idle
-first, red after 60 minutes, with its last comment), results with their scores, and the messages on `all`, where
-board.py's own announcements are hidden until shown; then a timeline per person, ideas, knowledge and closed work. The
-page reads every 10 s while its tab is visible (an unchanged board answers 304 with no body) and only rewrites what
-changed, so it does not move the text you are reading. A click on an item
-opens its text, scores, comments and thread in a side panel (`/#<item id>` is its link); filters are in the address too
-(`/?who=<name>&q=<text>`). Keys: `/` filter, `j` `k` move, `1` `2` `3` jump to a column, Enter opens, Esc closes, `?`
-lists them. The same page is public at https://monitor.invariant.team (`infra/monitor/`). The header of every page of
+http://127.0.0.1:8765). The page is written for people who have not seen the project, and it shows one line per
+thing, with the rest one click away. At the top is one sentence for one benchmark (a switcher picks it, `?bench=`): the
+best untrained-base score, the best RL score and the gap. Under it are the gap's 95% interval and what weakens the
+score: that its last step is within noise, and the first sentence of that step's `caveat`. Then the hill-climbing
+chart: every untrained-base score (`board.py score`) in the order posted with its 95% Wilson interval, the best so far
+as a step line, and the best RL score as the target. A rise that does not clear the previous record's interval is drawn
+faint, and the shaded area is the gap to RL. Beside the chart (under it on a narrow screen) is the ladder of record
+steps, newest first, one line each: the gain in points, the step's `title`, previous best -> new best, and "within
+noise". A click on a step opens it under its line (`?step=<right>`): what changed (`what`), why it works (`why`), is it
+real (before and after, the interval test, the `caveat`), cost (tokens per problem, a link to the raw result) and its
+settings (the configuration). A step takes these words from the `plain` row of its score, or from the row of its result
+when that result holds no other step. Without a row it shows what its configuration gained and lost against the step
+before, and the first sentence of the result's text. Below are two lists, one line per item: Now (open work, longest
+idle first, red from 60 minutes) and Learned (results that set no record and announce nothing, by their `title`). One
+row, More (`?more=`), opens one further list at a time: results that announce a page or a tool, ideas, knowledge and
+skills, closed work, the messages on `all` (board.py's own announcements stay hidden until shown) and a timeline per
+person. The board stores nothing that tells an announcement from a research result, so the page uses a rule on the
+result's text (`ANNOUNCE` in `view.py`) and a few results may land in the wrong list. Terms such as "cue" or "cap hit"
+are underlined with dots in the sentence, in an opened step and in the side panel; a click shows one sentence from
+`tools/glossary.py`, where a term is added with its source. The page reads every 10 s while its tab is visible (an
+unchanged board answers 304 with no body) and only rewrites what changed, so it does not move the text you are reading.
+A click on an item opens its title, what, why and caveat, its full text, scores, comments and thread in a side panel
+(`/#<item id>` is its link); filters are in the address too (`/?who=<name>&q=<text>`). Keys: `/` filter, `j` `k` move,
+`1` `2` `3` jump to the record steps, Now and Learned, Enter opens, Esc closes, `?` lists them. The same page is public at https://monitor.invariant.team (`infra/monitor/`). The header of every page of
 the site has three tabs: Board (this page, `/`), Design (`/architecture`) and Findings (`/findings`).
 
 To see which finding raised the benchmark: `uv run tools/climb.py [benchmark] [--json]` lists, per benchmark, every
 record step of that chart (a base score strictly above all earlier ones, the same rule), newest first: the gain in
-points, previous best -> new best, the result id, who, the configuration and the first line of the result's text.
+points, previous best -> new best, the result id, who, the configuration and the step's title (from its `plain` row;
+without one, the first line of the result's text that is not a `score:`, `title:`, `what:`, `why:` or `caveat:` line).
 
 The tab Design is the page `/architecture` (`tools/architecture.py`): one picture of the shared work setup for
 a first-time reader. The board is in the centre with one dot per live item, each person's agents are beside it with

@@ -8,9 +8,10 @@ description: Guidelines for any page or change on the team site (monitor.invaria
 The header of every page has three tabs: Board (`/`, `tools/view.py`), Design (`/architecture`,
 `tools/architecture.py`) and Findings (`/findings`, `tools/findings.py`). Design is the reference for how the site
 should look and move. Open it in a browser before you design anything, and copy its tokens, its light, its depth and
-its motion. Board is older and flatter and keeps its own tokens until it is restyled. Findings is a grid of tiles, one
-per finding, and each tile opens the page of that finding (`tools/finding_<slug>.py`, `/finding/<slug>`;
-`.claude/skills/finding-page/SKILL.md`). On a finding's page the tab Findings is the current one.
+its motion. Board is a page of lists and one chart: it uses the same tokens and type, has no lit object, and its
+chart is its one picture. Findings is a grid of tiles, one per finding, and each tile opens the page of that finding
+(`tools/finding_<slug>.py`, `/finding/<slug>`; `.claude/skills/finding-page/SKILL.md`). On a finding's page the tab
+Findings is the current one.
 
 A reader should get the point of a page in 5 seconds and find depth by clicking.
 
