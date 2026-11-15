@@ -1,0 +1,35 @@
+{
+ "name": "fm-04-c2-spread-group",
+ "note": "same as fm-03 with the spread of fm-02 [amazon/chronos-2 zero-shot, job abaybektursun-1114-172248-26c3, context = all days to the origin]",
+ "utc": "2026-11-14T23:24:42+00:00",
+ "commit": "db1c99f",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 1,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.182234,
+ "pinball": 0.027431,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.176897,
+ "skill_geomean": 0.158485,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.043947,
+   "in_band": 0.839234
+  },
+  "3": {
+   "skill_pooled": 0.151235,
+   "in_band": 0.694767
+  },
+  "7": {
+   "skill_pooled": 0.236166,
+   "in_band": 0.593992
+  }
+ },
+ "in_band": 0.709875
+}

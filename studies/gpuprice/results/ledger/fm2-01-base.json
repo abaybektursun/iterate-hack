@@ -1,0 +1,35 @@
+{
+ "name": "fm2-01-base",
+ "note": "control: fm-07 rebuilt from the round-2 job and fm2_post.py (listings alone, independent draws); expect +0.272 within simulation noise 0.002 [fm2_post.py flags: ; amazon/chronos-2 zero-shot, cpu jobs 174823-3849, 174829-8fcd, 174832-6f16, 201126-a38b, 201131-4739]",
+ "utc": "2026-11-15T02:17:48+00:00",
+ "commit": "35810bc",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.269369,
+ "pinball": 0.024508,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.274602,
+ "skill_geomean": 0.331565,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.097846,
+   "in_band": 0.851675
+  },
+  "3": {
+   "skill_pooled": 0.24727,
+   "in_band": 0.719961
+  },
+  "7": {
+   "skill_pooled": 0.327403,
+   "in_band": 0.606589
+  }
+ },
+ "in_band": 0.7266
+}

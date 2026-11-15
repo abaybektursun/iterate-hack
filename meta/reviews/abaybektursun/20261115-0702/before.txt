@@ -1,0 +1,6 @@
+07:04 UTC, before
+h100: 21 submitted, 0 started, median wait 0.0 min, GPU min 0, waiting now 20 (oldest 38 min)
+short: 2 submitted, 2 started, median wait 27.7 min, GPU min 4, waiting now 0 (oldest 0 min)
+b200: 0 submitted, 0 started, median wait 0.0 min, GPU min 0, waiting now 0 (oldest 0 min)
+  27 queued h100
+   8 running NVIDIA

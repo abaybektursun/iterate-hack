@@ -1,0 +1,35 @@
+{
+ "name": "loc-02-lora-s0",
+ "note": "Main arm: ft-05 recipe (LoRA on 8,000 synthetic sticky-price series of ft_chronos2.py, 800 steps, batch 32, lr 1e-4, seed 0; no real price, so no latest date) retrained locally in 36 s, used inside the fm2 pipeline with fm2-17 post-processing. H: beats loc-01 base (+0.2915) by more than seed noise 0.01; refuted if below +0.30",
+ "utc": "2026-11-15T04:36:47+00:00",
+ "commit": "04b0cf4",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.306227,
+ "pinball": 0.023272,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.286015,
+ "skill_geomean": 0.356763,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.189741,
+   "in_band": 0.8
+  },
+  "3": {
+   "skill_pooled": 0.269337,
+   "in_band": 0.771318
+  },
+  "7": {
+   "skill_pooled": 0.357498,
+   "in_band": 0.696705
+  }
+ },
+ "in_band": 0.756192
+}

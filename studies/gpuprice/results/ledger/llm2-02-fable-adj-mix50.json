@@ -1,0 +1,35 @@
+{
+ "name": "llm2-02-fable-adj-mix50",
+ "note": "llm2-01 averaged 50/50 with ens-05",
+ "utc": "2026-11-15T04:26:23+00:00",
+ "commit": "eec80d2",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.30831,
+ "pinball": 0.023202,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.308822,
+ "skill_geomean": 0.377916,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.202341,
+   "in_band": 0.837321
+  },
+  "3": {
+   "skill_pooled": 0.277611,
+   "in_band": 0.772287
+  },
+  "7": {
+   "skill_pooled": 0.353401,
+   "in_band": 0.676357
+  }
+ },
+ "in_band": 0.762303
+}

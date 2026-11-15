@@ -1,0 +1,124 @@
+{
+ "name": "r4-m07",
+ "statement": "The cued base's wrong answers are of two kinds, problem-specific attractors (one wrong value reached repeatedly by both base and RL, inherited from shared pretraining) and scattered slips; RL sharpens the base's own distribution, so it removes the scattered slips but keeps the attractors, which means RL's wrong answers mostly coincide with the base's repeated wrong answer and RL rarely fixes a problem on which the base has one.",
+ "scope": "Olmo-3-1025-7B with the opening cue against Olmo-3.1-7B-RL-Zero-Math (plain), T 1.0 / top-p 1.0, cap 16,384, grader v3, on MATH-500 (Day-1 #3 four-sample rows) and the clean hard-328. It covers finished answers only: cap hits and loops (the T 0.6 failure mode) are outside it, as are format/grader errors, the weight-difference cells, the Code pair and other model families. It says nothing about which tokens or weights carry the change.",
+ "parent": "r2-revise-2",
+ "imports": [
+  {
+   "source": "2504.13837",
+   "finding": "RLVR raises pass@1 by concentrating on paths the base already samples, while coverage at large k does not grow (MATH-500 at 128 samples: RL only 1.0 %, base only 3.6 %).",
+   "how": "Concentration on base paths removes low-probability scattered slips (the base's correct path dominates them) but cannot remove a wrong value that is itself one of the base's high-probability paths; so RL's residual errors are the base's attractors."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-5d032f",
+   "quote": "a 4-sample vote adds 8.2 points to base+cue",
+   "how": "Voting removes scattered slips, which the base has many of, so vote helps the base a lot."
+  },
+  {
+   "item": "result-5d032f",
+   "quote": "3.6 to RL (456 -> 474)",
+   "how": "RL's scattered slips are already removed by training, so its remaining errors are attractors that a vote cannot overturn, and the vote adds little."
+  },
+  {
+   "item": "result-9b6af3",
+   "quote": "Of the 65 'RL right, base wrong' problems the random cell solves 40",
+   "how": "Most single-sample base errors that RL 'fixes' are scattered slips that a fresh base sample also avoids."
+  },
+  {
+   "item": "result-5e17a6",
+   "quote": "14 arithmetic/algebra slip",
+   "how": "Slips are the scattered kind of error, which concentration removes, so they appear among RL's fixes."
+  },
+  {
+   "item": "result-96e819",
+   "quote": "RL 454 (-0.6 [-1.4, 0.0], 0 fixed of 35 wrong",
+   "how": "RL's remaining wrong answers are attractors the model holds with confidence, so a self-review pass fixes none of them."
+  },
+  {
+   "item": "result-2c2cae",
+   "quote": "vote@4 179, +5.8 [3.0, 8.8]",
+   "how": "On hard328 the base vote gains less than the sample-specific account needed because many base errors there are repeated attractor values that win or tie the vote."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-5d032f",
+   "quote": "RL stays 5.6 points ahead under the vote",
+   "how": "If the base's vote-surviving errors were mostly attractors that RL keeps, RL's lead should shrink further under the vote; a 5.6-point lead means RL fixes about 28 net problems where the base's vote fails, which the theory must assign to ties or cap-hit-dominated problems."
+  },
+  {
+   "item": "result-2c2cae",
+   "quote": "vote@4: base 138, RL 161, +9.3 [5.3, 13.4]",
+   "how": "On hard328 the gap barely shrinks under the vote (10.2 to 9.3), so many base-vote failures are fixed by RL, not kept as attractors."
+  },
+  {
+   "item": "result-5e17a6",
+   "quote": "14 misread",
+   "how": "The theory traces attractors to shared misreadings, yet 14 of RL's fixes are labelled misreads; they fit only if those misreads were single-sample, not repeated."
+  }
+ ],
+ "rival": "Difficulty alone: problems where the base repeats a wrong value are simply the hardest problems (lowest base p), and RL fails on hard problems whatever the structure of the base's wrong answers (r3-across-1). The two separate on problems where the base gets 0 of 4 right: the difficulty account predicts the same RL vote fix rate whether the base's wrong answers repeat a value or are all distinct, while this theory predicts a much lower fix rate when they repeat, and RL wrong answers equal to the base's repeated value rather than new values.",
+ "predictions": [
+  {
+   "experiment": "MATH-500: share of RL's wrong finished samples whose answer equals one of the base's wrong finished answers on the same problem",
+   "recipe": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (base) and studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (RL). Keep rows with attempt == 0 only (4 samples per problem per model). A row is 'answered' iff cap_hit is false and extracted_v3 is a non-empty string after normalisation; a row is 'wrong' iff answered and score_v3 == 0. Normalise extracted_v3 by: delete all whitespace; strip leading/trailing '$'; replace '\\dfrac' and '\\tfrac' with '\\frac'; delete '\\left' and '\\right'; delete one trailing '.'. Base wrong set W_b(p) = set of normalised extracted_v3 of base wrong rows on problem_index p. Denominator: all RL wrong rows (all problems). Numerator: RL wrong rows whose normalised extracted_v3 is in W_b(p) for their problem (empty W_b counts as no match). Missing problem rows count as empty sets. Report numerator/denominator.",
+   "unit": "fraction of RL wrong finished samples",
+   "value": 0.5,
+   "low": 0.36,
+   "high": 0.65,
+   "refuted_by": "measured below 0.36",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "MATH-500: on problems where the base repeats a wrong value, share of RL's wrong finished samples that equal the base's most frequent wrong value",
+   "recipe": "Same files, filters, 'answered', 'wrong' and normalisation as the first prediction (attempt == 0 only). For each problem p, count normalised extracted_v3 strings over base wrong rows; p is an 'attractor problem' iff the maximum count is >= 2. Modal set M(p) = all strings with that maximum count (ties: all tied strings are in M(p)). Denominator: RL wrong rows on attractor problems. Numerator: those whose normalised extracted_v3 is in M(p). Report numerator/denominator; if the denominator is 0, report 0.",
+   "unit": "fraction of RL wrong finished samples on attractor problems",
+   "value": 0.65,
+   "low": 0.5,
+   "high": 0.82,
+   "refuted_by": "measured below 0.50",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "MATH-500: RL vote fix rate on base-vote-wrong problems where the base has a repeated wrong value",
+   "recipe": "Attractor problems as defined in the second prediction (from rows.jsonl, attempt == 0, base wrong rows, max count of one normalised wrong string >= 2). Vote outcomes from studies/rlneurons/results/day1_3/math500_base_cue-01/readout.json and studies/rlneurons/results/day1_3/math500_rl-01/readout.json, key per_problem, procedure 'vote' (0/1). Set A = problems with base vote == 0 that are attractor problems. Report the fraction of A with RL vote == 1. Problems missing from either readout are dropped.",
+   "unit": "fraction of problems",
+   "value": 0.3,
+   "low": 0.12,
+   "high": 0.5,
+   "refuted_by": "measured above 0.50",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "MATH-500: RL vote fix rate on base-vote-wrong problems without a repeated base wrong value",
+   "recipe": "Same files and definitions as the third prediction. Set B = problems with base vote == 0 that are NOT attractor problems (no normalised base wrong string appears in >= 2 of the base's 4 attempt-0 rows; this includes problems whose base rows are all cap hits or unanswered). Report the fraction of B with RL vote == 1. Problems missing from either readout are dropped.",
+   "unit": "fraction of problems",
+   "value": 0.75,
+   "low": 0.55,
+   "high": 0.92,
+   "refuted_by": "measured below 0.55",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "hard328: when both single samples are wrong and finished, share where base and RL give the same answer",
+   "recipe": "Files: s3 results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue) and .../abaybektursun-1114-151540-86ef/answers.jsonl (RL plain). One row per problem_index; join on problem_index. 'Answered' and 'wrong' and normalisation exactly as in the first prediction (cap_hit false, non-empty normalised extracted_v3, score_v3 == 0). Denominator: problems where both rows are wrong. Numerator: those where the two normalised extracted_v3 strings are identical. Problems missing in either file are dropped.",
+   "unit": "fraction of problems",
+   "value": 0.33,
+   "low": 0.2,
+   "high": 0.48,
+   "refuted_by": "measured below 0.20",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "RL plain (Olmo-3.1-7B-RL-Zero-Math), T 1.0 / top-p 1.0, cap 16,384, 8 fresh samples per problem (seed 46,000,000 + 10,000*sample + problem_index), on the MATH-500 problems of set A in the third offline prediction (base vote wrong, base repeats a wrong value); grade with grader v3, cap hits count wrong. Report the fraction of all samples that are right; also report the fraction of RL wrong finished samples equal to the base modal wrong value.",
+   "unit": "fraction of samples right",
+   "value": 0.32,
+   "low": 0.17,
+   "high": 0.48,
+   "refuted_by": "fraction of samples right above 0.50, or fewer than half of RL's wrong finished samples equal the base's modal wrong value",
+   "gpu_minutes": 25
+  }
+ ]
+}

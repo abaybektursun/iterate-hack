@@ -71,6 +71,32 @@ Resources:
       Code:
         ZipFile: "# placeholder: infra/monitor/deploy.sh uploads the real code with aws lambda update-function-code"
 
+  # GitHub Actions on main updates the function's code (.github/workflows/site.yml) through GitHub's OIDC provider,
+  # so no AWS key is stored anywhere. The role can do nothing but replace this one function's code.
+  DeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: iterate-monitor-github-deploy
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Sub arn:aws:iam::${AWS::AccountId}:oidc-provider/token.actions.githubusercontent.com
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+                token.actions.githubusercontent.com:sub: repo:abaybektursun/iterate-hack:ref:refs/heads/main
+      Policies:
+        - PolicyName: update-code
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: [lambda:UpdateFunctionCode, lambda:GetFunction, lambda:GetFunctionConfiguration]
+                Resource: !GetAtt Function.Arn
+
   Api:
     Type: AWS::ApiGatewayV2::Api
     Properties:
@@ -151,6 +177,8 @@ Resources:
         HostedZoneId: !GetAtt CustomDomain.RegionalHostedZoneId
 
 Outputs:
+  DeployRole:
+    Value: !GetAtt DeployRole.Arn
   Url:
     Value: !Sub https://${Api}.execute-api.${AWS::Region}.amazonaws.com/
   CustomUrl:

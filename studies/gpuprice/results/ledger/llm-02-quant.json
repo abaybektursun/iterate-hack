@@ -1,0 +1,35 @@
+{
+ "name": "llm-02-quant",
+ "note": "Qwen3-Next-80B-A3B-Instruct 4-bit, same 100 cells and listing table as llm-01-sample (10 highest-loss series x 5 origins x h 3,7), job abaybektursun-1114-201359-2fcd. Changed: the model states q10/q50/q90 as JSON, median over 10 samples. Hypothesis: stated quantiles are wider than the sampled point mass and beat last_value_empirical on these cells; refuted if lower.",
+ "utc": "2026-11-15T02:44:22+00:00",
+ "commit": "6586164",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 516,
+  "missing_truth": 39,
+  "missing_forecast": 0,
+  "filled_from_baseline": 424,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.044264,
+ "pinball": 0.034542,
+ "last_value_pinball": 0.036141,
+ "skill_median_of_series": 0.0,
+ "skill_geomean": 0.022109,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.0,
+   "in_band": 0.55814
+  },
+  "3": {
+   "skill_pooled": 0.051594,
+   "in_band": 0.427027
+  },
+  "7": {
+   "skill_pooled": 0.048818,
+   "in_band": 0.264151
+  }
+ },
+ "in_band": 0.420543
+}

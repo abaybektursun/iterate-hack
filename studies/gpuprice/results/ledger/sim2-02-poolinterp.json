@@ -1,0 +1,35 @@
+{
+ "name": "sim2-02-poolinterp",
+ "note": "check: sim2-01 scored +0.176, 0.02 below SPEC1; hypothesis: the gap is the step-function quantile, np.quantile in SPEC1 interpolates between scenario values; change: linear interpolation of the weighted quantile; refuted if still below +0.185 [flags: --pool --no-gap]",
+ "utc": "2026-11-14T23:24:21+00:00",
+ "commit": "db1c99f",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 360,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.175466,
+ "pinball": 0.027658,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.155654,
+ "skill_geomean": 0.19712,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.091617,
+   "in_band": 0.644976
+  },
+  "3": {
+   "skill_pooled": 0.167637,
+   "in_band": 0.581395
+  },
+  "7": {
+   "skill_pooled": 0.202225,
+   "in_band": 0.532946
+  }
+ },
+ "in_band": 0.586684
+}

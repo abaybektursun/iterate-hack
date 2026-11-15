@@ -1,0 +1,35 @@
+{
+ "name": "sim2-14-afh",
+ "note": "sim2-09 (+0.2673) leaves the 4 afhubbard series at last value; hypothesis: the median's own h-day change over all past windows (as last_value_empirical, which saves 0.5 of 3.6 loss units there) adds about +0.005; refuted if pooled <= +0.2673 [flags: --tau 14 --shrink 0.2 --abs-enter 2 --afh]",
+ "utc": "2026-11-14T23:35:22+00:00",
+ "commit": "882e83c",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.272185,
+ "pinball": 0.024414,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.274618,
+ "skill_geomean": 0.350482,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.174563,
+   "in_band": 0.751196
+  },
+  "3": {
+   "skill_pooled": 0.240978,
+   "in_band": 0.745155
+  },
+  "7": {
+   "skill_pooled": 0.31531,
+   "in_band": 0.655039
+  }
+ },
+ "in_band": 0.717272
+}

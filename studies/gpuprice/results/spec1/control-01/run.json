@@ -1,0 +1,6 @@
+{
+ "commit": "dc7100df70d2e4e05e397439132f1feb638e083d",
+ "command": "same with --control",
+ "job_id": "laptop (no GPU)",
+ "source_dir": "/home/abay/Projects/iterate-hack/runs/gpuprice/spec1c"
+}

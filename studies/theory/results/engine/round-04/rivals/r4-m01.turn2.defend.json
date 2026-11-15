@@ -1,0 +1,4 @@
+[
+ {"k": 4, "value": 0.12, "low": -0.07, "high": 0.31, "why": "If finishing depends on how self-similar the text is rather than how sound the maths is, then keeping only problems where RL's opening is at least as compressible as the base's own should shrink the overall +32-point finish gap (48 vs 23 of 78). It does not reach zero because the first 3,000 characters cover only part of a prefix of about 2,500 tokens, and only a few dozen problems are kept, so the noise is large."},
+ {"k": 5, "value": 0.2, "low": -0.03, "high": 0.43, "why": "If loop hazard grows with how self-similar the text already is, a more compressible opening (lower zlib ratio) should bring the rule-A onset earlier, giving a modest positive rank correlation. The correlation is diluted because the opening is only a proxy for the text before the loop, and there are about 60 loops of the 71 at T 0.6 / top-p 1.0, which makes the estimate noisy."}
+]

@@ -1,0 +1,1 @@
+{"n_problems_finished_by_all": 307, "median_mean_logprob_matched": {"cued_base": -0.16107373654280305, "plain_base": -0.17926877883009498, "step100": -0.1565771140367442, "step400": -0.16228226262180462, "step2800": -0.1847874475017002}, "median_n_new_finished": {"cued_base": 981, "plain_base": 648.0, "step100": 1432, "step400": 1653.0, "step2800": 2839}}

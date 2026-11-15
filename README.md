@@ -66,7 +66,7 @@ here uses this profile; details in step 6.
 uv tool install modal
 modal token new                                      # opens the browser; pick your own workspace
 modal secret create hf-token HF_TOKEN=<your token>   # the Hugging Face token of step 4
-modal deploy infra/runner.py                         # your job runner; repeat after changing requirements.txt
+uv run tools/gpu.py deploy                           # your job runner; again whenever infra/runner.py changes
 ```
 
 Check: `uv run tools/gpu.py submit cpu --hours 0.1 -- 'python -c "import torch; print(torch.__version__)"'`,
@@ -205,7 +205,10 @@ Put the command in single quotes, so `$OUT_DIR` is expanded on the job's machine
 with its own quotes, put it in a script in the repository and run that. A job over its class's limit waits in Modal's queue. A job is killed at `--hours` (default 2). The command is one
 shell string, so `&&` and pipes work. Install extra packages in the command
 (`'pip install -q einops && python exp/train.py'`), or add them to `requirements.txt` and run
-`modal deploy infra/runner.py` again. The limits are the `max_containers` values in `infra/runner.py`.
+`uv run tools/gpu.py deploy` again. The limits are the `max_containers` values in `infra/runner.py`. The class
+`short` takes jobs of `--hours 0.5` at most in a queue of their own; it holds no GPUs back by default, since
+2 reserved H100s sat idle while long jobs waited (meta/reviews/abaybektursun/20261115-0702). `submit` refuses
+to run while the runner deployed in your workspace is not the `infra/runner.py` of the commit; `gpu.py deploy` fixes that.
 
 ### vast.ai
 
@@ -296,6 +299,8 @@ opens its text, scores, comments and thread in a side panel (`/#<item id>` is it
 (`/?who=<name>&q=<text>`). Keys: `/` filter, `j` `k` move, `1` `2` `3` jump to a column, Enter opens, Esc closes, `?`
 lists them. The same page is public at https://monitor.invariant.team (`infra/monitor/`). The header of every page of
 the site has four tabs: Board (this page, `/`), Design (`/architecture`), Proof (`/proof`) and Findings (`/findings`).
+Every page has the same tab icon, `/favicon.svg`: `view.py` holds the SVG and writes the link to it into each page as
+it is sent, so a page module holds no icon.
 
 To see which finding raised the benchmark: `uv run tools/climb.py [benchmark] [--json]` lists, per benchmark, every
 record step of that chart (a base score strictly above all earlier ones, the same rule), newest first: the gain in
@@ -308,7 +313,8 @@ ring (messages) runs through every person's agents, and the "Retro" loop (self-r
 first words are typed beside the person whose agent wrote it, with its age ("4 min ago", or "now"), and the status at
 the top right counts the seconds since the last post. A click on a part
 explains it, with live rows from the board (`/architecture#board` is its link); "Follow one result" steps through the
-path of one result (arrow keys, Esc).
+path of one result (arrow keys, Esc). The logos of past.dev (the team's memory) and Exa (web and literature search)
+sit on the key's row at the bottom, and a click on either explains how agents use it.
 
 The tab Findings is the page `/findings` (`tools/findings.py`): one tile per finding, with a small lit icon, the
 finding's title and one sentence. A tile opens the page of that finding. Every finding worth telling gets such a page:
@@ -342,7 +348,9 @@ uv run tools/msg.py wait --timeout 300    # blocks until a message arrives (exit
 
 In Claude Code, two hooks in `.claude/settings.json` put the team's state into the agent's context. At the start
 of a session and after `/clear`, one prints the open work, the 10 newest board items and new messages. After tool
-calls (at most every 20 s), the other runs `msg.py read` and adds new messages. All times are UTC. After changing a tool, run `python3 tools/selftest.py`:
+calls (at most every 20 s), the other runs `msg.py read` and adds new messages. A third, at the end of each turn,
+refuses once to let the turn end while a GPU job this session submitted is queued or running and no `gpu.py wait`
+runs for it (`gpu.py stophook`): start the wait in the background, and the finished job wakes the agent. All times are UTC. After changing a tool, run `python3 tools/selftest.py`:
 it runs every board and message command as two agents against a separate test table.
 
 A message reaches a waiting agent in under a second (measured: 0.2 s after the send returned). Each agent
