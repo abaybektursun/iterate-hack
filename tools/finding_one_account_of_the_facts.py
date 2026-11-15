@@ -769,8 +769,8 @@ def _tally(rec):
 COUNTS = _tally(RECORD)
 _c = COUNTS
 _a = _c.get("accounts", {})
-LINE = (f"Three agents each explained what RL changed; {_c.get('held')} of their {_c.get('tested')} new claims held on "
-        "stored data, but the three accounts were nearly one story.")
+LINE = (f"{_c.get('held')} of {_c.get('tested')} new claims from three accounts of what RL changed held on stored data; a stricter retest "
+        f"could not separate {_c.get('not_separated')} of them from predictions made without the account.")
 EXAMPLES = [["d1", "Example: the one disagreement, and its test"], ["a3c3", "Example: a claim that was refuted"]]
 
 
@@ -1245,7 +1245,7 @@ function statics() {
   g.labY.forEach((y, j) => at(E["bl" + j], g.labX, y));
   E.set.textContent = `Round 15 · three accounts of the same ${C.counts.facts} tested facts`;
   E.bl0.textContent = "new claims held their test on stored data.";
-  E.bl1.textContent = `${C.counts.refuted} refuted, ${C.counts.undecided} undecided; 3 claims per account.`;
+  E.bl1.textContent = `${C.counts.refuted} refuted, ${C.counts.undecided} undecided. Retest: ${C.counts.not_separated} not separated.`;
   const hy = g.top - (g.phone ? 46 : 34);
   E.hair.setAttribute("d", `M${g.phone ? 24 : 58} ${f(hy - (g.phone ? 26 : 22))}H${g.phone ? 456 : 942}`);
   at(E.h1, g.phone ? 24 : g.bead - 12, hy); E.h1.textContent = "The account, in plain words";
