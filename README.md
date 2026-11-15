@@ -344,11 +344,13 @@ the site has four tabs: Board (this page, `/`), Design (`/architecture`), Proof 
 
 The home page is https://invariant.team (`tools/home.py`; the same Lambda, which answers `/` with it when the host is
 `invariant.team`, and `/home` on any host). It leads to every page of the monitor: Findings, Board, Proof, Design, Talk
-(`/demo`), Paper, Lab, Exa, past.dev, GPU prices (gpu.invariant.team) and Psychosis. Its picture is a dial: a lit glass
+(`/demo`), Papers, Lab, Exa, past.dev, GPU prices (gpu.invariant.team) and Psychosis. Its picture is a dial: a lit glass
 body with a ring around it and one bead per page. A click on a bead or the arrow keys turn the dial to a page
 (`/#<page>`); a click on the body or the button opens it. Beside the picture the same pages are a plain list of links.
 About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
-line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. The domain is the stack parameter
+line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. The page `/papers` (`tools/papers.py`) is the paper loop: its six steps in the words column and one lit sheet per
+paper of `view.PAPERS`, each with its claim, its length, why the loop picked it and how it was checked; a click opens
+the PDF. A new paper gets its row in `ROWS` of `papers.py` (without one it still gets a sheet with its title). The domain is the stack parameter
 `HomeDomainName` (`infra/monitor/deploy.sh monitor.invariant.team <zone id> invariant.team`).
 Every page has the same tab icon, `/favicon.svg`: `view.py` holds the SVG and writes the link to it into each page as
 it is sent, so a page module holds no icon.
@@ -404,6 +406,13 @@ from each item to the earlier items it builds on; 151 of 450 links join two basi
 holds no board text, come from `studies/basins` on branch `ali/basins` (`results/swarm/main-03/summary.json`,
 `analysis/swarm_nested_layout.py`).
 
+The page `/values` (`tools/values.py`; not a header tab, reached from the home dial) holds the six values the team
+works by, in the order of AGENTS.md: Speed, Enthusiasm, Practicality, novelty and interestingness, The bitter lesson,
+Asymmetry and Clean context. The picture is a hexagonal glass prism with one face per value: one beam enters its top
+and leaves as six rays, one through each face to a bead naming a value. A click on a bead or a face, the arrow keys or
+the buttons select a value (`/values#speed`); its face turns to the front, and the column shows its sentences, its
+quotes with their sources and its line of AGENTS.md. The words are the person's own; nothing on the page is data.
+
 The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game.
 Hold Space, or press and hold, to breathe in and let go to breathe out, so that the white ring follows the blue one. A
 breath that follows it lights one of 10 petals and releases every thought on screen; 10 petals win. The thoughts are
@@ -414,7 +423,7 @@ subagents. A guide speaks one line per breath (M mutes). The end screen counts w
 The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): nine 16:9 slides, each one
 figure with a few words, `#hook`, `#question`, `#tea`, `#harness`, `#finding`, `#proof`, `#ideas`, `#papers` and
 `#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
-PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` changes the theme
+PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` or the button at the top right changes the theme
 (`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
 theme on screen, so print to PDF from the dark page for a dark PDF. The hook sentence is the constant `HOOK` in
 `tools/demo_deck.py`. The two photos (tea, meditation) are the strings `TEA` and `MEDITATE` in `tools/demo_photos.py`,
