@@ -108,6 +108,10 @@ TABLE = {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.DATA['okay'][2]} of {m.DATA['n']}", "answers",
                              f"MATH-500, open with 'Okay' after 100 RL steps; Base {m.DATA['okay'][0]}"]},
+    "rl-avoids-the-slip": {
+        "group": ANSWERS,
+        "figure": lambda m: [f"{m.DATA['D']['math31']['factor']:.2f}", "times as likely",
+                             "MATH-500, RL writing the first wrong step of 51 wrong answers of Base + cue; the interval includes 1"]},
     "rl-wait-habit": {
         "group": ANSWERS,
         "figure": lambda m: [m.PUSH_POINTS, "points", "MATH-500, at RL's rate of Wait"]},
