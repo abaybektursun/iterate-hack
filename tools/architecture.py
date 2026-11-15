@@ -7,7 +7,7 @@ session, the Claude mark for Claude Code and the OpenAI mark for Codex, in the p
 The Chat ring (messages) runs through every swarm, and the Retro loop (self-review) with its comet goes around
 everything. What moves is real data, replayed: a message leaves its sender's swarm for the others, a post
 travels to the board and a ripple returns to every swarm. A larger dot with a halo is happening now. The picture
-stands alone in the middle of the page with one button under it. A click on a part dims the rest, moves the picture
+stands alone in the middle of the page with one button at the bottom right. A click on a part dims the rest, moves the picture
 over and explains the part in a column beside it (address /architecture#<part>); the button "Follow one result"
 steps through the path of one result (arrow keys, Esc). Nothing here writes to the board.
 """
@@ -26,8 +26,8 @@ PAGE = r"""<!doctype html>
    on a cool grey table, with a cast shadow in place of the glow. The light comes from the upper left in both. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #8b97a1; --rule: #d3d9de;
-  --blue: #1f43d6; --red: #cf2338; --on-blue: #fff;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
+  --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
   --pl: .56; --pc: .15; --dim: .16;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
@@ -36,7 +36,7 @@ PAGE = r"""<!doctype html>
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #5f6c77; --rule: #1c2630;
+    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
     --blue: #8fb1ff; --red: #ff6b7c; --on-blue: #080c11;
     --pl: .78; --pc: .13; --dim: .24;
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
@@ -75,7 +75,7 @@ a { color: inherit; }
 
 /* The picture */
 .stage { grid-column: 1; grid-row: 2; min-height: 0; min-width: 0; display: flex; padding: 8px 0 0; }
-.foot { grid-column: 1; grid-row: 3; display: flex; justify-content: center; padding-top: 6px; }
+.foot { grid-column: 1; grid-row: 3; display: flex; justify-content: flex-end; padding-top: 6px; }
 .page.open .foot { visibility: hidden; }
 svg { width: 100%; height: 100%; display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-stretch: 112%; letter-spacing: .012em; }
@@ -189,7 +189,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
   .name { font-stretch: 112%; margin-right: 0; }
   .stage { margin-top: 10px; padding: 0; }
   svg { height: auto; }
-  .foot { padding-top: 14px; }
+  .foot { padding-top: 14px; justify-content: center; }
   .page.open .foot { display: none; }
   .side { padding: 12px 0 0; overflow: visible; border-left: 0; }
   .pane { min-width: 0; }
@@ -217,7 +217,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 </div>
 <script>
 const $ = id => document.getElementById(id);
-const HUES = [300, 155, 70, 215, 340, 115, 255, 35];  // the board page's colors: the same person has the same color on both
+const HUES = [325, 150, 65, 195, 105, 45, 175, 350];  // the board page's colors: the same person has the same color on both
 const S = { data: null, m: null, g: null, error: null, readAt: 0, sel: null, key: "", seen: null, entered: false, token: 0, queue: [], flying: false };
 const still = matchMedia("(prefers-reduced-motion: reduce)");
 const narrow = matchMedia("(max-width: 900px)");

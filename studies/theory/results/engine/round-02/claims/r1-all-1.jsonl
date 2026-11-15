@@ -1,0 +1,15 @@
+{"id": "t19", "value": 0.85, "low": 0.80, "high": 0.91, "why": "If the base's errors come from degrading over its own long context, answer length separates wrong from right answers strongly, beyond the cap hits alone."}
+{"id": "t25", "value": 167, "low": 160, "high": 173, "why": "Restarting long answers gives a fresh attempt on the same long problem, where the base degrades again, so it recovers only a few of the 77 cap-hit problems."}
+{"id": "t27", "value": 170, "low": 163, "high": 178, "why": "Failures on the 328 are systematic on long problems (the base degrades on every sample), so a 4-sample vote adds only a few points over 164."}
+{"id": "t28", "value": 205, "low": 195, "high": 214, "why": "The base fails the long-solution problems on nearly every sample, so pass@4 stays near RL's single-sample 206 instead of climbing well above it."}
+{"id": "t51", "value": 395, "low": 382, "high": 405, "why": "T 1.0 helps the base only by escaping repetition attractors in its own long context; min-p 0.1 cuts the tail and brings part of the looping back, so accuracy falls below 410."}
+{"id": "t53", "value": 397, "low": 385, "high": 406, "why": "Top-p 0.95 truncation at T 1.0 brings back part of the low-temperature looping (as at T 0.6, where top-p 0.95 cost 24 problems), so accuracy falls below 410."}
+{"id": "t55", "value": 12, "low": 4, "high": 30, "why": "Truncating the sampling tail at T 1.0 brings back some rule-A loops (0 at plain T 1.0, 71 at T 0.6)."}
+{"id": "t56", "value": 50, "low": 35, "high": 70, "why": "Min-p truncation restores some repetition attractors and drift, so cap hits rise above the 27 at plain T 1.0."}
+{"id": "t57", "value": 8, "low": 2, "high": 15, "why": "The RL change depends on long math context and grows with position, so one constant vector per layer closes little of the KL."}
+{"id": "t58", "value": 8, "low": 2, "high": 15, "why": "On RL's own long text the change is context-dependent and grows with position, so a constant per-layer vector closes little of the KL."}
+{"id": "t59", "value": 6, "low": 1, "high": 12, "why": "A constant vector on the MLP output alone captures even less of a context-dependent change."}
+{"id": "t60", "value": 6, "low": 1, "high": 12, "why": "A constant vector on the MLP output alone captures even less of a context-dependent change on RL text."}
+{"id": "t64", "value": 420, "low": 413, "high": 427, "why": "The base's remaining errors cluster on long problems where it degrades on every sample, so a 4-sample vote adds about 10 over 410."}
+{"id": "t65", "value": 414, "low": 410, "high": 419, "why": "At T 1.0 the 27 cap hits are drift on long problems, not loops, so restarts recover only a few of them (unlike T 0.6, where restarts recovered loops)."}
+{"id": "t69", "value": 450, "low": 442, "high": 458, "why": "Long-solution problems fail on nearly every base sample, so pass@4 stays below RL's 463 single sample."}

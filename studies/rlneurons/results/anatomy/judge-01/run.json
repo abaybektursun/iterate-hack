@@ -1,0 +1,10 @@
+{
+ "commit": "c0caab339ace36251d723ad14c85f56ef88861af",
+ "command": "/home/abay/Projects/iterate-hack-anatomy/studies/rlneurons/analysis/anatomy_judge.py score --work /home/abay/Projects/iterate-hack/runs/anatomy_judge --pairs studies/rlneurons/results/anatomy/math500-01/pairs.json --out studies/rlneurons/results/anatomy/judge-01",
+ "judge": "Claude Code subagents (the agent's own model), fixed rubric rubric.md, one subagent per batch; pass A all 120 items, pass B 30 base + 15 RL + the 30 controls in other batches",
+ "gpu": null,
+ "batches": {
+  "passA": 28,
+  "passB": 15
+ }
+}

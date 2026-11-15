@@ -1,0 +1,30 @@
+[
+ {
+  "theory": "r1-all-2",
+  "kind": "divergent win",
+  "id": "t41",
+  "item": "result-4b0d5f",
+  "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, plain prompt (no cue), one sample: weights base + 0.5*(RL-Zero-Math minus base), number right",
+  "unit": "right of 500",
+  "quote": "443/500 tokens 4536",
+  "measured": 443,
+  "claim": {"value": 432, "low": 415, "high": 450},
+  "null-1": 400,
+  "null-2": 380,
+  "note": "Both no-theory agents guessed below 415; the theory said half the delta already gives most of the gain, and 443 fell inside its interval."
+ },
+ {
+  "theory": "r1-all-2",
+  "kind": "divergent loss",
+  "id": "t40",
+  "item": "result-4b0d5f",
+  "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, plain prompt (no cue), one sample: weights base Olmo-3-1025-7B + 0.25*(RL-Zero-Math minus base), number right",
+  "unit": "right of 500",
+  "quote": "405/500 tokens 3653",
+  "measured": 405,
+  "claim": {"value": 370, "low": 340, "high": 400},
+  "null-1": 300,
+  "null-2": 290,
+  "note": "The claim was 35 from the measured 405 and the nulls 105 and 115, but 405 is 5 above the interval's top, so the score counts it as a loss."
+ }
+]

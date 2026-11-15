@@ -1,0 +1,138 @@
+{
+ "name": "r3-all-2",
+ "statement": "On hard problems the base model's probability at a solution's progress-making step is spread over many alternatives, while RL has concentrated it on its own rollouts. The same spread produces both of the base's failures, on the same high-entropy problems: lowering the temperature gives the spread mass to an easy cyclic continuation that then reinforces itself (loops and cap hits), and at T 1.0 it is spent on sampled wrong turns instead. RL has low entropy on its own rollouts, so temperature barely affects it.",
+ "scope": "Olmo-3-1025-7B base with the cue (and plain) vs Olmo-3.1-7B-RL-Zero-Math, MATH-500 and clean hard-328, T 0.3-1.5, top-p / min-p truncation, cap 16,384, grader v3. Covers why temperature matters for the base and not for RL, why voting helps the base more, and where the base's errors fall. It does not cover the weight-difference results: why a = 0.25 saturates, or why the Code-RL delta works on math. It does not cover grader effects or the 3.0 pair.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2512.12895",
+   "finding": "Looping comes from errors in learning: when the progress-making action is hard to learn and a cyclic action is easy, probability on the hard action spreads over many alternatives while the cyclic action keeps its mass, so low temperature picks the cycle; looping falls with temperature, is worse on hard problems (51 % vs 13 %) and in imitating students than in their teachers.",
+   "how": "This is the core mechanism. The same spread mass gives loops at T 0.6 and wrong turns at T 1.0, and RL (trained on its own samples) has small errors on its own distribution, so it does not respond to temperature."
+  },
+  {
+   "source": "2310.00297",
+   "finding": "Self-reinforcement: the probability of producing a sentence rises nearly monotonically with how many times it already appears in context.",
+   "how": "This is why a cycle, once entered at low T, runs to the cap instead of escaping. Truncating the tail (min-p, top-p) at T 1.0 raises the chance of entering a cycle, and the cycle then holds; only a higher entry temperature (T 1.5) removes it."
+  },
+  {
+   "source": "2610.00991",
+   "finding": "RLVR makes samples share mistakes: voter error correlation rises above the base's by +0.05 to +0.20, so voting gains less after RL.",
+   "how": "The base's errors are independent sampled wrong turns from spread mass, so they decorrelate across samples and voting recovers more for the base (+8.2) than for RL (+3.6), whose concentrated distribution repeats its mistakes."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-533123",
+   "quote": "Temperature changes RL by -0.2 points [-1.8, 1.4].",
+   "how": "RL's mass is concentrated on its own rollouts, so rescaling the logits barely changes what it samples."
+  },
+  {
+   "item": "result-dadeec",
+   "quote": "98 cap hits, 71 loops, 4,690 tokens/problem",
+   "how": "At T 0.6 the base's spread mass goes to the easy cyclic continuation, which then reinforces itself."
+  },
+  {
+   "item": "result-e870a1",
+   "quote": "119 cap hits (loops to 16,384 tokens)",
+   "how": "Truncating the tail as well (top-p 0.95) gives even more mass to the cycle."
+  },
+  {
+   "item": "result-44b4df",
+   "quote": "Truncating the tail at T 1.0 brings loops back",
+   "how": "Min-p and top-p remove the spread alternatives and leave the cyclic action with the largest share, as Prop. 3.1 predicts."
+  },
+  {
+   "item": "result-44b4df",
+   "quote": "T 1.5 + min-p 0.1 removes them",
+   "how": "A higher temperature flattens the cycle's lead before truncation, so the cycle is not entered."
+  },
+  {
+   "item": "result-099916",
+   "quote": "base cue T1-T0.6 13.7 [8.8,18.9]",
+   "how": "Hard problems have more spread, so the temperature effect is larger on hard-328."
+  },
+  {
+   "item": "result-5d032f",
+   "quote": "a 4-sample vote adds 8.2 points to base+cue",
+   "how": "Wrong turns sampled from spread mass are nearly independent across samples, so a vote cancels them."
+  },
+  {
+   "item": "result-5d032f",
+   "quote": "pass@4 (oracle): base 467, RL 482",
+   "how": "The progress step is among the base's alternatives but is not concentrated, so it appears within a few samples."
+  },
+  {
+   "item": "result-5de032",
+   "quote": "By RL-length quartile (82 each) base/RL right: 78/82, 52/67, 30/45, 4/12",
+   "how": "Each extra progress step is another chance for a wrong turn, so the gap grows with solution length."
+  },
+  {
+   "item": "result-fdc8da",
+   "quote": "Top-1 tokens differ at 7.98 % of 1,966,404 T1 positions",
+   "how": "RL changes the argmax at a minority of positions (the spread ones) and leaves the rest alone."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-fdc8da",
+   "quote": "not sparse as in the 1-4 % published for greedy rollouts",
+   "how": "If the gap lived only at a few progress-making forks, the base-RL KL should be concentrated in few positions; the top 4 % carry only 38.7 %, so part of RL's change is spread across ordinary positions."
+  },
+  {
+   "item": "result-4b0d5f",
+   "quote": "Code-RL: plain 390, cue 450",
+   "how": "A delta trained on code should not concentrate mass at math-specific progress steps, yet it recovers most of the cued gain; the mechanism does not explain this, which points to a stop/format component outside it."
+  }
+ ],
+ "rival": "Rival: the temperature effect is just a loop/termination artifact, while wrong answers at T 1.0 come from a separate lack of math skill, so T 0.6 loops and T 1.0 errors fall on unrelated problems. Separating observation: under this theory the base's T 0.6 cap-hit problems are mostly ones it also gets wrong at T 1.0 (about 0.40 of them vs a 0.18 base rate), and the base's own per-token entropy separates its wrong finished T 1.0 answers from right ones. Under the rival both are near chance.",
+ "predictions": [
+  {
+   "experiment": "Base + cue, MATH-500 n=500, T 0.8 / top-p 1.0, cap 16,384, grader v3, one sample, T1's seeds (seed base 41,000,000)",
+   "unit": "right of 500",
+   "value": 401,
+   "low": 391,
+   "high": 411,
+   "refuted_by": "score below 389 or rule-A loop count above 40 (loops should already be mostly gone at T 0.8: predicted 18, 90 % interval 6-35)",
+   "gpu_minutes": 40
+  },
+  {
+   "experiment": "Olmo-3.1-7B-RL-Zero-Math, plain prompt, MATH-500 n=500, T 0.3 / top-p 1.0, cap 16,384, grader v3, one sample, T2's seeds (seed base 45,000,000)",
+   "unit": "right of 500",
+   "value": 461,
+   "low": 452,
+   "high": 469,
+   "refuted_by": "RL scores below 450 at T 0.3, or shows more than 15 rule-A loops",
+   "gpu_minutes": 35
+  },
+  {
+   "experiment": "Offline: does the base's own per-token entropy separate its wrong finished T 1.0 answers from its right ones?",
+   "recipe": "Files studies/rlneurons/results/rln5/map-01/checks.json (key per_row, list T1) and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, joined on problem_index. Drop rows with t1_cap_hit == true or n_own == 0. Score e = sum_entropy_own / n_own. Positive label = t1_right == false. ROC AUC as the Mann-Whitney probability that a random positive has larger e than a random negative, ties counted 0.5.",
+   "unit": "AUROC",
+   "value": 0.72,
+   "low": 0.62,
+   "high": 0.81,
+   "refuted_by": "AUROC below 0.60",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Offline: is RL's own per-token entropy lower than the cued base's on the same problem?",
+   "recipe": "File studies/rlneurons/results/rln5/map-01/checks.json, key per_row, lists T1 (base) and T2 (RL). Join T1 and T2 rows on problem_index, keep pairs where both n_own > 0, cap hits included. For each pair e_T1 = sum_entropy_own / n_own of the T1 row and e_T2 likewise for the T2 row. Statistic = (count e_T2 < e_T1 + 0.5 x count of equal) / number of pairs.",
+   "unit": "fraction of problems",
+   "value": 0.86,
+   "low": 0.77,
+   "high": 0.94,
+   "refuted_by": "fraction below 0.75",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Offline: are the base's T 0.6 cap hits on the problems it fails at T 1.0?",
+   "recipe": "Files iterate-runs:abaybektursun-1114-151718-d4fa/answers.jsonl (base, cue, T 0.6 / top-p 1.0, MATH-500 n=500) and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, joined on problem_index. Set C = problems whose d4fa row has cap_hit == true. Statistic = number of problems in C with t1_right == false / size of C.",
+   "unit": "fraction of problems",
+   "value": 0.4,
+   "low": 0.29,
+   "high": 0.52,
+   "refuted_by": "fraction below 0.27 (near the 0.18 base rate of T1 errors)",
+   "gpu_minutes": 0
+  }
+ ]
+}

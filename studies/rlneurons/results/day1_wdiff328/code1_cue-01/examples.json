@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2118,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " \\implies 512 + 16b + c = 54 \\implies 16b + c = -458\n  \\]\n- Substituting \\( (20, 53) \\):\n  \\[\n  2(20^2) + 20b + c = 53 \\implies 800 + 20b + c = 53 \\implies 20b + c = -747\n  \\]\n- Solving these equations:\n  \\[\n  4b = -289 \\implies b = -72.25\n  \\]\n  \\[\n  c = 698\n  \\]\nThus, \\( P(0) = c = 698 \\).\n\nFor \\( Q(x) \\):\n- The polynomial is \\( -2x^2 + dx + e \\).\n- Substituting \\( (16, 54) \\):\n  \\[\n  -2(16^2) + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n  \\]\n- Substituting \\( (20, 53) \\):\n  \\[\n  -2(20^2) + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n  \\]\n- Solving these equations:\n  \\[\n  4d = 287 \\implies d = 71.75\n  \\]\n  \\[\n  e = -582\n  \\]\nThus, \\( Q(0) = e = -582 \\).\n\nSumming \\( P(0) \\) and \\( Q(0) \\):\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 57,
+  "gold": "928",
+  "extracted_v3": "2744",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 13024,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "he number of colorings where both R1 and R2 are monochromatic is:\n       \\[\n       2 \\times 2 \\times 2^4 = 64\n       \\]\n     - Similarly, the number of colorings where R1 and R3, and R2 and R3 are monochromatic is also 64.\n   - For the intersection of all three rectangles (R1, R2, and R3):\n     - The number of colorings where all three rectangles are monochromatic is:\n       \\[\n       2^3 = 8\n       \\]\n\n5. **Applying Inclusion-Exclusion Principle:**\n   - The number of colorings where at least one rectangle is monochromatic is:\n     \\[\n     3 \\times 512 - 3 \\times 64 + 8 = 1536 - 192 + 8 = 1352\n     \\]\n\n6. **Valid Colorings:**\n   - The number of colorings where no rectangle is monochromatic is:\n     \\[\n     4096 - 1352 = 2744\n     \\]\n\nThus, the number of valid colorings is \\(\\boxed{2744}\\)."
+ }
+}

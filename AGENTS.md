@@ -112,6 +112,10 @@ and outputs from the study's `README.md` alone.
    that is still running.
 5. Before downloading a model on vast.ai, check the image table in `README.md`: some models are already in an image.
 6. Never write a model name from memory. Check the exact current name on Hugging Face first.
+7. Plain LLM inference goes to a hosted inference provider, never to a GPU job: sampling text from an unchanged
+   model that a provider serves costs almost nothing there. Use `gpu.py` or `vast.py` only for what a provider
+   cannot do: training, fine-tuning, changed or merged weights, activations or logits, a checkpoint no provider
+   serves, a model that is not an LLM. If no provider key is in your environment, ask your person for one.
 
 ## Results
 

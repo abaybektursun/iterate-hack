@@ -1,0 +1,39 @@
+{
+ "commit": "622bacbeef095d5984fc08a9a69837aef605a394",
+ "command": "/home/abay/Projects/iterate-hack-selector/studies/rlneurons/analysis/selector.py --run /home/abay/Projects/iterate-hack/runs/abaybektursun-1114-153825-208b --out studies/rlneurons/results/selector/math500_base_cue-01",
+ "source_job": "abaybektursun-1114-153825-208b",
+ "source_commit": "c36f5626b8dfcc638972dd3dafe9e13daa4d3175",
+ "config": {
+  "model": "base",
+  "prompt": "cue",
+  "set": "math500",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "max_tokens": 16384,
+  "seed": 41000000,
+  "n": null,
+  "samples": 4,
+  "restarts": 2,
+  "out": "/runs/abaybektursun-1114-153825-208b",
+  "dry_run": false,
+  "commit": "c36f5626b8dfcc638972dd3dafe9e13daa4d3175",
+  "model_repo": "allenai/Olmo-3-1025-7B",
+  "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 500
+ }
+}

@@ -1,0 +1,14 @@
+{"id": "t36", "value": 418, "low": 410, "high": 426, "why": "Code-RL also weakens the task-general self-copy pathway, so with the cue at T 1.0 it removes part of the base's 27 cap hits but none of its content errors: a small gain over 410."}
+{"id": "t37", "value": 407, "low": 399, "high": 415, "why": "A random matched-norm difference does not point along the copy-suppression direction, so the cued base keeps its cap hits and its 410-level accuracy."}
+{"id": "t47", "value": 3950, "low": 3750, "high": 4150, "why": "A random difference leaves the self-copy pathway intact, so cap hits and mean length stay at the cued base's 3,933 tokens."}
+{"id": "t46", "value": 3700, "low": 3450, "high": 3930, "why": "Copy suppression arrives early in the dose, so at a = 0.25 part of the cued base's 27 cap hits disappear and mean tokens fall below the base's 3,933 rather than rising toward RL's length."}
+{"id": "t55", "value": 40, "low": 25, "high": 60, "why": "Min-p 0.1 cuts the low-probability tokens that let T 1.0 escape the copy attractor, so rule-A loops come back from 0 toward the T 0.6 level."}
+{"id": "t56", "value": 62, "low": 45, "high": 80, "why": "Returning loops run to the cap, raising cap hits well above the 27 at plain T 1.0."}
+{"id": "t51", "value": 392, "low": 378, "high": 404, "why": "Loops restored by min-p truncation cost the cued base accuracy relative to 410 at untruncated T 1.0."}
+{"id": "t52", "value": 404, "low": 394, "high": 414, "why": "At T 1.5 with min-p 0.1 enough tail mass survives to escape copying, so loops stay near zero and accuracy stays near the T 1.0 level."}
+{"id": "t53", "value": 402, "low": 394, "high": 410, "why": "Top-p 0.95 trims part of the escape tail, adding a few loops and costing a few points relative to 410."}
+{"id": "t54", "value": 462, "low": 455, "high": 469, "why": "RL's self-copy pathway is already weakened, so min-p truncation does not restore loops and RL stays at its 463 level."}
+{"id": "t57", "value": 8, "low": 2, "high": 14, "why": "The RL change is an input-dependent change to copy circuitry spread over many neurons and heads, so one constant vector per layer closes little of KL(RL||base)."}
+{"id": "t58", "value": 9, "low": 3, "high": 16, "why": "Same reason on RL text: a constant per-layer offset cannot reproduce a context-dependent weakening of copying."}
+{"id": "t59", "value": 5, "low": 0, "high": 11, "why": "An MLP-only constant offset captures even less of an input-dependent change than the full-layer one."}
+{"id": "t65", "value": 420, "low": 413, "high": 428, "why": "A cap hit at T 1.0 is the base trapped by its own prefix; a fresh restart escapes it, recovering roughly half of the ~27 cap hits."}

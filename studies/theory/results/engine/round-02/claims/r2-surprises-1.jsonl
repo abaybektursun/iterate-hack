@@ -1,0 +1,4 @@
+{"id": "t09", "value": 95, "low": 65, "high": 140, "why": "At T 1.0 the high-entropy plain base sits in the confusion trap, which ends answers early with garbled or missing final lines, so many more answers have no extractable answer than its cap hits alone would give."}
+{"id": "t52", "value": 388, "low": 365, "high": 404, "why": "T 1.5 raises the cued base's observed surprise past its T 1.0 optimum; min-p 0.1 cuts the tail only partly, so slips and incoherent ends cost a net 5-10 % below the 410 of T 1.0."}
+{"id": "t55", "value": 10, "low": 3, "high": 30, "why": "Min-p 0.1 removes the low-probability tail, lowering observed surprise toward the repetition regime, so some rule-A loops return that are absent (0) at plain T 1.0, though far fewer than the 71 at T 0.6."}
+{"id": "t56", "value": 42, "low": 31, "high": 65, "why": "The same drop in observed surprise under min-p 0.1 adds loop cap hits on top of the 27 non-loop cap hits of plain T 1.0."}
