@@ -1,0 +1,2 @@
+{"groups": {"A: problems with >=2 CUE wrong answers": 55, "B: problems with >=1 CUE wrong and a T3 wrong answer": 65}}
+{"measured": 0.13463203463203466, "n": 55, "interval": [0.03994565217391305, 0.23477028941509814], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": 0.13463203463203466, "not_computable": null, "example_row": {"problem_index": 9, "sample": 0, "attempt": 0, "seed": 41000009, "n_new": 11280, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "5", "score_v3": 0, "gold": "4"}}
