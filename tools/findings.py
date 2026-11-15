@@ -116,6 +116,10 @@ TABLE = {
         "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over RL"],
         # Think-SFT + cue minus RL, one sample each, points of 328: [estimate, 95 % interval low, high], for the rail's number
         "rail": lambda m: {"hard328": m.DATA["diff"]["hard328"]["single"]}},
+    "no-early-warning": {
+        "group": NO_REWARD,
+        "figure": lambda m: [f"{m.DATA['auroc']['12000']['signs']['zratio']['same'][0]:.3f}", "AUROC",
+                             "Think-SFT + cue, best of six text signs at token 12,000 for a failing sample; 0.5 is chance"]},
     "cut-off-is-unfinished": {
         "group": NO_REWARD,
         "figure": lambda m: [f"{m.DATA['cells']['sft_cue']['right_at_16384_same_answers']} → {m.DATA['cells']['sft_cue']['right_at_32768']}", "right of 328",
