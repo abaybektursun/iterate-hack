@@ -47,7 +47,7 @@ imported them (unaffected). Programs now run in `runs/explore/.venv` (numpy 2.5.
   rule fired once; basin (1 flush) and randflush (1 flush) are the same arm in practice (0.571 vs 0.573). The
   basin trigger is not tested until the judge's granularity is calibrated (it lumped all 40 into one basin before).
 
-### assign-01 (gpt-5.4-mini, 1 seed, 40 submissions, numpy/scipy available, commits fde2f1b..HEAD of 2026-11-15)
+### assign-01 (gpt-5.4-mini, 1 seed, 40 submissions, numpy/scipy available, 2026-11-15; each run's commit is in runs.json)
 
 Question: a flush clears the chat, but the fresh chat samples from the same model. Does telling each fresh branch
 which method to use (`fnf_assign`: before each fork one call lists 4 methods, one per branch) beat the published
