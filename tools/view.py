@@ -23,7 +23,8 @@ closes, ? lists the keys. A click on a person shows only that person.
                        finding (climb.finding) and the newest comment of each open work item idle over an hour (JSON),
                        with only the fields the pages read. One snapshot serves every reader for 5 s. Its ETag comes from
                        the content and its time is in the header X-Snapshot-Ns, so a browser that asks again with
-                       If-None-Match gets 304 and no body while the board has not changed.
+                       If-None-Match gets 304 and no body while the board has not changed. The page stops reading while
+                       its tab is hidden.
   GET /data/<item id>  one item with its votes, comments and thread (JSON); 404 for an unknown id
 
 It reads the same DynamoDB table as board.py and msg.py, with Query and GetItem only, and never writes to it or moves an
@@ -580,8 +581,9 @@ function diffCI(a, b, z = 1.96) {  // a minus b, in points, for two independent 
 
 /* Writes that do not disturb reading: skip an unchanged string, skip while the reader has text selected in it. */
 const selecting = el => {  // a selection younger than 60 s pauses writes to the region that holds it
+  if (!S.selAt || Date.now() - S.selAt >= 60000) return false;  // no selection (selectionchange keeps S.selAt): skip getSelection
   const s = getSelection();
-  return s && !s.isCollapsed && el.contains(s.anchorNode) && Date.now() - S.selAt < 60000;
+  return s && !s.isCollapsed && el.contains(s.anchorNode);
 };
 document.addEventListener("selectionchange", () => { S.selAt = getSelection().isCollapsed ? 0 : Date.now(); });
 function put(el, html) {
@@ -972,11 +974,15 @@ async function read() {  // an unchanged board comes back as a 304 with the same
   S.readAt = Date.now(); S.error = null;
 }
 
-function poll() {
+let timer = 0, reading = false;
+function poll() {  // every 10 s while the tab is visible; a hidden tab stops, and reads at once when it is shown again
+  clearTimeout(timer);
+  if (reading) return;
+  reading = true;
   read()
     .then(() => S.open && loadDetail())
     .catch(failed)
-    .finally(() => { render(); renderPanel(); setTimeout(poll, 10000); });
+    .finally(() => { reading = false; render(); renderPanel(); if (!document.hidden) timer = setTimeout(poll, 10000); });
 }
 
 async function loadDetail() {  // a failed read of one item is logged; the rest of the page stays live
@@ -1131,7 +1137,7 @@ document.fonts.ready.then(() => S.benches && charts());
 const keepSeen = () => S.lookedAt && store.set(SEEN_KEY, String(S.lookedAt));
 const back = () => { S.since = Number(store.get(SEEN_KEY)) || S.since; S.acked = false; if (S.data) render(); };
 const ack = () => { if (!S.acked && document.hasFocus()) { S.acked = true; render(); } };
-document.addEventListener("visibilitychange", () => document.hidden ? keepSeen() : back());
+document.addEventListener("visibilitychange", () => { if (document.hidden) { keepSeen(); clearTimeout(timer); } else { back(); poll(); } });
 addEventListener("blur", keepSeen);
 addEventListener("focus", back);
 addEventListener("pagehide", keepSeen);
