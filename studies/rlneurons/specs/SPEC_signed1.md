@@ -45,3 +45,13 @@ Paired bootstrap against base cue job abaybektursun-1114-151534-e72c (164/328).
 2. Train P and G in parallel (about 3.0M and 3.5M target tokens).
 3. Instrument check, then the two cue cells on the 328.
 4. Readout with examples in `results/signed1/`, README section, board.
+
+## Amendment after training, before any cell (2026-11-15)
+
+The instrument check as written cannot decide. Each problem is seen once, so `nll_negative - nll_positive` before a step is
+measured on a problem the adapter has not trained on, and with 34 problems per quarter it moves by more than any trend: P
+0.20, 0.05, 0.14, 0.04 nats per token by quarter; G 0.17, 0.09, 0.04, 0.11 (train jobs 17cc, 116e). It does not rise. Read as
+written, the check says the update did not learn to separate right from wrong samples on new problems. The model did change:
+merged relative norm 0.0048 (P) and 0.0052 (G), greedy generations differ and stay coherent, cosine with RL minus base 0.001
+and 0.003. Deviation from the order: both cue cells on the 328 are run anyway, because the 328 is the deciding number; the
+failed check is reported beside it.
