@@ -26,6 +26,7 @@ All code runs from the repository root (`python -m studies.cleanneurons.<folder>
 | `results/loops/real-01/`, `real-02/` | Part L runs on real looping answers (14 and 34 held-out loops): `metrics.json`, `examples.json`, the edit files `edit_<ranking><k>.json`, `run.json`. |
 | `results/describe/attr1000_loops-01/` | Part I on 1,000 loop neurons: `metrics.json`, `dose_summary.json`, `onset_summary.json`, `run.json`. |
 | `results/gen/<arm>_t06-01/`, `results/gen/readout_t06.json` | Part G: MATH-500 at T 0.6 with an edit, and the paired readout against the unedited cell. |
+| `analysis/page_grid.py`, `results/gen/page_grid.json` | Per-problem state (right, wrong, loop) of each Part G cell, for a site page; totals asserted against `readout_t06.json`. |
 | `analysis/gen_readout.py` | Part G: an edited run against the unedited run, problem by problem (points, interval, loops, tokens, examples). |
 | `tools/finding_rl_every_neuron.py`, `tools/finding_neurons_you_can_describe.py` | The site pages of Part T2 and Part I (`/finding/rl-every-neuron`, `/finding/neurons-you-can-describe`, tiles on `/findings`). |
 | `results/transplant/curve-01/` | Part T full run: `metrics.json`, `profile.json`, `examples.json`, `readout_after_cue.json`, `run.json`, edit files of four arms. |
@@ -208,8 +209,10 @@ the unedited cell (job `9d69`, identical to the team's cell). From `results/gen/
   neither. No row reaches the 415 of the best single-answer row without RL.
 - Why no accuracy: of the 71 problems that looped, 33 are right with `attr1000`, and 25 are right with the random edit, which
   only changes the sampling path. A loop sits on a problem the model mostly cannot solve; removing it buys one more try.
-- Published: a count-based repetition penalty also removes loops with no MATH-500 gain on two other models (arXiv 2610.24715,
-  Table 16). What is new here is the place: a set of neurons that can be zeroed in the weights, with a dose response.
+- Published: neurons that drive repetition, with a dose response in both directions, were reported for 2B to 3B models on
+  ordinary text (Hiraoka and Inui, arXiv 2410.13497; no task score measured). A count-based repetition penalty leaves MATH-500
+  accuracy unchanged on two other models (arXiv 2610.24715, Table 16). New here: what zeroing such neurons does to a math
+  benchmark's loops, tokens and score.
 - Examples (one finished right, one finished wrong per arm) are in `readout_t06.json`. Raw generations stay in the Volume
   (`run.json` of each folder).
 - Running: the 100 and 1,000 `attr` neurons of run 2 (jobs `ef4f`, `15f9`).
