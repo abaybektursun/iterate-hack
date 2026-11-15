@@ -1,0 +1,204 @@
+{
+ "run": "hard328-02",
+ "arms": {
+  "sft1_rl20": {
+   "jobs": [
+    "abaybektursun-1115-000954-b526",
+    "abaybektursun-1115-020508-879c",
+    "hard328_s2"
+   ],
+   "alpha": 2.0,
+   "random": false,
+   "effective_a": 1.9999997397341798,
+   "written_norm_over_intended": 1.0017984565793947,
+   "samples": {
+    "abaybektursun-1115-000954-b526": {
+     "n": 328,
+     "right": 234,
+     "cap_hits": 51,
+     "loop_A": 0,
+     "finished": 277,
+     "right_of_finished": 232,
+     "tokens_per_problem": 9504.911585365853
+    },
+    "abaybektursun-1115-020508-879c": {
+     "n": 328,
+     "right": 229,
+     "cap_hits": 57,
+     "loop_A": 0,
+     "finished": 271,
+     "right_of_finished": 227,
+     "tokens_per_problem": 9499.463414634147
+    },
+    "hard328_s2": {
+     "n": 328,
+     "right": 237,
+     "cap_hits": 54,
+     "loop_A": 0,
+     "finished": 274,
+     "right_of_finished": 235,
+     "tokens_per_problem": 9303.908536585366
+    }
+   },
+   "n": 984,
+   "right": 700,
+   "cap_hits": 162,
+   "loop_A": 0,
+   "finished": 822,
+   "right_of_finished": 694,
+   "tokens_per_problem": 9436.094512195123,
+   "minus": {
+    "think score_v3": {
+     "n_problems": 328,
+     "arm": 233.33333333333334,
+     "reference": 209.0,
+     "diff_points": 7.418699186991873,
+     "ci95": [
+      5.182926829268286,
+      9.756097560975608
+     ]
+    },
+    "think cap_hit": {
+     "n_problems": 328,
+     "arm": 54.0,
+     "reference": 94.5,
+     "diff_points": -12.347560975609756,
+     "ci95": [
+      -15.167682926829269,
+      -9.578252032520327
+     ]
+    },
+    "rl score_v3": {
+     "n_problems": 328,
+     "arm": 233.33333333333334,
+     "reference": 200.0,
+     "diff_points": 10.162601626016263,
+     "ci95": [
+      7.621951219512191,
+      12.72865853658537
+     ]
+    },
+    "rl cap_hit": {
+     "n_problems": 328,
+     "arm": 54.0,
+     "reference": 28.5,
+     "diff_points": 7.774390243902439,
+     "ci95": [
+      4.902820121951218,
+      10.823170731707316
+     ]
+    }
+   },
+   "vote": {
+    "samples": 3,
+    "right": 246
+   }
+  }
+ },
+ "references": {
+  "think": {
+   "rows": "studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl",
+   "samples": {
+    "sample 0": {
+     "n": 328,
+     "right": 212,
+     "cap_hits": 89,
+     "loop_A": 3,
+     "finished": 239,
+     "right_of_finished": 208,
+     "tokens_per_problem": 10137.34756097561
+    },
+    "sample 1": {
+     "n": 328,
+     "right": 212,
+     "cap_hits": 95,
+     "loop_A": 1,
+     "finished": 233,
+     "right_of_finished": 207,
+     "tokens_per_problem": 10163.40243902439
+    },
+    "sample 2": {
+     "n": 328,
+     "right": 211,
+     "cap_hits": 92,
+     "loop_A": 3,
+     "finished": 236,
+     "right_of_finished": 208,
+     "tokens_per_problem": 10062.118902439024
+    },
+    "sample 3": {
+     "n": 328,
+     "right": 201,
+     "cap_hits": 102,
+     "loop_A": 2,
+     "finished": 226,
+     "right_of_finished": 199,
+     "tokens_per_problem": 10047.484756097561
+    }
+   },
+   "n": 1312,
+   "right": 836,
+   "cap_hits": 378,
+   "loop_A": 9,
+   "finished": 934,
+   "right_of_finished": 822,
+   "tokens_per_problem": 10102.588414634147,
+   "vote": {
+    "samples": 4,
+    "right": 241
+   }
+  },
+  "rl": {
+   "rows": "studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl",
+   "samples": {
+    "sample 0": {
+     "n": 328,
+     "right": 207,
+     "cap_hits": 35,
+     "loop_A": 0,
+     "finished": 293,
+     "right_of_finished": 205,
+     "tokens_per_problem": 9436.564024390244
+    },
+    "sample 1": {
+     "n": 328,
+     "right": 190,
+     "cap_hits": 26,
+     "loop_A": 1,
+     "finished": 302,
+     "right_of_finished": 190,
+     "tokens_per_problem": 9252.606707317073
+    },
+    "sample 2": {
+     "n": 328,
+     "right": 209,
+     "cap_hits": 24,
+     "loop_A": 0,
+     "finished": 304,
+     "right_of_finished": 205,
+     "tokens_per_problem": 9243.048780487805
+    },
+    "sample 3": {
+     "n": 328,
+     "right": 194,
+     "cap_hits": 29,
+     "loop_A": 0,
+     "finished": 299,
+     "right_of_finished": 193,
+     "tokens_per_problem": 9367.204268292682
+    }
+   },
+   "n": 1312,
+   "right": 800,
+   "cap_hits": 114,
+   "loop_A": 1,
+   "finished": 1198,
+   "right_of_finished": 793,
+   "tokens_per_problem": 9324.855945121952,
+   "vote": {
+    "samples": 4,
+    "right": 221
+   }
+  }
+ }
+}

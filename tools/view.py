@@ -27,7 +27,10 @@ a side panel whose address is /#<item id>; the filters are in the address too (/
 / filter, j and k move, 1 2 3 jump to the record steps, Now and Learned, Enter opens, Esc closes, ? lists the keys. A
 click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
 
-  GET /demo            the talk: one stepped story page over the Design page's picture (demo.py), fed by the same /data
+  GET /demo            the talk as a deck of nine 16:9 slides (demo_deck.py): keys step, p prints one slide per page
+  GET /demo/fig/<name> the pictures the deck embeds, harness (the Design page) and tree (Ali's slide 2), with their
+                       header, words column and key hidden (demo_deck.FIGS)
+  GET /demo/story      the stepped story of the talk over the Design page's picture (demo.py), fed by the same /data
   GET /demo/ali/<name> Ali's slides of the talk, slide1 to slide3: the idea map, the idea tree and the accuracy climb
                        (demo_ali.py, with its data in demo_ali_data.py); /demo/ali leads to the first
   GET /architecture    the Design tab, how the harness works: one interactive picture (architecture.py), fed by the same /data
@@ -75,6 +78,7 @@ import board
 import climb
 import demo
 import demo_ali
+import demo_deck
 import exa_page
 import findings
 import glossary
@@ -227,7 +231,9 @@ LAB = (Path(__file__).with_name("sitelab"), Path(__file__).parent.parent / "stud
 LAB_FILE = re.compile(r"(prototypes/[a-z-]+/)?(index\.html|data\.json)?")
 PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / folder / name)
           for name, folder in (("the-finish-dial.pdf", "rlneurons/paper"), ("theories-on-trial.pdf", "theory/paper"),
-                               ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"))}
+                               ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"),
+                               ("no-early-warning.pdf", "rlneurons/paper-no-warning"))}
+DECK_PAGE = demo_deck.page(len(FINDINGS), PAPERS)  # the talk deck at /demo, with the number of finding pages and the papers
 
 
 # The home page (home.py) is the page / of invariant.team; on any other host / is the board and the home page is /home.
@@ -273,7 +279,11 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/":
             return self.send(200, "text/html", PAGE)
         if path == "/demo":
+            return self.send(200, "text/html", DECK_PAGE)
+        if path == "/demo/story":
             return self.send(200, "text/html", demo.PAGE)
+        if path.startswith("/demo/fig/") and path[len("/demo/fig/"):] in demo_deck.FIGS:
+            return self.send(200, "text/html", demo_deck.FIGS[path[len("/demo/fig/"):]])
         if path in ("/demo/ali", "/demo/ali/"):
             return self.send(302, "text/plain", "", [("Location", "/demo/ali/slide1")])
         if path.startswith("/demo/ali/") and path[len("/demo/ali/"):] in demo_ali.PAGES:

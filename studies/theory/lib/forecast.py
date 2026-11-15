@@ -46,6 +46,7 @@ cross_predict (--model-all <model> overrides it, for smoke tests).
 """
 import argparse
 import json
+import re
 import subprocess
 import sys
 import time
@@ -75,7 +76,7 @@ THEORY = ("- theory.json: a theory of the team's results. Derive each forecast f
 NOTHING = (' For a target the theory says nothing about, write {"id": "t02", "value": null, "low": null, "high": null, '
            '"reason": "theory says nothing"}.')
 engine.args = engine.args or argparse.Namespace(model_all=None, workers=8)  # round.py sets its own
-for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast"):
+for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast", "routes_propose", "duplicates"):
     engine.MODELS[stage] = engine.MODELS["cross_predict"]
 
 
@@ -312,21 +313,40 @@ def score(folder, rescore):
     print(scores_md(s, f"{folder / name}.md"))
 
 
-def cells(folder, fams, known, plan):
-    """Families ({family: {lens, mechanisms}}) propose cells, one job merges them, families and readers forecast them
-    blind; ranked by lib/cells.py. A proposed or merged cell whose command fails the flag check after one send-back is
-    dropped. Job outputs are kept in folder/jobs/, so the same command resumes a stopped run. Writes cells.json,
+def prefix(folder):
+    """The id prefix of a folder's cells: r10 for round-10, else the folder name."""
+    m = re.search(r"round-(\d+)", folder.name)
+    return f"r{int(m.group(1)):02d}" if m else folder.name
+
+
+def gap_md(items):
+    """gap.md for the route jobs: result-f39ba8 (the gap budget) and the "Gap anatomy" section of the rlneurons README."""
+    readme = (ROOT / "studies/rlneurons/README.md").read_text()
+    anatomy = "## Gap anatomy" + readme.split("\n## Gap anatomy")[1].split("\n## Answer-statement repair")[0]
+    return f"# The gap between the cued base and RL-Zero-Math\n\n## result-f39ba8\n\n{next(i['text'] for i in items if i['id'] == 'result-f39ba8')}\n\n{anatomy}\n"
+
+
+def cells(folder, fams, known, plan, left_out=()):
+    """Families ({family: {lens, mechanisms}}) propose cells and one no-reward route each; one job merges the cells;
+    families and readers forecast every cell and route blind; ranked by lib/cells.py (forecasters in left_out are left
+    out). A cell or route whose command fails the flag check after one send-back is dropped. Cell ids carry the folder
+    (prefix). Job outputs are kept in folder/jobs/, so the same command resumes a stopped run. Writes cells.json,
     cell_forecasts.json, cells.md; returns their counts."""
     folder.mkdir(parents=True, exist_ok=True)
-    out, utc, flags = folder / "jobs", now(), C.job_flags()
+    out, utc, flags, pre = folder / "jobs", now(), C.job_flags(), prefix(folder)
     items, _ = board("board", "9999")
+    table = C.base_table(items)
     common = {"DIRECTION.md": ROOT / "DIRECTION.md", "board.jsonl": "".join(json.dumps(i) + "\n" for i in items), "known.json": json.dumps(known, indent=1)}
     every = [{"id": m["id"], "family": n, "statement": m["statement"]} for n, f in fams.items() for m in f["mechanisms"]]
     all_ids, board_ids = {m["id"] for m in every}, {i["id"] for i in items}
-    engine.run([engine.job("cells_propose", n.replace("/", "-"), {**common, **C.family_inputs(n, f, ROUND), "all_mechanisms.json": json.dumps(every, indent=1),
-                                                                  "jobs.md": C.jobs_md()}, {"cells.json": out / f"propose-{n}.json"},
-                           C.flags_once(lambda d, fl, f=f: C.check_proposals(d, [m["id"] for m in f["mechanisms"]], all_ids, board_ids, fl)),
-                           theories=C.THEORY_FILES if n == ROUND.name else "") for n, f in fams.items()], folder, len(fams))
+    jobs = [engine.job("cells_propose", n.replace("/", "-"), {**common, **C.family_inputs(n, f, ROUND), "all_mechanisms.json": json.dumps(every, indent=1),
+                                                              "jobs.md": C.jobs_md()}, {"cells.json": out / f"propose-{n}.json"},
+                       C.flags_once(lambda d, fl, f=f: C.check_proposals(d, [m["id"] for m in f["mechanisms"]], all_ids, board_ids, fl)),
+                       theories=C.THEORY_FILES if n == ROUND.name else "") for n, f in fams.items()]
+    jobs += [engine.job("routes_propose", n.replace("/", "-"), {**common, **C.family_inputs(n, f, ROUND), "jobs.md": C.jobs_md(), "gap.md": gap_md(items),
+                                                                "best_known.json": json.dumps(table, indent=1)}, {"route.json": out / f"route-{n}.json"},
+                         C.flags_once(lambda d, fl, f=f: C.check_routes(d, [m["id"] for m in f["mechanisms"]], fl))) for n, f in fams.items()]
+    engine.run(jobs, folder, len(jobs))
     props = [{"family": n, **p} for n in fams for p in json.loads((out / f"propose-{n}.json").read_text())["cells"]]
     props = [{"id": f"c{k:02d}", **p} for k, p in enumerate(props, 1)]
     dropped = [{"id": p["id"], "mechanism": p["mechanism"], "command": p["command"], "reason": "; ".join(e)}
@@ -336,19 +356,29 @@ def cells(folder, fams, known, plan):
     engine.run([engine.job("cells_merge", "merge", {"proposals.json": json.dumps(shown, indent=1)}, {"merged.json": out / "merged.json"},
                            C.flags_once(lambda d, fl: C.check_merged(d, list(by_id), fl)))], folder)
     merged = json.loads((out / "merged.json").read_text())["cells"]
+    for c in merged:  # ids carry the round: m05 -> r10-m05, m05-r1 -> r10-m05-r1
+        c["id"] = f"{pre}-{c['id']}"
+        for r in c["readouts"]:
+            r["id"] = f"{pre}-{r['id']}"
     dropped += [{"id": c["id"], "from": [i for r in c["readouts"] for i in r["from"]], "command": c["command"], "reason": "; ".join(e)}
                 for c in merged if (e := C.command_errors(c["command"], flags))]
     merged = [c for c in merged if c["id"] not in {x["id"] for x in dropped}]
+    routes = [{"family": n, **json.loads((out / f"route-{n}.json").read_text())["route"]} for n in fams]
+    dropped += [{"id": f"route of {r['family']}", "command": r["command"], "reason": "; ".join(e)}
+                for r in routes if (e := C.command_errors(r["command"], flags) + C.command_errors(r["rl_command"], flags))]
+    routes = C.route_cells([r for r in routes if f"route of {r['family']}" not in {x["id"] for x in dropped}], table, pre)
     for x in dropped:
         print(f"  dropped {x['id']}: {x['reason']}")
     C.attach(merged, by_id)
-    rids, fc = [r["id"] for c in merged for r in c["readouts"]], {**common, "cells.json": json.dumps(C.blind(merged), indent=1)}
+    rids = [r["id"] for c in merged + routes for r in c["readouts"]]
+    fc = {**common, "cells.json": json.dumps(C.blind(merged), indent=1), "routes.json": json.dumps(C.blind_routes(routes), indent=1)}
+    every_id = "every readout id of cells.json and routes.json"
     jobs = [engine.job("cells_forecast", r, fc, {"forecasts.json": out / f"forecast-{r}.json"}, lambda d: C.check_forecasts(d, rids, [None]),
-                       theory="", key="", every="every readout id of cells.json exactly once", nothing="") for r in READERS]
+                       theory="", key="", every=f"{every_id} exactly once", nothing="") for r in READERS]
     jobs += [engine.job("cells_forecast", n.replace("/", "-"), {**fc, **C.family_inputs(n, f, ROUND)}, {"forecasts.json": out / f"forecast-{n}.json"},
                         lambda d, f=f: C.check_forecasts(d, rids, [m["id"] for m in f["mechanisms"]]),
                         theory=C.FAMILY.format(files=C.THEORY_FILES if n == ROUND.name else ""), key='"mechanism": "<id>", ',
-                        every="one forecast per mechanism of mechanisms.json and readout id of cells.json, each pair exactly once",
+                        every=f"one forecast per mechanism of mechanisms.json and {every_id}, each pair exactly once",
                         nothing=C.NOTHING) for n, f in fams.items()]
     engine.run(jobs, folder, len(jobs))
     F, fam_of = {}, {}  # forecaster (a mechanism or a reader) -> {readout id: forecast}; each reader is its own family
@@ -356,16 +386,21 @@ def cells(folder, fams, known, plan):
         for f in json.loads((out / f"forecast-{n}.json").read_text())["forecasts"]:
             F.setdefault(f.get("mechanism", n), {})[f["readout"]] = f
             fam_of[f.get("mechanism", n)] = n
-    C.rank(merged, F, fam_of)
-    (folder / "cells.json").write_text(json.dumps({"utc": utc, "proposals": props, "dropped": dropped, "cells": merged}, indent=1))
+    left_out = sorted(set(left_out) & set(F))
+    C.rank(merged, F, fam_of, left_out)
+    C.rank_routes(routes, F, left_out)
+    (folder / "cells.json").write_text(json.dumps({"utc": utc, "proposals": props, "dropped": dropped, "left_out": left_out, "cells": merged,
+                                                   "routes": routes, "best_known": table}, indent=1))
     (folder / "cell_forecasts.json").write_text(json.dumps({n: {"family": fam_of[n], "forecasts": list(F[n].values())} for n in F}, indent=1))
     head = (f"Written {now()} UTC (board read {utc} UTC). {plan}Families: "
             f"{', '.join(n + ' (' + str(len(f['mechanisms'])) + ')' for n, f in fams.items())}; {len(F)} forecasters (each reader is its own "
-            f"family). {len(dropped)} cells dropped by the flag check (cells.json \"dropped\"). Separation = pairs of forecasters from "
-            "different families whose 90 % intervals do not overlap, summed over the cell's readouts.")
-    (folder / "cells.md").write_text(md := C.cells_md(f"Cells designed by the theories, {folder.name}", head, list(by_id.values()), merged, F, fam_of))
-    print("\n".join(md.splitlines()[4:7]) + f"\n{folder / 'cells.md'}")
-    return {"proposed": len(props), "dropped": len(dropped), "merged": len(merged), "forecasters": len(F)}
+            f"family). {len(dropped)} cells or routes dropped by the flag check (cells.json \"dropped\"). Separation = readouts whose forecasters "
+            "split into a low and a high side (every low interval below every high interval) with 2 or more families on each side.")
+    (folder / "cells.md").write_text(md := C.cells_md(f"Cells designed by the theories, {folder.name}", head, list(by_id.values()), merged, F, fam_of,
+                                                      routes, left_out))
+    print("\n".join(md.splitlines()[4:8]) + f"\n{folder / 'cells.md'}")
+    return {"proposed": len(props), "dropped": len(dropped), "merged": len(merged), "routes": len(routes), "forecasters": len(F),
+            "routes_above_best": sum((c["score"] or 0) > 0 for c in routes), "cells_split": sum(bool(c["separation"]) for c in merged)}
 
 
 def cells_run(folder, runs):
@@ -416,12 +451,22 @@ def cell_scores(src):
                   [{"id": r["readout"], "value": r["measured"], "item": r.get("item"), "quote": r.get("artifact")} for r in rows])
 
 
+def row_item(src, r):
+    """The board item of a carried row of round src (a version-9 row has none: it is looked up in src/standing/)."""
+    if "item" in r:
+        return r["item"]
+    name, kind = r["source"].rsplit(" ", 1)
+    m = next(m for m in json.loads((src / "standing" / f"{kind}-{name}.json").read_text())["measured"] if m["id"] == r["id"])
+    return m.get("item") or f"{name}:{m['id']}"
+
+
 def standing(folder, sources):
-    """Scores each source's forecasts (one job per source, at once) and cells; a mechanism's record is its rows from
-    these scores and its record in a source round's standing.json. Carried: total gain above 0 on 3 or more scored
-    numbers; graveyard: at or below -2 nats on 3 or more. Writes standing/<kind>-<source>.json and .md, standing.json,
+    """Scores each source's forecasts (one job per source, at once) and cells, each folder once; a mechanism's record is
+    its rows from these scores and its record in a source round's standing.json, one row per (source, number). Each row
+    carries the board item that posted its number. Carried: total gain above 0 on 3 or more distinct items; graveyard:
+    at or below -2 nats on 2 or more distinct items. Writes standing/<kind>-<source>.json and .md, standing.json,
     standing.md, graveyard.json."""
-    out = folder / "standing"
+    out, sources = folder / "standing", list({s.resolve(): s for s in sources}.values())
     out.mkdir(parents=True, exist_ok=True)
 
     def score_source(src):
@@ -438,40 +483,63 @@ def standing(folder, sources):
     for src in sources:
         if (src / "standing.json").exists():
             graveyard |= json.loads((src / "graveyard.json").read_text())
-            records |= {m["id"]: m for m in json.loads((src / "standing.json").read_text())["carried"]}
+            records |= {m["id"]: {**m, "rows": {(r["source"], r["id"]): {**r, "item": row_item(src, r)} for r in m["rows"]}} for m in json.loads((src / "standing.json").read_text())["carried"]}
         for i, m in mechanisms_of(src).items():
-            records.setdefault(i, {**m, "rows": []})
+            records.setdefault(i, {**m, "rows": {}})
     for src, kinds in scores.items():
         for kind, s in kinds:
             (out / f"{kind}-{src.name}.md").write_text(scores_md(s, f"{kind} of {src.name}, scored for {folder.name}"))
+            item = {m["id"]: m.get("item") or f"{src.name}:{m['id']}" for m in s["measured"]}
             for n, p in s["forecasters"].items():
                 if full(src, n) in records:
-                    records[full(src, n)]["rows"] += [{**r, "source": f"{src.name} {kind}"} for r in p["rows"]]
+                    records[full(src, n)]["rows"] |= {(f"{src.name} {kind}", r["id"]): {**r, "source": f"{src.name} {kind}", "item": item[r["id"]]} for r in p["rows"]}
     for m in records.values():
-        m["forecast"] = {"scored": len(m["rows"]), "inside": sum(r["inside"] for r in m["rows"]), "total_gain": round(sum(r["gain"] for r in m["rows"]), 3)}
-        f = m["forecast"]
-        m["state"] = "not carried" if f["scored"] < 3 else "carried" if f["total_gain"] > 0 else "graveyard" if f["total_gain"] <= -2 else "not carried"
+        m["rows"] = list(m["rows"].values())
+        m["forecast"] = f = {"scored": len(m["rows"]), "items": len({r["item"] for r in m["rows"]}), "inside": sum(r["inside"] for r in m["rows"]),
+                             "total_gain": round(sum(r["gain"] for r in m["rows"]), 3)}
+        m["state"] = ("carried" if f["items"] >= 3 and f["total_gain"] > 0 else "graveyard" if f["items"] >= 2 and f["total_gain"] <= -2 else "not carried")
     graveyard |= {i: {"name": i, "round": folder.name, "statement": m["statement"], "state": "refuted by forecasts", "verdict": "", "forecast": m["forecast"],
-                      "reason": f"total forecast gain {m['forecast']['total_gain']:+.2f} nats on {m['forecast']['scored']} scored numbers"}
-                  for i, m in records.items() if m["state"] == "graveyard"}
+                      "reason": f"total forecast gain {m['forecast']['total_gain']:+.2f} nats on {m['forecast']['scored']} numbers from "
+                                f"{m['forecast']['items']} board items"} for i, m in records.items() if m["state"] == "graveyard"}
     ranked = sorted(records.values(), key=lambda m: -m["forecast"]["total_gain"])
     (folder / "standing.json").write_text(json.dumps({"utc": now(), "from": [str(s) for s in sources], "carried": [m for m in ranked if m["state"] == "carried"],
-                                                      "records": {m["id"]: {k: m[k] for k in ("family", "state", "forecast")} for m in ranked}}, indent=1))
+                                                      "records": {m["id"]: {k: m[k] for k in ("family", "state", "forecast", "statement")} for m in ranked}}, indent=1))
     (folder / "graveyard.json").write_text(json.dumps(graveyard, indent=1))
     md = [f"# Standing, {folder.name}\n\nFrom {', '.join(s.name for s in sources)}. Gain per number: log density of the forecast minus the equal mixture of "
-          "the two readers, clipped to [-3, 3] nats, at most 0 when the measured value is outside the forecast's own 90 % interval. Carried: total above 0 "
-          "on 3 or more scored numbers; graveyard: at or below -2 on 3 or more.\n",
-          "| mechanism | family | scored | inside | total gain | state | statement |\n|---|---|---|---|---|---|---|"]
-    md += [f"| {m['id']} | {m['family']} | {m['forecast']['scored']} | {m['forecast']['inside']} | {m['forecast']['total_gain']:+.2f} | {m['state']} | "
-           f"{flat(m['statement'])[:160]} |" for m in ranked if m["forecast"]["scored"]]
+          "the two readers, clipped to [-3, 3] nats, at most 0 when the measured value is outside the forecast's own 90 % interval. The numbers of one "
+          "board item are one experiment. Carried: total above 0 on numbers from 3 or more items; graveyard: at or below -2 on 2 or more items.\n",
+          "| mechanism | family | scored | items | inside | total gain | state | statement |\n|---|---|---|---|---|---|---|---|"]
+    md += [f"| {m['id']} | {m['family']} | {m['forecast']['scored']} | {m['forecast']['items']} | {m['forecast']['inside']} | {m['forecast']['total_gain']:+.2f} | "
+           f"{m['state']} | {flat(m['statement'])[:160]} |" for m in ranked if m["forecast"]["scored"]]
     (folder / "standing.md").write_text("\n".join(md) + "\n")
     print(f"  standing: {len(records)} mechanisms, {sum(m['forecast']['scored'] > 0 for m in ranked)} scored, "
           f"{sum(m['state'] == 'carried' for m in ranked)} carried, {sum(m['state'] == 'graveyard' for m in ranked)} to the graveyard")
 
 
+def judge_duplicates(folder, new, carried, graveyard):
+    """One blind job lists new mechanisms that restate an earlier mechanism (a carried one or any record of standing),
+    a graveyard entry, or a new one listed before them; writes duplicates.json and returns the ids to drop."""
+    records = json.loads((folder / "standing.json").read_text())["records"]
+    earlier = ([{"id": i, "statement": r["statement"]} for i, r in records.items()] + [{"id": m["id"], "statement": m["statement"]} for m in carried if m["id"] not in records]
+               + [{"id": i, "statement": g["statement"], "failed": g.get("reason") or g.get("state")} for i, g in graveyard.items()])
+    order, known = [m["id"] for m in new], {e["id"] for e in earlier}
+
+    def valid(d):
+        ps = json.loads((d / "duplicates.json").read_text())["pairs"]
+        bad = [p for p in ps if p["new"] not in order or not str(p.get("reason", "")).strip()
+               or not (p["earlier"] in known or p["earlier"] in order[:order.index(p["new"])])]
+        return f"each pair needs new (an id of new.json), earlier (an id of earlier.json or a new id listed before it) and a reason; failing: {bad}" if bad else None
+    engine.run([engine.job("duplicates", "judge", {"new.json": json.dumps([{k: m[k] for k in ("id", "family", "statement")} for m in new], indent=1),
+                                                   "earlier.json": json.dumps(earlier, indent=1)}, {"duplicates.json": folder / "duplicates.json"}, valid)], folder)
+    pairs = json.loads((folder / "duplicates.json").read_text())["pairs"]
+    for p in pairs:
+        print(f"  duplicate {p['new']} of {p['earlier']}: {p['reason']}")
+    return {p["new"] for p in pairs}
+
+
 def wide_round(folder, sources, n):
-    """The version-9 round: standing, targets_open, forecast, propose, cells, experiments; a stage whose output exists
-    is skipped."""
+    """The version-10 round: standing, targets_open, forecast, propose (with the duplicate judge), cells and routes,
+    experiments; a stage whose output exists is skipped."""
     start, out = time.time(), folder / "jobs"
     folder.mkdir(parents=True, exist_ok=True)
     print("== standing")
@@ -493,39 +561,49 @@ def wide_round(folder, sources, n):
                 for k, lens in LENSES.items()], folder, len(LENSES))
     new = [{"id": f"{folder.name}/{k}-{m['id'][3:]}", "family": k, "lens": lens, **{x: m[x] for x in ("statement", "rests_on", "holds_against", "forecasts")}}
            for k, lens in LENSES.items() for m in json.loads((out / f"mechanisms-{k}.json").read_text())["mechanisms"]]
+    drop = judge_duplicates(folder, new, carried, dead)
+    new = [m for m in new if m["id"] not in drop]
     forecasts |= {m["id"]: m.pop("forecasts") for m in new}
     mechs = carried + new
     (folder / "mechanisms.json").write_text(json.dumps({"mechanisms": mechs}, indent=1))
     (folder / "forecasts.json").write_text(json.dumps(forecasts, indent=1))
     write_md(folder, utc, forecasts, [f"\n- {m['id']} ({m['family']}{', carried' if m in carried else ''}): {flat(m['statement'])}" for m in mechs])
-    print(f"  {len(carried)} carried and {len(new)} new mechanisms, {len(tids)} targets: {folder / 'forecasts.md'}")
+    print(f"  {len(carried)} carried and {len(new)} new mechanisms ({len(drop)} dropped as duplicates), {len(tids)} targets: {folder / 'forecasts.md'}")
     print("== cells")
     fams = {}
     for m in mechs:
         fams.setdefault(m["family"], {"lens": m["lens"], "mechanisms": []})["mechanisms"].append({k: m[k] for k in ("id", "statement", "rests_on")})
+    records = json.loads((folder / "standing.json").read_text())["records"]
+    left_out = [i for i, r in records.items() if r["forecast"]["total_gain"] <= -2]
     counts = cells(folder, fams, {"targets": json.loads((folder / "targets.json").read_text())["targets"], "facts": facts},
-                   "Plan `specs/SPEC_engine_v9.md`. ") if not (folder / "cells.json").exists() else {}
+                   "Plan `specs/SPEC_engine_v10.md`. ", left_out) if not (folder / "cells.json").exists() else {}
     print("== experiments")
     experiments(folder)
     (folder / "run.json").write_text(json.dumps({"commit": sh("git", "rev-parse", "--short", "HEAD").strip(), "command": " ".join(sys.argv), "utc": utc,
-                                                 "from": [str(s) for s in sources], "carried": len(carried), "new": len(new), "targets": len(tids), **counts,
+                                                 "from": [str(s) for s in sources], "carried": len(carried), "new": len(new), "duplicates": len(drop), "targets": len(tids), **counts,
                                                  "minutes": round((time.time() - start) / 60, 1), "job_dirs": str(engine.tmp())}, indent=1))
     print(f"{(time.time() - start) / 60:.1f} minutes: {folder / 'experiments.md'}")
 
 
 def experiments(folder):
-    """experiments.md: the cells to run, list A (top 10 by separation per GPU minute) and list B (base-only cells, top 5
-    by the highest forecast minus the best known base count), each with its command."""
-    cs = json.loads((folder / "cells.json").read_text())["cells"]
+    """experiments.md: the cells to run, list A (top 10 by separation per GPU minute), list B (base-only cells, top 5 by
+    the highest forecast minus the best known base count) and list C (no-reward routes by the median forecast minus the
+    best known count at equal tokens), each with its command."""
+    data = json.loads((folder / "cells.json").read_text())
+    cs, routes = data["cells"], data.get("routes", [])
     a = sorted(cs, key=lambda c: -c["per_minute"])[:10]
     b = sorted((c for c in cs if c["base_only"]), key=lambda c: -max(r["top"]["gain"] for r in c["readouts"]))[:5]
     md = [f"# Experiments, {folder.name}\n\nEach cell's forecasts and proposers are in `cells.md`. Run from the top; write each readout's number "
           "into `measured.json` (a list of {readout, measured, n, interval, artifact, item}).\n", "## A: separation per GPU minute\n"]
-    md += [f"{k}. {c['id']} ({c['separation']} pairs, {c['gpu_minutes']:g} min): {c['cell']['model']}; {c['cell']['prompt']}; {c['cell']['set']}, "
+    md += [f"{k}. {c['id']} ({c['separation']} split readouts, {c['gpu_minutes']:g} min): {c['cell']['model']}; {c['cell']['prompt']}; {c['cell']['set']}, "
            f"n {c['cell']['n']}. Readouts: {', '.join(r['id'] for r in c['readouts'])}.\n   `{c['command']}`" for k, c in enumerate(a, 1)]
     md.append("\n## B: base-only cells by the highest forecast over the best known base count\n")
     md += [f"{k}. {c['id']} ({max(r['top']['gain'] for r in c['readouts']):+g} over best, {c['gpu_minutes']:g} min): {c['cell']['model']}; "
            f"{c['cell']['prompt']}; {c['cell']['set']}.\n   `{c['command']}`" for k, c in enumerate(b, 1)]
+    md.append("\n## C: no-reward routes by the median forecast over the best known count at equal tokens per problem\n")
+    md += [f"{k}. {c['id']} ({c['family']}; score {C.g(c['score'])}; {c['tokens']:g} tokens per problem, {c['gpu_minutes']:g} min): {c['change']} "
+           + "; ".join(f"{x['set']} median {C.g(x['median'])} against {x['best_base']['value']:g}" for x in c["readouts"] if x["best_base"])
+           + f".\n   `{c['command']}`\n   RL arm: `{c['rl_command']}`" for k, c in enumerate(sorted(routes, key=lambda c: -(c["score"] if c["score"] is not None else -1e9)), 1)]
     (folder / "experiments.md").write_text("\n".join(md) + "\n")
 
 

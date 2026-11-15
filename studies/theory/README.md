@@ -898,6 +898,45 @@ function `standing` uses (no stand-alone command exists for cells): `cells-01/sc
 (result-a74ac3): readers 14 [7, 22] and 13 [6, 21]; run-06/f2-m02 3 [0, 8] and run-06/f2-m06 2 [0, 7] -3.00 each,
 run-07/f2-m06 16 [9, 23] -0.63, run-08/f2-m01 14 [8, 20] -0.08.
 
+## Engine version 10 (two tracks)
+
+Plan `specs/SPEC_engine_v10.md`; skill version 10. Same command (`forecast.py round $W --from ...`), with these changes
+in `lib/forecast.py` and `lib/cells.py`:
+
+- Carry rule by experiments: each scored row carries the board item that posted its number (version-9 rows get it from
+  their round's `standing/` files); carried needs a total gain above 0 on 3 or more distinct items, the graveyard -2
+  nats or less on 2 or more items. `standing` reads each `--from` folder once and keeps one row per (folder, number).
+  Re-applied to round 09's cached scores (a copy, runs 02-08): 2 of the 10 stay carried, run-02/f2-m01 (+5.10 nats, 6
+  numbers from 4 items) and run-02/f2-m04 (+1.43, 3 numbers from 3 items); the other 8 have one item each
+  (result-a1bf75). Graveyard by the new rule: run-02/f2-m03 (-5.45, 3 items) and run-02/f2-m02 (-8.62, 2 items); the
+  other five of round 09's seven have one item.
+- Separation: forecasters with a record at or below -2 nats are left out (`cells.json` `left_out`); a readout separates
+  when the rest split into a low and a high side with 2 or more families on each side; list A ranks by separating
+  readouts per GPU minute.
+- Track 2, no-reward routes (`prompts/routes_propose.md`, list C): one route per family from the base alone or
+  Think-SFT, with an RL arm, tokens per problem, four readouts (route and RL on a hard328 subset and on MATH-500) and
+  the gap parts it targets (`gap.md`: result-f39ba8 and the rlneurons "Gap anatomy"). Everyone forecasts every route
+  in the same job as the cells. Ranked by the median forecast minus the best known count of the same model at equal or
+  fewer tokens, from a table built in code from the board's `score:` lines (49 rows at the time of writing: base
+  rows, and Think-SFT rows that name no RL change).
+- `studies/theory/jobs/free_cell.py`: no existing job takes free prompt text, opening text and a repetition penalty, so
+  this one imports run_cell's sets, rln4_gen's engine and row record and grader v3 and takes `--model base|rl|think_sft`,
+  `--prompt-suffix`, `--opening-text`, `--temperature`, `--top-p`, `--min-p`, `--repetition-penalty`, `--max-tokens`,
+  `--samples`, `--seed`, `--set`, `--n`, `--shard`, `--dry-run`. Tested on the laptop by the dry path only (tokenizer and
+  canned answers: 6 rows on hard328 shard 0/2, suffix and opening in the prompt as intended); it has not run on a GPU.
+- Duplicate judge (`prompts/duplicates.md`, `duplicates.json`): one blind job before the forecasts; the newer
+  mechanism of each pair is dropped. Cell ids carry the round (`r10-m05`, routes `r10-n01`). The flag check covers
+  `studies/theory/jobs/` and reads a single-quoted value as one word (version 9 stopped at the first quote).
+
+Smoke run (outside the repository, `--from results/forecast/run-07 --propose 2 --model-all sonnet`, then deleted;
+about 12 minutes over two runs: the stopping family's job failed its forecast-count check after the send-back, and a
+rerun of the same command resumed): 28 targets, 12 new mechanisms, 6 dropped as duplicates (4 of each other, 2 of
+earlier entries), 7 cells and 6 routes, 0 dropped by the flag check, 0 cells with a 2-and-2 family split. With
+Think-SFT routes measured against Think-SFT's own counts, 2 of 6 routes have a median above the best known count (the
+first ranking, against the base table, put all 6 above and was fixed). A route's token figure is the proposer's
+estimate: one base route claimed 5,000 tokens per problem with the cue, which runs about 9,300, and so met the plain
+76-of-328 row.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
