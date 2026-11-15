@@ -1,0 +1,24 @@
+{
+ "what": "Frozen inputs of the RLN-5 map job (jobs/rln5_map.py): the stored answers of T1 and T2, one JSONL row per MATH-500 problem. Not committed (raw generations); uploaded to the Modal Volume iterate-runs with `modal volume put`. The job asserts sha256 and size.",
+ "note": "The sha256 values are the ones recorded in results/rln4/t1_t2_items-01/run.json for the same two files.",
+ "files": {
+  "T1.jsonl": {
+   "what": "base with cue, T 1.0 / top-p 1.0 (RLN-4 T1)",
+   "sha256": "c65a12fcc5922c5270bb3b6abeb352246385299111c9e033dfc7deae4712ea85",
+   "bytes": 6685484,
+   "rows": 500,
+   "volume": "iterate-runs:inputs/rln5/T1.jsonl",
+   "job_path": "/runs/inputs/rln5/T1.jsonl",
+   "source": "s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl"
+  },
+  "T2.jsonl": {
+   "what": "RL, plain prompt, T 1.0 / top-p 1.0 (RLN-4 T2)",
+   "sha256": "851e422c1d062b3378806b225d28e467c6b2ea5f2afe5e1a96527fb1cf62324b",
+   "bytes": 8001431,
+   "rows": 500,
+   "volume": "iterate-runs:inputs/rln5/T2.jsonl",
+   "job_path": "/runs/inputs/rln5/T2.jsonl",
+   "source": "s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t2-01/t2/T2.jsonl"
+  }
+ }
+}

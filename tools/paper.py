@@ -11,7 +11,7 @@
 fetch writes papers/<paper-id>.txt, with [page N] markers, and papers/<paper-id>.json.
 Read the whole .txt, appendix included, before adding findings.
 add checks that the quote appears in the text, sends the finding to past.dev as one data point dated
-at the paper's date, and waits until past.dev has processed it.
+at the paper's date, and returns once past.dev has queued it.
 """
 import argparse
 import hashlib
@@ -21,7 +21,6 @@ import json
 import re
 import subprocess
 import sys
-import time
 import unicodedata
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -70,6 +69,7 @@ def fetch(args):
         data, kind = get(url)
         text = pdf_text(data) if kind == "application/pdf" else html_text(data)
 
+    text = text.encode("utf-8", "replace").decode("utf-8")  # pypdf can return lone surrogates, which write_text rejects
     PAPERS.mkdir(exist_ok=True)
     (PAPERS / f"{paper_id}.txt").write_text(text)
     (PAPERS / f"{paper_id}.json").write_text(json.dumps({"title": title, "date": date, "url": url}))
@@ -94,11 +94,9 @@ def add(args):
         "timestamp": f"{meta['date']}T00:00:00Z",
         "metadata": {"paper": args.paper_id, "where": args.where, "who": who},
     })
-    while receipt["status"] != "completed":
-        time.sleep(3)
-        receipt = call("GET", f"ingest/{receipt['ingestionId']}")
-        assert receipt["status"] != "failed", receipt["failure"]
-    print("added")
+    assert receipt["status"] != "failed", receipt
+    # past.dev processes ingestions 10-15 min behind when busy; do not wait (board.py does not either)
+    print(f"added: past.dev {receipt['status']}, ingestion {receipt['ingestionId']}")
 
 
 parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
