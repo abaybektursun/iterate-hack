@@ -6,9 +6,10 @@ dot per live item. Each person has a swarm of agents beside it with threads to t
 session, the Claude mark for Claude Code and the OpenAI mark for Codex, in the person's color of the board page.
 The Chat ring (messages) runs through every swarm, and the Retro loop (self-review) with its comet goes around
 everything. What moves is real data, replayed: a message leaves its sender's swarm for the others, a post
-travels to the board and a ripple returns to every swarm. A larger dot with a halo is happening now. A click on a
-part dims the rest and explains it in the side column (address /architecture#<part>); "Follow one result" steps
-through the path of one result (arrow keys, Esc). Nothing here writes to the board.
+travels to the board and a ripple returns to every swarm. A larger dot with a halo is happening now. The picture
+stands alone in the middle of the page with one button at the bottom right. A click on a part dims the rest, moves the picture
+over and explains the part in a column beside it (address /architecture#<part>); the button "Follow one result"
+steps through the path of one result (arrow keys, Esc). Nothing here writes to the board.
 """
 
 PAGE = r"""<!doctype html>
@@ -25,8 +26,8 @@ PAGE = r"""<!doctype html>
    on a cool grey table, with a cast shadow in place of the glow. The light comes from the upper left in both. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #8b97a1; --rule: #d3d9de;
-  --blue: #1f43d6; --red: #cf2338; --on-blue: #fff;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
+  --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
   --pl: .56; --pc: .15; --dim: .16;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
@@ -35,7 +36,7 @@ PAGE = r"""<!doctype html>
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #5f6c77; --rule: #1c2630;
+    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
     --blue: #8fb1ff; --red: #ff6b7c; --on-blue: #080c11;
     --pl: .78; --pc: .13; --dim: .24;
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
@@ -57,9 +58,11 @@ a { color: inherit; }
 .hue { --c: oklch(var(--pl) var(--pc) var(--h)); }
 
 .page {
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 26vw); grid-template-rows: auto minmax(0, 1fr);
-  gap: 0; height: 100vh; min-height: 620px; max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 0px; grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0; height: 100vh; min-height: 620px; max-width: 1840px; margin: 0 auto; padding: 20px 40px 24px;
+  transition: grid-template-columns .45s cubic-bezier(.3, 0, .2, 1);
 }
+.page.open { grid-template-columns: minmax(0, 1fr) minmax(320px, 26vw); }  /* a selection opens the words column; the picture moves over */
 .top { grid-column: 1 / -1; display: flex; align-items: center; gap: 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
 .top a { color: var(--mute); text-decoration: none; white-space: nowrap; transition: color .15s ease; }
@@ -71,7 +74,9 @@ a { color: inherit; }
 .status.bad::before { background: var(--red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--red) 20%, transparent); }
 
 /* The picture */
-.stage { min-height: 0; min-width: 0; display: flex; padding: 8px 40px 0 0; }
+.stage { grid-column: 1; grid-row: 2; min-height: 0; min-width: 0; display: flex; padding: 8px 0 0; }
+.foot { grid-column: 1; grid-row: 3; display: flex; justify-content: flex-end; padding-top: 6px; }
+.page.open .foot { visibility: hidden; }
 svg { width: 100%; height: 100%; display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-stretch: 112%; letter-spacing: .012em; }
 .label { font-weight: 600; paint-order: stroke fill; stroke: var(--paper); stroke-width: 10px; stroke-linejoin: round; }
@@ -137,13 +142,14 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 
 /* The words */
 .side {
-  min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
+  grid-column: 2; grid-row: 2 / 4; min-width: 0; min-height: 0; overflow: hidden auto; scrollbar-width: none;
   padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  opacity: 0; visibility: hidden; transition: opacity .3s ease .12s, visibility 0s .42s;
 }
-.say { margin: 0; font-size: clamp(23px, 1.95vw, 35px); line-height: 1.17; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 19ch; }
-.pane { margin-top: clamp(24px, 4.4vh, 48px); }
+.page.open .side { opacity: 1; visibility: visible; transition: opacity .3s ease .12s; }
+.pane { min-width: 270px; }
 .walk {
-  margin-top: 26px; padding: 12px 22px; border-radius: 999px; background: var(--btn); color: var(--btn-ink);
+  padding: 12px 22px; border-radius: 999px; background: var(--btn); color: var(--btn-ink);
   font-weight: 620; font-size: 15px; font-stretch: 106%; letter-spacing: .004em;
   box-shadow: inset 0 1px 0 var(--btn-edge), 0 14px 28px -14px var(--btn-drop); transition: transform .18s ease, box-shadow .18s ease;
 }
@@ -170,8 +176,6 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .steps i { flex: 1; height: 2px; border-radius: 2px; background: var(--rule); }
 .steps i.done { background: var(--ink); }
 .cap { margin: 24px 0 0; font-size: clamp(26px, 2.3vw, 42px); line-height: 1.12; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 14ch; min-height: 4.6em; }
-.walking .say { display: none; }
-.walking .pane { margin-top: 0; }
 .nav { display: flex; align-items: center; gap: 10px; margin-top: 20px; }
 .nav button { padding: 9px 18px; border-radius: 999px; border: 1px solid var(--faint); font-weight: 600; font-size: 14px; transition: background .15s ease, border-color .15s ease, color .15s ease; }
 .nav button.next { background: var(--btn); color: var(--btn-ink); border-color: transparent; box-shadow: inset 0 1px 0 var(--btn-edge); }
@@ -185,7 +189,10 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
   .name { font-stretch: 112%; margin-right: 0; }
   .stage { margin-top: 10px; padding: 0; }
   svg { height: auto; }
+  .foot { padding-top: 14px; justify-content: center; }
+  .page.open .foot { display: none; }
   .side { padding: 12px 0 0; overflow: visible; border-left: 0; }
+  .pane { min-width: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter *, .dot.arrived, .dot.ping { animation: none !important; }
@@ -194,7 +201,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 </style>
 </head>
 <body>
-<div class="page">
+<div class="page" id="page">
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
@@ -203,14 +210,14 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
     <span class="status" id="status" role="status">Reading the board</span>
   </header>
   <div class="stage"><svg id="svg" role="group" aria-label="The harness: people and their agents around one shared board"></svg></div>
+  <div class="foot"><button class="walk" data-go="walk-1">Follow one result</button></div>
   <div class="side" id="side">
-    <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
   </div>
 </div>
 <script>
 const $ = id => document.getElementById(id);
-const HUES = [300, 155, 70, 215, 340, 115, 255, 35];  // the board page's colors: the same person has the same color on both
+const HUES = [325, 150, 65, 195, 105, 45, 175, 350];  // the board page's colors: the same person has the same color on both
 const S = { data: null, m: null, g: null, error: null, readAt: 0, sel: null, key: "", seen: null, entered: false, token: 0, queue: [], flying: false };
 const still = matchMedia("(prefers-reduced-motion: reduce)");
 const narrow = matchMedia("(max-width: 900px)");
@@ -723,9 +730,7 @@ function pane() {
       `<button data-step="${n - 1}"${n === 1 ? " disabled" : ""}>Back</button>` +
       `<button class="next" data-step="${n + 1}">${n === 7 ? "Done" : "Next"}</button><span>${n} of 7</span></div>`;
   }
-  if (!s) {
-    return `<button class="walk" data-go="walk-1">Follow one result</button>`;
-  }
+  if (!s) return "";
   const head = (name, hue) => `<div class="dhead"><h2${hue == null ? "" : ` class="hue" style="--h:${hue}"`}>${esc(name)}</h2><button class="close" data-go="${esc(s)}">Close</button></div>`;
   if (s.startsWith("p-")) {
     const who = s.slice(2), i = m.people.indexOf(who), mine = m.live.filter(r => r.who === who).sort((a, b) => b.at_ns - a.at_ns);
@@ -741,8 +746,7 @@ function show() {
   const on = lit(), svg = $("svg"), m = S.m;
   svg.classList.toggle("has-focus", !!on);
   svg.querySelectorAll(".part").forEach(p => p.classList.toggle("on", !!on && on.includes(p.dataset.part)));
-  $("say").textContent = `${m ? m.people.length : "Several"} people, each running their own agent swarms, working on one research direction.`;
-  $("side").classList.toggle("walking", !!step());
+  $("page").classList.toggle("open", !!S.sel);
   const who = S.sel && S.sel.startsWith("p-") ? S.sel.slice(2) : null;  // one person selected: only that person's items stay lit
   svg.querySelectorAll(".dot").forEach(d => d.classList.toggle("off", !!who && d.dataset.who !== who));
   $("finds").innerHTML = (S.data && S.data.findings || []).map(x => `<a href="/finding/${esc(x.slug)}" title="${esc(x.line)}">${esc(x.title)}</a>`).join("");

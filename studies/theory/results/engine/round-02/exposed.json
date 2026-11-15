@@ -1,0 +1,7 @@
+{
+ "items": [
+  "result-5d032f"
+ ],
+ "why": "Claude Code gives every subagent a git status block with the 5 newest commit subjects of the repository. The agents started for round 02 (nulls, new generators) had this line in context: 'd1f0136 Day-1 #3 MATH-500 results: base+cue single 405, restart 413, vote4 446, pass@4 467; RL 456, 458, 474, 482 of 500 (grader v3)'. Those are the targets of result-5d032f. Reported by the r2-all author, which copied its 5 lines on request.",
+ "round_01_agents": "The r1-across author copied its 5 lines (aa9166a, e7b86c8, 19b31b9, d1772d6, 573ce6f): none holds a result number. 19b31b9 names planned runs (Code-RL, theta 0.25, theta 0.5 on the 328)."
+}

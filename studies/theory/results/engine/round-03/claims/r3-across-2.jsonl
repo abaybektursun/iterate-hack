@@ -1,0 +1,1 @@
+{"id": "t13", "value": 0.0, "low": -0.25, "high": 0.25, "why": "The theory says RL adds hold-on tokens through a constant per-layer push that does not depend on context. A push like that raises hold-on log-prob by the same amount after a right or a wrong result, so the RL-minus-base difference in the rise after a wrong result should be about zero."}

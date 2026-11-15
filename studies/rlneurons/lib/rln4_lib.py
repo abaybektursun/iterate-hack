@@ -46,7 +46,7 @@ def onset_lines(text: str):
         j -= 1
     while j < len(ls) and _norm(ls[j][1]) not in rec:
         j += 1
-    return ls[j][0]
+    return ls[j][0] if j < len(ls) else cstar          # no line of MINLEN characters recurs (an answer of '\n\n\n\n :' lines): the window start
 
 
 # ------------------------------------------------------------------------------------------------ loop onset, rule B (published)
@@ -207,5 +207,6 @@ def selfcheck():
     o = onset_lines(loop)
     assert o == len("Start.\n"), o
     assert onset_lines("Some ordinary text without repeats.\n" + "".join(f"line {i} {i*i} {i**3}\n" for i in range(50))) is None
+    assert onset_lines(" line!\n\nOkay" + "\n\n\n\n :" * 5000) == 0        # short lines only: was an IndexError
     assert onset_period("abc" + "xy" * 1500) == 3 and onset_period("ab" * 900) is None
     return True

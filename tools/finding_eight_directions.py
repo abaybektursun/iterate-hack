@@ -8,7 +8,7 @@ directions, and the score on a scale under it. The reader switches between four 
 """
 import json
 
-LISTED = False  # served at its address, but left out of the links in the site header (view.py)
+UNLISTED = True  # served at its address, but left out of the links in the site header (view.py)
 
 TITLE = "Eight directions"  # the link text in the site header and the browser tab
 PROBLEM = "What did reward training change inside the model?"

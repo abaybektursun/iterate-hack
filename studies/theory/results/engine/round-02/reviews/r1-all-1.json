@@ -1,0 +1,51 @@
+{
+ "theory": "r1-all-1",
+ "refutation": {
+  "item": "result-e45bf4",
+  "quote": "score: rl hard328 190/328 tokens 9656 | theta(0.5) = base + 0.5 (RL - base), cue, T 1.0 / top-p 1.0 ... Q2 held at edge, Q3/Q4 refuted",
+  "excluded_by_scope": false,
+  "note": "Source checked at origin/main studies/rlneurons/results/day1_wdiff328/readout.json: theta0.5_cue right_v3 190, cap_hits 73 (base cue 164 right, 77 cap hits; theta0.25 182 right, 56 cap hits; Code-RL cue 187 right, 25 cap hits; RL plain 206, 20). The theory's own forward prediction P1 says 'refuted_by: cap hits stay at 70 or more (the base's 77) while accuracy rises above 175'; both conditions are met. Half the RL weight difference gains 26 problems on the 328 while removing only 4 cap hits, and Code-RL removes 52 cap hits yet gains no more than theta0.5 (187 vs 190, -0.9 [-5.5, 3.7]): accuracy gain and cap-hit reduction come apart. MATH-500 says the same (origin/main studies/rlneurons/results/day1_wdiff/readout.json): theta0.5 cue 452 right with 22 cap hits vs base cue 410 with 27, so at least 37 of the 42 added problems are finished answers that became right, not unfinished answers that now finish. Weight interpolation base + a*(RL - base) with the cue at T 1.0 on the 328 is named in the scope. Second contradiction, also in scope: result-54f212, 'adding ONE constant vector per layer to the base ... closes 23.4 / 31.2 % of KL(RL||base)', a position-independent push carrying a quarter to a third of the change, against the theory's 'changes activations only deep inside long math contexts' (its scored loss, t58: predicted 8 [2, 15], measured 31.2). Third: result-5d032f, base+cue pass@4 467 and vote@4 446 on MATH-500 against the theory's 450 [442, 458] and 420 [413, 427] (claims t69, t64, excluded from scoring only because round-02 agents saw the numbers; this round-01 author did not): the base solves the problems on some samples, so its failures are not systematic degradation on every long attempt. Fourth, in before.jsonl and missed by the author: result-fdc8da reports 'On the 16 cap hits RL's largest gaps are early (median relative position 0.19)', against KL concentrated late."
+ },
+ "wins_judgement": "Neither divergent win is specific support for the mechanism. t28 (hard328 base pass@4 205, claim 205, nulls 225/220): any account where per-problem solve rates are bimodal (some problems near 0 for the base) gives the same number; the same reasoning applied to MATH-500 predicted pass@4 450 and missed (467, above RL's single 463), and on the 246 problems paired with RL the base's pass@4 157 exceeds RL's single 148 (result-2c2cae), so 'pass@4 stays near RL single' is a coincidence of the full 328. t51 (min-p 0.1, 404, claim 395 [382, 405], nulls 415/412): the measured change vs untruncated sampling is -1.2 points [-4.6, 2.2], noise; the twin cell t53 (top-p 0.95, 409) was predicted 397 [385, 406] by the same mechanism and missed; the simpler account 'cutting the sampling tail brings back low-temperature repetition' (Mirostat 2007.14966 boredom trap; result-44b4df itself) needs no claim about RL. The loss (t58, constant vector closes 31.2 % vs claimed 8) hits the mechanism directly. Reversed control: the planted reversal of this theory scored 1 win 6 losses, so the forward score separates the two, but the two wins are at the edge of an interval or at noise level.",
+ "forward_predictions_measured": [
+  {
+   "prediction": "P1: base + 0.5*(RL - base), cue, T 1.0, hard 328, cap hits 45 [30, 60]; refuted if cap hits stay >= 70 while accuracy > 175 (planted reversed control: 72 [60, 85])",
+   "measured": "73 cap hits of 328, 190 right (readout day1_wdiff328/readout.json, job abaybektursun-1114-181228-34ad)",
+   "item": "result-e45bf4",
+   "inside": false
+  },
+  {
+   "prediction": "P2: stored T 1.0 MATH-500 answers of cued base (410) and RL (463), cut at 4,096 generated tokens, RL minus cued base -7 [-14, 0] points",
+   "measured": "-9.2 points [-13.0, -5.4] (base 337, RL 291 of 500), computed in this review from origin/main studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json as right AND generated_tokens <= 4096; approximation: an answer whose boxed answer appears before token 4,096 but keeps writing is counted wrong. Same rule: -15.6 at 3,000, +1.2 at 6,000, +8.0 at 8,192. Not a board item. This follows from RL writing longer answers (median right answer 3,014 vs 1,432 tokens, result-5e17a6) and does not discriminate the mechanism.",
+   "item": "none (computed in review from result-5e17a6's artifact)",
+   "inside": true
+  },
+  {
+   "prediction": "P3: Olmo-3-7B-RL-Zero-Math (3.0), plain, T 1.0, cap 16,384, MATH-500 395 [365, 425]",
+   "measured": "not measured by the team. Nearest published: Wang et al. 2610.06851 Table 6, 3.0 RL 75.0 % at T 0.6 / top-p 0.95 / cap 31,744 (32 rollouts), a different setting",
+   "item": "knowledge-8a31ad",
+   "inside": null
+  },
+  {
+   "prediction": "KL(RL||base) per token, last quarter / first quarter of positions on RL's T 1.0 answers > 8,000 tokens: 2.0 [1.4, 3.5]",
+   "measured": "not measured. Indirect: on the 16 RL-only cap hits RL's largest gaps are early, median relative position 0.19 (result-fdc8da)",
+   "item": "result-fdc8da",
+   "inside": null
+  },
+  {
+   "prediction": "Base continues at T 1.0 from 40 % of RL's right answer vs 40 % of its own, on the base's 77 hard-328 cap hits: finish-rate difference 25 [12, 40] points",
+   "measured": "not measured",
+   "item": "none",
+   "inside": null
+  }
+ ],
+ "rival": "The theory's own rival (RL improves the per-step policy uniformly over positions) predicted P1 = 72 [60, 85] cap hits and the measurement was 73, so the rival explains the newest in-scope result and this theory does not. A simpler rival fits every held-out number at least as well: 'RL makes the base more reliable per problem (24 fewer lost problems on MATH-500 than a fresh base sample, result-9b6af3) and, separately, writes longer, more checked answers; cap hits mark problems that are long for both models, not the cause of the gap.' It gives t28 (bimodal solve rates), t51 (tail truncation restores repetition), P2 (RL is longer) and the theta0.5 and Code-RL dissociation without a self-conditioning deficit. The one measurement that separates them: teacher-forced KL(RL||base) per token by position on RL's own T 1.0 MATH-500 answers longer than 8,000 tokens, ratio of last-quarter to first-quarter mean KL, with the same ratio on the base's own long answers as control; this theory needs >= 1.4, the rival predicts about 1 (below 1.2). An injected-error continuation test (one wrong step spliced early vs late into a sound prefix, base vs RL continuation accuracy, as in 2509.09677 Sec 3.2) would be the second, stronger check of the self-conditioning claim.",
+ "novelty": {
+  "nearest": "Sinha et al., 'The Illusion of Diminishing Returns: Measuring Long Horizon Execution in LLMs' (2509.09677), Sec 3.2 and Result 5: per-step accuracy falls as the task goes on because models self-condition on their own earlier errors; 'Qwen3 models with thinking enabled no longer self-condition', with RL training named as a possible reason ('RL training can reduce the most likely next token prediction behaviour'). The training-recipe half is AI2's own statement: Olmo 3 report 2512.13961 App. A.6.4 / Fig. 39, 3.1 RL-Zero differs from 3.0 by a 16k completion length and by not masking truncated sequences, with higher AIME pass@1.",
+  "url": "https://arxiv.org/abs/2509.09677",
+  "difference": "Sinha et al. show self-conditioning on a synthetic key-value execution task with Qwen3/Gemma3 and note that thinking (RL) models are immune; they do not claim that the gap between a prompted base and its own RL-Zero checkpoint on MATH-500 is self-conditioning, that a base given the right opening cue already has the RL model's per-step skill, or that truncation-as-negative training plus a diffuse weight direction active late in long math contexts is what repairs it. That specific claim about Olmo-3 base vs Olmo-3.1-RL-Zero-Math is new, and the team's own data now contradict it.",
+  "status": "partly published"
+ },
+ "verdict": "refuted",
+ "verdict_sentence": "Its own refutation rule for forward prediction P1 is met (half the RL weight difference with the cue on the 328: 190 right with 73 cap hits, against a claimed 45 [30, 60]; MATH-500 shows +42 right with only 5 fewer cap hits), a context-independent constant vector closes 23-31 % of the KL it says is confined to deep long contexts, and its two backtest wins are explained as well by per-problem difficulty and tail-truncation repetition."
+}

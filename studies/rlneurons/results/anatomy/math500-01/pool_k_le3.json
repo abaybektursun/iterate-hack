@@ -1,0 +1,2389 @@
+{
+"what": "MATH-500 problems (index of data/rln4/math500.json) where the cued base has at most 3 right of 4 samples (attempt 0, T 1.0 / top-p 1.0, grader v3), with the right counts of both models",
+"source_jobs": {
+"base_cue": "abaybektursun-1114-153825-208b",
+"rl": "abaybektursun-1114-183640-e828"
+},
+"n": 183,
+"problems": [
+{
+"index": 1,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 4,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 2,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 9,
+"base_k": 0,
+"rl_k": 1,
+"subject": "Prealgebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"cap_hit",
+"cap_hit"
+]
+},
+{
+"index": 10,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 3,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 11,
+"base_k": 1,
+"rl_k": 2,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 14,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 1,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 15,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 17,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 4,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 18,
+"base_k": 0,
+"rl_k": 2,
+"subject": "Geometry",
+"level": 1,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 20,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 3,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 21,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 3,
+"base_kinds": [
+"cap_hit",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 22,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 5,
+"base_kinds": [
+"no_answer",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 25,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 26,
+"base_k": 0,
+"rl_k": 2,
+"subject": "Counting & Probability",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"finished_wrong",
+"finished_wrong",
+"cap_hit"
+]
+},
+{
+"index": 29,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Counting & Probability",
+"level": 2,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 32,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Counting & Probability",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 34,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Counting & Probability",
+"level": 4,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 39,
+"base_k": 1,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 3,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 43,
+"base_k": 0,
+"rl_k": 3,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"finished_wrong",
+"cap_hit",
+"cap_hit"
+]
+},
+{
+"index": 45,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Geometry",
+"level": 3,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 46,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 2,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 48,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 2,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 49,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 4,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 50,
+"base_k": 1,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 5,
+"base_kinds": [
+"right",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 51,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 2,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 52,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 5,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 60,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"cap_hit",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 63,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 64,
+"base_k": 1,
+"rl_k": 3,
+"subject": "Precalculus",
+"level": 4,
+"base_kinds": [
+"cap_hit",
+"right",
+"cap_hit",
+"finished_wrong"
+]
+},
+{
+"index": 70,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 2,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 71,
+"base_k": 1,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 80,
+"base_k": 1,
+"rl_k": 3,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 81,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 3,
+"base_kinds": [
+"no_answer",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 88,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 90,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 3,
+"base_kinds": [
+"right",
+"finished_wrong",
+"no_answer",
+"right"
+]
+},
+{
+"index": 94,
+"base_k": 2,
+"rl_k": 2,
+"subject": "Prealgebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 96,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"cap_hit",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 97,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 1,
+"base_kinds": [
+"right",
+"no_answer",
+"right",
+"right"
+]
+},
+{
+"index": 100,
+"base_k": 1,
+"rl_k": 2,
+"subject": "Geometry",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"finished_wrong",
+"cap_hit",
+"right"
+]
+},
+{
+"index": 101,
+"base_k": 0,
+"rl_k": 2,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"cap_hit"
+]
+},
+{
+"index": 103,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"cap_hit",
+"finished_wrong",
+"cap_hit"
+]
+},
+{
+"index": 104,
+"base_k": 1,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 4,
+"base_kinds": [
+"right",
+"finished_wrong",
+"cap_hit",
+"finished_wrong"
+]
+},
+{
+"index": 109,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"cap_hit",
+"right",
+"right"
+]
+},
+{
+"index": 110,
+"base_k": 0,
+"rl_k": 1,
+"subject": "Intermediate Algebra",
+"level": 4,
+"base_kinds": [
+"cap_hit",
+"cap_hit",
+"cap_hit",
+"no_answer"
+]
+},
+{
+"index": 114,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"right",
+"no_answer"
+]
+},
+{
+"index": 115,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Counting & Probability",
+"level": 2,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 119,
+"base_k": 3,
+"rl_k": 3,
+"subject": "Prealgebra",
+"level": 3,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 120,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 2,
+"base_kinds": [
+"cap_hit",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 122,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"no_answer",
+"right"
+]
+},
+{
+"index": 126,
+"base_k": 1,
+"rl_k": 1,
+"subject": "Intermediate Algebra",
+"level": 4,
+"base_kinds": [
+"cap_hit",
+"cap_hit",
+"right",
+"cap_hit"
+]
+},
+{
+"index": 128,
+"base_k": 2,
+"rl_k": 3,
+"subject": "Algebra",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 136,
+"base_k": 3,
+"rl_k": 3,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 137,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 138,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Counting & Probability",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 141,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 1,
+"base_kinds": [
+"right",
+"right",
+"no_answer",
+"right"
+]
+},
+{
+"index": 142,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Counting & Probability",
+"level": 5,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 145,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 150,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 154,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Geometry",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"cap_hit",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 156,
+"base_k": 3,
+"rl_k": 3,
+"subject": "Precalculus",
+"level": 3,
+"base_kinds": [
+"right",
+"cap_hit",
+"right",
+"right"
+]
+},
+{
+"index": 164,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 2,
+"base_kinds": [
+"right",
+"right",
+"right",
+"no_answer"
+]
+},
+{
+"index": 166,
+"base_k": 0,
+"rl_k": 1,
+"subject": "Prealgebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"cap_hit"
+]
+},
+{
+"index": 168,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Counting & Probability",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 170,
+"base_k": 0,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"finished_wrong",
+"finished_wrong",
+"cap_hit"
+]
+},
+{
+"index": 176,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 177,
+"base_k": 3,
+"rl_k": 3,
+"subject": "Geometry",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 178,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 2,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 180,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 3,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 184,
+"base_k": 2,
+"rl_k": 3,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"finished_wrong",
+"cap_hit",
+"right"
+]
+},
+{
+"index": 189,
+"base_k": 1,
+"rl_k": 3,
+"subject": "Geometry",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"cap_hit",
+"cap_hit",
+"right"
+]
+},
+{
+"index": 190,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Counting & Probability",
+"level": 5,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 194,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"cap_hit",
+"right",
+"right"
+]
+},
+{
+"index": 196,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 1,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 198,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Counting & Probability",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 204,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"cap_hit",
+"cap_hit",
+"cap_hit"
+]
+},
+{
+"index": 205,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"cap_hit",
+"finished_wrong"
+]
+},
+{
+"index": 210,
+"base_k": 0,
+"rl_k": 3,
+"subject": "Prealgebra",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 214,
+"base_k": 0,
+"rl_k": 2,
+"subject": "Counting & Probability",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 217,
+"base_k": 2,
+"rl_k": 2,
+"subject": "Number Theory",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 219,
+"base_k": 2,
+"rl_k": 2,
+"subject": "Counting & Probability",
+"level": 4,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 220,
+"base_k": 3,
+"rl_k": 3,
+"subject": "Prealgebra",
+"level": 5,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 222,
+"base_k": 2,
+"rl_k": 3,
+"subject": "Geometry",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 224,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 4,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 225,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 226,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Counting & Probability",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 227,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 3,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 228,
+"base_k": 1,
+"rl_k": 3,
+"subject": "Precalculus",
+"level": 4,
+"base_kinds": [
+"right",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 232,
+"base_k": 1,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 234,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 237,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 1,
+"base_kinds": [
+"right",
+"right",
+"right",
+"no_answer"
+]
+},
+{
+"index": 239,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Geometry",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"no_answer",
+"finished_wrong"
+]
+},
+{
+"index": 240,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Prealgebra",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 242,
+"base_k": 2,
+"rl_k": 1,
+"subject": "Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"finished_wrong",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 245,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 4,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 248,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 253,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 3,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 264,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Geometry",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 266,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 272,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 273,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 4,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 274,
+"base_k": 3,
+"rl_k": 3,
+"subject": "Geometry",
+"level": 5,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 279,
+"base_k": 0,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 284,
+"base_k": 1,
+"rl_k": 1,
+"subject": "Precalculus",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"cap_hit",
+"right"
+]
+},
+{
+"index": 286,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"cap_hit",
+"cap_hit",
+"cap_hit"
+]
+},
+{
+"index": 294,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 4,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 295,
+"base_k": 0,
+"rl_k": 2,
+"subject": "Precalculus",
+"level": 3,
+"base_kinds": [
+"cap_hit",
+"cap_hit",
+"cap_hit",
+"cap_hit"
+]
+},
+{
+"index": 301,
+"base_k": 0,
+"rl_k": 3,
+"subject": "Prealgebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"cap_hit"
+]
+},
+{
+"index": 303,
+"base_k": 1,
+"rl_k": 3,
+"subject": "Geometry",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"cap_hit",
+"right"
+]
+},
+{
+"index": 306,
+"base_k": 0,
+"rl_k": 2,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 308,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Geometry",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"cap_hit",
+"cap_hit",
+"cap_hit"
+]
+},
+{
+"index": 311,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 4,
+"base_kinds": [
+"right",
+"cap_hit",
+"right",
+"right"
+]
+},
+{
+"index": 313,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 317,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"right",
+"cap_hit",
+"right"
+]
+},
+{
+"index": 324,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Geometry",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 326,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 2,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 327,
+"base_k": 1,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"finished_wrong",
+"cap_hit"
+]
+},
+{
+"index": 331,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 332,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 333,
+"base_k": 2,
+"rl_k": 3,
+"subject": "Intermediate Algebra",
+"level": 4,
+"base_kinds": [
+"right",
+"finished_wrong",
+"no_answer",
+"right"
+]
+},
+{
+"index": 334,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 3,
+"base_kinds": [
+"no_answer",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 335,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 4,
+"base_kinds": [
+"right",
+"right",
+"cap_hit",
+"right"
+]
+},
+{
+"index": 339,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"no_answer",
+"right"
+]
+},
+{
+"index": 340,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Precalculus",
+"level": 3,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"cap_hit",
+"finished_wrong"
+]
+},
+{
+"index": 349,
+"base_k": 0,
+"rl_k": 2,
+"subject": "Counting & Probability",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 352,
+"base_k": 1,
+"rl_k": 0,
+"subject": "Precalculus",
+"level": 4,
+"base_kinds": [
+"cap_hit",
+"finished_wrong",
+"right",
+"cap_hit"
+]
+},
+{
+"index": 355,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 358,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 2,
+"base_kinds": [
+"no_answer",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 359,
+"base_k": 1,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 4,
+"base_kinds": [
+"right",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 365,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 5,
+"base_kinds": [
+"right",
+"cap_hit",
+"right",
+"right"
+]
+},
+{
+"index": 369,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Prealgebra",
+"level": 2,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 372,
+"base_k": 3,
+"rl_k": 3,
+"subject": "Geometry",
+"level": 2,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 377,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 3,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 379,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 4,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 381,
+"base_k": 1,
+"rl_k": 3,
+"subject": "Counting & Probability",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"no_answer",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 382,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 385,
+"base_k": 1,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 389,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Geometry",
+"level": 3,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 391,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 392,
+"base_k": 0,
+"rl_k": 1,
+"subject": "Precalculus",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"cap_hit",
+"finished_wrong",
+"cap_hit"
+]
+},
+{
+"index": 393,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 394,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 396,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 3,
+"base_kinds": [
+"finished_wrong",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 398,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 4,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 399,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 2,
+"base_kinds": [
+"no_answer",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 400,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Geometry",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 401,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"cap_hit",
+"right",
+"right"
+]
+},
+{
+"index": 402,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 403,
+"base_k": 1,
+"rl_k": 2,
+"subject": "Number Theory",
+"level": 4,
+"base_kinds": [
+"right",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 409,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 4,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 411,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 412,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 4,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 419,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 420,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 3,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 421,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 5,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 422,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"cap_hit",
+"cap_hit",
+"no_answer"
+]
+},
+{
+"index": 425,
+"base_k": 0,
+"rl_k": 2,
+"subject": "Precalculus",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"finished_wrong",
+"cap_hit",
+"cap_hit"
+]
+},
+{
+"index": 430,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 2,
+"base_kinds": [
+"right",
+"right",
+"no_answer",
+"right"
+]
+},
+{
+"index": 432,
+"base_k": 2,
+"rl_k": 2,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"cap_hit",
+"right",
+"cap_hit"
+]
+},
+{
+"index": 433,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 2,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 437,
+"base_k": 3,
+"rl_k": 3,
+"subject": "Algebra",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 438,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Number Theory",
+"level": 2,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 442,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 4,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 444,
+"base_k": 1,
+"rl_k": 0,
+"subject": "Counting & Probability",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"finished_wrong",
+"cap_hit"
+]
+},
+{
+"index": 445,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 4,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 454,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Precalculus",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 458,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 3,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 460,
+"base_k": 0,
+"rl_k": 0,
+"subject": "Prealgebra",
+"level": 4,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 466,
+"base_k": 1,
+"rl_k": 3,
+"subject": "Precalculus",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"finished_wrong",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 470,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"right"
+]
+},
+{
+"index": 471,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 3,
+"base_kinds": [
+"finished_wrong",
+"right",
+"right",
+"right"
+]
+},
+{
+"index": 472,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Algebra",
+"level": 1,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 473,
+"base_k": 2,
+"rl_k": 2,
+"subject": "Prealgebra",
+"level": 5,
+"base_kinds": [
+"right",
+"finished_wrong",
+"right",
+"cap_hit"
+]
+},
+{
+"index": 475,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Counting & Probability",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 478,
+"base_k": 3,
+"rl_k": 3,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 481,
+"base_k": 1,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"cap_hit",
+"cap_hit",
+"cap_hit",
+"right"
+]
+},
+{
+"index": 482,
+"base_k": 3,
+"rl_k": 3,
+"subject": "Number Theory",
+"level": 5,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 484,
+"base_k": 3,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 485,
+"base_k": 3,
+"rl_k": 3,
+"subject": "Counting & Probability",
+"level": 2,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"right"
+]
+},
+{
+"index": 486,
+"base_k": 3,
+"rl_k": 3,
+"subject": "Geometry",
+"level": 3,
+"base_kinds": [
+"right",
+"right",
+"right",
+"finished_wrong"
+]
+},
+{
+"index": 490,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"right",
+"right",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 491,
+"base_k": 1,
+"rl_k": 4,
+"subject": "Prealgebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"finished_wrong",
+"finished_wrong"
+]
+},
+{
+"index": 494,
+"base_k": 2,
+"rl_k": 2,
+"subject": "Intermediate Algebra",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"right",
+"cap_hit",
+"right"
+]
+},
+{
+"index": 497,
+"base_k": 2,
+"rl_k": 4,
+"subject": "Geometry",
+"level": 5,
+"base_kinds": [
+"finished_wrong",
+"cap_hit",
+"right",
+"right"
+]
+}
+]
+}

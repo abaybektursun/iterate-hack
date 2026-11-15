@@ -1,0 +1,2043 @@
+[
+{
+"problem_index": 1,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": 0.7779027059440822,
+"proxy_number": "1.2020569",
+"wrong_chars": 13341
+},
+{
+"problem_index": 4,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.3054371002132196,
+"proxy_number": "0.277",
+"wrong_chars": 16884
+},
+{
+"problem_index": 10,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": 0.2036514769185097,
+"proxy_number": "600",
+"wrong_chars": 13474
+},
+{
+"problem_index": 11,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+2
+],
+"proxy_position": 0.782749056517983,
+"proxy_number": "60",
+"wrong_chars": 21993
+},
+{
+"problem_index": 11,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+2
+],
+"proxy_position": 0.5800392320038044,
+"proxy_number": "64",
+"wrong_chars": 16823
+},
+{
+"problem_index": 11,
+"base_k": 1,
+"wrong_sample": 3,
+"right_samples": [
+2
+],
+"proxy_position": 0.2865999046256557,
+"proxy_number": "1.5",
+"wrong_chars": 20970
+},
+{
+"problem_index": 14,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.34555729229289406,
+"proxy_number": "17",
+"wrong_chars": 8317
+},
+{
+"problem_index": 15,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.7699397812461595,
+"proxy_number": "100",
+"wrong_chars": 8137
+},
+{
+"problem_index": 17,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.029229474328563775,
+"proxy_number": "4.14",
+"wrong_chars": 26138
+},
+{
+"problem_index": 20,
+"base_k": 2,
+"wrong_sample": 0,
+"right_samples": [
+2,
+3
+],
+"proxy_position": 0.12170783575985604,
+"proxy_number": "15",
+"wrong_chars": 6113
+},
+{
+"problem_index": 20,
+"base_k": 2,
+"wrong_sample": 1,
+"right_samples": [
+2,
+3
+],
+"proxy_position": 0.025535420098846788,
+"proxy_number": "15",
+"wrong_chars": 33992
+},
+{
+"problem_index": 21,
+"base_k": 2,
+"wrong_sample": 3,
+"right_samples": [
+1,
+2
+],
+"proxy_position": 0.0305159877827932,
+"proxy_number": "23.8425",
+"wrong_chars": 36997
+},
+{
+"problem_index": 25,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 16798
+},
+{
+"problem_index": 29,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.3114754098360656,
+"proxy_number": "1.25",
+"wrong_chars": 2257
+},
+{
+"problem_index": 32,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.04449297479345367,
+"proxy_number": "240",
+"wrong_chars": 38006
+},
+{
+"problem_index": 34,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.23286702294875825,
+"proxy_number": "1250",
+"wrong_chars": 12724
+},
+{
+"problem_index": 39,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+3
+],
+"proxy_position": 0.20398009950248755,
+"proxy_number": "1332",
+"wrong_chars": 1608
+},
+{
+"problem_index": 39,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+3
+],
+"proxy_position": 0.05729827742520399,
+"proxy_number": "50",
+"wrong_chars": 16545
+},
+{
+"problem_index": 39,
+"base_k": 1,
+"wrong_sample": 2,
+"right_samples": [
+3
+],
+"proxy_position": 0.016843118383060636,
+"proxy_number": "432",
+"wrong_chars": 6234
+},
+{
+"problem_index": 45,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 3964
+},
+{
+"problem_index": 46,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.21796389464338561,
+"proxy_number": "150",
+"wrong_chars": 13516
+},
+{
+"problem_index": 48,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 1489
+},
+{
+"problem_index": 49,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 1869
+},
+{
+"problem_index": 50,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+0
+],
+"proxy_position": 0.25184,
+"proxy_number": "189",
+"wrong_chars": 6250
+},
+{
+"problem_index": 50,
+"base_k": 1,
+"wrong_sample": 2,
+"right_samples": [
+0
+],
+"proxy_position": 0.2694575471698113,
+"proxy_number": "168",
+"wrong_chars": 8480
+},
+{
+"problem_index": 50,
+"base_k": 1,
+"wrong_sample": 3,
+"right_samples": [
+0
+],
+"proxy_position": 0.3037370269523697,
+"proxy_number": "201",
+"wrong_chars": 25341
+},
+{
+"problem_index": 51,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 4077
+},
+{
+"problem_index": 52,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.17111882661376035,
+"proxy_number": "1.777",
+"wrong_chars": 14113
+},
+{
+"problem_index": 60,
+"base_k": 2,
+"wrong_sample": 2,
+"right_samples": [
+0,
+3
+],
+"proxy_position": 0.12582902501436105,
+"proxy_number": "18",
+"wrong_chars": 38298
+},
+{
+"problem_index": 63,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 7268
+},
+{
+"problem_index": 64,
+"base_k": 1,
+"wrong_sample": 3,
+"right_samples": [
+1
+],
+"proxy_position": 0.47302576504511207,
+"proxy_number": "14",
+"wrong_chars": 21502
+},
+{
+"problem_index": 70,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.31181181181181183,
+"proxy_number": "81",
+"wrong_chars": 1998
+},
+{
+"problem_index": 71,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+2
+],
+"proxy_position": 0.06299257404614902,
+"proxy_number": "1101",
+"wrong_chars": 35147
+},
+{
+"problem_index": 71,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+2
+],
+"proxy_position": 0.11156060937386107,
+"proxy_number": "011",
+"wrong_chars": 27438
+},
+{
+"problem_index": 71,
+"base_k": 1,
+"wrong_sample": 3,
+"right_samples": [
+2
+],
+"proxy_position": 0.08413477705292892,
+"proxy_number": "011",
+"wrong_chars": 29738
+},
+{
+"problem_index": 80,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+3
+],
+"proxy_position": 0.28740699917332596,
+"proxy_number": "15",
+"wrong_chars": 21774
+},
+{
+"problem_index": 80,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+3
+],
+"proxy_position": 0.5613216215222904,
+"proxy_number": "100",
+"wrong_chars": 27209
+},
+{
+"problem_index": 80,
+"base_k": 1,
+"wrong_sample": 2,
+"right_samples": [
+3
+],
+"proxy_position": 0.3784788020659161,
+"proxy_number": "64",
+"wrong_chars": 26913
+},
+{
+"problem_index": 90,
+"base_k": 2,
+"wrong_sample": 1,
+"right_samples": [
+0,
+3
+],
+"proxy_position": 0.4397283531409168,
+"proxy_number": "20",
+"wrong_chars": 2945
+},
+{
+"problem_index": 94,
+"base_k": 2,
+"wrong_sample": 0,
+"right_samples": [
+1,
+3
+],
+"proxy_position": 0.1074595484047902,
+"proxy_number": "5.8",
+"wrong_chars": 43756
+},
+{
+"problem_index": 94,
+"base_k": 2,
+"wrong_sample": 2,
+"right_samples": [
+1,
+3
+],
+"proxy_position": 0.09953526050993435,
+"proxy_number": "16",
+"wrong_chars": 46908
+},
+{
+"problem_index": 100,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+3
+],
+"proxy_position": 0.4628235790658413,
+"proxy_number": "505",
+"wrong_chars": 28432
+},
+{
+"problem_index": 104,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+0
+],
+"proxy_position": 0.055020632737276476,
+"proxy_number": "153",
+"wrong_chars": 28353
+},
+{
+"problem_index": 104,
+"base_k": 1,
+"wrong_sample": 3,
+"right_samples": [
+0
+],
+"proxy_position": 0.029810477896459454,
+"proxy_number": "236",
+"wrong_chars": 45219
+},
+{
+"problem_index": 115,
+"base_k": 2,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2
+],
+"proxy_position": 0.6372840976771889,
+"proxy_number": "12",
+"wrong_chars": 1679
+},
+{
+"problem_index": 115,
+"base_k": 2,
+"wrong_sample": 3,
+"right_samples": [
+0,
+2
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 1798
+},
+{
+"problem_index": 119,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 25132
+},
+{
+"problem_index": 128,
+"base_k": 2,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1
+],
+"proxy_position": 0.04461067870014234,
+"proxy_number": "32",
+"wrong_chars": 33019
+},
+{
+"problem_index": 128,
+"base_k": 2,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1
+],
+"proxy_position": 0.30653883972468043,
+"proxy_number": "13",
+"wrong_chars": 4068
+},
+{
+"problem_index": 136,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.13325248237701812,
+"proxy_number": "18000",
+"wrong_chars": 26386
+},
+{
+"problem_index": 137,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.011444921316165951,
+"proxy_number": "4135",
+"wrong_chars": 25863
+},
+{
+"problem_index": 138,
+"base_k": 2,
+"wrong_sample": 0,
+"right_samples": [
+2,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 24811
+},
+{
+"problem_index": 138,
+"base_k": 2,
+"wrong_sample": 1,
+"right_samples": [
+2,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 34410
+},
+{
+"problem_index": 142,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 52545
+},
+{
+"problem_index": 150,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.20119484953059483,
+"proxy_number": "10",
+"wrong_chars": 26949
+},
+{
+"problem_index": 176,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.5731659474303649,
+"proxy_number": "30",
+"wrong_chars": 2549
+},
+{
+"problem_index": 177,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.08047341601066647,
+"proxy_number": "9.5",
+"wrong_chars": 54751
+},
+{
+"problem_index": 178,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": 0.141804788213628,
+"proxy_number": "50",
+"wrong_chars": 5430
+},
+{
+"problem_index": 180,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.2961630695443645,
+"proxy_number": "500",
+"wrong_chars": 834
+},
+{
+"problem_index": 184,
+"base_k": 2,
+"wrong_sample": 1,
+"right_samples": [
+0,
+3
+],
+"proxy_position": 0.6531229738491463,
+"proxy_number": "0.4",
+"wrong_chars": 9254
+},
+{
+"problem_index": 189,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+3
+],
+"proxy_position": 0.14440158117826357,
+"proxy_number": "45",
+"wrong_chars": 41994
+},
+{
+"problem_index": 190,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.11217314875851461,
+"proxy_number": "30",
+"wrong_chars": 18204
+},
+{
+"problem_index": 196,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.2979661016949153,
+"proxy_number": "1241",
+"wrong_chars": 2950
+},
+{
+"problem_index": 198,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.44609665427509293,
+"proxy_number": "80640",
+"wrong_chars": 2690
+},
+{
+"problem_index": 205,
+"base_k": 2,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1
+],
+"proxy_position": 0.21400155668944046,
+"proxy_number": "20",
+"wrong_chars": 23126
+},
+{
+"problem_index": 217,
+"base_k": 2,
+"wrong_sample": 0,
+"right_samples": [
+2,
+3
+],
+"proxy_position": 0.02810472433243129,
+"proxy_number": "20",
+"wrong_chars": 30671
+},
+{
+"problem_index": 217,
+"base_k": 2,
+"wrong_sample": 1,
+"right_samples": [
+2,
+3
+],
+"proxy_position": 0.08713075337760476,
+"proxy_number": "10100",
+"wrong_chars": 17468
+},
+{
+"problem_index": 219,
+"base_k": 2,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1
+],
+"proxy_position": 0.03130641085151375,
+"proxy_number": "2.5",
+"wrong_chars": 38778
+},
+{
+"problem_index": 219,
+"base_k": 2,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1
+],
+"proxy_position": 0.261337183604915,
+"proxy_number": "2.5",
+"wrong_chars": 33937
+},
+{
+"problem_index": 220,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": 0.01731863263353975,
+"proxy_number": "15",
+"wrong_chars": 39726
+},
+{
+"problem_index": 222,
+"base_k": 2,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2
+],
+"proxy_position": 0.4528214309395929,
+"proxy_number": "24",
+"wrong_chars": 30162
+},
+{
+"problem_index": 222,
+"base_k": 2,
+"wrong_sample": 3,
+"right_samples": [
+1,
+2
+],
+"proxy_position": 0.3128545178557162,
+"proxy_number": "4.46",
+"wrong_chars": 37551
+},
+{
+"problem_index": 224,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.16266336983398091,
+"proxy_number": "70",
+"wrong_chars": 16986
+},
+{
+"problem_index": 225,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.5555309734513274,
+"proxy_number": "15",
+"wrong_chars": 4520
+},
+{
+"problem_index": 226,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 33989
+},
+{
+"problem_index": 227,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 2382
+},
+{
+"problem_index": 228,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+0
+],
+"proxy_position": 0.8510450211529962,
+"proxy_number": "1.5",
+"wrong_chars": 15837
+},
+{
+"problem_index": 228,
+"base_k": 1,
+"wrong_sample": 2,
+"right_samples": [
+0
+],
+"proxy_position": 0.061712161059218285,
+"proxy_number": "30",
+"wrong_chars": 44108
+},
+{
+"problem_index": 228,
+"base_k": 1,
+"wrong_sample": 3,
+"right_samples": [
+0
+],
+"proxy_position": 0.3526292532037119,
+"proxy_number": "144",
+"wrong_chars": 18104
+},
+{
+"problem_index": 232,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+2
+],
+"proxy_position": 0.46783446798745504,
+"proxy_number": "997.5",
+"wrong_chars": 13073
+},
+{
+"problem_index": 232,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+2
+],
+"proxy_position": 0.33626154230097327,
+"proxy_number": "199",
+"wrong_chars": 20035
+},
+{
+"problem_index": 232,
+"base_k": 1,
+"wrong_sample": 3,
+"right_samples": [
+2
+],
+"proxy_position": 0.4179226545157145,
+"proxy_number": "1009",
+"wrong_chars": 17118
+},
+{
+"problem_index": 234,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 2390
+},
+{
+"problem_index": 242,
+"base_k": 2,
+"wrong_sample": 1,
+"right_samples": [
+0,
+3
+],
+"proxy_position": 0.18654956972769068,
+"proxy_number": "0.34986",
+"wrong_chars": 16966
+},
+{
+"problem_index": 242,
+"base_k": 2,
+"wrong_sample": 2,
+"right_samples": [
+0,
+3
+],
+"proxy_position": 0.0755376628880178,
+"proxy_number": "10.47",
+"wrong_chars": 28317
+},
+{
+"problem_index": 245,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.20910940679292533,
+"proxy_number": "10.5",
+"wrong_chars": 19167
+},
+{
+"problem_index": 248,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.03883443987775319,
+"proxy_number": "25",
+"wrong_chars": 18978
+},
+{
+"problem_index": 253,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": 0.43232438606510565,
+"proxy_number": "27",
+"wrong_chars": 1751
+},
+{
+"problem_index": 266,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.5430303030303031,
+"proxy_number": "97",
+"wrong_chars": 3300
+},
+{
+"problem_index": 272,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.16100485298315728,
+"proxy_number": "311",
+"wrong_chars": 3503
+},
+{
+"problem_index": 273,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.026114762835317107,
+"proxy_number": "1.200",
+"wrong_chars": 5629
+},
+{
+"problem_index": 274,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.5237298202040926,
+"proxy_number": "16",
+"wrong_chars": 18521
+},
+{
+"problem_index": 284,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+3
+],
+"proxy_position": 0.31882051637018066,
+"proxy_number": "1.414",
+"wrong_chars": 14447
+},
+{
+"problem_index": 284,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+3
+],
+"proxy_position": 0.32724492396567834,
+"proxy_number": "1.414",
+"wrong_chars": 11771
+},
+{
+"problem_index": 294,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.2181147972617167,
+"proxy_number": "199",
+"wrong_chars": 9495
+},
+{
+"problem_index": 303,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+3
+],
+"proxy_position": 0.5249200362820452,
+"proxy_number": "180",
+"wrong_chars": 41894
+},
+{
+"problem_index": 303,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+3
+],
+"proxy_position": 0.5958116290753325,
+"proxy_number": "21",
+"wrong_chars": 37819
+},
+{
+"problem_index": 313,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.19606329602470088,
+"proxy_number": "6.2832",
+"wrong_chars": 2591
+},
+{
+"problem_index": 326,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.11694481666463638,
+"proxy_number": "4.583",
+"wrong_chars": 16418
+},
+{
+"problem_index": 327,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+1
+],
+"proxy_position": 0.44054469580496375,
+"proxy_number": "7.5",
+"wrong_chars": 22765
+},
+{
+"problem_index": 327,
+"base_k": 1,
+"wrong_sample": 2,
+"right_samples": [
+1
+],
+"proxy_position": 0.09650606840750275,
+"proxy_number": "3.13",
+"wrong_chars": 40785
+},
+{
+"problem_index": 331,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.9332054412277642,
+"proxy_number": "8.944",
+"wrong_chars": 5734
+},
+{
+"problem_index": 332,
+"base_k": 2,
+"wrong_sample": 0,
+"right_samples": [
+2,
+3
+],
+"proxy_position": 0.3357903938384483,
+"proxy_number": "1000",
+"wrong_chars": 42327
+},
+{
+"problem_index": 332,
+"base_k": 2,
+"wrong_sample": 1,
+"right_samples": [
+2,
+3
+],
+"proxy_position": 0.08345802161263507,
+"proxy_number": "2.3094",
+"wrong_chars": 30075
+},
+{
+"problem_index": 333,
+"base_k": 2,
+"wrong_sample": 1,
+"right_samples": [
+0,
+3
+],
+"proxy_position": 0.21096656875087424,
+"proxy_number": "3.85",
+"wrong_chars": 35745
+},
+{
+"problem_index": 352,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+2
+],
+"proxy_position": 0.1000463177396943,
+"proxy_number": "29.25",
+"wrong_chars": 38862
+},
+{
+"problem_index": 355,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.1826445107229087,
+"proxy_number": "26",
+"wrong_chars": 28164
+},
+{
+"problem_index": 359,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+0
+],
+"proxy_position": 0.2956320689870649,
+"proxy_number": "36",
+"wrong_chars": 16003
+},
+{
+"problem_index": 359,
+"base_k": 1,
+"wrong_sample": 2,
+"right_samples": [
+0
+],
+"proxy_position": 0.19633600795285094,
+"proxy_number": "16",
+"wrong_chars": 14083
+},
+{
+"problem_index": 359,
+"base_k": 1,
+"wrong_sample": 3,
+"right_samples": [
+0
+],
+"proxy_position": 0.5225105612552806,
+"proxy_number": "36",
+"wrong_chars": 8285
+},
+{
+"problem_index": 372,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.5897226753670473,
+"proxy_number": "120",
+"wrong_chars": 2452
+},
+{
+"problem_index": 377,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": 0.18302991546931516,
+"proxy_number": "36",
+"wrong_chars": 50041
+},
+{
+"problem_index": 379,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": 0.40333416272704653,
+"proxy_number": "44.69",
+"wrong_chars": 4019
+},
+{
+"problem_index": 381,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+3
+],
+"proxy_position": 0.7274933412252146,
+"proxy_number": "3.5",
+"wrong_chars": 33790
+},
+{
+"problem_index": 381,
+"base_k": 1,
+"wrong_sample": 2,
+"right_samples": [
+3
+],
+"proxy_position": 0.18885562584726615,
+"proxy_number": "3.5",
+"wrong_chars": 35408
+},
+{
+"problem_index": 382,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": 0.4596310493531385,
+"proxy_number": "40",
+"wrong_chars": 8348
+},
+{
+"problem_index": 385,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+1
+],
+"proxy_position": 0.2691933916423712,
+"proxy_number": "91",
+"wrong_chars": 2058
+},
+{
+"problem_index": 385,
+"base_k": 1,
+"wrong_sample": 2,
+"right_samples": [
+1
+],
+"proxy_position": 0.145263671875,
+"proxy_number": "0.6098",
+"wrong_chars": 12288
+},
+{
+"problem_index": 385,
+"base_k": 1,
+"wrong_sample": 3,
+"right_samples": [
+1
+],
+"proxy_position": 0.39330306469920545,
+"proxy_number": "1.463",
+"wrong_chars": 1762
+},
+{
+"problem_index": 389,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.10490196078431373,
+"proxy_number": "29",
+"wrong_chars": 19380
+},
+{
+"problem_index": 391,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.1151952641275786,
+"proxy_number": "125",
+"wrong_chars": 33109
+},
+{
+"problem_index": 393,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 2612
+},
+{
+"problem_index": 394,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.09696044994914138,
+"proxy_number": "27",
+"wrong_chars": 33426
+},
+{
+"problem_index": 396,
+"base_k": 2,
+"wrong_sample": 0,
+"right_samples": [
+1,
+3
+],
+"proxy_position": 0.28993520004755957,
+"proxy_number": "1.5",
+"wrong_chars": 33642
+},
+{
+"problem_index": 396,
+"base_k": 2,
+"wrong_sample": 2,
+"right_samples": [
+1,
+3
+],
+"proxy_position": 0.7253822303004384,
+"proxy_number": "0.125",
+"wrong_chars": 18706
+},
+{
+"problem_index": 398,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": 0.1293757292882147,
+"proxy_number": "4.97",
+"wrong_chars": 6856
+},
+{
+"problem_index": 401,
+"base_k": 2,
+"wrong_sample": 0,
+"right_samples": [
+2,
+3
+],
+"proxy_position": 0.28223084005245097,
+"proxy_number": "1.87",
+"wrong_chars": 35843
+},
+{
+"problem_index": 402,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.6387589086458858,
+"proxy_number": "13",
+"wrong_chars": 13891
+},
+{
+"problem_index": 403,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+0
+],
+"proxy_position": 0.4403032217308907,
+"proxy_number": "84",
+"wrong_chars": 4749
+},
+{
+"problem_index": 403,
+"base_k": 1,
+"wrong_sample": 2,
+"right_samples": [
+0
+],
+"proxy_position": 0.07373206421366671,
+"proxy_number": "90",
+"wrong_chars": 7039
+},
+{
+"problem_index": 403,
+"base_k": 1,
+"wrong_sample": 3,
+"right_samples": [
+0
+],
+"proxy_position": 0.1110078959591268,
+"proxy_number": "84",
+"wrong_chars": 12918
+},
+{
+"problem_index": 409,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 6799
+},
+{
+"problem_index": 411,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.03822341074906258,
+"proxy_number": "15",
+"wrong_chars": 34403
+},
+{
+"problem_index": 412,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.2622957153343894,
+"proxy_number": "512",
+"wrong_chars": 25883
+},
+{
+"problem_index": 419,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.20837188526943815,
+"proxy_number": "42.426",
+"wrong_chars": 31343
+},
+{
+"problem_index": 420,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 8427
+},
+{
+"problem_index": 421,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": 0.19231062628728354,
+"proxy_number": "1.57",
+"wrong_chars": 39327
+},
+{
+"problem_index": 433,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.006334519572953737,
+"proxy_number": "0.333",
+"wrong_chars": 28100
+},
+{
+"problem_index": 437,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.21070359281437126,
+"proxy_number": "45",
+"wrong_chars": 8016
+},
+{
+"problem_index": 438,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.20477815699658702,
+"proxy_number": "27.6",
+"wrong_chars": 3809
+},
+{
+"problem_index": 442,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.3924481584648716,
+"proxy_number": "384",
+"wrong_chars": 3231
+},
+{
+"problem_index": 444,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+1
+],
+"proxy_position": 0.2126252166194683,
+"proxy_number": "0.577",
+"wrong_chars": 47318
+},
+{
+"problem_index": 444,
+"base_k": 1,
+"wrong_sample": 2,
+"right_samples": [
+1
+],
+"proxy_position": 0.7345558771148709,
+"proxy_number": "0.0625",
+"wrong_chars": 35936
+},
+{
+"problem_index": 445,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": 0.06416112515668487,
+"proxy_number": "1024",
+"wrong_chars": 47069
+},
+{
+"problem_index": 454,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.6553978494623656,
+"proxy_number": "1.5",
+"wrong_chars": 11625
+},
+{
+"problem_index": 458,
+"base_k": 2,
+"wrong_sample": 0,
+"right_samples": [
+2,
+3
+],
+"proxy_position": 0.2690657660535804,
+"proxy_number": "20",
+"wrong_chars": 43822
+},
+{
+"problem_index": 458,
+"base_k": 2,
+"wrong_sample": 1,
+"right_samples": [
+2,
+3
+],
+"proxy_position": 0.13645719431401557,
+"proxy_number": "17",
+"wrong_chars": 31094
+},
+{
+"problem_index": 466,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+2
+],
+"proxy_position": 0.8522478070175439,
+"proxy_number": "45",
+"wrong_chars": 10944
+},
+{
+"problem_index": 466,
+"base_k": 1,
+"wrong_sample": 1,
+"right_samples": [
+2
+],
+"proxy_position": 0.760647065588224,
+"proxy_number": "14",
+"wrong_chars": 26087
+},
+{
+"problem_index": 466,
+"base_k": 1,
+"wrong_sample": 3,
+"right_samples": [
+2
+],
+"proxy_position": 0.6103145492942091,
+"proxy_number": "5.936",
+"wrong_chars": 8997
+},
+{
+"problem_index": 470,
+"base_k": 3,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2,
+3
+],
+"proxy_position": 0.10957438270779273,
+"proxy_number": "180",
+"wrong_chars": 37381
+},
+{
+"problem_index": 471,
+"base_k": 3,
+"wrong_sample": 0,
+"right_samples": [
+1,
+2,
+3
+],
+"proxy_position": 0.15926620804669586,
+"proxy_number": "160",
+"wrong_chars": 4797
+},
+{
+"problem_index": 472,
+"base_k": 2,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1
+],
+"proxy_position": null,
+"proxy_number": null,
+"wrong_chars": 424
+},
+{
+"problem_index": 472,
+"base_k": 2,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1
+],
+"proxy_position": 0.290197461212976,
+"proxy_number": "12.5",
+"wrong_chars": 2836
+},
+{
+"problem_index": 473,
+"base_k": 2,
+"wrong_sample": 1,
+"right_samples": [
+0,
+2
+],
+"proxy_position": 0.2765797862366398,
+"proxy_number": "5.5",
+"wrong_chars": 37331
+},
+{
+"problem_index": 475,
+"base_k": 2,
+"wrong_sample": 2,
+"right_samples": [
+1,
+3
+],
+"proxy_position": 0.1514095180357684,
+"proxy_number": "0.666",
+"wrong_chars": 19794
+},
+{
+"problem_index": 478,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.1361956792782173,
+"proxy_number": "75",
+"wrong_chars": 44113
+},
+{
+"problem_index": 482,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.2903555373927258,
+"proxy_number": "78125",
+"wrong_chars": 9788
+},
+{
+"problem_index": 484,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.6916294088425236,
+"proxy_number": "0.408",
+"wrong_chars": 8052
+},
+{
+"problem_index": 485,
+"base_k": 3,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1,
+3
+],
+"proxy_position": 0.10594475442584556,
+"proxy_number": "6.708",
+"wrong_chars": 14517
+},
+{
+"problem_index": 486,
+"base_k": 3,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1,
+2
+],
+"proxy_position": 0.6571009477959981,
+"proxy_number": "4.2426",
+"wrong_chars": 26588
+},
+{
+"problem_index": 490,
+"base_k": 2,
+"wrong_sample": 2,
+"right_samples": [
+0,
+1
+],
+"proxy_position": 0.47913049517327594,
+"proxy_number": "35",
+"wrong_chars": 14399
+},
+{
+"problem_index": 490,
+"base_k": 2,
+"wrong_sample": 3,
+"right_samples": [
+0,
+1
+],
+"proxy_position": 0.5491347342398022,
+"proxy_number": "28",
+"wrong_chars": 12944
+},
+{
+"problem_index": 491,
+"base_k": 1,
+"wrong_sample": 0,
+"right_samples": [
+1
+],
+"proxy_position": 0.9293876355112805,
+"proxy_number": "27",
+"wrong_chars": 10239
+},
+{
+"problem_index": 491,
+"base_k": 1,
+"wrong_sample": 2,
+"right_samples": [
+1
+],
+"proxy_position": 0.630533922682944,
+"proxy_number": "12",
+"wrong_chars": 14253
+},
+{
+"problem_index": 491,
+"base_k": 1,
+"wrong_sample": 3,
+"right_samples": [
+1
+],
+"proxy_position": 0.36453139525057043,
+"proxy_number": "24",
+"wrong_chars": 23666
+},
+{
+"problem_index": 494,
+"base_k": 2,
+"wrong_sample": 0,
+"right_samples": [
+1,
+3
+],
+"proxy_position": 0.17629979130750387,
+"proxy_number": "1.75",
+"wrong_chars": 33063
+},
+{
+"problem_index": 497,
+"base_k": 2,
+"wrong_sample": 0,
+"right_samples": [
+2,
+3
+],
+"proxy_position": 0.6011823166552434,
+"proxy_number": "1.0",
+"wrong_chars": 11672
+}
+]
