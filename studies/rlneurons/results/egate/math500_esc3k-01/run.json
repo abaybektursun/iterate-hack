@@ -1,0 +1,44 @@
+[
+ {
+  "job_id": "abaybektursun-1114-232527-9e94",
+  "commit": "9f78be907e7cd8a35b9a150671da24a8765fedde",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "esc3k=esc:0.3:1024"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": null,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": null,
+   "samples": 1,
+   "first_sample": 1,
+   "shard": "0/1",
+   "out": "/root/abaybektursun-1114-232527-9e94/out",
+   "commit": "9f78be907e7cd8a35b9a150671da24a8765fedde",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 500
+  },
+  "h0": 0.9,
+  "rnd_share": null,
+  "started_utc": "2026-11-15T07:25:53Z"
+ }
+]
