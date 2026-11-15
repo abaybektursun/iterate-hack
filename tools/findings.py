@@ -190,7 +190,7 @@ TABLE = {
     "forecasts-before-results": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.COUNTS['theory'][1]} of {m.COUNTS['theory'][0]}", "forecasts",
-                             f"theory nearer the reported number than both readers with no theory; {m.COUNTS['landed']} of {m.COUNTS['targets']} targets reported"]},
+                             f"theory nearer the reported number than both readers with no theory, most of them on one code experiment; {m.COUNTS['landed']} of {m.COUNTS['targets']} targets reported"]},
 }
 
 
