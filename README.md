@@ -365,8 +365,8 @@ other than `/` and `/data` redirects to the monitor. The page `/team` (`tools/pe
 names are placeholders, each with the one line "Details to be added" until the people fill `PEOPLE` in; a filled field
 shows as its own row.
 
-The page `/papers` (`tools/papers.py`) is the paper loop: its six steps in the words column (below the sheets
-where the page is one column) and the papers of `view.PAPERS` as one stack of sheets. The sheet in front is large and
+The page `/papers` (`tools/papers.py`) is the paper loop: the names of its six steps in the words column (below the sheets
+where the page is one column; a click on a step opens its sentence) and the papers of `view.PAPERS` as one stack of sheets. The sheet in front is large and
 lit and shows the paper's claim, why the loop picked it, how it was checked, its length and the button that opens the
 PDF. The other sheets stand behind it and show their number and title; a click on one, or the left and right arrow
 keys, brings it to the front, and the address names it (`/papers#no-early-warning`). Below 1240 px every sheet is shown
