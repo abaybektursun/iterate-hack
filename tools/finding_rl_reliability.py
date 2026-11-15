@@ -17,6 +17,16 @@ DATA = {
     # a_joint.table_rows_base_k_cols_rl_k: problems by right answers of 4; row = base with cue, column = RL
     "table": [[16, 4, 8, 3, 2], [2, 2, 3, 7, 10], [0, 1, 6, 4, 17], [0, 0, 0, 12, 86], [0, 0, 0, 7, 310]],
     "base_right": 1642, "rl_right": 1840, "samples": 2000,  # a_joint.base_right_samples, rl_right_samples
+    # Of the problems the base model missed 4 of 4 and RL solved at least once, how many fresh base samples solve at least
+    # once (predictions[k=1]: measured x 17; the pool mixes other seeds and temperatures).
+    "fresh": {"source": "studies/theory/results/engine/round-05/tests/r5-m06.json", "solved": 11, "of": 17},
+    # The RL model's log-probability of the base model's own located wrong step, relative to the base (branch critic):
+    # D.math31.factor and D.math31.all.mean / ci95, over 51 items.
+    "wrongstep": {"source": "studies/rlneurons/results/wrongstep/math500-01/metrics.json", "branch": "critic",
+                  "items": 51, "factor": 0.49, "mean": -0.71, "ci95": [-1.48, 0.01]},
+    # Gap problems sorted by fixed rules, reliability share with full evidence: the known cell (RL) and the null cell
+    # (a fresh base sample with a random weight change of the RL change's size), table "Budgets".
+    "account": {"source": "studies/theory/results/account/run-02/readout.md", "rl": 0.66, "fresh": 0.71},
 }
 T = DATA["table"]
 DATA["gap"] = DATA["rl_right"] - DATA["base_right"]  # 198 right answers
@@ -31,7 +41,7 @@ LINE = f"{SOME} % of the RL gain is on problems the base model already solves so
 
 # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
 DATA["states"] = [
-    {"name": "Problems", "note": f"The {PROBLEMS} problems, by how many of 4 tries each model gets right. A column's height is its number of problems."},
+    {"name": "Problems", "note": f"The {PROBLEMS} MATH-500 problems, by how many of 4 tries each model gets right. A column's height is its number of problems."},
     {"name": "RL gain", "note": f"Where RL's {DATA['gap']} extra right answers come from. The lit columns are problems the base model "
                                 f"already solves at least once in 4 tries: {SOME} %."},
 ]
@@ -49,8 +59,9 @@ PANELS = [
     ["why", "Why it matters", "A method without RL does not have to teach the base model new mathematics for most of the gain: "
      "it has to remove the occasional wrong answer on problems the model usually solves.",
      ["More checking text is unlikely to do that: checks in the base model's answers follow its wrong steps and repeat them.",
-      f"Still open: the {100 - SOME} % of the gain on problems the base model never solved in 4 tries, and whether the same split "
-      "holds on the 328 harder problems."]],
+      f"The {100 - SOME} % on problems the base model never solved in 4 tries is not out of its reach either: fresh base samples "
+      f"solve {DATA['fresh']['solved']} of the {DATA['fresh']['of']} of them that RL solves. Whether the same split holds on the "
+      "328 harder problems is open."]],
     ["how", "How we know", f"Each model answered the {PROBLEMS} MATH-500 problems 4 times at temperature 1.0, and every problem was "
      "placed by how many of its 4 answers each model got right (grader v3).",
      [f"The base model (Olmo 3 7B with an opening cue) has {DATA['base_right']:,} right answers of {DATA['samples']:,} and the RL model "
@@ -62,17 +73,24 @@ PANELS = [
       "(88 %), which is the rate at random positions (87 %)."]],
     ["limits", "What it does not show", f"It does not show that RL teaches nothing new: {100 - SOME} % of the gain (95 % interval 11 to 27) "
      f"is on the {sum(T[0])} problems the base model missed 4 times of 4, and RL solves {T[0][4]} of them 4 times of 4.",
-     ["It is one benchmark, one pair of models, 4 samples per problem and one grader. The harder problems have not been split this way.",
+     [f"The share is not specific to RL. Under fixed rules, {DATA['account']['rl']} of the problems RL solves and one base sample "
+      f"misses are solved in another base sample; for the problems a fresh base sample solves and the first misses, the share is "
+      f"{DATA['account']['fresh']}. It is one benchmark and one grader.",
       "The wrong steps were located and labelled by judges that are subagents of the agent that ran the study, with a fixed rubric. "
       "Two passes agree on 44 of 45 answers, but both are the same model, and the hand reads had one reader who knew the model.",
-      "A second session recomputed the table from the stored rows and got the same counts (board result-afc423). Not measured: "
-      "whether RL makes fewer errors or resolves a noticed conflict right more often."]],
+      "A second session recomputed the table from the stored rows and got the same counts (board result-afc423). On "
+      f"{DATA['wrongstep']['items']} located wrong steps of the base model, RL gives the same step about half the base model's "
+      f"probability (factor {DATA['wrongstep']['factor']}; log ratio {DATA['wrongstep']['mean']} nats, 95 % interval "
+      f"{DATA['wrongstep']['ci95'][0]} to {DATA['wrongstep']['ci95'][1]}). Whether RL resolves a noticed conflict right more "
+      "often is not measured."]],
     ["run", "How to reproduce it", "Both analyses run on a laptop, from the stored samples of the two generation jobs named in run.json.",
      ["The table: studies/rlneurons/analysis/anatomy.py --base <run> --rl <run> --out <folder> (commit " + DATA["commit"] + "). "
       "Its numbers are in " + DATA["artifact"] + ".",
       "The checking words: studies/rlneurons/analysis/checks.py stats, then prep and score for the judged events (commit "
       + DATA["checks_commit"] + "). Its numbers are in " + DATA["checks"] + " and " + DATA["checks_judge"] + ".",
-      "The slips read by hand are in studies/rlneurons/results/checks/math500-01/hand_reads.json."]],
+      "The slips read by hand are in studies/rlneurons/results/checks/math500-01/hand_reads.json, the fresh base samples in "
+      + DATA["fresh"]["source"] + ", the shares by fixed rules in " + DATA["account"]["source"] + ", and the wrong steps in "
+      + DATA["wrongstep"]["source"] + " on branch " + DATA["wrongstep"]["branch"] + "."]],
 ]
 
 # The icon of this finding's tile on /findings (tools/findings.py says how it is called): the page's own picture,
@@ -149,7 +167,13 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .wash { fill: var(--blue); opacity: calc(var(--wash) * var(--q, 0)); pointer-events: none; }
 .empty .body, .empty .face { opacity: .45; }
 .empty .rim { opacity: .3; }
+.col .body { fill-opacity: .55; }
+.col .face { fill-opacity: .8; }
 .num { font-weight: 620; text-anchor: middle; }
+.brace { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.sum { font-weight: 640; letter-spacing: -.01em; }
+#sum-never { fill: var(--mute); }
+.sumcap { fill: var(--mute); font-weight: 520; }
 .num.loss { fill: var(--red); }
 .tick { fill: var(--mute); font-weight: 560; text-anchor: middle; }
 .axis { fill: var(--mute); font-weight: 500; }
@@ -210,7 +234,7 @@ svg { animation: fade 1s both; }
     <a href="/findings" aria-current="page">Findings</a>
   </header>
   <div class="stage" id="stage">
-    <svg id="svg" viewBox="0 0 760 650" role="img"></svg>
+    <svg id="svg" viewBox="0 0 900 650" role="img"></svg>
     <div class="switch" id="switch" role="group" aria-label="What the columns show"></div>
     <p class="note" id="note" aria-live="polite"></p>
   </div>
@@ -229,13 +253,18 @@ const f = n => n.toFixed(1), mix = (a, b, q) => a + (b - a) * q, ease = p => p <
 /* The picture: the table of problems by right answers of 4, as glass columns on a glass board seen from slightly above.
    A row is the base model's count (0 at the front), a column the RL model's (0 at the left). With "Problems" a column
    is as high as its number of problems. With "RL gain" it is as high as its share of the gain, problems x (RL right -
-   base right) / gap, and the columns of problems the base model solves at least once are lit. */
-const RAD = Math.PI / 180, CX = 400, CY = 322, EL = 52, PITCH = 100, HALF = 42, TALL = 200, FLAT = 3;
+   base right) / gap, the columns of problems the base model solves at least once are lit, and a bracket at the right
+   adds up the rows: the share on problems the base model solves at least once, and the share on the rest. Columns are
+   clear glass, so a tall one does not hide the cell behind it, and every number is drawn above all columns. A phone gets
+   a narrower drawing with larger type (G.k), so that no number is below 12 px. */
+const RAD = Math.PI / 180, CY = 322, EL = 52, PITCH = 100, HALF = 42, TALL = 170, FLAT = 3, EDGE = 2.5 * PITCH + 14;
+const narrow = matchMedia("(max-width: 900px)");
+let G;
 const V = { yaw: 0, el: EL, px: 0, py: 0, tx: 0, ty: 0 };  // the view: a slow sway, plus a few degrees toward the pointer
 function proj(u, v, w) {  // u to the right, v away from the viewer, w up; what is near is larger
   const a = V.yaw * RAD, e = V.el * RAD, x = u * Math.cos(a) - v * Math.sin(a), d = u * Math.sin(a) + v * Math.cos(a);
   const k = 900 / (900 + d * .4);
-  return [CX + x * k, CY - k * (d * Math.sin(e) + w * Math.cos(e)), k];
+  return [G.cx + x * k, CY - k * (d * Math.sin(e) + w * Math.cos(e)), k];
 }
 function hull(p) {  // the silhouette of a convex body is the convex hull of its projected points
   p = [...p].sort((a, b) => a[0] - b[0] || a[1] - b[1]);
@@ -253,36 +282,57 @@ const square = (u, v, r, w) => [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([i, j])
 const maxN = Math.max(...D.table.flat()), share = (b, r) => D.table[b][r] * (r - b) / D.gap;
 const maxShare = Math.max(...D.table.flatMap((row, b) => row.map((n, r) => share(b, r))));
 const pct = s => `${Math.round(s * 100)} %`.replace("-", "−");
+const never = D.table[0].reduce((a, n, r) => a + share(0, r), 0);  // the share of the gain on problems the base never solves
+const set = (el, o) => { for (const k in o) el.setAttribute(k, o[k]); };
 
 function build() {
+  G = narrow.matches ? { w: 800, h: 640, cx: 323, k: 1.32, cap: 22, some: ["base right", "sometimes"] }
+    : { w: 900, h: 650, cx: 390, k: 1, cap: 17, some: ["base right", "1 to 4 times"] };
   const stop = (at, color, alpha) => `<stop offset="${at}" style="stop-color:${color}${alpha == null ? "" : ";stop-opacity:" + alpha}"/>`;
-  let cells = "";
-  for (let b = 4; b >= 0; b--) for (let r = 0; r < 5; r++) {  // the back row first, so that a near column hides a far one
+  let cells = "", nums = "";
+  S.cells = []; S.ticks = [];
+  for (let b = 4; b >= 0; b--) for (let r = 0; r < 5; r++) {  // the back row first, so that a near column is drawn over a far one
     const n = D.table[b][r], s = share(b, r), id = `${b}${r}`;
     S.cells.push({ id, u: (r - 2) * PITCH, v: (b - 2) * PITCH, lit: s > 0 && b > 0,
       h: [n ? Math.max(FLAT, TALL * n / maxN) : FLAT, s > 0 ? Math.max(FLAT, TALL * s / maxShare) : FLAT],
       text: [n ? String(n) : "", s ? pct(s) : ""], loss: s < 0 });
-    cells += `<g id="c${id}"${n ? "" : ' class="empty"'}><path class="body" id="b${id}"/><path class="wash" id="e${id}"/><path class="face" id="f${id}"/>` +
-      `<path class="wash" id="w${id}"/><path class="rim" id="r${id}"/><text class="num" id="n${id}"></text></g>`;
+    cells += `<g class="col${n ? "" : " empty"}" id="c${id}"><path class="body" id="b${id}"/><path class="wash" id="e${id}"/><path class="face" id="f${id}"/>` +
+      `<path class="wash" id="w${id}"/><path class="rim" id="r${id}"/></g>`;
+    nums += `<text class="num" id="n${id}"></text>`;
   }
   for (let k = 0; k < 5; k++) S.ticks.push({ id: "tb" + k, u: -2 * PITCH - HALF - 44, v: (k - 2) * PITCH, k }, { id: "tr" + k, u: (k - 2) * PITCH, v: -2 * PITCH - HALF - 56, k });
+  const sum = (id, value, cap) => `<text class="sum" id="${id}">${pct(value)}</text>` +
+    `<text class="sumcap" id="${id}c">${cap.map((t, i) => `<tspan id="${id}c${i}">${t}</tspan>`).join("")}</text>`;
+  $("svg").setAttribute("viewBox", `0 0 ${G.w} ${G.h}`);
   $("svg").innerHTML = "<defs>" +
     `<radialGradient id="body" cx=".3" cy=".16" r="1.05">${stop(0, "var(--glass-hi)")}${stop(.5, "var(--glass)")}${stop(1, "var(--glass-lo)")}</radialGradient>` +
     `<linearGradient id="rim" x1=".06" y1="0" x2=".94" y2="1">${stop(0, "var(--rim-a)")}${stop(.56, "var(--rim-b)")}${stop(1, "var(--rim-c)")}</linearGradient>` +
     `<radialGradient id="atmo">${stop(.3, "var(--blue)", .2)}${stop(.7, "var(--blue)", .06)}${stop(1, "var(--blue)", 0)}</radialGradient>` +
     `<radialGradient id="shade">${stop(.55, "var(--ink)", .2)}${stop(1, "var(--ink)", 0)}</radialGradient></defs>` +
-    `<g class="atmo"><ellipse cx="${CX}" cy="${CY - 20}" rx="440" ry="330" fill="url(#atmo)"/></g>` +
-    `<g class="shade"><ellipse cx="${CX + 22}" cy="${CY + 50}" rx="400" ry="290" fill="url(#shade)"/></g>` +
-    `<path class="body" id="board-side"/><path class="face" id="board-face"/><path class="rim" id="board-rim"/>` + cells +
+    `<g class="atmo"><ellipse cx="${G.cx}" cy="${CY - 20}" rx="440" ry="330" fill="url(#atmo)"/></g>` +
+    `<g class="shade"><ellipse cx="${G.cx + 22}" cy="${CY + 50}" rx="400" ry="290" fill="url(#shade)"/></g>` +
+    `<path class="body" id="board-side"/><path class="face" id="board-face"/><path class="rim" id="board-rim"/>` + cells + nums +
     S.ticks.map(o => `<text class="tick" id="${o.id}">${o.k}</text>`).join("") +
-    `<text class="axis" id="axis-b" style="text-anchor:end"><tspan id="axis-b1">Base model,</tspan><tspan id="axis-b2">right in 4 tries</tspan></text>` +
-    `<text class="axis" id="axis-r" style="text-anchor:middle">After RL, right in 4 tries</text>`;
+    `<text class="axis" id="axis-b"><tspan id="axis-b1">Base model,</tspan><tspan id="axis-b2">right in 4 tries</tspan></text>` +
+    `<text class="axis" id="axis-r" style="text-anchor:middle">After RL, right in 4 tries</text>` +
+    `<g id="sums"><path class="brace" id="brace-some"/><path class="brace" id="brace-never"/>` +
+    sum("sum-some", 1 - never, G.some) + sum("sum-never", never, ["base never", "right"]) + "</g>";
   S.cells.forEach(o => { o.el = Object.fromEntries(["c", "b", "e", "f", "w", "r", "n"].map(k => [k, $(k + o.id)])); });
   S.ticks.forEach(o => { o.el = $(o.id); });
 }
+function brace(id, v0, v1) {  // a bracket beside the rows from v0 to v1, its two ends turned toward the board
+  const u = EDGE + 20, p = [proj(u - 10, v0, 0), proj(u, v0, 0), proj(u, v1, 0), proj(u - 10, v1, 0)];
+  $(id).setAttribute("d", "M" + p.map(q => f(q[0]) + " " + f(q[1])).join("L"));
+}
+function sum(id, v, size) {  // a share beside a bracket, and its two-line caption under it
+  const c = proj(EDGE + 33, v, 0), z = G.k * c[2], x = f(c[0]), g = G.cap / 17;
+  set($(id), { x, y: f(c[1] + (size * .1) * z), "font-size": f(size * z) });
+  set($(id + "c"), { "font-size": f(G.cap * z) });
+  set($(id + "c0"), { x, y: f(c[1] + (size * .1 + 22 * g) * z) }); set($(id + "c1"), { x, y: f(c[1] + (size * .1 + 42 * g) * z) });
+}
 function place() {
-  const q = S.q, edge = 2.5 * PITCH + 14, top = square(0, 0, edge, 0), d = path(top);
-  $("board-side").setAttribute("d", path(hull([...top, ...square(0, 0, edge, -12)])));
+  const q = S.q, top = square(0, 0, EDGE, 0), d = path(top);
+  $("board-side").setAttribute("d", path(hull([...top, ...square(0, 0, EDGE, -12)])));
   $("board-face").setAttribute("d", d); $("board-rim").setAttribute("d", d);
   S.cells.forEach(o => {
     const h = mix(o.h[0], o.h[1], q) * S.grow, up = square(o.u, o.v, HALF, h), side = path(hull([...up, ...square(o.u, o.v, HALF, 0)])), face = path(up);
@@ -291,18 +341,26 @@ function place() {
     o.el.f.setAttribute("d", face); o.el.w.setAttribute("d", face); o.el.r.setAttribute("d", face);
     o.el.c.style.setProperty("--q", o.lit ? f(q) : 0);
     if (o.el.n.textContent !== text) { o.el.n.textContent = text; o.el.n.classList.toggle("loss", q >= .5 && o.loss); }
-    o.el.n.setAttribute("x", f(c[0])); o.el.n.setAttribute("y", f(c[1] + 9 * c[2]));
-    o.el.n.setAttribute("font-size", f(25 * c[2])); o.el.n.setAttribute("opacity", f(Math.abs(1 - 2 * q) * S.grow));
+    set(o.el.n, { x: f(c[0]), y: f(c[1] + 9 * c[2] * G.k), "font-size": f(25 * c[2] * G.k), opacity: f(Math.abs(1 - 2 * q) * S.grow) });
   });
   S.ticks.forEach(o => {
     const c = proj(o.u, o.v, 0);
-    o.el.setAttribute("x", f(c[0])); o.el.setAttribute("y", f(c[1] + 8 * c[2])); o.el.setAttribute("font-size", f(24 * c[2]));
+    set(o.el, { x: f(c[0]), y: f(c[1] + 8 * c[2] * G.k), "font-size": f(24 * c[2] * G.k) });
   });
+  // The base model's axis name: two lines at the upper left on a wide screen, one line above the board on a phone.
   const tb = proj(-2 * PITCH - HALF - 30, 2 * PITCH + HALF + 30, 0), tr = proj(0, -2 * PITCH - HALF - 56, 0);
-  $("axis-b1").setAttribute("x", f(tb[0])); $("axis-b1").setAttribute("y", f(tb[1] - 44));
-  $("axis-b2").setAttribute("x", f(tb[0])); $("axis-b2").setAttribute("y", f(tb[1] - 20));
-  $("axis-b").setAttribute("font-size", 20);
-  $("axis-r").setAttribute("x", f(tr[0])); $("axis-r").setAttribute("y", f(tr[1] + 52)); $("axis-r").setAttribute("font-size", 22);
+  if (narrow.matches) {
+    set($("axis-b"), { "font-size": f(22 * G.k), style: "text-anchor:start" });
+    set($("axis-b1"), { x: 6, y: f(tb[1] - 34) }); $("axis-b2").removeAttribute("x"); set($("axis-b2"), { y: f(tb[1] - 34), dx: 8 });
+  } else {
+    set($("axis-b"), { "font-size": 20, style: "text-anchor:end" });
+    set($("axis-b1"), { x: f(tb[0]), y: f(tb[1] - 44) }); set($("axis-b2"), { x: f(tb[0]), y: f(tb[1] - 20), dx: 0 });
+  }
+  set($("axis-r"), { x: f(tr[0]), y: f(tr[1] + 52 * G.k), "font-size": f(22 * G.k) });
+  const shown = q * S.grow;
+  brace("brace-some", -PITCH - HALF, 2 * PITCH + HALF); brace("brace-never", -2 * PITCH - HALF, -2 * PITCH + HALF);
+  $("sums").setAttribute("opacity", f(shown));
+  sum("sum-some", PITCH / 2, 46); sum("sum-never", -2 * PITCH, 30);
 }
 /* One frame: the view sways slowly and leans toward the pointer, the columns rise once on load, and a change of the
    switch moves every column to its new height. With reduced motion the page shows one still frame. */
@@ -354,6 +412,7 @@ $("stage").addEventListener("pointermove", e => {  // the view leans a few degre
   V.tx = 2 * (e.clientX - r.left) / r.width - 1; V.ty = 2 * (e.clientY - r.top) / r.height - 1;
 });
 $("stage").addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
+narrow.addEventListener("change", () => { build(); place(); });
 $("problem").textContent = C.problem;
 $("say").innerHTML = C.line.replace(/(\d+(?:[.,]\d+)*(?: ?%)?)/g, "<b>$1</b>");
 build();

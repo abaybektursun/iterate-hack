@@ -38,10 +38,14 @@ DATA = {
     # The repeat of the cue cell: each_sample.single_right (sample 0 has the seeds of the cell above).
     "repeat_artifact": "studies/rlneurons/results/day1_3/math500_base_cue-01/readout.json",
     "repeat": {"samples": [405, 409, 410, 418]},
-    # The later steps of the climb: rows.tie_short.right of the base model with the cue and of the RL model.
+    # The later steps of the climb: rows.vote_after_restart.right of the base model with the cue (repeat_artifact) and of
+    # the RL model (rl_artifact), and rows.cv_pick.right of vote_artifact, the tie rule picked on held-out folds. The
+    # tie rule tie_short (453) is not used: it was chosen after reading the 7 problems it fixes (board result-e78dfe).
     "vote_artifact": "studies/rlneurons/results/selector/math500_base_cue-01/readout.json",
-    "vote_rl_artifact": "studies/rlneurons/results/selector/math500_rl-01/readout.json",
-    "vote": {"cue": 453, "rl": 475},
+    "vote": {"cue": 450, "rl": 475, "cue_held_out": 451},
+    # Cut-off answers of the RL model during training, plain prompt, T 0.6 / top-p 0.95, sample 0 (step5 of the file).
+    "steps_artifact": "studies/theory/results/engine/round-04/replication/replication.json",
+    "steps": {"base": 65, "step400": 98, "step2800": 19},
     # 328 harder problems: rows.hard328_base_cue_t10-01.right_v3 and rows.hard328_rl_plain_t10-01.right_v3.
     "hard_artifact": "studies/rlneurons/results/day1/readout.json",
     "hard": {"cue": 164, "rl": 206, "n": 328},
@@ -74,6 +78,7 @@ LINE = f"Three opening tokens raise the base model from {pc(PLAIN)} % to {pc(CUE
 
 DATA.update({
     "metric": "MATH-500, right answers of 500, one sample at temperature 1.0",
+    "caption": f"The bar is the share of the {N} MATH-500 problems solved, one sample each at temperature 1.0.",
     "unit": "%",
     "max": 100,
     # What the reader switches between. The first is shown on load, so the page starts from the problem.
@@ -106,9 +111,10 @@ PANELS = [
      [f"The temperature decides how large that remainder looks. About half of the {G06[0]} points seen at temperature 0.6 are "
       f"gone at 1.0, where far fewer of the base model's answers run to the token cap ({DATA['cue']['cap_hits']} of {N} "
       f"against {T06['cue_cap_hits']}).",
-      f"It is the first and largest step of the team's climb on MATH-500. With a vote over four samples the base model with "
-      f"the cue reaches {DATA['vote']['cue']} of {N} ({pc(DATA['vote']['cue'])} %), and the RL model {DATA['vote']['rl']} "
-      f"({pc(DATA['vote']['rl'])} %) under the same rule.",
+      f"It is the first and largest step of the team's climb on MATH-500. With a vote over four samples after restarting "
+      f"cut-off answers the base model with the cue reaches {DATA['vote']['cue']} of {N} ({pc(DATA['vote']['cue'])} %), and "
+      f"the RL model {DATA['vote']['rl']} ({pc(DATA['vote']['rl'])} %) under the same rule. A tie rule picked on held-out "
+      f"folds gives the base model {DATA['vote']['cue_held_out']}.",
       f"Harder problems leave more to explain: on {DATA['hard']['n']} of them the base model with the cue has "
       f"{DATA['hard']['cue']} right and the RL model {DATA['hard']['rl']}."]],
     ["how", "How we know",
@@ -129,8 +135,9 @@ PANELS = [
     ["limits", "What it does not show",
      f"The score above the paper's {DATA['paper']['cue']} % is a grader effect rather than a better cue: under our first "
      f"grader, the closest to the paper's, the same answers score {DATA['cue']['right_v1']} of {N} ({pc(DATA['cue']['right_v1'])} %).",
-     ["Why the RL model keeps its score at the lower temperature is untested. Its release was trained with cut-off answers "
-      "counted as failures, which is one possible reason.",
+     [f"Why the RL model keeps its score at the lower temperature is only partly measured: at temperature 0.6 its cut-off "
+      f"answers fall late in training, from {DATA['steps']['step400']} of {N} at RL step 400 to {DATA['steps']['step2800']} "
+      "at the final step 2,800. What in training causes the fall is untested.",
       f"The size of the step also depends on the temperature. At temperature 0.6 the plain base model has "
       f"{DATA['plain_t06']['right']} right of {N}. Against that setting the cue at temperature 1.0 adds "
       f"{round(pc(CUE) - pc(DATA['plain_t06']['right']), 1)} points, where the picture shows {round(pc(CUE) - pc(PLAIN), 1)}.",
@@ -145,8 +152,9 @@ PANELS = [
       f"The two numbers in the picture are in {DATA['artifact']} (cells base_plain_1.0 and base_opener_1.0, commit "
       f"{DATA['commit']}), written by studies/rlneurons/grader/rln4_grader_v3.py from the first runs. The RL reference is the "
       f"cell rl_1.0 of the same file, which also holds the cells and differences at temperature 0.6. The later RL run is in "
-      f"{DATA['rl_artifact']} (commit {DATA['rl_commit']}), and the loop counts are in {DATA['t06_p10_artifact']} and "
-      f"{DATA['minp_artifact']}.",
+      f"{DATA['rl_artifact']} (commit {DATA['rl_commit']}), the votes in {DATA['repeat_artifact']}, {DATA['rl_artifact']} "
+      f"and {DATA['vote_artifact']}, the cut-off answers during training in {DATA['steps_artifact']}, and the loop counts "
+      f"in {DATA['t06_p10_artifact']} and {DATA['minp_artifact']}.",
       f"The cue's three token ids and its text are frozen in {DATA['cue_artifact']} (prefill_ids, prefill_text). The paper's "
       "cue has two tokens. The cue here has three, the text \" line!\", two line breaks and \"Okay\", and it is how the RL "
       "model opens its own answers."]],
@@ -233,7 +241,8 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .cuet { fill: var(--blue); font-size: 34px; font-weight: 640; }
 .ret { fill: none; stroke: var(--blue); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .stroke { stroke: var(--mute); stroke-linecap: round; opacity: .62; }
-.switch { display: inline-flex; align-self: center; margin-top: 22px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
+.cap { align-self: center; margin: 14px 0 0; color: var(--mute); font-size: 14px; text-align: center; max-width: 60ch; }
+.switch { display: inline-flex; align-self: center; margin-top: 18px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
 .switch button { padding: 8px 20px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
@@ -289,6 +298,7 @@ svg { animation: fade 1s both; }
   </header>
   <div class="stage" id="stage">
     <svg id="svg" viewBox="0 0 1000 400" role="img"></svg>
+    <p class="cap" id="cap"></p>
     <div class="switch" id="switch" role="group" aria-label="The start of the answer"></div>
   </div>
   <div class="side">
@@ -429,6 +439,7 @@ $("stage").addEventListener("pointermove", e => {  // the view leans a little to
 $("stage").addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 narrow.addEventListener("change", setup);
 document.fonts.ready.then(() => { fit(); place(); });
+$("cap").textContent = D.caption;
 $("problem").textContent = C.problem;
 $("say").innerHTML = esc(C.line).replace(/(?<![\w-])(\d+(?:[.,]\d+)*(?: ?%)?)/g, "<b>$1</b>");  // a number inside a name (MATH-500) stays plain
 setup();
