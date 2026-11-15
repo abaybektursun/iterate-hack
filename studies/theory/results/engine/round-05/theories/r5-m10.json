@@ -1,0 +1,99 @@
+{
+ "name": "r5-m10",
+ "statement": "At T 1.0 / top-p 1.0 the plain-prompt Olmo-3-1025-7B base commits within its first few tokens to one of two whole answer modes: answers that open on their own with a newline then 'Okay' are the cued mode, solving each problem about as often as cued answers do and having the same length, while the rest are the plain mode; the cue's +38.6 points is (1 - self-open share) x (self-opened accuracy - other accuracy), and nothing after the opening adds to it.",
+ "scope": "Covers the base allenai/Olmo-3-1025-7B with the plain prompt versus the 3-token cue, MATH-500 (n = 500), T 1.0 / top-p 1.0, cap 16,384, one sample per problem, grader v3. It does not cover T 0.6 or top-p 0.95, where cued answers loop after the opening, so later tokens do matter there (see conflicts). It does not cover the RL model, weight-difference models (theta(a), Code-RL, Think-SFT) or examples in context. It does not cover the harder 328, where the mode split is untested. It makes no claim about why a problem's self-open probability differs from another's beyond its link to the cue's base log-probability.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2509.06608",
+   "finding": "The RL steering vector acts as a token-substitution bias on the first generated token ('To'); prefixing that token alone gives about 75% of the vector's gain.",
+   "how": "Supplies the core claim: one or a few opening tokens select a whole reasoning mode that the base already has. Here the cue only forces a mode the plain base sometimes picks on its own (a newline then 'Okay')."
+  }
+ ],
+ "explains": [
+  {
+   "item": "knowledge-0b450e",
+   "quote": "on its own in 168 of 500",
+   "how": "The cued mode already exists in the plain base and is picked spontaneously in a sizable share of answers, so the cue selects a mode and does not create one."
+  },
+  {
+   "item": "knowledge-9e4147",
+   "quote": "Cue worth +38.6 points [33.2, 43.8] at T 1.0",
+   "how": "The gain is the non-self-opening share of plain answers times the accuracy gap between the two whole modes."
+  },
+  {
+   "item": "result-c36598",
+   "quote": "Plain base at T 1.0: 224/500 (44.8 %)",
+   "how": "Plain accuracy is a mixture of the cued-mode accuracy (about 82 %) on self-opened answers and a much lower plain-mode accuracy on the rest."
+  },
+  {
+   "item": "knowledge-8a31ad",
+   "quote": "base 42.2 -> cue 77.9 (Table 5)",
+   "how": "Wang et al.'s 2-token opening of the same register gives nearly the whole gain, as expected if the opening alone picks the mode."
+  },
+  {
+   "item": "result-099916",
+   "quote": "base plain 76, base cue 164 (77 cap)",
+   "how": "The same switch doubles accuracy and roughly doubles tokens on the harder set, consistent with a whole-mode change and not only a change at the end."
+  },
+  {
+   "item": "result-e2482e",
+   "quote": "cue token in top 15 for 13 of 96 late readouts",
+   "how": "RL's late directions write the same opening register, so RL partly works by making the base pick this mode every time."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-e870a1",
+   "quote": "119 cap hits (loops to 16,384 tokens)",
+   "how": "At T 0.6 / top-p 0.95 cued answers loop after the opening, so later tokens decide accuracy there; the theory is limited to T 1.0."
+  },
+  {
+   "item": "knowledge-9e4147",
+   "quote": "Plain base: T 1.0 - T 0.6 = -28.0, -29.6, -27.2, 0.0 by quartile",
+   "how": "On the longest quartile, temperature changes cap hits by 32.8 points with flat accuracy. That is post-opening dynamics the opening mode does not capture, so the mode account does not carry across temperatures."
+  }
+ ],
+ "rival": "The continuous-surprise account (r2-surprises-1, r2-all-2): the cue lowers per-token entropy along a graded axis. A spontaneous 'Okay' opening is then only a partial step along that axis, or a marker of problems the base finds easy. On that account, self-opened plain answers land between the two modes in accuracy and length: accuracy about 10-25 points below the cued answers on the same problems, and median length near that of other plain answers (about half the cued length). This theory predicts that self-opened plain answers match the cued answers on the same problems in both accuracy and length.",
+ "predictions": [
+  {
+   "experiment": "Accuracy of self-opened plain answers minus cued accuracy on the same problems. This theory predicts about 0. The continuous-entropy / easy-problem-marker rival predicts self-opened answers fall clearly short of cued answers on the same problems, about -0.15.",
+   "recipe": "Files: S3 T3.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl, plain base, T 1.0) and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. For each T3 row, compute grader v3 with studies/rlneurons/grader/rln4_grader_v3.py from text and gold (rows with cap_hit true keep the score v3 gives; an empty extraction counts 0). Mark a T3 row self-opened if the first 60 characters of its text field contain the substring '\\nOkay' (newline immediately followed by 'Okay'). Let S = problem_index values of self-opened T3 rows. A = mean v3 score of T3 rows in S. B = mean of t1_right over the per_problem.json entries whose problem_index is in S. Report D = A - B. Problems missing from either file are dropped from S before both means.",
+   "unit": "difference of fractions of problems",
+   "value": -0.02,
+   "low": -0.09,
+   "high": 0.05,
+   "refuted_by": "D < -0.10 or D > 0.08",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Length of self-opened plain answers relative to cued answers on the same problems. Whole-mode theory: ratio about 1.0. The rival (the spontaneous 'Okay' only marks easy problems or a partial entropy shift) predicts a ratio near the one for non-self-opened plain answers against their cued counterparts, about 0.5.",
+   "recipe": "Files: S3 T3.jsonl and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. Self-opened as in the first prediction (first 60 characters of text contain '\\nOkay'). S = problem_index values of self-opened T3 rows present in per_problem.json. R = median of n_generated over T3 rows in S, divided by the median of t1_generated_tokens over per_problem.json entries in S. Cap hits are included at their generated length. With an even count, the median is the mean of the two middle values.",
+   "unit": "ratio of median tokens",
+   "value": 1.0,
+   "low": 0.78,
+   "high": 1.3,
+   "refuted_by": "R < 0.70 or R > 1.40",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Whether a problem's base log-probability of the cue predicts whether the plain base self-opens on it. Theory: the mode choice has a per-problem propensity that the cue's base probability reads, so AUROC is clearly above 0.5. The rival in which self-opening is per-sample noise unrelated to the prompt predicts 0.50.",
+   "recipe": "Files: S3 T3.jsonl and studies/rlneurons/results/rln5/map-01/checks.json (key per_row, list T1). Label each problem 1 if its T3 row is self-opened (first 60 characters of text contain '\\nOkay'), else 0. Score = cue_logprob_base from the T1 list entry with the same problem_index. Compute the AUROC of score for label: the Mann-Whitney fraction of (label 1, label 0) pairs where the label-1 score is higher, with ties counting 0.5. Problems missing from either file are dropped. Cap hits are not treated specially.",
+   "unit": "AUROC",
+   "value": 0.62,
+   "low": 0.54,
+   "high": 0.74,
+   "refuted_by": "AUROC < 0.53",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Plain base, MATH-500 n = 500, T 1.0 / top-p 1.0, cap 16,384, seed base 47,000,000 (as T3), with the self-open string '.\\n\\nOkay' prefilled after the plain prompt instead of the 3-token cue, grader v3, one sample. If the opening alone picks the whole mode, this scores like the 3-token cue (410/500).",
+   "unit": "right of 500",
+   "value": 403,
+   "low": 385,
+   "high": 422,
+   "refuted_by": "fewer than 380 right of 500",
+   "gpu_minutes": 40
+  }
+ ]
+}

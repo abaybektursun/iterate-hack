@@ -1,0 +1,85 @@
+{
+ "baseline": {
+  "dir": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-auto-research-harness-hackathon-bbd59e/25ae40cc-2e8a-47af-8f2b-c73aa0b7149f/scratchpad/submit/runs/sameraslan-1114-184603-9d69",
+  "n": 500,
+  "right_v3": 378,
+  "cap_hits": 98,
+  "loops_rule_A": 71,
+  "tokens_per_problem": 4689.678
+ },
+ "baseline_loops": 71,
+ "arms": {
+  "attr100_real02": {
+   "dir": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-auto-research-harness-hackathon-bbd59e/25ae40cc-2e8a-47af-8f2b-c73aa0b7149f/scratchpad/submit/runs/sameraslan-1114-214049-ef4f",
+   "n": 500,
+   "right_v3": 412,
+   "cap_hits": 34,
+   "loops_rule_A": 22,
+   "tokens_per_problem": 3742.122,
+   "points_vs_baseline": 6.8,
+   "ci95": [
+    2.8,
+    10.6
+   ],
+   "newly_right": 65,
+   "newly_wrong": 31,
+   "of_baseline_loops": {
+    "still_loop": 9,
+    "cap_hit": 12,
+    "now_right": 39
+   },
+   "examples": {
+    "finished_right": {
+     "problem_index": 17,
+     "gold": "\\pi",
+     "baseline_tail": " provided, so maybe the graph is as described. Let me check the Asymptote code again.\n\nThe Asymptote code draws the graph of f(x) = 2 sin(3x + pi) + 1. The trig_axes function sets the x-axis from -3pi to 3pi and the y-axis from -4 to 4, with pi/2 as the period. The labels on the axes are 1, 2, 3, -1",
+     "edited_tail": "). In this case, the function \\( 2\\sin(3x + \\pi) + 1 \\) has \\( c = \\pi \\). Since the problem asks for the smallest possible value of \\( c \\) and \\( c \\) must be a positive constant, the smallest possible value of \\( c \\) is \\( \\pi \\).\n\nThus, the smallest possible value of \\( c \\) is \\(\\boxed{\\pi}\\).",
+     "edited_tokens": 1854
+    },
+    "finished_wrong": {
+     "problem_index": 64,
+     "gold": "\\frac{35}{64}",
+     "baseline_tail": "y that cos \u03b8 = sin(\u03b8 + \u03c0/2). Let's try that.\n\nLet me denote \u03b8 = (7 - 2m)x. Then cos \u03b8 = sin(\u03b8 + \u03c0/2). Therefore, the real part becomes sum_{m=0}^7 C(7, m) (-1)^m sin((7 - 2m)x + \u03c0/2). However, this might not help directly. Alternatively, perhaps we can use the identity that sum_{m=0}^7 C(7, m) (-1)^",
+     "edited_tail": " 7x\\)\n   - For \\(k=1\\): \\(-7 \\sin 5x\\)\n   - For \\(k=2\\): \\(21 \\sin 3x\\)\n   - For \\(k=3\\): \\(-35 \\sin x\\)\n\nThus, the coefficients are:\n\\[\na = \\frac{1}{128}, \\quad b = -\\frac{7}{128}, \\quad c = \\frac{21}{128}, \\quad d = -\\frac{35}{128}\n\\]\n\nTherefore, the value of \\(d\\) is \\(\\boxed{-\\dfrac{35}{128}}\\).",
+     "edited_tokens": 14225
+    }
+   }
+  },
+  "attr1000_real02": {
+   "dir": "/private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-auto-research-harness-hackathon-bbd59e/25ae40cc-2e8a-47af-8f2b-c73aa0b7149f/scratchpad/submit/runs/sameraslan-1114-214056-15f9",
+   "n": 500,
+   "right_v3": 414,
+   "cap_hits": 22,
+   "loops_rule_A": 4,
+   "tokens_per_problem": 3464.378,
+   "points_vs_baseline": 7.2,
+   "ci95": [
+    3.2,
+    11.2
+   ],
+   "newly_right": 68,
+   "newly_wrong": 32,
+   "of_baseline_loops": {
+    "still_loop": 1,
+    "cap_hit": 9,
+    "now_right": 39
+   },
+   "examples": {
+    "finished_right": {
+     "problem_index": 9,
+     "gold": "4",
+     "baseline_tail": " So to make (4*5)+1, we need to insert a parenthesis around (4*5) +1. But the original addition is between 5 and 1. Therefore, to group (4*5)+1, we need to insert a parenthesis around (4*5) +1. But the original expression is 2*3*4*5 +1. So to make (4*5)+1, we need to insert a parenthesis around (4*5",
+     "edited_tail": "e addition with the first two multiplications and the last:**\n    \\[\n    (2 \\cdot 3 \\cdot 4) \\cdot 5 + 1 = 24 \\cdot 5 + 1 = 121\n    \\]\n\n26. **Grouping the addition with the first and the last two:**\n    \\[\n    2 \\cdot (3 \\cdot 4 \\cdot 5) + 1 = 2 \\cdot 60 + 1 = 121\n    \\]\n\n27. **Grouping the addition",
+     "edited_tokens": 16384
+    },
+    "finished_wrong": {
+     "problem_index": 18,
+     "gold": "28",
+     "baseline_tail": "s is not possible.\n\nAlternatively, maybe the segment through A is not a transversal but part of the triangle. Wait, if BC is parallel to the segment through A, and AB = BC, then triangle ABC is isosceles with AB = BC. Therefore, angles at A and C are equal. But angle at A is 124 degrees, so angle at",
+     "edited_tail": "tote code labels \"x^{\\circ}\" at point B and \"x^{\\circ}\" at point C. But the problem statement doesn't mention angle at C. So maybe there's a typo in the Asymptote code, or maybe the problem is different. However, the original problem statement says AB = BC, so if AB = BC, then triangle ABC is isosce",
+     "edited_tokens": 6717
+    }
+   }
+  }
+ }
+}

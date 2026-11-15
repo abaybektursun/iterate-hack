@@ -21,16 +21,22 @@ team's graders, and nothing else (subprocess for aws, modal or git is fine). Whe
 grader it names instead of writing your own: grader v3 is `from studies.rlneurons.lib import rln4_lib` (`grade_v3(gold,
 text)`, `extract_v3`, `norm_v3`), its equivalence test is `from studies.rlneurons.lib import n13_score` (`grade`,
 `extract`), grader v4 is `from studies.rlneurons.grader import repair_v4` (`grade_v4`). Read those files for the exact
-signatures. The script fetches any file it needs into runs/theory-tests/ when missing, and prints as its last line one
-JSON object:
-{"measured": <number>, "refuted_by_met": <true or false>, "alt_measured": <number or null>, "not_computable": null, "example_row": <one input row the statistic used, as a JSON object>}
+signatures. The script fetches any file it needs into runs/theory-tests/ when missing.
 
-If the recipe cannot be computed from the stored files (a file is not readable, a field does not exist, the recipe
-asks for something the rows do not hold), the script prints
-{"measured": null, "refuted_by_met": false, "alt_measured": null, "not_computable": "<the reason>", "example_row": null}
-Do not substitute another file or field to get a number.
-If the recipe or refuted_by itself says a case counts as refuted without a number (for example an empty group),
-the script prints {"measured": null, "refuted_by_met": true, "alt_measured": null, "not_computable": null, "example_row": null}.
+Every script ends by printing its result with the helper in studies/theory/lib/noise.py (read it; do not rewrite it):
+`from studies.theory.lib.noise import bootstrap, binomial, report, not_computable, refuted_without_number`.
+- `report(measured, n, interval, kind, refuted_by_met=..., alt_measured=..., example_row=...)`: n is the number of
+  problems (or rows) the statistic used; interval is the 90 % interval of the statistic. Use
+  `bootstrap(stat, problems)` (2,000 resamples over problems, seed 0) whenever the statistic is computed from
+  per-problem rows: put one entry per problem in the list (a tuple of rows when the recipe pairs files or samples) and
+  write stat so that it recomputes the whole statistic from such a list. For a statistic with no per-problem
+  resampling (a single count), use `binomial(k, n)` with kind "binomial" if it is a proportion, else interval None
+  with kind "none". example_row is one input row the statistic used, as a JSON object.
+- `not_computable("<the reason>")` if the recipe cannot be computed from the stored files (a file is not readable, a
+  field does not exist, the recipe asks for something the rows do not hold). Do not substitute another file or field
+  to get a number.
+- `refuted_without_number()` if the recipe or refuted_by itself says a case counts as refuted without a number (for
+  example an empty group).
 
 Then write $out/tests/$theory/notes.json, next to the scripts: [{"k": 1, "note": "<files used, the ambiguities and the other reading, anything that could make the number wrong>"}], one entry per prediction.
 

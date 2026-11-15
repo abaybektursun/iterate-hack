@@ -9,13 +9,16 @@
 
 Per benchmark (MATH-500 first, then alphabetical): the best base score, the best RL score and the gap, then every
 record step, newest first, on two lines: the gain in points, previous best -> new best, the time of the result (UTC),
-the result id, who posted it and the configuration; under it the finding, the first line of the result's text that is
-not a score line, cut to 160 characters. --json prints load() instead.
+the result id, who posted it and the configuration; under it the title of the step in plain words (board.py plain, or
+a title: line in the result's text) or, when it has none, the finding: the first line of the result's text that is not
+a score, title, what, why or caveat line, cut to 160 characters. --json prints load() instead.
 
 The rule is the chart's (tools/view.py, hill): only base scores (the untrained model) count; a score whose
 right/n and configuration already appeared on that benchmark is the same run reported twice and is dropped; a step is
 a score whose percent is strictly above every earlier one, in the order the results were posted.
-It reads the score rows (board.py score) and only the result items that set a record, and never writes.
+It reads the score rows (board.py score), the plain rows (board.py plain) and only the result items that set a record,
+and never writes. A step takes its title, what, why and caveat from the plain row of its score,
+<result id>#<benchmark>#<right>/<n>, or else from the plain row of its result, <result id>.
 """
 import json
 import sys
@@ -26,6 +29,7 @@ import board
 import team
 
 FINDING_WIDTH = 160
+OTHER_LINES = tuple(f"{name}:" for name in ("score", *board.PLAIN))  # lines of a result's text that are not its finding
 
 
 def pct(score):
@@ -51,14 +55,15 @@ def records(scores):
 
 
 def finding(text):
-    return next((line.strip() for line in text.splitlines() if line.strip() and not line.strip().startswith("score:")), "")
+    return next((line.strip() for line in text.splitlines() if line.strip() and not line.strip().startswith(OTHER_LINES)), "")
 
 
-def steps(scores, texts):
-    """scores: the score rows in stored order; texts: {result id: the result's text}. Returns
-    {benchmark: {"steps": [step, ...] in the order found, "rl": the best RL score or None}}, where a step is
-    {result, who, result_at, config, right, n, pct, before, delta, tokens, finding} (before and delta are None for the
-    first step) and "rl" is {result, who, result_at, config, right, n, pct, tokens}. Plain ints, floats and strings."""
+def steps(scores, texts, plain):
+    """scores: the score rows in stored order; texts: {result id: the result's text}; plain: {sk: the plain row}.
+    Returns {benchmark: {"steps": [step, ...] in the order found, "rl": the best RL score or None}}, where a step is
+    {result, who, result_at, config, right, n, pct, before, delta, tokens, finding, title, what, why, caveat} (before
+    and delta are None for the first step; title, what, why and caveat are None when the step's plain row does not
+    give them) and "rl" is {result, who, result_at, config, right, n, pct, tokens}. Plain ints, floats and strings."""
     def row(s):
         tokens = s.get("tokens")
         return {"result": s["result"], "who": s["who"], "result_at": s["result_at"], "config": s["config"], "right": int(s["right"]),
@@ -70,17 +75,20 @@ def steps(scores, texts):
         for s in found:
             step = {**row(s), "before": before, "finding": finding(texts[s["result"]])}
             step["delta"] = None if before is None else round(step["pct"] - before, 2)
+            words = plain.get(f"{s['result']}#{name}#{step['right']}/{step['n']}") or plain.get(s["result"]) or {}  # of the score, else of its result
+            step.update({field: words.get(field) for field in board.PLAIN})
             out[name]["steps"].append(step)
             before = step["pct"]
     return out
 
 
 def load():
-    """steps() of the live board: every score row, and the text of each result that set a record."""
+    """steps() of the live board: every score row, every plain row, and the text of each result that set a record."""
     scores = board.rows(KeyConditionExpression=Key("pk").eq("scores"))
+    plain = {row["sk"]: row for row in board.rows(KeyConditionExpression=Key("pk").eq("plain"))}
     ids = {s["result"] for found, _ in records(scores).values() for s in found}
     texts = {i: team.table().get_item(Key={"pk": f"item#{i}", "sk": "item"})["Item"]["text"] for i in ids}
-    return steps(scores, texts)
+    return steps(scores, texts, plain)
 
 
 def order(names):
@@ -99,7 +107,7 @@ def show(climb):
         for s in reversed(found):
             gain = f"+{s['delta']:.1f}  {s['before']:.1f} -> {s['pct']:.1f}" if s["before"] is not None else f"first        {s['pct']:.1f}"
             print(f"  {gain}  {s['result_at'][5:16].replace('T', ' ')}  {s['result']}  {s['who']}  {s['config']}")
-            print(f"        {s['finding'][:FINDING_WIDTH]}")
+            print(f"        {s['title'] or s['finding'][:FINDING_WIDTH]}")
         print()
 
 
@@ -110,12 +118,19 @@ def selftest():
               s("r3", "rl", 70, 100, "c"), s("r4", "base", 50, 100, "d"),
               s("r5", "base", 50, 100, "d"),  # same right/n and configuration as r4: one run (also not strictly above)
               s("r6", "base", 50, 100, "e"),  # equal percent: not strictly above, not a step
-              s("r7", "base", 60, 200, "f")]  # lower percent on another n: not a step
-    texts = {r: f"score: base B 1/2 | x\n\n  finding of {r}\nmore" for r in ("r1", "r4")}
-    got = steps(scores, texts)["B"]
-    assert [x["result"] for x in got["steps"]] == ["r1", "r4"], got
+              s("r7", "base", 60, 200, "f"),  # lower percent on another n: not a step
+              s("r8", "base", 55, 100, "g")]
+    texts = {r: f"title: t\nwhy: y\nscore: base B 1/2 | x\nwhat: w\ncaveat: c\n\n  finding of {r}\nmore" for r in ("r1", "r4", "r8")}
+    plain = {"r1": {"title": "the result r1", "what": "w1", "why": "y1"},
+             "r4": {"title": "the result r4", "what": "w4", "why": "y4", "caveat": "c4"},
+             "r4#B#50/100": {"title": "the score 50/100 of r4"},  # the row of the score is used whole: no what, why or caveat from the row r4
+             "r8#B#40/100": {"title": "another score of r8"}}
+    got = steps(scores, texts, plain)["B"]
+    assert [x["result"] for x in got["steps"]] == ["r1", "r4", "r8"], got
     assert (got["steps"][1]["before"], got["steps"][1]["delta"], got["steps"][1]["finding"]) == (40.0, 10.0, "finding of r4"), got
     assert got["steps"][0]["before"] is None and got["rl"]["result"] == "r3", got
+    words = [tuple(x[field] for field in board.PLAIN) for x in got["steps"]]
+    assert words == [("the result r1", "w1", "y1", None), ("the score 50/100 of r4", None, None, None), (None, None, None, None)], words
     json.dumps(got)
     print("climb selftest passed")
 

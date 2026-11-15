@@ -6,9 +6,20 @@ Study: studies/jspace (README.md, specs/SPEC1_lensdiff.md, specs/SPEC2_workspace
 """
 import json
 
+# How often Wait or Hmm is among the top 8 words, as a share of positions: b_presence.T1_L24.hold_on of
+# studies/jspace/results/lensdiff/full-01/metrics.json (rate_b is the base model, rate_a the RL model, ci95 the 95 % interval
+# of rate_a - rate_b over the 500 problems). The page shows only the change relative to the base model (Samer, 2026-11-15);
+# the shares themselves are in studies/jspace/README.md.
+HOLD = {"base": 0.04560638191269175, "rl": 0.056411440686372, "ci95": [0.01013116150189313, 0.011544151143475597]}
+MORE = round(100 * (HOLD["rl"] / HOLD["base"] - 1))              # 24: Wait is in mind 24 % more often after RL
+MORE_CI = [round(100 * x / HOLD["base"]) for x in HOLD["ci95"]]  # 22 and 25: the interval of the difference, divided by the base model's share
+# The same key with a lens fitted to each model: studies/jspace/results/lensdiff/matched-01/metrics.json.
+HOLD_OWN = {"base": 0.04631902136951907, "rl": 0.06290556484434093}
+MORE_OWN = round(100 * (HOLD_OWN["rl"] / HOLD_OWN["base"] - 1))  # 36
+
 TITLE = "What RL changed"
 PROBLEM = "What does RL training change inside a model?"
-LINE = "After RL the model is the same inside, but it thinks Wait 24 % more often."
+LINE = f"After RL the model is the same inside, but it thinks Wait {MORE} % more often."
 
 # Every number is copied from the artifacts named here. None is typed from memory.
 DATA = {
@@ -17,11 +28,12 @@ DATA = {
         {"name": "Before RL", "note": "The base model, Olmo 3 7B, trained only to predict the next word."},
         {"name": "After RL", "note": "The same model after AI2 trained it with rewards on math problems."},
     ],
-    # value[0] is the base model, value[1] the RL model, both in percent
+    # value[0] is the base model, value[1] the RL model, in percent. A row with "relative" holds the base model as 1 and
+    # the RL model as a multiple of it, and the page prints only the change.
     "rows": [
         {"name": "A hidden step can be swapped", "value": [36.4, 36.4], "of": "two-step questions where the answer follows a swapped middle step (of 44)",
          "artifact": "studies/jspace/results/workspace/pub-01/metrics.json", "key": "swap.probe-swap.*.pub.flip"},
-        {"name": "Wait is in mind", "value": [4.56, 5.64], "of": "positions in math solutions where Wait is among the 8 words the model is about to write",
+        {"name": "Wait is in mind", "value": [1, round(HOLD["rl"] / HOLD["base"], 3)], "relative": True, "of": "positions in math solutions where Wait is among the 8 words the model is about to write",
          "artifact": "studies/jspace/results/lensdiff/full-01/metrics.json", "key": "b_presence.T1_L24.hold_on"},
     ],
 }
@@ -29,20 +41,20 @@ DATA = {
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
     ["new", "What is new", "The closest published work compared the lenses of the two models and called RL a light change; it did not look at math text.",
-     ["New here: on 500 math solutions the RL model has Wait or Hmm among the 8 words it is about to write 24 % more often than the base model.",
+     [f"New here: on 500 math solutions the RL model has Wait or Hmm among the 8 words it is about to write {MORE} % more often than the base model.",
       "New here: swapping a hidden middle step changes the answer equally often in both models, so the inner machinery looks the same."]],
     # 45 % and 85 % are the states "untrained" (224 of 500) and "rl-directions" (427 of 500) of tools/finding_eight_directions.py.
     ["why", "Why it matters", "It narrows where the RL gain can come from: a habit of pausing to check, on top of the same inner machinery.",
      ['The page <a href="/finding/eight-directions">Eight directions</a> tests a related edit in the weights: adding the 8 strongest RL '
       "directions per matrix, some of which point at Wait and Okay, lifts the untrained model from 45 % to 85 %."]],
     ["how", "How we know", "Both models read the same text, and a lens showed which words each one was about to write.",
-     ["On 500 MATH-500 solutions written by the base model, Wait or Hmm was among the top 8 words at 4.56 % of positions for the base model and 5.64 % for the RL model (95 % interval of the difference: 1.01 to 1.15 points).",
+     [f"On 500 MATH-500 solutions written by the base model, Wait or Hmm was among the top 8 words {MORE} % more often for the RL model than for the base model (95 % interval: {MORE_CI[0]} % to {MORE_CI[1]} % more often).",
       "On 44 two-hop questions, swapping the hidden middle step inside the model changed the answer 16 times in each model. Swapping in an unrelated word did so 1 to 3 times.",
       "The closest published result (mhough/olmo3-jacobian-lenses) compared the lenses of the two models and called RL a light change. It did not look at math text."]],
     ["limits", "What it does not show", "It does not show that thinking Wait is why the RL model scores 11 points higher on MATH-500.",
      ["Nobody has yet pushed the base model toward Wait and measured its score.",
       "The extra Wait does not mark mistakes: it is no larger on the problems the base model gets wrong, and after a wrong line of arithmetic the pull toward writing Wait rises only a little more in the RL model (0.35 against 0.28 nats in its output).",
-      "The 24 % comes from reading both models with one lens. With a lens fitted to each model the gap is larger: 4.63 % against 6.29 %."]],
+      f"The {MORE} % comes from reading both models with one lens. With a lens fitted to each model the gap is larger: {MORE_OWN} % more often."]],
     ["run", "How to reproduce it", "Two GPU jobs of the study studies/jspace reproduce both numbers from a clean checkout.",
      ["Wait in mind: python -m studies.jspace.jobs.lensdiff, then analysis/lensdiff_analyze.py (commit 3af965d, 23 minutes on one H100).",
       "Hidden step: python -m studies.jspace.jobs.workspace_tests, then analysis/workspace_analyze.py (commit 3208566, 6 minutes).",
@@ -184,10 +196,15 @@ function draw() {
     const d = r.value[S.state] / r.value[0] - 1;
     $("bar" + i).style.transform = `scaleX(${len(r, S.state) / len(r, 1)})`;
     $("mark" + i).style.transform = `translateX(${X0 + len(r, S.state)}px)`;
-    $("value" + i).textContent = S.state === 0 ? pct(r.value[0]) : `${pct(r.value[0])} → ${pct(r.value[1])}`;
-    $("delta" + i).textContent = S.state === 0 ? "" : Math.abs(d) < .005 ? "no change" : `${d > 0 ? "+" : ""}${Math.round(d * 100)} %`;
+    // A relative row prints only its change: nothing before RL, then "+24 %" and "more often".
+    $("value" + i).textContent = r.relative ? (S.state === 0 ? "" : `${d > 0 ? "+" : ""}${Math.round(d * 100)} %`)
+      : S.state === 0 ? pct(r.value[0]) : `${pct(r.value[0])} → ${pct(r.value[1])}`;
+    $("delta" + i).textContent = S.state === 0 ? "" : r.relative ? (d > 0 ? "more often" : "less often")
+      : Math.abs(d) < .005 ? "no change" : `${d > 0 ? "+" : ""}${Math.round(d * 100)} %`;
   });
-  $("svg").setAttribute("aria-label", D.rows.map(r => `${r.name}: ${pct(r.value[S.state])} ${st.name.toLowerCase()}`).join("; "));
+  $("svg").setAttribute("aria-label", D.rows.map(r => r.relative
+    ? `${r.name}: ${S.state === 0 ? "the level before RL" : Math.round((r.value[1] / r.value[0] - 1) * 100) + " % more often after RL"}`
+    : `${r.name}: ${pct(r.value[S.state])} ${st.name.toLowerCase()}`).join("; "));
   $("note").textContent = st.note;
   $("switch").innerHTML = D.states.map((s, i) => `<button data-state="${i}" aria-pressed="${i === S.state}">${s.name}</button>`).join("");
 }

@@ -1,0 +1,54 @@
+{
+ "commit": "856971b",
+ "code_note": "round.py version 6.1 is at 856971b; HEAD at run time was 4c685e4 (the spec commit), with studies/theory/lib unchanged; the run's outputs were committed in a92ae63",
+ "spec": "studies/theory/specs/SPEC_account02.md (committed 4c685e4 before the run)",
+ "cutoff": "2026-11-15T04:29:33",
+ "commands": [
+  "uv run studies/theory/lib/round.py studies/theory/results/account/run-02 split --cutoff 2026-11-15T04:29:33 --skip gpuprice --skip \"theory round\" --skip \"theory skill\" --skip \"Theory engine\" --from studies/theory/results/account/run-01",
+  "cp studies/theory/results/account/run-01/external.md studies/theory/results/account/run-01/inventory.md studies/theory/results/account/run-02/",
+  "uv run studies/theory/lib/round.py studies/theory/results/account/run-02 all --only-account --cutoff 2026-11-15T04:29:33 --skip gpuprice --skip \"theory round\" --skip \"theory skill\" --skip \"Theory engine\" --from studies/theory/results/account/run-01"
+ ],
+ "copied": {
+  "external.md": "from run-01 (sha256 8b2473aa..., equal; the same file as round-04's)",
+  "inventory.md": "from run-01 (sha256 0a701964..., equal)"
+ },
+ "items_before": 114,
+ "items_after": 42,
+ "theories_carried": ["r4-m06", "r4-m11", "r4-m12", "r4-m10-rival"],
+ "graveyard": 45,
+ "facts": 65,
+ "incumbent_accounts": 1,
+ "account": "r6-account",
+ "cells": {
+  "math500-rl-T1": "known (input, not predicted): MATH-500, T 1.0, v3, cued base t1 against RL plain t2, 65 gap problems; shares from result-5e17a6 and run 01",
+  "math500-theta05-T1": "MATH-500, T 1.0, v3, cued base t1 against base + 0.5 (RL - base) with the cue (job 683b), 53 gap problems",
+  "hard328-code-T1": "clean harder 328, T 1.0, v3, cued base (e72c) against Code-RL 3.1 with the cue (a619), 37 gap problems",
+  "math500-s0400-T06": "MATH-500, T 0.6 / top-p 0.95, v1, cued base (r3 base-01 F) against RL step 400 plain (r3 s0400 P), 66 gap problems"
+ },
+ "offline_predictions": 20,
+ "share_predictions": 18,
+ "computed": 20,
+ "inside": 17,
+ "outside_within_noise": 1,
+ "outside": 2,
+ "outside_ids": {"within_noise": ["p15"], "beyond_noise": ["p16", "p17"]},
+ "total_gain_nats": 1.61,
+ "unexpected_wins": ["p4", "p5"],
+ "state": "refuted",
+ "refuted_by": "p16, reliability share in math500-s0400-T06: measured 0.379 (25 of 66, 90 % [0.288, 0.470]), predicted 0.15 [0.07, 0.25]",
+ "jobs": {"account (opus)": 1, "null_tests (opus)": 2, "test (opus)": 1},
+ "jobs_total": 4,
+ "job_s": {"account/r6-account": 473, "null_tests": [82, 87], "test/r6-account": 295},
+ "stages_skipped": "inventory and external (files copied); heldout, rival, defend, rival2, duel_test, score_duel, review: no theory survived the offline tests",
+ "wall_time": "about 15 minutes, before.jsonl written 2026-11-15T07:03:37Z to metrics_v4.json 07:18:15Z",
+ "log": "/private/tmp/claude-501/-Users-abaybektursun-projects-iterate-hack/85298391-4ffe-41a3-927a-6370d6b6a4e7/scratchpad/account02.log",
+ "temp_folder": "/var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-t5hfbkpm",
+ "row_files": "fetched by the test scripts to runs/theory-tests/ (not committed)",
+ "check": {
+  "what": "independent recomputation of the four budgets from the rules in theories/r6-account.json, written before reading tests/r6-account/; equal-E version; a null cell; raw-text reads",
+  "scripts": ["check/budget.py", "check/rawtext.py"],
+  "outputs": ["check/budget.out.txt", "check/assign.json", "check/rawtext.out.txt", "check/s0400_reliability_hand.json"],
+  "row_files": "runs/account-check/ (not committed), fetched with: aws s3 cp s3://pg-lineage-769063704696/results/rlneurons/{r4/base_rl-02/out/T1.jsonl, r3/base-01/out/{F,P}_math500.jsonl, r3/base-01/out/{F,P,CF,CP}_hard.jsonl, r3/s0400_s0100-01/out/s0400/P_math500.jsonl, r5/day1_hard328-01/abaybektursun-1114-{151534-e72c,132922-7ba0}/answers.jsonl, r5/day1_wdiff328-01/abaybektursun-1114-181216-a619/answers.jsonl} --profile iterate-ecr; modal volume get iterate-runs abaybektursun-1114-{152855-683b,153047-6429}/answers.jsonl",
+  "result": "all 18 share values and their bootstrap intervals of the three new cells equal the engine's"
+ }
+}

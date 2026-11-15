@@ -1,0 +1,244 @@
+{
+ "theory": "r4-m10-rival",
+ "turn": 1,
+ "tests": [
+  {
+   "k": 1,
+   "experiment": "Cap-hit rate of RL step 400, plain prompt, MATH-500 at T 0.6 / top-p 0.95.",
+   "recipe": "File: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl. Keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. A row is a cap hit if cap_hit is true, or if cap_hit is missing/null and finish_reason == 'length'; every other kept row is not a cap hit. Statistic: (number of cap-hit rows) / (number of kept rows).",
+   "unit": "fraction of problems",
+   "refuted_by": null,
+   "script": "rivals/r4-m10-rival/p1.py",
+   "measured": 0.196,
+   "n": 500,
+   "interval": [
+    0.166,
+    0.226
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.196,
+   "not_computable": null,
+   "note": "File: s3 r3/s0400_s0100-01/out/s0400/P_math500.jsonl, fetched to runs/theory-tests/r3/s0400_s0100-01_out_s0400_P_math500.jsonl (500 rows; every row has sample int 0, cap_hit bool, finish_reason 'stop' or 'length'). Kept rows are the sample == 0 rows, one per problem_index (the first in file order). Main: a row is a cap hit if cap_hit is True, or if cap_hit is missing/null and finish_reason == 'length'. Because cap_hit is never null in this file, the finish_reason fallback never applies, so a row with cap_hit False and finish_reason 'length' counts as not a cap hit. alt_measured counts a row as a cap hit if cap_hit is True OR finish_reason == 'length'; it differs from the main number only if the two flags disagree on some row. Interval: bootstrap over problems. refuted_by is null, so refuted_by_met is always false. The text field is dropped from example_row.",
+   "example_row": {
+    "cell": "P",
+    "bench": "math500",
+    "sample": 0,
+    "problem_index": 65,
+    "unique_id": "test/prealgebra/1747.json",
+    "seed": 1000065,
+    "prompt_n_tokens": 69,
+    "prefill_ids": [],
+    "n_new": 563,
+    "n_generated": 564,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "finished_by_N": true,
+    "loop_ratio": 0.43866171003717475,
+    "n_special_ids": 0,
+    "mode": "boxed",
+    "extracted": "1",
+    "gold": "1",
+    "score": 1,
+    "parsed_gold": [
+     "1",
+     "1"
+    ],
+    "parsed_answer": [
+     "1",
+     "1"
+    ],
+    "answer_logprob": -9.285972191719338e-05,
+    "answer_prob": 0.9999071445894133,
+    "answer_tokens": 1,
+    "mean_logprob": -0.2894862138918001,
+    "utc": "2026-11-14T04:16:05Z"
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Paired change in cap-hit rate from RL step 100 to RL step 400, plain prompt, MATH-500 at T 0.6 / top-p 0.95 (step 100 minus step 400).",
+   "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (A) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (B). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both A and B (set S); problems missing from either file are dropped. A row is a cap hit if cap_hit is true, or if cap_hit is missing/null and finish_reason == 'length'. Statistic: (cap hits in A over S) / |S| minus (cap hits in B over S) / |S|.",
+   "unit": "fraction of problems",
+   "refuted_by": null,
+   "script": "rivals/r4-m10-rival/p2.py",
+   "measured": 0.009999999999999981,
+   "n": 500,
+   "interval": [
+    -0.01999999999999999,
+    0.03999999999999998
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.009999999999999981,
+   "not_computable": null,
+   "note": "A = s3 r3/s0400_s0100-01/out/s0100/P_math500.jsonl (step 100), B = .../s0400/P_math500.jsonl (step 400), fetched to runs/theory-tests/r3/. Each file holds 500 rows, all with sample 0. In each file, the first row per problem_index is kept. S is the set of problem_index values present in both files, matched on problem_index (not on unique_id). Statistic: cap rate of A over S minus cap rate of B over S, using the same cap rule as k 1 (cap_hit is never null, so the finish_reason fallback is not used). alt_measured uses the cap_hit OR finish_reason=='length' rule on both files. Interval: bootstrap over (A row, B row) pairs. The inventory excludes s0100/F_math500 because it was modified after the cutoff; this recipe uses P_math500, which is listed as readable, so it is unaffected.",
+   "example_row": {
+    "A": {
+     "cell": "P",
+     "bench": "math500",
+     "sample": 0,
+     "problem_index": 86,
+     "unique_id": "test/prealgebra/307.json",
+     "seed": 1000086,
+     "prompt_n_tokens": 93,
+     "prefill_ids": [],
+     "n_new": 351,
+     "n_generated": 352,
+     "cap_hit": false,
+     "finish_reason": "stop",
+     "finished_by_N": true,
+     "loop_ratio": 0.46726190476190477,
+     "n_special_ids": 0,
+     "mode": "answer_line",
+     "extracted": "240",
+     "gold": "240",
+     "score": 1,
+     "parsed_gold": [
+      "240",
+      "240"
+     ],
+     "parsed_answer": [
+      "240",
+      "240"
+     ],
+     "answer_logprob": -0.002862881403416395,
+     "answer_prob": 0.9971412127336071,
+     "answer_tokens": 1,
+     "mean_logprob": -0.3064725926194093,
+     "utc": "2026-11-14T23:25:08Z"
+    },
+    "B": {
+     "cell": "P",
+     "bench": "math500",
+     "sample": 0,
+     "problem_index": 86,
+     "unique_id": "test/prealgebra/307.json",
+     "seed": 1000086,
+     "prompt_n_tokens": 93,
+     "prefill_ids": [],
+     "n_new": 597,
+     "n_generated": 598,
+     "cap_hit": false,
+     "finish_reason": "stop",
+     "finished_by_N": true,
+     "loop_ratio": 0.4386834986474301,
+     "n_special_ids": 0,
+     "mode": "answer_line",
+     "extracted": "\\boxed{240}",
+     "gold": "240",
+     "score": 1,
+     "parsed_gold": [
+      "240",
+      "240"
+     ],
+     "parsed_answer": [
+      "240",
+      "240"
+     ],
+     "answer_logprob": -0.13733542711634072,
+     "answer_prob": 0.8716777927214127,
+     "answer_tokens": 5,
+     "mean_logprob": -0.28346673218515067,
+     "utc": "2026-11-14T04:43:12Z"
+    }
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Paired cap-hit rate difference on the 400-problem harder set at T 0.6 / top-p 0.95: RL step 400 plain minus cued base.",
+   "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_hard.jsonl (A) and s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (B). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both A and B (set S); problems missing from either file are dropped. No problems are excluded for training overlap. A row is a cap hit if cap_hit is true, or if cap_hit is missing/null and finish_reason == 'length'. Statistic: (cap hits in A over S) / |S| minus (cap hits in B over S) / |S|.",
+   "unit": "fraction of problems",
+   "refuted_by": null,
+   "script": "rivals/r4-m10-rival/p3.py",
+   "measured": -0.04749999999999999,
+   "n": 400,
+   "interval": [
+    -0.08750000000000002,
+    -0.007500000000000062
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": -0.04749999999999999,
+   "not_computable": null,
+   "note": "A = s3 r3/s0400_s0100-01/out/s0400/P_hard.jsonl (step 400, plain), B = s3 r3/base-01/out/F_hard.jsonl (base, cue), fetched to runs/theory-tests/r3/. Each file holds 400 rows with sample 0. Problems are paired on problem_index alone; the script assumes both runs index the 400-problem hard set the same way, and does not check unique_id. If the two runs ordered the problems differently, the pairing would be wrong, although the difference of the two rates would only change if S changes. Per the recipe, no problems are excluded for training overlap. The cap rule and the alt reading are the same as in k 1 and k 2. Interval: bootstrap over pairs.",
+   "example_row": {
+    "A": {
+     "cell": "P",
+     "bench": "hard",
+     "sample": 0,
+     "problem_index": 0,
+     "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+     "seed": 3000000,
+     "prompt_n_tokens": 116,
+     "prefill_ids": [],
+     "n_new": 3144,
+     "n_generated": 3145,
+     "cap_hit": false,
+     "finish_reason": "stop",
+     "finished_by_N": true,
+     "loop_ratio": 0.3300849575212394,
+     "n_special_ids": 0,
+     "mode": "boxed",
+     "extracted": "116",
+     "gold": "116",
+     "score": 1,
+     "parsed_gold": [
+      "116",
+      "116"
+     ],
+     "parsed_answer": [
+      "116",
+      "116"
+     ],
+     "answer_logprob": -4.0531076592742465e-06,
+     "answer_prob": 0.9999959469005546,
+     "answer_tokens": 1,
+     "mean_logprob": -0.13087266336532136,
+     "utc": "2026-11-14T10:30:17Z"
+    },
+    "B": {
+     "cell": "F",
+     "bench": "hard",
+     "sample": 0,
+     "problem_index": 0,
+     "unique_id": "aime2022/2022_AIME_I_Problems/Problem_1",
+     "seed": 3000000,
+     "prompt_n_tokens": 116,
+     "prefill_ids": [
+      1584,
+      2268,
+      33413
+     ],
+     "n_new": 2304,
+     "n_generated": 2305,
+     "cap_hit": false,
+     "finish_reason": "stop",
+     "finished_by_N": true,
+     "loop_ratio": 0.33153735632183906,
+     "n_special_ids": 0,
+     "mode": "boxed",
+     "extracted": "116",
+     "gold": "116",
+     "score": 1,
+     "parsed_gold": [
+      "116",
+      "116"
+     ],
+     "parsed_answer": [
+      "116",
+      "116"
+     ],
+     "answer_logprob": -1.07287787614041e-05,
+     "answer_prob": 0.9999892712787918,
+     "answer_tokens": 1,
+     "mean_logprob": -0.1074636638683021,
+     "utc": "2026-11-14T05:28:59Z"
+    }
+   }
+  }
+ ]
+}

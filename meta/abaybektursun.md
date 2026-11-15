@@ -1,5 +1,54 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 08:45 UTC (session egate, after result-34897a of work-deec92) meta/reviews/abaybektursun/20261115-0845/
+
+- Direction: work-deec92 asked whether a decoding rule gives the base T 0.6's accuracy without its loops. Negative (-1.4 points at n = 500, three gates), and it closes the decoding-rule line together with result-44b4df. It tested "no reward" but not the 328: the spec allowed the 328 only after a MATH-500 gain. Next step, work-3d1e3b, starts from the bar of 219 (Think-SFT + RL delta on the 328).
+- Research: the 2x2 with loops was unpublished (16 findings read before the run). work-3d1e3b's method is published (2605.00610, sum of SFT and GRPO vectors); it runs because the donor, the held-out set and the control differ, and the README had filed its predictions.
+- Turnaround (cycle.txt line 110): work-deec92 to-job 154 min, jobs 60, to-answer 214. To-job was the vLLM processor interface (read from source) and one screen of 8 arms on one box that was stopped after 40 min: the KV cache of a 96 GB card holds 249,438 tokens, about 31 long requests, so arms on one box run one after another.
+- Failures: (1) I destroyed two boxes 14 s after their jobs ended, while `get` was copying: one n = 500 sample lost. Cause removed by abaybektursun/main in tools/vast.py (down refuses without a finished get). (2) 3 of 7 rent calls waited 20 min for boxes that never answered ssh (before.txt); the 4 that worked were ready in 75 to 180 s.
+- Change (step 2, delete waiting): `BOOT_MINUTES` 20 -> 6 in tools/vast.py.
+
+| measure | before | after | change | runs | source |
+|---|---|---|---|---|---|
+| minutes lost per rent call that fails | 20 | not measured yet | | 3 and 0 | before.txt |
+| boxes ready later than 6 min (must stay 0) | 0 of 4 | not measured yet | | 4 and 0 | before.txt |
+
+- Next entry checks: the next failed rent call ends at 6 min, and no box that would have worked was destroyed.
+
+## 2026-11-15 08:20 UTC (session signed, after result of work-d9a824) meta/reviews/abaybektursun/20261115-0818/
+
+- Previous entry of this session asked: setup_vllm.sh on vast.ai with the plain command. Still not measured: no vast.ai job since.
+- Direction: work-d9a824 tested the mission's "route that uses no reward" (signed self-training). Result negative (P 140, G 155 vs 164 of 328). It followed from the vote-distillation null, not from the mission's deliverable; Think-SFT cue at 219 now sets the bar, so the next step should start from that number.
+- Turnaround (cycle.txt): work-d9a824 claim to close 161 min, jobs stage 156 min, 5 jobs, 0 failed. The two 328 cells took 131 and 132 min each from submit (about 60 min queued), for an answer that was visible early: in the first 40 problems cap hits were already far above the base (before.txt).
+- Cause: no small cell before the full one. The spec's instrument check had already failed, and I ran two full cells anyway.
+- Change (step 2, delete): when a pre-registered check fails, run the cell on the first 40 problems (`run_cell --n 40`) and stop there if cap hits or right answers are outside the base's range. No code change; after: not measured yet.
+- Next entry checks: minutes from trained model to a keep-or-stop decision, against 131 min here.
+
+## 2026-11-15 08:15 UTC (loop cycle 4, step-back 1; no change to tools) meta/reviews/abaybektursun/20261115-0810/
+
+- Target: last 1 h 103 / 171 min over 6 items, 8.0 results per hour; last 4 h 31 / 100 min over 45 items, 16.2 per hour. The 1 h number went 15, 16, 24, 103 over four cycles with the mix of work and the number of active sessions; no change of the loop can be read from it. The loop records the 4 h window from cycle 5.
+- Score of cycle 3 (reservation removed): helped, weak. Long lane in the hour after: 7 of 14 started, median wait 10.0 min, against 0 of 21 started in 39 min (lanes_after_redeploy.txt). Correction: cycle 3's "queue moving" reading counted jobs that a broken container killed (31 deaths 07:04-07:18, fixed 07:22 by another session).
+- The three questions are answered in stepback.md. Short: (1) the changes that helped each removed a wait or a failure in shared tools, by the reviewer alone, with the before number already in job records; none shows in the team median. (2) Never fixed: minutes per cell, rows outside git, GPU capacity; each was written into entries the owner does not read. (3) Section 2 (Research) made 0 changes in 31 entries.
+- Skill edit (one, 131 lines before and after): a change the reviewer cannot make is posted as an idea with its baseline, not carried. Measured over cycles 5 to 8 against 1 of 9 proposals reaching an owner.
+- Modal: the person asked for no new Modal GPU jobs. The loop submits none; cycle.py reads Modal records only, so fewer jobs will show.
+- Next cycle checks: the 4 h Team line against 31 / 100 min and 16.2 per hour; the two open proposals (rows in git, GPUs per question) posted as ideas.
+
+## 2026-11-15 07:12 UTC (loop cycle 3) meta/reviews/abaybektursun/20261115-0702/
+
+- Target (Team line, last 1 h): claim to close median 24 min (16), upper quartile 124 min (46), 6 items of 2 people (19 of 3); 16.0 results per hour (18.0). Worse on every number; 6 items is a small sample, but the cause below is direct.
+- Open measurements closed: review entries by other sessions: 0 in the hour since cycle 2 against 3 the hour before (cycle 1's change, now that the sessions merged main): helped. The open-file class (work-95ff34): 0 jobs died in the last hour (cycle.txt): removed.
+- Score of cycle 2's change (cycle.py, died jobs): no effect on the target, as expected of a fix to the measure; failed minutes read 1.0 of 96.0.
+- Cause of the worse hour: at 06:25 the runner got a lane of 2 H100 kept free for short jobs and the long lane went from 20 to 8 (5ae3f7c, e9ffa5e). In the 39 min after it (before.txt): the short lane ran 2 jobs for 4 GPU-min, and they still waited 27.7 min; the long lane started 0 of 21 submitted jobs, 20 waited, the oldest 38 min; 8 ran and 27 were queued. About 74 GPU-min idle beside a queue. Cycle 1 had rejected this lane on the same arithmetic (96 min of waits saved against 215 GPU-min idle per 2 h).
+- Change (step 2, remove the reservation; no code edit): `ITERATE_MAX_H100=10 uv run tools/gpu.py deploy` in abaybektursun's workspace. The short lane stays as a class, without GPUs held for it. Same jobs and GPU hours, so no extra credits.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | H100 jobs running / queued | 8 / 27 | 9 / 24 after 3 min, 2 of the 8 finished and 3 queued jobs started | queue moving | 1 and 2 readings | before.txt, after.txt |
+  | jobs running at the deploy (must not change) | 8 | 2 done, 5 running, 1 not found by my grep | none ended by the deploy seen | 1 | after.txt |
+  | long-lane queue wait | 20 waiting, oldest 38 min | not measured yet | - | - | lanes.py |
+
+- Next cycle (4) is the step-back: no change, a review of the entries in meta/reviews/. It also reads lanes.py for the hour after this deploy.
+
 ## 2026-11-15 06:08 UTC (loop cycle 2) meta/reviews/abaybektursun/20261115-0559/
 
 - Target (Team line, last 1 h, no overlap with cycle 1): claim to close median 16 min (15), upper quartile 46 min (69), 19 items; 18.0 results per hour (20.0). Median unchanged; the quartile fell while the H100 queue emptied (median wait 0.1 min). One window each: weak evidence.

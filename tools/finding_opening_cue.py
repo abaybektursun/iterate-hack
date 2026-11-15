@@ -4,7 +4,8 @@ The page of one finding, served at /finding/opening-cue (copied from .claude/ski
 replaced by a glass bar with depth, and above it the start of the answer, where the cue appears in front of the text).
 It is reached from its tile on /findings, which ICON draws. Study: studies/rlneurons (README.md "Definitions",
 "Established numbers" and "Day-1 #3"; board result-c36598 and result-60d899). The cue is published (Wang et al., arXiv
-2610.06851); what this page adds is the share of the RL gain that the cue covers at temperature 1.0.
+2610.06851); what this page adds is the share of the RL gain that the cue covers at temperature 1.0, and that the gap
+left to the RL model depends on the sampling temperature (board result-bac4fd, result-dadeec, result-44b4df).
 """
 import json
 
@@ -16,6 +17,19 @@ DATA = {
     "plain": {"right": 224, "right_v1": 196, "nothing_extracted": 129, "cap_hits": 8},   # cells.base_plain_1.0
     "cue": {"right": 410, "right_v1": 389, "nothing_extracted": 25, "cap_hits": 27},      # cells.base_opener_1.0
     "plain_t06": {"right": 319},  # cells.base_plain_0.6 (T 0.6 / top-p 0.95)
+    # The same pair at T 0.6 / top-p 0.95: cells.base_opener_0.6 (right_v3, cap_hits) and cells.rl_0.6.
+    "t06": {"cue": 354, "cue_cap_hits": 119, "rl": 464},
+    # Paired differences in points with their 95 % intervals (differences_v3: diff_points, ci95), each as [points, low, high]:
+    # rl_0.6 - base_opener_0.6 and rl_1.0 - base_opener_1.0.
+    "gap": {"t06": [22.0, 18.4, 25.8], "t10": [10.6, 7.4, 13.8]},
+    # T 0.6 / top-p 1.0: rows.math500_base_cue_t06_p10-01 (right_v3, cap_hits, loops_A, the loop detector rule A).
+    "t06_p10_artifact": "studies/rlneurons/results/day1/readout.json",
+    "t06_p10_commit": "3407c6e",
+    "t06_p10": {"right": 378, "cap_hits": 98, "loops": 71},
+    # Loops at T 1.0: cells.T1_base_cue.loops_A, and cells.base_mp0.1_T1.loops_A where min-p 0.1 cuts off the unlikely tokens.
+    "minp_artifact": "studies/rlneurons/results/day1_minp/readout.json",
+    "minp_commit": "d1f5a23",
+    "minp": {"loops_t10": 0, "loops_cut": 34},
     "rl_first": {"right": 463},   # cells.rl_1.0: the RL reference, the RL model's cell in the same artifact, T 1.0 / top-p 1.0
     # A later RL run: rows.single.right and each_sample.single_right of the four-sample run at T 1.0 / top-p 1.0.
     "rl_artifact": "studies/rlneurons/results/day1_3/math500_rl-01/readout.json",
@@ -24,10 +38,14 @@ DATA = {
     # The repeat of the cue cell: each_sample.single_right (sample 0 has the seeds of the cell above).
     "repeat_artifact": "studies/rlneurons/results/day1_3/math500_base_cue-01/readout.json",
     "repeat": {"samples": [405, 409, 410, 418]},
-    # The later steps of the climb: rows.tie_short.right of the base model with the cue and of the RL model.
+    # The later steps of the climb: rows.vote_after_restart.right of the base model with the cue (repeat_artifact) and of
+    # the RL model (rl_artifact), and rows.cv_pick.right of vote_artifact, the tie rule picked on held-out folds. The
+    # tie rule tie_short (453) is not used: it was chosen after reading the 7 problems it fixes (board result-e78dfe).
     "vote_artifact": "studies/rlneurons/results/selector/math500_base_cue-01/readout.json",
-    "vote_rl_artifact": "studies/rlneurons/results/selector/math500_rl-01/readout.json",
-    "vote": {"cue": 453, "rl": 475},
+    "vote": {"cue": 450, "rl": 475, "cue_held_out": 451},
+    # Cut-off answers of the RL model during training, plain prompt, T 0.6 / top-p 0.95, sample 0 (step5 of the file).
+    "steps_artifact": "studies/theory/results/engine/round-04/replication/replication.json",
+    "steps": {"base": 65, "step400": 98, "step2800": 19},
     # 328 harder problems: rows.hard328_base_cue_t10-01.right_v3 and rows.hard328_rl_plain_t10-01.right_v3.
     "hard_artifact": "studies/rlneurons/results/day1/readout.json",
     "hard": {"cue": 164, "rl": 206, "n": 328},
@@ -37,7 +55,8 @@ DATA = {
     "cue_tokens": 3,
     "cap": 16384,
     # From the paper (Wang et al., arXiv 2610.06851, read in full: board knowledge-8a31ad), in percent on MATH-500 at T 0.6.
-    "paper": {"plain": 42.2, "cue": 77.9},
+    # "rl" is the paper's RL model, the earlier release Olmo-3-7B-RL-Zero-Math (its Table 6).
+    "paper": {"plain": 42.2, "cue": 77.9, "rl": 75.0},
 }
 N = DATA["n"]
 
@@ -59,6 +78,7 @@ LINE = f"Three opening tokens raise the base model from {pc(PLAIN)} % to {pc(CUE
 
 DATA.update({
     "metric": "MATH-500, right answers of 500, one sample at temperature 1.0",
+    "caption": f"The bar is the share of the {N} MATH-500 problems solved, one sample each at temperature 1.0.",
     "unit": "%",
     "max": 100,
     # What the reader switches between. The first is shown on load, so the page starts from the problem.
@@ -71,23 +91,30 @@ DATA.update({
 })
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
+# [[words|/path]] in a fact becomes a link to another page of the site.
+T06, G06, G10 = DATA["t06"], DATA["gap"]["t06"], DATA["gap"]["t10"]
 PANELS = [
     ["new", "What is new",
      f"The cue is a replication of Wang et al. (arXiv 2610.06851), who report that a short opening cue takes the Olmo 3 base "
      f"model from {DATA['paper']['plain']} % to {DATA['paper']['cue']} % on MATH-500 at temperature 0.6.",
-     [f"This run adds the share of the RL gain at temperature 1.0. The plain base model has {PLAIN} right answers of {N}, the "
-      f"base model with the cue {CUE} and the RL model {RL}. So the cue alone covers {CUE - PLAIN} of the {RL - PLAIN} answers "
-      f"that RL training adds: {SHARE} %.",
-      f"Against a later run of the RL model at the same setting ({RL_LATER} right in its first sample) the share is {SHARE_LATER} %.",
-      "The paper's cue has two tokens. The cue here has three, the text \" line!\", two line breaks and \"Okay\", and it is "
-      "how the RL model opens its own answers."]],
+     [f"New here: how far the base model with the cue stays behind the RL model depends on the sampling temperature. The gap "
+      f"is {G06[0]} points at temperature 0.6 (95 % interval {G06[1]} to {G06[2]}) and {G10[0]} points at temperature 1.0 "
+      f"({G10[1]} to {G10[2]}).",
+      f"Only the base model moves. With the cue it has {T06['cue']} right answers of {N} at temperature 0.6 and {CUE} at 1.0, "
+      f"and the RL model has {T06['rl']} and {RL}.",
+      f"The paper ran temperature 0.6 only, and its RL model is an earlier release that scores {DATA['paper']['rl']} %, which "
+      f"the cue already matched, so it had no gap to explain. Against the later release used here, the cue covers "
+      f"{CUE - PLAIN} of the {RL - PLAIN} answers that RL training adds at temperature 1.0: {SHARE} %."]],
     ["why", "Why it matters",
      f"Most of what RL training adds on this benchmark is reached with no training, so the work that follows is about the "
      f"remaining {LEFT[0]} to {LEFT[1]} points.",
-     ["No weight changes. Three tokens are placed in front of the answer, and the model writes the rest.",
-      f"It is the first and largest step of the team's climb on MATH-500. With a vote over four samples the base model with "
-      f"the cue reaches {DATA['vote']['cue']} of {N} ({pc(DATA['vote']['cue'])} %), and the RL model {DATA['vote']['rl']} "
-      f"({pc(DATA['vote']['rl'])} %) under the same rule.",
+     [f"The temperature decides how large that remainder looks. About half of the {G06[0]} points seen at temperature 0.6 are "
+      f"gone at 1.0, where far fewer of the base model's answers run to the token cap ({DATA['cue']['cap_hits']} of {N} "
+      f"against {T06['cue_cap_hits']}).",
+      f"It is the first and largest step of the team's climb on MATH-500. With a vote over four samples after restarting "
+      f"cut-off answers the base model with the cue reaches {DATA['vote']['cue']} of {N} ({pc(DATA['vote']['cue'])} %), and "
+      f"the RL model {DATA['vote']['rl']} ({pc(DATA['vote']['rl'])} %) under the same rule. A tie rule picked on held-out "
+      f"folds gives the base model {DATA['vote']['cue_held_out']}.",
       f"Harder problems leave more to explain: on {DATA['hard']['n']} of them the base model with the cue has "
       f"{DATA['hard']['cue']} right and the RL model {DATA['hard']['rl']}."]],
     ["how", "How we know",
@@ -97,29 +124,40 @@ PANELS = [
       f"per problem at temperature 1.0 and top-p 1.0, with a cap of {DATA['cap']:,} generated tokens, scored by grader v3.",
       f"The control is the plain prompt on the same weights. The reference is the RL model Olmo-3.1-7B-RL-Zero-Math with the "
       f"plain prompt at the same setting: {RL} of {N} ({pc(RL)} %) in the run shown, and {DATA['rl']['samples'][0]}, "
-      f"{DATA['rl']['samples'][1]}, {DATA['rl']['samples'][2]} and {DATA['rl']['samples'][3]} in the four samples of a later run.",
+      f"{DATA['rl']['samples'][1]}, {DATA['rl']['samples'][2]} and {DATA['rl']['samples'][3]} in the four samples of a later run. "
       f"A repeat of the cue run on the same seeds gave {DATA['repeat']['samples'][0]} right, and three further samples "
-      f"{DATA['repeat']['samples'][1]}, {DATA['repeat']['samples'][2]} and {DATA['repeat']['samples'][3]}. The artifact keeps "
-      "one answer scored right and one scored wrong for each run."]],
+      f"{DATA['repeat']['samples'][1]}, {DATA['repeat']['samples'][2]} and {DATA['repeat']['samples'][3]}.",
+      f"Temperature: at 0.6 with top-p 0.95 the base model with the cue has {T06['cue']} right, and {T06['cue_cap_hits']} of its "
+      f"answers run to the token cap. At 0.6 with top-p 1.0 it has {DATA['t06_p10']['right']} right, and a loop detector finds "
+      f"{DATA['t06_p10']['loops']} answers that repeat themselves. At 1.0 the detector finds {DATA['minp']['loops_t10']}, and "
+      f"cutting off the unlikely tokens again brings {DATA['minp']['loops_cut']} back. The page "
+      "[[Restarting stuck answers|/finding/restart-on-cap]] shows what a restart recovers."]],
     ["limits", "What it does not show",
      f"The score above the paper's {DATA['paper']['cue']} % is a grader effect rather than a better cue: under our first "
      f"grader, the closest to the paper's, the same answers score {DATA['cue']['right_v1']} of {N} ({pc(DATA['cue']['right_v1'])} %).",
-     [f"The size of the step depends on the temperature. At temperature 0.6 the plain base model has "
+     [f"Why the RL model keeps its score at the lower temperature is only partly measured: at temperature 0.6 its cut-off "
+      f"answers fall late in training, from {DATA['steps']['step400']} of {N} at RL step 400 to {DATA['steps']['step2800']} "
+      "at the final step 2,800. What in training causes the fall is untested.",
+      f"The size of the step also depends on the temperature. At temperature 0.6 the plain base model has "
       f"{DATA['plain_t06']['right']} right of {N}. Against that setting the cue at temperature 1.0 adds "
       f"{round(pc(CUE) - pc(DATA['plain_t06']['right']), 1)} points, where the picture shows {round(pc(CUE) - pc(PLAIN), 1)}.",
       f"Part of the gain is answers that end in a readable form. With the plain prompt {DATA['plain']['nothing_extracted']} of "
-      f"{N} answers hold no final answer that the grader can find, and with the cue {DATA['cue']['nothing_extracted']}.",
-      "It is one pair of models, one benchmark and one sample per problem. The regrade under the paper's own extraction rule "
-      "is board result-60d899, and its script is not committed."]],
+      f"{N} answers hold no final answer that the grader can find, and with the cue {DATA['cue']['nothing_extracted']}. "
+      "It is one pair of models, one benchmark and one sample per problem."]],
     ["run", "How to reproduce it",
      "One command runs the cue on one GPU, and the same command with --prompt plain runs the control.",
      ["uv run tools/gpu.py submit h100 --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python "
       "-m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 "
       "--seed 41000000 --commit $(git rev-parse HEAD)\"",
       f"The two numbers in the picture are in {DATA['artifact']} (cells base_plain_1.0 and base_opener_1.0, commit "
-      f"{DATA['commit']}), written by studies/rlneurons/grader/rln4_grader_v3.py from the first runs. The RL reference is the cell rl_1.0 of the "
-      f"same file, and the later RL run is in {DATA['rl_artifact']} (commit {DATA['rl_commit']}).",
-      f"The cue's three token ids and its text are frozen in {DATA['cue_artifact']} (prefill_ids, prefill_text)."]],
+      f"{DATA['commit']}), written by studies/rlneurons/grader/rln4_grader_v3.py from the first runs. The RL reference is the "
+      f"cell rl_1.0 of the same file, which also holds the cells and differences at temperature 0.6. The later RL run is in "
+      f"{DATA['rl_artifact']} (commit {DATA['rl_commit']}), the votes in {DATA['repeat_artifact']}, {DATA['rl_artifact']} "
+      f"and {DATA['vote_artifact']}, the cut-off answers during training in {DATA['steps_artifact']}, and the loop counts "
+      f"in {DATA['t06_p10_artifact']} and {DATA['minp_artifact']}.",
+      f"The cue's three token ids and its text are frozen in {DATA['cue_artifact']} (prefill_ids, prefill_text). The paper's "
+      "cue has two tokens. The cue here has three, the text \" line!\", two line breaks and \"Okay\", and it is how the RL "
+      "model opens its own answers."]],
 ]
 
 # The icon of this finding's tile on /findings (tools/findings.py says how it is called): the page's own picture,
@@ -203,7 +241,8 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .cuet { fill: var(--blue); font-size: 34px; font-weight: 640; }
 .ret { fill: none; stroke: var(--blue); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
 .stroke { stroke: var(--mute); stroke-linecap: round; opacity: .62; }
-.switch { display: inline-flex; align-self: center; margin-top: 22px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
+.cap { align-self: center; margin: 14px 0 0; color: var(--mute); font-size: 14px; text-align: center; max-width: 60ch; }
+.switch { display: inline-flex; align-self: center; margin-top: 18px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
 .switch button { padding: 8px 20px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
@@ -259,6 +298,7 @@ svg { animation: fade 1s both; }
   </header>
   <div class="stage" id="stage">
     <svg id="svg" viewBox="0 0 1000 400" role="img"></svg>
+    <p class="cap" id="cap"></p>
     <div class="switch" id="switch" role="group" aria-label="The start of the answer"></div>
   </div>
   <div class="side">
@@ -376,7 +416,7 @@ function pane() {
   const p = C.panels.find(p => p[0] === S.open);
   $("pane").innerHTML = p
     ? `<div class="dhead"><h2>${esc(p[1])}</h2><button class="close" data-open="">Close</button></div><p class="lead">${esc(p[2])}</p>` +
-      `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
+      `<ul class="facts">${p[3].map(x => `<li>${esc(x).replace(/\[\[([^|\]]+)\|([^\]]+)\]\]/g, '<a href="$2">$1</a>')}</li>`).join("")}</ul>`
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${esc(p[1])}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
 function fromHash() { const h = location.hash.slice(1); S.open = C.panels.some(p => p[0] === h) ? h : null; pane(); }
@@ -399,6 +439,7 @@ $("stage").addEventListener("pointermove", e => {  // the view leans a little to
 $("stage").addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 narrow.addEventListener("change", setup);
 document.fonts.ready.then(() => { fit(); place(); });
+$("cap").textContent = D.caption;
 $("problem").textContent = C.problem;
 $("say").innerHTML = esc(C.line).replace(/(?<![\w-])(\d+(?:[.,]\d+)*(?: ?%)?)/g, "<b>$1</b>");  // a number inside a name (MATH-500) stays plain
 setup();
