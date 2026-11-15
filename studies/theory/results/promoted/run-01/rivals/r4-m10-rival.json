@@ -1,0 +1,33 @@
+{
+ "statement": "Early RL-Zero-Math adopts the RL opening and lengthens deliberation at once (step 100 is the cued base in format, length and per-token sharpness), but 3.1's truncation-as-negative reward starts pruning the T 0.6 / top-p 0.95 loop hazard from the first steps rather than late, so cap hits fall steadily in log-steps (cued base ~0.24 -> step 100 ~0.19 -> step 400 ~0.15 -> step 2,800 ~0.03) instead of sitting flat at the cued-base level through step 400.",
+ "why_strongest": "It explains every measured value as well as the theory does. The opening is adopted by step 100 (0.956 'Okay'). At step 400, cue and plain are both the model's own opening, so their cap rates match (-0.028, within the ~0.025 sampling sd). Finished-answer length at step 100 is the cued base's (ratio 2.25, i.e. ~1,430 tokens, the cued-base scale). Finished-answer mean_logprob at steps 100/400 sits at the cued-base median (0.55, 0.48), with step 400 only 0.07 of the way to step 2,800. None of these tests measures the cap-hit level after step 0, which is the one thing the two mechanisms disagree on. The rival also fits the board. The 3.1 report (knowledge-8a31ad) trains truncated sequences as negatives from the start, and in published entropy dynamics most RL change comes in the first few hundred steps (2505.22617). Loops are driven by a small, specific neuron set, and zeroing it removes loops without changing the finished answers (result-6de887), so pruning loops need not move per-token sharpness. Step 2,800 is far below the base (16/500 cap hits), and the loops at T 0.6 come from a few decision points (Wait-after-answer re-checks), which a reward on truncated rollouts hits directly. The theory's own rival (sharpening -> more top-p locks) is weaker: tests 4-6 show no sharpening by step 400, so it has no driver for rising loops.",
+ "tests": [
+  {
+   "experiment": "Cap-hit rate of RL step 400, plain prompt, MATH-500 at T 0.6 / top-p 0.95.",
+   "recipe": "File: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl. Keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. A row is a cap hit if cap_hit is true, or if cap_hit is missing/null and finish_reason == 'length'; every other kept row is not a cap hit. Statistic: (number of cap-hit rows) / (number of kept rows).",
+   "unit": "fraction of problems",
+   "value": 0.15,
+   "low": 0.1,
+   "high": 0.2,
+   "theory_should_say": "The theory has cap hits at the cued-base level (119/500 ~ 0.24) at step 100, flat through step 400, so it implies ~0.22-0.24; the rival has early truncation-negative pruning already bringing it to ~0.15."
+  },
+  {
+   "experiment": "Paired change in cap-hit rate from RL step 100 to RL step 400, plain prompt, MATH-500 at T 0.6 / top-p 0.95 (step 100 minus step 400).",
+   "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (A) and s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_math500.jsonl (B). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both A and B (set S); problems missing from either file are dropped. A row is a cap hit if cap_hit is true, or if cap_hit is missing/null and finish_reason == 'length'. Statistic: (cap hits in A over S) / |S| minus (cap hits in B over S) / |S|.",
+   "unit": "fraction of problems",
+   "value": 0.05,
+   "low": 0.0,
+   "high": 0.1,
+   "theory_should_say": "The theory says cap hits stay flat from step 100 to step 400 (only later commit-and-stop training removes them), so it implies ~0.00; the rival has them falling steadily, so ~+0.05."
+  },
+  {
+   "experiment": "Paired cap-hit rate difference on the 400-problem harder set at T 0.6 / top-p 0.95: RL step 400 plain minus cued base.",
+   "recipe": "Files: s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0400/P_hard.jsonl (A) and s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (B). In each file keep rows with sample == 0; if a problem_index appears more than once, keep the first row in file order. Keep problem_index values present in both A and B (set S); problems missing from either file are dropped. No problems are excluded for training overlap. A row is a cap hit if cap_hit is true, or if cap_hit is missing/null and finish_reason == 'length'. Statistic: (cap hits in A over S) / |S| minus (cap hits in B over S) / |S|.",
+   "unit": "fraction of problems",
+   "value": -0.1,
+   "low": -0.18,
+   "high": -0.02,
+   "theory_should_say": "The theory says step 400 loops exactly like the cued base (the cue-forced deliberation mode, not yet pruned), so it implies ~0.00 (or slightly positive from longer chains); the rival has loop pruning already under way, giving ~-0.10 on the cap-heavy hard set (cued base ~0.5 cap hits there)."
+  }
+ ]
+}
