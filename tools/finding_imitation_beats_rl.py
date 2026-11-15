@@ -35,8 +35,11 @@ DATA = {
     "single_readout": {b: R + f"thinkvote/frontier_{b}-01/readout.json" for b in BENCH},  # one-sample difference
     "mixvote": R + "mixvote/hard328-01/readout.json",  # the same votes recomputed by a second script
     "problems": {"hard328": "studies/rlneurons/data/rln3/hard.json", "math500": "studies/rlneurons/data/rln4/math500.json"},
-    # Problems whose text matches a Think-SFT training prompt (result-f6a8bc; 123 of 156 shards, prompts only)
-    "flags": "origin/claude/weight-space-programming-research-ddd44e:studies/rlneurons/results/wsp1/sft_overlap-02/flags.json",
+    # Problems whose text matches a Think-SFT training prompt (a user turn): result-d484cb, all 156 shards and every turn
+    # scanned. The flag of a problem is its user-turn flag; the 4 MATH-500 problems that match only inside training
+    # responses (phrases in other problems' reasoning) are not flagged.
+    "flags": R + "wsp1/sft_overlap-03/flags.json",
+    "overlap": R + "wsp1/sft_overlap-03/metrics.json",
     "commit": "6e20129",  # git rev-parse --short HEAD of main when the numbers were read (artifacts of 15e67d4, ce9fbf6)
     "jobs": {"sft": {"hard328": "abaybektursun-1115-000503-1e5f + -000525-ea4e + -014823-ef56 + -014833-1daa",
                      "math500": "abaybektursun-1115-000512-ee03 + -014843-85d9 + -000607-0e92 + -000621-1d7e"},
@@ -57,6 +60,9 @@ DATA = {
              "math500": {"single": [0.1, -1.3, 1.4], "vote": [1.4, -0.4, 3.2]}},
     # Without the problems that match Think-SFT training prompts: readout without_training_prompt_match
     "clean": {"hard328": {"n": 322, "sft": 235, "rl": 215}, "math500": {"n": 475, "sft": 456, "rl": 450}},
+    # hard328 vote without the 6 flagged problems, Think-SFT minus RL [95 % interval]: overlap metrics
+    # sets.hard328.vote4_think_sft_minus_rl.unflagged
+    "clean_diff": [6.2, 3.1, 9.6],
     # hard328, all four samples: cap hits of 1,312 rows, share of finished answers that are right (readout raw)
     "caps": {"rows": 1312, "sft": 378, "rl": 114, "right_sft": 88.0, "right_rl": 66.2, "sft_s0": 89},
     "pass4": {"sft": 244, "rl": 240},  # hard328, right in at least one of four samples
@@ -68,7 +74,9 @@ DATA = {
               "sft": 203, "rl": 206},
     # RL with and without the cue, one sample on the 328 (results/day1_hard328/readout.json cells *_T1)
     "rl_cue": {"path": R + "day1_hard328/readout.json", "cue": 205, "plain": 206},
-    "shards": [123, 156],  # training shards scanned for overlap by result-f6a8bc; the rest are code (work-173c5c open)
+    "shards": [156, 156],  # training shards scanned for overlap by result-d484cb (overlap metrics shards_scanned, shards_total)
+    # Finished answers over 12,000 tokens on hard328 that are right (result-b006f5, riskcov/hard328-01/table.md, bin 5)
+    "long": {"path": R + "riskcov/hard328-01/readout.json", "sft": [135, 198], "rl": [87, 356]},
 }
 
 D, _d = DATA, DATA["diff"]
@@ -97,38 +105,43 @@ PANELS = [
      "328 harder problems.",
      [f"Under the vote it is the best row on the 328 so far: {D['vote']['hard328']['sft']} of 328 at "
       f"{D['tokens']['sft']:,} tokens per problem, against {D['rl_after_restart']['hard328']} for RL even after restarts.",
-      f"Its advantage is in what it does not answer. On the 328 it stops at the token cap in {D['caps']['sft']} of "
+      f"Its advantage is in what it does not answer. On the 328 it is cut off at {D['cap']:,} tokens in {D['caps']['sft']} of "
       f"{D['caps']['rows']:,} samples (RL {D['caps']['rl']}), but {D['caps']['right_sft']} % of its finished answers are "
       f"right (RL {D['caps']['right_rl']} %).",
-      f"A cut-off sample casts no vote, so its vote comes close to right-in-any-sample: {D['vote']['hard328']['sft']} "
-      f"against {D['pass4']['sft']}. RL's vote is {D['vote']['hard328']['rl']} against {D['pass4']['rl']}."]],
+      f"A sample that is cut off gives no answer, so the vote is taken among the samples that finished. For Think-SFT that "
+      f"vote is right on {D['vote']['hard328']['sft']} problems, close to the {D['pass4']['sft']} where at least one of its "
+      f"four samples is right. For RL it is {D['vote']['hard328']['rl']} against {D['pass4']['rl']}."]],
     ["how", "How we know",
-     f"Each model answered each problem four times at T 1.0 / top-p 1.0 with a {D['cap']:,}-token cap, graded by our "
-     "grader v3. The vote takes the most common answer.",
+     f"Each model answered each problem four times at T 1.0; an answer that reaches {D['cap']:,} tokens is cut off there. "
+     "Grader v3 scores the answers, and the vote takes the most common one.",
      [f"The opening cue is three fixed tokens that begin the answer. RL runs without it: it scores {D['rl_cue']['cue']} of 328 "
       f"with it and {D['rl_cue']['plain']} without, in one sample.",
       f"The {D['n']['hard328']} harder problems (olympiad, AIME 2022 to 2025, AMC, HMMT) are absent from RL's training "
       "prompts. Nothing was chosen on them: the vote rule was fixed on MATH-500.",
       f"One sample: Think-SFT {sum(D['single']['hard328']['sft']) / 4:.1f} right on average, RL "
       f"{sum(D['single']['hard328']['rl']) / 4:.1f}, {_d['hard328']['single'][0]:+} points "
-      f"[{_d['hard328']['single'][1]}, {_d['hard328']['single'][2]}]. Vote: {_d['hard328']['vote'][0]:+} "
-      f"[{_d['hard328']['vote'][1]}, {_d['hard328']['vote'][2]}]."]],
+      f"(95 % interval {_d['hard328']['single'][1]} to {_d['hard328']['single'][2]}). Vote over 4 samples: "
+      f"{_d['hard328']['vote'][0]:+} points (95 % interval {_d['hard328']['vote'][1]} to {_d['hard328']['vote'][2]})."]],
     ["limits", "What it does not show",
      "It does not show that a model learns this much without training. Think-SFT was trained on 2.27 million reasoning "
-     "traces written by larger models: it uses no reward, but it is not untrained.",
-     [f"The overlap check is not finished: {D['shards'][1] - D['shards'][0]} of {D['shards'][1]} training shards are "
-      "unscanned (by the data card, code), and only prompts were compared, not the training answers. Without the "
-      f"{D['n']['hard328'] - D['clean']['hard328']['n']} problems that match so far, the vote is {D['clean']['hard328']['sft']} "
-      f"against {D['clean']['hard328']['rl']} of {D['clean']['hard328']['n']}.",
+     "traces written by larger models: it uses no reward, but it is trained.",
+     [f"All {D['shards'][1]} shards of Think-SFT's training set, every turn, were compared with the 328 harder problems: "
+      f"{D['n']['hard328'] - D['clean']['hard328']['n']} match, none of them new. Without them the vote is "
+      f"{D['clean']['hard328']['sft']} against {D['clean']['hard328']['rl']} of {D['clean']['hard328']['n']}, "
+      f"{D['clean_diff'][0]:+} points (95 % interval {D['clean_diff'][1]} to {D['clean_diff'][2]}). The scan finds copies of "
+      "the text; a paraphrased problem, or one with changed numbers, would not be found.",
+      f"Most of the lead is in long answers, which come mostly from the hardest problems: of finished answers over 12,000 tokens, {round(100 * D['long']['sft'][0] / D['long']['sft'][1], 1)} % "
+      f"of Think-SFT's are right ({D['long']['sft'][0]} of {D['long']['sft'][1]}), against "
+      f"{round(100 * D['long']['rl'][0] / D['long']['rl'][1], 1)} % of RL's ({D['long']['rl'][0]} of {D['long']['rl'][1]}).",
       f"Think-SFT needs the opening cue: without it, one sample scores {D['plain']['sft']} of 328, against {D['plain']['rl']} "
       f"for RL. Many of its answers are cut off: {D['caps']['sft_s0']} of 328 in the first sample. "
       "RL's rows had restarts after a cut-off; Think-SFT's had none. The vote compared here uses no restarts for either.",
       f"On MATH-500 the order is not established: vote {D['vote']['math500']['sft']} against {D['vote']['math500']['rl']}, "
-      f"{_d['math500']['vote'][0]:+} points [{_d['math500']['vote'][1]}, {_d['math500']['vote'][2]}]."]],
+      f"{_d['math500']['vote'][0]:+} points (95 % interval {_d['math500']['vote'][1]} to {_d['math500']['vote'][2]})."]],
     ["run", "How to reproduce it",
      "The plan is studies/rlneurons/specs/SPEC_thinkvote.md; the jobs ran jobs/run_cell.py with --samples 1 per job, four "
      "jobs per set, at commit ff0c715.",
-     [f"Think-SFT jobs: {D['jobs']['sft']['hard328']} (harder 328) and {D['jobs']['sft']['math500']} (MATH-500). RL: "
+     [f"Think-SFT jobs: {D['jobs']['sft']['hard328']} (328 harder problems) and {D['jobs']['sft']['math500']} (MATH-500). RL: "
       f"{D['jobs']['rl']['hard328']}, {D['jobs']['rl']['math500']}. Base: {D['jobs']['base']['hard328']}, "
       f"{D['jobs']['base']['math500']}.",
       "The counts are recomputed by analysis/thinkvote_read.py into thinkvote/scored-01/ and by analysis/mixvote.py into "
@@ -1011,7 +1024,7 @@ def _cut(s, n):
 
 def _build():  # PROBLEMS and EXAMPLES from the artifacts; run from the repository root with PYTHONPATH=.
     from studies.rlneurons.analysis.day1_vote import vote
-    flags = json.loads(subprocess.run(["git", "show", DATA["flags"]], capture_output=True, text=True, check=True).stdout)
+    flags = json.load(open(DATA["flags"]))
     out, ex = {}, []
     for b in BENCH:
         M = {m: _rows(DATA["runs"][b][m]) for m in MODELS}
@@ -1029,8 +1042,7 @@ def _build():  # PROBLEMS and EXAMPLES from the artifacts; run from the reposito
                          "".join("n" if v[m]["winner"] is None else "r" if v[m]["score"] else "w" for m in MODELS),
                          [_cut(r["extracted_v3"], 28) for m in MODELS for r in s[m]],
                          [_cut(s[m][v[m]["winner"]]["extracted_v3"], 28) if v[m]["winner"] is not None else "" for m in MODELS],
-                         {"none": ""}.get(flags["hard" if b == "hard328" else "math500"][str(i)]["flag"],
-                                          flags["hard" if b == "hard328" else "math500"][str(i)]["flag"])])
+                         flags["hard" if b == "hard328" else "math500"][str(i)]["by_role"].get("user", {}).get("flag", "")])
         out[b] = rows
         for m in MODELS:
             for kind in ("right", "wrong"):
@@ -1112,6 +1124,7 @@ svg * { pointer-events: none; }
 .cut { fill: none; stroke: var(--mute); stroke-width: 1.5; stroke-linecap: butt; opacity: .8; }
 .sel { fill: none; stroke: var(--ink); stroke-width: 1.6; }
 .cap { fill: var(--mute) !important; font-weight: 500; }
+.cap0 { font-weight: 600; }
 .band { font-weight: 640; }
 .band.sft { font-weight: 700; }
 .cnt { font-weight: 680; }
@@ -1151,7 +1164,7 @@ svg * { pointer-events: none; }
 .more button { display: flex; width: 100%; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--rule); font-size: 17px; font-weight: 520; transition: color .15s ease; }
 .more button span { color: var(--faint); font-size: 20px; line-height: 1; }
 .more button:hover { color: var(--blue); }
-.dhead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
+.dhead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 0 6px 12px 0; border-bottom: 1px solid var(--ink); }
 .dhead h2 { margin: 0; font-size: 17px; font-weight: 660; font-stretch: 114%; letter-spacing: .008em; }
 .close { font-size: 13px; color: var(--mute); }
 .close:hover { color: var(--ink); }
@@ -1205,7 +1218,7 @@ svg * { pointer-events: none; }
       <button data-state="1" aria-pressed="false">Vote over 4</button>
       <button data-state="2" aria-pressed="false">MATH-500, vote</button>
     </div>
-    <p class="hint">Click a dot to see the problem and every answer.</p>
+    <p class="hint">Click a dot, or press Enter on the picture, to see the problem and every answer.</p>
   </div>
   <div class="side">
     <p class="problem" id="problem"></p>
@@ -1224,20 +1237,29 @@ const sgn = v => (v < 0 ? "−" : "+") + Math.abs(v).toFixed(1), num = v => (v <
 /* The three models, top to bottom, and the three positions of the switch. A state shows one set of problems (bench)
    and one procedure: proc 0 is one sample (four dots per problem, one per stored sample, counted as the mean of the
    four), proc 1 the vote over the same four samples (one dot: the most common answer). */
-const M = [{ key: "base", name: "Base + cue (untrained)", long: "the untrained base model with the opening cue" },
-           { key: "rl", name: "RL-Zero-Math (reward)", long: "RL-Zero-Math, trained with reward" },
-           { key: "sft", name: "Think-SFT + cue (imitation)", long: "Think-SFT with the opening cue, trained by imitation" }];
+const M = [{ key: "base", name: "Base + cue", row: "No training (Base + cue)", short: "No training (Base + cue)" },
+           { key: "rl", name: "RL", row: "Trained with reward (RL)", short: "Trained with reward (RL)" },
+           { key: "sft", name: "Think-SFT + cue", row: "Trained on worked solutions, no reward (Think-SFT)", short: "Worked solutions, no reward (Think-SFT)" }];
 const ST = [{ key: "single", bench: "hard328", proc: 0 }, { key: "vote", bench: "hard328", proc: 1 }, { key: "math500", bench: "math500", proc: 1 }];
 const SRC = { olympiadbench: "OlympiadBench", amc23: "AMC 2023", aime2022: "AIME 2022", aime2023: "AIME 2023",
   aime2024: "AIME 2024", aime2025: "AIME 2025", hmmt_feb2025: "HMMT February 2025", math500: "MATH-500" };
 const PR = {}, ORDER = {}, SLOT = {};
 for (const b of ["hard328", "math500"]) {
-  PR[b] = C.problems[b].map(([i, src, q, gold, o, v, ans, va, flag]) => ({ i, src, q, gold, o, v, ans, va, flag }));
+  PR[b] = C.problems[b].map(([i, o, v, flag]) => ({ i, o, v, flag }));
   /* One order for all three rows: problems whose vote is right for more of the three models first, then by right samples
      of all twelve. The lit area sits at the left of every row, and its edge shows how far each model gets. */
   const key = p => 100 * [...p.v].filter(x => x === "r").length + [...p.o].filter(x => x === "r").length;
   ORDER[b] = PR[b].map((p, k) => k).sort((x, y) => key(PR[b][y]) - key(PR[b][x]) || PR[b][x].i - PR[b][y].i);
   SLOT[b] = []; ORDER[b].forEach((k, s) => { SLOT[b][k] = s; });
+}
+/* The problem texts and answers are in a separate block at the end of the page, read on the first click, so the
+   picture draws before they are parsed. */
+let TX = null;
+function texts() {
+  if (TX) return TX;
+  TX = JSON.parse($("texts").textContent);
+  for (const b in PR) PR[b].forEach((p, k) => { const [src, q, gold, ans, va] = TX[b][k]; Object.assign(p, { src, q, gold, ans, va }); });
+  return TX;
 }
 const right = (b, m, proc) => proc ? D.vote[b][M[m].key] : D.single[b][M[m].key].reduce((s, x) => s + x, 0) / 4;
 const S = { st: 0, from: 0, t0: -1e9, open: null, g: null, el: {}, shown: {}, last: 0, pos: [],
@@ -1247,12 +1269,12 @@ const S = { st: 0, from: 0, t0: -1e9, open: null, g: null, el: {}, shown: {}, la
    x0..x1; a set of n problems is laid out in `rows` lines, column by column, so the most-solved problems are at the left. */
 function geo() {
   return narrow.matches
-    ? { w: 480, h: 900, cx: 240, cy: 450, D: 2000, a: [6, 8, 474, 892], r: 22, deep: 30, blur: 12,
-        x0: 34, x1: 446, top: [300, 478, 656], rows: { hard328: 10, math500: 13 }, slot: 140, fl: 18, fs: 17, fc: 22,
-        capY: 262, bigX: 30, bigY: 118, fb: 96, labY: 152, subY: [178, 202, 226], key: [[34, 836], [124, 836], [228, 836], [34, 866]], short: true }
+    ? { w: 480, h: 1000, cx: 240, cy: 500, D: 2000, a: [6, 8, 474, 992], r: 22, deep: 30, blur: 12,
+        x0: 34, x1: 446, top: [356, 556, 756], rows: { hard328: 10, math500: 13 }, slot: 140, fl: 17, fs: 17, fc: 21, fn: 17, nameUp: 26,
+        capY: [262, 286], bigX: 30, bigY: 118, fb: 96, labY: 152, subY: [178, 202, 226], key: [[34, 936], [124, 936], [228, 936], [34, 966]], short: true }
     : { w: 1000, h: 600, cx: 500, cy: 300, D: 2200, a: [24, 18, 976, 582], r: 30, deep: 40, blur: 16,
-        x0: 74, x1: 604, top: [108, 260, 412], rows: { hard328: 8, math500: 10 }, slot: 108, fl: 17, fs: 15, fc: 20,
-        capY: 64, bigX: 656, bigY: 254, fb: 136, labY: 292, subY: [320, 344, 368], key: [[662, 440], [662, 466], [662, 492], [662, 518]] };
+        x0: 74, x1: 604, top: [108, 260, 412], rows: { hard328: 8, math500: 10 }, slot: 108, fl: 17, fs: 15, fc: 20, fn: 15, nameUp: 0,
+        capY: [48, 70], bigX: 656, bigY: 254, fb: 136, labY: 292, subY: [320, 344, 368], key: [[662, 440], [662, 466], [662, 492], [662, 518]] };
 }
 function grid(b) {  // pitch and offsets of a set's layout
   const g = S.g, rows = g.rows[b], n = PR[b].length, cols = Math.ceil(n / rows), pitch = (g.x1 - g.x0) / cols;
@@ -1289,8 +1311,8 @@ function build() {
     `<rect class="shade" x="${f(ax0 + aw * .012)}" y="${f(ay0 + ah * .04)}" width="${aw}" height="${ah}" rx="${g.r}" filter="url(#soft)"/>` +
     `<path class="back" id="back"/><path class="plate draw" id="plate" pathLength="1"/>` +
     `<ellipse class="spec" cx="${f(ax0 + aw * .3)}" cy="${f(ay0 + ah * .24)}" rx="${f(aw * .3)}" ry="${f(ah * .2)}" transform="rotate(-14 ${f(ax0 + aw * .3)} ${f(ay0 + ah * .24)})" fill="url(#spec)"/>` +
-    `<g class="marks">${marks}</g><g class="words">` + T("cap", "cap", g.fs) +
-    M.map((m, k) => T("band" + (k === 2 ? " sft" : ""), "bn" + k, g.fl) +
+    `<g class="marks">${marks}</g><g class="words">` + T("cap0", "cap0", g.fs) + T("cap", "cap1", g.fs) +
+    M.map((m, k) => T("band" + (k === 2 ? " sft" : ""), "bn" + k, g.fn) +
       `<text id="bc${k}" font-size="${g.fl}" text-anchor="end"><tspan class="cnt" id="bv${k}" font-size="${g.fc}"></tspan><tspan class="of" id="bo${k}"></tspan></text>`).join("") +
     T("big", "big", g.fb) + T("lab", "lab", g.fl + 1) + T("sub", "sub0", g.fs) + T("sub", "sub1", g.fs) + T("sub", "sub2", g.fs) +
     `<circle class="kd lit" id="kd0" r="4"/>${T("kl", "kt0", g.fs)}<circle class="kd dim" id="kd1" r="3"/>${T("kl", "kt1", g.fs)}` +
@@ -1366,23 +1388,29 @@ function draw(t, now) {
 
   // The words on the plate: the set, each row's name and count, the difference and the key. Counts move with the marks.
   const e = ease(clamp(el / 900, 0, 1)), n = S.n1.map((v, i) => mix(S.n0[i], v, e)), shown = e < .5 ? A : B, N = D.n[shown.bench];
-  const what = shown.bench === "hard328" ? `${N} harder problems` : `MATH-500, ${N} problems`;
-  text("cap", g.short ? `${what}, ${shown.proc ? "vote of 4 each" : "4 samples each"}`
-    : `${what}, ${shown.proc ? "one dot each: the most common of 4 answers" : "4 dots each: one per sample"}. Same order in every row.`);
-  at(E.cap, proj(g, g.x0, g.capY, 10));
+  text("cap0", shown.bench === "hard328" ? (g.short ? `${N} harder competition problems` : `${N} harder competition problems: AIME, AMC, HMMT, OlympiadBench`)
+    : `MATH-500, ${N} problems`);
+  text("cap1", g.short ? (shown.proc ? "One dot per problem: the vote over 4 samples" : "4 dots per problem, one per sample")
+    : `${shown.proc ? "One dot per problem: the most common of 4 answers" : "4 dots per problem, one per sample"}. Same order in every row.`);
+  const fadeW = Math.abs(1 - 2 * e);  // words of the new state appear at the midpoint, as the old ones fade out
+  E.cap0.setAttribute("opacity", same ? 1 : fadeW.toFixed(2)); E.cap1.setAttribute("opacity", fadeW.toFixed(2));
+  at(E.cap0, proj(g, g.x0, g.capY[0], 10)); at(E.cap1, proj(g, g.x0, g.capY[1], 10));
   M.forEach((m, k) => {
-    text("bn" + k, m.name); text("bv" + k, B.proc && (same || e >= .5) ? String(Math.round(n[k])) : n[k].toFixed(1)); text("bo" + k, ` of ${N}`);
-    at(E["bn" + k], proj(g, g.x0, g.top[k] - 12, 10)); at(E["bc" + k], proj(g, g.x1, g.top[k] - 12, 10));
+    text("bn" + k, g.short ? m.short : m.row); text("bv" + k, B.proc && (same || e >= .5) ? String(Math.round(n[k])) : n[k].toFixed(1)); text("bo" + k, ` of ${N}`);
+    at(E["bn" + k], proj(g, g.x0, g.top[k] - 12 - g.nameUp, 10));  // on a phone the name has its own line above the count
+    E["bc" + k].setAttribute("text-anchor", g.nameUp ? "start" : "end");
+    at(E["bc" + k], proj(g, g.nameUp ? g.x0 : g.x1, g.top[k] - 12, 10));
   });
   text("big", sgn(n[3]));
   at(E.big, proj(g, g.bigX, g.bigY, 14));
   text("lab", "points, Think-SFT minus RL");
   at(E.lab, proj(g, g.bigX + 4, g.labY, 14));
-  const di = D.diff[B.bench][B.proc ? "vote" : "single"];
+  const di = D.diff[shown.bench][shown.proc ? "vote" : "single"];
   const more = n[2] - n[1];
-  text("sub0", `${B.proc && (same || e >= .5) ? Math.round(more) : more.toFixed(1)} more problems right, of ${N}`);
-  text("sub1", `95 % interval ${num(di[1])} to ${num(di[2])}` + (di[1] <= 0 ? ": not separated" : ", paired"));
-  text("sub2", B.proc ? "Most common of 4 answers, T 1.0" : "One sample, mean of 4 runs, T 1.0");
+  text("sub0", `That is ${B.proc && (same || e >= .5) ? Math.round(more) : more.toFixed(1)} more problems right, of ${N}`);
+  text("sub1", `95 % interval ${num(di[1])} to ${num(di[2])}` + (di[1] <= 0 ? ", which includes 0" : ""));
+  text("sub2", shown.proc ? "Vote over 4 samples, T 1.0" : "One sample, mean of 4 samples, T 1.0");
+  E.sub1.setAttribute("opacity", fadeW.toFixed(2)); E.sub2.setAttribute("opacity", fadeW.toFixed(2));
   [0, 1, 2].forEach(i => at(E["sub" + i], proj(g, g.bigX + 4, g.subY[i], 14)));
   const key = [["Right", 0, 0], ["Wrong", 1, 0], ["Cut off at 16,384 tokens", 2, 0], ["Right for only one of RL and Think-SFT", 0, 1]];
   key.forEach(([label], k) => {
@@ -1416,33 +1444,35 @@ function setState(st, opts = {}) {
   $("switch").querySelectorAll("button").forEach((b, k) => b.setAttribute("aria-pressed", k === st));
   const s = ST[st], N = D.n[s.bench];
   $("svg").setAttribute("aria-label", `${s.bench === "hard328" ? "The 328 harder problems" : "MATH-500"}, ${s.proc ? "vote over 4 samples" : "one sample"}: ` +
-    M.map((m, k) => `${m.name} ${S.n1[k]} of ${N}`).join(", ") + `. Think-SFT minus RL ${sgn(S.n1[3])} points. Enter opens a problem.`);
+    M.map((m, k) => `${m.row} ${S.n1[k]} of ${N}`).join(", ") + `. Think-SFT minus RL ${sgn(S.n1[3])} points. Enter opens a problem.`);
   if (still.matches) { aim(0, 0); draw(0, now); }
 }
 
 /* The side column: the five panels, or one problem with every answer of the three models. */
 function problemPane(k) {
-  const b = ST[S.st].bench, p = PR[b][k], cap = D.cap.toLocaleString("en-US");
+  const b = ST[S.st].bench, X = texts(), p = PR[b][k], cap = D.cap.toLocaleString("en-US");
   const one = (m) => {
     const a = [0, 1, 2, 3].map(j => { const x = p.o[4 * m + j], s = p.ans[4 * m + j];
-      return `<span class="a ${x}">${x === "c" ? "cut off" : s ? esc(s) : "no answer"}${x === "r" ? " ✓" : ""}</span>`; }).join("");
+      return `<span class="a ${x}"${x !== "c" && s ? " data-math" : ""}>${x === "c" ? "cut off" : s ? esc(s) : "no answer"}${x === "r" ? " ✓" : ""}</span>`; }).join("");
     const v = p.v[m], other = m === 1 ? p.v[2] : m === 2 ? p.v[1] : "r";
-    const said = v === "n" ? "no answer to vote on: wrong" : `vote ${esc(p.va[m])}: ${v === "r" ? "right" : "wrong"}`;
-    return `<li><span class="who">${M[m].name}</span>, four samples:<span class="ans">${a}</span>` +
+    const said = v === "n" ? "no answer to vote on: wrong" : `vote <span data-math>${esc(p.va[m])}</span>: ${v === "r" ? "right" : "wrong"}`;
+    return `<li><span class="who">${M[m].row}</span>, four samples:<span class="ans">${a}</span>` +
       `<span class="verdict${v === "r" && other !== "r" ? " blue" : ""}">${said}</span></li>`;
   };
-  const texts = C.examples.filter(e => e[0] === b && e[2] === p.i).map(e => {
+  const saved = X.examples.filter(e => e[0] === b && e[2] === p.i).map(e => {
     const m = M.findIndex(x => x.key === e[1]);
-    return `<div class="txt"><p class="tcap">Saved text: the end of ${M[m].name}'s first sample (${e[4] ? `cut off at ${cap} tokens` : e[3] ? "right" : "wrong"})</p><p>… ${esc(e[5])}</p></div>`;
+    return `<div class="txt"><p class="tcap">Saved text: the end of the first sample of ${M[m].name} (${e[4] ? `cut off at ${cap} tokens` : e[3] ? "right" : "wrong"})</p><p data-math>… ${esc(e[5])}</p></div>`;
   }).join("");
   const flag = p.flag ? `<p class="note">This problem's text matches a Think-SFT training prompt (${p.flag} match). The finding holds without such problems.</p>` : "";
-  return `<div class="dhead"><h2>Problem ${p.i}, ${SRC[p.src] || esc(p.src)}</h2><button class="close" data-open="">Close</button></div>` +
-    `<p class="lead q">${esc(p.q)}</p>` +
-    `<ul class="facts"><li>Reference answer: <span class="verdict">${esc(p.gold)}</span>. T 1.0, ${cap}-token cap.</li>${[2, 1, 0].map(one).join("")}</ul>` + flag + texts +
+  const head = b === "hard328" ? `328 harder problems, problem ${p.i} (${SRC[p.src] || esc(p.src)})` : `MATH-500, problem ${p.i}`;
+  return `<div class="dhead"><h2>${head}</h2><button class="close" data-open="">Close</button></div>` +
+    `<p class="lead q" data-math>${esc(p.q)}</p>` +
+    `<ul class="facts"><li>Reference answer: <span class="verdict" data-math>${esc(p.gold)}</span>. T 1.0; an answer is cut off at ${cap} tokens.</li>${[2, 1, 0].map(one).join("")}</ul>` + flag + saved +
     `<div class="steps"><button data-step="-1">‹ Previous problem</button><button data-step="1">Next problem ›</button></div>`;
 }
 function pane() {
   const b = ST[S.st].bench, p = C.panels.find(p => p[0] === S.open), k = S.open && S.open[0] === "p" ? PR[b].findIndex(q => "p" + q.i === S.open) : -1;
+  if (k >= 0 && !$("texts")) { addEventListener("DOMContentLoaded", pane, { once: true }); return; }  // opened from the address
   $("pane").innerHTML = k >= 0 ? problemPane(k) : p
     ? `<div class="dhead"><h2>${esc(p[1])}</h2><button class="close" data-open="">Close</button></div><p class="lead">${esc(p[2])}</p>` +
       `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
@@ -1461,6 +1491,7 @@ function fromHash(first) {
   S.open = parts.find(x => C.panels.some(p => p[0] === x) || PR[b].some(p => "p" + p.i === x)) || null;
   pane();
 }
+const show = () => { if (narrow.matches) $("pane").scrollIntoView({ behavior: still.matches ? "auto" : "smooth", block: "start" }); };
 function open(key) {
   const was = S.open;
   S.open = key || null;
@@ -1487,7 +1518,7 @@ function nearest([x, y]) {
 svg.addEventListener("pointermove", e => { if (e.pointerType === "mouse") svg.style.cursor = nearest(svgPoint(e)) >= 0 ? "pointer" : "default"; });
 svg.addEventListener("click", e => {
   const k = nearest(svgPoint(e));
-  if (k >= 0) { open("p" + PR[ST[S.st].bench][k].i); if (narrow.matches) $("pane").scrollIntoView({ behavior: still.matches ? "auto" : "smooth", block: "start" }); }
+  if (k >= 0) { open("p" + PR[ST[S.st].bench][k].i); show(); }
 });
 document.addEventListener("click", e => {
   const w = e.target.closest("[data-state]"), o = e.target.closest("[data-open]"), s = e.target.closest("[data-step]");
@@ -1506,9 +1537,11 @@ document.addEventListener("keydown", e => {
     const st = clamp(S.st + (e.key === "ArrowRight" ? 1 : -1), 0, 2);
     if (st !== S.st) { setState(st); address(false); pane(); }
   }
-  if (e.key === "Enter" && document.activeElement === svg) {
+  if (e.key === "Enter" && document.activeElement === svg) {  // the first problem only one of RL and Think-SFT gets right
+    e.preventDefault();
     const b = ST[S.st].bench, k = PR[b].findIndex(p => p.v[2] === "r" && p.v[1] !== "r");
     open("p" + PR[b][k >= 0 ? k : ORDER[b][0]].i);
+    show();
   }
 });
 addEventListener("hashchange", fromHash);
@@ -1535,6 +1568,7 @@ if (!still.matches) {
 }
 requestAnimationFrame(frame);
 </script>
+<script type="application/json" id="texts">__TEXTS__</script>
 </body>
 </html>
 """
@@ -1556,10 +1590,15 @@ ICON = r"""(kit, t, tilt) => {
   return out;
 }"""
 
+# The picture needs per problem only [index, samples, votes, flag]; the texts and answers go in a block read on the first
+# click ("</" escaped so no text ends the block).
 PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
-    "problem": PROBLEM, "line": LINE, "panels": PANELS, "problems": PROBLEMS, "examples": EXAMPLES,
+    "problem": PROBLEM, "line": LINE, "panels": PANELS,
+    "problems": {b: [[r[0], r[4], r[5], r[8]] for r in rows] for b, rows in PROBLEMS.items()},
     "data": {"n": DATA["n"], "cap": DATA["cap"], "single": DATA["single"], "vote": DATA["vote"], "diff": DATA["diff"]}},
-    ensure_ascii=False))
+    ensure_ascii=False)).replace("__TEXTS__", json.dumps(
+    {**{b: [[r[1], r[2], r[3], r[6], r[7]] for r in rows] for b, rows in PROBLEMS.items()}, "examples": EXAMPLES},
+    ensure_ascii=False).replace("</", "<\\/"))
 
 if __name__ == "__main__":  # run from the repository root with PYTHONPATH=. and math-verify (see the docstring)
     problems, examples = _build()
@@ -1612,4 +1651,13 @@ if __name__ == "__main__":  # run from the repository root with PYTHONPATH=. and
             run = load(DATA["runs"][b][m] + "/run.json")
             assert run["config"]["temperature"] == 1.0 and run["config"]["top_p"] == 1.0 and run["config"]["max_tokens"] == DATA["cap"], (b, m)
             assert run["config"]["prompt"] == ("plain" if m == "rl" else "cue"), (b, m, run["config"]["prompt"])
+    ov = load(DATA["overlap"])
+    assert DATA["shards"] == [ov["shards_scanned"], ov["shards_total"]] and ov["complete"]
+    u = ov["sets"]["hard328"]["vote4_think_sft_minus_rl"]["unflagged"]
+    assert (DATA["clean"]["hard328"]["n"], DATA["clean"]["hard328"]["sft"], DATA["clean"]["hard328"]["rl"]) == (u["n"], u["think_sft_4"], u["rl_4"])
+    assert DATA["clean_diff"] == [round(u["points"], 1), round(u["interval95"][0], 1), round(u["interval95"][1], 1)]
+    bins = load(DATA["long"]["path"])["bins"]
+    for m, k in (("sft", "think"), ("rl", "rl")):
+        last = bins[k]["fixed"][-1]
+        assert last["tokens"] == [12000.0, 16384.0] and DATA["long"][m] == [last["right"], last["samples"]], m
     print("DATA, PROBLEMS and EXAMPLES match", DATA["readout"], "and the rows of", ", ".join(DATA["runs"]["hard328"].values()))

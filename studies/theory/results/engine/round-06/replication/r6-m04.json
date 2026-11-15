@@ -1,0 +1,14 @@
+{
+ "theory": "r6-m04",
+ "items": [
+  {
+   "k": 2,
+   "experiment": "Mechanism test, how early the length policy arrives: f = ln(M(sft025_cue)/M(base_cue)) / ln(M(sft1_cue)/M(base_cue)), M = median generated tokens of finished answers. This mechanism says the length is mostly installed at a = 0.25 (f near 0.8); the linear-path rival (WiSE-FT, length proportional to dose in log) gives about 0.25.",
+   "original": 0.06468979820134287,
+   "replicated": 0.06468979820134287,
+   "status": "replicated",
+   "script": "replication/r6-m04/p2.py",
+   "not_computable": null
+  }
+ ]
+}

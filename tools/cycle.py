@@ -7,8 +7,8 @@ skill (section 3), and for anyone who wants to know what to speed up.
 
   uv run tools/cycle.py [--hours 24]
 
-Jobs: every GPU job of yours submitted in the window, on Modal and on vast.ai (the vast.ai ones only from this laptop's
-checkout and worktrees; their run minutes end when `vast.py get` finished the copy), with
+Jobs: every GPU job of yours submitted in the window, on Modal, on vast.ai and on AWS (the last two only from this laptop's
+checkout and worktrees; their run minutes end when the command exited or its output was copied out), with
   wait = submit to container start (queue and boot), run = start to end (setup, model load and the work), state.
 Work: every work item of yours posted in the window, with
   to-job = claim to first job submit (reading, spec, code, review), jobs = first submit to last job end (compute and
@@ -50,26 +50,31 @@ who = team.who()
 
 
 
-def vast_jobs():
-    """Jobs sent to vast.ai from this checkout and its worktrees (tools/vast.py keeps runs/vast/<job>.json there), in the
-    shape of gpu.py's records. vast.py keeps no start or end time: the end is when `get` finished copying the output."""
+NO_COPY = "no copy yet"  # a vast.ai or AWS job whose output was not copied out: it may still run
+
+
+def outside_jobs():
+    """Jobs sent to vast.ai (tools/vast.py) and to AWS (the ih tool) from this checkout and its worktrees, in the shape of
+    gpu.py's records. Both tools keep runs/<vast or ih>/<job>.json there, with no start time. The end is the record's
+    "end" (ih, when the command exited) or else the time `get` finished copying the output."""
     root = Path(__file__).resolve().parent.parent
     for folder in [root, *root.parent.glob(root.name + "-*")]:
         branch = subprocess.run(["git", "-C", str(folder), "rev-parse", "--abbrev-ref", "HEAD"], capture_output=True, text=True).stdout.strip()
-        for path in folder.glob("runs/vast/*.json"):
-            if path.name.startswith("instance-"):
-                continue
-            record = json.loads(path.read_text())
-            at = time.mktime(time.strptime(record["at"], "%Y-%m-%d %H:%M:%S"))
-            r = {"id": path.stem, "job": {"at": at, "branch": branch, "cmd": record["cmd"], "class": "vast.ai"},
-                 "start": {"at": at, "gpu": "vast.ai"}, "state": "vast.ai, no copy yet"}
-            copied = folder / "runs" / path.stem / ".copied"
-            if copied.exists():
-                r["end"], r["state"] = {"at": copied.stat().st_mtime}, "done"
-            yield r
+        for tool, name in (("vast", "vast.ai"), ("ih", "aws")):
+            for path in folder.glob(f"runs/{tool}/*.json"):
+                if path.name.startswith("instance-"):
+                    continue
+                record = json.loads(path.read_text())
+                at = time.mktime(time.strptime(record["at"], "%Y-%m-%d %H:%M:%S"))
+                r = {"id": path.stem, "job": {"at": at, "branch": branch, "cmd": record["cmd"], "class": name},
+                     "start": {"at": at, "gpu": name}, "state": NO_COPY}
+                copied = folder / "runs" / path.stem / ".copied"
+                if "end" in record or copied.exists():
+                    r["end"], r["state"] = {"at": record.get("end") or copied.stat().st_mtime}, "done"
+                yield r
 
 
-jobs = sorted((r for r in [*gpu.load().values(), *vast_jobs()] if r["job"]["at"] >= since), key=lambda r: r["job"]["at"])
+jobs = sorted((r for r in [*gpu.load().values(), *outside_jobs()] if r["job"]["at"] >= since), key=lambda r: r["job"]["at"])
 print(f"Jobs of {who}, last {hours:g} h:  id  state  gpu  wait  run  command")
 waits, run_minutes, failed_minutes = [], 0.0, 0.0
 for r in jobs:
@@ -77,18 +82,18 @@ for r in jobs:
     start = r["start"]["at"] if "start" in r else None
     end = r["end"]["at"] if "end" in r else r["cancel"]["at"] if "cancel" in r else None
     r["finished"] = end
-    wait = minutes(r["job"]["at"], start) if start and r["job"]["class"] != "vast.ai" else None  # vast.py keeps no start time
+    wait = minutes(r["job"]["at"], start) if start and r["job"]["class"] not in ("vast.ai", "aws") else None  # those tools keep no start time
     # none for a job that died (Modal kept no end time) and for one whose end is before its start
     run = minutes(start, end or now) if start and (end >= start if end else r["state"] == "running") else None
     if wait is not None:
         waits.append(wait)
     if run is not None:
         run_minutes += run
-        if r["state"] not in ("done", "running", "vast.ai, no copy yet"):
+        if r["state"] not in ("done", "running", NO_COPY):
             failed_minutes += run
     gpu_name = r["start"]["gpu"] if start else r["job"]["class"]
     print(f"  {r['id']}  {r['state']}  {gpu_name[:12]}  {fmt(wait, 1)}  {fmt(run, 1)}  {r['job']['cmd'][:70]}")
-failed = [r for r in jobs if r["state"] not in ("done", "running", "queued", "submitting", "vast.ai, no copy yet")]
+failed = [r for r in jobs if r["state"] not in ("done", "running", "queued", "submitting", NO_COPY)]
 if jobs:
     print(f"  {len(jobs)} jobs, {len(failed)} failed or cancelled; median wait {statistics.median(waits) if waits else 0:.1f}; "
           f"{run_minutes:.1f} container minutes, {failed_minutes:.1f} of them in failed or cancelled jobs")

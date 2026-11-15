@@ -1,0 +1,104 @@
+{
+ "theory": "r5-m10-rival",
+ "turn": 1,
+ "tests": [
+  {
+   "k": 1,
+   "experiment": "First-marker regrade of the plain base's wrong non-self-opened answers at T 1.0: among non-self-opened T3 rows graded wrong by grader v3 on the full text, the fraction whose first answer marker is right.",
+   "recipe": "File: S3 T3.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl; base, plain, T 1.0 / top-p 1.0). If more than one row exists for a problem_index, keep the first in file order. v3_last = studies/rlneurons/grader/rln4_grader_v3.py applied to the full text field against gold (recomputed); cap_hit rows keep whatever v3 gives; an empty extraction counts 0. Drop self-opened rows (the first 60 characters of text contain the substring '\\nOkay', a newline immediately followed by 'Okay'). First marker = whichever of these starts earliest in text: (a) a line (text.split('\\n')) whose str.lstrip() begins with 'Answer:', with content = the rest of that line after 'Answer:'; (b) the first occurrence of '\\boxed{', with content = its brace-balanced contents (if the braces never balance, content = the rest of the text). first_score = grader v3 applied to the string 'Answer: ' + content against gold. A row with no marker gets first_score 0. Filter: the remaining (non-self-opened) rows with v3_last == 0, cap hits included. Statistic: (filtered rows with first_score == 1) / (filtered rows). If no rows pass the filter, report nothing.",
+   "unit": "fraction of problems",
+   "refuted_by": null,
+   "script": "rivals/r5-m10-rival/p1.py",
+   "measured": 0.007692307692307693,
+   "n": 260,
+   "interval": [
+    0.0,
+    0.019230769230769232
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.007692307692307693,
+   "not_computable": null,
+   "note": "File: s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl, fetched to runs/theory-tests/s3k/r4/modal_t3-01/t3/T3.jsonl (500 rows, one per problem; the first-per-problem_index rule is applied anyway). T3 has no stored v3 field, so v3_last is recomputed with rln4_lib.grade_v3(gold, text). rln4_grader_v3.py named in the recipe calls the same function (R.grade_v3). An empty extraction counts 0. Some rows have empty text (n_new 0). They are not self-opened, get v3_last 0 and no marker, so they stay in the denominator with first_score 0, as the recipe says. Self-opened means '\\nOkay' is a substring of text[:60], so the match must end inside the first 60 characters. Main first marker: the first line whose lstrip() starts with case-sensitive 'Answer:' (content = rest of that line, which may be empty, and then grading 'Answer: ' gives 0), or the first '\\boxed{' (brace-balanced content, else rest of text), whichever starts earlier. first_score = grade_v3(gold, 'Answer: ' + content). If the content is multi-line (an unbalanced box), v3 re-extracts inside it and may pick a later box or marker inside that content. alt_measured: the first marker is grader v3's own first candidate: a MARK_V3 match anywhere in a line ('Answer:', 'Final Answer:', 'Answer is', bold variants) with a non-empty rest of line, or the first balanced box, whichever starts earlier. The interval is a bootstrap over the filtered rows (the denominator), so it is conditional on the filter.",
+   "example_row": {
+    "problem_index": 146,
+    "unique_id": "test/algebra/1519.json",
+    "gold": "\\frac{\\sqrt{3}}{3}",
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 1340,
+    "text_head": ".\n\nTo simplify the expression $\\frac{3}{\\sqrt{27}}$, let's begin by simplifying the denominator:\n\n$\\sqrt{27}$ can be expressed as $\\sqrt{9 \\times 3}$. This allows us to separate the radical into the multiplication of two square roots:\n\n$\\sqrt{27} = \\sqrt{9} \\times \\sqrt{3}$. Since $\\sqrt{9} = 3$, we have:\n\n$\\sqrt{27} = 3 \\times \\sqrt{3}$\n\nNow, substitute this simplified form of $\\sqrt{27}$ back into the original expression:\n\n$\\frac{3}{\\sqrt{27}} = \\frac{3}{3 \\times \\sqrt{3}}$\n\nThe numerator is $3$, and the denominator is $3 \\times \\sqrt{3}$. The numerical factor $3$ in the numerator cancels ou",
+    "text_tail": "e the numbers of the different types of entities.\n\nIn this problem, $n = 6$ (total letters), $n_1 = 3$ (number of F's), $n_2 = 2$ (number of E's), and $n_3 = 1$ (number of C's).\n\nSubstituting these values into the formula, we get:\n\nTotal permutations = $\\frac{6!}{3! \\times 2! \\times 1!}$\n\nCalculate the factorials:\n- $6! = 720$\n- $3! = 6$\n- $2! = 2$\n- $1! = 1$\n\nNow, let\u2019s calculate the total:\n\nTotal permutations = $\\frac{720}{6 \\times 2 \\times 1} = \\frac{720}{6 \\times 2} = \\frac{720}{12} = 60$\n\nTherefore, 60 different permutations can be formed using the letters in the word COFFEE. Answer: $60$",
+    "v3_last": 0,
+    "first_score": 1,
+    "first_score_alt": 1
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Direction of first/last disagreement in the plain base's non-self-opened T 1.0 answers: among rows where the first-marker grade differs from the v3 last-marker grade, the share that are first-right and last-wrong.",
+   "recipe": "File: S3 T3.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl). First row per problem_index in file order. Drop self-opened rows (the first 60 characters of text contain '\\nOkay'). For every remaining row, cap hits included, compute v3_last and first_score exactly as in the previous recipe: v3_last = grader v3 (studies/rlneurons/grader/rln4_grader_v3.py) on the full text vs gold, empty extraction 0; first marker = earliest left-stripped line beginning 'Answer:' (content = rest of line) or first '\\boxed{' (brace-balanced content, else rest of text); first_score = grader v3 on 'Answer: ' + content vs gold, and 0 if there is no marker. Discordant rows: first_score != v3_last. Statistic: (discordant rows with first_score == 1) / (discordant rows). If there are no discordant rows, report nothing.",
+   "unit": "fraction of discordant problems",
+   "refuted_by": null,
+   "script": "rivals/r5-m10-rival/p2.py",
+   "measured": 0.08,
+   "n": 25,
+   "interval": [
+    0.0,
+    0.16
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.06896551724137931,
+   "not_computable": null,
+   "note": "Same file, dedup, self-opened rule, v3_last and first-marker definitions as p1 (see k 1). Cap hits are included. Empty-text rows have first_score 0 and v3_last 0, so they are never discordant. Discordant means first_score != v3_last. Statistic: share of discordant rows with first_score 1. alt_measured is the same statistic with the v3-candidate first marker (see k 1); its discordant set is recomputed and can differ in size from the main one. n is the number of discordant rows under the main reading. The bootstrap resamples over discordant rows. The discordant set may be small, which gives a wide interval.",
+   "example_row": {
+    "problem_index": 146,
+    "unique_id": "test/algebra/1519.json",
+    "gold": "\\frac{\\sqrt{3}}{3}",
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 1340,
+    "text_head": ".\n\nTo simplify the expression $\\frac{3}{\\sqrt{27}}$, let's begin by simplifying the denominator:\n\n$\\sqrt{27}$ can be expressed as $\\sqrt{9 \\times 3}$. This allows us to separate the radical into the multiplication of two square roots:\n\n$\\sqrt{27} = \\sqrt{9} \\times \\sqrt{3}$. Since $\\sqrt{9} = 3$, we have:\n\n$\\sqrt{27} = 3 \\times \\sqrt{3}$\n\nNow, substitute this simplified form of $\\sqrt{27}$ back into the original expression:\n\n$\\frac{3}{\\sqrt{27}} = \\frac{3}{3 \\times \\sqrt{3}}$\n\nThe numerator is $3$, and the denominator is $3 \\times \\sqrt{3}$. The numerical factor $3$ in the numerator cancels ou",
+    "text_tail": "e the numbers of the different types of entities.\n\nIn this problem, $n = 6$ (total letters), $n_1 = 3$ (number of F's), $n_2 = 2$ (number of E's), and $n_3 = 1$ (number of C's).\n\nSubstituting these values into the formula, we get:\n\nTotal permutations = $\\frac{6!}{3! \\times 2! \\times 1!}$\n\nCalculate the factorials:\n- $6! = 720$\n- $3! = 6$\n- $2! = 2$\n- $1! = 1$\n\nNow, let\u2019s calculate the total:\n\nTotal permutations = $\\frac{720}{6 \\times 2 \\times 1} = \\frac{720}{6 \\times 2} = \\frac{720}{12} = 60$\n\nTherefore, 60 different permutations can be formed using the letters in the word COFFEE. Answer: $60$",
+    "v3_last": 0,
+    "first_score": 1
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Run-on share among the plain base's finished, wrong, non-self-opened T 1.0 answers: the fraction that keep going for more than 300 characters after their first answer marker and state another answer marker.",
+   "recipe": "File: S3 T3.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl). First row per problem_index in file order. Drop self-opened rows (the first 60 characters of text contain '\\nOkay'). Keep rows with cap_hit false and v3_last == 0 (v3_last = grader v3, studies/rlneurons/grader/rln4_grader_v3.py, on the full text vs gold; empty extraction 0). First marker as in the first recipe (earliest left-stripped line beginning 'Answer:' or first '\\boxed{'). End of the first marker: for an 'Answer:' line, the end of that line (or the end of text); for '\\boxed{', the position just after its matching closing brace (or the end of text if unbalanced). A kept row counts as run-on if it has a first marker AND the text after that end is longer than 300 characters AND that remaining text contains another line whose str.lstrip() begins with 'Answer:' or another '\\boxed{'. Kept rows with no marker count as not run-on and stay in the denominator. Statistic: (run-on rows) / (kept rows). If no rows are kept, report nothing.",
+   "unit": "fraction of problems",
+   "refuted_by": null,
+   "script": "rivals/r5-m10-rival/p3.py",
+   "measured": 0.0888030888030888,
+   "n": 259,
+   "interval": [
+    0.06177606177606178,
+    0.11969111969111969
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.12355212355212356,
+   "not_computable": null,
+   "note": "Same file, dedup and self-opened rule as p1. Kept rows: cap_hit is False (a row with a missing or null cap_hit is dropped) and v3_last == 0. Empty-text rows are kept (finish 'stop', cap_hit false) and count as not run-on, so they lower the share. End of the first marker: for an 'Answer:' line, the position of the newline that ends it (the remaining text starts with that newline); for a box, just after the matching '}', or end of text if unbalanced. Run-on: the remaining text is more than 300 characters (len > 300) and either one of its lines (split on '\\n') starts after lstrip() with 'Answer:', or it contains '\\boxed{'. When the first marker is a box, the first 'line' of the remaining text is the rest of the box's line, and it counts if it starts with 'Answer:'. alt_measured: the v3-candidate first marker and, for 'another marker', any v3 candidate (MARK_V3 anywhere in a line with a non-empty rest, or a balanced box) in the remaining text. The bootstrap resamples over kept rows.",
+   "example_row": {
+    "problem_index": 90,
+    "unique_id": "test/prealgebra/1761.json",
+    "gold": "\\frac{3}{2}",
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 572,
+    "text_head": " and using the form $Answer:d$ , where d is the answer to the question.\n\n[asy]\ndraw((0,0)--(2,0));\ndraw((2,0)--(2,6));\ndraw((0,0)--(0,7));\ndraw((0,7/2)--(2,7/2));\nlabel(\"3\",(1,0),S);\nlabel(\"5\",(2,3),E);\nlabel(\"2\",(0,3.5),W);\nlabel(\"6\",(1,7.5),S);\nlabel(\"10\",(2.5,7),E);\n[/asy]\n\nThe question is asking what number Remmy should multiply 10 by to get the answer when dividing $10$ by $\\frac{2}{3}$.\nLet's break down the problem. The question is to find a number x such that when we multiply 10 by x, we get the result of dividing 10 by 2/3.\nIn mathematical terms, we need to find x such that $10 \\times ",
+    "text_tail": "wer to the division is 15.\nAnswer: 15\n\nTo solve the problem, we need to find a number that, when multiplied by 10, gives us the result of dividing 10 by $\\frac{2}{3}$.\nLet's call this number $x$.\nWe know that Remmy is trying to find the value of $10 \\div \\frac{2}{3}$.\nTo divide by a fraction, we multiply by its reciprocal. The reciprocal of $\\frac{2}{3}$ is $\\frac{3}{2}$.\nSo, $10 \\div \\frac{2}{3} = 10 \\times \\frac{3}{2}$.\nNow, we can multiply 10 by $\\frac{3}{2}$:\n$10 \\times \\frac{3}{2} = \\frac{10 \\times 3}{2} = \\frac{30}{2} = 15$.\nRemmy should multiply 10 by 15 to get the answer.\n\nAnswer: $15$",
+    "v3_last": 0,
+    "run_on": true,
+    "run_on_alt": true
+   }
+  }
+ ]
+}

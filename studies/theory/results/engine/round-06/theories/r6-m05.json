@@ -1,0 +1,99 @@
+{
+ "name": "r6-m05",
+ "statement": "RL-Zero-Math's extra hold-on words ('Wait', 'Hmm') come from a timer rather than an error detector: RL raised the hold-on probability as a rising function of the text written since the last stated numeric result, so RL's hold-on rate is about the base's right after a result and its excess grows over long stretches in which no result is stated.",
+ "scope": "Covers Olmo-3-1025-7B (base, with the cue) against Olmo-3.1-7B-RL-Zero-Math on stored MATH-500 text at T 1.0 / top-p 1.0 (T1, T2), finished answers only, with the hold-on words Wait/Hmm. It is about where hold-ons are placed, not about accuracy: it does not claim the timer causes RL's accuracy gain (result-882fa7 shows a constant Wait push gives none). It does not cover looping cap-hit text, T 0.6 cells, earlier RL checkpoints, the Code pair, or other check phrases ('let me verify'). Known tension outside the board: facts r4-m06 (RL minus base share of right answers with a re-checked right non-final candidate, 0.44) shows RL re-checks after stated answers more often per row; that statistic is an indicator per row, uses a broader re-check regex and an 800-character window, and does not normalise by exposure, so it does not fix the rate ratio right after a result. Conflicts listed below are small RL excesses measured right after a result.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2603.22446",
+   "finding": "RLVR rarely raises tokens the base found unlikely; at high-divergence positions most RL top-1 tokens are already in the base top-3.",
+   "how": "The timer re-weights a token the base already writes (Wait/Hmm, about 5 per 1k for the base), so the mechanism is a change in when an existing base token is chosen, not a new behaviour; it predicts the excess lives at positions far from a result, where the base's hold-on probability is moderate and RL shifts it."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-b4c576",
+   "quote": "RL readout holds Wait/Hmm at 5.64 % of positions vs base 4.56 %",
+   "how": "Averaged over all positions, a bias that grows with distance from the last result gives a modest, general readout excess."
+  },
+  {
+   "item": "result-d68d37",
+   "quote": "Wait/Hmm in RL readout 6.29 % vs base 4.63 %",
+   "how": "The same averaged timer excess survives a matched lens because it is a property of RL's policy, not of the lens."
+  },
+  {
+   "item": "result-cb82cf",
+   "quote": "general habit, not error-specific",
+   "how": "A timer keyed to elapsed text since a result fires whether or not the result was wrong, so it reads as a general habit."
+  },
+  {
+   "item": "result-855858",
+   "quote": "markers do not separate right from wrong samples of the same model and problem",
+   "how": "If hold-ons are scheduled by elapsed text rather than by detected errors, marker counts carry no information about correctness."
+  },
+  {
+   "item": "result-c4411d",
+   "quote": "RL does not read partial results better",
+   "how": "The timer does not read the content of results, only their occurrence, so RL's reading of partial results equals the base's."
+  },
+  {
+   "item": "result-882fa7",
+   "quote": "the push adds the word without a check",
+   "how": "A constant push places hold-ons uniformly, unlike RL's timer, which places them where a long stretch has gone unchecked, so matching the overall rate does not reproduce RL's placement."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-c4411d",
+   "quote": "hold-on log-prob rises +0.279 nats (base) vs +0.346 (RL) after a wrong arithmetic result",
+   "how": "Right after a result RL's hold-on rise is slightly larger than the base's (+0.066 nats), so the excess at distance zero is small but not exactly zero."
+  },
+  {
+   "item": "result-a2dc6f",
+   "quote": "wrong-result hold-on gap at L24 +0.128 vs +0.154 nats",
+   "how": "Again a small RL excess measured directly after a result, where the timer says the excess should be near zero."
+  }
+ ],
+ "rival": "Wrap-up replacement: RL suppresses wrap-up tokens (result-b4c576, wrap-up 2.82 % vs 4.22 %) and writes a hold-on where the base would wrap up, which happens right after a stated result; it predicts RL's excess is largest within 200 characters of a result and smaller over long result-free stretches (R(last bin)/R(first bin) below 1). The constant-bias rival r4-m06 predicts a flat profile (about 1.0). The profile of the RL/base hold-on rate ratio against characters since the last result separates all three.",
+ "predictions": [
+  {
+   "experiment": "Mechanism test: ratio of the RL/base hold-on rate ratio far from the last numeric result to the same ratio near it, R(d >= 1500) / R(d < 200), on finished MATH-500 answers. The constant-bias rival (r4-m06) predicts about 1.0; the wrap-up-replacement rival predicts below 1.0; this mechanism predicts well above 1.",
+   "recipe": "Files: runs/theory-rows/s3k/r4/base_rl-02/out/T1.jsonl (base, cue) and runs/theory-rows/s3k/r4/modal_t2-01/t2/T2.jsonl (RL, plain), from inventory.md (readable now). Keep rows with cap_hit false; rows missing or with empty text contribute nothing. In each text replace every match of the regex (?<=\\d),(?=\\d{3}) by '' (commas between digits deleted). Result positions: for each match of '=\\s*-?\\d+(?:\\.\\d+)?' the index just after the match end; for each occurrence of '\\boxed{' the index just after its brace-balanced closing '}' (skip a box that is unbalanced before the end of text). For each character index i in [0, len(text)), d(i) = i - r* where r* is the largest result position <= i; if no result position is <= i, d(i) = i. Bins of d: B1 [0,200), B2 [200,600), B3 [600,1500), B4 [1500, inf). Exposure of a bin = number of character indices with d in the bin, summed over all kept rows of a model. Events = start indices of matches of the case-sensitive regex (?<![A-Za-z])(Wait|Hmm)(?![A-Za-z]); each event is binned by d at its start index. rate_b = 1000 * events_b / exposure_b per model; R_b = rate_b(RL) / rate_b(base). Statistic = R_4 / R_1. If any base rate in B1 or B4 is 0 the statistic is undefined and counts as refuted.",
+   "unit": "ratio of rate ratios",
+   "value": 1.7,
+   "low": 1.15,
+   "high": 2.8,
+   "refuted_by": "statistic below 1.1, or undefined",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Case where the effect should not appear: the RL/base hold-on rate ratio within 200 characters after a stated numeric result (bin B1 alone). The overall written ratio is about 1.4 (result-8695c6, 8.81 vs 6.24 per 1,000 tokens), which a reader without the theory would expect here too; the timer says the excess is near zero right after a result.",
+   "recipe": "Same files, filters, comma deletion, result positions, d(i), events and exposure as the first prediction. Statistic = R_1 = (1000 * events in B1 / exposure in B1 for T2) / (1000 * events in B1 / exposure in B1 for T1). Cap-hit rows excluded; missing rows contribute nothing; if the T1 rate in B1 is 0 the statistic is undefined and counts as refuted.",
+   "unit": "ratio of rates (RL / base)",
+   "value": 1.05,
+   "low": 0.8,
+   "high": 1.3,
+   "refuted_by": "statistic above 1.3 or below 0.75, or undefined",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Cause test against a position rival: the same far/near contrast R(d >= 1500) / R(d < 200), computed only on character positions in the first half of each answer. The rival in which RL's excess comes from a late verification phase of the answer (excess grows with position in the answer, not with distance from a result) predicts about 1.0 here; the timer, which resets at every result regardless of where it is, predicts a clearly rising profile in the first half as well.",
+   "recipe": "Same files, filters, comma deletion, result positions, d(i) (computed on the full text), bins and event regex as the first prediction, but count exposure only for character indices i < len(text) / 2 (len of the comma-deleted text) and count only events whose start index s < len(text) / 2. Per model and bin, rate_b = 1000 * events_b / exposure_b; R_b = rate_b(T2) / rate_b(T1). Statistic = R_4 / R_1. Cap hits excluded, missing rows contribute nothing; if any T1 rate in B1 or B4 is 0, or any T2 exposure in B4 is 0, the statistic is undefined and counts as refuted.",
+   "unit": "ratio of rate ratios",
+   "value": 1.6,
+   "low": 1.1,
+   "high": 2.8,
+   "refuted_by": "statistic below 1.05, or undefined",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "GPU, teacher-forced: score the 500 stored T1 texts (base, cue, MATH-500, cap_hit false) under both the base and RL (Olmo-3.1-7B-RL-Zero-Math) with the cue prompt, bf16, one H100. At every token position compute D = log P_RL(hold-on) - log P_base(hold-on), where P(hold-on) is the summed next-token probability of the tokens ' Wait', 'Wait', ' Hmm', 'Hmm'. Assign each position the character distance d from the last numeric result as in the offline recipe (character offset of the token start). Statistic: mean D over positions with d >= 1500 minus mean D over positions with d < 200.",
+   "unit": "nats",
+   "value": 0.35,
+   "low": 0.12,
+   "high": 0.75,
+   "refuted_by": "difference at or below 0.05 nats (flat or falling excess with distance from the last result)",
+   "gpu_minutes": 40
+  }
+ ]
+}

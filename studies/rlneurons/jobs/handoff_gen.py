@@ -4,7 +4,9 @@ Request = plain prompt ids + the first L ids of the writer's answer; T 1.0 / top
     uv run tools/gpu.py submit h100 --hours 4 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.handoff_gen
         --finisher rl --cuts 25,50,75 --commit $(git rev-parse HEAD)"
 
-  --finisher base | rl (frozen4.json revisions, RL tokenizer).
+  --finisher base | rl (frozen4.json revisions, RL tokenizer), or any label with --finisher-path.
+  --finisher-path  a local weights directory instead (jobs/wsp_edit.py writes Think-SFT to one); the RL tokenizer as for the others.
+  --plan     file in data/handoff/ (default plan_v1.json: MATH-500 pool; plan_v2.json: the relay on hard328, specs/SPEC_relay.md).
   --cuts     percent of the writer's answer ids kept, from handoff_lib.CUTS. 100 is skipped for a writer answer that hit the cap.
   --writers  directory holding <writer job>/answers.jsonl (default /runs: the Volume iterate-runs inside a job).
   --n        the first n pool problems (smoke).
@@ -31,12 +33,15 @@ from studies.rlneurons.lib import n13_gen as G
 from studies.rlneurons.lib import n13_score as S
 
 PLAN = C.STUDY / "data" / "handoff" / "plan_v1.json"
+PLANS = {1: ("math500", H.WRITERS, H.SEED), 2: ("hard328", H.RELAY_WRITERS, H.RELAY_SEED)}      # plan version: set, writers, seed base
 SAMPLING = {"temperature": 1.0, "top_p": 1.0, "repetition_penalty": 1.0}
 
 
 def requests(tok, fz, plan, texts, cuts, n=None) -> list:
     """One request per (pool problem, writer, cut). texts: {writer: handoff_lib.writer_texts}. Asserts the plan's hashes."""
-    probs = {int(p["index"]): p for p in C.problems("math500", fz)}
+    bench, writers, seed0 = PLANS[plan["version"]]
+    assert plan["writers"] == writers and plan["seed"] == seed0
+    probs = {int(p["index"]): p for p in C.problems(bench, fz)}
     keep = set(plan["pool"][:n])
     reqs = []
     for row in plan["rows"]:
@@ -52,7 +57,7 @@ def requests(tok, fz, plan, texts, cuts, n=None) -> list:
                 continue
             assert H.sha(ids[:L]) == row["ids_sha256"][str(c)], f"{w} {i} cut {c}: prefix ids differ from the plan's"
             reqs.append({"rid": f"{w}|{c}|{i}", "problem_index": i, "writer": w, "cut": c, "n_prefix": L, "n_prompt": len(pids),
-                         "ids": pids + ids[:L], "seed": H.seed(w, c, i), "max_tokens": fz["cap"] - L, "gold": probs[i]["answer"]})
+                         "ids": pids + ids[:L], "seed": H.seed(w, c, i, writers, seed0), "max_tokens": fz["cap"] - L, "gold": probs[i]["answer"]})
     return reqs
 
 
@@ -79,7 +84,9 @@ class Canned:
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--finisher", required=True, choices=sorted(C.MODELS))
+    ap.add_argument("--finisher", required=True)
+    ap.add_argument("--finisher-path")
+    ap.add_argument("--plan", default=PLAN.name)
     ap.add_argument("--cuts", default="25,50,75")
     ap.add_argument("--writers", default="/runs")
     ap.add_argument("--n", type=int, default=None)
@@ -97,22 +104,22 @@ def main():
     rows_path, mpath = out / "answers.jsonl", out / "metrics.json"
     assert not rows_path.exists(), f"{rows_path} exists: one fresh directory per run"
     fz = json.loads((C.D4 / "frozen4.json").read_text())
-    plan = json.loads(PLAN.read_text())
-    assert plan["writers"] == H.WRITERS and plan["seed"] == H.SEED
+    plan = json.loads((PLAN.parent / a.plan).read_text())
+    assert (a.finisher in C.MODELS) != bool(a.finisher_path), "give --finisher base or rl, or another label with --finisher-path"
     versions = {k: metadata.version(k) for k in C.PINS if k != "vllm" or not a.dry_run}
     if not a.dry_run:
         assert versions == C.PINS, f"package versions {versions} differ from the study's {C.PINS}: run setup_vllm.sh first"
-    repo, _, rev = fz["models"][C.MODELS[a.finisher]]
+    repo, _, rev = (None, None, None) if a.finisher_path else fz["models"][C.MODELS[a.finisher]]
     from huggingface_hub import snapshot_download
     from transformers import AutoTokenizer
     tok_dir = snapshot_download(fz["tokenizer"][0], revision=fz["tokenizer"][1], allow_patterns=["*.json", "*.jinja", "*.txt"])
     tok = AutoTokenizer.from_pretrained(tok_dir)
-    texts = {w: H.writer_texts(pathlib.Path(a.writers) / job / "answers.jsonl") for w, job in H.WRITERS.items()}
+    texts = {w: H.writer_texts(pathlib.Path(a.writers) / job / "answers.jsonl") for w, job in plan["writers"].items()}
     reqs = requests(tok, fz, plan, texts, cuts, a.n)
     live = {r["rid"]: r for r in reqs}
     assert len(live) == len(reqs) and len({r["seed"] for r in reqs}) == len(reqs)
     m = {"status": "starting", "config": {**vars(a), "cuts": cuts, "out": str(out), "model_repo": repo, "model_revision": rev, "tokenizer": fz["tokenizer"],
-                                         "sampling": SAMPLING, "cap": fz["cap"], "plan": PLAN.name, "n_requests": len(reqs)},
+                                         "sampling": SAMPLING, "cap": fz["cap"], "plan": a.plan, "n_requests": len(reqs)},
          "commit": a.commit, "job_id": os.environ.get("JOB_ID"), "versions": versions, "started_utc": J.utc()}
 
     def write():
@@ -124,7 +131,7 @@ def main():
     if a.dry_run:
         engine = Canned(tok)
     else:
-        model_dir = snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors", "*.jinja", "*.txt"])
+        model_dir = a.finisher_path or snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors", "*.jinja", "*.txt"])
         os.environ.update(G.ENGINE_ENV)
         engine = J.VllmEngine(model_dir, tok_dir, 2048 + fz["cap"])
     m["engine"] = {**engine.info, "load_s": time.time() - t_load}
@@ -144,7 +151,8 @@ def main():
                        "finisher": a.finisher, "n_new": len(gen), "cap_hit": j is None, "finish_reason": fr, "out_ids": out_ids,
                        "prompt": tok.decode(req["ids"][: req["n_prompt"]], skip_special_tokens=False),
                        "prefix_text": tok.decode(req["ids"][req["n_prompt"]:], skip_special_tokens=False),
-                       "gen_text": tok.decode(gen, skip_special_tokens=False), "utc": J.utc()}
+                       "gen_text": tok.decode(gen, skip_special_tokens=False),
+                       "text": tok.decode(req["ids"][req["n_prompt"]:] + gen, skip_special_tokens=False), "utc": J.utc()}    # decoded in one piece: a cut can split a character
                 f.write(json.dumps(rec) + "\n")
                 f.flush()
                 os.fsync(f.fileno())

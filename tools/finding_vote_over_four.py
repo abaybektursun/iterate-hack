@@ -1,4 +1,4 @@
-"""A vote over four samples adds 8.2 points to the cued base model on MATH-500, and RL under the same vote stays 5.6 ahead.
+"""A vote over 4 samples adds 8.2 points to the cued base model on MATH-500, and RL under the same vote stays 5.6 points ahead.
 
 The page of one finding, served at /finding/vote-over-four (copied from .claude/skills/finding-page/template.py; draw()
 shows each model's score as a glass bar that becomes a stack of four sheets, one per sample, when the vote is switched
@@ -47,20 +47,21 @@ DATA = {
 }
 BASE, RL, GAP, N = DATA["rows"][0], DATA["rows"][1], DATA["gap"], DATA["n"]
 pct = lambda right: f"{100 * right / N:.1f} %"
+_m = lambda v: str(v).replace("-", "\u2212")  # a negative number with the minus sign U+2212
 TIMES = round(BASE["tokens_vote"] / RL["tokens_single"], 1)  # the base model's vote against one RL sample, in tokens
 DATA["times"] = TIMES
 
-TITLE = "Vote over four samples"
+TITLE = "Vote over 4 samples"
 PROBLEM = "Can voting replace RL training?"
-LINE = (f"A vote over four samples adds {BASE['gain']} points to the base model, "
-        f"and RL stays {GAP['vote']} ahead.")  # also the sentence on its tile
+LINE = (f"A vote over 4 samples adds {BASE['gain']} points to the base model on MATH-500, "
+        f"and RL with the same vote stays {GAP['vote']} points ahead.")  # also the sentence on its tile
 
 # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
 DATA["states"] = [
-    {"name": "One sample", "note": f"A bar's length is its right answers of the {N} MATH-500 problems, "
-                                   "with one sample per problem."},
-    {"name": "Vote over four", "note": "The most common of four answers counts. For the base model that costs "
-                                       f"{TIMES} times the tokens of one RL sample."},
+    {"name": "One sample", "hash": "one-sample", "note": f"A bar's length is its right answers of the {N} MATH-500 problems, "
+                                   "with one sample per problem at T 1.0."},
+    {"name": "Vote over 4 samples", "hash": "vote", "note": "The most common of 4 answers counts. For the base model that "
+                                       f"costs {TIMES} times the tokens of one RL sample."},
 ]
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
@@ -77,7 +78,8 @@ PANELS = [
       f"Against that model the gap stays: {GAP['vote']} points under the vote (95 % interval {GAP['vote_ci'][0]} to "
       f"{GAP['vote_ci'][1]}), down from {GAP['single']} with one sample each."]],
     ["why", "Why it matters", "The direction asks for the cheapest route to the RL gain that uses no reward, compared at equal "
-     "tokens and with RL given the same procedure, and by that standard the vote is a real step and an expensive one.",
+     "tokens and with RL given the same procedure. By that standard the vote helps, but it costs "
+     f"{TIMES} times the tokens of one RL sample.",
      [f"With one sample each the base model is {GAP['single']} points behind. Its vote is {abs(DATA['vote_minus_rl_single'])} "
       f"points behind one RL sample, at {TIMES} times the tokens: {BASE['tokens_vote']:,.0f} per problem against "
       f"{RL['tokens_single']:,.0f}.",
@@ -86,12 +88,12 @@ PANELS = [
       f"A right answer is among the four samples on {DATA['pass_at_4']} problems, {DATA['pass_at_4'] - BASE['vote']} more "
       "than the vote picks. Sending a tie to the shortest finished sample was chosen after reading those misses and "
       f"failed on held-out problems: on the {DATA['hard']['n']} harder problems it gives {DATA['hard']['tie_short']} "
-      f"against the plain vote's {DATA['hard']['vote']} ({DATA['hard']['tie_short_minus_vote'][0]} points, 95 % interval "
-      f"{DATA['hard']['tie_short_minus_vote'][1]} to {DATA['hard']['tie_short_minus_vote'][2]}). The number to quote is "
+      f"against the plain vote's {DATA['hard']['vote']} ({_m(DATA['hard']['tie_short_minus_vote'][0])} points, 95 % interval "
+      f"{_m(DATA['hard']['tie_short_minus_vote'][1])} to {DATA['hard']['tie_short_minus_vote'][2]}). The number to quote is "
       f"the plain vote's {BASE['vote']} of {N} ({DATA['vote_after_restart']} after restart)."]],
-    ["how", "How we know", f"Each model answered the {N} MATH-500 problems {DATA['samples']} times at temperature 1.0 and "
+    ["how", "How we know", f"Each model answered the {N} MATH-500 problems {DATA['samples']} times at T 1.0 and "
      "top-p 1.0, and the vote takes the most common of the 4 extracted answers (grader v3).",
-     ["The base model is Olmo-3-1025-7B with a three-token opening cue and no training, and the RL model is "
+     ["The base model is Olmo-3-1025-7B with a three-token opening cue and no training, and RL is "
       "Olmo-3.1-7B-RL-Zero-Math. \"One sample\" is the first of the four. The base model's four samples score "
       f"{', '.join(map(str, BASE['each'][:3]))} and {BASE['each'][3]}, so the vote's {BASE['vote']} is above each of them.",
       f"Intervals are paired bootstraps over the {N} problems with 5,000 resamples. A sample without an extracted answer "
@@ -100,11 +102,11 @@ PANELS = [
       f"{DATA['wrong_to_right']} of the base model's problems from wrong to right and {DATA['right_to_wrong']} from right to "
       f"wrong. The same seeds in another RL job gave {DATA['rl_vote_other_job']} for the vote where this one has "
       f"{RL['vote']}, so about 1 point of a vote score is variation between runs."]],
-    ["limits", "What it does not show", "It does not show that voting replaces RL training: under the same vote the RL model "
+    ["limits", "What it does not show", "It does not show that voting replaces RL training: under the same vote RL "
      f"stays {GAP['vote']} points ahead.",
      [f"No vote rule closes the gap to one RL sample: of {DATA['frontier_rules']} base rules fixed before scoring, the best "
       f"is {abs(DATA['best_rule_minus_rl'][0])} points below it at {DATA['best_rule_times']} times the tokens, but its 95 % "
-      f"interval, {DATA['best_rule_minus_rl'][1]} to +{DATA['best_rule_minus_rl'][2]}, includes 0. RL given the same rule "
+      f"interval, {_m(DATA['best_rule_minus_rl'][1])} to +{DATA['best_rule_minus_rl'][2]}, includes 0. RL given the same rule "
       f"leads under every one of them by at least {DATA['min_rl_lead'][0]} points ({DATA['min_rl_lead'][1]} to "
       f"{DATA['min_rl_lead'][2]}).",
       f"On the {DATA['hard']['n']} harder problems, where nothing was chosen, the base model's vote has "
@@ -202,10 +204,13 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .track { fill: none; stroke: var(--faint); stroke-width: 1; stroke-dasharray: 2 5; }
 .wash { fill: var(--blue); opacity: var(--wash); pointer-events: none; }
 .dim { fill: none; stroke: var(--ink); stroke-width: 1.3; stroke-linecap: round; }
-.lane { font-weight: 540; }
+.lane { font-weight: 560; fill: var(--mute) !important; }
 .num { font-weight: 640; text-anchor: end; }
+.num .of { font-weight: 520; fill: var(--mute); }
 .gaptext { font-weight: 600; text-anchor: end; }
 .plus { font-weight: 640; text-anchor: middle; fill: var(--blue); }
+#plus-rl { text-anchor: end; }
+.say .nw { white-space: nowrap; }
 .tick { fill: var(--mute); font-weight: 520; text-anchor: middle; }
 .switch { display: inline-flex; align-self: center; margin-top: 18px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
 .switch button { padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
@@ -276,7 +281,7 @@ svg { animation: fade 1s both; }
 </div>
 <script>
 const C = __CONFIG__, D = C.data, $ = id => document.getElementById(id);
-const S = { state: 0, open: null, q: 0, from: 0, t0: 0, grow: 0 };
+const S = { state: 0, open: null, q: 0, from: 0, t0: 0, grow: 0, t1: null };
 const still = matchMedia("(prefers-reduced-motion: reduce)"), narrow = matchMedia("(max-width: 900px)");
 const f = n => n.toFixed(1), mix = (a, b, q) => a + (b - a) * q, ease = p => p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2;
 const clamp = p => Math.max(0, Math.min(1, p));
@@ -320,7 +325,8 @@ function build() {
   const bar = o => `<g id="bar-${o.key}">` +
     sheets.map(i => `<path class="body" id="b-${o.key}${i}"/><path class="face" id="f-${o.key}${i}"/><path class="rim" id="r-${o.key}${i}"/>`).join("") +
     `<path class="wash" id="ws-${o.key}"/><path class="wash" id="wt-${o.key}"/>` +
-    `<text class="lane" id="name-${o.key}">${o.name}</text><text class="num" id="num-${o.key}"></text></g>`;
+    `<text class="lane" id="name-${o.key}">${o.name}</text><text class="num" id="num-${o.key}"><tspan id="cnt-${o.key}"></tspan>` +
+    `<tspan class="of" id="of-${o.key}"></tspan></text></g>`;
   $("svg").innerHTML = "<defs>" +
     `<radialGradient id="body" cx=".3" cy=".16" r="1.05">${stop(0, "var(--glass-hi)")}${stop(.5, "var(--glass)")}${stop(1, "var(--glass-lo)")}</radialGradient>` +
     `<linearGradient id="rim" x1=".06" y1="0" x2=".94" y2="1">${stop(0, "var(--rim-a)")}${stop(.56, "var(--rim-b)")}${stop(1, "var(--rim-c)")}</linearGradient>` +
@@ -331,7 +337,7 @@ function build() {
     `<path class="body" id="board-side"/><path class="face" id="board-face"/><path class="rim" id="board-rim"/>` +
     rows.map(o => `<path class="track" id="track-${o.key}"/>`).join("") +
     bar(rows[0]) + `<path class="dim" id="gap-line"/><text class="gaptext" id="gap-text"></text>` + bar(rows[1]) +
-    `<text class="plus" id="plus">+${f(rows[1].gain)} points</text>` +
+    rows.map(o => `<text class="plus" id="plus-${o.key}">+${f(o.gain)} points</text>`).join("") +
     `<text class="tick" id="tick-0">0</text><text class="tick" id="tick-n" style="text-anchor:end">${D.n} problems</text>`;
 }
 function place() {
@@ -350,10 +356,15 @@ function place() {
     });
     set("wt-" + o.key, "d", path(rect(us, u1, v - HB, v + HB, top)));  // the part the vote adds: its top and its front
     set("ws-" + o.key, "d", path([proj(us, v - HB, 0), proj(u1, v - HB, 0), proj(u1, v - HB, top), proj(us, v - HB, top)]));
-    label("name-" + o.key, proj(U0 + 16, v, top), 24, .34, shown);
-    label("num-" + o.key, proj(us - 12, v, top), 44, .35, shown);  // the number stays left of the part the vote adds
-    $("num-" + o.key).textContent = Math.round(right);
-    if (o.key === "base") label("plus", proj((us + u1) / 2, v - HB - 30, 0), 22, .34, clamp(2 * q - 1));
+    // The name stands on the board behind its bar; the count, as "446 of 500 (89.2 %)", ends where one sample ends, left of
+    // the part the vote adds, which is named in front of the base bar and behind the RL bar.
+    const lab = proj(U0 + 4, v + HB + 14, top);
+    label("name-" + o.key, lab, 22, .34, shown); set("name-" + o.key, "style", "text-anchor:start");
+    label("num-" + o.key, proj(us - 12, v, top), 40, .35, shown);
+    const n = Math.round(right), cnt = String(n), of = ` of ${D.n} (${f(100 * n / D.n)} %)`;
+    if ($("cnt-" + o.key).textContent !== cnt) { $("cnt-" + o.key).textContent = cnt; $("of-" + o.key).textContent = of; }
+    set("of-" + o.key, "font-size", f(.55 * parseFloat($("num-" + o.key).getAttribute("font-size"))));
+    label("plus-" + o.key, o.key === "base" ? proj((us + u1) / 2, v - HB - 30, 0) : proj(u1, v + HB + 14, top), 22, .34, clamp(2 * q - 1));
   });
   set("gap-line", "d", seg(proj(end.base, LANE.base + HB, 0), proj(end.base, VGAP + 9, 0)) +
     seg(proj(end.base, VGAP, 0), proj(end.rl, VGAP, 0)) + seg(proj(end.rl, VGAP - 9, 0), proj(end.rl, LANE.rl - HB, 0)));
@@ -369,7 +380,8 @@ function frame(now) {
   const t = now / 1000;
   V.px += (V.tx - V.px) * .06; V.py += (V.ty - V.py) * .06;
   V.yaw = 1.6 * Math.sin(t * .25) + 2 * V.px; V.el = EL + Math.sin(t * .19 + 1) - 2 * V.py;
-  S.grow = ease(Math.min(1, t / 1.3));
+  S.t1 ??= now;  // the entrance starts with the first frame shown, so a tab opened in the background still plays it
+  S.grow = ease(Math.min(1, (now - S.t1) / 1300));
   S.q = mix(S.from, S.state, ease(Math.min(1, (now - S.t0) / 900)));
   place();
   if (!still.matches) requestAnimationFrame(frame);
@@ -394,18 +406,39 @@ function pane() {
       `<ul class="facts">${p[3].map(f => `<li>${f}</li>`).join("")}</ul>`
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${p[1]}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
-function fromHash() { const h = location.hash.slice(1); S.open = C.panels.some(p => p[0] === h) ? h : null; pane(); }
+/* The state and the open panel are one value in the address: #<state>, #<panel> or #<state>/<panel>. */
+const HK = D.states.map(s => s.hash);
+function address(push) {
+  const parts = [S.state ? HK[S.state] : "", S.open || ""].filter(Boolean);
+  const url = parts.length ? "#" + parts.join("/") : location.pathname;
+  push ? history.pushState(null, "", url) : history.replaceState(null, "", url);
+}
+function fromHash() {
+  const parts = decodeURIComponent(location.hash.slice(1)).split("/"), k = HK.indexOf(parts[0]);
+  choose(k < 0 ? 0 : k);
+  S.open = parts.find(x => C.panels.some(p => p[0] === x)) || null;
+  pane();
+}
+function open(key) {  // a panel opens in the side column; the keyboard focus follows it there and back
+  const was = S.open;
+  S.open = key || null;
+  address(true);
+  pane();
+  const to = $("pane").querySelector(key ? ".close" : `[data-open="${was}"]`);
+  if (to) to.focus({ preventScroll: true });
+}
 document.addEventListener("click", e => {
   const s = e.target.closest("[data-state]"), o = e.target.closest("[data-open]");
-  if (s) { choose(Number(s.dataset.state)); document.querySelector(`[data-state="${S.state}"]`).focus(); }
-  if (o) { history.pushState(null, "", o.dataset.open ? "#" + o.dataset.open : location.pathname); fromHash(); }
+  if (s) { choose(Number(s.dataset.state)); address(false); document.querySelector(`[data-state="${S.state}"]`).focus(); }
+  if (o) open(o.dataset.open);
 });
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (e.key === "Escape" && S.open) { history.pushState(null, "", location.pathname); fromHash(); }
-  if (e.key === "ArrowRight" || e.key === "ArrowLeft") choose((S.state + 1) % D.states.length);
+  if (e.key === "Escape" && S.open) open("");
+  if (e.key === "ArrowRight" || e.key === "ArrowLeft") { choose((S.state + 1) % D.states.length); address(false); }
 });
 addEventListener("hashchange", fromHash);
+addEventListener("popstate", fromHash);
 $("stage").addEventListener("pointermove", e => {  // the view leans a few degrees toward a mouse, and settles back
   if (e.pointerType !== "mouse") return;
   const r = $("stage").getBoundingClientRect();
@@ -413,10 +446,11 @@ $("stage").addEventListener("pointermove", e => {  // the view leans a few degre
 });
 $("stage").addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 $("problem").textContent = C.problem;
-$("say").innerHTML = C.line.replace(/(\d+(?:[.,]\d+)*(?: ?%)?)/g, "<b>$1</b>");
+$("say").innerHTML = C.line.replace(/(?<![\w-])(\d+(?:[.,]\d+)*(?: ?%)?)(?! samples)/g, "<b>$1</b>").replace(/MATH-500/g, '<span class="nw">MATH-500</span>');
 build();
 draw();
 fromHash();
+S.from = S.q = S.state; S.t0 = -1e9;  // a state read from the address is shown at once
 if (still.matches) { S.grow = 1; place(); } else requestAnimationFrame(frame);
 </script>
 </body>

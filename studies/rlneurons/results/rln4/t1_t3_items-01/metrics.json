@@ -1,0 +1,20 @@
+{
+ "n": 500,
+ "grader": "v3 (rln4_lib.grade_v3)",
+ "t3": {
+  "right": 224,
+  "cap_hits": 8,
+  "nothing_extracted": 129
+ },
+ "t1": {
+  "right": 410,
+  "cap_hits": 27,
+  "nothing_extracted": 25
+ },
+ "two_by_two": {
+  "both": 201,
+  "cue_only": 209,
+  "plain_only": 23,
+  "neither": 67
+ }
+}
