@@ -2993,7 +2993,7 @@ python3 tools/vast.py run <box> -- 'PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rln
 uv run --with numpy python -m studies.rlneurons.analysis.transplant hard328-01 --arm sft1_rl20=runs/<job>,runs/<job> [--arm ...] --ref think=studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl --ref rl=studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl
 ```
 
-## Token cap 32,768 on the 328: Think-SFT gains 23 problems, RL gains 2 (board work-ceccc0)
+## Token cap 32,768 on the 328: Think-SFT gains 23 problems, the base 4, RL 2 (board work-ceccc0)
 
 Spec `specs/SPEC_cap32.md` (written before the runs). `run_cell --set hard328 --max-tokens 32768`, T 1.0 / top-p 1.0, grader
 v3, one sample, seed 3000000, on vast.ai (RTX PRO 6000). Each cell is scored twice from the same answers: right at 32,768, and
@@ -3006,6 +3006,7 @@ Per-problem rows of both cells (tokens generated, cut off at 32,768 or not, scor
 |---|---|---|---|---|---|
 | Think-SFT cue (`results/cap32/sft_cue-01/`) | 207 | 230 | +7.0 [4.3, 9.8] | 93: 91 / 23 | 10,048 / 11,795 |
 | RL plain (`results/cap32/rl_plain-01/`) | 193 | 195 | +0.6 [0.0, 1.5] | 20: 20 / 2 | 9,293 / 9,421 |
+| base cue (`results/cap32/base_cue-01/`, 4 shards on AWS L40S) | 152 | 156 | +1.2 [0.3, 2.4] | 64: 63 / 4 | 9,145 / 9,995 |
 
 - H1 held: Think-SFT's cut answers are unfinished work. 91 of 93 finish inside the second 16,384 tokens and 23 are right, for
   1,747 more tokens per problem. 230 of 328 is the best single-sample row on the 328 so far (vote over 4 Think-SFT samples at
@@ -3015,7 +3016,9 @@ Per-problem rows of both cells (tokens generated, cut off at 32,768 or not, scor
   outside the spec's limit of 12, and inside the range of RL's four stored samples on the 328 (207, 190, 209, 194,
   `results/day1_3/hard328_rl_plain_s4r2-01/`). Not rerun; the gain is measured inside the run.
 - Of the 68 long Think-SFT answers that finish wrong, none is a loop by the runner's loop count (3 in the whole cell).
-- Base cue at 32,768 (H2): the vast.ai box ended before its rows were copied. Rerun as 4 shards on AWS; row added when done.
+- H2 held: the base's long answers also finish with more tokens (63 of 64) but only 4 are right. Share right among answers past
+  16,384: Think-SFT 23 of 93, RL 2 of 20, base 4 of 64. The base's 16,384 score in this run is 152 (stored 164, limit 12: inside).
+  Base jobs ih-1115-144232-448b, -144318-6d57, -144428-85af, -144457-42b8, joined with `analysis/shard_join.py`.
 - Jobs abaybektursun-1115-005756-309b (Think-SFT), -005823-8ac9 (RL); raw answers in `runs/<job>/` on the laptop, not in git.
 
 ## Fresh held-out set: Think-SFT's lead over RL holds on problems published in 2026 (fresh2026, n = 136, 4 samples, board work-7c069c, idea-67db73)
