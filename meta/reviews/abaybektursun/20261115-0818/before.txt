@@ -1,0 +1,8 @@
+abaybektursun-1114-213934-79aa  done  NVIDIA H100 80GB HBM3  160m  29750c9  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-214246-17cc  done  NVIDIA H100 80GB HBM3  156m  89f0d71  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-214255-116e  done  NVIDIA H100 80GB HBM3  156m  89f0d71  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies
+abaybektursun-1114-220703-1a4c  done  NVIDIA H100 80GB HBM3  132m  1dee7ab  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rln-vllm/bin
+abaybektursun-1114-220719-fa57  done  NVIDIA H100 80GB HBM3  132m  1dee7ab  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rln-vllm/bin
+first 40 problems of hard328, P (abaybektursun-1114-220703-1a4c): cap hits 27, right 12
+first 40 problems of hard328, G (abaybektursun-1114-220719-fa57): cap hits 22, right 14
+first 40 problems of hard328, base (abaybektursun-1114-151534-e72c): cap hits 14, right 18

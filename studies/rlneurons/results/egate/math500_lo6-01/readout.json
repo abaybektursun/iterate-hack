@@ -1,0 +1,42 @@
+{
+ "run": "math500_lo6-01",
+ "job_id": [
+  "abaybektursun-1114-220136-0946",
+  "abaybektursun-1114-220200-a639",
+  "abaybektursun-1114-220821-3215",
+  "abaybektursun-1114-220836-0ff3"
+ ],
+ "commit": [
+  "d803714b8420fc081d82ec8ab0f0db16cd816a70"
+ ],
+ "h0_nats": 0.9,
+ "rnd_share": null,
+ "arms": {
+  "lo6": {
+   "n": 2000,
+   "right": 1614,
+   "cap_hits": 177,
+   "loop_A": 83,
+   "finished": 1823,
+   "right_of_finished": 1609,
+   "tokens_per_problem": 3954.1485,
+   "share_sharpened": 0.8725035826486073,
+   "mean_entropy": 0.2965149116144119,
+   "low_prob_tokens_per_1k": 3.571059609926132,
+   "vs_ref": {
+    "n_problems": 500,
+    "mean_right": 403.5,
+    "ref_mean_right": 410.5,
+    "diff_points": -1.4,
+    "ci95": [
+     -3.2499999999999973,
+     0.40000000000000036
+    ]
+   }
+  }
+ },
+ "reference": {
+  "rows": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl",
+  "mean_right_per_sample": 410.5
+ }
+}

@@ -28,6 +28,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/rate.py`, `analysis/rate_test.py`, `specs/SPEC_rate.md` | Exchange-rate table: each arm's ability shift in logits, tokens and training signal; leave-one-arm-out transfer to the 328; predictions filed before held-out cells were read. Outputs `results/rate/`. |
 | `analysis/hazard.py`, `analysis/hazard_test.py`, `specs/SPEC_hazard.md` | Slip-hazard law: hazard-link item model against the Rasch logit model held out, hazard ratio of every arm and its constancy over difficulty, transfer to the 328, chain length and independence of the 4 samples, filed predictions. Outputs `results/hazard/`. |
 | `analysis/profile.py`, `analysis/profile_test.py`, `specs/SPEC_profile.md` | Difficulty profiles of Think-SFT and RL: error reduction by difficulty bin with difficulty defined without the arms compared, profile contrast against same-arm and one-axis noise floors, 2PL against Rasch held out, unions, cap hits by level, filed predictions for Think-SFT on hard328. Outputs `results/profile/`; input `data/profile/math500_meta_v1.json`. |
+| `lib/egate.py`, `jobs/egate_cell.py`, `analysis/egate.py`, `specs/SPEC_egate.md` | Entropy-gated temperature: a vLLM logits processor that lowers the temperature only at positions chosen by next-token entropy, at random, or outside the stretch after a repeat; the multi-arm job; the readout. Outputs `results/egate/`. |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
 | `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
 | `jobs/rln3_gen.py` | RLN-3 generation job (arms P, F, C on MATH-500 and the harder set), AWS `pg` only. |
@@ -2143,6 +2144,124 @@ right prefixes at 75 % give base 79 of 88, RL 84 of 88, +5.7 [1.1, 11.4]; the ot
   in 50 of 366 answers, by at most 8 ids). Cuts 0 and 100 ran only in the smoke, RL finisher only.
 - Jobs (one H100 each, commit `bd403e1`): base finisher `abaybektursun-1114-231144-7399`, RL finisher
   `abaybektursun-1114-231154-44ea`. Raw rows: `answers.jsonl` in each job's `$OUT_DIR` (Volume `iterate-runs`), not committed.
+
+## Entropy-gated temperature: no gate beats T 1.0; forks and confident positions make loops together (board work-deec92, idea-069f19)
+
+Spec `specs/SPEC_egate.md` (written before any run; amendment 1 before the repeat-aware arm). Every request runs at
+T 1.0 / top-p 1.0; the logits processor `lib/egate.py` divides the logits by `t_low` at the positions its arm names. H is the
+entropy of the next-token distribution at temperature 1; the threshold h0 = 0.9 nats is the 80th percentile of H over 69,978
+positions of 50 MATH-500 problems at T 1.0 (calibration in `results/egate/calib-01/metrics.json`, mean H 0.416 nats). Base +
+cue, grader v3, cap 16,384, vast.ai RTX PRO 6000 (vLLM 0.32.0, Model Runner V2, engine in-process).
+
+### Screen: first 100 MATH-500 problems, one sample, seed 61,000,000 + index (`results/egate/screen-01/`, `screen_esc-01/`)
+
+| Arm | Positions sharpened | t_low | Share sharpened | Right | Cap hits | Rule-A loops | Right of finished | Tokens per problem |
+|---|---|---|---|---|---|---|---|---|
+| t1 | none | | 0 | 87 | 4 | 0 | 87 of 96 | 3,905 |
+| all6 | all (constant T 0.6) | 0.6 | 1 | 80 | 17 | 12 | 80 of 83 | 4,006 |
+| hi6 | H > h0 | 0.6 | 0.119 | 87 | 6 | 2 | 87 of 94 | 3,418 |
+| lo6 | H <= h0 | 0.6 | 0.872 | 90 | 4 | 3 | 90 of 96 | 2,950 |
+| rnd6 | random, probability 0.187 | 0.6 | 0.188 | 88 | 3 | 1 | 88 of 97 | 3,634 |
+| hi3 | H > h0 | 0.3 | 0.090 | 82 | 9 | 7 | 81 of 91 | 3,581 |
+| hi1 | H > h0 | 0.1 | 0.090 | 81 | 8 | 7 | 81 of 92 | 3,398 |
+| lo3 | H <= h0 | 0.3 | 0.911 | 82 | 17 | 10 | 81 of 83 | 4,389 |
+| esc6 | all, except 256 positions after a repeat | 0.6 | 0.752 | 80 | 8 | 4 | 80 of 92 | 3,255 |
+| esc3 | all, except 256 positions after a repeat | 0.3 | 0.620 | 82 | 8 | 7 | 82 of 92 | 3,008 |
+| esc6k | all, except 1,024 positions after a repeat | 0.6 | 0.579 | 83 | 5 | 5 | 83 of 95 | 3,257 |
+| esc3k | all, except 1,024 positions after a repeat | 0.3 | 0.504 | 84 | 6 | 6 | 84 of 94 | 3,167 |
+
+- Instrument checks of the spec hold: all6 through the processor reproduces the stored constant T 0.6 cell on these 100 problems
+  (17 cap hits, 12 loops, 80 right against 18, 12, 77 in job -151718-d4fa); t1 (87 right, 4 cap hits) is inside the four stored
+  T 1.0 samples (77 to 87 right, 2 to 6 cap hits); the processor sharpened 0 % of t1's positions, 100 % of all6's and 11.9 %
+  of hi6's. The planted tests of the gate, the percentile and the repeat detector run at the start of every job.
+- Neither single-regime hypothesis of the spec holds. At t_low 0.6 neither gate alone reaches the midpoint of 10.5 cap hits
+  (hi6 6, lo6 4, all6 17). At t_low 0.3 the confident positions alone loop as much as constant T 0.6 (lo3 17 cap hits, 10
+  loops) and the forks alone about half as much (hi3 9 and 7; hi1 8 and 7). Loops rise with the strength of sharpening in
+  either regime.
+- The first 100 problems are too few to read a difference in right answers (one arm's standard error is about 4 points), and
+  the screen misled on cap hits too: lo6 had 4 of 100 here and 4 to 10 on the same 100 problems in the four fresh samples below.
+- Raw answers: of the 82 looping answers on these 100 problems over all jobs of this section, the repeated block opens with
+  `Wait` in 19, `But` in 14 and `Alternatively` in 6: the model returns to a doubt it has already stated (two blocks per arm
+  read in full for all6, lo3, hi1 and lo6).
+
+### The 2x2 at n = 500 and the stage-2 test (`results/egate/math500_lo6-01/`, `math500_hi6-01/`, `math500_esc3k-01/`)
+
+All 500 problems, fresh seeds (sample s: 61,000,000 + 10,000 s + index, s from 1, so that no row repeats a screen seed). The
+reference is the four stored T 1.0 samples of job -153825-208b (`results/day1_3/math500_base_cue-01/rows.jsonl`, attempt 0).
+Differences are per problem (mean over the samples), 95 % bootstrap over problems, 5,000 resamples, seed 0.
+
+| Cell | Samples | Right per 500 | Minus T 1.0, points | Cap hits per 500 | Rule-A loops per 500 | Right of finished | Tokens per problem |
+|---|---|---|---|---|---|---|---|
+| T 1.0 (stored) | 4 | 410.5 | | 22.5 | 0 | 85.9 % (1,641 of 1,910) | 4,008 |
+| lo6: T 0.6 where H <= 0.9 (87 % of positions) | 4 | 403.5 | -1.4 [-3.2, 0.4] | 44.2 | 20.8 | 88.3 % (1,609 of 1,823) | 3,954 |
+| hi6: T 0.6 where H > 0.9 (12.1 % of positions) | 2 | 403.5 | -1.4 [-3.5, 0.8] | 33.0 | 13.0 | 86.0 % (803 of 934) | 3,876 |
+| constant T 0.6 (stored, 1 sample) | 1 | 378 | | 98 | 71 | 94.0 % (378 of 402) | 4,690 |
+| esc3k: T 0.3, back to T 1.0 for 1,024 positions after a repeat | 1 | 404 | -1.3 [-4.3, 1.5] | 47 | 23 | 89.0 % (403 of 453) | 3,798 |
+
+- Stage 2 of the spec is refuted for both gates. lo6 (the screen's best arm, 90 of 100) scores 403.5 of 500 over four fresh
+  samples (413, 399, 393, 409) and hi6 the same 403.5 over two (395, 412): both -1.4 points against T 1.0, intervals through 0.
+  The screen's 90 was a lucky sample.
+- Each gate raises the share of finished answers that are right (lo6 88.3 %, T 1.0 85.9 %) and loses more answers to the cap
+  than it gains: the trade of constant T 0.6, at a smaller size.
+- The two regimes interact. Cap hits per 500: T 1.0 22.5, forks only 33.0 (+10.5), confident positions only 44.2 (+21.8),
+  both 98 (+75.5). If the two effects added, both together would give 54.8 cap hits; the stored T 0.6 cell has 98 (rule-A
+  loops: 13.0 + 20.8 = 33.8 added, 71 observed). A loop needs a sharpened choice at the fork and a sharpened continuation after
+  it. The 12 % of positions with H > 0.9 carry a third of the added cap hits, about 4 times their share of positions.
+  Caveat: the T 0.6 cell is one stored sample; its 98 cap hits are far outside the range of the gated samples (30 to 51).
+- Returning to T 1.0 after a repeat removes half of the loops and none of the cost: esc3k (T 0.3 at 57 % of positions) has
+  47 cap hits and 23 loops, half of constant T 0.6 at a lower temperature, and 404 right, -1.3 points [-4.3, 1.5]. Its
+  right of finished is the highest of the section (89.0 %). One sample only: the second (job -232552-5470) finished, and I
+  destroyed its box while the copy was running.
+- Across this section, the truncation rules of result-44b4df (min-p, top-p) and constant T 0.6, every rule that removes
+  randomness from the cued base raises accuracy among finished answers and adds loops that cost as much or more. No decoding
+  rule tested here beats plain T 1.0 sampling on MATH-500, so none was run on the 328.
+- Deviations from the spec: stage 2 used fresh seeds (samples 1 to 4) instead of the screen's sample 0, so that the arm picked
+  for its screen score is not scored on the same draws; hi6 has 2 samples and esc3k 1 instead of 4 (box lifetime).
+
+Stage 3 (the 328) was not run: the spec allows it only for an arm whose stage-2 interval is above 0.
+
+Run folders `results/egate/<run>/`: `run.json` (job ids, commit, command arguments, h0), `metrics.json` (the jobs' own counts and
+the processor's entropy histograms), `rows.jsonl` (per answer: arm, problem, sample, seed, tokens, cap hit, loop, extracted
+answer, score), `examples.json` (one right and one wrong answer per arm, with the prompt), `readout.json`. Raw answers:
+`runs/<job-id>/answers.jsonl` on the laptop of abaybektursun (not committed; the vast.ai boxes are destroyed). Cost: about
+17 USD of vast.ai rent.
+
+```
+python3 tools/vast.py run <box> -- 'PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.egate_cell --model base --set math500 --n 100 --seed 61000000 --h0 0.9 --rnd-share 0.1869444682614536 --arms t1=off:1 hi6=hi:0.6 --commit <sha>'
+uv run --with numpy python -m studies.rlneurons.analysis.egate screen-01 runs/<job-id> [runs/<job-id> ...]
+uv run --with numpy python -m studies.rlneurons.analysis.egate math500_lo6-01 runs/<job-id> ... --ref studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl
+```
+
+## Signed self-training with no reward: it loses points, by making the base doubt and run out of tokens (hard328, board work-d9a824, idea-0d55a4)
+
+Spec `specs/SPEC_signed1.md` (written before the runs, amended once before the cells). The missing cell of the 2x2
+{vote, key} x {positives only, signed}: one LoRA epoch on the base's own 4 stored cue samples per MATH-500 problem (job
+abaybektursun-1114-153825-208b), loss = sum of advantage x mean per-token NLL, advantage = return minus the problem's mean
+return. Arm P: return 1 for a finished sample in the plurality group (no reward, no key; 138 problems). Arm G: return = grader
+v3 score (uses the key; 150 problems). Data `data/signed/arms-v1.json` (`jobs/signed_data.py`), trainer `jobs/signed_train.py`
+(LoRA, hyperparameters and merge of `jobs/distill_train.py`), readouts `analysis/signed1.py`, `analysis/signed1_read.py`.
+
+Cue, T 1.0 / top-p 1.0, cap 16,384, grader v3, seed 3000000, one sample, n 328 (`results/signed1/readout.json`, `read.json`):
+
+| model | right of 328 | minus base cue, points [95 %] | cap hits | tokens per problem | Wait per 1,000 tokens |
+|---|---|---|---|---|---|
+| base cue (job e72c) | 164 | | 77 | 9,344 | 4.6 |
+| signed P, vote as return (`results/signed1/P-01/`) | 140 | -7.3 [-11.9, -3.1] | 178 | 11,775 | 10.5 |
+| signed G, key as return (`results/signed1/G-01/`) | 155 | -2.7 [-7.0, 1.5] | 145 | 11,055 | 8.7 |
+| for reference: SFT on voted samples V / U, cue | 167 / 168 | | | | |
+
+- H1 (the sign carries RL's gain) is refuted: P is below the base with the interval below 0. H2 is refuted too: the key as
+  return (G) gives no gain either. So neither the sign nor the reward's information, applied offline for one epoch to 4 stored
+  samples per problem, moves the base toward RL (206 plain).
+- What the raw answers show: the loss is in answers that no longer finish. Cap hits go from 77 to 178 (P) and 145 (G); 2 and 1
+  of them repeat a line, so they are not loops. The word Wait doubles. On the problems both models finish, accuracy is the
+  same: P 127 against 124 of 144, G 141 against 134 of 168. Of P's 107 new cap hits the base had 37 right.
+  Lowering the probability of whole wrong samples taught the model to doubt and restart, not to avoid the wrong step.
+- The pre-registered instrument check (NLL of wrong minus right samples on not-yet-trained problems) did not rise over the
+  epoch (P 0.123 then 0.090 nats per token by half; G 0.128 then 0.072): the update did not learn to tell right from wrong
+  samples on new problems. Cosine of the merged difference with RL minus base: 0.001 (P), 0.003 (G).
+- Not tested: more epochs, online resampling after each update, a smaller step. Train jobs abaybektursun-1114-214246-17cc (P),
+  -214255-116e (G); cells -220703-1a4c, -220719-fa57; raw answers in the Modal Volume under /runs/<job>.
 
 ## How to run
 

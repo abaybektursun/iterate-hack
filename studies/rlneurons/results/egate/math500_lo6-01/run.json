@@ -1,0 +1,170 @@
+[
+ {
+  "job_id": "abaybektursun-1114-220136-0946",
+  "commit": "d803714b8420fc081d82ec8ab0f0db16cd816a70",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "lo6=lo:0.6"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": null,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": null,
+   "samples": 1,
+   "first_sample": 1,
+   "shard": "0/1",
+   "out": "/root/abaybektursun-1114-220136-0946/out",
+   "commit": "d803714b8420fc081d82ec8ab0f0db16cd816a70",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 500
+  },
+  "h0": 0.9,
+  "rnd_share": null,
+  "started_utc": "2026-11-15T06:02:00Z"
+ },
+ {
+  "job_id": "abaybektursun-1114-220200-a639",
+  "commit": "d803714b8420fc081d82ec8ab0f0db16cd816a70",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "lo6=lo:0.6"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": null,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": null,
+   "samples": 1,
+   "first_sample": 2,
+   "shard": "0/1",
+   "out": "/root/abaybektursun-1114-220200-a639/out",
+   "commit": "d803714b8420fc081d82ec8ab0f0db16cd816a70",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 500
+  },
+  "h0": 0.9,
+  "rnd_share": null,
+  "started_utc": "2026-11-15T06:02:08Z"
+ },
+ {
+  "job_id": "abaybektursun-1114-220821-3215",
+  "commit": "d803714b8420fc081d82ec8ab0f0db16cd816a70",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "lo6=lo:0.6"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": null,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": null,
+   "samples": 1,
+   "first_sample": 3,
+   "shard": "0/1",
+   "out": "/root/abaybektursun-1114-220821-3215/out",
+   "commit": "d803714b8420fc081d82ec8ab0f0db16cd816a70",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 500
+  },
+  "h0": 0.9,
+  "rnd_share": null,
+  "started_utc": "2026-11-15T06:08:36Z"
+ },
+ {
+  "job_id": "abaybektursun-1114-220836-0ff3",
+  "commit": "d803714b8420fc081d82ec8ab0f0db16cd816a70",
+  "config": {
+   "model": "base",
+   "model_path": null,
+   "model_label": null,
+   "set": "math500",
+   "arms": [
+    "lo6=lo:0.6"
+   ],
+   "h0": "0.9",
+   "q": 0.8,
+   "calib_n": 50,
+   "calib_tokens": 2000,
+   "rnd_share": null,
+   "max_tokens": 16384,
+   "seed": 61000000,
+   "n": null,
+   "samples": 1,
+   "first_sample": 4,
+   "shard": "0/1",
+   "out": "/root/abaybektursun-1114-220836-0ff3/out",
+   "commit": "d803714b8420fc081d82ec8ab0f0db16cd816a70",
+   "model_repo": "allenai/Olmo-3-1025-7B",
+   "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "tokenizer": [
+    "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   ],
+   "prefix_ids": [
+    1584,
+    2268,
+    33413
+   ],
+   "seed_rule": "seed + 10000 * sample + index",
+   "n_problems": 500
+  },
+  "h0": 0.9,
+  "rnd_share": null,
+  "started_utc": "2026-11-15T06:09:33Z"
+ }
+]
