@@ -1073,6 +1073,53 @@ tokens, median position 0.20 of the answer) minus the same sum over 200 control 
 
 Limits: 51 items, wide intervals; the quote marks where a judge saw the error, and the judges are the team's subagents.
 
+### Screening decoding rules on the same wrong steps (board work-d10ae6, `specs/SPEC_rulescreen.md`)
+
+The same statistic D for rules that need only the base model (`jobs/rule_screen.py`, job `abaybektursun-1114-214538-9e63`;
+`results/wrongstep/rules-01/`, written by `analysis/wrongstep.py <job> rules-01`). 51 items.
+
+| Rule | Mean D, nats [95 %] | exp(mean D) | Median D | misread (14) | slip (21) | wrong plan (16) |
+|---|---|---|---|---|---|---|
+| temperature 0.6 | +0.77 [-0.21, 1.91] | 2.17 | +0.53 | +0.34 | +0.68 | +1.27 |
+| problem contrast, a = 0.5: softmax(1.5 logits - 0.5 logits without the problem) | -0.58 [-1.01, -0.19] | 0.56 | +0.02 | -1.71 | 0.00 | -0.34 |
+| problem contrast, a = 1 | -1.69 [-3.06, -0.53] | 0.18 | +0.08 | -4.62 | +0.07 | -1.44 |
+| the problem stated twice | -0.07 [-0.24, 0.08] | 0.93 | -0.02 | -0.22 | -0.05 | +0.02 |
+
+S1 not refuted (temperature 0.6 raises the wrong steps), S2 held (contrast lowers them, most on misreadings), S3 held weakly.
+The contrast acts on a minority of items: its median D is at 0 and 41 % of items are below 0; slips are untouched. Both
+contrast strengths pass the spec's bar for a generation test.
+
+### Generation test from the prefix before each wrong step (board work-d10ae6, `specs/SPEC_prefixtest.md`)
+
+Predictions G0-G2 were written before the run; the cap was lowered from 6,000 to 4,000 new tokens before the full run. Does a
+rule that lowers the probability of the base's wrong steps (the screen above) produce more right answers when the text continues
+from the token before the wrong step? 51 located wrong steps of the cued base, 6 continuations per prefix (306 per arm),
+T 1.0 / top-p 1.0, grader v3 on prefix + continuation. Job `jobs/prefix_cell.py`, input
+`data/wrongstep/base_cue_judged_rows_v1.jsonl` (the 60 judged rows of job `abaybektursun-1114-153825-208b`), readout
+`analysis/prefixtest.py`, results `results/wrongstep/prefix-01/` (`metrics.json`, `per_prefix.json`, `examples.json`, `run.json`
+with the job ids). Ran on vast.ai (RTX PRO 6000, 96 GB); raw rows are in `runs/<job id>/` on Abay's laptop, not in git. Jobs that
+ran out of GPU memory on the longest prefixes kept their finished batches; the rest ran with `--start` at a smaller batch.
+
+| Arm | Right of 306 | Percent [95 %] | Minus base, points [95 %] | Hit the cap | Right and ended before the cap |
+|---|---|---|---|---|---|
+| base, plain sampling (control) | 99 | 32.4 [23.2, 41.5] | | 170 | 90 |
+| base, problem contrast a = 1 | 104 | 34.0 [24.2, 44.1] | +1.6 [-4.2, 7.8] | 177 | 96 |
+| Math-RL 3.1 continues the base prefix | 132 | 43.1 [32.7, 53.6] | +10.8 [5.6, 16.3] | 167 | 90 |
+
+By the judge's label (difference to base in points, interval over prefixes): contrast: misread (14 prefixes) +10.7 [-1.2, 22.6],
+slip (21) -2.4 [-12.7, 9.5], wrong plan (16) -1.0 [-4.2, 2.1]; RL: misread +20.2 [8.3, 33.3], slip +7.1 [0.0, 13.5], wrong plan
++7.3 [1.0, 14.6].
+
+- G0 held: the base continues to a right answer in 32.4 % of continuations (wrong plans 10.4 %, slips 49.2 %).
+- G1 held by the registered statistic, with a caveat that changes its reading: all of RL's gain is in continuations that hit the
+  cap. RL has 42 capped rows scored right against 9 for the base: it writes a boxed answer, then keeps checking until the cap, and
+  grader v3 scores the last box. Counting only continuations that ended, RL and the base both have 90 right.
+- G2 refuted: contrast minus base is +1.6 points [-4.2, 7.8]. The direction on misreadings matches the screen (27 to 36 right of
+  84) but its interval includes 0, and slips and wrong plans do not move. Cap hits are equal (177 against 170), so the rule does
+  not break the text. Decision of the spec: no MATH-500 cell with this rule.
+- Limit of the test: 55 % of continuations in every arm hit the 4,000-token cap, so more than half of each arm's rows are
+  unfinished text.
+
 ## Solved examples in context: no gain that survives a second draw or the 328 (shots1, board work-be7af1)
 
 **Correction (2026-11-15 05:20 UTC).** The first draw below gave +5.6 points for RL-written examples (result-6d422d). A second
@@ -1191,92 +1238,6 @@ an H100). Smoke: job abaybektursun-1114-212215-f08c. The RL model was not run: t
 uv run tools/gpu.py submit h100 --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.commit_cue --model base --commit $(git rev-parse HEAD)"
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.commit1 base <job>
 ```
-
-### Screening decoding rules on the same wrong steps (board work-d10ae6, `specs/SPEC_rulescreen.md`)
-
-The same statistic D for rules that need only the base model (`jobs/rule_screen.py`, job `abaybektursun-1114-214538-9e63`;
-`results/wrongstep/rules-01/`, written by `analysis/wrongstep.py <job> rules-01`). 51 items.
-
-| Rule | Mean D, nats [95 %] | exp(mean D) | Median D | misread (14) | slip (21) | wrong plan (16) |
-|---|---|---|---|---|---|---|
-| temperature 0.6 | +0.77 [-0.21, 1.91] | 2.17 | +0.53 | +0.34 | +0.68 | +1.27 |
-| problem contrast, a = 0.5: softmax(1.5 logits - 0.5 logits without the problem) | -0.58 [-1.01, -0.19] | 0.56 | +0.02 | -1.71 | 0.00 | -0.34 |
-| problem contrast, a = 1 | -1.69 [-3.06, -0.53] | 0.18 | +0.08 | -4.62 | +0.07 | -1.44 |
-| the problem stated twice | -0.07 [-0.24, 0.08] | 0.93 | -0.02 | -0.22 | -0.05 | +0.02 |
-
-S1 not refuted (temperature 0.6 raises the wrong steps), S2 held (contrast lowers them, most on misreadings), S3 held weakly.
-The contrast acts on a minority of items: its median D is at 0 and 41 % of items are below 0; slips are untouched. Both
-contrast strengths pass the spec's bar for a generation test.
-
-## Reward content test: the five Olmo 3 RL-Zero rewards on MATH-500 (board idea-46b68c, work-069eca)
-
-Spec `specs/SPEC_reward5.md` (predictions R1-R5, written before the jobs). Does the MATH-500 gain over the cued base depend on
-what the RL reward graded? AI2's five Olmo 3 RL-Zero models share the base `allenai/Olmo-3-1025-7B` (names and revisions in
-`jobs/merge_weights.py` `OTHERS`). Cells: `run_cell` on `merge_weights --other <key> --alpha 1 --rounding nearest` (all 355
-tensors identical to the named model in every job), T 1.0 / top-p 1.0, one sample, cap 16,384, grader v3, n = 500, the 3.1
-tokenizer. Readout `results/reward5/readout.json`, written by `analysis/reward5.py`; one run folder
-`results/reward5/<arm>-01/` per cell (`run.json`, `metrics.json`, `merge.json`, `examples.json`). Jobs at commit `3b4ab2a`.
-
-| Model | Cue: right of 500 | Cue minus base cue, points [95 %] | Plain: right of 500 | Tokens per problem (cue) | Relative norm of the weight difference |
-|---|---|---|---|---|---|
-| base (T1, T3) | 410 | | 224 | 3,932 | |
-| Math 3.0 | 448 | +7.6 [4.2, 11.0] | 443 | 4,527 | 0.127 % |
-| Mix 3.0 | 440 | +6.0 [2.6, 9.4] | 372 | 5,203 | 0.090 % |
-| General 3.0 | 429 | +3.8 [0.4, 7.0] | 323 | 3,839 | 0.064 % |
-| Code 3.0 | 411 | +0.2 [-3.4, 3.8] | 360 | 3,069 | 0.151 % |
-| IF 3.0 | 377 | -6.6 [-10.6, -2.6] | 55 | 2,667 | 0.138 % |
-| Math 3.1 (day1_wdiff) | 457 | +9.4 [6.2, 12.6] | 463 | 4,696 | 0.13 % |
-| Code 3.1 (day1_wdiff) | 450 | +8.0 [4.6, 11.2] | 390 | 3,336 | 0.109 % |
-
-Paired bootstrap over problems, 5,000 resamples, seed 0. Other paired differences: Code 3.0 cue minus Math 3.0 cue -7.4
-[-10.8, -4.0]; IF 3.0 cue minus Math 3.0 cue -14.2 [-17.8, -10.8]; Code 3.1 cue minus Code 3.0 cue +7.8 [4.4, 11.2]; Math 3.1
-cue minus Math 3.0 cue +1.8 [-0.4, 4.2].
-
-- R1 held: Math 3.0 with the cue is above the cued base.
-- R2 refuted: the IF model gains nothing. Of its 123 wrong cue answers, 34 have a broken answer line (`Answer: Answer`, or an
-  empty `Answer:`: 24 placeholder, 10 nothing extracted; counted from the rows, 6 read by hand and all 6 had the right value in
-  the text); with all 34 counted right it is 411, level with the base. Plain, the IF model answers at once (median 5 tokens, 55 right).
-- R3 refuted: Code 3.0 with the cue equals the cued base (411), 37 problems below Math 3.0. The 450 of Code 3.1 does not hold for
-  the earlier Code release, although Code 3.0 moved the weights further (0.151 % against 0.109 %).
-- R4: Mix held (-1.6 [-4.4, 1.2]); General refuted at the stated bound (-3.8 [-6.8, -0.8]).
-- R5 held: Math 3.0 plain 443 (+219 over base plain); IF plain 55.
-
-Reading: in the Olmo 3 models the gain follows the share of math in the reward (Math > Mix > General > Code = base > IF). The
-earlier finding that the Code-RL difference gives the math gain (above, `day1_wdiff`) is a property of the 3.1 Code release. The
-model cards do not state what changed between the 3.0 and 3.1 Code runs. No answer of any cell contains an `extra_id` token
-text (the 3.0 tokenizer's `<think>`/`<answer>` ids print that way under the 3.1 tokenizer).
-
-### Step 2: do the models change the same tokens? (`specs/SPEC_reward5_tokens.md`, predictions S1-S3)
-
-`jobs/score_tokens.py` scores the 500 first answers of the cued base (job `abaybektursun-1114-153825-208b`, 405 right; 1,904,493
-answer positions; 465 of 500 answers tokenize to the stored token count) under every model. r_m = log p_m(stored token) - log
-p_base. Readout `results/reward5/tokens-01/metrics.json` (with `examples.json`: two positions with every model's numbers), written by
-`analysis/reward5_tokens.py` from jobs `abaybektursun-1114-191457-f9da` and `abaybektursun-1114-193153-3c4c`. Intervals: bootstrap
-over answers. The Mix model is loaded through `merge_weights --alpha 1` (its own `config.json` names a model type transformers
-does not load; job `abaybektursun-1114-191504-5599` failed on it).
-
-| Model | Pearson r of r_m with r_Math 3.1 [95 %] | Where Math 3.1's top token differs from the base's: share with Math 3.1's token / the base's | Mean abs r_m | Cue gain, points |
-|---|---|---|---|---|
-| theta(0.25) | 0.820 [0.811, 0.827] | 0.178 / 0.802 | 0.030 | +6.2 |
-| Code 3.1 | 0.405 [0.400, 0.411] | 0.270 / 0.667 | 0.081 | +8.0 |
-| Math 3.0 | 0.271 [0.259, 0.286] | 0.326 / 0.526 | 0.238 | +7.6 |
-| Code 3.0 | 0.240 [0.229, 0.252] | 0.272 / 0.617 | 0.129 | +0.2 |
-| Mix 3.0 | 0.168 [0.159, 0.179] | 0.221 / 0.703 | 0.103 | +6.0 |
-| General 3.0 | 0.162 [0.153, 0.172] | 0.074 / 0.906 | 0.028 | +3.8 |
-| IF 3.0 | 0.039 [0.030, 0.048] | 0.086 / 0.881 | 0.045 | -6.6 |
-| random difference | -0.001 [-0.004, 0.003] | 0.013 / 0.983 | 0.004 | +1.4 |
-
-Math 3.1 itself: mean abs r 0.159; its top token differs from the base's at 151,701 positions (8.0 %).
-
-- Instrument checks passed: theta(0.25) highest, the random difference at 0.
-- S1 held: Code 3.1 changes the same tokens as Math 3.1 (0.405), more than the earlier Math release does (0.271).
-- S2 refuted: where Math 3.1's top token differs from the base's, Code 3.1 keeps the base's token (0.667) more often than it
-  takes Math 3.1's (0.270).
-- S3 held: the IF model is near the random difference.
-- The agreement does not order the models by gain: Code 3.0 (no gain) agrees as much as Math 3.0 and more than Mix and General,
-  which gain.
-- Not a critic: the summed r_m over an answer separates right from wrong base answers at AUROC 0.853 for Math 3.1, the same as
-  the answer's length alone (0.855); computed from the same files, not in `metrics.json`.
 
 ## RLN-5 map: where RL still disagrees once the cue is given
 
