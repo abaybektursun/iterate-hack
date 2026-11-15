@@ -1,17 +1,16 @@
 """Eight directions per weight matrix of the RL weight change lift the untrained model from 45 % to 85 % on MATH-500 (224 to 427 of 500).
 
-The page of one finding, served at /finding/eight-directions (view.py serves every tools/finding_<slug>.py). The
-picture is one weight matrix as a glass slab seen from slightly above, with eight lines across it for the eight
-directions, and the score on a scale under it. The reader switches between four conditions (address
-/finding/eight-directions#<condition>, arrow keys) and watches the lines and the score change. The rules are in
-.claude/skills/finding-page/SKILL.md; the looks are those of tools/architecture.py (.claude/skills/site-ui/SKILL.md).
+The page of one finding, served at /finding/eight-directions (view.py serves every tools/finding_<slug>.py) and
+reached from its tile on /findings, which ICON draws. The picture is one weight matrix as a glass slab seen from
+slightly above, with eight lines across it for the eight directions, and the score on a scale under it. The reader
+switches between four conditions (address /finding/eight-directions#<condition>, arrow keys) and watches the lines and
+the score change. The rules are in .claude/skills/finding-page/SKILL.md; the looks are those of tools/architecture.py
+(.claude/skills/site-ui/SKILL.md).
 """
 import json
 
-UNLISTED = True  # served at its address, but left out of the links in the site header (view.py)
-
-TITLE = "Eight directions"  # the link text in the site header and the browser tab
-PROBLEM = "What did reward training change inside the model?"
+TITLE = "Eight directions"  # the name on its tile on /findings and in the browser tab
+PROBLEM = "Reward training changed every weight a little. Which changes matter?"
 LINE = "Eight directions per matrix are enough: the untrained model rises from 45% to 85% on MATH-500."
 
 # Every number is copied from the artifact named here. None is typed from memory.
@@ -26,11 +25,11 @@ DATA = {
     # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
     # value = right of 500 as a rounded percentage; right is copied from the cell named in "cell".
     "states": [
-        {"key": "untrained", "name": "Untrained", "right": 224, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.base_plain_1.0", "note": "The slab is one weight matrix. Each line is one direction in it."},
+        {"key": "untrained", "name": "Untrained", "right": 224, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.base_plain_1.0", "note": "The slab is one weight matrix. Each line is one direction in it: one pattern of change, strongest first."},
         {"key": "random", "name": "8 random directions", "right": 197, "n": 500, "cell": "full500/rand8_plain",
          "note": "A control: eight random directions of the same size in each matrix."},
         {"key": "rl-directions", "name": "8 RL directions", "right": 427, "n": 500, "cell": "full500/top8_plain",
-         "note": "The words are what two of these directions point at in one matrix of layer 29."},
+         "note": "Only these 8 patterns of the RL change are added. The words are what two of them make the model more likely to write."},
         {"key": "rl-trained", "name": "RL-trained", "right": 463, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.rl_1.0",
          "note": "The model after reinforcement learning with a math reward."},
     ],
@@ -41,6 +40,8 @@ DATA = {
     "edit": {"source": RESULTS + "full500/top8_plain-01/metrics.json", "k": 8, "n_edited": 224, "n": 500, "share": 0.0982, "add_rel": 0.000741},
     "removed": {"cell": "screen100/bulk_plain", "value": 91, "n": 100},  # the RL-trained model without these directions, first 100 problems
     "one": {"cell": "screen100/top1_plain", "value": 42, "n": 100},  # one direction per matrix, first 100 problems
+    # The untrained model with the three opening tokens of the RL model's answers in front of its answer, all 500 problems.
+    "cue": {"right": 410, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.base_opener_1.0"},
     # What three ends of two directions read as through the output layer: rows of anatomy-01/readout.json with this
     # name and delta. direction counts from 0; toks are the first tokens of the row, label is what the page shows.
     "words": {"source": RESULTS + "anatomy-01/readout.json", "name": "model.layers.29.mlp.down_proj.weight", "delta": "rl_math",
@@ -50,19 +51,32 @@ DATA = {
                   {"direction": 2, "sign": "+", "toks": [" WAIT", "wait", ".Wait", "WAIT", " wait", " Wait"], "label": "Wait"},
               ]},
 }
-for _s in DATA["states"] + [DATA["reference"]]:
+for _s in DATA["states"] + [DATA["reference"], DATA["cue"]]:
     _s["value"] = round(100 * _s["right"] / _s["n"])
 _value = {s["key"]: s["value"] for s in DATA["states"]}
+_right = {s["key"]: s["right"] for s in DATA["states"]}
 _edit = DATA["edit"]
+_left = round(100 * (_right["rl-trained"] - _right["rl-directions"]) / _edit["n"])  # points between the 8 directions and the RL-trained model
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
+    ["new", "What is new",
+     "It was already known that a small part of the RL weight change keeps the gain. How small, the control and what the part means are new.",
+     [f"Eight directions per matrix are enough, and eight random directions of the same size give no gain ({_value['random']} % against {_value['untrained']} %).",
+      "Taking those eight out of the RL-trained model does not remove the gain.",
+      "Read through the output layer, they point at words of deliberation: Okay, Wait, perhaps. The model trained with a code reward "
+      "has them too. The model trained by imitation has none."]],
+    ["why", "Why it matters",
+     "It suggests what reward training taught this model: a habit of reasoning aloud and checking, more than new mathematics.",
+     [f"That fits the cue result: three opening tokens take the untrained model from {_value['untrained']} % to {DATA['cue']['value']} % with no training.",
+      "A change this small and this readable is a target for editing weights directly, with no reward.",
+      f"The {_edit['k']} directions reach {_value['rl-directions']} % and the RL-trained model {_value['rl-trained']} %; that remainder is still unexplained."]],
     ["how", "How we know",
      f"We added only the {_edit['k']} strongest directions of the RL weight change in each of {_edit['n_edited']} weight matrices to the "
      f"untrained model and scored it on all {_edit['n']} MATH-500 problems.",
      [f"Eight random directions of the same size score {_value['random']} %, so the size of the edit is not the cause.",
       f"The edit is {_edit['add_rel'] * 100:.2f} % of the size of the weights and {_edit['share'] * 100:.1f} % of the full RL change.",
-      "Closest published result: Spectral Rewiring (arXiv 2607.03065) keeps the RL gain with a compact part of the update on models that include this pair. This page tests 8 directions against a matched random control."]],
+      "Closest published result: Spectral Rewiring (arXiv 2607.03065), which keeps the RL gain with a compact part of the update on models that include this pair."]],
     ["limits", "What it does not show",
      "The directions were read from the RL-trained weights, so this is not yet a way to get the gain without reward.",
      [f"RL with these 8 directions removed still scores {DATA['removed']['value']} of the first {DATA['removed']['n']} problems: the change is stored many times over.",
@@ -75,6 +89,18 @@ PANELS = [
       "--top-p 1.0 --seed 180000000 --commit $(git rev-parse HEAD)",
       "The run used commit " + DATA["commit"] + ". Its numbers are in " + RESULTS + "."]],
 ]
+
+# The icon of this finding's tile on /findings (tools/findings.py says how it is called): the page's own picture,
+# reduced. A glass slab seen from slightly above with one fine line per direction, three of them bright.
+ICON = r"""(kit, t, tilt) => {
+  const a = 44, b = 38, th = 5, n = __K__, bright = [1, 4, 6];
+  let out = kit.slab(a, b, th);
+  for (let i = 0; i < n; i++) {
+    const v = b * (1 - 2 * (i + 1) / (n + 1)), lit = bright.includes(i);
+    out += kit.line(kit.at(-a * .8, v, th / 2), kit.at(a * .8, v, th / 2), lit ? 1.3 + .14 * Math.sin(t * .6 + i * 1.7) : .7, lit ? "lit" : "plain", lit ? 1 : .6);
+  }
+  return out;
+}""".replace("__K__", str(DATA["edit"]["k"]))
 
 PAGE = r"""<!doctype html>
 <html lang="en">
@@ -211,8 +237,8 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
-    <a href="/architecture">How it works</a>
-    <a href="" aria-current="page">__TITLE__</a>
+    <a href="/architecture">Design</a>
+    <a href="/findings" aria-current="page">Findings</a>
   </header>
   <div class="stage" id="stage">
     <svg id="svg" role="img"></svg>

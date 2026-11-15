@@ -957,7 +957,7 @@ delta) 58. Cue, seed base 81,000,000: base 82, `sft1` 92, `sft05` 88, `sft025` 8
 - Closest published result: Spectral Rewiring (arXiv 2607.03065) keeps the RL gain with a compact part of the update on
   models that include this pair. New here: the matched-spectrum random control at 8 directions, the removal cells, and the
   comparison with a no-reward delta.
-- Finding page, unlisted: `tools/finding_eight_directions.py` (`/finding/eight-directions`, `LISTED = False`).
+- Finding page: `tools/finding_eight_directions.py` (`/finding/eight-directions`, a tile on `/findings`).
 ## One axis or several? Item-level structure of every arm (MATH-500 n = 500, hard328 n = 328, laptop, board work-1aa34c, idea-1c8b73)
 
 Question: do the partial routes toward the RL model fix the same problems or different ones? Answer: the same. On MATH-500 two

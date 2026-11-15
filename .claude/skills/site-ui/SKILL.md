@@ -1,14 +1,16 @@
 ---
 name: site-ui
-description: Guidelines for any page or change on the team site (monitor.invariant.team, served by tools/view.py), covering the look (one lit object with depth, slow motion that replays real data), the words, the behaviour and the checks. Use before adding a page, a picture, a chart, a panel or any visible element to tools/view.py, tools/architecture.py or a new page module.
+description: Guidelines for any page or change on the team site (monitor.invariant.team, served by tools/view.py), covering the look (one lit object with depth, slow motion that replays real data), the words, the behaviour and the checks. Use before adding a page, a picture, a chart, a panel or any visible element to tools/view.py, tools/architecture.py, tools/findings.py or a new page module.
 ---
 
 # Site UI
 
-`tools/architecture.py` (`/architecture`) is the reference for how the site should look and move. Open it in a
-browser before you design anything, and copy its tokens, its light, its depth and its motion. The site also has the
-board (`tools/view.py`, `/`), which is older and flatter and keeps its own tokens until it is restyled, and one page
-per finding (`tools/finding_<slug>.py`, `/finding/<slug>`; `.claude/skills/finding-page/SKILL.md`).
+The header of every page has three tabs: Board (`/`, `tools/view.py`), Design (`/architecture`,
+`tools/architecture.py`) and Findings (`/findings`, `tools/findings.py`). Design is the reference for how the site
+should look and move. Open it in a browser before you design anything, and copy its tokens, its light, its depth and
+its motion. Board is older and flatter and keeps its own tokens until it is restyled. Findings is a grid of tiles, one
+per finding, and each tile opens the page of that finding (`tools/finding_<slug>.py`, `/finding/<slug>`;
+`.claude/skills/finding-page/SKILL.md`). On a finding's page the tab Findings is the current one.
 
 A reader should get the point of a page in 5 seconds and find depth by clicking.
 
