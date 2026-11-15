@@ -1,0 +1,45 @@
+{"name": "r6-m06",
+ "statement": "The cued base's wrong steps come from the head of its own distribution, and Math-RL raises accuracy by changing which head token wins at a minority of positions, not by cutting probability from low-probability tokens, so RL's sampled text at T 1.0 carries about as many p < 0.01 tokens per 1,000 as the base's, and those tokens do not track which answers fail or which problems RL fixes.",
+ "scope": "Covers Olmo-3-1025-7B with the 3-token opening cue against Olmo-3.1-7B-RL-Zero-Math (plain prompt), untruncated sampling at T 1.0 / top-p 1.0, cap 16,384, grader v3, on MATH-500 and the clean hard328. It is about the probabilities of the sampled tokens and where errors come from. It does not cover the T 0.6 / top-p 0.95 loops or cap hits (those depend on the opening and on loop neurons, not on the tail), answer-format and extraction effects, the Code pair, or the weight-space localisation of the RL change. It makes no claim about absolute tail rates, only about ratios between models and between answer classes.",
+ "parent": null,
+ "imports": [
+  {"source": "2312.01552", "finding": "Alignment tuning changes few token decisions: 77.7 % of the tuned model's tokens are the base's top-1 and 92.2 % are in the base's top-3, and the shifted tokens are mostly discourse markers.", "how": "Gives the shape of the change: the tuned model reorders the base's head and leaves the tail alone, so the tail mass the tuned model samples from stays about the same as the base's."},
+  {"source": "2603.22446", "finding": "At high-divergence positions more than 80-90 % of RLVR top-1 tokens are in the base's top-3, and only about 5 % had base probability below 0.01.", "how": "The RL-specific version of the same shape: RL's decisive tokens are already likely under the base, so RL's gain needs no tail cut, and RL's own sampling keeps the base's rate of p < 0.01 tokens."}
+ ],
+ "explains": [
+  {"item": "result-faf15a", "quote": "the base's wrong step is not an unlikely sample", "how": "The located wrong step has log-prob -0.53 per token against -0.63 for control text, so the errors sit in the head, as the mechanism says."},
+  {"item": "result-44b4df", "quote": "No truncation rule beats untruncated sampling on MATH-500 at T 1.0", "how": "If errors come from the head, removing tail tokens (min-p, top-p) cannot remove them, for the base or for RL."},
+  {"item": "result-32b7a8", "quote": "Steps 100-400 are no sharper per token than the cued base.", "how": "RL checkpoints do not concentrate their sampled mass. The final step's lower median mean_logprob (-0.192 vs -0.161) is the opposite of a trimmed tail."},
+  {"item": "result-fdc8da", "quote": "Top-1 tokens differ at 7.98 % of 1,966,404 T1 positions", "how": "RL's change is a reordering of the head at a minority of positions, with mean KL per token after the cue of only 0.06-0.09 nats."},
+  {"item": "result-b30f15", "quote": "mean log-prob and entropy so far 0.49-0.57", "how": "If wrong samples were tail-driven, their running log-prob would separate them from right siblings. It does not, so errors are not drawn from unlikely tokens."}
+ ],
+ "conflicts": [
+  {"item": "result-fdc8da", "quote": "the top 4 % of positions carry 38.7 % of KL", "how": "The KL is less concentrated than the 'few positions' framing implies, so the head swaps are spread over more positions than published Qwen pairs show. That weakens 'a few' but does not show any tail trimming."},
+  {"item": "result-855858", "quote": "Not separable at 40 events per model", "how": "The board cannot yet tell whether RL makes fewer errors or catches more of them. The mechanism needs the first reading (fewer head errors), and this item leaves the second open."}
+ ],
+ "rival": "Tail trimming / entropy sharpening (r3-surprises-1, and the fork-entropy-collapse theories r3-all-2 / r2-across-1): RL removes probability from low-probability tokens, which derail answers. On paired finished hard328 problems that rival predicts that RL's rate of sampled p < 0.01 tokens is at most about 0.6 of the base's, and that the problems RL fixes are the ones where its tail rate falls most (a clearly negative fixed-minus-unfixed log-rate difference). This mechanism predicts a ratio near 1 and a difference near 0. The truncation negatives cannot separate the two, because truncation hurts both models through loops.",
+ "predictions": [
+  {"experiment": "Paired tail-rate ratio on hard328: the pooled rate of sampled tokens with p < 0.01 per generated token, RL plain over base cue, on problems both models finished. This tests the mechanism against tail trimming: the rival r3-surprises-1 (RL trims the tail everywhere) predicts about 0.6 or less, and this mechanism predicts about 1.",
+   "recipe": "Files: S3 r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue) and r5/day1_hard328-01/abaybektursun-1114-151540-86ef/answers.jsonl (RL plain), fetched with the aws commands in inventory.md. In each file keep one row per problem_index: the one with the smallest attempt, or the first in file order if there is no attempt field. Keep the problem_index values present in both files whose kept rows have cap_hit false in both files. Drop a problem from both models if either row has a null or missing n_tok_p_lt_1e2 or n_generated, or n_generated == 0. For each model, rate = sum of n_tok_p_lt_1e2 / sum of n_generated over the kept problems, pooled, not a mean of per-row rates. Statistic = rate(86ef) / rate(e72c). No grading is used.",
+   "unit": "ratio of pooled rates (RL / base)",
+   "value": 1.08, "low": 0.86, "high": 1.35,
+   "refuted_by": "statistic below 0.80 or above 1.50",
+   "gpu_minutes": 0},
+  {"experiment": "Cause: whether the cued base's wrong answers carry more low-probability tokens than its right ones at matched length, on hard328. This mechanism (errors are drawn from the head) predicts a ratio near 1. A tail-derailment account (unlikely tokens push answers off course) predicts about 1.3 or more.",
+   "recipe": "File: S3 r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue). Keep one row per problem_index (smallest attempt, else first in file order). Keep rows with cap_hit false, non-null n_tok_p_lt_1e2 and n_generated > 0. Right = score_v3 == 1, and wrong = any other value, with null counting as wrong. Sort the kept rows by n_generated ascending, ties broken by problem_index ascending. Give each row its 0-based rank r and quartile q = floor(4*r/N), where N is the number of kept rows. In each quartile compute rW = sum n_tok_p_lt_1e2 / sum n_generated over the wrong rows and rR the same over the right rows. Skip a quartile with no wrong rows, no right rows, or rR == 0. ratio_q = rW / rR. Statistic = sum over kept quartiles of (number of wrong rows in q) * ratio_q / sum over kept quartiles of (number of wrong rows in q).",
+   "unit": "ratio of pooled rates (wrong / right), wrong-count-weighted over length quartiles",
+   "value": 1.05, "low": 0.85, "high": 1.3,
+   "refuted_by": "statistic above 1.40",
+   "gpu_minutes": 0},
+  {"experiment": "Where the effect should not appear: on hard328 problems where the cued base finished wrong and RL finished, whether RL's tail-rate change relative to the base differs between problems RL fixes and problems it does not. The tail-trimming rival puts the fix where the tail was cut, a clearly negative difference of about -0.3. This mechanism (fixes come from head swaps) predicts about 0.",
+   "recipe": "Files: e72c (base cue) and 86ef (RL plain) answers.jsonl as in the first prediction, one row per problem_index each (smallest attempt, else first in file order). Keep problems present in both files where the e72c row has cap_hit false and score_v3 != 1 (null counts as not 1), and the 86ef row has cap_hit false. Drop a problem if either row has a null or missing n_tok_p_lt_1e2 or n_generated, or n_generated == 0. Per problem d = ln((t_RL + 0.5) / g_RL) - ln((t_b + 0.5) / g_b), with t = n_tok_p_lt_1e2 and g = n_generated of that model's row. Fixed = 86ef score_v3 == 1, and unfixed = otherwise. Statistic = (mean d over fixed problems) - (mean d over unfixed problems). If either group is empty, the statistic counts as refuted.",
+   "unit": "difference of mean natural-log rate ratios",
+   "value": 0.0, "low": -0.18, "high": 0.18,
+   "refuted_by": "statistic below -0.25 or above 0.25, or either group empty",
+   "gpu_minutes": 0},
+  {"experiment": "GPU: base Olmo-3-1025-7B with the 3-token cue on MATH-500 (n=500), T 1.0, top-p 1.0, top-k 20 (vLLM top_k=20), cap 16,384, one sample, seeds 1,000,000 + problem index, run_cell harness, grader v3. top-k 20 removes the deep tail but keeps the head at almost every position. The mechanism says the base's errors are in the head, so the score stays at the untruncated cued base's level (405-418 in stored samples) and does not move toward RL (463).",
+   "unit": "right of 500",
+   "value": 409, "low": 396, "high": 421,
+   "refuted_by": "425 or more right of 500 (a tail cut closing a third or more of the gap to RL)",
+   "gpu_minutes": 35}
+ ]}

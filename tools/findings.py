@@ -30,7 +30,6 @@ slab, a lit face, a line, the theme tokens), `t` is the time in seconds, and `ti
 The icon's space is 112 by 80 units around the centre (56, 36). A module without ICON gets a plain glass slab.
 """
 
-import importlib
 
 NO_REWARD, ANSWERS, WEIGHTS = "What needs no reward?", "How does RL change the answers?", "Where does RL's change sit in the weights?"
 GROUPS = [NO_REWARD, ANSWERS, WEIGHTS, "New"]
@@ -55,16 +54,6 @@ def board_step(name, model, result, config):
     """One mark whose count view.py reads from the board's score row of this result, model and configuration on MATH-500."""
     return {"name": name, "model": model, "find": {"result": result, "benchmark": "MATH-500", "model": model, "config": config},
             "source": f"board {result}"}
-
-
-def right_of(m, key):
-    return next(s["right"] for s in m.DATA["states"] if s["key"] == key)
-
-
-def gap_control():
-    """The share of the gap on problems the base solves sometimes when the 'gap' is the base against the base with a random
-    weight change: _NULL of tools/finding_where_the_gap_goes.py, the control that page names."""
-    return round(100 * importlib.import_module("finding_where_the_gap_goes")._NULL["parts"]["reliability"][1])
 
 
 # slug -> its group, its figure [number, unit, tag of the set] and its marks on the rail, each read from the module m.
@@ -104,7 +93,7 @@ TABLE = {
                              f"MATH-500; a random weight change gives {m.pc(m._NULL['parts']['reliability'][1])} %"]},
     "rl-reliability": {
         "group": ANSWERS,
-        "figure": lambda m: [f"{m.SOME} %", "of the gain", f"MATH-500; a random weight change gives {gap_control()} % of its gap"]},
+        "figure": lambda m: [f"{m.SOME} %", "of the gain", "MATH-500, 4 samples each of Base + cue and RL"]},
     "rl-edge-comes-early": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap", "MATH-500, base finishes RL's answers"]},
@@ -119,8 +108,8 @@ TABLE = {
         "figure": lambda m: [f"{m.Q_M} %", "of the gain", "MATH-500, a = 0.25"]},
     "eight-directions": {
         "group": WEIGHTS,
-        "figure": lambda m: [points(m.DATA["cue"]["right"], right_of(m, "rl-directions"), m.DATA["edit"]["n"]), "points",
-                             f"MATH-500, over Base + cue; {points(right_of(m, 'untrained'), right_of(m, 'rl-directions'), m.DATA['edit']['n'])} over Base"]},
+        "figure": lambda m: [signed(m.DATA["vs_cue_hard"]["points"]), "points",
+                             f"328 harder problems, over Base + cue; 8 random directions {signed(m.DATA['random_vs_cue_hard']['points'])}"]},
     "rl-every-neuron": {
         "group": WEIGHTS,
         "figure": lambda m: [m.pct(m.mean(m.ONE["best"])), "of RL's effect", f"next-word predictions, RL's best {m.ONE['share']:g} % of neurons copied"]},

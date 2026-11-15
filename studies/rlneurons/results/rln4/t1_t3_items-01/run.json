@@ -1,0 +1,24 @@
+{
+ "experiment": "rln4",
+ "run": "t1_t3_items-01",
+ "date": "2026-11-15",
+ "what": "Per-problem rows of T3 (base, plain prompt, T 1.0 / top-p 1.0) and T1 (base with the cue, same sampling) on MATH-500 under grader v3, with the extracted answers and the first 240 characters of each answer. The dots of tools/finding_opening_cue.py.",
+ "commit": "3f8c411e285b15e6e64f846619fad17595dab7c5",
+ "commit_note": "HEAD when the script ran; the script is committed together with this folder.",
+ "script": "studies/rlneurons/analysis/rln4_t1_t3_items.py",
+ "command": "PYTHONPATH=. uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.rln4_t1_t3_items runs/T3.jsonl runs/T1.jsonl studies/rlneurons/results/rln4/t1_t3_items-01",
+ "job_id": null,
+ "where": "laptop, saved rows only, no model forward pass",
+ "grader": "v3, studies.rlneurons.lib.rln4_lib.grade_v3",
+ "inputs": {
+  "T3": {"s3": "s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl", "sha256": "65a519baf11dd31d9544ee59e57adbaf7fad991cb3bb3d0e96a90efc6183e87a"},
+  "T1": {"s3": "s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl", "sha256": "c65a12fcc5922c5270bb3b6abeb352246385299111c9e033dfc7deae4712ea85"},
+  "problems": "studies/rlneurons/data/rln4/math500.json"
+ },
+ "inputs_note": "The script asserts both sha256 values against results/rln4/grader_v3/readout.json (files.base_plain_1.0, files.base_opener_1.0). The files were read with the AWS profile iterate-ecr.",
+ "checks": "T3 224 right, 8 cut off, 129 with nothing extracted; T1 410, 27, 25: equal to grader_v3/readout.json cells base_plain_1.0 and base_opener_1.0. t1_right equals results/rln4/t1_t2_items-01/per_problem.json on all 500 rows.",
+ "examples": {
+  "right": {"cell": "T1", "problem_index": 10, "gold": "2220", "extracted_v3": "2220", "score_v3": 1, "start": " line!\n\nOkay, so I need to find the smallest positive integer multiple of 30 that uses only the digi"},
+  "wrong": {"cell": "T3", "problem_index": 10, "gold": "2220", "extracted_v3": "120", "score_v3": 0, "start": " exactly, do NOT includeunits with your answer, and do not put an space between **Answer:** and Answer: $\\$**Answer: $120$."}
+ }
+}

@@ -1,0 +1,99 @@
+{
+ "name": "r6-m10",
+ "statement": "In the Olmo-3.1 RL-Zero-Math run the first 100 steps install the cue's opening, the boxed stop format and the cued base's deliberative length, while the per-step error rate stays the cued base's; RL's lower error rate on finished answers arrives only later (between steps 400 and 2,800), so step 100's finished answers are exactly as accurate as the cued base's on the same problems.",
+ "scope": "Covers allenai/Olmo-3.1-7B-RL-Zero-Math checkpoints step_0100, step_0400 and step_2800 against the base Olmo-3-1025-7B with the 3-token cue, on MATH-500, plain prompt, one sample, T 0.6 / top-p 0.95 (stored RLN-3 rows), plus step 100 at T 1.0 / top-p 1.0 (GPU prediction). It does not cover the 3.0 first release (different tokenizer and template confound), hard328 (no step-100 rows exist), the Code, IF, General or Mix RL runs, or why the late error reduction happens. Cap hits are treated as a separate failure (loops), not as part of the finished-answer error rate the mechanism is about.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2609.15064",
+   "finding": "Tracked with a fixed SAE, GRPO first installs an answer format (wrapper rate 0.108 -> 0.983) while accuracy rises slowly (0.300 -> 0.408); about 86% of feature amplification happens in the first 50 steps and carries format and extractability, not reasoning.",
+   "how": "Supplies the two-phase timing: the early, large change is a format/opening change; the reasoning (per-step error) gain is a slow later component, so step 100 should carry format but not accuracy on finished answers."
+  },
+  {
+   "source": "2503.20783",
+   "finding": "Base models already write self-reflection keywords and in R1-Zero self-reflection is not positively correlated with accuracy.",
+   "how": "Explains why installing the deliberative 'Okay'/Wait register at step 100 need not lower the error rate: the register is a style the base already has, not the error-reduction itself."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-32b7a8",
+   "quote": "Steps 100-400 are no sharper per token than the cued base.",
+   "how": "If step 100 is the cued base's policy with RL's opening and format, its per-token confidence equals the cued base's, as measured."
+  },
+  {
+   "item": "result-32b7a8",
+   "quote": "478 answers have 'Okay' in the first 30 characters",
+   "how": "The opening the cue forces is the first thing installed, so by step 100 nearly every plain answer opens in the cue's register."
+  },
+  {
+   "item": "knowledge-87618d",
+   "quote": "most of the divergence comes later in training",
+   "how": "Activation change on math text tracks the late error-rate reduction, not the early opening/format change, so step 100 is still close to the base."
+  },
+  {
+   "item": "knowledge-9c5052",
+   "quote": "step 100 is at the noise floor",
+   "how": "A step-100 model whose only change is opening and stop format leaves neuron top-activation sets unchanged, as observed."
+  },
+  {
+   "item": "result-855858",
+   "quote": "first wrong steps per 1k finished tokens, 0.015 RL vs 0.038 base",
+   "how": "The final model's advantage is a lower per-step error rate, which this mechanism places after step 400 rather than in the early format phase."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "knowledge-c1fe13",
+   "quote": "76 % of the gain in the first 200 RL steps",
+   "how": "Published RL dynamics (2505.22617, other models) put most of the accuracy gain early; if that held for this run, step 100 would already show a large part of the finished-accuracy gain, which this mechanism denies."
+  },
+  {
+   "item": "result-284db5",
+   "quote": "each step-100 checkpoint's nearest final model of another run is its own reward's other release",
+   "how": "By step 100 the weights already point in a reward-specific direction, which is at least compatible with early reward-specific (math) learning beyond format; the mechanism must say that this direction is the format/opening part only."
+  }
+ ],
+ "rival": "Gradual reliability: RL lowers the per-step error rate from the first steps onward (as 2505.22617 reports for other models, most of the gain within 200 steps), and step 100's unchanged mean log-probability hides an early accuracy gain. It predicts that on problems both finish, step 100 already makes clearly fewer finished errors than the cued base (at least half of step 2,800's drop, about -0.02 or lower in error rate), and that step 100 at T 1.0 scores well above the cued base's 410. This mechanism predicts no difference (about 0.00) and about 412 of 500; the paired finished-error contrast separates them.",
+ "predictions": [
+  {
+   "experiment": "Mechanism test. Paired finished-answer error rate, RL step 100 plain minus cued base, MATH-500 at T 0.6 / top-p 0.95, on problems where both answers finished. This mechanism predicts about 0.00. The nearest rival (gradual reliability: the per-step error reduction starts at once, as in 2505.22617) predicts step 100 already carries at least half of step 2,800's finished-error drop against the cued base, about -0.02 or lower.",
+   "recipe": "Files (S3, readable): A = s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (step 100, plain); B = s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (base, cue). In each file keep, per problem_index, the row with the smallest sample value (first in file order on ties). Score every kept row with grader v3 (studies/rlneurons/grader/rln4_grader_v3.py) from its text and gold; an empty extraction scores 0. S = problem_index values that have a kept row in both files with cap_hit false in both. err(X) = (number of S rows of X with v3 score 0) / |S|. Statistic = err(A) - err(B). Cap-hit rows are excluded through S; problems missing from either file are excluded.",
+   "unit": "difference of fractions of problems",
+   "value": 0.0,
+   "low": -0.025,
+   "high": 0.025,
+   "refuted_by": "measured below -0.03 or above 0.04",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Cause: whose deliberative length step 100 has. Median per-problem log ratio of step-100 finished length to the cued base's finished length, same problems. This mechanism (step 100 has the cued base's length) predicts about 0.05. A rival in which the first 100 steps already install RL's final long-answer mode predicts about step 2,800's ratio to the cued base, about 0.6.",
+   "recipe": "Files A and B and the kept rows and paired set S exactly as in the first recipe (one row per problem_index, smallest sample; S = problems with cap_hit false in both files). For each problem in S compute ln(max(n_new_A, 1) / max(n_new_B, 1)). Statistic = median over S (for an even count, the mean of the two middle values). No grading is needed. Cap hits and missing problems are excluded through S.",
+   "unit": "natural-log ratio (median over problems)",
+   "value": 0.05,
+   "low": -0.15,
+   "high": 0.25,
+   "refuted_by": "measured above 0.35 or below -0.25",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Case where an effect should not appear: the opening cue's value at step 100. On the base the cue is worth many points; if step 100 already writes the cue's opening by itself, prefilling the cue adds nothing. Accuracy of step 100 with the cue minus step 100 plain, all 500 problems, T 0.6 / top-p 0.95.",
+   "recipe": "Files: A = s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (plain) and D = s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/F_math500.jsonl (cue). In each file keep, per problem_index, the row with the smallest sample value (first in file order on ties). Score each kept row with grader v3 (studies/rlneurons/grader/rln4_grader_v3.py) from text and gold; a row with cap_hit true counts 0 whatever v3 gives; an empty extraction counts 0. Keep problems present in both files. Statistic = mean score over D minus mean score over A on those problems.",
+   "unit": "difference of fractions of problems",
+   "value": 0.0,
+   "low": -0.035,
+   "high": 0.035,
+   "refuted_by": "absolute value above 0.045",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "RL step 100 (allenai/Olmo-3.1-7B-RL-Zero-Math, branch step_0100 @ 0a45720c), plain prompt in the RLN-3 chat template, MATH-500 all 500, one sample, T 1.0 / top-p 1.0, max 16,384 new tokens, seed 1,000,000 + problem index, vLLM on one H100, grader v3. At T 1.0 the cued base's loops vanish (410/500); the mechanism says step 100 then scores like the cued base, not like RL (463).",
+   "unit": "right of 500",
+   "value": 412,
+   "low": 398,
+   "high": 426,
+   "refuted_by": "430 or more right of 500 (step 100 already carries a third or more of RL's gain over the cued base at T 1.0), or 392 or fewer",
+   "gpu_minutes": 40
+  }
+ ]
+}
