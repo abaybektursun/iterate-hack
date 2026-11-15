@@ -46,7 +46,7 @@ The pair must be testable: on 2 or more targets the 90 % intervals of a and b mu
 "cell" on which they do not overlap: {"cell": {"model", "prompt", "set", "n", "sampling", "samples", "grader", "cap"},
 "job": "<file of jobs.md>", "command": "<command line with the flags of jobs.md only>", "readout": "...", "unit": "...",
 "why": "...", "gpu_minutes": <at most 120 on one L40S>, "a": {"value", "low", "high"}, "b": {"value", "low", "high"}}.
-Never put git in a command ($(git rev-parse HEAD) or rev-parse): job machines have no .git folder. Where a job takes
+Never put git in a command ($$(git rev-parse HEAD) or rev-parse): job machines have no .git folder. Where a job takes
 --commit, write --commit COMMIT_SHA; the coordinator replaces it with the pushed commit's full sha when submitting.
 A cell must not repeat an open work item, a target or a board result. Use "cell": null when the targets suffice.
 

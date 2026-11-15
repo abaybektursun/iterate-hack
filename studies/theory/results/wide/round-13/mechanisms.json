@@ -1,0 +1,230 @@
+{
+ "mechanisms": [
+  {
+   "id": "round-10/weights-m03",
+   "family": "weights",
+   "lens": "weight space: the RL weight change, its top directions, scaling and transplanting it",
+   "statement": "The effect of an added RL change depends on the host. Think-SFT's high-rank imitation change (3.7 % of weight norm, top 8 directions hold 2 %) already sets the long-reasoning features that RL's directions read, so RL's push has about a quarter of its effect on the base: a=1 cut Think-SFT's cap hits by 20 %, not 74 %. The response is weak but stable, no breakdown up to 4x. Its correctness covers every domain in its traces.",
+   "rests_on": [
+    "result-3387ce",
+    "result-6f1bb7",
+    "result-39497c",
+    "result-c8b994"
+   ],
+   "holds_against": [
+    {
+     "item": "result-3387ce",
+     "value": 213,
+     "why": "At a=4 Think-SFT falls to 213, but it still has 33 cap hits and its precision falls steadily: a smooth dose cost, not the word-string breakdown the base shows at 3x."
+    },
+    {
+     "item": "result-6f1bb7",
+     "value": 117,
+     "why": "The base breaks at 3x top-8 (117), but the base has no strong reasoning change of its own to absorb the push; Think-SFT + 3x and 4x the full change, which contains 3x and 4x top-8, scored 227 and 213."
+    }
+   ]
+  },
+  {
+   "id": "round-09/training-m01",
+   "family": "training",
+   "lens": "training data and objective: what Think-SFT imitation, RL reward and pretraining each put into the model, exposure of problems",
+   "statement": "Think-SFT imitated teacher traces inside its ChatML template, opened by <think> and closed by a final answer after the thinking block. Where and how it states the answer is learned conditional on that template. On the raw template with the cue it reasons as well but sometimes misplaces the final answer (on the line after 'Answer:'), which v3 misses. Its own template restores the trained ending: more MATH-500 answers counted, unchanged reasoning length and cap behaviour on hard328.",
+   "rests_on": [
+    "result-818c20",
+    "result-d9d6f3",
+    "result-c8b994"
+   ],
+   "holds_against": [
+    {
+     "item": "result-d9d6f3",
+     "value": 203,
+     "why": "Raw template without the cue is neither the trained template nor the cue's register, so it loses 16; the native template is the trained one."
+    },
+    {
+     "fact": 23,
+     "value": 0.333,
+     "why": "The misses are about which line carries the answer, not answer type, so the non-integer share need not rise above the pool's."
+    }
+   ]
+  },
+  {
+   "id": "round-13/s1-a",
+   "family": "s1",
+   "lens": "rival explanations of surprise run-02 t15 (result-6e7b64, measured 139)",
+   "statement": "The kept method caps every sample at 4,096 tokens. On hard328 the cued base's right answers have a median length of about 3,900 tokens, so the cap cuts roughly half of the right-answer length mass. A cut sample casts no vote. On problems whose only right routes are long, the vote sees only short finished answers, mostly wrong on hard problems. The score is bounded by problems solvable in under 4,096 tokens, not by vote size.",
+   "rests_on": [
+    "result-6e7b64",
+    "result-1b6bf2",
+    "result-51fd20"
+   ],
+   "holds_against": [
+    {
+     "item": "result-6e7b64",
+     "value": 338,
+     "why": "338 vs 338 on the 400 MATH-500 problems: there the cued base's right answers have a median of about 1,432 tokens (result-5e17a6), so a 4,096 cap seldom binds and the vote's gain shows in full; the cap bites only on hard328."
+    },
+    {
+     "item": "result-51fd20",
+     "value": 130,
+     "why": "Forced commit at 4,000 tokens gives 130 of 328 vs 152 at 8,000: cutting at about 4k costs the base problems even with a forced answer, the same cap loss; a 12-vote recovers part of it, which puts the method near 139, not near 192."
+    }
+   ],
+   "readers_wrong": "The readers treated 12 votes as more than the base's 4-sample vote (192) and ignored the per-sample cap; at 4,096 tokens a single cued-base sample is worth only 81 of 328 (result-1b6bf2), and a vote over cut samples cannot recover problems whose right answers are longer. Consistent with result-ebf7a4 (refuted run-02/f2-m01): short right samples exist on 32.7 % of solved problems, so the method keeps those, but the median right length of 3,921 sits at the cap, so about half of the long-only problems are lost. The refuted mechanism forecast well because 'short samples' correlates with the true cause, a hard per-sample cap set near the median right-answer length.",
+   "direct_test": {
+    "claim": "On hard328, the problems the kept Karpathy method loses even though the cued base can solve them are lost to 4,096-token cap hits, not to agreeing finished wrong answers.",
+    "files": [
+     "studies/autobench/results/math500-loop/finals-01",
+     "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01"
+    ],
+    "computation": "1) From finals-01 take the Karpathy-method hard328 rows (plain prompt, T 0.6, 12 samples per problem, cap 4,096). A sample is a cap hit if finish_reason == 'length' or its generated tokens are >= 4,096. Compute the plurality vote per problem as the run did (score_v3 of the winning group). 2) From the day1_3 rows keep attempt 0 of samples 0-3; k = the number of samples with score_v3 == 1 and no cap hit. 3) Lost set: problems where the Karpathy vote is wrong and k >= 2. Matched null set: problems where the vote is right and k >= 2. 4) L = mean over the lost problems of the share of the 12 samples that are cap hits; N = the same mean over the null set. 5) Also report, for the lost set, the share of problems where no right cued-base sample is <= 4,096 tokens.",
+    "refuted_if": "L < 0.45, or L - N < 0.20",
+    "threshold": "L >= 0.45 and L - N >= 0.20",
+    "null": "The cap-hit share on difficulty-matched problems the same method gets right (cued base k >= 2). That null holds the problem's difficulty fixed, so this is stronger than an overall or random share."
+   }
+  },
+  {
+   "id": "round-13/s3-a",
+   "family": "s3",
+   "lens": "rival explanations of surprise round-10 t16 (result-1c9e40, measured 466)",
+   "statement": "On MATH-500 at T 1.0, the cued base's wrong answers to a problem spread over many values, while its right answers agree on one. So the plurality vote is right whenever the right answer is the mode, even below half the samples. The ceiling for votes over many samples is the number of problems where the right answer is the mode (about 470-475), not the number where it is a majority.",
+   "rests_on": [
+    "result-1c9e40",
+    "result-3605ba",
+    "result-e61b47"
+   ],
+   "holds_against": [
+    {
+     "fact": 28,
+     "value": 0.4286,
+     "why": "43 % of the k=4 vote failures that had a right sample were lost to a wrong group of two or more. But 57 % were ties of singletons, which is exactly where more samples let a dispersed-wrong problem's right answer become the mode. Two agreeing wrong answers out of 4 also need not stay the mode out of 12."
+    },
+    {
+     "fact": 26,
+     "value": 0.1346,
+     "why": "Wrong answers to the same problem under the cue do agree with each other more than with plain-prompt wrong answers. Still, the agreement is a fraction of pairs well under one half, so most wrong pairs disagree and the wrong mass splits across values."
+    }
+   ],
+   "readers_wrong": "The readers treated the vote over 4 (446, or 449.2 averaged over subsets) as near saturation, as if every problem's wrong answers sat on one shared attractor. In fact many problems where the base is right in only 25-50 % of samples still turn right as k grows, because their wrong answers do not agree. None of the direct_facts rows is about voting: the refuted termination-dial and short-answer claims concern edits, not the base's answer spread, so they leave this mechanism untouched.",
+   "direct_test": {
+    "claim": "Most of the problems that the vote over 12 gains over the vote over samples 0-3 have the right answer in under half of the 12 samples, and win only because the wrong answers split.",
+    "files": [
+     "studies/rlneurons/results/votek/math500_base_cue-01"
+    ],
+    "computation": "1) From rows.jsonl in the folder, keep one row per (problem_index, sample) for samples 0-11 (first in file order). 2) A row is answer-bearing if cap_hit is not true, finish_reason != 'length', and extracted_v3 is non-empty after strip(). Normalise each extracted answer by removing whitespace, '$' and a wrapping \\boxed{}. 3) For k in {4 (samples 0-3), 12}, group the answer-bearing rows by normalised answer. The winner is the largest group, with ties going to the group whose first member has the lowest sample index. The vote is right if the winner's first member has score_v3 == 1. 4) G = problems right at k=12 and wrong at k=4. 5) For each problem in G, p = (rows with score_v3 == 1) / 12, counting cap hits as not right. 6) S_a = fraction of G with p < 0.5. 7) Null: recompute the k=12 vote after merging all wrong answers of each problem into one label (a single-attractor world). G_null = problems right in that null at k=12 and wrong at k=4; S_null = fraction of G_null with p < 0.5, which is 0 by construction. Also report |G| and |G_null|, and how many problems the merge removes from G.",
+    "refuted_if": "S_a < 0.50, or the merged-wrong null keeps at least 80 % of G (meaning splitting is not needed for the gain).",
+    "threshold": "0.50",
+    "null": "Single-attractor null: each problem's wrong answers merged into one value. Under it, a plurality win needs p > 0.5, so any gain that sits on p < 0.5 is due to splitting."
+   }
+  },
+  {
+   "id": "round-13/s4-a",
+   "family": "s4",
+   "lens": "rival explanations of surprise run-04 t02 (result-a1bf75, measured 399)",
+   "statement": "RL-Code's code gain sits almost entirely in its own top-8 directions, and in early/middle layers it raises the pass rate of finished programs, not just how often a program finishes. At 1.5x it matches RL-Code. Math's directions help code only through the shared finishing channel (fewer cap hits and missing code blocks), passing those recovered answers at the base rate. With Code's directions already finishing nearly everything, adding Math's gives little.",
+   "rests_on": [
+    "result-a1bf75",
+    "result-51ccc6",
+    "result-284db5"
+   ],
+   "holds_against": [
+    {
+     "item": "result-a1bf75",
+     "value": 368,
+     "why": "Math's 1.5x edit on code gives +37 over random. That is about the ~56 format failures it removes, passed at random's 71 % finished rate (~40), so it needs no gain in correctness."
+    },
+    {
+     "item": "result-51ccc6",
+     "value": 342,
+     "why": "Code's late-layer band alone adds nothing (342 vs random 331, cap hits 34). The mechanism places the correctness gain in layers 0-21 (372, 366), and no single band reaches 399, as expected when the directions are concentrated but spread over depth."
+    }
+   ],
+   "readers_wrong": "The readers scaled from the math dial (top-8 1x = 192 vs RL 206) and from finishing alone. The base fails only 61 of 538 by cap hit or missing block, so finishing alone caps the gain near 317 + 0.7*61, about 357. The 1.5x edit also lifts the pass rate of finished-with-block answers (399/529 = 75.4 % vs random 331/466 = 71.0 %), which the readers missed. Consistent with result-6e4536 (Math adds no block-less endings) and result-124593 (the edit adds right answers, not just finished ones).",
+   "direct_test": {
+    "claim": "Code's 1.5x directions raise the pass rate among finished answers that contain a code block above the random edit's rate, and Math's 1.5x directions do not: Math's gain on code goes through finishing alone.",
+    "files": [
+     "studies/rlneurons/results/xreward/code_dial",
+     "studies/rlneurons/results/code1/base_cue-01"
+    ],
+    "computation": "From code_dial/readout.json (or each run folder's metrics.json) take passed, cap hits and no-code-block for the cells random rank-8 1.5x, Code top-8 1.5x and Math top-8 1.5x. For each cell, F = 538 - cap hits - no-block, and r = passed / F. Compute dC = r(Code 1.5x) - r(random 1.5x) and dM = r(Math 1.5x) - r(random 1.5x) in points. Then bootstrap over the 538 problems with per-problem rows if they are stored, else use Wilson intervals on the two rates.",
+    "refuted_if": "dC < 3.0 points, or dM >= 0.5 * dC",
+    "threshold": "dC >= 3.0 points and dM < 0.5 * dC",
+    "null": "The random rank-8 1.5x edit's own pass rate among its finished-with-block answers (331/466 = 71.0 %). The rival b says Math's share of dC is about its share of the total gain over random (37/68 = 0.54)."
+   }
+  },
+  {
+   "id": "round-13/s4-b",
+   "family": "s4",
+   "lens": "rival explanations of surprise run-04 t02 (result-a1bf75, measured 399)",
+   "statement": "Any reasoning reward's top-8 directions share a generic commit-to-a-complete-answer component, whose input side is excited by code and math text alike. It sharpens the base onto its own most likely complete program, which on code is usually a passing one. The gain is limited by what the base can already write (its pass@k), not by RL-Code's level, so Math's and Code's directions add until that ceiling.",
+   "rests_on": [
+    "result-a1bf75",
+    "result-284db5",
+    "result-51ccc6"
+   ],
+   "holds_against": [
+    {
+     "item": "result-c9b27e",
+     "value": 0.014,
+     "why": "The Math and Code deltas are almost orthogonal over all entries. But the shared part is the top-8 input subspace (Code top-8 driven 6.3-8.9x random by math text, result-a7c052; result-3abd6f shared with Code 3.1), which a full-entry cosine does not see."
+    },
+    {
+     "item": "result-51ccc6",
+     "value": 342,
+     "why": "Code's late layers alone neither finish nor add passes. The commit component is read in the early/middle input subspace (L0-10 cap hits 12, L11-21 cap hits 6), so a late-only band is expected to do little."
+    }
+   ],
+   "readers_wrong": "The readers treated the code edit as a weaker copy of Code-RL's direction (Code top-8 gave only 178 on hard328). In fact the shared commit component sharpens the base's own passing programs, and those are plentiful on HumanEval+/MBPP+, so 1.5x reaches 399. Consistent with result-6e4536 (commitment writes the code block, not a boxed answer) and result-124593 (it turns base finished-wrong answers right, as sharpening does).",
+   "direct_test": {
+    "claim": "The Code 1.5x edit's passes over the cued base fall on problems the untrained base already passes under another prompt, as often as a random edit's extra passes do: the edit sharpens existing base solutions and adds no new ones.",
+    "files": [
+     "studies/rlneurons/results/code1/base_cue-01",
+     "studies/rlneurons/results/code1/base_plain-01",
+     "studies/rlneurons/results/code1/base_mathcue-01",
+     "studies/rlneurons/results/xreward/code_dial"
+    ],
+    "computation": "Join per-problem pass/fail rows of base cue, base plain, base Math cue, Code top-8 1.5x and random rank-8 1.5x on the 538 problem ids. U = problems passed by base plain or base Math cue. G_E = problems Code 1.5x passes and base cue fails; G_R = problems random 1.5x passes and base cue fails. f_E = |G_E within U| / |G_E|, f_R = |G_R within U| / |G_R|. D = f_E - f_R, with a 90 % bootstrap over problems.",
+    "refuted_if": "D < -0.10 (the edit's extra passes land outside the base's own solved set clearly more often than a random edit's)",
+    "threshold": "-0.10",
+    "null": "The random rank-8 1.5x edit's extra passes over the cued base (f_R), which measure how often any extra base-like draw lands in U. The rival a predicts new solutions from code-specific directions, so D clearly below 0."
+   }
+  },
+  {
+   "id": "round-13/s6-b",
+   "family": "s6",
+   "lens": "rival explanations of surprise run-04 t01 (result-a1bf75, measured 386)",
+   "statement": "HumanEval+/MBPP+ are easy for the cued base: most problems it fails in one sample it passes in others, so the code gap is almost all per-sample reliability. Code-RL's top-8 directions lower the per-step error rate on reasoning text everywhere, as Math's dial does on finished-wrong math (result-124593). On a set whose gap is reliability, that recovers nearly all of RL's gain. On hard328, where a third of the gap needs answers the base never writes, it recovers less.",
+   "rests_on": [
+    "result-a1bf75",
+    "result-124593",
+    "result-afc423",
+    "result-6776d8"
+   ],
+   "holds_against": [
+    {
+     "item": "result-a1bf75",
+     "value": 9,
+     "why": "Code 1x cuts cap hits 27->9 (and no-block answers 34->8). This looks like a contract fix. But cap hits and missing blocks are per-sample events: the base finishes with a block on most of those problems in other samples (Math-cue cell 326). They are reliability of finishing, and the net gain of 69 exceeds the 44 those two categories could give."
+    },
+    {
+     "item": "knowledge-dab63f",
+     "value": 10,
+     "why": "On hard328 the base has a right sample on only 10 of 36 problems where RL's vote wins. That is the capability-heavy hard set, where the edit closes only about 2/3. The mechanism predicts the closed share follows the base-solvable share of the gap, which is high on easy code."
+    }
+   ],
+   "readers_wrong": "The readers took the share of RL's gain that 8 directions close from hard328 (about two thirds), where much of the gap is capability: the base has no right sample on 26 of 36 vote-gap problems. On code the gap is nearly all reliability, so the same kind of edit closes 82 % of it. This fits result-124593 (the dial adds right answers on base finished-wrong problems as RL does), result-6e4536 (no boxed displacement), and the refutations of incomplete switching (result-d02d46) and bf16 under-application (result-c2edfb). run-06/f2-m03 forecast this cell well although its cause is refuted. Code-RL's update is concentrated (0.174), as General-RL's is, so concentration is not caused by a gradable reward. What f2-m03 captured is that the concentrated directions carry the reliability shift.",
+   "direct_test": {
+    "claim": "The base failures that Code-top8-1x fixes are mostly problems the base passes in its other stored base-like samples, clearly more than base failures in general.",
+    "files": [
+     "studies/rlneurons/results/code1/base_cue-01",
+     "studies/rlneurons/results/code1/base_mathcue-01",
+     "studies/rlneurons/results/code1/rl_plain-01",
+     "studies/rlneurons/results/xreward/code_dial"
+    ],
+    "computation": "1. Load per-problem pass/fail of base + Code cue (code1/base_cue-01), base + Math cue (code1/base_mathcue-01), the code_dial cells 'random rank-8 1.5x' and 'Code directions 1x', and RL-Code plain (code1/rl_plain-01); join on problem id (538). 2. k2 = passes in the two base-like cells (Math cue, random 1.5x), from 0 to 2. 3. Among problems the Code-cue base fails: F_top8 = passed by top8-1x; Q_top8 = share of F_top8 with k2 >= 1; Q_base = share of all Code-cue base failures with k2 >= 1; Q_RL = share of RL-Code's fixes with k2 >= 1. 4. Fix rate of top8-1x within k2 = 0 and within k2 >= 1. 5. 90 % bootstrap over problems (10,000 draws) for Q_top8 and Q_top8 - Q_base.",
+    "refuted_if": "Q_top8 < 0.60, or the 90 % lower bound of Q_top8 - Q_base is <= 0.10",
+    "threshold": "Q_top8 >= 0.60 and Q_top8 - Q_base lower bound > 0.10",
+    "null": "The share of base-solvable problems among all base failures (Q_base, which is what fixes drawn without regard to base solvability would give). Also RL-Code's own fixes (Q_RL) as the reference for a full reliability-plus-capability change."
+   }
+  }
+ ]
+}

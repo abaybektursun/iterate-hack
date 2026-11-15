@@ -1,0 +1,86 @@
+{
+ "rivals": [
+  {
+   "id": "a",
+   "statement": "The kept method caps every sample at 4,096 tokens. On hard328 the cued base's right answers have a median length of about 3,900 tokens, so the cap cuts roughly half of the right-answer length mass. A cut sample casts no vote. On problems whose only right routes are long, the vote sees only short finished answers, mostly wrong on hard problems. The score is bounded by problems solvable in under 4,096 tokens, not by vote size.",
+   "readers_wrong": "The readers treated 12 votes as more than the base's 4-sample vote (192) and ignored the per-sample cap; at 4,096 tokens a single cued-base sample is worth only 81 of 328 (result-1b6bf2), and a vote over cut samples cannot recover problems whose right answers are longer. Consistent with result-ebf7a4 (refuted run-02/f2-m01): short right samples exist on 32.7 % of solved problems, so the method keeps those, but the median right length of 3,921 sits at the cap, so about half of the long-only problems are lost. The refuted mechanism forecast well because 'short samples' correlates with the true cause, a hard per-sample cap set near the median right-answer length.",
+   "rests_on": ["result-6e7b64", "result-1b6bf2", "result-51fd20"],
+   "holds_against": [
+    {"item": "result-6e7b64", "value": 338, "why": "338 vs 338 on the 400 MATH-500 problems: there the cued base's right answers have a median of about 1,432 tokens (result-5e17a6), so a 4,096 cap seldom binds and the vote's gain shows in full; the cap bites only on hard328."},
+    {"item": "result-51fd20", "value": 130, "why": "Forced commit at 4,000 tokens gives 130 of 328 vs 152 at 8,000: cutting at about 4k costs the base problems even with a forced answer, the same cap loss; a 12-vote recovers part of it, which puts the method near 139, not near 192."}
+   ],
+   "forecasts": [
+    {"id": "t01", "value": 230, "low": 214, "high": 245, "reason": "native T 1.0 at cap 32,768 gives 232; with no cap binding, T 0.6 changes little"},
+    {"id": "t02", "value": 473, "low": 462, "high": 483, "reason": "native T 1.0 gives 474; MATH-500 answers are short, so neither the cap nor T matters"},
+    {"id": "t03", "value": 405, "low": 390, "high": 420, "reason": "411 at the earlier seed, regressed toward RL-Code's 401"},
+    {"id": "t04", "value": 405, "low": 390, "high": 420, "reason": "same cell at another seed"},
+    {"id": "t05", "value": 400, "low": 386, "high": 414, "reason": "401 at the earlier seed; seed spread about 7"},
+    {"id": "t07", "value": 389, "low": 374, "high": 403, "reason": "386 at the earlier seed and 399 at 1.5x"},
+    {"id": "t09", "value": 228, "low": 214, "high": 242, "reason": "232 at the earlier seed, single-sample spread about 7"},
+    {"id": "t13", "value": 182, "low": 168, "high": 196, "reason": "one direction gave 181 at 1x and 184 at 2x; 1.5x sits between"},
+    {"id": "t14", "value": 182, "low": 168, "high": 196, "reason": "same cell, second sample"},
+    {"id": "t17", "value": 198, "low": 189, "high": 207, "reason": "uncapped long answers stay votable at 16,384, so 6 votes add about 6 to the 4-vote's 192"},
+    {"id": "t18", "value": 233, "low": 222, "high": 244, "reason": "the earlier samples were 234, 229, 237"},
+    {"id": "t19", "value": 246, "low": 238, "high": 254, "reason": "the vote over 3 was 246, and a 4th vote adds about 0-2"},
+    {"id": "t21", "value": 244, "low": 234, "high": 254, "reason": "seed 3,010,000 gave 245 with 0 cap hits; the larger cap frees the long answers"},
+    {"id": "t24", "value": 80, "low": 71, "high": 89, "reason": "75 at 16,384; Think-SFT's cut answers are unfinished work and resolve at 32k (as on hard328, +6 to the vote)"},
+    {"id": "t25", "value": 66, "low": 59, "high": 73, "reason": "60.0 at 16,384; 46 % cap hits, of which about 1 in 4 are right when allowed to finish"}
+   ],
+   "direct_test": {
+    "claim": "On hard328, the problems the kept Karpathy method loses even though the cued base can solve them are lost to 4,096-token cap hits, not to agreeing finished wrong answers.",
+    "files": ["studies/autobench/results/math500-loop/finals-01", "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01"],
+    "computation": "1) From finals-01 take the Karpathy-method hard328 rows (plain prompt, T 0.6, 12 samples per problem, cap 4,096). A sample is a cap hit if finish_reason == 'length' or its generated tokens are >= 4,096. Compute the plurality vote per problem as the run did (score_v3 of the winning group). 2) From the day1_3 rows keep attempt 0 of samples 0-3; k = the number of samples with score_v3 == 1 and no cap hit. 3) Lost set: problems where the Karpathy vote is wrong and k >= 2. Matched null set: problems where the vote is right and k >= 2. 4) L = mean over the lost problems of the share of the 12 samples that are cap hits; N = the same mean over the null set. 5) Also report, for the lost set, the share of problems where no right cued-base sample is <= 4,096 tokens.",
+    "refuted_if": "L < 0.45, or L - N < 0.20",
+    "threshold": "L >= 0.45 and L - N >= 0.20",
+    "null": "The cap-hit share on difficulty-matched problems the same method gets right (cued base k >= 2). That null holds the problem's difficulty fixed, so this is stronger than an overall or random share."
+   }
+  },
+  {
+   "id": "b",
+   "statement": "The kept method samples the base with the plain prompt and no cue, at T 0.6. Without the cue the base stays in its short, 'Answer:'-line mode, which on hard problems produces quick finished wrong answers. Those wrong answers come from shared attractor values, so they agree across samples. A 12-sample plurality then locks onto a wrong value. The 4,096 cap rarely binds, because plain-mode answers are short and its long answers are loops.",
+   "readers_wrong": "The readers carried the cued base's vote (192) over to a cue-less configuration; the plain base at T 0.6 is right on only 107 of 328 per sample (result-099916), and voting over correlated wrong answers adds far less than voting over the cued base's diverse long attempts. Consistent with result-ebf7a4: short right samples exist, but the plain mode's short answers are mostly not those; with result-124593 (the RL edit adds right answers on finished-wrong problems): the gap here is the mode the prompt selects. run-02/f2-m01's forecast landed because 'short samples' correlates with the plain prompt's short mode, not with a length that hard solutions need.",
+   "rests_on": ["result-6e7b64", "result-099916", "result-3a3af3"],
+   "holds_against": [
+    {"item": "result-1b6bf2", "value": 81, "why": "A single cued-base sample cut at a 4k budget gets 81 of 328, but that cut acts on cued long-mode answers; the plain mode at T 0.6 writes short answers (about 1,700 generated tokens per sample in the method, 20,407 over 12), so few of its samples reach 4,096 and the cap is not what limits it."},
+    {"item": "result-6e7b64", "value": 338, "why": "338 vs 338 on the 400 MATH-500 problems: on easier problems the plain mode's short answers are mostly right (plain base 319/500 at T 0.6), so the plurality locks onto the right value; on hard328 the shared attractor values are wrong, so the same vote fails."}
+   ],
+   "forecasts": [
+    {"id": "t01", "value": 229, "low": 213, "high": 244, "reason": "native format already sets Think-SFT's mode; T 0.6 vs 1.0 changes little from 232"},
+    {"id": "t02", "value": 474, "low": 463, "high": 484, "reason": "native T 1.0 474; mode unchanged"},
+    {"id": "t03", "value": 406, "low": 391, "high": 421, "reason": "411 earlier, regressed toward 401"},
+    {"id": "t04", "value": 406, "low": 391, "high": 421, "reason": "same cell at another seed"},
+    {"id": "t05", "value": 400, "low": 386, "high": 414, "reason": "401 at the earlier seed"},
+    {"id": "t07", "value": 388, "low": 373, "high": 402, "reason": "386 at the earlier seed"},
+    {"id": "t09", "value": 228, "low": 214, "high": 242, "reason": "232 at the earlier seed"},
+    {"id": "t13", "value": 182, "low": 168, "high": 196, "reason": "between 1x (181) and 2x (184)"},
+    {"id": "t14", "value": 182, "low": 168, "high": 196, "reason": "same cell, second sample"},
+    {"id": "t15", "value": 372, "low": 335, "high": 405, "reason": "a strong mode-setter from imitation; the cue lifts the base to 317 and Think-SFT sits near RL-Code (401) as it does on math"},
+    {"id": "t16", "value": 368, "low": 330, "high": 402, "reason": "the Math cue works as well as the Code cue on the base (326 vs 317)"},
+    {"id": "t17", "value": 195, "low": 187, "high": 203, "reason": "the cued base's wrong answers partly agree (r7-m11 excess 0.13), so 2 more votes add about 3 to 192"},
+    {"id": "t18", "value": 233, "low": 222, "high": 244, "reason": "the earlier samples were 234, 229, 237"},
+    {"id": "t19", "value": 245, "low": 237, "high": 253, "reason": "the vote over 3 was 246"},
+    {"id": "t21", "value": 242, "low": 232, "high": 252, "reason": "245 at another seed"},
+    {"id": "t25", "value": 64, "low": 57, "high": 71, "reason": "60.0 at 16k; late answers often switch script (249 of 368 on hard328), so the gain is modest"}
+   ],
+   "direct_test": {
+    "claim": "On hard328, the problems the kept Karpathy method loses even though the cued base can solve them are lost to a plurality of agreeing short finished wrong answers, with few cap hits.",
+    "files": ["studies/autobench/results/math500-loop/finals-01", "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01"],
+    "computation": "1) From finals-01 take the Karpathy-method hard328 rows (12 samples per problem). Cap hit = finish_reason == 'length' or generated tokens >= 4,096. 2) From the day1_3 rows keep attempt 0 of samples 0-3; k = right samples (score_v3 == 1, no cap hit). 3) Lost set = Karpathy vote wrong and k >= 2. 4) C = mean share of cap hits among the 12 samples over the lost set. 5) A_K = over the lost set, the share of unordered pairs of finished wrong Karpathy answers of the same problem that agree under rln4_lib.agree (pooled). A_B = the same pooled agreement among the cued base's finished wrong answers (day1_3 attempt 0) on the same problems. Report C and A_K - A_B.",
+    "refuted_if": "C > 0.35, or A_K - A_B < 0.10",
+    "threshold": "C <= 0.35 and A_K - A_B >= 0.10",
+    "null": "Wrong-answer agreement of the cued base's own samples on the same problems. This null controls for each problem's shared attractor values, so it is stronger than chance agreement."
+   }
+  }
+ ],
+ "cell": {
+  "cell": {"model": "base Olmo-3-1025-7B", "prompt": "plain (no opening text)", "set": "hard328, first 100 problems", "n": 100, "sampling": "T 0.6 / top-p 1.0", "samples": 6, "grader": "v3", "cap": "16,384 generated tokens; each sample also scored truncated at 4,096 from the same text"},
+  "job": "studies/theory/jobs/free_cell.py",
+  "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model base --set hard328 --n 100 --temperature 0.6 --top-p 1.0 --max-tokens 16384 --samples 6 --seed 71000000 --commit COMMIT_SHA\"",
+  "readout": "Plurality vote over the 6 samples at cap 16,384, minus the plurality vote over the same 6 samples when every sample longer than 4,096 generated tokens counts as no answer (paired on the same texts), in right answers of 100.",
+  "unit": "right answers of 100 (difference)",
+  "why": "a says the 4,096 cap removes long right answers that the plain T 0.6 base does write, so lifting the cap adds many vote wins. b says plain-mode answers are short and its long answers are loops, so lifting the cap adds almost nothing.",
+  "gpu_minutes": 100,
+  "a": {"value": 9, "low": 5, "high": 15},
+  "b": {"value": 1, "low": -2, "high": 3}
+ }
+}
