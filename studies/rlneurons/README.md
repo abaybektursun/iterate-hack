@@ -307,6 +307,44 @@ characters in the last 3,000 characters), descriptive only.
   `runs/abaybektursun-1114-152416-de10/merge_{rl,code}.json` (not committed).
   Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_wdiff`.
 
+## Reward content test: the five Olmo 3 RL-Zero rewards on MATH-500 (board idea-46b68c, work-069eca)
+
+Spec `specs/SPEC_reward5.md` (predictions R1-R5, written before the jobs). Does the MATH-500 gain over the cued base depend on
+what the RL reward graded? AI2's five Olmo 3 RL-Zero models share the base `allenai/Olmo-3-1025-7B` (names and revisions in
+`jobs/merge_weights.py` `OTHERS`). Cells: `run_cell` on `merge_weights --other <key> --alpha 1 --rounding nearest` (all 355
+tensors identical to the named model in every job), T 1.0 / top-p 1.0, one sample, cap 16,384, grader v3, n = 500, the 3.1
+tokenizer. Readout `results/reward5/readout.json`, written by `analysis/reward5.py`; one run folder
+`results/reward5/<arm>-01/` per cell (`run.json`, `metrics.json`, `merge.json`, `examples.json`). Jobs at commit `3b4ab2a`.
+
+| Model | Cue: right of 500 | Cue minus base cue, points [95 %] | Plain: right of 500 | Tokens per problem (cue) | Relative norm of the weight difference |
+|---|---|---|---|---|---|
+| base (T1, T3) | 410 | | 224 | 3,932 | |
+| Math 3.0 | 448 | +7.6 [4.2, 11.0] | 443 | 4,527 | 0.127 % |
+| Mix 3.0 | 440 | +6.0 [2.6, 9.4] | 372 | 5,203 | 0.090 % |
+| General 3.0 | 429 | +3.8 [0.4, 7.0] | 323 | 3,839 | 0.064 % |
+| Code 3.0 | 411 | +0.2 [-3.4, 3.8] | 360 | 3,069 | 0.151 % |
+| IF 3.0 | 377 | -6.6 [-10.6, -2.6] | 55 | 2,667 | 0.138 % |
+| Math 3.1 (day1_wdiff) | 457 | +9.4 [6.2, 12.6] | 463 | 4,696 | 0.13 % |
+| Code 3.1 (day1_wdiff) | 450 | +8.0 [4.6, 11.2] | 390 | 3,336 | 0.109 % |
+
+Paired bootstrap over problems, 5,000 resamples, seed 0. Other paired differences: Code 3.0 cue minus Math 3.0 cue -7.4
+[-10.8, -4.0]; IF 3.0 cue minus Math 3.0 cue -14.2 [-17.8, -10.8]; Code 3.1 cue minus Code 3.0 cue +7.8 [4.4, 11.2]; Math 3.1
+cue minus Math 3.0 cue +1.8 [-0.4, 4.2].
+
+- R1 held: Math 3.0 with the cue is above the cued base.
+- R2 refuted: the IF model gains nothing. Of its 123 wrong cue answers, 34 have a broken answer line (`Answer: Answer`, or an
+  empty `Answer:`: 24 placeholder, 10 nothing extracted; counted from the rows, 6 read by hand and all 6 had the right value in
+  the text); with all 34 counted right it is 411, level with the base. Plain, the IF model answers at once (median 5 tokens, 55 right).
+- R3 refuted: Code 3.0 with the cue equals the cued base (411), 37 problems below Math 3.0. The 450 of Code 3.1 does not hold for
+  the earlier Code release, although Code 3.0 moved the weights further (0.151 % against 0.109 %).
+- R4: Mix held (-1.6 [-4.4, 1.2]); General refuted at the stated bound (-3.8 [-6.8, -0.8]).
+- R5 held: Math 3.0 plain 443 (+219 over base plain); IF plain 55.
+
+Reading: in the Olmo 3 models the gain follows the share of math in the reward (Math > Mix > General > Code = base > IF). The
+earlier finding that the Code-RL difference gives the math gain (above, `day1_wdiff`) is a property of the 3.1 Code release. The
+model cards do not state what changed between the 3.0 and 3.1 Code runs. No answer of any cell contains an `extra_id` token
+text (the 3.0 tokenizer's `<think>`/`<answer>` ids print that way under the 3.1 tokenizer).
+
 ## RLN-5 map: where RL still disagrees once the cue is given
 
 Spec `specs/SPEC5_map.md`; run folder `results/rln5/map-01/` (`run.json`, `metrics.json`, `examples.json`, `checks.json`,

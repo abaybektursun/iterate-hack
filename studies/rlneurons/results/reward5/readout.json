@@ -1,0 +1,420 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_reward5.md",
+ "grader": "rln4_lib.grade_v3",
+ "n": 500,
+ "cells": {
+  "base_cue": {
+   "n": 500,
+   "right_v3": 410,
+   "cap_hits": 27,
+   "loops_A": 0,
+   "mean_generated_tokens": 3932.0,
+   "from": "results/day1_wdiff/readout.json cell T1_base_cue"
+  },
+  "math31_plain": {
+   "n": 500,
+   "right_v3": 463,
+   "cap_hits": 6,
+   "loops_A": 0,
+   "mean_generated_tokens": 4692.9,
+   "from": "results/day1_wdiff/readout.json cell T2_rl_plain"
+  },
+  "base_plain": {
+   "n": 500,
+   "right_v3": 224,
+   "cap_hits": 8,
+   "loops_A": 0,
+   "mean_generated_tokens": 2106.9,
+   "from": "results/day1_wdiff/readout.json cell T3_base_plain"
+  },
+  "code31_cue": {
+   "n": 500,
+   "right_v3": 450,
+   "cap_hits": 7,
+   "loops_A": 0,
+   "mean_generated_tokens": 3336.2,
+   "job_id": "abaybektursun-1114-162452-0203",
+   "from": "results/day1_wdiff"
+  },
+  "code31_plain": {
+   "n": 500,
+   "right_v3": 390,
+   "cap_hits": 4,
+   "loops_A": 0,
+   "mean_generated_tokens": 3065.9,
+   "job_id": "abaybektursun-1114-153052-5013",
+   "from": "results/day1_wdiff"
+  },
+  "math31_cue": {
+   "n": 500,
+   "right_v3": 457,
+   "cap_hits": 8,
+   "loops_A": 0,
+   "mean_generated_tokens": 4695.5,
+   "job_id": "abaybektursun-1114-153110-e985",
+   "from": "results/day1_wdiff"
+  },
+  "if30_cue": {
+   "n": 500,
+   "right_v3": 377,
+   "cap_hits": 14,
+   "loops_A": 0,
+   "mean_generated_tokens": 2667.3,
+   "seed_base": 91000000,
+   "job_id": "abaybektursun-1114-182707-731c",
+   "model": [
+    "allenai/Olmo-3-7B-RL-Zero-IF",
+    "3cae007c5324a9a06ee6780f03b848bc7b8fd440"
+   ],
+   "frac_changed": 0.4463628963144405,
+   "rel_norm": 0.0013793065674345877,
+   "word_salad_tails": 1,
+   "run_folder": "studies/rlneurons/results/reward5/if30_cue-01"
+  },
+  "general30_cue": {
+   "n": 500,
+   "right_v3": 429,
+   "cap_hits": 22,
+   "loops_A": 0,
+   "mean_generated_tokens": 3838.8,
+   "seed_base": 92000000,
+   "job_id": "abaybektursun-1114-182712-3556",
+   "model": [
+    "allenai/Olmo-3-7B-RL-Zero-General",
+    "24e5814cb36944d3eb36a49679d02c2b3bb46195"
+   ],
+   "frac_changed": 0.28444026589109334,
+   "rel_norm": 0.0006389904705499255,
+   "word_salad_tails": 0,
+   "run_folder": "studies/rlneurons/results/reward5/general30_cue-01"
+  },
+  "mix30_cue": {
+   "n": 500,
+   "right_v3": 440,
+   "cap_hits": 24,
+   "loops_A": 4,
+   "mean_generated_tokens": 5203.0,
+   "seed_base": 93000000,
+   "job_id": "abaybektursun-1114-182718-612b",
+   "model": [
+    "allenai/Olmo-3-7B-RL-Zero-Mix",
+    "73b2b1a50d94aec859e22c9b4a524416b5a3a739"
+   ],
+   "frac_changed": 0.33425251942504025,
+   "rel_norm": 0.0008982796975402087,
+   "word_salad_tails": 1,
+   "run_folder": "studies/rlneurons/results/reward5/mix30_cue-01"
+  },
+  "math30_cue": {
+   "n": 500,
+   "right_v3": 448,
+   "cap_hits": 9,
+   "loops_A": 7,
+   "mean_generated_tokens": 4526.6,
+   "seed_base": 94000000,
+   "job_id": "abaybektursun-1114-182724-87aa",
+   "model": [
+    "allenai/Olmo-3-7B-RL-Zero-Math",
+    "dee26a4074b88215cd1326472e1ab14d0259d892"
+   ],
+   "frac_changed": 0.4223515365433391,
+   "rel_norm": 0.0012713207286506475,
+   "word_salad_tails": 0,
+   "run_folder": "studies/rlneurons/results/reward5/math30_cue-01"
+  },
+  "code30_cue": {
+   "n": 500,
+   "right_v3": 411,
+   "cap_hits": 5,
+   "loops_A": 13,
+   "mean_generated_tokens": 3068.8,
+   "seed_base": 95000000,
+   "job_id": "abaybektursun-1114-182730-9523",
+   "model": [
+    "allenai/Olmo-3-7B-RL-Zero-Code",
+    "a961af69d75f9c52b3ae4db7b1664d890229b7ca"
+   ],
+   "frac_changed": 0.4691854887846529,
+   "rel_norm": 0.0015113835959325887,
+   "word_salad_tails": 5,
+   "run_folder": "studies/rlneurons/results/reward5/code30_cue-01"
+  },
+  "if30_plain": {
+   "n": 500,
+   "right_v3": 55,
+   "cap_hits": 0,
+   "loops_A": 0,
+   "mean_generated_tokens": 39.3,
+   "seed_base": 96000000,
+   "job_id": "abaybektursun-1114-182735-bcca",
+   "model": [
+    "allenai/Olmo-3-7B-RL-Zero-IF",
+    "3cae007c5324a9a06ee6780f03b848bc7b8fd440"
+   ],
+   "frac_changed": 0.4463628963144405,
+   "rel_norm": 0.0013793065674345877,
+   "word_salad_tails": 1,
+   "run_folder": "studies/rlneurons/results/reward5/if30_plain-01"
+  },
+  "general30_plain": {
+   "n": 500,
+   "right_v3": 323,
+   "cap_hits": 12,
+   "loops_A": 0,
+   "mean_generated_tokens": 2302.7,
+   "seed_base": 97000000,
+   "job_id": "abaybektursun-1114-182742-9129",
+   "model": [
+    "allenai/Olmo-3-7B-RL-Zero-General",
+    "24e5814cb36944d3eb36a49679d02c2b3bb46195"
+   ],
+   "frac_changed": 0.28444026589109334,
+   "rel_norm": 0.0006389904705499255,
+   "word_salad_tails": 0,
+   "run_folder": "studies/rlneurons/results/reward5/general30_plain-01"
+  },
+  "mix30_plain": {
+   "n": 500,
+   "right_v3": 372,
+   "cap_hits": 23,
+   "loops_A": 7,
+   "mean_generated_tokens": 4227.6,
+   "seed_base": 98000000,
+   "job_id": "abaybektursun-1114-182748-3300",
+   "model": [
+    "allenai/Olmo-3-7B-RL-Zero-Mix",
+    "73b2b1a50d94aec859e22c9b4a524416b5a3a739"
+   ],
+   "frac_changed": 0.33425251942504025,
+   "rel_norm": 0.0008982796975402087,
+   "word_salad_tails": 0,
+   "run_folder": "studies/rlneurons/results/reward5/mix30_plain-01"
+  },
+  "math30_plain": {
+   "n": 500,
+   "right_v3": 443,
+   "cap_hits": 8,
+   "loops_A": 3,
+   "mean_generated_tokens": 4505.9,
+   "seed_base": 99000000,
+   "job_id": "abaybektursun-1114-182754-7238",
+   "model": [
+    "allenai/Olmo-3-7B-RL-Zero-Math",
+    "dee26a4074b88215cd1326472e1ab14d0259d892"
+   ],
+   "frac_changed": 0.4223515365433391,
+   "rel_norm": 0.0012713207286506475,
+   "word_salad_tails": 0,
+   "run_folder": "studies/rlneurons/results/reward5/math30_plain-01"
+  },
+  "code30_plain": {
+   "n": 500,
+   "right_v3": 360,
+   "cap_hits": 7,
+   "loops_A": 9,
+   "mean_generated_tokens": 2630.0,
+   "seed_base": 100000000,
+   "job_id": "abaybektursun-1114-182800-3331",
+   "model": [
+    "allenai/Olmo-3-7B-RL-Zero-Code",
+    "a961af69d75f9c52b3ae4db7b1664d890229b7ca"
+   ],
+   "frac_changed": 0.4691854887846529,
+   "rel_norm": 0.0015113835959325887,
+   "word_salad_tails": 1,
+   "run_folder": "studies/rlneurons/results/reward5/code30_plain-01"
+  }
+ },
+ "differences": {
+  "if30_cue minus base_cue": {
+   "points": -6.6,
+   "ci95": [
+    -10.6,
+    -2.6
+   ]
+  },
+  "general30_cue minus base_cue": {
+   "points": 3.8,
+   "ci95": [
+    0.4,
+    7.0
+   ]
+  },
+  "mix30_cue minus base_cue": {
+   "points": 6.0,
+   "ci95": [
+    2.6,
+    9.4
+   ]
+  },
+  "math30_cue minus base_cue": {
+   "points": 7.6,
+   "ci95": [
+    4.2,
+    11.0
+   ]
+  },
+  "code30_cue minus base_cue": {
+   "points": 0.2,
+   "ci95": [
+    -3.4,
+    3.8
+   ]
+  },
+  "if30_cue minus math30_cue": {
+   "points": -14.2,
+   "ci95": [
+    -17.8,
+    -10.8
+   ]
+  },
+  "general30_cue minus math30_cue": {
+   "points": -3.8,
+   "ci95": [
+    -6.8,
+    -0.8
+   ]
+  },
+  "mix30_cue minus math30_cue": {
+   "points": -1.6,
+   "ci95": [
+    -4.4,
+    1.2
+   ]
+  },
+  "code30_cue minus math30_cue": {
+   "points": -7.4,
+   "ci95": [
+    -10.8,
+    -4.0
+   ]
+  },
+  "if30_plain minus math30_plain": {
+   "points": -77.6,
+   "ci95": [
+    -81.2,
+    -73.8
+   ]
+  },
+  "general30_plain minus math30_plain": {
+   "points": -24.0,
+   "ci95": [
+    -28.4,
+    -19.6
+   ]
+  },
+  "mix30_plain minus math30_plain": {
+   "points": -14.2,
+   "ci95": [
+    -18.0,
+    -10.6
+   ]
+  },
+  "code30_plain minus math30_plain": {
+   "points": -16.6,
+   "ci95": [
+    -20.4,
+    -12.8
+   ]
+  },
+  "if30_plain minus base_plain": {
+   "points": -33.8,
+   "ci95": [
+    -38.8,
+    -29.0
+   ]
+  },
+  "general30_plain minus base_plain": {
+   "points": 19.8,
+   "ci95": [
+    14.2,
+    25.4
+   ]
+  },
+  "mix30_plain minus base_plain": {
+   "points": 29.6,
+   "ci95": [
+    24.4,
+    34.8
+   ]
+  },
+  "math30_plain minus base_plain": {
+   "points": 43.8,
+   "ci95": [
+    39.0,
+    48.6
+   ]
+  },
+  "code30_plain minus base_plain": {
+   "points": 27.2,
+   "ci95": [
+    22.0,
+    32.4
+   ]
+  },
+  "if30_cue minus if30_plain": {
+   "points": 64.4,
+   "ci95": [
+    60.0,
+    68.8
+   ]
+  },
+  "general30_cue minus general30_plain": {
+   "points": 21.2,
+   "ci95": [
+    17.0,
+    25.6
+   ]
+  },
+  "mix30_cue minus mix30_plain": {
+   "points": 13.6,
+   "ci95": [
+    9.6,
+    17.6
+   ]
+  },
+  "math30_cue minus math30_plain": {
+   "points": 1.0,
+   "ci95": [
+    -1.6,
+    3.6
+   ]
+  },
+  "code30_cue minus code30_plain": {
+   "points": 10.2,
+   "ci95": [
+    6.4,
+    14.0
+   ]
+  },
+  "math31_cue minus math30_cue": {
+   "points": 1.8,
+   "ci95": [
+    -0.4,
+    4.2
+   ]
+  },
+  "code31_cue minus code30_cue": {
+   "points": 7.8,
+   "ci95": [
+    4.4,
+    11.2
+   ]
+  },
+  "code31_cue minus base_cue": {
+   "points": 8.0,
+   "ci95": [
+    4.6,
+    11.2
+   ]
+  },
+  "math31_cue minus base_cue": {
+   "points": 9.4,
+   "ci95": [
+    6.2,
+    12.6
+   ]
+  }
+ },
+ "bootstrap": "paired, 5,000 resamples, seed 0, 95 % percentile"
+}
