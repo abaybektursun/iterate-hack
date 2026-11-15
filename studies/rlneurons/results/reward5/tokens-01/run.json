@@ -1,0 +1,11 @@
+{
+ "jobs": [
+  "abaybektursun-1114-191457-f9da",
+  "abaybektursun-1114-193153-3c4c"
+ ],
+ "command": "python -m studies.rlneurons.analysis.reward5_tokens abaybektursun-1114-191457-f9da abaybektursun-1114-193153-3c4c",
+ "raw": [
+  "runs/abaybektursun-1114-191457-f9da/ (uv run tools/gpu.py get abaybektursun-1114-191457-f9da)",
+  "runs/abaybektursun-1114-193153-3c4c/ (uv run tools/gpu.py get abaybektursun-1114-193153-3c4c)"
+ ]
+}
