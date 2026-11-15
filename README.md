@@ -346,15 +346,20 @@ The home page is https://invariant.team (`tools/home.py`; the same Lambda, which
 `invariant.team`, and `/home` on any host). It leads to every page of the monitor: Findings, Board, Proof, Design, Talk
 (`/demo`), Papers, Lab, Exa, past.dev, GPU prices (gpu.invariant.team) and Psychosis. Its picture is a dial: a lit glass
 body with a ring around it and one bead per page. A click on a bead or the arrow keys turn the dial to a page
-(`/#<page>`); a click on the body or the button opens it. Beside the picture the same pages are a plain list of links.
+(`/#<page>`); a click on the body or the button opens it. Beside the picture are one sentence with the Board's two live
+MATH-500 scores (the best untrained-base score and the best RL score in the `scores` rows of `/data`; no numbers before
+the first read), the button, and the same pages as a plain list of links in three groups (Findings, Papers, Talk, Team;
+Board, Design, Proof, Values; the rest under "Also"); on a phone the list comes before the picture.
 About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
 line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and adds the
-link "More" to it after the four tabs; a page with no header gets a small link "Invariant" at its lower left; pinch
-zoom is never switched off. An unknown address answers a short page with links, and every address of invariant.team
+link "All pages" to it after the four tabs; a page with no header gets a small link "Invariant" at the middle of its right edge; pinch
+zoom is never switched off. An unknown address answers a short page with the header and links, and every address of invariant.team
 other than `/` and `/data` redirects to the monitor. The page `/team` (`tools/people.py`) lists the team: its three
-names are placeholders with every line "To be added" until the people fill `PEOPLE` in.
+names are placeholders, each with the one line "Details to be added" until the people fill `PEOPLE` in; a filled field
+shows as its own row.
 
-The page `/papers` (`tools/papers.py`) is the paper loop: its six steps in the words column and one lit sheet per
+The page `/papers` (`tools/papers.py`) is the paper loop: its six steps in the words column (below the sheets
+where the page is one column) and one lit sheet per
 paper of `view.PAPERS`, each with its claim, its length, why the loop picked it and how it was checked; a click opens
 the PDF. A new paper gets its row in `ROWS` of `papers.py` (without one it still gets a sheet with its title). The domain is the stack parameter
 `HomeDomainName` (`infra/monitor/deploy.sh monitor.invariant.team <zone id> invariant.team`).
@@ -405,10 +410,10 @@ The tab Proof is the page `/proof`: the same page as one list of rows with no pi
 not the research question. Each is a module `tools/proof_<slug>.py`, made like a finding page and served at
 `/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
 skill, `studies/metaharness/`).
-The second is `tools/proof_idea_basins.py` (`/proof/idea-basins`): the 218 board items of the snapshot of 15 November
-2026, 04:08 UTC, as dots on a glass slab with a faint relief, in three conditions: the items in the order they were
+The second is `tools/proof_idea_basins.py` (`/proof/idea-basins`): the 515 board items of the snapshot of 15 November
+2026, 19:42 UTC, as dots on a glass slab with a faint relief, in three conditions: the items in the order they were
 posted, the items in the 12 idea basins a judge model grouped them into, and the idea tree (one row per basin, a line
-from each item to the earlier items it builds on; 151 of 450 links join two basins). Its numbers and its layout, which
+from each item to the earlier items it builds on; 269 of 914 links join two basins). Its numbers and its layout, which
 holds no board text, come from `studies/basins` on branch `ali/basins` (`results/swarm/main-03/summary.json`,
 `analysis/swarm_nested_layout.py`).
 
@@ -431,18 +436,24 @@ that follows the breath (M mutes). A WebGL shader draws the picture: fog, glow, 
 split. The end screen gives score, rank, achievements and what the agents posted meanwhile.
 
 The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): thirteen 16:9 slides, each one
-figure with a few words, `#hook`, `#climb`, `#question`, `#tea`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
+figure with a few words, `#hook`, `#question`, `#powered`, `#climb`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
 `#proof`, `#ideas`, `#papers` and `#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
 PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` or the button at the top right changes the theme
 (`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
 theme on screen, so print to PDF from the dark page for a dark PDF. The hook sentence is the constant `HOOK` in
-`tools/demo_deck.py`. The two photos (tea, meditation) are the strings `TEA` and `MEDITATE` in `tools/demo_photos.py`,
+`tools/demo_deck.py`; the first slide also shows the address invariant.team and its QR code (`QR_PATH`, made with
+segno). The slide `#powered` sets the 72 H100 GPUs of the RL training (`FACTS['rl_zero_gpus']`, Olmo 3 paper, Table
+49) beside the photo and name of the cook who fed the team. The two photos (cook, meditation) are the strings `COOK`
+and `MEDITATE` in `tools/demo_photos.py`, with her name in `COOK_NAME`,
 each a `data:image/jpeg;base64,...` URI (the deploy ships only `tools/*.py`); while one is empty its slide shows an
 empty frame. Slides 4 and 7 show the Design page's picture and the idea tree of `/demo/ali/slide2` in an iframe of
 `/demo/fig/harness` and `/demo/fig/tree`: those pages with their header, words column and key hidden
 (`demo_deck.FIGS`). The slide `#sponsors` shows the scene of `/exa` and the memory scene of `/pastdev` side by side in iframes of
 `/demo/fig/exa` and `/demo/fig/pastdev` (those pages with everything but the scene hidden; the dark deck shows them
-inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. Every number is read when the page is built: the finish dial from
+inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. The slide `#finding` shows `/demo/fig/fixes` (`tools/demo_fixes.py`): one MATH-500 problem
+answered four ways, each answer a glass sheet on a step as high as its configuration's score (base model, 3 opening
+tokens, sampling at T 1.0, 8 directions in the weights), with every quoted word checked against its run by
+`PYTHONPATH=.:tools python3 tools/demo_fixes.py`. Every number is read when the page is built: the cut-off answers from
 `tools/finding_the_finish_dial.py` (`DATA['cells']`), the comparison with Karpathy's autoresearch loop from
 `FACTS['auto_research_comparison']` in `tools/demo_facts.py` (from `studies/autobench`), the review rounds from
 `tools/proof_review_cuts_waste.py`, the links of the idea tree from `tools/demo_ali_data.py` (counted as
@@ -476,8 +487,7 @@ MATH-500 score of the untrained base as a step line over board time above the di
 record tied to the result that set it and the record steps as rows in the board's plain words. The arrow keys change
 the slide. `tools/demo_ali.py` holds the three pages and `tools/demo_ali_data.py` every number on them. The data file
 is written by `python3 studies/basins/analysis/slide_data.py <run folder>` from one run of the swarm idea map
-(`studies/basins/results/swarm/main-03` on the branch `ali/basins`: 218 board items at 04:08 UTC on 15 Nov; its
-`map.json` is not committed) and from the board's score rows, read from `/data` at the time each slide names. The
+(`studies/basins/results/swarm/main-04` on the branch `ali/basins`: 515 board items at 19:42 UTC on 15 Nov) and from the board's score rows, read from `/data` at the time each slide names. The
 record steps follow the rule of `tools/climb.py`. To refresh the numbers, run the script again and merge.
 
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the

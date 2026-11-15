@@ -1,0 +1,8 @@
+{"forecasts": [
+{"mechanism": "run-07/f2-m02", "readout": "r11-m01-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-07/f2-m02", "readout": "r11-m02-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-07/f2-m02", "readout": "r11-n01-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-07/f2-m02", "readout": "r11-n01-r2", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-07/f2-m02", "readout": "r11-n02-r1", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"mechanism": "run-07/f2-m02", "readout": "r11-n02-r2", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

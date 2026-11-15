@@ -137,7 +137,9 @@ def main():
     ap.add_argument("--model", choices=sorted(MODELS))
     ap.add_argument("--model-path")
     ap.add_argument("--model-label")
-    ap.add_argument("--prompt", required=True, choices=("plain", "cue"))
+    ap.add_argument("--prompt", required=True, choices=("plain", "cue", "native"))
+    ap.add_argument("--native-tokenizer", help="with --prompt native: <repo>@<revision> of the model's own tokenizer; the problem text of the "
+                                               "study's template goes through its chat template (generation prompt included)")
     ap.add_argument("--set", required=True, choices=("math500", "hard328", "hard72", "hardmatch"))
     ap.add_argument("--temperature", type=float, required=True)
     ap.add_argument("--top-p", type=float, required=True)
@@ -196,6 +198,17 @@ def main():
     if a.set == "math500":
         n13 = json.loads((D4 / "prompt_ids.json").read_text())
         assert n13["pair"] == "pair1" and pids == n13["ids"][: len(pids)], "G-TEMPLATE: MATH-500 prompt ids differ from n13's"
+    native_end = None
+    if a.prompt == "native":                # the model's own chat format instead of the study's raw template; same token ids, checked
+        nrepo, nrev = a.native_tokenizer.split("@")
+        ntok = AutoTokenizer.from_pretrained(snapshot_download(nrepo, revision=nrev, allow_patterns=["*.json", "*.jinja", "*.txt"]))
+        pids = [[int(i) for i in ntok.apply_chat_template([{"role": "user", "content": S.TEMPLATE[fz["template"]].format(problem=p["problem"])}],
+                                                          tokenize=True, add_generation_prompt=True, return_dict=False)] for p in probs]
+        assert tok.decode(pids[0], skip_special_tokens=False) == ntok.decode(pids[0], skip_special_tokens=False), "the two tokenizers read the ids differently"
+        native_end = int(ntok.convert_tokens_to_ids("<|im_end|>"))
+        m["config"].update(native_prompt_example=ntok.decode(pids[0], skip_special_tokens=False), native_end_id=native_end)
+    else:
+        assert a.native_tokenizer is None
     if a.shard:
         k, n_shards = (int(x) for x in a.shard.split("/"))
         assert 0 <= k < n_shards, f"--shard {a.shard}: k must be in 0..N-1"
@@ -262,6 +275,9 @@ def main():
         if shots and not a.dry_run:             # engine.add refuses stop strings (the study's neutral-sampling check), so add directly
             engine.engine.add_request(r["rid"], {"prompt_token_ids": r["ids"]}, engine.SP(
                 **{**J.BASE_SAMPLING, **r["sampling"]}, max_tokens=r["max_tokens"], seed=r["seed"], stop=[SHOT_STOP]))
+        elif native_end is not None and not a.dry_run:      # the chat format may end a turn with <|im_end|> instead of the stop id
+            engine.engine.add_request(r["rid"], {"prompt_token_ids": r["ids"]}, engine.SP(
+                **{**J.BASE_SAMPLING, **r["sampling"], "stop_token_ids": [S.STOP_ID, native_end]}, max_tokens=r["max_tokens"], seed=r["seed"]))
         else:
             engine.add(r["rid"], r["ids"], r["sampling"], r["seed"], r["max_tokens"])
 
@@ -295,10 +311,15 @@ def main():
         while engine.has_unfinished():
             for rid, out_ids, lps, fr in engine.step():
                 req = live.pop(rid)
+                ended_im_end = native_end is not None and bool(out_ids) and out_ids[-1] == native_end
+                if ended_im_end:
+                    out_ids = list(out_ids[:-1]) + [S.STOP_ID]
                 shot_stop = bool(shots) and fr == "stop" and S.STOP_ID not in out_ids
                 if shot_stop:
                     out_ids, lps = cut_at_shot_stop(tok, out_ids, lps)
                 rec = J.record(tok, req, out_ids, lps, fr)
+                if native_end is not None:
+                    rec["ended_im_end"] = ended_im_end
                 rec.update(R.grade_v3(req["gold"], rec["text"]))
                 n_gen = rec["n_new"]                                        # sampled-token probabilities (raw, before truncation): min-p check
                 rec.update(n_tok_p_lt_1e2=sum(1 for x in lps[:n_gen] if x < LOG_1E2), n_tok_p_lt_1e3=sum(1 for x in lps[:n_gen] if x < LOG_1E3),

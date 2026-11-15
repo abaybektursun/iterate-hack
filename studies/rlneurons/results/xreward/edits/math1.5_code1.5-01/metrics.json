@@ -1,0 +1,86 @@
+{
+ "status": "done",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "math1.5_code1.5",
+  "prompt": "cue",
+  "set": "hard328",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 3000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/runs/abaybektursun-1115-130320-3e7b",
+  "dry_run": false,
+  "commit": "7620e5953c3c85dbfaba1bf5b005aebc224ac408",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 328,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "commit": "7620e5953c3c85dbfaba1bf5b005aebc224ac408",
+ "job_id": "abaybektursun-1115-130320-3e7b",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T19:06:50Z",
+ "updated_utc": "2026-11-15T19:37:41Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 56679,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 18432,
+  "load_s": 87.40037059783936,
+  "model_dir": "/tmp/theta",
+  "tok_dir": "/__modal/volumes/vo-rul9XKaAuhEZE7QxFIdPN3/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 328,
+  "tok_p_lt_1e2": 28898,
+  "tok_p_lt_1e3": 6625,
+  "correct_v3": 191,
+  "correct_v1": 191,
+  "cap_hits": 4,
+  "loop_A": 0,
+  "generated_tokens": 2670987,
+  "restarts": 0,
+  "n_planned": 328,
+  "mean_generated_tokens": 8143.253048780488,
+  "generation_s": 1756.6858940124512,
+  "tokens_per_s": 1520.4693161730759
+ },
+ "memory": {
+  "gpu_memory_used_mib": 129071,
+  "gpu_memory_total_mib": 143771,
+  "gpu": "NVIDIA H200"
+ },
+ "wall_s": 1850.9033675193787
+}
