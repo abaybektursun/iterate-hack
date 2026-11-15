@@ -1,0 +1,21 @@
+Jobs of sameraslan, last 1.1 h:  id  state  gpu  wait  run  command
+  sameraslan-1114-220803-2a56  done  NVIDIA H100   0.6  48.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220813-f46b  done  NVIDIA H100   3.1  47.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220821-7858  done  NVIDIA H100   10.0  28.7  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220830-d05c  done  NVIDIA H100   13.9  25.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220942-7014  cancelled  NVIDIA H100   24.7  16.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220952-aa97  running  NVIDIA H100   25.3  38.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-221130-eb90  running  NVIDIA H100   31.3  31.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-221138-a65c  done  NVIDIA H100   35.4  25.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-223704-bee0  running  NVIDIA H100   11.2  25.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-224752-36e7  died: RuntimeError: there are open files preventing the operation: path sameraslan-1114-220942-7014/log is open from '/bin/sh -c bash studie  NVIDIA H100   2.6  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-225232-b300  died: RuntimeError: there are open files preventing the operation: path sameraslan-1114-220942-7014/log is open from '/bin/sh -c bash studie  NVIDIA H100   0.1  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-225351-82fa  died: RuntimeError: there are open files preventing the operation: path sameraslan-1114-220942-7014/log is open from '/bin/sh -c bash studie  NVIDIA H100   0.0  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-225555-5d2f  running  NVIDIA H100   0.0  18.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  13 jobs, 4 failed or cancelled; median wait 10.0; 305.1 container minutes, 16.1 of them in failed or cancelled jobs
+
+Work of sameraslan, last 1.1 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-c030d0  claude/missing-findings-pages-585a15  -  -  -  6  0  0  Two finding page changes asked by Samer: /finding/opening-cu
+  work-fc23b4  claude/logo-integration-architecture-c3eb77  -  -  -  12 (open)  0  0  Design page (tools/architecture.py): past.dev and Exa logos 
+
+Team, last 1.1 h: claim to close median 38 min, upper quartile 124 min, over 8 work items closed by 3 people; 18 results, 16.4 per hour.

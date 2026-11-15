@@ -1,0 +1,11 @@
+== part B after the change: git pull/merge commands through the PreToolUse hooks (hooktest.py)
+PreToolUse hooks for Bash: 1
+session 05:31:19: refused [2] | ls meta meta/loop 2>/dev/null | head -20; git pull -q origin main 2>&1 | tail -2; git log 
+session 06:10:58: refused [2] | git add AGENTS.md README.md infra/monitor/README.md tools/board.py tools/climb.py tools/se
+session 07:08:29: refused [2] | git fetch -q origin; git rev-list --count HEAD..origin/main; git diff HEAD...origin/main -
+session 07:11:01: refused [2] | git merge origin/main 2>&1 | tail -3; git status --short | grep -v '^[AM] ' | head -5; pyt
+control plain pull: allowed [0] | git pull origin main
+control pull then log piped: allowed [0] | git pull -q origin main && git log --oneline | head -3
+control pull or-else: allowed [0] | git pull origin main || echo failed
+control piped log: allowed [0] | git log --oneline -5 | head
+control piped merge: refused [2] | git merge origin/main 2>&1 | tail -3
