@@ -3261,6 +3261,25 @@ all on problems the cued base already solves in some samples (47 gained, 44 of t
 | `paper-first-steps/figs.py`, `fig_curve.pdf` | The figure, drawn from `facts.json`. Run: `python studies/rlneurons/paper-first-steps/figs.py`. |
 | `paper-first-steps/paper.tex`, `refs.bib`, `fonts/` | Source; build with `tectonic paper.tex` in the folder. |
 
+## Paper: No Early Warning (`paper-no-warning/`, board work-184476)
+
+A 4-page paper: `paper-no-warning/no-early-warning.pdf`, served at https://monitor.invariant.team/paper/no-early-warning.pdf.
+Claim (MATH-500, n = 500, base + cue, 4 samples, T 1.0 / top-p 1.0, cap 16,384, grader v3; 150 problems with both
+outcomes, 478 pairs): a perfect critic at token 1,000 would lift the base from 410.5 to at most 459.2 [447.9, 469.9]
+at 4,013 tokens per problem (RL 460.0), but within a problem the best probe cell scores AUROC 0.571 [0.509, 0.634]
+(340 pairs) and its restart policy gains 0.8 points [-0.7, 2.4] over random stopping. Length carries the signal later:
+which attempts have ended scores 0.572 [0.523, 0.619] at token 4,000, final length 0.680 [0.620, 0.738], agreement with
+the other three samples 0.893 [0.855, 0.929]. Restarting any attempt still running at token 4,000 gains 1.15 points
+[0.60, 1.73] at 4,886 tokens. The within-problem control is published (Bulut, arXiv 2609.03436, to 512 tokens).
+
+| File | What it is |
+|---|---|
+| `paper-no-warning/build_facts.py` | Recomputes length, agreement, text signs, ceilings and replays from the committed rows (`results/day1_3/`), copies the probe numbers from `results/critic/probe-02/metrics.json`, checks 64 values against stored readouts, writes `facts.json` and `examples.json`. Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python studies/rlneurons/paper-no-warning/build_facts.py`. |
+| `paper-no-warning/facts.json`, `examples.json` | Every number in the paper with its source; one problem with a right and a wrong sample. |
+| `paper-no-warning/NOTES.md` | Definitions, arms, caveats, what could not be recomputed. |
+| `paper-no-warning/figs.py`, `fig_warning.pdf` | The figure, drawn from `facts.json`. |
+| `paper-no-warning/paper.tex`, `refs.bib`, `fonts/` | Source; build with `tectonic paper.tex` in the folder. |
+
 ## How to run
 
 Laptop checks (no GPU, no weights):
