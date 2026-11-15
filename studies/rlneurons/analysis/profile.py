@@ -424,7 +424,8 @@ def cmd_predict():
 
 RULES = ("Lc", "L1", "P", "profile", "profile_corrected")
 # cell -> (observed right of 328, where it was read); filled in after predict-01 was pushed
-OBSERVED = {}
+SRC = "board result-d9d6f3 (posted 05:48:33 UTC, after predict-01 was pushed at 05:47:01); jobs sameraslan-1114-204845-1055 (cue), -204852-d527 (plain); run folders not committed when scored"
+OBSERVED = {"hard328 Think-SFT, cue, one sample": (219, SRC), "hard328 Think-SFT, plain, one sample": (203, SRC)}
 
 
 def cmd_score():
