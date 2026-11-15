@@ -1,5 +1,6 @@
 """normband readout (specs/SPEC_normband.md): the Math 3.1 top-8 edit in layers 22-31 scaled up and in layers 0-10 scaled down to
-the other band's layer-24 activation shift. hard328 (n 328), cue, T 1.0 / top-p 1.0, cap 16,384, grader v3, sample 1.
+the other band's layer-24 activation shift. hard328 (n 328), cue, T 1.0 / top-p 1.0, cap 16,384, grader v3, sample 1. Also the rank cells: direction 1 alone and
+directions 2-8, each at 1.5, all layers, samples 0 and 1.
 
     uv run --no-project --with numpy python -m studies.rlneurons.analysis.normband_readout
 
@@ -19,14 +20,21 @@ from studies.rlneurons.analysis.shard_join import join
 
 OUT = STUDY / "results" / "xreward" / "normband"
 D3 = STUDY / "results" / "xreward" / "depth3"
-SAMPLE = 1
-# cell -> (job of shard 0/2, job of shard 1/2); wsp_edit arguments in EDIT
+# cell -> {sample: (job of shard 0/2, job of shard 1/2)}; wsp_edit arguments in EDIT. Sample s has seed SEED0 + 10000 s + problem.
 NEW = {}
 EDIT = {"top8x4.5_L22-31_math31": "--recipe top8 --layers 22-31 --scale 4.5", "top8x0.2_L0-10_math31": "--recipe top8 --layers 0-10 --scale 0.2",
-        "top8x3_L22-31_math31": "--recipe top8 --layers 22-31 --scale 3.0"}
+        "top8x3_L22-31_math31": "--recipe top8 --layers 22-31 --scale 3.0", "top1x1.5_math31": "--recipe top8 --k 1 --scale 1.5",
+        "top8x1.5_d2-8_math31": "--recipe top8 --skip 1 --scale 1.5"}
 REFS = {"base_cue": [STUDY / "results" / "day1_3" / "hard328_base_cue_s4r2-01" / "rows.jsonl"],
+        "top8x1.5_math31": [STUDY / "results" / "xreward" / "dial15_s4_vs_base_cue-01" / "rows.jsonl"],
         "top8x1.5_L0-10_math31": [D3 / "sample0_rows" / "top8x1.5_L0-10_math31.jsonl"] + [D3 / f"top8x1.5_L0-10_math31_s{s}-01" / "rows.jsonl" for s in (1, 2, 3)],
-        "top8x1.5_L22-31_math31": [D3 / "sample0_rows" / "top8x1.5_L22-31_math31.jsonl", D3 / "top8x1.5_L22-31_math31_s1-01" / "rows.jsonl"]}
+        "top8x1.5_L22-31_math31": [D3 / "sample0_rows" / "top8x1.5_L22-31_math31.jsonl", D3 / "top8x1.5_L22-31_math31_s1-01" / "rows.jsonl"],
+        "top8x1.5_d2-8_math31": [D3 / "top8x1.5_d2-8_math31_s1-01" / "rows.jsonl"]}
+# (cell, reference): per problem, mean over the cell's samples minus mean over the reference's samples
+CONTRASTS = [("top8x4.5_L22-31_math31", "top8x1.5_L0-10_math31"), ("top8x4.5_L22-31_math31", "top8x1.5_L22-31_math31"),
+             ("top8x3_L22-31_math31", "top8x1.5_L22-31_math31"), ("top8x0.2_L0-10_math31", "top8x1.5_L22-31_math31"),
+             ("top8x0.2_L0-10_math31", "top8x1.5_L0-10_math31"), ("top1x1.5_math31", "top8x1.5_d2-8_math31"),
+             ("top1x1.5_math31", "top8x1.5_math31"), ("top8x1.5_d2-8_math31", "top8x1.5_math31")]
 
 
 def main():
@@ -37,14 +45,15 @@ def main():
                 if r["attempt"] == 0:
                     cells.setdefault(cell, {}).setdefault(r["sample"], []).append(r)
         cells[cell] = {s: compact(rows, s) for s, rows in cells[cell].items()}
-    assert [len(cells[c]) for c in REFS] == [4, 4, 2], {c: sorted(cells[c]) for c in REFS}
-    for cell, jobs in NEW.items():
+    assert [len(cells[c]) for c in REFS] == [4, 4, 4, 2, 1], {c: sorted(cells[c]) for c in REFS}
+    for cell, sample, jobs in ((c, s, j) for c, ss in NEW.items() for s, j in ss.items()):
         m, rows = join([(json.loads((RUNS / j / "metrics.json").read_text()), read(RUNS / j / "answers.jsonl")) for j in jobs])
         c = m["config"]
         assert (c["model_label"], c["seed"], c["prompt"], c["set"], c["temperature"], c["top_p"], c["max_tokens"]) == \
-            (cell, SEED0 + 10000 * SAMPLE, "cue", "hard328", 1.0, 1.0, 16384), c
-        cells[cell] = {SAMPLE: compact(rows, SAMPLE)}
-        d = OUT / f"{cell}_s{SAMPLE}-01"
+            (cell, SEED0 + 10000 * sample, "cue", "hard328", 1.0, 1.0, 16384), c
+        assert sample not in cells.get(cell, {}), (cell, sample)
+        cells.setdefault(cell, {})[sample] = compact(rows, sample)
+        d = OUT / f"{cell}_s{sample}-01"
         d.mkdir(parents=True)
         cmd = (f"wsp_edit {EDIT[cell]} --other math31 --rounding stochastic --seed 0, then run_cell --model-label {cell} --prompt cue --set hard328 "
                f"--temperature 1.0 --top-p 1.0 --seed {c['seed']} --shard k/2 (k = 0, 1), joined by analysis/shard_join.join")
@@ -52,7 +61,7 @@ def main():
                                                 "raw_answers": [f"runs/{j}/answers.jsonl (uv run tools/gpu.py get {j})" for j in jobs],
                                                 "edit": json.loads((RUNS / jobs[0] / "edit.json").read_text())["totals"]}, indent=1) + "\n")
         (d / "metrics.json").write_text(json.dumps(m, indent=1) + "\n")
-        (d / "rows.jsonl").write_text("".join(json.dumps(r) + "\n" for r in cells[cell][SAMPLE]))
+        (d / "rows.jsonl").write_text("".join(json.dumps(r) + "\n" for r in cells[cell][sample]))
         rows = sorted(rows, key=lambda r: r["problem_index"])
         right = next((r for r in rows if r["score_v3"] == 1), None)
         wrong = next((r for r in rows if r["score_v3"] == 0 and not r["cap_hit"]), None) or next(r for r in rows if r["score_v3"] == 0)
@@ -71,15 +80,14 @@ def main():
         right, cap = arr[cell]["right"], arr[cell]["cap"]
         t = {"samples": sorted(cells[cell]), "right": [int(x) for x in right.sum(1)], "right_mean": round(right.sum(1).mean(), 2),
              "cap_hits": [int(x) for x in cap.sum(1)], "cap_hits_mean": round(cap.sum(1).mean(), 2)}
-        if cell in NEW:
-            for ref in REFS:
-                t[f"minus_{ref}"] = {"reference_samples": sorted(cells[ref]),
-                                     **{key: diff(arr[cell][key].mean(0), arr[ref][key].mean(0), rng) for key in ("right", "cap")}}
+        for c, ref in [(cell, "base_cue")] * (cell != "base_cue") + [x for x in CONTRASTS if x[0] == cell]:
+            t[f"minus_{ref}"] = {"reference_samples": sorted(cells[ref]),
+                                 **{key: diff(arr[cell][key].mean(0), arr[ref][key].mean(0), rng) for key in ("right", "cap")}}
         table[cell] = t
     out = {"spec": "studies/rlneurons/specs/SPEC_normband.md", "set": "hard328, n 328", "settings": "cue, T 1.0 / top-p 1.0, cap 16,384, grader v3 (score_v3 of run_cell)",
            "seed_rule": f"{SEED0} + 10000 * sample + problem index", "edits": EDIT,
            "differences": f"per problem, mean over the cell's samples minus mean over the reference's samples; points of 328; 95 % interval from {B} resamples of the problems (numpy seed {RNG})",
-           "sources": {**{k: [str(p) for p in v] for k, v in REFS.items()}, **{k: [f"runs/{j}" for j in v] for k, v in NEW.items()}},
+           "sources": {**{k: [str(p) for p in v] for k, v in REFS.items()}, **{f"{k} sample {s}": [f"runs/{j}" for j in js] for k, ss in NEW.items() for s, js in ss.items()}},
            "cells": table}
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / "readout.json").write_text(json.dumps(out, indent=1) + "\n")

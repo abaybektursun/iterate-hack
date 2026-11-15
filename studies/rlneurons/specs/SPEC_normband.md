@@ -82,3 +82,21 @@ in order:
 
 P1, P2 now apply to A3, P4 to A2 (between L22-31 at 1.5 and A3). The decision rule reads A3 in place of A6; if A3 is broken (right
 < 150 or cap hits > 100), A2 decides. Weight size of A3: add_norm 3.61 (squared 13.0) against L0-10 at 1.5: 1.06 (1.13), 11.5 times.
+
+## Amendment 2 (before these runs): rank cells, so that all 8 = direction 1 + directions 2-8 at equal scale and seeds
+
+Requested by the coordinator after the band jobs were submitted. Existing: direction 1 alone (`top8 --k 1`) only at 1, 2, 3
+(sample 0: 181/51, 184/23, 168/10 right/cap hits, `results/xreward/edits/top1*_math31-01/`); directions 2-8 at 1.5 (`top8 --skip 1
+--scale 1.5`) only sample 1 (183/69, `results/xreward/depth3/top8x1.5_d2-8_math31_s1-01/`). All layers, same settings as above.
+
+| Cell | Arguments | Sample (seed) |
+|---|---|---|
+| R1 `top1x1.5_math31` | `--recipe top8 --k 1 --scale 1.5` | 1 (3010000), pairs with directions 2-8 sample 1 |
+| R2 `top1x1.5_math31` | same | 0 (3000000) |
+| R3 `top8x1.5_d2-8_math31` | `--recipe top8 --skip 1 --scale 1.5` | 0 (3000000) |
+
+- P5 (filed by the coordinator). Direction 1 at 1.5 finishes more than it adds right answers: top1x1.5 cap hits minus base < -8
+  points (R1 and R2 pooled), and top1x1.5 right minus directions 2-8 right (samples 0 and 1, paired) < -2 points. Refuted if
+  direction 1 at 1.5 is within 2 points of directions 2-8 in right answers, or above.
+- My forecast from the direction-1 dial (1x 181, 2x 184 right; 51, 23 cap hits): top1x1.5 about 182 right and 35 cap hits per
+  sample, so the right-answer part of P5 is at risk (directions 2-8 had 183). Directions 2-8 sample 0: 180 to 186 right, 60 to 75 cap hits.
