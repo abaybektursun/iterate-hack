@@ -22,6 +22,9 @@ rebase    Control for the flush: one growing chat as single, but every `period` 
 fnf_assign  Ours: fnf, but before each fork one call to `list_model` lists K different methods, given the task,
           the best program and the methods assigned before with their best scores. Each fresh branch is told to
           implement one of them. The list calls are extra to the budget; their cost is in metrics.json (list_usd).
+single_list  Control for fnf_assign: one growing chat as single, no fork and no flush. At the fnf fork points (0, 33
+          and 66 % of the budget) the same list call is made and its K methods are shown to the chat, which is
+          asked to pick one. Separates the method list from the fork structure.
 tree      Archive tree (DGM 2505.22954 parent rule): every step picks a parent from all valid submissions with weight
           sigmoid(10 * (rank score - 0.5)) / (1 + children), and starts a fresh chat from it.
 basin     Ours: K agents with growing chats; every `check` submissions an online judge groups the recent ideas into
@@ -86,9 +89,12 @@ programmer can implement. Reply with JSON only: ["<method 1>", ..., "<method {k}
 def list_methods(run, k, list_model, code, score, fork_no):
     done = {}
     for a in run.assignments:
+        if a["branch"] is None:  # single_list: offered to one chat, so no score belongs to one method
+            done[a["method"]] = "offered before"
+            continue
         rows = [r["score"] for r in run.archive if r["branch"] == a["branch"] and r["valid"]]
-        done[a["method"]] = max(rows) if rows else "no valid program"
-    ledger = "\n".join(f"- {m} (best {v})" for m, v in done.items()) or "(none yet)"
+        done[a["method"]] = f"best {max(rows)}" if rows else "no valid program"
+    ledger = "\n".join(f"- {m} ({v})" for m, v in done.items()) or "(none yet)"
     msg = LIST_PROMPT.format(spec=run.task.spec, score=score, code=code, ledger=ledger, k=k)
     text, usage = chat([{"role": "user", "content": msg}], list_model)
     run.list_usd += cost(usage, list_model)
@@ -96,6 +102,26 @@ def list_methods(run, k, list_model, code, score, fork_no):
     assert len(methods) == k and all(isinstance(m, str) for m in methods), f"bad method list: {text[:400]}"
     print(f"[fnf_assign fork {fork_no}] {list_model} methods: {methods}", flush=True)
     return methods
+
+
+def single_list(run, k=4, forks=(0, 1 / 3, 2 / 3), list_model=None, **_):
+    points = [round(f * run.budget) for f in forks]
+    s, parent = None, "start"
+    while run.left() > 0:
+        if points and len(run.archive) >= points[0]:
+            fork_no = len(forks) - len(points)
+            points.pop(0)
+            code, score, _ = run.base()
+            methods = list_methods(run, k, list_model or run.model, code, score, fork_no)
+            note = ("Methods to consider for your next versions (pick one):\n"
+                    + "\n".join(f"{i + 1}. {m}" for i, m in enumerate(methods)) + "\n")
+            if s is None:
+                s = [{"role": "user", "content": first_message(run.task, code, score, note)}]
+            else:
+                s[-1]["content"] += "\n\n" + note
+            run.assignments += [{"fork": fork_no, "branch": None, "method": m, "list_model": list_model or run.model}
+                                for m in methods]
+        parent = run.step(s, "a0", parent)["id"]
 
 
 def parallel(run, k=4, **_):
@@ -263,5 +289,5 @@ def tree(run, seed=0, **_):
         run.step(fresh(run, base, score), "t", parent)
 
 
-STRATEGIES = {"rebase": rebase, "fnf_assign": fnf_assign, "single": single, "parallel": parallel, "fnf": fnf, "fnf_keep": fnf_keep, "forget": forget,
+STRATEGIES = {"single_list": single_list, "rebase": rebase, "fnf_assign": fnf_assign, "single": single, "parallel": parallel, "fnf": fnf, "fnf_keep": fnf_keep, "forget": forget,
               "basin": basin, "randflush": randflush, "tree": tree}
