@@ -75,6 +75,7 @@ import demo
 import exa_page
 import findings
 import glossary
+import home
 import pastdev
 import psychosis
 import sitekit
@@ -217,12 +218,23 @@ def detail(item_id):
             "thread": board.rows(KeyConditionExpression=Key("pk").eq(f"chan#{item_id}"))}
 
 
-# The paper of the finish dial (studies/rlneurons/paper/): beside this file on AWS (infra/monitor/deploy.sh), in its study here.
+# The papers (studies/<study>/paper/<name>.pdf), served at /paper/<name>.pdf: beside this file on AWS (infra/monitor/deploy.sh), in their study here.
 # The site lab's static files: beside the code in the Lambda zip (infra/monitor/deploy.sh), in the study in the repository.
 LAB = (Path(__file__).with_name("sitelab"), Path(__file__).parent.parent / "studies/sitelab")
 LAB_FILE = re.compile(r"(prototypes/[a-z-]+/)?(index\.html|data\.json)?")
-PAPER = (Path(__file__).with_name("the-finish-dial.pdf"),
-         Path(__file__).parent.parent / "studies/rlneurons/paper/the-finish-dial.pdf")
+PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / folder / name)
+          for name, folder in (("the-finish-dial.pdf", "rlneurons/paper"), ("theories-on-trial.pdf", "theory/paper"),
+                               ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"))}
+
+
+# The home page (home.py) is at / and the board at /board. The page modules were written when the board was at /, so
+# their links to it are rewritten as a page is sent: a link to / goes to /board, unless it is the name "Invariant",
+# and the address of a board item (/#result-8b1c48) goes to /board#result-8b1c48. The name in each header leads home.
+HOME_LINK = re.compile(r'href="/"(?=[^>]*>(?!Invariant))')
+NAME_LINK = ('<h1 class="name">Invariant</h1>', '<h1 class="name"><a href="/" style="color:inherit;font-weight:inherit">Invariant</a></h1>')
+HOME_PAGE = home.PAGE.replace("__COUNTS__", json.dumps({
+    "findings": len(FINDINGS), "proof": len(PROOFS),
+    "lab": max(len(list((d / "prototypes").glob("*/index.html"))) for d in LAB)}))
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -230,7 +242,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def send(self, status, kind, body, headers=()):
         if kind == "text/html":  # every page gets the tab icon here, so no page module holds it
-            body = body.replace("<title>", ICON_LINK + "<title>", 1)
+            body = HOME_LINK.sub('href="/board"', body.replace("<title>", ICON_LINK + "<title>", 1)).replace('"/#', '"/board#').replace(*NAME_LINK)
         data = body if isinstance(body, bytes) else body.encode()
         tag = f'"{hashlib.blake2b(data, digest_size=16).hexdigest()}"'  # from the content, so an unchanged board answers 304
         if status == 200 and self.headers.get("If-None-Match") == tag:
@@ -253,6 +265,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split("?")[0]
         if path == "/":
+            return self.send(200, "text/html", HOME_PAGE)
+        if path == "/board":
             return self.send(200, "text/html", PAGE)
         if path == "/demo":
             return self.send(200, "text/html", demo.PAGE)
@@ -284,8 +298,8 @@ class Handler(BaseHTTPRequestHandler):
             if name.endswith(".html"):
                 return self.send(200, "text/html", found[0].read_text())
             return self.send(200, "application/json", found[0].read_bytes())
-        if path == "/paper/the-finish-dial.pdf":
-            found = [p for p in PAPER if p.exists()]  # a deploy without the file answers 404 and the other pages stay up
+        if path.startswith("/paper/") and path[7:] in PAPERS:
+            found = [p for p in PAPERS[path[7:]] if p.exists()]  # a deploy without the file answers 404 and the other pages stay up
             return self.send(200, "application/pdf", found[0].read_bytes()) if found else self.send(404, "text/plain", f"no page {path}")
         if path != "/data" and not path.startswith("/data/"):
             return self.send(404, "text/plain", f"no page {path}")

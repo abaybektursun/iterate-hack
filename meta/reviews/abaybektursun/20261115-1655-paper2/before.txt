@@ -1,0 +1,56 @@
+16:15:58 spawn  Scout: new board results
+16:16:02 spawn  Scout: basins, jspace, cleanneurons
+16:16:07 spawn  Scout: autobench, metaharness, gpuprice
+16:16:13 spawn  Scout: theory engine
+16:16:21 spawn  Scout: the swarm itself
+16:16:29 spawn  Scout: overlooked gems in tierlist
+16:16:38 spawn  Scout: Think-SFT vs RL line
+16:16:46 spawn  Scout: rlneurons mid-tier gems
+16:17:14 notice Agent "Scout: new board results" finished
+16:17:28 notice Agent "Scout: theory engine" finished
+16:17:31 notice Agent "Scout: Think-SFT vs RL line" finished
+16:17:54 notice Agent "Scout: rlneurons mid-tier gems" finished
+16:17:58 notice Agent "Scout: overlooked gems in tierlist" finished
+16:18:52 notice Agent "Scout: the swarm itself" finished
+16:19:28 spawn  Judge: frontier scientist
+16:19:32 spawn  Judge: awe-struck newcomer
+16:19:35 spawn  Judge: practitioner founder
+16:19:39 spawn  Judge: hostile skeptic
+16:19:42 spawn  Judge: interpretability and AI-science
+16:19:46 notice Agent "Judge: awe-struck newcomer" finished
+16:19:49 notice Agent "Judge: practitioner founder" finished
+16:19:52 notice Agent "Judge: frontier scientist" finished
+16:20:48 spawn  Facts and data for theory paper
+16:21:00 spawn  Literature for theory paper
+16:21:14 spawn  GPU samples for step-100 cells
+16:22:32 notice Agent "Literature for theory paper" finished
+16:24:10 notice Agent "GPU samples for step-100 cells" is waiting on its own background work
+16:28:54 notice Agent "Facts and data for theory paper" finished
+16:29:52 spawn  Figures for theory paper
+16:32:11 notice Agent "Figures for theory paper" finished
+16:32:52 spawn  Review: number audit
+16:33:03 spawn  Review: hostile skeptic
+16:33:15 spawn  Review: description and citations
+16:33:25 spawn  Review: visuals and prose
+16:34:14 notice Agent "Review: hostile skeptic" finished
+16:34:25 notice Agent "Review: visuals and prose" finished
+16:37:19 notice Agent "Review: description and citations" finished
+16:38:31 notice Agent "Review: number audit" finished
+16:39:12 spawn  Figure fixes round 2
+16:42:27 spawn  Final check of draft 2
+16:46:09 notice Agent "Final check of draft 2" finished
+16:51:44 spawn  Facts and data for first-steps paper
+16:51:58 spawn  Literature for first-steps paper
+16:52:07 spawn  Team meta review after result
+16:55:03 notice Agent "Literature for first-steps paper" finished
+
+Board (uv run tools/board.py show work-184476): claimed 16:15:18Z; comment "paper 2 live" 16:50:42Z. Claim to live PDF: 35.4 min.
+Stages of paper 2 from the lines above (min): scouts and judges 16:15:58-16:20:21 4.4 | data layer 16:20:48-16:28:54 8.1 |
+figures 16:29:52-16:32:11 2.3 | four reviews 16:32:52-16:38:31 5.65 (number audit the last to end) | rewrite and figure fixes
+to 16:42:27 3.9 | final check to 16:46:09 3.7 | last fixes, build, commit, deploy to 16:50:42 4.6.
+Reviews to live: 17.8 of 35.4 min. The data-layer brief (16:20:48) names result files and README, no prompt file; the
+review briefs (16:33) are the first to name studies/theory/lib/prompts/*.md.
+Number audit result (16:38:31): 13 problems in draft 1, among them "84 %" (197/236 = 83.47 %), "-25.6" (sum -25.549),
+"54 of 55" (files give 57 of 58), "two earlier budgets" (three), "14 carried" (15).
+The number the change is meant to move: minutes from draft to a list of wrong numbers (5.65, 1 run, one subagent).
+Must not change: the 13 problems are still found.

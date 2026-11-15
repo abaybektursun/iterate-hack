@@ -1,0 +1,248 @@
+{
+ "theory": "r5-m10-rival",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Temperature sensitivity of the non-self-opened plain register: accuracy of non-self-opened plain base answers at T 0.6 minus accuracy of non-self-opened plain base answers at T 1.0, on the same problems.",
+   "recipe": "Files: S3 r3/base-01/out/P_math500.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/P_math500.jsonl; base, plain, T 0.6 / top-p 0.95) and S3 T3.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl; base, plain, T 1.0). In P_math500 keep, for each problem_index, only the row with the smallest value of the sample column. In T3 keep one row per problem_index. Score every kept row with grader v3 (studies/rlneurons/grader/rln4_grader_v3.py) from its text and gold. A cap_hit row keeps whatever score v3 gives, and an empty extraction counts 0. A row is self-opened if the first 60 characters of its text field contain the substring '\\nOkay' (a newline immediately followed by 'Okay'), else non-self-opened. Let S = the problem_index values present in both files whose kept rows are non-self-opened in both files. A06 = mean v3 score of the P_math500 rows in S. A10 = mean v3 score of the T3 rows in S. Report A06 - A10. Problems missing from either file are dropped.",
+   "unit": "difference of fractions of problems",
+   "value": 0.29,
+   "low": 0.17,
+   "high": 0.41,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": 0.15767634854771778,
+   "n": null,
+   "interval": null,
+   "inside": false,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 1,
+   "turn": 1
+  },
+  {
+   "k": 2,
+   "experiment": "How weak the non-self-opened plain register is when sampling is cooler: accuracy of non-self-opened plain base answers at T 0.6 minus accuracy of cued base answers at T 0.6 on the same problems.",
+   "recipe": "Files: S3 r3/base-01/out/P_math500.jsonl (base, plain, T 0.6 / top-p 0.95) and S3 r3/base-01/out/F_math500.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl; base, cue, T 0.6 / top-p 0.95). In each file keep, for each problem_index, only the row with the smallest value of the sample column. Score every kept row with grader v3 (studies/rlneurons/grader/rln4_grader_v3.py) from its text and gold. A cap_hit row keeps whatever score v3 gives, and an empty extraction counts 0. A P_math500 row is self-opened if the first 60 characters of its text field contain the substring '\\nOkay', else non-self-opened. Let S = the problem_index values whose kept P_math500 row is non-self-opened and which also have a kept F_math500 row. A = mean v3 score of the P_math500 rows in S. B = mean v3 score of the F_math500 rows in S. Report A - B. Problems missing from either file are dropped.",
+   "unit": "difference of fractions of problems",
+   "value": -0.1,
+   "low": -0.2,
+   "high": 0.0,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": -0.15540540540540537,
+   "n": null,
+   "interval": null,
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 2,
+   "turn": 1
+  },
+  {
+   "k": 3,
+   "experiment": "Accuracy gap between self-opened and non-self-opened plain base answers at T 0.6, within one file.",
+   "recipe": "File: S3 r3/base-01/out/P_math500.jsonl (base, plain, T 0.6 / top-p 0.95). Keep, for each problem_index, only the row with the smallest value of the sample column. Score each kept row with grader v3 (studies/rlneurons/grader/rln4_grader_v3.py) from its text and gold. A cap_hit row keeps whatever score v3 gives, and an empty extraction counts 0. A row is self-opened if the first 60 characters of its text field contain the substring '\\nOkay', else non-self-opened. Report (mean v3 score of the self-opened rows) - (mean v3 score of the non-self-opened rows). If either group is empty, report nothing.",
+   "unit": "difference of fractions of problems",
+   "value": 0.09,
+   "low": -0.04,
+   "high": 0.22,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": 0.20574986751457336,
+   "n": null,
+   "interval": null,
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 3,
+   "turn": 1
+  },
+  {
+   "k": 4,
+   "experiment": "On MATH-500 at T 1.0, plain base answers that do not self-open but contain a self-check marker later ('Wait' or 'Hmm'): their accuracy minus cued base accuracy on the same problems.",
+   "recipe": "Files: S3 T3.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl; base, plain, T 1.0) and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. If T3 holds more than one row for a problem_index, keep the first in file order. Score each kept T3 row with grader v3 (studies/rlneurons/grader/rln4_grader_v3.py) from its text and gold. A cap_hit row keeps whatever score v3 gives, and an empty extraction counts 0. A T3 row is self-opened if the first 60 characters of its text field contain the substring '\\nOkay' (newline immediately followed by 'Okay'). Let L = the problem_index values of T3 rows that are not self-opened and whose full text field contains the case-sensitive substring 'Wait' or the case-sensitive substring 'Hmm' (or both), restricted to problem_index values present in per_problem.json. A = mean v3 score of the T3 rows in L. B = mean of t1_right over the per_problem.json entries in L. Report A - B. If L is empty, report nothing.",
+   "unit": "difference of fractions of problems",
+   "value": -0.14,
+   "low": -0.3,
+   "high": 0.02,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": -0.07462686567164178,
+   "n": null,
+   "interval": null,
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 4,
+   "turn": 2
+  },
+  {
+   "k": 5,
+   "experiment": "On MATH-500 at T 1.0, within the plain base answers that do not self-open: accuracy of those containing 'Wait' or 'Hmm' minus accuracy of those containing neither.",
+   "recipe": "File: S3 T3.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl; base, plain, T 1.0). If more than one row exists for a problem_index, keep the first in file order. Score each kept row with grader v3 (studies/rlneurons/grader/rln4_grader_v3.py) from its text and gold. A cap_hit row keeps whatever score v3 gives, and an empty extraction counts 0. Drop rows that are self-opened (the first 60 characters of text contain the substring '\\nOkay'). Among the remaining rows, group M = rows whose full text contains the case-sensitive substring 'Wait' or the case-sensitive substring 'Hmm'; group N = all other remaining rows. Report (mean v3 score of M) - (mean v3 score of N). If either group is empty, report nothing.",
+   "unit": "difference of fractions of problems",
+   "value": 0.24,
+   "low": 0.07,
+   "high": 0.41,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": 0.35583146215823536,
+   "n": null,
+   "interval": null,
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 5,
+   "turn": 2
+  },
+  {
+   "k": 6,
+   "experiment": "On the harder clean 328 at T 1.0, plain base answers that do not self-open but contain 'Wait' or 'Hmm': their accuracy minus cued base accuracy on the same problems.",
+   "recipe": "Files: S3 r5/day1_hard328-01/abaybektursun-1114-132922-7ba0/answers.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-132922-7ba0/answers.jsonl; base, plain, T 1.0) and S3 r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base, cue, T 1.0). In each file, if more than one row exists for a problem_index, keep the row with the smallest attempt value (or, with no attempt field, the first in file order). Use the score_v3 column as the score; a null or missing score_v3 counts 0, and cap_hit rows keep their score_v3. A plain (7ba0) row is self-opened if the first 60 characters of its text field contain the substring '\\nOkay'. Let L = the problem_index values whose kept 7ba0 row is not self-opened and whose full text contains the case-sensitive substring 'Wait' or the case-sensitive substring 'Hmm', and which also have a kept e72c row. A = mean score_v3 of the 7ba0 rows in L. B = mean score_v3 of the e72c rows in L. Report A - B. If L is empty, report nothing.",
+   "unit": "difference of fractions of problems",
+   "value": -0.1,
+   "low": -0.26,
+   "high": 0.06,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": -0.10000000000000003,
+   "n": null,
+   "interval": null,
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 6,
+   "turn": 2
+  }
+ ],
+ "carried_from": "round-05",
+ "rows": [
+  {
+   "id": "r5-m10-rival:p1",
+   "k": 1,
+   "measured": 0.15767634854771778,
+   "value": 0.29,
+   "low": 0.17,
+   "high": 0.41,
+   "nulls": [
+    {
+     "value": 0.28,
+     "low": 0.16,
+     "high": 0.4
+    }
+   ],
+   "gain": -0.2393,
+   "inside": false,
+   "n": null,
+   "interval": null,
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  },
+  {
+   "id": "r5-m10-rival:p2",
+   "k": 2,
+   "measured": -0.15540540540540537,
+   "value": -0.1,
+   "low": -0.2,
+   "high": 0.0,
+   "nulls": [
+    {
+     "value": -0.1,
+     "low": -0.19,
+     "high": -0.01
+    }
+   ],
+   "gain": -0.0079,
+   "inside": true,
+   "n": null,
+   "interval": null,
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  },
+  {
+   "id": "r5-m10-rival:p3",
+   "k": 3,
+   "measured": 0.20574986751457336,
+   "value": 0.09,
+   "low": -0.04,
+   "high": 0.22,
+   "nulls": [
+    {
+     "value": 0.11,
+     "low": 0.02,
+     "high": 0.2
+    }
+   ],
+   "gain": 0.091,
+   "inside": true,
+   "n": null,
+   "interval": null,
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  },
+  {
+   "id": "r5-m10-rival:p4",
+   "k": 4,
+   "measured": -0.07462686567164178,
+   "value": -0.14,
+   "low": -0.3,
+   "high": 0.02,
+   "nulls": [
+    {
+     "value": -0.47,
+     "low": -0.6,
+     "high": -0.33
+    }
+   ],
+   "gain": 3.0,
+   "inside": true,
+   "n": null,
+   "interval": null,
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  },
+  {
+   "id": "r5-m10-rival:p5",
+   "k": 5,
+   "measured": 0.35583146215823536,
+   "value": 0.24,
+   "low": 0.07,
+   "high": 0.41,
+   "nulls": [
+    {
+     "value": -0.03,
+     "low": -0.15,
+     "high": 0.1
+    }
+   ],
+   "gain": 3.0,
+   "inside": true,
+   "n": null,
+   "interval": null,
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  },
+  {
+   "id": "r5-m10-rival:p6",
+   "k": 6,
+   "measured": -0.10000000000000003,
+   "value": -0.1,
+   "low": -0.26,
+   "high": 0.06,
+   "nulls": [
+    {
+     "value": -0.33,
+     "low": -0.47,
+     "high": -0.19
+    }
+   ],
+   "gain": 3.0,
+   "inside": true,
+   "n": null,
+   "interval": null,
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  }
+ ]
+}

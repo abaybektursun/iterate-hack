@@ -1,0 +1,908 @@
+{
+ "snapshot_utc": "2026-11-15T15:46:24",
+ "written_utc": "2026-11-15T16:07:51",
+ "forecasts": {
+  "reader-1": [
+   {
+    "id": "t01",
+    "value": 162,
+    "low": 150,
+    "high": 174,
+    "reason": "Random rank-8 edits at -1,1,2,3 gave 159/158/167/163 against base cue 164 (seed noise about 9), so the 1.5x random edit should land flat."
+   },
+   {
+    "id": "t02",
+    "value": 162,
+    "low": 145,
+    "high": 179,
+    "reason": "Think-SFT directions do not point along RL (cos ~0), so at Math's small edit norm they should act like a structured perturbation near base/random level, with a wider band because it could break or help a little."
+   },
+   {
+    "id": "t03",
+    "value": 55,
+    "low": 47,
+    "high": 63,
+    "reason": "On hard328 the 1.5x dial matched RL (203 vs 206, new samples 200.25 vs 200.0), so expect slightly under RL's fresh vote of 57."
+   },
+   {
+    "id": "t04",
+    "value": 48.5,
+    "low": 42.5,
+    "high": 54.5,
+    "reason": "The dial is level with RL on hard328 and its size was chosen there, so expect slightly under RL's fresh single mean of 50.5."
+   },
+   {
+    "id": "t05",
+    "value": 453,
+    "low": 445,
+    "high": 461,
+    "reason": "Vote over 4 is 446 with pass@4 467; Wang's majority curve adds about 2.5 points from 4 to 8 samples, and an odd k removes ties."
+   },
+   {
+    "id": "t06",
+    "value": 455,
+    "low": 447,
+    "high": 463,
+    "reason": "The vote curve flattens past 9 samples, so expect about 1-2 problems above the vote over 9."
+   },
+   {
+    "id": "t07",
+    "value": 168,
+    "low": 156,
+    "high": 181,
+    "reason": "The 16k score is about 161; of the ~75 base cap hits, extra tokens should rescue only a few because long base answers are right 17% of the time (RL gained +2, Think-SFT +23)."
+   },
+   {
+    "id": "t08",
+    "value": 161,
+    "low": 150,
+    "high": 172,
+    "reason": "Counting only answers finished within 16k makes this a fresh base-cue sample at seed 3000000 (stored 160-164, seed spread about 9)."
+   },
+   {
+    "id": "t09",
+    "value": 69,
+    "low": 60,
+    "high": 77,
+    "reason": "Expected single mean of about 63 plus a vote gain of about 6, like RL's 50.5 to 57."
+   },
+   {
+    "id": "t10",
+    "value": 63,
+    "low": 55,
+    "high": 70,
+    "reason": "a=2 added 6.9 points over Think-SFT on hard328, where a was chosen; expect a smaller transfer above Think-SFT's 60.0 on fresh."
+   },
+   {
+    "id": "t11",
+    "value": 248,
+    "low": 238,
+    "high": 258,
+    "reason": "Singles are 234/229; with fewer cap hits and lower finished precision than Think-SFT, the vote gain should sit between RL's +21 and Think-SFT's +32."
+   },
+   {
+    "id": "t12",
+    "value": 466,
+    "low": 456,
+    "high": 475,
+    "reason": "Think-SFT cue singles are 457-462 and a=1 gave 467; a=2 finishes more but is a bit less precise."
+   },
+   {
+    "id": "t13",
+    "value": 245,
+    "low": 234,
+    "high": 256,
+    "reason": "Singles at 32k are about 228-230 against 209 at 16k, but less abstention narrows the vote gain; the simulation says 240, or 254 if late wrong answers disagree."
+   },
+   {
+    "id": "t14",
+    "value": 238,
+    "low": 228,
+    "high": 248,
+    "reason": "Cut at 16k this is the stored setting, where the vote was 241 from singles around 209; this run's sample 0 scored 207 at 16k."
+   },
+   {
+    "id": "t15",
+    "value": 72,
+    "low": 63,
+    "high": 80,
+    "reason": "Think-SFT fresh single is 60 at 16k, about +8% at 32k, times the hard328 vote/single ratio of about 1.1-1.15."
+   },
+   {
+    "id": "t16",
+    "value": 68,
+    "low": 60,
+    "high": 76,
+    "reason": "Think-SFT fresh single is 60.0 at 16k, scaled by the hard328 vote/single ratio of 241/209."
+   }
+  ],
+  "reader-2": [
+   {
+    "id": "t01",
+    "value": 162,
+    "low": 150,
+    "high": 174,
+    "reason": "Random rank-8 edits at -1,1,2,3 gave 159/158/167/163 against the cued base's 164 (result-6f1bb7), so the random dial is flat at about 160."
+   },
+   {
+    "id": "t02",
+    "value": 162,
+    "low": 142,
+    "high": 182,
+    "reason": "At Math's norm the Think-SFT directions do not point along RL (cos ~0) and other rewards' 8 directions span 155-182, so the centre is near the base's 164 with a wide spread."
+   },
+   {
+    "id": "t03",
+    "value": 53,
+    "low": 45,
+    "high": 61,
+    "reason": "The 1.5x edit matched RL on single samples off its chosen set (200.25 vs 200.0) but trailed RL's vote (214 vs 221), so this is RL's fresh vote of 57 minus a few."
+   },
+   {
+    "id": "t04",
+    "value": 48.5,
+    "low": 43,
+    "high": 54,
+    "reason": "The 1.5x edit sits at or a little below RL on single samples (hard328 203 vs 206, held-out mean 200.25 vs 200), so RL's 50.5 minus a little for a size not chosen here."
+   },
+   {
+    "id": "t05",
+    "value": 453,
+    "low": 446,
+    "high": 460,
+    "reason": "Vote over 4 gives 446 and pass@4 467; Wang's majority curve adds about 2.5 points from 4 to 8 samples, and the board finds votes falling short of independent-sample predictions."
+   },
+   {
+    "id": "t06",
+    "value": 454,
+    "low": 447,
+    "high": 461,
+    "reason": "The vote flattens past 9 samples, so this is the vote-over-9 value plus about 1."
+   },
+   {
+    "id": "t07",
+    "value": 170,
+    "low": 157,
+    "high": 184,
+    "reason": "About 162 at 16k, plus perhaps 10-12% of the base's ~75 cap hits turning right with more room (the base's long answers are right about 17% of the time; forced commits recover almost none)."
+   },
+   {
+    "id": "t08",
+    "value": 161,
+    "low": 149,
+    "high": 173,
+    "reason": "Single cued-base samples on hard328 at seed 3000000 range 155-168 (164, 160, 161), and sharding adds noise."
+   },
+   {
+    "id": "t09",
+    "value": 67,
+    "low": 59,
+    "high": 75,
+    "reason": "A single-sample mean of about 62, plus a vote gain of about 6 like RL's (50.5 -> 57)."
+   },
+   {
+    "id": "t10",
+    "value": 62,
+    "low": 55,
+    "high": 69,
+    "reason": "a=2 added about 11% over Think-SFT on hard328 where it was chosen; with some shrinkage on fresh that is Think-SFT's 60.0 plus about 2."
+   },
+   {
+    "id": "t11",
+    "value": 249,
+    "low": 238,
+    "high": 259,
+    "reason": "Singles are 234 and 229; with fewer cap hits than Think-SFT, its vote gain should fall between RL's +21 and Think-SFT's +32."
+   },
+   {
+    "id": "t12",
+    "value": 466,
+    "low": 456,
+    "high": 475,
+    "reason": "Think-SFT+1x scored 467 and Think-SFT cue singles score 457-462; doubling the dose helps hard problems more than MATH-500."
+   },
+   {
+    "id": "t13",
+    "value": 245,
+    "low": 236,
+    "high": 254,
+    "reason": "The simulation gives 240 [232, 248], or 254 if late wrong answers disagree; sample 0 rose from 207 to 230 at 32k, so I lean a little above the simulation."
+   },
+   {
+    "id": "t14",
+    "value": 238,
+    "low": 229,
+    "high": 246,
+    "reason": "Think-SFT's 16k vote over 4 was 241, and sample 0 of this run scores 207 at 16k against 212 stored, so slightly below 241."
+   },
+   {
+    "id": "t15",
+    "value": 70,
+    "low": 61,
+    "high": 78,
+    "reason": "Think-SFT's fresh single is 60.0 at 16k; the 32k cap adds about 7%, and its vote adds about 10% of n, as on hard328."
+   },
+   {
+    "id": "t16",
+    "value": 66,
+    "low": 58,
+    "high": 74,
+    "reason": "Think-SFT's fresh single of 60.0 plus its vote gain at 16k (about +6 to +8 of 136)."
+   }
+  ],
+  "r3-across-2": [
+   {
+    "id": "t01",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t02",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t03",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t04",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t05",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t06",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t07",
+    "value": 174,
+    "low": 161,
+    "high": 188,
+    "reason": "The theory says untruncated T 1.0 keeps the base's tail escape mass, so its hard328 cap hits (77 at 16,384) are unfinished runs, not locked loops; doubling the cap lets roughly half of them finish, and at about a quarter right (RL solves 19 of those 77) that adds about 10 to the 164 base rate."
+   },
+   {
+    "id": "t08",
+    "value": 163,
+    "low": 152,
+    "high": 174,
+    "reason": "Under the theory the same T 1.0 untruncated sampling reproduces the 16,384-cap behaviour, so the count within 16,384 tokens should match the board's cued-base single-sample rate on hard328 (164 at seed 3000000, reruns 155-172)."
+   },
+   {
+    "id": "t09",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t10",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t11",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t12",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t13",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t14",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t15",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t16",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   }
+  ],
+  "r4-m01": [
+   {
+    "id": "t01",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t02",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t03",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t04",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t05",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t06",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t07",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t08",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t09",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t10",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t11",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t12",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t13",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t14",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t15",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t16",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   }
+  ],
+  "r5-m03-rival": [
+   {
+    "id": "t01",
+    "value": 162,
+    "low": 151,
+    "high": 173,
+    "reason": "The theory says the edit works because it carries a weak dose of RL's own policy, so a random rank-8 edit carries no policy and should leave the cued base where it is (164 on the board; random rank-8 at -1/1/2/3 gave 159/158/167/163)."
+   },
+   {
+    "id": "t02",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t03",
+    "value": 55,
+    "low": 48,
+    "high": 62,
+    "reason": "The theory says the top-8 edit puts most answers on a weak dose of RL's policy, and the cue removes the plain-base share, so 1.5x top8+cue should sit at or just below RL's fresh vote of 57 (it matched RL on hard328: 200.25 vs 200.0, and on MATH-500: 456 vs 460)."
+   },
+   {
+    "id": "t04",
+    "value": 49,
+    "low": 43.5,
+    "high": 54.5,
+    "reason": "Same weak-dose-of-RL reading: 1.5x top8 with the cue should be close to RL's single-sample mean of 50.5 on fresh2026, slightly below because the dose is partial."
+   },
+   {
+    "id": "t05",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t06",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t07",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t08",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t09",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t10",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t11",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t12",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t13",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t14",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t15",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t16",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   }
+  ],
+  "r5-m10-rival": [
+   {
+    "id": "t01",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t02",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t03",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t04",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t05",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t06",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t07",
+    "value": 170,
+    "low": 158,
+    "high": 182,
+    "reason": "The theory says the cued deliberative register survives untruncated T 1.0 sampling rather than derailing, so its 16k cap hits (about 70-77, 0 loops at T 1.0) are unfinished reasoning; doubling the cap lets many of them finish, but at the low accuracy the base has on its long answers (about 15 % right past 12k tokens), so roughly +8 over the 16k score of about 162."
+   },
+   {
+    "id": "t08",
+    "value": 161,
+    "low": 152,
+    "high": 170,
+    "reason": "Under the theory the cued register at T 1.0 is the same robust mode whatever the cap, so the score within 16,384 tokens is the usual cued-base single sample on hard328 at seed 3000000 (164, 160, 161 in stored runs; reruns spread about 155-168)."
+   },
+   {
+    "id": "t09",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t10",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t11",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t12",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t13",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t14",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t15",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   },
+   {
+    "id": "t16",
+    "value": null,
+    "low": null,
+    "high": null,
+    "reason": "theory says nothing"
+   }
+  ],
+  "r8-m02": [
+   {
+    "id": "t05",
+    "value": 455,
+    "low": 448,
+    "high": 462,
+    "reason": "Switch-induced wrong answers come from diverse abandoned lines and scatter, so votes absorb them; vote 4 = 446-450, the vote grows about 2 points per doubling up to 9."
+   },
+   {
+    "id": "t06",
+    "value": 457,
+    "low": 450,
+    "high": 464,
+    "reason": "Same scattering of switch-made wrong answers; 12 samples add 1-3 problems over 9 as the remaining errors are reach and repeated wrong values."
+   },
+   {
+    "id": "t07",
+    "value": 168,
+    "low": 157,
+    "high": 179,
+    "reason": "The base's long answers keep switching rather than finishing a line, so the extra 16k tokens convert few of its 67-77 cap hits to right answers (about 8)."
+   },
+   {
+    "id": "t08",
+    "value": 160,
+    "low": 151,
+    "high": 169,
+    "reason": "Counting only answers finished within 16,384 tokens reproduces the stored seed-3,000,000 sample (160-164), less run-to-run noise."
+   },
+   {
+    "id": "t13",
+    "value": 250,
+    "low": 240,
+    "high": 260,
+    "reason": "Think-SFT stays on one line (36 % asserted, 88 % precision when finished), so its 29 % cap hits finish right at 32k and the vote nears its pass@4."
+   },
+   {
+    "id": "t14",
+    "value": 240,
+    "low": 232,
+    "high": 248,
+    "reason": "Cutting the same samples at 16,384 tokens reproduces the stored 241 vote within seed noise."
+   },
+   {
+    "id": "t15",
+    "value": 70,
+    "low": 62,
+    "high": 78,
+    "reason": "A one-line model gains from budget: Think-SFT single 60 of 136 at 16k, vote adds about 5, the 32k cap adds about 4."
+   },
+   {
+    "id": "t16",
+    "value": 65,
+    "low": 58,
+    "high": 73,
+    "reason": "The same samples cut at 16,384 tokens: single 60 plus about 5 from the vote."
+   }
+  ],
+  "r8-m09": [
+   {
+    "id": "t12",
+    "value": 468,
+    "low": 461,
+    "high": 474,
+    "reason": "Think-SFT single 459.5 + ~4 from the boxed ending ending the v3 layout miss + ~4 reliability from the RL delta; a=2 at the MATH-500 plateau, about like a=1's 467."
+   },
+   {
+    "id": "t11",
+    "value": 250,
+    "low": 241,
+    "high": 258,
+    "reason": "Singles 234/229 (mean 231.5), each with ~2 grading points recovered; a vote adds less than Think-SFT's +32 because the hybrid finishes (54 cap hits) at lower precision, so about +18."
+   },
+   {
+    "id": "t10",
+    "value": 66,
+    "low": 60,
+    "high": 72,
+    "reason": "Think-SFT 60.0 per sample; the hybrid's hard328 relative gain (+11 %) plus ~0.5 from grading on 136."
+   },
+   {
+    "id": "t09",
+    "value": 73,
+    "low": 66,
+    "high": 80,
+    "reason": "Single ~66 plus a vote gain of about +7 (between RL's +6.5 and Think-SFT's larger abstention-driven gain)."
+   },
+   {
+    "id": "t13",
+    "value": 248,
+    "low": 238,
+    "high": 257,
+    "reason": "Think-SFT vote 241 at 16k; at 32k many of its 29 % cap hits finish with ~68 % precision on long answers; the v3 layout loss (~2 per sample) persists because the teacher ending is unchanged."
+   },
+   {
+    "id": "t14",
+    "value": 240,
+    "low": 232,
+    "high": 248,
+    "reason": "Same samples cut at 16,384 tokens reproduce the stored 16k vote (241) up to seed noise; layout loss unchanged."
+   },
+   {
+    "id": "t15",
+    "value": 71,
+    "low": 64,
+    "high": 78,
+    "reason": "Think-SFT 60.0 per sample on fresh2026, vote adds about +8 as on hard328 scaled, 32k adds ~3 from finished long answers; layout loss ~0.5 stays."
+   },
+   {
+    "id": "t16",
+    "value": 68,
+    "low": 61,
+    "high": 75,
+    "reason": "Same samples scored at 16k: the fresh vote without the long-answer finishes."
+   }
+  ],
+  "r8-m10": [
+   {
+    "id": "t13",
+    "value": 251,
+    "low": 240,
+    "high": 262,
+    "reason": "Think-SFT's precision holds past 16k, so many of its 29 % cap hits finish right at 32k; the vote rises from 241 by about 10."
+   },
+   {
+    "id": "t14",
+    "value": 240,
+    "low": 232,
+    "high": 248,
+    "reason": "The same text cut at 16,384 reproduces the stored 16k vote (241) up to seed noise."
+   },
+   {
+    "id": "t15",
+    "value": 75,
+    "low": 67,
+    "high": 83,
+    "reason": "Fresh contest problems demand long answers; the 32k cap adds about 7 to Think-SFT's 16k vote."
+   },
+   {
+    "id": "t16",
+    "value": 68,
+    "low": 61,
+    "high": 75,
+    "reason": "At 16k, Think-SFT's vote over 4 is about its single-sample mean (60) plus the usual vote gain."
+   },
+   {
+    "id": "t11",
+    "value": 248,
+    "low": 238,
+    "high": 258,
+    "reason": "The RL difference converts cap hits into finishes (cap hits 94 to 54), so the vote gains less than Think-SFT's +32: singles 231.5 plus about 17."
+   },
+   {
+    "id": "t12",
+    "value": 466,
+    "low": 458,
+    "high": 474,
+    "reason": "MATH-500 answers are mostly short, before both drop points, so a = 2 is about level with a = 1 (467)."
+   },
+   {
+    "id": "t10",
+    "value": 65,
+    "low": 57,
+    "high": 72,
+    "reason": "As on hard328, the RL difference trades Think-SFT's cap hits for finishes, a net gain of a few problems over 60.0."
+   },
+   {
+    "id": "t09",
+    "value": 71,
+    "low": 63,
+    "high": 79,
+    "reason": "Single-sample mean of about 65 plus a vote gain smaller than Think-SFT's, because fewer cap hits leave more wrong answers that agree."
+   }
+  ],
+  "r8-m12": [
+   {
+    "id": "t07",
+    "value": 169,
+    "low": 159,
+    "high": 179,
+    "reason": "The 16k score (about 161) plus about 70 cap hits that convert at roughly 0.11 over 16k more tokens, the late per-problem rate after selection."
+   },
+   {
+    "id": "t08",
+    "value": 161,
+    "low": 152,
+    "high": 170,
+    "reason": "Same seed and setting as the stored samples (160, 161, 164); text cut at 16,384 tokens is unchanged by the larger cap."
+   },
+   {
+    "id": "t13",
+    "value": 250,
+    "low": 240,
+    "high": 261,
+    "reason": "Think-SFT's cap hits (about 95 per sample) convert at about 2.8x the base rate. Its vote tracks pass@4 because it abstains, so about +9 over the 16k vote."
+   },
+   {
+    "id": "t14",
+    "value": 239,
+    "low": 231,
+    "high": 247,
+    "reason": "Cut at 16,384 this reproduces the stored Think-SFT 4-sample vote (241) within seed noise."
+   },
+   {
+    "id": "t15",
+    "value": 76,
+    "low": 68,
+    "high": 84,
+    "reason": "Fresh contest problems are harder with more Think-SFT cap hits, so the 32k extension adds about 7 to the 16k vote."
+   },
+   {
+    "id": "t16",
+    "value": 69,
+    "low": 62,
+    "high": 76,
+    "reason": "The 16k vote: single mean 60.0 plus a vote gain near Think-SFT's hard328 ratio."
+   }
+  ]
+ }
+}

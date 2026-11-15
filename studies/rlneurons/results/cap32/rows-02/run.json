@@ -1,0 +1,22 @@
+{
+ "what": "Per-problem rows of the cap32 cell base_cue (Base + cue, 328 harder problems, cap 32,768, T 1.0), same format as rows-01. analysis/cap32_rows.py writes only rows-01, so these rows were written by the one-off command below, run from the repository root of a worktree whose sibling ../iterate-hack-shots holds the raw answers.",
+ "command": "python3 -c '\nimport json\nsrc = \"../iterate-hack-shots/runs/cap32_base_cue_joined/answers.jsonl\"\nKEEP = (\"problem_index\", \"unique_id\", \"n_new\", \"cap_hit\", \"score_v3\", \"extracted_v3\", \"gold\")\nrows = sorted(map(json.loads, open(src)), key=lambda r: r[\"problem_index\"])\nref = [json.loads(l) for l in open(\"studies/rlneurons/results/cap32/rows-01/sft_cue.jsonl\")]\nassert len(rows) == 328 and [(r[\"problem_index\"], r[\"unique_id\"]) for r in rows] == [(r[\"problem_index\"], r[\"unique_id\"]) for r in ref]\nassert all(r[\"sample\"] == 0 and r[\"attempt\"] == 0 for r in rows)\ncell = json.load(open(\"studies/rlneurons/results/cap32/readout.json\"))[\"cells\"][\"base_cue\"]\nr32 = sum(r[\"score_v3\"] for r in rows)\nr16 = sum(r[\"score_v3\"] for r in rows if r[\"n_new\"] <= 16384 and not r[\"cap_hit\"])\nlate = [r for r in rows if r[\"n_new\"] > 16384]\nassert (r32, r16, len(late), sum(r[\"score_v3\"] for r in late)) == (cell[\"right_at_32768\"], cell[\"right_at_16384_same_answers\"], cell[\"answers_longer_than_16384\"], cell[\"of_them_right\"])\nwith open(\"studies/rlneurons/results/cap32/rows-02/base_cue.jsonl\", \"w\") as f:\n    for r in rows:\n        f.write(json.dumps({**{k: r[k] for k in KEEP}, \"tail\": r[\"text\"][-400:]}) + \"\\n\")\nprint(r32, r16, len(late), sum(r[\"score_v3\"] for r in late))\n'",
+ "commit": "59ec177135265179cf20b5cb7fdb5fcb0747c006",
+ "raw_answers": "runs/cap32_base_cue_joined/answers.jsonl (joined from 4 shards; not in git)",
+ "shard_jobs": [
+  "ih-1115-144232-448b",
+  "ih-1115-144318-6d57",
+  "ih-1115-144428-85af",
+  "ih-1115-144457-42b8"
+ ],
+ "cells": {
+  "base_cue": {
+   "job": "cap32_base_cue_joined",
+   "right_at_32768": 156,
+   "right_at_16384": 152,
+   "answers_longer_than_16384": 64,
+   "of_them_right": 4
+  }
+ },
+ "printed": "156 152 64 4"
+}
