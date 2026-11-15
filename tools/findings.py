@@ -53,7 +53,7 @@ AFTER_RESTART = "T 1.0 / top-p 1.0, vote over 4 samples after restart"
 TABLE = {
     "opening-cue": {
         "group": GAIN,
-        "figure": lambda m: [points(m.PLAIN, m.CUE, m.N), "points on MATH-500, T 1.0"],
+        "figure": lambda m: [points(m.PLAIN, m.CUE, m.N), "points over the plain prompt, MATH-500, T 1.0"],
         "steps": lambda m: [step("Plain prompt", "base", m.PLAIN, m.N, m.DATA["artifact"]),
                             step("Opening cue", "base", m.CUE, m.N, m.DATA["artifact"]),
                             step("RL, one sample", "rl", m.RL, m.N, m.DATA["artifact"])]},
@@ -75,13 +75,25 @@ TABLE = {
         "figure": lambda m: [f"{m.SOME} %", "of the RL gain, on problems the base model solves sometimes"]},
     "rl-wait-habit": {
         "group": BEHAVIOUR,
-        "figure": lambda m: [f"+{m.MORE} %", "more often after RL, Wait is among the next words"]},
+        "figure": lambda m: [m.PUSH_POINTS, "points on MATH-500 when the base says Wait as often as RL"]},
     "equal-token-frontier": {
         "group": GAIN,
         "figure": lambda m: [f"{m._best['gap'][0]:+.1f}", f"points below one RL sample at {m._best['multiple']:.1f} times the tokens"]},
+    "one-difficulty-axis": {
+        "group": BEHAVIOUR,
+        "figure": lambda m: [f"{m.DATA['diff']['excess_mean']:+.2f}", "problems beyond one difficulty order, mean of 618 pairs of methods"]},
+    "imitation-beats-rl": {
+        "group": BEHAVIOUR,
+        "figure": lambda m: [f"{m.DATA['diff']['hard328']['vote'][0]:+.1f}", "points, Think-SFT over RL, 328 harder problems, vote over 4"]},
+    "where-the-gap-goes": {
+        "group": BEHAVIOUR,
+        "figure": lambda m: [f"{m.pc(m._RL['parts']['reliability'][1])} %", "of the gap to RL, on problems the base solves in other samples"]},
     "rl-edge-comes-early": {
         "group": BEHAVIOUR,
         "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap closed when the base model finishes RL's half-written answers"]},
+    "a-quarter-of-rl": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.Q_M} %", "of RL's gain on MATH-500 from the RL weight change scaled to a quarter"]},
     "eight-directions": {
         "group": WEIGHTS,
         "figure": lambda m: [points(*(next(s["right"] for s in m.DATA["states"] if s["key"] == k) for k in ("untrained", "rl-directions")), m.DATA["edit"]["n"]),

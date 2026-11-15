@@ -39,10 +39,12 @@ DATA = {
     "repeat_artifact": "studies/rlneurons/results/day1_3/math500_base_cue-01/readout.json",
     "repeat": {"samples": [405, 409, 410, 418]},
     # The later steps of the climb: rows.vote_after_restart.right of the base model with the cue (repeat_artifact) and of
-    # the RL model (rl_artifact), and rows.cv_pick.right of vote_artifact, the tie rule picked on held-out folds. The
-    # tie rule tie_short (453) is not used: it was chosen after reading the 7 problems it fixes (board result-e78dfe).
+    # the RL model (rl_artifact); rows.vote.right and rows.cv_pick.right (the tie rule picked on held-out folds) of
+    # vote_artifact on MATH-500 and of vote_hard_artifact on the 328 harder problems (board result-5c961a). The tie rule
+    # tie_short (453) is not used: it was chosen after reading the 7 problems it fixes (board result-e78dfe).
     "vote_artifact": "studies/rlneurons/results/selector/math500_base_cue-01/readout.json",
-    "vote": {"cue": 450, "rl": 475, "cue_held_out": 451},
+    "vote_hard_artifact": "studies/rlneurons/results/selector/hard328_base_cue-01/readout.json",
+    "vote": {"cue": 450, "rl": 475, "cue_plain_vote": 446, "cue_held_out": 451, "hard_plain_vote": 192, "hard_held_out": 189},
     # Cut-off answers of the RL model during training, plain prompt, T 0.6 / top-p 0.95, sample 0 (step5 of the file).
     "steps_artifact": "studies/theory/results/engine/round-04/replication/replication.json",
     "steps": {"base": 65, "step400": 98, "step2800": 19},
@@ -70,6 +72,7 @@ PLAIN, CUE, RL = DATA["plain"]["right"], DATA["cue"]["right"], DATA["rl_first"][
 RL_LATER = DATA["rl"]["right"]                                 # the first sample of the later four-sample RL run
 SHARE = round(100 * (CUE - PLAIN) / (RL - PLAIN))              # 186 of 239 right answers
 SHARE_LATER = round(100 * (CUE - PLAIN) / (RL_LATER - PLAIN))  # 186 of 232
+SHARE_BEST = round(100 * (CUE - DATA["plain_t06"]["right"]) / (RL - DATA["plain_t06"]["right"]))  # 91 of 144, plain at T 0.6
 LEFT = [round(pc(RL_LATER) - pc(CUE), 1), round(pc(RL) - pc(CUE), 1)]  # points still to RL
 
 TITLE = "The opening cue"
@@ -114,7 +117,9 @@ PANELS = [
       f"It is the first and largest step of the team's climb on MATH-500. With a vote over four samples after restarting "
       f"cut-off answers the base model with the cue reaches {DATA['vote']['cue']} of {N} ({pc(DATA['vote']['cue'])} %), and "
       f"the RL model {DATA['vote']['rl']} ({pc(DATA['vote']['rl'])} %) under the same rule. A tie rule picked on held-out "
-      f"folds gives the base model {DATA['vote']['cue_held_out']}.",
+      f"folds does not hold up: it gives {DATA['vote']['cue_held_out']} against the plain vote's "
+      f"{DATA['vote']['cue_plain_vote']} on MATH-500 but {DATA['vote']['hard_held_out']} against "
+      f"{DATA['vote']['hard_plain_vote']} on {DATA['hard']['n']} harder problems.",
       f"Harder problems leave more to explain: on {DATA['hard']['n']} of them the base model with the cue has "
       f"{DATA['hard']['cue']} right and the RL model {DATA['hard']['rl']}."]],
     ["how", "How we know",
@@ -138,9 +143,10 @@ PANELS = [
      [f"Why the RL model keeps its score at the lower temperature is only partly measured: at temperature 0.6 its cut-off "
       f"answers fall late in training, from {DATA['steps']['step400']} of {N} at RL step 400 to {DATA['steps']['step2800']} "
       "at the final step 2,800. What in training causes the fall is untested.",
-      f"The size of the step also depends on the temperature. At temperature 0.6 the plain base model has "
-      f"{DATA['plain_t06']['right']} right of {N}. Against that setting the cue at temperature 1.0 adds "
-      f"{round(pc(CUE) - pc(DATA['plain_t06']['right']), 1)} points, where the picture shows {round(pc(CUE) - pc(PLAIN), 1)}.",
+      f"The picture's {round(pc(CUE) - pc(PLAIN), 1)} points are against the plain prompt at temperature 1.0. At its better "
+      f"temperature, 0.6, the plain base model has {DATA['plain_t06']['right']} of {N} ({pc(DATA['plain_t06']['right'])} %); "
+      f"against that the cue at 1.0 adds {round(pc(CUE) - pc(DATA['plain_t06']['right']), 1)} points and closes {SHARE_BEST} % of "
+      f"the gap to the RL model, not {SHARE} %.",
       f"Part of the gain is answers that end in a readable form. With the plain prompt {DATA['plain']['nothing_extracted']} of "
       f"{N} answers hold no final answer that the grader can find, and with the cue {DATA['cue']['nothing_extracted']}. "
       "It is one pair of models, one benchmark and one sample per problem."]],
@@ -153,7 +159,7 @@ PANELS = [
       f"{DATA['commit']}), written by studies/rlneurons/grader/rln4_grader_v3.py from the first runs. The RL reference is the "
       f"cell rl_1.0 of the same file, which also holds the cells and differences at temperature 0.6. The later RL run is in "
       f"{DATA['rl_artifact']} (commit {DATA['rl_commit']}), the votes in {DATA['repeat_artifact']}, {DATA['rl_artifact']} "
-      f"and {DATA['vote_artifact']}, the cut-off answers during training in {DATA['steps_artifact']}, and the loop counts "
+      f"and {DATA['vote_artifact']} (on the 328 harder problems {DATA['vote_hard_artifact']}), the cut-off answers during training in {DATA['steps_artifact']}, and the loop counts "
       f"in {DATA['t06_p10_artifact']} and {DATA['minp_artifact']}.",
       f"The cue's three token ids and its text are frozen in {DATA['cue_artifact']} (prefill_ids, prefill_text). The paper's "
       "cue has two tokens. The cue here has three, the text \" line!\", two line breaks and \"Okay\", and it is how the RL "

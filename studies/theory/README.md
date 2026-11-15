@@ -526,3 +526,5 @@ Round-01 forward predictions of idea-0b2ad8 that have been measured (`round-02/r
   It follows from RL writing longer answers (result-5e17a6) and does not separate the mechanisms.
 
 P3 to P6 have no measurement in this record (P3: not measured by the team, per the same review).
+
+Page of the gap account (run-02): `tools/finding_where_the_gap_goes.py`, served at `/finding/where-the-gap-goes`; its numbers are read from `results/account/run-02/check/` and `python3 tools/finding_where_the_gap_goes.py` checks them.

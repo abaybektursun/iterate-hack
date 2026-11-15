@@ -1,0 +1,58 @@
+{
+ "status": "done",
+ "config": {
+  "finisher": "rl",
+  "finisher_path": null,
+  "plan": "plan_v2.json",
+  "cuts": [
+   25
+  ],
+  "writers": "/runs",
+  "n": null,
+  "out": "/runs/abaybektursun-1115-013411-6d5e",
+  "dry_run": false,
+  "commit": "141c605a1df46fb4ffa25c120e5bb6f2c26ff46d",
+  "model_repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+  "model_revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "cap": 16384,
+  "n_requests": 656
+ },
+ "commit": "141c605a1df46fb4ffa25c120e5bb6f2c26ff46d",
+ "job_id": "abaybektursun-1115-013411-6d5e",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T08:11:57Z",
+ "updated_utc": "2026-11-15T09:37:33Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 28749,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 18432,
+  "load_s": 82.75835871696472
+ },
+ "counts": {
+  "n": 656,
+  "cap_hits": 46,
+  "generated_tokens": 4459341,
+  "prefix_tokens": 1595324,
+  "n_planned": 656,
+  "generation_s": 5053.012376785278,
+  "tokens_per_s": 882.5113946855259
+ },
+ "wall_s": 5152.702986955643
+}

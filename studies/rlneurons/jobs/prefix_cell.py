@@ -9,8 +9,9 @@
   --shard  i/N: the requests with (request number mod N) == i.
 
 Each located item (as score_tokens --labels locates it) gives --k requests: prompt + cue + the stored answer's tokens before the
-wrong step, then up to --cap new tokens at T 1.0 / top-p 1.0. Sampling loop: transformers with a key-value cache, batches of
---batch requests sorted by length, finished requests leave the batch. Writes answers.jsonl (rln4_gen.record fields + grader v3 +
+wrong step, then up to --cap new tokens at T 1.0 / top-p 1.0. --alpha 0: the study's vLLM engine (rln4_gen.VllmEngine, all
+requests at once; --batch unused). --alpha > 0: transformers with a key-value cache, batches of --batch requests sorted by
+length, finished requests leave the batch. Writes answers.jsonl (rln4_gen.record fields + grader v3 +
 item, label, k, arm) and metrics.json to $OUT_DIR. Fail loud.
 """
 from __future__ import annotations
@@ -25,6 +26,7 @@ import torch
 
 from studies.rlneurons.jobs import rln4_gen as J
 from studies.rlneurons.jobs.score_tokens import span
+from studies.rlneurons.lib import n13_gen as G
 from studies.rlneurons.lib import n13_score as S
 from studies.rlneurons.lib import rln4_lib as R
 
@@ -55,7 +57,8 @@ def main():
     fz = json.loads((STUDY / "data" / "rln4" / "frozen4.json").read_text())
     from huggingface_hub import snapshot_download
     from transformers import AutoModelForCausalLM, AutoTokenizer
-    tok = AutoTokenizer.from_pretrained(snapshot_download(fz["tokenizer"][0], revision=fz["tokenizer"][1], allow_patterns=["*.json", "*.jinja", "*.txt"]))
+    tok_dir = snapshot_download(fz["tokenizer"][0], revision=fz["tokenizer"][1], allow_patterns=["*.json", "*.jinja", "*.txt"])
+    tok = AutoTokenizer.from_pretrained(tok_dir)
     probs = {int(p["index"]): p for p in json.loads((STUDY / "data" / "rln4" / "math500.json").read_text())}
     pre, pre_text = fz["prefill_ids"], fz["prefill_text"]
     judged = {(x["problem_index"], x["sample"]): x["passA"] for x in json.loads(pathlib.Path(a.labels).read_text()) if x["kind"] == "base"}
@@ -83,9 +86,41 @@ def main():
     reqs = sorted([r for j, r in enumerate(reqs) if j % sn == si], key=lambda r: len(r["ids"]))[a.start:]
 
     repo, _, rev = fz["models"]["base" if a.model == "base" else "s2800"]
-    model = AutoModelForCausalLM.from_pretrained(snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors"]), dtype=torch.bfloat16).cuda().eval()
+    model_dir = snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors", "*.jinja", "*.txt"])
     m = {"status": "running", "config": {**vars(a), "arm": arm, "model_repo": repo, "model_revision": rev}, "items": len(items), "requests": len(reqs),
          "job_id": os.environ.get("JOB_ID"), "counts": {"n": 0, "correct_v3": 0, "cap_hits": 0, "generated_tokens": 0}}
+
+    def emit(f, req, out_ids, lps, finish_reason):
+        rec = J.record(tok, req, out_ids, lps, finish_reason)
+        rec.update(R.grade_v3(req["gold"], rec["text"]))
+        rec.update(item=req["item"], label=req["label"], k=req["sample"], arm=arm, n_prefix_tokens=len(req["prefix_ids"]) - len(pre))
+        f.write(json.dumps(rec) + "\n")
+        f.flush()
+        c = m["counts"]
+        c["n"] += 1
+        c["correct_v3"] += rec["score_v3"]
+        c["cap_hits"] += int(rec["cap_hit"])
+        c["generated_tokens"] += rec["n_new"]
+        m["seconds"] = round(time.time() - t0, 1)
+
+    if not a.alpha:
+        os.environ.update(G.ENGINE_ENV)
+        engine = J.VllmEngine(model_dir, tok_dir, max(len(r["ids"]) for r in reqs) + a.cap)
+        t0 = time.time()
+        live = {r["rid"]: r for r in reqs}
+        for r in reqs:
+            engine.add(r["rid"], r["ids"], r["sampling"], r["seed"], r["max_tokens"])
+        with open(rows_path, "a") as f:
+            while engine.has_unfinished():
+                for rid, out_ids, lps, fr in engine.step():
+                    emit(f, live.pop(rid), out_ids, lps, fr)
+                    (out / "metrics.json").write_text(json.dumps(m, indent=1) + "\n")
+        assert m["counts"]["n"] == len(reqs)
+        m["status"] = "done"
+        (out / "metrics.json").write_text(json.dumps(m, indent=1) + "\n")
+        return
+    model = AutoModelForCausalLM.from_pretrained(model_dir, dtype=torch.bfloat16).cuda().eval()
+    t0 = time.time()
 
     def start(seqs):
         """Left-padded first pass: next-token logits, cache, attention mask."""
@@ -100,7 +135,6 @@ def main():
         o = model(input_ids=tokens[:, None], attention_mask=mask, past_key_values=cache, use_cache=True)
         return o.logits[:, -1].float(), o.past_key_values, mask
 
-    t0 = time.time()
     with torch.no_grad(), open(rows_path, "a") as f:
         for b0 in range(0, len(reqs), a.batch):
             batch = reqs[b0: b0 + a.batch]
@@ -119,17 +153,7 @@ def main():
                     outs[bi].append(int(nxt[j]))
                     lps[bi].append(float(lp[j]))
                     if int(nxt[j]) == S.STOP_ID or len(outs[bi]) == a.cap:
-                        req = batch[bi]
-                        rec = J.record(tok, req, outs[bi], lps[bi], "stop" if int(nxt[j]) == S.STOP_ID else "length")
-                        rec.update(R.grade_v3(req["gold"], rec["text"]))
-                        rec.update(item=req["item"], label=req["label"], k=req["sample"], arm=arm, n_prefix_tokens=len(req["prefix_ids"]) - len(pre))
-                        f.write(json.dumps(rec) + "\n")
-                        f.flush()
-                        c = m["counts"]
-                        c["n"] += 1
-                        c["correct_v3"] += rec["score_v3"]
-                        c["cap_hits"] += int(rec["cap_hit"])
-                        c["generated_tokens"] += rec["n_new"]
+                        emit(f, batch[bi], outs[bi], lps[bi], "stop" if int(nxt[j]) == S.STOP_ID else "length")
                     else:
                         keep.append(j)
                 if len(keep) < len(live):

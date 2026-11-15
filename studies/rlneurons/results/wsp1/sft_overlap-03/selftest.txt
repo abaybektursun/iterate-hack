@@ -1,0 +1,16 @@
+selftest planted: {'t/0': ('exact', 1.0, 'r1'), 't/1': ('near', 0.643, 'r2'), 't/2': ('none', 0.191, 'r3')} rows 5 no_user 1
+selftest shard data/train-00099-of-00156.parquet 26 MB in 3.4 s; schema: messages: list<element: struct<content: string, role: string>>
+  child 0, element: struct<content: string, role: string>
+      child 0, content: string
+      child 1, role: string
+dataset_source: string
+id: string
+-- schema metadata --
+huggingface: '{"info": {"features": {"messages": [{"content": {"dtype": "' + 180 row groups 15 rows 14539
+selftest real row 19 wildjailbreak-r1-v2-format-filtered-keyword-filtered-filter-datecutoff-final-content-filtered_1003 'Share some insights into the personal struggles and motivations of the renowned biologist who made g'
+selftest real: exact 1.0 19 scan 0.4 s rows 14539 no_user 0 sources {'allenai/wildjailbreak-r1-v2-format-filtered-keyword-filtered-filter-datecutoff-final-content-filtered': 14539}
+selftest all turns, planted: {"system": {}, "user": {"t/0": ["exact", 1.0, "a1", "user"], "t/1": ["near", 1.0, "a2", "user"], "t/3": ["none", 0.188, "a4", "user"]}, "assistant": {"t/2": ["near", 1.0, "a3", "assistant"], "t/3": ["none", 0.341, "a4", "assistant"]}} rows 5 no_user 0 messages {'system': 1, 'user': 5, 'assistant': 5} fed {'system': 1, 'user': 5, 'assistant': 4}
+selftest all turns ok: exact user copy, respaced user copy, assistant copy found; 40 % copy not flagged
+selftest prefilter: shard 103, 3000 assistant messages, 597 pass the prefilter, 210 problems share an 8-gram with some message, max share 0.520, 12 s
+selftest prefilter ok: same best match per problem with and without the prefilter
+selftest ok; dataset 156 shards, 36.1 GB, 2268178 rows
