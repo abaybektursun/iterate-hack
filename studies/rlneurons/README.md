@@ -13,6 +13,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | Path | What it is |
 |---|---|
 | `specs/SPEC3.md` | RLN-3 spec: base, RL steps 100/400/2,800 and the first release; arms P (plain), F (opening cue), C (forced commit); MATH-500 and the 400-problem harder set; training-set overlap (§11). |
+| `specs/SPEC_wsp1.md` | WSP-1 spec: anatomy of the RL-Math, RL-Code and Think-SFT weight deltas, then edited-weight cells. Job `jobs/wsp_delta_anatomy.py`, results `results/wsp1/`. |
 | `specs/SPEC4.md` | RLN-4 spec: T1 (cue, T 1.0), continuation test K, T2 (RL, T 1.0), T3 (plain base, T 1.0), G, R1; Modal deviations; grader v3. |
 | `lib/n13_score.py` | Prompt template (`TEMPLATE["pair1"]` inside the model's chat template), answer extraction and grader v1 (`extract`, `grade`, rule `dollar_both`), `wilson`, `paired_bootstrap`, `selfcheck`. |
 | `lib/rln4_lib.py` | Grader v2 (`extract_v2`, `grade_v2`), grader v3 (`extract_v3`, `norm_v3`, `grade_v3`), loop-onset detectors (rule A `onset_lines`, rule B `onset_period`, `zratio`), `agree`, prefix encoding. |
@@ -24,6 +25,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `jobs/rln4_gen.py` | RLN-4 generation job. Child (`--inner --phase ...`): one vLLM engine, every request with its own seed, one JSONL row per finished request. Parent: AWS `pg` setup. |
 | `jobs/modal_rln4_k.py` | The Modal app that ran K, T2 and T3 (`modal run ... --step download|check|k|t2|t3`). Runs the `rln4_gen` child on an H100. |
 | `analysis/axis.py`, `analysis/axis_test.py`, `specs/SPEC_axis.md` | One axis or several: per-problem vectors of every arm, pair overlap and oracle union against the rest-score null, Rasch against Rasch plus one bilinear term, the floor; planted checks. See "One axis or several?". |
+| `analysis/rate.py`, `analysis/rate_test.py`, `specs/SPEC_rate.md` | Exchange-rate table: each arm's ability shift in logits, tokens and training signal; leave-one-arm-out transfer to the 328; predictions filed before held-out cells were read. Outputs `results/rate/`. |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
 | `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
 | `jobs/rln3_gen.py` | RLN-3 generation job (arms P, F, C on MATH-500 and the harder set), AWS `pg` only. |
@@ -38,6 +40,8 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/rln4_t1_t2_items.py` | Per-problem T1 against T2 under grader v3; wrote `results/rln4/t1_t2_items-01/` (from commit `8b6a836`, unchanged). |
 | `analysis/anatomy.py` | Gap anatomy from the Day-1 #3 four-sample runs (laptop): joint k-of-4 table, held-out-sample decomposition, subject and level, error types, tokens, divergence proxy, `pool_k_le3.json`. See "Gap anatomy". |
 | `analysis/anatomy_judge.py` | Slip against wrong plan: `prep` draws the items and the two controls and writes blind batches; `score` reads the judges' labels (agreement, controls, first wrong step). |
+| `specs/SPEC_checks.md`, `analysis/checks.py` | Checks or per-step error: checking markers per 1,000 tokens in the four-sample texts (`stats`), blind judge batches for check events (`prep`, `score`). Results `results/checks/`. See "Checks or per-step error". |
+| `tools/finding_rl_reliability.py` | The public page of "Gap anatomy" and "Checks or per-step error", served at `/finding/rl-reliability`: the joint k-of-4 table as columns, with a switch from problems to share of the gain. Its numbers are read from `results/anatomy/math500-01/readout.json` and `results/checks/`. |
 | `grader/repair_v4.py`, `grader/repair_v4_test.py` | Grader v4 / v4a: grader v3 plus five label-free answer-statement rules (placeholder, lower-case marker, last-line math, trailing brace, form), and its planted tests. A grader version for both models, not a method. See "Answer-statement repair". |
 | `analysis/repair.py`, `prep/repair_plan.py`, `data/repair/plan_v1.json` | Answer-statement repair: the gold-aware upper bound, the rule table and the vote under v4 (laptop); the plan of the forced-suffix job (not run). |
 | `data/anatomy/math500_meta.json` | Subject, level and reference solution of the 500 problems (HuggingFaceH4/MATH-500 `test.jsonl`, revision `6e4ed1a`), same order and `unique_id` as `data/rln4/math500.json`. |
@@ -742,6 +746,32 @@ Problems that change against base cue (164 right, 164 wrong; `fixed_lost_vs_base
   reused cells as in "Harder 328" (`.../r5/day1_hard328-01/<job-id>/answers.jsonl`).
   Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_wdiff328`.
 
+## Code pair: the cue on HumanEval+ and MBPP+ (538 problems, T 1.0, one sample, board work-d84808)
+
+Spec `specs/SPEC_code1.md`. `jobs/run_code_cell.py` samples one answer per problem with the Code model's raw template and
+`lib/code_lib.py` runs the extracted program against the EvalPlus tests; 4 of the 542 problems fail the grader check with
+their reference solution and are excluded for every cell. RL = `allenai/Olmo-3.1-7B-RL-Zero-Code`. The Code cue is the
+RL-Code model's own opening, 12 tokens (`' as shown in the prompt. I hope this helps!\n\nOkay'`); the Math cue is
+`' line!\n\nOkay'`. Readout `analysis/code1_readout.py` -> `results/code1/readout.json` and one folder per cell
+(`run.json`, `metrics.json`, `examples.json`: the first passed and the first failed problem). Paired bootstrap, 5,000
+resamples, in points.
+
+| Cell | Passed of 538 | HumanEval+ of 163 | MBPP+ of 375 | Cap hits | No code block | Tokens per problem | Job |
+|---|---|---|---|---|---|---|---|
+| RL-Code, plain | 401 (74.5 %) | 135 | 266 | 8 | 8 | 4,054 | `abaybektursun-1114-170253-f661` |
+| base, plain | 222 (41.3 %) | 72 | 150 | 15 | 43 | 2,241 | `abaybektursun-1114-170258-388e` |
+| base, Code cue | 317 (58.9 %) | 106 | 211 | 27 | 34 | 4,148 | `abaybektursun-1114-170304-c03c` |
+| base, Math cue | 326 (60.6 %) | 120 | 206 | 22 | 33 | 4,119 | `abaybektursun-1114-170309-b137` |
+
+- RL minus plain base: 33.3 [28.8, 37.7]. The cue gives the base +17.7 [12.8, 22.5] (Code cue) and +19.3 [14.3, 24.3]
+  (Math cue): 53 % and 58 % of the gain, against 78 % on MATH-500. H1 (at least half) held, H2 (no gain to recover) refuted.
+- The two cues are equal: Code minus Math -1.7 [-5.8, 2.8] (H3 held). What helps is the opening word `Okay` and a
+  reasoning start, not the text before it.
+- RL stays ahead of the cued base by 15.6 [11.5, 19.9] and 13.9 [10.0, 17.8] points at the same tokens per problem.
+- Without the 3 problems that overlap the RL training prompts: 399, 221, 315, 323 of 535.
+- Not run: the vote over four samples after restart (the configuration chosen on MATH-500), and RL-Code with a cue (the
+  model writes the cue itself in 10 of 10 smoke answers).
+
 ## Truncation rules at T 1.0: min-p and top-p (board work-180a48, spec specs/SPEC_minp.md)
 
 No truncation rule beats untruncated sampling. MATH-500, n = 500, cue, cap 16,384, grader v3, one sample, seeds of the min-p 0
@@ -1005,6 +1035,80 @@ Generated tokens (`metrics.json`): base answers of at most 2,000 tokens: 263, of
 tokens: 286, of which 0 wrong. Median and 90th percentile: T1 right 1,431.5 and 7,054 (n = 410), T1 wrong 10,547.5 and 16,384
 (n = 90); T2 right 3,014 and 8,430 (n = 463), T2 wrong 13,455 and 16,384 (n = 37).
 
+## WSP-1 delta anatomy: what the RL weights changed (weights only, no forward pass)
+
+Spec `specs/SPEC_wsp1.md`. Job `jobs/wsp_delta_anatomy.py` (`--selftest` runs 7 planted-input checks; the job runs them first),
+Modal job `sameraslan-1114-153637-0929`, commit `97ac320`, 111 s for 355 tensors on an H200. Artifact:
+`results/wsp1/anatomy-01/` (`summary.json`, `metrics.json` per tensor, `readout.json`, `run.json`). A delta is model minus
+base `allenai/Olmo-3-1025-7B`; RL-Math = `Olmo-3.1-7B-RL-Zero-Math` `364820b`, RL-Code = `Olmo-3.1-7B-RL-Zero-Code` `1ca3bb3`,
+Think-SFT = `Olmo-3-7B-Think-SFT` `6ff8575` (imitation of reasoning traces, no reward). Means are over the 224 layer matrices
+(q, k, v, o, gate, up, down in 32 layers) unless stated. Null = a Gaussian delta of the RL-Math delta's norm, 5 seeds, layer 16.
+
+| Quantity (`summary.json` key) | RL-Math | RL-Code | Think-SFT | Null |
+|---|---|---|---|---|
+| Delta norm / base norm (`layer_matrices.delta.*.rel`) | 0.24 % | 0.20 % | 24.8 % | |
+| Entries bitwise equal to the base (`unchanged`) | 51 % | 56 % | 0.7 % | |
+| Share of squared norm in the top 8 singular directions (`top8_share`) | 0.118 | 0.127 | 0.030 | 0.005 to 0.008 |
+| Largest `top8_share` of one matrix (`hypotheses.H3`) | 0.391, layer 31 `v_proj` | | | 0.008 |
+| Cosine with the RL-Math delta (`pair.*.cos`) | | 0.0160 | -0.00001 | sd 0.00013 |
+| Overlap of top-8 output subspaces with RL-Math (`overlap_left`) | | 0.096 | 0.051 | 0.002 |
+| Readouts in layers 24-31 with a cue token in the top 15 (`readout.json`) | 13 of 96 | 15 of 96 | 0 of 96 | 0 of 30 |
+
+- The RL-Math delta's relative norm is the same in every layer (0.24 % to 0.27 %, `by_layer`), so its size says nothing about
+  where the change matters; its spectrum does (top-8 share 0.09 to 0.22 by layer, highest in layers 0 and 27 to 31).
+- Readout = a top-3 output direction of a layer's `mlp.down_proj` or `self_attn.o_proj` delta, times the base `lm_head`. In RL-Math
+  the late MLP directions read as words of deliberation: layer 29 `down_proj` direction 1 `Okay, consider, considering`
+  (cue token `Okay` at rank 0) against `perhaps, maybe, probably, possibly`; direction 2 `WAIT, wait, Wait`; layer 24
+  directions 1 and 2 `recall, considerations, !\n\n, Consider, Okay`. One readout with a cue token and one without are
+  in `readout.json` (layer 29 `down` direction 1 `+`; layer 31 `down` direction 0 `+`).
+- H1 (the no-reward delta points the same way as RL) is refuted: mean cosine -0.00001 against a null sd of 0.00013. H2 holds
+  (RL-Math and RL-Code share a part: cosine 0.016, 120 null sd). H3: the largest top-8 share is 0.39, below the 0.5 the
+  spec named and 51 times the null. H4 holds (cue tokens in 13 of 96 late readouts, 0 of 30 null readouts).
+- Not controlled: the top-8 subspace overlap of Think-SFT with RL-Math (0.051, 25 times the null) may come from directions
+  that any fine-tune of this base shares; the overlap with the base weights' own top subspace is not measured.
+
+## WSP-1 edited weights: which part of a weight change carries the gain
+
+Spec `specs/SPEC_wsp1.md` (amendments 1 to 4). `jobs/wsp_edit.py` writes an edited model directory (selftest of 6 planted
+checks runs first; BF16 by `merge_weights.to_bf16`, stochastic rounding), `jobs/run_cell.py --model-path` scores it,
+`analysis/wsp1_readout.py` writes the run folders and `results/wsp1/readout.json` (run it with
+`uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.wsp1_readout`; it reads the
+cells from `runs/<job id>/`, copied with `tools/gpu.py get`). MATH-500, T 1.0 / top-p 1.0, one sample, grader v3. Raw rows
+are in the Modal Volume `iterate-runs` of workspace sameraslan under the job ids in each `run.json`.
+
+"Layer matrices" are the 224 q, k, v, o, gate, up, down tensors. `top8` = base + the top 8 singular directions of each
+layer matrix's RL-Math delta (9.8 % of the delta's squared norm; the addition is 0.074 % of the weight norm;
+`metrics.json` `edit`). `rand8` = the same 8 singular values with random orthonormal vectors. `bulk` = RL-Math minus its
+top 8 directions. `sft1` = Think-SFT as released (imitation of reasoning traces written by other models, no reward).
+
+All 500 problems (`results/wsp1/full500/<cell>-01/`, `readout.json` `full500_vs_references`); references T3 224, T1 410,
+T2 463 from `results/rln4/grader_v3/readout.json`:
+
+| Cell | Right of 500 | Against |
+|---|---|---|
+| `top8` plain | 427 | `rand8` plain +46.0 points [40.8, 51.0]; T2 (RL plain) -7.2 [-10.2, -4.2] |
+| `rand8` plain | 197 | T3 (base plain) -5.4 [-11.5, 0.7], unpaired |
+| `sft1` cue | 454 | T1 (cued base) +8.8 [5.4, 12.4]; T2 -1.8 [-4.2, 0.6] |
+| `sft1` plain | 440 | T2 -4.6 [-7.8, -1.4] |
+
+First 100 problems (`results/wsp1/screen100/<cell>-01/`), right of 100. Plain, seed base 80,000,000: base 34, RL 96,
+`top8` 88, `rand8` 36, `bulk` 91, `bulk64` (RL minus its top 64 directions) 86, `top1` (one direction per matrix) 42,
+`late3` (top 3 directions of `mlp.down_proj` in layers 24 to 31 only) 41, `sft1` 91, `sft025` (base + 0.25 of the Think-SFT
+delta) 58. Cue, seed base 81,000,000: base 82, `sft1` 92, `sft05` 88, `sft025` 89.
+
+- Eight directions per matrix of the RL change are sufficient (427 against the matched control's 197) and not necessary
+  (`bulk` 91, `bulk64` 86 of 100): the change is redundant across directions. One direction per matrix is not enough.
+- The same slice of the imitation change breaks the model: `sfttop8` and `sfttop64` (base + the top 8 or 64 directions of
+  the Think-SFT delta, 3.7 % and 7.9 % of the weight norm) gave 0 right of the 6 and 1 answers that finished, 5 and 1 of them
+  loops at the cap; both jobs then stopped on an IndexError in `lib/rln4_lib.onset_lines` (`screen100/sfttop8_plain-01/`,
+  `sfttop64_plain-01/`, status crashed). The prediction of amendment 4 (not concentrated) held.
+- Think-SFT with the cue solves 58 of the 65 problems that T2 solves and T1 does not (14 of 16 cap hits, 11 of 14
+  misreadings, 14 of 14 slips, 7 of 9 wrong methods) and misses 17 of the 398 that both solve. A fresh sample of the cued
+  base would also solve some of the 65; that share is not measured here.
+- Closest published result: Spectral Rewiring (arXiv 2607.03065) keeps the RL gain with a compact part of the update on
+  models that include this pair. New here: the matched-spectrum random control at 8 directions, the removal cells, and the
+  comparison with a no-reward delta.
+- Finding page: `tools/finding_eight_directions.py` (`/finding/eight-directions`, a tile on `/findings`).
 ## One axis or several? Item-level structure of every arm (MATH-500 n = 500, hard328 n = 328, laptop, board work-1aa34c, idea-1c8b73)
 
 Question: do the partial routes toward the RL model fix the same problems or different ones? Answer: the same. On MATH-500 two
@@ -1093,6 +1197,259 @@ arms give z -10.1. Grader v3 errors (hand reads in the weight-difference section
 Run folders `results/axis/math500-01/` and `results/axis/hard328-01/`: `run.json`, `manifest.json`, `vectors.json`,
 `readout.json` (every pair's z in `pair_z_matrix`), `examples.json` (one floor problem and one problem both theta 0.5 cue and
 Think-SFT cue fix, with the stored answers of the Day-1 #3 samples).
+
+## Checks or per-step error: does RL check more, or err less per step? (MATH-500, n = 500, 4 samples, laptop, board work-768257, idea-60d3e1)
+
+Question: is RL more reliable than the cued base because it checks its work more, or because each step is less often wrong?
+Answer: RL writes more checking markers, 13.1 against 9.5 per 1,000 tokens (paired +3.6 [3.4, 3.9], 457 of 500 problems), but
+checking text does not separate right from wrong samples of the same model and problem (base, right minus wrong at matched
+length: +0.08 [-0.64, 0.77]; the spec asked for +1.0), a wrong step is followed by markers at the same rate as any other
+position, and 6 % of check events fix something, RL no more than the base. What differs is the number of wrong steps left in
+finished answers: 0.015 first wrong steps per 1,000 tokens for RL against 0.038 for the base. Spec, marker list and
+hypotheses, written before the script: `specs/SPEC_checks.md`. Inputs: attempt 0 of samples 0 to 3 of the two Day-1 #3 jobs,
+grader v3, and the located first wrong steps of `results/anatomy/judge-01/labels.json`. A token position is character x
+n_new / len(text) (no tokenizer on the laptop). Intervals: bootstrap over problems, 5,000 resamples, seed 0.
+
+Markers (frozen in the spec, case-insensitive): backtrack `wait, hold on, hmm, actually, oops, scratch that, on second
+thought`; check `check, double-check, recheck, re-examine, verify, confirm, sanity`; error `mistake, error, wrong, incorrect,
+correction, miscalculat*, misread, messed up, that can't be, doesn't make sense, not right / correct`. Primary measure: the
+three families together. `alternatively, perhaps, maybe` is reported apart.
+
+a. Base against RL on the same problems (markers per 1,000 tokens, per problem, its samples pooled):
+
+| Samples | Problems | Base with cue | RL | RL minus base [95 %] |
+|---|---|---|---|---|
+| all | 500 | 9.51 | 13.13 | +3.62 [3.37, 3.87] |
+| finished | 497 | 9.56 | 13.12 | +3.56 [3.31, 3.81] |
+| right only | 465 | 9.58 | 13.15 | +3.57 [3.30, 3.82] |
+| all, backtrack family | 500 | 6.12 | 9.74 | +3.62 [3.41, 3.84] |
+| all, check family | 500 | 2.42 | 2.30 | -0.12 [-0.18, -0.05] |
+| all, error family | 500 | 0.97 | 1.08 | +0.11 [0.04, 0.19] |
+| all, `alternatively, perhaps, maybe` | 500 | 3.31 | 6.00 | +2.69 [2.48, 2.90] |
+| all, cell base 3 of 4 and RL 4 of 4 | 86 | 10.03 | 13.69 | +3.66 [3.08, 4.25] |
+
+- H2 (RL checks more) holds, and the whole difference is the backtrack family (`wait`); RL writes `check / verify` slightly
+  less often. By base k of 4 the difference is +4.2, +3.4, +3.2, +3.8, +3.6 for k = 0 to 4: the same where the base fails and
+  where it does not. Pooled over all tokens: 9.17 and 13.24. The planner's preview (9.7 against 7.1, another list) has the
+  same direction.
+
+b. Wrong against right samples of the same model and problem (markers per 1,000 tokens; "first N" = the first N tokens of
+every wrong x right pair, N the shorter of the two):
+
+| Model, wrong samples | Problems | Right | Wrong | Wrong minus right [95 %] | First N: right | wrong | Wrong minus right [95 %] |
+|---|---|---|---|---|---|---|---|
+| base, any wrong | 150 | 9.70 | 9.07 | -0.63 [-1.28, 0.01] | 9.56 | 9.48 | -0.08 [-0.77, 0.64] |
+| base, finished-wrong | 124 | 9.73 | 9.03 | -0.70 [-1.38, -0.04] | 9.68 | 9.48 | -0.20 [-0.96, 0.55] |
+| RL, any wrong | 57 | 12.96 | 13.28 | +0.32 [-0.29, 0.90] | 13.11 | 14.22 | +1.10 [0.42, 1.80] |
+| RL, finished-wrong | 50 | 13.30 | 13.49 | +0.20 [-0.45, 0.86] | 13.48 | 14.49 | +1.02 [0.24, 1.79] |
+
+- H1 (per-step error, not checking; refuted if right samples have at least 1 more marker per 1,000 tokens) is not refuted.
+  The largest difference in that direction is the base's 0.70 over the whole answer, and it is 0.20 [-0.55, 0.96] at matched
+  length: wrong answers are longer and their late part has fewer markers. In RL the wrong samples have more markers.
+
+c. Around the located first wrong steps (pass A quotes; 300 tokens before the quote and 300 after its end):
+
+| Steps | n (with a right sibling) | Markers per 1k after the step | Same position, right siblings | Random positions, same answer | Marker within 500 tokens after | Random positions |
+|---|---|---|---|---|---|---|
+| base, all | 52 (40) | 9.2 (40), 9.3 (52) | 9.2, difference -0.01 [-2.46, 2.60] | 9.7, -0.38 [-2.56, 1.85] | 46 of 52 (88 %) | 87 % |
+| base, slips | 21 (18) | 7.6, 7.8 | 7.8, -0.18 [-3.95, 4.11] | 9.3, -1.55 [-4.94, 2.15] | 18 of 21 (86 %) | 86 % |
+| RL, all | 30 (24) | 14.4, 13.7 | 14.3, +0.14 [-4.28, 4.54] | 13.3, +0.41 [-2.62, 3.69] | 30 of 30 | 91 % |
+
+- H4 (the base does not notice its slips) is not refuted: after a wrong step the marker rate equals that of a right sibling
+  at the same relative position and of random positions. The base writes a marker within 500 tokens after 46 of 52 wrong
+  steps and still ends wrong; that is the rate of any 500-token window (87 %), so a marker after a slip is not a detection.
+  Before the step the rates are also equal (base 8.8 against 9.4 in the siblings).
+- 11 base slips read from the step on (`results/checks/math500-01/hand_reads.json`): in 6 a check follows and repeats the
+  slip (`150 + 130 + 150 + 130 = 580` is written three times under "let me verify" and "check the calculations again",
+  problem 189; three recounts each leave out day 27, problem 128); in 3 the answer notices two values that disagree and keeps
+  the wrong one (21, 52, 60); in 2 the wrong step is never looked at again.
+
+d. Effective checks. A check event is a marker with no marker in the 100 characters before it: 5.61 per 1,000 tokens in the
+base's right samples, 6.75 in RL's. 40 events per model from right samples (seed 0, one per problem) and 20 planted controls,
+labeled blind by judges that see the problem and about 250 tokens on each side of the marked word, not the model or the
+score. Judges: Claude Code subagents (the agent's own model), rubric `results/checks/judge-01/rubric.md`, one subagent per
+batch, two passes over all 100 items in other batches and orders. No hosted provider key works on this machine.
+
+| Label (pass A; pass B) | Base, 40 | RL, 40 |
+|---|---|---|
+| fix: a specific earlier statement was wrong and is corrected | 3; 4 | 2; 1 |
+| switch: the method or the reading changes | 4; 5 | 3; 4 |
+| confirm: an earlier statement is tested and kept | 21; 21 | 21; 22 |
+| filler: nothing is re-examined | 12; 10 | 14; 13 |
+
+- Agreement of the two passes: 74 of 80 with the same label, Cohen's kappa 0.88 (fix or not: 78 of 80). Both passes are the
+  same model, so this is its consistency. Controls (pass at 8 of 10): planted filler 10 and 9 of 10, planted correction 10
+  and 10 of 10. The planted items are easy (`Wait, that's not right. Let me redo that:`), so they show that the labels work
+  on a clear case, not on a subtle one.
+- H3 (RL's checks fix more often) is refuted: fix share RL minus base -2.5 points [-12.5, 7.5] in pass A, -7.5 [-17.5, 2.5]
+  in pass B. Over both models 5 of 80 events are a fix (6 % [3, 14]), 53 % confirm, 33 % are filler.
+- The spec's rule for a revising event (a retraction cue and a new number in the next 200 tokens) is rejected: of 20 flagged
+  events read by hand 3 revise a value (base 3 of 10, RL 0 of 10), and of the 14 judged events it flags the judges call 2 a
+  fix or a switch (they label 12 so). Its shares (12 % of base events, 10 % of RL events) are not used.
+- 12 RL spans read (`results/checks/judge-01/hand_reads_rl.json`): 4 fix a value (1.3 squared 1.79 to 1.69, problem 159; a
+  point recomputed, 497; two start from two computations that disagree, 394 and 180), 1 fixes wording, 3 switch method, 4
+  confirm or are filler.
+
+e. Wrong steps per token:
+
+| | Base with cue | RL | Base over RL |
+|---|---|---|---|
+| Finished samples, tokens | 1,910, 6.54 M | 1,968, 8.85 M | |
+| Finished-wrong samples (one first wrong step each) | 250 | 131 | |
+| First wrong steps per 1,000 tokens | 0.038 | 0.015 | 2.6 |
+| Of those slips (judged 21 of 60, 5 of 30), per 1,000 tokens [Wilson of the share] | 0.013 [0.009, 0.018] | 0.0025 [0.0010, 0.0050] | 5.4 |
+| Fixes per 1,000 tokens of right samples (events x fix share, pass A) [Wilson of the share] | 0.42 [0.15, 1.11] | 0.34 [0.09, 1.11] | |
+
+- A fix is about ten times as frequent as a remaining first wrong step in both models (0.42 against 0.038, 0.34 against
+  0.015). So most errors that are made are corrected by both models, and the share that is missed (8 % base, 4 % RL from these
+  point values) is not separable with 40 events per model. What the data exclude is that RL's 3.6 extra markers per 1,000
+  tokens are extra fixes: its fix rate is not above the base's, and its extra markers are `wait` in confirmations and filler.
+- Not measured: whether RL makes fewer errors or resolves a detected conflict right more often. The hand reads point to the
+  second as a part of it (the base notices the conflict in 21, 52 and 60 and keeps the wrong value; RL in 394 and 180 goes
+  back to the wrong step), on 5 spans.
+
+Prediction for work-74703c (steering Wait into the cued base), filed on that item before it reports: at the dose that brings
+the base to RL's marker rate, accuracy on MATH-500 changes by 0 points, within -2 to +1, against the no-steering control of
+the same code, and tokens per problem rise; larger doses lose points to cap hits. Refuted by a gain of 3 points or more over
+both the no-steering and the random-direction control at n = 500. Consistent priors: an appended review pass changes the
+base by 0.0 points (result-96e819), and zero-RL raised MATH-500 with `wait` below 0.05 per 1,000 tokens in 17 of 18 runs
+(arXiv 2610.30882, Sec. 4, from the team's memory).
+
+Limits: markers are words, not checks (a third of the events are filler); 4 samples per problem; first wrong steps exist only
+for 82 finished-wrong samples and slips in cap hits are unlabeled; 40 judged events per model, from right samples only; one
+judge model of the agent's own family; hand reads by one reader who knew the model; observational, MATH-500 only.
+
+Run folders: `results/checks/math500-01/` (`readout.json`: tables a, b, c, the rule and the uncaught part of e;
+`examples.json`: a base slip with no marker in the 500 tokens after it (problem 245), one with markers after it that still
+ends wrong (problem 1), a sibling set with its rates; `rule_sample.json`: the 20 rule-flagged events; `hand_reads.json`;
+`run.json`) and `results/checks/judge-01/` (`readout.json`: labels, agreement, controls, table e; `labels.json`: both passes'
+label and reason per item with its excerpt; `examples.json`: a check that fixes a slip in RL (problem 497) and in the base
+(195), a filler, a disagreement of the passes, a planted control of each kind scored right (pass A scored none wrong);
+`hand_reads_rl.json`; `rubric.md`; `run.json`). The batch files and raw labels are in `runs/checks_judge/` (not committed).
+
+```
+R="--base runs/abaybektursun-1114-153825-208b --rl runs/abaybektursun-1114-183640-e828"
+PY="uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.checks"
+$PY stats $R --labels studies/rlneurons/results/anatomy/judge-01/labels.json --out studies/rlneurons/results/checks/math500-02
+$PY prep $R --work runs/checks_judge-02
+$PY score $R --work runs/checks_judge-02 --stats studies/rlneurons/results/checks/math500-02/readout.json --out studies/rlneurons/results/checks/judge-02
+```
+
+## Exchange-rate table: every method as one logit shift, and its transfer to the 328 (laptop, board work-c45b70, idea-31636e)
+
+Question: if all arms lie on one axis (section above), each method is one number. What is it, what does it cost, and does it
+predict the 328 better than "same point gain"? Answer: no better. Leave-one-arm-out over the 5 arms on both sets, the
+calibrated logit rule misses the 328 score by 5.1 problems on average and "same point gain" by 5.1 (rerun noise 4, binomial sd
+5.7); on the two held-out vote cells scored so far the logit rule misses by 8.4 and the point rule by 3.7. The logit scale
+does rule out two other rules: "same relative error reduction" misses by 45.0 and "same change in the logit of the total" by
+25.2. Spec and hypotheses, written first: `specs/SPEC_rate.md`. Code: `analysis/rate.py` (imports the fit of `axis.py`);
+planted test: `analysis/rate_test.py`.
+
+Method. Item difficulties from `axis.fit` on the 36 single-sample arms (ridge 0.3); the ability of any 0/1 vector is the
+maximum-likelihood a given those difficulties, so votes and restarts get an ability too. Shift = ability minus the ability of
+base + cue sample 0 (405 of 500; the pooled four samples sit 0.12 above it). Interval: paired bootstrap over problems, 2,000
+resamples, 95 %. Noise floor: the sd of the abilities of four same-config samples is 0.12 logits (base + cue) and 0.17 (RL
+plain); one single-sample shift has a 95 % interval of about +/- 0.4. Tokens per problem from each run's `metrics.json`.
+All 47 rows: `results/rate/math500-01/table.md` and `table.json`; selected rows:
+
+| Method (MATH-500) | Right of 500 | Shift, logits [95 %] | Tokens per problem | Training signal |
+|---|---|---|---|---|
+| RL plain, vote over 4 after restart | 475 | +2.46 [+2.03, +2.92] | 19,864 | RL reward |
+| RL plain, vote over 4 | 474 | +2.40 [+1.95, +2.84] | 18,747 | RL reward |
+| RL plain, one sample (4 samples) | 456 to 464 | +1.46 to +1.83 | 4,675 | RL reward |
+| RL, cue | 457 | +1.50 [+1.06, +1.94] | 4,696 | RL reward |
+| Think-SFT, cue | 454 | +1.38 [+0.91, +1.87] | 4,888 | SFT data |
+| base + cue, vote over 4, ties to the shortest | 453 | +1.34 [+1.01, +1.71] | 16,034 | none |
+| base + 0.5 (RL - base), cue | 452 | +1.30 [+0.87, +1.75] | 4,626 | RL reward (weights) |
+| Code-RL 3.1, cue | 450 | +1.22 [+0.79, +1.66] | 3,336 | RL reward, other task |
+| base + cue, vote over 4 after restart | 450 | +1.22 [+0.90, +1.58] | 19,697 | none |
+| base + cue, vote over 4 | 446 | +1.08 [+0.79, +1.40] | 16,034 | none |
+| base + 0.25 (RL - base), cue | 441 | +0.91 [+0.52, +1.28] | 4,036 | RL reward (weights) |
+| base + cue + 3 RL-written solved problems (n 497; a second draw of examples has 404, see below) | 435 | +0.81 [+0.43, +1.20] | 4,379 | RL reward (text in context) |
+| base + top 8 directions of the RL delta, plain | 427 | +0.51 [+0.05, +0.97] | 3,962 | RL reward (weights) |
+| base + random difference, cue (control) | 417 | +0.26 [-0.11, +0.63] | 3,944 | none |
+| base + cue + 3 base-written solved problems (n 497) | 414 | +0.26 [-0.12, +0.62] | 3,365 | own samples (in context) |
+| base + cue, restart up to 2 | 413 | +0.17 [+0.06, +0.31] | 4,852 | none |
+| base + cue, sample 0 (reference) | 405 | 0 | 3,808 | none |
+
+Test-time methods against the model's own single sample (pooled four samples; restart against sample 0):
+
+| Method | Base + cue: logits [95 %], points | Extra tokens | Logits per 1,000 extra tokens | RL plain: logits [95 %], points | Extra tokens | Logits per 1,000 |
+|---|---|---|---|---|---|---|
+| restart, up to 2 | +0.17 [+0.06, +0.31], 1.6 | 1,044 | 0.164 | +0.09 [+0.00, +0.22], 0.4 | 224 | 0.383 |
+| vote over 2 (mean of 6 subsets) | +0.18 [+0.07, +0.30], 1.6 | 4,008 | 0.045 | -0.01 [-0.14, +0.12], -0.1 | 4,687 | -0.003 |
+| vote over 3 (mean of 4 subsets) | +0.81 [+0.65, +0.99], 6.2 | 8,017 | 0.101 | +0.43 [+0.26, +0.64], 1.7 | 9,374 | 0.046 |
+| vote over 4 | +0.96 [+0.74, +1.24], 7.1 | 12,025 | 0.080 | +0.76 [+0.49, +1.11], 2.8 | 14,060 | 0.054 |
+| vote over 4, ties to the shortest | +1.22 [+0.96, +1.53], 8.5 | 12,025 | 0.102 | | | |
+| vote over 4 after restart | +1.11 [+0.85, +1.43], 7.9 | 15,689 | 0.071 | +0.83 [+0.55, +1.19], 3.0 | 15,177 | 0.055 |
+
+- One logit costs the base about 12,000 extra generated tokens per problem by voting (0.08 to 0.10 logits per 1,000). The RL
+  weights give +1.4 to +1.5 logits for about 900 more tokens per problem, Think-SFT +1.38 for about 1,100, half of the RL
+  weight difference +1.30 for about 800. The label-free vote with ties to the shortest answer (+1.34) equals half the RL
+  weight difference at 3.5 times the tokens. A vote over 2 buys nothing (ties go to sample 0).
+- In logits the vote is worth about the same for both models (+0.96 base, +0.76 RL; intervals overlap); in points it is 7.1
+  against 2.8.
+- Theta sweep (cue, against the pooled base): 0.25 +0.80, 0.5 +1.18, 0.75 +1.15, 1 +1.39, 1.25 +1.11, 1.5 +1.22. Ability is
+  not linear in theta: theta 0.25 has 57 % of the full shift and theta 0.5 lies 0.49 logits above the line through 0 and 1
+  (4.1 sd of the base noise floor, 2.9 of RL's): H3 refuted. Past theta 0.5 the points are inside noise of each other. The
+  random difference of the same norm sits at +0.15 (1.2 sd): inside noise.
+
+Transfer MATH-500 -> hard328 (`results/rate/transfer-01/readout.json`). Reference: pooled base + cue (410.5 of 500; 162 of
+328 from the two runs 164 and 160). Each arm held out of the hard328 difficulty fit and of the calibration. Rules: Lc =
+Rasch logit shift times c, c the slope of hard328 shift on MATH-500 shift over the other arms (0.81 to 0.89; all five 0.87);
+L1 = the same with c = 1; P = same point gain; M = same change in logit of the total; R = same relative error.
+
+| Held-out arm | Observed of 328 | Lc | L1 | P | M | R |
+|---|---|---|---|---|---|---|
+| RL plain | 206 | 201.7 | 210.0 | 194.5 | 232.8 | 253.8 |
+| RL cue | 205 | 197.7 | 205.9 | 192.5 | 227.4 | 248.3 |
+| theta 0.25 cue | 182 | 184.3 | 187.7 | 182.0 | 201.4 | 218.6 |
+| theta 0.5 cue | 190 | 195.2 | 199.1 | 189.2 | 218.8 | 239.0 |
+| Code-RL 3.1 cue | 187 | 193.3 | 197.4 | 187.9 | 215.5 | 235.3 |
+| Mean absolute error, problems | | 5.07 | 5.99 | 5.14 | 25.18 | 44.97 |
+
+- H1 (Lc better than P): 5.07 against 5.14 is a tie inside noise, and the held-out cells below go to P. Read as refuted:
+  the logit shift does not predict the 328 better than the point gain. P is within 1 problem on the three partial arms and
+  12 low on the two RL arms; Lc is 4 to 7 low on RL and 2 to 6 high on the others.
+- H2 (the item model adds to the logit of the total): holds, 5.1 against 25.2.
+- Planted test (20 seeds, 5 arms each, a known one-axis model, second set 2.2 logits harder): Lc 8.5, L1 8.4, M 9.2, P 15.2,
+  R 20.8 problems; an arm with +1.2 logits on the first set only shows an error of 51.9 problems (4.8 sd). So the instrument
+  can tell Lc from P when a one-axis world separates them; on the real pair of sets the two rules happen to agree.
+
+Predictions filed before the cells were read (`results/rate/predict-01/`, commit `640d00b`, pushed 04:44:16 UTC;
+`predict-02/`, commit `14e2f4e`, 04:49:14 UTC; scores in `results/rate/scored-01/readout.json`):
+
+| Cell | Predicted right [80 %] | Point rule | Observed | Error Lc, P | Inside 80 % |
+|---|---|---|---|---|---|
+| hard328 base + cue, vote over 4, no restart (result-1dedfe) | 188.5 [179, 198] | 185.3 | 179 | +9.5, +6.3 | yes (on the edge) |
+| hard328 RL plain, vote over 4, no restart, 246 finished problems (result-1dedfe) | 168.2 [160, 177] | 159.9 | 161 | +7.2, -1.1 | yes |
+| hard328 base + cue, vote over 4 after restart | 192.3 [182, 202] | 187.9 | running | | |
+| hard328 RL plain, vote over 4 after restart | 227.1 [217, 239] | 215.8 | running | | |
+| hard328 base + cue + 3 RL-written solved problems | 181.4 [171, 192] | 179.8 | running | | |
+| hard328 base + top 8 directions, cue | 173.1 [164, 193] | 172.8 | not found on the board | | |
+| hard328 vote distillation V, cue and plain (category prior) | 175.5 [162, 189] | none | running | | |
+| hard328 unfiltered control U, cue and plain (category prior) | 162.0 [151, 173] | none | running | | |
+| MATH-500 shots, second draw, RL-written (of 497; job `abaybektursun-1114-195350-bc00`) | 435 [422, 448] | the same | 404 | +31 | no |
+| MATH-500 shots, second draw, base-written (of 497; job `abaybektursun-1114-195357-6936`) | 414 [399, 429] | the same | 405 | +9 | yes |
+| MATH-500 shots, second draw, Code-RL-written (of 497) | 412 [397, 427] | the same | not submitted | | |
+| MATH-500 Think-SFT cue, vote over 4 | 473.1 [466, 480] (`axis.py`: 471.5 +/- 7) | 489.5 | not run | | |
+
+- The second draw of RL-written examples (problems 3, 5, 6 as examples) has 404 of 497, against 435 for the first draw and
+  405 for base-written examples: the +0.81 logits of the RL-written row belong to one draw of three examples, not to the
+  method. Counted here from the finished jobs' `answers.jsonl` (`score_v3`, 406 and 408 of 500 before masking); the owner's
+  readout (work-be7af1) is the reference.
+- On the two scored hard328 cells the vote gained less on the 328 than either rule said (base +19.5 problems over its own four
+  samples' mean of 159.5; Lc predicted +26.5, P +23.3). Mean absolute error: Lc 8.35, P 3.7, M 23.4, R 36.65. Scored in all: 4 of 14 filed cells, 3 inside their 80 % interval.
+- The V and U rows are category priors, not measured shifts (those arms were trained on MATH-500). The note in
+  `predict-01/predictions.json` about "246 of 328" misread a problem count as a score; no hard328 vote score was seen
+  before filing (`predict-01/run.json`).
+
+Limits. Five arms on both sets, one sample each on the 328, all of them RL-weight arms; the two scored held-out cells are
+votes. Difficulties on the 328 come from 7 arms, which is why c is below 1. Tokens are generated tokens only; the three
+solved problems in context add prompt tokens that are not counted.
+
+Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.rate table|transfer|score`
+(`predict`, `predict2` refuse to overwrite the filed files); `... python -m studies.rlneurons.analysis.rate_test`.
 
 ## How to run
 

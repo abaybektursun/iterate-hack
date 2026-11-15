@@ -1,0 +1,244 @@
+{
+ "filed_utc": "2026-11-15T04:44:08+00:00",
+ "code_commit_parent": "ce01e95e87c80fee11721c533281691d325a22e1",
+ "commit": "the commit that adds this file (see run.json)",
+ "rule": "Lc: sum_i sigmoid(a_ref328 + c d + b_i); specs/SPEC_rate.md",
+ "c": 0.873,
+ "c_leave_one_out": [
+  0.842,
+  0.827,
+  0.881,
+  0.9,
+  0.904
+ ],
+ "calibration_arms": {
+  "rl_plain": {
+   "shift_math500": 1.52,
+   "shift_hard328": 1.431
+  },
+  "rl_cue": {
+   "shift_math500": 1.387,
+   "shift_hard328": 1.397
+  },
+  "theta0.25_cue": {
+   "shift_math500": 0.797,
+   "shift_hard328": 0.628
+  },
+  "theta0.5_cue": {
+   "shift_math500": 1.184,
+   "shift_hard328": 0.891
+  },
+  "code_cue": {
+   "shift_math500": 1.108,
+   "shift_hard328": 0.792
+  }
+ },
+ "cells": [
+  {
+   "cell": "base + cue, vote over 4 after restart",
+   "set": "hard328",
+   "n": 328,
+   "status": "prediction",
+   "note": "",
+   "shift_math500_logits": 1.108,
+   "predicted_right": 192.3,
+   "interval80": [
+    182.0,
+    202.0
+   ],
+   "L1_uncalibrated": 196.5,
+   "reference_right_328": 162.0,
+   "baseline_point": 187.9,
+   "baseline_relative_error": 235.3,
+   "baseline_marginal_logit": 215.5
+  },
+  {
+   "cell": "RL plain, vote over 4 after restart",
+   "set": "hard328",
+   "n": 328,
+   "status": "prediction",
+   "note": "the text of work-1a972a, read before filing, says an earlier hard328 RL run without restarts had 246 of 328 (result-1dedfe, not opened); the prediction is the rule's output, not adjusted",
+   "shift_math500_logits": 0.829,
+   "predicted_right": 227.1,
+   "interval80": [
+    217.0,
+    239.0
+   ],
+   "L1_uncalibrated": 230.2,
+   "reference_right_328": 206.0,
+   "baseline_point": 215.8,
+   "baseline_relative_error": 251.7,
+   "baseline_marginal_logit": 241.5
+  },
+  {
+   "cell": "base + cue + 3 RL-written solved problems (shots_rl)",
+   "set": "hard328",
+   "n": 328,
+   "status": "prediction",
+   "note": "",
+   "shift_math500_logits": 0.699,
+   "predicted_right": 181.4,
+   "interval80": [
+    171.0,
+    192.0
+   ],
+   "L1_uncalibrated": 184.2,
+   "reference_right_328": 162.0,
+   "baseline_point": 179.8,
+   "baseline_relative_error": 212.3,
+   "baseline_marginal_logit": 196.4
+  },
+  {
+   "cell": "base + top 8 directions, cue",
+   "set": "hard328",
+   "n": 328,
+   "status": "prediction",
+   "note": "shift of top8_plain (no cue cell on MATH-500); upper end widened to the theta 0.5 cue shift",
+   "shift_math500_logits": 0.392,
+   "predicted_right": 173.1,
+   "interval80": [
+    164.0,
+    193.0
+   ],
+   "L1_uncalibrated": 174.6,
+   "reference_right_328": 162.0,
+   "baseline_point": 172.8,
+   "baseline_relative_error": 192.6,
+   "baseline_marginal_logit": 181.9
+  },
+  {
+   "cell": "vote distillation V cue",
+   "set": "hard328",
+   "n": 328,
+   "status": "category prior, not a measured shift",
+   "note": "trained on MATH-500, so no MATH-500 shift; prior: half the vote-over-4 shift, between 0 and the full vote shift",
+   "shift_math500_logits": 0.482,
+   "predicted_right": 175.5,
+   "interval80": [
+    162.0,
+    188.10000000000014
+   ],
+   "L1_uncalibrated": 177.4,
+   "reference_right_328": 162.0,
+   "baseline_point": null,
+   "baseline_relative_error": null,
+   "baseline_marginal_logit": null
+  },
+  {
+   "cell": "vote distillation V plain",
+   "set": "hard328",
+   "n": 328,
+   "status": "category prior, not a measured shift",
+   "note": "trained on MATH-500, so no MATH-500 shift; prior: half the vote-over-4 shift, between 0 and the full vote shift",
+   "shift_math500_logits": 0.482,
+   "predicted_right": 175.5,
+   "interval80": [
+    162.0,
+    189.0
+   ],
+   "L1_uncalibrated": 177.4,
+   "reference_right_328": 162.0,
+   "baseline_point": null,
+   "baseline_relative_error": null,
+   "baseline_marginal_logit": null
+  },
+  {
+   "cell": "unfiltered self-training control U cue",
+   "set": "hard328",
+   "n": 328,
+   "status": "category prior, not a measured shift",
+   "note": "prior: no shift, between -0.3 and +0.3 logits",
+   "shift_math500_logits": 0.0,
+   "predicted_right": 162.0,
+   "interval80": [
+    151.0,
+    173.0
+   ],
+   "L1_uncalibrated": 162.0,
+   "reference_right_328": 162.0,
+   "baseline_point": null,
+   "baseline_relative_error": null,
+   "baseline_marginal_logit": null
+  },
+  {
+   "cell": "unfiltered self-training control U plain",
+   "set": "hard328",
+   "n": 328,
+   "status": "category prior, not a measured shift",
+   "note": "prior: no shift, between -0.3 and +0.3 logits",
+   "shift_math500_logits": 0.0,
+   "predicted_right": 162.0,
+   "interval80": [
+    151.0,
+    173.0
+   ],
+   "L1_uncalibrated": 162.0,
+   "reference_right_328": 162.0,
+   "baseline_point": null,
+   "baseline_relative_error": null,
+   "baseline_marginal_logit": null
+  },
+  {
+   "cell": "shots_base, second draw of the 3 examples",
+   "set": "math500",
+   "n": 497,
+   "status": "prediction",
+   "note": "same ability as the first draw; predicted rate applies if the second draw masks other problems",
+   "predicted_right": 414.0,
+   "predicted_rate": 0.833,
+   "interval80": [
+    399.2,
+    428.8
+   ],
+   "baseline_point": 414.0
+  },
+  {
+   "cell": "shots_code, second draw of the 3 examples",
+   "set": "math500",
+   "n": 497,
+   "status": "prediction",
+   "note": "same ability as the first draw; predicted rate applies if the second draw masks other problems",
+   "predicted_right": 412.0,
+   "predicted_rate": 0.829,
+   "interval80": [
+    397.0,
+    427.0
+   ],
+   "baseline_point": 412.0
+  },
+  {
+   "cell": "shots_rl, second draw of the 3 examples",
+   "set": "math500",
+   "n": 497,
+   "status": "prediction",
+   "note": "same ability as the first draw; predicted rate applies if the second draw masks other problems",
+   "predicted_right": 435.0,
+   "predicted_rate": 0.8753,
+   "interval80": [
+    422.0,
+    448.0
+   ],
+   "baseline_point": 435.0
+  },
+  {
+   "cell": "Think-SFT cue, vote over 4",
+   "set": "math500",
+   "n": 500,
+   "status": "prediction",
+   "note": "on file from axis.py (one_axis_vote_prediction): 471.5 +/- 7; this row: sft1_cue ability + the base vote-over-4 shift in logits",
+   "on_file_axis": 471.5,
+   "on_file_axis_interval": [
+    464.5,
+    478.5
+   ],
+   "shift_math500_logits": 0.964,
+   "predicted_right": 473.1,
+   "interval80": [
+    466.0,
+    480.0
+   ],
+   "baseline_point": 489.5,
+   "baseline_relative_error": 472.2
+  }
+ ]
+}

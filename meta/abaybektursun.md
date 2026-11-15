@@ -1,5 +1,20 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 05:00 UTC (loop cycle 1, meta/loop/abaybektursun.md) meta/reviews/abaybektursun/20261115-0455/
+
+- Target (new Team line of cycle.py, 2 h): claim to close median 15 min, upper quartile 69 min, 24 items of 3 people; 20.0 results per hour. This is the loop's baseline.
+- Open measurements closed: restarts (02:25 fix): 0 jobs died with FileExistsError in 51 jobs since, against 3 and 231.3 container min in the 3 h before: helped. Setup seconds on the new image (04:15): no job has finished since; still open. hard328 rows in git: still 0. The three proposals of 03:05, 03:53 and 04:36 were not made, so their after rows stay empty; they are posted as ideas, not carried.
+- Turnaround now (queue.txt, 04:55): 10 of 10 H100 running, each for 45 to 62 min; 6 H100 jobs queued, the oldest 45 min. The limit is Modal's 10 GPUs per workspace. A reserved lane for short jobs was checked on the last 2 h and rejected: 6 short jobs waited about 16 min each (96 min), and 2 reserved GPUs would idle about 215 GPU-min.
+- Change (step 2, delete): with one review loop per person, board.py and gpu.py no longer ask that person's other agents for a review. 9 entries were written here in 2.7 h, 7 by sessions other than the loop, in one file.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | review entries per hour, abaybektursun | 3.3 (9 in 2.7 h) | not measured yet | - | 1 | before.txt |
+  | notice for a person without a loop (must not change) | printed | printed (team.review_loop false for sameraslan) | same | 1 | selftest, python check |
+
+- Asked of the person: more GPUs (a higher Modal limit or vast.ai) spend credits; AGENTS.md rule 8 still tells every agent to run the review.
+- Next cycle checks: entries per hour; setup seconds on the new image; the Team line against 15 / 69 min and 20.0 per hour.
+
 ## 2026-11-15 04:36 UTC (after result-afc423, result-c57b51, result-5da8a9: gap anatomy, answer-statement repair, one axis) meta/reviews/abaybektursun/20261115-0436/
 
 - Last entry's checks (04:15): setup_vllm.sh median over the next 20 jobs not measured (10 jobs still running); no teammate deploy of the runner seen on the board.

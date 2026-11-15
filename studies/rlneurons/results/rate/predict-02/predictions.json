@@ -1,0 +1,73 @@
+{
+ "filed_utc": "2026-11-15T04:49:06+00:00",
+ "code_commit_parent": "640d00b2f1d8d47de3744833e005361b32c632f8",
+ "commit": "the commit that adds this file (see run.json)",
+ "rule": "Lc: sum_i sigmoid(a_ref328 + c d + b_i); specs/SPEC_rate.md",
+ "c": 0.873,
+ "c_leave_one_out": [
+  0.842,
+  0.827,
+  0.881,
+  0.9,
+  0.904
+ ],
+ "calibration_arms": {
+  "rl_plain": {
+   "shift_math500": 1.52,
+   "shift_hard328": 1.431
+  },
+  "rl_cue": {
+   "shift_math500": 1.387,
+   "shift_hard328": 1.397
+  },
+  "theta0.25_cue": {
+   "shift_math500": 0.797,
+   "shift_hard328": 0.628
+  },
+  "theta0.5_cue": {
+   "shift_math500": 1.184,
+   "shift_hard328": 0.891
+  },
+  "code_cue": {
+   "shift_math500": 1.108,
+   "shift_hard328": 0.792
+  }
+ },
+ "cells": [
+  {
+   "cell": "base + cue, vote over 4, no restart (sameraslan's run, result-1dedfe)",
+   "set": "hard328",
+   "n": 328,
+   "status": "prediction",
+   "note": "",
+   "shift_math500_logits": 0.964,
+   "predicted_right": 188.5,
+   "interval80": [
+    179.0,
+    198.0
+   ],
+   "L1_uncalibrated": 192.2,
+   "reference_right_328": 162.0,
+   "baseline_point": 185.3,
+   "baseline_relative_error": 227.8,
+   "baseline_marginal_logit": 209.0
+  },
+  {
+   "cell": "RL plain, vote over 4, no restart, on the 246 problems that finished (result-1dedfe)",
+   "set": "hard328 subset",
+   "n": 246,
+   "status": "prediction",
+   "note": "",
+   "shift_math500_logits": 0.763,
+   "predicted_right": 168.2,
+   "interval80": [
+    160.0,
+    177.0
+   ],
+   "reference_right_subset": 153.0,
+   "baseline_point": 159.9,
+   "baseline_relative_error": 185.5,
+   "baseline_marginal_logit": 177.8
+  }
+ ]
+}
