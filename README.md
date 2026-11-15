@@ -348,7 +348,13 @@ The home page is https://invariant.team (`tools/home.py`; the same Lambda, which
 body with a ring around it and one bead per page. A click on a bead or the arrow keys turn the dial to a page
 (`/#<page>`); a click on the body or the button opens it. Beside the picture the same pages are a plain list of links.
 About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
-line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. The page `/papers` (`tools/papers.py`) is the paper loop: its six steps in the words column and one lit sheet per
+line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and adds the
+link "More" to it after the four tabs; a page with no header gets a small link "Invariant" at its lower left; pinch
+zoom is never switched off. An unknown address answers a short page with links, and every address of invariant.team
+other than `/` and `/data` redirects to the monitor. The page `/team` (`tools/people.py`) lists the team: its three
+names are placeholders with every line "To be added" until the people fill `PEOPLE` in.
+
+The page `/papers` (`tools/papers.py`) is the paper loop: its six steps in the words column and one lit sheet per
 paper of `view.PAPERS`, each with its claim, its length, why the loop picked it and how it was checked; a click opens
 the PDF. A new paper gets its row in `ROWS` of `papers.py` (without one it still gets a sheet with its title). The domain is the stack parameter
 `HomeDomainName` (`infra/monitor/deploy.sh monitor.invariant.team <zone id> invariant.team`).
@@ -413,12 +419,14 @@ and leaves as six rays, one through each face to a bead naming a value. A click 
 the buttons select a value (`/values#speed`); its face turns to the front, and the column shows its sentences, its
 quotes with their sources and its line of AGENTS.md. The words are the person's own; nothing on the page is data.
 
-The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game.
-Hold Space, or press and hold, to breathe in and let go to breathe out, so that the white ring follows the blue one. A
-breath that follows it lights one of 10 petals and releases every thought on screen; 10 petals win. The thoughts are
-written jokes and, marked with a blue dot, real messages and result titles of the board. A thought that reaches the
-head is believed and moves the diagnosis up; the fifth ends the session. A click on a thought brings it back as 3
-subagents. A guide speaks one line per breath (M mutes). The end screen counts what the agents posted meanwhile.
+The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game
+of 5 levels, each ending in a boss. Hold Space, or press and hold, to breathe in and let go to breathe out, so that the
+white ring follows the blue one. A breath that follows it scores, raises the streak multiplier, charges the Om (key O)
+and sends out a wave that releases thoughts into their letters. The thoughts are bodies that collide; they are written
+jokes and, marked with a blue dot, real messages and result titles of the board. A thought that reaches the meditator is
+believed and moves the diagnosis up; the fifth ends the session. A click on a thought brings it back as 3 subagents.
+Three power-ups, a WebGL fog behind the scene, a drone with a layer per level and a spoken guide (M mutes). The end
+screen gives score, rank, achievements and what the agents posted meanwhile; the best score stays in the browser.
 
 The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): twelve 16:9 slides, each one
 figure with a few words, `#hook`, `#climb`, `#question`, `#tea`, `#harness`, `#finding`, `#beyond`, `#efficiency`,
@@ -619,7 +627,7 @@ search tool. No count of GPU jobs avoided by a search exists.
 
 The page `/exa` (`tools/exa_page.py`; not a header tab, and its look is its own: white paper and one cyan marker) shows
 four searches that changed a decision, and what the agents got from Exa up to Nov 15 15:29 UTC, without the number of
-calls. The four searches are one 3D scene under the first screen: a track with the stations Idea, Exa, GPU run and
+calls. Its first screen is five numbers and one 3D scene of the four searches: a track with the stations Idea, Exa, GPU run and
 Board, a porcelain gate at Exa, and above it one dot for each of the 677 distinct pages Exa returned
 (`distinct_urls_in_search_results`). Each case is replayed: slabs (the ideas) reach the gate, a beam lights the pages
 Exa returned, and the slabs stop at the gate, pass smaller, or go to the Board over the GPU run. The buttons 1 to 4
@@ -672,7 +680,7 @@ memory before it starts an idea.
 - Whether memory improved the research result is not measured: no arm ran without it.
 
 The page `/pastdev` (`tools/pastdev.py`; not a header tab, and its look is its own: white paper and one blue for what
-past.dev returned) shows this in two 3D scenes. The first is the memory as a disc with one dot per stored source (854:
+past.dev returned) shows this on its first screen: four usage numbers and two 3D scenes side by side. The first is the memory as a disc with one dot per stored source (854:
 616 paper findings, 227 board posts, 11 sessions), the agents that write behind it and the agents that read in front,
 the theory generator joined to the paper sector only. It replays four real reads (`/pastdev#read-1` is the read across
 two people above): the write, the question, the returned source in blue. The second draws the pilot: per method, 20

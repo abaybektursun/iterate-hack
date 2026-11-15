@@ -1,10 +1,12 @@
 """How the team used past.dev as its shared memory, on one page.
 
-Served at /pastdev by view.py; not a header tab. A static page with no data read: the first screen is one real recall
-(the query, the entry past.dev returned, the agent's next sentence), then the usage numbers read from the past.dev
-usage API on 2026-11-15 15:40 UTC, four more recalls quoted from the team's Claude Code transcripts, the recall pilot
-(studies/metaharness/results/recall_pilot/recall_vs_grep-01), and what the page does not show. Its
-look is its own (white paper, black ink, one blue for what past.dev returned), at the person's request.
+Served at /pastdev by view.py; not a header tab. A static page with no data read. The first screen is the title, four
+usage numbers read from the past.dev usage API on 2026-11-15 15:40 UTC, and the two scenes side by side: four recalls
+quoted from the team's Claude Code transcripts, replayed, and the recall pilot
+(studies/metaharness/results/recall_pilot/recall_vs_grep-01); the caption of the selected recall runs under both.
+One recall quoted in full follows (the query, the entry past.dev returned, the agent's next sentence), then how the
+setup works and what the page does not show. Its look is its own (white paper, black ink, one blue for what past.dev
+returned), at the person's request.
 
 The four recalls are replayed in a 3D scene of the memory: a porcelain disc holding 854 source dots in three sectors
 (616 paper findings, 227 board posts, 11 sessions), the writers behind it and the readers in front. Each replay shows
@@ -33,11 +35,23 @@ body { background: var(--paper); color: var(--ink); font: 400 17px/1.5 Archivo, 
 /* masthead */
 .mast { display: flex; justify-content: space-between; gap: 24px; padding: calc(var(--u) * 3) 0; border-bottom: 2px solid var(--rule); font-size: 14px; font-weight: 600; }
 
-/* first screen */
-.first { display: grid; grid-template-columns: 5fr 7fr; gap: calc(var(--u) * 8); padding: calc(var(--u) * 9) 0 calc(var(--u) * 10); border-bottom: 2px solid var(--rule); }
-h1.cond { font-size: clamp(64px, 8.6vw, 136px); line-height: 1.04; }
-.first .sub { margin-top: calc(var(--u) * 4); font-size: 20px; line-height: 1.45; max-width: 420px; }
-.ex { align-self: end; }
+/* first screen: title, four usage numbers, both scenes, the caption of the selected recall */
+.top { padding: calc(var(--u) * 3) 0 calc(var(--u) * 5); border-bottom: 2px solid var(--rule); }
+.lede { display: flex; align-items: center; gap: calc(var(--u) * 5); }
+h1.cond { font-size: clamp(44px, 5.6vw, 88px); line-height: 1; white-space: nowrap; }
+.lede .sub { font-size: 17px; line-height: 1.45; max-width: 520px; }
+.nums { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: calc(var(--u) * 3); border-top: 2px solid var(--rule); }
+.nums > div { padding: calc(var(--u) * 1.5) calc(var(--u) * 2.5) calc(var(--u) * 1.5); border-left: 1px solid var(--hair); }
+.nums > div:first-child { border-left: 0; padding-left: 0; }
+.nums .n { display: block; font-stretch: 62%; font-weight: 800; font-size: clamp(36px, 4vw, 60px); line-height: 1; font-variant-numeric: tabular-nums; }
+.nums .w { display: block; margin-top: 6px; font-size: 17px; font-weight: 600; line-height: 1.3; }
+.nums .d { display: block; font-size: 14px; line-height: 1.4; color: var(--grey); }
+.src-line { padding-top: calc(var(--u) * 1); border-top: 1px solid var(--hair); font-size: 13px; color: var(--grey); }
+.figs { display: grid; grid-template-columns: 7fr 5fr; grid-template-areas: "mem tw" "strip strip"; column-gap: calc(var(--u) * 6); margin-top: calc(var(--u) * 3); }
+.fig-mem { grid-area: mem; } .fig-tw { grid-area: tw; }
+.figlab { font-size: 15px; font-weight: 600; padding-bottom: calc(var(--u) * 1); }
+.figsay { margin-top: calc(var(--u) * 1); font-size: 14px; max-width: 600px; }
+.ex { align-self: start; }
 .ex .row { display: grid; grid-template-columns: 96px 1fr; gap: calc(var(--u) * 3); padding: calc(var(--u) * 3) 0; border-top: 1px solid var(--hair); }
 .ex .row:first-child { border-top: 2px solid var(--rule); }
 .ex .k { font-size: 13px; font-weight: 600; line-height: 1.9; }
@@ -54,20 +68,9 @@ h1.cond { font-size: clamp(64px, 8.6vw, 136px); line-height: 1.04; }
 
 /* sections */
 section { display: grid; grid-template-columns: 5fr 7fr; gap: calc(var(--u) * 8); padding: calc(var(--u) * 10) 0; border-bottom: 2px solid var(--rule); }
-section.wide { display: block; }
 h2 { font-size: clamp(40px, 4.6vw, 68px); text-wrap: balance; }
 section > div:first-child { align-self: start; position: sticky; top: 40px; }
-section.wide > div:first-child { position: static; }
 section .say { margin-top: calc(var(--u) * 3); font-size: 18px; max-width: 420px; }
-section.wide .say { max-width: 640px; }
-
-/* ledger table */
-table { width: 100%; border-collapse: collapse; }
-td { padding: calc(var(--u) * 2) 0; border-top: 1px solid var(--hair); vertical-align: baseline; }
-tr:first-child td { border-top: 2px solid var(--rule); }
-td.n { font-stretch: 62%; font-weight: 800; font-size: clamp(40px, 4.4vw, 64px); line-height: 1; width: 1%; white-space: nowrap; padding-right: calc(var(--u) * 4); font-variant-numeric: tabular-nums; }
-td.w { font-size: 20px; font-weight: 600; width: 34%; }
-td.d { color: var(--grey); font-size: 16px; }
 
 /* the two scenes: one SVG under, an optional canvas for the many small dots, one SVG over */
 .scene { position: relative; width: 100%; overflow: hidden; touch-action: pan-y; }
@@ -79,28 +82,27 @@ td.d { color: var(--grey); font-size: 16px; }
 .scene text.tag { font-size: 13px; font-weight: 600; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round; paint-order: stroke; }
 .scene text.ml { font-size: 13px; font-weight: 500; fill: var(--grey); }
 .scene text.ml.on { font-weight: 600; fill: var(--ink); }
-.key { margin-top: calc(var(--u) * 2); font-size: 14px; color: var(--grey); max-width: 600px; }
+.key { margin-top: calc(var(--u) * 1.5); font-size: 14px; color: var(--grey); max-width: 600px; }
+#mem, #tw { height: clamp(340px, 46vh, 500px); }
 
-/* the memory, with real reads replayed */
-.mem { display: grid; grid-template-columns: 7fr 5fr; gap: calc(var(--u) * 7); margin-top: calc(var(--u) * 6); align-items: start; }
-#mem { height: 560px; }
-.cases { display: grid; }
-.case { grid-area: 1 / 1; visibility: hidden; }
+/* the caption of the selected recall: a strip of four columns under both scenes; every case sits in the same cell,
+   so the strip keeps the height of the longest one and nothing moves between cases */
+.strip { --cols: 1fr 1.25fr 1.6fr 1.6fr; grid-area: strip; display: grid; grid-template-columns: var(--cols); column-gap: calc(var(--u) * 4); margin-top: calc(var(--u) * 4); padding-top: calc(var(--u) * 2.5); border-top: 1px solid var(--hair); }
+.cases { display: grid; grid-column: 1 / -1; grid-row: 1; }
+.case { grid-area: 1 / 1; visibility: hidden; display: grid; grid-template-columns: var(--cols); column-gap: calc(var(--u) * 4); }
 .case.on { visibility: visible; }
-.case .when { font-size: 15px; font-weight: 600; padding-bottom: calc(var(--u) * 2.5); }
+.case .when { font-size: 15px; font-weight: 600; padding-bottom: 76px; }  /* room for the buttons below it */
 .case .when span { display: block; font-weight: 400; color: var(--grey); }
-.case .blk { padding: calc(var(--u) * 2.5) 0; border-top: 1px solid var(--hair); }
 .case .lab { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-.case .ret { color: var(--blue); font-size: 18px; line-height: 1.42; font-weight: 500; }
-.case .then { font-size: 18px; line-height: 1.42; font-weight: 500; }
+.case .ret { color: var(--blue); font-size: 17px; line-height: 1.42; font-weight: 500; }
+.case .then { font-size: 17px; line-height: 1.42; font-weight: 500; }
 .case b { font-weight: 700; }
-.picks { display: flex; gap: calc(var(--u) * 1.5); padding-top: calc(var(--u) * 3); border-top: 1px solid var(--hair); }
+.picks { grid-column: 1; grid-row: 1; align-self: end; position: relative; z-index: 1; display: flex; gap: calc(var(--u) * 1.5); }
 .picks button { width: 48px; height: 48px; padding: 0; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink); font: 800 22px/1 Archivo, Arial, sans-serif; font-stretch: 62%; font-variant-numeric: tabular-nums; cursor: pointer; }
 .picks button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .picks button:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 
 /* recall against grep, as towers */
-#tw { height: 640px; }
 #tw text.cnt { font-stretch: 62%; font-weight: 800; font-size: 30px; font-variant-numeric: tabular-nums; }
 #tw text.lane { font-size: 14px; }
 #tw tspan.tn { font-stretch: 62%; font-weight: 800; font-size: 30px; font-variant-numeric: tabular-nums; }
@@ -120,11 +122,24 @@ td.d { color: var(--grey); font-size: 16px; }
 
 @media (max-width: 900px) {
   .page { padding: 0 20px; }
-  .first, section { grid-template-columns: 1fr; gap: calc(var(--u) * 5); padding: calc(var(--u) * 6) 0; }
+  section { grid-template-columns: 1fr; gap: calc(var(--u) * 5); padding: calc(var(--u) * 6) 0; }
   .mast span:last-child { text-align: right; }
   .ex .row { grid-template-columns: 1fr; gap: 6px; }
   .ex .k span { display: inline; margin-left: 8px; }
-  .mem { grid-template-columns: 1fr; gap: calc(var(--u) * 4); }
+  .top { padding: calc(var(--u) * 4) 0 calc(var(--u) * 5); }
+  .lede { display: block; }
+  h1.cond { white-space: normal; }
+  .lede .sub { margin-top: calc(var(--u) * 2); }
+  .nums { grid-template-columns: 1fr 1fr; }
+  .nums > div:nth-child(odd) { border-left: 0; padding-left: 0; }
+  .nums > div:nth-child(n+3) { border-top: 1px solid var(--hair); }
+  .figs { grid-template-columns: minmax(0, 1fr); grid-template-areas: "mem" "strip" "tw"; }
+  .fig-tw { margin-top: calc(var(--u) * 5); }
+  .strip { display: block; margin-top: calc(var(--u) * 3); }
+  .case { display: block; }
+  .case .when { padding-bottom: calc(var(--u) * 2); }
+  .case .blk { padding: calc(var(--u) * 2) 0; border-top: 1px solid var(--hair); }
+  .picks { padding-top: calc(var(--u) * 2.5); border-top: 1px solid var(--hair); }
   #mem { height: 340px; }
   #tw { height: 400px; }
   section > div:first-child { position: static; }  /* in one column a sticky heading would slide over its own figure */
@@ -134,12 +149,6 @@ td.d { color: var(--grey); font-size: 16px; }
   #tw tspan.tw { font-size: 11px; }
   .scene text { font-size: 10px; }
   .scene text.tag { display: none; }  /* the caption below names the source */
-  td.d { display: block; border-top: 0; padding-top: 0; }
-  td.n, td.w { display: inline-block; border-top: 0; padding-bottom: 4px; width: auto; }
-  td.n { padding-right: 12px; font-size: 44px; }
-  tr { display: block; border-top: 1px solid var(--hair); }
-  tr:first-child { border-top: 2px solid var(--rule); }
-  tr:first-child td { border-top: 0; }
 }
 </style>
 </head>
@@ -148,55 +157,40 @@ td.d { color: var(--grey); font-size: 16px; }
 
   <div class="mast"><span>past.dev, used by iterate-hack</span><span>SF AI Research Hackathon · Nov 14–15, 2026</span></div>
 
-  <div class="first">
-    <div>
+  <div class="top">
+    <div class="lede">
       <h1 class="cond">Our agents asked first.</h1>
-      <p class="sub">Three people ran dozens of Claude Code agents on one research question. Before an agent started an idea, it asked past.dev what the team had already read and found. This is one of those questions.</p>
+      <p class="sub">Three people ran dozens of Claude Code agents on one research question. Before an agent started an idea, it asked past.dev what the team had already read and found.</p>
     </div>
-    <div class="ex">
-      <div class="row">
-        <p class="k">Asked<span>02:16 UTC</span></p>
-        <p class="asked">recall.py "power distribution sampling sharpening base model matches RL; likelihood ratio log p_RL minus log p_base on base samples"</p>
-      </div>
-      <div class="row">
-        <p class="k blue">Returned<span>by past.dev</span></p>
-        <p class="got">sameraslan: Replacing only tokens with large negative log p_RL − log p_base by tokens sampled from the RL model reaches the RL model’s AIME24 Avg@32.
-        <small>On the Direction of RLVR Updates for LLM Reasoning, Section 3.2, Figure 2, p. 4–5 [arxiv-2603.22117:fde433402c]</small></p>
-      </div>
-      <div class="row">
-        <p class="k">Then<span>the agent</span></p>
-        <p class="then">“My first candidate (RL as distribution sharpening) is already published and in team memory, so I’m checking a second one.”</p>
-      </div>
-      <p class="cap">Nov 15, 2026. The finding had been stored by a teammate’s agent that read the paper in full. Text in blue on this page is what past.dev returned.</p>
+    <div class="nums">
+      <div><span class="n">15,944</span><span class="w">memories</span><span class="d">extracted by past.dev from 854 stored sources</span></div>
+      <div><span class="n">0.4 s</span><span class="w">median recall</span><span class="d">409 ms server side; 95% under 1.2 seconds</span></div>
+      <div><span class="n">1 s</span><span class="w">write to indexed</span><span class="d">median over 854 sources; the slowest took 8 seconds</span></div>
+      <div><span class="n">$1.09</span><span class="w">for all of it</span><span class="d">3,648 credits; dollars derived from an earlier bill</span></div>
     </div>
-  </div>
-
-  <section>
-    <div>
-      <h2 class="cond">Nineteen hours, on the meter.</h2>
-      <p class="say">Read from the past.dev usage API on Nov 15 at 15:40 UTC.</p>
-    </div>
-    <table>
-      <tr><td class="n">15,944</td><td class="w">memories</td><td class="d">extracted by past.dev from 854 stored sources</td></tr>
-      <tr><td class="n">0.4 s</td><td class="w">median recall</td><td class="d">409 ms server side; 95% under 1.2 seconds</td></tr>
-      <tr><td class="n">1 s</td><td class="w">write to indexed</td><td class="d">median over 854 sources; the slowest took 8 seconds</td></tr>
-      <tr><td class="n">$1.09</td><td class="w">for all of it</td><td class="d">3,648 credits; dollars derived from an earlier bill</td></tr>
-    </table>
-  </section>
-
-  <section class="wide">
-    <h2 class="cond">Four more from the log.</h2>
-    <p class="say">Taken from the team’s Claude Code transcripts. In the ones we hold, two of every three recalls returned something a teammate wrote.</p>
-    <div class="mem">
-      <div>
+    <p class="src-line">Read from the past.dev usage API on Nov 15 at 15:40 UTC.</p>
+    <div class="figs">
+      <div class="fig-mem">
+        <p class="figlab">Four real recalls, replayed</p>
         <div class="scene" id="mem" role="img" aria-label="The past.dev memory drawn as a disc of 854 dots, one per stored source: 616 paper findings, 227 board posts and 11 sessions. Paper readers, research agents and the session plugin write into it from behind. A research agent and the theory generator read from it in front; the theory generator reads paper findings only. Each replay shows one agent's write and a different agent's recall returning it.">
           <svg id="mem-back" aria-hidden="true"></svg>
           <canvas id="mem-dots" aria-hidden="true"></canvas>
           <svg id="mem-front" aria-hidden="true"></svg>
         </div>
         <p class="key">Each dot is one of the 854 sources stored in past.dev. Blue is what a recall returned.</p>
+        <p class="figsay">Taken from the team’s Claude Code transcripts. In the ones we hold, two of every three recalls returned something a teammate wrote.</p>
       </div>
-      <div class="cap">
+      <div class="fig-tw">
+        <p class="figlab">Recall against grep, 20 questions</p>
+        <div class="scene" id="tw" role="img" aria-label="past.dev recall put the answer inside the first 2,000 tokens for 20 of 20 questions, and grep for 6 of 20. The median number of tokens the agent has to read is 1,985 with past.dev recall and 121,074 with grep.">
+          <svg id="tw-back" aria-hidden="true"></svg>
+          <canvas id="tw-cubes" aria-hidden="true"></canvas>
+          <svg id="tw-front" aria-hidden="true"></svg>
+        </div>
+        <p class="key">One slab is 2,000 tokens, the most one recall returns. One cube is one question; filled means the answer was inside the first 2,000 tokens.</p>
+        <p class="figsay">Twenty questions whose answer was already on the team board. One was asked of past.dev, the other of a grep over 271 session transcripts (446 MB). One run, templated questions, retrieval only.</p>
+      </div>
+      <div class="strip">
         <div class="cases">
           <article class="case on" data-case="1">
             <p class="when">Nov 15 · 03:13 UTC<span>across two people</span></p>
@@ -231,20 +225,28 @@ td.d { color: var(--grey); font-size: 16px; }
         </div>
       </div>
     </div>
-  </section>
+  </div>
 
   <section>
     <div>
-      <h2 class="cond">Recall against grep.</h2>
-      <p class="say">Twenty questions whose answer was already on the team board. One was asked of past.dev, the other of a grep over 271 session transcripts (446 MB). One run, templated questions, retrieval only.</p>
+      <h2 class="cond">One recall in full.</h2>
+      <p class="say">This is one of those questions.</p>
     </div>
-    <div>
-      <div class="scene" id="tw" role="img" aria-label="past.dev recall put the answer inside the first 2,000 tokens for 20 of 20 questions, and grep for 6 of 20. The median number of tokens the agent has to read is 1,985 with past.dev recall and 121,074 with grep.">
-        <svg id="tw-back" aria-hidden="true"></svg>
-        <canvas id="tw-cubes" aria-hidden="true"></canvas>
-        <svg id="tw-front" aria-hidden="true"></svg>
+    <div class="ex">
+      <div class="row">
+        <p class="k">Asked<span>02:16 UTC</span></p>
+        <p class="asked">recall.py "power distribution sampling sharpening base model matches RL; likelihood ratio log p_RL minus log p_base on base samples"</p>
       </div>
-      <p class="key">One slab is 2,000 tokens, the most one recall returns. One cube is one question; filled means the answer was inside the first 2,000 tokens.</p>
+      <div class="row">
+        <p class="k blue">Returned<span>by past.dev</span></p>
+        <p class="got">sameraslan: Replacing only tokens with large negative log p_RL − log p_base by tokens sampled from the RL model reaches the RL model’s AIME24 Avg@32.
+        <small>On the Direction of RLVR Updates for LLM Reasoning, Section 3.2, Figure 2, p. 4–5 [arxiv-2603.22117:fde433402c]</small></p>
+      </div>
+      <div class="row">
+        <p class="k">Then<span>the agent</span></p>
+        <p class="then">“My first candidate (RL as distribution sharpening) is already published and in team memory, so I’m checking a second one.”</p>
+      </div>
+      <p class="cap">Nov 15, 2026. The finding had been stored by a teammate’s agent that read the paper in full. Text in blue on this page is what past.dev returned.</p>
     </div>
   </section>
 
