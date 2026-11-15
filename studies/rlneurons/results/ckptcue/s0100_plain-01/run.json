@@ -1,0 +1,16 @@
+{
+ "job_id": "abaybektursun-1115-064532-6a2f",
+ "commit": "cf26d19ae08a91d532e1f34e3075d575669d1045",
+ "runner": "tools/vast.py run or ih submit (see job id prefix)",
+ "model_path": "/tmp/s0100",
+ "model_label": "s0100",
+ "prompt": "plain",
+ "seed": 45000000,
+ "temperature": 1.0,
+ "top_p": 1.0,
+ "max_tokens": 16384,
+ "model_dir": "/tmp/s0100",
+ "raw_answers": "runs/abaybektursun-1115-064532-6a2f/answers.jsonl (submitter's laptop)",
+ "started_utc": "2026-11-15T14:47:05Z",
+ "updated_utc": "2026-11-15T15:37:30Z"
+}

@@ -526,6 +526,63 @@ G4 refuted (no change to the base predicted above the best known count). G5 refu
 | r7-m09 | Think-SFT's excess wrong answers on easy problems are final formats that grader v3 rejects. | 4 of 4 | 2 / 2 / 0 | -4.00 | no gain | Groups of 6 to 9 items. |
 | r6-m06 | (carried untested) | 0 of 3 | | | untested | The stored rows still have no per-token probability field. |
 
+## Forecast runs
+
+Every unrefuted theory of the newest round (at most 6, survivors first, then by total gain) and two readers with no
+theory forecast the numbers the open `work` items will report, before they post. Code `lib/forecast.py` (imports the
+job runner and the log density from `lib/round.py`), prompts `lib/prompts/forecast_targets.md`, `forecast.md`,
+`forecast_score.md`.
+
+```
+uv run studies/theory/lib/forecast.py make studies/theory/results/forecast/run-<nn>   # fails if the folder exists
+uv run studies/theory/lib/forecast.py score studies/theory/results/forecast/run-<nn>  # rerun as results post
+```
+
+`make` writes `targets.json` (item id, cell, unit, quote), `forecasts.json`, `forecasts.md` (one table per target),
+`run.json` (commit, command, board snapshot time). `score` reads only items posted after the snapshot and writes
+`scores.json` (measured value, item, quote per target; gain per forecast against the equal mixture of the two readers,
+clipped to [-3, 3] nats) and `scores.md`. Job dirs (prompts, outputs) are under the temp folder in `run.json`.
+
+**run-01** (plan `specs/SPEC_forecast01.md`; snapshot 2026-11-15 14:45:56 UTC; `results/forecast/run-01/`): 20 targets
+from 7 open work items (RL step 100, vote over 9 and 12, cap 32,768, transplant a = 2, 1.5x edit replication,
+autobench, fresh2026); forecasters reader-1, reader-2, r5-m03-rival, r6-account-rival, r6-m06, r7-m05, r7-m08,
+r7-m11. The theories forecast 1 to 3 targets each (r6-m06: none); the rest "theory says nothing". F1 holds (20 targets).
+First score (14:50:25 UTC, `scores.md`): 6 of 20 measured, all fresh2026 (result-5251c9). No theory forecast any of
+them, so F2 is not decided. reader-2 has all 6 inside its interval (mean gain +0.30 nats), reader-1 4 of 6 (-0.77).
+F3 is refuted at this score (every measured value inside some interval) and is checked again as the other 14 post.
+Second score (15:03:15 UTC): 9 of 20 measured (adds t10-t12, the 1.5x edit replication, result-95a4dc: 200.25, 214, 456).
+r5-m03-rival 3 of 3 inside, +1.83 nats (mean +0.61, only 3 targets); reader-2 9 of 9 inside, +2.14; reader-1 6 of 9,
+-5.12. No value outside every interval.
+
+**run-02** (plan `specs/SPEC_forecast02.md`; `make ... --propose 6`; snapshot 2026-11-15 14:53:16 UTC;
+`results/forecast/run-02/`; `run.json` names commit 46875c7, the `--propose` code was committed after the run in the
+same commit as the run folder): 17 targets from 8 open work items, the fresh2026 numbers of result-5251c9 left out.
+Forecasters as in run-01 plus 6 mechanisms written about the targets (`mechanisms.json`, one job, 595 s): all 6 passed
+the checks on the first draft (P1 holds). Each forecasts 9 or 10 targets and lies outside both readers' intervals on
+exactly 3 (`forecasts.md`). The engine's theories forecast 0 to 3 of 17. First score: 3 of 17 measured (t10-t12,
+result-95a4dc). f2-m03 (the 8 directions set only when the base stops) was outside both readers on all three and wrong
+on all three (-7.07 nats); f2-m05 wrong on its one (t10). P3 so far: 0 of 4 disagreements right (needs 8 to decide).
+P2 not decided.
+
+Third score (2026-11-15 15:28 UTC, `scores-2026-11-15T152845.*` and `scores-2026-11-15T152839.*`; `score` now writes a
+time-stamped pair when `scores.json` exists). The autobench result (result-6e7b64: 338 of 400, 139 of 328, dev100 84.0)
+adds 2 targets to run-01 and 3 to run-02. run-01, 11 of 20 measured: reader-2 10 of 11 inside, +3.01 nats; reader-1 7 of 11,
+-8.36; r5-m03-rival 3 of 3, +1.83. t14 (autobench on hard328, 139) is outside every interval. run-02, 6 of 17 measured:
+f2-m01 (autobench buys votes by shortening samples) was outside both readers on t14 (338 against 362 and 356) and t15
+(139 against 190 and 197) and right on both, +3.25 nats over 4 targets. f2-m02 -8.62 over 4, f2-m03 -7.07 over 3, f2-m05
+-5.89 over 3. P3 so far: 2 of 7 disagreements right (needs 8 to decide).
+
+## Engine version 8 (forecasts inside the round)
+
+`lib/round.py --version 8` (now the default; 7 still runs) adds `targets_open` after `standing` and `forecast` after
+`develop` and `account`, both through `lib/forecast.py`'s functions. Mechanisms list the targets they give a number for
+(a third of them or more, at least 3); new theories carry `forecasts`; the readers and carried theories forecast blind.
+The next round's `standing` scores the forecasts (`forecast_scores.json`): 3 or more scored targets with a total at or
+below -2 nats refute; "stands" needs a total above 0 on 3 or more. Smoke run (sonnet, 3 mechanisms, outside the
+repository, about 14 minutes through `split standing targets_open mechanisms develop forecast`): 21 targets, 3 mechanisms
+with 7 targets each, 2 theories developed (7 and 11 forecasts), 1 abandoned; a second smoke folder's `standing` scored
+them (6 targets measured). Both folders deleted.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
@@ -591,5 +648,11 @@ Round-01 forward predictions of idea-0b2ad8 that have been measured (`round-02/r
   It follows from RL writing longer answers (result-5e17a6) and does not separate the mechanisms.
 
 P3 to P6 have no measurement in this record (P3: not measured by the team, per the same review).
+
+Page of the forecasts of open GPU numbers (results/forecast/run-NN): `tools/finding_forecasts_before_results.py`, served at `/finding/forecasts-before-results`. After new scores: `uv run tools/finding_forecasts_before_results.py --write`, then run it with no argument to check.
+
+Page of the engine's record: `tools/finding_theories_on_trial.py`, served at `/finding/theories-on-trial`: every prediction of every round as one mark (interval and measured number) against the readers with no theory. After a new round: `uv run tools/finding_theories_on_trial.py --write`, then the check, then names for the new theories in NAMES.
+
+Page of the self-opened draw (selfopen-01): `tools/finding_base_opens_itself.py`, served at `/finding/base-opens-itself`; running the file checks it against `results/experiments/selfopen-01/`.
 
 Page of the gap account (run-02): `tools/finding_where_the_gap_goes.py`, served at `/finding/where-the-gap-goes`; its numbers are read from `results/account/run-02/check/` and `python3 tools/finding_where_the_gap_goes.py` checks them.

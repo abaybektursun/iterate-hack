@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2369,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "\n  c = -458 - 16\\left(-\\frac{289}{4}\\right) = -458 + 1156 = 698\n  \\]\nThus, \\( P(x) = 2x^2 - \\frac{289}{4}x + 698 \\) and \\( P(0) = 698 \\).\n\nNext, for polynomial \\( Q(x) = -2x^2 + dx + e \\):\n- Substituting \\( (16, 54) \\):\n  \\[\n  -2(16^2) + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n  \\]\n- Substituting \\( (20, 53) \\):\n  \\[\n  -2(20^2) + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n  \\]\n- Solving these equations:\n  \\[\n  4d = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n  \\]\n  Substituting \\( d \\) back:\n  \\[\n  e = 566 - 16\\left(\\frac{287}{4}\\right) = 566 - 1148 = -582\n  \\]\nThus, \\( Q(x) = -2x^2 + \\frac{287}{4}x - 582 \\) and \\( Q(0) = -582 \\).\n\nFinally, the sum \\( P(0) + Q(0) \\):\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\nThe answer is \\boxed{116}."
+ },
+ "wrong": {
+  "problem_index": 15,
+  "gold": "154",
+  "extracted_v3": "392.857",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 10475,
+  "prompt_tail": "wer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nAdults made up $\\frac5{12}$ of the crowd of people at a concert. After a bus carrying $50$ more people arrived, adults made up $\\frac{11}{25}$ of the people at the concert. Find the minimum number of adults who could have been at the concert after the bus arrived.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": ", elveri kuranlak san\u0131rsak kayma her zaman ald\u0131\u011f\u0131 sorunsal\u0131n. Hepsini zaten yapm\u0131\u015ft\u0131m, genelliklerdir bu konu, co\u015fkun veya \u00e7ok oldun ki bu hususu erken bu Gaines Nesinler ve araba kareleri cin satan \u00c4gyptiya Ni\u015fanlar. Fischler fark\u0131, but godu konusunma gunu tabihi;. Bir zamanlar farkl\u0131 ayar eski zamanlarda \u015fu san\u0131rd\u0131\u011f\u0131m analizler \u00f6neme ve.<overnice yerler bunda olarak 2700 G\u00fcnl\u00fck gereksinimimiz \u00e7ininin 2016 Sub304, chaene renkte gelen yapmanz gere\u011fini, 1182 bir 1792 14. Ve sakin turizme. 60\u00b0C ge\u00e7en konfor da\u011f\u0131t\u0131m\u0131n dahiliyyetinin g\u00f6r\u00fc. Hayat\u0131 insan ziyaret\u00e7isi, conversations m\u00fcgesten ve da seseri konverstere.Nazarizle \u015fu kap\u0131 detaylar\u0131 (fare liketi) \u00fcnk\u00fc: Payla\u015fan kiral\u0131k y\u00fck allen diyanet m\u00fchendisi. DIY spazm diyalog. Fekirde d\u00fczenli bir CFL. Kitapl\u0131k R. A bleklerin bo\u015fda \u00c7engelke ve izin"
+ }
+}

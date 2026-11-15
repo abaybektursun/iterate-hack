@@ -1,0 +1,46 @@
+{
+ "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+ "job_id": "abaybektursun-1115-024256-58c8+abaybektursun-1115-024347-94e1+abaybektursun-1115-024432-d87b+abaybektursun-1115-024621-af01",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "sft1",
+  "prompt": "cue",
+  "set": "fresh2026",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 7000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 4,
+  "restarts": 0,
+  "out": "/root/abaybektursun-1115-024256-58c8/out",
+  "dry_run": false,
+  "commit": "94d98636d48b2af9b4e380c64a5b16992bae96f7",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 136,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "source": "runs/fresh_sft1_cue_s4"
+}

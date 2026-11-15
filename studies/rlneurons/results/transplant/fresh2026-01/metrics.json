@@ -1,0 +1,262 @@
+{
+ "sft1_rl20": [
+  {
+   "status": "done",
+   "config": {
+    "model": null,
+    "model_path": "/tmp/theta",
+    "model_label": "sft1_rl20",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 7000000,
+    "shots": null,
+    "n": null,
+    "shard": null,
+    "samples": 1,
+    "restarts": 0,
+    "out": "/root/abaybektursun-1115-064456-33a0/out",
+    "dry_run": false,
+    "commit": "b7842178626523ff84be6287739c814d21886f22",
+    "model_repo": null,
+    "model_revision": null,
+    "tokenizer": [
+     "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    ],
+    "prefix_ids": [
+     1584,
+     2268,
+     33413
+    ],
+    "sampling": {
+     "temperature": 1.0,
+     "top_p": 1.0,
+     "repetition_penalty": 1.0
+    },
+    "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+    "n_problems": 136,
+    "shots_arm": null,
+    "shots_sha256": null,
+    "shots_tokens": 0
+   },
+   "commit": "b7842178626523ff84be6287739c814d21886f22",
+   "job_id": "abaybektursun-1115-064456-33a0",
+   "versions": {
+    "vllm": "0.32.0",
+    "math-verify": "0.9.0",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3"
+   },
+   "started_utc": "2026-11-15T14:47:42Z",
+   "updated_utc": "2026-11-15T15:40:06Z",
+   "engine": {
+    "vllm": "0.32.0",
+    "max_num_seqs": 128,
+    "max_num_batched_tokens": 2048,
+    "num_gpu_blocks": 36083,
+    "gpu_memory_utilization": 0.9,
+    "max_model_len": 18432,
+    "load_s": 155.1051630973816,
+    "model_dir": "/tmp/theta",
+    "tok_dir": "/root/.cache/huggingface/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   },
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 26174,
+    "tok_p_lt_1e3": 6113,
+    "correct_v3": 69,
+    "correct_v1": 68,
+    "cap_hits": 50,
+    "loop_A": 0,
+    "generated_tokens": 1657362,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 12186.485294117647,
+    "generation_s": 2981.843574523926,
+    "tokens_per_s": 555.8178886914317
+   },
+   "memory": {
+    "gpu_memory_used_mib": 87548,
+    "gpu_memory_total_mib": 97887,
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition"
+   },
+   "wall_s": 3144.189188480377
+  },
+  {
+   "status": "done",
+   "config": {
+    "model": null,
+    "model_path": "/tmp/theta",
+    "model_label": "sft1_rl20",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 7020000,
+    "shots": null,
+    "n": null,
+    "shard": null,
+    "samples": 1,
+    "restarts": 0,
+    "out": "/root/abaybektursun-1115-064540-7ae0/out",
+    "dry_run": false,
+    "commit": "b7842178626523ff84be6287739c814d21886f22",
+    "model_repo": null,
+    "model_revision": null,
+    "tokenizer": [
+     "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    ],
+    "prefix_ids": [
+     1584,
+     2268,
+     33413
+    ],
+    "sampling": {
+     "temperature": 1.0,
+     "top_p": 1.0,
+     "repetition_penalty": 1.0
+    },
+    "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+    "n_problems": 136,
+    "shots_arm": null,
+    "shots_sha256": null,
+    "shots_tokens": 0
+   },
+   "commit": "b7842178626523ff84be6287739c814d21886f22",
+   "job_id": "abaybektursun-1115-064540-7ae0",
+   "versions": {
+    "vllm": "0.32.0",
+    "math-verify": "0.9.0",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3"
+   },
+   "started_utc": "2026-11-15T14:52:42Z",
+   "updated_utc": "2026-11-15T15:43:24Z",
+   "engine": {
+    "vllm": "0.32.0",
+    "max_num_seqs": 128,
+    "max_num_batched_tokens": 2048,
+    "num_gpu_blocks": 36083,
+    "gpu_memory_utilization": 0.9,
+    "max_model_len": 18432,
+    "load_s": 95.08256340026855,
+    "model_dir": "/tmp/theta",
+    "tok_dir": "/root/.cache/huggingface/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   },
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 26086,
+    "tok_p_lt_1e3": 5874,
+    "correct_v3": 70,
+    "correct_v1": 70,
+    "cap_hits": 44,
+    "loop_A": 0,
+    "generated_tokens": 1643419,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 12083.963235294117,
+    "generation_s": 2941.461016893387,
+    "tokens_per_s": 558.7084073395916
+   },
+   "memory": {
+    "gpu_memory_used_mib": 87548,
+    "gpu_memory_total_mib": 97887,
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Workstation Edition"
+   },
+   "wall_s": 3041.8418033123016
+  },
+  {
+   "status": "done",
+   "config": {
+    "model": null,
+    "model_path": "/tmp/theta",
+    "model_label": "sft1_rl20",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 7030000,
+    "shots": null,
+    "n": null,
+    "shard": null,
+    "samples": 1,
+    "restarts": 0,
+    "out": "/root/abaybektursun-1115-064708-17f7/out",
+    "dry_run": false,
+    "commit": "b7842178626523ff84be6287739c814d21886f22",
+    "model_repo": null,
+    "model_revision": null,
+    "tokenizer": [
+     "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    ],
+    "prefix_ids": [
+     1584,
+     2268,
+     33413
+    ],
+    "sampling": {
+     "temperature": 1.0,
+     "top_p": 1.0,
+     "repetition_penalty": 1.0
+    },
+    "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+    "n_problems": 136,
+    "shots_arm": null,
+    "shots_sha256": null,
+    "shots_tokens": 0
+   },
+   "commit": "b7842178626523ff84be6287739c814d21886f22",
+   "job_id": "abaybektursun-1115-064708-17f7",
+   "versions": {
+    "vllm": "0.32.0",
+    "math-verify": "0.9.0",
+    "transformers": "5.19.0",
+    "tokenizers": "0.23.3"
+   },
+   "started_utc": "2026-11-15T14:50:22Z",
+   "updated_utc": "2026-11-15T15:47:24Z",
+   "engine": {
+    "vllm": "0.32.0",
+    "max_num_seqs": 128,
+    "max_num_batched_tokens": 2048,
+    "num_gpu_blocks": 36065,
+    "gpu_memory_utilization": 0.9,
+    "max_model_len": 18432,
+    "load_s": 86.72287917137146,
+    "model_dir": "/tmp/theta",
+    "tok_dir": "/root/.cache/huggingface/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+   },
+   "counts": {
+    "n": 136,
+    "tok_p_lt_1e2": 24898,
+    "tok_p_lt_1e3": 5723,
+    "correct_v3": 75,
+    "correct_v1": 75,
+    "cap_hits": 46,
+    "loop_A": 1,
+    "generated_tokens": 1620411,
+    "restarts": 0,
+    "n_planned": 136,
+    "mean_generated_tokens": 11914.786764705883,
+    "generation_s": 3331.5438964366913,
+    "tokens_per_s": 486.3844062607543
+   },
+   "memory": {
+    "gpu_memory_used_mib": 87512,
+    "gpu_memory_total_mib": 97887,
+    "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition"
+   },
+   "wall_s": 3422.152087211609
+  }
+ ]
+}

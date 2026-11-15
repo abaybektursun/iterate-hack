@@ -1,5 +1,64 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 16:15 UTC (session cap32, after result of work-ceccc0) meta/reviews/abaybektursun/20261115-1610-cap32/
+
+- Previous entry of this session asked for minutes from a trained model to a keep-or-stop decision. No trained model since; not measured.
+- Direction: work-ceccc0 served the deliverable directly ("best configuration of either model on the 328"): Think-SFT cue at cap 32,768 = 230 of 328 at 11,795 tokens, the best single-sample row. The follow-up (vote at the larger cap) is with another session (work-dc9359).
+- Turnaround (before.txt): claim to first result 6 h 20 min, of which about 4 h 45 min the laptop was off. Generation was 87 to 129 min per cell. Two losses: 35 min on three 48 GB boxes at 240 tokens per second, and the base cell (about 2.5 box hours) lost when its box ended before the rows were copied.
+- Cause of the lost cell: a finished job's rows existed only on the box until a laptop process copied them.
+- Change (step 2, delete the dependency on the laptop): already made on main by another session while this ran (vast.py 6d6a18b uploads a job's outputs to the team store when it ends). Nothing added here. After: not measured by this session; the AWS rerun used ih, which writes to S3 every 30 s, and lost nothing.
+- Next entry checks: one vast.ai cell fetched with get after its box is gone.
+
+## 2026-11-15 16:00 UTC (loop cycle 10) meta/reviews/abaybektursun/20261115-1550/
+
+- Target (Team line, 4 h): claim to close median 174 min (131 at 15:01), upper quartile 376 min (184), 12 items by 3 people (9); 3.8 results per hour (3.0). The rate rose, the median rose: long items from before the outage are closing now. Modal 28 jobs, 0 failed, wait 0.1 min.
+- Open measurements: the vast.py upload (cycle 9) has not run on a real job. 3 vast.ai jobs were submitted after it, 0 from a commit that contains it; 0 real tars in the team store. Sharded jobs: none in the 4 h listing of this laptop's records.
+- Cause (before.txt): 18 of 25 worktrees have not merged 6d6a18b, among them the four active ones (cap32run, critic, egate, shots: last merge 49 to 69 min old). A session runs the tools of its own checkout, so a tool change on main reaches it only at its next pull; the message on `all` at 15:03 did not lead to one.
+- Score of cycle 9: not measurable yet, for that reason.
+- Change (step 3; step 2 found nothing to delete: one checkout per writer is what keeps writers apart): the message hook adds one line when origin/main changed tools/, infra/ or .claude/ since the checkout merged it (tools/msg.py, one fetch per 10 min for all checkouts).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | worktrees without the newest tool change, 55 min after its push | 18 of 25 | not measured yet | | 1 | before.txt |
+  | active worktrees without it | 4 of 4 | not measured yet | | 1 | before.txt |
+  | stale checkout gets the line | no | yes, once per 10 min | | 1 | after.txt |
+
+- Seen, not mine to act on: box 60799654 is "offline" with GPU 0 % and its job fa29 ended "exit 1" (NVML Unknown Error); told its owner by message.
+- Next cycle checks: active worktrees containing the newest tools commit; real tars under jobs/; the Team line against 174 / 376 min and 3.8 per hour.
+
+## 2026-11-15 15:05 UTC (loop cycle 9, asked for by the person: three read-only subagents on jobs, transcripts and the board) meta/reviews/abaybektursun/20261115-1500/
+
+- Target: Team, last 4 h: claim to close median 131 min, upper quartile 184 min, over 9 work items closed by 2 people; 12 results, 3.0 per hour. Over 8 h: 92 / 172 min, 31 items, 5.5 per hour.
+- Cause of the low rate (verified in trace pushes and git): no agent of abaybektursun made a tool call from 12:06 to 14:46 UTC; the laptop was down. Every job's outputs and every waiter depend on the laptop.
+- Where the minutes are: generation is 93 % of submit-to-end on vast.ai (39 jobs) and runs at the GPU's memory bandwidth (H100 1,019 tok/s, RTX PRO 6000 557, L40S 267), so vLLM settings give nothing; shards and faster GPUs do. 8 sharded jobs went out at 14:42-14:48, the first.
+- Change (step 2, delete the laptop from the path of a job's outputs): a `vast.py run` job uploads its $OUT_DIR to the team store when it ends (presigned URL, no key on the box); `get` reads it from there, box alive or not.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | vast.ai jobs with no copy, 8 h | 49 of 77 | not measured yet | | | before.txt; cycle.py |
+  | billed GPU-hours on boxes whose jobs were never copied | about 15 of 86.6 | not measured yet | | | before.txt |
+  | local test: outputs fetched with no box | 0 | 1 of 1 | works | 1 | after.txt |
+
+- Failures removed: idle boxes were invisible (13.0 GPU-hours on boxes with no job): `vast.py ls` prints GPU use. Another agent's question reset a work item's idle time (work-ab0f72: "idle 5m" after 168 min): only the owner's comment resets it now (board.py; test in after.txt).
+- Not made, for the person: `vast.py` sharding in one command (about 20 to 30 % more credits for about 3x shorter cells); H100 offers on vast.ai (1.8x faster, 2 offers); close a work item at its first answer (5 of the 8 slowest items had their answer 90 to 170 min before close; AGENTS.md); split the 350 KB studies/rlneurons/README.md (6 of 16 merge conflicts; AGENTS.md).
+- Next cycle checks: the first real job with a tar in jobs/ of the team store; "no copy yet" against 49 of 77; the sharded jobs' minutes against 98 for hard328.
+
+## 2026-11-15 14:50 UTC (loop cycle 8, step-back 2; no tool change) meta/reviews/abaybektursun/20261115-1441/
+
+- Target (Team line, 4 h): claim to close median 73 min (92 at 11:20), upper quartile 131 min (210), 10 items by 2 people (23); 3.2 results per hour (7.2). Fewer items, each still slow. 17 Modal jobs in the window (105 at 10:18), median wait 0.1 min, 0 failed; vast.ai 15 listed, 13 with run minutes. The laptop restarted near 14:35 and stopped every session.
+- Open measurements closed: AWS jobs in cycle.py: 2 real ones listed at 14:47 (aws_listed_1447.txt), so cycle 6's change works on real records. Theory round minutes (11:45 entry): 125 -> 55, one run each; theories with a computed test 9 -> 10 (round-07 run.json). No sharded job in the listing: the full sharded cell has not run.
+- Score of cycle 7 (stale FAILURES row deleted): no effect on the target.
+- Step-back (stepback.md): none of the loop's three changes since 08:15 moved the target; all repaired the measure. The one change that cut minutes deleted a stage and was made by the owner of that code. Never fixed: a full sharded cell, credits, reviews by other sessions (AGENTS.md rule 8).
+- Skill, reverted by the loop's rule: "post as an idea instead of carrying" (213bd18). 0 of 3 ideas were commented or claimed in 6.5 h, against 1 of 9 before; the target did not improve either (31 -> 43, 142, 92, 73 min), for a cause outside the edit.
+- Skill, the one edit (step 2, delete): section 2 (Research) is removed: 0 changes from it in 32 entries.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | lines of SKILL.md | 131 | 120 | 11 fewer | | wc -l |
+  | 4 h target, median min | 43, 142, 92, 73 (cycles 5 to 8) | not measured yet | | | meta/loop/abaybektursun.md |
+
+- Next cycle checks: 9 rented vast.ai boxes ran no job from 12:20 to 14:44 UTC (msg.py, 14:42 and 14:43), about 13.7 USD per hour: whether `vast.py ls` shows a box with no job; the first sharded cell; the Team line against 73 / 131 min and 3.2 per hour.
+
 ## 2026-11-15 11:45 UTC (theory engine session, after result-3a3af3 and result-8b0706) meta/reviews/abaybektursun/20261115-1126-theory/
 
 - Previous entry's checks belong to the review loop session; this entry covers the theory engine only (work-502f19).

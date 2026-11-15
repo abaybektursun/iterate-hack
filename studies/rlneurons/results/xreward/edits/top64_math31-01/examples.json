@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 3549,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "\\[ -2(256) + 16c + d = 54 \\]\n\\[ -512 + 16c + d = 54 \\]\n\\[ 16c + d = 54 + 512 \\]\n\\[ 16c + d = 566 \\quad \\text{(Equation 3)} \\]\n\n2. At \\(x = 20\\):\n\\[ -2(20^2) + 20c + d = 53 \\]\n\\[ -2(400) + 20c + d = 53 \\]\n\\[ -800 + 20c + d = 53 \\]\n\\[ 20c + d = 53 + 800 \\]\n\\[ 20c + d = 853 \\quad \\text{(Equation 4)} \\]\n\nSubtract Equation 3 from Equation 4:\n\\[ (20c + d) - (16c + d) = 853 - 566 \\]\n\\[ 4c = 287 \\]\n\\[ c = \\frac{287}{4} \\]\n\nSubstitute \\(c = \\frac{287}{4}\\) into Equation 3:\n\\[ 16\\left(\\frac{287}{4}\\right) + d = 566 \\]\n\\[ 4(287) + d = 566 \\]\n\\[ 1148 + d = 566 \\]\n\\[ d = 566 - 1148 \\]\n\\[ d = -582 \\]\n\nThus, \\(Q(x) = -2x^2 + \\frac{287}{4}x - 582\\).\n\n### Finding \\(P(0) + Q(0)\\):\n\\[ P(0) = b = 698 \\]\n\\[ Q(0) = d = -582 \\]\n\nThus,\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\nThe final answer is:\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 57,
+  "gold": "928",
+  "extracted_v3": "2744",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 13877,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ares being monochromatic is disallowed, and each individual square is allowed.\n\n   - For the intersections of any two squares, each pair of squares contributes:\n     \\[\n     2 \\times 2 \\times 2^4 = 2 \\times 2 \\times 16 = 64\n     \\]\n   - There are 3 pairs of squares:\n     \\[\n     3 \\times 64 = 192\n     \\]\n   - For the intersection of all three squares, each pair of squares being monochromatic is disallowed, and each individual square is allowed:\n     \\[\n     2 \\times 2 \\times 2 = 8\n     \\]\n\n   Applying the inclusion-exclusion principle:\n   \\[\n   \\text{Total invalid colorings} = 1536 - 192 + 8 = 1352\n   \\]\n\n4. **Valid Colorings**:\n   Subtract the invalid colorings from the total number of colorings:\n   \\[\n   4096 - 1352 = 2744\n   \\]\n\nThus, the number of valid colorings is:\n\\[\n\\boxed{2744}\n\\]"
+ }
+}

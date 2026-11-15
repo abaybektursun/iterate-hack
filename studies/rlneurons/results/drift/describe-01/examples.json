@@ -1,0 +1,403 @@
+[
+ {
+  "cell": "hard328_sft",
+  "problem_index": 61,
+  "unique_id": "aime2024/2024_AIME_I_Problems/Problem_10",
+  "sample": 1,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "start_tok": 13584,
+  "letters": 506,
+  "scripts": {
+   "CJK": 506
+  },
+  "back": null,
+  "episodes": 1,
+  "before_300": "and Δx squared=625/36,\n\nthus total is indeed 625/36 +218,750/1089,\n\nTo combine, converting to 45 as denominator or computed:\n\n625/36 = (625*30.25)/1089,\n\n625 ×30.25 = 18,906.25,\n\n thus total numerator is 18,906.25 +218,750=237,656.25,\n\nSo 237,656.25/1089,\n\nThen if 325/22 squared is (325)^2/(22^2),\n\n",
+  "from_switch_500": "计算 325^2 = 105,625,\n\n22^2 =484,\n\n Thus 325/22 squared is105,625/484,\n\n要与之转换为1,089分母, 要注意到484 * 2.1216≈1,089. 但是这是分数的计算。Thus 105,625/484等价于(105,625 × 2.25)/ (484×2.25)=105,625×2.25/1089,\n\n计算2.25 × 105,625=235,  but this leads to the discrepancy because perhaps my initial assumption that DA is 325/22 is incorrect,\n\nWait, but where was the error in simplifying ?\n\n当我们计算 DA squared as:\n\n625/36 + 218750/1089,\n\n我试图将其转换为 common denominator 1089:\n\n625/36 = (625 × (30.25))/1089,\n\n因为 30.25乘以36等于1089,\n\n但是30",
+  "after_episode_300": "50,625 divided by (22×325)=",
+  "text_last_200": " DA=325/22,\n\n 因此 denominator是 325/22,\n\n 因此:\n\nDP= (225²)/ (22²) divided by (325/22)= (225²) /22² * 22/325= (225² *22)/ (22²×325 )= (225²) / (22 ×325 ),\n\n因此 DP是,\n\n225 squared是50,625 divided by (22×325)="
+ },
+ {
+  "cell": "hard328_sft",
+  "problem_index": 66,
+  "unique_id": "aime2024/2024_AIME_I_Problems/Problem_15",
+  "sample": 0,
+  "n_new": 15243,
+  "cap_hit": false,
+  "score_v3": 1,
+  "start_tok": 14310,
+  "letters": 57,
+  "scripts": {
+   "CJK": 57
+  },
+  "back": true,
+  "episodes": 1,
+  "before_300": "516,\n\nSo it's less than 41.06.\n\nHence the maximum is indeed at a=2.\n\nWhen I computed with a=2.01, the mistake might be miscalculation of the sum of squares.\n\nEarlier with a=2.01, the roots were approximately5.78 and 1.98,\n\nThe exact calculation:\n\n(5.78)^2 =33.4,\n\n(1.98)^2=3.920392,\n\nThus sum is 2.01",
+  "from_switch_500": "的平方是4.0401 +33.40 +3.920≈41.36.\n\nHowever, according to the maximum S is achieved at a=2.\n\nBut using calculus, S(a)的最大值在a=2精确。\n\n这表明当a=2时，才是最大值，计算出的41.06 肯定是最大的。\n\nLikely因为我这里的 Manual calculation with a=2.01可能有approximation误差，在精确计算时 the actual maximum when a slightly over 2 might not actually be higher than at a=2. 因为 the derivative is zero at a=2, 这个点是maximum。\n\nThus conclude that the maximum of a² +b² +c² occurs at a=2，b=2，c=23/4.\n\nTherefore the minimal sphere半径 squared is 657⁄64，故 the answer is 6",
+  "after_episode_300": " the answer is 657+64=721.\n\n**Final Answer**\n\\boxed{721}\n</think>\n\nGiven a set of rectangular boxes with surface area \\(54\\) and volume \\(23\\), we need to determine the radius \\(r\\) of the smallest sphere that can contain all such boxes. The value of \\(r^2\\) is required, and the final answer is the ",
+  "text_last_200": " in simplest form. The numerator \\(657 = 3^2 \\times 73\\) and denominator \\(64 = 2^6\\) have no common factors.\n   - Thus, \\(p = 657\\) and \\(q = 64\\), leading to \\(p + q = 657 + 64 = 721\\).\n\n\\boxed{721}"
+ },
+ {
+  "cell": "hard328_sft",
+  "problem_index": 81,
+  "unique_id": "aime2024/2024_AIME_II_Problems/Problem_15",
+  "sample": 3,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "start_tok": 14323,
+  "letters": 175,
+  "scripts": {
+   "CJK": 175
+  },
+  "back": true,
+  "episodes": 5,
+  "before_300": "direction 1 and4，\"(how many edges of direction1 and4 cross, then form vertices?\n\nFor example， in a regular polygon with even number of sides:\n\nIn regular polygon， two chords are parallel if they subtend the same arc steps. Two diagonals are perpendicular if the arcs are separated by an angle of 90°,",
+  "from_switch_500": "即他们 permutation的 steps difference is such that their central，则 meeting条件.\n\n具体来说， for a dodecagon：\n\nsuppose one edge is of stepk， then the perpendicular is at stepk+3 or5 steps makeup?\n\nSuppose edge with stepk and steps+3 can form perpendicular chords互相交叉, producing vertices for rectangles.\n\nFor each such pair of steps separated by3, the number of rectangles would depend on how many 进入一组 such chords intersect at a +-right angle between them.\n\nEach such intersection could form a rectangle的一个顶点.\n\nE",
+  "after_episode_300": " edges at these directions will create a rectangle at their intersection.\n\nEach pair of edges from group1 dan group4 meet at some point, and their opposites also meet at another symmetric point, creating四个vertices where的 edges form the rectangle.\n\nHowever, the具体 number may be经 different.\n\nThis is ge",
+  "text_last_200": "ing, there are three possible齿轮,每对 of opposite vertices separated601会 each form a Rectangle, but since the perpendicular vectors are separated by three steps, the number of such rectangles is n choose"
+ },
+ {
+  "cell": "hard328_sft",
+  "problem_index": 170,
+  "unique_id": "hmmt_feb2025/11",
+  "sample": 2,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "start_tok": 16025,
+  "letters": 65,
+  "scripts": {
+   "CJK": 65
+  },
+  "back": null,
+  "episodes": 1,
+  "before_300": "te such that any starting point matters?\n\nWait in the count above, we fixed the starting point at1， which may count each unique cycle once per starting node.\n\nWait this is getting too confusing without solid techniques.\n\nAlternatively, since the total is between 12 and 84, but I need a better way.\n\n",
+  "from_switch_500": "等, another approach:\n\nSince the problem is similar to counting Hamiltonian cycles in the graph G, with specific degree constraints.\n\nIn the graph,\n\n注意 node7只能连接1和2. 因此， in all Hamiltonian cycles, the edges7-1和7-2必须存在，且 these edges are fixed in the cycle’s adjacencies.\n\n假设 the cycle includes the nodes如 follows:\n\nThe cycle must pass through7 between1 and2, so consider the path between1 and2 as passing through7. 因此，the entire cycle can be considered as：\n\n1 --7 --2 -- 其余路径 --回到1.\n\nThe sequence from2",
+  "after_episode_300": "",
+  "text_last_200": "five etc. step paths。\n\n这似乎 can be计算 using recursion or backtracking, 但手动 doing it is error-prone.\n\nGiven that the graph's smaller size, let me考虑 some 因数.\n\n假设的 possible paths from2到1 must include the结构"
+ },
+ {
+  "cell": "hard328_sft",
+  "problem_index": 172,
+  "unique_id": "hmmt_feb2025/13",
+  "sample": 3,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "start_tok": 1529,
+  "letters": 8,
+  "scripts": {
+   "ARABIC": 8
+  },
+  "back": true,
+  "episodes": 12,
+  "before_300": " be present in the same box. Therefore, the box cannot be a set where a ball is \"isolated,\" meaning both its neighbors are not in the box. \n\nAlternatively, every subset (the set of a box) must satisfy that for every element, at least one of its neighbors is present. \n\nThus, such subsets are called \"",
+  "from_switch_500": "انضمامات\" or connected in a different way. Actually, such a subset must form a union of connected intervals? Or perhaps not.\n\nWait, let me think. If you have a set S of numbers where every element either has a predecessor or successor in S. Hmm. Sort of similar to a graph where edges are not only between consecutive integers, but perhaps different. \n\nAlternatively, perhaps the set S must form a connected interval in the number line. Wait, is that required?\n\nSuppose S is 1,2,4,5. Then 1's neighbo",
+  "after_episode_300": "\" or connected in a different way. Actually, such a subset must form a union of connected intervals? Or perhaps not.\n\nWait, let me think. If you have a set S of numbers where every element either has a predecessor or successor in S. Hmm. Sort of similar to a graph where edges are not only between co",
+  "text_last_200": "er of这样的 partitions is the same as the total we computed above.\n\n However, the exact calculation might be cumbersome, but the final answer is  1200? \n\nbring, 等等。 Wait, perhaps the total is (15 choose3"
+ },
+ {
+  "cell": "hard328_sft",
+  "problem_index": 215,
+  "unique_id": "olympiadbench/2011",
+  "sample": 2,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "start_tok": 16252,
+  "letters": 24,
+  "scripts": {
+   "CJK": 24
+  },
+  "back": null,
+  "episodes": 1,
+  "before_300": ",3)=4>3. \n\n Thus can continue to4. \n\nPath1-2-3-4. \n\n FROM4 (2,3):\n\n adjacent cells: up (1,3)=3 <4, right none, down (3,3)=5>4, and (2,2)=9>4. \n\n thus from4 can go to9 or to5.\n\n Two branches now.\n\nBranch 1:1-2-3-4-9.\n\n Then from9 (2,2), only direction larger? Its except the direction is 9's adjacent ",
+  "from_switch_500": "无向 cells are all <9 except none larger than9 except nothing. \n\nWait 9 can't go further. So path length 4.\n\nBranch2:1-2-3-4-5. (继续到5). \n\n从4到5 (3,3):\n\n then继续到5的邻居:比如上面5的adjacent cells是4<5, left to6 (3,2) (which is6>5? 6 is the cell (3,2)=6. yes.6 >5. \n\n因此从5可到6。 \n\nThus path:1",
+  "after_episode_300": "6。 \n\nThus path:1",
+  "text_last_200": "t go further. So path length 4.\n\nBranch2:1-2-3-4-5. (继续到5). \n\n从4到5 (3,3):\n\n then继续到5的邻居:比如上面5的adjacent cells是4<5, left to6 (3,2) (which is6>5? 6 is the cell (3,2)=6. yes.6 >5. \n\n因此从5可到6。 \n\nThus path:1"
+ },
+ {
+  "cell": "hard328_sft",
+  "problem_index": 267,
+  "unique_id": "olympiadbench/2603",
+  "sample": 2,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "start_tok": 15565,
+  "letters": 12,
+  "scripts": {
+   "CJK": 12
+  },
+  "back": true,
+  "episodes": 1,
+  "before_300": "earlier, we divided by (2 +a). Thus, even if a is not 0, the equation is independent of a. \n\nWait, but in the equation:\n\nInitially , after dividing both sides by (2+a), which removed the dependency on a because the initial equations set d(214*n)=d(2014*n), but the equation with a cancels out?\n\nWait，",
+  "from_switch_500": "我先重新看一下方程的推导.\n\nOriginal problem's divisor counts' equation after mentioning variables:\n\nAfter expanding and equate, the equation was:\n\n(2 + d)(b +1)(c +1) = (2 +b)(2 +c)(1 +d )\n\nwhich canceled out variable a. So the solution's bc condition is independent of a. Therefore, the value of a can be any non-negative integer. So to minimize the n, yes, setting a to 0 is necessary.\n\nHowever, if in the solution above, for instance, if we set a to be positive, but the exponents of b,c,d can be reduced. But",
+  "after_episode_300": ".\n\nOriginal problem's divisor counts' equation after mentioning variables:\n\nAfter expanding and equate, the equation was:\n\n(2 + d)(b +1)(c +1) = (2 +b)(2 +c)(1 +d )\n\nwhich canceled out variable a. So the solution's bc condition is independent of a. Therefore, the value of a can be any non-negative i",
+  "text_last_200": "e total exponent of 2 is 1 (from 214) + a=[], so indeed exponent 1. \n\nThus for 214×n:\n\n- 2^1 → (1+1)=2\n\n-107^1 → (1+1)=2 (since in n, exponent d=0; so exponent from n is 0, so total exponent is1 → (1+"
+ },
+ {
+  "cell": "hard328_sft",
+  "problem_index": 342,
+  "unique_id": "olympiadbench/2915",
+  "sample": 1,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 1,
+  "start_tok": 13257,
+  "letters": 6,
+  "scripts": {
+   "CYRILLIC": 6
+  },
+  "back": true,
+  "episodes": 5,
+  "before_300": "numbers α, B, and C\", which probably means that they must exist a real number alpha such that these are the roots. The problem is probably constructed so that there is a unique answer, implying that the system has only one solution s.\n\nWhich suggests that perhaps my previous assumption of s=1/2 was ",
+  "from_switch_500": "академ, even though angle didn’t match but the algebra allows such answer?\n\nBut how?\n\nAlternatively, perhaps taking s=1/2 gives a valid answer for the problem, even though alpha wouldn’t have the trigonometric value?\n\nWait, when I did that earlier, the S=1/2 gives roots of 0.5,0.5, -2,\n\nwhich summed to -1,\n\nwhich satisfies the first equation,\n\nthe product: 0.5*0.5*(-2)= -0.5,\n\nso C=0.5 matches,\n\nthe second equation: (-7/4),\n\nthat gave B=-7/4,\n\n so these roots are 0.5,0.5,-2,\n\n which sum to -1,\n\n",
+  "after_episode_300": ", even though angle didn’t match but the algebra allows such answer?\n\nBut how?\n\nAlternatively, perhaps taking s=1/2 gives a valid answer for the problem, even though alpha wouldn’t have the trigonometric value?\n\nWait, when I did that earlier, the S=1/2 gives roots of 0.5,0.5, -2,\n\nwhich summed to -1",
+  "text_last_200": "确定的 B and C values,\r\n\r\n thus allowing确定的 T(5).\r\n\r\n this requires more scientific approach:\r\n\r\n let me use the 公式表达 B in terms of s,\r\n\r\n and perhaps relate with other equations,\r\n\r\n we have expressions"
+ },
+ {
+  "cell": "fresh_sft",
+  "problem_index": 43,
+  "unique_id": "hmmt_feb2026/17",
+  "sample": 1,
+  "n_new": 16120,
+  "cap_hit": false,
+  "score_v3": 0,
+  "start_tok": 11957,
+  "letters": 10,
+  "scripts": {
+   "CJK": 10
+  },
+  "back": true,
+  "episodes": 4,
+  "before_300": "nterval of length from 1 to 9 on the circle (since length 10 is the full circle).\n\nTherefore the total number arcs is 10 *9 (since length 1 to 9).\n\nFurther, for each such arc, the subset M can be either the set of vertices not in the interval, or the set in the interval? \n\nBut actually, the interval",
+  "from_switch_500": "只出现这段边被切割的 so the side that includes the vertices on the outside of the interval is the other subset. \n\nHowever, the subset M is defined as one of the two resulting parts, so for each interval, there are two subsets. \n\nTherefore for each of the 10 start points and 9 lengths, there are two subsets, giving 10×9×2=180 + the two bases ( subsets M01只 containing bottom or top decagon), totaling 182 no, 180+2=182.\n\nBut this may include overlapping subsets.\n\nWait examples:\n\nTake the length 1, starting a",
+  "after_episode_300": " so the side that includes the vertices on the outside of the interval is the other subset. \n\nHowever, the subset M is defined as one of the two resulting parts, so for each interval, there are two subsets. \n\nTherefore for each of the 10 start points and 9 lengths, there are two subsets, giving 10×9",
+  "text_last_200": "atorial aspects of the prism's vertices and the plane's effect.\n\n1. **Understanding the Prism Structure**:\n   - The prism has 20 vertices: 10 vertices on the bottom base \\( A_1, A_2, \\ldots, A_{10} \\)"
+ },
+ {
+  "cell": "fresh_sft",
+  "problem_index": 81,
+  "unique_id": "hmmt_feb2026_guts/27",
+  "sample": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "start_tok": 12994,
+  "letters": 115,
+  "scripts": {
+   "CJK": 115
+  },
+  "back": true,
+  "episodes": 5,
+  "before_300": "1 +1 ? Wait,\n\nActually:\n\np² = ab +1 = [ ( (p +r)/2 * (p+q)/3 ) ] +1,\n\n等等？\n\nWait, actually,\n\nBecause,\n\n------\n\nLet me re-define:\n\nBecause:\n\nWe have variables p, q, r such that:\n\na=(p + r)/2,\n\nb=(p + q)/3,\n\nc=(q + r)/5,\n\n also, the expressions for x,y,z are:\n\nx= p²= ab+1,\n\ny=q²= bc +1,\n\nz=r²= ca +1,\n\n",
+  "from_switch_500": "因此，\n\nx = ab +1 ⇒p² = ab +1,\n\nab = [(p + r)/2] * [(p + q)/3] = [ (p +r)(p+q) ]/(6),\n\n thus, p² = ab +1 ⇒ p² = [ (p +r)(p+q) ]/6 +1 ? 不，原式,\n\n不，x = ab +1 = p²,\n\n而 ab = [(p + r)/2 * (p +q)/3 ),\n\n因此，:\n\n p² = ab +1 = [ (p + r)(p +q) /6 ] +1,\n\n所以：\n\n[ (p + r)(p+q) ] /6 +1 = p²,\n\n similarly：\n\nFor y=q² = bc +1,\n\n bc = [(p+q)/3 ] * [ (q + r)/5 ] = [(p+q)(q+r)]/(15),\n\n so, q² = [(p+q)(q+r)]/15 +1,\n\n对于z=r²=ca +1,\n\n ca = [ (p + r)/2 ] * [ (q + r)/5 ] = [ (p + r)(q +r) ] / 10,\n\n so, r² = [ (p +r)(q+ r) ]/10 +1",
+  "after_episode_300": "：\n\nEquation1: 6p² −(S - r)(S - q) =6,\n\n similar for equation2 and3:\n\nEquation2:15q² - (S - p)(S - r) =15,\n\nEquation3:10r² − (S - p)(S - q) =10,\n\nThis may form a system.\n\nLet me express these equations:\n\nEquation1:\n\n6p² - [S² -S(r + q) + rq] =6,\n\nEquation2:\n\n15 q² - [S² -S(p +r) + pr}=15,\n\nEquation3:",
+  "text_last_200": "5.6)≈5.06,\n\n third term: sqrt(11.7145)=≈3.421,\n\n thus total S≈4.332+5.06+3.421≈12.81,\n\n而 RHS= 9×4−10=26,\n\n discrepancy.\n\n Now, perhaps try z= 5,\n\n则,\n\nx=3.5×(9×5-4?,\n\n wait:\n\nx=(9×5−4)/5=(45-4)/5=41/5="
+ },
+ {
+  "cell": "fresh_sft",
+  "problem_index": 83,
+  "unique_id": "hmmt_feb2026_guts/29",
+  "sample": 1,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "start_tok": 16258,
+  "letters": 5,
+  "scripts": {
+   "CJK": 5
+  },
+  "back": null,
+  "episodes": 1,
+  "before_300": "= - (1/(7)+1/11+1/13)\n\nCompute 1/7+1/11+1/13.\n\nLet me compute common denominator 7×11×13=1001.\n\nSo:\n\n1/7=143/1001\n\n1/11=91/1001\n\n1/13=77/1001\n\nTotal: (143 +91+77)/1001 = (311)/1001.\n\nThus, terms2-4 sum to -311/1001\n\nNow Term5-7:\n\n Term5+6+7 are the three positive terms:\n\n1/(7×11)=1/77 =13/(1001×11×7",
+  "from_switch_500": "后得到77?) \n\nWait, but to common denominator 1001:\n\nSeven十一: denominator is 7×11=77 ⇒7×11x1001/77= (7×11×13)=1001,\n\nso 1/(7×11)=14/1001, since (1001)/(77)=13,\n\nWait let me see:\n\nWait 7×11×13=1001, so 7×11=77. 1001/77=13.\n\nThus:\n\n1/77=13/(7×11×13)=13/1001\n\nSimilarly:\n\n1/(7×13)=",
+  "after_episode_300": ": denominator is 7×11=77 ⇒7×11x1001/77= (7×11×13)=1001,\n\nso 1/(7×11)=14/1001, since (1001)/(77)=13,\n\nWait let me see:\n\nWait 7×11×13=1001, so 7×11=77. 1001/77=13.\n\nThus:\n\n1/77=13/(7×11×13)=13/1001\n\nSimilarly:\n\n1/(7×13)=",
+  "text_last_200": "×11=77 ⇒7×11x1001/77= (7×11×13)=1001,\n\nso 1/(7×11)=14/1001, since (1001)/(77)=13,\n\nWait let me see:\n\nWait 7×11×13=1001, so 7×11=77. 1001/77=13.\n\nThus:\n\n1/77=13/(7×11×13)=13/1001\n\nSimilarly:\n\n1/(7×13)="
+ },
+ {
+  "cell": "fresh_sft",
+  "problem_index": 88,
+  "unique_id": "hmmt_nov2026_gen/3",
+  "sample": 2,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "start_tok": 10200,
+  "letters": 16,
+  "scripts": {
+   "CJK": 16
+  },
+  "back": true,
+  "episodes": 17,
+  "before_300": " bananas are0 <1.\n\n thus the choice on day15 must be to buy.\n\n Thus to ensure that the path ends correctly, the DPs trajectories that end with the final day's purchase must have exactly used all three B's (the first and this final one somewhere, and the third somewhere before).\n\n Thus, the final B's",
+  "from_switch_500": "必须是 2问题的 remaining buys, so the final step (14th step in the DP) must have k=1 (before day15's choice, 一个 buy remains? 一个 no, 因为我们 have to use up all 2).\n\n 等等， this is getting complicated.\n\n may be better to compute the DP manually for this reduced problem.\n\n Our goal is to compute the number of walks starting at 4, taking 14 steps, with exactly 2 more B's and 12 NoB's, such that at any NoB step, the current banana count is ≥1.\n\n we can model this as a DP with states defined by (current emphasiz",
+  "after_episode_300": "， this is getting complicated.\n\n may be better to compute the DP manually for this reduced problem.\n\n Our goal is to compute the number of walks starting at 4, taking 14 steps, with exactly 2 more B's and 12 NoB's, such that at any NoB step, the current banana count is ≥1.\n\n we can model this as a D",
+  "text_last_200": "within the first4 days to have 四前 noBs (_4-1 steps to mentioned等:\n\n\n 具体地说, the first B must be placed before the first3连续的 noBs.\n\n but without formulation it's hard.\n\n经 above steps：\n\n after two days 的"
+ },
+ {
+  "cell": "fresh_sft",
+  "problem_index": 97,
+  "unique_id": "hmmt_nov2026_thm/6",
+  "sample": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "start_tok": 15539,
+  "letters": 29,
+  "scripts": {
+   "CJK": 29
+  },
+  "back": true,
+  "episodes": 2,
+  "before_300": "9 positive,\n\nb=1.95:\n\nLet me try b=1.95,\n\nb^4: (1.95)^2=3.8025, then squared: (3.8025)^2 ≈14.455,\n\n256*b^4=256*14.455≈3699,\n\nb^3:1.95^3≈1.95*1.95²=1.95*3.8025≈7.414875,\n\nso -320*7.414875≈-320*7= -2240, -320*0.414875≈-133., totaling-2373.\n\n-668*(b²)=668*(3.8025)=668*3=2004, 668*0.8025≈534，total≈2538,",
+  "from_switch_500": "乘负号 -2538,\n\n480*1.95≈936,\n\n+225.\n\n合计:\n\n3699 -2373=1326,\n\n1326-2538≈-1212,\n\n-1212 +936= -276,\n\n-276+225= -51.\n\n接近50上，近2的根。\n\nWait 正确的方程在b=2时是49 positive, and b=1.95 is-51?\n\n Wait 我可能计算错误了：\n\nWait maybe the calculations for b=2 need to recompute精确:\n\n Towards b=2:\n\nb^4=16,\n\n256*16=4096,\n\n-320*(8) (-320*8= -2560),\n\n-668*(4)= -2672,\n\n480*2=960,\n\n+225,\n\nAdding:\n\nTotal:4096-2560=1536,\n\n1536-2672= -1136,\n\n-1136+960= -176,\n\nWhy was my previous calc claiming 49? I must have computed incorrectly之前.\n\nWait 我想 ",
+  "after_episode_300": ":\n\n Towards b=2:\n\nb^4=16,\n\n256*16=4096,\n\n-320*(8) (-320*8= -2560),\n\n-668*(4)= -2672,\n\n480*2=960,\n\n+225,\n\nAdding:\n\nTotal:4096-2560=1536,\n\n1536-2672= -1136,\n\n-1136+960= -176,\n\nWhy was my previous calc claiming 49? I must have computed incorrectly之前.\n\nWait 我想 possibly my previous calculation was wrong:",
+  "text_last_200": " -2411.48,\n\n第四项: +480*1.9=+912,\n\n fifth项:约 +225.\n\n总的是:\n\n3335.68 -2196 =1139.68,\n\n1139.68 -2411.48 =-1271.8,\n\n-1271.8+912= -359.8,\n\n -359.8+225= -134.8≈-135，\n\n 这和之前的计算一致.\n\nSo zeros between b=1.95 and b"
+ },
+ {
+  "cell": "fresh_sft",
+  "problem_index": 98,
+  "unique_id": "hmmt_nov2026_thm/7",
+  "sample": 0,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "start_tok": 13349,
+  "letters": 522,
+  "scripts": {
+   "CJK": 521,
+   "HIRAGANA": 1
+  },
+  "back": true,
+  "episodes": 4,
+  "before_300": "v_dir=R (different m's):\n\n- prev_dir=R, m=0 → count1\n\n- prev_dir=R, m=1 → count1\n\nNow processing i=4 (soldier4).\n\nFor each state from DP[3], compute their transitions.\n\nFirst, Starting with State1:\n\n**State1: prev_dir=L, m_prev=1, count=2.**\n\nWe choose D4 = L or R.\n\n Then Edge between 3-4 (Edge3):\n\n",
+  "from_switch_500": "贡献 to mutual edges:\n\n Edge3 requires D3 (previous direction =L?) and D4.\n\n Wait, Edge3 between3-4 requires previous previous soldiers:\n\n To determine mutual between3-4,需要 previous direction (D3) and current D4:\n\n slogan3: D4 must be pointing to ~方向 towards the left (D4=L) to form mutual, but mutual requires:\n\n D3的方向必须是 R (指向4方向), and D4 is L (Pointing to3方向). \n\n But D3 is the direction of soldier3,\n\n which in this state was prev_dir of D3? Wait 这个不太对， 因为Our states are录入到 i=3 representing D3的决定.\n",
+  "after_episode_300": " calculation is too tedious. Due to time constraints, perhaps the key is that this problem's number of ways to have exactly 3 mutual edges can be counted through recursive DP, but manually it's error-prone. \n\nThe key is that the total number of configurations is2^8=256.\n\nGiven that it's a competitio",
+  "text_last_200": "e answer needs to be computed, perhaps it's better to set up the DP and compute the values step by step.\n\n**Continuing the DP step-by-step 来 thro all steps.\n\nContinuing to Step4 (processing soldier4),"
+ },
+ {
+  "cell": "fresh_sft",
+  "problem_index": 116,
+  "unique_id": "hmmt_nov2026_guts/13",
+  "sample": 3,
+  "n_new": 14327,
+  "cap_hit": false,
+  "score_v3": 1,
+  "start_tok": 13009,
+  "letters": 174,
+  "scripts": {
+   "CJK": 174
+  },
+  "back": true,
+  "episodes": 1,
+  "before_300": "\nAnother attempt: Let's split the necklace such that the half contains two R5 arrays.\n\nIf we take beads from after the first R5 and before the last R5 such that both are included with some extra.\n\nFor instance, suppose we make the half from position10 (the start of first R block) up to position34. N",
+  "from_switch_500": "超额这样.\n\nWait let me planning:\n\nSuppose the half starts at position10 (R5 block), then:\n\npositions10-34:25 beads.\n\nPositions10-14:R5,\n\nposition15-18: G4,\n\n19-23:5R,\n\n24-27:G4,\n\n28-32:5R,\n\n剩下的beads in25: to pos32 is within the span.\n\npositions33-34: G2 and...\n\n等等, positions10 to34: beads10到34是共25 beads:\n\n10-34 里:\n\n10-14 (R5),\n\n15-18 (G4),\n\n19-23 (R5),\n\n24-27 (G4),\n\n28-32 (R5),\n\n33-34 (G2).\n\n总共有R:5+5+5=15R beads.\n\n在这种spilt中, 含有三个R块? 不, 5个 beads到14是 first block, then the next starts at19, so the span",
+  "after_episode_300": " is25−14=11.\n\nThus the maximum possible value of N is11. Hence the answer is \\boxed{11}\n\n**Final Answer**\n\\boxed{11}\n</think>\n\nThe problem involves arranging 20 red beads and 30 green beads on a circular necklace such that the minimum number of red beads in any half of the necklace is 6, and we need",
+  "text_last_200": "alf is \\(25 - 14 = 11\\).\n   - This value is fixed because the minimum red count of 6 requires the maximum red count of 14 in another half.\n\nThus, the maximum possible value of \\(N\\) is \\(\\boxed{11}\\)."
+ },
+ {
+  "cell": "fresh_sft",
+  "problem_index": 131,
+  "unique_id": "hmmt_nov2026_guts/29",
+  "sample": 2,
+  "n_new": 16384,
+  "cap_hit": true,
+  "score_v3": 0,
+  "start_tok": 15915,
+  "letters": 7,
+  "scripts": {
+   "CJK": 7
+  },
+  "back": false,
+  "episodes": 2,
+  "before_300": "eft:\n\n-110 cosβ - ( [2+12cosφ][11cosβ] +132 sinφ sinβ ) +x_A(2+12cosφ +11cosβ )\n\n+ y_A(12 sinphi +11 sinbeta ) \n\n - (x_A² + y_A² ) =0.\n\nNow, recall that from Equation3:\n\n(x_A -11 cos β)^2 + (y_A -11 sin b)^2=121,\n\n expanding gives x_A² -22 cosβ x_A +121 cos^2 β + y_A² -22 sinβ y_A +121 sin^2β=121,\n\n",
+  "from_switch_500": "故,\n\nx_A²+y_A²=22 cosβ x_A +22 sinβ y_A +0.\n\n因为 121(cos²β + sin2 beta)=121,\n\n所以:\n\nx_A² +y_A²=22(cob x_A + siny A y_A ).\n\n因此,\n\n- (x_A² + y_A² )= -22 cobx A - 22 sin beta y_A .\n\n substitute this into equation5's rearranged equation:\n\n-110 cosβ - terms + terms involving x_A, y_A, and constants.\n\n:\n\n-110 cosβ \n\n- [ (2+12cosφ)(11 cos beta) +132 sinphi sin beta ]\n\n +x_A(2+12 cosφ +11 cosβ ) + y_A(12 sinphi +11 sinbeta )\n\n-22 cosβ x_A -22 sinbeta y_A =0.\n\nNow collect terms with x_A and y_A:\n\nTerms with ",
+  "after_episode_300": ",\n\n- (x_A² + y_A² )= -22 cobx A - 22 sin beta y_A .\n\n substitute this into equation5's rearranged equation:\n\n-110 cosβ - terms + terms involving x_A, y_A, and constants.\n\n:\n\n-110 cosβ \n\n- [ (2+12cosφ)(11 cos beta) +132 sinphi sin beta ]\n\n +x_A(2+12 cosφ +11 cosβ ) + y_A(12 sinphi +11 sinbeta )\n\n-22 ",
+  "text_last_200": "sinphi sinbeta ]\n\n это等于：\n\n-110 cosbeta -11 cosbeta*(2+12cosphi ) -132 sinphi sinbeta,\n\n \n\n= -110 cosbeta -22 cosbeta -132 cosphi cosbeta -132 sinphi sinbeta,\n\n \n\n= -132 cosbeta -132 (cosphi cosbeta +"
+ },
+ {
+  "cell": "cap32_sft",
+  "problem_index": 81,
+  "unique_id": "aime2024/2024_AIME_II_Problems/Problem_15",
+  "sample": 0,
+  "n_new": 20659,
+  "cap_hit": false,
+  "score_v3": 0,
+  "start_tok": 12131,
+  "letters": 16,
+  "scripts": {
+   "CJK": 16
+  },
+  "back": true,
+  "episodes": 13,
+  "before_300": "6 + steps l /6 = more or less.\n\nAlternatively, steppingEdge where 右 joint of stepsk and direction when the edge completes a square:\n\nPerhaps through example, find all possible perpendicular step pairs:\n\n We could manually tabulate step combinations:\n\nLet me tabulate each step pair (k,l) for k=l-3:\n\n",
+  "from_switch_500": "但绝对:\n\nFor steps1 and4:\n\n earlier tested and not perpendicular.\n\nSteps1 and5:\n\nAs in the example, gives perpendicular, thus maybe step pairs differing in +4 or ?\n\nSteps5 and something:\n\n steps (它们的之间的角度差异是90 degrees):\n\n注意, for two displacements to be perpendicular, the angle between theTwo vectors when placed tail to tail must be90 degrees. So, this angle is computed by the angle between the two displacement vectors treated as vectors from the same origin?\n\n.\n\n thus, to find all pairs (k,l) such ",
+  "after_episode_300": ", for two displacements to be perpendicular, the angle between theTwo vectors when placed tail to tail must be90 degrees. So, this angle is computed by the angle between the two displacement vectors treated as vectors from the same origin?\n\n.\n\n thus, to find all pairs (k,l) such that the angle betwe",
+  "text_last_200": "agon is commonly considered as \\(24\\), which accounts for pairs (1-5 and 2-4) each contributing \\(12\\) rectangles, and excluding squares due to their count being a subset.\n\n### Final Answer\n\\boxed{24}"
+ },
+ {
+  "cell": "cap32_sft",
+  "problem_index": 98,
+  "unique_id": "aime2025/9",
+  "sample": 0,
+  "n_new": 31639,
+  "cap_hit": false,
+  "score_v3": 0,
+  "start_tok": 30174,
+  "letters": 119,
+  "scripts": {
+   "CJK": 119
+  },
+  "back": true,
+  "episodes": 5,
+  "before_300": "\n\n-3/4*(0)=0 \n\n+4 \n\nTotal:\n\nsqrt3 -1 +0 +0 +0 +4= sqrt3 +3≈1.732+3≈4.732≠0 \n\nTry t=1:\n\n0.5*sqrt3*1≈0.866 \n\n0.5*(-3)= -1.5 \n\n-0.25 \n\nsqrt3*(1)*(1-4)= -3sqrt3≈-5.196 \n\n-3/4*(9)= -6.75 \n\n+4 \n\nTotal: \n\n0.866-1.5= -0.633； -0.633-0.25= -0.883； -0.883-5.196≈-6.079；-6.079-6.75≈-12.829≈+4→≈-8.8→ not.\n\nHmm.\n\n",
+  "from_switch_500": "最终，考虑到问题的结构和所需的答案形式，可能正确的答案是 $a = 5，b = 29，c = 2$ ，这样a + b + c = 36，但检查数值近似时，这并不符合。然而，可能我犯了错误。\n\n或者可能答案是 (3−√11)/1 → but no。 \n\n或许正确的答案是 $Answer: (某个正确的分数，根据题意)$，但根据我的计算与推導，我可能没有解决这个问题的正确路径，但根据常见形式，可能是 $a=7,b=55,c=2$，这样 $a+b+c=64$, 但没有依据。\n\nGiven my approximate value of Y≈-2.28 and the need for (a−√b)/c, a plausible choice is (7 - sqrt(19))/ something:\n\nSuppose the answer is (5 -√29)/2 → a=5，b=29，c=2. This gives answer sum 36.\n\nAlternatively， if the form has a denominator of 3：\n\n(7 - sqrt( 5) )/2 →",
+  "after_episode_300": "。\n\nGiven my approximate value of Y≈-2.28 and the need for (a−√b)/c, a plausible choice is (7 - sqrt(19))/ something:\n\nSuppose the answer is (5 -√29)/2 → a=5，b=29，c=2. This gives answer sum 36.\n\nAlternatively， if the form has a denominator of 3：\n\n(7 - sqrt( 5) )/2 → no. \n\nPerhaps after all the attemp",
+  "text_last_200": "atic in某 variable with sqrt3 terms, I will assume最终答案 is 36 (5+29+2).\n\nThus:\n\n**Final Answer**\n\\boxed{36}\n</think>\n\nThe problem involves rotating the parabola \\( y = x^2 - 4 \\) by \\( 60^\\circ \\) count"
+ },
+ {
+  "cell": "cap32_sft",
+  "problem_index": 308,
+  "unique_id": "olympiadbench/2770",
+  "sample": 0,
+  "n_new": 21035,
+  "cap_hit": false,
+  "score_v3": 1,
+  "start_tok": 20219,
+  "letters": 42,
+  "scripts": {
+   "CJK": 42
+  },
+  "back": true,
+  "episodes": 1,
+  "before_300": "2 ⇒2c -b d =-28.2. 不, must integers.\n\nWait integer coefficients:\n\nEquation1:10c -5b d =-142 →2c − b d =−28.2 → not integer. Not possible.\n\nThus a=10 not version.\n\nAnother try:\n\na=13:\n\nThen d=(2997+142b)/(5b²+81)\n\nWait earlier when b=9, denominator=5×81 +81= 468?\n\n wait a=13:\n\nFor a=13:\n\nEquations:\n\n",
+  "from_switch_500": "方程2:13d +bc=333 → bc=333-13d.\n\nEquation1:13c −5b d =−142 →13c =5b d-142 →c=(5b d -142)/13 \n\n代入 equation2方程:\n\nb*(5b d —142)/13 =333−13d →5b²d —142b = (333 −13d)*13 \n\n这样:\n\n5b²d -142b =4339 -169d \n\n移动 all到等式左边：\n\n5b² d +169d =4339 +142b \n\nFactor d:\n\nd(5b²+169)=4339+142b → d=(4339 +142b)/(5b²+169)\n\n尝试 small b值.\n\n例如， b=3:\n\n分子=4339 +426=4765，分母=5×9 +169=45+169=214 →4765/214≈22.29的非整数.\n\nb=7:\n\n数值=4339+994=5333 divided by5×49+169=245+169=414 →5333/414≈12.86→ no.\n\nb= 9:\n\n分子=4339+1,278=6,217分母5×81+169=405+1",
+  "after_episode_300": "。 \n\nWe found a solution with a=11, b=6, c=28, d=15. \n\nThe minimal a+b is 17. \n\nLet me see if there's a case with a smaller a+b:\n\nTake a= 14, b= 7:\n\nLet me see with a= 14 and b= 7.\n\nThen d=(333a +284)/(a^2+20). \n\nPlugging in a=14:\n\nd=(333×14 +284)/(196+20)= (4662 +284)/216=4946/216=4946÷2=2473/108≈22",
+  "text_last_200": ")\n  - \\(ad + bc = 11 \\times 15 + 6 \\times 28 = 165 + 168 = 333\\)\n\nThe values \\(a + b = 11 + 6 = 17\\) and \\(c + d = 28 + 15 = 43\\). The lesser of these is \\(17\\).\n\nThus, the answer is:\n\\[\n\\boxed{17}\n\\]"
+ },
+ {
+  "cell": "cap32_sft",
+  "problem_index": 342,
+  "unique_id": "olympiadbench/2915",
+  "sample": 0,
+  "n_new": 28625,
+  "cap_hit": false,
+  "score_v3": 0,
+  "start_tok": 19368,
+  "letters": 212,
+  "scripts": {
+   "CJK": 212
+  },
+  "back": true,
+  "episodes": 8,
+  "before_300": "r such, but earlier trial didn’t work,\n\nHmm perhaps set a such that sqrt(a²+2a) -a= cos^2a,\n\nLet me set a=0.5,\n\nThen,\n\nsqrt(0.25 +1)=sqrt(1.25)=≈1.118,\n\nThus,\n\nz≈1.118 -0.5≈0.618,\n\nwhich is plausible cos^2,\n\nThus,\n\ncos²a≈0.618,\n\nthen csc^2α=1/sin^2α,\n\nsin^2α=1-0.618≈0.382,\n\nso csc^2=1/0.382≈2.618,\n\n",
+  "from_switch_500": "检查 equation1:2a +cos²a -csc^2a=1+0.618-2.618≈-1成立！\n\nHey! It works!\n\nWow! So when a=0.5,\n\nthen,\n\n2a=1,\n\ncos^2a≈0.618,\n\ncsc^2a≈2.618,\n\nSo 1 +0.618 -2.618= -1.0 exactly!\n\n因此, the angle a=0.5 radians solves the equation1,\n\nGreat!\n\nThus the value of alpha=0.5,\n\nWait let me confirm,\n\n计算 if a=0.5,\n\nThen,\n\n2a=1,\n\ncos²(a)=cos²(0.5).\n\n计算 cos(0.5):\n\ncos(0.5)≈0.87758,\n\ncos squared:0.769,\n\ncsc squared =1/sin²(0.5),\n\nsin(0.5)= approximately 0.4794,\n\nsquared is≈0.2298,\n\n故 csc squared≈4.346,\n\n于是, equation1:\n\n2a",
+  "after_episode_300": ".\n\n perhaps the solution requires symbolic solving.\n\nWe have,\n\nfrom the quadratic equation for z=cos²a,\n\nz = [-2a +√(4a² +8a)]/2 = -a +√(a² + 2a),\n\n but also,\n\nWe know from equation1 that,\n\ncot²a=cos²a +2a,\n\n因此,\n\ncot^2a= z + 2a = [-a +√(a²+2a )] +2a =\n\n=a +√(a²+2a),\n\n但 since,\n\ncot²a= z + 2a,\n\n and z",
+  "text_last_200": "alpha + \\cos^2 \\alpha)\n\\]\n\nAfter extensive algebraic manipulation and considering the problem's constraints and possible trigonometric relationships, the final answer is found to be:\n\\[\n\\boxed{115}\n\\]"
+ }
+]

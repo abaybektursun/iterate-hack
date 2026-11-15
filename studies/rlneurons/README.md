@@ -15,6 +15,10 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `specs/SPEC3.md` | RLN-3 spec: base, RL steps 100/400/2,800 and the first release; arms P (plain), F (opening cue), C (forced commit); MATH-500 and the 400-problem harder set; training-set overlap (§11). |
 | `specs/SPEC_wsp1.md` | WSP-1 spec: anatomy of the RL-Math, RL-Code and Think-SFT weight deltas, then edited-weight cells. Job `jobs/wsp_delta_anatomy.py`, results `results/wsp1/`. |
 | `specs/SPEC4.md` | RLN-4 spec: T1 (cue, T 1.0), continuation test K, T2 (RL, T 1.0), T3 (plain base, T 1.0), G, R1; Modal deviations; grader v3. |
+| `specs/SPEC_fresh.md`, `specs/fresh_jobs.txt` | Fresh held-out set: cutoffs with sources, selection rules, hypotheses, predictions; the 12 job commands. |
+| `data/fresh/`, `prep/fresh_prep.py`, `jobs/run_fresh.py` | `fresh2026_v1.json`: 136 competition problems published in 2026 (AIME, HMMT Feb and Nov), the transcribed PDF problems, the prep script, and `run_cell` with `--set fresh2026`. |
+| `specs/SPEC_drift.md`, `analysis/drift.py`, `analysis/drift_test.py`, `analysis/drift_read.py` | Drift: label-free signs in a sample's text per token position (switch to a non-Latin script, repeated 50-token windows, rule A on the prefix, "wait", restart phrases), planted tests, and the readout Q1 to Q4 with the stop-at-first-sign replay. Results `results/drift/`. |
+| `analysis/fresh_read.py`, `analysis/fresh_sft_overlap.py` | Readout of the three models on the fresh set; scan of the Think-SFT training data for the fresh set. |
 | `lib/n13_score.py` | Prompt template (`TEMPLATE["pair1"]` inside the model's chat template), answer extraction and grader v1 (`extract`, `grade`, rule `dollar_both`), `wilson`, `paired_bootstrap`, `selfcheck`. |
 | `lib/rln4_lib.py` | Grader v2 (`extract_v2`, `grade_v2`), grader v3 (`extract_v3`, `norm_v3`, `grade_v3`), loop-onset detectors (rule A `onset_lines`, rule B `onset_period`, `zratio`), `agree`, prefix encoding. |
 | `lib/n13_gen.py` | vLLM engine settings and sampling (`SAMPLING`, `ENGINE_ENV`, `child_env`, `dump`) that the RLN jobs reuse. From the n13 study. |
@@ -52,11 +56,17 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `tools/finding_restart_on_cap.py` | The public page of the restart of cut-off answers ("Established numbers" and "Day-1 #3"), served at `/finding/restart-on-cap`: the 500 answers as marks, with a switch from no restart to restart. Its numbers are read from `results/rln4/grader_v3/readout.json`, `results/day1_3/` and `results/commit1/base-01/readout.json`. |
 | `tools/finding_vote_over_four.py` | The public page of "Day-1 #3" and "Label-free selector", served at `/finding/vote-over-four`: the base model and the RL model as two bars, with a switch from one sample to the vote over four. Its numbers are read from `results/day1_3/math500_base_cue-01/readout.json`, `results/day1_3/math500_rl-01/readout.json` and `results/selector/math500_base_cue-01/readout.json`. |
 | `tools/finding_equal_token_frontier.py` | The public page of "Token frontier", served at `/finding/equal-token-frontier`: right answers against tokens per problem for the 24 rules on both models, one RL sample as a level line, a token budget the reader drags (the best base rule within it and its distance to one RL sample, with the interval) and a strip of the 500 problems. Its numbers are copied from `results/frontier/math500-01/` (readout.json, frontier.json, per_problem.json, examples.json); `python3 tools/finding_equal_token_frontier.py` checks the copy. |
-| `tools/finding_cue_on_code.py` | The public page of "Code pair", served at `/finding/cue-on-code`: three columns with a switch through no cue, the code cue and the math cue, and the Code-RL model as the reference. Its numbers are read from `results/code1/readout.json`. |
+| `tools/finding_cue_on_code.py` | The public page "The cue beyond math" ("Code pair" and "Outside math and code"), served at `/finding/cue-on-code`: MATH-500, the 538 code problems and the 500 general questions side by side, one mark per item, with a switch Base, Base + cue, RL, Think-SFT + cue. Only the MATH-500 marks are real problems; code and general marks fill by count, because those runs commit counts only. The general numbers are a checked copy of `results/ood1/readout.json` (branch `ali/ood`, 99b2d5d). |
 | `tools/finding_rl_edge_comes_early.py` | The public page of "Prefix hand-off", served at `/finding/rl-edge-comes-early`: one answer as a bar of text cut at 25, 50 or 75 %, the 183 problems as dots, a switch for who writes the start and a draggable cut; its large number is the share of the gap between the two models alone that the hand-off closes (81 % at 50 %, 29 of 36 problems; 65 %, 13 of 20, on the 155 chosen without the base's own answers). Its numbers and dots are read from `results/handoff/base-01/rows.jsonl`, `rl-01/rows.jsonl` and `readout-01/readout.json` (run the file to check them). |
 | `tools/finding_a_quarter_of_rl.py` | The public page of "Weight-difference line" (MATH-500 and the 328), served at `/finding/a-quarter-of-rl`: right answers against a for base + a (RL - base) with the cue, each point with its paired 95 % interval, the random change and Code-RL as reference marks, a slider on a that snaps to the measured values, a switch between MATH-500 and the 328, and one dot per problem. Its numbers are read from `results/day1_wdiff/readout.json`, `results/day1_wdiff328/readout.json`, `results/axis/math500-01/vectors.json`, `results/axis/hard328-01/vectors.json` and `results/rln4/t1_t2_items-01/per_problem.json` (run the file to check them). |
 | `tools/finding_one_difficulty_axis.py` | The public page of "One axis or several?", served at `/finding/one-difficulty-axis`: the 36 single-sample arms as rows against the 500 problems in one difficulty order, two arms the reader picks (or "Any pair" through the 618 pairs of different arms), their union against the difficulty-matched prediction, and all pairs' excess as a dot histogram with the 12 same-arm pairs. Its marks and pair excesses are copied from `results/axis/math500-01/` (vectors.json, readout.json); `PYTHONPATH=. uv run --no-project --with numpy python tools/finding_one_difficulty_axis.py` recomputes the pair table with `analysis/axis.py` and checks the copy against `pair_z_matrix`. |
 | `tools/finding_imitation_beats_rl.py` | The public page of "Think-SFT with the cue under the vote rules", served at `/finding/imitation-beats-rl`: the base with the cue, RL and Think-SFT with the cue as three rows of the same problems in one order, with a switch from one sample (four dots per problem) to the vote over four (the dots merge) and to MATH-500, Think-SFT minus RL with its paired interval, and every answer of a clicked problem. Its marks are copied from the rows.jsonl of `results/thinkvote/hard328_sft1_cue_s4-01/`, `math500_sft1_cue_s4-01/` and `results/day1_3/` (base and RL), its numbers from `results/thinkvote/scored-01/readout.json` and the frontier readouts, the training-overlap flags and the vote without the 6 flagged problems (235 against 215 of 322) from `results/wsp1/sft_overlap-03/`, the long-answer counts from `results/riskcov/hard328-01/`; `PYTHONPATH=. uv run --no-project --with numpy --with math-verify==0.9.0 python tools/finding_imitation_beats_rl.py` recomputes the votes and checks the copy. |
+| `tools/finding_cut_off_is_unfinished.py` | The public page of "Token cap 32,768 on the 328", served at `/finding/cut-off-is-unfinished`: one bar per answer of Think-SFT + cue, as long as its generated tokens, and one slider over the tokens allowed (16,384 to 32,768), with RL as a switch. Reads `results/cap32/readout.json` and `results/cap32/rows-01/`; running the file checks it (command in its docstring). |
+| `tools/finding_how_much_of_the_gap.py` | The public page of "Configurations on the 328 with committed rows, in one table" (it still names the section by its former title, "All configurations on the 328 in one table", and shows the rows of hard328-01 only), served at `/finding/how-much-of-the-gap`: every configuration as one row on the axis "share of the gap closed" (0 % Base + cue, 100 % RL) with its interval, and a switch between one sample, the vote over 4 samples and the tokens of one RL sample. Its DATA is a checked copy of `results/table/hard328-01/table.json`; `uv run tools/finding_how_much_of_the_gap.py` checks it. |
+| `tools/finding_the_finish_dial.py` | The public page of "The finish dial" (xreward), served at `/finding/the-finish-dial`: the 328 problems as marks in three columns (finished right, finished wrong, cut off) and one slider over the size of the 8 RL directions, with the random directions as a switch. Its DATA is a checked copy of `results/xreward/edits/readout.json`; the replication of `results/day1_3/hard328_top8x1.5_cue_s4-01/` is stated in its panel. |
+| `tools/finding_rl_change_on_imitation.py` | The public page of "Delta transplant", served at `/finding/rl-change-on-imitation`: the 328 problems as marks in three bands and one slider over a in Think-SFT + a × (RL − base), with the noise control as a switch. Its DATA is checked against `results/transplant/hard328-01/` by running the file (command in its docstring). |
+| `tools/finding_rl_avoids_the_slip.py` | The public page of the wrong-step measurement, served at `/finding/rl-avoids-the-slip`: the 51 located first wrong steps of Base + cue as one mark each on an axis of log-probability change, by kind of error, with a switch over the model scored. Reads `results/wrongstep/math500-01/`; running the file checks it. |
+| `tools/finding_rl_learns_the_opening_first.py` | The public page of the RL checkpoints (steps 100, 400, 2,800), served at `/finding/rl-learns-the-opening-first`: 500 answers as marks in three bands with a switch along training. Its PROBLEMS literal is a copy of the round-04 replication rows (not committed; `runs/replication/` of the theory worktree), checked against `studies/theory/results/engine/round-04/replication/`. |
 | `grader/repair_v4.py`, `grader/repair_v4_test.py` | Grader v4 / v4a: grader v3 plus five label-free answer-statement rules (placeholder, lower-case marker, last-line math, trailing brace, form), and its planted tests. A grader version for both models, not a method. See "Answer-statement repair". |
 | `analysis/repair.py`, `prep/repair_plan.py`, `data/repair/plan_v1.json` | Answer-statement repair: the gold-aware upper bound, the rule table and the vote under v4 (laptop); the plan of the forced-suffix job (not run). |
 | `data/anatomy/math500_meta.json` | Subject, level and reference solution of the 500 problems (HuggingFaceH4/MATH-500 `test.jsonl`, revision `6e4ed1a`), same order and `unique_id` as `data/rln4/math500.json`. |
@@ -98,7 +108,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `jobs/handoff_gen.py` | Hand-off generation job: one finisher model continues both writers' prefixes; writes each raw row (ids, prefix text, continuation) before anything else and does not score. |
 | `analysis/handoff.py`, `analysis/handoff_test.py` | Hand-off readout (grader v3 on prefix + continuation, strata tables, paired bootstrap, own-prefix control) and its planted checks. |
 | `results/handoff/` | `base-01/`, `rl-01/` (one per finisher: `run.json`, `metrics.json`, `rows.jsonl` without text, `examples.json`) and `readout-01/` (`readout.json`, `readout.txt`). |
-| `specs/SPEC_table.md`, `analysis/config_table.py`, `results/table/hard328-01/` | One table of every full-set configuration on hard328 from committed per-problem rows: counts, intervals, share of the base-to-RL gap closed, tokens, clean 322, grader v4, a check per posted number. See "All configurations on the 328 in one table". |
+| `specs/SPEC_table.md` (addendum 1), `analysis/config_table.py`, `results/table/hard328-02/` (current), `results/table/hard328-01/` (first run, 49 rows) | One table of the full-set configurations on hard328 whose per-problem rows are committed: counts, intervals, share of the base-to-RL gap closed, tokens, clean 322, grader v4, a check per posted number; a separate fresh2026 table. See "Configurations on the 328 with committed rows, in one table". |
 | `specs/SPEC_relay.md`, `prep/relay_plan.py`, `data/handoff/plan_v2.json`, `analysis/relay.py`, `results/relay/` | Relay on hard328 (Think-SFT writes, RL finishes, and the three other writer x finisher pairs): spec with filed predictions, the frozen plan for all 328 problems, the readout (imports `analysis/handoff.py`), run folders `{rl,think}_c{25,50}-01/` and `readout-01/`. `jobs/handoff_gen.py --plan plan_v2.json [--finisher-path]` generates. |
 
 Old paths: `infra/pg/*.py` and `infra/aws_pg/jobs/n13_*.py` are in `lib/`; `infra/aws_pg/jobs/rln*_gen.py` and
@@ -125,13 +135,17 @@ Old paths: `infra/pg/*.py` and `infra/aws_pg/jobs/n13_*.py` are in `lib/`; `infr
 - Loops: rule A (`rln4_lib.onset_lines`, window 8,000 characters, compression ratio below 0.10). A cap hit is an answer that
   reached 16,384 tokens without the stop token.
 
-## All configurations on the 328 in one table (hard328, n = 328, laptop, board work-44d747, idea-44d6e1)
+## Configurations on the 328 with committed rows, in one table (hard328, n = 328, laptop, board work-44d747, idea-44d6e1)
 
 Question (DIRECTION.md): how much of the RL-Zero-Math gain is reached without reward training, chosen on MATH-500 and scored
-once on the 328? Every full-set configuration whose per-problem rows are committed, rebuilt by `analysis/config_table.py`
-(spec `specs/SPEC_table.md`, commit `eb7afd0`, written before the script). Run folder `results/table/hard328-01/`:
-`table.md` (every column, also the clean 322 and grader v4), `table.json` (with the per-problem vectors), `checks.json`,
-`v4_rows.jsonl`, `run.json`.
+once on the 328? The full-set configurations whose per-problem rows are committed, rebuilt by `analysis/config_table.py`
+(spec `specs/SPEC_table.md`, commit `eb7afd0`, written before the script; addendum 1, commit `73264e8`, written before the
+second run). Run folder `results/table/hard328-02/`: `table.md` (every column, also the clean 322 and grader v4, and the
+fresh2026 table), `table.json` (with the per-problem vectors), `checks.json`, `v4_rows.jsonl`, `run.json`. It is not every
+configuration ever run on the 328: the list "Left out" below names what is absent. Formerly titled "All configurations on the
+328 in one table"; the first run, `results/table/hard328-01/` (49 rows, result-389164), is kept and its 49 rows are identical
+in hard328-02, which adds 17 rows (review of result-389164: the top-8 dial was absent): the finish dial at six sizes with
+four random-direction controls, the 1.5 size replicated with four samples, and Think-SFT + a (RL - base).
 
 1. No reward-trained weights, nothing chosen on the 328: Think-SFT + cue (trained on traces, so not training-free). One
    sample closes 122 % [103, 144] of the base-to-RL gap (209.0 of 328 against RL 200.0 and the cued base 158.5), the vote
@@ -145,6 +159,15 @@ once on the 328? Every full-set configuration whose per-problem rows are committ
 3. Unexplained: the 12.7 points [10.1, 15.5] between one cued-base sample and one RL sample (8.8 [5.2, 12.8] under the
    vote) are reached by no rule on the untrained weights. Think-SFT's lead over RL is 17.8 right answers per sample (5.4
    points [4.0, 6.9]) that are longer than 14,028 tokens; whether RL stops too early there is untested (work-ceccc0, open).
+
+The three sentences are those of hard328-01: no row added in hard328-02 changes them. The best row with no reward-trained
+weights and nothing chosen on the 328 is unchanged (Think-SFT + cue: 209.0 one sample, 241 under the vote; its single draws
+of 219 were already in the table). The only added rows with "no" in both columns are controls: Think-SFT + noise (209) and
+the random directions (158 to 167). Every added row above RL uses RL's weights: base + 1.5 x the top-8 RL directions closes
+107 % [84, 133] on the sample its size was chosen on and 101 % [88, 115] on four new draws, at 0.95 times the tokens of one
+RL sample (vote 214, 76 % [45, 110]); Think-SFT + 2 (RL - base) closes 176 % [152, 207] (231.5, a chosen on the 328), a = 1,
+not chosen, 148 % [124, 177] (220). Status of sentence 3's open item: work-ceccc0 is closed (result-c8b994, section "Token
+cap 32,768": with twice the cap RL gains 2 problems, Think-SFT 23); it is not a row here because its rows are not on main.
 
 Share of the gap closed = (accuracy - base) / (RL - base), base = base + cue, RL = RL plain, in the row's family. Single: the
 mean of the four stored samples (158.5 and 200.0; denominator 12.7 points [10.1, 15.5]). Vote: the plain vote over 4 (192
@@ -205,35 +228,77 @@ Tokens = generated tokens per problem over every sample and restart drawn (relay
 | RL-Zero-Code + cue, one sample | 1 | 187 / n/a (cap hits 25) | 57.0 [51.5, 62.5] | 69 [45, 93] (single) | -4.0 [-7.2, -0.8] | 7,613 (0.82) | yes (code reward) | no |  |
 | Think-SFT + cue, one sample, other workspace (sameraslan) | 1 | 219 / n/a (cap hits 89) | 66.8 [61.3, 72.0] | 146 [120, 178] (single) | +5.8 [+2.7, +8.9] | 10,123 (1.09) | no | no |  |
 | Think-SFT plain, one sample (sameraslan) | 1 | 203 / n/a (cap hits 86) | 61.9 [56.7, 67.1] | 107 [80, 138] (single) | +0.9 [-2.6, +4.4] | 9,376 (1.01) | no | no |  |
+| base + -1 x top-8 RL directions + cue, one sample | 1 | 118 / 114 / 96 | 36.0 [30.8, 41.2] | -98 [-143, -63] (single) | -25.0 [-29.3, -20.7] | 9,968 (1.07) | partly (RL-derived directions) | no (one size of the sweep of 7, every size reported) |  |
+| base + 0.5 x top-8 RL directions + cue, one sample | 1 | 170 / 118 / 40 | 51.8 [46.3, 57.3] | 28 [-1, 53] (single) | -9.1 [-12.9, -5.6] | 8,731 (0.94) | partly (RL-derived directions) | no (one size of the sweep of 7, every size reported) |  |
+| base + 1 x top-8 RL directions + cue, one sample | 1 | 192 / 110 / 26 | 58.5 [53.0, 64.0] | 81 [56, 105] (single) | -2.4 [-5.5, +0.6] | 9,284 (1.00) | partly (RL-derived directions) | no (one size of the sweep of 7, every size reported) |  |
+| base + 1.5 x top-8 RL directions + cue, one sample | 1 | 203 / 115 / 10 | 61.9 [56.4, 67.1] | 107 [84, 133] (single) | +0.9 [-2.1, +3.9] | 8,916 (0.96) | partly (RL-derived directions) | yes (1.5 is the best of 7 sizes scored on the 328) |  |
+| base + 2 x top-8 RL directions + cue, one sample | 1 | 190 / 138 / 0 | 57.9 [52.4, 63.1] | 76 [52, 99] (single) | -3.0 [-6.1, -0.2] | 8,207 (0.88) | partly (RL-derived directions) | no (one size of the sweep of 7, every size reported) |  |
+| base + 3 x top-8 RL directions + cue, one sample | 1 | 117 / 137 / 74 | 35.7 [30.5, 41.2] | -100 [-147, -64] (single) | -25.3 [-29.6, -21.1] | 8,257 (0.89) | partly (RL-derived directions) | no (one size of the sweep of 7, every size reported) |  |
+| base + -1 x 8 random directions (control) + cue, one sample | 1 | 159 / 109 / 60 | 48.5 [43.0, 54.0] | 1 [-28, 29] (single) | -12.5 [-16.5, -8.5] | 9,118 (0.98) | no (random directions) | no (control) |  |
+| base + 1 x 8 random directions (control) + cue, one sample | 1 | 158 / 118 / 52 | 48.2 [42.7, 53.7] | -1 [-30, 25] (single) | -12.8 [-16.8, -9.0] | 9,139 (0.98) | no (random directions) | no (control) |  |
+| base + 2 x 8 random directions (control) + cue, one sample | 1 | 167 / 95 / 66 | 50.9 [45.4, 56.4] | 20 [-7, 48] (single) | -10.1 [-14.1, -6.2] | 9,243 (0.99) | no (random directions) | no (control) |  |
+| base + 3 x 8 random directions (control) + cue, one sample | 1 | 163 / 103 / 62 | 49.7 [44.2, 54.9] | 11 [-17, 36] (single) | -11.3 [-15.0, -7.9] | 9,376 (1.01) | no (random directions) | no (control) |  |
+| base + 1.5 x top-8 RL directions + cue, one sample (mean of 4 new draws) | 1 | 200.25 / 119 / 8.75 | 61.1 [56.0, 65.7] | 101 [88, 115] (single) | +0.1 [-1.7, +1.8] | 8,898 (0.95) | partly (RL-derived directions) | yes (1.5 is the best of 7 sizes scored on the 328); the 4 samples are new draws on the same problems, not a held-out set | 456, 4,422 |
+| base + 1.5 x top-8 RL directions + cue, vote over 4 new draws | 4 | 214 / 114 / 0 | 65.2 [59.8, 70.4] | 76 [45, 110] (vote) | +4.3 [+1.9, +6.6] | 35,593 (3.82) | partly (RL-derived directions) | yes (1.5 is the best of 7 sizes scored on the 328); the 4 samples are new draws on the same problems, not a held-out set |  |
+| Think-SFT + 1 (RL - base) + cue, one sample | 1 | 220 / 47 / 61 | 67.1 [61.9, 72.3] | 148 [124, 177] (single) | +6.1 [+3.2, +8.9] | 9,667 (1.04) | partly (RL weight change added to Think-SFT) | no (prediction filed before the run) | 467, 4,771 |
+| Think-SFT + 2 (RL - base) + cue, one sample (mean of 2) | 1 | 231.5 / 55.5 / 41 | 70.6 [65.7, 75.2] | 176 [152, 207] (single) | +9.6 [+6.9, +12.3] | 9,502 (1.02) | partly (RL weight change added to Think-SFT) | yes (a = 2 is the best of 4 values on the 328; the second sample was pre-registered with the threshold 222) |  |
+| Think-SFT + 3 (RL - base) + cue, one sample | 1 | 227 / 80 / 21 | 69.2 [64.0, 74.4] | 165 [139, 199] (single) | +8.2 [+5.3, +11.3] | 9,709 (1.04) | partly (RL weight change added to Think-SFT) | no (one value of the sweep of 4, every value reported) |  |
+| Think-SFT + 4 (RL - base) + cue, one sample | 1 | 213 / 105 / 10 | 64.9 [59.5, 70.1] | 131 [106, 159] (single) | +4.0 [+0.8, +7.0] | 10,333 (1.11) | partly (RL weight change added to Think-SFT) | no (one value of the sweep of 4, every value reported) |  |
+| Think-SFT + noise of the RL delta's norm + cue (control), one sample | 1 | 209 / 31 / 88 | 63.7 [58.5, 68.9] | 122 [98, 151] (single) | +2.7 [-0.3, +5.9] | 10,109 (1.08) | no | no (control) |  |
 
-- Chosen on the 328: no row's model, prompt or rule was picked on 328 scores. Two rows use a length set from the 328's
-  token counts (no score read). The tie-to-shortest rule was written on MATH-500 after reading the problems it fixes (453
+- Chosen on the 328: four rows were picked on 328 scores, all added in hard328-02 and all with RL's weights in them: the
+  three rows of the 1.5 size of the top-8 edit (the best of 7 sizes; its four-sample rows are new draws on the same
+  problems, not a held-out set; MATH-500 is the held-out reading, 456 of 500) and Think-SFT + 2 (RL - base) (the best of 4
+  values of a; its second sample, 229, was pre-registered with the threshold 222). No other row's model, prompt or rule was
+  picked on 328 scores. Two rows use a length set from the 328's token counts (no score read). The tie-to-shortest rule was written on MATH-500 after reading the problems it fixes (453
   there is in-sample); on the 328 it is held out: 191 against the vote's 192, 199 against 195 after restart (+2.1 points
   [0.0, 4.6] over the plain vote). Picking the best relay arm or the best mix from this table would be a choice on the 328.
-- Clean 322 (without the 6 problems of `results/wsp1/sft_overlap-03/flags.json`): no share moves by more than 3 points
+- Clean 322 (without the 6 problems of `results/wsp1/sft_overlap-03/flags.json`): no share moves by more than 3.2 points
   (Think-SFT + cue: one sample 204.0 of 322, 124 % [105, 148]; vote 235, 169 % [128, 250]).
 - Grader v4 (v4a of `grader/repair_v4.py`, votes recounted on its extraction; text from the local raw answers of jobs
   `e8e6`, `5ff2` and the four Think-SFT jobs, extraction stored in `v4_rows.jsonl`): no row changes by more than 1 problem
   (Think-SFT one sample 209.5, 123 % [104, 146]; vote 241; the base's vote after restart 194 instead of 195). The relay rows,
-  the one-sample cells from `axis/hard328-01/vectors.json` and sameraslan's two cells have no v4 cell: their text was not read.
-- Instrument checks (`checks.json`): 176 of 176 posted numbers reproduce from the committed rows (README sections "The 328
+  the one-sample cells from `axis/hard328-01/vectors.json`, sameraslan's two cells and the 17 rows added in hard328-02 have no
+  v4 cell: their text was not read.
+- Instrument checks (`checks.json` of hard328-02): 270 of 270 posted numbers reproduce from the committed rows, 0 fail: the
+  176 of hard328-01 and 94 new ones (the finish dial 34: right, cap hits and tokens of its 12 cells against
+  `results/xreward/edits/readout.json`, its size 0 and RL columns equal to `axis/hard328-01/vectors.json`, four paired
+  differences; the four-sample replication 10; "Delta transplant" 29; fresh2026 21), counts, tokens and intervals. The 176
+  of hard328-01 are README sections "The 328
   with four samples and restarts", "Think-SFT with the cue under the vote rules", "Mixed-model vote", "Risk-coverage"
   outcome tables, "Think-SFT training-data overlap", "Relay", the Day-1 #1 and #4b cells, `frontier/hard328-01`, board
   result-32ff47, and 39 MATH-500 numbers of "Token frontier"), counts, tokens and intervals. Planted (`--test`): a
   configuration equal to RL gives 100 % [100, 100], equal to the base 0 % [0, 0], their mean 50 %; a vector with one
   flipped problem fails its check; a denominator carried by 6 problems is marked unstable.
-- Left out, no committed per-problem rows: the weight stack Think-SFT + a (RL - base) (work-3d1e3b, open; first numbers in
-  its comments: a = 1 220, a = 2 234, one sample); cap 32,768 (work-ceccc0, open); the top-k RL directions + cue
-  (result-51a0e7: readout and metrics only, branch `sharedsub`) and the finish dial (work-e02ba4, open); the loop-neuron edit
-  (sameraslan, result-79784b: metrics only); self-distillation, signed self-training, solved examples and the T 0.6 cells on
-  the 328 (metrics only). sameraslan's two Think-SFT cells are read from commit `bdba62b` of branch
-  `claude/weight-space-programming-research-ddd44e` (not on main). No full-set hard328 configuration of frustea is on the board.
+- Left out, still absent (no per-problem rows on main; metrics and readouts only): cap 32,768 (result-c8b994,
+  `results/cap32/`: Think-SFT + cue 230 at 32,768 and 207 at 16,384 on the same answers, RL plain 195 and 193; no rows on
+  branch `cap32` either); self-distillation (`results/selfdistill/`: V cue 167, U cue 168, S cue 171, V plain 161);
+  signed self-training (`results/signed1/`); solved examples in context (`results/shots1b/hard328_rl-01/`); the loop-neuron
+  edit (sameraslan, result-79784b); the T 0.6 cells on the 328; the 14 other xreward edit cells (top-1, top-64, bulk,
+  attention-only, MLP-only, Code-RL and other donors, projections: `results/xreward/edits/readout.json`); base + cue at cap
+  32,768 and the vote at cap 32,768 (no result on main). Read from outside `results/`: the one-sample dial cells come from
+  `PROBLEMS` in `tools/finding_the_finish_dial.py` (outcome, tokens and extracted answer per problem, written from the jobs'
+  answers; their run folders hold metrics only); sameraslan's two Think-SFT cells from commit `bdba62b` of branch
+  `claude/weight-space-programming-research-ddd44e` (not on main). No full-set hard328 configuration of frustea is on the
+  board.
+- fresh2026 (n = 136, result-5251c9, section "Fresh held-out set") is another benchmark: its rows are a separate table with no
+  share of the gap. Abstained = no extracted answer; accuracy interval from the same bootstrap over the 136 problems; the
+  differences are the posted ones (draws of `analysis/fresh_read.py`).
+
+  | fresh2026 configuration | Samples | Right / wrong / abstained of 136 | Accuracy, % [95 %] | minus RL plain under the same rule, points [95 %] | Tokens per problem | Reward-trained weights |
+  |---|---|---|---|---|---|---|
+  | Think-SFT + cue, one sample (mean of 4) | 1 | 60 / 18.75 / 57.25 | 44.1 [36.9, 51.7] | +7.0 [+3.1, +11.0] | 13,043 | no |
+  | Think-SFT + cue, vote over 4 | 4 | 75 / 40 / 21 | 55.1 [47.1, 63.2] | +13.2 [+7.4, +19.1] | 52,170 | no |
+  | RL plain, one sample (mean of 4) | 1 | 50.5 / 80.75 / 4.75 | 37.1 [30.3, 44.5] | +0.0 [+0.0, +0.0] | 12,083 | yes |
+  | RL plain, vote over 4 | 4 | 57 / 79 / 0 | 41.9 [33.8, 50.7] | +0.0 [+0.0, +0.0] | 48,331 | yes |
+  | base + cue, one sample (mean of 4) | 1 | 29.5 / 56 / 50.5 | 21.7 [16.4, 27.8] | -15.4 [-19.9, -11.4] | 12,790 | no |
+  | base + cue, vote over 4 | 4 | 38 / 87 / 11 | 27.9 [20.6, 36.0] | -14.0 [-19.9, -8.1] | 51,158 | no |
 - One right and one wrong item with input, output and score are in each source run folder's `examples.json`.
 
 ```
 P="uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.config_table"
 $P --test
-$P --out studies/rlneurons/results/table/hard328-02 --v4-rows studies/rlneurons/results/table/hard328-01/v4_rows.jsonl
+$P --out studies/rlneurons/results/table/hard328-03 --v4-rows studies/rlneurons/results/table/hard328-01/v4_rows.jsonl
 ```
 
 ## Established numbers (MATH-500, n = 500, one sample per problem, grader v3)
@@ -2918,6 +2983,27 @@ per problem against the mean of the reference's 4 samples, 95 % bootstrap over p
 467 of 500, 17 cap hits, 4,771 tokens per problem. Think-SFT cue 454 (25 cap hits, `results/wsp1/full500/sft1_cue-01/`), RL cue
 456 to 464 over 4 samples: M(1) minus RL +1.4 points [-0.6, 3.3]. The filed prediction was 467, with 460 or less refuting it.
 
+### fresh2026, n = 136, M(2) with the coefficient fixed: the gain transfers (`results/transplant/fresh2026-01/`, board work-8b4030)
+
+Amendment 2 of the spec, written before the runs. 136 competition problems published in 2026 (`specs/SPEC_fresh.md`), cue,
+T 1.0, cap 16,384, `jobs/run_fresh.py`, seeds 7,000,000 + 10,000 s. Three of the four samples (s = 0, 2, 3) are in; the
+references are the same three samples of Think-SFT cue and RL plain of work-7c069c (jobs -024256-58c8, -024432-d87b,
+-024621-af01 and -024606-5843, -024700-b8c3, -024804-390f, rows in the team store under handoff/fresh/).
+
+| Model | Right of 136, per sample | Mean | Minus Think-SFT, points | Cap hits per sample | Right of finished | Vote over 3 |
+|---|---|---|---|---|---|---|
+| RL-Math plain | 49, 53, 50 | 50.7 | | 21.0 | 42.9 % (148 of 345) | 54 |
+| Think-SFT | 65, 56, 60 | 60.3 | | 63.0 | 81.7 % (179 of 219) | 74 |
+| M(2) | 69, 70, 75 | 71.3 | +8.1 [4.4, 11.8] | 46.7 | 78.7 % (211 of 268) | 78 |
+
+- The prediction of amendment 2 holds on three samples: M(2) minus Think-SFT is +8.1 points with the interval above 0, on a
+  set the coefficient was not chosen on (the 328 gave +6.9). Against RL plain it is +15.2 [10.0, 20.6]. Cap hits fall by
+  12.0 points [-16.9, -7.6].
+- Under the vote the lead is not resolved: 78 against 74 of 136, +2.9 points [-1.5, 7.4].
+- Missing: sample 1 (its first box slowed to 5 requests in 15 minutes, its second failed with an NVML error, its third was
+  stopped with all boxes of the account at 16:15 UTC), MATH-500 for M(2) and hard328 samples 3 and 4 of M(2) (running on
+  boxes that were stopped at the same time; their disks are kept).
+
 Run folders hold `readout.json`, `metrics.json` and `delta_sum.json` (per arm), `rows.jsonl` (arms and references, per answer)
 and `examples.json` (one right and one wrong finished answer per arm, with the prompt). Jobs: hard328 a = 1 -000934-51f9,
 a = 2 -000954-b526 and -020508-879c, a = 3 -020435-c76d, a = 4 -020500-36ed, control -020021-e9d1; MATH-500 -004808-bb28 (all
@@ -2927,6 +3013,141 @@ abaybektursun-1115-). Raw answers: `runs/<job-id>/answers.jsonl` on the laptop o
 ```
 python3 tools/vast.py run <box> -- 'PIP_BREAK_SYSTEM_PACKAGES=1 bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 2.0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1_rl20 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --samples 1 --restarts 0 --commit <sha>'
 uv run --with numpy python -m studies.rlneurons.analysis.transplant hard328-01 --arm sft1_rl20=runs/<job>,runs/<job> [--arm ...] --ref think=studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl --ref rl=studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl
+```
+
+## Token cap 32,768 on the 328: Think-SFT gains 23 problems, the base 4, RL 2 (board work-ceccc0)
+
+Spec `specs/SPEC_cap32.md` (written before the runs). `run_cell --set hard328 --max-tokens 32768`, T 1.0 / top-p 1.0, grader
+v3, one sample, seed 3000000, on vast.ai (RTX PRO 6000). Each cell is scored twice from the same answers: right at 32,768, and
+right with at most 16,384 generated tokens, so the gain is paired inside one run. Readout `analysis/cap32.py`,
+`results/cap32/readout.json`.
+
+Per-problem rows of both cells (tokens generated, cut off at 32,768 or not, score, extracted answer, last 400 characters): `results/cap32/rows-01/` (`sft_cue.jsonl`, `rl_plain.jsonl`, `run.json`), written by `analysis/cap32_rows.py` from `runs/<job>/answers.jsonl`; its totals are checked against `results/cap32/readout.json` (230 and 207, 195 and 193).
+
+| cell | right at 16,384 (same answers) | right at 32,768 | gain, points [95 %] | answers past 16,384: finished / right | tokens per problem, 16,384 / 32,768 |
+|---|---|---|---|---|---|
+| Think-SFT cue (`results/cap32/sft_cue-01/`) | 207 | 230 | +7.0 [4.3, 9.8] | 93: 91 / 23 | 10,048 / 11,795 |
+| RL plain (`results/cap32/rl_plain-01/`) | 193 | 195 | +0.6 [0.0, 1.5] | 20: 20 / 2 | 9,293 / 9,421 |
+| base cue (`results/cap32/base_cue-01/`, 4 shards on AWS L40S) | 152 | 156 | +1.2 [0.3, 2.4] | 64: 63 / 4 | 9,145 / 9,995 |
+
+- H1 held: Think-SFT's cut answers are unfinished work. 91 of 93 finish inside the second 16,384 tokens and 23 are right, for
+  1,747 more tokens per problem. 230 of 328 is the best single-sample row on the 328 so far (vote over 4 Think-SFT samples at
+  16,384: 241 at 40,410 tokens).
+- H3 held: RL gains 2.
+- Instrument: the 16,384 scores of these runs are 207 (stored cells 212, 219) and 193 (stored 206). 193 is 13 below 206, one
+  outside the spec's limit of 12, and inside the range of RL's four stored samples on the 328 (207, 190, 209, 194,
+  `results/day1_3/hard328_rl_plain_s4r2-01/`). Not rerun; the gain is measured inside the run.
+- Of the 68 long Think-SFT answers that finish wrong, none is a loop by the runner's loop count (3 in the whole cell).
+- H2 held: the base's long answers also finish with more tokens (63 of 64) but only 4 are right. Share right among answers past
+  16,384: Think-SFT 23 of 93, RL 2 of 20, base 4 of 64. The base's 16,384 score in this run is 152 (stored 164, limit 12: inside).
+  Base jobs ih-1115-144232-448b, -144318-6d57, -144428-85af, -144457-42b8, joined with `analysis/shard_join.py`.
+- Jobs abaybektursun-1115-005756-309b (Think-SFT), -005823-8ac9 (RL); raw answers in `runs/<job>/` on the laptop, not in git.
+
+## Fresh held-out set: Think-SFT's lead over RL holds on problems published in 2026 (fresh2026, n = 136, 4 samples, board work-7c069c, idea-67db73)
+
+Question: Think-SFT + cue beats RL under the vote on the 328 (241 against 221), but its training data could hold those
+problems in a form an overlap scan cannot match. Does the lead hold on competition problems published after the weights of all
+three models existed? Answer: yes, and it is larger. Vote over 4 on 136 problems from AIME 2026, HMMT February 2026 and HMMT
+November 2026: Think-SFT + cue 75 of 136 (55.1 %), RL plain 57 (41.9 %), base + cue 38 (27.9 %). Think-SFT minus RL +13.2
+points [+7.4, +19.1], paired bootstrap; one sample (mean of 4) 60.0 against 50.5 against 29.5, +7.0 points [+3.1, +11.0]. Spec
+and predictions, filed before any model saw the set: `specs/SPEC_fresh.md` (commit `1232554`; refuting observations of P1 to P3
+added in `a29e390` before any full-run row was read). T 1.0 / top-p 1.0, cap 16,384, grader v3, no restarts, prompt `pair1`.
+
+What "fresh" guarantees. Every problem was first set at a contest held between 2026-02-05 and 2026-11-07. The last weights
+(RL-Zero-Math) were uploaded 2025-12-12, Think-SFT's on 2025-10-14 and its training data on 2025-10-16, the base's on
+2025-10-09; the model cards state "Date cutoff: Dec 2024" (base), "Dec. 2024." (Think-SFT) and "Dec. 2023." (RL), and the
+Olmo 3 paper (2512.13961, section 3) "a cutoff date of December 31, 2024" for the crawl. The Dolci dataset cards state no
+cutoff, so the bound is the upload dates. The contest papers, their solutions and discussions of them therefore cannot be in
+any training data. Not guaranteed: that a contest did not reuse an older problem. One was found and dropped (AIME 2026 I #1 is
+the 2020 Purple Comet Middle School #8, an exact match in the RL training prompts). Both training sets were then scanned for
+the 136: 0 exact, 0 near in the 13,314 RL prompts (`results/fresh/overlap-01/overlap.json`, largest 8-gram share 0.375) and 0
+in every message of the 2,268,178 Think-SFT rows (`results/fresh/sft_overlap-01/`, largest share 0.429; the controls hard/0
+and hard/38, known to be in that data, were flagged exact).
+
+The set: `data/fresh/fresh2026_v1.json` (sha256 `dcf571ea8a4654228e17975e8c1e255e50072f74061c9b083f5aad5c21d8e7d7`, built by
+`prep/fresh_prep.py`, counts in `fresh2026_v1_meta.json`). 165 candidates: `MathArena/aime_2026` @ `d61f486` (30),
+`MathArena/hmmt_feb_2026` @ `589a53f` (33), and the official HMMT solutions PDFs of the February Guts round (36) and of
+November 2026 General, Theme, Team and Guts (66), transcribed by Claude subagents into `data/fresh/transcribed_v1/` (urls and
+sha256 of the PDFs in `sources.json`). Dropped by rules written before any model output: 1 published before 2026, 20 that need
+a figure, 7 estimation problems, 1 with a tuple answer; 0 by the grader check (every gold grades right against itself and
+wrong against gold + 1 and against another problem's gold). Kept: AIME 27, HMMT Feb 32 + Guts 28, HMMT Nov 49. Caveats: the
+77 PDF problems were transcribed by a language model (the answer keys were checked against the official ones by the main
+session; three statements on which all models agree on one wrong answer were compared with the PDF text here and are
+verbatim); `aime2026/25` has MathArena's wording (the sum of all possible BC, gold 850), not the contest paper's; for
+`hmmt_feb2026/9` (gold `50(1 - \frac{1}{2^{101} - 1})`) grader v3 takes 50.0 but not 50: no sample of any model answers 50 or
+the gold (4 cap hits for Think-SFT, RL 100, 100 and two other expressions, base 3 cap hits and 101/2), so the counts are the
+same without it (75, 57, 38 of 135; +13.3 points [+6.7, +20.0]).
+
+| fresh2026, n = 136 | Think-SFT + cue | RL plain | base + cue |
+|---|---|---|---|
+| one sample: the 4 samples; mean | 65, 59, 56, 60; 60.0 | 49, 50, 53, 50; 50.5 | 28, 28, 32, 30; 29.5 |
+| vote over 4 | 75 | 57 | 38 |
+| any of 4 right (pass@4) | 77 | 68 | 48 |
+| sequential vote, at most 3 (`seq3`): right, right (24), tokens | 71, 72.5, 34,718 | 56, 54.9, 32,394 | 34, 36.2, 36,313 |
+| sequential vote, at most 4 (`seq4_restart`, no restarts run): right, right (24), tokens | 75, 75.5, 42,251 | 57, 55.8, 37,443 | 38, 38.8, 46,047 |
+| cap hits, share of the 544 samples | 45.6 % | 15.4 % | 40.3 % |
+| precision of finished answers | 80.4 % (238 of 296) | 42.8 % (197 of 460) | 36.0 % (117 of 325) |
+| generated tokens per sample; per problem for the vote | 13,043; 52,170 | 12,083; 48,331 | 12,790; 51,158 |
+
+Differences, points, paired bootstrap over problems (`results/fresh/readout-01/readout.md` has every group):
+
+| | vote over 4 | one sample |
+|---|---|---|
+| Think-SFT minus RL, all 136 | +13.2 [+7.4, +19.1] | +7.0 [+3.1, +11.0] |
+| Think-SFT minus RL, Hugging Face subset (AIME + HMMT Feb, 59): 29 against 22 | +11.9 [+3.4, +22.0] | +8.5 [+1.7, +15.7] |
+| Think-SFT minus RL, transcribed subset (77): 46 against 35 | +14.3 [+6.5, +23.4] | +5.8 [+1.3, +10.7] |
+| Think-SFT minus RL, HMMT November 2026 only (49, eight days old at the run): 30 against 23 | +14.3 [+6.1, +24.5] | +6.1 [+1.0, +11.7] |
+| Think-SFT minus base, all | +27.2 [+19.9, +35.3] | +22.4 [+17.5, +27.8] |
+| RL minus base, all (the control: the instrument separates the models as on the 328) | +14.0 [+8.1, +19.9] | +15.4 [+11.4, +19.9] |
+
+Hypotheses and predictions scored (`results/fresh/readout-01/readout.json`, `predictions`):
+
+- H1 (Think-SFT's vote beats RL's by at least 2 points; refuted if the interval is at or below 0): held, +13.2 [+7.4, +19.1].
+- H2 (Think-SFT abstains more and is more precise, each by at least 10 points): held, cap hits +30.1 points [+24.1, +36.6],
+  precision +37.6 [+30.9, +44.0].
+- H3 (base + cue below RL): held, 38 against 57 under the vote, 29.5 against 50.5 in one sample.
+- The 12 table predictions (vote, single, cap hits, precision for three models): all inside their intervals. Vote 74 / 64 / 49
+  predicted, 75 / 57 / 38 observed; single 59 / 54 / 36 against 60.0 / 50.5 / 29.5; cap hits 40 / 14 / 33 % against 45.6 /
+  15.4 / 40.3; precision 80 / 50 / 42 % against 80.4 / 42.8 / 36.0. Think-SFT was predicted within 1 problem; RL and the base
+  came out 7 and 11 problems lower than predicted. Tokens per sample 12,000 / 11,000 / 11,000 against 13,043 / 12,083 / 12,790.
+- P1 (difference +7 points, refuted above +12): refuted, +13.2; the interval half-width (5.9 points) was as stated.
+- P2 (Hugging Face subset 26 / 20 / 14): held, 29 / 22 / 13.
+- P3 (the models are closest on HMMT November, 35 / 33 / 27): refuted. 30 / 23 / 17, and the difference there (+14.3 points)
+  is not smaller than on the other 87 problems (+12.6). HMMT November was not the easier part for these models.
+
+What the raw rows show (all 1,632 extracted answers read beside the golds; texts of right, wrong and cap-hit rows read):
+
+- The mechanism of the 328 repeats. Think-SFT hits the cap on 248 of 544 samples and is right in 80 % of the answers it
+  finishes; RL finishes 460 and is right in 43 %. A cap hit casts no vote, so Think-SFT's vote is almost its pass@4 (75 of
+  77); RL's vote loses 11 of its 68 problems with a right sample to its own wrong finished answers (`aime2026/4`: 65, 71, 70,
+  65 against gold 70). Vote right for one model only: Think-SFT 20, RL 2 (`aime2026/18`: four Think-SFT cap hits).
+- RL answers with a confident wrong value where Think-SFT is right (`hmmt_feb2026/12`: 875/128 four times against RL's 10
+  four times; `hmmt_feb2026_guts/15` and `hmmt_nov2026_guts/25`: Think-SFT right twice and two cap hits, RL four wrong answers).
+- 66 of Think-SFT's 248 cap hits hold more than 20 Chinese characters (RL 3 of 84, base 0 of 219), as on the 328.
+- The grader takes equivalent forms: `\sqrt{14 + 3\sqrt{19}}` for `\frac{\sqrt{38}+3\sqrt{2}}{2}`, `\frac{2027! - 2026!}{2}`
+  for `1013 \cdot 2026!`, `0.87` for `\frac{87}{100}` (checked by hand). No finished answer equal to its
+  gold and scored wrong was seen in the table of extracted answers.
+- Problems where all three models agree on one wrong answer (`aime2026/30`: 243 for 393; `hmmt_feb2026_guts/21`: 34 for 102;
+  `hmmt_nov2026_team/4`: 2025 for 64) are verbatim statements with the official answers.
+
+Jobs. Smoke: Modal `abaybektursun-1115-042802-2fae` (base + cue, first 10 problems: 3 right, 3 cap hits; rows read). The 12
+cells ran from the main session on vast.ai, one RTX PRO 6000 96 GB per job, commit `94d9863`, commands in
+`specs/fresh_jobs.txt`, 12.1 GPU-hours of job time (450 to 545 tokens/s): Think-SFT `abaybektursun-1115-024256-58c8`,
+`-024347-94e1`, `-024432-d87b`, `-024621-af01`; RL `-024606-5843`, `-024132-1f6e`, `-024700-b8c3`, `-024804-390f`; base
+`-040403-80d7`, `-024927-4a44`, `-025027-51c8`, `-025153-2e87` (samples 0 to 3, seeds 7000000 + 10000 s; arm and seed read
+from each job's `metrics.json`, each done with 136 rows). Raw answers: `s3://iterate-hack-team-769063704696/handoff/fresh/<job>/`.
+Run folders `results/fresh/{sft1_cue,rl_plain,base_cue}_s4-01/` (`run.json`, `metrics.json`, `readout.json`, `rows.jsonl`,
+`examples.json`), `frontier_sft_rl-01/` (the `--base` slot holds Think-SFT; labels in `frontier.md` edited, numbers
+untouched), `frontier_base_rl-01/`, `readout-01/`. `jobs/run_fresh.py` is `run_cell` with `--set fresh2026` registered.
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 --with pyarrow --with huggingface_hub python -m studies.rlneurons.prep.fresh_prep
+uv run --no-project --with pyarrow python -I studies/rlneurons/analysis/rln3_overlap.py <dir with train.parquet, math500.json, the fresh set as hard.json> <out.json>
+PYTHONPATH=. uv run --no-project --with huggingface_hub --with pyarrow --with numpy python -m studies.rlneurons.analysis.fresh_sft_overlap --tmp <dir> --out studies/rlneurons/results/fresh/sft_overlap-01
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.thinkvote_join --runs runs/fresh_handoff/<s0> <s1> <s2> <s3> --out runs/fresh_<arm>_s4
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_vote --run runs/fresh_<arm>_s4 --out studies/rlneurons/results/fresh/<arm>_s4-01 [--minus <readout.json>]
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.frontier --base studies/rlneurons/results/fresh/sft1_cue_s4-01 --rl studies/rlneurons/results/fresh/rl_plain_s4-01 --fixed studies/rlneurons/results/frontier/math500-01/chosen.json --out studies/rlneurons/results/fresh/frontier_sft_rl-01
+uv run --no-project --with numpy python -m studies.rlneurons.analysis.fresh_read --sft studies/rlneurons/results/fresh/sft1_cue_s4-01 --rl studies/rlneurons/results/fresh/rl_plain_s4-01 --base studies/rlneurons/results/fresh/base_cue_s4-01 --out studies/rlneurons/results/fresh/readout-01 --texts runs/fresh_sft1_cue_s4 runs/fresh_rl_plain_s4 runs/fresh_base_cue_s4
 ```
 
 ## How to run
@@ -3166,6 +3387,52 @@ bootstrap, 5,000 resamples, seed 0). Tokens = generated tokens per problem, rest
   sample (207 at 9,437; mean of the four samples 200.0). The nine rules chosen on MATH-500, scored once here:
   `results/frontier/hard328-01/frontier.md` (the command at the end of "Token frontier").
 - The base loses 39 % of its single-sample accuracy from MATH-500 to the 328 (81.0 to 49.1 %), RL 31 % (91.2 to 63.1 %).
+
+## Released RL checkpoints at T 1.0, plain and cue (ckptcue)
+
+Spec and predictions, written before any job: `specs/SPEC_ckptcue.md`. Readout: `analysis/ckptcue.py`, output
+`results/ckptcue/readout.json`; one folder per cell `results/ckptcue/<cell>-01/` (`run.json`, the job's `metrics.json`,
+`per_problem.json`, `examples.json`). MATH-500, n = 500, T 1.0 / top-p 1.0, cap 16,384, grader v3, one sample; plain
+cells use seed 45000000 (T2's), cue cells 41000000 (T1's). The checkpoints are `allenai/Olmo-3.1-7B-RL-Zero-Math` at
+revisions `step_0100` (`0a45720c`) and `step_0400` (`897c0ce4`), downloaded in the job and passed with `--model-path`.
+Raw answers: `runs/<job id>/answers.jsonl` in the worktree `iterate-hack-ckpt` on abaybektursun's laptop (the vast.ai
+boxes are destroyed).
+
+| Cell | Right of 500 | Cap hits | Tokens per problem | Job |
+|---|---|---|---|---|
+| base, plain (T3, reference) | 224 | 8 | | |
+| base, cue (T1, reference) | 410 | 27 | | |
+| RL step 100, plain | 418 | 24 | 4,120 | `abaybektursun-1115-064532-6a2f` |
+| RL step 100, cue | 427 | 24 | 4,118 | `abaybektursun-1115-032509-fc06` |
+| RL step 400, plain | 436 | 7 | 4,080 | `abaybektursun-1115-015818-b11d` |
+| RL step 400, cue | 431 | 17 | 4,279 | `abaybektursun-1115-015852-a31f` |
+| RL final (step 2,800), plain (T2, reference) | 463 | 6 | | |
+
+| Difference (paired bootstrap over problems, 5,000 resamples) | Points | 95 % interval |
+|---|---|---|
+| step 100 plain minus base cue | +1.6 | [-2.0, +5.2] |
+| step 100 cue minus step 100 plain | +1.8 | [-1.2, +4.8] |
+| step 400 plain minus base cue | +5.2 | [+2.0, +8.4] |
+| step 400 cue minus step 400 plain | -1.0 | [-4.0, +2.0] |
+| step 400 plain minus step 100 plain | +3.6 | [+0.2, +7.0] |
+| final plain minus step 400 plain | +5.4 | [+2.8, +8.0] |
+
+Reading. At AI2's setting the first 100 RL steps bring the plain prompt from 224 to 418, and the cue alone brings the
+untrained base to 410: the two are not separated (+1.6 points, interval includes 0), and the cue adds nothing
+measurable to either checkpoint. H-open (the first 100 steps install what the cue gives) is not refuted; H-more (step
+100 is past the cue) is not supported here, unlike at T 0.6 where step 100 leads the looping cued base by 5.4 points
+(381 against 354). Of the 53 problems between the cued base and the final model, 8 come by step 100, 18 more by step
+400 and 27 after step 400. All five filed predictions hold (step 100 plain 428 [412, 444]: 418; step 400 plain 447
+[432, 459]: 436; cue gain at step 100 +0.5 [-3, +4]: +1.8; at step 400 0 [-3, +3]: -1.0; cap hits 25 [10, 45]: 24).
+
+Limits. One sample per cell, so each count carries about 2 points of sampling noise; the step 100 difference cannot
+exclude a lead of up to 5 points. The spec's identity check failed as written: 'Okay' in the first 30 characters is 383 of
+500 at step 100 and 358 at step 400, below the 430 threshold taken from T 0.6 rows. At T 1.0 the plain answers open in
+more ways (step 400: 243 start ' and resubmit.' and reach 'Okay' later), so the marker is not valid here. The
+checkpoint's identity rests on the pinned revision in each job's command and `model_dir`, and on the scores lying
+between the base's and the final model's. Three step 100 plain answers are empty (the model stops at once).
+The first step 100 plain job (AWS `ih-1115-092337-b35c`) was cut by its 2-hour limit at 478 answers (405 right) and is not
+used; a second run was lost with its box.
 
 ## Mixed-model vote on the 328: do two models' samples vote better together? (hard328, n = 328, laptop, board work-0d465a)
 
@@ -3586,3 +3853,394 @@ $P judge --work runs/derived-02 --judge A    # also B and F; the hand labels go 
 $P score --work runs/derived-02 --out studies/rlneurons/results/derived/hard328-02
 $P score --per-sample --out studies/rlneurons/results/derived/hard328_persample-02   # addendum 1; reads hard328-01/labels.jsonl, no judge call
 ```
+
+## The 1.5x top-8 edit, replicated with four samples on the 328 (hard328, n = 328, cue, T 1.0, grader v3, board work-ab0f72)
+
+Question: base + 1.5 times the top 8 directions of (RL-Math - base) scored 203 of 328 on one sample (board result-6f1bb7),
+and 1.5 was the best of seven sizes tried on the 328. Does it hold on new samples? Answer: yes for one sample, not fully under
+the vote. Four samples: 207, 198, 199, 197, mean 200.25 (RL plain 200.0: 207, 190, 209, 194). Vote over 4: 214 of 328 at
+35,593 tokens per problem, 2.1 points [-5.2, +0.6] below RL's vote (221) and 6.7 points [3.4, 10.4] above the base's (192).
+Under the vote the edit alone is right on 8 problems, RL alone on 15. MATH-500, one sample: 456 of 500, 7 cap hits (RL 457,
+base + cue 410; job `abaybektursun-1115-055652-3a2d`).
+
+Job `abaybektursun-1115-055641-b417` (`--model-label top8x1.5_math31 --prompt cue --set hard328 --samples 4 --seed 3000000`,
+no restarts; cap hits per sample 20, 14, 20, 22, against 71, 66, 81, 68 for the base and 35, 26, 24, 29 for RL). Readout
+`analysis/day1_vote.py --minus` the RL readout: `results/day1_3/hard328_top8x1.5_cue_s4-01/`. The edit uses the RL
+checkpoint's weights, so it is not a route without reward; its size was chosen on the 328, and these four samples are new
+draws on the same problems, not a held-out set (MATH-500 is the held-out reading).
+
+## xreward: what RL runs with different rewards write into the same base (board work-4fa42e, idea-ac4e14)
+
+Spec `specs/SPEC_xreward.md` (written before each run; amendments 1 to 4). Branch `sharedsub`.
+
+| File | What it does |
+|---|---|
+| `jobs/xreward_overlap.py` | Weights only. Top-8 singular subspaces of (model - base) for seven RL-Zero models, Think-SFT and the base matrix itself, per layer matrix (224), and every pairwise overlap; `--steps` adds the step-100 checkpoint of each RL run. Selftest with a planted shared subspace. |
+| `analysis/xreward_overlap.py` | Readout of the overlap job: key-by-key tables, by module type, nearest neighbours, X1 to X3, S1, S2. |
+| `jobs/wsp_edit.py` | Edited weights. Added here: `--mods` (module filter), `--scale`, recipes `proj` / `projc` (the top-k edit split by a donor model's input subspace), `--other` / `--donor` keys of `xreward_overlap.MODELS`; selftest checks 7 to 9. |
+| `analysis/xreward_edits.py` | Paired readout of the edit cells on the 328 against base cue, RL, theta(0.25), theta(0.5), Code-RL. |
+| `results/xreward/overlap-01/` | `readout.json`, `run.json` of job `abaybektursun-1114-220151-daaa` (final models). Raw per-matrix rows (3 MB): `runs/<job>/metrics.json`, Volume `iterate-runs`. |
+| `results/xreward/overlap_steps-01/` | The same with the seven step-100 checkpoints, job `abaybektursun-1114-221259-0871`. |
+| `results/xreward/edits/` | `readout.json` and one run folder per cell (`run.json`, `metrics.json`, `edit.json`, `examples.json`). |
+
+### Part 1: overlap of the top-8 subspaces (weights only, 224 layer matrices)
+
+Overlap = ||Va^T Vb||_F^2 / 8 for the input (right) side, the same with U for the output side; a random 8-dimensional subspace
+gives 0.002. Means over the 224 matrices, `results/xreward/overlap-01/readout.json`, key `tables`.
+
+| Pair | Input side | Output side |
+|---|---|---|
+| Math 3.0, Math 3.1 | 0.476 | 0.098 |
+| Code 3.0, Code 3.1 | 0.425 | 0.082 |
+| Math 3.1, Code 3.1 | 0.260 | 0.096 |
+| Math 3.1, Code 3.0 | 0.218 | 0.072 |
+| IF, General | 0.187 | 0.049 |
+| Mix with IF / Code 3.0 / General / Math 3.0 | 0.380 / 0.306 / 0.244 / 0.197 | 0.120 / 0.099 / 0.069 / 0.061 |
+| Math 3.1, IF | 0.026 | 0.030 |
+| Math 3.1, General | 0.045 | 0.047 |
+| Math 3.1, Think-SFT | 0.109 | 0.051 |
+| Math 3.1, the base matrix's own top-8 | 0.042 | 0.018 |
+
+- The RL runs do not share one subspace. Math and Code share one; IF and General share another; Mix overlaps every ingredient.
+  Math against IF or General is below Math against Think-SFT.
+- Each release pair is the other's nearest neighbour (4 of 4), so the reward is readable from the weights of another run.
+- The sharing is on the input side, 3 to 5 times the output side.
+- X1 (RL pairs above RL-SFT pairs): 0.186 against 0.063 on average, 14 of 21 pairs. X2 held (base matrix 0.037). X3: Spearman of the
+  overlap with Math 3.1 against the MATH-500 cue score 0.77, n 6; Code 3.0 overlaps 0.218 and gains nothing.
+- Step 100 (`overlap_steps-01`, differences of 0.03 to 0.19 % of the weight norm): for each step-100 checkpoint the nearest final
+  model of another run is the other release of its reward (Math, Code) or Mix (IF, General); Mix is nearest General (6 of 7 as
+  predicted, S1 held). Mean input-side overlap between a reasoning run and an instruction run at step 100: 0.076 (finals 0.049), S2 held.
+
+### Part 2: rank-8 edits with the cue on the 328 harder problems
+
+T 1.0 / top-p 1.0, seed 3000000, one sample, grader v3, `results/xreward/edits/readout.json`. Edits are 0.074 % of the weight norm
+(Math) and carry 9.8 % of the squared norm of the difference; effective scale after BF16 rounding 1.000.
+
+| Cell | Right of 328 | Cap hits | Minus base cue, points [95 %] | Run folder, job |
+|---|---|---|---|---|
+| base, cue | 164 | 77 | | `results/day1/hard328_base_cue_t10-01/` |
+| base + matched random rank-8, cue | 158 | 67 | -1.8 [-5.8, 2.4] | `edits/rand8_math31-01/`, `abaybektursun-1114-221040-5f1e` |
+| base + Math 3.1 top-8, cue | 192 | 46 | +8.5 [4.3, 12.8] | `edits/top8_math31-01/`, `abaybektursun-1114-221034-007d` |
+| base + Code 3.1 top-8, cue | 178 | 41 | +4.3 [0.3, 8.2] | `edits/top8_code31-01/`, `abaybektursun-1114-221053-fb3f` |
+| Math 3.1 minus its top-8, cue | 190 | 90 | +7.9 [3.7, 12.2] | `edits/bulk_math31-01/`, `abaybektursun-1114-221100-1e31` |
+| RL, plain | 206 | 20 | +12.8 | `results/day1/hard328_rl_plain_t10-01/` |
+
+- Math top-8 minus the random control: +10.4 points [5.8, 14.9]. Minus RL: -4.3 [-8.2, -0.3]. Minus theta(0.5) (190): +0.6 [-3.4, 4.6].
+- Math 3.1 minus its top-8, against RL cue (205): -4.6 [-8.2, -1.2]. P2 of amendment 1 (the rest keeps the gain) is refuted.
+- Each half alone solves 30 of the 49 problems that RL solves and the cued base does not; 19 are the same problems, which is what
+  independent resampling gives (18.4), and RL with the cue at another seed solves 37 of them. The two halves are not additive
+  (28 + 26 problems against RL's 42) and fix the same kinds of problems: of the base's 90 finished wrong answers 27 and 26, of its
+  74 wrong cap hits 14 and 13.
+- Cap hits fall with the 8 directions (77 to 46) and rise without them (90 against RL cue 25). They are not repetition loops: rules A
+  and B flag 0 cap hits in every cell, and 13 read by hand are all still working at the cap. The 90 has no control yet: the cell
+  carries BF16 rounding noise (norm 2.26 against 4.05 for the whole difference) that RL does not.
+- Audit by a second agent from the raw rows (work-4fa42e): all seven counts recomputed with `grade_v3`, same 328 problems, prompts
+  and seeds 3,000,000 + index in the paired cells (RL cue and theta(0.5) use other seeds); 24 answers read by hand, one lenient
+  match (`(4, \log 2)` for `(4, \log_{10} 2)` in the minus-top-8 cell). The clean contrast is top-8 against the random control:
+  both carry the rounding noise (written norm 2.60 and 2.67 for an addition of 1.27), the base cell does not.
+- Raw rows (read by a subagent, not committed): with the top-8 edit `Wait` rises from 9.2 to 12.3 per 1,000 words (RL 12.9) and
+  finished answers with no boxed answer fall from 22 to 1.
+
+#### Second batch (amendments 3 and 4): rank, module family, scale, shared input subspace, control for the minus-top-8 cell
+
+Same settings, edits of Math 3.1 unless named, `--rounding stochastic --seed 0`. "Right per finished" = right / (328 - cap hits).
+
+| Cell (`wsp_edit` arguments) | Right of 328 | Cap hits | Right per finished | Minus random rank-8, points [95 %] | Edit, % of weight norm | Run folder, job |
+|---|---|---|---|---|---|---|
+| base, cue | 164 | 77 | 0.65 | | | |
+| 1 direction per matrix (`top8 --k 1`) | 181 | 51 | 0.65 | +7.0 [2.4, 11.3] | 0.048 | `edits/top1_math31-01/`, `abaybektursun-1115-000358-d11a` |
+| 8 directions (first batch) | 192 | 46 | 0.68 | +10.4 [5.8, 14.9] | 0.074 | `edits/top8_math31-01/` |
+| 64 directions (`top8 --k 64`) | 200 | 42 | 0.70 | +12.8 [8.5, 17.4] | 0.115 | `edits/top64_math31-01/`, `abaybektursun-1115-003755-b90d` |
+| 8 directions, attention only (`--mods q,k,v,o`) | 178 | 59 | 0.66 | +6.1 [1.8, 10.4] | 0.103 | `edits/top8attn_math31-01/`, `abaybektursun-1115-012835-a431` |
+| 8 directions, MLP only (`--mods gate,up,down`) | 181 | 40 | 0.63 | +7.0 [2.7, 11.3] | 0.059 | `edits/top8mlp_math31-01/`, `abaybektursun-1115-012846-905e` |
+| 8 directions at twice the size (`--scale 2`) | 190 | 5 | 0.59 | +9.8 [5.5, 14.0] | 0.148 | `edits/top8x2_math31-01/`, `abaybektursun-1115-012855-d7ed` |
+| 8 directions, part reading Code 3.0's input subspace (`proj --donor code30`) | 171 | 54 | 0.62 | +4.0 [-0.6, 8.5] | 0.040 | `edits/proj_math31_code30-01/`, `abaybektursun-1115-012905-8f73` |
+| 8 directions, the rest (`projc --donor code30`) | 176 | 69 | 0.68 | +5.5 [0.9, 10.1] | 0.062 | `edits/projc_math31_code30-01/`, `abaybektursun-1115-012915-6618` |
+| Code 3.0's own 8 directions (`top8 --other code30`) | 173 | 23 | 0.57 | +4.6 [0.0, 8.8] | 0.107 | `edits/top8_code30-01/`, `abaybektursun-1115-012925-b15d` |
+| Math 3.1 minus a matched random rank-8 (`rbulk`) | 195 | 33 | 0.66 | | | `edits/rbulk_math31-01/`, `abaybektursun-1115-012935-2836` |
+| Math 3.1 minus its 8 directions (first batch) | 190 | 90 | 0.80 | | | `edits/bulk_math31-01/` |
+| RL, plain | 206 | 20 | 0.67 | | | |
+
+Against the predictions of amendments 3 and 4:
+
+- Rank: 1 direction 181 (predicted 170 to 180), 64 directions 200 (predicted 192 to 200). 64 directions against RL: -1.8 points
+  [-5.5, 1.8]. The steps 1 to 8 (+3.4 [-1.2, 7.9]) and 8 to 64 (+2.4 [-1.5, 6.4]) are each inside the noise of one sample.
+- Module family: MLP 181, attention 178, difference +0.9 [-3.0, 4.9]. "One module family carries it" is refuted; the predicted
+  MLP lead is not shown.
+- Scale 2: 190 right, 5 cap hits. The predicted 195 to 206 is refuted; the fall of cap hits (46 to 5, RL 20) is far larger than
+  predicted. On the 77 problems where the cued base hits the cap (3 right), the cells finish and answer: 8 directions 25 cap hits,
+  17 right, 36 finished wrong; twice the size 0 cap hits, 14 right, 63 finished wrong; RL 11, 19, 47. Three of the 63 read by
+  hand end in a boxed answer after an unfinished argument ("After testing various values, we find ...").
+- So the 8 directions mainly make the model finish with an answer. Cap hits follow their size in both directions: removed from
+  RL 90, base 77, one direction 51, eight 46, twice the size 5. Right answers per finished answer stay near 0.65 and fall to
+  0.59 at twice the size; RL minus the directions finishes least and is right most often when it does (0.80).
+- Control for the minus-top-8 cell (amendment 4): RL minus a random rank-8 scores 195 with 33 cap hits. Against the minus-top-8
+  cell: +1.5 points [-2.1, 5.2] and 57 fewer cap hits. So the loss of right answers in the minus-top-8 cell (190 against 205) is
+  not separable from the perturbation; the rise in cap hits (90 against 33) is the 8 directions.
+- Shared input subspace: the part of the edit that reads Code 3.0's input subspace 171, the rest 176, difference -1.5
+  [-6.1, 3.4]. "The shared input directions carry the gain" is refuted; neither part reaches the whole edit (192).
+- Code 3.0's 8 directions: 173 right, 23 cap hits, right per finished 0.57. They also make the model finish, with fewer right answers.
+- Correction after review (comment on result-51a0e7): "finish, not be right" overstates it. Split by the base's own outcome, half
+  of the gain is on problems the base finishes. On those 251 (base 161 right): random rank-8 149, one direction 166, eight 175
+  (+5.6 points against base [0.8, 10.8], +10.4 against random [4.8, 15.9]), 64 directions 182, twice the size 176, RL 187. On the
+  77 the base leaves at the cap (3 right): 9, 15, 17, 18, 14, 19. Conditioning on the base's finished sample favours the base, so
+  the +5.6 is a lower bound. The directions make the model finish and also raise right answers where it already finished; only
+  the step from size 1 to 2 adds finishing without right answers (175 to 176, 17 to 14).
+- One sample per cell: contrasts under about 5 points are not resolved.
+
+#### The finish dial (amendment 5, work-e02ba4): the 8 directions at seven sizes, a random edit at four
+
+Same settings. "On 251" = right on the 251 problems the cued base finishes (base 161). "No box" = finished answers without `\boxed`.
+
+| Size | Math 3.1's 8 directions: right of 328 | cap hits | on 251 | no box | Random rank-8: right | cap hits | Run folders (`edits/`) |
+|---|---|---|---|---|---|---|---|
+| -1 | 118 | 96 | 113 | 61 | 159 | 71 | `top8xm1_math31-01/` (`abaybektursun-1115-031209-1273`), `rand8xm1_math31-01/` (`...031249-1dcd`) |
+| 0 (base) | 164 | 77 | 161 | 23 | | | |
+| 0.5 | 170 | 50 | 156 | 7 | | | `top8x0.5_math31-01/` (`...031219-19af`) |
+| 1 | 192 | 46 | 175 | 2 | 158 | 67 | first batch |
+| 1.5 | 203 | 25 | 184 | 2 | | | `top8x1.5_math31-01/` (`...031229-5991`) |
+| 2 | 190 | 5 | 176 | 4 | 167 | 70 | `top8x2_math31-01/`, `rand8x2_math31-01/` (`...031304-cf34`) |
+| 3 | 117 | 9 | 115 | 113 | 163 | 79 | `top8x3_math31-01/` (`...031240-1106`), `rand8x3_math31-01/` (`...031315-b328`) |
+| RL | 206 | 20 | 187 | 0 | | | |
+
+- D1 (cap hits fall with size) held in order: 96, 77, 50, 46, 25, 5, 9. The predicted values at the ends were missed (above 100 at
+  -1: 96; at most 2 at 3: 9).
+- D2 (the directions, not the size of a perturbation) held: the random edit has 67 to 79 cap hits and 158 to 167 right at every
+  size, including 3 times the size (0.22 % of the weight norm).
+- D3 (right answers peak between 1 and 1.5, below the base at -1 and 3) held: 203 at 1.5, which is -0.9 points from RL [-4.9, 2.7]
+  and +13.7 points above the random edit [9.2, 18.3]; 118 at -1 and 117 at 3.
+- Raw answers. At -1 the model stops boxing its answer (61 finished answers without a box, base 23; they end "Answer: 27") and is
+  wrong more often when it finishes (0.51 right per finished, base 0.65). At 3 it finishes but 113 answers decay into strings of
+  function words. So the 8 directions carry three things that move together: finishing, the boxed answer format, and right
+  answers on problems the base already finishes (113, 161, 175, 184 at -1, 0, 1, 1.5).
+- One sample per cell; 1.5 against 1 is +3.4 points [-0.9, 7.6].
+
+Replication of size 1.5 (work-ab0f72, board result-95a4dc; 1.5 was the best of seven sizes on one sample of the 328, so it is
+scored again here):
+
+| Cell | Base + 8 directions at 1.5 | RL, plain | Base, cue | 1.5 minus RL, points [95 %] | Run folder, job |
+|---|---|---|---|---|---|
+| 328, four samples, each | 207, 198, 199, 197 (mean 200.25) | mean 200.0, sample 0 207 | mean 158.5 | sample 0: 0.0 [-4.0, 4.0] | `results/xreward/dial15_s4_vs_rl_plain-01/`, `abaybektursun-1115-055641-b417` |
+| 328, vote over 4 | 214 | 221 | 192 | -2.1 [-5.2, 0.6]; minus base +6.7 [3.4, 10.4] | the same; against base `dial15_s4_vs_base_cue-01/` |
+| 328, right in any of 4 | 235 | 240 | 207 | -1.5 [-4.3, 1.2] | the same |
+| 328, cap hits per sample | 20, 14, 20, 22 | | | | the same |
+| MATH-500, one sample | 456 | 456 (four samples 456 to 464) | 405 (405 to 418) | 0.0 [-2.2, 2.2] | `results/xreward/dial15_math500-01/`, `abaybektursun-1115-055652-3a2d` |
+
+Readout `analysis/day1_vote.py` with `--minus` (references `results/day1_3/`). One sample of the edited base equals one sample of
+RL on both sets; under the vote over four it is 7 problems behind RL. The edit is derived from the RL weights: it compresses the
+RL difference (8 directions per matrix, 0.11 % of the weight norm as intended; the written BF16 change is 0.19 % because of
+rounding noise), it does not reach RL without RL. No random-edit cell exists at size 1.5 (sizes 1 and 2: 158 and 167).
+
+Two controls (amendment 6, work-e1b23a), one sample each:
+
+| Cell | Right of 328 | Cap hits | On 251 | No box | Minus base cue, points [95 %] | Run folder, job |
+|---|---|---|---|---|---|---|
+| random rank-8 at size 1.5 (0.111 % of the weight norm) | 159 | 74 | 152 | 24 | -1.5 [-5.8, 2.7] | `edits/rand8x1.5_math31-01/`, `abaybektursun-1115-090241-0229` |
+| Think-SFT's 8 directions at Math's edit norm (`--scale 0.02`, 0.074 %) | 156 | 75 | 149 | 23 | -2.4 [-6.4, 1.5] | `edits/top8x0.02_think_sft-01/`, `abaybektursun-1115-090252-65bf` |
+
+Both predictions held. The random edit is flat at all five sizes (-1, 1, 1.5, 2, 3: 67 to 79 cap hits, 158 to 167 right). The
+largest 8 directions of Think-SFT's difference, at the size at which Math's give 192 right and 46 cap hits, change nothing (-11.0
+points against Math's [-15.6, -6.4]): fine-tuning on reasoning traces does not write the finishing directions into its largest
+directions. Limit: these are the top 8 of a difference 50 times larger than Math's, 2 % of its squared norm.
+
+Which reward writes the finishing directions (8 directions of each model added to the base):
+
+| Donor | Right of 328 | Cap hits | No box | Edit, % of weight norm | Run folder, job |
+|---|---|---|---|---|---|
+| Math 3.0 | 182 | 43 | 1 | 0.078 | `top8_math30-01/`, `abaybektursun-1115-031326-369f` |
+| Math 3.1 | 192 | 46 | 2 | 0.074 | first batch |
+| Code 3.1 | 178 | 41 | 12 | 0.064 | first batch |
+| Code 3.0 | 173 | 23 | 7 | 0.107 | second batch |
+| IF | 155 | 41 | 158 | 0.107 | `top8_if30-01/`, `abaybektursun-1115-031336-56ff` |
+| General | 164 | 88 | 14 | 0.038 | `top8_general30-01/`, `abaybektursun-1115-031346-5113` |
+| Think-SFT | 0 | 327 | | 3.68 | `top8_think_sft-01/`, `abaybektursun-1115-031356-77f0` |
+
+- R1 is refuted for IF: its 8 directions cut cap hits as far as Math's (41), by ending early with an unboxed "Answer: 27" (158 of
+  287 finished answers have no box, median 2,140 tokens; 108 of the 152 with an answer marker are right). Math 3.0 behaves as
+  Math 3.1 (43 cap hits, 182 right, +7.3 points above the random edit [2.7, 11.6]). General's edit changes nothing in right answers.
+- Finishing is therefore written by the Math, Code and IF rewards alike; what the reasoning rewards add is the boxed format and
+  right answers.
+- The Think-SFT cell is not a test: its top-8 edit is 3.7 % of the weight norm (50 times Math's) and the model writes commas
+  until the cap. A norm-matched Think-SFT edit is open.
+
+#### Lengths, token budgets and a restart cascade from the stored rows (work-e02ba4, laptop)
+
+`analysis/xreward_lengths.py` -> `results/xreward/lengths-01/readout.json` (prediction in the module docstring, written first).
+
+- Lengths, on problems both the base and the cell finish (tokens, base p10 / p50 / p90 -> cell): 8 directions 1,252 / 5,513 /
+  14,398 -> 1,654 / 6,094 / 14,816; 64 directions 1,270 / 5,652 / 14,299 -> 2,186 / 6,487 / 13,610; twice the size 1,297 / 6,409 /
+  14,487 -> 2,107 / 7,088 / 12,308; RL 1,295 / 6,174 / 13,532 -> 2,401 / 7,718 / 13,532; random rank-8 unchanged (ratio 1.00).
+  The prediction "median within 10 %, only the tail falls" is refuted: short and median answers get longer (p10 +32 to +72 %),
+  and only the long tail gets shorter, clearly so only at twice the size (p90 -15 %).
+- Right of 328 within a budget of C tokens (stored run cut at C): at 4k base 81, 8 directions 78, 64 directions 66, RL 69; at 12k
+  150, 169, 181, 179; at 16,384 164, 192, 200, 206. Below 4k tokens the base leads.
+- Cascade: 64 directions cut at C, unfinished problems restart with the twice-size edit: 196 (C 8k), 204 (12k), 207 (14k; +0.3
+  points against RL [-3.4, 4.0]) at 11,696 to 12,392 mean tokens, against RL alone 206 at 9,316. The same cascade restarting with
+  the random-edit cell: 178, 194, 198. With RL cue as the restart: 206, 208, 207. The cascade reaches RL's count with no RL
+  weights beyond 64 directions per matrix, at 26 % more tokens; it is not a saving.
+- Truncating a stored run at C estimates a cap-C run; RL cue uses another seed base.
+
+Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.xreward_edits`, after
+`uv run tools/gpu.py get <job>` for the jobs it names.
+
+## Drift: a switch to Chinese marks a cut-off Think-SFT answer but no label-free sign predicts one early (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-76a232, idea-e37da1)
+
+Question: Think-SFT + cue hits the 16,384 cap on 29 % (hard328) and 45.6 % (fresh2026) of its samples, and a quarter of those
+cap hits hold Chinese text. What is that text, does it predict the outcome, and can a label-free sign stop a failing sample
+early? Answer: no sign read at token 4,000, 8,000 or 12,000 tells a failing sample from a right one of the same problem
+(best within-problem AUROC 0.568 [0.480, 0.657], `zratio` at 12,000; every interval covers 0.5), and the stop rule chosen on
+MATH-500 saves 0.8 % of the sequential vote's tokens on hard328 [-0.3, +1.8] and 1.1 % on fresh2026 for -0.5 right answers:
+H2 (10 % at no loss) is refuted. The switch is real and late: 156 of 1,312 Think-SFT samples on hard328 and 104 of 544 on
+fresh2026 switch script (RL 12 and 9, base 9 and 6), 98 % of the letters are Chinese, the median first switch is at token
+13,589, and English resumes after 85 % of first episodes. One place where it does predict: in the 32,768 sample, cut answers
+that had switched before token 16,384 finish right 1 time of 24, the others 22 of 69 (-24.0 points [-36.8, -10.6] inside
+strata of the base's right count). Spec with predictions, written after the instrument checks and before any other number:
+`specs/SPEC_drift.md` (commit `9045c7c`). Stored rows and texts only; no GPU.
+
+Definitions. Token positions are positions in the text re-tokenized with the run's tokenizer (`tokenizer.json` of
+`allenai/Olmo-3.1-7B-RL-Zero-Math` @ `364820b` from the local cache; re-tokenized length minus `n_new` is 3 at the median, the
+cue, and at most 53). Switch: an episode of at least 5 letters of a non-Latin script (Greek excluded) within 200 characters
+of each other; its position is the token of the 5th letter. `rep50`: share of the 50-token windows of the prefix equal to an
+earlier window. `loopA`: the runner's rule A (`rln4_lib.onset_lines`) on the prefix. `zratio`: zlib ratio of the prefix.
+`wait`, `restart`: the word "wait" and 20 restart phrases per 1,000 tokens. Attempt 0 of every sample.
+
+Instrument checks. `analysis/drift_test.py`: 10 planted passages (Chinese long, short and inside mathematics, Japanese,
+Korean, Russian, Arabic, Hindi, Thai, mixed) are each found within 12 tokens of the planted position; 10 negatives (LaTeX,
+Greek letters, names with diacritics, double-struck and mathematical letters, full-width punctuation, four stray letters,
+emoji, code) are not flagged; a planted loop is found by `loopA` and `rep50`. The posted counts reproduce: cap hits with more
+than 20 Chinese characters, fresh2026 Think-SFT 66 of 248, RL 3 of 84, base 0 of 219; hard328 86 of 378 and 1 of 114. With
+switch flags shuffled inside problems the Q2 difference is -0.1 [-8.0, +10.7]; a planted sign (80 % of not-right, 20 % of
+right samples) has within-problem AUROC 0.807; a stop that never fires reproduces the frontier rows (241 at 30,904 and 75 at
+42,251 tokens, stored order).
+
+Q1, description (`results/drift/describe-01/table.md`):
+
+| Cell | Samples | With a switch | Cap hits: with a switch | Finished with a switch (right) | First switch at token: quartiles | English resumes: yes / no / text ends |
+|---|---|---|---|---|---|---|
+| hard328 Think-SFT + cue | 1,312 | 156 (11.9 %) | 378: 99 | 57 (39) | 10,733 / 13,589 / 15,048 | 135 / 2 / 19 |
+| hard328 RL plain | 1,312 | 12 | 114: 3 | 9 (1) | 4,512 / 12,145 / 13,884 | 12 / 0 / 0 |
+| hard328 base + cue | 1,312 | 9 | 286: 5 | 4 (0) | 11,111 / 12,173 / 13,132 | 5 / 1 / 3 |
+| fresh2026 Think-SFT + cue | 544 | 104 (19.1 %) | 248: 76 | 28 (14) | 11,353 / 13,583 / 15,121 | 87 / 5 / 12 |
+| fresh2026 RL plain | 544 | 9 | 84: 4 | 5 (0) | 12,955 / 13,379 / 14,416 | 8 / 0 / 1 |
+| fresh2026 base + cue | 544 | 6 | 219: 1 | 5 (1) | 3,488 / 6,029 / 11,584 | 4 / 1 / 1 |
+| MATH-500 Think-SFT + cue | 2,000 | 61 (3.1 %) | 93: 19 | 42 (34) | 3,750 / 10,249 / 13,147 | 57 / 0 / 4 |
+| hard328 Think-SFT, cap 32,768, one sample | 328 | 83 (25.3 %): 38 before token 16,384, 45 after | 2: 1 | 82 (18) | 13,971 / 16,774 / 19,499 | 80 / 3 / 0 |
+
+- Script: of the non-Latin letters in Think-SFT's hard328 samples 40,579 are CJK, 369 Cyrillic, 180 Hangul, 86 kana, 62
+  Arabic. After the first switch a median 4.2 % of the letters are non-Latin: the text stays mostly English.
+- Hand read of 20 switched samples (seed 0; read by the agent, not a blind judge; `describe-01/hand_read.md` with quotes
+  and translations): in 15 the same working goes on and Chinese connectives or half-sentences replace English ones ("因此，
+  x = ab + 1 ... 不，原式 ... 所以：", "therefore, ... no, the original expression ... so:"; "Wait，我先重新看一下方程的推导",
+  "let me first look at the derivation of the equation again"); in 4 it is one stray word (Arabic "انضمامات", Russian
+  "академ"); in 1 the sample gives up and guesses in Chinese ("可能正确的答案是 ... 但没有依据", "the right answer may be ...
+  but there is no basis"). None is a loop or unrelated text. The English beside a switch is often already broken.
+- Problem or sample: both. Pairs of samples of one problem that both switch: hard328 74 against 27.8 under flags permuted
+  over all samples and 48.9 under flags permuted over cap hits only (p = 0.0001 each, 10,000 permutations); fresh2026 66
+  against 29.6 and 41.9. 65 of the 102 hard328 problems with a switch have it in one sample only.
+- Predictions: P1 (105 and 82 samples) low on both sets (156, 104). P2 (over 95 % Chinese) held. P3 (median past 8,000,
+  under 10 % before 4,000) held on the median; 16 of 156 (10.3 %) start before 4,000. P4 (fewer than 40 % switch back)
+  refuted: 85 %. P5 (not clustered given a cap hit) refuted.
+
+Q2, does a switch predict the outcome (`results/drift/predict-01/table.md`):
+
+| Think-SFT samples still running at t, hard328 + fresh2026 | switched by t: right | not switched: right | within problem, points [95 %] (problems) | inside base strata, weighted |
+|---|---|---|---|---|
+| t = 4,000 | 8 of 20 | 818 of 1,580 | +1.8 [0.0, +5.3] (19) | -11.7 [-18.4, -4.9] |
+| t = 8,000 (primary) | 6 of 29 | 462 of 1,200 | +5.3 [-2.0, +13.3] (25) | -9.6 [-21.0, +2.8] |
+| t = 12,000 | 11 of 70 | 201 of 852 | +1.0 [-6.7, +9.0] (50) | -4.7 [-12.8, +3.4] |
+
+- H1 refuted: within problem the interval covers 0 at every t, with the sign opposite to the prediction (-10). The raw
+  deficit (21 % against 39 % at 8,000) is the problem: 23 of the 29 switched samples are on problems the base never solves.
+  Only 29 samples have switched by 8,000, so the test is weak; it cannot exclude a difference of 10 points either way.
+- H1b held (the 32,768 sample, `cap32_sft`): of 93 answers longer than 16,384 tokens, 24 had switched before 16,384 and 1
+  ends right; 22 of the other 69 do (Fisher p = 0.006). Base never right: 0 of 21 against 13 of 55, -23.6 [-35.3, -12.7];
+  weighted over strata -24.0 [-36.8, -10.6]. Predicted 2 of 22 against 21 of 71. One sample per problem, so this is not
+  matched within problem, and a switch first seen after 16,384 goes with 9 of 45 right.
+
+Q3, AUROC of each sign for "the sample does not end right", Think-SFT, hard328 + fresh2026 (1,856 samples, 780 not right):
+
+| Sign | t = 4,000: all / running, within problem | t = 8,000 | t = 12,000 |
+|---|---|---|---|
+| `length` (still running at t), baseline | 0.612 [0.591, 0.633] / 0.5 by construction | 0.771 [0.746, 0.797] / 0.5 | 0.874 [0.854, 0.894] / 0.5 |
+| `switch` | 0.504 / 0.499 [0.495, 0.500] | 0.507 / 0.492 [0.480, 0.502] | 0.527 / 0.498 [0.474, 0.521] |
+| `rep50` | 0.494 / 0.500 [0.487, 0.515] | 0.491 / 0.486 [0.463, 0.508] | 0.497 / 0.477 [0.451, 0.500] |
+| `loopA` | 0.500 / 0.500 | 0.501 / 0.503 [0.500, 0.511] | 0.501 / 0.502 [0.500, 0.508] |
+| `zratio` | 0.701 / 0.509 [0.440, 0.579] | 0.745 / 0.530 [0.458, 0.606] | 0.764 / 0.568 [0.480, 0.657] |
+| `wait` | 0.552 / 0.453 [0.391, 0.520] | 0.537 / 0.500 [0.431, 0.570] | 0.535 / 0.462 [0.378, 0.546] |
+| `restart` | 0.521 / 0.466 [0.414, 0.517] | 0.564 / 0.478 [0.415, 0.539] | 0.581 / 0.535 [0.460, 0.611] |
+| pairs within problem (running) | 348 | 315 | 213 |
+
+"all": every sample, pooled, the sign frozen when the sample ended. "running, within problem": pairs of a not-right and a
+right sample of one problem, both still running at t. No sign beats `length` over all samples, and among running samples
+none separates the samples of one problem: the prediction (none reaches 0.60, no interval above 0.55) held. `zratio` reaches
+0.62 to 0.65 pooled over running samples and 0.51 to 0.57 within problem: it reads the problem, as the probe of
+result-b30f15 did (0.571 [0.509, 0.634] within problem; result-f3d708 0.531 [0.468, 0.589]). The controls agree: best
+within-problem value 0.643 [0.539, 0.744] (`zratio`, RL, 12,000, 129 pairs, one of 42 cells), base 0.548. Of the 70 samples
+switched by 12,000, 11 end right (16 %, not the predicted under 10 %).
+
+Q4, stop a sample at its first sign (`results/drift/stop-01/table.md`). A replay on stored rows: `analysis/frontier.py`'s
+`seq4` (draw 2, stop when two agree, at most 4) on rows in which a stopped sample is a cap hit at its stop token (it costs
+those tokens and casts no vote); the new sample is the next stored one. 12 candidates fixed in the spec; counted signs fire
+when the sign is above the 75th or 90th percentile of MATH-500 samples running at that checkpoint. Chosen on MATH-500
+(fewest tokens among candidates that stop at least 30 samples and lose at most 0.5 right): `rep50_p75`, which there means
+any repeated 50-token window at a checkpoint. hard328 and fresh2026 are held out from the choice.
+
+| Rule under the sequential vote | hard328: right, right (24), tokens (24) | minus plain, right (24) | tokens saved | fresh2026: right, right (24), tokens (24) | minus plain | tokens saved |
+|---|---|---|---|---|---|---|
+| plain `seq4` | 241, 238.9, 30,837 | | | 75, 75.5, 42,901 | | |
+| `seq3` (at most 3 samples) | 241, 233.2, 26,114 | -5.7 | 15.3 % | 71, 72.5, 35,157 | -3.0 | 18.1 % |
+| `seq4_L12000` (frontier: abandon at 12,000) | 219, 221.2, 29,664 | -17.7 | 3.8 % | 68, 65.8, 39,382 | -9.7 | 8.2 % |
+| `rep50_p75`, chosen | 240, 238.4, 30,602 | -0.5 [-3.0, +2.0] | 0.8 % [-0.3, +1.8] | 74, 75.0, 42,446 | -0.5 [-1.5, 0.0] | 1.1 % [-0.1, +2.4] |
+| `switch` (not chosen) | 235, 234.6, 30,545 | -4.3 [-8.7, -0.8] | 0.9 % | 73, 73.5, 41,621 | -2.0 [-5.5, +0.5] | 3.0 % |
+| `zratio_p75` (not chosen) | 228, 226.1, 25,671 | -12.8 [-20.3, -6.3] | 16.8 % | 69, 69.5, 35,624 | -6.0 [-11.5, -1.5] | 17.0 % |
+| `zratio_p90` (not chosen) | 236, 233.9, 28,518 | -5.0 [-10.0, -1.0] | 7.5 % | 75, 75.0, 41,117 | -0.5 [-3.0, +1.5] | 4.2 % |
+| `len12000` (stop every sample at 12,000) | 204, 203.5, 28,203 | -35.4 | 8.5 % | 58, 58.0, 37,111 | -17.5 | 13.5 % |
+| perfect sign at 4,000 (uses the answer key; a ceiling) | 244, 244.0, 16,250 | +5.1 [+1.8, +9.2] | 47.3 % | 77, 77.0, 19,248 | +1.5 | 55.1 % |
+
+- H2 refuted, as predicted: the chosen rule saves 0.8 % and 1.1 %, not 10 %. No candidate saves 10 % without losing
+  answers; at matched tokens the signs do not beat drawing fewer samples (`zratio_p75`: 226.1 at 25,671 against `seq3` 233.2
+  at 26,114 on hard328).
+- Why stopping at a switch costs answers: 39 of the 156 switched samples on hard328 end right (14 of 104 on fresh2026), and
+  a switch comes at a median 13,589 tokens, so little is left to save.
+- The ceiling is large: a detector that knew at token 4,000 which samples will not end right would halve the tokens and add
+  5 problems on hard328. The signs here do not approach it.
+- Under the plain vote over 4 the chosen rule gives 240 at 39,201 tokens against 241 at 40,410 (3.0 % fewer).
+- Example of the rule's weakness (`stop-01/examples.json`): problem 0, sample 3 is stopped at token 8,000 after it boxed 116,
+  because its closing summary restates the problem; a deployed rule should not stop after an answer.
+
+Literature (WebSearch; four papers read in full by a subagent, findings added with `tools/paper.py`): 2507.15849 reports
+switching in 0.0 to 0.6 % of English MATH500 problems and switching answers scoring higher (0.438 against 0.281, Table 6, no
+matching); 2505.14815 that mixing rises with difficulty; 2505.17813 that the shortest sample is right most often; 2604.04930
+a logit-based stop. None reads a text sign at a fixed token or redraws a stopped sample under a vote. idea-6fb0de items 2, 3
+and 6 are different rules and were not run.
+
+Caveats. One hand reader. Greek prose is not detected. The 32,768 result is one sample per problem. The Q4 thresholds are
+quantiles on MATH-500, where `rep50`'s 75th percentile is 0. A replay cannot continue a stopped sample.
+
+```
+uv run --no-project --with numpy --with tokenizers python -m studies.rlneurons.analysis.drift_test
+uv run --no-project --with numpy --with tokenizers python -m studies.rlneurons.analysis.drift --runs runs --out runs/drift_features
+uv run --no-project --with numpy --with math-verify==0.9.0 --with tokenizers python -m studies.rlneurons.analysis.drift_read --features runs/drift_features --runs runs --out studies/rlneurons/results/drift --nn 01
+```
+
+Run folders `results/drift/{describe,predict,stop}-01/` (`run.json`, `readout.json`, `table.md`, `examples.json`;
+`describe-01/hand_read.md`). The per-sample signs (`runs/drift_features/<cell>.jsonl`) are on the laptop, not in git.
+
+## Paper: The Finish Dial (`paper/`, board work-0a1b10)
+
+A short paper on the xreward dial, the removal test, the four-sample replication, the reward table and the delta
+transplant. Public at https://monitor.invariant.team/paper/the-finish-dial.pdf (`tools/view.py` serves
+`paper/the-finish-dial.pdf`; `infra/monitor/deploy.sh` ships it).
+
+- `paper/facts.json`: every number of the paper with its value, n, unit and source (artifact path and key, or job
+  id); `audit_recomputed` holds the intervals recomputed from raw rows for the paper.
+- `paper/figs.py`: draws `fig_dial.pdf` and `fig_plane.pdf` from `facts.json`
+  (`uv run --no-project --with matplotlib --with numpy python studies/rlneurons/paper/figs.py`); `paper/fonts/` is
+  TeX Gyre Pagella, the body face (GUST font licence).
+- `paper/paper.tex`, `paper/refs.bib`: the text; `tectonic paper.tex` builds `paper.pdf`, renamed to
+  `the-finish-dial.pdf` for the site.
+- Review: four independent reviews of draft 1 (number audit against the artifacts, skeptical review, citation check
+  against arXiv, visual review) and one final check of draft 2. The main change: flat precision between sizes 0 and
+  1.5 is two offsetting effects (newly finished answers are right 19 of 64 times; right answers on the 251 problems
+  the base already finishes rise 161 to 184), so the paper claims the directions set finishing, not that they leave
+  correctness alone.
