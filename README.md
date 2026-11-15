@@ -404,6 +404,13 @@ from each item to the earlier items it builds on; 151 of 450 links join two basi
 holds no board text, come from `studies/basins` on branch `ali/basins` (`results/swarm/main-03/summary.json`,
 `analysis/swarm_nested_layout.py`).
 
+The page `/values` (`tools/values.py`; not a header tab, reached from the home dial) holds the six values the team
+works by, in the order of AGENTS.md: Speed, Enthusiasm, Practicality, novelty and interestingness, The bitter lesson,
+Asymmetry and Clean context. The picture is a hexagonal glass prism with one face per value: one beam enters its top
+and leaves as six rays, one through each face to a bead naming a value. A click on a bead or a face, the arrow keys or
+the buttons select a value (`/values#speed`); its face turns to the front, and the column shows its sentences, its
+quotes with their sources and its line of AGENTS.md. The words are the person's own; nothing on the page is data.
+
 The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game.
 Hold Space, or press and hold, to breathe in and let go to breathe out, so that the white ring follows the blue one. A
 breath that follows it lights one of 10 petals and releases every thought on screen; 10 petals win. The thoughts are

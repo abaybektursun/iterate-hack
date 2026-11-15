@@ -40,6 +40,7 @@ click on a person shows only that person. The look is that of the Design tab (.c
   GET /proof/<slug>    the page of one such experiment (proof_<slug>.py, made like a finding page)
   GET /lab/            the site lab: twelve interactive 3D pictures of the team's work (studies/sitelab/index.html), each at
                        /lab/prototypes/<slug>/ with its data.json; static files, fed by the same /data
+  GET /values         the six values the team works by, with their quotes: a glass prism, one face per value (values.py)
   GET /favicon.svg     the tab icon of every page; send() writes the link to it into the head of each HTML page
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
                        (board.py score), which the hill-climbing chart draws, the plain rows of those results
@@ -87,6 +88,7 @@ import pastdev
 import psychosis
 import sitekit
 import team
+import values
 
 PORT = int(sys.argv[sys.argv.index("--port") + 1]) if "--port" in sys.argv else 8765
 HOURS = float(sys.argv[sys.argv.index("--hours") + 1]) if "--hours" in sys.argv else 6.0
@@ -302,6 +304,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", exa_page.PAGE)
         if path == "/pastdev":
             return self.send(200, "text/html", pastdev.PAGE)
+        if path == "/values":
+            return self.send(200, "text/html", values.PAGE)
         if path == "/psychosis":
             return self.send(200, "text/html", psychosis.PAGE)
         if path == "/favicon.svg":
