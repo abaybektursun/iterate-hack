@@ -1287,7 +1287,7 @@ delta) 58. Cue, seed base 81,000,000: base 82, `sft1` 92, `sft05` 88, `sft025` 8
 - Finding page: `tools/finding_eight_directions.py` (`/finding/eight-directions`, a tile on `/findings`).
 ## xreward: what RL runs with different rewards write into the same base (board work-4fa42e, idea-ac4e14)
 
-Spec `specs/SPEC_xreward.md` (written before each run; amendments 1 to 3). Branch `sharedsub`.
+Spec `specs/SPEC_xreward.md` (written before each run; amendments 1 to 4). Branch `sharedsub`.
 
 | File | What it does |
 |---|---|
@@ -1356,6 +1356,47 @@ T 1.0 / top-p 1.0, seed 3000000, one sample, grader v3, `results/xreward/edits/r
   both carry the rounding noise (written norm 2.60 and 2.67 for an addition of 1.27), the base cell does not.
 - Raw rows (read by a subagent, not committed): with the top-8 edit `Wait` rises from 9.2 to 12.3 per 1,000 words (RL 12.9) and
   finished answers with no boxed answer fall from 22 to 1.
+
+#### Second batch (amendments 3 and 4): rank, module family, scale, shared input subspace, control for the minus-top-8 cell
+
+Same settings, edits of Math 3.1 unless named, `--rounding stochastic --seed 0`. "Right per finished" = right / (328 - cap hits).
+
+| Cell (`wsp_edit` arguments) | Right of 328 | Cap hits | Right per finished | Minus random rank-8, points [95 %] | Edit, % of weight norm | Run folder, job |
+|---|---|---|---|---|---|---|
+| base, cue | 164 | 77 | 0.65 | | | |
+| 1 direction per matrix (`top8 --k 1`) | 181 | 51 | 0.65 | +7.0 [2.4, 11.3] | 0.048 | `edits/top1_math31-01/`, `abaybektursun-1115-000358-d11a` |
+| 8 directions (first batch) | 192 | 46 | 0.68 | +10.4 [5.8, 14.9] | 0.074 | `edits/top8_math31-01/` |
+| 64 directions (`top8 --k 64`) | 200 | 42 | 0.70 | +12.8 [8.5, 17.4] | 0.115 | `edits/top64_math31-01/`, `abaybektursun-1115-003755-b90d` |
+| 8 directions, attention only (`--mods q,k,v,o`) | 178 | 59 | 0.66 | +6.1 [1.8, 10.4] | 0.103 | `edits/top8attn_math31-01/`, `abaybektursun-1115-012835-a431` |
+| 8 directions, MLP only (`--mods gate,up,down`) | 181 | 40 | 0.63 | +7.0 [2.7, 11.3] | 0.059 | `edits/top8mlp_math31-01/`, `abaybektursun-1115-012846-905e` |
+| 8 directions at twice the size (`--scale 2`) | 190 | 5 | 0.59 | +9.8 [5.5, 14.0] | 0.148 | `edits/top8x2_math31-01/`, `abaybektursun-1115-012855-d7ed` |
+| 8 directions, part reading Code 3.0's input subspace (`proj --donor code30`) | 171 | 54 | 0.62 | +4.0 [-0.6, 8.5] | 0.040 | `edits/proj_math31_code30-01/`, `abaybektursun-1115-012905-8f73` |
+| 8 directions, the rest (`projc --donor code30`) | 176 | 69 | 0.68 | +5.5 [0.9, 10.1] | 0.062 | `edits/projc_math31_code30-01/`, `abaybektursun-1115-012915-6618` |
+| Code 3.0's own 8 directions (`top8 --other code30`) | 173 | 23 | 0.57 | +4.6 [0.0, 8.8] | 0.107 | `edits/top8_code30-01/`, `abaybektursun-1115-012925-b15d` |
+| Math 3.1 minus a matched random rank-8 (`rbulk`) | 195 | 33 | 0.66 | | | `edits/rbulk_math31-01/`, `abaybektursun-1115-012935-2836` |
+| Math 3.1 minus its 8 directions (first batch) | 190 | 90 | 0.80 | | | `edits/bulk_math31-01/` |
+| RL, plain | 206 | 20 | 0.67 | | | |
+
+Against the predictions of amendments 3 and 4:
+
+- Rank: 1 direction 181 (predicted 170 to 180), 64 directions 200 (predicted 192 to 200). 64 directions against RL: -1.8 points
+  [-5.5, 1.8]. The steps 1 to 8 (+3.4 [-1.2, 7.9]) and 8 to 64 (+2.4 [-1.5, 6.4]) are each inside the noise of one sample.
+- Module family: MLP 181, attention 178, difference +0.9 [-3.0, 4.9]. "One module family carries it" is refuted; the predicted
+  MLP lead is not shown.
+- Scale 2: 190 right, 5 cap hits. The predicted 195 to 206 is refuted; the fall of cap hits (46 to 5, RL 20) is far larger than
+  predicted. On the 77 problems where the cued base hits the cap (3 right), the cells finish and answer: 8 directions 25 cap hits,
+  17 right, 36 finished wrong; twice the size 0 cap hits, 14 right, 63 finished wrong; RL 11, 19, 47. Three of the 63 read by
+  hand end in a boxed answer after an unfinished argument ("After testing various values, we find ...").
+- So the 8 directions mainly make the model finish with an answer. Cap hits follow their size in both directions: removed from
+  RL 90, base 77, one direction 51, eight 46, twice the size 5. Right answers per finished answer stay near 0.65 and fall to
+  0.59 at twice the size; RL minus the directions finishes least and is right most often when it does (0.80).
+- Control for the minus-top-8 cell (amendment 4): RL minus a random rank-8 scores 195 with 33 cap hits. Against the minus-top-8
+  cell: +1.5 points [-2.1, 5.2] and 57 fewer cap hits. So the loss of right answers in the minus-top-8 cell (190 against 205) is
+  not separable from the perturbation; the rise in cap hits (90 against 33) is the 8 directions.
+- Shared input subspace: the part of the edit that reads Code 3.0's input subspace 171, the rest 176, difference -1.5
+  [-6.1, 3.4]. "The shared input directions carry the gain" is refuted; neither part reaches the whole edit (192).
+- Code 3.0's 8 directions: 173 right, 23 cap hits, right per finished 0.57. They also make the model finish, with fewer right answers.
+- One sample per cell: contrasts under about 5 points are not resolved.
 
 Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.xreward_edits`, after
 `uv run tools/gpu.py get <job>` for the jobs it names.
