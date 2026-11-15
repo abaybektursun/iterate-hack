@@ -1,0 +1,49 @@
+{
+ "n": 8,
+ "tokens": 96,
+ "repeat": {
+  "identical": 8,
+  "pass": true
+ },
+ "hold_token_share_none": 0.010416666666666666,
+ "steer_acts": {
+  "20": {
+   "alpha": 8.0,
+   "identical_to_none": 0,
+   "hold_token_share": 1.0,
+   "pass": true,
+   "example": " wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait"
+  },
+  "24": {
+   "alpha": 8.0,
+   "identical_to_none": 0,
+   "hold_token_share": 1.0,
+   "pass": true,
+   "example": " wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait"
+  }
+ },
+ "block_norm_median": {
+  "20": 29.256288528442383,
+  "24": 40.35617446899414
+ },
+ "block_norm_positions": {
+  "20": 1615,
+  "24": 1615
+ },
+ "hook_calls": {
+  "20": 192,
+  "24": 192
+ },
+ "hook_hidden_shape": [
+  1,
+  8,
+  4096
+ ],
+ "bias_acts": {
+  "nats": 20.0,
+  "hold_token_share": 1.0,
+  "pass": true,
+  "example": " Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait"
+ },
+ "pass": true
+}

@@ -190,3 +190,34 @@ Every verdict of `pub-01` holds with `own`:
 The 100-prompt fit reads typos less well than the published 568-prompt lens (0.51 against 0.62 on the base); the two models
 stay equal under either.
 
+
+## SPEC 3: steering the cued base along the hold-on lens direction during generation
+
+Spec `specs/SPEC3_steer.md`; code `lib/steer.py` (directions, arm names), `jobs/steer_gen.py` (the GPU job: run_cell's vLLM engine
+built in-process with a forward hook on one block), `analysis/steer_analyze.py` (readout). Board: idea-da9dca, work-74703c.
+
+```
+uv run tools/gpu.py submit h100 --hours 1 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.jspace.jobs.steer_gen --arms none,steer:hold:L24:0.068 --commit $(git rev-parse HEAD)"
+PYTHONPATH=. python3 -m studies.jspace.analysis.steer_analyze --runs runs/<job-id> [...] --out studies/jspace/results/steer/<run>
+```
+
+### Run `steer/dose-01`: which strength gives the RL model's written Wait rate
+
+Job `sameraslan-1114-203946-8e12` (H100, 11 minutes, commit `313a104`; smoke `sameraslan-1114-203816-b34d`): the 63 MATH-500 problems
+whose index is a multiple of 8, cap 1,024 tokens, 17 arms. Numbers are keys of `results/steer/dose-01/metrics.json` (`arms.<arm>`).
+The instrument checks passed (`checks.json`): alpha 8 makes every generated token ` wait`, a bias of +20 nats every token ` Wait`.
+
+| Arm | Hold-on words per 1,000 tokens | Ratio to `none` | Finished within 1,024 tokens and right, of 63 |
+|---|---|---|---|
+| `none` | 6.53 | 1.00 | 21 |
+| layer 24, alpha 0.03 / 0.06 / 0.12 / 0.25 / 0.5 | 7.37 / 8.09 / 15.9 / 92.5 / 840 | 1.13 / 1.24 / 2.44 / 14.2 / 129 | 19 / 16 / 12 / 1 / 0 |
+| layer 20, alpha 0.06 / 0.12 / 0.25 / 0.5 | 7.19 / 8.52 / 20.8 / 133 | 1.10 / 1.31 / 3.19 / 20.3 | 16 / 15 / 2 / 0 |
+| logit bias on the hold-on tokens, 0.5 / 1 / 2 nats | 8.77 / 10.0 / 26.7 | 1.34 / 1.54 / 4.09 | 17 / 15 / 13 |
+| random direction, layer 24, alpha 0.12 / 0.5 | 6.47 / 6.26 | 0.99 / 0.96 | 20 / 10 |
+| hold minus wrap, layer 24, alpha 0.12 / 0.25 | 14.6 / 127 | 2.24 / 19.4 | 13 / 2 |
+
+S4 holds: the written hold-on rate rises with strength at both sites, and a random direction of the same norm leaves it
+unchanged. The rise is steep: doubling alpha from 0.12 to 0.25 at layer 24 turns the answer into repeated "wait". The strengths
+that give 1.41 times the rate of `none` (the RL model's ratio), by the spec's rule (`dose.*.strength_at_target`): alpha 0.068 at
+layer 24, alpha 0.128 at layer 20, a bias of 0.64 nats. The last column is not an accuracy: 42 of 63 answers of `none` are cut
+by the 1,024-token cap.
