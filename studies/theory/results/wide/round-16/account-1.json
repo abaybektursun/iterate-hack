@@ -1,0 +1,368 @@
+{
+ "account": [
+  "RL-Zero's weight change is small (0.24 % of the base's weight norm) and, as in every on-policy RL run whatever the reward (top-8 share of each matrix's change: LM-judge General 0.127, Math 0.118-0.135, against 0.030 for imitation-trained Think-SFT), concentrated in 8 input-output pairs per matrix whose inputs are directions the base's own activations already drive strongly in any step-by-step text (8-11x a random subspace; code text 0.87 as much as math), which is why Think-SFT's diffuse change also sits there (4.8x chance) and why Math's per-matrix concentration pattern follows Think-SFT's (rho 0.59) and not IF-RL's (-0.01).",
+  "The base's later layers amplify those pairs (95x a random edit's residual shift, and only while each input stays paired with its own reward-specific output), and in every sample they do two graded things: they raise the probability that the answer opens and stays in the base's own deliberative mode ('Okay', 'Wait'; near 1 for Math's pairs at 1x, 427 against plain 224 of 500, only partly for Code's pairs, whose unswitched answers look like plain-base answers), and they lower the per-step slip and cap-hit rates, which adds right answers even where the base finishes wrong (+13.5 points).",
+  "At 1.5x, which stands in for the diffuse 88 % of the change left out (not for a bf16 loss: the written change is 0.99996 of the intended one), the 8 pairs reproduce RL per sample, under the vote and past the base's reach (456 against 457 on MATH-500; 200.25 against 200.0, vote 216.25 against 215.92, and 0.88 of RL's lift on hard328 problems the base never solves), but they carry RL's gains, not its losses: where RL fails problems the base solves, the edit passes at the base's resample rate (code 0.45 against 0.44, RL 0.22).",
+  "Inference gets the first part almost free because the mode is already in the base: a three-token cue, a self-chosen 'Okay' opening or a one-tensor hand edit gives 397-411 of 500, the level of RL step 100 (417.5, same cap-hit rate, same +7-point vote gain, right answers only 15 % longer), which holds the mode in most samples but not all, so the cue still adds +8.5 problems there.",
+  "The second part inference recovers only by selection, which works because the base's slips are chance events whose wrong answers split (same-problem agreement 0.26, so a right answer held by under half the samples still wins the plurality), so votes over 4-12 samples recover RL's reliability on problems the base solves at least once (81 % of the MATH-500 gap; a vote over 6 equals one RL sample), provided sampling keeps the base's long right routes (T 1.0, not T 0.6 where 52-63 % of long answers loop, and no 4,096-token cap).",
+  "Selection cannot reach problems the base never solves (it has no right sample on 26 of the 36 hard328 problems RL's vote wins), so the cued base's vote stays 8.8 points under RL on the 328 while the 1.5x edit, which lowers the slip rate there too, does not."
+ ],
+ "marks": [
+  {
+   "fact": "F01",
+   "mark": "explained",
+   "why": "S2: Math's pairs at 1x switch nearly every sample, so short answers are switched answers on easy problems (82.9 % right), not unswitched base replies at ~50 %."
+  },
+  {
+   "fact": "F02",
+   "mark": "explained",
+   "why": "S3: 1x lands as written (0.99996); 1.5x is needed because it stands in for the diffuse 88 % of the change, not for rounding loss."
+  },
+  {
+   "fact": "F03",
+   "mark": "explained",
+   "why": "S1: concentration comes from on-policy RL amplifying directions the base already drives, whatever the reward, so LM-judge General (0.127) concentrates like Math (0.135)."
+  },
+  {
+   "fact": "F04",
+   "mark": "explained",
+   "why": "S2: the pairs lower the slip rate as well as the cap-hit rate, so they add right answers on base-finished-wrong problems (+13.5 points), not only finished ones."
+  },
+  {
+   "fact": "F05",
+   "mark": "explained",
+   "why": "S5: base failures are chance slips, not a length requirement, so 32.7 % of solved hard328 problems have a right sample of 2,000 tokens or fewer."
+  },
+  {
+   "fact": "F06",
+   "mark": "explained",
+   "why": "S1/S2: Math's inputs are generic step-by-step reading directions and its outputs carry math reliability, not a boxed-answer format, so code answers keep their block."
+  },
+  {
+   "fact": "F07",
+   "mark": "explained",
+   "why": "S4: step 100 holds the mode in most but not all samples, so the cue still adds a small +8.5 problems of 500 there."
+  },
+  {
+   "fact": "F08",
+   "mark": "explained",
+   "why": "S5: wrong answers split, so one more finished wrong vote almost never beats a right plurality (0 flips; VB equals the abstention null)."
+  },
+  {
+   "fact": "F09",
+   "mark": "explained",
+   "why": "S5: vote-12 gains come from split wrong answers that let a minority right answer win, not from k=4 ties (0.095)."
+  },
+  {
+   "fact": "F10",
+   "mark": "explained",
+   "why": "S5: base wrong answers split, so Karpathy-method losses are not agreeing short wrongs; they are long right routes cut by the 4,096 cap."
+  },
+  {
+   "fact": "F11",
+   "mark": "explained",
+   "why": "S2: Code's pairs switch only partly and unswitched m21 answers are plain-base answers: answer-first 0.25 against plain base 0.21; the 0.40 floor was set above the plain base's own rate."
+  },
+  {
+   "fact": "F12",
+   "mark": "explained",
+   "why": "S2: m21's quick wrongs are unswitched plain-base answers, so they sit on problems as hard as the plain base's own (0.833 against 0.838)."
+  },
+  {
+   "fact": "F13",
+   "mark": "explained",
+   "why": "S2/S5: the Code pairs' fixes are reliability gains on problems the base can solve, not answer-contract repairs (0.43 against 0.37 random)."
+  },
+  {
+   "fact": "F14",
+   "mark": "explained",
+   "why": "S1/S2: code text drives the input side almost as much as math (0.87), so transfer is set by the paired reward-specific outputs, not by input drive."
+  },
+  {
+   "fact": "F15",
+   "mark": "not addressed",
+   "why": "The account says nothing about Think-SFT's code-fence habit or which problems it falls on."
+  },
+  {
+   "fact": "F16",
+   "mark": "not addressed",
+   "why": "The account says nothing about Think-SFT's unfenced code answers."
+  },
+  {
+   "fact": "F17",
+   "mark": "not addressed",
+   "why": "Same measurement as F15; the account does not cover Think-SFT's answer format on code."
+  },
+  {
+   "fact": "F18",
+   "mark": "not addressed",
+   "why": "Same measurement as F16; the account does not cover Think-SFT's answer format on code."
+  },
+  {
+   "fact": "F19",
+   "mark": "explained",
+   "why": "S3: the pairs carry RL's gains, not its losses, so on problems RL-Code fails they pass at the base resample rate (0.452 against 0.435) and do not sharpen to 0.70."
+  },
+  {
+   "fact": "F20",
+   "mark": "explained",
+   "why": "S3: the edit does not copy RL-Code's losses (0.452, not 0.22 or below)."
+  },
+  {
+   "fact": "F21",
+   "mark": "explained",
+   "why": "S5: at T 0.6 half of the base's long answers are loops (0.519), so they are not live derivations cut by the budget."
+  },
+  {
+   "fact": "F22",
+   "mark": "explained",
+   "why": "S2: Code's pairs switch the mode only partly, so many m21 right answers stay plain-short (0.414), not 0-0.12."
+  },
+  {
+   "fact": "F23",
+   "mark": "explained",
+   "why": "S5: base wrong answers are chance slips that split (agreement 0.262), not one attractor value per problem."
+  },
+  {
+   "fact": "F24",
+   "mark": "explained",
+   "why": "S1: the concentration pattern follows which matrices step-by-step text drives, so Math follows Think-SFT (0.59) and not IF-RL (-0.01)."
+  },
+  {
+   "fact": "F25",
+   "mark": "explained",
+   "why": "S4 says step-100 right answers are already 15 % longer than the cued base's: the slip/finish shift has begun by step 100, so 'as long' is false."
+  },
+  {
+   "fact": "F26",
+   "mark": "explained",
+   "why": "S3/S6: the pairs lower the slip rate everywhere, so past the base's reach they capture most of RL's lift (0.88), not a 0.10-0.45 minority."
+  },
+  {
+   "fact": "F27",
+   "mark": "explained",
+   "why": "S1: Math's input directions are ones step-by-step text drives, so Think-SFT's change also lands there (4.80x chance)."
+  },
+  {
+   "fact": "F28",
+   "mark": "not addressed",
+   "why": "The account does not cover Think-SFT's chat template or its drift."
+  },
+  {
+   "fact": "F29",
+   "mark": "explained",
+   "why": "S2 puts the slip-rate shift across the 8 pairs, not in direction 1 alone: both direction 1 (+7.2) and directions 2-8 (+9.3) add right answers; the gap between them is unresolved."
+  },
+  {
+   "fact": "F30",
+   "mark": "not addressed",
+   "why": "The account does not say how often a capped RL row holds a right box."
+  },
+  {
+   "fact": "F31",
+   "mark": "explained",
+   "why": "S2: the gain needs each reward's own paired outputs, so Code's pairs raise code pass rate (+7.0) and Math's barely do (+1.5)."
+  },
+  {
+   "fact": "F32",
+   "mark": "explained",
+   "why": "S2/S5: the Code edit's extra passes are reliability gains on problems within the base's reach, at the base-solved share (0.69 against 0.63)."
+  },
+  {
+   "fact": "F33",
+   "mark": "explained",
+   "why": "S5: split wrong answers let a right answer held by under half of 12 samples win the plurality (0.667)."
+  },
+  {
+   "fact": "F34",
+   "mark": "explained",
+   "why": "S5: a 4,096-token cap throws away the base's long right routes (0.714 against 0.173)."
+  },
+  {
+   "fact": "F35",
+   "mark": "explained",
+   "why": "S2/S5: Code top-8 fixes are reliability gains on problems the base passes in other samples (0.75)."
+  },
+  {
+   "fact": "F36",
+   "mark": "not addressed",
+   "why": "Not computable on stored rows; S5's cap clause agrees with the claim, but there is no measurement to explain."
+  },
+  {
+   "fact": "F37",
+   "mark": "not addressed",
+   "why": "Not computable on stored rows; S5 predicts split rather than shared wrong values, but there is no measurement."
+  },
+  {
+   "fact": "F38",
+   "mark": "not addressed",
+   "why": "The account makes no claim about how the plain/cue ratio varies with MATH level."
+  },
+  {
+   "fact": "F39",
+   "mark": "not addressed",
+   "why": "The account does not say how the cap-hit cut scales with the base's cap rate."
+  },
+  {
+   "fact": "F40",
+   "mark": "explained",
+   "why": "S5: real split wrong answers beat merged ones under the vote (D 0.070)."
+  },
+  {
+   "fact": "F41",
+   "mark": "explained",
+   "why": "S4: step 100 holds the mode at the cued base's cap-hit rate; the cap-hit cut comes later in RL (final -2.9 points)."
+  },
+  {
+   "fact": "F42",
+   "mark": "explained",
+   "why": "S2: RL's change lowers cap hits, so on Think-SFT it turns abstaining cut-off companions into finished wrong votes (0.19 lower; n too small to decide)."
+  },
+  {
+   "fact": "F43",
+   "mark": "explained",
+   "why": "S5: at T 0.6 52-63 % of long base answers loop, so the cap loses little."
+  },
+  {
+   "fact": "F44",
+   "mark": "explained",
+   "why": "S2: a partial per-sample switch by Code's pairs leaves plain-short right answers at S 0.414, which is consistent with the measurement (undecided at the 0.36 edge)."
+  },
+  {
+   "fact": "F45",
+   "mark": "explained",
+   "why": "S5: slips are chance events with split wrong answers, agreement 0.262, low but above chance."
+  },
+  {
+   "fact": "F46",
+   "mark": "explained",
+   "why": "S1: Code-RL writes step-by-step text on-policy and concentrates its change, so it sits in the same input directions far more than diffuse Think-SFT (5.16x)."
+  },
+  {
+   "fact": "F47",
+   "mark": "explained",
+   "why": "S3: the edit carries RL's gains but not its losses, so it keeps the base's right answers where RL fails (ratio 2.0; undecided on n)."
+  },
+  {
+   "fact": "F48",
+   "mark": "explained",
+   "why": "S5: split wrong answers add to the hard328 vote (D 0.109)."
+  },
+  {
+   "fact": "F49",
+   "mark": "explained",
+   "why": "S4: step 100 is the switched base with base-like slips, so its wrong answers still split and the vote adds +7.18, like the cued base."
+  },
+  {
+   "fact": "F50",
+   "mark": "explained",
+   "why": "S3/S6: past the base's reach the edit lowers the slip rate as RL does (E - R -0.012)."
+  },
+  {
+   "fact": "F51",
+   "mark": "explained",
+   "why": "S4: the mode is already in the base; plain answers that open deliberatively are as right as cued ones (-0.034)."
+  },
+  {
+   "fact": "F52",
+   "mark": "explained",
+   "why": "S3: the 1.5x edit reproduces RL under the vote (+0.1 points)."
+  },
+  {
+   "fact": "F53",
+   "mark": "explained",
+   "why": "S2/S3: a graded slip-rate shift like RL's captures 0.88 of RL's lift past the base's reach."
+  }
+ ],
+ "worst": [
+  "F15",
+  "F28",
+  "F39"
+ ],
+ "consequences": [
+  {
+   "id": "c1",
+   "claim": "At RL step 100 (plain prompt, MATH-500, 4 samples) the samples that do not open deliberatively are unswitched plain-base answers (S4: step 100 holds the mode in most samples, not all; S2: an unswitched sample is a plain-base answer, about 0.5 below the cue on the same problem, F51's null -0.516). So on the same problem, the step-100 model with the cue is right far more often than its own non-deliberative plain samples, while its deliberative plain samples are right about as often as the cue. Pairing within each problem removes difficulty.",
+   "why_new": "F07 measured only the pooled cue-minus-plain difference at step 100 (+8.5/500), and F25/F41/F49 measured length, cap hits and the vote. F51 used the untrained base, one sample per problem. No fact or result splits step-100 samples by how they open.",
+   "statistic": "D1 = mean over problems of (right rate of the 4 step-100 cue samples minus right rate of the step-100 plain samples that do not open deliberatively), as a fraction of samples (0-1)",
+   "files": [
+    "studies/rlneurons/results/ckptcue/s0100_plain-01",
+    "studies/rlneurons/results/ckptcue/s0100_plain_s123-01",
+    "studies/rlneurons/results/ckptcue/s0100_cue-01",
+    "studies/rlneurons/results/ckptcue/s0100_cue_s123-01"
+   ],
+   "rows": "MATH-500 problems where at least 1 of the 4 step-100 plain samples does not open deliberatively. Flag rule of result-1f98b0: deliberative = the first 240 characters of the completion hold Okay/Hmm/Let me/Let's/Wait/First/Alright before any equation or 'Answer'.",
+   "n": 70,
+   "computation": "1) Read the v3 grade and the opening of the 4 plain samples (sample 0 from s0100_plain-01, samples 1-3 from s0100_plain_s123-01) and the 4 cue samples, per problem. 2) Flag each plain sample with the rule above. 3) Keep problems with >= 1 unflagged plain sample. 4) Per problem, c = cue right/4 and u = right/count over unflagged plain samples; D1 = mean(c - u). 5) Bootstrap: resample problems with replacement 10,000 times; the 90 % interval is the 5th-95th percentile of D1. 6) Null on the problems that also have >= 1 flagged plain sample: D0 = mean(c - o), with o = right rate of the flagged plain samples, using the same bootstrap. If fewer than 50 problems qualify, report undecided.",
+   "null": "The step-100 model's own deliberative plain samples on the same problems. This is the null that the opening is cosmetic because RL has already internalised the mode, so the cue minus any plain sample is about 0.",
+   "ranges": {
+    "account": [
+     0.15,
+     0.75
+    ],
+    "null": [
+     -0.08,
+     0.08
+    ]
+   }
+  },
+  {
+   "id": "c2",
+   "claim": "Code-RL's 8 pairs at 1x on the base (m21, plain, MATH-500 first 250) switch the mode only partly, and the unswitched answers are plain-base answers (S2). On problems the cued base solves, m21 answers that open deliberatively should be right at about the cued base's rate (~0.85) and non-deliberative ones at about the plain base's rate (~0.35-0.5): a gap of 0.2-0.65. Openings that only marked easier problems would give a gap near 0 on this difficulty-restricted set.",
+   "why_new": "F11, F12, F22 and F44 measured the opening share among quick wrong answers, their problems' difficulty, and right-answer length. No fact or result relates m21's correctness to its opening on fixed problems.",
+   "statistic": "G = right rate (v3) of deliberative-opening m21 answers minus right rate of non-deliberative m21 answers, on problems the cued base T1 sample solves, as a fraction (0-1)",
+   "files": [
+    "studies/theory/results/experiments/cell-r9-m21-01",
+    "studies/rlneurons/results/rln4/t1_t3_items-01",
+    "studies/rlneurons/results/day1_3/math500_base_cue-01"
+   ],
+   "rows": "The 250 m21 problems (first 250 of MATH-500) whose cued-base T1 answer is right under v3 in t1_t3_items-01/per_problem.json (about 205)",
+   "n": 205,
+   "computation": "1) Join m21 rows to t1_t3_items-01 per_problem.json by problem index; keep rows with T1 right. 2) Flag each m21 completion as deliberative with result-1f98b0's rule on its first 240 characters. 3) G = mean(m21 right | flagged) - mean(m21 right | unflagged). 4) Bootstrap: resample rows 10,000 times; the 90 % interval is the 5th-95th percentile. 5) Null G0: the same contrast with each row's m21 right replaced by the cued base's per-problem right rate over its 4 attempt-0 samples in day1_3/math500_base_cue-01, i.e. how much the opening tracks difficulty alone, with the same bootstrap.",
+   "null": "Difficulty only: the opening marks easier problems, measured by the cued base's own 4-sample right rate on the same rows.",
+   "ranges": {
+    "account": [
+     0.2,
+     0.65
+    ],
+    "null": [
+     -0.06,
+     0.12
+    ]
+   }
+  },
+  {
+   "id": "c3",
+   "claim": "S1: where the RL change concentrates is set by which matrices step-by-step text drives, not by the reward. Code-RL writes step-by-step text (its late directions also read Okay/Wait), so its per-matrix top-8 share pattern, with family medians removed, follows Think-SFT's, as Math 3.1's does (0.59), and not IF-RL's. A shared RL recipe would instead tie Code to IF.",
+   "why_new": "F24 correlated only Math 3.1's pattern with IF and Think-SFT; F03 and result-82eb02 compared median levels, not per-matrix patterns. No result correlates Code-RL's pattern with anything.",
+   "statistic": "D3 = Spearman rho(Code-RL 3.1, Think-SFT) - rho(Code-RL 3.1, IF-RL) of per-matrix top-8 share after the module family's median is removed (unitless)",
+   "files": [
+    "studies/theory/data/direct_reward/top8_share_v1.json"
+   ],
+   "rows": "All 224 layer matrices (32 layers x 7 module families q, k, v, o, gate, up, down) present for the Code-RL 3.1, Think-SFT and IF-RL keys",
+   "n": 224,
+   "computation": "1) Read the per-matrix top-8 share of the three keys. 2) Within each module family subtract that family's median share, per key. 3) Spearman rho of Code with Think-SFT and of Code with IF over the 224 matrices; D3 = difference. 4) Bootstrap: resample matrices with replacement (the same draw for both rhos) 10,000 times; the 90 % interval is the 5th-95th percentile.",
+   "null": "Another model's directions: IF-RL's pattern stands for 'RL runs share one concentration pattern whatever text they write', which gives D3 about 0 (F24's null range).",
+   "ranges": {
+    "account": [
+     0.15,
+     1.0
+    ],
+    "null": [
+     -0.1,
+     0.1
+    ]
+   }
+  }
+ ],
+ "cell": {
+  "readout": "Right answers (grader v3) of the untrained base, plain prompt, with a different deliberative opening prefilled (' Hmm, let me work through this carefully.' instead of the cue), on the first 164 hard328 problems, 1 sample, T 1.0 / top-p 1.0, cap 16,384, seeds 3000000 + index",
+  "unit": "right of 164 problems",
+  "command": "python -m studies.theory.jobs.free_cell --model base --opening-text ' Hmm, let me work through this carefully.' --set hard328 --n 164 --temperature 1.0 --top-p 1.0 --samples 1 --seed 3000000 --commit COMMIT_SHA",
+  "value": 65,
+  "low": 55,
+  "high": 76,
+  "gpu_minutes": 60,
+  "why": "S4: the deliberative mode is already in the base, and any deliberative opening switches it on, as the cue, the self-chosen 'Okay' opening and the hand edit do. So a different opening should score what the cue scored on these problems and seeds (65 of 164), far above the plain base (about 35)."
+ }
+}
