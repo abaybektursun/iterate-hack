@@ -34,6 +34,7 @@ import pastdev
 import proof_idea_basins
 
 HOOK = "36 hours to solve recursive self-improvement"  # the opening line of the talk
+TAGLINE = "Symbiotic harness for resource-constrained researchers"  # what Invariant is: after the name, under the opening line
 SITE = "invariant.team"  # the address on the first and last slide
 # Slide "summary": what the team did, in Samer's words, in groups of lines.
 # Slide "built": what the team did, said once early and in full on the slide "summary".
@@ -121,7 +122,7 @@ FIGS = {
     "harness": embed(architecture.PAGE, f""":root[data-theme="light"] {{ color-scheme: light; {demo.LIGHT} }}
 :root[data-theme="dark"] {{ color-scheme: dark; {demo.DARK} }}
 html, body {{ overflow: hidden; }}
-.top, .foot, .side, .part.key, .part.tool {{ display: none !important; }}
+.top, .foot, .side, .say, .part.key, .part.tool {{ display: none !important; }}
 .page {{ display: block !important; height: 100vh !important; min-height: 0 !important; max-width: none !important; padding: 0 !important; }}
 .stage {{ height: 100vh; padding: 0 !important; }}"""),
     # the accuracy climb of Ali's slide 3: the step line over the idea disc, without its words and its controls
@@ -242,7 +243,7 @@ def qr():
 
 def slides(papers):
     return [
-        ("hook", f'<div class="mid">{hours_svg()}<h1 class="big">{hook_html()}</h1><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
+        ("hook", f'<div class="mid">{hours_svg()}<h1 class="big">{hook_html()}</h1><p class="tagline"><b class="team">Invariant</b>: {esc(TAGLINE)}</p><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers</p>'
                      '<ul class="limits"><li>Limited token budget</li><li>Limited compute</li><li>Limited people</li></ul></div>'),
         ("built", '<div class="recap"><h2 class="title">So we built <b class="team">Invariant</b></h2><div class="did one">'
@@ -256,9 +257,10 @@ def slides(papers):
                   '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'
                   '<div class="replay"><input class="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Board time">'
                   '<button class="rate" aria-pressed="false" aria-label="Half speed">0.5×</button></div>'),
-        ("harness", '<div class="head"><h2>Invariant</h2><p class="sub">A hill climbing engine and an interpretability engine in one harness</p></div>'
+        ("harness", '<div class="head"><h2>Invariant</h2><p class="sub">Symbiotic research swarm</p></div>'
                     '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
-                    f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span></div>'),
+                    f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span>'
+                    '<span>Agents <b class="word">OpenAI</b><b class="word">Devin</b><b class="word">Anthropic</b></span></div>'),
         ("sponsors", '<div class="head"><h2>Search and memory before every experiment</h2></div>'
                      '<iframe class="fig-frame sponsor s-exa" data-fig="exa" data-replay title="Exa: searches at the gate before a GPU run" tabindex="-1"></iframe>'
                      '<iframe class="fig-frame sponsor s-past" data-fig="pastdev" data-replay title="past.dev: one agent writes, another reads" tabindex="-1"></iframe>'
@@ -316,6 +318,7 @@ p, h1, h2, figure { margin: 0; }
 .mid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; text-align: center; padding: 0 140px; }
 .big { font-weight: 300; font-size: 76px; line-height: 1.12; letter-spacing: -.012em; max-width: 1240px; text-wrap: balance; }
 .sub { font-size: 24px; font-weight: 500; color: var(--mute); }
+.tagline { font-size: 38px; font-weight: 400; color: var(--mute); letter-spacing: -.004em; }  /* slide "hook": what Invariant is */
 .faint { color: var(--faint); font-weight: 500; }
 .top { margin-bottom: 8px; }
 .title { font-weight: 300; font-size: 54px; line-height: 1.15; letter-spacing: -.008em; }
@@ -348,7 +351,7 @@ p, h1, h2, figure { margin: 0; }
 .head { position: absolute; left: 96px; top: 72px; z-index: 1; }
 .head h2 { font-weight: 300; font-size: 54px; line-height: 1.1; }
 .head .sub { margin-top: 12px; }
-.sub .team { font-weight: 740; font-stretch: 122%; letter-spacing: .02em; color: var(--blue); }  /* the team's name, set as on the site's header */
+.sub .team, .tagline .team { font-weight: 740; font-stretch: 122%; letter-spacing: .02em; color: var(--blue); }  /* the team's name, set as on the site's header */
 
 .photo { border-radius: 2px; overflow: hidden; }
 .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
