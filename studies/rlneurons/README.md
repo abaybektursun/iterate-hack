@@ -3000,3 +3000,123 @@ single right 212, 212, 211, 201). Readout `results/mixvote/hard328-01/readout.js
   under 4 Think-SFT). RL adds almost no problems that Think-SFT misses, so mixing dilutes the better model.
 - Caveats: Think-SFT's training prompts match 6 of the 328 (board result-f6a8bc; the lead holds without them); its samples
   have no restart rows; the vote's tie rule prefers the earlier sample, hence both orders.
+
+## Risk-coverage: Think-SFT's lead over RL on the 328 is in long answers (hard328 n = 328, MATH-500 n = 500, laptop, board work-4ecc65, idea-ce2272)
+
+Question: on the 328 Think-SFT + cue has vote 241 against RL 221 (result-818c20), hits the cap on 29 % of samples (RL 9 %),
+and its finished answers are right 88 % of the time (RL 66 %). Is it more precise than RL at the same coverage, and on which
+answers? Answer: only on the long ones. Keeping each model's shortest answers, the two are equally precise up to half of all
+samples (coverage 0.50: 94.8 % against 93.0 %, +1.8 points [-0.8, +5.5]); the difference opens at 0.55 (+3.7 [0.6, 7.1]) and
+is +8.8 [6.4, 12.5] at 0.75, the largest coverage all three models reach. Finished answers over 12,000 tokens are right
+68.2 % of the time for Think-SFT (135 of 198), 24.4 % for RL (87 of 356), 16.7 % for the base (41 of 246); under 4,000
+tokens all three are at 88 to 100 %. Of Think-SFT's 53 right samples on the 26 problems where its vote is right and RL's is
+not, 49 are over 8,000 tokens and 35 over 12,000. On MATH-500 there is no lead in precision at any matched coverage (area
+-0.8 [-1.7, +0.1]). Spec, written before the script: `specs/SPEC_riskcov.md` (commit `7a779d0`).
+
+`analysis/riskcov.py` on the stored rows (T 1.0 / top-p 1.0, cap 16,384, grader v3 as stored, 4 samples per problem; attempt
+0 of each sample for all three models, since the RL and base runs have restarts and Think-SFT has none). A sample is
+answered when it has an extracted answer; coverage = kept samples over all samples; precision = right over kept. Signals see
+tokens, cap hit and extracted answers only. Intervals: bootstrap over problems (2,000 resamples, paired across models).
+Instrument checks: the vote over attempt 0 reproduces 241 / 221 / 192 on the 328 and 481 / 474 / 446 on MATH-500 (asserted);
+`analysis/riskcov_test.py`: planted perfect abstention gives precision 1 at every coverage, shuffled lengths give a flat
+curve (every band holds the overall precision) while the real lengths do not, planted lengths give precision 1 up to the
+right share. Run folders `results/riskcov/hard328-01/`, `math500-01/` (`readout.json`, `curves.json`, `table.md`,
+`examples.json`: one long right Think-SFT answer, one long wrong RL answer), `read-01/` (the 25 rows read by hand, `notes.json`).
+
+Precision at matched coverage, signal = fewer generated tokens first (`table.md` has every 0.05 step and the signal
+agreement-then-length):
+
+| Set | Coverage | Think-SFT + cue | RL plain | base + cue | Think-SFT - RL, points [95 %] |
+|---|---|---|---|---|---|
+| hard328 | 0.30 | 98.5 | 99.0 | 91.4 | -0.5 [-2.3, +1.0] |
+| hard328 | 0.50 | 94.8 | 93.0 | 82.3 | +1.8 [-0.8, +5.5] |
+| hard328 | 0.60 | 93.0 | 87.3 | 76.1 | +5.7 [+2.2, +9.9] |
+| hard328 | 0.70 | 88.8 | 79.4 | 67.5 | +9.4 [+6.3, +12.3] |
+| hard328 | 0.75 | 85.0 | 76.1 | 63.9 | +8.8 [+6.4, +12.5] |
+| MATH-500 | 0.30 | 98.7 | 99.8 | 96.0 | -1.2 [-2.2, -0.2] |
+| MATH-500 | 0.50 | 98.8 | 99.9 | 96.3 | -1.1 [-2.0, -0.3] |
+| MATH-500 | 0.70 | 98.9 | 99.6 | 95.2 | -0.7 [-1.4, -0.1] |
+| MATH-500 | 0.90 | 97.8 | 97.6 | 89.3 | +0.2 [-0.8, +1.2] |
+| MATH-500 | 0.95 | 96.5 | 95.6 | 86.4 | +0.9 [-0.4, +2.1] |
+
+Area (mean precision over the grid up to the common coverage), hard328: by length 95.3 / 93.1 / 84.8 (Think-SFT minus RL
++2.2 [0.6, 4.2]); by agreement among the four samples, then length 97.1 / 95.1 / 89.7 (+2.0 [0.8, 3.7]); in a random order
+83.6 / 62.0 / 61.6 (+21.6). So a label-free order removes most of the 21-point difference in raw precision: RL's wrong
+answers are its long and its lone ones. With agreement first, RL is at 100.0 % up to coverage 0.35 and 99.8 % at 0.40.
+
+Finished answered samples by generated tokens, hard328 (right / samples, %; in brackets the 267 problems where all three
+models have a finished answered sample):
+
+| Tokens | Think-SFT + cue | RL plain | base + cue |
+|---|---|---|---|
+| 0 to 2,000 | 74 / 75, 98.7 | 59 / 59, 100.0 | 171 / 177, 96.6 |
+| 2,000 to 4,000 | 170 / 173, 98.3 | 185 / 186, 99.5 | 169 / 191, 88.5 |
+| 4,000 to 8,000 | 283 / 292, 96.9 | 288 / 310, 92.9 (93.2) | 161 / 221, 72.9 (74.8) |
+| 8,000 to 12,000 | 160 / 193, 82.9 (83.2) | 174 / 286, 60.8 (66.5) | 88 / 164, 53.7 (56.2) |
+| 12,000 to the cap | 135 / 198, 68.2 (67.6) | 87 / 356, 24.4 (33.8) | 41 / 246, 16.7 (22.1) |
+
+Right answers counted, not rated: under 12,000 tokens RL has more right samples than Think-SFT (706 against 687 of 1,312);
+over 12,000 Think-SFT has 135 against 87 (plus 14 against 7 right cap hits). Its whole lead of 36 right samples (836 against
+800) is there. MATH-500: 12,000 to the cap 76.9 % (70 of 91) against 39.7 % (46 of 116) and 39.6 % (42 of 106).
+
+Outcomes on the 328, Think-SFT + cue (rows) against RL plain (columns):
+
+| One sample (4 pairs per problem, summed; 1,312) | RL abstained | RL wrong | RL right |
+|---|---|---|---|
+| Think-SFT abstained | 26 | 248 | 52 |
+| Think-SFT wrong | 2 | 121 | 27 |
+| Think-SFT right | 8 | 107 | 721 |
+
+| Vote over 4 (328 problems) | RL abstained | RL wrong | RL right |
+|---|---|---|---|
+| Think-SFT abstained | 0 | 26 | 4 |
+| Think-SFT wrong | 0 | 55 | 2 |
+| Think-SFT right | 0 | 26 | 215 |
+
+Where a Think-SFT sample gives no answer, RL's sample is wrong 248 times, right 52, also without an answer 26. Of RL's 476
+wrong samples, 248 (52 %) face a Think-SFT sample without an answer, 121 a wrong one, 107 a right one.
+
+- H1 (the lead is in the long answers): held. Difference by length inside +-2 points with intervals covering 0 up to
+  coverage 0.50, excluding 0 from 0.55; bins above. Not uniform across length, and not absent.
+- H2 (RL is wrong where Think-SFT abstains, beyond difficulty): mostly difficulty. On the 141 problems with at least one
+  Think-SFT cap hit, RL's finished answers are right 31.2 % of the time (144 of 461; 66.2 % on all problems), and it finishes
+  82 % of its samples there. The control: RL's precision per stratum of the base's number of right samples (0 to 4), weighted
+  to these problems, gives 35.2 %: observed minus expected -3.9 points [-6.9, -1.0], below the 5 points the spec asked for.
+  The strata rates there include the 141 problems themselves; with rates from the other 187 problems only (added after the
+  spec) the expected value is 48.9 % and the difference -17.6 [-31.0, -4.5]. The residual sits where all four Think-SFT
+  samples hit the cap (48 problems): RL 8.8 % (13 of 147) against 22.8 % expected, -14.0 [-20.5, -7.5]; the base 3.8 % (3 of
+  79). MATH-500, 52 problems: 62.7 % against 72.3 %, -9.6 [-14.8, -4.3]. Reverse: on the 67 problems with an RL cap hit
+  Think-SFT's finished answers are right 75.6 % (68 of 90) against 69.5 % expected, +6.0 [-4.4, +15.7], and it hits the cap
+  on 66 % of its samples there. The base strata are a coarse control (121 of the 328 share the stratum "never right").
+- H3 (a length cut before the vote does not help RL or the base): held. Rule: drop every sample longer than L tokens before
+  the vote; if none is left, the plain vote. L chosen on MATH-500 only, scored once on the 328: RL L = 16,000, 224 against
+  221 (+0.9 points [0.0, 2.1], 37,168 tokens per problem if generation stops at L, 37,299 as run); base L = 12,000, 189
+  against 192 (-0.9 [-2.7, +0.6]; 35,124 / 36,902); Think-SFT L = 4,000, 240 against 241. On MATH-500 the chosen cuts gained
+  1, 4 and 1 problems. No cut reaches Think-SFT's 241. Without the fall-back the cut only abstains (RL at 12,000: 210 right,
+  59 wrong, 59 abstained).
+- Score = right - lambda x wrong, hard328, one sample (mean of four): lambda 0: 209.0 / 200.0 / 158.5; lambda 0.5: 190.2 /
+  140.5 / 106.8; lambda 1: 171.5 / 81.0 / 55.0. Vote: 241 / 221 / 192; 212.5 / 167.5 / 130.0; 184 / 114 / 68. MATH-500 one
+  sample: 460.2 / 460.0 / 410.5; lambda 1: 440.0 / 421.8 / 344.5. A metric that charges for wrong answers widens Think-SFT's
+  lead from 9 to 90 problems per sample.
+
+Hand read of 25 rows (seed 0, `results/riskcov/read-01/`; the end of each text, not a measurement). 10 finished wrong RL
+answers of 8,000 tokens or more on problems where Think-SFT hit the cap: 2 derive the boxed number with an error, 1 derives
+it from an assumption it never checks, 1 closes with a false step (problem 117: "Simplify: x_4 = 25/11"), 6 box a number the
+write-up does not derive, three in so many words (problem 189: "the correct answer based on the common geometric properties
+and the boxed integer result is 6"; problem 165: "typically the answer is expected to be an integer"). All ten end in a
+formatted final answer. 10 finished right Think-SFT answers of 8,000 tokens or more: 8 derive the answer in the write-up, 2
+hedge. 5 Think-SFT cap hits on the same problems as the RL rows: 4 are mid-computation or re-checking (problem 117: still
+computing the exact fractions RL cut short), 1 is cut inside a right final write-up. A rough count outside the spec: 5 of
+RL's 1,197 finished answers end in text that is not mathematics, so the long wrong answers are ordinary write-ups.
+
+Reading: RL writes a final answer on 97 % of samples and Think-SFT on 75 %. On problems neither solves, Think-SFT runs to the
+cap and RL boxes a number, which costs RL no right answers and most of its precision.
+Think-SFT's lead in right answers is in answers of 12,000 tokens and more, where it is right 68 % of the time against 24 %.
+Not tested here: whether RL's long answers are wrong because it stops too early (work-ceccc0 raises the cap for all three).
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.riskcov_test
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.riskcov --set math500 --out studies/rlneurons/results/riskcov/math500-01 --think-run runs/thinkvote_math500_sft1_cue_s4 --rl-run runs/abaybektursun-1114-183640-e828
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.riskcov --set hard328 --out studies/rlneurons/results/riskcov/hard328-01 --fixed studies/rlneurons/results/riskcov/math500-01/chosen.json --think-run runs/thinkvote_hard328_sft1_cue_s4 --rl-run runs/abaybektursun-1114-200505-5ff2
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.riskcov --set hard328 --read studies/rlneurons/results/riskcov/read-01 --think-run runs/thinkvote_hard328_sft1_cue_s4 --rl-run runs/abaybektursun-1114-200505-5ff2
+```
