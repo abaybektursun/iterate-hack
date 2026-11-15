@@ -1,0 +1,132 @@
+{
+ "supports_tie": {
+  "problem_index": 14,
+  "gold": "\\sqrt{51}",
+  "cue": [
+   {
+    "sample": 0,
+    "extracted_v3": "\\sqrt{51}",
+    "score_v3": 1,
+    "cap_hit": false,
+    "tokens": 2441
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "\\sqrt{51}",
+    "score_v3": 1,
+    "cap_hit": false,
+    "tokens": 1823
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "10",
+    "score_v3": 0,
+    "cap_hit": false,
+    "tokens": 4699
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "\\sqrt{51}",
+    "score_v3": 1,
+    "cap_hit": false,
+    "tokens": 2829
+   }
+  ],
+  "plain": [
+   {
+    "sample": 0,
+    "extracted_v3": "10",
+    "score_v3": 0,
+    "cap_hit": false,
+    "tokens": 2127
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "\\sqrt{51}",
+    "score_v3": 1,
+    "cap_hit": false,
+    "tokens": 2553
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "\\sqrt{51}",
+    "score_v3": 1,
+    "cap_hit": false,
+    "tokens": 5056
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "\\sqrt{51}",
+    "score_v3": 1,
+    "cap_hit": false,
+    "tokens": 3879
+   }
+  ],
+  "cue_minus_plain_right_of_4": 0
+ },
+ "against_largest_cue_lead": {
+  "problem_index": 120,
+  "gold": "\\text{even}",
+  "cue": [
+   {
+    "sample": 0,
+    "extracted_v3": "even**.",
+    "score_v3": 0,
+    "cap_hit": false,
+    "tokens": 7902
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "even",
+    "score_v3": 1,
+    "cap_hit": false,
+    "tokens": 6130
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "even",
+    "score_v3": 1,
+    "cap_hit": false,
+    "tokens": 9212
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "even",
+    "score_v3": 1,
+    "cap_hit": false,
+    "tokens": 6785
+   }
+  ],
+  "plain": [
+   {
+    "sample": 0,
+    "extracted_v3": "neither",
+    "score_v3": 0,
+    "cap_hit": false,
+    "tokens": 12997
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "neither.",
+    "score_v3": 0,
+    "cap_hit": false,
+    "tokens": 5782
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "neither",
+    "score_v3": 0,
+    "cap_hit": false,
+    "tokens": 9568
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "\\text{neither}",
+    "score_v3": 0,
+    "cap_hit": false,
+    "tokens": 8899
+   }
+  ],
+  "cue_minus_plain_right_of_4": 3
+ }
+}

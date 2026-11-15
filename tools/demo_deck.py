@@ -35,6 +35,9 @@ import proof_review_cuts_waste
 HOOK = "36 hours to solve recursive self-improvement"  # the opening line of the talk
 SITE = "invariant.team"  # the address on the first and last slide
 # Slide "summary": what the team did, in Samer's words, in groups of lines.
+# Slide "built": what the team did, said once early and in full on the slide "summary".
+BUILT = [("A symbiotic swarm", " with one shared brain"), ("More efficient", " than autoresearch"),
+         ("Novel findings", " in machine learning and interpretability")]
 SUMMARY = [  # each line: the words in bold, then the rest
     [("Team harness", " for resource-constrained researchers"), ("Novel", ", paper-worthy findings")],
     [("More effective", " than autoresearch, less compute"), ("Improves itself", "")],
@@ -233,6 +236,25 @@ def paper(name):
             f'<span>{esc(PAPER_AUTHOR)}</span><div class="lines">{lines}</div></a>')
 
 
+def hours_svg():
+    """Slide "hook": 36 dots on a spiral, one per hour, twelve to a turn like a clock face. Each turn is wider than
+    the one before (a loop that improves), the dots light up one by one, the 36th is the accent, and a small lit
+    head then keeps travelling the spiral. With reduced motion and in print all 36 dots are lit and nothing moves."""
+    import math
+    n, turns = 36, 3
+    at = lambda i: (-math.pi / 2 + i * 2 * math.pi * turns / n, 20 + i * 1.8)
+    pts = [(r * math.cos(a), r * math.sin(a)) for a, r in (at(i) for i in range(n))]
+    last = ' class="last"'
+    dots = "".join(f'<circle cx="{x:.2f}" cy="{y:.2f}" r="{2 + i * .055:.2f}" style="--i:{i}"{last if i == n - 1 else ""}/>'
+                   for i, (x, y) in enumerate(pts))
+    fine = [(r * math.cos(a), r * math.sin(a)) for a, r in (at(k / 8) for k in range((n - 1) * 8 + 1))]
+    path = "M" + "L".join(f"{x:.2f} {y:.2f}" for x, y in fine)
+    head = "".join(f'<circle class="head" r="{2.6 - k * .5:.1f}" opacity="{1 - k * .3:.1f}">'
+                   f'<animateMotion dur="12s" begin="{4.6 + k * .12:.2f}s" repeatCount="indefinite" path="{path}"/></circle>' for k in range(3))
+    return (f'<svg class="hours" viewBox="-92 -92 184 184" role="img" aria-label="36 hours as 36 dots on a widening spiral">'
+            f'{dots}{head}</svg>')
+
+
 def hook_html():
     """The hook with "self-improvement" kept on one line."""
     return esc(HOOK).replace("self-improvement", '<span class="nb">self-improvement</span>')
@@ -248,14 +270,16 @@ def qr():
 
 def slides(papers):
     return [
-        ("hook", f'<div class="mid"><h1 class="big">{hook_html()}</h1><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
+        ("hook", f'<div class="mid">{hours_svg()}<h1 class="big">{hook_html()}</h1><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers</p>'
                      '<ul class="limits"><li>Limited token budget</li><li>Limited compute</li><li>Limited people</li></ul></div>'),
+        ("built", '<div class="recap"><h2 class="title">So we built <b class="team">Invariant</b></h2><div class="did one">'
+                  + "<ul>" + "".join(f"<li><b>{esc(bold)}</b>{esc(rest)}</li>" for bold, rest in BUILT) + "</ul>" + '</div></div>'),
         ("gap", '<iframe class="fig-frame gapfig" data-fig="gap" data-replay title="Base model and RL-trained model" tabindex="-1"></iframe>'),
         ("powered", '<div class="versus">'
                     f'<div><p class="sub">The RL-trained model</p><p class="sub by">Powered by</p><p class="gpus">{RL_GPUS} H100 GPUs</p></div>'
                     f'<div><p class="sub">Invariant</p><p class="sub by">Powered by</p>{photo(demo_photos.COOK, "cook")}'
-                    f'<p class="who">{esc(demo_photos.COOK_NAME)}</p></div></div>'),
+                    + (f'<p class="who">{esc(demo_photos.COOK_NAME)}</p>' if demo_photos.COOK_NAME else "") + '</div></div>'),
         ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2></div>'
                   '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'
                   '<div class="replay"><input class="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Board time">'
@@ -331,8 +355,20 @@ p, h1, h2, figure { margin: 0; }
 .did ul { list-style: none; margin: 0; padding: 0 0 0 26px; border-left: 1px solid var(--rule); display: flex; flex-direction: column; gap: 16px; }
 .did li { font-weight: 300; font-size: 36px; line-height: 1.22; color: var(--mute); }
 .did li b { font-weight: 600; color: var(--ink); }
+.did.one { grid-template-columns: 1fr; }
+.did.one li { font-size: 46px; }
+.did.one ul { gap: 22px; }
 .recap .sub { font-size: 30px; }
 .nb { white-space: nowrap; }
+/* slide "hook": the 36 hours. A dot appears per hour when the slide comes on; the last one is the accent */
+.hours { width: 250px; height: 250px; display: block; overflow: visible; margin-bottom: 4px; }
+.hours circle { fill: var(--ink); opacity: .78; }
+.hours .last { fill: var(--blue); opacity: 1; filter: drop-shadow(0 0 calc(var(--glow) * 5px) var(--blue)); }
+.hours .head { fill: var(--blue); }
+.slide.on .hours circle:not(.head) { animation: hour .5s both; animation-delay: calc(.35s + var(--i) * .115s); }
+@keyframes hour { from { opacity: 0; transform: scale(.2); } }
+.hours circle:not(.head) { transform-box: fill-box; transform-origin: center; }
+@media (prefers-reduced-motion: reduce) { .slide.on .hours circle:not(.head) { animation: none; } .hours .head { display: none; } }
 .site { display: flex; align-items: center; gap: 26px; margin-top: 34px; font-size: 34px; font-weight: 500; color: var(--mute); }
 .qr { width: 150px; height: 150px; display: block; }
 .limits { list-style: none; margin: 0; padding: 0; font-weight: 300; font-size: 68px; line-height: 1.3; letter-spacing: -.01em; }
@@ -421,6 +457,8 @@ p, h1, h2, figure { margin: 0; }
 @page { size: 13.333in 7.5in; margin: 0; }
 @media print {
   html, body { height: auto; overflow: visible; }
+  .slide.on .hours circle:not(.head) { animation: none; }
+  .hours .head { display: none; }
   .count, .theme, .replay { display: none; }
   .slide { position: relative; inset: auto; display: block; width: 13.333in; height: 7.5in; overflow: hidden;
     opacity: 1; visibility: visible; transition: none; break-after: page; page-break-after: always; }
