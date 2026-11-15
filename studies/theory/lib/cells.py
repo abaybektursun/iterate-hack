@@ -1,7 +1,9 @@
 """Inputs, checks, ranking and cells.md of `forecast.py cells` (studies/theory/README.md, "Cells designed by the
 theories"). forecast.py runs the jobs; everything here is plain code on their files."""
+import ast
 import itertools
 import json
+import re
 from pathlib import Path
 
 import round as engine
@@ -14,6 +16,8 @@ THEORY_FILES = "\n- theories/: the full file of each theory (statement, scope, w
 FAMILY = ("- mechanisms.json: your family of mechanisms (id, statement).{files}\nForecast from each mechanism separately, "
           "as written: say in the reason which part of it gives the number. Where a mechanism implies nothing about a "
           "readout, do not guess: answer \"theory says nothing\" for it.\n")
+IMPORT = re.compile(r"from studies\.rlneurons\.jobs(?:\.(\w+))? import (\w+)")
+JOB_REF = re.compile(r"jobs/(\w+)\.py|jobs\.(\w+)")
 NOTHING = (' For a readout a mechanism says nothing about, write {"mechanism": "<id>", "readout": "m01-r2", "value": null, '
            '"low": null, "high": null, "reason": "theory says nothing"}.')
 
@@ -36,20 +40,84 @@ def family_inputs(name, f, rnd):
     return {"mechanisms.json": json.dumps({"family": name, **f}, indent=1), **files}
 
 
+def choices(node, names):
+    """The values of a choices= expression: a tuple or list of strings (with *NAME), NAME, or sorted/list/set(...)
+    of those, NAME being a module-level dict, list, tuple or set of strings; None when it is anything else."""
+    if isinstance(node, (ast.Tuple, ast.List, ast.Set)):
+        parts = [choices(e.value, names) if isinstance(e, ast.Starred) else [e.value] if isinstance(e, ast.Constant) else None for e in node.elts]
+        return None if None in parts else [v for part in parts for v in part]
+    if isinstance(node, ast.Name):
+        return names.get(node.id)
+    if isinstance(node, ast.Call) and isinstance(node.func, ast.Name) and node.func.id in ("sorted", "list", "set") and len(node.args) == 1:
+        return choices(node.args[0], names)
+    return None
+
+
+def job_flags():
+    """{job module: {flag: allowed values or None}} from the add_argument calls of each studies/rlneurons/jobs/*.py
+    (parsed, not run); a file with none takes the flags of the job modules it imports, without their values
+    (run_fresh.py runs run_cell.py's main and adds a set)."""
+    texts, own = {p.stem: p.read_text() for p in JOBS.glob("*.py")}, {}
+    for n, t in texts.items():
+        tree, own[n] = ast.parse(t), {}
+        names = {a.targets[0].id: [k.value for k in (a.value.keys if isinstance(a.value, ast.Dict) else a.value.elts) if isinstance(k, ast.Constant)]
+                 for a in tree.body if isinstance(a, ast.Assign) and isinstance(a.targets[0], ast.Name)
+                 and isinstance(a.value, (ast.Dict, ast.List, ast.Tuple, ast.Set))}
+        for c in ast.walk(tree):
+            if isinstance(c, ast.Call) and isinstance(c.func, ast.Attribute) and c.func.attr == "add_argument":
+                allowed = next((choices(k.value, names) for k in c.keywords if k.arg == "choices"), None)
+                own[n] |= {a.value: allowed for a in c.args if isinstance(a, ast.Constant) and str(a.value).startswith("-")}
+    return {n: own[n] or {f: None for a, b in IMPORT.findall(texts[n]) for f in own.get(a or b, {})} for n in texts}
+
+
+def command_errors(cmd, flags):
+    """Every job file a cell's command names (jobs/<name>.py or the module jobs.<name>) exists and takes every flag
+    written after it, up to the next &&, ;, | or quote, with a value among the flag's choices when it has them."""
+    refs, errors = list(JOB_REF.finditer(cmd)), []
+    for m in refs:
+        name = m.group(1) or m.group(2)
+        if name not in flags:
+            errors.append(f"studies/rlneurons/jobs/{name}.py does not exist")
+            continue
+        words = re.split(r"&&|;|\||\"|'", cmd[m.end():])[0].split()
+        for k, w in enumerate(words):
+            if not re.fullmatch(r"--?[A-Za-z][\w-]*(=.*)?", w):
+                continue
+            flag, value = w.split("=")[0], w.split("=", 1)[1] if "=" in w else words[k + 1] if k + 1 < len(words) else None
+            if flag not in flags[name]:
+                errors.append(f"jobs/{name}.py has no flag {flag}")
+            elif flags[name][flag] is not None and value not in map(str, flags[name][flag]):
+                errors.append(f"jobs/{name}.py {flag} takes {', '.join(map(str, flags[name][flag]))}; not {value}")
+    return errors if refs else ["the command names no job file of studies/rlneurons/jobs/"]
+
+
+def flags_once(check):
+    """valid(d) for engine.run: the first check (before the send-back) also checks the commands against the job files'
+    flags; the second does not, so a cell whose command still fails is dropped afterwards and the round goes on."""
+    calls = []
+
+    def valid(d):
+        calls.append(d)
+        return check(d, job_flags() if len(calls) == 1 else None)
+    return valid
+
+
 def jobs_md():
-    """The rows of studies/rlneurons/README.md that describe a job file, its "How to run" section, and every job
-    file's add_argument lines (flags only, no code)."""
+    """The rows of studies/rlneurons/README.md that describe a job file, its "How to run" section, and per job file
+    its flags (extracted by job_flags) and its add_argument lines (no other code)."""
     readme = (ROOT / "studies/rlneurons/README.md").read_text()
     rows = [line for line in readme.split("\n## Definitions")[0].splitlines() if line.startswith("|") and "jobs/" in line]
     howto = readme.split("\n## How to run")[1].split("\n## Raw answers")[0]
-    flags = [f"### jobs/{p.name}\n\n" + "\n".join(line.strip() for line in p.read_text().splitlines() if "add_argument(" in line)
-             for p in sorted(JOBS.glob("*.py"))]
+    fl = job_flags()
+    flags = [f"### jobs/{p.name}\n\nFlags (no others exist): {', '.join(f + (' {' + ', '.join(map(str, v)) + '}' if v else '') for f, v in sorted(fl[p.stem].items())) or 'none'}\n\n"
+             + "\n".join(line.strip() for line in p.read_text().splitlines() if "add_argument(" in line) for p in sorted(JOBS.glob("*.py"))]
     return "\n".join(["# Job files (studies/rlneurons/README.md)\n", *rows, "\n## How to run" + howto, "\n## Flags of each job file\n", *flags]) + "\n"
 
 
-def check_proposals(d, mids, all_ids, board_ids):
+def check_proposals(d, mids, all_ids, board_ids, flags=None):
     """A proposing job's cells.json: one cell per mechanism, complete, the alternative another listed mechanism whose
-    number lies outside the interval, minutes in (0, 120], an existing job file, a best base count for base_only."""
+    number lies outside the interval, minutes in (0, 120], an existing job file, a best base count for base_only; with
+    flags ({job: flags}), a command whose job files and flags exist."""
     ps = json.loads((d / "cells.json").read_text())["cells"]
     errors = [] if sorted(p["mechanism"] for p in ps) == sorted(mids) else [f"needs exactly one cell per mechanism: {sorted(mids)}"]
     for p in ps:
@@ -66,12 +134,14 @@ def check_proposals(d, mids, all_ids, board_ids):
         b = p.get("best_base")
         if not isinstance(p.get("base_only"), bool) or p["base_only"] and not (b and engine.number(b.get("value")) and b.get("item") in board_ids):
             e.append("base_only must be true or false; a base_only cell needs best_base with a number and the id of a board.jsonl item")
+        e += command_errors(p["command"], flags) if flags else []
         errors += [f"{p['mechanism']}: {x}" for x in e]
     return "; ".join(errors) or None
 
 
-def check_merged(d, pids):
-    """The merge job's merged.json: every proposal in exactly one readout, ids distinct, cells complete."""
+def check_merged(d, pids, flags=None):
+    """The merge job's merged.json: every proposal in exactly one readout, ids distinct, cells complete; with flags, a
+    command whose job files and flags exist."""
     cs = json.loads((d / "merged.json").read_text())["cells"]
     froms = [i for c in cs for r in c["readouts"] for i in r["from"]]
     errors = [] if sorted(froms) == sorted(pids) else [f"every proposal id must be in exactly one readout's from: missing "
@@ -79,6 +149,7 @@ def check_merged(d, pids):
     ids = [c["id"] for c in cs] + [r["id"] for c in cs for r in c["readouts"]]
     errors += [] if len(set(ids)) == len(ids) else ["cell and readout ids must not repeat"]
     errors += [f"{c['id']}: cell misses {k}" for c in cs for k in CELL_KEYS if not str(c["cell"].get(k, "")).strip()]
+    errors += [f"{c['id']}: {e}" for c in cs for e in command_errors(c["command"], flags)] if flags else []
     return "; ".join(errors) or None
 
 

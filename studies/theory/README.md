@@ -461,6 +461,36 @@ draws), 3 never did (1 right).
 - Raw generations (not committed): `runs/abaybektursun-1115-021039-24f7/{s0,s2}`, `runs/ih-1115-095450-2b5a`, `runs/abaybektursun-1115-015601-2e73`
   on the laptop of the run; the AWS shard also in `s3://pg-lineage-769063704696/results/ih/ih-1115-095450-2b5a/out/`.
 
+**top8x4-01** (idea-7ca1fe, work-22359d; plan `specs/SPEC_top8x4.md`, written before any new row). Base + 1x the top-8 singular
+directions per matrix of the RL-Math weight change (`rlneurons/jobs/wsp_edit.py --recipe top8`), plain prompt, MATH-500, T 1.0 /
+top-p 1.0, cap 16,384, grader v3. 3 new samples per problem (seed 187,000,000 + 10,000 s + index) plus the stored sample of
+`rlneurons/results/wsp1/full500/top8_plain-01/`: 4 per problem, 2,000 samples. Short = 1,000 generated tokens or fewer. Solve bin =
+right answers of 4 of the cued base (`rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl`, attempt 0; bins 0-4 hold 33, 24, 28,
+98, 317 problems). **The smooth-blend prediction holds and the top-8 switch prediction (r5-m03-rival) is refuted: short samples are
+right 87.2 % of the time where the cued base solves 4 of 4 (252 of 289), and 81 % of short samples sit in that bin, which holds 63 %
+of all samples.**
+- Right per sample: 427 (stored), 426, 429, 445 of 500; cap hits 12, 14, 9, 13; mean tokens 3,962, 4,037, 3,810, 4,046.
+- Short share 17.8 % [15.7, 20.0] (356 of 2,000; 90 % bootstrap over problems). Predicted 10-15 % (P1a refuted).
+- Short accuracy 82.9 % [79.2, 86.2] (295 of 356). Predicted about 50 % (P1b refuted).
+- Short accuracy by bin 0-4: 0 of 5, 0 of 2, 8 of 14, 35 of 46, 252 of 289 (87.2 %): it rises with the bin, not flat (P1c refuted).
+  Long accuracy by bin: 34 of 127, 64 of 94, 66 of 98, 310 of 346, 958 of 979 (97.9 %).
+- Short samples per problem (0-4): 318, 88, 42, 24, 28 problems. 30.8 % of all problems have both a short and a long sample;
+  84.6 % of the 182 problems with a short sample also have a long one (P1d holds: short and long samples do share problems).
+- Thresholds: at 600 tokens 6.7 % short [5.7, 7.9], 62.7 % right (84 of 134), bin 4 71.0 % (76 of 107), bins 0-1 0 of 5; at
+  1,500 tokens 32.1 % short [29.3, 34.8], 89.2 % right (572 of 641), bin 4 92.3 % (488 of 529), bins 0-1 1 of 9. The 85 % line in
+  bin 4 holds at 1,000 and 1,500 tokens and fails at 600.
+- What the switch theory keeps: on bin-4 problems short samples are wrong 12.8 % of the time against 2.1 % for long ones. Of 44
+  short wrong new samples, 26 have no extracted answer (12 are empty, 2 tokens or fewer) and others continue the prompt, write code
+  with an invented output or a template without an answer (10 short samples read by hand): the plain base's formats, not wrong
+  math. One (`Answer: cot x`, gold `\cot x`) is scored wrong by v3 although it is right.
+- Caveat: the stored sample ran on an H100 and the new ones on RTX PRO 6000 boxes; the edit's `add_norm` is identical and its
+  BF16 stochastic rounding differs in the 6th digit of the written norm. Sample 0 alone gave the same picture (18.4 % short,
+  81.5 % right, bin 4 86.3 %).
+- Files: `analysis/top8x4.py` (readout; without `--runs` it reads the stored sample alone); outputs `results/experiments/top8x4-01/`
+  (`run.json` with the job ids, `metrics.json`, `per_problem.json`, `examples.json`: one short right and one short wrong new sample).
+- Raw generations (not committed): `runs/abaybektursun-1115-085111-e8c2`, `runs/abaybektursun-1115-085127-c0c4`,
+  `runs/abaybektursun-1115-085134-75f7` in the worktree `iterate-hack-top8x4` of the run, and `jobs/<job-id>.tar` in the team store.
+
 ## Round 06 (2026-11-15, cutoff 11-15 06:51:23 UTC, coordinator frustea)
 
 Plan `specs/SPEC_round06.md` (before the run), engine version 6.3 with `--account-from results/account/run-03`, work-a9a6dd, launched with
@@ -693,6 +723,40 @@ below -2 nats refute; "stands" needs a total above 0 on 3 or more. Smoke run (so
 repository, about 14 minutes through `split standing targets_open mechanisms develop forecast`): 21 targets, 3 mechanisms
 with 7 targets each, 2 theories developed (7 and 11 forecasts), 1 abandoned; a second smoke folder's `standing` scored
 them (6 targets measured). Both folders deleted.
+
+## Engine version 9 (the wide round is the default)
+
+Plan `specs/SPEC_engine_v9.md`; skill `.claude/skills/theory/SKILL.md` (version 9). The default round is now
+`lib/forecast.py round <folder> --from <previous round, or forecast run and cells folders>`: `standing` (scores every
+source's forecasts and its cells' `measured.json`; carries mechanisms with a total gain above 0 on 3 or more scored
+numbers, sends those at or below -2 nats on 3 or more to `graveyard.json`), `targets_open`, `forecast` (readers and
+carried mechanisms), `propose` (six lens jobs at once, 6 mechanisms each, each with `holds_against`: the two known
+numbers nearest to contradicting it), `cells`, `experiments` (`experiments.md`). Output under `results/wide/round-<nn>/`.
+`lib/round.py` is the `--deep` tool: `--deep <wide round>` makes the carried mechanisms its `mechanisms.json`.
+
+Score change, everywhere a log gain meets a measured value (`round.py` `gain_rows`, `score_duel`, `gpu_tests`;
+forecast and cell scores): a prediction whose measured value lies outside its own 90 % interval gains at most 0;
+losses are unchanged. Cells: `lib/cells.py` `job_flags` parses each job file's `add_argument` calls (flags and
+`choices` values); a proposed or merged cell whose command names a missing job file, flag or value is sent back once,
+then dropped (`cells.json` `dropped`). On cells-01 the check fails 21 of 41 merged commands (`--recipe topk` or
+`minus_topk` where `wsp_edit.py` takes `top8`, `bulk`, ...; `--model s0100`, `s0400`, `think_sft` where `run_cell.py`
+takes `base`, `rl`).
+
+**Re-score of forecast runs 01-08** (`forecast.py score <run> --rescore`: the measured values of each run's newest
+score file, no job; `results/forecast/run-0N/scores-2026-11-15T1731*.json/.md`). The top three are unchanged:
+run-06/f2-m03 +5.56 nats (5 of 5 inside), run-02/f2-m01 +5.38 to +5.10 (4 of 6), run-05/f2-m03 +4.85 (5 of 5).
+run-07/f2-m02 falls from +5.21 to +3.29 (2 of 5 inside; third to fifth), run-04/f2-m03 from +2.54 to +0.26 (2 of 5),
+run-05/f2-m02 from +1.88 to -0.29 (1 of 5), run-05/f2-m06 from +3.36 to +2.66; run-01's reader-2 from +3.00 to
++2.32. The bottom is unchanged (run-08/f2-m03 -12.27, run-02/f2-m02 -8.62, run-02/f2-m05 -5.88): the cap removes
+gains, never losses.
+
+Smoke run (outside the repository, `--from results/forecast/run-07 --propose 2 --model-all sonnet`, then deleted):
+`standing` carried run-07/f2-m02 (+3.29 nats on 5) and sent run-07/f2-m05 (-2.59 on 5) to the graveyard; 23 targets
+from 15 open work items; 12 new mechanisms (all six lens jobs needed one send-back: too few forecasts or a statement
+over 80 words; every `holds_against` passed); 13 cells proposed, 0 dropped, 13 merged, 0 of 13 commands fail the flag
+check (on cells-01, 21 of 41 did), 2 cells with a pair of families whose intervals do not overlap. About 11 minutes of
+jobs (5.5 to `forecasts.json`, 5.7 for cells and experiments), plus two resumes after fixes found by the smoke run (the
+board dump folder was reused within one process; mechanism and cell proposals shared a file name).
 
 ## Theories
 

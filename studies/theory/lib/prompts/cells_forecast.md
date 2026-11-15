@@ -13,7 +13,7 @@ Files here:
 $theory
 For every readout, forecast the number the cell will give: a value and a 90 % interval (low, high). The forecast is
 scored as a normal distribution (mean value, sd (high - low) / 3.29) by the density it gives the measured value,
-against the mixture of two forecasters with no theory. Too wide earns little. Too narrow loses when it misses. Use
+against the mixture of two forecasters with no theory. Too wide earns little. Too narrow loses when it misses, and a measured value outside your interval earns at most 0. Use
 the base rates the board reports for the nearest models, sets and settings. Give the value in the readout's unit.
 
 Write forecasts.json, one JSON object:

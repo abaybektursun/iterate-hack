@@ -3516,6 +3516,55 @@ between the base's and the final model's. Three step 100 plain answers are empty
 The first step 100 plain job (AWS `ih-1115-092337-b35c`) was cut by its 2-hour limit at 478 answers (405 right) and is not
 used; a second run was lost with its box.
 
+### Four samples per cell (ckptcue3, board work-f8ecb6)
+
+Spec and predictions, written before any job: `specs/SPEC_ckptcue3.md`. Readout: `analysis/ckptcue3.py`, output
+`results/ckptcue/readout3.json`. Three more samples of step 100 plain, step 100 cue and step 400 plain, one Modal H100 job
+per cell (`run_cell.py --seed <S + 10000> --samples 3`, so the seeds are those of samples 1 to 3 of the cell's seed S):
+`results/ckptcue/<cell>_s123-01/` (`run.json`, `metrics.json`, `rows.jsonl` in the shape of the Day-1 #3 rows with sample
+= 1 to 3, `examples.json` with one right and one wrong answer). Sample 0 is the cell's `-01` folder above. The references
+are now four samples each: attempt 0 of `results/day1_3/math500_base_cue-01/rows.jsonl` and
+`results/day1_3/math500_rl-01/rows.jsonl`. Raw answers: `runs/<job id>/answers.jsonl` in the worktree
+`iterate-hack-ckptcue3` on abaybektursun's laptop and in his Modal Volume.
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.ckptcue3 --runs runs s0100_plain=abaybektursun-1115-102945-9b20 s0100_cue=abaybektursun-1115-102956-6e9a s0400_plain=abaybektursun-1115-103006-7462
+```
+
+| Cell | Right of 500, samples 0 to 3 | Mean | Cap hits per sample | 'Okay' in first 30 characters | Tokens per problem | Job of samples 1 to 3 |
+|---|---|---|---|---|---|---|
+| base, cue (Day-1 #3) | 405, 409, 410, 418 | 410.5 | 25, 23, 22, 20 | not stored | 4,008 | |
+| RL step 100, plain | 418, 411, 422, 419 | 417.5 | 24, 21, 21, 19 | 383, 375, 386, 373 | 4,049 | `abaybektursun-1115-102945-9b20` |
+| RL step 100, cue | 427, 423, 423, 431 | 426.0 | 24, 24, 25, 23 | 500 each | 4,171 | `abaybektursun-1115-102956-6e9a` |
+| RL step 400, plain | 436, 447, 435, 433 | 437.75 | 7, 16, 12, 12 | 358, 356, 369, 349 | 4,175 | `abaybektursun-1115-103006-7462` |
+| RL final, plain (Day-1 #3) | 456, 462, 464, 458 | 460.0 | 6, 10, 5, 11 | not stored | 4,687 | |
+
+| Difference of four-sample means (per problem the mean over 4 samples; paired bootstrap over problems, 5,000 resamples) | Points | 95 % interval | One sample, above |
+|---|---|---|---|
+| step 100 plain minus base cue | +1.40 | [-0.50, +3.25] | +1.6 [-2.0, +5.2] |
+| step 100 cue minus step 100 plain | +1.70 | [0.00, +3.35] | +1.8 [-1.2, +4.8] |
+| step 100 cue minus base cue | +3.10 | [+1.45, +4.70] | +3.4 [+0.2, +6.6] |
+| step 400 plain minus step 100 plain | +4.05 | [+2.40, +5.70] | +3.6 [+0.2, +7.0] |
+| final plain minus step 400 plain | +4.45 | [+3.05, +5.95] | +5.4 [+2.8, +8.0] |
+
+Reading. With four samples the step 100 lead over the cued base is +1.4 points and its interval still includes 0, but its
+upper end (+3.25) is outside the [-3, +3] band: by the spec's rule H-open is undecided, not supported, so "equals" is not
+earned; the supported statement is "step 100 plain is within 3.3 points of the cued base, and not shown to differ". H-more
+is not supported. The cue on top of step 100 adds +1.7 points with an interval whose lower end is exactly 0.00, so it is
+borderline, and step 100 with the cue is above the cued base by +3.1 [+1.45, +4.70]: the one-sample lead was real. The
+100 RL steps and the cue are therefore not interchangeable: together they give more than the cue alone. Step 400 leads
+step 100 by +4.05 and the final model leads step 400 by +4.45, both intervals clear of 0. Of the 49.5 problems between the
+cued base and the final model (four-sample means), 7 come by step 100, 20 more by step 400 and 22 after.
+
+All filed predictions hold: means 417.5, 426.0, 437.75 (filed 418 [411, 425], 423 [416, 430], 437 [430, 444]); the five
+differences lie inside their filed ranges; cap hits per new sample 21, 21, 19 (filed 24 [12, 36]). Identity check: each
+new sample is within 15 of its cell's sample 0 (largest gap 11, step 400 sample 1). Smoke: job
+`abaybektursun-1115-102326-6e86`, 30 rows read before the full jobs.
+
+Limits. The interval is over problems; four samples leave a quarter of the sample variance in each mean (per-sample
+counts spread over 11 to 14 problems within a cell). The plain and cue cells use different seeds. One benchmark, one
+model family. Four of the 1,500 new step 100 plain answers and one step 400 answer are empty.
+
 ## Mixed-model vote on the 328: do two models' samples vote better together? (hard328, n = 328, laptop, board work-0d465a)
 
 Question: the vote's remaining errors are problems where a model never writes the right answer ("The 328 with four samples
@@ -4176,6 +4225,33 @@ Which reward writes the finishing directions (8 directions of each model added t
   right answers.
 - The Think-SFT cell is not a test: its top-8 edit is 3.7 % of the weight norm (50 times Math's) and the model writes commas
   until the cap. A norm-matched Think-SFT edit is open.
+
+#### The smallest edit (amendment 8, work-d80b27): one larger direction, and three layer bands
+
+Same settings as the dial (hard328, cue, one sample). `wsp_edit --layers lo-hi` restricts the edit to those layers.
+
+| Cell | Right of 328 | Cap hits | On 251 | No box | Right per finished | Edit, % of weight norm | Run folder (`edits/`), job |
+|---|---|---|---|---|---|---|---|
+| 1 direction per matrix at 1 (second batch) | 181 | 51 | 166 | | 0.65 | 0.048 | `top1_math31-01/` |
+| 1 direction at 2 | 184 | 23 | 169 | 8 | 0.60 | 0.097 | `top1x2_math31-01/`, `abaybektursun-1115-105247-1603` |
+| 1 direction at 3 | 168 | 10 | 157 | 67 | 0.53 | 0.145 | `top1x3_math31-01/`, `abaybektursun-1115-105259-789c` |
+| 8 directions at 1.5, layers 0 to 10 | 184 | 98 | 169 | 2 | 0.80 | 0.107 | `top8x1.5_L0-10_math31-01/`, `abaybektursun-1115-105312-7e19` |
+| 8 directions at 1.5, layers 11 to 21 | 183 | 49 | 168 | 12 | 0.66 | 0.101 | `top8x1.5_L11-21_math31-01/`, `abaybektursun-1115-105324-5f61` |
+| 8 directions at 1.5, layers 22 to 31 | 166 | 57 | 156 | 15 | 0.61 | 0.126 | `top8x1.5_L22-31_math31-01/`, `abaybektursun-1115-105335-a886` |
+| 8 directions at 1.5, all layers | 203 | 25 | 184 | 2 | 0.67 | 0.111 | `top8x1.5_math31-01/` |
+
+- M1 refuted: one larger direction does not reach 187. Making it larger keeps cutting cap hits (51, 23, 10) while right answers
+  stay (181, 184) and then fall (168, with 67 unboxed answers). The first direction carries finishing; the right answers of the
+  8-direction edit (192 to 203) need the other seven.
+- M2 refuted: no band reaches 185 and two bands are above 180. The bands differ in kind, not only in size:
+  layers 0 to 10 add right answers (184; 169 on the 251, +7.9 points above the random edit [3.7, 12.2]) and raise cap hits to 98
+  (base 77), so 0.80 of the finished answers are right, the same profile as RL minus its 8 directions (190 right, 90 cap hits,
+  0.80); layers 11 to 21 add right answers and cut cap hits (183, 49); layers 22 to 31 cut cap hits (57) with no gain in right
+  answers (166, +2.4 above random [-2.4, 7.3]).
+- So finishing and right answers come apart twice: by rank (the first direction finishes, the rest add right answers) and by depth
+  (early layers add right answers without finishing, late layers finish without right answers). No edit smaller than 8
+  directions in all layers reached 190.
+- One sample per cell; differences under about 5 points are not resolved.
 
 #### The dial on a second model pair and benchmark (amendment 7, work-df5e0a)
 

@@ -15,7 +15,7 @@ For every entry of open.json, state the number the experiment will give if the m
 Work from that mechanism as written, with the base rates the items report for the same models and settings. Give a
 90 % interval: it is scored as a normal distribution (mean value, sd (high - low) / 3.29) by the probability it
 gives the measured value, against the other mechanism's prediction, so too wide earns little and too narrow loses
-when it misses. Where the mechanism implies little, give your best value with an honest interval.
+when it misses, and a measured value outside your interval earns at most 0. Where the mechanism implies little, give your best value with an honest interval.
 
 Write cross.json, one JSON object:
 {"predictions": [{"id": "<an id from open.json>", "value": 0.42, "low": 0.30, "high": 0.55,
