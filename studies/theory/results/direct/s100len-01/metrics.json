@@ -1,0 +1,52 @@
+{
+ "test": "s100len",
+ "mechanism": "round-15/account-3/c3",
+ "spec": "studies/theory/specs/SPEC_direct_s100len.md",
+ "statistic": "geometric mean over problems of median n_new of step-100 plain right samples / median n_new of cued-base right samples",
+ "sampling": "T 1.0 / top-p 1.0, max_tokens 16384, 4 samples per arm, attempt 0, grader v3",
+ "token_counter": "n_new (tokens before the stop id; cue's 3 prefilled tokens not counted); step-100 sample 0: n_generated - 1 for finished rows",
+ "step100_vs_cued_base": {
+  "value": 1.1466061057642998,
+  "ci90": [
+   1.1121864197177311,
+   1.1814883694193676
+  ],
+  "n_problems": 459,
+  "share_ratio_above_1": 0.6427015250544662,
+  "median_tokens_numerator": 1831.0,
+  "median_tokens_cued_base": 1714.5
+ },
+ "null_final_rl_vs_cued_base": {
+  "value": 1.6129159263125183,
+  "ci90": [
+   1.5596358198357252,
+   1.6674873198392879
+  ],
+  "n_problems": 465,
+  "share_ratio_above_1": 0.8817204301075269,
+  "median_tokens_numerator": 2856.0,
+  "median_tokens_cued_base": 1718.5
+ },
+ "ranges": {
+  "account-3": [
+   0.88,
+   1.1
+  ],
+  "null": [
+   1.15,
+   1.6
+  ]
+ },
+ "verdict": "refuted",
+ "problems_solved": {
+  "step100": 476,
+  "cued_base": 467,
+  "final_rl": 482
+ },
+ "inputs": [
+  "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+  "studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl",
+  "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl",
+  "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl"
+ ]
+}

@@ -1,0 +1,9 @@
+[
+ {
+  "mechanism": "round-15/account-3/c3",
+  "claim": "On MATH-500 problems both arms solve, RL step-100 plain right answers are as long as the cued base right answers (geometric-mean ratio of per-problem medians in [0.88, 1.10]), while final RL right answers are longer.",
+  "result": "result-534492",
+  "verdict": "refuted",
+  "measured": "1.147 [90 % 1.112, 1.181], n 459 problems; null value (final RL / cued base) 1.613 [1.560, 1.667], n 465; account-3 range [0.88, 1.10], null range [1.15, 1.60]"
+ }
+]
