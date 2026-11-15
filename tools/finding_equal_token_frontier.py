@@ -15,6 +15,8 @@ Study: studies/rlneurons, README section "Token frontier"; board result-40ed3b.
 """
 import json
 
+import finding_vote_over_four as _vote  # the vote over k of 12 samples, quoted once in "What it does not show"
+
 RUN = "studies/rlneurons/results/frontier/math500-01/"
 
 # Every number is copied from the artifacts named here. None is typed from memory. The deployed site ships only
@@ -221,7 +223,9 @@ PANELS = [
       "For the best base rules the interval includes 0, so a tie with one RL sample is not excluded. A tie with RL given "
       "the same rule is excluded.",
       "The 328 harder problems are not on this chart yet. Rules that cut long samples ran out of stored samples on some "
-      "problems, so their rows are approximate."]],
+      "problems, so their rows are approximate. Every rule here draws from 4 stored samples per problem; with 12, a vote "
+      f"over 6 samples of Base + cue reaches RL's one-sample range, {_vote.K[6][1]} of 500, at "
+      f"{_vote.times(_vote.K[6][7]):.1f} times the tokens ([Vote over 6 samples](/finding/vote-over-four))."]],
     ["run", "How to reproduce it",
      "studies/rlneurons/analysis/frontier.py replays the rules on the stored rows; the command is in studies/rlneurons/README.md, "
      "section Token frontier.",
@@ -756,7 +760,7 @@ function pane() {
   const p = C.panels.find(p => p[0] === S.open);
   $("pane").innerHTML = S.open === "rule" && S.pick ? rulePane(S.pick)
     : p ? `<div class="dhead"><h2>${esc(p[1])}</h2><button class="close" data-open="">Close</button></div><p class="lead">${esc(p[2])}</p>` +
-      `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>`
+      `<ul class="facts">${p[3].map(x => `<li>${esc(x).replace(/\[([^\]]+)\]\((\/finding\/[a-z-]+)\)/g, '<a href="$2">$1</a>')}</li>`).join("")}</ul>`
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${esc(p[1])}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
 /* The state is one value in the address: #<budget>, then <model>-<rule> or a panel, each optional. */
