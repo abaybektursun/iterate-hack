@@ -199,6 +199,26 @@ def bar(x, y0, w, h, cls, value, label=None):
     return s
 
 
+def gap_svg():
+    """Slide "gap": the untrained base model beside the RL-trained model on MATH-500, the same two scores the climb
+    slide starts and ends against (the first base record and RL's best). The dashed outline over the base bar is the
+    gap to close with no RL. Two numbers and two one-word labels, nothing else."""
+    W, H, y0, full, bw = 760, 640, 560, 500, 210
+    lo, rl = pct(CLIMB_LO), pct(CLIMB_RL)
+    xb, xr = 130, 420
+    hb, hr = full * lo / 100, full * rl / 100
+    return (f'<svg viewBox="0 0 {W} {H}" width="{W}" height="{H}" class="fig gap" role="img" '
+            f'aria-label="Base model {lo:.0f} %, RL-trained model {rl:.0f} % on {esc(CLIMB["bench"])}">'
+            f'<rect x="{xb}" y="{y0 - hb:.1f}" width="{bw}" height="{hb:.1f}" fill="var(--fbar1)"/>'
+            f'<rect class="todo" x="{xb + 1}" y="{y0 - hr:.1f}" width="{bw - 2}" height="{hr - hb:.1f}"/>'
+            f'<rect x="{xr}" y="{y0 - hr:.1f}" width="{bw}" height="{hr:.1f}" fill="var(--ink)"/>'
+            f'<line class="base" x1="{xb - 50}" y1="{y0}" x2="{xr + bw + 50}" y2="{y0}"/>'
+            f'<text class="num" x="{xb + bw / 2}" y="{y0 - hb - 22:.1f}" text-anchor="middle">{lo:.0f} %</text>'
+            f'<text class="num" x="{xr + bw / 2}" y="{y0 - hr - 22:.1f}" text-anchor="middle">{rl:.0f} %</text>'
+            f'<text class="lab" x="{xb + bw / 2}" y="{y0 + 44}" text-anchor="middle">Base</text>'
+            f'<text class="lab" x="{xr + bw / 2}" y="{y0 + 44}" text-anchor="middle">RL</text></svg>')
+
+
 def review_svg():
     W, H, y0, top = 620, 470, 360, 270
     m = SKILL["minutes"]
@@ -249,6 +269,7 @@ def slides(n_findings, papers):
         ("hook", f'<div class="mid"><h1 class="big">{hook_html()}</h1><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers</p>'
                      '<ul class="limits"><li>Limited token budget</li><li>Limited compute</li><li>Limited people</li></ul></div>'),
+        ("gap", f'<div class="mid">{gap_svg()}</div>'),
         ("powered", '<div class="versus">'
                     f'<div><p class="sub">The RL-trained model</p><p class="sub by">Powered by</p><p class="gpus">{RL_GPUS} H100 GPUs</p></div>'
                     f'<div><p class="sub">Invariant</p><p class="sub by">Powered by</p>{photo(demo_photos.COOK, "cook")}'
@@ -392,6 +413,8 @@ p, h1, h2, figure { margin: 0; }
 .fig .bl { font-size: 17px; font-weight: 500; fill: var(--mute); }
 .fig .gl { font-size: 20px; font-weight: 600; fill: var(--ink); }
 .fig .base { stroke: var(--faint); stroke-width: 1; }
+.fig.gap .num { font-size: 64px; font-weight: 300; letter-spacing: -.01em; }
+.fig.gap .todo { fill: color-mix(in srgb, var(--blue) 9%, transparent); stroke: var(--blue); stroke-width: 2; stroke-dasharray: 3 9; stroke-linecap: round; }
 
 .sheets { display: flex; gap: 60px; margin-top: 30px; }  /* --n: the number of papers, so any number fits the slide */
 /* a paper is white in both themes: the sheet carries the light values of these four tokens */
