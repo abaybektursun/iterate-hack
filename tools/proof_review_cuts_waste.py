@@ -27,8 +27,9 @@ DATA = {
 SKILL, PLAIN = DATA["arms"]
 
 TITLE = "Review cuts waste"
-PROBLEM = "Does a team of agents waste less compute when it reviews itself?"
-LINE = f"Three rounds of the review skill cut compute per batch from {SKILL['minutes'][0]} to {SKILL['minutes'][3]} minutes."  # also on its tile
+PROBLEM = "Does an agent remove more planted compute waste when it follows a written review procedure?"
+LINE = (f"In a test study with {DATA['planted']} inefficiencies planted on purpose, three rounds of the written review procedure "
+        f"cut compute per batch from {SKILL['minutes'][0]} to {SKILL['minutes'][3]} container minutes.")  # also on its tile
 
 # What the reader switches between: the review round. The first is shown on load: start from the problem.
 DATA["states"] = [
@@ -42,36 +43,40 @@ DATA["states"] = [
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 PANELS = [
-    ["new", "What is new", "A published system that changes its own prompts, gates and policies after repeated process failures reports "
-     "8 hand-audited events and calls this \"a retrospective process audit, not a controlled comparison\" "
-     "(Sibyl-AutoResearch, arXiv 2605.22343, Section 6).",
-     [f"New here: the {DATA['planted']} inefficiencies were planted before any review ran, so each one counts as found or missed, "
-      "and as removed or still there in the next batch's job records.",
-      "New here: the control is the same model on the same work, told to review the last hour and make one improvement, "
-      "without the skill."]],
-    ["why", "Why it matters", "The swarm's measurements are paid for in compute, and a review that removes waste gives that compute back "
+    ["new", "What is new", f"The {DATA['planted']} inefficiencies were planted before any review ran, so each one counts as found or missed, "
+     "and as removed or still there in the next batch's job records.",
+     ["The control is the same model on the same work, told to review the last hour and make one improvement, "
+      "without the skill.",
+      "Earlier work: a published system that changes its own prompts, gates and policies after repeated process failures reports "
+      "8 hand-audited events and calls this \"a retrospective process audit, not a controlled comparison\" "
+      "(Sibyl-AutoResearch, arXiv 2605.22343, Section 6)."]],
+    ["why", "Why it matters", "The team's measurements are paid for in compute, and a review that removes waste gives that compute back "
      "without more hardware.",
      [f"After three rounds a batch costs {SKILL['minutes'][3]} container minutes. The same work with nothing planted costs {DATA['clean']}.",
-      f"The same model with a plain instruction reached {PLAIN['minutes'][3]} minutes, so the written review procedure adds to what the model does alone.",
+      f"The same model with a plain instruction reached {PLAIN['minutes'][3]} minutes. With {DATA['runs']} runs per arm and no significance "
+      "test, this suggests that the written review procedure adds to what the model does alone.",
       f"The skill makes one change per review, and after three rounds {min(SKILL['left'])} or {max(SKILL['left'])} of the {DATA['planted']} "
-      "inefficiencies were still in place."]],
-    ["how", "How we know", f"{DATA['planted']} inefficiencies were planted in a small study that runs as CPU jobs. A fresh agent reviewed the "
+      "inefficiencies, depending on the run, were still in place."]],
+    ["how", "How we know", f"We planted {DATA['planted']} inefficiencies in a small study that runs as CPU jobs; one batch of its jobs computes "
+     "the study's 4 required answers. A fresh agent reviewed the "
      "work and made one change, the next batch of the same size ran on the changed code, and this was done three times.",
-     [f"There are {DATA['runs']} runs and {DATA['reviews']} reviews per arm, all by claude-opus-5-5. One arm is told to run the "
-      "team-meta-review skill. The other is told to review the last hour and make one improvement.",
-      "Compute is the container time of real Modal CPU jobs of one class. Every batch delivered its 4 answers with the same point "
+     [f"There are two arms (groups of runs), with {DATA['runs']} runs and {DATA['reviews']} reviews each, all by claude-opus-5-5. One arm is told "
+      "to run the team-meta-review skill, a written review procedure that a Claude Code agent follows. The other is told to review "
+      "the last hour and make one improvement.",
+      "Compute is the container time of real CPU jobs on Modal, a cloud computing service, all on the same machine type. Every batch delivered its 4 answers with the same point "
       "estimates as a reference run.",
       f"The skill's reviews named {SKILL['named']} of the planted inefficiencies per review and the plain reviews {PLAIN['named']}. "
       "No inefficiency that was removed came back in a later batch."]],
-    ["limits", "What it does not show", "It does not show that the review is safe on work that has no waste. On clean work both reviews "
-     "with the skill cut a bootstrap from 1,500,000 resamples to 20,000 and 10,000, against a written requirement of the study's owner.",
+    ["limits", "What it does not show", "It does not show that the review is safe on work that has no waste. On work with nothing planted, "
+     "the two reviews with the skill cut a bootstrap (a resampling estimate of uncertainty) from 1,500,000 resamples to 20,000 and "
+     "10,000, against a written requirement of the study's owner.",
      ["The work was run by a fixed script that follows the repository's code and instructions. Waste in what an agent chooses to do "
       "was not measured.",
       f"With {DATA['runs']} runs per arm there is no significance test. The best plain run ended at {min(PLAIN['runs_last'])} minutes "
       f"and the worst run with the skill at {max(SKILL['runs_last'])}.",
-      "No review in either arm removed the job whose answer was already stored, and none named it."]],
-    ["run", "How to reproduce it", "One command runs one arena from the first batch to the last, and the readout rebuilds the table "
-     "from the job records.",
+      "One planted inefficiency was a job that computes an answer already stored. No review in either arm removed it, and none named it."]],
+    ["run", "How to reproduce it", "One command runs one arena (a test copy of the study) from the first batch to the last, and an analysis "
+     "script rebuilds the numbers from the job records.",
      ["MH_HOME=<folder> python3 -m studies.metaharness.prep.run_arena a1 skill planted 5721 <base commit> 0,1,2,3 (commit "
       + DATA["commit"] + "). It needs a Modal workspace with infra/runner.py deployed.",
       "The numbers are in " + DATA["artifact"] + ", one folder per run beside it.",
@@ -103,7 +108,7 @@ PAGE = r"""<!doctype html>
    --wash is how strongly the lit part of a column takes the accent. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #8b97a1; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
   --blue: #1f43d6; --red: #cf2338;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
@@ -111,7 +116,7 @@ PAGE = r"""<!doctype html>
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #5f6c77; --rule: #1c2630;
+    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
     --blue: #8fb1ff; --red: #ff6b7c;
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
     --rim-a: rgba(255, 255, 255, .92); --rim-b: rgba(255, 255, 255, .1); --rim-c: rgba(143, 177, 255, .45);
@@ -152,8 +157,8 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .wash { opacity: var(--wash); }
 .col .body { fill: var(--glass); stroke: url(#rim) var(--rim-b); stroke-width: 1.2; }
 .band { fill: none; stroke: var(--blue); stroke-width: 1.6; stroke-linejoin: round; }
-.num { font-weight: 620; text-anchor: middle; }
-.num tspan { font-weight: 500; fill: var(--mute); }
+.num { font-weight: 330; font-stretch: 100%; letter-spacing: -.03em; text-anchor: middle; }
+.num tspan { font-weight: 500; fill: var(--mute); letter-spacing: 0; font-stretch: 104%; }
 .arm { fill: var(--ink); font-weight: 560; text-anchor: middle; }
 .key { fill: var(--mute); font-weight: 500; }
 .keylit { fill: var(--blue); opacity: calc(var(--wash) + .25); }
@@ -179,7 +184,7 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .more button:hover { color: var(--blue); }
 .dhead { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--ink); }
 .dhead h2 { margin: 0; font-size: 17px; font-weight: 660; font-stretch: 114%; letter-spacing: .008em; }
-.close { font-size: 13px; color: var(--mute); }
+.close { font-size: 13px; color: var(--mute); padding: 12px 0 12px 16px; margin: -12px 0; }
 .close:hover { color: var(--ink); }
 .lead { margin: 18px 0 0; font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; max-width: 30ch; }
 .facts { list-style: none; margin: 18px 0 0; padding: 0; font-size: 14.5px; color: var(--mute); max-width: 40ch; overflow-wrap: anywhere; }
@@ -197,7 +202,7 @@ svg { animation: fade 1s both; }
   .stage { order: 3; margin-top: 14px; padding: 0; }
   .pane { order: 4; margin-top: 14px; }
   svg { max-height: none; }
-  .switch button { padding: 8px 12px; font-size: 14px; }
+  .switch button { padding: 12px 12px; font-size: 14px; }
   .note { min-height: 4.5em; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -270,14 +275,15 @@ function build() {
     `<path class="body" id="board-side"/><path class="face" id="board-face"/><path class="rim" id="board-rim"/>` +
     S.cols.map(o => `<g class="col"><path class="body" id="b${o.id}"/><path class="wash" id="w${o.id}"/><path class="band" id="a${o.id}"/>` +
       `<path class="face" id="f${o.id}"/><path class="rim" id="r${o.id}"/>` +
-      `<text class="num" id="n${o.id}"><tspan id="v${o.id}" style="fill:var(--ink);font-weight:620"></tspan><tspan dx="7" id="m${o.id}">min</tspan></text>` +
+      `<text class="num" id="n${o.id}"><tspan id="v${o.id}" style="fill:var(--ink);font-weight:330;letter-spacing:-.03em;font-stretch:100%"></tspan><tspan dx="7" id="m${o.id}">min</tspan></text>` +
       `<text class="arm" id="t${o.id}">${o.arm.name}</text></g>`).join("") +
     `<rect class="keylit" id="k1" width="15" height="15" rx="2"/><text class="key" id="k1t">produced an answer</text>` +
     `<rect class="keyglass" id="k2" width="15" height="15" rx="2"/><text class="key" id="k2t">produced none</text>`;
   S.cols.forEach(o => { o.el = Object.fromEntries(["b", "w", "a", "f", "r", "n", "v", "m", "t"].map(k => [k, $(k + o.id)])); });
-  [["k1", 236], ["k2", 432]].forEach(([id, x]) => {
+  const ph = innerWidth <= 600;  // on a phone the key is set larger, so it stays 12 px on screen
+  [["k1", ph ? 130 : 236], ["k2", ph ? 440 : 432]].forEach(([id, x]) => {
     $(id).setAttribute("x", x); $(id).setAttribute("y", 612);
-    $(id + "t").setAttribute("x", x + 23); $(id + "t").setAttribute("y", 625); $(id + "t").setAttribute("font-size", 17);
+    $(id + "t").setAttribute("x", x + 23); $(id + "t").setAttribute("y", ph ? 628 : 625); $(id + "t").setAttribute("font-size", ph ? 27 : 17);
   });
 }
 function place() {
@@ -294,9 +300,9 @@ function place() {
     const c = proj(o.u, o.v, h), near = proj(o.u, -RV - 34, 0);
     o.el.v.textContent = f(minutes);
     o.el.n.setAttribute("x", f(c[0])); o.el.n.setAttribute("y", f(c[1] - 44 * c[2]));
-    o.el.n.setAttribute("font-size", f(46 * c[2])); o.el.m.setAttribute("font-size", f(22 * c[2]));
+    o.el.n.setAttribute("font-size", f(60 * c[2])); o.el.m.setAttribute("font-size", f(22 * c[2]));
     o.el.n.setAttribute("opacity", f(S.grow));
-    o.el.t.setAttribute("x", f(near[0])); o.el.t.setAttribute("y", f(near[1] + 30)); o.el.t.setAttribute("font-size", f(23 * near[2]));
+    o.el.t.setAttribute("x", f(near[0])); o.el.t.setAttribute("y", f(near[1] + 30)); o.el.t.setAttribute("font-size", f((innerWidth <= 600 ? 28 : 23) * near[2]));
   });
 }
 /* One frame: the view sways slowly and leans toward the pointer, the columns rise once on load, and a change of the

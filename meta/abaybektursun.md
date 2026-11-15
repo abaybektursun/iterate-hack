@@ -1,5 +1,22 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 22:00 UTC (session egate, after result-c5dafe) meta/reviews/abaybektursun/20261115-2200/
+
+- Direction: mission = how much of a published RL gain is reached without reward (DIRECTION.md). work-8b4030 tested the transplant on a set it was not chosen on (fresh2026, +9.0 points) and at cap 32,768 (241 of 328): both test the mission's held-out claim. No drift; the restart chains were offline, 0 GPU minutes.
+- Turnaround (`cycle.txt`, 6 h): claim to close median 21 min, jobs stage 47 min, slowest. This item: 9.6 h claim to close, of which three account stops and five lost jobs.
+- Observed (`before.txt`): the cap-32,768 job was cut at 44 min with 97 of 328 answers written; I reran from zero (110 min) although `run_cell --resume` exists. 44 min of generation thrown away.
+- Cause: I did not know the flag; the command was copied from an older job of mine.
+- Change (step 2, delete the repeated work; no code): every rerun of a cut cell from this session passes `--resume <cut run folder>`; the 10-minute partial upload of vast.py (main, 20:03 UTC) supplies that folder when the box is gone.
+- Next entry checks: minutes regenerated on the next cut job (target 0), from the row counts of the cut and the resumed folder.
+
+## 2026-11-15 21:10 UTC (loop cycle 15; no change) meta/reviews/abaybektursun/20261115-2104/
+
+- Target (Team line, 4 h): claim to close median 48 min (43 at 19:59), upper quartile 106 min (68), 34 items by 3 people (31); 10.2 results per hour (9.5). Stage medians of abaybektursun's items with jobs: to-job 3, jobs 37, to-answer 1 min. Modal 102 jobs, 4 failed or cancelled with 3.9 of 2,388.7 container min.
+- Open measurements: the 10-minute upload (cycle 14) has not run: 0 vast.ai jobs were submitted since 20:10 UTC (3 boxes left, 4.24 USD per hour; the work is on Modal and AWS). Final tars in the team store: 17. Account stops: none since 19:50.
+- Score of cycle 14: not measurable yet.
+- Change: none. Checked: queue wait 0.1 min, failed container minutes 0.2 %, to-job 3 min, to-answer 1 min; the jobs stage (37 min) is generation.
+- Next cycle (16) is step-back 4. It checks: part tars of real jobs; cut jobs with outputs outside the box against 0 of 9; cycles 13 to 16 against 9 to 12 on the target.
+
 ## 2026-11-15 20:45 UTC (paper loop 4, after result-aff8c5 of work-184476) meta/reviews/abaybektursun/20261115-2045-paper5/
 
 - Previous paper entry's open item, literature before the pick: done in part. The scout ran a quick novelty search before the pick (19:20-19:23) and the full read (19:25-19:33) found the claim unpublished before the draft. Paper 5 scouts 19:20 to live PDF 20:44 (84 min; paper 4: 60). Site stayed up.

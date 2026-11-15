@@ -1,0 +1,47 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "RL-Code's functional change, including more correct finished code, lies almost entirely in its top singular directions, which the base's own activations drive. The top-8 edit at 1x or more is a compressed copy of RL-Code's whole policy, problem by problem, not a finish switch added to base skill. Scores saturate at RL-Code's level (about 400 of 538); overshooting (2x, or stacking Math and Code) does not go higher. A model with no code reward lacks this policy.",
+  "readers_wrong": "The readers took the dial to be a finishing switch: 317 plus most of the base's 61 cap hits and blockless answers gives about 357. The edit also carries RL-Code's better finished answers, so it lands at RL-Code's 401, not at base plus fixed formats.",
+  "rests_on": ["result-a1bf75", "result-6776d8", "result-95a4dc", "result-2fe32f"],
+  "holds_against": [
+   {"item": "result-6776d8", "value": 387, "why": "Math 1.5x + Code 1.5x scores below Code 1.5x alone (399). A compressed policy saturates at RL-Code's level and overshoot costs a little, as 2x (394) does. Stacking two doses is an overshoot."},
+   {"item": "result-a1bf75", "value": 368, "why": "Math's directions at 1.5x beat random on code by 37. Math-RL's compressed policy is itself a complete-answer policy that partly transfers, yet it stays 31 below Code's own directions, which is the reward-specific part this mechanism claims."}
+  ],
+  "forecasts": [
+   {"id": "t03", "value": 402, "low": 385, "high": 419, "reason": "Saturates at RL-Code's policy (401). The earlier 411 was one high draw; seed sd is about 10."},
+   {"id": "t04", "value": 402, "low": 385, "high": 419, "reason": "Same as t03 at another seed."},
+   {"id": "t05", "value": 401, "low": 385, "high": 417, "reason": "RL-Code's measured 401, binomial seed noise about 10."},
+   {"id": "t06", "value": 401, "low": 385, "high": 417, "reason": "Same as t05."},
+   {"id": "t07", "value": 392, "low": 375, "high": 409, "reason": "Top-8 at 1x is close to the full policy: between the measured 386 and RL-Code's 401."},
+   {"id": "t08", "value": 392, "low": 375, "high": 409, "reason": "Same as t07."},
+   {"id": "t12", "value": 362, "low": 335, "high": 388, "reason": "No code reward means no compressed code policy. Think-SFT's long imitation traces hit the cap on part of the set, so it lands well under RL-Code."},
+   {"id": "t13", "value": 345, "low": 312, "high": 378, "reason": "Same as t12, and the Math cue mismatches the code answer format, so a few more misses."},
+   {"id": "t09", "value": 228, "low": 216, "high": 240, "reason": "Math's compressed policy on Think-SFT gave 232 at seed 3,000,000. Seed noise about 7."},
+   {"id": "t15", "value": 466, "low": 455, "high": 477, "reason": "Think-SFT 457-462 at 16k plus a small policy gain, as M(2)'s +7 on hard328."},
+   {"id": "t16", "value": 233, "low": 221, "high": 245, "reason": "M(2) samples 234/229/237 so far."},
+   {"id": "t17", "value": 247, "low": 238, "high": 256, "reason": "Vote over 3 is 246; a fourth sample adds about 0-2."},
+   {"id": "t18", "value": 243, "low": 232, "high": 254, "reason": "M(2) at cap 32,768 scored 245 at seed 3,010,000."}
+  ]},
+ {"id": "b",
+  "statement": "The top directions of any outcome-reward delta write one domain-general commit mode: write a complete final answer in the expected container, then stop. They add no code skill. Under the Code cue the base fails this mode more often than its 61 visible cap hits and blockless answers: many finished answers bury the function in prose, split it over partial blocks, or rename it, failing tests. Any model with a strong commit habit, Think-SFT included, reaches RL-Code's level.",
+  "readers_wrong": "The readers bounded the gain by the visibly unfinished answers (about 40 recoverable of 61, giving 357). The commit mode also repairs hidden format failures among finished answers, so the edit gains 82, not 40.",
+  "rests_on": ["result-a1bf75", "result-ac7104", "result-51ccc6", "result-1a80e9"],
+  "holds_against": [
+   {"item": "result-a1bf75", "value": 368, "why": "Math's directions on code are 31 below Code's. The commit mode is tuned to the container its reward graded (boxed answer vs code block), so Math's version repairs only part of the code-format failures. That is still a format gap, not a skill gap."},
+   {"item": "result-51ccc6", "value": 342, "why": "Layers 22-31 alone keep 34 cap hits and add little. The commit decision is written by the early and middle bands, which each add 6-8 points and also cut blockless answers (17, 9). Late layers only read it out."}
+  ],
+  "forecasts": [
+   {"id": "t03", "value": 395, "low": 378, "high": 412, "reason": "Code 1x already saturates the commit mode, so Math adds little. 411 was a high draw."},
+   {"id": "t04", "value": 395, "low": 378, "high": 412, "reason": "Same as t03."},
+   {"id": "t05", "value": 401, "low": 385, "high": 417, "reason": "RL-Code's measured 401."},
+   {"id": "t06", "value": 401, "low": 385, "high": 417, "reason": "Same as t05."},
+   {"id": "t07", "value": 388, "low": 371, "high": 405, "reason": "Measured 386 at 1x. The mode is not fully saturated at 1x (9 cap hits, 8 blockless)."},
+   {"id": "t08", "value": 388, "low": 371, "high": 405, "reason": "Same as t07."},
+   {"id": "t12", "value": 406, "low": 392, "high": 422, "reason": "Think-SFT has a strong commit habit (80% of its finished answers are right on fresh2026), so its code-format failures are rare and it reaches RL-Code's level or a little above."},
+   {"id": "t13", "value": 400, "low": 384, "high": 416, "reason": "The mode is generic, so the Math cue costs Think-SFT at most a few problems against the Code cue."},
+   {"id": "t09", "value": 224, "low": 212, "high": 236, "reason": "Commit mode on Think-SFT cuts cap hits (232 at seed 3,000,000). It adds no skill, so a little regression to the mean."},
+   {"id": "t14", "value": 197, "low": 188, "high": 206, "reason": "The vote rose from 192 at 4 samples; on MATH-500 it went 449 to 457 from 4 to 6, scaled to the 328."},
+   {"id": "t19", "value": 80, "low": 72, "high": 88, "reason": "Vote 75 at 16k. On hard328, cap 32,768 adds about 6 to the vote."}
+  ]}
+],
+ "cell": null}

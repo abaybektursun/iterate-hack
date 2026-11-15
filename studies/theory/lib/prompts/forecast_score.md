@@ -6,7 +6,8 @@ Files here:
 - posted.jsonl: the board items posted since, one JSON object per line (id, kind, at, who, text).
 
 For every target, find the measured value in posted.jsonl. It counts only when the item reports the same cell: same
-model, prompt, set, n, sampling and samples. A different n, set or setting is not the target's number. Give the value
+model, prompt, set, n, sampling and samples. A different n, set or setting is not the target's number. The
+seed does not decide the match: another seed of the same cell is the target's number, unless the target names a seed. Give the value
 in the target's unit (convert a percentage of n to a count when the unit is a count, and say so in the note).
 
 Write measured.json, one JSON object:

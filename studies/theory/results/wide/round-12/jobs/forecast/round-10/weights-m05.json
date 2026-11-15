@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": 398, "low": 383, "high": 413, "reason": "Theory: stacking adds the shared readout twice (an extra finishing dose, which the code dial shows is harmless: 1.5x 399, 2x 394) plus Math's code remainder only where the two overlap, so the sum lands about at Code's 1.5x level; the 411 single sample regresses toward that."},
+{"id": "t04", "value": 398, "low": 383, "high": 413, "reason": "Same as t03: a double shared readout plus Code's remainder, with little code-specific remainder from Math, gives about Code at 1.5x (399), with one-sample seed noise."},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": 389, "low": 374, "high": 404, "reason": "Theory: Code's top-8 at 1x is one dose of the shared finishing readout plus Code's own remainder, which reproduces the dial's 1x cell (386, between 1x and 1.5x at 399) at a new seed."},
+{"id": "t08", "value": 389, "low": 374, "high": 404, "reason": "Same as t07: a single shared readout plus Code's remainder, around the dial's 386 to 399."},
+{"id": "t09", "value": 226, "low": 214, "high": 238, "reason": "Theory: Math's directions carry the reward-general finishing readout, and that helps Think-SFT, whose losses are unfinished answers (random 3x 213, Math 1.5x 220); the 232 single sample regresses toward the middle of those."},
+{"id": "t10", "value": 41, "low": 30, "high": 53, "reason": "Theory: subtracting the directions removes the shared finishing readout, so cap hits rise above the cued base's 27 (hard328 at size -1: 96 against 77); the done shard's 20 of 250 doubles to about 40."},
+{"id": "t11", "value": 376, "low": 360, "high": 392, "reason": "Removing the finishing readout costs answers against the cued base's 410 (more cap hits and unboxed answers); the done shard's 188 of 250 doubles to about 376."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 468, "low": 457, "high": 479, "reason": "Theory: the RL change's shared readout makes Think-SFT finish (cap hits fall), but MATH-500 has few cut-off answers to recover, so it lands near a=1's 467, above Think-SFT's 457 to 462."},
+{"id": "t16", "value": 233, "low": 222, "high": 244, "reason": "The doubled finishing readout gives Think-SFT a steady gain; samples 1 to 3 of M(2) were 234, 229 and 237, so the fourth falls around their mean of 233."},
+{"id": "t17", "value": 247, "low": 239, "high": 255, "reason": "The finishing readout turns Think-SFT's cap hits into answers, so the vote nears pass@k; the vote over 3 was 246, and a fourth sample adds about 0 to 2."},
+{"id": "t18", "value": 242, "low": 232, "high": 252, "reason": "With the readout doubled almost no answer is cut off at 32,768, so the larger cap adds the right answers past 16,384 (other seed: 245 against Think-SFT's 234); this seed's Think-SFT is 230, about 4 lower, so about 242."},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

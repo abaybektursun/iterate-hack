@@ -123,9 +123,9 @@ for (const p of [20, 40, 60, 80]) {
 }
 const w = (X1 - X0) / DATA.length, cx = i => X0 + (i + .5) * w;
 el(svg, "path", { d: `M${cx(0) - 62} 88v-8h124v8`, class: "brace" });
-el(svg, "text", { x: cx(0), y: 70, class: "tuned" }, "Tuned here");
+el(svg, "text", { x: cx(0), y: 70, class: "tuned" }, "Climbed here (test)");
 el(svg, "path", { d: `M${cx(1) - 62} 88v-8H${cx(DATA.length - 1) + 62}v8`, class: "brace b" });
-el(svg, "text", { x: (cx(1) + cx(DATA.length - 1)) / 2, y: 70, class: "never" }, "Never tuned on these");
+el(svg, "text", { x: (cx(1) + cx(DATA.length - 1)) / 2, y: 70, class: "never" }, "Never climbed (validation)");
 DATA.forEach((s, i) => {
   const x = cx(i), lane = el(svg, "g", i ? {} : { class: "quiet" }), mid = (y(s.plain) + y(s.ours)) / 2;
   el(lane, "line", { x1: x, x2: x, y1: y(90), y2: y(10), class: "lane" });
@@ -157,7 +157,7 @@ DATA.forEach((s, i) => {
   el(svg, "path", { d: `M${hx} ${hy}L${hx - ux * 12 + nx * 6} ${hy - uy * 12 + ny * 6}L${hx - ux * 12 - nx * 6} ${hy - uy * 12 - ny * 6}Z`, class: "head" });
   el(svg, "circle", { cx: kx, cy: ky, r: 8, class: "base" });
   el(svg, "circle", { cx: ox, cy: oy, r: 9.5, class: "ours" });
-  for (const [px, py, m, who, cls] of [[kx, ky, s.k, "Autoresearch", "who"], [ox, oy, s.o, "Ours", "who b"]]) {
+  for (const [px, py, m, who, cls] of [[kx, ky, s.k, "Autoresearch", "who"], [ox, oy, s.o, "Invariant (ours)", "who b"]]) {
     if (!i) el(svg, "text", { x: px, y: py - 66, class: cls }, who);
     el(svg, "text", { x: px, y: py - 42, class: "lab" }, `${m[0]} of ${m[1]}`);
     el(svg, "text", { x: px, y: py - 23, class: "lab2" }, fmt(m[2]) + " tokens");

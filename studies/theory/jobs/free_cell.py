@@ -3,7 +3,7 @@ decoding settings, k samples per problem. A vote or selection rule over the samp
 
     uv run tools/gpu.py submit l40s --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell
         --model base --opening-text 'Okay, let me think step by step.' --set hard328 --shard 0/2 --temperature 0.8 --top-p 0.95
-        --samples 2 --seed 61000000 --commit $(git rev-parse HEAD)"
+        --samples 2 --seed 61000000 --commit COMMIT_SHA"   (COMMIT_SHA: the pushed commit's full sha, written in by hand)
 
   --model           base, rl (frozen4.json, as run_cell.py) or think_sft (wsp_delta_anatomy.MODELS); every model with the RL tokenizer
                     and the pair1 prompt, as run_cell.py runs them.

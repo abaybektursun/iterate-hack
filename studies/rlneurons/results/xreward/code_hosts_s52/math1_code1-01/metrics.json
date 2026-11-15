@@ -1,0 +1,120 @@
+{
+ "status": "done",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "math1_code1",
+  "prefix_ids": "[439,6982,304,279,10137,13,358,3987,420,8779,2268,33413]",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "seed": 52000000,
+  "n": null,
+  "grader_check_only": false,
+  "out": "/runs/abaybektursun-1115-143215-6942",
+  "commit": "bb86cc1ccb9c862528f38da51e8538161ebd2b45"
+ },
+ "commit": "bb86cc1ccb9c862528f38da51e8538161ebd2b45",
+ "job_id": "abaybektursun-1115-143215-6942",
+ "n_problems": 542,
+ "started_utc": "2026-11-15T20:34:46Z",
+ "grader_check": {
+  "n": 542,
+  "reference_failed": [
+   [
+    "HumanEval/32",
+    1,
+    "\n  File \"/tmp/tmp8uoml6tg/prog.py\", line 57, in check\n    assert _poly(*candidate(*inp), inp) <= 0.0001\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nTypeError: Value after * must be an iterable, not float\n"
+   ]
+  ],
+  "wrong_passed": [
+   "Mbpp/737",
+   "Mbpp/787",
+   "Mbpp/794"
+  ],
+  "failed": [
+   "HumanEval/32",
+   "Mbpp/737",
+   "Mbpp/787",
+   "Mbpp/794"
+  ]
+ },
+ "n_scored": 538,
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 28749,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 20480
+ },
+ "model_repo": "/tmp/theta",
+ "model_revision": null,
+ "tokenizer": [
+  "allenai/Olmo-3.1-7B-RL-Zero-Code",
+  "1ca3bb30f0e51b7ef05f7d0fefcf0e6b14eefc90"
+ ],
+ "prefix_ids": [
+  439,
+  6982,
+  304,
+  279,
+  10137,
+  13,
+  358,
+  3987,
+  420,
+  8779,
+  2268,
+  33413
+ ],
+ "prefix_text": " as shown in the prompt. I hope this helps!\n\nOkay",
+ "sampling": {
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "repetition_penalty": 1.0
+ },
+ "max_tokens": 16384,
+ "first_prompt_ids": [
+  50,
+  4035,
+  279,
+  2768,
+  2082,
+  3575,
+  3094,
+  555
+ ],
+ "generation_s": 1286.9692692756653,
+ "memory": {
+  "gpu_memory_used_mib": 73327,
+  "gpu_memory_total_mib": 81559,
+  "gpu": "NVIDIA H100 80GB HBM3"
+ },
+ "counts": {
+  "humanevalplus": {
+   "n": 163,
+   "passed": 142,
+   "cap_hits": 1,
+   "no_block": 1,
+   "timeouts": 0,
+   "mean_generated_tokens": 4562.39263803681
+  },
+  "mbppplus": {
+   "n": 375,
+   "passed": 265,
+   "cap_hits": 0,
+   "no_block": 0,
+   "timeouts": 1,
+   "mean_generated_tokens": 3337.6266666666666
+  },
+  "all": {
+   "n": 538,
+   "passed": 407,
+   "cap_hits": 1,
+   "no_block": 1,
+   "timeouts": 1,
+   "mean_generated_tokens": 3708.6988847583643
+  }
+ },
+ "wall_s": 1468.8058905601501
+}

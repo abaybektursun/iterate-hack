@@ -22,7 +22,7 @@ typed here.
 Under the picture, the findings in groups that follow the story (GROUPS), each group headed by its question. A row
 holds the finding's effect size as one figure with its unit ("66 % of the gap", "+6.1 points") and a short tag for the
 set it was measured on, its TITLE, its LINE and its icon, and opens /finding/<slug>. A finding that TABLE does not name
-goes into the last group, "New", so a new page appears here without an edit. The looks are those of
+goes into the last group, "Not yet grouped", so a new page appears here without an edit. The looks are those of
 tools/architecture.py (.claude/skills/site-ui/SKILL.md): its tokens, one light from the upper left, a slow sway, and
 one still frame with reduced motion.
 
@@ -36,9 +36,10 @@ The icon's space is 112 by 80 units around the centre (56, 36). A module without
 """
 
 
-NO_REWARD, ANSWERS, WEIGHTS = "What needs no reward?", "How does RL change the answers?", "Where does RL's change sit in the weights?"
-THEORIES = "Do our theories predict?"
-GROUPS = [NO_REWARD, ANSWERS, WEIGHTS, THEORIES, "New"]
+NO_REWARD, ANSWERS, WEIGHTS = "What can the model reach without a reward?", "How does RL change the answers?", "Where does RL's change sit in the weights?"
+THEORIES = "Do our theories predict results better than agents without a theory?"
+NEW = "Not yet grouped"
+GROUPS = [NO_REWARD, ANSWERS, WEIGHTS, THEORIES, NEW]
 
 
 def signed(x, digits=1):
@@ -78,20 +79,20 @@ AFTER_RESTART = "T 1.0 / top-p 1.0, vote over 4 samples after restart"
 TABLE = {
     "opening-cue": {
         "group": NO_REWARD,
-        "figure": lambda m: [points(m.PLAIN, m.CUE, m.N), "points", "MATH-500, over Base"],
+        "figure": lambda m: [points(m.PLAIN, m.CUE, m.N), "points", "MATH-500, over the base model"],
         "steps": lambda m: [step("Base", "free", m.PLAIN, m.N, m.DATA["artifact"]),
                             step("Base + cue", "free", m.CUE, m.N, m.DATA["artifact"], key="cue"),
                             step("RL, one sample", "rl", m.RL, m.N, m.DATA["artifact"], key="rl")]},
     "base-opens-itself": {
         "group": NO_REWARD,
-        "figure": lambda m: [signed(m.DATA["diff_cue"][0]), "points", "MATH-500, the base's own opening with Okay against the prefilled cue"]},
+        "figure": lambda m: [signed(m.DATA["diff_cue"][0]), "points", "MATH-500, the base model's own openings that start with \"Okay\", against the cue placed in its answer"]},
     "restart-on-cap": {
         "group": NO_REWARD,
-        "figure": lambda m: [signed(m.GAIN), "points", "MATH-500, T 0.6"],
+        "figure": lambda m: [signed(m.GAIN), "points", "MATH-500, T 0.6, over the same answers without restart"],
         "steps": lambda m: [step("Base + cue, restart", "free", m.T10["restart"], m.D["n"], m.T10["artifact"])]},
     "vote-over-four": {
         "group": NO_REWARD,
-        "figure": lambda m: [signed(m.BASE["gain"]), "points", "MATH-500, Base + cue"],
+        "figure": lambda m: [f"{m.K[6][1]}", "of 500", f"MATH-500, Base + cue with a vote over 6 samples; the RL model with one sample scores {m.RL1['lo']} to {m.RL1['hi']}; a vote over 4 samples adds {m.BASE['gain']} points"],
         "steps": lambda m: [step("Vote over 4 samples", "free", m.BASE["vote"], m.N, m.DATA["artifact"], vote=True),
                             board_step("Vote over 4 samples, restart", "base", "result-5d032f", "cue, " + AFTER_RESTART, vote=True),
                             board_step("RL, vote over 4 samples, restart", "rl", "result-5d032f", "plain, " + AFTER_RESTART, vote=True)]},
@@ -101,11 +102,11 @@ TABLE = {
     "cue-on-code": {
         "group": NO_REWARD,
         "figure": lambda m: [signed(m.GAINS["general"]), "points",
-                             f"500 general questions, Base + cue over Base; code {signed(m.GAINS['code'])}, math {signed(m.GAINS['math'])}"]},
+                             f"500 general questions, Base + cue over the base model; code {signed(m.GAINS['code'])}, math {signed(m.GAINS['math'])}"]},
     "how-much-of-the-gap": {
         "group": NO_REWARD,
         "figure": lambda m: [m._pc(m._one["share"][0]), "of the gap",
-                             f"328 harder problems, Think-SFT + cue; best rule on untrained weights {m._pc(m._L['one'][1]['share'][0])}"],
+                             f"328 harder problems, Think-SFT + cue; the best sampling rule on the base model {m._pc(m._L['one'][1]['share'][0])}"],
         "steps": lambda m: [gap_step(m, "Base + cue", "free", "base-single", "cue"),
                             gap_step(m, "RL, one sample", "rl", "rl-single", "rl"),
                             gap_step(m, "Think-SFT + cue", "free", "think-single", "think"),
@@ -113,17 +114,17 @@ TABLE = {
                             gap_step(m, "Think-SFT + cue, vote over 4 samples", "free", "think-vote4")]},
     "imitation-beats-rl": {
         "group": NO_REWARD,
-        "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over RL"],
+        "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over the RL model, vote over 4 samples each"],
         # Think-SFT + cue minus RL, one sample each, points of 328: [estimate, 95 % interval low, high], for the rail's number
         "rail": lambda m: {"hard328": m.DATA["diff"]["hard328"]["single"]}},
     "no-early-warning": {
         "group": NO_REWARD,
         "figure": lambda m: [f"{m.DATA['auroc']['12000']['signs']['zratio']['same'][0]:.3f}", "AUROC",
-                             "Think-SFT + cue, best of six text signs at token 12,000 for a failing sample; 0.5 is chance"]},
+                             "Think-SFT + cue: the best of six signs read from the first 12,000 tokens of an answer, to spot a failing sample; 0.5 is chance"]},
     "cut-off-is-unfinished": {
         "group": NO_REWARD,
         "figure": lambda m: [f"{m.DATA['cells']['sft_cue']['right_at_16384_same_answers']} → {m.DATA['cells']['sft_cue']['right_at_32768']}", "right of 328",
-                             "328 harder problems, Think-SFT + cue, tokens allowed 16,384 → 32,768"],
+                             "328 harder problems, Think-SFT + cue, token limit raised from 16,384 to 32,768"],
         "steps": lambda m: [step("Think-SFT + cue, 32,768\u00a0tokens", "free", m.DATA["cells"]["sft_cue"]["right_at_32768"], m.DATA["n"],
                                  f"{m.DATA['readout']}, sft_cue right_at_32768", "hard328")]},
     "where-the-gap-goes": {
@@ -132,10 +133,10 @@ TABLE = {
                              f"MATH-500; a random weight change gives {m.pc(m._NULL['parts']['reliability'][1])} %"]},
     "rl-reliability": {
         "group": ANSWERS,
-        "figure": lambda m: [f"{m.SOME} %", "of the gain", "MATH-500, 4 samples each of Base + cue and RL"]},
+        "figure": lambda m: [f"{m.SOME} %", "of the gain", "MATH-500, 4 samples each of Base + cue and the RL model"]},
     "rl-edge-comes-early": {
         "group": ANSWERS,
-        "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap", "MATH-500, base finishes RL's answers"]},
+        "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap", "MATH-500, the base model finishes the RL model's answers"]},
     "rl-learns-the-opening-first": {
         "group": ANSWERS,
         "figure": lambda m: [signed(m.DATA["t10"]["s100_vs_cue"][0]), "points",
@@ -143,16 +144,16 @@ TABLE = {
     "rl-avoids-the-slip": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.DATA['D']['math31']['factor']:.2f}", "times as likely",
-                             "MATH-500, RL writing the first wrong step of 51 wrong answers of Base + cue; the interval includes 1"]},
+                             "MATH-500, the RL model writing the first wrong step of 51 wrong answers of Base + cue; the interval includes 1"]},
     "rl-wait-habit": {
         "group": ANSWERS,
-        "figure": lambda m: [m.PUSH_POINTS, "points", "MATH-500, at RL's rate of Wait"]},
+        "figure": lambda m: [m.PUSH_POINTS, "points", "MATH-500, the base model pushed to write \"Wait\" as often as the RL model, against no push"]},
     "one-difficulty-axis": {
         "group": ANSWERS,
         "figure": lambda m: [signed(m.DATA["diff"]["excess_mean"], 2), "problems", "MATH-500, mean of 618 pairs of methods"]},
     "a-quarter-of-rl": {
         "group": WEIGHTS,
-        "figure": lambda m: [f"{m.Q_M} %", "of the gain", "MATH-500, a = 0.25"]},
+        "figure": lambda m: [f"{m.Q_M} %", "of the gain", "MATH-500, a quarter of RL's weight change added to the base model"]},
     "hand-written-edit": {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.DATA['states'][0]['right']} → {m.DATA['states'][2]['right']}", "right of 500",
@@ -160,22 +161,22 @@ TABLE = {
     "eight-directions": {
         "group": WEIGHTS,
         "figure": lambda m: [signed(m.DATA["vs_cue_hard"]["points"]), "points",
-                             f"328 harder problems, over Base + cue; 8 random directions {signed(m.DATA['random_vs_cue_hard']['points'])}"]},
+                             f"328 harder problems, over Base + cue; 8 random directions instead: {signed(m.DATA['random_vs_cue_hard']['points'])}"]},
     "the-finish-dial": {
         "group": WEIGHTS,
-        "figure": lambda m: [f"{m.DATA['cells']['0']['cut']} → {m.DATA['cells']['1.5']['cut']}", "cut off",
-                             f"of 328 harder problems, 8 RL directions at size 1.5; right {m.DATA['cells']['0']['right']} → {m.DATA['cells']['1.5']['right']}, RL {m.DATA['cells']['rl']['right']}"],
+        "figure": lambda m: [f"{m.DATA['cells']['0']['right']} → {m.DATA['cells']['1.5']['right']}", "right of 328",
+                             f"harder problems, 8 RL directions at size 1.5, RL {m.DATA['cells']['rl']['right']}; cut off {m.DATA['cells']['0']['cut']} → {m.DATA['cells']['1.5']['cut']}; most of the gain is where Base + cue already finished"],
         "steps": lambda m: [step("Base + 8 RL directions, size\u00a01.5", "weights", m.DATA["cells"]["1.5"]["right"], m.DATA["n"],
                                  f"{m.DATA['readout']}, cell {m.DATA['cells']['1.5']['cell']}", "hard328")]},
     "rl-change-on-imitation": {
         "group": WEIGHTS,
         "figure": lambda m: [signed(m.DATA["minus_think"]["2"][0]), "points",
-                             f"328 harder problems, Think-SFT + 2 × RL's change over Think-SFT; over RL {signed(m.DATA['minus_rl']['2'][0])}"],
+                             f"328 harder problems, Think-SFT + 2 × RL's weight change, over Think-SFT; over the RL model {signed(m.DATA['minus_rl']['2'][0])}"],
         "steps": lambda m: [step("Think-SFT + 2\u00a0× RL's weight change", "weights", m.DATA["right"][m.ARMS.index("sft1_rl20")], m.DATA["n"],
                                  f"{m.DATA['readout']}, a = 2, mean of {m.DATA['samples'][m.ARMS.index('sft1_rl20')]} samples", "hard328")]},
     "rl-every-neuron": {
         "group": WEIGHTS,
-        "figure": lambda m: [m.pct(m.mean(m.ONE["best"])), "of RL's effect", f"next-word predictions, RL's best {m.ONE['share']:g} % of neurons copied"]},
+        "figure": lambda m: [m.pct(m.mean(m.ONE["best"])), "of RL's effect", f"next-word predictions, copying from the RL model the {m.ONE['share']:g} % of neurons with the largest effect"]},
     "neurons-you-can-describe": {
         "group": WEIGHTS,
         "figure": lambda m: [f"{100 * m.DATA['sets']['selected']['mean_accuracy']:.1f} %", "of snippets sorted right",
@@ -186,19 +187,19 @@ TABLE = {
     "rl-directions-move-activations": {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.RATIO:.0f}×", "the shift",
-                             f"of the layer-24 residual stream, 8 RL directions ({m.DATA['edits']['top8_math31']['rms_shift']:.2f} RMS) against 8 random directions of equal weight norm ({m.DATA['edits']['rand8_math31']['rms_shift']:.3f})"]},
+                             f"of the activations at layer 24 (root mean square): 8 RL directions {m.DATA['edits']['top8_math31']['rms_shift']:.2f}, 8 random directions of equal weight norm {m.DATA['edits']['rand8_math31']['rms_shift']:.3f}"]},
     "two-jobs-in-the-edit": {
         "group": WEIGHTS,
         "figure": lambda m: [signed(m.DATA["math"]["L0"]["vs_base"]["right"][0]), "points",
-                             f"328 harder problems, right answers from layers 0 to 10 of RL's edit alone, while cut-offs rise {m.DATA['math']['L0']['vs_base']['cut'][0]:.1f}; layers 11 to 21 cut them by {-m.DATA['math']['L11']['vs_base']['cut'][0]:.1f}; the split failed on code"]},
+                             f"328 harder problems: layers 0 to 10 of the 8-direction edit alone add right answers, while answers cut off rise by {m.DATA['math']['L0']['vs_base']['cut'][0]:.1f} points; layers 11 to 21 lower them by {-m.DATA['math']['L11']['vs_base']['cut'][0]:.1f} points; the split did not hold on code"]},
     "theories-on-trial": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.DATA['nearer']['all'][0]} of {m.DATA['nearer']['all'][1]}", "predictions",
-                             "theory nearer the measured number than readers with no theory; half would be a tie"]},
+                             "in which a theory came nearer the measured number than agents given no theory; half would mean no difference"]},
     "forecasts-before-results": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.COUNTS['theory'][1]} of {m.COUNTS['theory'][0]}", "forecasts",
-                             f"theory nearer the reported number than both readers with no theory, most of them on one code experiment; {m.COUNTS['landed']} of {m.COUNTS['targets']} targets reported"]},
+                             f"in which a theory came nearer the measured number than both agents given no theory, most on one code experiment; {m.COUNTS['landed']} of {m.COUNTS['targets']} forecast numbers were measured"]},
 }
 
 
@@ -206,7 +207,7 @@ def entry(slug, m):
     """What the page says of one finding: slug, title, line, group, rank (the order on the page), figure, steps and rail
     (values a rail's text needs, by set)."""
     row = TABLE.get(slug, {})
-    return {"slug": slug, "title": m.TITLE, "line": m.LINE, "group": row.get("group", "New"),
+    return {"slug": slug, "title": m.TITLE, "line": m.LINE, "group": row.get("group", NEW),
             "rank": list(TABLE).index(slug) if slug in TABLE else len(TABLE),
             "figure": row["figure"](m) if "figure" in row else None,
             "steps": row["steps"](m) if "steps" in row else [],
@@ -335,6 +336,8 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
 /* The findings, in groups that follow the question */
 .groups { margin-top: clamp(64px, 12vh, 132px); }
 .groups.flat { margin-top: clamp(26px, 5vh, 52px); }
+.lede { max-width: 96ch; margin: clamp(64px, 12vh, 132px) 0 0; color: var(--mute); font-size: 14.5px; line-height: 1.45; }
+.lede:not([hidden]) + .groups { margin-top: 28px; }
 .group { display: grid; grid-template-columns: minmax(190px, 17%) minmax(0, 1fr); gap: 0 40px; border-top: 1px solid var(--rule); padding-top: 6px; margin-top: 44px; }
 .group:first-child { margin-top: 0; }
 .group h2 { margin: 18px 0 0; max-width: 15ch; font-size: 19px; line-height: 1.22; font-weight: 400; font-stretch: 102%; letter-spacing: -.004em; }
@@ -432,6 +435,7 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
     </div>
     <ul class="src" id="src" hidden></ul>
   </section>
+  <p class="lede" id="lede" data-terms>On the tiles below, the base model is Olmo 3 7B with no further training, and the RL model is the same model after reinforcement learning (RL) on math. Think-SFT is the base model trained to imitate worked solutions, with no reward. Base + cue is the base model with the opening cue, three fixed tokens placed at the start of its answer. A direction is one of the largest components of RL's weight change in one weight matrix. Differences are in percentage points.</p>
   <div class="groups" id="groups"></div>
 </div>
 <script>
@@ -707,17 +711,17 @@ function rdraw(now) {
 const SAY = {
   math500: (S, rail) => {
     const best = S.up[S.up.length - 1], rl = S.rl[S.rl.length - 1];
-    return { final: rl.pct - best.pct, setting: `MATH-500, ${rl.n} problems, T 1.0. A mark opens its finding.`,
-             unit: "points: Base + cue behind RL with the same vote and restarts",
-             rest: `RL still leads when both models get the same vote over 4 samples and restarts: ${cnt(rl.right)} of ${rl.n} against ${cnt(best.right)} of ${best.n}. ` +
-                   "What RL adds in these points is not yet explained." };
+    return { final: rl.pct - best.pct, setting: `MATH-500, ${rl.n} problems, temperature 1.0. Click a mark to open its finding.`,
+             unit: "points by which Base + cue trails the RL model when both get the same vote and restarts",
+             rest: `The RL model still leads when both models get the same vote over 4 samples and restarts: ${cnt(rl.right)} of ${rl.n} against ${cnt(best.right)} of ${best.n}. ` +
+                   `What RL training adds in these ${f(rl.pct - best.pct)} points is not yet explained.` };
   },
   hard328: (S, rail) => {
     const sft = S.up.find(k => k.key === "think"), rl = S.rl[0], sv = S.up.find(k => k.vote), rv = S.rl[S.rl.length - 1], iv = rail.hard328;
-    return { final: sft.pct - rl.pct, setting: `328 harder problems, T 1.0, one sample unless a vote. A mark opens its finding.`,
-             unit: "points: Think-SFT + cue ahead of RL, one sample each",
-             rest: `With no reward, only imitation of worked solutions, Think-SFT + cue gets ${cnt(sft.right)} of ${sft.n} right against RL's ${cnt(rl.right)} ` +
-                   `(95 % interval ${f(iv[1])} to ${f(iv[2])} points). With a vote over 4 samples: ${cnt(sv.right)} against ${cnt(rv.right)}.` };
+    return { final: sft.pct - rl.pct, setting: `328 harder problems, temperature 1.0. Each mark is one sample per problem unless it is a vote. Click a mark to open its finding.`,
+             unit: "points by which Think-SFT + cue leads the RL model, one sample each",
+             rest: `With no reward, only imitation of worked solutions, Think-SFT + cue gets ${cnt(sft.right)} of ${sft.n} right and the RL model ${cnt(rl.right)}: ` +
+                   `a lead of ${f(iv[0])} points (95 % interval ${f(iv[1])} to ${f(iv[2])}). With a vote over 4 samples: ${cnt(sv.right)} against ${cnt(rv.right)}.` };
   },
 };
 const want = () => location.hash === "#math500" ? "math500" : "hard328";  // the 328 harder problems open first: the current result
@@ -766,11 +770,11 @@ function rows(list) {
   if (key === S.key) return;
   S.key = key;
   const sorted = [...list].sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0));
-  const groups = [...new Set(sorted.map(x => x.group || "New"))];
+  const groups = [...new Set(sorted.map(x => x.group || "Not yet grouped"))];
   let n = 0;
   $("groups").classList.toggle("flat", KIND !== "findings");
   $("groups").innerHTML = groups.map(name => `<section class="group"><h2>${esc(name)}</h2><ul class="rows">` +
-    sorted.filter(x => (x.group || "New") === name).map(x =>
+    sorted.filter(x => (x.group || "Not yet grouped") === name).map(x =>
       `<li style="--i:${n++}"><a class="row${x.figure ? "" : " nofig"}" href="/${KIND === "findings" ? "finding" : "proof"}/${esc(x.slug)}" data-slug="${esc(x.slug)}">` +
       `<span class="fig2">${x.figure ? `<span class="num"><b>${esc(x.figure[0])}</b><span class="u">${esc(x.figure[1])}</span></span><span class="unit">${nb(x.figure[2])}</span>` : ""}</span>` +
       `<span class="text"><h3 class="title">${esc(x.title)}</h3><p class="line">${nb(x.line)}</p></span>` +
@@ -827,6 +831,7 @@ PROOF = [
     ('<title>Invariant: Findings</title>', '<title>Invariant: Proof</title>'),
     ('<a href="/proof">Proof</a>\n    <a href="/findings" aria-current="page">Findings</a>',
      '<a href="/proof" aria-current="page">Proof</a>\n    <a href="/findings">Findings</a>'),
-    ('<p class="say" id="say" hidden></p>', '<p class="say" id="say">Experiments on the harness itself.</p>'),
+    ('<p class="say" id="say" hidden></p>', '<p class="say" id="say">Experiments that test how the team\'s agents choose, run and review their work.</p>'),
+    ('<p class="lede" id="lede" data-terms>', '<p class="lede" id="lede" hidden>'),
     ('const KIND = "findings";', 'const KIND = "proof";'),
 ]

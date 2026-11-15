@@ -1,0 +1,13 @@
+{
+ "cell": "m11",
+ "spec": "studies/theory/specs/SPEC_cells_r9a.md",
+ "jobs": {
+  "1/2": "ih-1115-184625-e391",
+  "0/2 (stopped at 104 of 250 rows)": "ih-1115-195318-e122"
+ },
+ "commit": "4a524a2bdba52ff144206ed9ee9a37044fb9307d",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale -1.0 --dir /tmp/theta && <smoke: run_cell ... --n 2 --max-tokens 256 --out $OUT_DIR/smoke> && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x-1_math31 --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --shard k/2 --commit 4a524a2bdba52ff144206ed9ee9a37044fb9307d",
+ "raw": [
+  "runs/ih-1115-184625-e391"
+ ]
+}

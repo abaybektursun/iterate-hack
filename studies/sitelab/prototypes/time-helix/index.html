@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<title>Invariant: Time helix</title>
+<title>The grind, as a spiral</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
@@ -30,11 +30,12 @@ canvas#gl.drag { cursor: grabbing; } canvas#gl.hit { cursor: pointer; }
 .top { position: fixed; left: 32px; right: 32px; top: 20px; display: flex; align-items: baseline; gap: 22px; font-size: 13px; pointer-events: none; }
 .name { font-weight: 740; font-stretch: 122%; font-size: 14px; letter-spacing: .02em; }
 .top .tab { color: var(--mute); }
+.top .lab { pointer-events: auto; color: var(--mute); text-decoration: none; border-bottom: 1px solid var(--rule); transition: color .2s; } .top .lab:hover { color: var(--ink); }
 .status { margin-left: auto; color: var(--mute); display: flex; align-items: center; gap: 10px; }
 .status::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
 .status.bad { color: var(--red); } .status.bad::before { background: var(--red); }
 .lead { position: fixed; left: 32px; top: 58px; width: min(430px, calc(100vw - 64px)); pointer-events: none; }
-.lead h1 { margin: 0 0 12px; font-family: var(--serif); font-weight: 300; font-size: clamp(22px, 2.3vw, 33px); line-height: 1.14; letter-spacing: -.012em; text-wrap: balance; }
+.lead h1 { margin: 0 0 12px; font-family: var(--serif); font-weight: 300; font-size: clamp(21px, 2vw, 29px); line-height: 1.16; letter-spacing: -.012em; text-wrap: balance; }
 .lead { transition: opacity .5s; } body.close .lead { opacity: 0; }
 .lead p { margin: 0; padding-top: 12px; border-top: 1px solid var(--rule); color: var(--mute); font-size: 12.5px; line-height: 1.55; max-width: 380px; }
 
@@ -58,7 +59,7 @@ canvas#gl.drag { cursor: grabbing; } canvas#gl.hit { cursor: pointer; }
   background: #1b1a18; border-left: 1px solid var(--rule);
   transform: translateX(104%); transition: transform .4s cubic-bezier(.3, 0, .2, 1); user-select: text; -webkit-user-select: text; }
 .side.open { transform: none; }
-.side .x { position: absolute; right: 26px; top: 54px; color: var(--mute); font-size: 20px; padding: 4px 8px; }
+.side .x { position: absolute; right: 22px; top: 18px; color: var(--mute); font-size: 20px; padding: 4px 8px; }
 .side .m { color: var(--mute); font-size: 12.5px; margin: 0 0 8px; } .side .m b { color: var(--c, var(--ink)); font-weight: 650; }
 .side h2 { margin: 0 0 14px; font-family: var(--serif); font-weight: 300; font-size: 25px; line-height: 1.16; letter-spacing: -.01em; text-wrap: balance; }
 .side .body { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 13.5px; line-height: 1.55; color: #d2cbbd; }
@@ -85,12 +86,14 @@ canvas#gl.drag { cursor: grabbing; } canvas#gl.hit { cursor: pointer; }
 .btns .play:hover { color: var(--paper); }
 .strip { position: relative; height: 96px; cursor: ew-resize; touch-action: none; }
 .strip canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+#head { position: absolute; left: -1px; top: 0; bottom: 11px; width: 1.5px; background: var(--accent); will-change: transform; }
+#head::before { content: ""; position: absolute; left: -2.5px; top: 0; width: 6.5px; height: 6.5px; border-radius: 50%; background: var(--accent); }
 .news { position: absolute; left: 0; right: 0; bottom: 104px; font-size: 13px; color: var(--mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; }
 .news button { color: var(--ink); max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
 .news button b { color: var(--c); font-weight: 650; }
 #err { position: fixed; left: 32px; top: 200px; color: var(--red); font-size: 13px; white-space: pre-wrap; max-width: 60vw; z-index: 9; }
 @media (max-width: 760px) {
-  .top { left: 16px; right: 16px; } .top .tab { display: none; }
+  .top { left: 16px; right: 16px; } .top .tab { display: none; } .status { display: block; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 11px; } .status::before { display: inline-block; margin-right: 7px; vertical-align: middle; }
   .lead { left: 16px; top: 50px; } .lead p { display: none; }
   .key { display: none; }
   .bar { left: 16px; right: 16px; grid-template-columns: 1fr; row-gap: 8px; bottom: 12px; }
@@ -107,7 +110,7 @@ canvas#gl.drag { cursor: grabbing; } canvas#gl.hit { cursor: pointer; }
 <body>
 <canvas id="gl"></canvas>
 <div class="shade"></div>
-<div class="top"><span class="name">Invariant</span><span class="tab">Time helix</span><span class="status" id="status">Reading</span></div>
+<div class="top"><a class="lab" href="../../">Lab</a><span class="name">Invariant</span><span class="tab">The grind, as a spiral</span><span class="status" id="status">Reading</span></div>
 <div class="lead"><h1 id="h1">&nbsp;</h1><p id="sub"></p></div>
 <div class="key" id="key"></div>
 <div class="tip" id="tip"></div>
@@ -118,7 +121,7 @@ canvas#gl.drag { cursor: grabbing; } canvas#gl.hit { cursor: pointer; }
     <div class="read" id="read"></div>
     <div class="btns"><button class="play" id="play">Play</button><span id="speeds" style="display:contents"></span><button id="ride">Ride</button></div>
   </div>
-  <div class="strip" id="strip"><div class="news" id="news"></div><canvas id="hist"></canvas></div>
+  <div class="strip" id="strip"><div class="news" id="news"></div><canvas id="hist"></canvas><canvas id="lit"></canvas><i id="head"></i></div>
 </div>
 <div id="err"></div>
 
@@ -128,17 +131,17 @@ window.addEventListener("unhandledrejection", e => { document.getElementById("er
 
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
-import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
-import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
-import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
-import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
 
 const $ = id => document.getElementById(id);
 const Q = new URLSearchParams(location.search);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+/* data.json: each table is its column names and one list per row. A column @x is seconds after t0, a column $x an index into str.
+   Tool commands come grouped by session: the seconds between one and the next, and one letter per command. */
 const D = await (await fetch("data.json")).json();
+for (const k of ["sessions", "items", "comments", "msgs", "scores", "commits", "jobs"]) D[k] = D[k].rows.map(r => Object.fromEntries(D[k].cols.map((c, i) =>
+  [c.replace(/^[@$]/, ""), c[0] === "@" ? r[i] == null ? null : r[i] + D.t0 : c[0] === "$" ? D.str[r[i]] : r[i]])));
+D.ev = D.ev.flatMap(g => { let t = D.t0; return g.t.map((d, i) => [t += d, g.p, g.s, g.c.charCodeAt(i) - 97]); });
 
 /* ---------- time ---------- */
 const PST = -8 * 3600;  // the hackathon is in San Francisco; every stored time is UTC
@@ -164,7 +167,7 @@ function oklch(L, C, h) {  // -> linear sRGB
   const l = (L + .3963377774 * a + .2158037573 * b) ** 3, m = (L - .1055613458 * a - .0638541728 * b) ** 3, s = (L - .0894841775 * a - 1.291485548 * b) ** 3;
   return [4.0767416621 * l - 3.3077115913 * m + .2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - .3413193965 * s, -.0041960863 * l - .7034186147 * m + 1.707614701 * s].map(v => Math.max(0, v));
 }
-const TINT = D.people.map((_, p) => oklch(.43, .04, hue(p))), DEEP = D.people.map((_, p) => oklch(.42, .06, hue(p)));  // muted: the hue names the person, the value does the work
+const LIGHT = D.people.map((_, p) => oklch(.7, .065, hue(p)));  // muted: the hue names the person, the value does the work
 const css = p => `oklch(.76 .065 ${hue(p)})`;
 
 /* ---------- layout: one band per person, one lane per concurrent agent session ---------- */
@@ -196,12 +199,14 @@ const turnaround = (from, to) => D.items.filter(i => i.k === "work" && i.c != nu
 
 /* ---------- renderer: a table-top instrument in a studio. One key light with a shadow, a soft fill, a rim ---------- */
 const canvas = $("gl");
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: "high-performance", preserveDrawingBuffer: Q.has("still") });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: "high-performance" });
+const FULL = () => Math.min(devicePixelRatio, 2);
+let PR = FULL(), BUDGET = Infinity;  // the pixel ratio while the picture moves: at most BUDGET pixels
+renderer.setPixelRatio(PR);
 const BG = 0x171614;
 renderer.setClearColor(BG, 1);
 renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.04;
-renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;  // redrawn only when the play head or a layer changes
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(BG, 520, 1500);
 scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .04).texture;
@@ -209,11 +214,14 @@ const camera = new THREE.PerspectiveCamera(23, 1, 4, 3000);
 const controls = new OrbitControls(camera, canvas);
 Object.assign(controls, { enableDamping: true, dampingFactor: .055, rotateSpeed: .5, zoomSpeed: .7, panSpeed: .7, minDistance: 8, maxDistance: 900, screenSpacePanning: true, maxPolarAngle: 1.5 });
 
+let dirty = 2, shadowDirty = true;  // a frame is drawn only when something changed
+renderer.domElement.addEventListener("webglcontextlost", e => { e.preventDefault(); $("status").textContent = "The graphics context was lost. Waiting for the browser to restore it."; });
+renderer.domElement.addEventListener("webglcontextrestored", () => { $("status").textContent = ""; dirty = 2; shadowDirty = true; });
 const U = { uNow: { value: 0 }, uTau: { value: .05 }, uSolo: { value: -1 }, uPx: { value: 1000 } };
 const FLOOR = -(RS1 + 5.5), LEN = HGEO * PITCH;
 { const key = new THREE.DirectionalLight(0xfff1dc, 2.6); key.position.set(-110, 230, 150); key.castShadow = true;
   const c = key.shadow.camera, half = LEN / 2 + 60; Object.assign(c, { left: -half, right: half, top: 90, bottom: -90, near: 20, far: 620 });
-  key.shadow.mapSize.set(4096, 4096); key.shadow.bias = -.0012; key.shadow.normalBias = .55; key.shadow.radius = 6;
+  key.shadow.mapSize.set(2048, 1024); key.shadow.bias = -.0012; key.shadow.normalBias = .5;
   const rim = new THREE.DirectionalLight(0xc9d6e6, .9); rim.position.set(160, 70, -220);
   scene.add(key, rim, new THREE.HemisphereLight(0xe9e2d6, 0x2a2622, .32)); }
 
@@ -231,10 +239,11 @@ const GRAIN = grain(0), BRUSH = grain(2600), TABLE = grain(400); TABLE.repeat.se
 /* a material whose parts exist only behind the play head. cut: fragments after it are not drawn. pop: an instance grows in as it passes */
 function timed(mat, mode) {
   const patch = depth => sh => {
-    Object.assign(sh.uniforms, { uNow: U.uNow, uTau: U.uTau, uSolo: U.uSolo });
-    sh.vertexShader = "attribute float aT, aP; uniform float uNow, uTau, uSolo; varying float vT, vS;\n" + sh.vertexShader.replace("#include <begin_vertex>", `#include <begin_vertex>
+    Object.assign(sh.uniforms, { uNow: U.uNow, uTau: U.uTau, uSolo: U.uSolo, uPx: U.uPx });
+    sh.vertexShader = "attribute float aT, aP; uniform float uNow, uTau, uSolo, uPx; varying float vT, vS;\n" + sh.vertexShader.replace("#include <begin_vertex>", `#include <begin_vertex>
   vT = aT; vS = (uSolo < 0. || abs(aP - uSolo) < .5 || aP < -.5) ? 1. : 0.;
-  ${mode === "pop" ? "float k = clamp((uNow - aT) / uTau, 0., 1.) - 1.; k = 1. + 2.3 * k * k * k + 1.3 * k * k; transformed *= k * vS;" : ""}`);
+  ${mode !== "cut" ? "float k = clamp((uNow - aT) / uTau, 0., 1.) - 1.; k = 1. + 2.3 * k * k * k + 1.3 * k * k; transformed *= k * vS;" : ""}
+  ${mode === "far" ? "transformed *= max(1., 2.6 * length((modelViewMatrix * instanceMatrix * vec4(0., 0., 0., 1.)).xyz) / (uPx * .46));" : ""}`);
     sh.fragmentShader = "uniform float uNow; varying float vT, vS;\n" + (depth
       ? sh.fragmentShader.replace("void main() {", `void main() {\n  ${mode === "cut" ? "if (vT > uNow) discard;" : ""}`)
       : sh.fragmentShader.replace("#include <color_fragment>", `#include <color_fragment>\n  ${mode === "cut" ? "if (vT > uNow) discard; diffuseColor.rgb *= mix(.3, 1., vS);" : ""}`));
@@ -245,29 +254,43 @@ function timed(mat, mode) {
 }
 const std = (o, mode = "pop") => timed(new THREE.MeshStandardMaterial(o), mode);
 const MAT = {
-  brass: std({ color: 0xb58d48, metalness: 1, roughness: .3, roughnessMap: BRUSH }),
+  brass: std({ color: 0xc79a4c, metalness: 1, roughness: .34, envMapIntensity: 1.5 }, "far"),  // a result: never under 2.6 px on screen
   steel: std({ color: 0xb4b6b8, metalness: 1, roughness: .36, roughnessMap: BRUSH }),
   bone: std({ color: 0xe9e2d4, metalness: 0, roughness: .42 }),
   graphite: std({ color: 0x34322f, metalness: .25, roughness: .55 }),
   blued: std({ color: 0x3a4e73, metalness: 1, roughness: .3 }),
   tint: std({ color: 0xffffff, metalness: 0, roughness: .6 }),   // takes the instance colour
   wire: std({ color: 0xffffff, metalness: .9, roughness: .38, vertexColors: true }, "cut"),
-  flight: std({ color: 0xffffff, vertexColors: true, metalness: 0, roughness: .78, roughnessMap: GRAIN, bumpMap: GRAIN, bumpScale: .5, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1.5, polygonOffsetUnits: 2 }, "cut"),
+  flight: std({ color: 0xffffff, vertexColors: true, metalness: .55, roughness: .62, roughnessMap: GRAIN, bumpMap: GRAIN, bumpScale: .35, envMapIntensity: .9, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1.5, polygonOffsetUnits: 2 }, "cut"),
+  flightLite: timed(new THREE.MeshPhongMaterial({ vertexColors: true, specular: 0x2c2a27, shininess: 22, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1.5, polygonOffsetUnits: 2 }), "cut"),
   shaft: std({ color: 0xb9b6ae, metalness: 1, roughness: .62, roughnessMap: BRUSH, envMapIntensity: 1.5 }, "cut"),
 };
-const BONE = [.80, .76, .68], INK = [.1, .095, .085], OXIDE = [.5, .14, .08], WIRE = [.72, .72, .72];
+const BONE = [.80, .76, .68], ANOD = [.028, .027, .026], WORN = [.3, .27, .225], INK = [.62, .59, .53], OXIDE = [.5, .14, .08], WIRE = [.72, .72, .72];
+
+/* the lens: still film grain and a restrained vignette, one quad drawn last */
+{ const lens = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({ transparent: true, depthTest: false, depthWrite: false,
+    vertexShader: "varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }",
+    fragmentShader: `varying vec2 vUv; float h(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+void main() { float n = h(floor(gl_FragCoord.xy)), v = .34 * smoothstep(.38, .95, length(vUv - .5)); float a = .04 + v; gl_FragColor = vec4(vec3(n * .04 / a), a); }` }));
+  lens.frustumCulled = false; lens.renderOrder = 99; scene.add(lens); }
 
 /* ink on the surfaces: unlit hairlines and dots */
 const inkLines = () => new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: U,
   vertexShader: `attribute vec3 aC; attribute float aA, aT, aP; uniform float uNow, uSolo; varying vec4 vC;
 void main() { float solo = (uSolo < 0. || abs(aP - uSolo) < .5 || aP < -.5) ? 1. : .25; vC = vec4(aC, aA * solo * step(aT, uNow)); gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.); }`,
-  fragmentShader: `varying vec4 vC; void main() { if (vC.a < .004) discard; gl_FragColor = vC; }` });
+  fragmentShader: `varying vec4 vC; void main() { if (vC.a < .004) discard; gl_FragColor = vC;
+#include <tonemapping_fragment>
+#include <colorspace_fragment>
+}` });
 const inkDots = () => new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: U,
   vertexShader: `attribute vec3 aC; attribute float aS, aT, aP; uniform float uNow, uTau, uSolo, uPx; varying vec4 vC;
 void main() { float solo = (uSolo < 0. || abs(aP - uSolo) < .5) ? 1. : 0.; float k = clamp((uNow - aT) / uTau, 0., 1.);
   vec4 mv = modelViewMatrix * vec4(position, 1.); gl_Position = projectionMatrix * mv;
-  float px = aS * uPx / -mv.z * k; vC = vec4(aC, solo * min(1., px / 1.6) * step(.001, k)); gl_PointSize = max(px, 1.6); }`,
-  fragmentShader: `varying vec4 vC; void main() { float d = length(gl_PointCoord - .5) * 2.; float a = smoothstep(1., .72, d) * vC.a; if (a < .01) discard; gl_FragColor = vec4(vC.rgb, a); }` });
+  float px = aS * uPx / -mv.z * k; vC = vec4(aC, solo * min(1., px / 1.6) * step(.001, k)); gl_PointSize = clamp(px, 1.6, 48.); }`,
+  fragmentShader: `varying vec4 vC; void main() { float d = length(gl_PointCoord - .5) * 2.; float a = smoothstep(1., .72, d) * vC.a; if (a < .01) discard; gl_FragColor = vec4(vC.rgb, a);
+#include <tonemapping_fragment>
+#include <colorspace_fragment>
+}` });
 
 function geometry(n, extra = {}) {
   const g = new THREE.BufferGeometry(), a = { position: 3, aT: 1, aP: 1, ...extra }, arr = {};
@@ -287,7 +310,7 @@ function solid(parent, geo, material, marks) {  // marks: {pos, t, p, s (scale: 
   marks.forEach((k, i) => { typeof k.s === "number" ? v2.setScalar(k.s) : k.s ? v2.copy(k.s) : v2.setScalar(1);
     m.setMatrixAt(i, mat4.compose(k.pos, k.q ?? quat.identity(), v2)); if (k.c) m.setColorAt(i, colour.setRGB(...k.c)); aT[i] = k.t; aP[i] = k.p; });
   m.geometry = geo.clone(); m.geometry.setAttribute("aT", new THREE.InstancedBufferAttribute(aT, 1)); m.geometry.setAttribute("aP", new THREE.InstancedBufferAttribute(aP, 1));
-  m.customDepthMaterial = material.userData.depth; m.castShadow = true; m.receiveShadow = true; m.frustumCulled = false; parent.add(m); return m;
+  m.customDepthMaterial = material.userData.depth; m.castShadow = true; m.frustumCulled = false; parent.add(m); return m;
 }
 function dots(parent, marks) {  // marks: {pos, c, size, t, p}
   const [g, a] = geometry(marks.length, { aC: 3, aS: 1 });
@@ -308,11 +331,11 @@ const ROD = new THREE.CylinderGeometry(1, 1, 1, 6).translate(0, .5, 0);  // from
 
 function buildStatic() {
   /* the flight of each person: bone ceramic, tinted where more happened (events per 2 minutes) */
-  const BIN = 1 / 30, nb = Math.ceil(HGEO / BIN) + 1, count = D.people.map(() => new Float32Array(nb));
+  const BIN = 1 / 12, nb = Math.ceil(HGEO / BIN) + 1, count = D.people.map(() => new Float32Array(nb));
   const add = (p, t) => { const b = Math.floor(hr(t) / BIN); if (b >= 0 && b < nb) count[p][b]++; };
   D.ev.forEach(e => add(e[1], e[0])); D.commits.forEach(c => add(c.p, c.t)); D.items.forEach(i => add(i.p, i.t)); D.msgs.forEach(m => add(m.p, m.t));
   const top = Math.max(...count.map(c => Math.max(...c)));
-  const dens = (p, h) => { const x = h / BIN - .5, i = Math.max(0, Math.floor(x)), f = x - i; return Math.min(1, Math.sqrt(((count[p][i] ?? 0) * (1 - f) + (count[p][i + 1] ?? 0) * f) / (top * .5))); };
+  const dens = (p, h) => { const x = h / BIN - .5, i = Math.max(0, Math.floor(x)), f = x - i; return Math.min(1, Math.sqrt(((count[p][i] ?? 0) * (1 - f) + (count[p][i + 1] ?? 0) * f) / (top * .6))); };
   const n = Math.ceil(HGEO / STEP) + 1, [g, a] = geometry(n * 2 * bands.length, { color: 3, normal: 3, uv: 2 }), index = [];
   bands.forEach((b, p) => {
     const base = p * n * 2;
@@ -320,7 +343,7 @@ function buildStatic() {
       const h = Math.min(HGEO, i * STEP), d = dens(p, h), an = h * 2 * Math.PI;
       for (let s = 0; s < 2; s++) {
         const k = base + i * 2 + s, r = s ? b.r1 + .14 : b.r0 - .14; P(h, r, 0, v);
-        a.position.set([v.x, v.y, v.z], k * 3); a.color.set(BONE.map((x, j) => x + (TINT[p][j] - x) * (.12 + .88 * d)), k * 3); a.aT[k] = h; a.aP[k] = p;
+        a.position.set([v.x, v.y, v.z], k * 3); a.color.set(ANOD.map((x, j) => x + (WORN[j] - x) * d * d), k * 3); a.aT[k] = h; a.aP[k] = p;
         v2.set(2 * Math.PI * r, Math.sin(an) * PITCH, -Math.cos(an) * PITCH).normalize(); a.normal.set([v2.x, v2.y, v2.z], k * 3); a.uv.set([h * 9, r / 3], k * 2);
       }
       if (i) index.push(base + i * 2 - 2, base + i * 2 - 1, base + i * 2, base + i * 2 - 1, base + i * 2 + 1, base + i * 2);
@@ -328,35 +351,39 @@ function buildStatic() {
   });
   g.setIndex(index);
   const flight = new THREE.Mesh(g, MAT.flight); flight.customDepthMaterial = MAT.flight.userData.depth; flight.castShadow = flight.receiveShadow = true; flight.frustumCulled = false;
+  /* The turns hide each other up to 26 deep, so depth is laid down first with a shader that costs nothing and each pixel is then lit once. */
+  const pre = new THREE.Mesh(g, timed(new THREE.MeshBasicMaterial({ colorWrite: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: 1.5, polygonOffsetUnits: 2 }), "cut"));
+  pre.renderOrder = -1; pre.frustumCulled = false; pre.name = "pre"; scene.add(pre);
   scene.add(flight); layers.flight = flight;
 
   /* engraved hairlines: one per agent session from its first to its last recorded command, a seam at every whole hour, and the rails of the score pins */
   const segs = [], G = group("strands");
   D.sessions.forEach(s => {
     const h0 = hr(s.a), h1 = Math.max(hr(s.b), h0 + STEP), k = Math.ceil((h1 - h0) / STEP);
-    for (let i = 0; i < k; i++) for (const u of [i, i + 1]) { const h = h0 + (h1 - h0) * u / k; segs.push({ pos: P(h, s.r).clone(), c: INK, a: .5, t: h, p: s.p }); }
+    for (let i = 0; i < k; i++) for (const u of [i, i + 1]) { const h = h0 + (h1 - h0) * u / k; segs.push({ pos: P(h, s.r).clone(), c: INK, a: .34, t: h, p: s.p }); }
   });
-  for (let h = 0; h <= HGEO; h++) segs.push({ pos: P(h, RIN - .6).clone(), c: INK, a: .8, t: h, p: -1 }, { pos: P(h, ROUT + .3).clone(), c: INK, a: .8, t: h, p: -1 });
+  for (let h = 0; h <= HGEO; h++) segs.push({ pos: P(h, RIN - .6).clone(), c: INK, a: .5, t: h, p: -1 }, { pos: P(h, ROUT + .3).clone(), c: INK, a: .5, t: h, p: -1 });
   for (const [r, al] of [[RS0, .07], [RS1, .1]]) for (let h = 0; h < HGEO; h += STEP) for (const u of [h, Math.min(HGEO, h + STEP)]) segs.push({ pos: P(u, r).clone(), c: BONE, a: al, t: -1, p: -1 });
+  bands.forEach((b, p) => { for (let h = 0; h < HGEO; h += STEP) for (const u of [h, Math.min(HGEO, h + STEP)]) segs.push({ pos: P(u, b.r1 + .14).clone(), c: LIGHT[p], a: .85, t: u, p }); });  // the rim of a band, in its person's colour
   hair(G, segs);
 
   /* tool commands and comments: ink dots on the lane of the session that ran them */
-  dots(group("dust"), D.ev.map(e => { const pos = P(hr(e[0]), radius(e[1], e[2])).clone(); pick("dust", "cmd", e, pos, 0); return { pos, c: INK, size: .17, t: hr(e[0]), p: e[1] }; }));
-  dots(group("comments"), D.comments.map(c => { const pos = P(hr(c.t), radius(c.p, c.s)).clone(); pick("comments", "comment", c, pos, 1); return { pos, c: DEEP[c.p], size: .34, t: hr(c.t), p: c.p }; }));
+  dots(group("dust"), D.ev.map(e => { const pos = P(hr(e[0]), radius(e[1], e[2])).clone(); pick("dust", "cmd", e, pos, 0); return { pos, c: INK, size: .15, t: hr(e[0]), p: e[1] }; }));
+  dots(group("comments"), D.comments.map(c => { const pos = P(hr(c.t), radius(c.p, c.s)).clone(); pick("comments", "comment", c, pos, 1); return { pos, c: LIGHT[c.p], size: .3, t: hr(c.t), p: c.p }; }));
 
   /* commits: steel studs on the rail inside each band, larger with more files changed */
   solid(group("commits"), OCTA, MAT.steel, D.commits.map(c => { const pos = P(hr(c.t), bands[c.p].r0 - .45).clone(); pick("commits", "commit", c, pos, 2);
     return { pos, t: hr(c.t), p: c.p, s: .11 + .035 * Math.log2(1 + c.files) }; }));
 
   /* GPU jobs: a wire arch from launch to end standing on the lane, taller for a longer job (to a cap) */
-  const G2 = group("jobs"), SIDES = 5, WR = .045, verts = [], idx = [], stubs = [];
+  const G2 = group("jobs"), SIDES = 3, WR = .05, verts = [], idx = [], stubs = [];
   D.jobs.forEach((j, n) => {
     const bad = /fail|kill|cancel|died|stopped/.test(j.state), c = bad ? OXIDE : WIRE;
     const r = radius(j.p, j.s) + ((n % 5) - 2) * .07, h0 = hr(j.t);
     j.r = r; j.h0 = h0; j.h1 = j.end ? hr(j.end) : null; j.lift = j.end ? .8 + Math.min((j.end - j.t) / 60, 90) / 90 * 2.8 : 0;
     const pos = P(h0, r).clone(); pick("jobs", "job", j, pos, 3);
     if (j.h1 == null) { stubs.push({ pos, t: h0, p: j.p, q: new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), -Math.PI / 2), s: new THREE.Vector3(.05, .7, .05) }); return; }
-    const k = Math.max(8, Math.ceil((j.h1 - h0) / (STEP * 1.5))), base = verts.length;
+    const k = Math.max(8, Math.ceil((j.h1 - h0) / (STEP * 2.5))), base = verts.length;
     for (let i = 0; i <= k; i++) { const u = i / k, h = h0 + (j.h1 - h0) * u, an = h * 2 * Math.PI; jobAt(j, u, v);
       for (let s = 0; s < SIDES; s++) { const f = s / SIDES * 2 * Math.PI, nx = Math.sin(f), nr = Math.cos(f);
         verts.push({ x: v.x + nx * WR, y: v.y + nr * Math.cos(an) * WR, z: v.z + nr * Math.sin(an) * WR, n: [nx, nr * Math.cos(an), nr * Math.sin(an)], c, t: h, p: j.p });
@@ -366,12 +393,13 @@ function buildStatic() {
   const [wg, wa] = geometry(verts.length, { color: 3, normal: 3 });
   verts.forEach((q, i) => { wa.position.set([q.x, q.y, q.z], i * 3); wa.normal.set(q.n, i * 3); wa.color.set(q.c, i * 3); wa.aT[i] = q.t; wa.aP[i] = q.p; });
   wg.setIndex(idx);
-  const wires = new THREE.Mesh(wg, MAT.wire); wires.customDepthMaterial = MAT.wire.userData.depth; wires.castShadow = true; wires.frustumCulled = false; G2.add(wires);
+  const wires = new THREE.Mesh(wg, MAT.wire);  wires.frustumCulled = false; G2.add(wires);
   solid(G2, ROD, MAT.steel, stubs);
 
   /* the stand: two posts and the table. Not data */
-  const table = new THREE.Mesh(new THREE.PlaneGeometry(4000, 4000), new THREE.MeshStandardMaterial({ color: 0x2f2c29, roughness: .93, metalness: 0, bumpMap: TABLE, bumpScale: .6, roughnessMap: TABLE }));
-  table.rotation.x = -Math.PI / 2; table.position.y = FLOOR; table.receiveShadow = true; scene.add(table);
+  const table = new THREE.Mesh(new THREE.PlaneGeometry(4000, 4000), new THREE.MeshStandardMaterial({ color: 0x37342f, roughness: .93, metalness: 0, bumpMap: TABLE, bumpScale: .6, roughnessMap: TABLE }));
+  table.rotation.x = -Math.PI / 2; table.position.y = FLOOR; table.receiveShadow = true; scene.add(table); layers.table = table;
+  table.userData = { high: table.material, lite: new THREE.MeshLambertMaterial({ color: 0x4a463f }) };
   const post = new THREE.MeshStandardMaterial({ color: 0x2b2a28, metalness: .85, roughness: .5, roughnessMap: BRUSH });
   for (const s of [-1, 1]) { const x = s * (LEN / 2 + 7);
     const p = new THREE.Mesh(new THREE.BoxGeometry(1.1, -FLOOR, 3.4), post); p.position.set(x, FLOOR / 2, 0); p.castShadow = p.receiveShadow = true; scene.add(p);
@@ -390,8 +418,8 @@ function buildBoard() {  // rebuilt when /data brings something new
   /* messages on all: a thin rod across every band in the sender's colour, with a bead on the sender's lane */
   const M2 = group("msgs"), rods = [], beads = [];
   D.msgs.forEach(m => { const h = hr(m.t), pos = P(h, radius(m.p, m.s)).clone(); pick("msgs", "msg", m, pos, 4);
-    rods.push({ pos: P(h, RIN - .5).clone(), t: h, p: m.p, q: radial(h), s: new THREE.Vector3(.035, ROUT - RIN + 1, .035), c: DEEP[m.p] });
-    beads.push({ pos, t: h, p: m.p, s: .15, c: DEEP[m.p] }); });
+    rods.push({ pos: P(h, RIN - .5).clone(), t: h, p: m.p, q: radial(h), s: new THREE.Vector3(.035, ROUT - RIN + 1, .035), c: LIGHT[m.p] });
+    beads.push({ pos, t: h, p: m.p, s: .15, c: LIGHT[m.p] }); });
   solid(M2, ROD, MAT.tint, rods); solid(M2, SMALL, MAT.tint, beads);
   /* scores: a pin standing out from the rim at the time of the result; its height is the accuracy, 0 to 100 % between the two rails */
   const SC = group("scores"), pins = [], heads = { base: [], rl: [], other: [] };
@@ -420,7 +448,7 @@ function buildSpine() {
 /* printed on the table: the hours as a scale, and under it the claim-to-close median of each 6-hour block */
 const blocks = [];
 { const first = Math.floor((T0 + PST) / 21600) * 21600 - PST; for (let a = first; hr(a) < HEND; a += 21600) blocks.push({ a, b: a + 21600 }); }
-const plate = { w: LEN + 48, d: 46, canvas: document.createElement("canvas") };
+const plate = { w: LEN + 48, d: 56, canvas: document.createElement("canvas") };
 { plate.canvas.width = 4096; plate.canvas.height = Math.round(4096 * plate.d / plate.w);
   plate.tex = new THREE.CanvasTexture(plate.canvas); plate.tex.anisotropy = 16;
   const m = new THREE.Mesh(new THREE.PlaneGeometry(plate.w, plate.d), new THREE.MeshBasicMaterial({ map: plate.tex, transparent: true, depthWrite: false, opacity: .9 }));
@@ -432,17 +460,17 @@ function fillBlocks() {
   for (let h = 0; h <= HGEO; h++) { const t = T0 + h * 3600, hd = new Date((t + PST) * 1000).getUTCHours(), major = hd % 6 === 0 || h === 0;
     g.fillStyle = major ? ink : soft; g.fillRect(X(h) - .07 * k, 5 * k, .14 * k, (major ? 2.6 : 1.4) * k);
     for (let q = 1; q < 4; q++) if (h + q / 4 <= HGEO) g.fillRect(X(h + q / 4) - .04 * k, 5 * k, .08 * k, .6 * k);
-    g.font = `${major ? 600 : 500} ${(major ? 3 : 2.3) * k}px Archivo, sans-serif`; g.textAlign = "center";
-    if (major || hd % 2 === 0) g.fillText(major ? `${hd === 0 || h === 0 ? day(t) + " " : ""}${two(hd)}:00` : two(hd), X(h), (major ? 11.6 : 10.4) * k); }
-  g.textAlign = "left"; g.fillStyle = soft; g.font = `600 ${1.9 * k}px Archivo, sans-serif`; g.letterSpacing = `${.22 * k}px`;
-  g.fillText("MEDIAN TIME FROM CLAIMING WORK TO ITS RESULT, PER SIX HOURS", X(0) + .6 * k, 17.6 * k); g.letterSpacing = "0px";
+    g.font = `${major ? 600 : 500} ${(major ? 3.9 : 3) * k}px Archivo, sans-serif`; g.textAlign = "center";
+    if (major || hd % 2 === 0) g.fillText(major ? `${hd === 0 || h === 0 ? day(t) + " " : ""}${two(hd)}:00` : two(hd), X(h), (major ? 12.6 : 11.4) * k); }
+  g.textAlign = "left"; g.fillStyle = soft; g.font = `600 ${2.4 * k}px Archivo, sans-serif`; g.letterSpacing = `${.26 * k}px`;
+  g.fillText("MEDIAN TIME FROM CLAIMING WORK TO ITS RESULT, PER SIX HOURS", X(0) + .6 * k, 20 * k); g.letterSpacing = "0px";
   for (const b of blocks) { const m = turnaround(b.a, b.b); b.m = median(m); b.n = m.length;
-    const x0 = X(Math.max(0, hr(b.a))), x1 = X(Math.min(HGEO, hr(b.b))), y = 20.5 * k;
+    const x0 = X(Math.max(0, hr(b.a))), x1 = X(Math.min(HGEO, hr(b.b))), y = 23.5 * k;
     g.fillStyle = soft; g.fillRect(x0 + .6 * k, y, x1 - x0 - 1.2 * k, .12 * k); g.fillRect(x0 + .6 * k, y, .12 * k, 1.4 * k); g.fillRect(x1 - .72 * k, y, .12 * k, 1.4 * k);
     g.textAlign = "left";
-    if (b.n) { g.fillStyle = ink; g.font = `300 ${7.5 * k}px Newsreader, Georgia, serif`; const text = `${Math.round(b.m)} min`; g.fillText(text, x0 + 1.6 * k, y + 9.6 * k);
-      const w = g.measureText(text).width; g.fillStyle = soft; g.font = `500 ${2.3 * k}px Archivo, sans-serif`;
-      g.fillText(`${b.n} work items closed`, x0 + 1.7 * k, y + 13.4 * k); }
+    if (b.n) { g.fillStyle = ink; g.font = `300 ${9.5 * k}px Newsreader, Georgia, serif`; const text = `${Math.round(b.m)} min`; g.fillText(text, x0 + 1.6 * k, y + 11.4 * k);
+      const w = g.measureText(text).width; g.fillStyle = soft; g.font = `500 ${2.9 * k}px Archivo, sans-serif`;
+      g.fillText(`${b.n} work items closed`, x0 + 1.7 * k, y + 16.2 * k); }
     else if (x1 - x0 > 22 * k) { g.fillStyle = soft; g.font = `500 ${2.3 * k}px Archivo, sans-serif`; g.fillText("no work closed", x0 + 1.7 * k, y + 5 * k); } }
   plate.tex.needsUpdate = true;
 }
@@ -463,38 +491,27 @@ $("speeds").onclick = e => e.target.dataset.s && setSpeed(+e.target.dataset.s);
 setSpeed(900);
 
 buildStatic(); buildBoard(); buildSpine(); fillBlocks();
-const composer = new EffectComposer(renderer, new THREE.WebGLRenderTarget(4, 4, { samples: 4, type: THREE.HalfFloatType }));
-composer.addPass(new RenderPass(scene, camera));
-composer.addPass(new UnrealBloomPass(new THREE.Vector2(1, 1), .1, .4, .95));  // a faint lens response on the brightest highlights only
-composer.addPass(new OutputPass());
-const film = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uT: { value: 0 } },
-  vertexShader: "varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }",
-  fragmentShader: `uniform sampler2D tDiffuse; uniform float uT; varying vec2 vUv;
-float h(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233)) + uT) * 43758.5453); }
-void main() { vec4 c = texture2D(tDiffuse, vUv); c.rgb *= mix(.74, 1., smoothstep(.92, .3, length(vUv - .5)));
-  c.rgb += (h(gl_FragCoord.xy) - .5) * .028; gl_FragColor = c; }` });
-composer.addPass(film);
-
-const OVER = { cam: new THREE.Vector3(170, 150, 385), tgt: new THREE.Vector3(0, -16, 16) };
-const overScale = () => { const wide = innerWidth / innerHeight; return (wide < 1 ? 1.8 : wide < 1.5 ? 1.3 : 1) * HGEO / 21; };
-const overDist = () => OVER.cam.length() * overScale();
-function frameOverview() { camera.position.copy(OVER.cam).multiplyScalar(overScale()); controls.target.copy(OVER.tgt); scene.fog.near = overDist() * 1.25; scene.fog.far = overDist() * 3.4; }
+const OVER = { get tgt() { return innerWidth < innerHeight ? new THREE.Vector3(34, -20, 6) : new THREE.Vector3(0, -20, 16); } };
+const overCam = () => { const wide = innerWidth / innerHeight;  // a tall window looks along the coil, a wide one across it
+  return wide < 1 ? new THREE.Vector3(760, 230, 190).multiplyScalar(1.42 * HGEO / 26) : new THREE.Vector3(170, 150, 385).multiplyScalar((wide < 1.5 ? 1.3 : 1) * HGEO / 21); };
+const overDist = () => overCam().length();
+function frameOverview() { camera.position.copy(overCam()); controls.target.copy(OVER.tgt); scene.fog.near = overDist() * 1.25; scene.fog.far = overDist() * 3.4; }
 function fly(tgt, cam, ms = 1100) { S.fly = { t0: performance.now(), ms, a: controls.target.clone(), b: tgt.clone(), ca: camera.position.clone(), cb: cam.clone() }; }
 const axis = h => new THREE.Vector3((h - HC) * PITCH, 0, 0);
 function setRide(on) {
   S.ride = on; $("ride").classList.toggle("on", on);
   if (on) { const t = axis(S.now); fly(t, t.clone().add(new THREE.Vector3(118, 62, 150)), 1800); }
-  else fly(OVER.tgt, OVER.cam.clone().multiplyScalar(overScale()), 1800);
+  else fly(OVER.tgt, overCam(), 1800);
 }
 function play(on) {
-  S.playing = on; S.intro = 0;
+  S.playing = on; S.intro = 0; S.goal = null;
   if (on && S.now >= HEND - 1e-4) S.now = 0;
   if (on && !S.ride && !S.touched) setRide(true);
   $("play").textContent = on ? "Pause" : "Play";
 }
 $("play").onclick = () => play(!S.playing);
 $("ride").onclick = () => setRide(!S.ride);
-const seek = h => { S.now = Math.max(0, Math.min(HEND, h)); S.intro = 0; };
+const seek = h => { S.goal = Math.max(0, Math.min(HEND, h)); S.intro = 0; if (S.playing) play(false); };  // the play head follows with some weight
 
 /* ---------- key: layers and people ---------- */
 const GL = { result: `<svg width="12" height="12"><circle cx="6" cy="6" r="4.2" fill="#c8a765"/></svg>`,
@@ -516,14 +533,14 @@ $("key").onclick = e => { const b = e.target.closest("button"); if (!b) return;
   if (b.dataset.p != null) U.uSolo.value = U.uSolo.value === +b.dataset.p ? -1 : +b.dataset.p;
   else { const k = b.dataset.l; S.off.has(k) ? S.off.delete(k) : S.off.add(k); const on = !S.off.has(k);
     layers[k].visible = on; if (k === "jobs") heads.visible = on; }
-  drawKey(); };
+  dirty = 2; shadowDirty = true; drawKey(); };
 drawKey();
 
 /* ---------- words ---------- */
 function words() {
-  const h = Math.round(HEND);
-  $("h1").textContent = `${h} hours of one research hackathon, every recorded event at its real time.`;
-  $("sub").textContent = `One turn of the coil is one hour. Each band is a person, each strand in it one agent session. ${D.people.length} people ran ${D.sessions.length} sessions, which posted ${D.items.length} board items, launched ${D.jobs.length} GPU jobs and made ${D.commits.length} commits. Drag to turn, scroll to zoom, click any mark to read it.`;
+  const all = D.items.filter(i => i.k === "work" && i.c != null).map(i => (i.c - i.t) / 60), results = D.items.filter(i => i.k === "result").length;
+  $("h1").textContent = `${Math.round(HEND)} hours of one research hackathon: ${results} results, each piece of work closed a median ${Math.round(median(all))} minutes after it was claimed.`;
+  $("sub").textContent = `Every recorded event at its real time. One turn of the coil is one hour, each band a person, each engraved line one of ${D.sessions.length} agent sessions. Brass beads are results. Drag to turn, scroll to zoom, click any mark to read it.`;
 }
 words();
 
@@ -560,7 +577,7 @@ function select(pk, quiet) {
   if (pk.kind === "item") history.replaceState(null, "", "#" + pk.rec.id);
   if (S.playing) play(false);
   const dist = camera.position.distanceTo(controls.target), off = camera.position.clone().sub(controls.target);
-  if (dist > 120) off.setLength(120); S.touched = true; controls.autoRotate = false;
+  if (dist > 120) off.setLength(120); S.touched = true;
   fly(pk.pos, pk.pos.clone().add(off), 900);
 }
 const open = id => { const p = picks.find(p => p.kind === "item" && p.rec.id === id); if (p) select(p); };
@@ -583,10 +600,10 @@ function nearest(x, y) {
   return best;
 }
 let down = null, moved = false, mouse = null;
-canvas.addEventListener("pointerdown", e => { down = [e.clientX, e.clientY]; moved = false; canvas.classList.add("drag"); S.touched = true; S.fly = null; controls.autoRotate = false; });
+canvas.addEventListener("pointerdown", e => { down = [e.clientX, e.clientY]; moved = false; canvas.classList.add("drag"); S.touched = true; S.fly = null; });
 addEventListener("pointermove", e => { if (down && Math.hypot(e.clientX - down[0], e.clientY - down[1]) > 5) moved = true; mouse = e.target === canvas && !down ? [e.clientX, e.clientY] : null; });
 addEventListener("pointerup", e => { canvas.classList.remove("drag"); if (down && !moved && e.target === canvas) { const p = nearest(e.clientX, e.clientY); select(p); } down = null; });
-canvas.addEventListener("wheel", () => { S.touched = true; S.fly = null; controls.autoRotate = false; }, { passive: true });
+canvas.addEventListener("wheel", () => { S.touched = true; S.fly = null; }, { passive: true });
 canvas.addEventListener("pointerleave", () => { mouse = null; });
 function hover() {
   const p = mouse ? nearest(mouse[0], mouse[1]) : null; S.hover = p; canvas.classList.toggle("hit", !!p);
@@ -600,7 +617,7 @@ function hover() {
 }
 
 /* ---------- the strip: the same hours flat, 5-minute bins stacked by person ---------- */
-const hist = $("hist"), hc = hist.getContext("2d");
+const hist = $("hist"), lit = $("lit"), head = $("head");
 let bins = null;
 function binAll() {
   const n = Math.ceil(HEND * 12) + 1; bins = D.people.map(() => new Float32Array(n));
@@ -608,26 +625,29 @@ function binAll() {
   D.ev.forEach(e => add(e[1], e[0])); D.commits.forEach(c => add(c.p, c.t)); D.items.forEach(i => add(i.p, i.t)); D.msgs.forEach(m => add(m.p, m.t));
 }
 binAll();
-let stripKey = "";
+/* Two fixed drawings of the same strip, one for the hours behind the play head and a dim one for those ahead. A frame moves only the cut
+   between them and the head, so the 2D canvas is not redrawn while the picture plays. */
+let stripKey = "", stripW = 0, stripNow = -1;
 function drawStrip(force) {
-  const r = hist.getBoundingClientRect(), dpr = Math.min(devicePixelRatio, 2), W = r.width, H = r.height;
-  const key = [W, H, S.now.toFixed(4), HEND, U.uSolo.value, D.items.length].join(); if (key === stripKey && !force) return; stripKey = key;
-  if (hist.width !== Math.round(W * dpr)) { hist.width = Math.round(W * dpr); hist.height = Math.round(H * dpr); }
-  hc.setTransform(dpr, 0, 0, dpr, 0, 0); hc.clearRect(0, 0, W, H);
-  const x = h => h / HEND * W, base = H - 17, top = 22, n = bins[0].length;
-  let max = 1; for (let b = 0; b < n; b++) max = Math.max(max, bins.reduce((s, a) => s + a[b], 0));
-  const bw = W / (HEND * 12);
-  for (let b = 0; b < n; b++) { let y = base; const past = (b + .5) / 12 <= S.now;
-    for (const p of order) { const hgt = bins[p][b] / max * (base - top); if (!hgt) continue;
-      hc.fillStyle = css(p); hc.globalAlpha = (past ? .95 : .3) * (U.uSolo.value < 0 || U.uSolo.value === p ? 1 : .15); hc.fillRect(b * bw + .5, y - hgt, Math.max(1, bw - 1), hgt); y -= hgt; } }
-  hc.globalAlpha = 1; hc.font = '500 10.5px Archivo, sans-serif'; hc.textBaseline = "alphabetic";
-  for (let h = 0; h <= HEND; h++) { const t = T0 + h * 3600, hd = new Date((t + PST) * 1000).getUTCHours(); hc.fillStyle = "#2c2925"; hc.fillRect(x(h), base, 1, hd % 6 ? 3 : 6);
-    if (hd % (W < 700 ? 6 : 2) === 0) { hc.fillStyle = hd % 6 ? "#8f887b" : "#cfc7b8"; hc.fillText(hd === 0 ? `${day(t)} 00:00` : `${two(hd)}:00`, x(h) + 3, H - 3); } }
-  hc.fillStyle = "#2c2925"; hc.fillRect(0, base, W, 1);
-  for (const i of D.items) if (i.k === "result") { hc.fillStyle = hr(i.t) <= S.now ? "#c8a765" : "#4a443a"; hc.fillRect(x(hr(i.t)) - .5, top - 9, 1.2, 5); }  // one tick per result
-  for (const b of blocks) { const x0 = x(Math.max(0, hr(b.a))), x1 = x(Math.min(HEND, hr(b.b))); hc.fillStyle = "#3a352f"; hc.fillRect(x0, 0, 1, 9);
-    const text = `claim to result ${Math.round(b.m)} min`; if (b.n && x1 - x0 > hc.measureText(text).width + 12) { hc.fillStyle = "#8f887b"; hc.fillText(text, x0 + 5, 9); } }
-  const px = x(S.now); hc.fillStyle = "#c8a765"; hc.fillRect(px - .75, 0, 1.5, base + 6); hc.beginPath(); hc.arc(px, 3, 3, 0, 7); hc.fill();
+  const W = hist.clientWidth, H = hist.clientHeight, dpr = Math.min(devicePixelRatio, 2);
+  const key = [W, H, HEND, U.uSolo.value, D.items.length].join();
+  if (key !== stripKey || force) { stripKey = key; stripW = W; stripNow = -1;
+    for (const [cv, past] of [[hist, false], [lit, true]]) {
+      cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); const hc = cv.getContext("2d"); hc.setTransform(dpr, 0, 0, dpr, 0, 0); hc.clearRect(0, 0, W, H);
+      const x = h => h / HEND * W, base = H - 17, top = 22, n = bins[0].length;
+      let max = 1; for (let b = 0; b < n; b++) max = Math.max(max, bins.reduce((s, a) => s + a[b], 0));
+      const bw = W / (HEND * 12);
+      for (let b = 0; b < n; b++) { let y = base;
+        for (const p of order) { const hgt = bins[p][b] / max * (base - top); if (!hgt) continue;
+          hc.fillStyle = css(p); hc.globalAlpha = (past ? .95 : .3) * (U.uSolo.value < 0 || U.uSolo.value === p ? 1 : .15); hc.fillRect(b * bw + .5, y - hgt, Math.max(1, bw - 1), hgt); y -= hgt; } }
+      hc.globalAlpha = 1; hc.font = "500 10.5px Archivo, sans-serif"; hc.textBaseline = "alphabetic";
+      for (let h = 0; h <= HEND; h++) { const t = T0 + h * 3600, hd = new Date((t + PST) * 1000).getUTCHours(); hc.fillStyle = "#2c2925"; hc.fillRect(x(h), base, 1, hd % 6 ? 3 : 6);
+        if (hd % (W < 700 ? 6 : 2) === 0 && x(h) < W - 30) { hc.fillStyle = hd % 6 ? "#8f887b" : "#cfc7b8"; hc.fillText(hd === 0 ? `${day(t)} 00:00` : `${two(hd)}:00`, x(h) + 3, H - 3); } }
+      hc.fillStyle = "#2c2925"; hc.fillRect(0, base, W, 1);
+      for (const i of D.items) if (i.k === "result") { hc.fillStyle = past ? "#c8a765" : "#4a443a"; hc.fillRect(x(hr(i.t)) - .5, top - 9, 1.2, 5); }  // one tick per result
+      for (const b of blocks) { const x0 = x(Math.max(0, hr(b.a))), x1 = x(Math.min(HEND, hr(b.b))); hc.fillStyle = "#3a352f"; hc.fillRect(x0, 0, 1, 9);
+        const text = `claim to result ${Math.round(b.m)} min`; if (b.n && x1 - x0 > hc.measureText(text).width + 12) { hc.fillStyle = "#8f887b"; hc.fillText(text, x0 + 5, 9); } } } }
+  if (S.now !== stripNow) { stripNow = S.now; const px = S.now / HEND * stripW; lit.style.clipPath = `inset(0 ${(stripW - px).toFixed(1)}px 0 0)`; head.style.transform = `translateX(${px.toFixed(1)}px)`; }
 }
 { let drag = false; const at = e => { const r = hist.getBoundingClientRect(); seek((e.clientX - r.left) / r.width * HEND); S.live = false; };
   $("strip").addEventListener("pointerdown", e => { if (e.target.closest("button")) return; drag = true; $("strip").setPointerCapture(e.pointerId); at(e); });
@@ -650,13 +670,13 @@ addEventListener("keydown", e => { if (e.target.closest("input")) return;
   else if (e.key === "Escape") select(null); else if (e.key === "r") setRide(!S.ride); });
 
 /* ---------- resize ---------- */
-function resize() { const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); composer.setPixelRatio(renderer.getPixelRatio()); composer.setSize(w, h); camera.aspect = w / h; if (w > 760) camera.setViewOffset(w, h, -w * .045, h * .02, w, h); else camera.clearViewOffset(); camera.updateProjectionMatrix();
+function resize() { const w = innerWidth, h = innerHeight; PR = Math.min(FULL(), Math.sqrt(BUDGET / (w * h))); renderer.setPixelRatio(PR); renderer.setSize(w, h, false); dirty = 2; camera.aspect = w / h; if (w > 760) camera.setViewOffset(w, h, -w * .045, h * .02, w, h); else camera.clearViewOffset(); camera.updateProjectionMatrix();
   U.uPx.value = h * renderer.getPixelRatio() / (2 * Math.tan(camera.fov * Math.PI / 360)); }
 addEventListener("resize", () => { resize(); if (!S.touched && !S.ride) frameOverview(); });
 frameOverview(); resize();
 
 /* ---------- live: new board items, messages and scores from /data ---------- */
-const known = { items: new Set(D.items.map(i => i.id)), msgs: new Set(D.msgs.map(m => Math.round(m.t * 10))), scores: new Set(D.scores.map(s => s.result + s.right + s.n + s.config)) };
+const known = { items: new Set(D.items.map(i => i.id)), msgs: new Set(D.msgs.map(m => Math.round(m.t))), scores: new Set(D.scores.map(s => s.result + s.right + s.n + s.config)) };
 let fresh = 0;
 async function read() {
   try {
@@ -664,66 +684,95 @@ async function read() {
     const pid = w => { let p = D.people.indexOf(w); return p; };
     for (const i of d.items) { const p = pid(i.who); if (p < 0) continue; const old = byId.get(i.id);
       if (old) { if (i.closed_at && old.c == null) { old.c = Date.parse(i.closed_at) / 1000; n++; } continue; }
-      const rec = { id: i.id, k: i.kind, p, s: sessionOf.get((i.session || "").slice(0, 8)) ?? -1, t: i.at_ns / 1e9, c: i.closed_at ? Date.parse(i.closed_at) / 1000 : null, text: i.text, title: d.plain?.[i.id]?.title ?? "", branch: i.branch ?? "", ups: i.ups ?? 0, downs: i.downs ?? 0, nc: i.n_comments ?? 0 };
+      const rec = { id: i.id, k: i.kind, p, s: sessionOf.get((i.session || "").slice(0, 8)) ?? -1, t: i.at_ns / 1e9, c: i.closed_at ? Date.parse(i.closed_at) / 1000 : null, text: i.text, title: d.plain?.[i.id]?.title ?? "", branch: i.branch ?? "", ups: i.ups ?? 0, downs: i.downs ?? 0 };
       D.items.push(rec); byId.set(i.id, rec); known.items.add(i.id); n++; }
-    for (const m of d.messages) { const t = +m.sk.split("#")[0] / 1e9, k = Math.round(t * 10), p = pid(m.who); if (p < 0 || known.msgs.has(k)) continue; known.msgs.add(k);
+    for (const m of d.messages) { const t = +m.sk.split("#")[0] / 1e9, k = Math.round(t), p = pid(m.who); if (p < 0 || known.msgs.has(k)) continue; known.msgs.add(k);
       D.msgs.push({ p, s: sessionOf.get((m.session || "").slice(0, 8)) ?? -1, t, text: m.text, branch: m.branch ?? "" }); n++; }
     for (const s of d.scores) { const k = s.result + s.right + s.n + s.config, p = pid(s.who); if (p < 0 || known.scores.has(k)) continue; known.scores.add(k);
       D.scores.push({ t: +s.sk.split("#")[0] / 1e9, result: s.result, model: s.model, bench: s.benchmark, right: s.right, n: s.n, config: s.config ?? "", tokens: s.tokens ?? null, p }); n++; }
     if (n) { fresh += n; D.items.sort((a, b) => a.t - b.t); const end = S.now >= HEND - 1e-3;
       HEND = Math.max(HEND, ...D.items.map(i => hr(i.t)), ...D.msgs.map(m => hr(m.t)));
-      buildBoard(); buildSpine(); fillBlocks(); binAll(); drawKey(); words(); if (end && !S.playing) S.now = HEND; }
+      buildBoard(); buildSpine(); fillBlocks(); binAll(); drawKey(); words(); dirty = 2; shadowDirty = true; if (end && !S.playing) S.now = HEND; }
     $("status").className = "status"; $("status").textContent = `Live, read ${clock(Date.now() / 1000, true)} PST` + (fresh ? `, ${fresh} new since the build` : "");
-  } catch (e) { $("status").className = "status bad"; $("status").textContent = `Offline, showing the build of ${when(D.built)} PST`; }
+  } catch (e) { $("status").className = "status bad"; $("status").textContent = "Offline, showing the last data read, retrying"; }
 }
-if (!Q.has("still")) { read(); setInterval(read, 10000); } else $("status").textContent = `Build of ${when(D.built)} PST`;
+if (!Q.has("still")) { read(); setInterval(() => document.hidden || read(), 10000); } else $("status").textContent = `Build of ${when(D.built)} PST`;
 
 /* ---------- frame ---------- */
 const tmp = new THREE.Vector3(), tmp2 = new THREE.Vector3();
 const shown = {}, set = (id, html) => { if (shown[id] !== html) { shown[id] = html; $(id).innerHTML = html; } };
-let last = performance.now(), prevAxis = null;
-if (Q.has("h")) { S.now = +Q.get("h"); } else S.intro = performance.now();
+let last = performance.now();
+const CALM = matchMedia("(prefers-reduced-motion: reduce)").matches;  // then one still frame of the whole object, and no replay until asked
+if (Q.has("h")) S.now = +Q.get("h"); else if (CALM) S.now = HEND; else S.intro = performance.now();
 if (Q.has("ride")) { S.ride = true; $("ride").classList.add("on"); const t = axis(S.now); controls.target.copy(t); camera.position.copy(t).add(new THREE.Vector3(118, 62, 150)); S.touched = true; }
 if (Q.has("cam")) { const c = Q.get("cam").split(",").map(Number); camera.position.set(c[0], c[1], c[2]); controls.target.set(c[3], c[4], c[5]); S.touched = true; }
-controls.autoRotate = !S.touched && !matchMedia("(prefers-reduced-motion: reduce)").matches; controls.autoRotateSpeed = .06;
 if (location.hash.length > 1) setTimeout(() => open(location.hash.slice(1)), 300);
 if (Q.has("play")) setTimeout(() => play(true), 300);
 
+/* quality: an integrated or software renderer gets the two large surfaces in cheaper materials and a harder shadow, and draws at most
+   2 million pixels while the picture moves (multisampling makes the pixel its main cost). If pictures still come slowly the budget shrinks. */
+function lower() {
+  const was = BUDGET;
+  if (layers.flight.material !== MAT.flightLite) { layers.flight.material = MAT.flightLite; layers.flight.receiveShadow = false; layers.table.material = layers.table.userData.lite;
+    renderer.shadowMap.type = THREE.PCFShadowMap; layers.table.material.needsUpdate = true; shadowDirty = true; BUDGET = 2e6; }
+  else BUDGET = Math.max(6e5, Math.min(BUDGET, innerWidth * innerHeight * PR * PR) * .64);
+  if (BUDGET !== was) resize();
+}
+{ const g = renderer.getContext(), e = g.getExtension("WEBGL_debug_renderer_info");
+  if (e && /Intel|Mesa|SwiftShader|llvmpipe|Apple GPU|Mali|Adreno/i.test(g.getParameter(e.UNMASKED_RENDERER_WEBGL))) lower(); }
+let drawn = 0, sig = "", hud = "", lastShadow = 0, slow = 0, lastMouse = null, fence = null, frames = 0, sharp = false;
+const gl = renderer.getContext();
 function frame(t) {
-  const dt = Math.min(.1, (t - last) / 1000); last = t; 
+  requestAnimationFrame(frame);
+  const dt = Math.min(.1, (t - last) / 1000); last = t;
   /* the play head */
-  if (S.intro) { const u = Math.min(1, (t - S.intro) / 6500); S.now = HEND * (1 - (1 - u) ** 2.2) ; U.uTau.value = .5; if (u >= 1) S.intro = 0; }
+  if (S.intro) { const u = Math.min(1, (t - S.intro) / 6500); S.now = HEND * (1 - (1 - u) ** 2.2); U.uTau.value = .5; if (u >= 1) S.intro = 0; }
   else if (S.playing) { S.now += dt * S.speed / 3600; U.uTau.value = Math.max(.03, S.speed / 3600 * .7); if (S.now >= HEND) { S.now = HEND; play(false); } }
-  else U.uTau.value += (.03 - U.uTau.value) * .05;
+  else { if (S.goal != null) { S.now += (S.goal - S.now) * (1 - Math.exp(-dt * 9)); U.uTau.value = .12; if (Math.abs(S.goal - S.now) < 2e-4) { S.now = S.goal; S.goal = null; } }
+    else U.uTau.value = Math.abs(U.uTau.value - .03) < 1e-3 ? .03 : U.uTau.value + (.03 - U.uTau.value) * .08; }
   U.uNow.value = S.now;
   const tNow = T0 + S.now * 3600;
 
   /* camera */
-  if (S.fly) { const f = S.fly, u = Math.min(1, (t - f.t0) / f.ms), k = u * u * (3 - 2 * u);
+  if (S.fly) { const f = S.fly, u = Math.min(1, (t - f.t0) / f.ms), k = u * u * u * (u * (u * 6 - 15) + 10);
     controls.target.lerpVectors(f.a, f.b, k); camera.position.lerpVectors(f.ca, f.cb, k); if (u >= 1) S.fly = null; }
-  if (S.ride && !S.fly && !S.sel) { const a = axis(S.now); if (prevAxis != null) { const dx = a.x - controls.target.x; const m = dx * Math.min(1, dt * 6); controls.target.x += m; camera.position.x += m; } prevAxis = a.x; }
+  if (S.ride && !S.fly && !S.sel) { const dx = (S.now - HC) * PITCH - controls.target.x, m = dx * Math.min(1, dt * 5); controls.target.x += m; camera.position.x += m; }
   controls.update();
 
-  /* hand */
-  hand.position.set((S.now - HC) * PITCH, 0, 0); hand.rotation.x = S.now * 2 * Math.PI;
-  /* a bead on the wire of every GPU job running at the play head */
-  let n = 0, running = 0;
-  for (const j of D.jobs) { if (j.h1 == null || j.h0 > S.now || j.h1 < S.now) continue; running++; if (n >= HEADS) continue;
-    jobAt(j, (S.now - j.h0) / Math.max(1e-6, j.h1 - j.h0), tmp); heads.setMatrixAt(n++, mat4.makeScale(.13, .13, .13).setPosition(tmp)); }
-  heads.count = n; heads.instanceMatrix.needsUpdate = true;
-  const mark = S.sel ?? S.hover; ring.visible = !!mark;
-  if (mark) { ring.position.copy(mark.pos); ring.quaternion.copy(camera.quaternion); ring.scale.setScalar(camera.position.distanceTo(mark.pos) * (.011 + .0012 * Math.sin(t / 700))); }
-  film.uniforms.uT.value = Math.floor(t / 90) % 64;
-
-  composer.render();
-
-  /* words at the play head */
-  set("clock", `${clock(tNow)}<small>${day(tNow)} PST</small>`);
-  const openWork = D.items.reduce((s, i) => s + (i.k === "work" && i.t <= tNow && (i.c == null || i.c > tNow)), 0), tr = turnaround(tNow - 3 * 3600, tNow), m = median(tr);
-  set("read", `<b>${running}</b> GPU jobs running · <b>${openWork}</b> work items open<br>claim to result <b>${m == null ? "no work closed" : Math.round(m) + " min"}</b>${m == null ? "" : ` median, ${tr.length} closed`} in the 3 h before`);
-  document.body.classList.toggle('close', S.ride || !!S.sel || camera.position.distanceTo(controls.target) < overDist() * .62);
-  news(); drawStrip(); hover();
-  requestAnimationFrame(frame);
+  const mark = S.sel ?? S.hover, c = camera.position, q = camera.quaternion;
+  const now = [S.now, U.uTau.value, c.x, c.y, c.z, q.x, q.y, q.z, mark?.pos.x, mark?.pos.y, U.uSolo.value].map(x => x?.toFixed?.(4)).join();
+  if (now !== sig) { sig = now; dirty = Math.max(dirty, 1); }
+  const state = S.now.toFixed(5) + U.uSolo.value;
+  if (state !== hud) { hud = state; shadowDirty = true;
+    /* hand, and a bead on the wire of every GPU job running at the play head */
+    hand.position.set((S.now - HC) * PITCH, 0, 0); hand.rotation.x = S.now * 2 * Math.PI;
+    let n = 0, running = 0;
+    for (const j of D.jobs) { if (j.h1 == null || j.h0 > S.now || j.h1 < S.now) continue; running++; if (n >= HEADS) continue;
+      jobAt(j, (S.now - j.h0) / Math.max(1e-6, j.h1 - j.h0), tmp); heads.setMatrixAt(n++, mat4.makeScale(.13, .13, .13).setPosition(tmp)); }
+    heads.count = n; heads.instanceMatrix.needsUpdate = true;
+    /* words at the play head */
+    set("clock", `${clock(tNow)}<small>${day(tNow)} PST</small>`);
+    const openWork = D.items.reduce((s, i) => s + (i.k === "work" && i.t <= tNow && (i.c == null || i.c > tNow)), 0), tr = turnaround(tNow - 3 * 3600, tNow), m = median(tr);
+    set("read", `<b>${running}</b> GPU jobs running · <b>${openWork}</b> work items open<br>claim to result <b>${m == null ? "no work closed" : Math.round(m) + " min"}</b>${m == null ? "" : ` median, ${tr.length} closed`} in the 3 h before`);
+    news(); }
+  drawStrip();
+  document.body.classList.toggle("close", S.ride || !!S.sel || c.distanceTo(controls.target) < overDist() * .62);
+  if (dirty || mouse !== lastMouse) { lastMouse = mouse; hover(); }
+  /* A new picture starts only when the graphics card has finished the one before (a fence tells), so pictures never queue up behind a slow card.
+     When the card takes too long for nine pictures in a row, the quality is lowered. */
+  if (fence) { if (!gl.isContextLost() && gl.getSyncParameter(fence, gl.SYNC_STATUS) !== gl.SIGNALED) return;
+    gl.deleteSync(fence); fence = null; const cost = t - drawn;
+    if (++frames > 12 && !sharp) { if (cost <= 18.5 || cost >= 2000) slow = 0; else if (++slow > 8) { slow = 0; lower(); } } }
+  /* at rest the picture is drawn once more at full resolution, so a lowered resolution shows only in motion */
+  if (!dirty && !sharp && PR < FULL() && t - drawn > 250) { sharp = true; renderer.setPixelRatio(FULL()); renderer.setSize(innerWidth, innerHeight, false); dirty = 1; }
+  else if (dirty && sharp && t - drawn > 7.4) { sharp = false; renderer.setPixelRatio(PR); renderer.setSize(innerWidth, innerHeight, false); }
+  if (!dirty || t - drawn < 7.4) return;  // never more than about 120 pictures a second, whatever the browser's frame rate
+  drawn = t; dirty--;
+  ring.visible = !!mark;
+  if (mark) { ring.position.copy(mark.pos); ring.quaternion.copy(q); ring.scale.setScalar(c.distanceTo(mark.pos) * .011); }
+  if (shadowDirty && t - lastShadow > (S.playing || S.intro || S.goal != null ? 110 : 0)) { renderer.shadowMap.needsUpdate = true; shadowDirty = false; lastShadow = t; }
+  renderer.render(scene, camera);
+  fence = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0); gl.flush();
 }
 requestAnimationFrame(frame);
 document.fonts?.ready.then(() => Promise.all([document.fonts.load('300 40px Newsreader'), document.fonts.load('500 20px Archivo'), document.fonts.load('600 20px Archivo')])).then(() => { drawStrip(true); fillBlocks(); });

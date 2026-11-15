@@ -75,9 +75,11 @@ def job_flags():
 def command_errors(cmd, flags):
     """Every job file a cell's command names (jobs/<name>.py or the module jobs.<name>) exists and takes every flag
     written after it, up to the next &&, ;, | or double quote, with a value among the flag's choices when it has them;
-    a single-quoted value counts as one word."""
+    a single-quoted value counts as one word. A command that runs git is rejected (job machines have no .git)."""
+    git = ["the command runs git ($(git ...) or rev-parse): job machines have no .git folder; write --commit COMMIT_SHA, which the "
+           "coordinator replaces with the pushed commit's full sha at submission"] if re.search(r"\$\(git|`git|rev-parse", cmd) else []
     cmd = re.sub(r"\$?'([^']*)'", lambda q: q[1] if q[1] and not re.search(r"\s", q[1]) else "TEXT", cmd)  # a quoted value is one word
-    refs, errors = list(JOB_REF.finditer(cmd)), []
+    refs, errors = list(JOB_REF.finditer(cmd)), git
     for m in refs:
         name = m.group(1) or m.group(2)
         if name not in flags:
@@ -92,7 +94,7 @@ def command_errors(cmd, flags):
                 errors.append(f"jobs/{name}.py has no flag {flag}")
             elif flags[name][flag] is not None and value not in map(str, flags[name][flag]):
                 errors.append(f"jobs/{name}.py {flag} takes {', '.join(map(str, flags[name][flag]))}; not {value}")
-    return errors if refs else ["the command names no job file of studies/rlneurons/jobs/"]
+    return errors if refs else git + ["the command names no job file of studies/rlneurons/jobs/"]
 
 
 def flags_once(check):

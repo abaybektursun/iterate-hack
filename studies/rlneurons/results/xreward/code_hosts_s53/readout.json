@@ -1,0 +1,247 @@
+{
+ "cells": {
+  "math1_code1": {
+   "job_id": "abaybektursun-1115-143301-ec55",
+   "commit": "bb86cc1ccb9c862528f38da51e8538161ebd2b45",
+   "prefix_text": " as shown in the prompt. I hope this helps!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 138,
+    "pct": 84.66257668711657,
+    "wilson95": [
+     78.33867821289797,
+     89.39029080816351
+    ],
+    "cap_hits": 0,
+    "no_block": 0,
+    "timeouts": 2,
+    "tokens_per_problem": 4384.386503067484
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 263,
+    "pct": 70.13333333333334,
+    "wilson95": [
+     65.31599837916004,
+     74.54236359787835
+    ],
+    "cap_hits": 0,
+    "no_block": 0,
+    "timeouts": 1,
+    "tokens_per_problem": 3356.808
+   },
+   "all": {
+    "n": 538,
+    "passed": 401,
+    "pct": 74.53531598513011,
+    "wilson95": [
+     70.68897021860278,
+     78.03376881747307
+    ],
+    "cap_hits": 0,
+    "no_block": 0,
+    "timeouts": 3,
+    "tokens_per_problem": 3668.1375464684015
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 398,
+    "pct": 74.39252336448598,
+    "wilson95": [
+     70.52928708044112,
+     77.90796578830984
+    ],
+    "cap_hits": 0,
+    "no_block": 0,
+    "timeouts": 3,
+    "tokens_per_problem": 3672.814953271028
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     538
+    ]
+   ]
+  },
+  "code_top8_code31": {
+   "job_id": "abaybektursun-1115-143316-628e",
+   "commit": "bb86cc1ccb9c862528f38da51e8538161ebd2b45",
+   "prefix_text": " as shown in the prompt. I hope this helps!\n\nOkay",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 138,
+    "pct": 84.66257668711657,
+    "wilson95": [
+     78.33867821289797,
+     89.39029080816351
+    ],
+    "cap_hits": 1,
+    "no_block": 1,
+    "timeouts": 0,
+    "tokens_per_problem": 4664.7239263803685
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 253,
+    "pct": 67.46666666666667,
+    "wilson95": [
+     62.56855340468408,
+     72.01055533036246
+    ],
+    "cap_hits": 3,
+    "no_block": 5,
+    "timeouts": 3,
+    "tokens_per_problem": 3418.1653333333334
+   },
+   "all": {
+    "n": 538,
+    "passed": 391,
+    "pct": 72.67657992565056,
+    "wilson95": [
+     68.76024828387003,
+     76.2713741585637
+    ],
+    "cap_hits": 4,
+    "no_block": 6,
+    "timeouts": 3,
+    "tokens_per_problem": 3795.8401486988846
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 388,
+    "pct": 72.5233644859813,
+    "wilson95": [
+     68.59026829839982,
+     76.13531768385681
+    ],
+    "cap_hits": 4,
+    "no_block": 6,
+    "timeouts": 3,
+    "tokens_per_problem": 3786.626168224299
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     538
+    ]
+   ]
+  },
+  "rl_plain": {
+   "job_id": "abaybektursun-1115-143331-10da",
+   "commit": "bb86cc1ccb9c862528f38da51e8538161ebd2b45",
+   "prefix_text": "",
+   "humanevalplus": {
+    "n": 163,
+    "passed": 135,
+    "pct": 82.82208588957056,
+    "wilson95": [
+     76.29328973312941,
+     87.83945084433589
+    ],
+    "cap_hits": 2,
+    "no_block": 2,
+    "timeouts": 0,
+    "tokens_per_problem": 4879.39263803681
+   },
+   "mbppplus": {
+    "n": 375,
+    "passed": 268,
+    "pct": 71.46666666666667,
+    "wilson95": [
+     66.69655276539069,
+     75.80143583264362
+    ],
+    "cap_hits": 2,
+    "no_block": 1,
+    "timeouts": 2,
+    "tokens_per_problem": 3507.2213333333334
+   },
+   "all": {
+    "n": 538,
+    "passed": 403,
+    "pct": 74.90706319702602,
+    "wilson95": [
+     71.07574008354808,
+     78.38522227125618
+    ],
+    "cap_hits": 4,
+    "no_block": 3,
+    "timeouts": 2,
+    "tokens_per_problem": 3922.953531598513
+   },
+   "all_no_overlap": {
+    "n": 535,
+    "passed": 400,
+    "pct": 74.76635514018692,
+    "wilson95": [
+     70.91812508499068,
+     78.26146116105913
+    ],
+    "cap_hits": 4,
+    "no_block": 3,
+    "timeouts": 2,
+    "tokens_per_problem": 3929.7214953271027
+   },
+   "first_three_words": [
+    [
+     "as shown in",
+     447
+    ],
+    [
+     "! Okay, I",
+     66
+    ],
+    [
+     "! Okay, let's",
+     22
+    ],
+    [
+     "! I hope",
+     1
+    ],
+    [
+     "! Okay, so",
+     1
+    ],
+    [
+     ". Okay, let's",
+     1
+    ]
+   ]
+  }
+ },
+ "differences": {
+  "math1_code1 - code_top8_code31": {
+   "points": 1.858736059479554,
+   "bootstrap95": [
+    -1.3011152416356864,
+    5.018587360594795
+   ],
+   "only_first": 41,
+   "only_second": 31
+  },
+  "math1_code1 - rl_plain": {
+   "points": -0.37174721189591076,
+   "bootstrap95": [
+    -3.3457249070631967,
+    2.602230483271384
+   ],
+   "only_first": 33,
+   "only_second": 35
+  },
+  "code_top8_code31 - rl_plain": {
+   "points": -2.2304832713754648,
+   "bootstrap95": [
+    -5.576208178438657,
+    0.743494423791824
+   ],
+   "only_first": 30,
+   "only_second": 42
+  }
+ },
+ "overlap_excluded": [
+  "HumanEval/47",
+  "Mbpp/641",
+  "Mbpp/804"
+ ]
+}

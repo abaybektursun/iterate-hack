@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 230, "low": 214, "high": 244, "reason": "New samples land around the arm's mean: Think-SFT at cap 32,768 sits at 230-235 at T 1.0 (own format 232, cue 230/234/235/232); the theory's T 0.6 clause (loops put problems near p=0.5) widens the spread beyond the usual 6-9 on the 328."},
+{"id": "t02", "value": 472, "low": 462, "high": 481, "reason": "Arm mean from the paired T 1.0 own-format cap-32,768 cell (474) and the 457-464 cue/16k cells; one draw varies by about 5-7 on MATH-500, widened slightly for the T 0.6 clause."},
+{"id": "t03", "value": 406, "low": 393, "high": 419, "reason": "The stored 411 is one draw; new seeds land around the arm's mean, which I shrink a little toward the neighbouring code-direction cells (386-399), with about 7-8 problems of per-draw sd on 538."},
+{"id": "t04", "value": 406, "low": 393, "high": 419, "reason": "Same arm as t03: an independent draw around the arm's mean (about 406), not around the stored 411."},
+{"id": "t05", "value": 401, "low": 389, "high": 413, "reason": "The best estimate of RL-Code's arm mean is its stored single draw (401); a new seed is a fresh draw with an sd of about 7 on 538."},
+{"id": "t06", "value": 401, "low": 389, "high": 413, "reason": "Same arm as t05, an independent draw around 401."},
+{"id": "t07", "value": 389, "low": 376, "high": 402, "reason": "The stored 386 is one draw; the arm mean is shrunk slightly toward the 1.5x/2x cells (399, 394), since a gap of a few problems between single cells is noise, with an sd of about 7-8."},
+{"id": "t08", "value": 389, "low": 376, "high": 402, "reason": "Same arm as t07, an independent draw around about 389."},
+{"id": "t09", "value": 226, "low": 214, "high": 238, "reason": "The stored 232 is one draw at seed 3,000,000; the new seed lands around the arm mean, shrunk toward the 1.5x (220) and M(2) (233) cells, with an sd of 6-9 on the 328."},
+{"id": "t10", "value": 40, "low": 32, "high": 48, "reason": "Shard 1/2 gave 20 cap hits of 250; the rerun shard 0/2 is an independent draw at the same rate, so the total is about 40, with binomial plus problem-split spread."},
+{"id": "t11", "value": 376, "low": 364, "high": 388, "reason": "Shard 1/2 gave 188/250; the other half is an independent draw around the same per-problem rates, about 188, so the total is about 376 with an sd of about 6-7."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": 197, "low": 189, "high": 205, "reason": "With independent draws at fixed p_i, adding 2 samples to the 4-sample vote (192) raises the plurality modestly; pass@4 of 207 caps the gain on the 328."},
+{"id": "t15", "value": 469, "low": 460, "high": 477, "reason": "Arm mean from neighbouring cells (Think-SFT + 1x delta 467, Think-SFT 457-462), with M(2)'s hard328 lead mostly saturated on MATH-500; one draw varies by about 5-7."},
+{"id": "t16", "value": 233, "low": 221, "high": 245, "reason": "Samples 234/229/237 give an arm mean of 233.3; the 4th sample is an independent draw around it with an sd of about 7 on the 328."},
+{"id": "t17", "value": 247, "low": 240, "high": 254, "reason": "The vote over 3 is 246; one more independent draw changes the plurality on only a few near-tie problems (Think-SFT's vote over 4 sat at the top of its vote-over-3 range)."},
+{"id": "t18", "value": 245, "low": 233, "high": 257, "reason": "The first cap-32,768 M(2) sample gave 245, and its 16k view (232) matched the arm's 16k mean, so 245 is the arm mean; the same seed still gives new text, with an sd of about 7."},
+{"id": "t19", "value": 80, "low": 73, "high": 87, "reason": "The 16k vote is 75; by the hard328 base rate the late finishes add about a quarter of the single-sample gain to the vote, about +5."},
+{"id": "t20", "value": 71, "low": 64, "high": 78, "reason": "The arm mean at 16k is about 60 of 136 with about 62 cap hits per sample; by the board's rate for late finishes (about 20-25% right on hard328) that adds about 11, and averaging 4 draws shrinks the sampling noise."}
+]}

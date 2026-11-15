@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 228, "low": 214, "high": 242, "reason": "Theory: the opening (prompt format) moves few problems on hard items, and at cap 32,768 Think-SFT's late answers finish, so the count stays near the paired T 1.0 own-format cell (232) with a small allowance for the T 0.6 change, which the theory does not cover."},
+{"id": "t02", "value": 472, "low": 463, "high": 481, "reason": "Theory: changing the opening and format moves few problems, so the count stays near the paired own-format T 1.0 cap-32,768 cell (474 of 500) on the easy MATH-500 mix."},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t10", "value": 41, "low": 30, "high": 53, "reason": "Set-composition part of the theory: the interleaved MATH-500 shards have the same difficulty mix, so the full count is about twice shard 1/2's 20 cap hits of 250."},
+{"id": "t11", "value": 375, "low": 360, "high": 390, "reason": "Set-composition part of the theory: the interleaved shards share a difficulty mix, so the full count is about twice shard 1/2's 188/250 right under v3."},
+{"id": "t14", "value": 196, "low": 188, "high": 204, "reason": "Theory: on hard items votes yield little per abstention, so going from 4 to 6 samples adds only a few problems over the cued base's vote over 4 (192, 195 after restart), staying under its pass@4 of 207."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": 246, "low": 239, "high": 253, "reason": "Theory: a vote's yield per abstention on hard328 is modest, so the fourth sample adds about nothing to M(2)'s vote over 3 (246)."},
+{"id": "t18", "value": 244, "low": 235, "high": 252, "reason": "Theory: on hard328 a cap raise turns Think-SFT-type unfinished answers into some right ones, as M(2) went 232 to 245 at seed 3,010,000; apply the same gain to the 16k mean of about 233."},
+{"id": "t19", "value": 79, "low": 72, "high": 86, "reason": "Theory: on fresh2026 (harder than hard328) cap raises and votes yield less per abstention, so the vote over 4 rises only a few problems above its cap-16,384 value of 75."},
+{"id": "t20", "value": 67, "low": 62, "high": 73, "reason": "Theory: fresh2026's ~62 cap hits per sample finish at 32,768 but convert at a lower rate than hard328's (~24 %), about +7 on the 16k single-sample mean of 60."}
+]}

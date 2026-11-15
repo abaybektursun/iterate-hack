@@ -78,8 +78,8 @@ p, h2, article, section { margin: 0; }
 .mast { display: flex; justify-content: space-between; gap: 24px; padding-top: 14px; font-size: 13px; color: var(--mute); }
 
 /* first screen: title, four usage numbers, both scenes, the caption of the selected recall */
-.first { padding: 22px 0 40px; border-bottom: 1px solid var(--rule); }
-.lede { display: flex; align-items: center; gap: calc(var(--u) * 5); }
+.first { padding: max(0px, clamp(28px, 7vh, 76px) - 34px) 0 40px; border-bottom: 1px solid var(--rule); }  /* the lead starts where it does on every page; 34px is the line above it */
+.lede { display: flex; align-items: baseline; gap: calc(var(--u) * 5); }
 h1.cond { white-space: nowrap; }
 .lede .sub { font-size: 16px; line-height: 1.45; max-width: 560px; }
 .nums { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 28px; margin-top: calc(var(--u) * 3); border-top: 1px solid var(--rule); }
@@ -137,9 +137,9 @@ section .say { margin-top: calc(var(--u) * 3); font-size: 16px; max-width: 420px
 .case .then { line-height: 1.45; }
 .case b { font-weight: 600; }
 .picks { grid-column: 1; grid-row: 1; align-self: end; position: relative; z-index: 1; }
-.picks { display: flex; gap: 6px; }
+.picks { display: flex; gap: 8px; }
 .picks button { appearance: none; min-width: 44px; height: 44px; padding: 0 12px; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: none; color: var(--mute); font: inherit; font-weight: 600; cursor: pointer; }
-.picks button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--blue); }
+.picks button[aria-pressed="true"] { color: var(--ink); border-bottom: 2px solid var(--blue); }
 
 /* recall against grep, as towers */
 #tw text.cnt, #tw tspan.tn { font-weight: 300; font-size: 26px; font-stretch: 102%; letter-spacing: -.016em; }
@@ -155,6 +155,9 @@ section .say { margin-top: calc(var(--u) * 3); font-size: 16px; max-width: 420px
 .end p { margin-top: calc(var(--u) * 3); font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; max-width: 620px; }
 .end .src { margin-top: 56px; padding-top: calc(var(--u) * 2); border-top: 1px solid var(--rule); font-size: 13px; line-height: 1.5; font-weight: 400; color: var(--grey); max-width: none; }
 
+@media (max-width: 500px) {  /* no room: of the writers only the one that wrote is named, and the note "papers only" goes */
+  #mem [data-k="writers"] .lab:not(.on), #mem [data-k="only"] { display: none; }
+}
 @media (max-width: 900px) {
   .page { padding: 14px 16px 0; }
   .end .page { padding-top: 40px; padding-bottom: 40px; }
@@ -178,7 +181,7 @@ section .say { margin-top: calc(var(--u) * 3); font-size: 16px; max-width: 420px
   .case .when { padding-bottom: calc(var(--u) * 2); }
   .case .blk { padding: calc(var(--u) * 2) 0; border-top: 1px solid var(--rule); }
   .picks { padding-top: calc(var(--u) * 2.5); border-top: 1px solid var(--rule); }
-  #mem { height: 340px; }
+  #mem { height: clamp(270px, 75vw, 340px); }  /* on a phone the width sets the disc's size, so a shorter box leaves no empty band */
   #tw { height: 400px; }
   section > div:first-child { position: static; }  /* in one column a sticky heading would slide over its own figure */
   #tw text.cnt, #tw tspan.tn { font-size: 20px; }
@@ -591,28 +594,34 @@ function memory() {
   sEl.forEach((t, i) => { t.firstChild.textContent = SECTORS[SL[i][0]][0]; t.lastChild.textContent = String(SECTORS[SL[i][0]][1]); set(t, "text-anchor", SL[i][3]); });
   const P0 = { bloom: F.pulse.querySelector(".bloom"), tail: F.pulse.querySelector(".tail"), head: F.pulse.querySelector(".head") };
 
-  let W = 1, H = 1, G = { cx: 0, cy: 0, s: 1, D }, cur = 0, caseT = 0, auto = !reduce, clock = 0, tagW = 0;
+  let W = 1, H = 1, G = { cx: 0, cy: 0, s: 1, D }, cur = 0, caseT = 0, auto = !reduce, clock = 0, tagW = 0, phone = false, wroteW = 0, whoW = 0;
   const lean = leaning(el);
 
   function layout() {
     const sz = sizeOf(el, cvs); W = sz.w; H = sz.h;
+    phone = W <= 500;  // no room to keep both long captions clear of the edges: the disc takes the width, and draw() holds the captions inside the box
     const items = [];
     RING.forEach((a, i) => { if (i % 4) return; items.push({ p: face(R, a) }, { p: face(R, a, YB) }, { p: face(1.1 * R, a, 0) }); });
     let wr = 0;
     CASES.forEach(c => { F.wrote.textContent = c.wrote; wr = Math.max(wr, width(F.wrote)); });
+    WR.forEach((w, i) => {
+      if (phone) F.wrote.textContent = w.name;  // a writer's name is hidden on a phone until it writes, so it is measured here
+      const lw = (phone ? width(F.wrote) : Math.max(width(wEl[i].lab), wr)) / 2 + 2;
+      items.push({ p: w.head, l: lw, r: lw, t: phone ? 46 : 40 }, { p: w.foot });
+    });
     F.wrote.textContent = CASES[cur].wrote;
-    WR.forEach((w, i) => { const lw = Math.max(width(wEl[i].lab), wr) / 2 + 2; items.push({ p: w.head, l: lw, r: lw, t: 40 }, { p: w.foot }); });
     let who = 0;
     CASES.forEach(c => { F.who.textContent = c.reader; who = Math.max(who, width(F.who)); });
     F.who.textContent = CASES[cur].reader;
-    RD.forEach((r, i) => { const lw = Math.max(width(rEl[i].lab), i ? 0 : who) / 2 + 2; items.push({ p: r.foot, l: lw, r: lw, b: i ? 26 : 42 }, { p: r.head }); });
+    RD.forEach((r, i) => { const lw = Math.max(width(rEl[i].lab), i || phone ? 0 : who) / 2 + 2; items.push({ p: r.foot, l: lw, r: lw, b: i ? 26 : 42 }, { p: r.head }); });
     SL.forEach((l, i) => {
       const lw = width(sEl[i]), an = l[3];
       items.push({ p: face(l[2] * R, l[1]), l: an === "end" ? lw : an === "middle" ? lw / 2 : 0, r: an === "start" ? lw : an === "middle" ? lw / 2 : 0, t: 12, b: 8 });
     });
     G = fitView(view(YAW, PITCH), D, items, W, H, 16);
-    tagW = width(F.tag);
+    tagW = width(F.tag); wroteW = width(F.wrote); whoW = width(F.who);
   }
+  const inBox = (x, w) => (phone ? Math.max(8 + w / 2, Math.min(W - 8 - w / 2, x)) : x);  // a centred caption, kept inside the box on a phone
 
   function pulse(Pr, path, f, blue) {
     if (f == null) { set(F.pulse, "opacity", "0"); return; }
@@ -635,7 +644,7 @@ function memory() {
     set(m.stem, "x1", f1(f[0])); set(m.stem, "y1", f1(f[1])); set(m.stem, "x2", f1(h[0])); set(m.stem, "y2", f1(h[1]));
     set(m.head, "cx", f1(h[0])); set(m.head, "cy", f1(h[1])); set(m.head, "r", f1(hr));
     set(m.wire, "d", pline([h, t]));
-    set(m.lab, "x", f1(h[0])); set(m.lab, "y", f1(above ? h[1] - hr - 9 : f[1] + 19));
+    set(m.lab, "x", f1(h[0])); set(m.lab, "y", f1(above ? h[1] - hr - (phone ? 15 : 9) : f[1] + 19));  // on a phone a writer's name stands higher, clear of "Board"
     return { f, h, t };
   }
 
@@ -696,11 +705,11 @@ function memory() {
     /* writers, readers, labels */
     wEl.forEach((m, i) => placeMark(m, WR[i], Pr, true));
     const ai = WR.findIndex(w => w.sec === C.sec);
-    set(F.wrote, "x", wEl[ai].lab.__c.x); set(F.wrote, "y", f1(parseFloat(wEl[ai].lab.__c.y) - 16));
+    set(F.wrote, "x", f1(inBox(parseFloat(wEl[ai].lab.__c.x), wroteW))); set(F.wrote, "y", f1(parseFloat(wEl[ai].lab.__c.y) - 16));
     const rp = rEl.map((m, i) => placeMark(m, RD[i], Pr, false));
-    set(F.who, "x", f1(rp[0].f[0])); set(F.who, "y", f1(rp[0].f[1] + 34));
+    set(F.who, "x", f1(inBox(rp[0].f[0], whoW))); set(F.who, "y", f1(rp[0].f[1] + 34));
     set(F.only, "x", f1((rp[1].h[0] + rp[1].t[0]) / 2 - 8)); set(F.only, "y", f1((rp[1].h[1] + rp[1].t[1]) / 2 + 4));
-    sEl.forEach((tx, i) => { const q = Pr(face(SL[i][2] * R, SL[i][1])); set(tx, "x", f1(q[0])); set(tx, "y", f1(q[1] + 4)); });
+    sEl.forEach((tx, i) => { const q = Pr(face(SL[i][2] * R, SL[i][1])); set(tx, "x", f1(q[0])); set(tx, "y", f1(q[1] + 4 - (!i && innerWidth <= 500 ? 7 : 0))); });  // on a phone "Board" stands clear of the back rim
 
     /* the replay */
     const wr = WR.find(w => w.sec === C.sec), wPath = pathOf([wr.head, wr.to, dFace]);
@@ -724,7 +733,7 @@ function memory() {
     cases.forEach((c, i) => { c.classList.toggle("on", i === n); if (i === n) c.removeAttribute("aria-hidden"); else c.setAttribute("aria-hidden", "true"); });
     picks.forEach((b, i) => b.setAttribute("aria-pressed", i === n ? "true" : "false"));
     const C = CASES[n];
-    F.who.textContent = C.reader; F.wrote.textContent = C.wrote; F.tag.textContent = C.tag; tagW = width(F.tag);
+    F.who.textContent = C.reader; F.wrote.textContent = C.wrote; F.tag.textContent = C.tag; tagW = width(F.tag); wroteW = width(F.wrote); whoW = width(F.who);
     wEl.forEach((m, i) => {
       const on = WR[i].sec === C.sec;
       m.lab.classList.toggle("on", on);

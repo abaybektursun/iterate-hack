@@ -1,6 +1,8 @@
-"""The Design page of the team site: one interactive picture of the shared work setup, for a first-time reader.
+"""One interactive picture of the shared work setup, for a first-time reader, and the site's visual reference.
 
-view.py serves PAGE at /architecture, the tab "Design" in the header. The page reads the same /data as the board page every 10 s and draws the
+It was the Design page (/architecture, a header tab) until 2026-11-15. Now demo_deck.py embeds PAGE as the deck's
+picture /demo/fig/harness (the slide /demo#harness) with its header, words column and key hidden, and /architecture
+leads there; the tokens, light and projection here are the ones the other pages copy. The page reads the same /data as the board page every 10 s and draws the
 setup as a small three-dimensional object seen from slightly above. The board is the dome in the centre with one
 dot per live item. Each person has a swarm of agents beside it with threads to the board: one mark per agent
 session, the Claude mark for Claude Code and the OpenAI mark for Codex, in the person's color of the board page.
@@ -621,7 +623,7 @@ function comet(u, pts, r, opacity) {  // a pulse: a small lit head, a tapered ta
   u.el.setAttribute("opacity", opacity.toFixed(2));
 }
 function say(i, k, text, ns, t, hold) {  // the first words of a real message or post, beside whoever wrote it
-  const o = S.r.swarms[i], g = S.g, s = String(text ?? "").replace(/\s+/g, " ").trim();
+  const o = S.r.swarms[i], g = S.g, s = String(text ?? "").replace(/\s+/g, " ").trim().replace(/^title:\s*/i, "").replace(/\s+what:.*$/, "");  // a result's text opens with its field names
   if (!o || !s) return;
   S.r.swarms.forEach(x => x.said.setAttribute("opacity", 0));
   const [line, when] = o.said.children, age = g.age ? "\u2002" + ago(ns) : "";  // a phone has no room for the age

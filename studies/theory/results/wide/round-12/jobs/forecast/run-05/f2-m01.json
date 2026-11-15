@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": 402, "low": 387, "high": 417, "reason": "Dial part: Math and Code top-8 directions each push termination, so the summed 1x edit sits at the top of the code dial plateau (Code 1x 386, 1.5x 399, 2x 394, sum 411 at the first seed); at a new seed I expect it to fall back toward about 400."},
+{"id": "t04", "value": 402, "low": 387, "high": 417, "reason": "Same dial reasoning as t03 for the second new seed: the summed edit finishes nearly every code answer, so the score sits on the plateau near 400."},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": 390, "low": 376, "high": 404, "reason": "Dial at size 1 on code: the measured dial is 386, 399 and 394 at 1x, 1.5x and 2x, so 1x at a new seed lands near the plateau, at about 390."},
+{"id": "t08", "value": 390, "low": 376, "high": 404, "reason": "Same dial-at-size-1 reasoning as t07 for the second seed."},
+{"id": "t09", "value": 226, "low": 214, "high": 238, "reason": "Dial part: the RL directions make Think-SFT finish answers it would otherwise leave unfinished (209 base, 220 at 1.5x, 232 at 3x, random 213); the first seed's 232 is a single high draw, so I expect it to fall back to about 226."},
+{"id": "t10", "value": 41, "low": 29, "high": 53, "reason": "Negative s lengthens answers: cap hits rise above the cued base's 27 of 500. The finished half had 20 of 250, so doubling gives about 40."},
+{"id": "t11", "value": 376, "low": 363, "high": 389, "reason": "Negative s lengthens answers, unboxes them and lowers correctness below the cued base's 410. The finished half had 188 of 250, so doubling gives about 376, plus binomial noise from the half still running."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

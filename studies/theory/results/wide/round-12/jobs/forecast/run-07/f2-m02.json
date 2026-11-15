@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": 401, "low": 384, "high": 418, "reason": "Own-domain top-8 at 1x carries ~2/3 of RL-Code's 84-point gain over cued base 317 (+56) and Math's directions on the other domain carry about half that (+28), summed: 317+56+28 = 401."},
+{"id": "t04", "value": 401, "low": 384, "high": 418, "reason": "Same theory arithmetic as t03 at the second seed: 317 + 2/3*84 (Code, own domain) + 1/3*84 (Math, cross-domain at half) = 401."},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": 375, "low": 358, "high": 392, "reason": "Own-domain top-8 edit at 1x carries about two thirds of RL-Code's gain: 317 + 2/3*(401-317) = 373, nudged toward the measured 386 at the old seed."},
+{"id": "t08", "value": 375, "low": 358, "high": 392, "reason": "Same as t07 at the second seed: two thirds of RL-Code's 84-point gain over the cued base 317."},
+{"id": "t09", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t10", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t11", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}
