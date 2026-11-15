@@ -1089,6 +1089,22 @@ uv run tools/gpu.py submit h100 --hours 2 -- "bash studies/rlneurons/jobs/setup_
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.commit1 base <job>
 ```
 
+### Screening decoding rules on the same wrong steps (board work-d10ae6, `specs/SPEC_rulescreen.md`)
+
+The same statistic D for rules that need only the base model (`jobs/rule_screen.py`, job `abaybektursun-1114-214538-9e63`;
+`results/wrongstep/rules-01/`, written by `analysis/wrongstep.py <job> rules-01`). 51 items.
+
+| Rule | Mean D, nats [95 %] | exp(mean D) | Median D | misread (14) | slip (21) | wrong plan (16) |
+|---|---|---|---|---|---|---|
+| temperature 0.6 | +0.77 [-0.21, 1.91] | 2.17 | +0.53 | +0.34 | +0.68 | +1.27 |
+| problem contrast, a = 0.5: softmax(1.5 logits - 0.5 logits without the problem) | -0.58 [-1.01, -0.19] | 0.56 | +0.02 | -1.71 | 0.00 | -0.34 |
+| problem contrast, a = 1 | -1.69 [-3.06, -0.53] | 0.18 | +0.08 | -4.62 | +0.07 | -1.44 |
+| the problem stated twice | -0.07 [-0.24, 0.08] | 0.93 | -0.02 | -0.22 | -0.05 | +0.02 |
+
+S1 not refuted (temperature 0.6 raises the wrong steps), S2 held (contrast lowers them, most on misreadings), S3 held weakly.
+The contrast acts on a minority of items: its median D is at 0 and 41 % of items are below 0; slips are untouched. Both
+contrast strengths pass the spec's bar for a generation test.
+
 ## RLN-5 map: where RL still disagrees once the cue is given
 
 Spec `specs/SPEC5_map.md`; run folder `results/rln5/map-01/` (`run.json`, `metrics.json`, `examples.json`, `checks.json`,
