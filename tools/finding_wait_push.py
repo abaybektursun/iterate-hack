@@ -1,7 +1,9 @@
 """Pushing the base model to think "Wait" as often as the RL model does not raise its MATH-500 score.
 
 The page of one finding, served at /finding/wait-push (copied from tools/finding_rl_wait_habit.py; draw() has three states of
-one push and a dashed line for the RL model). Unlisted: UNLISTED keeps it out of the site header.
+one push and a dashed line for the RL model). The header has the four tabs of the template, with Findings current.
+view.py has no unlisted mode: it gives every tools/finding_<slug>.py a tile on /findings (group "New" here), so
+UNLISTED below is read by nothing.
 Study: studies/jspace (README.md, specs/SPEC3_steer.md).
 """
 import json
@@ -9,7 +11,7 @@ import json
 TITLE = "Pushing Wait"
 PROBLEM = "Is thinking Wait more often why the RL model scores higher?"
 LINE = "Pushed to the RL model's Wait rate, the base model still solves 413 of 500."
-UNLISTED = True  # reachable by its link only
+UNLISTED = True  # intent: reachable by its link only; view.py does not read it
 
 # Every number is copied from the artifacts named here. None is typed from memory.
 DATA = {
@@ -193,8 +195,9 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
-    <a href="/architecture">How it works</a>
-    <a href="" aria-current="page">__TITLE__</a>
+    <a href="/architecture">Design</a>
+    <a href="/proof">Proof</a>
+    <a href="/findings" aria-current="page">Findings</a>
   </header>
   <div class="stage">
     <svg id="svg" viewBox="0 0 1000 480" role="img"></svg>
