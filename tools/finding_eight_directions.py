@@ -26,7 +26,7 @@ DATA = {
     # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
     # value = right of 500 as a rounded percentage; right is copied from the cell named in "cell".
     "states": [
-        {"key": "untrained", "name": "Untrained", "right": 224, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.base_plain_1.0", "note": ""},
+        {"key": "untrained", "name": "Untrained", "right": 224, "n": 500, "cell": "studies/rlneurons/results/rln4/grader_v3/readout.json cells.base_plain_1.0", "note": "The slab is one weight matrix. Each line is one direction in it."},
         {"key": "random", "name": "8 random directions", "right": 197, "n": 500, "cell": "full500/rand8_plain",
          "note": "A control: eight random directions of the same size in each matrix."},
         {"key": "rl-directions", "name": "8 RL directions", "right": 427, "n": 500, "cell": "full500/top8_plain",
