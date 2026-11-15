@@ -25,6 +25,7 @@ which replaces Part C). Parts A and B and the planted-waste test have run; Part 
 | `grader/judge_pack.py`, `grader/judge_merge.py` | Packs each review under a neutral name for the judge; checks every quote and files `rubric.json`. |
 | `analysis/planted_collect.py`, `analysis/planted_readout.py` | Copies each arena's records into `results/`; writes the summary table and the chart. |
 | `data/gapmap_overall_v1/`, `data/gapmap_reference_v1.json`, `data/planted_arenas_v1.json` | The stored overall result planted as P4; the reference tables of the 16 required cells (clean pilot); which arena is which run. |
+| `analysis/recall_pilot.py` | Recall pilot: N board score rows asked of the shared memory on past.dev (`tools/past.py`, `POST /recall`, 2,000 tokens) and of a grep over a local copy of the uploaded transcripts; counts how often the posted "<right>/<n>" is in the returned text. |
 
 Run, from the repository root (the replay scripts need `uv run tools/gpu.py get <job>` for each job first):
 
@@ -35,6 +36,14 @@ uv run --with modal --with boto3 python -m studies.metaharness.analysis.replay_e
 ```
 
 Raw answers are in sameraslan's Modal Volume `iterate-runs` under the job ids in each `run.json`.
+
+The recall pilot (reads only; 1 past.dev credit per question; needs `~/.past/config.json`). Its two inputs are not in
+git: a full board dump made with `uv run tools/board.py`, and the transcripts from
+`aws s3 sync s3://iterate-hack-team-769063704696/traces/ <folder>`. The output folder must be new:
+
+```
+python3 -m studies.metaharness.analysis.recall_pilot --board <board dump .json> --traces <transcripts folder> --n 20 --out studies/metaharness/results/recall_pilot/recall_vs_grep-<nn>
+```
 
 ## Numbers
 
@@ -175,3 +184,23 @@ Cell: hard328, base with cue, T 1.0 / top-p 1.0, seed 3000000, 328 problems, gra
 - The H200 has 56,679 KV blocks against 29,067 on the H100 and ran the whole cell 1.3 times faster, which is the
   mechanism entry A4 named. Its 12.3 min of queue came from this study's own four shards holding the H100 slots.
 - Each arm's `examples.json` holds one answer scored right and one scored wrong, with prompt and text.
+
+### Recall pilot: shared memory against grep over transcripts (`results/recall_pilot/recall_vs_grep-01/`)
+
+20 known-answer questions (board score rows, MATH-500 and hard328, one per configuration), run 2026-11-15 06:04 UTC.
+A hit is the posted "<right>/<n>" in the returned text. `metrics.json`, `rows.jsonl`, `examples.json`, `run.json`.
+
+| | past.dev recall | grep over 271 transcripts (446 MB) |
+|---|---|---|
+| answer inside 2,000 tokens | 20 of 20 | 6 of 20 |
+| answer anywhere in the output | 20 of 20 | 17 of 20 |
+| cites the exact board result | 17 of 20 | not applicable |
+| seconds, median | 1.22 | 3.01 |
+| tokens returned, median | 1,985 | 121,074 (characters / 4) |
+
+Limits: a pilot, one run, N = 20, not blind. The questions are templated from the board's own wording, and real agent
+questions are vaguer. It measures retrieval only: no agent answered anything. The hit is a string match on a number,
+and "164/328" is the answer of three rows. The only baseline is one naive grep (an agent would refine it over several
+calls), and it searches transcripts while recall searches board posts and findings. The grep's second word is not
+fixed when two words have the same length (Python set order), so its token counts vary between runs; the hits were
+the same in both runs made. Seconds are wall time on one laptop. The memory is live, so recall output changes over time.
