@@ -117,16 +117,22 @@ TABLE = {
         "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over the RL model, vote over 4 samples each"],
         # Think-SFT + cue minus RL, one sample each, points of 328: [estimate, 95 % interval low, high], for the rail's number
         "rail": lambda m: {"hard328": m.DATA["diff"]["hard328"]["single"]}},
+    "no-reward-on-code": {
+        "group": NO_REWARD,
+        "figure": lambda m: [f"{m.DATA['passed']['v3']['sft1_codecue']} of 538", "code problems",
+                             f"538 code problems, Think-SFT + cue, one sample, once the grader reads its answer format ({m.DATA['passed']['v1']['sft1_codecue']} before); "
+                             f"Base + cue {m.DATA['passed']['v3']['base_cue']}, RL {m.DATA['passed']['v3']['rl_plain']}; the reading rule was written after seeing the answers"]},
     "no-early-warning": {
         "group": NO_REWARD,
         "figure": lambda m: [f"{m.DATA['auroc']['12000']['signs']['zratio']['same'][0]:.3f}", "AUROC",
                              "Think-SFT + cue: the best of six signs read from the first 12,000 tokens of an answer, to spot a failing sample; 0.5 is chance"]},
     "cut-off-is-unfinished": {
         "group": NO_REWARD,
-        "figure": lambda m: [f"{m.DATA['cells']['sft_cue']['right_at_16384_same_answers']} → {m.DATA['cells']['sft_cue']['right_at_32768']}", "right of 328",
-                             "328 harder problems, Think-SFT + cue, token limit raised from 16,384 to 32,768"],
-        "steps": lambda m: [step("Think-SFT + cue, 32,768\u00a0tokens", "free", m.DATA["cells"]["sft_cue"]["right_at_32768"], m.DATA["n"],
-                                 f"{m.DATA['readout']}, sft_cue right_at_32768", "hard328")]},
+        "figure": lambda m: [f"{m.DATA['four_samples']['single_mean_at_16384']:.1f} → {m.DATA['four_samples']['single_mean_at_32768']:.1f}", "right of 328",
+                             f"328 harder problems, one Think-SFT + cue sample (mean of 4), token limit raised from 16,384 to 32,768; the vote over 4 samples: {m.DATA['four_samples']['vote_at_16384']} → {m.DATA['four_samples']['vote_at_32768']}, not separated"],
+        # one mark on the rail, the vote: a second mark for one sample at 32,768 tokens crowds the labels on a phone
+        "steps": lambda m: [step("Think-SFT + cue vote, 32,768\u00a0tokens", "free", m.DATA["four_samples"]["vote_at_32768"], m.DATA["n"],
+                                 f"{m.DATA['four_samples']['readout']}, vote at 32,768", "hard328", vote=True)]},
     "where-the-gap-goes": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.pc(m._RL['parts']['reliability'][1])} %", "of the gap",
@@ -188,6 +194,10 @@ TABLE = {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.RATIO:.0f}×", "the shift",
                              f"of the activations at layer 24 (root mean square): 8 RL directions {m.DATA['edits']['top8_math31']['rms_shift']:.2f}, 8 random directions of equal weight norm {m.DATA['edits']['rand8_math31']['rms_shift']:.3f}"]},
+    "the-base-amplifies-rl": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.HEADLINE}×", "growth",
+                             f"of the activation shift from layer 0 to layer 24 when only layer 0 gets RL's paired directions; {m.GROWTH[0]['rin']:.1f}× with RL's inputs and random outputs; one run, activations only"]},
     "two-jobs-in-the-edit": {
         "group": WEIGHTS,
         "figure": lambda m: [signed(m.DATA["math"]["L0"]["vs_base"]["right"][0]), "points",
@@ -196,6 +206,10 @@ TABLE = {
         "group": THEORIES,
         "figure": lambda m: [f"{m.DATA['nearer']['all'][0]} of {m.DATA['nearer']['all'][1]}", "predictions",
                              "in which a theory came nearer the measured number than agents given no theory; half would mean no difference"]},
+    "mechanisms-tested-directly": {
+        "group": THEORIES,
+        "figure": lambda m: [f"{m.COUNTS['held']} of {m.COUNTS['tested']}", "proposed causes",
+                             f"held a direct test on stored data in round {m.COUNTS['round']}; {m.COUNTS['refuted']} refuted, {m.COUNTS['undecided']} undecided; the holds are weak evidence"]},
     "forecasts-before-results": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.COUNTS['theory'][1]} of {m.COUNTS['theory'][0]}", "forecasts",

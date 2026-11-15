@@ -5,10 +5,12 @@ The page of one finding, served at /finding/rl-directions-move-activations (view
 and reached from its tile on /findings, which ICON draws. It is the companion of /finding/the-finish-dial one level down:
 the same weight edits (the 8 largest directions of RL's weight change per matrix at several sizes, 8 random directions of
 the same norm, Think-SFT's 8 directions, other rewards' 8 directions and parts of RL's change), measured in the model's
-activations instead of its answers. Board item result-98de28.
+activations instead of its answers. Board item result-98de28; the three unpaired edits (RL's input directions with random
+outputs, its output directions with random inputs, both with the pairs shifted by one) are from a second run, result-e91adc,
+and score like the random edit (result-0d54f3, on /finding/two-jobs-in-the-edit#pairs).
 
-The picture is one lit plate with one mark per edit (28). The one control is a switch of three views, and the marks travel
-between them:
+The picture is one lit plate with one mark per edit (28, and the 3 unpaired edits in the size view only, with leader lines
+to their labels). The one control is a switch of three views, and the marks travel between them:
   size       x: the edit's weight norm (% of the weight norm of the matrices it edits); y: the RMS shift of the residual
              stream at layer 24 (log scale). The large number is RL's shift over the random edit's at size 1 (95x).
   direction  the same x; y: the cosine of the edit's mean shift with that of RL's 8 directions at size 1. The large number
@@ -29,9 +31,10 @@ on any changed number:
     uv run python tools/finding_rl_directions_move_activations.py
 """
 import json
+import os
 import sys
 
-RUN = "studies/rlneurons/results/xshift/run-01/"
+RUN ="studies/rlneurons/results/xshift/run-01/"
 CELLS = "studies/rlneurons/results/xreward/edits/readout.json"  # the scored cells: right and cut off on the 328
 
 # Every number is copied from the artifacts named here. None is typed from memory.
@@ -83,6 +86,20 @@ DATA = {
         "proj_math31_code30": {"n_edited": 224, "add_rel": 0.0004038, "rms_shift": 3.0249, "mean_shift_norm": 0.7544, "frac_mean_dir": 0.0697, "cos_with_math": 0.8776, "projection_p1": 0.268702, "p1_direction": "top8_code31", "cap_hits": 54, "right_v3": 171, "raised": [[" which", 0.115], ["which", 0.038], [" котор", 0.036], [" it", 0.033], [" WHICH", 0.014], ["stdexcept", -0.003]], "lowered": [[" (", -0.691], [" (**", -0.686], [" *(", -0.668], [" edge", -0.665]]},
         "projc_math31_code30": {"n_edited": 224, "add_rel": 0.0006208, "rms_shift": 3.7791, "mean_shift_norm": 0.9718, "frac_mean_dir": 0.0807, "cos_with_math": 0.9747, "projection_p1": 0.364974, "p1_direction": "top8_code31", "cap_hits": 69, "right_v3": 176, "raised": [[" which", 0.088], [" actually", 0.004], [" perhaps", -0.008], [" it", -0.011], [" \n\n", -0.019], [" Actually", -0.028]], "lowered": [[".*(", -0.877], [" ((", -0.866], [" *(", -0.84], ["@(", -0.812]]},
     },
+    # The second run (SPEC_xshift amendment 1): RL's 8 directions at size 1.5 with their input-output pairs broken, all three
+    # with the singular values of RL's 8 directions, so the weight norm of the size-1.5 edit. Its files are on the branch
+    # sharedsub only (main was frozen), commit run2_commit. readout edits.<key> (rounded): add_rel, rms -> rms_shift,
+    # mean_norm -> mean_shift_norm, frac_mean_dir, cos_with_full_edit_mean_shift["24"] -> cos_with_full (the cosine with
+    # the mean shift of RL's 8 directions at size 1.5); metrics edits.<key>: n_edited and lens (first 6 raised, 4 lowered);
+    # right and cut off: counts.correct_v3 and counts.cap_hits of studies/rlneurons/results/xreward/edits/<key>-01/metrics.json.
+    "run2": "studies/rlneurons/results/xshift/run-02/", "run2_job": "abaybektursun-1115-163129-1048",
+    "run2_commit": "dc8a162753e442816efaaa8aaa1cd11f875c46c8", "run2_branch": "sharedsub",
+    "run2_readme": "studies/rlneurons/README.md, section 'xshift run-02' (branch sharedsub)",
+    "unpaired": {
+        "permx1.5_math31": {"n_edited": 224, "add_rel": 0.0011109, "rms_shift": 1.7558, "mean_shift_norm": 0.383, "frac_mean_dir": 0.0516, "cos_with_full": -0.1162, "cap_hits": 64, "right_v3": 160, "raised": [["-ie", 0.439], ["zimmer", 0.411], ["-ln", 0.406], ["bilder", 0.406], ["[js", 0.403], ["[Index", 0.399]], "lowered": [["?", -0.127], ["?\n\n", -0.101], [" something", -0.056], ["?”", -0.055]]},
+        "rinx1.5_math31": {"n_edited": 224, "add_rel": 0.0011109, "rms_shift": 0.8067, "mean_shift_norm": 0.3061, "frac_mean_dir": 0.1518, "cos_with_full": -0.0288, "cap_hits": 75, "right_v3": 158, "raised": [["AtA", 0.137], [" Raid", 0.133], ["�", 0.131], [" rust", 0.126], [" disappearing", 0.126], ["umm", 0.124]], "lowered": [[" Pais", -0.12], ["opsis", -0.114], ["teil", -0.111], [" vois", -0.11]]},
+        "routx1.5_math31": {"n_edited": 224, "add_rel": 0.0011109, "rms_shift": 0.3286, "mean_shift_norm": 0.0315, "frac_mean_dir": 0.0169, "cos_with_full": -0.2432, "cap_hits": 77, "right_v3": 163, "raised": [["[\".", 0.043], ["printStats", 0.041], ["#ac", 0.041], [".Microsoft", 0.04], ["\f\n", 0.04], ["?><", 0.04]], "lowered": [[",", -0.037], [".", -0.034], [":", -0.029], [" and", -0.026]]},
+    },
 }
 
 _E = DATA["edits"]
@@ -99,6 +116,8 @@ _P, _B, _RL = DATA["P1"], DATA["base_cue"], DATA["rl"]
 _rp, _rn = (_m(f"{_P[k]:.2f}") for k in ("rho_projection", "rho_norm"))  # −0.67, −0.62
 _r = lambda k: _E[k]["rms_shift"]
 _pct = lambda k: f"{100 * _E[k]['add_rel']:.3f} %"
+_U = DATA["unpaired"]
+_less = {k: _r("top8x1.5_math31") / d["rms_shift"] for k, d in _U.items()}  # how many times less than the intact pairs: 5.3, 11.6, 28.4
 
 TITLE = "RL directions move activations"  # the name on its tile on /findings and in the browser tab
 PROBLEM = ("Do the largest directions of the weight change from reinforcement learning (RL) move the model's activations "
@@ -144,7 +163,16 @@ EDITS = [
      "The part of RL's 8 directions per matrix that reads from the input directions of Code 3.0's 8 directions, at its own norm."],
     ["projc_math31_code30", "part", "", "RL's 8 directions, rest",
      "RL's 8 directions per matrix without the part shared with Code 3.0, at its own norm."],
+    # the second run: shown in the size view only (the other two views need numbers the second run did not compute)
+    ["permx1.5_math31", "unpaired", f"Pairs shifted · {round(_less['permx1.5_math31'])}× less", "RL's 8 directions, pairs shifted",
+     "RL's 8 input directions and 8 output directions per matrix with their strengths (singular values) at size 1.5, but each "
+     "input direction joined to a neighbouring output direction: the pairs shifted by one."],
+    ["rinx1.5_math31", "unpaired", f"RL's inputs only · {round(_less['rinx1.5_math31'])}× less", "RL's input directions, random outputs",
+     "RL's 8 input directions per matrix with their strengths at size 1.5, each joined to a random output direction."],
+    ["routx1.5_math31", "unpaired", f"RL's outputs only · {round(_less['routx1.5_math31'])}× less", "RL's output directions, random inputs",
+     "RL's 8 output directions per matrix with their strengths at size 1.5, each joined to a random input direction."],
 ]
+_UNP = [e[0] for e in EDITS if e[1] == "unpaired"]
 
 # The readout beside the picture, one per view: the large number (value, decimals, suffix), two lines under it, then the
 # lines of the state. Computed from DATA.
@@ -184,8 +212,16 @@ PANELS = [
       f"The page \"The finish dial\" shows what the same edits do to the answers: RL's 8 directions at 1.5 times their size "
       f"bring the base model with the opening cue "
       f"to {_E['top8x1.5_math31']['right_v3']} of {DATA['n']} harder problems right, with {_E['top8x1.5_math31']['cap_hits']} "
-      "cut off."],
-     [_FIN, "The finish dial: the same edits on the answers ›"]],
+      "cut off.",
+      f"The pairs of input and output directions carry the shift: at the same weight norm as size 1.5, RL's input directions "
+      f"with random outputs shift layer {DATA['layer']} by {_U['rinx1.5_math31']['rms_shift']:.2f}, its output directions with "
+      f"random inputs by {_U['routx1.5_math31']['rms_shift']:.2f}, and both with the pairs shifted by one by "
+      f"{_U['permx1.5_math31']['rms_shift']:.2f}, against {_r('top8x1.5_math31'):.2f} for the intact pairs "
+      f"({min(_less.values()):.0f} to {max(_less.values()):.0f} times less), and all three score like the random edit "
+      f"({', '.join(str(_U[k]['right_v3']) for k in ('rinx1.5_math31', 'routx1.5_math31', 'permx1.5_math31'))} of "
+      f"{DATA['n']} right against {_E['rand8x1.5_math31']['right_v3']})."],
+     [_FIN, "The finish dial: the same edits on the answers ›"],
+     ["/finding/two-jobs-in-the-edit#pairs", "Two jobs in one edit: the unpaired edits on the answers ›"]],
     ["why", "Why it matters",
      "The 8 directions that set how often answers finish act on inputs the base model already produces; a change of the same "
      "size in a random direction barely moves the model.",
@@ -313,6 +349,10 @@ svg * { pointer-events: none; }
 .m.reward { fill: var(--base-tone); opacity: .9; }
 .m.sft { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.9; }
 .m.rand { fill: none; stroke: var(--base-tone); stroke-width: 1.4; }
+.m.unpaired { fill: var(--sheet); stroke: var(--blue); stroke-width: 1.8; stroke-dasharray: 2.6 2.2; }
+.ml.unpaired { fill: var(--blue) !important; font-weight: 600; }
+.ld { fill: none; stroke: var(--blue); stroke-width: 1; opacity: .55; transition: opacity .3s ease; }
+.col { fill: none; stroke: var(--blue); stroke-width: 1; stroke-dasharray: 2 4; opacity: .45; transition: opacity .3s ease; }
 .mh { fill: var(--blue); opacity: calc(var(--bloom) * .16); transition: opacity .3s ease; }
 .ml { font-weight: 560; fill: var(--mute) !important; transition: opacity .3s ease; }
 .ml.rl { fill: var(--blue) !important; font-weight: 640; }
@@ -360,6 +400,7 @@ svg * { pointer-events: none; }
 .paper { margin: 18px 0 0; font-size: 15px; }
 .paper a { color: var(--mute); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
 .paper a:hover, .paper a:focus-visible { color: inherit; }
+.paper + .paper { margin-top: 10px; }
 .more { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
 .more button { display: flex; width: 100%; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--rule); font-size: 17px; font-weight: 520; transition: color .15s ease; }
 .more button span { color: var(--faint); font-size: 20px; line-height: 1; }
@@ -403,7 +444,7 @@ svg * { pointer-events: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
-  .switch button, .more button, .top a, .m, .mh, .ml, .sr { transition: none; }
+  .switch button, .more button, .top a, .m, .mh, .ml, .sr, .ld, .col { transition: none; }
 }
 </style>
 </head>
@@ -443,10 +484,12 @@ const RAD = Math.PI / 180, f = n => n.toFixed(1), mix = (a, b, q) => a + (b - a)
 const ease = p => p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2, clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const num = v => String(v).replace("-", "−"), LOG = Math.log10;
 
-/* The 28 edits, in the order of the side column (C.edits: key, group, label, name, what), each with its readout row. */
-const M = C.edits.map(([key, group, label, name, what], j) => ({ key, group, label, name, what, j, ...D.edits[key] }));
+/* The 28 edits of the first run and the 3 unpaired edits of the second, in the order of the side column (C.edits: key,
+   group, label, name, what), each with its readout row. The unpaired edits are shown in the size view only. */
+const M = C.edits.map(([key, group, label, name, what], j) => ({ key, group, label, name, what, j, ...(D.edits[key] || D.unpaired[key]) }));
 const IDX = Object.fromEntries(M.map((m, j) => [m.key, j]));
-const ORDER = ["part", "reward", "rand", "sft", "rl"];  // drawn back to front
+const ORDER = ["part", "reward", "rand", "unpaired", "sft", "rl"];  // drawn back to front
+const hidden = (m, v) => m.group === "unpaired" && v !== "size";
 const VIEWS = ["size", "direction", "cutoffs"];
 const RL_LINE = ["top8x0.5_math31", "top8_math31", "top8x1.5_math31", "top8x2_math31", "top8x3_math31"];
 const RAND_LINE = ["rand8_math31", "rand8x1.5_math31", "rand8x2_math31", "rand8x3_math31"];
@@ -474,11 +517,13 @@ const AX = {
 const LAB = {
   rl: { size: [0, -1.05, "middle"], direction: [0, 1.6, "middle"], cutoffs: [.75, -.5, "start"] },
   "top8xm1_math31": { size: [0, 1.6, "middle"], direction: [.8, .35, "start"], cutoffs: [-.8, .35, "end"] },
-  sft: { size: [.8, .35, "start"], direction: [-.8, 1.1, "end"], cutoffs: [-.8, .35, "end"] },
+  sft: { size: [.55, 1.35, "start"], direction: [-.8, 1.1, "end"], cutoffs: [-.8, .35, "end"] },  // size: under its mark, clear of the unpaired edits' leader lines
   reward: { size: null, direction: [.75, .35, "start"], cutoffs: null },
   "top8x1.5_L0-10_math31": { size: null, direction: null, cutoffs: [.8, .35, "start"] },
+  unpaired: { size: [3, .35, "start"], direction: null, cutoffs: null },  // right of the edits of layers 22 to 31, with a leader line
 };
 const labAt = (m, v) => S.g.phone && v === "cutoffs" && m.group === "sft" ? null : (LAB[m.key] || LAB[m.group] || {})[v] || null;  // on a phone the key names Think-SFT there
+const labText = m => S.g.phone && m.group === "unpaired" ? m.label.split(" · ")[0] : m.label;  // on a phone without the "times less"
 
 /* Geometry: the plate and the chart in a small 3D space around the plate's centre (x right, y down, z toward the viewer).
    The chart on the left, the readout on the right (on a phone, the readout above the chart). */
@@ -512,10 +557,10 @@ function rounded(g, [x0, y0, x1, y1], r, z) {  // a rounded rectangle at depth z
 const line = pts => pts.length ? "M" + pts.map(q => f(q[0]) + " " + f(q[1])).join("L") : "";
 const KEY = [["rl", "RL's 8 directions"], ["part", "Parts of RL's change"], ["reward", "Other rewards"],
   ["sft", "Think-SFT"], ["rand", "Random, same norm"]];
-const RADIUS = { rl: 6.5, part: 4.4, reward: 5.4, sft: 5.6, rand: 4.2 };
+const RADIUS = { rl: 6.5, part: 4.4, reward: 5.4, sft: 5.6, rand: 4.2, unpaired: 4.8 };
 
 const S = { view: "size", prev: "size", t0: -1e9, dur: 720, stag: 14, open: null, g: null, el: {}, shown: {}, from: [], to: [], rank: [],
-  scr: [], last: 0, t: 0, touched: false, keyX: [] };
+  scr: [], hid: [], last: 0, t: 0, touched: false, keyX: [] };
 
 function build() {
   const g = S.g = geo(), svg = $("svg"), [ax0, ay0, ax1, ay1] = g.a, aw = ax1 - ax0, ah = ay1 - ay0;
@@ -530,7 +575,8 @@ function build() {
   const order = M.map((_, k) => k).sort((a, b) => ORDER.indexOf(M[a].group) - ORDER.indexOf(M[b].group));
   const marks = order.map(k => { const m = M[k], r = RADIUS[m.group] * g.mr;
     return (m.group === "rl" ? `<circle class="mh" id="mh${k}" r="${f(r * 2)}"/>` : "") + `<circle class="m ${m.group}" id="m${k}" r="${f(r)}"/>`; }).join("");
-  const labels = M.map((m, k) => m.label ? `<text class="ml ${m.group}" id="ml${k}" font-size="${g.fsm}">${esc(m.label)}</text>` : "").join("");
+  const labels = M.map((m, k) => m.label ? `<text class="ml ${m.group}" id="ml${k}" font-size="${g.fsm}">${esc(labText(m))}</text>` : "").join("");
+  const leads = M.map((m, k) => m.group === "unpaired" ? `<path class="ld" id="ld${k}"/>` : "").join("");
   svg.innerHTML = "<defs>" +
     `<radialGradient id="body" cx=".3" cy=".22" r=".95">${stop(0, "var(--glass-hi)")}${stop(.46, "var(--glass)")}${stop(1, "var(--glass-lo)")}</radialGradient>` +
     `<linearGradient id="rim" x1=".06" y1=".04" x2=".94" y2=".96">${stop(0, "var(--rim-a)")}${stop(.56, "var(--rim-b)")}${stop(1, "var(--rim-c)")}</linearGradient>` +
@@ -542,7 +588,7 @@ function build() {
     `<path class="back" id="back"/><path class="plate draw" id="plate" pathLength="1"/>` +
     `<ellipse class="spec" cx="${f(ax0 + aw * .3)}" cy="${f(ay0 + ah * .24)}" rx="${f(aw * .3)}" ry="${f(ah * .2)}" transform="rotate(-14 ${f(ax0 + aw * .3)} ${f(ay0 + ah * .24)})" fill="url(#spec)"/>` +
     `<g class="axes"><path class="frame" id="frame"/>${axes}</g>` +
-    `<g class="data"><path class="sr rlg" id="srg"/><path class="sr rand" id="srr"/><path class="sr rl" id="srl"/>` +
+    `<g class="data"><path class="col" id="col"/>${leads}<path class="sr rlg" id="srg"/><path class="sr rand" id="srr"/><path class="sr rl" id="srl"/>` +
     `<circle class="selh" id="selh" r="0"/>${marks}<circle class="sel" id="sel" r="0"/>${labels}` +
     `<text class="sl rl" id="slr" font-size="${g.fsm}">RL's 8 directions${g.phone ? "" : ", by size"}</text><text class="sl rand" id="sla" font-size="${g.fsm}" text-anchor="end">8 random directions</text>` +
     `<path class="br" id="br"/><text class="brt" id="brt" font-size="${f(g.fs * 1.5)}" text-anchor="end"></text></g>` +
@@ -571,7 +617,8 @@ function markAt(k, now) {
   const moved = a[0] !== b[0] || a[1] !== b[1];
   return { x: mix(a[0], b[0], e), y: mix(a[1], b[1], e), z: moved ? 26 * Math.sin(Math.PI * p) : 0 };
 }
-const target = v => M.map(m => [S.g.X(v, AX[v].x(m)), S.g.Y(v, AX[v].y(m))]);
+const target = v => M.map(m => { const h = hidden(m, v) ? M[IDX["top8x1.5_math31"]] : m;  // a hidden edit folds into RL's 8 at 1.5
+  return [S.g.X(v, AX[v].x(h)), S.g.Y(v, AX[v].y(h))]; });
 const fmtBig = (R, x) => `${num(x.toFixed(R.dec))}${R.suffix}`;
 
 function place(t, now) {
@@ -598,12 +645,12 @@ function place(t, now) {
   });
 
   // The marks, their labels and the two lines through RL's sizes and the random sizes.
-  const sel = S.open != null && IDX[S.open] != null ? IDX[S.open] : -1;
+  const sel = S.open != null && IDX[S.open] != null && !hidden(M[IDX[S.open]], S.view) ? IDX[S.open] : -1;
   M.forEach((m, k) => {
-    const q = markAt(k, now), s = P(q.x, q.y, 8 + q.z), c = E["m" + k], dim = sel >= 0 && sel !== k;
-    S.scr[k] = s;
+    const q = markAt(k, now), s = P(q.x, q.y, 8 + q.z), c = E["m" + k], dim = sel >= 0 && sel !== k, hid = hidden(m, S.view);
+    S.scr[k] = s; S.hid[k] = hid;
     c.setAttribute("cx", f(s[0])); c.setAttribute("cy", f(s[1]));
-    c.style.opacity = dim ? ".22" : "";
+    c.style.opacity = hid ? "0" : dim ? ".22" : "";
     if (E["mh" + k]) { E["mh" + k].setAttribute("cx", f(s[0])); E["mh" + k].setAttribute("cy", f(s[1])); E["mh" + k].style.opacity = dim ? "0" : ""; }
     const L = E["ml" + k];
     if (!L) return;
@@ -615,14 +662,25 @@ function place(t, now) {
     L.setAttribute("text-anchor", (e < .5 && a ? a : pos)[2]);
     at(L, [s[0] + dx * g.fsm, s[1] + dy * g.fsm]);
     L.style.opacity = dim ? String(.22 * lo) : String(lo);
+    if (E["ld" + k]) {  // the leader line from the mark's rim to its label
+      const r = (RADIUS[m.group] + 2.5) * g.mr;
+      E["ld" + k].setAttribute("d", line([[s[0] + r, s[1]], [s[0] + dx * g.fsm - 4 * g.mr, s[1]]]));
+      E["ld" + k].style.opacity = String((dim ? .22 : 1) * lo * .55);
+    }
   });
+  { // the column of equal weight norm: from RL's 8 at 1.5 down to the random edit of the same norm, in the size view
+    const a = S.scr[IDX["top8x1.5_math31"]], b = S.scr[IDX["rand8x1.5_math31"]], r = 10 * g.mr;
+    E.col.setAttribute("d", line([[a[0], a[1] + r], [b[0], b[1] - r * .7]]));
+    const o = S.view === "size" && S.prev === "size" ? 1 : S.view === "size" ? e : S.prev === "size" ? 1 - e : 0;
+    E.col.style.opacity = String(o * (sel >= 0 ? .2 : .45));
+  }
   const pts = keys => keys.map(k => S.scr[IDX[k]]);
   E.srl.setAttribute("d", line(pts(RL_LINE))); E.srg.setAttribute("d", line(pts(RL_LINE))); E.srr.setAttribute("d", line(pts(RAND_LINE)));
   const lineOp = sel >= 0 ? ".25" : "";
   [E.srl, E.srg, E.srr].forEach(el => { el.style.opacity = lineOp; });
-  { // RL's line is named under its last segment (above it in the cut-off view); the random line above its end (under it in the direction view)
+  { // RL's line is named under its last segment (above it in the cut-off view); the random line under its end
     const a2 = S.scr[IDX["top8x2_math31"]], a3 = S.scr[IDX["top8x3_math31"]], b = S.scr[IDX["rand8x3_math31"]];
-    const dyOf = (tab, v) => tab[v] * g.fsm, RLD = { size: 1.9, direction: 1.9, cutoffs: -1.2 }, RAD2 = { size: -1.1, direction: 1.6, cutoffs: 1.6 };
+    const dyOf = (tab, v) => tab[v] * g.fsm, RLD = { size: 1.9, direction: 1.9, cutoffs: -1.2 }, RAD2 = { size: 2.6, direction: 1.6, cutoffs: 1.6 };
     // in the cut-off view it sits right of the segment from size 1 to 1.5, where the plate is empty
     const a1 = S.scr[IDX["top8_math31"]], a15 = S.scr[IDX["top8x1.5_math31"]];
     const spot = v => v === "cutoffs" ? [(a1[0] + a15[0]) / 2 + g.fsm * 7.6, (a1[1] + a15[1]) / 2 + g.fsm * .3] : [(a2[0] + a3[0]) / 2, (a2[1] + a3[1]) / 2 + dyOf(RLD, v)];
@@ -699,22 +757,26 @@ const sig = (x, d = 2) => num(x.toFixed(d));
 const tok = s => s.replace(/\n/g, "↵").replace(/\t/g, "⇥").trim() || "␣";
 const lv = v => num((v > 0 ? "+" : "") + (Math.abs(v) < .1 ? v.toFixed(3) : v.toFixed(2)));
 function editPane(j) {
-  const m = M[j], pair = C.pair[m.key], twin = C.twin[m.key];
+  const m = M[j], pair = C.pair[m.key], twin = C.twin[m.key], unp = m.group === "unpaired";
+  const times = r => r < 10 ? r.toFixed(1) : String(Math.round(r));
   const rows = [
     ["Weight change", `<b>${(100 * m.add_rel).toFixed(3)} %</b> of the weight norm of its ${m.n_edited} matrices`],
     ["Shift at layer 24", `<b class="${m.group === "rl" ? "rl" : ""}">${sig(m.rms_shift, m.rms_shift < 1 ? 3 : 2)}</b> RMS; the base's residual norm is ${D.base_rms.toFixed(1)}`],
   ];
-  if (pair) rows.push(["Random, same norm", `<b>${sig(M[IDX[pair]].rms_shift, 3)}</b>: ${Math.round(m.rms_shift / M[IDX[pair]].rms_shift)} times less`]);
-  if (twin) rows.push(["RL's 8, same size", `<b>${sig(M[IDX[twin]].rms_shift)}</b>: ${Math.round(M[IDX[twin]].rms_shift / m.rms_shift)} times more`]);
-  rows.push(["Mean shift", `<b>${sig(m.mean_shift_norm, m.mean_shift_norm < .1 ? 3 : 2)}</b>; ${(100 * m.frac_mean_dir).toFixed(0)} % of the shift lies along it`],
-    ["Cosine with RL's mean shift", `<b>${sig(m.cos_with_math)}</b>`],
-    ["Projection on the shared direction", `<b>${sig(m.projection_p1, Math.abs(m.projection_p1) < .01 ? 4 : 2)}</b> (on ${m.p1_direction === "top8_code31" ? "RL-Code's" : "RL's"} mean shift)`],
-    [`${D.n} harder problems`, `<b>${m.right_v3} of ${D.n}</b> right, <b>${m.cap_hits}</b> cut off at 16,384 tokens`]);
+  if (pair) rows.push(["Random, same norm", `<b>${sig(M[IDX[pair]].rms_shift, 3)}</b>: ${times(m.rms_shift / M[IDX[pair]].rms_shift)} times less`]);
+  if (twin) rows.push([unp ? "RL's 8, intact pairs" : "RL's 8, same size", `<b>${sig(M[IDX[twin]].rms_shift)}</b>: ${times(M[IDX[twin]].rms_shift / m.rms_shift)} times more`]);
+  rows.push(["Mean shift", `<b>${sig(m.mean_shift_norm, m.mean_shift_norm < .1 ? 3 : 2)}</b>; ${(100 * m.frac_mean_dir).toFixed(0)} % of the shift lies along it`]);
+  if (unp) rows.push(["Cosine with the intact pairs' mean shift", `<b>${sig(m.cos_with_full)}</b> (RL's 8 at size 1.5)`]);
+  else rows.push(["Cosine with RL's mean shift", `<b>${sig(m.cos_with_math)}</b>`],
+    ["Projection on the shared direction", `<b>${sig(m.projection_p1, Math.abs(m.projection_p1) < .01 ? 4 : 2)}</b> (on ${m.p1_direction === "top8_code31" ? "RL-Code's" : "RL's"} mean shift)`]);
+  rows.push([`${D.n} harder problems`, `<b>${m.right_v3} of ${D.n}</b> right, <b>${m.cap_hits}</b> cut off at 16,384 tokens`]);
   const chips = (xs, cls) => `<ul class="toks ${cls}">${xs.map(([t, v]) => `<li>${esc(tok(t))}<small>${lv(v)}</small></li>`).join("")}</ul>`;
   return `<div><div class="dhead"><h2>${esc(m.name)}</h2><button class="close" data-open="">Close</button></div>` +
     `<p class="lead q">${esc(m.what)}</p>` +
     `<ul class="vals">${rows.map(([a, b]) => `<li><span>${a}</span><span>${b}</span></li>`).join("")}</ul>` +
     `<p class="sub">The score is Base + cue with this edit, one answer per problem, T 1.0. The shift is measured on ${D.inputs} stored Base + cue answers, ${D.positions.toLocaleString("en-US")} positions.</p>` +
+    (unp ? `<p class="sub">Measured in a second run (job ${esc(D.run2_job)}) on the same answers; there RL's 8 directions at 1.5 and the random edit give the same shifts as in the first run. Shown in the size view only.</p>` +
+      `<p class="paper"><a href="/finding/two-jobs-in-the-edit#pairs/${esc(C.pairs_key[m.key])}">The same edit on the answers: Two jobs in one edit ›</a></p>` : "") +
     `<p class="sub"><b>Logit lens.</b> The tokens the mean shift at the last layer raises most:</p>${chips(m.raised, "up")}` +
     `<p class="sub">and lowers most (raw logit change; all tokens share an offset):</p>${chips(m.lowered, "")}` +
     `<div class="steps"><button data-step="-1">‹ Previous edit</button><button data-step="1">Next edit ›</button></div></div>`;
@@ -723,7 +785,7 @@ function pane() {
   const p = C.panels.find(p => p[0] === S.open), j = S.open != null && IDX[S.open] != null ? IDX[S.open] : -1;
   $("pane").innerHTML = j >= 0 ? editPane(j) : p
     ? `<div class="dhead"><h2>${esc(p[1])}</h2><button class="close" data-open="">Close</button></div><p class="lead">${esc(p[2])}</p>` +
-      `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>` + (p[4] ? `<p class="paper"><a href="${esc(p[4][0])}">${esc(p[4][1])}</a></p>` : "")
+      `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>` + p.slice(4).map(l => `<p class="paper"><a href="${esc(l[0])}">${esc(l[1])}</a></p>`).join("")
     : `<ul class="more">${C.panels.map(p => `<li><button data-open="${p[0]}">${esc(p[1])}<span aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
 }
 /* The view and what is open are one value in the address: #[direction/|cutoffs/][<panel>|<edit key>]. */
@@ -736,8 +798,11 @@ function fromHash(first) {
   const parts = decodeURIComponent(location.hash.slice(1)).split("/");
   const view = VIEWS.find(v => parts.includes(v)) || "size";
   S.open = parts.find(x => C.panels.some(p => p[0] === x) || IDX[x] != null) || null;
+  const drop = S.open && IDX[S.open] != null && hidden(M[IDX[S.open]], view);  // an edit this view does not show
+  if (drop) S.open = null;
   if (first === true) setView(view, { instant: view !== "size" || !!S.open, rise: view === "size" && !S.open });
   else if (view !== S.view) setView(view);
+  if (drop) address(false);
   pane();
   if (still.matches) place(0, performance.now());
 }
@@ -756,6 +821,7 @@ function go(view) {
   S.touched = true;
   if (view === S.view) return;
   setView(view);
+  if (S.open && IDX[S.open] != null && hidden(M[IDX[S.open]], view)) { S.open = null; pane(); }  // an edit the new view hides is closed
   address(false);
 }
 
@@ -763,7 +829,7 @@ const svg = $("svg");
 function svgPoint(e) { const m = svg.getScreenCTM().inverse(); return [m.a * e.clientX + m.c * e.clientY + m.e, m.b * e.clientX + m.d * e.clientY + m.f]; }
 function nearest([x, y]) {
   let best = -1, bd = S.g.hit ** 2;
-  S.scr.forEach((q, k) => { const d = (q[0] - x) ** 2 + (q[1] - y) ** 2; if (d < bd) { bd = d; best = k; } });
+  S.scr.forEach((q, k) => { if (S.hid[k]) return; const d = (q[0] - x) ** 2 + (q[1] - y) ** 2; if (d < bd) { bd = d; best = k; } });
   return best;
 }
 svg.addEventListener("pointermove", e => { if (e.pointerType === "mouse") svg.style.cursor = nearest(svgPoint(e)) >= 0 ? "pointer" : "default"; });
@@ -773,8 +839,8 @@ document.addEventListener("click", e => {
   if (v) go(v.dataset.view);
   if (o) open(o.dataset.open);
   if (s) {
-    const n = (IDX[S.open] + Number(s.dataset.step) + M.length) % M.length;
-    open(M[n].key);
+    const vis = M.filter(m => !hidden(m, S.view)), i = vis.findIndex(m => m.key === S.open);
+    open(vis[(i + Number(s.dataset.step) + vis.length) % vis.length].key);
     $("pane").querySelector(`[data-step="${s.dataset.step}"]`).focus({ preventScroll: true });
   }
 });
@@ -828,9 +894,13 @@ ICON = r"""(kit, t, tilt) => {
 }"""
 
 _RAND_OF = {v: k for k, v in _PAIR.items()}
+_PAIRS_KEY = {"rinx1.5_math31": "rin", "routx1.5_math31": "rout", "permx1.5_math31": "perm"}  # their cell keys on /finding/two-jobs-in-the-edit
 PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
-    "problem": PROBLEM, "line": LINE, "panels": PANELS, "edits": EDITS, "read": READ, "pair": _PAIR, "twin": _RAND_OF,
-    "data": {k: DATA[k] for k in ("edits", "base_rms", "n", "inputs", "positions", "base_cue", "rl")}}, ensure_ascii=False))
+    "problem": PROBLEM, "line": LINE, "panels": PANELS, "edits": EDITS, "read": READ,
+    "pair": {**_PAIR, **{k: "rand8x1.5_math31" for k in _UNP}}, "twin": {**_RAND_OF, **{k: "top8x1.5_math31" for k in _UNP}},
+    "pairs_key": _PAIRS_KEY,
+    "data": {k: DATA[k] for k in ("edits", "unpaired", "run2_job", "base_rms", "n", "inputs", "positions", "base_cue", "rl")}},
+    ensure_ascii=False))
 
 
 def _spearman(a, b):  # rank correlation with average ranks for ties
@@ -870,7 +940,8 @@ if __name__ == "__main__":  # run from the repository root: every number of DATA
     assert ro["P3"]["held"] == DATA["P3"]["held"] and round(ro["P3"]["cos_if30_math31"], 4) == _E["top8_if30"]["cos_with_math"]
     spec = open(DATA["spec"]).read()
     assert "is at most -0.8" in spec and "|rho_norm| >= |rho_proj| - 0.05" in spec and "cosine(IF, Math 3.1) > 0.5" in spec
-    assert set(_E) == set(ro["edits"]) == {e[0] for e in EDITS} and len(EDITS) == 28
+    assert set(_E) == set(ro["edits"]) == {e[0] for e in EDITS if e[1] != "unpaired"} and len(EDITS) == 28 + len(_U)
+    assert set(_UNP) == set(_U) == set(_PAIRS_KEY)
     rnd = {"add_rel": 7, "rms_shift": 4, "mean_shift_norm": 4, "frac_mean_dir": 4, "cos_with_math": 4, "projection_p1": 6}
     for k, d in _E.items():
         e, L = ro["edits"][k], ro["logit_lens"][k]
@@ -896,5 +967,28 @@ if __name__ == "__main__":  # run from the repository root: every number of DATA
     assert f"{_r('rand8_math31'):.3f}" == "0.066" and f"{_r('top8_math31'):.2f}" == "6.23" and f"{_r('top8x0.02_think_sft'):.2f}" == "0.75"
     assert (f"{min(_cos_pos):.2f}", f"{max(_cos_pos):.2f}", _c("top8xm1_math31")) == ("0.93", "0.99", "−0.83")
     assert (round(100 * min(_frac)), round(100 * max(_frac))) == (7, 19)
+    # the second run: its files are on the branch sharedsub only until main takes them; where they are present, every number
+    # of DATA["unpaired"] is compared with them, and the edits it shares with the first run must give the first run's numbers
+    assert [round(_less[k]) for k in ("permx1.5_math31", "rinx1.5_math31", "routx1.5_math31")] == [5, 12, 28]
+    r2 = DATA["run2"] + "readout.json"
+    if os.path.exists(r2):
+        ro2, me2 = json.load(open(r2)), json.load(open(DATA["run2"] + "metrics.json"))
+        assert (ro2["job"], ro2["layer"], round(ro2["base_rms"], 4)) == (DATA["run2_job"], DATA["layer"], DATA["base_rms"]), ro2["job"]
+        for k in ("top8x1.5_math31", "rand8x1.5_math31"):
+            assert round(ro2["edits"][k]["rms"], 4) == _E[k]["rms_shift"] and round(ro2["edits"][k]["add_rel"], 7) == _E[k]["add_rel"], k
+        for k, d in _U.items():
+            e, m = ro2["edits"][k], me2["edits"][k]
+            sc = json.load(open(f"studies/rlneurons/results/xreward/edits/{k}-01/metrics.json"))["counts"]
+            got = {"n_edited": m["n_edited"], "add_rel": round(e["add_rel"], 7), "rms_shift": round(e["rms"], 4),
+                   "mean_shift_norm": round(e["mean_norm"], 4), "frac_mean_dir": round(e["frac_mean_dir"], 4),
+                   "cos_with_full": round(e["cos_with_full_edit_mean_shift"]["24"], 4), "cap_hits": sc["cap_hits"],
+                   "right_v3": sc["correct_v3"], "raised": [[t, round(v, 3)] for t, v in m["lens"]["raised"][:6]],
+                   "lowered": [[t, round(v, 3)] for t, v in m["lens"]["lowered"][:4]]}
+            assert got == d, (k, got)
+        assert "the partial edits move the residual stream 5 to 28 times less" in open("studies/rlneurons/README.md").read()
+        print("DATA['unpaired'] matches", r2)
+    else:
+        print("skipped: the second run's files (" + DATA["run2"] + ") are not here; DATA['unpaired'] was copied from branch "
+              f"{DATA['run2_branch']}, commit {DATA['run2_commit'][:7]}")
     print("DATA matches", DATA["readout"], DATA["metrics"], DATA["run"], "and", CELLS)
     sys.exit(0)
