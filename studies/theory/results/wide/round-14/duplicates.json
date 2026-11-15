@@ -1,0 +1,10 @@
+{"pairs": [
+  {"new": "round-14/s2-a", "earlier": "round-14/s1-a", "reason": "Think-SFT's skill is intact; on easy short problems it writes its SFT answer layout (bare 'python' line, no opening fence), which the grader drops even though the programs would pass"},
+  {"new": "round-14/s2-b", "earlier": "round-14/s1-b", "reason": "Unfenced answers come from failed long math-style deliberation on hard problems that never reaches answer mode; the programs mostly fail"},
+  {"new": "round-14/s3-a", "earlier": "round-13/s1-a", "reason": "The 4,096 cap sits near the median right-answer length (~3,900) on hard328, so cut samples cast no vote and the score is bounded by short routes"},
+  {"new": "round-14/s4-b", "earlier": "r5-m03-rival", "reason": "The top-8 edit is a per-sample all-or-none switch, so outputs are a mixture of full shifted-mode samples and untouched plain-base samples"},
+  {"new": "round-14/s5-a", "earlier": "run-04/f2-m01", "reason": "Cued base's wrong answers scatter over values while right answers coincide, so the plurality picks the right value at a 25-40 % share and keeps rising with more samples"},
+  {"new": "round-14/s5-b", "earlier": "run-07/f2-m03", "reason": "A problem-specific recurring wrong value (misreading) holds a stable plurality against the right answer and limits what voting recovers"},
+  {"new": "round-14/s6-a", "earlier": "round-13/s4-b", "reason": "Top-8 RL directions sharpen the base onto its own most likely passing program, limited by base pass@k rather than RL-Code's own solutions"},
+  {"new": "round-14/s6-b", "earlier": "round-11/s2-b", "reason": "RL-Code's top-8 directions at 1.5x carry RL-Code's own task policy, so the edit is a copy of RL-Code"}
+]}

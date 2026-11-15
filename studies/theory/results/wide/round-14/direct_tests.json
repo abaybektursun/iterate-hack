@@ -1,0 +1,319 @@
+[
+ {
+  "mechanism": "round-09/grader-m04",
+  "kind": "carried",
+  "gain": 1.593,
+  "items": 9,
+  "statement": "A count's size depends on the set's difficulty mix: hard328's first 164 problems are much harder than its second half (cued base 65 vs 99), and fresh2026 is harder still. On hard items the opening (cue, step 100, self-opening) moves few problems, while answers past 16k tokens are mostly unfinished or guessed, so cap raises and votes yield less per abstention than on hard328, and plain prompts keep a falling share of the cued count.",
+  "claim": "Within one set, the base's plain prompt keeps a smaller share of the cued base's right count on harder problems: on MATH-500 the ratio plain-right / cue-right is lower on levels 4-5 than on levels 1-2, by more than a second cued sample's ratio falls over the same strata.",
+  "why_only_this": "This mechanism's cause is the set's difficulty mix: the cue's share of a count is set by how hard the items are, so plain/cue must fall with item difficulty inside a set, not only between sets (0.55 MATH-500, 0.46 hard328). None of the others says anything about the plain prompt against the cue by difficulty. stopping-m04, f2-m04, stopping-m01, sampling-m02, sampling-m05 and training-m02 are about cap hits, abstentions, votes and late finishes. weights-m01 is about how the RL directions shift the cap rate. f2-m05 is about vote ties. problems-m04 says gains on mid-difficulty problems transfer between sets in similar numbers, which predicts a flat ratio rather than a falling one. The second-sample null takes out the part of any fall that comes only from the cued base itself being less reliable on hard problems.",
+  "files": [
+   "studies/rlneurons/results/rln4/t1_t3_items-01",
+   "studies/rlneurons/data/anatomy/math500_meta.json",
+   "studies/rlneurons/results/day1_3/math500_base_cue-01"
+  ],
+  "computation": "1. Load studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json: 500 rows, each with T3 (base, plain, T 1.0) and T1 (base, cue, T 1.0) right/wrong under grader v3. Check the totals: T3 224 and T1 410. 2. Load studies/rlneurons/data/anatomy/math500_meta.json, which has the same order and unique_id as data/rln4/math500.json, and attach each problem's MATH level (1-5). Join on unique_id, or on index if per_problem.json has no unique_id; assert that all 500 rows join. 3. Make two strata from level only, so they do not depend on any arm: E = levels 1-2 and H = levels 4-5. Leave level 3 out. Assert that each stratum has at least 50 T1-right problems; if not, the verdict is undecided. 4. For each stratum s, compute rho_s = (number of problems with T3 right) / (number with T1 right). Then D_plain = rho_H - rho_E. 5. Null: from the rows file of studies/rlneurons/results/day1_3/math500_base_cue-01 (base, cue, T 1.0, 4 samples per problem, grader v3), take sample index 0 for each problem as a second cued sample C2. If C2 is the same generation as T1 (same seed, so its right/wrong pattern equals T1 on all 500 problems), use sample index 1 instead. For each stratum, rho'_s = (C2-right count) / (T1-right count), and D_null = rho'_H - rho'_E. 6. Statistic: Delta = D_plain - D_null. 7. Interval: run a paired bootstrap over problems, resampling problems with replacement within each stratum (10,000 resamples, seed 0). Recompute Delta each time and take the 5th and 95th percentiles as the 90 % interval. 8. Report rho_E, rho_H, rho'_E, rho'_H, D_plain, D_null, Delta with its 90 % interval, and the stratum sizes (problems and T1-right counts). 9. Verdict: holds if both strata have at least 50 T1-right problems and the 90 % upper bound of Delta is below -0.05. Refuted if the 90 % lower bound of Delta is at or above -0.05. Otherwise undecided.",
+  "refuted_if": "The 90 % interval of Delta = (rho_H - rho_E)_plain - (rho_H - rho_E)_second-cue-sample lies wholly at or above -0.05. That would mean the plain prompt's share of the cued count falls with level no faster than a second cued sample's does.",
+  "threshold": "Delta = -0.05 (holds only if the 90 % upper bound < -0.05 with at least 50 T1-right problems per stratum; refuted if the 90 % lower bound >= -0.05)",
+  "null": "A second cued-base sample (day1_3/math500_base_cue-01, T 1.0, a different sample from T1), scored as a ratio against T1 in the same level strata. This is the fall in retention that comes only from sample-to-sample scatter of the cued base on hard items. It is stronger than a random relabelling of the strata, which would give 0."
+ },
+ {
+  "mechanism": "round-09/stopping-m04",
+  "kind": "carried",
+  "gain": 1.432,
+  "items": 12,
+  "statement": "On a hard set part of every model's answers would end past 16,384 tokens, and a cut answer scores zero. A change that leaves the length distribution in place (100 RL steps, the cue on a checkpoint, a new seed or more samples) can move only the precision of finished answers. Step 100 writes cued-base lengths at T 1.0 (4,120 vs 4,008 tokens), so on hard problems it keeps the cued base's cap hits and adds a few right answers.",
+  "claim": "At T 1.0 on MATH-500, RL step 100 (plain prompt) cuts answers at the 16,384-token cap as often as the cued base does on the same problems: its per-problem cap-hit rate is not lower than the cued base's by 1 point or more, while final RL's clearly is.",
+  "why_only_this": "The mechanism says step 100 keeps the cued base's length distribution and gains only precision on finished answers, so its cap hits stay where the base's are. Every other top mechanism that speaks to the RL change says it adds stopping, so even a partial RL update should cut fewer answers. round-10/weights-m01 has the RL directions shift the log-odds of a cap hit by a fixed amount per unit of size, so a small early update gives a smaller cap-hit rate, not the same one. round-09/training-m02 says 'RL's delta adds stopping'. round-09/stopping-m01 and round-09/sampling-m02 put RL among the models that finish more and are capped 5-15 %. round-09/sampling-m05 treats RL as a model whose long tail is cut less than Think-SFT's. round-10/problems-m04 and round-09/grader-m04 tie cap-hit changes to edits and set difficulty, and expect a training edit to move them. The vote mechanisms (run-02/f2-m04, run-08/f2-m05) say nothing that keeps step 100's cap hits equal to the base's. Only stopping-m04 predicts zero change in cap hits at step 100 alongside a gain in right answers.",
+  "files": [
+   "studies/rlneurons/results/ckptcue/s0100_plain-01",
+   "studies/rlneurons/results/ckptcue/s0100_plain_s123-01",
+   "studies/rlneurons/results/day1_3/math500_base_cue-01",
+   "studies/rlneurons/results/day1_3/math500_rl-01",
+   "studies/rlneurons/results/ckptcue/s0400_plain-01",
+   "studies/rlneurons/results/ckptcue/s0400_plain_s123-01"
+  ],
+  "computation": "1) In each folder read the per-sample row file (rows.jsonl; if absent, the per-sample rows in metrics.json/examples.json that carry problem index, sample index, generated tokens and finish reason). Keep MATH-500 rows at T 1.0 / top-p 1.0 only. 2) Mark a row as a cap hit if its finish reason is 'length' or its generated tokens are >= 16,384. Use the same rule for every arm. 3) Arm A is step 100 plain: pool the rows of s0100_plain-01 and s0100_plain_s123-01 (4 samples per problem in total, per result-6832a8; if the count differs, use every stored sample and record the count). Arm B is the cued base: math500_base_cue-01 (4 samples per problem). Positive control C is final RL plain: math500_rl-01. Second checkpoint E is step 400 plain: pool s0400_plain-01 and s0400_plain_s123-01. 4) For each of the 500 problems i and each arm X, compute h_X(i), the share of X's samples on i that hit the cap. 5) Statistic: D = 100 * mean_i [h_A(i) - h_B(i)], in points, paired by problem, n = 500 problems. Get the 90 % interval from 10,000 bootstrap resamples of problems with seed 0, percentile method. 6) Compute the same paired difference for D_C = C - B and D_E = E - B, each with its own 90 % interval. 7) Null and noise floor: split the cued base into samples {0,1} and {2,3}. Compute D_null = 100 * mean_i [h_B01(i) - h_B23(i)] with its 90 % interval. Then compute the A-vs-B difference using only 2 samples of each arm (A's first 2 against B's samples {2,3}), so it matches the null in size. 8) Also report, as descriptions only (they do not decide the verdict): the right share among finished rows for A and B on the 500, and the total cap-hit counts of A, B, C and E. 9) Verdict. Instrument check: if D_C's 90 % interval does not lie wholly below -1.0, final RL itself shows no cap-hit drop, the test cannot tell stopping apart from no stopping, and the verdict is undecided. Otherwise: holds if D's 90 % interval lies wholly above -1.0. Refuted if D's 90 % interval lies wholly at or below -1.0. Undecided in every other case.",
+  "refuted_if": "Step 100 cuts clearly fewer answers than the cued base: the 90 % bootstrap interval of D (step-100 cap-hit rate minus cued-base cap-hit rate, paired over 500 MATH-500 problems) lies wholly at or below -1.0 points, while final RL's interval also lies below -1.0.",
+  "threshold": "-1.0 percentage points of cap-hit rate (step 100 minus cued base, paired over 500 problems, 90 % bootstrap interval). Holds only if the whole interval is above -1.0 and final RL's difference has its whole interval below -1.0.",
+  "null": "There are two references, both stronger than random. (a) The cued base against itself: samples {0,1} against {2,3} give the size-matched seed scatter of the cap-hit rate (D_null). The A-vs-B difference must look like this scatter, not like a stopping shift. (b) Other RL checkpoints of the same run: final RL (math500_rl-01) must show a cap-hit drop below -1.0 points, which shows the instrument detects stopping. Step 400 (D_E) shows where a later checkpoint sits. The claim is that step 100 sits with the base's own resample, not with final RL."
+ },
+ {
+  "mechanism": "run-02/f2-m04",
+  "kind": "carried",
+  "gain": 1.376,
+  "items": 11,
+  "statement": "A capped sample gives no answer, so in a plurality vote it abstains instead of adding a wrong value. Think-SFT's vote sits near its pass@4 because its unsolved samples run to the cap rather than box a guess. Anything that makes it finish, a 32k cap or the RL difference, turns abstentions into mostly wrong, scattered answers that tie or outvote lone right samples: single scores rise, vote gains shrink.",
+  "claim": "Adding the RL difference to Think-SFT (M(2) = Think-SFT + 2 x (RL-Math - base)) turns the cap-hit companions of a lone right sample into finished wrong answers, so on problems with exactly one right sample out of three the M(2) vote is right at least 0.15 less often than Think-SFT's vote, whose companions abstain.",
+  "why_only_this": "Only this mechanism says the RL difference itself, added to Think-SFT, plays the same part as the 32k cap: it makes Think-SFT's capped samples finish as wrong answers that tie with or outvote a lone right sample. round-09/stopping-m01 and round-09/sampling-m02 share the abstention rule, but they put the low cap rate in RL and the 1.5x edit on the base (stopping-m01) or in generic 'finishing weights' (sampling-m02). Neither says the transplanted delta finishes Think-SFT's own cut samples on the problems where a lone right sample used to win. round-09/training-m02 says late finishes seldom beat an existing right answer and that the RL delta only leaves fewer cuts, so it predicts a gap near 0. run-08/f2-m05 is a law of base votes with no abstention term, so it predicts the same lone-right vote rate for both models. round-10/weights-m01 has finishing as guesses only at overdose, on the base. round-09/stopping-m04, round-09/grader-m04 and round-10/problems-m04 say nothing about how lone-right votes are decided.",
+  "files": [
+   "studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01",
+   "studies/rlneurons/results/transplant/hard328-01",
+   "studies/rlneurons/results/transplant/hard328-02",
+   "studies/rlneurons/results/fresh/sft1_cue_s4-01",
+   "studies/rlneurons/results/transplant/fresh2026-01",
+   "studies/rlneurons/results/transplant/fresh2026-02"
+  ],
+  "computation": "1) Read rows.jsonl in each folder. Keep Think-SFT + cue rows at cap 16,384 (thinkvote, fresh/sft1_cue_s4-01). Keep only M(2) rows (arm a = 2 of the Think-SFT + a x (RL-Math - base) transplant, cue, cap 16,384) from the transplant folders, and drop the a = 1/3/4 and noise arms. For each row, record problem id, sample index, grader v3 right/wrong, cap hit (16,384 tokens reached with no boxed answer) and the extracted final answer string. 2) Take three samples per problem per arm. Think-SFT: samples 0, 1, 2. M(2) hard328: the two samples in hard328-01 plus the third in hard328-02. M(2) fresh2026: the first three sample indices across fresh2026-01/-02. Drop any problem that lacks three samples in an arm and report how many were dropped. 3) Vote per problem and arm. A cap-hit or no-answer sample casts no vote. Group the other samples by extracted answer string after the grader v3 normalisation. The top group wins. With m tied top groups, score the vote as 1/m if the right answer is one of them and 0 if not (expected value of a random tie break, so no stored tie rule is needed). If every sample abstains, the vote scores 0. 4) Lone-right set: L_arm = problems (hard328 and fresh2026 pooled) where exactly 1 of the arm's 3 samples is right. Compute each set separately for Think-SFT and for M(2). 5) VR_arm = mean vote score over L_arm. Statistic D = VR_ThinkSFT - VR_M2. 6) Interval: 10,000 bootstrap resamples of problems, stratified by set. Resample each arm's L independently, recompute D, and take the 5th and 95th percentiles for the 90 % interval. Report n_ThinkSFT and n_M2 and each set's share. 7) Mediation (reported, not the decider): over the two non-right samples of each lone-right problem, give the cap-hit share for each arm, the finished-wrong share, and the share of problems where the two finished wrong answers agree with each other. 8) Null: run steps 2-6 again with Think-SFT samples 1, 2, 3 in place of M(2) (D_null = VR_ThinkSFT(0,1,2) - VR_ThinkSFT(1,2,3), with the same bootstrap). Also run them with M(2) against Think-SFT at cap 32,768 (studies/rlneurons/results/cap32vote/hard328_sft1_cue_s4-01 and fresh2026_sft1_cue_s4-01, samples 0-2) as the budget route, reported only. 9) Verdict: holds if min(n_ThinkSFT, n_M2) >= 50, the 90 % interval of D lies wholly above 0.15, and D - D_null also has its 90 % interval above 0. Refuted if the 90 % interval of D lies wholly below 0.15. Undecided otherwise, or if either n < 50.",
+  "refuted_if": "D = VR_ThinkSFT - VR_M2 on lone-right problems has its 90 % bootstrap interval wholly below 0.15. That is, M(2)'s lone right samples win the vote about as often as Think-SFT's, so the RL difference does not turn abstaining companions into tying or outvoting wrong answers.",
+  "threshold": "D = 0.15 (vote-right rate on lone-right problems, Think-SFT minus M(2), 3 samples each, hard328 + fresh2026 pooled, n >= 50 lone-right problems per arm)",
+  "null": "Think-SFT against itself on a second sample triple (samples 0-2 vs 1-3, same vote rule and bootstrap). D must exceed this resampling gap (D - D_null 90 % interval above 0), not only 0. The f2-m05 base-vote law, with no abstention, predicts equal lone-right vote rates in both arms, and training-m02 predicts D near 0."
+ },
+ {
+  "mechanism": "round-10/weights-m01",
+  "kind": "carried",
+  "gain": 1.227,
+  "items": 6,
+  "statement": "The top RL-Math directions write stop and box logits additively: signed size s shifts the log-odds that an answer runs to the cap by a roughly fixed amount per unit, in either sign, on any set. Cap-hit counts therefore move with each set's base cap rate in log-odds, not by a fixed fraction. Overdose costs right answers only in proportion to a set's long unsolved answers, which it forces to finish as guesses.",
+  "claim": "On hard328, the 1.5x top-8 RL-Math edit cuts each problem's cap-hit odds by about the same factor, so problems the base often runs to the cap keep a much larger share of their cap hits than problems it seldom runs to the cap (Q = ln(e_hi/b_hi) - ln(e_lo/b_lo) > 0.3), not one fixed share everywhere.",
+  "why_only_this": "Only weights-m01 says the edit adds a roughly fixed amount to each answer's cap log-odds. A fixed log-odds shift keeps a larger share of cap hits where the base cap rate is high: with c of about -1.2 (base 71.5 to 25 of 328), a problem near 0.7 keeps about 0.59 of its cap hits and one near 0.06 keeps about 0.31, so Q is about 0.6. round-10/problems-m04 says cap-hit change is a fixed fraction of the base cap hits in the long-derivation tail (it scales the change by the base cap-hit ratio), and that gives Q = 0. stopping-m04, sampling-m05 and training-m02 treat cap hits as a model's length tail that a length-preserving change leaves alone, or else are about Think-SFT; none sets a dose law per problem for the weight edit. grader-m04, f2-m04, f2-m05, stopping-m01 and sampling-m02 are about votes, abstentions and difficulty mix, and say nothing about how the edit's cap-hit cut depends on a problem's base cap rate.",
+  "files": [
+   "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01",
+   "studies/rlneurons/results/day1_3/hard328_top8x1.5_cue_s4-01"
+  ],
+  "computation": "1) In each folder read rows.jsonl (per problem x sample rows). Key each row by problem index (0-327) and sample index (0-3). For every row take the first-attempt cap-hit flag: the answer reached 16,384 generated tokens with no answer marker before any restart. In the s4r2 base folder use the pre-restart attempt's flag (or tokens >= 16,384 on the original attempt), never the restarted attempt's. In the edit folder use its cap-hit flag (or tokens >= 16,384). Assert 328 problems x 4 samples in each folder. Assert the base mean is about 71.5 cap hits per sample and the edit count is in its posted range (about 25 per sample); if either is off by more than 5, stop and report the field used. 2) Strata come from base samples 0 and 1 only: k = number of those two that hit the cap (0, 1 or 2). HI = problems with k = 2, LO = problems with k = 0. 3) Held-out base rate per stratum: b_S = (cap hits in base samples 2 and 3 over problems in S + 0.5) / (2*|S| + 1). Edit rate per stratum: e_S = (cap hits in all 4 edit samples over problems in S + 0.5) / (4*|S| + 1). The held-out base samples remove the regression to the mean that strata picked on the same samples would bring. 4) Statistic: Q = ln(e_HI/b_HI) - ln(e_LO/b_LO). Also report the log-odds shifts L_S = logit(e_S) - logit(b_S) for both strata and D = L_HI - L_LO (weights-m01 predicts D near 0), and the share kept e_S/b_S per stratum. 5) Interval: bootstrap over problems, 10,000 resamples of the 328 problems with replacement, seed 20261115. Redo steps 2-4 in each resample, keeping each problem's 4 base and 4 edit samples together. Report the 5th and 95th percentiles of Q (90 % interval), and the same for D. 6) n = number of problems in HI plus LO, which must be at least 50 (the statistic rests on all 328 problems through the bootstrap, and on |HI| + |LO| directly). Also report |HI|, |LO| and the counts behind each rate. 7) Null computation: repeat steps 3-5 with base sample 3 standing in for the edit and base sample 2 as the base: Q_null = ln(b3_HI/b2_HI) - ln(b3_LO/b2_LO) with the same +0.5 smoothing. This shows the noise width of Q with no edit. 8) Verdict: holds if n >= 50 and the 90 % interval of Q lies wholly above 0.3. Refuted if the 90 % interval lies wholly below 0.3. Otherwise undecided.",
+  "refuted_if": "The 90 % bootstrap interval of Q lies wholly below 0.3. That would mean the edit removes about the same share of cap hits on problems the base often runs to the cap as on problems it seldom does, which is the fixed-fraction scaling of round-10/problems-m04, not a fixed log-odds shift.",
+  "threshold": "Q = 0.3, halfway between the fixed-fraction prediction (Q = 0) and the fixed-log-odds prediction (Q about 0.6 at c = -1.2). Holds if n >= 50 and the 90 % interval of Q > 0.3; refuted if the 90 % interval < 0.3; otherwise undecided.",
+  "null": "Main null: the fixed-fraction law (problems-m04), e_S = r * b_S in every stratum, which gives Q = 0, measured on the same strata with held-out base samples so that regression to the mean cannot make Q. Noise null: a second base sample standing in for the edit (Q_null from base sample 3 against base sample 2, step 7), whose interval should cover 0 and shows how much Q moves with no edit at all."
+ },
+ {
+  "mechanism": "run-08/f2-m05",
+  "kind": "carried",
+  "gain": 1.099,
+  "items": 6,
+  "statement": "Majority vote counts answer strings: the base's wrong answers scatter (only about a quarter repeat), so the right answer is the plurality once per-sample success exceeds about 0.3, and even k leaves ties that a fixed rule breaks about half right. Vote over k therefore rises toward the number of problems whose right answer is the modal string, well below pass@k, with odd k gaining from fewer ties and returns shrinking fast after k = 4.",
+  "claim": "On MATH-500 problems where the cued base gets 2 to 10 of its 12 stored samples right, the vote over 4 is right more often because the finished wrong answers scatter across different strings: holding cap hits fixed as abstentions, the exact vote-over-4 accuracy with the real wrong strings beats the same vote with every finished wrong answer merged into one string by at least 0.05 per problem.",
+  "why_only_this": "The other mechanisms explain vote gains through abstentions (cap hits cast no vote: run-02/f2-m04, round-09/stopping-m01, round-09/sampling-m02), through cap and length shifts (round-09/stopping-m04, round-09/sampling-m05, round-10/weights-m01), through difficulty strata (round-09/grader-m04, round-10/problems-m04) or through late finishes on a longer cap (round-09/training-m02). In this test both arms use the same samples and the same abstentions, and the vote rule is the same. The only thing that differs is whether finished wrong answers are counted as their real strings or merged into one. So abstention, cap, length and difficulty accounts predict a difference of zero. Some of them call late finishes 'scattered', but none says that scatter among ordinary finished wrong answers decides the vote. sampling-m02 even says a right answer facing finished wrong values wins 'only through the tie rule', which predicts a small gap. Only run-08/f2-m05 makes scatter among finished wrong answers the cause of the vote's gain: about a quarter of wrong answers repeat, so the right answer becomes the plurality from per-sample success of about 0.3. That predicts a clear positive gap.",
+  "files": [
+   "studies/rlneurons/results/votek/math500_base_cue-01",
+   "studies/rlneurons/results/votek/math500_base_cue-02",
+   "studies/rlneurons/results/day1_3/math500_base_cue-01"
+  ],
+  "computation": "1. Load the per-sample rows (rows.jsonl, or the per-sample row file in each folder) of the cued base on MATH-500 at T 1.0 from the three folders. For each row keep: problem index (or unique_id), sample index or seed, extracted answer string, grader-v3 right flag, and cap-hit flag (finished = not cut at 16,384 and an answer was extracted). Drop exact duplicate (problem, sample) rows. Assemble 12 samples per problem and give them sample order 0-11 (day1_3 samples first in their stored order, then votek-01, then votek-02). Check: a plurality vote over all 12 with ties going to the lowest-ordered sample must give 466/500 (result-1c9e40). If it differs by more than 2, stop and report the mismatch. 2. Answer key: a finished sample's key is its extracted answer, normalized by stripping whitespace, a \\boxed{} wrapper, \\left/\\right, \\! and a trailing period. Merge every right sample into one key, RIGHT, so grader-equivalent right forms count as one string. A capped or no-answer sample abstains. 3. Band: keep problems with r = number of right samples in 2..10 of 12. Report n (must be >= 50). 4. For each band problem, enumerate all C(12,4) = 495 four-sample subsets. Vote S (scatter arm): the plurality among the non-abstaining keys. Ties go to the tied key whose earliest sample has the lowest order. If all 4 abstain the vote is wrong. The subset scores 1 if the winner is RIGHT. Vote M (merged null): the same, except every finished wrong key is replaced by one key, WRONG. V4_S and V4_M are the mean scores over the 495 subsets. 5. Per problem d = V4_S - V4_M. The statistic D is the mean of d over band problems. 6. 90 % interval: percentile bootstrap over band problems, 10,000 resamples, seed 0. 7. Descriptive (not decisive): the share of finished wrong samples whose key appears at least twice among that problem's 12 samples (the mechanism says about 0.25); D separately for r in 2..4 and r in 5..10; and the same D on hard328 if 12 samples per problem are stored (otherwise say so).",
+  "refuted_if": "The upper end of the 90 % bootstrap interval of D is below 0.05. In that case merging all finished wrong answers into one string costs the vote over 4 less than 0.05 per band problem, so scatter among wrong answers does not drive the vote. Holds if n >= 50 and the lower end of the 90 % interval is at least 0.05. Otherwise undecided.",
+  "threshold": "D = 0.05 (mean per-problem gain in vote-over-4 accuracy, scatter arm minus merged-wrong arm, on problems with 2-10 of 12 right; n >= 50 problems)",
+  "null": "The merged-wrong vote on the same problems, samples, abstentions and tie rule, with every finished wrong answer collapsed into one string. This is the strongest offline null: it keeps each problem's success rate and cap-hit pattern exactly and removes only the scatter. Under it, the abstention, cap and difficulty mechanisms predict D = 0. As a secondary reference, also report D for problems with r = 1 or 11, and for a shuffled-order version of the tie rule, to show that D does not come from the order rule."
+ },
+ {
+  "pair": "round-14/s1",
+  "rivals": [
+   "round-14/s1-a",
+   "round-14/s1-b"
+  ],
+  "kind": "shared test of the rivals for surprise s1",
+  "statements": {
+   "round-14/s1-a": "Think-SFT's code skill is intact on HumanEval+/MBPP+. The loss is in the answer layout. When it settles a problem quickly, it writes its final program in the layout of its SFT traces: a bare 'python' line, the program, then a closing fence, with no opening fence. This happens mostly on easy, short problems, and the Math cue makes it more frequent. The grader scores these programs zero, even though they would pass at or above the fenced pass rate.",
+   "round-14/s1-b": "The unfenced answers are failed solves, not a layout habit. On problems Think-SFT finds hard, it deliberates long and never switches into answer mode. It then dumps its last draft program mid-reasoning, with a language tag but no opening fence. The Math cue pushes more problems into this math-style long deliberation. These programs come from problems the cued base also usually fails, so they pass at well below the fenced rate."
+  },
+  "claim": "Which problems carry Think-SFT's unfenced answers, measured by the cued base's pass rate on them. Under a's layout habit, unfenced answers come from quick settles on easy problems, so the base passes them far more often than a random problem. Under b's failed solves, they come from hard problems, so the base passes them far less often. A random 106-problem subset sits between the two.",
+  "statistic": "r_U = fraction of Think-SFT Code-cue problems with no fenced code block (unscored) that the cued base passes in its stored Code-cue sample (fraction of problems)",
+  "files": [
+   "studies/rlneurons/results/code_think/sft1_codecue-01",
+   "studies/rlneurons/results/code1/base_cue-01"
+  ],
+  "rows": "The 106 problems whose Think-SFT Code-cue answer has no fenced code block, the unscored set of result-9d38d9 (97 with an unopened program, 9 others), each joined by problem id to its one cued-base Code-cue row.",
+  "n": 106,
+  "computation": "1) In sft1_codecue-01, select the problems whose answer the stored grader marked as having no fenced code block (expect 106). 2) For each, read pass/fail of the same problem in code1/base_cue-01 (317 of 538 pass overall). 3) r_U = passes / 106. 4) 90 % interval: percentile bootstrap over the 106 problems (10,000 resamples); report Wilson 90 % as a check. 5) Report the base's 538-problem rate 0.589 beside it.",
+  "null": "A random 106-problem subset of the 538 drawn without replacement: expected base pass rate 317/538 = 0.589, with 90 % sampling range 0.589 +/- 1.645 x sqrt(0.589 x 0.411 / 106 x 432/537) = [0.52, 0.66].",
+  "ranges": {
+   "a": [
+    0.72,
+    1.0
+   ],
+   "b": [
+    0.0,
+    0.46
+   ],
+   "null": [
+    0.52,
+    0.66
+   ]
+  }
+ },
+ {
+  "pair": "round-14/s2",
+  "rivals": [
+   "round-14/s2-a",
+   "round-14/s2-b"
+  ],
+  "kind": "shared test of the rivals for surprise s2",
+  "statements": {
+   "round-14/s2-a": "Think-SFT's code skill is intact. Its loss is a template habit: after a cleanly finished, usually short reasoning on an easy task it writes its own SFT answer format, a bare 'python' line, the program, then a closing fence. The fence-based grader throws this away. The 97 unopened answers sit mostly on problems the cued base also passes and hold working programs, so program-level passes are about 370 of 538, above the cued base's 317.",
+   "round-14/s2-b": "Think-SFT's code deficit is real. On harder code problems its long math-style reasoning wanders, and it leaves without a proper final answer: the program comes out without the opening fence. The missing fence marks a degraded run, so most unopened programs fail. The 97 unopened answers sit mostly on problems the cued base also fails. Regraded, Think-SFT stays near the cued base, about 330 of 538, far below RL-Code."
+  },
+  "claim": "Which problems the unopened answers fall on. Under a, the bare 'python' block is the template ending after a cleanly finished, usually easy task, so these answers fall on problems the cued base solves. Under b, the missing fence marks a degraded exit on hard problems, so they fall on problems the cued base fails. A random set of problems gives the base's overall pass rate, which lies between the two ranges.",
+  "statistic": "Share of Think-SFT Code-cue answers without a fenced code block whose problem the cued base (Code cue) passes in its stored row (fraction of problems)",
+  "files": [
+   "studies/rlneurons/results/code_think/sft1_codecue-01",
+   "studies/rlneurons/results/code1/base_cue-01"
+  ],
+  "rows": "Think-SFT Code-cue rows (first row per problem) that the stored grade marks unscored for having no fenced code block (106 rows, 97 of them unopened blocks), joined on problem id to the cued base's Code-cue row",
+  "n": 106,
+  "computation": "1) In sft1_codecue-01 keep one row per problem (first in file order) and select the rows marked as having no fenced block (expect 106). 2) For each selected problem take the base_cue-01 row; passed = all tests passed under the stored grade; a missing row counts as not passed. 3) S = passed / selected. 4) 90 % interval: Wilson score interval at z = 1.645 on (passed, selected); report a 10,000-draw bootstrap over problems as a check. 5) Also report S for the 97 unopened-block rows alone, and the same share for the complement (Think-SFT fenced rows).",
+  "null": "Random subset of problems: the base's overall Code-cue pass rate, 317/538 = 0.589. With n = 106 its 90 % sampling range is 0.589 +/- 0.079.",
+  "ranges": {
+   "a": [
+    0.72,
+    1.0
+   ],
+   "b": [
+    0.0,
+    0.45
+   ],
+   "null": [
+    0.51,
+    0.67
+   ]
+  }
+ },
+ {
+  "pair": "round-14/s3",
+  "rivals": [
+   "round-14/s3-a",
+   "round-14/s3-b"
+  ],
+  "kind": "shared test of the rivals for surprise s3",
+  "statements": {
+   "round-14/s3-a": "The autobench final configuration (plain prompt, T 0.6, 12 votes, cap 4,096 tokens per sample) is budget-bound. The cap sits at the median length of the base's right hard328 routes (3,921 tokens), so on about half of the problems the base can solve, every route is cut before its answer. A cut sample casts no vote, so 12 votes recover only problems with a short route. If the cap were lifted, most cut derivations at T 0.6 would finish.",
+   "round-14/s3-b": "At T 0.6 the plain base's long hard328 attempts fall into repetition loops that never end at any cap. Only short attempts finish, so the 12-vote counts short answers alone, and problems needing a long derivation are lost to the temperature regime, not to the 4,096 cap. The vote lifts a weak T 0.6 single sample (107/328) by about 30. A larger cap would recover almost nothing; T 1.0 would."
+  },
+  "claim": "Among the cued base's T 0.6 hard328 answers that run past 4,096 generated tokens (the answers a 4,096 cap would cut), this is the share that are repetition loops. Under a, the cut answers are mostly live derivations that would finish or end with an answer, so the loop share is low and the cap is what loses them. Under b, the cut answers are mostly loops that would never finish, so the cap loses nothing recoverable.",
+  "statistic": "loop share: rule-A loops / answers with more than 4,096 generated tokens (fraction of answers)",
+  "files": [
+   "studies/cleanneurons/results/gen/hard328_base_t06-01",
+   "studies/cleanneurons/results/gen/page_grid.json"
+  ],
+  "rows": "The 328 rows of hard328_base_t06-01 (Olmo-3-1025-7B base, cue, T 0.6 / top-p 1.0, 1 sample, cap 16,384, grader v3), keeping the rows whose generated token count exceeds 4,096; loop state per problem from page_grid.json for that cell (state 'loop' = rule A).",
+  "n": 210,
+  "computation": "1) In hard328_base_t06-01, take one row per problem_index (the first in file order). 2) Keep the rows with generated tokens > 4,096; n = their count. 3) For each kept problem, read its state for cell hard328_base_t06-01 in page_grid.json; loop = 1 if the state is 'loop', else 0. 4) S = sum(loop) / n. 5) 90 % interval: 10,000 bootstrap resamples of the kept rows with replacement; take the 5th and 95th percentiles of S. 6) Verdict: a holds if the interval lies inside [0.05, 0.40], b holds if it lies inside [0.45, 1.0]. A value in neither range refutes both.",
+  "null": "The same share on the cued base's T 1.0 hard328 rows (day1 hard328_base_cue_t10-01: 1 rule-A loop of 328, 77 cap hits). This is the no-loop regime the readers assumed, giving at most about 1/200.",
+  "ranges": {
+   "a": [
+    0.05,
+    0.4
+   ],
+   "b": [
+    0.45,
+    1.0
+   ],
+   "null": [
+    0.0,
+    0.03
+   ]
+  }
+ },
+ {
+  "pair": "round-14/s4",
+  "rivals": [
+   "round-14/s4-a",
+   "round-14/s4-b"
+  ],
+  "kind": "shared test of the rivals for surprise s4",
+  "statements": {
+   "round-14/s4-a": "Code-RL's top-8 directions are driven by solution text, not by the bare plain prompt. A sample that starts working on the problem, including the plain base's quick commitments, is pushed into full Math-like deliberation. A sample that opens in non-solution text (prompt continuation, web text, empty reply) never drives them and stays a plain-base failure at any size. So about 60 quick wrongs remain, and they are the base's non-solution openings. The effect saturates by 1x.",
+   "round-14/s4-b": "Per sample, the Code top-8 edit is an all-or-none lottery that does not depend on the problem. With probability s (about 0.47 at 1x) a sample is a full Math-mode sample; otherwise it is an untouched plain-base sample. Code's directions overlap only part of Math's shift on math text (cosine 0.37), so s grows with size along Math's dose curve. Readouts mix in proportion: 0.47x9 + 0.53x105 = 60 quick wrongs, and 0.47x217 + 0.53x107 = 159 right (measured 157)."
+  },
+  "claim": "Share of m21's right answers that are as short as a typical plain-base right answer. Under b, about 0.53 x 107 / 157 = 0.36 of m21's right answers are untouched plain-base answers, and half of those fall below the plain base's own median length. Switched answers rarely fall below it, so S is about 0.18-0.28. Under a, every solution-started sample, including the base's short right replies, is pushed into Math-like deliberation, so almost no right answer stays plain-short: S is about 0.03-0.10. A plain-base draw with no edit gives 0.5.",
+  "statistic": "S = fraction of m21 right rows with n_generated <= L, where L is the median generated tokens of the plain base's (T3) right answers on problems 0-249 (unitless fraction)",
+  "files": [
+   "studies/theory/results/experiments/cell-r9-m21-01",
+   "studies/rlneurons/results/rln4/t1_t3_items-01"
+  ],
+  "rows": "m21 answers.jsonl: the first row per problem_index 0-249, kept if score_v3 == 1 and cap_hit is not true (157 rows). t1_t3_items-01/per_problem.json: problem_index 0-249 with T3 right and not cut off (about 107 rows), used only to set L.",
+  "n": 157,
+  "computation": "1) From per_problem.json, keep problems 0-249 where T3 is right and not cut off; L = median of their T3 generated tokens (for an even count, the mean of the two middle values). 2) From m21 answers.jsonl, keep the first row per problem_index 0-249 with score_v3 == 1 and cap_hit not true. 3) S = (kept m21 rows with n_generated <= L) / (kept m21 rows). 4) 90 % interval: 10,000 bootstrap draws resampling problems 0-249 with replacement, recomputing L and S in each draw; take the 5th and 95th percentiles.",
+  "null": "No edit: a plain-base draw measured against the plain base's own median gives 0.50 by construction, and its sampling spread at n 157 is about [0.43, 0.57]. Math top-8 1x plain right rows below L (about 0.02-0.08) are a's prediction, not a null.",
+  "ranges": {
+   "a": [
+    0.0,
+    0.12
+   ],
+   "b": [
+    0.15,
+    0.36
+   ],
+   "null": [
+    0.41,
+    0.6
+   ]
+  }
+ },
+ {
+  "pair": "round-14/s5",
+  "rivals": [
+   "round-14/s5-a",
+   "round-14/s5-b"
+  ],
+  "kind": "shared test of the rivals for surprise s5",
+  "statements": {
+   "round-14/s5-a": "The cued base's wrong finished answers at T 1.0 are mostly one-off slip values that differ between samples, while right routes all land on one value. So on contested problems the right value is the largest answer group even at a 25-50 % share. Four samples cannot show this: singleton ties are broken by sample order, and two slips can outvote one right answer. Twelve samples can, so the vote keeps rising toward the pass@k ceiling.",
+   "round-14/s5-b": "On contested problems the cued base runs a close race between two recurring routes: a right route and one wrong attractor value per problem, a misreading tied to the problem and the cue. The right route usually leads only slightly (about 35-48 % of answers against 25-40 %). Four samples often split 2-2 or flip 2-1 for the attractor. Twelve samples settle the race. Gains therefore stop where the attractor outweighs the right route, as on harder sets."
+  },
+  "claim": "Pooled pairwise agreement among the cued base's wrong answers on contested MATH-500 problems, using all 12 stored T 1.0 samples. Cause a (one-off slips) puts it low but above chance. Cause b (one recurring attractor per problem) puts it high, because most wrong pairs on a problem share the attractor value.",
+  "statistic": "pooled share of same-problem pairs of wrong answer-bearing samples that agree under rln4_lib.agree (fraction of pairs)",
+  "files": [
+   "studies/rlneurons/results/votek/math500_base_cue-01",
+   "studies/rlneurons/results/votek/math500_base_cue-02",
+   "studies/rlneurons/results/day1_3/math500_base_cue-01"
+  ],
+  "rows": "rows.jsonl of the three folders pooled. Keep attempt == 0 (or no attempt field) and the first row per (problem_index, sample) in file order, samples 0-11 (if a sample appears in two folders, keep the first folder listed). Answer-bearing = cap_hit not true, finish_reason != 'length', and extracted_v3 non-empty after strip(). Right = answer-bearing and score_v3 == 1; wrong = answer-bearing and score_v3 == 0. Contested problems = at least 1 right and at least 2 wrong answer-bearing samples among the 12.",
+  "n": 120,
+  "computation": "1) Build the contested set P (expected about 120 problems; the test needs at least 50). 2) For each p in P, take its wrong answers W_p, form all unordered pairs, and count agreeing pairs with rln4_lib.agree (studies/rlneurons/lib/rln4_lib.py). 3) Statistic = sum of agreeing pairs / sum of pairs over P. 4) 90 % interval: bootstrap over problems, 2,000 resamples of P with replacement, recompute the pooled ratio, and take the 5th-95th percentiles. 5) Null: for each p, pair each of its wrong answers with each wrong answer of one randomly drawn other contested problem whose gold has the same type (integer or not, using the normalisation in facts.json r7-m09). Pool agreement and average over 200 draws.",
+  "null": "Cross-problem pairing of wrong answers matched on gold type (integer or not). This is the chance agreement of wrong values that share an answer format but not a problem.",
+  "ranges": {
+   "a": [
+    0.07,
+    0.3
+   ],
+   "b": [
+    0.42,
+    1.0
+   ],
+   "null": [
+    0.0,
+    0.05
+   ]
+  }
+ },
+ {
+  "pair": "round-14/s6",
+  "rivals": [
+   "round-14/s6-a",
+   "round-14/s6-b"
+  ],
+  "kind": "shared test of the rivals for surprise s6",
+  "statements": {
+   "round-14/s6-a": "Base-mode sharpening: RL-Code's top-8 directions per matrix raise, for each code problem, the probability of the base's own most likely passing program. Problems the base solves at moderate rate become near-certain, and problems it already passes stay passed. The edit installs no RL-specific solutions. On code it therefore fixes finished-with-block logic failures on base-solvable problems, not only cut-off and no-block endings, and it keeps base passes that RL-Code itself loses.",
+   "round-14/s6-b": "RL-policy copy: RL-Code's change is concentrated enough (top-8 share 0.174) that its top-8 directions at 1.5x carry RL-Code's own per-problem programs and conventions. The edited base reproduces RL-Code's outcome pattern problem by problem, including RL-Code's losses on problems the base solves. Its gain over the base equals RL-Code's, not a sharpening of the base's own distribution."
+  },
+  "claim": "On code problems the cued base passes but RL-Code mostly fails, does the Code-direction edit keep the base's pass (a: sharpening the base's own programs keeps and raises it above a base resample) or lose it like RL-Code (b: the edit copies RL-Code's per-problem outcomes)? The two causes put the edit's pass rate on this set on opposite sides of a base resample's rate.",
+  "statistic": "Mean pass rate of the Code-top-8 edit samples on set L (fraction of edit samples passed, averaged over problems)",
+  "files": [
+   "studies/rlneurons/results/code1/base_cue-01",
+   "studies/rlneurons/results/code1/rl_plain-01",
+   "studies/rlneurons/results/xreward/code_hosts_s52",
+   "studies/rlneurons/results/xreward/code_hosts_s53",
+   "studies/rlneurons/results/xreward/code_dial",
+   "studies/rlneurons/results/code1/base_plain-01",
+   "studies/rlneurons/results/code1/base_mathcue-01"
+  ],
+  "rows": "L = the problems (of 538) that code1/base_cue-01 passes and on which RL-Code fails in at least 2 of its 3 stored samples (code1/rl_plain-01 seed 51M, the RL-Code rows of code_hosts_s52 and code_hosts_s53). Rows entering: (problem in L, edit sample) pairs for 5 edit samples per problem: Code top-8 1x at seeds 51M (code_dial), 52M (code_hosts_s52) and 53M (code_hosts_s53), and Code top-8 1.5x and 2x (code_dial).",
+  "n": 100,
+  "computation": "1) Per problem take each cell's first row. Pass = all tests passed under the cells' stored grader; cap hits and no-block answers count as fail. 2) Build L as in rows. 3) Per problem in L, e = mean pass of its 5 edit samples. 4) Statistic S = mean of e over L. 5) 90 % interval: 10,000 bootstrap resamples of the problems in L (with replacement), 5th and 95th percentiles of S. n = 5 x |L| rows; if n < 50 the verdict is undecided. 6) Null: the same mean over L of base-like resamples, using code1/base_plain-01, code1/base_mathcue-01 and the random rank-8 1.5x cell of code_dial (3 samples per problem), with the same bootstrap.",
+  "null": "Base-like resamples on L (plain base, Math-cue base, random rank-8 1.5x edit with the Code cue): the pass rate a non-sharpened base gets on problems the cued base passed and RL-Code mostly failed, including regression to the mean.",
+  "ranges": {
+   "a": [
+    0.7,
+    1.0
+   ],
+   "b": [
+    0.0,
+    0.34
+   ],
+   "null": [
+    0.38,
+    0.66
+   ]
+  }
+ }
+]

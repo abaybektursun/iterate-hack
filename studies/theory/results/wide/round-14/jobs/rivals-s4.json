@@ -1,0 +1,66 @@
+{"rivals": [
+  {"id": "a",
+   "statement": "Code-RL's top-8 directions are driven by solution text, not by the bare plain prompt. A sample that starts working on the problem, including the plain base's quick commitments, is pushed into full Math-like deliberation. A sample that opens in non-solution text (prompt continuation, web text, empty reply) never drives them and stays a plain-base failure at any size. So about 60 quick wrongs remain, and they are the base's non-solution openings. The effect saturates by 1x.",
+   "readers_wrong": "The readers took Code's directions to act from the prompt like Math's (9 quick wrongs), so they forecast 18-25. In fact the plain base's non-solution openings (about a quarter of its samples) are out of the edit's reach. This fits result-cc7288: the 60 look like base failures, by eye only 3-5 are 'Answer:'-first, and they are no harder. It also fits every direct fact: none concerns Code on plain math, and r5-m03-rival's refutation is about Math's edit. run-05/f2-m06 forecast this number well because Code at 1x is under-dosed on math. Its rounding cause is refuted (0.99996). What it picked up is the partial reach of Code's directions.",
+   "rests_on": ["result-ac7104", "result-cc7288", "result-ba58ee"],
+   "holds_against": [
+     {"item": "result-ac7104", "value": 157, "why": "If every solution-started sample solved at Math's rate, right would be about 171. Code's directions add less correctness on math than Math's do (result-d15c5e: Code's own gain is domain-specific), so switched samples solve a little worse. 157 is 2 sd below 171, not a contradiction."},
+     {"item": "result-cc7288", "value": 0.25, "why": "The answer-first share of 0.25 is an upper bound from a rule that over-counts. By eye only 3-5 of 60 are 'Answer:'-first, so about 90 % of the quick wrongs are non-solution openings, as a says."}
+   ],
+   "forecasts": [
+     {"id": "t13", "value": 165, "low": 135, "high": 190, "reason": "The prompt drives Math's directions, so most plain samples switch: about 0.85 x 183 (dir 1 at 1.5x with the cue) + 0.15 x 76 (plain base)."},
+     {"id": "t14", "value": 178, "low": 152, "high": 198, "reason": "About 0.9 x 189 (dirs 2-8 at 1.5x with the cue, 183-196) + 0.1 x 76."},
+     {"id": "t09", "value": 362, "low": 340, "high": 382, "reason": "301 graded, plus about 0.65 of the 97 unopened-block answers passing (the fenced pass rate is 0.70)."},
+     {"id": "t10", "value": 340, "low": 305, "high": 372, "reason": "270 graded; the Math cue leaves more unopened blocks, which pass at about 0.6."},
+     {"id": "t11", "value": 321, "low": 316, "high": 332, "reason": "The base fences its code; only a few of its 34 no-block answers are unopened blocks."},
+     {"id": "t12", "value": 403, "low": 401, "high": 409, "reason": "RL-Code has 8 no-block answers; a couple recover."},
+     {"id": "t15", "value": 188, "low": 176, "high": 204, "reason": "Vote over 4 is 179 (195 with restarts); 4 to 6 votes adds about 2 % of the missing problems, as on MATH-500."},
+     {"id": "t16", "value": 222, "low": 214, "high": 229, "reason": "RL vote over 4 is 224 with restarts; RL has few cap hits; the tie rule moves about 1."},
+     {"id": "t17", "value": 474, "low": 466, "high": 481, "reason": "Think-SFT one sample is 457-462 at 16k; the vote adds about 12; shortest-tie helps Think-SFT (252 vs 246 on hard328)."},
+     {"id": "t18", "value": 58, "low": 53, "high": 63, "reason": "RL vote over 4 on fresh2026 is 57; ties rarely matter for RL."},
+     {"id": "t19", "value": 44, "low": 36, "high": 52, "reason": "Cued base about 0.78 of RL's one sample (50.5), about 39, plus about 11 % from the vote (as on hard328, 161 to 179)."}
+   ]},
+  {"id": "b",
+   "statement": "Per sample, the Code top-8 edit is an all-or-none lottery that does not depend on the problem. With probability s (about 0.47 at 1x) a sample is a full Math-mode sample; otherwise it is an untouched plain-base sample. Code's directions overlap only part of Math's shift on math text (cosine 0.37), so s grows with size along Math's dose curve. Readouts mix in proportion: 0.47x9 + 0.53x105 = 60 quick wrongs, and 0.47x217 + 0.53x107 = 159 right (measured 157).",
+   "readers_wrong": "The readers set s near 1, as for Math's directions. Code's aligned shift on math text is a fraction of Math's, so only about half of the samples switch. The rest are ordinary plain-base samples, which is why result-cc7288 finds the same type mix and difficulty as the base's (s_Q 0.25 vs s_N 0.21; r_Q 0.833 vs r_N 0.838). This is consistent with r5-m03-rival's refutation, because Math's s is about 0.96, so its short answers are switched ones. run-05/f2-m06's under-application was the right correlate (a lower effective dose) with the wrong cause.",
+   "rests_on": ["result-ac7104", "result-cc7288", "result-98de28"],
+   "holds_against": [
+     {"item": "result-d02d46", "value": 0.829, "why": "Math's short answers are 82.9 % right, not the 50 % of an unswitched base. Math's s at 1x is about 0.96, so under 5 % of its samples are unswitched plain-base ones. The lottery here concerns Code, whose s is about 0.47."},
+     {"item": "result-cc7288", "value": 0.04, "why": "The answer-first gap s_Q - s_N is 0.04 [-0.07, 0.15], and b predicts exactly 0: unswitched Code samples are plain-base draws with the base's own type mix."}
+   ],
+   "forecasts": [
+     {"id": "t13", "value": 150, "low": 115, "high": 185, "reason": "Lottery s about 0.7 for dir 1 at 1.5x (part of the aligned shift): 0.7 x 183 + 0.3 x 76."},
+     {"id": "t14", "value": 172, "low": 145, "high": 196, "reason": "s about 0.85 for dirs 2-8 at 1.5x: 0.85 x 189 + 0.15 x 76."},
+     {"id": "t09", "value": 362, "low": 340, "high": 382, "reason": "301 graded, plus about 0.65 of the 97 unopened-block answers."},
+     {"id": "t10", "value": 340, "low": 305, "high": 372, "reason": "270 graded, plus unopened blocks passing at about 0.6."},
+     {"id": "t11", "value": 321, "low": 316, "high": 332, "reason": "Few of the base's 34 no-block answers are unopened blocks."},
+     {"id": "t12", "value": 403, "low": 401, "high": 409, "reason": "8 no-block answers; a couple recover."},
+     {"id": "t15", "value": 188, "low": 176, "high": 204, "reason": "179 over 4 (195 with restarts), plus about 2 % of the missing problems from 6 votes."},
+     {"id": "t16", "value": 222, "low": 214, "high": 229, "reason": "RL vote over 4 is 224 with restarts; the tie rule moves about 1."},
+     {"id": "t17", "value": 474, "low": 466, "high": 481, "reason": "457-462 one sample, plus the vote and the shortest-tie gain."},
+     {"id": "t18", "value": 58, "low": 53, "high": 63, "reason": "RL vote is 57 on fresh2026."},
+     {"id": "t19", "value": 44, "low": 36, "high": 52, "reason": "About 39 for one sample, plus about 11 % from the vote."}
+   ]}
+ ],
+ "test": {
+   "claim": "Share of m21's right answers that are as short as a typical plain-base right answer. Under b, about 0.53 x 107 / 157 = 0.36 of m21's right answers are untouched plain-base answers, and half of those fall below the plain base's own median length. Switched answers rarely fall below it, so S is about 0.18-0.28. Under a, every solution-started sample, including the base's short right replies, is pushed into Math-like deliberation, so almost no right answer stays plain-short: S is about 0.03-0.10. A plain-base draw with no edit gives 0.5.",
+   "statistic": "S = fraction of m21 right rows with n_generated <= L, where L is the median generated tokens of the plain base's (T3) right answers on problems 0-249 (unitless fraction)",
+   "files": ["studies/theory/results/experiments/cell-r9-m21-01", "studies/rlneurons/results/rln4/t1_t3_items-01"],
+   "rows": "m21 answers.jsonl: the first row per problem_index 0-249, kept if score_v3 == 1 and cap_hit is not true (157 rows). t1_t3_items-01/per_problem.json: problem_index 0-249 with T3 right and not cut off (about 107 rows), used only to set L.",
+   "n": 157,
+   "computation": "1) From per_problem.json, keep problems 0-249 where T3 is right and not cut off; L = median of their T3 generated tokens (for an even count, the mean of the two middle values). 2) From m21 answers.jsonl, keep the first row per problem_index 0-249 with score_v3 == 1 and cap_hit not true. 3) S = (kept m21 rows with n_generated <= L) / (kept m21 rows). 4) 90 % interval: 10,000 bootstrap draws resampling problems 0-249 with replacement, recomputing L and S in each draw; take the 5th and 95th percentiles.",
+   "null": "No edit: a plain-base draw measured against the plain base's own median gives 0.50 by construction, and its sampling spread at n 157 is about [0.43, 0.57]. Math top-8 1x plain right rows below L (about 0.02-0.08) are a's prediction, not a null.",
+   "ranges": {"a": [0.0, 0.12], "b": [0.15, 0.36], "null": [0.41, 0.60]}
+ },
+ "cell": {
+   "cell": {"model": "base Olmo-3-1025-7B + 2.0 x the top 8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), stochastic bf16 rounding seed 0", "prompt": "plain", "set": "MATH-500", "n": "first 250 problems (--n 250)", "sampling": "T 1.0 / top-p 1.0 / min-p 0; seed 64000000 + problem index", "samples": "1 per problem, 0 restarts", "grader": "v3", "cap": "16,384"},
+   "job": "studies/rlneurons/jobs/wsp_edit.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 2.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code_top8x2_plain --prompt plain --set math500 --n 250 --temperature 1.0 --top-p 1.0 --seed 64000000 --commit COMMIT_SHA\"",
+   "readout": "quick wrong answers: rows with n_generated <= 1,000, not a cap hit, and v3 score not 1 (no extracted answer counts wrong), from answers.jsonl, same rule as m21-r1",
+   "unit": "answers of 250",
+   "why": "Under a, the edit cannot reach samples that open in non-solution text at any size, so doubling Code's directions leaves about the same quick wrongs. Under b, the switch probability rises along the dose curve (s about 0.75 at 2x), giving 0.75 x 9 + 0.25 x 105, about 33.",
+   "gpu_minutes": 55,
+   "a": {"value": 53, "low": 41, "high": 66},
+   "b": {"value": 31, "low": 17, "high": 38}
+ }
+}

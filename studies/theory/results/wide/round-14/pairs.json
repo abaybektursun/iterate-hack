@@ -1,0 +1,374 @@
+[
+ {
+  "family": "s1",
+  "surprise": {
+   "source": "round-13",
+   "id": "t16",
+   "item": "result-9d38d9",
+   "measured": 270,
+   "z": 4.65,
+   "what": "Think-SFT (no reward) with the Math cue at T 1.0, one sample per problem on HumanEval+ and MBPP+: how many of 538 problems pass?"
+  },
+  "a": "round-14/s1-a",
+  "b": "round-14/s1-b",
+  "apart": [
+   "t09",
+   "t10"
+  ],
+  "cell": null,
+  "test": {
+   "claim": "Which problems carry Think-SFT's unfenced answers, measured by the cued base's pass rate on them. Under a's layout habit, unfenced answers come from quick settles on easy problems, so the base passes them far more often than a random problem. Under b's failed solves, they come from hard problems, so the base passes them far less often. A random 106-problem subset sits between the two.",
+   "statistic": "r_U = fraction of Think-SFT Code-cue problems with no fenced code block (unscored) that the cued base passes in its stored Code-cue sample (fraction of problems)",
+   "files": [
+    "studies/rlneurons/results/code_think/sft1_codecue-01",
+    "studies/rlneurons/results/code1/base_cue-01"
+   ],
+   "rows": "The 106 problems whose Think-SFT Code-cue answer has no fenced code block, the unscored set of result-9d38d9 (97 with an unopened program, 9 others), each joined by problem id to its one cued-base Code-cue row.",
+   "n": 106,
+   "computation": "1) In sft1_codecue-01, select the problems whose answer the stored grader marked as having no fenced code block (expect 106). 2) For each, read pass/fail of the same problem in code1/base_cue-01 (317 of 538 pass overall). 3) r_U = passes / 106. 4) 90 % interval: percentile bootstrap over the 106 problems (10,000 resamples); report Wilson 90 % as a check. 5) Report the base's 538-problem rate 0.589 beside it.",
+   "null": "A random 106-problem subset of the 538 drawn without replacement: expected base pass rate 317/538 = 0.589, with 90 % sampling range 0.589 +/- 1.645 x sqrt(0.589 x 0.411 / 106 x 432/537) = [0.52, 0.66].",
+   "ranges": {
+    "a": [
+     0.72,
+     1.0
+    ],
+    "b": [
+     0.0,
+     0.46
+    ],
+    "null": [
+     0.52,
+     0.66
+    ]
+   }
+  },
+  "dropped_no_direct_test": null
+ },
+ {
+  "family": "s2",
+  "surprise": {
+   "source": "round-13",
+   "id": "t15",
+   "item": "result-9d38d9",
+   "measured": 301,
+   "z": 4.42,
+   "what": "Think-SFT (no reward) with the Code cue at T 1.0, one sample per problem on HumanEval+ and MBPP+: how many of 538 problems pass (RL-Code 401, cued base 317)?"
+  },
+  "a": "round-14/s2-a",
+  "b": "round-14/s2-b",
+  "apart": [
+   "t09",
+   "t10"
+  ],
+  "cell": null,
+  "test": {
+   "claim": "Which problems the unopened answers fall on. Under a, the bare 'python' block is the template ending after a cleanly finished, usually easy task, so these answers fall on problems the cued base solves. Under b, the missing fence marks a degraded exit on hard problems, so they fall on problems the cued base fails. A random set of problems gives the base's overall pass rate, which lies between the two ranges.",
+   "statistic": "Share of Think-SFT Code-cue answers without a fenced code block whose problem the cued base (Code cue) passes in its stored row (fraction of problems)",
+   "files": [
+    "studies/rlneurons/results/code_think/sft1_codecue-01",
+    "studies/rlneurons/results/code1/base_cue-01"
+   ],
+   "rows": "Think-SFT Code-cue rows (first row per problem) that the stored grade marks unscored for having no fenced code block (106 rows, 97 of them unopened blocks), joined on problem id to the cued base's Code-cue row",
+   "n": 106,
+   "computation": "1) In sft1_codecue-01 keep one row per problem (first in file order) and select the rows marked as having no fenced block (expect 106). 2) For each selected problem take the base_cue-01 row; passed = all tests passed under the stored grade; a missing row counts as not passed. 3) S = passed / selected. 4) 90 % interval: Wilson score interval at z = 1.645 on (passed, selected); report a 10,000-draw bootstrap over problems as a check. 5) Also report S for the 97 unopened-block rows alone, and the same share for the complement (Think-SFT fenced rows).",
+   "null": "Random subset of problems: the base's overall Code-cue pass rate, 317/538 = 0.589. With n = 106 its 90 % sampling range is 0.589 +/- 0.079.",
+   "ranges": {
+    "a": [
+     0.72,
+     1.0
+    ],
+    "b": [
+     0.0,
+     0.45
+    ],
+    "null": [
+     0.51,
+     0.67
+    ]
+   }
+  },
+  "dropped_no_direct_test": null
+ },
+ {
+  "family": "s3",
+  "surprise": {
+   "source": "run-02",
+   "id": "t15",
+   "item": "result-6e7b64",
+   "measured": 139,
+   "z": 3.73,
+   "what": "How many of the 328 harder problems the autobench agent's final configuration answers right in the final run."
+  },
+  "a": "round-14/s3-a",
+  "b": "round-14/s3-b",
+  "apart": [],
+  "cell": {
+   "cell": {
+    "model": "Olmo-3-1025-7B base",
+    "prompt": "plain",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "T 0.6 / top-p 0.95, seeds 3,000,000 + index (paired with the stored plain T 0.6 cell, 107/328 at cap 16,384)",
+    "samples": 1,
+    "grader": "v3",
+    "cap": 4096
+   },
+   "job": "studies/rlneurons/jobs/run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 1.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt plain --set hard328 --temperature 0.6 --top-p 0.95 --max-tokens 4096 --seed 3000000 --commit COMMIT_SHA\"",
+   "readout": "right answers of 328 under grader v3 (metrics.json), with cap hits",
+   "unit": "right answers of 328",
+   "why": "This is one sample of the autobench configuration at its 4,096 cap, paired with the stored 107 at cap 16,384. Under a, many plain right answers at T 0.6 are long live derivations, so the cap cuts them and the count falls to about 82. Under b, long T 0.6 attempts loop and right answers finish early, so the cap costs almost nothing and the count stays near 101.",
+   "gpu_minutes": 40,
+   "a": {
+    "value": 82,
+    "low": 70,
+    "high": 94
+   },
+   "b": {
+    "value": 101,
+    "low": 95,
+    "high": 110
+   }
+  },
+  "test": {
+   "claim": "Among the cued base's T 0.6 hard328 answers that run past 4,096 generated tokens (the answers a 4,096 cap would cut), this is the share that are repetition loops. Under a, the cut answers are mostly live derivations that would finish or end with an answer, so the loop share is low and the cap is what loses them. Under b, the cut answers are mostly loops that would never finish, so the cap loses nothing recoverable.",
+   "statistic": "loop share: rule-A loops / answers with more than 4,096 generated tokens (fraction of answers)",
+   "files": [
+    "studies/cleanneurons/results/gen/hard328_base_t06-01",
+    "studies/cleanneurons/results/gen/page_grid.json"
+   ],
+   "rows": "The 328 rows of hard328_base_t06-01 (Olmo-3-1025-7B base, cue, T 0.6 / top-p 1.0, 1 sample, cap 16,384, grader v3), keeping the rows whose generated token count exceeds 4,096; loop state per problem from page_grid.json for that cell (state 'loop' = rule A).",
+   "n": 210,
+   "computation": "1) In hard328_base_t06-01, take one row per problem_index (the first in file order). 2) Keep the rows with generated tokens > 4,096; n = their count. 3) For each kept problem, read its state for cell hard328_base_t06-01 in page_grid.json; loop = 1 if the state is 'loop', else 0. 4) S = sum(loop) / n. 5) 90 % interval: 10,000 bootstrap resamples of the kept rows with replacement; take the 5th and 95th percentiles of S. 6) Verdict: a holds if the interval lies inside [0.05, 0.40], b holds if it lies inside [0.45, 1.0]. A value in neither range refutes both.",
+   "null": "The same share on the cued base's T 1.0 hard328 rows (day1 hard328_base_cue_t10-01: 1 rule-A loop of 328, 77 cap hits). This is the no-loop regime the readers assumed, giving at most about 1/200.",
+   "ranges": {
+    "a": [
+     0.05,
+     0.4
+    ],
+    "b": [
+     0.45,
+     1.0
+    ],
+    "null": [
+     0.0,
+     0.03
+    ]
+   }
+  },
+  "dropped_no_direct_test": null
+ },
+ {
+  "family": "s4",
+  "surprise": {
+   "source": "round-09",
+   "id": "m21-r1",
+   "item": "result-ac7104",
+   "measured": 60,
+   "z": 3.29,
+   "what": "quick wrong answers: rows with n_generated <= 1,000, not a cap hit, and v3 score not 1 (no extracted answer counts wrong), from answers.jsonl"
+  },
+  "a": "round-14/s4-a",
+  "b": "round-14/s4-b",
+  "apart": [],
+  "cell": {
+   "cell": {
+    "model": "base Olmo-3-1025-7B + 2.0 x the top 8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), stochastic bf16 rounding seed 0",
+    "prompt": "plain",
+    "set": "MATH-500",
+    "n": "first 250 problems (--n 250)",
+    "sampling": "T 1.0 / top-p 1.0 / min-p 0; seed 64000000 + problem index",
+    "samples": "1 per problem, 0 restarts",
+    "grader": "v3",
+    "cap": "16,384"
+   },
+   "job": "studies/rlneurons/jobs/wsp_edit.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 2.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code_top8x2_plain --prompt plain --set math500 --n 250 --temperature 1.0 --top-p 1.0 --seed 64000000 --commit COMMIT_SHA\"",
+   "readout": "quick wrong answers: rows with n_generated <= 1,000, not a cap hit, and v3 score not 1 (no extracted answer counts wrong), from answers.jsonl, same rule as m21-r1",
+   "unit": "answers of 250",
+   "why": "Under a, the edit cannot reach samples that open in non-solution text at any size, so doubling Code's directions leaves about the same quick wrongs. Under b, the switch probability rises along the dose curve (s about 0.75 at 2x), giving 0.75 x 9 + 0.25 x 105, about 33.",
+   "gpu_minutes": 55,
+   "a": {
+    "value": 53,
+    "low": 41,
+    "high": 66
+   },
+   "b": {
+    "value": 31,
+    "low": 17,
+    "high": 38
+   }
+  },
+  "test": {
+   "claim": "Share of m21's right answers that are as short as a typical plain-base right answer. Under b, about 0.53 x 107 / 157 = 0.36 of m21's right answers are untouched plain-base answers, and half of those fall below the plain base's own median length. Switched answers rarely fall below it, so S is about 0.18-0.28. Under a, every solution-started sample, including the base's short right replies, is pushed into Math-like deliberation, so almost no right answer stays plain-short: S is about 0.03-0.10. A plain-base draw with no edit gives 0.5.",
+   "statistic": "S = fraction of m21 right rows with n_generated <= L, where L is the median generated tokens of the plain base's (T3) right answers on problems 0-249 (unitless fraction)",
+   "files": [
+    "studies/theory/results/experiments/cell-r9-m21-01",
+    "studies/rlneurons/results/rln4/t1_t3_items-01"
+   ],
+   "rows": "m21 answers.jsonl: the first row per problem_index 0-249, kept if score_v3 == 1 and cap_hit is not true (157 rows). t1_t3_items-01/per_problem.json: problem_index 0-249 with T3 right and not cut off (about 107 rows), used only to set L.",
+   "n": 157,
+   "computation": "1) From per_problem.json, keep problems 0-249 where T3 is right and not cut off; L = median of their T3 generated tokens (for an even count, the mean of the two middle values). 2) From m21 answers.jsonl, keep the first row per problem_index 0-249 with score_v3 == 1 and cap_hit not true. 3) S = (kept m21 rows with n_generated <= L) / (kept m21 rows). 4) 90 % interval: 10,000 bootstrap draws resampling problems 0-249 with replacement, recomputing L and S in each draw; take the 5th and 95th percentiles.",
+   "null": "No edit: a plain-base draw measured against the plain base's own median gives 0.50 by construction, and its sampling spread at n 157 is about [0.43, 0.57]. Math top-8 1x plain right rows below L (about 0.02-0.08) are a's prediction, not a null.",
+   "ranges": {
+    "a": [
+     0.0,
+     0.12
+    ],
+    "b": [
+     0.15,
+     0.36
+    ],
+    "null": [
+     0.41,
+     0.6
+    ]
+   }
+  },
+  "dropped_no_direct_test": null
+ },
+ {
+  "family": "s5",
+  "surprise": {
+   "source": "round-10",
+   "id": "t16",
+   "item": "result-1c9e40",
+   "measured": 466,
+   "z": 2.47,
+   "what": "How many of the 500 MATH-500 problems does the untrained base with the cue get right under a majority vote over all 12 samples at T 1.0, grader v3?"
+  },
+  "a": "round-14/s5-a",
+  "b": "round-14/s5-b",
+  "apart": [],
+  "cell": {
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained)",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0 / top-p 1.0, seed 71000000 + index (unused by the stored 12 samples)",
+    "samples": 1,
+    "grader": "v3, plus rln4_lib.agree against the stored 12 samples' wrong answers",
+    "cap": 16384
+   },
+   "job": "studies/rlneurons/jobs/run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 71000000 --commit COMMIT_SHA\"",
+   "readout": "Take problems whose stored 12 samples hold at least 2 wrong answer-bearing samples and where the new sample finished wrong. Report the share of those new wrong answers that agree (rln4_lib.agree) with the problem's modal stored wrong value.",
+   "unit": "fraction of new finished wrong answers",
+   "why": "A fresh draw separates a recurring attractor from scatter without reusing the rows that define the modal value. Under a, a new slip rarely repeats a stored wrong value. Under b, it mostly lands on the attractor.",
+   "gpu_minutes": 80,
+   "a": {
+    "value": 0.25,
+    "low": 0.12,
+    "high": 0.38
+   },
+   "b": {
+    "value": 0.62,
+    "low": 0.48,
+    "high": 0.78
+   }
+  },
+  "test": {
+   "claim": "Pooled pairwise agreement among the cued base's wrong answers on contested MATH-500 problems, using all 12 stored T 1.0 samples. Cause a (one-off slips) puts it low but above chance. Cause b (one recurring attractor per problem) puts it high, because most wrong pairs on a problem share the attractor value.",
+   "statistic": "pooled share of same-problem pairs of wrong answer-bearing samples that agree under rln4_lib.agree (fraction of pairs)",
+   "files": [
+    "studies/rlneurons/results/votek/math500_base_cue-01",
+    "studies/rlneurons/results/votek/math500_base_cue-02",
+    "studies/rlneurons/results/day1_3/math500_base_cue-01"
+   ],
+   "rows": "rows.jsonl of the three folders pooled. Keep attempt == 0 (or no attempt field) and the first row per (problem_index, sample) in file order, samples 0-11 (if a sample appears in two folders, keep the first folder listed). Answer-bearing = cap_hit not true, finish_reason != 'length', and extracted_v3 non-empty after strip(). Right = answer-bearing and score_v3 == 1; wrong = answer-bearing and score_v3 == 0. Contested problems = at least 1 right and at least 2 wrong answer-bearing samples among the 12.",
+   "n": 120,
+   "computation": "1) Build the contested set P (expected about 120 problems; the test needs at least 50). 2) For each p in P, take its wrong answers W_p, form all unordered pairs, and count agreeing pairs with rln4_lib.agree (studies/rlneurons/lib/rln4_lib.py). 3) Statistic = sum of agreeing pairs / sum of pairs over P. 4) 90 % interval: bootstrap over problems, 2,000 resamples of P with replacement, recompute the pooled ratio, and take the 5th-95th percentiles. 5) Null: for each p, pair each of its wrong answers with each wrong answer of one randomly drawn other contested problem whose gold has the same type (integer or not, using the normalisation in facts.json r7-m09). Pool agreement and average over 200 draws.",
+   "null": "Cross-problem pairing of wrong answers matched on gold type (integer or not). This is the chance agreement of wrong values that share an answer format but not a problem.",
+   "ranges": {
+    "a": [
+     0.07,
+     0.3
+    ],
+    "b": [
+     0.42,
+     1.0
+    ],
+    "null": [
+     0.0,
+     0.05
+    ]
+   }
+  },
+  "dropped_no_direct_test": null
+ },
+ {
+  "family": "s6",
+  "surprise": {
+   "source": "run-04",
+   "id": "t02",
+   "item": "result-a1bf75",
+   "measured": 399,
+   "z": 2.38,
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems the base model plus Code-RL 3.1's 8 top weight directions at 1.5x size passes, with the Code cue at T 1.0."
+  },
+  "a": "round-14/s6-a",
+  "b": "round-14/s6-b",
+  "apart": [],
+  "cell": {
+   "cell": {
+    "model": "Olmo-3-1025-7B base + RL-Code 3.1 top-8 directions per matrix at 1.5x",
+    "prompt": "plain (no Code cue, --prefix-ids '[]')",
+    "set": "HumanEval+ and MBPP+",
+    "n": 538,
+    "sampling": "T 1.0 / top-p 1.0, seed 51000000",
+    "samples": 1,
+    "grader": "code tests (run_code_cell default extraction)",
+    "cap": "run_code_cell default"
+   },
+   "job": "studies/rlneurons/jobs/run_code_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_code_cell --model-path /tmp/theta --model-label code_top8x1.5_plain --prefix-ids '[]' --temperature 1.0 --top-p 1.0 --seed 51000000 --commit COMMIT_SHA\"",
+   "readout": "passed of 538 in metrics.json of the run_code_cell output",
+   "unit": "problems passed of 538",
+   "why": "Under b the edit copies RL-Code's policy, which RL-Code runs with the plain prompt (401), so the edit's score should not depend on the cue. Under a the edit only sharpens the base's own distribution given the prompt, so without the Code cue it sharpens the weaker plain-prompt base and stays well below the cued 399, as Code's directions lifted plain MATH-500 only about halfway (result-ac7104).",
+   "gpu_minutes": 60,
+   "a": {
+    "value": 345,
+    "low": 300,
+    "high": 378
+   },
+   "b": {
+    "value": 396,
+    "low": 382,
+    "high": 412
+   }
+  },
+  "test": {
+   "claim": "On code problems the cued base passes but RL-Code mostly fails, does the Code-direction edit keep the base's pass (a: sharpening the base's own programs keeps and raises it above a base resample) or lose it like RL-Code (b: the edit copies RL-Code's per-problem outcomes)? The two causes put the edit's pass rate on this set on opposite sides of a base resample's rate.",
+   "statistic": "Mean pass rate of the Code-top-8 edit samples on set L (fraction of edit samples passed, averaged over problems)",
+   "files": [
+    "studies/rlneurons/results/code1/base_cue-01",
+    "studies/rlneurons/results/code1/rl_plain-01",
+    "studies/rlneurons/results/xreward/code_hosts_s52",
+    "studies/rlneurons/results/xreward/code_hosts_s53",
+    "studies/rlneurons/results/xreward/code_dial",
+    "studies/rlneurons/results/code1/base_plain-01",
+    "studies/rlneurons/results/code1/base_mathcue-01"
+   ],
+   "rows": "L = the problems (of 538) that code1/base_cue-01 passes and on which RL-Code fails in at least 2 of its 3 stored samples (code1/rl_plain-01 seed 51M, the RL-Code rows of code_hosts_s52 and code_hosts_s53). Rows entering: (problem in L, edit sample) pairs for 5 edit samples per problem: Code top-8 1x at seeds 51M (code_dial), 52M (code_hosts_s52) and 53M (code_hosts_s53), and Code top-8 1.5x and 2x (code_dial).",
+   "n": 100,
+   "computation": "1) Per problem take each cell's first row. Pass = all tests passed under the cells' stored grader; cap hits and no-block answers count as fail. 2) Build L as in rows. 3) Per problem in L, e = mean pass of its 5 edit samples. 4) Statistic S = mean of e over L. 5) 90 % interval: 10,000 bootstrap resamples of the problems in L (with replacement), 5th and 95th percentiles of S. n = 5 x |L| rows; if n < 50 the verdict is undecided. 6) Null: the same mean over L of base-like resamples, using code1/base_plain-01, code1/base_mathcue-01 and the random rank-8 1.5x cell of code_dial (3 samples per problem), with the same bootstrap.",
+   "null": "Base-like resamples on L (plain base, Math-cue base, random rank-8 1.5x edit with the Code cue): the pass rate a non-sharpened base gets on problems the cued base passed and RL-Code mostly failed, including regression to the mean.",
+   "ranges": {
+    "a": [
+     0.7,
+     1.0
+    ],
+    "b": [
+     0.0,
+     0.34
+    ],
+    "null": [
+     0.38,
+     0.66
+    ]
+   }
+  },
+  "dropped_no_direct_test": null
+ }
+]
