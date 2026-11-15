@@ -1,0 +1,11 @@
+#!/bin/sh
+# main is frozen from 2026-11-15 14:30 SF time (AGENTS.md, "Main is frozen"). Pushes to other branches pass.
+# Install once per clone (its worktrees share it): cp tools/pre-push .git/hooks/pre-push
+[ "$(date +%s)" -lt 1794781800 ] && exit 0
+while read -r local_ref local_sha remote_ref remote_sha; do
+  if [ "$remote_ref" = refs/heads/main ]; then
+    echo "main is frozen since 2026-11-15 14:30 SF time (AGENTS.md). Push your branch instead." >&2
+    exit 1
+  fi
+done
+exit 0

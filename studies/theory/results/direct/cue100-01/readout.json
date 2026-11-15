@@ -1,0 +1,161 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_cue100.md",
+ "mechanism": "round-09/grader-m01",
+ "n_problems": 500,
+ "samples_per_arm": 4,
+ "problems_dropped": 0,
+ "right_per_sample": {
+  "s0100_plain": [
+   418,
+   411,
+   422,
+   419
+  ],
+  "s0100_cue": [
+   427,
+   423,
+   423,
+   431
+  ],
+  "s0400_plain": [
+   436,
+   447,
+   435,
+   433
+  ]
+ },
+ "totals": {
+  "s0100_plain": 1670,
+  "s0100_cue": 1704,
+  "s0400_plain": 1751
+ },
+ "deciding": {
+  "name": "D = 500 * mean_i (cue right rate_i - plain right rate_i), step 100",
+  "D_per_500": 8.5,
+  "ci95": [
+   0.24375000000000568,
+   16.75
+  ],
+  "ci90": [
+   1.25,
+   15.5
+  ],
+  "perm_p_two_sided": 0.0444,
+  "perm_abs_D_95th": 8.0,
+  "rule_refutes": true,
+  "share_bootstrap_D_le_0": 0.025
+ },
+ "null_A_permutation": {
+  "p_two_sided": 0.0444,
+  "abs_D_95th_percentile_under_permutation": 8.0
+ },
+ "null_B_folder_per_500": {
+  "plain s0 minus plain s123": 0.6666666666666716,
+  "cue s0 minus cue s123": 1.3333333333333355,
+  "cue s0 minus plain s0": 9.0,
+  "cue s123 minus plain s123": 8.333333333333334
+ },
+ "null_B_single_sample_pairs": {
+  "within_arm_differences": {
+   "plain": [
+    7,
+    -4,
+    -1,
+    -11,
+    -8,
+    3
+   ],
+   "cue": [
+    4,
+    4,
+    -4,
+    0,
+    -8,
+    -8
+   ]
+  },
+  "within_arm_max_abs": 11,
+  "between_arm_cue_minus_plain": [
+   9,
+   16,
+   5,
+   8,
+   5,
+   12,
+   1,
+   4,
+   5,
+   12,
+   1,
+   4,
+   13,
+   20,
+   9,
+   12
+  ],
+  "between_arm_mean": 8.5,
+  "between_arm_pairs_above_within_max": 6,
+  "single_cell_gap_sample0": 9
+ },
+ "descriptive_mixed_problems": {
+  "n": 186,
+  "D_per_500_scaled": 22.8494623655914,
+  "D_problems_sum": 8.5
+ },
+ "per_problem_cue_minus_plain_right_of_4": {
+  "-4": 0,
+  "-3": 7,
+  "-2": 7,
+  "-1": 46,
+  "0": 347,
+  "1": 73,
+  "2": 18,
+  "3": 2,
+  "4": 0
+ },
+ "cap_hits": {
+  "s0100_plain": 85,
+  "s0100_cue": 96
+ },
+ "positive_control_s0400_minus_s0100_plain": {
+  "D_per_500": 20.25,
+  "ci95": [
+   12.0,
+   28.5
+  ],
+  "ci90": [
+   13.5,
+   27.25
+  ],
+  "perm_p_two_sided": 0.0,
+  "perm_abs_D_95th": 7.75,
+  "rule_refutes": true,
+  "share_bootstrap_D_le_0": 0.0
+ },
+ "robustness_not_deciding": {
+  "ci95_lower_for_bootstrap_seeds_1_to_20": [
+   0.0,
+   0.0,
+   0.25,
+   0.0,
+   0.25,
+   0.0,
+   0.0,
+   0.0,
+   0.25,
+   -0.25,
+   0.25,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.0,
+   0.25
+  ]
+ },
+ "rule": "refuted if lower 95 % bound of D > 0.0 AND permutation p < 0.05; else holds",
+ "verdict": "refuted"
+}
