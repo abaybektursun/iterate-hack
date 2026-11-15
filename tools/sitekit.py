@@ -213,7 +213,7 @@ const mo = new MutationObserver(recs => {
   for (const r of recs) {
     const el = r.target.nodeType === 1 ? r.target : r.target.parentElement;
     if (el) up(el);
-    for (const n of r.addedNodes) if (n.nodeType === 1) { n.querySelectorAll(REG).forEach(e => regs.add(e)); n.querySelectorAll("[data-math]").forEach(e => maths.add(e)); }
+    for (const n of r.addedNodes) if (n.nodeType === 1) { up(n); n.querySelectorAll(REG).forEach(e => regs.add(e)); n.querySelectorAll("[data-math]").forEach(e => maths.add(e)); }
   }
   run(regs, maths);
   mo.takeRecords();  // the marks just written

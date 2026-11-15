@@ -68,6 +68,9 @@ TABLE = {
         "steps": lambda m: [step("Base", "base", m.PLAIN, m.N, m.DATA["artifact"]),
                             step("Base + cue", "base", m.CUE, m.N, m.DATA["artifact"]),
                             step("RL, one sample", "rl", m.RL, m.N, m.DATA["artifact"])]},
+    "base-opens-itself": {
+        "group": NO_REWARD,
+        "figure": lambda m: [signed(m.DATA["diff_cue"][0]), "points", "MATH-500, the base's own opening with Okay against the prefilled cue"]},
     "restart-on-cap": {
         "group": NO_REWARD,
         "figure": lambda m: [signed(m.GAIN), "points", "MATH-500, T 0.6"],
