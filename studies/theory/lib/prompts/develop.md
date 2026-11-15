@@ -37,6 +37,10 @@ Rules:
   now, the filters, the statistic, and how cap hits, ties and missing rows count, precise enough that two people
   would compute the same number. The quantity must be one no board item reports. The recipe states only the
   computation, never the expected result or the theory.
+- At least 1 offline prediction tests the mechanism, not only the phenomenon: a quantity for which the nearest other
+  explanation of the same phenomenon gives a different number. Name that explanation and its number in the
+  prediction's "experiment" (for example: a theory that says cap hits rise because entropy drops predicts how far
+  the rows' mean log-probability rises; a length-growth explanation of the same cap hits predicts no change).
 - At least 1 GPU prediction, on an experiment that runs in under 60 GPU minutes.
 - Every prediction has value, low and high (a 90 % interval) and refuted_by. For an offline prediction refuted_by is
   a condition on the computed number that a script can check.

@@ -16,8 +16,13 @@ names, a few rows), but do not compute the recipe's statistic, or anything close
 scripts: the pipeline runs each script exactly once after you finish and records what it prints. This keeps the
 recipe fixed before anyone sees the number.
 
-A script runs as `python3 <script>` from the repository root, uses the standard library only (subprocess for aws,
-modal or git is fine), fetches any file it needs into runs/theory-tests/ when missing, and prints as its last line one
+A script runs as `PYTHONPATH=<repository root> $run_command <script>` from the repository root. It may import the
+standard library, numpy, sympy (with its LaTeX parser, `sympy.parsing.latex.parse_latex`), math_verify (0.9.0) and the
+team's graders, and nothing else (subprocess for aws, modal or git is fine). When a recipe grades an answer, import the
+grader it names instead of writing your own: grader v3 is `from studies.rlneurons.lib import rln4_lib` (`grade_v3(gold,
+text)`, `extract_v3`, `norm_v3`), its equivalence test is `from studies.rlneurons.lib import n13_score` (`grade`,
+`extract`), grader v4 is `from studies.rlneurons.grader import repair_v4` (`grade_v4`). Read those files for the exact
+signatures. The script fetches any file it needs into runs/theory-tests/ when missing, and prints as its last line one
 JSON object:
 {"measured": <number>, "refuted_by_met": <true or false>, "alt_measured": <number or null>, "not_computable": null, "example_row": <one input row the statistic used, as a JSON object>}
 

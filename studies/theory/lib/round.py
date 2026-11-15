@@ -55,6 +55,11 @@ import check  # noqa: E402
 from check import read, write  # noqa: E402
 
 AWS_PROFILE = "iterate-ecr"  # reads s3://pg-lineage-769063704696/results/rlneurons/ on the owner's machine
+# Test scripts run with the team's grader packages (studies/rlneurons/README.md: math-verify 0.9.0 and numpy) and the
+# antlr4 runtime sympy's LaTeX parser needs (it accepts only 4.11), from the repository root with the root on PYTHONPATH,
+# so `from studies.rlneurons.lib import rln4_lib` works.
+TEST_PACKAGES = ["numpy", "math-verify==0.9.0", "antlr4-python3-runtime==4.11"]
+TEST_PYTHON = ["uv", "run", "--no-project", *(a for p in TEST_PACKAGES for a in ("--with", p)), "python"]
 MODELS = {"inventory": "opus", "targets": "sonnet", "external": "opus", "generate": "opus", "fix": "opus",
           "null": "opus", "claims": "opus", "reverse": "sonnet", "test": "opus", "review": "opus",
           "mechanisms": "opus", "develop": "opus", "null_tests": "opus"}
@@ -141,6 +146,18 @@ def command(j, folder):
                    "--allowedTools", "Read", "Grep", "Glob", "Write", *REPO_TOOLS[j["stage"]]]
 
 
+def claude(j, folder, text, suffix):
+    """One headless run of the job's model in its directory; prompt<suffix>.txt in, out<suffix>.txt out."""
+    d, repo = j["dir"], j["mode"] == "repo"
+    (d / f"prompt{suffix}.txt").write_text(text)
+    out = d / f"out{suffix}.txt"
+    with open(d / f"prompt{suffix}.txt") as stdin, open(out, "w") as stdout:
+        code = subprocess.run(command(j, folder), stdin=stdin, stdout=stdout, stderr=subprocess.STDOUT, cwd=ROOT if repo else d,
+                              env={**os.environ, "AWS_PROFILE": AWS_PROFILE} if repo else None, timeout=3600).returncode
+    if code:
+        sys.exit(f"{j['stage']}/{j['name']}: claude exited with {code}; see {out}")
+
+
 def run_one(j, folder):
     d = j["dir"]
     d.mkdir(parents=True)
@@ -152,25 +169,24 @@ def run_one(j, folder):
             shutil.copytree(src, d / rel)
         else:
             shutil.copy(src, d / rel)
-    (d / "prompt.txt").write_text(j["prompt"])
-    out, start = d / "out.txt", time.time()
-    repo = j["mode"] == "repo"
-    with open(d / "prompt.txt") as stdin, open(out, "w") as stdout:
-        code = subprocess.run(command(j, folder), stdin=stdin, stdout=stdout, stderr=subprocess.STDOUT, cwd=ROOT if repo else d,
-                              env={**os.environ, "AWS_PROFILE": AWS_PROFILE} if repo else None, timeout=3600).returncode
-    if code:
-        sys.exit(f"{j['stage']}/{j['name']}: claude exited with {code}; see {out}")
-    for rel in j["outputs"]:
-        if not (d / rel).exists():
-            sys.exit(f"{j['stage']}/{j['name']}: wrote no {rel}; see {out}")
-    if j["valid"]:
-        try:
+    start = time.time()
+    claude(j, folder, j["prompt"], "")
+    missing = [rel for rel in j["outputs"] if not (d / rel).exists()]
+    error = f"wrote no {', '.join(missing)}" if missing else None
+    if not error and j["valid"]:
+        try:  # the first check's error, a parse error included, goes back to the job once; the second check raises
             error = j["valid"](d)
-        except Exception:
-            print(f"{j['stage']}/{j['name']}: malformed output; see {out}", file=sys.stderr)
-            raise
+        except Exception as e:
+            error = f"malformed output: {type(e).__name__}: {e}"
+    if error:
+        print(f"  {j['stage']}/{j['name']}: {error}; sent back once")
+        files = ", ".join(str(d / rel) for rel in j["outputs"])
+        claude(j, folder, j["prompt"] + "\n\n" + prompt("sendback", files=files, message=error), ".sendback")
+        print(f"  {j['stage']}/{j['name']}: checking the send-back; on a traceback see {d / 'out.sendback.txt'}")
+        missing = [rel for rel in j["outputs"] if not (d / rel).exists()]
+        error = f"wrote no {', '.join(missing)}" if missing else j["valid"] and j["valid"](d)
         if error:
-            sys.exit(f"{j['stage']}/{j['name']}: {error}; see {out}")
+            sys.exit(f"{j['stage']}/{j['name']}: {error} after the send-back; see {d / 'out.sendback.txt'}")
     for rel, dest in j["outputs"].items():
         dest.parent.mkdir(parents=True, exist_ok=True)
         if (d / rel).is_dir():
@@ -387,14 +403,24 @@ def standing(folder):
             graveyard[name], where[name] = entry, rdir
     (folder / "graveyard.json").write_text(json.dumps(graveyard, indent=1) + "\n")
     (folder / "theories").mkdir(exist_ok=True)
+    carried = 0
     for name, entry in graveyard.items():
-        if survivor(entry):
+        # an untested theory is carried once, so the new round computes its tests; a survivor is carried with its
+        # computed tests and their gains (tests/<name>.json, "carried_from"), so they are not computed or scored again
+        if survivor(entry) or (entry["state"] == "untested" and len(entry["rounds"]) == 1):
+            carried += 1
             shutil.copy(where[name] / "theories" / f"{name}.json", folder / "theories")
             if (where[name] / "reviews" / f"{name}.json").exists():
                 (folder / "prior_reviews").mkdir(exist_ok=True)
                 shutil.copy(where[name] / "reviews" / f"{name}.json", folder / "prior_reviews")
+            if survivor(entry) and (where[name] / "metrics_v4.json").exists():
+                tests = json.loads((where[name] / "tests" / f"{name}.json").read_text())
+                rows = json.loads((where[name] / "metrics_v4.json").read_text())["theories"][name]["rows"]
+                (folder / "tests").mkdir(exist_ok=True)
+                (folder / "tests" / f"{name}.json").write_text(
+                    json.dumps({**tests, "carried_from": tests.get("carried_from", where[name].name), "rows": rows}, indent=1) + "\n")
             print(f"  carried: {name} (round {entry['round']}, {entry['state']})")
-    print(f"  graveyard.json: {len(graveyard)} theories from earlier rounds, {sum(map(survivor, graveyard.values()))} carried")
+    print(f"  graveyard.json: {len(graveyard)} theories from earlier rounds, {carried} carried")
     metrics = json.loads((prev / "metrics_v3.json").read_text()) if (prev / "metrics_v3.json").exists() else None
     if metrics and (prev / "targets.jsonl").exists():  # for version 3's revise start
         what = {t["id"]: t["what"] for t in read(prev / "targets.jsonl")}
@@ -565,9 +591,16 @@ def offline_predictions(theory):
     return [{"k": k, **p} for k, p in enumerate(theory["predictions"], 1) if "recipe" in p]
 
 
+def carried_tests(folder, name):
+    """A survivor's tests carried by `standing` from the round that computed and scored them."""
+    path = folder / "tests" / f"{name}.json"
+    return path.exists() and "carried_from" in json.loads(path.read_text())
+
+
 def null_tests(folder):
     blind = [{"id": f"{p.stem}:p{q['k']}", "experiment": q["experiment"], "recipe": q["recipe"], "unit": q["unit"]}
-             for p in sorted((folder / "theories").glob("*.json")) for q in offline_predictions(json.loads(p.read_text()))]
+             for p in sorted((folder / "theories").glob("*.json")) if not carried_tests(folder, p.stem)
+             for q in offline_predictions(json.loads(p.read_text()))]
     if not blind:
         return print("null_tests: no offline prediction")
     write(folder / "tests_blind.jsonl", blind)
@@ -683,14 +716,18 @@ def score_tests(folder):
     for p in sorted((folder / "theories").glob("*.json")):
         name = p.stem
         path = folder / "tests" / f"{name}.json"
-        preds = json.loads(path.read_text())["predictions"] if path.exists() else []
+        data = json.loads(path.read_text()) if path.exists() else {"predictions": []}
+        preds = data["predictions"]
         computed = [q for q in preds if q["measured"] is not None]
-        rows = gain_rows([{"id": f"{name}:p{q['k']}", "value": q["value"], "low": q["low"], "high": q["high"]} for q in computed],
-                         {f"{name}:p{q['k']}": q["measured"] for q in computed}, nulls) if computed else []
-        for r, q in zip(rows, computed):
-            r.update(k=q["k"], inside=q["inside"], refuted_by=q["refuted_by"], refuted_by_met=q["refuted_by_met"])
-        rows += [{"k": q["k"], "not_computable": q["not_computable"]} if q["not_computable"] else
-                 {"k": q["k"], "refuted_without_number": q["refuted_by"]} for q in preds if q["measured"] is None]
+        if "carried_from" in data:  # computed and scored in that round: its rows, gains against that round's readers
+            rows = data["rows"]
+        else:
+            rows = gain_rows([{"id": f"{name}:p{q['k']}", "value": q["value"], "low": q["low"], "high": q["high"]} for q in computed],
+                             {f"{name}:p{q['k']}": q["measured"] for q in computed}, nulls) if computed else []
+            for r, q in zip(rows, computed):
+                r.update(k=q["k"], inside=q["inside"], refuted_by=q["refuted_by"], refuted_by_met=q["refuted_by_met"])
+            rows += [{"k": q["k"], "not_computable": q["not_computable"]} if q["not_computable"] else
+                     {"k": q["k"], "refuted_without_number": q["refuted_by"]} for q in preds if q["measured"] is None]
         outside = sum(not q["inside"] for q in computed)
         reasons = [f"p{q['k']} {q['experiment'][:80]}: measured {q['measured']}, predicted {q['value']} [{q['low']}, {q['high']}]; "
                    f"refuting condition met: {q['refuted_by'][:120]}" for q in preds if q["refuted_by_met"]]
@@ -707,7 +744,8 @@ def score_tests(folder):
         if verdict.startswith(("refuted", "published")):
             state = verdict.split(":")[0]
             reasons.append(f"review: {verdict[:200]}")
-        theories[name] = {"offline": len(preds), "computed": len(computed), "inside": len(computed) - outside, "outside": outside,
+        theories[name] = {"carried_from": data.get("carried_from"),
+                          "offline": len(preds), "computed": len(computed), "inside": len(computed) - outside, "outside": outside,
                           "total_gain": total, "heldout_claims": len(held), "strikes": strikes, "state": state,
                           "reasons": reasons, "verdict": verdict, "rows": rows, "heldout_rows": held}
     (folder / "metrics_v4.json").write_text(json.dumps({"theories": theories}, indent=1) + "\n")
@@ -715,7 +753,8 @@ def score_tests(folder):
     print(f"{'theory':16} {'computed':>9} {'in/out':>7} {'gain':>7} {'strikes':>8}  state")
     for name, t in sorted(theories.items(), key=lambda kv: -kv[1]["total_gain"]):
         print(f"{name:16} {t['computed']:>4} of {t['offline']:<2} {t['inside']:>3}/{t['outside']:<3} {t['total_gain']:7.2f} "
-              f"{str(t['strikes']) + ' of ' + str(t['heldout_claims']) if t['heldout_claims'] else '':>8}  {t['state']}")
+              f"{str(t['strikes']) + ' of ' + str(t['heldout_claims']) if t['heldout_claims'] else '':>8}  {t['state']}"
+              f"{', tests carried from ' + t['carried_from'] if t['carried_from'] else ''}")
         for r in t["rows"]:
             if "not_computable" in r:
                 print(f"    p{r['k']}: not computable: {r['not_computable'][:110]}")
@@ -783,15 +822,16 @@ def test(folder):
 
         jobs.append((n, offline, job("test", n, {"theory.json": folder / "theories" / f"{n}.json", "offline.json": json.dumps(offline, indent=1)},
                                      {f"tests/{n}": folder / "tests" / n}, valid,
-                                     mode="repo", theory=n, inventory=(folder / "inventory.md").resolve(), profile=AWS_PROFILE)))
+                                     mode="repo", theory=n, inventory=(folder / "inventory.md").resolve(), profile=AWS_PROFILE,
+                                     run_command=" ".join(TEST_PYTHON))))
     run([j for _, _, j in jobs], folder, workers=6)
     for n, offline, _ in jobs:
         notes = {e["k"]: e["note"] for e in json.loads((folder / "tests" / n / "notes.json").read_text())}
         results = []
         for q in offline:
             script = folder / "tests" / n / f"p{q['k']}.py"
-            p = subprocess.run(["python3", str(script.resolve())], cwd=ROOT, capture_output=True, text=True, timeout=1800,
-                               env={**os.environ, "AWS_PROFILE": AWS_PROFILE})
+            p = subprocess.run([*TEST_PYTHON, str(script.resolve())], cwd=ROOT, capture_output=True, text=True, timeout=1800,
+                               env={**os.environ, "AWS_PROFILE": AWS_PROFILE, "PYTHONPATH": str(ROOT)})
             (script.with_suffix(".out.txt")).write_text(p.stdout + p.stderr)
             if p.returncode:
                 sys.exit(f"{script} failed (exit {p.returncode}); output in {script.with_suffix('.out.txt')}")
