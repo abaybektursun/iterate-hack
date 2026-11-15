@@ -2589,3 +2589,49 @@ bootstrap, 5,000 resamples, seed 0). Tokens = generated tokens per problem, rest
   sample (207 at 9,437; mean of the four samples 200.0). The nine rules chosen on MATH-500, scored once here:
   `results/frontier/hard328-01/frontier.md` (the command at the end of "Token frontier").
 - The base loses 39 % of its single-sample accuracy from MATH-500 to the 328 (81.0 to 49.1 %), RL 31 % (91.2 to 63.1 %).
+
+## Released RL checkpoints at T 1.0, plain and cue (ckptcue)
+
+Spec and predictions, written before any job: `specs/SPEC_ckptcue.md`. Readout: `analysis/ckptcue.py`, output
+`results/ckptcue/readout.json`; one folder per cell `results/ckptcue/<cell>-01/` (`run.json`, the job's `metrics.json`,
+`per_problem.json`, `examples.json`). MATH-500, n = 500, T 1.0 / top-p 1.0, cap 16,384, grader v3, one sample; plain
+cells use seed 45000000 (T2's), cue cells 41000000 (T1's). The checkpoints are `allenai/Olmo-3.1-7B-RL-Zero-Math` at
+revisions `step_0100` (`0a45720c`) and `step_0400` (`897c0ce4`), downloaded in the job and passed with `--model-path`.
+Raw answers: `runs/<job id>/answers.jsonl` in the worktree `iterate-hack-ckpt` on abaybektursun's laptop (the vast.ai
+boxes are destroyed).
+
+| Cell | Right of 500 | Cap hits | Tokens per problem | Job |
+|---|---|---|---|---|
+| base, plain (T3, reference) | 224 | 8 | | |
+| base, cue (T1, reference) | 410 | 27 | | |
+| RL step 100, plain | 418 | 24 | 4,120 | `abaybektursun-1115-064532-6a2f` |
+| RL step 100, cue | 427 | 24 | 4,118 | `abaybektursun-1115-032509-fc06` |
+| RL step 400, plain | 436 | 7 | 4,080 | `abaybektursun-1115-015818-b11d` |
+| RL step 400, cue | 431 | 17 | 4,279 | `abaybektursun-1115-015852-a31f` |
+| RL final (step 2,800), plain (T2, reference) | 463 | 6 | | |
+
+| Difference (paired bootstrap over problems, 5,000 resamples) | Points | 95 % interval |
+|---|---|---|
+| step 100 plain minus base cue | +1.6 | [-2.0, +5.2] |
+| step 100 cue minus step 100 plain | +1.8 | [-1.2, +4.8] |
+| step 400 plain minus base cue | +5.2 | [+2.0, +8.4] |
+| step 400 cue minus step 400 plain | -1.0 | [-4.0, +2.0] |
+| step 400 plain minus step 100 plain | +3.6 | [+0.2, +7.0] |
+| final plain minus step 400 plain | +5.4 | [+2.8, +8.0] |
+
+Reading. At AI2's setting the first 100 RL steps bring the plain prompt from 224 to 418, and the cue alone brings the
+untrained base to 410: the two are not separated (+1.6 points, interval includes 0), and the cue adds nothing
+measurable to either checkpoint. H-open (the first 100 steps install what the cue gives) is not refuted; H-more (step
+100 is past the cue) is not supported here, unlike at T 0.6 where step 100 leads the looping cued base by 5.4 points
+(381 against 354). Of the 53 problems between the cued base and the final model, 8 come by step 100, 18 more by step
+400 and 27 after step 400. All five filed predictions hold (step 100 plain 428 [412, 444]: 418; step 400 plain 447
+[432, 459]: 436; cue gain at step 100 +0.5 [-3, +4]: +1.8; at step 400 0 [-3, +3]: -1.0; cap hits 25 [10, 45]: 24).
+
+Limits. One sample per cell, so each count carries about 2 points of sampling noise; the step 100 difference cannot
+exclude a lead of up to 5 points. The spec's identity check failed as written: 'Okay' in the first 30 characters is 383 of
+500 at step 100 and 358 at step 400, below the 430 threshold taken from T 0.6 rows. At T 1.0 the plain answers open in
+more ways (step 400: 243 start ' and resubmit.' and reach 'Okay' later), so the marker is not valid here. The
+checkpoint's identity rests on the pinned revision in each job's command and `model_dir`, and on the scores lying
+between the base's and the final model's. Three step 100 plain answers are empty (the model stops at once).
+The first step 100 plain job (AWS `ih-1115-092337-b35c`) was cut by its 2-hour limit at 478 answers (405 right) and is not
+used; a second run was lost with its box.
