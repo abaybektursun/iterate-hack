@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": 401, "low": 386, "high": 416, "reason": "Theory: on the base (no imitation change of its own) RL directions act at full strength, so Math+Code 1x keeps Code's full effect near RL-Code; the first seed's 411 is pulled back toward 401/386-399 code-dial values."},
+{"id": "t04", "value": 401, "low": 386, "high": 416, "reason": "Same as t03: full-strength RL directions on the base host, second seed, centred between 411 and the code-dial cells."},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": 389, "low": 374, "high": 404, "reason": "Theory: the base takes RL directions at full effect, so Code top-8 1x stays near its measured 386 (1.5x 399, 2x 394)."},
+{"id": "t08", "value": 389, "low": 374, "high": 404, "reason": "As t07, second seed of the full-strength base response to Code top-8 at 1x."},
+{"id": "t09", "value": 226, "low": 214, "high": 238, "reason": "Theory: on Think-SFT the RL push has about a quarter of its effect and is weak but stable to 4x, so 3x top-8 sits a few points above Think-SFT's 209 (random 213, 1.5x 220), with the 232 pulled back by regression."},
+{"id": "t10", "value": 41, "low": 30, "high": 53, "reason": "Theory: the base responds fully to RL directions, so subtracting them raises cap hits (hard328 96 vs 77); the odd half already shows 20 of 250, and the even half should be similar."},
+{"id": "t11", "value": 375, "low": 360, "high": 390, "reason": "Full base response to the subtracted directions; the odd half gave 188/250, so about twice that over 500."},
+{"id": "t12", "value": 398, "low": 368, "high": 425, "reason": "Theory: Think-SFT's correctness covers every domain in its traces (code included), so it should reach about RL-Code's 401, well above the cued base's 317."},
+{"id": "t13", "value": 375, "low": 330, "high": 415, "reason": "Same coverage claim: Think-SFT is right on code even under the Math cue, minus some format and code-block loss from the math-style prompt."},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 468, "low": 458, "high": 477, "reason": "Theory: a weak but stable response on Think-SFT, no breakdown at a=2, so M(2) on MATH-500 stays near a=1's 467 and Think-SFT's 457-462."},
+{"id": "t16", "value": 233, "low": 222, "high": 244, "reason": "Stable dose response with no breakdown at 2x: the fourth sample matches samples 1-3 (234, 229, 237)."},
+{"id": "t17", "value": 246, "low": 238, "high": 254, "reason": "Stable M(2) samples (mean 233) with a vote over 3 of 246; a fourth sample barely moves the vote."},
+{"id": "t18", "value": 241, "low": 231, "high": 251, "reason": "Theory: the RL change cuts Think-SFT's cap hits by only about 20 % and mostly makes it finish, so at 32,768 M(2) lands a few points above Think-SFT's 230 on this seed (other seed 245 vs 234)."},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

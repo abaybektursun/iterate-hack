@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": 404, "low": 389, "high": 419, "reason": "Theory: Code directions act in full on code (Code alone 1x 386, 1.5x 399) and Math's directions add about half their in-domain effect through the 0.22-0.26 input-subspace overlap (Math 1.5x on code 368 vs random 331), so roughly 386 + 15-20; the 411 seen at one seed is pulled back toward that."},
+{"id": "t04", "value": 404, "low": 389, "high": 419, "reason": "Same theory reading as t03 (Code in full plus about half of Math's effect), at a second fresh seed, so one-sample noise of about 9 on 538."},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": 390, "low": 375, "high": 405, "reason": "Theory: an edit acts in full in its own domain, so Code top-8 at 1x sits on the code dial (386 at 1x, 399 at 1.5x, 394 at 2x); centre is the dial's level near 1x, plus one-sample noise."},
+{"id": "t08", "value": 390, "low": 375, "high": 405, "reason": "Same in-domain full-effect reading as t07, second seed."},
+{"id": "t09", "value": 226, "low": 214, "high": 238, "reason": "Theory: Math directions act in full on hard math on any host, so the edit keeps its gain over Think-SFT (232 vs random 3x 213 at seed 3,000,000; Think-SFT mean 209); at a new seed the 232 regresses toward about 209 + 17."},
+{"id": "t10", "value": 41, "low": 31, "high": 52, "reason": "Theory: the subtracted Math edit acts in full on MATH-500 (in-domain), as size -1 raised cap hits on hard328; the measured odd shard has 20 of 250, so about twice that over 500."},
+{"id": "t11", "value": 376, "low": 362, "high": 390, "reason": "Theory: the size -1 Math edit acts in full in domain, lowering right answers from the cued base's 410; the odd shard measured 188/250, so the total is about 2 x 188 with noise from the even shard."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 468, "low": 459, "high": 476, "reason": "Theory: the RL-Math change acts in full on its own domain on the Think-SFT host, so 2x lands at or slightly above a=1's 467 and Think-SFT's 457-462 on MATH-500, close to the ceiling."},
+{"id": "t16", "value": 233, "low": 222, "high": 244, "reason": "Theory: the in-domain RL-Math change acts in full on hard328, so the fourth sample matches the first three (234, 229, 237; mean 233.3)."},
+{"id": "t17", "value": 246, "low": 239, "high": 253, "reason": "Theory: the in-domain full effect gives the same per-sample level, so the vote over 4 stays near the vote over 3 (246), above Think-SFT's 241."},
+{"id": "t18", "value": 243, "low": 233, "high": 252, "reason": "Theory: the in-domain change acts in full, and the larger cap adds the late finishes; seed 3,010,000 gave 245 at 32,768 (232 at 16,384), and this seed gave 234 at 16,384, so about 243."},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

@@ -621,7 +621,7 @@ function comet(u, pts, r, opacity) {  // a pulse: a small lit head, a tapered ta
   u.el.setAttribute("opacity", opacity.toFixed(2));
 }
 function say(i, k, text, ns, t, hold) {  // the first words of a real message or post, beside whoever wrote it
-  const o = S.r.swarms[i], g = S.g, s = String(text ?? "").replace(/\s+/g, " ").trim();
+  const o = S.r.swarms[i], g = S.g, s = String(text ?? "").replace(/\s+/g, " ").trim().replace(/^title:\s*/i, "").replace(/\s+what:.*$/, "");  // a result's text opens with its field names
   if (!o || !s) return;
   S.r.swarms.forEach(x => x.said.setAttribute("opacity", 0));
   const [line, when] = o.said.children, age = g.age ? "\u2002" + ago(ns) : "";  // a phone has no room for the age
