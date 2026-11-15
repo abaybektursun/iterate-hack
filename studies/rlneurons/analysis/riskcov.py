@@ -218,6 +218,19 @@ def penalty(a: dict) -> dict:
     return {k: {**d, "n": n, "score": {str(l): d["right"] - l * d["wrong"] for l in LAMBDAS}} for k, d in (("single_mean_of_4", single), ("vote", vote))}
 
 
+def lead(arr: dict) -> dict:
+    """The problems behind the vote lead (Think-SFT's vote right, RL's not): Think-SFT's right samples and RL's wrong samples there
+    by generated tokens (BINS, cap hits with an answer in the last bin), and the outcomes of RL's samples."""
+    t, r = arr["think"], arr["rl"]
+    p = (t["vote"] == 2) & (r["vote"] != 2)
+    by_bin = lambda a, m: np.bincount(np.digitize(a["n_new"][p][m[p]], BINS[1:-1], right=True), minlength=len(BINS) - 1).tolist()
+    return {"problems": int(p.sum()), "reverse_problems": int(((r["vote"] == 2) & (t["vote"] != 2)).sum()), "bins": BINS,
+            "think_right_samples_by_bin": by_bin(t, t["right"]), "rl_wrong_samples_by_bin": by_bin(r, r["ans"] & ~r["right"]),
+            "think_samples": {o: int((t["sample"][p] == j).sum()) for j, o in enumerate(OUTCOME)},
+            "rl_samples": {o: int((r["sample"][p] == j).sum()) for j, o in enumerate(OUTCOME)},
+            "rl_problems_with_a_right_sample": int(r["right"][p].any(1).sum())}
+
+
 def texts(run) -> dict:
     return {(r["problem_index"], r["sample"]): r for r in map(json.loads, open(pathlib.Path(run) / "answers.jsonl")) if r["attempt"] == 0}
 
@@ -314,6 +327,12 @@ def markdown(res: dict, cv: dict) -> str:
             o += ["", f"## Outcomes, {unit} ({'4 sample pairs per problem, summed' if unit == 'single' else 'problems'}): Think-SFT + cue (rows) against {LABEL[y]} (columns)", "",
                   "| | " + " | ".join(OUTCOME) + " |", "|---|---|---|---|"]
             o += [f"| {a} | " + " | ".join(str(t[f"{a} / {b}"]) for b in OUTCOME) + " |" for a in OUTCOME]
+    v = res["vote_lead"]
+    o += ["", f"## The {v['problems']} problems where Think-SFT's vote is right and RL's is not (reverse: {v['reverse_problems']})", "",
+          "| Samples on these problems | " + " | ".join(f"{lo}-{hi}" for lo, hi in zip(BINS[:-1], BINS[1:])) + " | abstained / wrong / right |", "|---|---|---|---|---|---|---|",
+          "| Think-SFT + cue, right samples by tokens | " + " | ".join(map(str, v["think_right_samples_by_bin"])) + " | " + " / ".join(str(v["think_samples"][x]) for x in OUTCOME) + " |",
+          "| RL plain, wrong samples by tokens | " + " | ".join(map(str, v["rl_wrong_samples_by_bin"])) + " | " + " / ".join(str(v["rl_samples"][x]) for x in OUTCOME) + " |",
+          "", f"RL has a right sample on {v['rl_problems_with_a_right_sample']} of them."]
     o += ["", "## Vote after dropping samples longer than L tokens", "", "| Model | Rule | Right | Wrong | Abstained | Tokens as run | Tokens, stopped at L |", "|---|---|---|---|---|---|---|"]
     for m in LABEL:
         for k, c in res["cuts"][m].items():
@@ -365,6 +384,7 @@ def main():
            "by_rl_caps": {m: by_caps(arr["rl"], arr[m], arr["base"], rng) for m in ("think", "base")},
            "transitions": {"single": {f"think / {y}": transition(arr["think"]["sample"], arr[y]["sample"]) for y in ("rl", "base")},
                            "vote": {f"think / {y}": transition(arr["think"]["vote"], arr[y]["vote"]) for y in ("rl", "base")}},
+           "vote_lead": lead(arr),
            "cuts": {m: {k: {x: v for x, v in c.items() if x != "per_problem"} for k, c in cut[m].items()} for m in arr},
            "chosen": chosen, "penalty": {m: penalty(x) for m, x in arr.items()}}
     commit = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
