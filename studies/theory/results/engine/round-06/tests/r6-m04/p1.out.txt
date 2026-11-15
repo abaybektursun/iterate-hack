@@ -1,0 +1,2 @@
+cap-hit counts per arm: {"base_cue": 8, "sft025_cue": 3, "sft05_cue": 6, "sft1_cue": 5}
+{"measured": -2, "n": 100, "interval": [-6, 2], "interval_kind": "bootstrap", "refuted_by_met": true, "alt_measured": -2, "not_computable": null, "example_row": {"problem_index": 11, "score_v3": 0, "cap_hit": true, "n_generated": 16384}}

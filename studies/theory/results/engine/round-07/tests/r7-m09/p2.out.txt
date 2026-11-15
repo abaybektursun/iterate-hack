@@ -1,0 +1,1 @@
+{"measured": 0.3333333333333333, "n": 6, "interval": [0.0, 0.6666666666666666], "interval_kind": "bootstrap", "refuted_by_met": true, "alt_measured": 0.3333333333333333, "not_computable": null, "example_row": {"cue": {"problem_index": 2, "score_v3": 0, "cap_hit": false, "n_generated": 2846}, "gold": "\\frac{14}{3}", "gold_normalised": "\\frac{14}{3}", "gold_is_integer": false}}

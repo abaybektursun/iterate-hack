@@ -1,0 +1,145 @@
+{
+ "theory": "r6-account",
+ "turn": 2,
+ "tests": [
+  {
+   "k": 4,
+   "experiment": "MATH-500, T 1.0: on the cued base's T1 cap-hit problems, Think-SFT cue's right count minus Math-RL's (T2) right count",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json and studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json. If a problem_index repeats in either file, use its first row in file order. Set C = the per_problem.json problems with t1_cap_hit true. RL right = t2_right true and t2_cap_hit not true; a null t2_right counts as not right. Think-SFT right = the sft1_cue row has score_v3 == 1 and cap_hit not true; a missing row or a null score_v3 counts as not right. Statistic = (number of C problems with Think-SFT right) minus (number of C problems with RL right), as a signed integer.",
+   "unit": "problems (signed count)",
+   "refuted_by": null,
+   "script": "rivals/r6-account.turn2/p4.py",
+   "measured": 0,
+   "n": 27,
+   "interval": [
+    -3,
+    3
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (C = rows with t1_cap_hit true; RL right = t2_right true and t2_cap_hit not true) and studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json (Think-SFT right = score_v3 == 1 and cap_hit not true; missing row or null score = not right). Both committed, first row per problem_index kept (no repeats seen). t2_right is stored as the integer 0/1, not JSON true/false; 1 is read as true. Statistic: signed integer sum over C of (SFT right - RL right); n = |C|; 90 % interval = bootstrap over C problems (each entry the pair of rows), recomputing the signed sum, so the interval also moves with how many C problems a resample holds. Ambiguity: the recipe is explicit; alt_measured drops the cap-hit conditions (right = t2_right true / score_v3 == 1 alone), in case 'right' was meant as the graded score only. refuted_by is null, so refuted_by_met is always false.",
+   "example_row": {
+    "t1_t2_items": {
+     "problem_index": 11,
+     "subject": "intermediate_algebra",
+     "level5": true,
+     "cell": "neither",
+     "t1_right": 0,
+     "t2_right": 0,
+     "t1_cap_hit": true,
+     "t2_cap_hit": false,
+     "t1_generated_tokens": 16384,
+     "t2_generated_tokens": 8316,
+     "failure_type": null,
+     "label_from_tail_only": false
+    },
+    "sft1_cue": {
+     "problem_index": 11,
+     "score_v3": 1,
+     "cap_hit": false,
+     "n_generated": 8969
+    }
+   }
+  },
+  {
+   "k": 5,
+   "experiment": "MATH-500, T 1.0: Think-SFT cue's solve rate on the cued base's T1 cap-hit problems minus its solve rate on T1 finished-wrong problems of the same 4-sample base count (the matched excess, now for the reward-free arm)",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. If a problem_index repeats in either per_problem file, use its first row in file order. From t1_t2_items per_problem.json keep the problems where t1_right is non-null. A problem is T1-right iff t1_right is true and t1_cap_hit is not true; keep only the problems that are not T1-right. Group C = kept problems with t1_cap_hit true. Group F = all other kept problems. Think-SFT right = the sft1_cue row has score_v3 == 1 and cap_hit not true; a missing row or a null score_v3 counts as not right. k4 for each kept problem: for each sample s in {0,1,2,3}, take the first row in file order of rows.jsonl with that problem_index, attempt == 0 and sample == s, and count the rows with score_v3 == 1 that are not a cap hit (cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'). A missing row counts as not right. Strata: k4 = 0, k4 = 1, k4 = 2, k4 in {3,4}. r_F(stratum) = (F problems in the stratum with Think-SFT right) / (F problems in the stratum). Drop any C problem whose stratum holds no F problem. Statistic = (fraction of the remaining C problems with Think-SFT right) minus (mean over the same C problems of r_F for each one's stratum).",
+   "unit": "difference of fractions of problems",
+   "refuted_by": null,
+   "script": "rivals/r6-account.turn2/p5.py",
+   "measured": -0.03438418577307478,
+   "n": 90,
+   "interval": [
+    -0.20161290322580644,
+    0.13710575139146564
+   ],
+   "interval_kind": "bootstrap",
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": -0.06413728313369882,
+   "not_computable": null,
+   "note": "Files: t1_t2_items-01/per_problem.json (kept = t1_right non-null and not (t1_right true and t1_cap_hit not true); C = kept with t1_cap_hit true, so a cap-hit row with t1_right 1 also lands in C; F = other kept), wsp1/full500/sft1_cue-01/per_problem.json (Think-SFT right as in k 4), day1_3/math500_base_cue-01/rows.jsonl (k4 = over samples 0-3, the first attempt == 0 row per sample, counted right if score_v3 == 1 and not a cap hit; cap hit = cap_hit true, or cap_hit missing and finish_reason 'length'; every row has cap_hit). Strata 0, 1, 2, {3,4}; r_F per stratum from F; C problems whose stratum has no F problem are dropped; statistic = SFT-right fraction over remaining C minus mean of their strata's r_F. n reported = number of kept problems (C plus F), since the bootstrap resamples over all kept problems and recomputes r_F, the drop and both terms; a resample with no usable C problem (probability negligible) returns the full-sample value. t1_right is stored as 0/1, 1 read as true. Ambiguity: the recipe fixes attempt == 0; alt_measured computes k4 from each sample's last attempt (the outcome after up to 2 restarts), the other plausible meaning of the base's '4-sample count'. Strata are small (C about 27 problems), so the interval will be wide. refuted_by is null, so refuted_by_met is always false.",
+   "example_row": {
+    "t1_t2_items": {
+     "problem_index": 11,
+     "subject": "intermediate_algebra",
+     "level5": true,
+     "cell": "neither",
+     "t1_right": 0,
+     "t2_right": 0,
+     "t1_cap_hit": true,
+     "t2_cap_hit": false,
+     "t1_generated_tokens": 16384,
+     "t2_generated_tokens": 8316,
+     "failure_type": null,
+     "label_from_tail_only": false
+    },
+    "sft1_cue": {
+     "problem_index": 11,
+     "score_v3": 1,
+     "cap_hit": false,
+     "n_generated": 8969
+    },
+    "rows_attempt0": [
+     {
+      "problem_index": 11,
+      "sample": 0,
+      "attempt": 0,
+      "seed": 41000011,
+      "n_new": 8630,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "\\dfrac{171}{56}",
+      "score_v3": 0,
+      "gold": "\\frac{3}{56}"
+     },
+     {
+      "problem_index": 11,
+      "sample": 1,
+      "attempt": 0,
+      "seed": 41010011,
+      "n_new": 6614,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "\\dfrac{1}{7}",
+      "score_v3": 0,
+      "gold": "\\frac{3}{56}"
+     },
+     {
+      "problem_index": 11,
+      "sample": 2,
+      "attempt": 0,
+      "seed": 41020011,
+      "n_new": 6113,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "\\dfrac{3}{56}",
+      "score_v3": 1,
+      "gold": "\\frac{3}{56}"
+     },
+     {
+      "problem_index": 11,
+      "sample": 3,
+      "attempt": 0,
+      "seed": 41030011,
+      "n_new": 8282,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "\\dfrac{3}{28}",
+      "score_v3": 0,
+      "gold": "\\frac{3}{56}"
+     }
+    ],
+    "n_C_used": 27
+   }
+  }
+ ]
+}

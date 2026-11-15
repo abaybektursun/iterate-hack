@@ -43,7 +43,7 @@ FILTER = "num_gpus=1 verified=true reliability>0.98 rentable=true inet_down>=500
 ROOT = Path(__file__).resolve().parent.parent
 RECORDS = ROOT / "runs" / "vast"
 MIN_MB_S = 20      # a box that downloads slower than this is destroyed at once (9 of 32 earlier rentals were slow)
-BOOT_MINUTES = 20  # a box not reachable by ssh within this time is destroyed
+BOOT_MINUTES = 6  # a box not reachable by ssh within this time is destroyed
 # The deadline: python and the instance's own key, so it works on any image and with the laptop closed.
 DESTROY = ("python3 -c \"import os, urllib.request as u; u.urlopen(u.Request("
            "'https://console.vast.ai/api/v0/instances/' + os.environ['CONTAINER_ID'] + '/', method='DELETE', "

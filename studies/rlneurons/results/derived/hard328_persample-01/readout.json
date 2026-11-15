@@ -1,0 +1,686 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_derived.md, addendum 1",
+ "labels": "studies/rlneurons/results/derived/hard328-01/labels.jsonl",
+ "samples_per_model": 1312,
+ "bootstrap": {
+  "resamples": 2000,
+  "seed": 0,
+  "unit": "problem"
+ },
+ "counts": {
+  "think": {
+   "long finished right": 295,
+   "long finished wrong": 96,
+   "short right": 527,
+   "short wrong": 13,
+   "cap hit": 378,
+   "no answer": 3,
+   "cap hit with a boxed value": 55,
+   "cap hit scored right": 14
+  },
+  "rl": {
+   "long finished right": 261,
+   "long finished wrong": 381,
+   "short right": 532,
+   "short wrong": 23,
+   "cap hit": 114,
+   "no answer": 1,
+   "cap hit with a boxed value": 79,
+   "cap hit scored right": 7
+  },
+  "base": {
+   "long finished right": 129,
+   "long finished wrong": 281,
+   "short right": 501,
+   "short wrong": 88,
+   "cap hit": 286,
+   "no answer": 27,
+   "cap hit with a boxed value": 49,
+   "cap hit scored right": 4
+  }
+ },
+ "sample_labels": {
+  "A": {
+   "think": {
+    "wrong": {
+     "rows": 80,
+     "asserted": 29
+    },
+    "right": {
+     "rows": 60,
+     "asserted": 5
+    }
+   },
+   "rl": {
+    "wrong": {
+     "rows": 80,
+     "asserted": 58
+    },
+    "right": {
+     "rows": 60,
+     "asserted": 13
+    }
+   },
+   "base": {
+    "wrong": {
+     "rows": 80,
+     "asserted": 53
+    },
+    "right": {
+     "rows": 60,
+     "asserted": 12
+    }
+   }
+  },
+  "B": {
+   "think": {
+    "wrong": {
+     "rows": 80,
+     "asserted": 34
+    },
+    "right": {
+     "rows": 60,
+     "asserted": 10
+    }
+   },
+   "rl": {
+    "wrong": {
+     "rows": 80,
+     "asserted": 58
+    },
+    "right": {
+     "rows": 60,
+     "asserted": 13
+    }
+   },
+   "base": {
+    "wrong": {
+     "rows": 80,
+     "asserted": 53
+    },
+    "right": {
+     "rows": 60,
+     "asserted": 11
+    }
+   }
+  }
+ },
+ "rates_pct": {
+  "A": {
+   "think": {
+    "long right, derived": {
+     "value": 20.61102642276423,
+     "interval95": [
+      17.297671221689896,
+      24.091775628363663
+     ]
+    },
+    "long right, asserted": {
+     "value": 1.873729674796748,
+     "interval95": [
+      0.3960626843404243,
+      3.6628525673064103
+     ]
+    },
+    "long wrong, derived": {
+     "value": 4.664634146341464,
+     "interval95": [
+      3.2165194583931127,
+      6.335124121872285
+     ]
+    },
+    "long wrong, asserted": {
+     "value": 2.652439024390244,
+     "interval95": [
+      1.610379552096212,
+      3.82290841093719
+     ]
+    },
+    "short right": {
+     "value": 40.167682926829265,
+     "interval95": [
+      35.0609756097561,
+      45.198170731707314
+     ]
+    },
+    "short wrong": {
+     "value": 0.9908536585365854,
+     "interval95": [
+      0.38109756097560976,
+      1.829268292682927
+     ]
+    },
+    "cap hit": {
+     "value": 28.8109756097561,
+     "interval95": [
+      24.61890243902439,
+      33.23170731707317
+     ]
+    },
+    "no answer": {
+     "value": 0.22865853658536586,
+     "interval95": [
+      0.0,
+      0.5335365853658537
+     ]
+    }
+   },
+   "rl": {
+    "long right, derived": {
+     "value": 15.583079268292684,
+     "interval95": [
+      12.176886876063527,
+      19.142018728222997
+     ]
+    },
+    "long right, asserted": {
+     "value": 4.310213414634147,
+     "interval95": [
+      2.1051332468727773,
+      6.900059671854941
+     ]
+    },
+    "long wrong, derived": {
+     "value": 7.985899390243903,
+     "interval95": [
+      5.319797312556459,
+      10.94528764581124
+     ]
+    },
+    "long wrong, asserted": {
+     "value": 21.053734756097562,
+     "interval95": [
+      16.926553894571203,
+      25.11907772725456
+     ]
+    },
+    "short right": {
+     "value": 40.548780487804876,
+     "interval95": [
+      35.59451219512195,
+      45.80792682926829
+     ]
+    },
+    "short wrong": {
+     "value": 1.7530487804878048,
+     "interval95": [
+      0.9146341463414634,
+      2.7439024390243905
+     ]
+    },
+    "cap hit": {
+     "value": 8.689024390243903,
+     "interval95": [
+      6.554878048780488,
+      10.823170731707316
+     ]
+    },
+    "no answer": {
+     "value": 0.07621951219512195,
+     "interval95": [
+      0.0,
+      0.22865853658536586
+     ]
+    }
+   },
+   "base": {
+    "long right, derived": {
+     "value": 7.865853658536586,
+     "interval95": [
+      6.048729674796748,
+      9.725762195121952
+     ]
+    },
+    "long right, asserted": {
+     "value": 1.9664634146341464,
+     "interval95": [
+      0.9593944285031086,
+      3.1111622385830127
+     ]
+    },
+    "long wrong, derived": {
+     "value": 7.228467987804878,
+     "interval95": [
+      4.825865171009395,
+      9.949868211087352
+     ]
+    },
+    "long wrong, asserted": {
+     "value": 14.18921493902439,
+     "interval95": [
+      11.08549046835396,
+      17.41967509165355
+     ]
+    },
+    "short right": {
+     "value": 38.1859756097561,
+     "interval95": [
+      33.38414634146341,
+      42.91158536585366
+     ]
+    },
+    "short wrong": {
+     "value": 6.7073170731707314,
+     "interval95": [
+      5.259146341463414,
+      8.231707317073171
+     ]
+    },
+    "cap hit": {
+     "value": 21.798780487804876,
+     "interval95": [
+      18.445121951219512,
+      25.228658536585368
+     ]
+    },
+    "no answer": {
+     "value": 2.057926829268293,
+     "interval95": [
+      1.3719512195121952,
+      2.8201219512195124
+     ]
+    }
+   }
+  },
+  "B": {
+   "think": {
+    "long right, derived": {
+     "value": 18.737296747967477,
+     "interval95": [
+      15.225179267126244,
+      22.608923168422024
+     ]
+    },
+    "long right, asserted": {
+     "value": 3.747459349593496,
+     "interval95": [
+      1.5387993612078978,
+      6.449146138827584
+     ]
+    },
+    "long wrong, derived": {
+     "value": 4.2073170731707314,
+     "interval95": [
+      2.8027915784161235,
+      5.7757452574525745
+     ]
+    },
+    "long wrong, asserted": {
+     "value": 3.1097560975609757,
+     "interval95": [
+      1.9725161406025824,
+      4.389643612106822
+     ]
+    },
+    "short right": {
+     "value": 40.167682926829265,
+     "interval95": [
+      35.0609756097561,
+      45.198170731707314
+     ]
+    },
+    "short wrong": {
+     "value": 0.9908536585365854,
+     "interval95": [
+      0.38109756097560976,
+      1.829268292682927
+     ]
+    },
+    "cap hit": {
+     "value": 28.8109756097561,
+     "interval95": [
+      24.61890243902439,
+      33.23170731707317
+     ]
+    },
+    "no answer": {
+     "value": 0.22865853658536586,
+     "interval95": [
+      0.0,
+      0.5335365853658537
+     ]
+    }
+   },
+   "rl": {
+    "long right, derived": {
+     "value": 15.583079268292684,
+     "interval95": [
+      12.295439802802282,
+      18.93233873625789
+     ]
+    },
+    "long right, asserted": {
+     "value": 4.310213414634147,
+     "interval95": [
+      2.2899583636694576,
+      6.733732075351678
+     ]
+    },
+    "long wrong, derived": {
+     "value": 7.985899390243903,
+     "interval95": [
+      5.144690910736162,
+      11.259415547007942
+     ]
+    },
+    "long wrong, asserted": {
+     "value": 21.053734756097562,
+     "interval95": [
+      17.015063082381484,
+      25.23584367728543
+     ]
+    },
+    "short right": {
+     "value": 40.548780487804876,
+     "interval95": [
+      35.59451219512195,
+      45.80792682926829
+     ]
+    },
+    "short wrong": {
+     "value": 1.7530487804878048,
+     "interval95": [
+      0.9146341463414634,
+      2.7439024390243905
+     ]
+    },
+    "cap hit": {
+     "value": 8.689024390243903,
+     "interval95": [
+      6.554878048780488,
+      10.823170731707316
+     ]
+    },
+    "no answer": {
+     "value": 0.07621951219512195,
+     "interval95": [
+      0.0,
+      0.22865853658536586
+     ]
+    }
+   },
+   "base": {
+    "long right, derived": {
+     "value": 8.029725609756097,
+     "interval95": [
+      6.232850609756097,
+      9.87052636967601
+     ]
+    },
+    "long right, asserted": {
+     "value": 1.802591463414634,
+     "interval95": [
+      0.8203134140491549,
+      3.016470495135278
+     ]
+    },
+    "long wrong, derived": {
+     "value": 7.228467987804878,
+     "interval95": [
+      4.829894094993582,
+      9.910836500058162
+     ]
+    },
+    "long wrong, asserted": {
+     "value": 14.18921493902439,
+     "interval95": [
+      11.249363229391788,
+      17.37386207488835
+     ]
+    },
+    "short right": {
+     "value": 38.1859756097561,
+     "interval95": [
+      33.38414634146341,
+      42.91158536585366
+     ]
+    },
+    "short wrong": {
+     "value": 6.7073170731707314,
+     "interval95": [
+      5.259146341463414,
+      8.231707317073171
+     ]
+    },
+    "cap hit": {
+     "value": 21.798780487804876,
+     "interval95": [
+      18.445121951219512,
+      25.228658536585368
+     ]
+    },
+    "no answer": {
+     "value": 2.057926829268293,
+     "interval95": [
+      1.3719512195121952,
+      2.8201219512195124
+     ]
+    }
+   }
+  }
+ },
+ "B_whole_pool": {
+  "rl": {
+   "long right, derived": {
+    "n": 207,
+    "pct": {
+     "value": 15.777439024390244,
+     "interval95": [
+      12.955411585365853,
+      18.675685975609746
+     ]
+    }
+   },
+   "long right, asserted": {
+    "n": 54,
+    "pct": {
+     "value": 4.115853658536586,
+     "interval95": [
+      2.7439024390243905,
+      5.716463414634147
+     ]
+    }
+   },
+   "long wrong, derived": {
+    "n": 116,
+    "pct": {
+     "value": 8.841463414634147,
+     "interval95": [
+      7.012195121951219,
+      11.051829268292684
+     ]
+    }
+   },
+   "long wrong, asserted": {
+    "n": 265,
+    "pct": {
+     "value": 20.198170731707318,
+     "interval95": [
+      16.996951219512194,
+      23.47751524390243
+     ]
+    }
+   }
+  },
+  "base": "judge B labelled the 140 sampled rows only",
+  "think": "judge B labelled the 140 sampled rows only"
+ },
+ "asserted_wrong_per_sample": {
+  "A": {
+   "rl - base": {
+    "difference": {
+     "value": 6.864519817073171,
+     "interval95": [
+      3.0735543160814762,
+      10.619178067468058
+     ]
+    },
+    "pool_term": {
+     "value": 5.04954268292683,
+     "interval95": [
+      2.878755562678377,
+      7.626799359370176
+     ]
+    },
+    "share_term": {
+     "value": 1.8149771341463414,
+     "interval95": [
+      -1.9550369856320025,
+      5.60728838078055
+     ]
+    }
+   },
+   "rl - think": {
+    "difference": {
+     "value": 18.401295731707318,
+     "interval95": [
+      14.611836331213803,
+      22.28401648292442
+     ]
+    },
+    "pool_term": {
+     "value": 7.874428353658536,
+     "interval95": [
+      5.029815279770445,
+      10.976176252471982
+     ]
+    },
+    "share_term": {
+     "value": 10.526867378048781,
+     "interval95": [
+      6.46936522868654,
+      14.807694451362726
+     ]
+    }
+   }
+  },
+  "B": {
+   "rl - base": {
+    "difference": {
+     "value": 6.864519817073171,
+     "interval95": [
+      3.069380828938617,
+      10.79228013296473
+     ]
+    },
+    "pool_term": {
+     "value": 5.04954268292683,
+     "interval95": [
+      2.8981763775971103,
+      7.628139747717549
+     ]
+    },
+    "share_term": {
+     "value": 1.8149771341463414,
+     "interval95": [
+      -2.333546240384868,
+      5.687169160574829
+     ]
+    }
+   },
+   "rl - think": {
+    "difference": {
+     "value": 17.943978658536587,
+     "interval95": [
+      13.987770241762396,
+      21.84594277801554
+     ]
+    },
+    "pool_term": {
+     "value": 9.232088414634147,
+     "interval95": [
+      6.1316887507817395,
+      12.542008230472037
+     ]
+    },
+    "share_term": {
+     "value": 8.71189024390244,
+     "interval95": [
+      4.234825288219303,
+      13.324982691162898
+     ]
+    }
+   }
+  },
+  "B, rl whole pool": {
+   "rl - base": {
+    "difference": {
+     "value": 6.008955792682928,
+     "interval95": [
+      2.825353699677177,
+      9.389944909333897
+     ]
+    }
+   },
+   "rl - think": {
+    "difference": {
+     "value": 17.088414634146343,
+     "interval95": [
+      14.032711332999169,
+      20.2099178249847
+     ]
+    }
+   }
+  }
+ },
+ "cap_hit": {
+  "rl - base": {
+   "value": -13.109756097560975,
+   "interval95": [
+    -16.3109756097561,
+    -10.211509146341474
+   ]
+  },
+  "rl - think": {
+   "value": -20.121951219512194,
+   "interval95": [
+    -24.009146341463413,
+    -16.463414634146343
+   ]
+  }
+ },
+ "H4_held": true,
+ "H5_held": true,
+ "by_base_cap_hits": {
+  "base hits the cap on none of 4": {
+   "problems": 191,
+   "samples": 764,
+   "think": {
+    "cap hit": 40,
+    "long finished wrong": 47,
+    "long finished right": 163
+   },
+   "rl": {
+    "cap hit": 11,
+    "long finished wrong": 90,
+    "long finished right": 144
+   },
+   "base": {
+    "cap hit": 0,
+    "long finished wrong": 105,
+    "long finished right": 97
+   },
+   "rl long wrong, asserted, judge B whole pool": 41
+  },
+  "base hits the cap on 1 to 4 of 4": {
+   "problems": 137,
+   "samples": 548,
+   "think": {
+    "cap hit": 338,
+    "long finished wrong": 49,
+    "long finished right": 132
+   },
+   "rl": {
+    "cap hit": 103,
+    "long finished wrong": 291,
+    "long finished right": 117
+   },
+   "base": {
+    "cap hit": 286,
+    "long finished wrong": 176,
+    "long finished right": 32
+   },
+   "rl long wrong, asserted, judge B whole pool": 224
+  }
+ }
+}

@@ -1,0 +1,8 @@
+{
+ "commit": "f0420ba13fb3d9793249e6c6ea4a739ab0d99bf2",
+ "command": "python -m studies.rlneurons.analysis.riskcov --set hard328 --read studies/rlneurons/results/riskcov/read-01 --think-run runs/thinkvote_hard328_sft1_cue_s4 --rl-run runs/abaybektursun-1114-200505-5ff2",
+ "job_id": null,
+ "gpu": "none (laptop)",
+ "spec": "studies/rlneurons/specs/SPEC_riskcov.md",
+ "seed": 0
+}

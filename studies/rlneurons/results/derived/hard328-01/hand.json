@@ -1,0 +1,185 @@
+{
+ "labelled_by": "the agent (a fork of the session), before any judge call; no model, gold, score or length shown",
+ "rows": [
+  {
+   "id": "i0663",
+   "label": "DERIVED",
+   "final_answer": "1/2",
+   "note": "Flawed but shown halving argument ends 'Thus in any configuration of four points ... allows to get a rectangle of 0.5'."
+  },
+  {
+   "id": "i0917",
+   "label": "DERIVED",
+   "final_answer": "1/2017",
+   "note": "Small cases are computed and generalised: 'the remainder divided by N is 1/p'."
+  },
+  {
+   "id": "i0779",
+   "label": "DERIVED",
+   "final_answer": "7/128",
+   "note": "'Total probability:45/1024 +11/1024=56/1024=7/128.'"
+  },
+  {
+   "id": "i0146",
+   "label": "DERIVED",
+   "final_answer": "(b^2-a^2)/4",
+   "note": "Sets the discriminant to b^2: 'b²= a² +4q, solve for q, q= (b² -a²)/4'."
+  },
+  {
+   "id": "i0942",
+   "label": "DERIVED",
+   "final_answer": "4",
+   "note": "T=2 is ruled out and the next even T taken, existence unchecked: 'Next even T is 4'."
+  },
+  {
+   "id": "i0304",
+   "label": "DERIVED",
+   "final_answer": "9",
+   "note": "'Therefore, the center is at (3,3,4), so the top is 4+5=9 above the plane.'"
+  },
+  {
+   "id": "i0490",
+   "label": "DERIVED",
+   "final_answer": "2744",
+   "note": "Inclusion-exclusion shown: '4096 - 3×512 + 3×(2^2×2^4) - 2^3'."
+  },
+  {
+   "id": "i0089",
+   "label": "DERIVED",
+   "final_answer": "4",
+   "note": "Covering set exhibited and triples tried: 'With four squares ... all 12 rectangles are covered' and 'three squares are insufficient'."
+  },
+  {
+   "id": "i0437",
+   "label": "DERIVED",
+   "final_answer": "sqrt(3)",
+   "note": "Algebra shown reaches it ('x^3 - 3x = 0'), kept although its own check fails: 'following the algebraic steps'."
+  },
+  {
+   "id": "i0371",
+   "label": "DERIVED",
+   "final_answer": "50",
+   "note": "Enumeration shown: 'y=6: ... 960 -936 +26=50', the minimum of the table."
+  },
+  {
+   "id": "i0558",
+   "label": "DERIVED",
+   "final_answer": "96",
+   "note": "'48 +32 +16 +0 +0 +0 +0 ... =96'."
+  },
+  {
+   "id": "i0022",
+   "label": "DERIVED",
+   "final_answer": "279",
+   "note": "'4 × 4 × 24 × 6 = 2304. Then subtract 2025 gives 279.'"
+  },
+  {
+   "id": "i0660",
+   "label": "DERIVED",
+   "final_answer": "8",
+   "note": "Pair sums verified for three pairs and extended: 'each pair contributes 1 ... 8×1=8'."
+  },
+  {
+   "id": "i0696",
+   "label": "DERIVED",
+   "final_answer": "19133",
+   "note": "Candidates compared and computed: '361 ×53 ... total 19,133' as the smaller of two solutions."
+  },
+  {
+   "id": "i0918",
+   "label": "DERIVED",
+   "final_answer": "1022",
+   "note": "'the total number of valid C and D pairs is 1024 - 2 = 1022'."
+  },
+  {
+   "id": "i0237",
+   "label": "DERIVED",
+   "final_answer": "992",
+   "note": "'47 ×47 = 2209, 2209 -225 = 1984 ... 1984 /2 = 992'."
+  },
+  {
+   "id": "i0097",
+   "label": "DERIVED",
+   "final_answer": "(-1±sqrt17)/2",
+   "note": "Vieta comparison gives 'S² +S -4=0', solved for both values."
+  },
+  {
+   "id": "i0721",
+   "label": "ASSERTED",
+   "final_answer": "12",
+   "note": "'given the time I've spent and lack of progress, I think the answer is 12 points.'"
+  },
+  {
+   "id": "i0874",
+   "label": "DERIVED",
+   "final_answer": "f(n)=n",
+   "note": "Checks f(n)=n and rules out f(n)=n+k: 'k(m - 1) must be zero ... k = 0'."
+  },
+  {
+   "id": "i0626",
+   "label": "DERIVED",
+   "final_answer": "227",
+   "note": "'198 = 142 + 8c ... c = 7 (valid)', the only pair that works."
+  },
+  {
+   "id": "i0900",
+   "label": "ASSERTED",
+   "final_answer": "15",
+   "note": "Equations give no integer, reasoning lands on 0, then: 'Given the time I've spent and the problem's ambiguity, I think the intended answer is \\boxed{15}.'"
+  },
+  {
+   "id": "i0645",
+   "label": "ASSERTED",
+   "final_answer": "n^2-1",
+   "note": "'Given the time I've spent and the lack of progress, I think the answer is likely n² -1'."
+  },
+  {
+   "id": "i0259",
+   "label": "DERIVED",
+   "final_answer": "504",
+   "note": "Write-up shows the steps: 'r^2 + s^2 = 576 - 2 × 36 = 504' (the reasoning before it is a loop)."
+  },
+  {
+   "id": "i0000",
+   "label": "DERIVED",
+   "final_answer": "1",
+   "note": "One solution found by AM-GM equality and trials find no other: 'I think the answer is that there's only one ordered pair'."
+  },
+  {
+   "id": "i0760",
+   "label": "DERIVED",
+   "final_answer": "117",
+   "note": "'51+67−1=117'."
+  },
+  {
+   "id": "i0620",
+   "label": "DERIVED",
+   "final_answer": "610",
+   "note": "'total exceptions is indeed 390 ... 1000-390=610'."
+  },
+  {
+   "id": "i0025",
+   "label": "ASSERTED",
+   "final_answer": "n",
+   "note": "'I'll just guess the answer is \\boxed{n} ... but my examples say it's not right.'"
+  },
+  {
+   "id": "i0355",
+   "label": "DERIVED",
+   "final_answer": "150",
+   "note": "'n=140, t=10 ⇒n+t=140+10=150.'"
+  },
+  {
+   "id": "i0052",
+   "label": "ASSERTED",
+   "final_answer": "no such n",
+   "note": "Search fails, then a claimed theorem: 'I'm inclined to conjecture that no such n exists ... I need to verify if this theorem exists.'"
+  },
+  {
+   "id": "i0013",
+   "label": "ASSERTED",
+   "final_answer": "6",
+   "note": "'I'll hazard a guess that the answer is 6'."
+  }
+ ]
+}

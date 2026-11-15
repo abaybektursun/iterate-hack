@@ -1,0 +1,331 @@
+{
+ "flags": "origin/claude/weight-space-programming-research-ddd44e:studies/rlneurons/results/wsp1/sft_overlap-02/flags.json",
+ "sets": {
+  "hard328": {
+   "n": 328,
+   "think_sft_single_each_sample": [
+    212,
+    212,
+    211,
+    201
+   ],
+   "rl_single_each_sample": [
+    207,
+    190,
+    209,
+    194
+   ],
+   "vote": {
+    "think_sft": 241,
+    "rl": 221,
+    "rl_after_restart": 224,
+    "think_sft_minus_rl": {
+     "points": 6.097560975609753,
+     "interval95": [
+      3.0487804878048697,
+      9.45121951219512
+     ]
+    }
+   },
+   "pass_at_4": {
+    "think_sft": 244,
+    "rl": 240
+   },
+   "without_training_prompt_match": {
+    "n": 322,
+    "flagged": 6,
+    "single": {
+     "think_sft": 207,
+     "rl": 201
+    },
+    "vote": {
+     "think_sft": 235,
+     "rl": 215
+    }
+   },
+   "raw": {
+    "think_sft": {
+     "rows_attempt_0": 1312,
+     "cap_hits": 378,
+     "cap_hits_rule_A": 6,
+     "cap_hits_right": 14,
+     "cap_hits_with_over_20_CJK_characters": 86,
+     "finished": 934,
+     "finished_wrong": 112,
+     "finished_right_share": 0.880085653104925,
+     "finished_wrong_without_extracted_answer": 3,
+     "finished_wrong_last_line_is_gold": 4,
+     "last_line_is_gold_examples": [
+      {
+       "problem_index": 272,
+       "sample": 0,
+       "gold": "$\\frac{5}{2}$",
+       "extracted_v3": "$5/2",
+       "text_last_120": "the answer to the problem is the sum of the reciprocals of the divisors of 24, which is \\( \\frac{5}{2} \\).\n\nAnswer: $5/2"
+      },
+      {
+       "problem_index": 375,
+       "sample": 0,
+       "gold": "39",
+       "extracted_v3": "\"",
+       "text_last_120": " divisors confirms they yield smaller \\(c\\) values. Thus, the greatest possible value of \\(c\\) is indeed 39.\n\nAnswer:\n39"
+      },
+      {
+       "problem_index": 154,
+       "sample": 1,
+       "gold": "1625",
+       "extracted_v3": null,
+       "text_last_120": "entimeters. To find the area, multiply width by length:  \n0.65 cm \u00d7 2500 cm = 1625 square centimeters.  \n\nAnswer:  \n1625"
+      },
+      {
+       "problem_index": 364,
+       "sample": 1,
+       "gold": "6",
+       "extracted_v3": null,
+       "text_last_120": "switches exactly once is 6 minutes.\n\nThus, the minimum number of minutes required for Elizabeth to escape is:\n\nAnswer:\n6"
+      }
+     ]
+    },
+    "rl": {
+     "rows_attempt_0": 1312,
+     "cap_hits": 114,
+     "cap_hits_rule_A": 1,
+     "cap_hits_right": 7,
+     "cap_hits_with_over_20_CJK_characters": 1,
+     "finished": 1198,
+     "finished_wrong": 405,
+     "finished_right_share": 0.6619365609348915,
+     "finished_wrong_without_extracted_answer": 1,
+     "finished_wrong_last_line_is_gold": 0,
+     "last_line_is_gold_examples": []
+    }
+   },
+   "vote_right_only": {
+    "think_sft": 26,
+    "rl": 6,
+    "both": 215
+   },
+   "think_sft_vote_right_rl_no_sample_right": [
+    75,
+    98,
+    109,
+    112,
+    116,
+    162,
+    168,
+    169,
+    199,
+    232,
+    289,
+    369,
+    392
+   ],
+   "rl_vote_right_think_sft_no_sample_right": [
+    110,
+    163,
+    267,
+    283,
+    308
+   ]
+  },
+  "math500": {
+   "n": 500,
+   "think_sft_single_each_sample": [
+    461,
+    457,
+    462,
+    461
+   ],
+   "rl_single_each_sample": [
+    456,
+    462,
+    464,
+    458
+   ],
+   "vote": {
+    "think_sft": 481,
+    "rl": 474,
+    "rl_after_restart": 475,
+    "think_sft_minus_rl": {
+     "points": 1.4000000000000057,
+     "interval95": [
+      -0.40000000000000036,
+      3.1999999999999917
+     ]
+    }
+   },
+   "pass_at_4": {
+    "think_sft": 487,
+    "rl": 482
+   },
+   "without_training_prompt_match": {
+    "n": 475,
+    "flagged": 25,
+    "single": {
+     "think_sft": 436,
+     "rl": 433
+    },
+    "vote": {
+     "think_sft": 456,
+     "rl": 450
+    }
+   },
+   "raw": {
+    "think_sft": {
+     "rows_attempt_0": 2000,
+     "cap_hits": 93,
+     "cap_hits_rule_A": 15,
+     "cap_hits_right": 8,
+     "cap_hits_with_over_20_CJK_characters": 17,
+     "finished": 1907,
+     "finished_wrong": 74,
+     "finished_right_share": 0.9611955951756685,
+     "finished_wrong_without_extracted_answer": 12,
+     "finished_wrong_last_line_is_gold": 16,
+     "last_line_is_gold_examples": [
+      {
+       "problem_index": 158,
+       "sample": 0,
+       "gold": "2107",
+       "extracted_v3": null,
+       "text_last_120": "105 + 196) = 7 \\times 301 = 2107\\). Verifying through manual addition of all 14 terms confirms the result.\n\nAnswer:\n2107"
+      },
+      {
+       "problem_index": 253,
+       "sample": 0,
+       "gold": "\\frac{1}{8}",
+       "extracted_v3": null,
+       "text_last_120": "es. Therefore, the fraction is \\( \\frac{3}{24} \\), which simplifies to \\( \\frac{1}{8} \\). \n\nAnswer:  \n\\( \\dfrac{1}{8} \\)"
+      },
+      {
+       "problem_index": 406,
+       "sample": 0,
+       "gold": "0",
+       "extracted_v3": null,
+       "text_last_120": "0, the remainder is 0.  \n\nVerification by direct division confirms 12 \u00d7 167 = 2004, leaving no remainder.  \n\nAnswer:  \n0"
+      },
+      {
+       "problem_index": 98,
+       "sample": 1,
+       "gold": "2k+2",
+       "extracted_v3": "$2k + 2",
+       "text_last_120": ":\n\n\\[\n4 - 2 = 2\n\\]\n\nCombining these results, we get:\n\n\\[\n2k + 2\n\\]\n\nThe final simplified expression is:\n\nAnswer: $2k + 2"
+      },
+      {
+       "problem_index": 263,
+       "sample": 1,
+       "gold": "15",
+       "extracted_v3": null,
+       "text_last_120": "ion shows the interior angle \\( 180^\\circ - 24^\\circ = 156^\\circ \\) is indeed \\( 6.5 \\times 24^\\circ \\).  \n\nAnswer:  \n15"
+      },
+      {
+       "problem_index": 325,
+       "sample": 1,
+       "gold": "4",
+       "extracted_v3": null,
+       "text_last_120": "d:**  \n\\( \\frac{\\text{Sphere Volume}}{\\text{Cylinder Volume}} = \\frac{288\\pi}{72\\pi} = \\frac{288}{72} = 4 \\)\n\nAnswer: \n4"
+      }
+     ]
+    },
+    "rl": {
+     "rows_attempt_0": 2000,
+     "cap_hits": 32,
+     "cap_hits_rule_A": 1,
+     "cap_hits_right": 3,
+     "cap_hits_with_over_20_CJK_characters": 0,
+     "finished": 1968,
+     "finished_wrong": 131,
+     "finished_right_share": 0.9334349593495935,
+     "finished_wrong_without_extracted_answer": 0,
+     "finished_wrong_last_line_is_gold": 0,
+     "last_line_is_gold_examples": []
+    }
+   },
+   "vote_right_only": {
+    "think_sft": 13,
+    "rl": 6,
+    "both": 468
+   },
+   "think_sft_vote_right_rl_no_sample_right": [
+    168,
+    239,
+    286,
+    340,
+    352,
+    369
+   ],
+   "rl_vote_right_think_sft_no_sample_right": [
+    18,
+    128
+   ]
+  }
+ },
+ "predictions": {
+  "math500 vote over 4": {
+   "observed": 481,
+   "rules": {
+    "Rasch (results/rate)": {
+     "predicted": 473.1,
+     "miss": 7.9
+    },
+    "hazard (results/hazard/predict-01)": {
+     "predicted": 472.1,
+     "miss": 8.9
+    }
+   },
+   "nearest": "Rasch (results/rate)"
+  },
+  "hard328 vote over 4": {
+   "observed": 241,
+   "rules": {
+    "Rasch Lc, base vote shift": {
+     "predicted": 243.8,
+     "miss": -2.8
+    },
+    "Rasch Lc, RL vote shift": {
+     "predicted": 238.6,
+     "miss": 2.4
+    },
+    "point rule, MATH-500 gain": {
+     "predicted": 245.9,
+     "miss": -4.9
+    },
+    "point rule, 328 gain": {
+     "predicted": 234.0,
+     "miss": 7.0
+    },
+    "author": {
+     "predicted": 238.0,
+     "miss": 3.0
+    }
+   },
+   "nearest": "Rasch Lc, RL vote shift"
+  },
+  "hard328 single (mean of 4)": {
+   "observed": 209.0,
+   "rules": {
+    "profile": {
+     "predicted": 217.6,
+     "miss": -8.6
+    },
+    "profile_corrected": {
+     "predicted": 209.2,
+     "miss": -0.2
+    },
+    "Lc": {
+     "predicted": 196.3,
+     "miss": 12.7
+    },
+    "L1": {
+     "predicted": 201.1,
+     "miss": 7.9
+    },
+    "P": {
+     "predicted": 190.5,
+     "miss": 18.5
+    }
+   },
+   "nearest": "profile_corrected"
+  }
+ }
+}

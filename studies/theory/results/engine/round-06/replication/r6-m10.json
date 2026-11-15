@@ -1,0 +1,23 @@
+{
+ "theory": "r6-m10",
+ "items": [
+  {
+   "k": 1,
+   "experiment": "Mechanism test. Paired finished-answer error rate, RL step 100 plain minus cued base, MATH-500 at T 0.6 / top-p 0.95, on problems where both answers finished. This mechanism predicts about 0.00. The nearest rival (gradual reliability: the per-step error reduction starts at once, as in 2505.22617) predicts step 100 already carries at least half of step 2,800's finished-error drop against the cued base, about -0.02 or lower.",
+   "original": -0.0463768115942029,
+   "replicated": -0.0463768115942029,
+   "status": "replicated",
+   "script": "replication/r6-m10/p1.py",
+   "not_computable": null
+  },
+  {
+   "k": 2,
+   "experiment": "Cause: whose deliberative length step 100 has. Median per-problem log ratio of step-100 finished length to the cued base's finished length, same problems. This mechanism (step 100 has the cued base's length) predicts about 0.05. A rival in which the first 100 steps already install RL's final long-answer mode predicts about step 2,800's ratio to the cued base, about 0.6.",
+   "original": 0.30830135965451666,
+   "replicated": 0.30830135965451666,
+   "status": "replicated",
+   "script": "replication/r6-m10/p2.py",
+   "not_computable": null
+  }
+ ]
+}

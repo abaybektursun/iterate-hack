@@ -1,0 +1,2 @@
+{"groups": {"in_example_subjects algebra+intermediate_algebra+precalculus": 274, "other_subjects": 223}}
+{"measured": -0.018489574809335205, "n": 223, "interval": [-0.05767259056732741, 0.021835075493612084], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": -0.018489574809335205, "not_computable": null, "example_row": {"problem_index": 4, "subject": "algebra", "in_M": true, "uid_in_M": true, "R": 0, "B0": 0, "B1": 1, "B2": 1, "B3": 1, "g": -0.75}}

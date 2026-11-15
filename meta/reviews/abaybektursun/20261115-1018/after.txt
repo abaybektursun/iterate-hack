@@ -1,0 +1,5 @@
+after the record request was answered (ih writes runs/ih/<job>.json since 10:21 UTC): cycle.py reads them.
+AWS jobs listed before: 0 (no reading). Test with two planted records, removed after the run:
+  ih-test-0001  done  aws  -  15.0  echo test       (record with end 15 min after at)
+  ih-test-0002  no copy yet  aws  -  -  echo test2  (record without end or copy mark)
+vast.ai lines in the same output: 50, as before. No real ih record exists yet on this laptop (10:30 UTC).

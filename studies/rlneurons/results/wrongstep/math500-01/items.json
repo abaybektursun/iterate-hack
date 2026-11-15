@@ -1,0 +1,3623 @@
+[
+ {
+  "problem_index": 1,
+  "sample": 1,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 55,
+  "position": 0.266,
+  "quote": "So the double sum becomes \u2211_{m=2}^\u221e 2 \u2211_{j=1}^{m - 1} 1/m^3, since for each m \u2265 2, both j and k are positive integers adding up to m",
+  "models": {
+   "base": {
+    "lp_span": -23.827076953300548,
+    "lp_control": -22.150271860108504,
+    "lp_head": -2.0109675515268464,
+    "lp_head_control": -2.251327974014691
+   },
+   "math31": {
+    "lp_span": -31.010723777083513,
+    "lp_control": -25.58908866212107,
+    "lp_head": -2.520433872239664,
+    "lp_head_control": -2.57739908538024
+   },
+   "code31": {
+    "lp_span": -25.276615255862907,
+    "lp_control": -23.199613835029933,
+    "lp_head": -2.3756555523723364,
+    "lp_head_control": -2.307203417412457
+   },
+   "math30": {
+    "lp_span": -28.251130010093675,
+    "lp_control": -27.56502322345162,
+    "lp_head": -2.8902434787305538,
+    "lp_head_control": -2.8261678950287537
+   },
+   "code30": {
+    "lp_span": -24.76313841218166,
+    "lp_control": -23.85636442299485,
+    "lp_head": -2.0827627936087083,
+    "lp_head_control": -2.4114436060014803
+   },
+   "if30": {
+    "lp_span": -24.580825955434193,
+    "lp_control": -22.608299222831775,
+    "lp_head": -1.898230911087012,
+    "lp_head_control": -2.2842446828592804
+   },
+   "general30": {
+    "lp_span": -23.950844797288482,
+    "lp_control": -22.30026265782656,
+    "lp_head": -1.935097615700215,
+    "lp_head_control": -2.259624531526835
+   },
+   "mix30": {
+    "lp_span": -24.613169201544338,
+    "lp_control": -23.45807133191444,
+    "lp_head": -3.668823536558193,
+    "lp_head_control": -2.351714830384911
+   },
+   "theta0.25": {
+    "lp_span": -24.139988005757004,
+    "lp_control": -22.34934608439742,
+    "lp_head": -1.96185889604385,
+    "lp_head_control": -2.270875416780832
+   },
+   "random": {
+    "lp_span": -23.891810826930396,
+    "lp_control": -22.15986117696816,
+    "lp_head": -2.003809109737631,
+    "lp_head_control": -2.253305096842757
+   }
+  }
+ },
+ {
+  "problem_index": 4,
+  "sample": 0,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 16,
+  "position": 0.026,
+  "quote": "The y-axis probably shows the time taken, and the x-axis the distance.",
+  "models": {
+   "base": {
+    "lp_span": -16.535541132543585,
+    "lp_control": -7.733392481445653,
+    "lp_head": -9.923104375600815,
+    "lp_head_control": -2.3643005571262687
+   },
+   "math31": {
+    "lp_span": -17.402769428459578,
+    "lp_control": -8.381399025483283,
+    "lp_head": -11.327096670866013,
+    "lp_head_control": -2.582415684589655
+   },
+   "code31": {
+    "lp_span": -16.693538213661668,
+    "lp_control": -8.147553327131481,
+    "lp_head": -10.186227023601532,
+    "lp_head_control": -2.478435291864589
+   },
+   "math30": {
+    "lp_span": -18.50753094863012,
+    "lp_control": -9.092934714347326,
+    "lp_head": -11.437083840370178,
+    "lp_head_control": -2.726664350803512
+   },
+   "code30": {
+    "lp_span": -16.579109382349998,
+    "lp_control": -8.448442706398072,
+    "lp_head": -10.052194774150848,
+    "lp_head_control": -2.5640602869042506
+   },
+   "if30": {
+    "lp_span": -16.526656921412723,
+    "lp_control": -7.80208005907675,
+    "lp_head": -10.106007695198059,
+    "lp_head_control": -2.3554648400376434
+   },
+   "general30": {
+    "lp_span": -17.534622036124347,
+    "lp_control": -7.7924325062128785,
+    "lp_head": -10.593457341194153,
+    "lp_head_control": -2.371810998282299
+   },
+   "mix30": {
+    "lp_span": -17.493787620238436,
+    "lp_control": -7.8841228117329685,
+    "lp_head": -10.498300224542618,
+    "lp_head_control": -2.369186307582493
+   },
+   "theta0.25": {
+    "lp_span": -16.799621416052105,
+    "lp_control": -7.752860928479051,
+    "lp_head": -10.267104834318161,
+    "lp_head_control": -2.376247917796745
+   },
+   "random": {
+    "lp_span": -16.514630775272963,
+    "lp_control": -7.7370583281377385,
+    "lp_head": -9.90734314918518,
+    "lp_head_control": -2.3647541464946267
+   }
+  }
+ },
+ {
+  "problem_index": 17,
+  "sample": 2,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 51,
+  "position": 0.239,
+  "quote": "So -c/b = \u03c0/3, so c = -\u03c0/3 * b. Here, b = 3, so c = -\u03c0/3 * 3 = -\u03c0. Therefore, in this case, c is -\u03c0.",
+  "models": {
+   "base": {
+    "lp_span": -16.90999781215305,
+    "lp_control": -29.602721447287227,
+    "lp_head": -3.2010294697247446,
+    "lp_head_control": -2.8217415861213384
+   },
+   "math31": {
+    "lp_span": -23.281183252708615,
+    "lp_control": -32.94495026959853,
+    "lp_head": -3.2344119865447283,
+    "lp_head_control": -3.1370879364967776
+   },
+   "code31": {
+    "lp_span": -20.781106554480175,
+    "lp_control": -31.16912706036136,
+    "lp_head": -3.3216293323785067,
+    "lp_head_control": -2.9451181179354533
+   },
+   "math30": {
+    "lp_span": -27.620090612851527,
+    "lp_control": -36.03443145609152,
+    "lp_head": -3.5929159838706255,
+    "lp_head_control": -3.4152467389768253
+   },
+   "code30": {
+    "lp_span": -22.78245479900943,
+    "lp_control": -32.57255854732556,
+    "lp_head": -2.3015325758606195,
+    "lp_head_control": -3.065597940808284
+   },
+   "if30": {
+    "lp_span": -17.618347808456747,
+    "lp_control": -29.997850548529545,
+    "lp_head": -3.1482117935083807,
+    "lp_head_control": -2.852329703565347
+   },
+   "general30": {
+    "lp_span": -17.013925195713455,
+    "lp_control": -29.820293942137,
+    "lp_head": -3.1482657487504184,
+    "lp_head_control": -2.845935893360456
+   },
+   "mix30": {
+    "lp_span": -23.86488906557588,
+    "lp_control": -31.324114612225422,
+    "lp_head": -2.700497057288885,
+    "lp_head_control": -3.0129258123538873
+   },
+   "theta0.25": {
+    "lp_span": -17.478760170944952,
+    "lp_control": -29.816436511882344,
+    "lp_head": -3.014691644348204,
+    "lp_head_control": -2.8470836928380776
+   },
+   "random": {
+    "lp_span": -16.885601786011648,
+    "lp_control": -29.62347276304648,
+    "lp_head": -3.130982688628137,
+    "lp_head_control": -2.820773127865018
+   }
+  }
+ },
+ {
+  "problem_index": 18,
+  "sample": 3,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 29,
+  "position": 0.011,
+  "quote": "The label for angle at A is 124 degrees, which is between AB and AC. The angle x is labeled at B, I think.",
+  "models": {
+   "base": {
+    "lp_span": -25.06160712129349,
+    "lp_control": -15.25506742524869,
+    "lp_head": -7.558160781860352,
+    "lp_head_control": -2.543309436552809
+   },
+   "math31": {
+    "lp_span": -24.389283146900198,
+    "lp_control": -17.12793734784088,
+    "lp_head": -7.676814138889313,
+    "lp_head_control": -2.85289482314678
+   },
+   "code31": {
+    "lp_span": -23.463611993167433,
+    "lp_control": -15.911116948451381,
+    "lp_head": -6.851278483867645,
+    "lp_head_control": -2.649642715072623
+   },
+   "math30": {
+    "lp_span": -25.652763285457695,
+    "lp_control": -18.831149536425155,
+    "lp_head": -8.340850055217743,
+    "lp_head_control": -3.2387644295004336
+   },
+   "code30": {
+    "lp_span": -26.00006000436042,
+    "lp_control": -16.48320268638774,
+    "lp_head": -7.303364336490631,
+    "lp_head_control": -2.7231063681816066
+   },
+   "if30": {
+    "lp_span": -24.90226403413908,
+    "lp_control": -15.419658255397936,
+    "lp_head": -7.606888085603714,
+    "lp_head_control": -2.5653106713421128
+   },
+   "general30": {
+    "lp_span": -25.37922403081393,
+    "lp_control": -15.276278685520555,
+    "lp_head": -7.529983997344971,
+    "lp_head_control": -2.54186162880319
+   },
+   "mix30": {
+    "lp_span": -26.086996428184648,
+    "lp_control": -15.890370852011875,
+    "lp_head": -7.659505128860474,
+    "lp_head_control": -2.626440225138185
+   },
+   "theta0.25": {
+    "lp_span": -24.239008284072042,
+    "lp_control": -15.371906435529299,
+    "lp_head": -7.4721603989601135,
+    "lp_head_control": -2.563886880174559
+   },
+   "random": {
+    "lp_span": -25.058558391829138,
+    "lp_control": -15.245323535925763,
+    "lp_head": -7.6163661777973175,
+    "lp_head_control": -2.542480722210739
+   }
+  }
+ },
+ {
+  "problem_index": 21,
+  "sample": 3,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 49,
+  "position": 0.203,
+  "quote": "2\u221a7 * 568 - 2*(44\u221a7) = (1136\u221a7 - 88\u221a7) = (1148\u221a7). So I_5 = 1148\u221a7",
+  "models": {
+   "base": {
+    "lp_span": -11.972836404424015,
+    "lp_control": -20.20468782899612,
+    "lp_head": -0.37124400720131234,
+    "lp_head_control": -1.7612383481380312
+   },
+   "math31": {
+    "lp_span": -8.993193797508866,
+    "lp_control": -22.429501537129745,
+    "lp_head": -0.1602552679614746,
+    "lp_head_control": -1.9752406269110907
+   },
+   "code31": {
+    "lp_span": -11.222810069200932,
+    "lp_control": -20.929542121665126,
+    "lp_head": -0.46060901709643076,
+    "lp_head_control": -1.8138347147264722
+   },
+   "math30": {
+    "lp_span": -22.01034620450082,
+    "lp_control": -25.23372997197217,
+    "lp_head": -1.407442450428789,
+    "lp_head_control": -2.1960123247258525
+   },
+   "code30": {
+    "lp_span": -10.603274566870823,
+    "lp_control": -21.592755463117847,
+    "lp_head": -0.14285986002869322,
+    "lp_head_control": -1.8830197489020792
+   },
+   "if30": {
+    "lp_span": -11.670816065703548,
+    "lp_control": -20.3292914870654,
+    "lp_head": -0.42101135404300294,
+    "lp_head_control": -1.7587540062675908
+   },
+   "general30": {
+    "lp_span": -11.815576185334066,
+    "lp_control": -20.27700796418281,
+    "lp_head": -0.319408235449373,
+    "lp_head_control": -1.7707097791170419
+   },
+   "mix30": {
+    "lp_span": -13.733465620342031,
+    "lp_control": -21.119132274156236,
+    "lp_head": -0.3305905736197019,
+    "lp_head_control": -1.826483636153298
+   },
+   "theta0.25": {
+    "lp_span": -11.159987708728295,
+    "lp_control": -20.324501788108737,
+    "lp_head": -0.3434882430410653,
+    "lp_head_control": -1.7763345787134859
+   },
+   "random": {
+    "lp_span": -12.039091850816476,
+    "lp_control": -20.200224198240495,
+    "lp_head": -0.36677699701249367,
+    "lp_head_control": -1.7601885225914702
+   }
+  }
+ },
+ {
+  "problem_index": 52,
+  "sample": 3,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 45,
+  "position": 0.128,
+  "quote": "because 2.7 - 2.5 is the same as (2.5 + 0.7 - 2.5) which is 0.7. So the denominator becomes 0.7.",
+  "models": {
+   "base": {
+    "lp_span": -20.575439799216838,
+    "lp_control": -18.306399263637996,
+    "lp_head": -1.7695715529152949,
+    "lp_head_control": -2.069622796616277
+   },
+   "math31": {
+    "lp_span": -27.57847773345202,
+    "lp_control": -20.609055375055522,
+    "lp_head": -1.681840191326046,
+    "lp_head_control": -2.2678324150060507
+   },
+   "code31": {
+    "lp_span": -23.479705952202494,
+    "lp_control": -19.105227166930216,
+    "lp_head": -1.1044748259228072,
+    "lp_head_control": -2.1543665756992594
+   },
+   "math30": {
+    "lp_span": -31.52054017748378,
+    "lp_control": -23.46143493131496,
+    "lp_head": -1.4981878983453498,
+    "lp_head_control": -2.6546927841952312
+   },
+   "code30": {
+    "lp_span": -24.339579494739155,
+    "lp_control": -20.063708575383206,
+    "lp_head": -1.3894054565244005,
+    "lp_head_control": -2.2087220393710596
+   },
+   "if30": {
+    "lp_span": -21.09992310418602,
+    "lp_control": -18.564185959465902,
+    "lp_head": -1.895321202930063,
+    "lp_head_control": -2.105853395689792
+   },
+   "general30": {
+    "lp_span": -21.07777664360401,
+    "lp_control": -18.40605117709241,
+    "lp_head": -1.7740315890914644,
+    "lp_head_control": -2.080484850418707
+   },
+   "mix30": {
+    "lp_span": -26.583861368508224,
+    "lp_control": -19.520422972111046,
+    "lp_head": -1.0841541407062323,
+    "lp_head_control": -2.1492696759696446
+   },
+   "theta0.25": {
+    "lp_span": -21.037337502977607,
+    "lp_control": -18.4342820318942,
+    "lp_head": -1.315658442392305,
+    "lp_head_control": -2.0744227966958353
+   },
+   "random": {
+    "lp_span": -20.555162410051707,
+    "lp_control": -18.29876132392881,
+    "lp_head": -1.7549909313820535,
+    "lp_head_control": -2.069106165701851
+   }
+  }
+ },
+ {
+  "problem_index": 60,
+  "sample": 2,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 34,
+  "position": 0.274,
+  "quote": "= (-63 -5p +3q) alpha\u00b2 + (190 -11p -4q) alpha + (-54 +4p + q - r)",
+  "models": {
+   "base": {
+    "lp_span": -11.303222512873617,
+    "lp_control": -11.629621783973107,
+    "lp_head": -3.865748593227181,
+    "lp_head_control": -1.9522214878612068
+   },
+   "math31": {
+    "lp_span": -13.498857463069726,
+    "lp_control": -12.929835351126057,
+    "lp_head": -5.298531590386119,
+    "lp_head_control": -2.1787152127618175
+   },
+   "code31": {
+    "lp_span": -13.857807431893889,
+    "lp_control": -12.056058372376446,
+    "lp_head": -5.618781204186234,
+    "lp_head_control": -2.074660051931387
+   },
+   "math30": {
+    "lp_span": -16.566307625216723,
+    "lp_control": -15.095322456449248,
+    "lp_head": -8.519938260316849,
+    "lp_head_control": -2.5370106801838483
+   },
+   "code30": {
+    "lp_span": -13.918641426404065,
+    "lp_control": -12.596293993019353,
+    "lp_head": -5.022489010632853,
+    "lp_head_control": -2.061608519717629
+   },
+   "if30": {
+    "lp_span": -11.712834740475955,
+    "lp_control": -11.689378913490017,
+    "lp_head": -3.420325812232477,
+    "lp_head_control": -1.9689836507167637
+   },
+   "general30": {
+    "lp_span": -12.125965489729424,
+    "lp_control": -11.687545892568632,
+    "lp_head": -4.390961640572641,
+    "lp_head_control": -1.968642570964821
+   },
+   "mix30": {
+    "lp_span": -15.19400718000179,
+    "lp_control": -12.511481498069607,
+    "lp_head": -6.040276184510731,
+    "lp_head_control": -2.0776025591490908
+   },
+   "theta0.25": {
+    "lp_span": -11.668453728903842,
+    "lp_control": -11.673397414385471,
+    "lp_head": -4.1507052970519,
+    "lp_head_control": -1.9571794813305496
+   },
+   "random": {
+    "lp_span": -11.230702071392443,
+    "lp_control": -11.631842069556406,
+    "lp_head": -3.7970214854940423,
+    "lp_head_control": -1.9526293662257013
+   }
+  }
+ },
+ {
+  "problem_index": 63,
+  "sample": 0,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 56,
+  "position": 0.573,
+  "quote": "\\( (x^4 - 1)(x^4 + 4) = (x^2 - 1)(x^2 + 1)(x^2 + 2x + 2)(x^2 - 2x + 2) \\).",
+  "models": {
+   "base": {
+    "lp_span": -2.875419318646891,
+    "lp_control": -13.523062451253063,
+    "lp_head": -0.0909671087138122,
+    "lp_head_control": -1.2084021450569709
+   },
+   "math31": {
+    "lp_span": -3.4885752626651083,
+    "lp_control": -16.573551944634417,
+    "lp_head": -0.3321056332133594,
+    "lp_head_control": -1.4556437018900032
+   },
+   "code31": {
+    "lp_span": -2.9490530775365187,
+    "lp_control": -14.015513433289088,
+    "lp_head": -0.12200705774739617,
+    "lp_head_control": -1.2299388918474141
+   },
+   "math30": {
+    "lp_span": -5.187232252363174,
+    "lp_control": -19.02079452982176,
+    "lp_head": -1.554770116294094,
+    "lp_head_control": -1.6245329789572498
+   },
+   "code30": {
+    "lp_span": -3.5396769504150143,
+    "lp_control": -14.778313818521601,
+    "lp_head": -0.05807372705749003,
+    "lp_head_control": -1.292987917682549
+   },
+   "if30": {
+    "lp_span": -2.6627018182334723,
+    "lp_control": -14.703510049458709,
+    "lp_head": -0.06968203904398251,
+    "lp_head_control": -1.3342643301990393
+   },
+   "general30": {
+    "lp_span": -2.8531375227394165,
+    "lp_control": -13.571339391267248,
+    "lp_head": -0.062459794608002994,
+    "lp_head_control": -1.2207264232987292
+   },
+   "mix30": {
+    "lp_span": -3.8068008978734724,
+    "lp_control": -14.986718336375743,
+    "lp_head": -0.09776926031918265,
+    "lp_head_control": -1.2845967549258421
+   },
+   "theta0.25": {
+    "lp_span": -2.823248975459137,
+    "lp_control": -13.705673875814647,
+    "lp_head": -0.09053920999576803,
+    "lp_head_control": -1.2232937490963378
+   },
+   "random": {
+    "lp_span": -2.872714847631869,
+    "lp_control": -13.529294565555574,
+    "lp_head": -0.0901000585508882,
+    "lp_head_control": -1.2127740580914905
+   }
+  }
+ },
+ {
+  "problem_index": 90,
+  "sample": 1,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 29,
+  "position": 0.442,
+  "quote": "So applying the same logic, 10 divided by (2/3) should be 10 \u00d7 (3/2) = 15.",
+  "models": {
+   "base": {
+    "lp_span": -8.236343481141375,
+    "lp_control": -11.907894589792194,
+    "lp_head": -2.0172817532002227,
+    "lp_head_control": -2.008651855209573
+   },
+   "math31": {
+    "lp_span": -9.13967137344298,
+    "lp_control": -13.9953266566632,
+    "lp_head": -1.855775516210997,
+    "lp_head_control": -2.4201190772217887
+   },
+   "code31": {
+    "lp_span": -8.337905974658497,
+    "lp_control": -12.190256359320628,
+    "lp_head": -1.4641226321691647,
+    "lp_head_control": -2.0695847418416817
+   },
+   "math30": {
+    "lp_span": -15.145126545867242,
+    "lp_control": -13.328101317627661,
+    "lp_head": -1.6331942938486463,
+    "lp_head_control": -2.2923130875944846
+   },
+   "code30": {
+    "lp_span": -8.621909664856503,
+    "lp_control": -12.300038095890596,
+    "lp_head": -1.0580302333837608,
+    "lp_head_control": -2.0671939300363373
+   },
+   "if30": {
+    "lp_span": -7.276794240315212,
+    "lp_control": -12.779155828168623,
+    "lp_head": -1.2444227526139002,
+    "lp_head_control": -2.129299936821044
+   },
+   "general30": {
+    "lp_span": -8.349343589252385,
+    "lp_control": -11.8963679291866,
+    "lp_head": -2.033809565458796,
+    "lp_head_control": -2.011745497230113
+   },
+   "mix30": {
+    "lp_span": -10.117656639158668,
+    "lp_control": -12.293615331103538,
+    "lp_head": -2.9691858172009233,
+    "lp_head_control": -2.0992715365441836
+   },
+   "theta0.25": {
+    "lp_span": -8.612340403051348,
+    "lp_control": -12.020259364262202,
+    "lp_head": -2.228201813311898,
+    "lp_head_control": -2.0542372332118974
+   },
+   "random": {
+    "lp_span": -8.204949167382438,
+    "lp_control": -11.895584204275037,
+    "lp_head": -2.005120224057464,
+    "lp_head_control": -2.010489933072058
+   }
+  }
+ },
+ {
+  "problem_index": 96,
+  "sample": 2,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 39,
+  "position": 0.147,
+  "quote": "Let me find a common denominator for these two terms. The denominators are 5 and 9, so LCM is 45. So common denominator is 5*9=45.",
+  "models": {
+   "base": {
+    "lp_span": -16.236462769797072,
+    "lp_control": -16.327515430485,
+    "lp_head": -1.9249703454479459,
+    "lp_head_control": -2.201743204089544
+   },
+   "math31": {
+    "lp_span": -18.154603787479573,
+    "lp_control": -18.660243707203808,
+    "lp_head": -2.16830971827585,
+    "lp_head_control": -2.581263355534793
+   },
+   "code31": {
+    "lp_span": -18.065064965565398,
+    "lp_control": -16.881506078764215,
+    "lp_head": -1.8099876525084255,
+    "lp_head_control": -2.2867597889557874
+   },
+   "math30": {
+    "lp_span": -20.300240791752003,
+    "lp_control": -20.24370825332913,
+    "lp_head": -2.3804701677145204,
+    "lp_head_control": -2.7099825029549174
+   },
+   "code30": {
+    "lp_span": -18.70805036991078,
+    "lp_control": -17.534103070973906,
+    "lp_head": -2.4072223198381835,
+    "lp_head_control": -2.3951889927086087
+   },
+   "if30": {
+    "lp_span": -16.336444070810103,
+    "lp_control": -16.415458622767254,
+    "lp_head": -2.1430989950240473,
+    "lp_head_control": -2.229545121893716
+   },
+   "general30": {
+    "lp_span": -16.403726341406582,
+    "lp_control": -16.432906409135978,
+    "lp_head": -1.8842412474987213,
+    "lp_head_control": -2.2142793254679782
+   },
+   "mix30": {
+    "lp_span": -17.768008399863902,
+    "lp_control": -17.4033683575708,
+    "lp_head": -1.58479317088495,
+    "lp_head_control": -2.3401924180475544
+   },
+   "theta0.25": {
+    "lp_span": -16.489923746863496,
+    "lp_control": -16.478013686504926,
+    "lp_head": -1.9411757624548045,
+    "lp_head_control": -2.231338342566778
+   },
+   "random": {
+    "lp_span": -16.33299708112463,
+    "lp_control": -16.331053294187367,
+    "lp_head": -1.9212440474584582,
+    "lp_head_control": -2.204509145509073
+   }
+  }
+ },
+ {
+  "problem_index": 101,
+  "sample": 2,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 22,
+  "position": 0.614,
+  "quote": "So, the roots at 18\u00b0 and 198\u00b0 are conjugates because their angles differ by \u03c0.",
+  "models": {
+   "base": {
+    "lp_span": -13.069087314281205,
+    "lp_control": -10.231308466209303,
+    "lp_head": -4.11669497191906,
+    "lp_head_control": -2.593968785517609
+   },
+   "math31": {
+    "lp_span": -14.705424653169757,
+    "lp_control": -11.543616266130375,
+    "lp_head": -5.6016591265797615,
+    "lp_head_control": -2.88305969740959
+   },
+   "code31": {
+    "lp_span": -14.88649563560466,
+    "lp_control": -10.743182023459267,
+    "lp_head": -4.383750654757023,
+    "lp_head_control": -2.688952048138381
+   },
+   "math30": {
+    "lp_span": -19.152088958158856,
+    "lp_control": -12.442310552247617,
+    "lp_head": -6.424828127026558,
+    "lp_head_control": -3.1456433854518764
+   },
+   "code30": {
+    "lp_span": -13.32828030566452,
+    "lp_control": -11.098700663578493,
+    "lp_head": -4.648854438215494,
+    "lp_head_control": -2.882141468247937
+   },
+   "if30": {
+    "lp_span": -13.327655923290877,
+    "lp_control": -10.322768748796115,
+    "lp_head": -4.1183029636740685,
+    "lp_head_control": -2.6334992936619894
+   },
+   "general30": {
+    "lp_span": -13.247421568339632,
+    "lp_control": -10.294953025022586,
+    "lp_head": -4.172806769609451,
+    "lp_head_control": -2.6287457832356087
+   },
+   "mix30": {
+    "lp_span": -13.035186459834222,
+    "lp_control": -11.170334923451046,
+    "lp_head": -4.380490427836776,
+    "lp_head_control": -2.9134836355224616
+   },
+   "theta0.25": {
+    "lp_span": -13.509265211170714,
+    "lp_control": -10.295031035300344,
+    "lp_head": -4.393353089690208,
+    "lp_head_control": -2.6013596331641384
+   },
+   "random": {
+    "lp_span": -13.075782088417327,
+    "lp_control": -10.228466841405206,
+    "lp_head": -4.118075415492058,
+    "lp_head_control": -2.5944522597087416
+   }
+  }
+ },
+ {
+  "problem_index": 104,
+  "sample": 3,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 20,
+  "position": 0.012,
+  "quote": "Hmm, both equations are circles. Let me try to subtract or add them to eliminate some variables.",
+  "models": {
+   "base": {
+    "lp_span": -11.102205486880848,
+    "lp_control": -8.705391435466991,
+    "lp_head": -2.9299919402983505,
+    "lp_head_control": -2.19226612637045
+   },
+   "math31": {
+    "lp_span": -10.051249019787065,
+    "lp_control": -10.209719721425827,
+    "lp_head": -3.7038171811582288,
+    "lp_head_control": -2.5778831794699726
+   },
+   "code31": {
+    "lp_span": -12.700776405254146,
+    "lp_control": -9.133737750652436,
+    "lp_head": -3.8809592709876597,
+    "lp_head_control": -2.273877918457074
+   },
+   "math30": {
+    "lp_span": -16.01859635169967,
+    "lp_control": -10.942984337730014,
+    "lp_head": -1.9453803003270878,
+    "lp_head_control": -2.8413167108703785
+   },
+   "code30": {
+    "lp_span": -10.519084090337856,
+    "lp_control": -9.569683901680582,
+    "lp_head": -3.499354757834226,
+    "lp_head_control": -2.411032469589809
+   },
+   "if30": {
+    "lp_span": -10.609522658225615,
+    "lp_control": -8.77112648865019,
+    "lp_head": -2.9030554685741663,
+    "lp_head_control": -2.2108544497695037
+   },
+   "general30": {
+    "lp_span": -11.674515558581334,
+    "lp_control": -8.735198196013007,
+    "lp_head": -3.0952897811075673,
+    "lp_head_control": -2.2058849344988993
+   },
+   "mix30": {
+    "lp_span": -10.98153549269773,
+    "lp_control": -9.263377746131846,
+    "lp_head": -1.7682775871362537,
+    "lp_head_control": -2.362269085134867
+   },
+   "theta0.25": {
+    "lp_span": -10.572060865873937,
+    "lp_control": -8.807828096610246,
+    "lp_head": -2.8579471289995126,
+    "lp_head_control": -2.2204076111152973
+   },
+   "random": {
+    "lp_span": -11.078917110367911,
+    "lp_control": -8.705299907622393,
+    "lp_head": -2.8812708486511838,
+    "lp_head_control": -2.1924977453186147
+   }
+  }
+ },
+ {
+  "problem_index": 128,
+  "sample": 2,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 32,
+  "position": 0.016,
+  "quote": "So the days she walks are days 3, 6, 9, 12, 15, 18, 21, and 24.",
+  "models": {
+   "base": {
+    "lp_span": -9.480369170683844,
+    "lp_control": -20.162929955560866,
+    "lp_head": -3.605134948156774,
+    "lp_head_control": -3.1394642466819276
+   },
+   "math31": {
+    "lp_span": -11.97148049374664,
+    "lp_control": -22.33012293487147,
+    "lp_head": -5.371879561804235,
+    "lp_head_control": -3.579378871422887
+   },
+   "code31": {
+    "lp_span": -11.736456700375129,
+    "lp_control": -21.07060233974724,
+    "lp_head": -4.415058790706098,
+    "lp_head_control": -3.3377341730921763
+   },
+   "math30": {
+    "lp_span": -13.42291300141369,
+    "lp_control": -24.72744282654392,
+    "lp_head": -7.451167278923094,
+    "lp_head_control": -3.7462252472856927
+   },
+   "code30": {
+    "lp_span": -11.965605846424296,
+    "lp_control": -22.505986644214207,
+    "lp_head": -5.128923227079213,
+    "lp_head_control": -3.510899076147216
+   },
+   "if30": {
+    "lp_span": -8.442546667953138,
+    "lp_control": -20.452682929159053,
+    "lp_head": -3.2897284952923656,
+    "lp_head_control": -3.204925333765932
+   },
+   "general30": {
+    "lp_span": -9.768548891232058,
+    "lp_control": -20.23759801569642,
+    "lp_head": -3.9084017518907785,
+    "lp_head_control": -3.1423052029851535
+   },
+   "mix30": {
+    "lp_span": -10.648902830820589,
+    "lp_control": -21.00604141877393,
+    "lp_head": -4.737599927932024,
+    "lp_head_control": -3.247534446274003
+   },
+   "theta0.25": {
+    "lp_span": -9.697050806214975,
+    "lp_control": -20.25746875088429,
+    "lp_head": -3.809119231067598,
+    "lp_head_control": -3.1641023440430582
+   },
+   "random": {
+    "lp_span": -9.44910030590836,
+    "lp_control": -20.157720847637464,
+    "lp_head": -3.6299506975337863,
+    "lp_head_control": -3.139230726950518
+   }
+  }
+ },
+ {
+  "problem_index": 136,
+  "sample": 3,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 28,
+  "position": 0.193,
+  "quote": "Wait, but this seems like lower bound, but I think the problem is different: since we have three power sums, not just two.",
+  "models": {
+   "base": {
+    "lp_span": -48.809694098774344,
+    "lp_control": -23.812425547648854,
+    "lp_head": -6.722237329930067,
+    "lp_head_control": -4.354749352951367
+   },
+   "math31": {
+    "lp_span": -50.92547305859625,
+    "lp_control": -25.627833634651108,
+    "lp_head": -6.403363099321723,
+    "lp_head_control": -4.699393395379957
+   },
+   "code31": {
+    "lp_span": -50.1737396591343,
+    "lp_control": -24.254808076658627,
+    "lp_head": -6.805840149521828,
+    "lp_head_control": -4.470108234493746
+   },
+   "math30": {
+    "lp_span": -57.344045490026474,
+    "lp_control": -27.356512096767474,
+    "lp_head": -10.40101589076221,
+    "lp_head_control": -5.176569969855555
+   },
+   "code30": {
+    "lp_span": -59.49895467516035,
+    "lp_control": -27.65125160607644,
+    "lp_head": -10.315280795097351,
+    "lp_head_control": -5.1630495665126
+   },
+   "if30": {
+    "lp_span": -49.241116371471435,
+    "lp_control": -23.955873017483427,
+    "lp_head": -6.59565419331193,
+    "lp_head_control": -4.380408344847747
+   },
+   "general30": {
+    "lp_span": -48.56105578923598,
+    "lp_control": -23.903859580246426,
+    "lp_head": -6.556512447074056,
+    "lp_head_control": -4.353583248908144
+   },
+   "mix30": {
+    "lp_span": -53.51189114456065,
+    "lp_control": -24.839463940885143,
+    "lp_head": -9.194877481088042,
+    "lp_head_control": -4.604582665607595
+   },
+   "theta0.25": {
+    "lp_span": -49.125786332413554,
+    "lp_control": -23.902197303915344,
+    "lp_head": -6.618575653061271,
+    "lp_head_control": -4.380264989176176
+   },
+   "random": {
+    "lp_span": -48.830933053512126,
+    "lp_control": -23.818479761478375,
+    "lp_head": -6.727172132581472,
+    "lp_head_control": -4.357284076189244
+   }
+  }
+ },
+ {
+  "problem_index": 137,
+  "sample": 0,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 31,
+  "position": 0.008,
+  "quote": "The dividend is 4135, and the divisor is 25. Wait, but 4135 divided by 25? Let me check the positions.",
+  "models": {
+   "base": {
+    "lp_span": -30.861403731134487,
+    "lp_control": -17.802650159535187,
+    "lp_head": -6.211084221635247,
+    "lp_head_control": -2.696486862617021
+   },
+   "math31": {
+    "lp_span": -37.460536182668875,
+    "lp_control": -20.089210075435474,
+    "lp_head": -8.737903048328008,
+    "lp_head_control": -3.1837122041501424
+   },
+   "code31": {
+    "lp_span": -32.84547485085204,
+    "lp_control": -18.636693882753242,
+    "lp_head": -6.793367466103518,
+    "lp_head_control": -2.9048315968830867
+   },
+   "math30": {
+    "lp_span": -40.35627633469994,
+    "lp_control": -22.866847934338,
+    "lp_head": -7.170724295225227,
+    "lp_head_control": -3.6020371228254224
+   },
+   "code30": {
+    "lp_span": -35.0408827883366,
+    "lp_control": -19.80902264261298,
+    "lp_head": -5.683944608579623,
+    "lp_head_control": -3.1328213189816596
+   },
+   "if30": {
+    "lp_span": -31.493071712728124,
+    "lp_control": -18.160209186728753,
+    "lp_head": -4.966317355385399,
+    "lp_head_control": -2.7209930823345347
+   },
+   "general30": {
+    "lp_span": -32.375806131749414,
+    "lp_control": -17.913238635650558,
+    "lp_head": -7.0558467652736,
+    "lp_head_control": -2.711548673539801
+   },
+   "mix30": {
+    "lp_span": -31.91902858672256,
+    "lp_control": -18.88530219283981,
+    "lp_head": -5.713429959097994,
+    "lp_head_control": -2.951162647674646
+   },
+   "theta0.25": {
+    "lp_span": -31.3429736441758,
+    "lp_control": -17.91958718498696,
+    "lp_head": -6.748860515290289,
+    "lp_head_control": -2.7436388493781125
+   },
+   "random": {
+    "lp_span": -30.849496279028244,
+    "lp_control": -17.819245599488276,
+    "lp_head": -6.168724039918743,
+    "lp_head_control": -2.700592460270782
+   }
+  }
+ },
+ {
+  "problem_index": 177,
+  "sample": 3,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 33,
+  "position": 0.229,
+  "quote": "Since all circles have radius 1 and are tangent to each other, the distance between any two centers should be twice the radius, i.e., 2 units.",
+  "models": {
+   "base": {
+    "lp_span": -8.3952351907501,
+    "lp_control": -16.41009612018577,
+    "lp_head": -3.1766668260097504,
+    "lp_head_control": -2.296153344689228
+   },
+   "math31": {
+    "lp_span": -7.804787474844488,
+    "lp_control": -18.902974603211188,
+    "lp_head": -2.412271047011018,
+    "lp_head_control": -2.799115033908165
+   },
+   "code31": {
+    "lp_span": -7.445565274945693,
+    "lp_control": -17.328998626705435,
+    "lp_head": -2.8302674535661936,
+    "lp_head_control": -2.486923893883359
+   },
+   "math30": {
+    "lp_span": -7.642900223945617,
+    "lp_control": -20.921350587757114,
+    "lp_head": -3.556632317835465,
+    "lp_head_control": -3.013253556818818
+   },
+   "code30": {
+    "lp_span": -6.383054736739723,
+    "lp_control": -18.313952011093644,
+    "lp_head": -1.9480557800270617,
+    "lp_head_control": -2.5541512694402626
+   },
+   "if30": {
+    "lp_span": -7.701222863557632,
+    "lp_control": -16.62950884495716,
+    "lp_head": -2.4991106223315,
+    "lp_head_control": -2.3300409018476786
+   },
+   "general30": {
+    "lp_span": -8.401653704349883,
+    "lp_control": -16.51731008331277,
+    "lp_head": -3.4111919049173594,
+    "lp_head_control": -2.298291192338438
+   },
+   "mix30": {
+    "lp_span": -6.547466215037275,
+    "lp_control": -17.43378886572107,
+    "lp_head": -2.552271066000685,
+    "lp_head_control": -2.4516831999149145
+   },
+   "theta0.25": {
+    "lp_span": -8.020779567290447,
+    "lp_control": -16.578590074166787,
+    "lp_head": -2.9248167779296637,
+    "lp_head_control": -2.3485588681692753
+   },
+   "random": {
+    "lp_span": -8.469247409535456,
+    "lp_control": -16.412935219468345,
+    "lp_head": -3.2422989699989557,
+    "lp_head_control": -2.299384768208183
+   }
+  }
+ },
+ {
+  "problem_index": 189,
+  "sample": 0,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 29,
+  "position": 0.911,
+  "quote": "Original total rope length was HA + HB + HC + HD = 150 + 130 + 150 + 130 = 580 m.",
+  "models": {
+   "base": {
+    "lp_span": -6.105938082080684,
+    "lp_control": -14.937642253331433,
+    "lp_head": -0.7292066619265825,
+    "lp_head_control": -2.538969350436746
+   },
+   "math31": {
+    "lp_span": -7.707613251652219,
+    "lp_control": -16.724373758699656,
+    "lp_head": -1.3775606786366552,
+    "lp_head_control": -2.775428354643154
+   },
+   "code31": {
+    "lp_span": -6.441684105942841,
+    "lp_control": -15.490938420555104,
+    "lp_head": -0.9732894590124488,
+    "lp_head_control": -2.610633533046348
+   },
+   "math30": {
+    "lp_span": -6.46595034339407,
+    "lp_control": -18.259566709971843,
+    "lp_head": -0.48522753780707717,
+    "lp_head_control": -3.1322773051427792
+   },
+   "code30": {
+    "lp_span": -7.11395455073216,
+    "lp_control": -16.40711207785149,
+    "lp_head": -0.8170429801102728,
+    "lp_head_control": -2.8146032305340487
+   },
+   "if30": {
+    "lp_span": -6.126459777573473,
+    "lp_control": -14.99469202268432,
+    "lp_head": -0.6043451934820041,
+    "lp_head_control": -2.529350796065846
+   },
+   "general30": {
+    "lp_span": -6.299144551550853,
+    "lp_control": -14.98953020367204,
+    "lp_head": -0.6705115009099245,
+    "lp_head_control": -2.540197451110289
+   },
+   "mix30": {
+    "lp_span": -5.930921595325344,
+    "lp_control": -15.563754051308205,
+    "lp_head": -0.4378223023377359,
+    "lp_head_control": -2.6405430728918873
+   },
+   "theta0.25": {
+    "lp_span": -6.392963648962905,
+    "lp_control": -15.023296802999466,
+    "lp_head": -0.813782294280827,
+    "lp_head_control": -2.5435424518652145
+   },
+   "random": {
+    "lp_span": -6.091438221410499,
+    "lp_control": -14.945832804917954,
+    "lp_head": -0.7252184194512665,
+    "lp_head_control": -2.5391656543593126
+   }
+  }
+ },
+ {
+  "problem_index": 190,
+  "sample": 3,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 13,
+  "position": 0.712,
+  "quote": "So in such cases, I think the default is without replacement.",
+  "models": {
+   "base": {
+    "lp_span": -13.75044564215932,
+    "lp_control": -6.70378539166988,
+    "lp_head": -7.8334312776860315,
+    "lp_head_control": -2.6301472541978
+   },
+   "math31": {
+    "lp_span": -14.702689578203717,
+    "lp_control": -7.860984999638094,
+    "lp_head": -9.134569437825121,
+    "lp_head_control": -3.0650077354240786
+   },
+   "code31": {
+    "lp_span": -13.490155557446997,
+    "lp_control": -7.120254121729231,
+    "lp_head": -8.006212913925992,
+    "lp_head_control": -2.741241732754497
+   },
+   "math30": {
+    "lp_span": -15.767432434062357,
+    "lp_control": -8.54737925127214,
+    "lp_head": -9.93464579746069,
+    "lp_head_control": -3.3201965593780915
+   },
+   "code30": {
+    "lp_span": -16.75413361545361,
+    "lp_control": -7.634191664709288,
+    "lp_head": -9.851746912987437,
+    "lp_head_control": -3.0324828061085283
+   },
+   "if30": {
+    "lp_span": -13.994750499579823,
+    "lp_control": -6.7702765075358915,
+    "lp_head": -8.418264500010991,
+    "lp_head_control": -2.6588520363917634
+   },
+   "general30": {
+    "lp_span": -14.1777670802403,
+    "lp_control": -6.755897191639015,
+    "lp_head": -8.122499414006597,
+    "lp_head_control": -2.6581755029993657
+   },
+   "mix30": {
+    "lp_span": -15.983695588787668,
+    "lp_control": -7.219772668143633,
+    "lp_head": -10.079976895169239,
+    "lp_head_control": -2.7997873745521793
+   },
+   "theta0.25": {
+    "lp_span": -13.688125667817076,
+    "lp_control": -6.760511909940833,
+    "lp_head": -7.945746773446444,
+    "lp_head_control": -2.638989082584958
+   },
+   "random": {
+    "lp_span": -13.849159155361122,
+    "lp_control": -6.703869471996659,
+    "lp_head": -7.8773434211470885,
+    "lp_head_control": -2.629970770210857
+   }
+  }
+ },
+ {
+  "problem_index": 210,
+  "sample": 1,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 17,
+  "position": 0.968,
+  "quote": "Half of 12 makes sense if the shaded area is two out of four triangles.",
+  "models": {
+   "base": {
+    "lp_span": -19.924418004928157,
+    "lp_control": -9.336425640422966,
+    "lp_head": -12.225644439822645,
+    "lp_head_control": -2.4034746549655392
+   },
+   "math31": {
+    "lp_span": -21.44149665166333,
+    "lp_control": -10.594455033741616,
+    "lp_head": -12.557182615608326,
+    "lp_head_control": -2.7515671020396986
+   },
+   "code31": {
+    "lp_span": -21.751177825586637,
+    "lp_control": -9.80356034319164,
+    "lp_head": -13.875851729870192,
+    "lp_head_control": -2.493746284505323
+   },
+   "math30": {
+    "lp_span": -24.992514033030602,
+    "lp_control": -11.119172649459578,
+    "lp_head": -17.980622850358486,
+    "lp_head_control": -2.9441534319308267
+   },
+   "code30": {
+    "lp_span": -21.205010708217742,
+    "lp_control": -10.201064910061396,
+    "lp_head": -12.404251226224005,
+    "lp_head_control": -2.709901696399102
+   },
+   "if30": {
+    "lp_span": -18.497266333768493,
+    "lp_control": -9.460553415350295,
+    "lp_head": -11.098126891054562,
+    "lp_head_control": -2.439318561357577
+   },
+   "general30": {
+    "lp_span": -21.189916268049274,
+    "lp_control": -9.43194522294165,
+    "lp_head": -13.284270586431376,
+    "lp_head_control": -2.426571873426874
+   },
+   "mix30": {
+    "lp_span": -21.698282376193674,
+    "lp_control": -9.760790540850286,
+    "lp_head": -13.680687991785817,
+    "lp_head_control": -2.541648507634527
+   },
+   "theta0.25": {
+    "lp_span": -20.13171705705463,
+    "lp_control": -9.363644243955205,
+    "lp_head": -12.272595141956117,
+    "lp_head_control": -2.402113143663737
+   },
+   "random": {
+    "lp_span": -20.031632088139304,
+    "lp_control": -9.331795738129586,
+    "lp_head": -12.29149132258317,
+    "lp_head_control": -2.39565947440904
+   }
+  }
+ },
+ {
+  "problem_index": 217,
+  "sample": 1,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 44,
+  "position": 0.006,
+  "quote": "First, 450 factors into 2 \u00d7 3\u00b2 \u00d7 5\u00b3. The prime factors are 2, 3, and 5 with exponents 1, 2, and 3 respectively.",
+  "models": {
+   "base": {
+    "lp_span": -18.59762317679997,
+    "lp_control": -23.409592756984495,
+    "lp_head": -1.3556852244510083,
+    "lp_head_control": -2.697694506671469
+   },
+   "math31": {
+    "lp_span": -28.381188275438035,
+    "lp_control": -26.137957284245932,
+    "lp_head": -2.4454256072058342,
+    "lp_head_control": -3.1020165734153853
+   },
+   "code31": {
+    "lp_span": -21.10051676646981,
+    "lp_control": -24.386320407076564,
+    "lp_head": -1.8362311801029136,
+    "lp_head_control": -2.8485712489346042
+   },
+   "math30": {
+    "lp_span": -26.88645953241212,
+    "lp_control": -29.424060465601286,
+    "lp_head": -3.6957323180686217,
+    "lp_head_control": -3.558494438965281
+   },
+   "code30": {
+    "lp_span": -21.48639130189258,
+    "lp_control": -25.330186110519936,
+    "lp_head": -3.01098890270805,
+    "lp_head_control": -2.9840912702940114
+   },
+   "if30": {
+    "lp_span": -19.132620474294527,
+    "lp_control": -23.556286854338612,
+    "lp_head": -1.4993954643723555,
+    "lp_head_control": -2.711737506005229
+   },
+   "general30": {
+    "lp_span": -20.06817758885154,
+    "lp_control": -23.46278275023018,
+    "lp_head": -1.5154708679474425,
+    "lp_head_control": -2.7093078815053016
+   },
+   "mix30": {
+    "lp_span": -21.29216279667162,
+    "lp_control": -24.538838177795697,
+    "lp_head": -2.269513344275765,
+    "lp_head_control": -2.8442560545078597
+   },
+   "theta0.25": {
+    "lp_span": -19.932302361223265,
+    "lp_control": -23.53522546083259,
+    "lp_head": -1.464277506340295,
+    "lp_head_control": -2.726205492649824
+   },
+   "random": {
+    "lp_span": -18.765592606607242,
+    "lp_control": -23.39994860416591,
+    "lp_head": -1.3610516729822848,
+    "lp_head_control": -2.6970426948877138
+   }
+  }
+ },
+ {
+  "problem_index": 219,
+  "sample": 2,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 29,
+  "position": 0.039,
+  "quote": "Then (3,-1)--(3,0)--(4,0)--(4,-1)--cycle, gray(0.7))",
+  "models": {
+   "base": {
+    "lp_span": -11.453689779038541,
+    "lp_control": -15.495690301673967,
+    "lp_head": -6.468206062912941,
+    "lp_head_control": -2.660253597051269
+   },
+   "math31": {
+    "lp_span": -11.70341455344169,
+    "lp_control": -17.33546728866677,
+    "lp_head": -6.368591245263815,
+    "lp_head_control": -3.0004033453751617
+   },
+   "code31": {
+    "lp_span": -13.501946043368662,
+    "lp_control": -16.37292849041587,
+    "lp_head": -7.756714018061757,
+    "lp_head_control": -2.8340195347461123
+   },
+   "math30": {
+    "lp_span": -15.766284012730466,
+    "lp_control": -18.864165081458633,
+    "lp_head": -10.117718307301402,
+    "lp_head_control": -3.187519739885538
+   },
+   "code30": {
+    "lp_span": -11.98377389308007,
+    "lp_control": -17.239270906514356,
+    "lp_head": -7.920980881899595,
+    "lp_head_control": -2.936355680397828
+   },
+   "if30": {
+    "lp_span": -11.836809239393915,
+    "lp_control": -15.720555165804981,
+    "lp_head": -6.592327583581209,
+    "lp_head_control": -2.713791727786738
+   },
+   "general30": {
+    "lp_span": -11.334394432138652,
+    "lp_control": -15.564437701665666,
+    "lp_head": -6.361811907961965,
+    "lp_head_control": -2.6831599946960343
+   },
+   "mix30": {
+    "lp_span": -12.159206109572551,
+    "lp_control": -16.395063797318873,
+    "lp_head": -7.5603794362396,
+    "lp_head_control": -2.8435971471409722
+   },
+   "theta0.25": {
+    "lp_span": -11.315735427866457,
+    "lp_control": -15.627681069449682,
+    "lp_head": -6.417054139077663,
+    "lp_head_control": -2.692964122201811
+   },
+   "random": {
+    "lp_span": -11.547348262567539,
+    "lp_control": -15.490945141437551,
+    "lp_head": -6.514894530177116,
+    "lp_head_control": -2.6596267380284555
+   }
+  }
+ },
+ {
+  "problem_index": 222,
+  "sample": 0,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 32,
+  "position": 0.236,
+  "quote": "So DE is a translation of AB. However, DE must start from point D(4,0). So point E would be D plus the vector AB.",
+  "models": {
+   "base": {
+    "lp_span": -20.952401972041116,
+    "lp_control": -14.094330452576322,
+    "lp_head": -5.898825466632843,
+    "lp_head_control": -2.140280222725705
+   },
+   "math31": {
+    "lp_span": -20.11667363565357,
+    "lp_control": -16.03507863966799,
+    "lp_head": -5.110371619462967,
+    "lp_head_control": -2.4099203187083913
+   },
+   "code31": {
+    "lp_span": -23.437250123970443,
+    "lp_control": -14.765179666352852,
+    "lp_head": -6.247282445430756,
+    "lp_head_control": -2.248176894779026
+   },
+   "math30": {
+    "lp_span": -29.428079275836353,
+    "lp_control": -19.192558241669175,
+    "lp_head": -7.344109952449799,
+    "lp_head_control": -2.794830915524726
+   },
+   "code30": {
+    "lp_span": -25.02477682036988,
+    "lp_control": -15.53186268005833,
+    "lp_head": -6.778807297348976,
+    "lp_head_control": -2.29007503416542
+   },
+   "if30": {
+    "lp_span": -20.21113952025189,
+    "lp_control": -14.266260610988029,
+    "lp_head": -6.102204650640488,
+    "lp_head_control": -2.1868127474247014
+   },
+   "general30": {
+    "lp_span": -20.71375478283153,
+    "lp_control": -14.252078771615562,
+    "lp_head": -5.949527412652969,
+    "lp_head_control": -2.1643932165917796
+   },
+   "mix30": {
+    "lp_span": -25.622477770899422,
+    "lp_control": -15.445778907775384,
+    "lp_head": -6.764807745814323,
+    "lp_head_control": -2.2799588821669747
+   },
+   "theta0.25": {
+    "lp_span": -20.27891901010298,
+    "lp_control": -14.222548403488691,
+    "lp_head": -5.5476604998111725,
+    "lp_head_control": -2.160016291886495
+   },
+   "random": {
+    "lp_span": -20.813057830164325,
+    "lp_control": -14.098897470544397,
+    "lp_head": -5.845790505409241,
+    "lp_head_control": -2.1422832168280728
+   }
+  }
+ },
+ {
+  "problem_index": 232,
+  "sample": 0,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 56,
+  "position": 0.183,
+  "quote": "S' = sum_{k=1}^{1997} 1/(1 + \u03c9^k) = sum_{k=0}^{1996} 1/(1 + \u03c9^k) + 1/(1 + \u03c9^1997)",
+  "models": {
+   "base": {
+    "lp_span": -11.398075550387148,
+    "lp_control": -18.912795144088886,
+    "lp_head": -4.757767092887661,
+    "lp_head_control": -1.795628848697961
+   },
+   "math31": {
+    "lp_span": -14.229767100114259,
+    "lp_control": -22.369065407289018,
+    "lp_head": -6.168335074791685,
+    "lp_head_control": -2.12135228592495
+   },
+   "code31": {
+    "lp_span": -13.000630556314718,
+    "lp_control": -20.096622746131615,
+    "lp_head": -5.575767129674205,
+    "lp_head_control": -1.9018365981484384
+   },
+   "math30": {
+    "lp_span": -14.656053546874318,
+    "lp_control": -27.48712954025468,
+    "lp_head": -6.575653132778825,
+    "lp_head_control": -2.6631843718739403
+   },
+   "code30": {
+    "lp_span": -11.485510107740993,
+    "lp_control": -21.405951692528614,
+    "lp_head": -4.5508530100487405,
+    "lp_head_control": -2.0158839785002782
+   },
+   "if30": {
+    "lp_span": -11.682141589277308,
+    "lp_control": -19.163848251702003,
+    "lp_head": -4.838973314064788,
+    "lp_head_control": -1.8305216136563103
+   },
+   "general30": {
+    "lp_span": -11.879374883981654,
+    "lp_control": -19.05917673164855,
+    "lp_head": -5.340037099536858,
+    "lp_head_control": -1.8164662537586265
+   },
+   "mix30": {
+    "lp_span": -12.62542001226393,
+    "lp_control": -20.696883288768003,
+    "lp_head": -6.118709161950392,
+    "lp_head_control": -2.01517135095688
+   },
+   "theta0.25": {
+    "lp_span": -11.311530788458185,
+    "lp_control": -19.019484840819423,
+    "lp_head": -4.787869478750508,
+    "lp_head_control": -1.807695174402761
+   },
+   "random": {
+    "lp_span": -11.300261174124898,
+    "lp_control": -18.91279494437331,
+    "lp_head": -4.7280576131888665,
+    "lp_head_control": -1.7944059428351467
+   }
+  }
+ },
+ {
+  "problem_index": 245,
+  "sample": 3,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 30,
+  "position": 0.94,
+  "quote": "= 1 + 5 + 7 + 4 + 12 - 8 - 1 - 12 - 5 - 5",
+  "models": {
+   "base": {
+    "lp_span": -3.167389493828523,
+    "lp_control": -9.04199181485761,
+    "lp_head": -0.9547818550199736,
+    "lp_head_control": -1.7180872636436106
+   },
+   "math31": {
+    "lp_span": -2.3363538609992247,
+    "lp_control": -10.968305450571206,
+    "lp_head": -0.9690969627408776,
+    "lp_head_control": -2.096911917155594
+   },
+   "code31": {
+    "lp_span": -4.402732089409255,
+    "lp_control": -9.300475509752069,
+    "lp_head": -1.2822018693259452,
+    "lp_head_control": -1.7899941222925555
+   },
+   "math30": {
+    "lp_span": -4.013025229709456,
+    "lp_control": -11.236171256593371,
+    "lp_head": -2.1416625836864114,
+    "lp_head_control": -2.1588734424722498
+   },
+   "code30": {
+    "lp_span": -3.958709812388406,
+    "lp_control": -10.669367335253991,
+    "lp_head": -1.1790014374273596,
+    "lp_head_control": -2.084139020889197
+   },
+   "if30": {
+    "lp_span": -3.352602202372509,
+    "lp_control": -9.125145478467457,
+    "lp_head": -1.1584026265627472,
+    "lp_head_control": -1.7287367257518054
+   },
+   "general30": {
+    "lp_span": -3.174444778051111,
+    "lp_control": -9.035505849239417,
+    "lp_head": -0.9521656456927303,
+    "lp_head_control": -1.7073051020194543
+   },
+   "mix30": {
+    "lp_span": -3.215906730358256,
+    "lp_control": -9.767863193221492,
+    "lp_head": -0.962789925353718,
+    "lp_head_control": -1.8572599332621758
+   },
+   "theta0.25": {
+    "lp_span": -2.789279479358811,
+    "lp_control": -9.082471128395918,
+    "lp_head": -0.9606306713394588,
+    "lp_head_control": -1.7335987290473713
+   },
+   "random": {
+    "lp_span": -3.055335788274533,
+    "lp_control": -9.043071062431336,
+    "lp_head": -0.9622240699827671,
+    "lp_head_control": -1.7205033876364177
+   }
+  }
+ },
+ {
+  "problem_index": 253,
+  "sample": 1,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 20,
+  "position": 0.01,
+  "quote": "The problem is asking what fraction of 2 feet 3 inches is equal to 3 inches.",
+  "models": {
+   "base": {
+    "lp_span": -5.18785969442979,
+    "lp_control": -10.093168164748276,
+    "lp_head": -0.4094289862550795,
+    "lp_head_control": -2.67847749745044
+   },
+   "math31": {
+    "lp_span": -5.968983947153902,
+    "lp_control": -11.777320696933675,
+    "lp_head": -0.932954020681791,
+    "lp_head_control": -3.092173983068933
+   },
+   "code31": {
+    "lp_span": -6.250783081079135,
+    "lp_control": -10.32354525606519,
+    "lp_head": -0.6380907397251576,
+    "lp_head_control": -2.705116904844981
+   },
+   "math30": {
+    "lp_span": -4.806731308082817,
+    "lp_control": -13.458768802010745,
+    "lp_head": -0.6952134398452472,
+    "lp_head_control": -3.567698603027675
+   },
+   "code30": {
+    "lp_span": -4.97480668919161,
+    "lp_control": -10.945204071548506,
+    "lp_head": -0.38695460464805365,
+    "lp_head_control": -2.875023124038926
+   },
+   "if30": {
+    "lp_span": -5.7283299291011645,
+    "lp_control": -10.666353705249493,
+    "lp_head": -0.14427022740710527,
+    "lp_head_control": -2.7940509870091774
+   },
+   "general30": {
+    "lp_span": -5.479088061329094,
+    "lp_control": -10.331199611870325,
+    "lp_head": -0.5111036035232246,
+    "lp_head_control": -2.7645701962836755
+   },
+   "mix30": {
+    "lp_span": -6.592838937373017,
+    "lp_control": -10.708629087401933,
+    "lp_head": -1.1496792080724845,
+    "lp_head_control": -2.818770654623513
+   },
+   "theta0.25": {
+    "lp_span": -5.338348995341221,
+    "lp_control": -10.082769459109477,
+    "lp_head": -0.5434853131882846,
+    "lp_head_control": -2.672432805015851
+   },
+   "random": {
+    "lp_span": -5.217748345559812,
+    "lp_control": -10.079409215823034,
+    "lp_head": -0.40896683372557163,
+    "lp_head_control": -2.675321763802858
+   }
+  }
+ },
+ {
+  "problem_index": 264,
+  "sample": 0,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 16,
+  "position": 0.103,
+  "quote": "If BE is 5, then BH should be equal to BE, right?",
+  "models": {
+   "base": {
+    "lp_span": -8.836677645711461,
+    "lp_control": -9.373767148368133,
+    "lp_head": -2.7338136937323725,
+    "lp_head_control": -3.011881339820611
+   },
+   "math31": {
+    "lp_span": -16.772049402468838,
+    "lp_control": -10.748284793586063,
+    "lp_head": -5.597969203605317,
+    "lp_head_control": -3.4985472411942466
+   },
+   "code31": {
+    "lp_span": -10.504389829438878,
+    "lp_control": -9.671402810701693,
+    "lp_head": -2.8796534528955817,
+    "lp_head_control": -3.138152943048917
+   },
+   "math30": {
+    "lp_span": -12.673555311979726,
+    "lp_control": -11.674966147772212,
+    "lp_head": -3.9814555048942566,
+    "lp_head_control": -3.675409864876856
+   },
+   "code30": {
+    "lp_span": -10.92607681878144,
+    "lp_control": -9.979249844492223,
+    "lp_head": -2.4650622452172684,
+    "lp_head_control": -3.277446122707042
+   },
+   "if30": {
+    "lp_span": -8.056030633597402,
+    "lp_control": -9.514589325575871,
+    "lp_head": -2.4584111842268612,
+    "lp_head_control": -3.0624093039837317
+   },
+   "general30": {
+    "lp_span": -8.33986507281952,
+    "lp_control": -9.434042953718745,
+    "lp_head": -2.5159166447992902,
+    "lp_head_control": -3.051898265800992
+   },
+   "mix30": {
+    "lp_span": -8.868939413383487,
+    "lp_control": -9.78324362027859,
+    "lp_head": -3.025362281492562,
+    "lp_head_control": -3.1169020812066446
+   },
+   "theta0.25": {
+    "lp_span": -9.56156110225129,
+    "lp_control": -9.465779176039941,
+    "lp_head": -2.8938569383171853,
+    "lp_head_control": -3.047402423472304
+   },
+   "random": {
+    "lp_span": -8.789749014438712,
+    "lp_control": -9.378722729430374,
+    "lp_head": -2.7468571274366695,
+    "lp_head_control": -3.012037999347085
+   }
+  }
+ },
+ {
+  "problem_index": 274,
+  "sample": 2,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 23,
+  "position": 0.262,
+  "quote": "Therefore, each corner, when rounded with a radius of 1 unit, becomes an arc of 140 degrees.",
+  "models": {
+   "base": {
+    "lp_span": -8.429195926350076,
+    "lp_control": -14.813785158670507,
+    "lp_head": -3.037217728793621,
+    "lp_head_control": -3.279518501424245
+   },
+   "math31": {
+    "lp_span": -10.23518148108269,
+    "lp_control": -16.500957024803064,
+    "lp_head": -2.9669080674648285,
+    "lp_head_control": -3.6448691902968857
+   },
+   "code31": {
+    "lp_span": -9.33348095495603,
+    "lp_control": -15.507523920594904,
+    "lp_head": -3.8766661137342453,
+    "lp_head_control": -3.4460183676980525
+   },
+   "math30": {
+    "lp_span": -9.646165525045944,
+    "lp_control": -18.037252678646766,
+    "lp_head": -5.23430922627449,
+    "lp_head_control": -4.01328953921111
+   },
+   "code30": {
+    "lp_span": -8.632090806524502,
+    "lp_control": -15.969849938929837,
+    "lp_head": -2.850726630538702,
+    "lp_head_control": -3.5907434980091057
+   },
+   "if30": {
+    "lp_span": -8.577194047597004,
+    "lp_control": -14.93923652126272,
+    "lp_head": -3.2148596607148647,
+    "lp_head_control": -3.2819753477095945
+   },
+   "general30": {
+    "lp_span": -8.125304311033688,
+    "lp_control": -14.853509390583058,
+    "lp_head": -2.903459720313549,
+    "lp_head_control": -3.2876821632908104
+   },
+   "mix30": {
+    "lp_span": -8.2845030320168,
+    "lp_control": -15.534430478100475,
+    "lp_head": -2.7277169935405254,
+    "lp_head_control": -3.447068520416287
+   },
+   "theta0.25": {
+    "lp_span": -8.62714114531991,
+    "lp_control": -14.892096415358829,
+    "lp_head": -3.0245879366993904,
+    "lp_head_control": -3.2958360260926565
+   },
+   "random": {
+    "lp_span": -8.413980105542578,
+    "lp_control": -14.812357648488833,
+    "lp_head": -3.0075929276645184,
+    "lp_head_control": -3.2804613544916355
+   }
+  }
+ },
+ {
+  "problem_index": 279,
+  "sample": 0,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 39,
+  "position": 0.458,
+  "quote": "So, the largest area is Y with 20\u03c0, and the smallest is X with 16\u03c0. Therefore, the difference is 20\u03c0 - 16\u03c0 = 4\u03c0.",
+  "models": {
+   "base": {
+    "lp_span": -8.398456899507437,
+    "lp_control": -19.782202768126954,
+    "lp_head": -3.1067704651504755,
+    "lp_head_control": -2.58967999124754
+   },
+   "math31": {
+    "lp_span": -8.620154476491734,
+    "lp_control": -21.781277328177968,
+    "lp_head": -4.13364421389997,
+    "lp_head_control": -2.875201285770745
+   },
+   "code31": {
+    "lp_span": -8.741829139951733,
+    "lp_control": -20.54838578589741,
+    "lp_head": -3.5851475037634373,
+    "lp_head_control": -2.708718569118864
+   },
+   "math30": {
+    "lp_span": -14.899651760235429,
+    "lp_control": -24.187300251504492,
+    "lp_head": -8.333234246820211,
+    "lp_head_control": -3.1960020924391572
+   },
+   "code30": {
+    "lp_span": -10.174681468342897,
+    "lp_control": -21.475876202563086,
+    "lp_head": -4.131302100606263,
+    "lp_head_control": -2.8829620375319793
+   },
+   "if30": {
+    "lp_span": -7.782377460156567,
+    "lp_control": -19.95288045116824,
+    "lp_head": -2.879029832780361,
+    "lp_head_control": -2.6019685517934703
+   },
+   "general30": {
+    "lp_span": -8.577612784603843,
+    "lp_control": -19.85790543164505,
+    "lp_head": -3.018476739525795,
+    "lp_head_control": -2.591815617926695
+   },
+   "mix30": {
+    "lp_span": -10.579226675850805,
+    "lp_control": -20.351525650466282,
+    "lp_head": -5.097738100215793,
+    "lp_head_control": -2.653555329459996
+   },
+   "theta0.25": {
+    "lp_span": -8.270180811407045,
+    "lp_control": -19.832960256486622,
+    "lp_head": -3.301928846165538,
+    "lp_head_control": -2.6019366562426147
+   },
+   "random": {
+    "lp_span": -8.439507579474594,
+    "lp_control": -19.780347750884903,
+    "lp_head": -3.114976391196251,
+    "lp_head_control": -2.5924629022181036
+   }
+  }
+ },
+ {
+  "problem_index": 306,
+  "sample": 0,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 20,
+  "position": 0.522,
+  "quote": "So, if one root is a fixed point, the other must also be the same fixed point.",
+  "models": {
+   "base": {
+    "lp_span": -3.4302469686954282,
+    "lp_control": -6.1664887807644115,
+    "lp_head": -1.0685919582319912,
+    "lp_head_control": -1.3785721672513318
+   },
+   "math31": {
+    "lp_span": -3.5877709945489187,
+    "lp_control": -7.553424605966866,
+    "lp_head": -1.2111223228275776,
+    "lp_head_control": -1.728047973568464
+   },
+   "code31": {
+    "lp_span": -2.896659917838406,
+    "lp_control": -6.637780488330463,
+    "lp_head": -1.3542335525271483,
+    "lp_head_control": -1.543541347663704
+   },
+   "math30": {
+    "lp_span": -3.152201924327528,
+    "lp_control": -8.75024279575373,
+    "lp_head": -1.7015742724761367,
+    "lp_head_control": -1.9231305792443163
+   },
+   "code30": {
+    "lp_span": -3.6976316559303086,
+    "lp_control": -7.169436567694938,
+    "lp_head": -1.5907922927290201,
+    "lp_head_control": -1.612995331795537
+   },
+   "if30": {
+    "lp_span": -3.2755661334085744,
+    "lp_control": -6.248348077269257,
+    "lp_head": -1.0869048935419414,
+    "lp_head_control": -1.4047476074301812
+   },
+   "general30": {
+    "lp_span": -3.174638986500213,
+    "lp_control": -6.214149859900572,
+    "lp_head": -0.9856005235924385,
+    "lp_head_control": -1.3914205800041237
+   },
+   "mix30": {
+    "lp_span": -3.456178367108805,
+    "lp_control": -6.680549962143996,
+    "lp_head": -0.8978063897811808,
+    "lp_head_control": -1.4866870614618528
+   },
+   "theta0.25": {
+    "lp_span": -3.5744459200213896,
+    "lp_control": -6.297909143106372,
+    "lp_head": -1.1559052863158286,
+    "lp_head_control": -1.4183096998149995
+   },
+   "random": {
+    "lp_span": -3.4428338955476647,
+    "lp_control": -6.177295998505142,
+    "lp_head": -1.0593976908130571,
+    "lp_head_control": -1.3814577832314534
+   }
+  }
+ },
+ {
+  "problem_index": 324,
+  "sample": 2,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 40,
+  "position": 0.564,
+  "quote": "For example, the smaller circle plus a sector of the larger circle. Then, the total area would be \u03c0 + (1/2)*2^2*\u03b8 = \u03c0 + 2\u03b8.",
+  "models": {
+   "base": {
+    "lp_span": -6.609633207175648,
+    "lp_control": -19.250668210281656,
+    "lp_head": -1.4639862552285194,
+    "lp_head_control": -2.4865172536455065
+   },
+   "math31": {
+    "lp_span": -8.42306501159328,
+    "lp_control": -21.751115173658036,
+    "lp_head": -2.0565402656502556,
+    "lp_head_control": -2.900715161108674
+   },
+   "code31": {
+    "lp_span": -7.601470340741798,
+    "lp_control": -20.086201636018668,
+    "lp_head": -1.4947241991758347,
+    "lp_head_control": -2.65359575746028
+   },
+   "math30": {
+    "lp_span": -11.327156956336694,
+    "lp_control": -23.857512972615805,
+    "lp_head": -2.5284311771392822,
+    "lp_head_control": -3.224786924555374
+   },
+   "code30": {
+    "lp_span": -9.275973431533203,
+    "lp_control": -21.207097220490397,
+    "lp_head": -1.9541537016630173,
+    "lp_head_control": -2.8431062876645594
+   },
+   "if30": {
+    "lp_span": -6.3665889906696975,
+    "lp_control": -19.44515330641414,
+    "lp_head": -1.3847454711794853,
+    "lp_head_control": -2.5150099383751514
+   },
+   "general30": {
+    "lp_span": -6.308378557325341,
+    "lp_control": -19.28585330083042,
+    "lp_head": -1.4025387540459633,
+    "lp_head_control": -2.51661460729767
+   },
+   "mix30": {
+    "lp_span": -6.641621809947537,
+    "lp_control": -20.28145380108792,
+    "lp_head": -1.6651481911540031,
+    "lp_head_control": -2.6575267493340653
+   },
+   "theta0.25": {
+    "lp_span": -6.704723831353476,
+    "lp_control": -19.397297572827885,
+    "lp_head": -1.5339820608496666,
+    "lp_head_control": -2.5181902097934654
+   },
+   "random": {
+    "lp_span": -6.646779017028166,
+    "lp_control": -19.251709762657047,
+    "lp_head": -1.4464122205972672,
+    "lp_head_control": -2.4850224188056744
+   }
+  }
+ },
+ {
+  "problem_index": 326,
+  "sample": 3,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 18,
+  "position": 0.055,
+  "quote": "Therefore, the product sin(A + B) * sin(A - B) would be:",
+  "models": {
+   "base": {
+    "lp_span": -2.4736936622066423,
+    "lp_control": -5.6832830698988985,
+    "lp_head": -1.9664134826743975,
+    "lp_head_control": -1.6025079338844808
+   },
+   "math31": {
+    "lp_span": -5.892268896888709,
+    "lp_control": -6.741843077505473,
+    "lp_head": -4.549032814567909,
+    "lp_head_control": -1.9486513574718265
+   },
+   "code31": {
+    "lp_span": -4.099407460918883,
+    "lp_control": -5.84283279942043,
+    "lp_head": -3.434707179229008,
+    "lp_head_control": -1.653798199180601
+   },
+   "math30": {
+    "lp_span": -4.027189277054276,
+    "lp_control": -7.3458404436038105,
+    "lp_head": -3.085752636194229,
+    "lp_head_control": -2.118091777325171
+   },
+   "code30": {
+    "lp_span": -3.334583958319854,
+    "lp_control": -6.034595877411776,
+    "lp_head": -2.838019683927996,
+    "lp_head_control": -1.7011785260391479
+   },
+   "if30": {
+    "lp_span": -2.3402197576942854,
+    "lp_control": -5.78635934568505,
+    "lp_head": -1.88363596049021,
+    "lp_head_control": -1.6213068132080661
+   },
+   "general30": {
+    "lp_span": -2.436120291997213,
+    "lp_control": -5.698637179492362,
+    "lp_head": -1.9721310137829278,
+    "lp_head_control": -1.6214385755709373
+   },
+   "mix30": {
+    "lp_span": -3.3085084287449718,
+    "lp_control": -5.994194416097016,
+    "lp_head": -2.7068401574506424,
+    "lp_head_control": -1.6919262494242866
+   },
+   "theta0.25": {
+    "lp_span": -2.722176067647524,
+    "lp_control": -5.708990112864703,
+    "lp_head": -2.152857452252647,
+    "lp_head_control": -1.627640113800444
+   },
+   "random": {
+    "lp_span": -2.481833128404105,
+    "lp_control": -5.681836822919285,
+    "lp_head": -1.9837702657969203,
+    "lp_head_control": -1.6034212904689775
+   }
+  }
+ },
+ {
+  "problem_index": 340,
+  "sample": 0,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 41,
+  "position": 0.138,
+  "quote": "Right side: (0.87462 - z)^2 = ( -z + 0.87462 )^2 = z\u00b2 - 1.74924 z + 0.761515",
+  "models": {
+   "base": {
+    "lp_span": -18.090489789028652,
+    "lp_control": -28.566409065916233,
+    "lp_head": -0.15810744394548237,
+    "lp_head_control": -3.854589161249605
+   },
+   "math31": {
+    "lp_span": -17.740553081326652,
+    "lp_control": -30.220148663537692,
+    "lp_head": -0.20905363536439836,
+    "lp_head_control": -4.077964763468626
+   },
+   "code31": {
+    "lp_span": -17.716561171982903,
+    "lp_control": -29.298510718089673,
+    "lp_head": -0.08707248736754991,
+    "lp_head_control": -4.003320258414897
+   },
+   "math30": {
+    "lp_span": -20.26158796591335,
+    "lp_control": -32.73947832758611,
+    "lp_head": -0.18026230184477754,
+    "lp_head_control": -4.42198336852729
+   },
+   "code30": {
+    "lp_span": -18.405747361277463,
+    "lp_control": -32.21763642358856,
+    "lp_head": -0.6225081614102237,
+    "lp_head_control": -4.264893072650884
+   },
+   "if30": {
+    "lp_span": -18.29346144560259,
+    "lp_control": -28.806164966350043,
+    "lp_head": -0.0924725185323041,
+    "lp_head_control": -3.9212021888385062
+   },
+   "general30": {
+    "lp_span": -17.98931669263402,
+    "lp_control": -28.718233017345046,
+    "lp_head": -0.11506635189289227,
+    "lp_head_control": -3.882600940585253
+   },
+   "mix30": {
+    "lp_span": -18.80036680478952,
+    "lp_control": -30.073275828018378,
+    "lp_head": -0.2763746799901128,
+    "lp_head_control": -4.083218164028803
+   },
+   "theta0.25": {
+    "lp_span": -18.01132831524592,
+    "lp_control": -28.662845140704302,
+    "lp_head": -0.16496512715821154,
+    "lp_head_control": -3.876315632350452
+   },
+   "random": {
+    "lp_span": -17.927121305227047,
+    "lp_control": -28.57104603082902,
+    "lp_head": -0.1559645759407431,
+    "lp_head_control": -3.8572521208932447
+   }
+  }
+ },
+ {
+  "problem_index": 352,
+  "sample": 1,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 26,
+  "position": 0.135,
+  "quote": "But from the previous calculation, angle BDC was arccos(-117/125) \u2248 167.64 degrees.",
+  "models": {
+   "base": {
+    "lp_span": -16.56199050610303,
+    "lp_control": -9.236154967409675,
+    "lp_head": -4.853625077754259,
+    "lp_head_control": -1.7492160207651615
+   },
+   "math31": {
+    "lp_span": -22.841148098901613,
+    "lp_control": -10.6973098242977,
+    "lp_head": -4.214552715420723,
+    "lp_head_control": -2.0098032257921297
+   },
+   "code31": {
+    "lp_span": -17.76449224210228,
+    "lp_control": -9.411333588320558,
+    "lp_head": -4.9889085702598095,
+    "lp_head_control": -1.769989542166295
+   },
+   "math30": {
+    "lp_span": -24.25649520053412,
+    "lp_control": -12.680148571423778,
+    "lp_head": -6.090785380452871,
+    "lp_head_control": -2.356264569376508
+   },
+   "code30": {
+    "lp_span": -17.56026900699362,
+    "lp_control": -9.940707848525635,
+    "lp_head": -4.597674181684852,
+    "lp_head_control": -1.8662017166214355
+   },
+   "if30": {
+    "lp_span": -17.10822183371056,
+    "lp_control": -9.296372770051384,
+    "lp_head": -4.904546007514,
+    "lp_head_control": -1.7494322831652243
+   },
+   "general30": {
+    "lp_span": -17.189201138477074,
+    "lp_control": -9.283808782415871,
+    "lp_head": -4.876596754416823,
+    "lp_head_control": -1.756244023957115
+   },
+   "mix30": {
+    "lp_span": -17.332822799740825,
+    "lp_control": -9.901528670205735,
+    "lp_head": -5.056874466128647,
+    "lp_head_control": -1.8348479461116949
+   },
+   "theta0.25": {
+    "lp_span": -16.815953527460806,
+    "lp_control": -9.26361504724875,
+    "lp_head": -4.599040403962135,
+    "lp_head_control": -1.7559426294297737
+   },
+   "random": {
+    "lp_span": -16.476671299809823,
+    "lp_control": -9.234001042449528,
+    "lp_head": -4.862490925006568,
+    "lp_head_control": -1.7486076778752613
+   }
+  }
+ },
+ {
+  "problem_index": 369,
+  "sample": 2,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 30,
+  "position": 0.604,
+  "quote": "The left side is vertical. The bottom base is 27 cm. The top base is 15 cm. The vertical side is 9 cm.",
+  "models": {
+   "base": {
+    "lp_span": -7.957094460231019,
+    "lp_control": -15.800123932435817,
+    "lp_head": -0.6120357403415255,
+    "lp_head_control": -2.6812514243175976
+   },
+   "math31": {
+    "lp_span": -8.203299252316356,
+    "lp_control": -18.006961091914707,
+    "lp_head": -0.5313355703256093,
+    "lp_head_control": -3.1238951834870385
+   },
+   "code31": {
+    "lp_span": -7.612713887618156,
+    "lp_control": -16.456825981955916,
+    "lp_head": -0.7239933899545576,
+    "lp_head_control": -2.774109729450138
+   },
+   "math30": {
+    "lp_span": -7.066544378816616,
+    "lp_control": -19.255351186087065,
+    "lp_head": -0.39626080248854123,
+    "lp_head_control": -3.2839160045185416
+   },
+   "code30": {
+    "lp_span": -8.888669531821506,
+    "lp_control": -16.970933973740756,
+    "lp_head": -0.6950115300132893,
+    "lp_head_control": -2.880545401053678
+   },
+   "if30": {
+    "lp_span": -7.663059405516833,
+    "lp_control": -15.832165150120272,
+    "lp_head": -0.4978739447542466,
+    "lp_head_control": -2.679322480861738
+   },
+   "general30": {
+    "lp_span": -7.6951025862654205,
+    "lp_control": -15.852135507460188,
+    "lp_head": -0.5616493080160581,
+    "lp_head_control": -2.6887920243067494
+   },
+   "mix30": {
+    "lp_span": -7.637576037959661,
+    "lp_control": -16.386464790808823,
+    "lp_head": -0.4000554358935915,
+    "lp_head_control": -2.7898766564296964
+   },
+   "theta0.25": {
+    "lp_span": -7.859496415738249,
+    "lp_control": -15.904536368405097,
+    "lp_head": -0.5740209602518007,
+    "lp_head_control": -2.707592018324649
+   },
+   "random": {
+    "lp_span": -7.905005004577106,
+    "lp_control": -15.798436071919713,
+    "lp_head": -0.6212622633611318,
+    "lp_head_control": -2.6817073308351973
+   }
+  }
+ },
+ {
+  "problem_index": 377,
+  "sample": 1,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 50,
+  "position": 0.524,
+  "quote": "But when previous term is 0 mod2, this becomes 24^0 mod2 =1 mod2 (since 24^0=1, mod2 is 1), then 24^ (that) mod2=0 again.",
+  "models": {
+   "base": {
+    "lp_span": -51.69286458037095,
+    "lp_control": -47.72205282062656,
+    "lp_head": -6.56715353531763,
+    "lp_head_control": -4.328693336045689
+   },
+   "math31": {
+    "lp_span": -54.006873916019686,
+    "lp_control": -51.621104289277575,
+    "lp_head": -6.2195548438467085,
+    "lp_head_control": -4.753309203844401
+   },
+   "code31": {
+    "lp_span": -50.66921628359705,
+    "lp_control": -49.45220676572513,
+    "lp_head": -7.235192421358079,
+    "lp_head_control": -4.494916462169058
+   },
+   "math30": {
+    "lp_span": -64.8264623505238,
+    "lp_control": -53.996565893227526,
+    "lp_head": -5.413432231638581,
+    "lp_head_control": -4.970135949977848
+   },
+   "code30": {
+    "lp_span": -57.080688792979345,
+    "lp_control": -52.26065551387408,
+    "lp_head": -7.965454294346273,
+    "lp_head_control": -4.860309334158228
+   },
+   "if30": {
+    "lp_span": -52.116403353225905,
+    "lp_control": -47.98644548441764,
+    "lp_head": -6.6241789711639285,
+    "lp_head_control": -4.3228612352960045
+   },
+   "general30": {
+    "lp_span": -52.2440554521454,
+    "lp_control": -47.876992434804414,
+    "lp_head": -6.424450416583568,
+    "lp_head_control": -4.330616952549608
+   },
+   "mix30": {
+    "lp_span": -56.55157889565453,
+    "lp_control": -49.03080465893654,
+    "lp_head": -7.221707620890811,
+    "lp_head_control": -4.494075156506733
+   },
+   "theta0.25": {
+    "lp_span": -51.83679685051902,
+    "lp_control": -47.934045943633684,
+    "lp_head": -6.416126425843686,
+    "lp_head_control": -4.365684759243449
+   },
+   "random": {
+    "lp_span": -51.74517769028898,
+    "lp_control": -47.7238984318715,
+    "lp_head": -6.598281615413725,
+    "lp_head_control": -4.3272362051341045
+   }
+  }
+ },
+ {
+  "problem_index": 381,
+  "sample": 2,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 30,
+  "position": 0.109,
+  "quote": "For x >=1: y must be in (x -1, 3) since x +1 >=2 and upper limit remains 3.",
+  "models": {
+   "base": {
+    "lp_span": -27.946656171494396,
+    "lp_control": -48.18275511668442,
+    "lp_head": -0.47888109312043525,
+    "lp_head_control": -8.109091372474941
+   },
+   "math31": {
+    "lp_span": -31.991256794077344,
+    "lp_control": -49.95523381806561,
+    "lp_head": -0.9061151908244938,
+    "lp_head_control": -8.558388113303227
+   },
+   "code31": {
+    "lp_span": -31.289711294753943,
+    "lp_control": -48.667309148234196,
+    "lp_head": -0.43018877430586144,
+    "lp_head_control": -8.210882202630891
+   },
+   "math30": {
+    "lp_span": -33.68959627542063,
+    "lp_control": -51.12655532321063,
+    "lp_head": -0.08189644943922758,
+    "lp_head_control": -8.574851564557758
+   },
+   "code30": {
+    "lp_span": -29.368678223603638,
+    "lp_control": -49.6233716984326,
+    "lp_head": -0.3561694387171883,
+    "lp_head_control": -8.361208421985065
+   },
+   "if30": {
+    "lp_span": -29.19078810888459,
+    "lp_control": -48.50490789423435,
+    "lp_head": -0.4938584816409275,
+    "lp_head_control": -8.127210624460423
+   },
+   "general30": {
+    "lp_span": -29.239617400889983,
+    "lp_control": -48.3066695767222,
+    "lp_head": -0.4307958670251537,
+    "lp_head_control": -8.138812337732379
+   },
+   "mix30": {
+    "lp_span": -33.11472198777483,
+    "lp_control": -48.91089638520091,
+    "lp_head": -0.2899477235041559,
+    "lp_head_control": -8.228495367974828
+   },
+   "theta0.25": {
+    "lp_span": -28.15843051543925,
+    "lp_control": -48.31522719867804,
+    "lp_head": -0.481325538654346,
+    "lp_head_control": -8.15677666890435
+   },
+   "random": {
+    "lp_span": -27.975666930287844,
+    "lp_control": -48.18652470507208,
+    "lp_head": -0.4686602628498804,
+    "lp_head_control": -8.109577659678035
+   }
+  }
+ },
+ {
+  "problem_index": 389,
+  "sample": 0,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 13,
+  "position": 0.009,
+  "quote": "That makes triangle RST a right-angled triangle at T.",
+  "models": {
+   "base": {
+    "lp_span": -8.651811133313458,
+    "lp_control": -5.987930742734607,
+    "lp_head": -7.549707998521626,
+    "lp_head_control": -2.1085308397463813
+   },
+   "math31": {
+    "lp_span": -13.043080595409265,
+    "lp_control": -6.7601623345422555,
+    "lp_head": -12.205697867175331,
+    "lp_head_control": -2.4343092630001775
+   },
+   "code31": {
+    "lp_span": -9.55930173600791,
+    "lp_control": -6.27408551386281,
+    "lp_head": -8.765193879138678,
+    "lp_head_control": -2.260698048003251
+   },
+   "math30": {
+    "lp_span": -14.313658365630545,
+    "lp_control": -7.772082115350204,
+    "lp_head": -12.30213000724325,
+    "lp_head_control": -2.698964844506554
+   },
+   "code30": {
+    "lp_span": -10.631665472639725,
+    "lp_control": -6.496320871936623,
+    "lp_head": -9.448724319314351,
+    "lp_head_control": -2.3143491855435423
+   },
+   "if30": {
+    "lp_span": -8.488801402010722,
+    "lp_control": -6.038565051833139,
+    "lp_head": -7.117852567113005,
+    "lp_head_control": -2.1189645392939567
+   },
+   "general30": {
+    "lp_span": -8.181120136898244,
+    "lp_control": -6.022891954912629,
+    "lp_head": -7.052450643474003,
+    "lp_head_control": -2.1116802248054594
+   },
+   "mix30": {
+    "lp_span": -11.037055210617837,
+    "lp_control": -6.398764875606139,
+    "lp_head": -9.707448242639657,
+    "lp_head_control": -2.2336151508461626
+   },
+   "theta0.25": {
+    "lp_span": -9.112247943965485,
+    "lp_control": -6.028346507268434,
+    "lp_head": -8.111768423812464,
+    "lp_head_control": -2.1227836100266724
+   },
+   "random": {
+    "lp_span": -8.678198278532363,
+    "lp_control": -5.989032061024481,
+    "lp_head": -7.5815736275108065,
+    "lp_head_control": -2.1087652170934597
+   }
+  }
+ },
+ {
+  "problem_index": 398,
+  "sample": 1,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 38,
+  "position": 0.659,
+  "quote": "So Ian is highest at ~39.14, Navin at ~39.45, Luka at ~38.62. So the order is Ian > Navin > Luka.",
+  "models": {
+   "base": {
+    "lp_span": -11.75357333291322,
+    "lp_control": -15.649751204341156,
+    "lp_head": -5.404454231262207,
+    "lp_head_control": -2.273002008532785
+   },
+   "math31": {
+    "lp_span": -16.358594256453216,
+    "lp_control": -18.797007280082326,
+    "lp_head": -7.998169958591461,
+    "lp_head_control": -2.644096227554255
+   },
+   "code31": {
+    "lp_span": -12.86949946367531,
+    "lp_control": -16.400829137400724,
+    "lp_head": -5.639123558998108,
+    "lp_head_control": -2.342390011251409
+   },
+   "math30": {
+    "lp_span": -13.683294114773162,
+    "lp_control": -21.181527191126662,
+    "lp_head": -5.751436412334442,
+    "lp_head_control": -3.0177598174632294
+   },
+   "code30": {
+    "lp_span": -14.640134909393964,
+    "lp_control": -17.099596365037723,
+    "lp_head": -7.8564271330833435,
+    "lp_head_control": -2.5250952092462104
+   },
+   "if30": {
+    "lp_span": -9.88137482208549,
+    "lp_control": -16.256119384136692,
+    "lp_head": -4.818810231983662,
+    "lp_head_control": -2.351454255443532
+   },
+   "general30": {
+    "lp_span": -11.947450984502211,
+    "lp_control": -15.873893049886973,
+    "lp_head": -5.598977670073509,
+    "lp_head_control": -2.3160692991940595
+   },
+   "mix30": {
+    "lp_span": -13.13453389480128,
+    "lp_control": -16.878254772569054,
+    "lp_head": -5.99271447211504,
+    "lp_head_control": -2.4660393349266085
+   },
+   "theta0.25": {
+    "lp_span": -12.58319310285151,
+    "lp_control": -15.8432016269851,
+    "lp_head": -5.841218292713165,
+    "lp_head_control": -2.2842273777203808
+   },
+   "random": {
+    "lp_span": -11.70559077852522,
+    "lp_control": -15.649640628897615,
+    "lp_head": -5.422207206487656,
+    "lp_head_control": -2.2717656002606965
+   }
+  }
+ },
+ {
+  "problem_index": 403,
+  "sample": 3,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 11,
+  "position": 0.162,
+  "quote": "Now, let's compare each digit position by position:",
+  "models": {
+   "base": {
+    "lp_span": -7.461851404514164,
+    "lp_control": -3.2725383005526965,
+    "lp_head": -3.055396478070179,
+    "lp_head_control": -1.4893219270517875
+   },
+   "math31": {
+    "lp_span": -13.119721206952818,
+    "lp_control": -4.011683410482219,
+    "lp_head": -5.66391885234043,
+    "lp_head_control": -1.9509613582445309
+   },
+   "code31": {
+    "lp_span": -9.045909343054518,
+    "lp_control": -3.620761713915854,
+    "lp_head": -3.78025920240907,
+    "lp_head_control": -1.6597261988061656
+   },
+   "math30": {
+    "lp_span": -14.42638144257944,
+    "lp_control": -4.715683936604182,
+    "lp_head": -5.0539754005440045,
+    "lp_head_control": -2.1261051082293854
+   },
+   "code30": {
+    "lp_span": -9.989638761500828,
+    "lp_control": -3.9836685796412348,
+    "lp_head": -3.739540123468032,
+    "lp_head_control": -1.8656301661796169
+   },
+   "if30": {
+    "lp_span": -7.146626594330883,
+    "lp_control": -3.3259336466458627,
+    "lp_head": -3.0246315504191443,
+    "lp_head_control": -1.512627683011524
+   },
+   "general30": {
+    "lp_span": -6.984925908240257,
+    "lp_control": -3.3063214808884367,
+    "lp_head": -2.8270191891642753,
+    "lp_head_control": -1.5018040365444905
+   },
+   "mix30": {
+    "lp_span": -9.754956171353115,
+    "lp_control": -3.480334067026415,
+    "lp_head": -4.2965432586788666,
+    "lp_head_control": -1.6316558939522656
+   },
+   "theta0.25": {
+    "lp_span": -8.182227672718,
+    "lp_control": -3.307491404026223,
+    "lp_head": -3.329431798425503,
+    "lp_head_control": -1.5203493096711462
+   },
+   "random": {
+    "lp_span": -7.527250292419922,
+    "lp_control": -3.2798948602765448,
+    "lp_head": -3.09397549869027,
+    "lp_head_control": -1.4932575652649394
+   }
+  }
+ },
+ {
+  "problem_index": 411,
+  "sample": 3,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 27,
+  "position": 0.012,
+  "quote": "But wait, the seducers don't shake hands with sorcerers either. Wait, it's not clear if that's true",
+  "models": {
+   "base": {
+    "lp_span": -48.3867160405498,
+    "lp_control": -162.7178388373951,
+    "lp_head": -19.463360903348075,
+    "lp_head_control": -29.73033416878752
+   },
+   "math31": {
+    "lp_span": -53.93167314436869,
+    "lp_control": -162.82190518219198,
+    "lp_head": -17.470209960942157,
+    "lp_head_control": -29.731150727795903
+   },
+   "code31": {
+    "lp_span": -50.64393185763038,
+    "lp_control": -162.7716577788489,
+    "lp_head": -19.610479235096136,
+    "lp_head_control": -29.723409818290094
+   },
+   "math30": {
+    "lp_span": -52.93909816435189,
+    "lp_control": -162.7439869878233,
+    "lp_head": -20.13182742218487,
+    "lp_head_control": -29.724365273156
+   },
+   "code30": {
+    "lp_span": -55.71578335904633,
+    "lp_control": -163.33584633221312,
+    "lp_head": -21.45182567741722,
+    "lp_head_control": -29.804717268661626
+   },
+   "if30": {
+    "lp_span": -52.54315188340843,
+    "lp_control": -163.5371609969887,
+    "lp_head": -20.539748668525135,
+    "lp_head_control": -29.805459851742636
+   },
+   "general30": {
+    "lp_span": -50.62827871990157,
+    "lp_control": -162.970605747347,
+    "lp_head": -20.28347563702846,
+    "lp_head_control": -29.7505687411275
+   },
+   "mix30": {
+    "lp_span": -50.03851603344083,
+    "lp_control": -163.2417608986645,
+    "lp_head": -19.832173371047247,
+    "lp_head_control": -29.7966456844128
+   },
+   "theta0.25": {
+    "lp_span": -48.005009274726035,
+    "lp_control": -162.7151190549186,
+    "lp_head": -18.947146054997575,
+    "lp_head_control": -29.725026493400073
+   },
+   "random": {
+    "lp_span": -48.30995749065187,
+    "lp_control": -162.72651841315994,
+    "lp_head": -19.42040878307307,
+    "lp_head_control": -29.72706371859327
+   }
+  }
+ },
+ {
+  "problem_index": 419,
+  "sample": 0,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 25,
+  "position": 0.036,
+  "quote": "j component: - (1* v3 - (-5)* v1) = -v3 + 5v1",
+  "models": {
+   "base": {
+    "lp_span": -2.946058291650843,
+    "lp_control": -15.513630844287837,
+    "lp_head": -0.34681542025646195,
+    "lp_head_control": -2.8399879691570824
+   },
+   "math31": {
+    "lp_span": -8.027864323055837,
+    "lp_control": -16.737059411552327,
+    "lp_head": -0.595897851511836,
+    "lp_head_control": -3.0503614352957813
+   },
+   "code31": {
+    "lp_span": -3.6061864600342233,
+    "lp_control": -16.067235545528675,
+    "lp_head": -0.3080990494636353,
+    "lp_head_control": -2.977270637147594
+   },
+   "math30": {
+    "lp_span": -5.7804129456635565,
+    "lp_control": -18.638919141127552,
+    "lp_head": -1.0072190238861367,
+    "lp_head_control": -3.3941381575967533
+   },
+   "code30": {
+    "lp_span": -3.973718053603079,
+    "lp_control": -16.49565988225717,
+    "lp_head": -0.3841116307885386,
+    "lp_head_control": -3.0400168720443617
+   },
+   "if30": {
+    "lp_span": -2.716418424184667,
+    "lp_control": -15.69966505963268,
+    "lp_head": -0.29581822114414535,
+    "lp_head_control": -2.866833240159613
+   },
+   "general30": {
+    "lp_span": -3.133456032606773,
+    "lp_control": -15.603058949258557,
+    "lp_head": -0.30810569974710234,
+    "lp_head_control": -2.8723890663974454
+   },
+   "mix30": {
+    "lp_span": -4.348306939820759,
+    "lp_control": -16.037482362589508,
+    "lp_head": -0.4639151518349536,
+    "lp_head_control": -2.9418961315078196
+   },
+   "theta0.25": {
+    "lp_span": -4.047726907476317,
+    "lp_control": -15.569016537010175,
+    "lp_head": -0.3430772650463041,
+    "lp_head_control": -2.841928326260677
+   },
+   "random": {
+    "lp_span": -2.967701856250642,
+    "lp_control": -15.507155334995478,
+    "lp_head": -0.34606856654863805,
+    "lp_head_control": -2.8400261140367364
+   }
+  }
+ },
+ {
+  "problem_index": 425,
+  "sample": 1,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 37,
+  "position": 0.719,
+  "quote": "Wait, in the previous computation, I considered |A - G|\u00b2 = [6R\u00b2 -4(A\u00b7B + A\u00b7C + B\u00b7C)] /9.",
+  "models": {
+   "base": {
+    "lp_span": -16.84921023977222,
+    "lp_control": -18.983864440252365,
+    "lp_head": -6.505617391318083,
+    "lp_head_control": -2.530347889587574
+   },
+   "math31": {
+    "lp_span": -18.285508398665115,
+    "lp_control": -20.39027554114611,
+    "lp_head": -6.793361093848944,
+    "lp_head_control": -2.804718132180278
+   },
+   "code31": {
+    "lp_span": -16.477775676583406,
+    "lp_control": -19.35626027948485,
+    "lp_head": -6.077802428044379,
+    "lp_head_control": -2.595290378089703
+   },
+   "math30": {
+    "lp_span": -15.016017785121221,
+    "lp_control": -22.13638756723667,
+    "lp_head": -6.085378497838974,
+    "lp_head_control": -2.939619977573457
+   },
+   "code30": {
+    "lp_span": -20.597047498100437,
+    "lp_control": -21.936035209825494,
+    "lp_head": -9.213842213153839,
+    "lp_head_control": -2.921599987683294
+   },
+   "if30": {
+    "lp_span": -16.947924210107885,
+    "lp_control": -19.04560022731079,
+    "lp_head": -6.56615580804646,
+    "lp_head_control": -2.545034374302195
+   },
+   "general30": {
+    "lp_span": -16.631082924373914,
+    "lp_control": -19.044905454133403,
+    "lp_head": -6.5557169038802385,
+    "lp_head_control": -2.541843184166646
+   },
+   "mix30": {
+    "lp_span": -15.620086427021306,
+    "lp_control": -20.059429869417798,
+    "lp_head": -6.476521117147058,
+    "lp_head_control": -2.6423629773347055
+   },
+   "theta0.25": {
+    "lp_span": -16.942373603989836,
+    "lp_control": -19.043776896616475,
+    "lp_head": -6.534489678218961,
+    "lp_head_control": -2.552904619411129
+   },
+   "random": {
+    "lp_span": -16.82265083573293,
+    "lp_control": -18.983427958980172,
+    "lp_head": -6.490410463884473,
+    "lp_head_control": -2.5275223670728155
+   }
+  }
+ },
+ {
+  "problem_index": 437,
+  "sample": 2,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 19,
+  "position": 0.05,
+  "quote": "I need to find the value of \u2661. Let me think about how to approach this.",
+  "models": {
+   "base": {
+    "lp_span": -12.490239451464731,
+    "lp_control": -6.7401180415516135,
+    "lp_head": -8.936978681536857,
+    "lp_head_control": -1.9292633399061743
+   },
+   "math31": {
+    "lp_span": -17.749250926543027,
+    "lp_control": -8.295594695906038,
+    "lp_head": -10.804306749196257,
+    "lp_head_control": -2.438222306102689
+   },
+   "code31": {
+    "lp_span": -13.894088781729806,
+    "lp_control": -7.065914059254864,
+    "lp_head": -9.43509819864994,
+    "lp_head_control": -2.058043380183808
+   },
+   "math30": {
+    "lp_span": -13.410857299808413,
+    "lp_control": -9.208938584268035,
+    "lp_head": -8.324644219130278,
+    "lp_head_control": -2.6878477089080843
+   },
+   "code30": {
+    "lp_span": -12.869056316965725,
+    "lp_control": -7.370721140003589,
+    "lp_head": -8.725247785856482,
+    "lp_head_control": -2.1437978357906102
+   },
+   "if30": {
+    "lp_span": -13.377643022569828,
+    "lp_control": -6.908111914244946,
+    "lp_head": -9.264748315908946,
+    "lp_head_control": -2.021235137640615
+   },
+   "general30": {
+    "lp_span": -12.451465186779387,
+    "lp_control": -6.767640395654308,
+    "lp_head": -8.82590154162608,
+    "lp_head_control": -1.9516036549725686
+   },
+   "mix30": {
+    "lp_span": -17.632344466401264,
+    "lp_control": -7.359846016553929,
+    "lp_head": -11.423298748617526,
+    "lp_head_control": -2.211753665926808
+   },
+   "theta0.25": {
+    "lp_span": -13.526409495505504,
+    "lp_control": -6.788371546673589,
+    "lp_head": -9.371993376989849,
+    "lp_head_control": -1.953727233283571
+   },
+   "random": {
+    "lp_span": -12.404505345912185,
+    "lp_control": -6.74076379385835,
+    "lp_head": -8.875471500563435,
+    "lp_head_control": -1.9310836612342974
+   }
+  }
+ },
+ {
+  "problem_index": 438,
+  "sample": 0,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 22,
+  "position": 0.461,
+  "quote": "Therefore, the last nonzero digit to the right of the decimal is the second digit, which is 7.",
+  "models": {
+   "base": {
+    "lp_span": -11.21979390719207,
+    "lp_control": -9.350129499877513,
+    "lp_head": -2.2455361501779407,
+    "lp_head_control": -2.045158378619526
+   },
+   "math31": {
+    "lp_span": -14.295137613429688,
+    "lp_control": -10.737803618587495,
+    "lp_head": -3.303521749912761,
+    "lp_head_control": -2.375800209942099
+   },
+   "code31": {
+    "lp_span": -11.602960356045514,
+    "lp_control": -9.827759879892984,
+    "lp_head": -3.3759863161831163,
+    "lp_head_control": -2.143930963084858
+   },
+   "math30": {
+    "lp_span": -12.486377298890147,
+    "lp_control": -12.36369850272633,
+    "lp_head": -4.2122825715341605,
+    "lp_head_control": -2.6234962985714083
+   },
+   "code30": {
+    "lp_span": -12.144670929410495,
+    "lp_control": -10.26329624154896,
+    "lp_head": -4.377747077262029,
+    "lp_head_control": -2.2308743264884106
+   },
+   "if30": {
+    "lp_span": -12.551676283008419,
+    "lp_control": -10.04105550400709,
+    "lp_head": -2.465650818834547,
+    "lp_head_control": -2.273040094439348
+   },
+   "general30": {
+    "lp_span": -11.230099978274666,
+    "lp_control": -9.584494069013163,
+    "lp_head": -2.387224219215568,
+    "lp_head_control": -2.0875834080291678
+   },
+   "mix30": {
+    "lp_span": -11.647372234612703,
+    "lp_control": -10.099785542819008,
+    "lp_head": -3.178214370214846,
+    "lp_head_control": -2.2948449919951965
+   },
+   "theta0.25": {
+    "lp_span": -11.711622265342157,
+    "lp_control": -9.336539174122153,
+    "lp_head": -2.427926952659618,
+    "lp_head_control": -2.0337659852480283
+   },
+   "random": {
+    "lp_span": -11.309712506772485,
+    "lp_control": -9.339292786861769,
+    "lp_head": -2.31197144521866,
+    "lp_head_control": -2.0433054106999773
+   }
+  }
+ },
+ {
+  "problem_index": 444,
+  "sample": 0,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 22,
+  "position": 0.703,
+  "quote": "Given the time I've spent and the complexity, perhaps there's a pattern or formula that can be generalized.",
+  "models": {
+   "base": {
+    "lp_span": -13.457047266885638,
+    "lp_control": -7.576467769611045,
+    "lp_head": -2.865494465921074,
+    "lp_head_control": -1.6894397526991087
+   },
+   "math31": {
+    "lp_span": -15.461872309679165,
+    "lp_control": -8.528342258878984,
+    "lp_head": -1.0516359396278858,
+    "lp_head_control": -1.8395492682768964
+   },
+   "code31": {
+    "lp_span": -14.284195544896647,
+    "lp_control": -7.987143643936434,
+    "lp_head": -1.4720369398128241,
+    "lp_head_control": -1.7561099941909197
+   },
+   "math30": {
+    "lp_span": -14.947209911479149,
+    "lp_control": -10.118563218645285,
+    "lp_head": -2.7334928642376326,
+    "lp_head_control": -2.344055567200994
+   },
+   "code30": {
+    "lp_span": -12.845296415267512,
+    "lp_control": -8.427286289551702,
+    "lp_head": -1.8840555837377906,
+    "lp_head_control": -1.9835743998197721
+   },
+   "if30": {
+    "lp_span": -13.001194402459078,
+    "lp_control": -7.6375025482440835,
+    "lp_head": -2.7992668267106637,
+    "lp_head_control": -1.7190175003444892
+   },
+   "general30": {
+    "lp_span": -12.952574163908139,
+    "lp_control": -7.630406218193238,
+    "lp_head": -2.949482391937636,
+    "lp_head_control": -1.6932924359192838
+   },
+   "mix30": {
+    "lp_span": -10.704844248190057,
+    "lp_control": -8.2519560415647,
+    "lp_head": -1.8373409785563126,
+    "lp_head_control": -1.8644965857060742
+   },
+   "theta0.25": {
+    "lp_span": -13.101867447374389,
+    "lp_control": -7.588147570786823,
+    "lp_head": -2.1774295289069414,
+    "lp_head_control": -1.6772131203731988
+   },
+   "random": {
+    "lp_span": -13.309650632087141,
+    "lp_control": -7.576117991540814,
+    "lp_head": -2.853168479865417,
+    "lp_head_control": -1.6893451336908039
+   }
+  }
+ },
+ {
+  "problem_index": 460,
+  "sample": 2,
+  "label": "wrong_plan",
+  "whole_quote": true,
+  "span_tokens": 20,
+  "position": 0.495,
+  "quote": "So, angle at T between TR and ST is equal to angle at Q between TR and QR.",
+  "models": {
+   "base": {
+    "lp_span": -6.60653306695167,
+    "lp_control": -9.74023775798938,
+    "lp_head": -3.772765353322029,
+    "lp_head_control": -2.3666379002074245
+   },
+   "math31": {
+    "lp_span": -7.819047128083184,
+    "lp_control": -10.607462825559779,
+    "lp_head": -4.32087093219161,
+    "lp_head_control": -2.5700994876539336
+   },
+   "code31": {
+    "lp_span": -7.001458069076762,
+    "lp_control": -10.086181400404604,
+    "lp_head": -3.9125893637537956,
+    "lp_head_control": -2.4627921980564134
+   },
+   "math30": {
+    "lp_span": -7.869605598971248,
+    "lp_control": -12.222440469253343,
+    "lp_head": -5.31462987314444,
+    "lp_head_control": -3.009093633942539
+   },
+   "code30": {
+    "lp_span": -8.569802538549993,
+    "lp_control": -11.93992257931095,
+    "lp_head": -3.922118819958996,
+    "lp_head_control": -2.938901072483859
+   },
+   "if30": {
+    "lp_span": -6.915375748416409,
+    "lp_control": -9.85404390809592,
+    "lp_head": -4.293360240757465,
+    "lp_head_control": -2.400593723185011
+   },
+   "general30": {
+    "lp_span": -6.818797590385657,
+    "lp_control": -9.788811191599525,
+    "lp_head": -4.040089584887028,
+    "lp_head_control": -2.3751736808457644
+   },
+   "mix30": {
+    "lp_span": -7.170577272365335,
+    "lp_control": -10.372827276811586,
+    "lp_head": -4.469067649915814,
+    "lp_head_control": -2.5222130256608946
+   },
+   "theta0.25": {
+    "lp_span": -6.829499296669383,
+    "lp_control": -9.773242669982137,
+    "lp_head": -3.9270347766578197,
+    "lp_head_control": -2.3739671109928167
+   },
+   "random": {
+    "lp_span": -6.6059212007094175,
+    "lp_control": -9.73923602237861,
+    "lp_head": -3.7795099020004272,
+    "lp_head_control": -2.3670021569472737
+   }
+  }
+ },
+ {
+  "problem_index": 471,
+  "sample": 0,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 32,
+  "position": 0.175,
+  "quote": "Well, 10 times 90 is 900, so 8 is 800 less. 900-80=820. So that's 820.",
+  "models": {
+   "base": {
+    "lp_span": -13.591332322801463,
+    "lp_control": -13.038835872902709,
+    "lp_head": -1.4147504675202072,
+    "lp_head_control": -1.9485770700720604
+   },
+   "math31": {
+    "lp_span": -16.08991238294402,
+    "lp_control": -16.6563861851368,
+    "lp_head": -0.8962091147550382,
+    "lp_head_control": -2.6298315582150824
+   },
+   "code31": {
+    "lp_span": -14.571735042787623,
+    "lp_control": -13.652047899656173,
+    "lp_head": -1.4620134222786874,
+    "lp_head_control": -2.0119385561492527
+   },
+   "math30": {
+    "lp_span": -19.392727113503497,
+    "lp_control": -18.474525667794804,
+    "lp_head": -1.2274075230234303,
+    "lp_head_control": -2.6366961162598455
+   },
+   "code30": {
+    "lp_span": -19.573097671440337,
+    "lp_control": -14.519914026985061,
+    "lp_head": -1.4984152568504214,
+    "lp_head_control": -2.145743396429461
+   },
+   "if30": {
+    "lp_span": -13.899067980237305,
+    "lp_control": -13.981048230118759,
+    "lp_head": -1.213434576697182,
+    "lp_head_control": -2.191852696372371
+   },
+   "general30": {
+    "lp_span": -13.29451948957285,
+    "lp_control": -13.217102363254234,
+    "lp_head": -1.294285429699812,
+    "lp_head_control": -1.986979449376522
+   },
+   "mix30": {
+    "lp_span": -18.029112872085534,
+    "lp_control": -14.365554883648583,
+    "lp_head": -1.1865063608274795,
+    "lp_head_control": -2.1991348628074046
+   },
+   "theta0.25": {
+    "lp_span": -13.861193275079131,
+    "lp_control": -13.339095960091218,
+    "lp_head": -1.2854408440180123,
+    "lp_head_control": -2.011315748297493
+   },
+   "random": {
+    "lp_span": -13.517146763391793,
+    "lp_control": -13.045671199406788,
+    "lp_head": -1.4403942481731065,
+    "lp_head_control": -1.9512424306938192
+   }
+  }
+ },
+ {
+  "problem_index": 473,
+  "sample": 1,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 36,
+  "position": 0.006,
+  "quote": "The top-left corner is labeled as \"n-3\", the top-right is \"3\", the bottom-left is \"n+1\", and the bottom-right is \"1\".",
+  "models": {
+   "base": {
+    "lp_span": -9.432874613557942,
+    "lp_control": -58.993006227369186,
+    "lp_head": -2.3801816878840327,
+    "lp_head_control": -8.198022689001519
+   },
+   "math31": {
+    "lp_span": -13.23507569526555,
+    "lp_control": -61.34009445474716,
+    "lp_head": -4.937040466815233,
+    "lp_head_control": -8.5641084121936
+   },
+   "code31": {
+    "lp_span": -9.934416565170977,
+    "lp_control": -59.743402541387475,
+    "lp_head": -3.3565302714705467,
+    "lp_head_control": -8.264973438928136
+   },
+   "math30": {
+    "lp_span": -10.381919201056007,
+    "lp_control": -62.33050393083366,
+    "lp_head": -3.096405510092154,
+    "lp_head_control": -8.778159727984166
+   },
+   "code30": {
+    "lp_span": -10.72719905647682,
+    "lp_control": -66.38215330395644,
+    "lp_head": -2.9549786299467087,
+    "lp_head_control": -9.321536999079107
+   },
+   "if30": {
+    "lp_span": -8.495968684670515,
+    "lp_control": -59.174348803847096,
+    "lp_head": -1.8090950958430767,
+    "lp_head_control": -8.208520602727658
+   },
+   "general30": {
+    "lp_span": -9.59582401800435,
+    "lp_control": -59.174929071043444,
+    "lp_head": -2.9097123416140676,
+    "lp_head_control": -8.22816549497744
+   },
+   "mix30": {
+    "lp_span": -10.380498348502442,
+    "lp_control": -60.05789252435905,
+    "lp_head": -3.2007019789889455,
+    "lp_head_control": -8.371896092940588
+   },
+   "theta0.25": {
+    "lp_span": -9.507532159041148,
+    "lp_control": -59.15391412766243,
+    "lp_head": -2.4810891561210155,
+    "lp_head_control": -8.218960753670835
+   },
+   "random": {
+    "lp_span": -9.407861793646589,
+    "lp_control": -58.98955774294067,
+    "lp_head": -2.3828189205378294,
+    "lp_head_control": -8.199678976459253
+   }
+  }
+ },
+ {
+  "problem_index": 485,
+  "sample": 2,
+  "label": "misread",
+  "whole_quote": true,
+  "span_tokens": 27,
+  "position": 0.121,
+  "quote": "But the problem statement gives \"AD: 5, BD:6, CD:4, AC:6, BC:5\".",
+  "models": {
+   "base": {
+    "lp_span": -35.225917641073465,
+    "lp_control": -8.486661756227841,
+    "lp_head": -8.345925241708755,
+    "lp_head_control": -1.6611822598264552
+   },
+   "math31": {
+    "lp_span": -39.9570917065721,
+    "lp_control": -9.640994558612874,
+    "lp_head": -10.765011802315712,
+    "lp_head_control": -1.8512635068502277
+   },
+   "code31": {
+    "lp_span": -38.29113809426781,
+    "lp_control": -8.699994211125304,
+    "lp_head": -8.688174158334732,
+    "lp_head_control": -1.702642386056541
+   },
+   "math30": {
+    "lp_span": -41.09405649534892,
+    "lp_control": -9.914021173846267,
+    "lp_head": -10.056812912225723,
+    "lp_head_control": -1.8717397215298843
+   },
+   "code30": {
+    "lp_span": -35.331672343018,
+    "lp_control": -9.512030984440353,
+    "lp_head": -8.693309485912323,
+    "lp_head_control": -1.8100469252979383
+   },
+   "if30": {
+    "lp_span": -36.516400024527684,
+    "lp_control": -8.568353750225505,
+    "lp_head": -8.115587621927261,
+    "lp_head_control": -1.6675621599904844
+   },
+   "general30": {
+    "lp_span": -36.47759591054637,
+    "lp_control": -8.492677946959157,
+    "lp_head": -8.325403213500977,
+    "lp_head_control": -1.6702470459684264
+   },
+   "mix30": {
+    "lp_span": -38.916591082524974,
+    "lp_control": -9.046243751593865,
+    "lp_head": -9.676342368125916,
+    "lp_head_control": -1.7635726473818067
+   },
+   "theta0.25": {
+    "lp_span": -35.92039956746157,
+    "lp_control": -8.477711553659173,
+    "lp_head": -8.586752444505692,
+    "lp_head_control": -1.6580353850056417
+   },
+   "random": {
+    "lp_span": -35.267449268256314,
+    "lp_control": -8.494924197054353,
+    "lp_head": -8.363030940294266,
+    "lp_head_control": -1.663166375348228
+   }
+  }
+ },
+ {
+  "problem_index": 490,
+  "sample": 3,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 28,
+  "position": 0.862,
+  "quote": "That's better than 14. Wait, is this allowed? The roots are 1,3,-1,-11. All distinct.",
+  "models": {
+   "base": {
+    "lp_span": -13.155564919288736,
+    "lp_control": -14.882981899041042,
+    "lp_head": -1.8968804547330365,
+    "lp_head_control": -2.5997634468466275
+   },
+   "math31": {
+    "lp_span": -15.835598561912775,
+    "lp_control": -17.592946017856303,
+    "lp_head": -1.9136391221545637,
+    "lp_head_control": -3.0544817387111833
+   },
+   "code31": {
+    "lp_span": -13.297110322746448,
+    "lp_control": -15.549856047986832,
+    "lp_head": -1.6507771243341267,
+    "lp_head_control": -2.766698455889418
+   },
+   "math30": {
+    "lp_span": -20.303424096666276,
+    "lp_control": -19.244729758796456,
+    "lp_head": -3.0056673592771403,
+    "lp_head_control": -3.531169016424392
+   },
+   "code30": {
+    "lp_span": -17.799973362707533,
+    "lp_control": -16.04973796702892,
+    "lp_head": -2.4554531410103664,
+    "lp_head_control": -2.8908490000027816
+   },
+   "if30": {
+    "lp_span": -12.584344148577657,
+    "lp_control": -15.127523975753574,
+    "lp_head": -1.5560738174826838,
+    "lp_head_control": -2.692733807505283
+   },
+   "general30": {
+    "lp_span": -12.75865919480566,
+    "lp_control": -14.979564753996383,
+    "lp_head": -1.6160142297158018,
+    "lp_head_control": -2.6198596016928786
+   },
+   "mix30": {
+    "lp_span": -16.364982920174953,
+    "lp_control": -15.501978994730743,
+    "lp_head": -2.2640664872014895,
+    "lp_head_control": -2.696446177121252
+   },
+   "theta0.25": {
+    "lp_span": -13.333544943947345,
+    "lp_control": -14.963272969244862,
+    "lp_head": -1.9706579792546108,
+    "lp_head_control": -2.598303335668752
+   },
+   "random": {
+    "lp_span": -13.14453002793016,
+    "lp_control": -14.890925361601113,
+    "lp_head": -1.9026637483621016,
+    "lp_head_control": -2.6016672139943693
+   }
+  }
+ },
+ {
+  "problem_index": 494,
+  "sample": 0,
+  "label": "slip",
+  "whole_quote": true,
+  "span_tokens": 27,
+  "position": 0.665,
+  "quote": "Therefore, the inequality sqrt(a\u00b2 +4b +8) \u2265 -a +4 reduces to b \u22642 -2a.",
+  "models": {
+   "base": {
+    "lp_span": -6.8793243784457445,
+    "lp_control": -9.651152294976637,
+    "lp_head": -3.7484697699546814,
+    "lp_head_control": -1.5727758912643184
+   },
+   "math31": {
+    "lp_span": -9.086650765500963,
+    "lp_control": -11.350172517668398,
+    "lp_head": -4.517972335102968,
+    "lp_head_control": -1.845789377866895
+   },
+   "code31": {
+    "lp_span": -6.927593531087041,
+    "lp_control": -9.973528224413458,
+    "lp_head": -4.066334150731564,
+    "lp_head_control": -1.6026557153410976
+   },
+   "math30": {
+    "lp_span": -5.958573984971736,
+    "lp_control": -13.022211240938923,
+    "lp_head": -3.68864956474863,
+    "lp_head_control": -2.169041250871087
+   },
+   "code30": {
+    "lp_span": -8.17993741465034,
+    "lp_control": -10.577741926409072,
+    "lp_head": -6.224800638854504,
+    "lp_head_control": -1.7407847838653834
+   },
+   "if30": {
+    "lp_span": -6.8731377782532945,
+    "lp_control": -9.660076756485505,
+    "lp_head": -3.808360293507576,
+    "lp_head_control": -1.5613910589998705
+   },
+   "general30": {
+    "lp_span": -6.914420511573553,
+    "lp_control": -9.644228743083367,
+    "lp_head": -3.5799922794103622,
+    "lp_head_control": -1.563990887607506
+   },
+   "mix30": {
+    "lp_span": -6.995370623422787,
+    "lp_control": -10.291527638252592,
+    "lp_head": -4.6893469244241714,
+    "lp_head_control": -1.6728978116033248
+   },
+   "theta0.25": {
+    "lp_span": -7.277378128375858,
+    "lp_control": -9.696409724185942,
+    "lp_head": -3.9726944118738174,
+    "lp_head_control": -1.5820588373357896
+   },
+   "random": {
+    "lp_span": -6.911015433026478,
+    "lp_control": -9.657730387884659,
+    "lp_head": -3.735807314515114,
+    "lp_head_control": -1.5724758863335593
+   }
+  }
+ }
+]
