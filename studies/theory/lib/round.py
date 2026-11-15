@@ -1111,8 +1111,8 @@ def run_scripts(folder, label, offline, scripts):
                         "refuted_by_met": met, "alt_measured": out.get("alt_measured"),
                         "not_computable": out.get("not_computable") if m is None and not met else None,
                         "note": notes.get(q["k"], ""), "example_row": out.get("example_row")})
-        print(f"  {label} p{q['k']}: " + (f"no number; refuting condition met: {q['refuted_by'][:100]}" if m is None and met
-              else f"not computable: {out['not_computable'][:100]}" if m is None else
+        print(f"  {label} p{q['k']}: " + (f"no number; refuting condition met: {str(q.get('refuted_by'))[:100]}" if m is None and met
+              else f"not computable: {str(out.get('not_computable'))[:100]}" if m is None else
               f"measured {m} (n {out.get('n')}, 90 % {out.get('interval')})" + (f", predicted {q['value']} [{q['low']}, {q['high']}], refuting condition met: {met}" if "value" in q else "")))
     return results
 

@@ -1,0 +1,50 @@
+{
+ "theory": "r5-m10-rival",
+ "items": [
+  {
+   "k": 1,
+   "experiment": "First-marker regrade of the plain base's wrong non-self-opened answers at T 1.0: among non-self-opened T3 rows graded wrong by grader v3 on the full text, the fraction whose first answer marker is right.",
+   "original": 0.007692307692307693,
+   "replicated": 0.007692307692307693,
+   "status": "replicated",
+   "script": "replication/r5-m10-rival.duel/p1.py",
+   "not_computable": null
+  },
+  {
+   "k": 2,
+   "experiment": "Direction of first/last disagreement in the plain base's non-self-opened T 1.0 answers: among rows where the first-marker grade differs from the v3 last-marker grade, the share that are first-right and last-wrong.",
+   "original": 0.08,
+   "replicated": 0.08,
+   "status": "replicated",
+   "script": "replication/r5-m10-rival.duel/p2.py",
+   "not_computable": null
+  },
+  {
+   "k": 3,
+   "experiment": "Run-on share among the plain base's finished, wrong, non-self-opened T 1.0 answers: the fraction that keep going for more than 300 characters after their first answer marker and state another answer marker.",
+   "original": 0.0888030888030888,
+   "replicated": 0.0888030888030888,
+   "status": "replicated",
+   "script": "replication/r5-m10-rival.duel/p3.py",
+   "not_computable": null
+  },
+  {
+   "k": 4,
+   "experiment": "Within the cued base's MATH-500 answers at T 1.0 / top-p 1.0: accuracy of answers containing 'Wait' or 'Hmm' minus accuracy of answers containing neither.",
+   "original": 0.07056451612903225,
+   "replicated": 0.07056451612903225,
+   "status": "replicated",
+   "script": "replication/r5-m10-rival.duel/p4.py",
+   "not_computable": null
+  },
+  {
+   "k": 5,
+   "experiment": "The same contrast on the harder clean 328: within cued base answers at T 1.0 / top-p 1.0, accuracy of answers containing 'Wait' or 'Hmm' minus accuracy of answers containing neither.",
+   "original": 0.0,
+   "replicated": 0.0,
+   "status": "replicated",
+   "script": "replication/r5-m10-rival.duel/p5.py",
+   "not_computable": null
+  }
+ ]
+}

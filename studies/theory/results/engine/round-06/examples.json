@@ -1,0 +1,66 @@
+[
+ {
+  "theory": "r6-account",
+  "kind": "computed test inside its interval",
+  "id": "r6-account:p19",
+  "experiment": "Share of the 247 MATH-500 problems that RL gets right and the plain base (T 1.0) gets wrong that fall under the answer-statement rule (no answer line, or the gold stated and then another value)",
+  "script": "studies/theory/results/engine/round-06/tests/r6-account/p19.py",
+  "output": "studies/theory/results/engine/round-06/tests/r6-account/p19.out.txt",
+  "measured": 0.5141700404858299,
+  "n": 247,
+  "interval_90": [
+   0.46558704453441296,
+   0.5668016194331984
+  ],
+  "prediction": {
+   "value": 0.38,
+   "low": 0.22,
+   "high": 0.55
+  },
+  "nulltest-1": {
+   "value": 0.18,
+   "low": 0.06,
+   "high": 0.35
+  },
+  "nulltest-2": {
+   "value": 0.15,
+   "low": 0.03,
+   "high": 0.38
+  },
+  "gain": 3.0,
+  "replication": "replicated",
+  "note": "Both readers expected 0.15 to 0.18; half of the plain base's gap to RL is in how it states the answer. Gain at the +3 nat clip."
+ },
+ {
+  "theory": "r6-m10",
+  "kind": "computed test outside its interval, refuting condition met",
+  "id": "r6-m10:p1",
+  "experiment": "Paired finished-answer error rate, RL step 100 plain minus cued base, MATH-500 at T 0.6 / top-p 0.95, problems where both finished",
+  "script": "studies/theory/results/engine/round-06/tests/r6-m10/p1.py",
+  "output": "studies/theory/results/engine/round-06/tests/r6-m10/p1.out.txt",
+  "measured": -0.0463768115942029,
+  "n": 345,
+  "interval_90": [
+   -0.06666666666666668,
+   -0.026086956521739132
+  ],
+  "prediction": {
+   "value": 0.0,
+   "low": -0.025,
+   "high": 0.025
+  },
+  "nulltest-1": {
+   "value": -0.015,
+   "low": -0.05,
+   "high": 0.02
+  },
+  "nulltest-2": {
+   "value": 0.0,
+   "low": -0.035,
+   "high": 0.035
+  },
+  "gain": -2.7827,
+  "replication": "replicated",
+  "note": "The theory said step 100 has the cued base's error rate on finished answers; it is 4.6 points lower (n 345, interval excludes 0)."
+ }
+]

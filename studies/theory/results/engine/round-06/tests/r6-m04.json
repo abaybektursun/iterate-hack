@@ -1,0 +1,95 @@
+{
+ "theory": "r6-m04",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Cap-hit bump on the first 100 MATH-500: max cap hits of the two intermediate cue arms minus max cap hits of the two endpoint cue arms. The linear-path rival (WiSE-FT) predicts at most 0.",
+   "recipe": "Files: studies/rlneurons/results/wsp1/screen100/base_cue-01/per_problem.json, sft025_cue-01/per_problem.json, sft05_cue-01/per_problem.json, sft1_cue-01/per_problem.json. In each file keep the first row per problem_index (file order). C(arm) = number of kept rows with cap_hit true (missing or null cap_hit counts as false; problems absent from a file add nothing). Statistic D = max(C(sft025_cue), C(sft05_cue)) - max(C(base_cue), C(sft1_cue)), an integer.",
+   "unit": "problems of 100",
+   "value": 4,
+   "low": 1,
+   "high": 9,
+   "refuted_by": "D below 1 (D <= 0)",
+   "gpu_minutes": 0,
+   "script": "tests/r6-m04/p1.py",
+   "measured": -2,
+   "n": 100,
+   "interval": [
+    -6,
+    2
+   ],
+   "interval_kind": "bootstrap",
+   "inside": false,
+   "refuted_by_met": true,
+   "alt_measured": -2,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/wsp1/screen100/{base_cue,sft025_cue,sft05_cue,sft1_cue}-01/per_problem.json (committed; 100 rows each, one per problem_index, fields problem_index, score_v3, cap_hit (bool), n_generated). First row per problem_index kept; cap_hit counted only when exactly true. D is an integer difference of counts. Interval: bootstrap over the union of problem_index values, each entry the tuple of the four arms' rows (None where absent), D recomputed per resample. Ambiguity: the recipe is explicit; alt_measured counts a cap hit as n_generated >= 16,384 instead of the stored cap_hit flag, in case the flag and the length disagree. A row that stopped for another reason at exactly 16,384 or a flag set by a different rule would make the two differ. D is a difference of maxima, so its bootstrap interval is biased upward (max of noisy counts).",
+   "example_row": {
+    "problem_index": 11,
+    "score_v3": 0,
+    "cap_hit": true,
+    "n_generated": 16384
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Mechanism test, how early the length policy arrives: f = ln(M(sft025_cue)/M(base_cue)) / ln(M(sft1_cue)/M(base_cue)), M = median generated tokens of finished answers. This mechanism says the length is mostly installed at a = 0.25 (f near 0.8); the linear-path rival (WiSE-FT, length proportional to dose in log) gives about 0.25.",
+   "recipe": "Files: studies/rlneurons/results/wsp1/screen100/base_cue-01/per_problem.json, sft025_cue-01/per_problem.json, sft1_cue-01/per_problem.json. Keep the first row per problem_index in each file, then restrict all three to the problem_index values present in all three files. For each arm, M(arm) = median of n_generated over its kept rows with cap_hit false (cap-hit rows excluded; rows with missing n_generated excluded; even count: mean of the two middle values). f = ln(M(sft025_cue)/M(base_cue)) / ln(M(sft1_cue)/M(base_cue)). If M(sft1_cue) <= M(base_cue), f is undefined and counts as refuted.",
+   "unit": "fraction of the log length change",
+   "value": 0.8,
+   "low": 0.45,
+   "high": 1.3,
+   "refuted_by": "f below 0.45, or undefined",
+   "gpu_minutes": 0,
+   "script": "tests/r6-m04/p2.py",
+   "measured": 0.06468979820134287,
+   "n": 100,
+   "interval": [
+    -0.20777972855755164,
+    0.3962439480682959
+   ],
+   "interval_kind": "bootstrap",
+   "inside": false,
+   "refuted_by_met": true,
+   "alt_measured": -0.014825691278796967,
+   "not_computable": null,
+   "note": "Files: wsp1/screen100 base_cue-01, sft025_cue-01, sft1_cue-01 per_problem.json. First row per problem_index, restricted to problem_index in all three (100 expected). M(arm) = median n_generated over rows with cap_hit not true and n_generated numeric (null/missing cap_hit treated as not a cap hit, i.e. kept as finished); even count -> mean of the two middle values. f undefined (M(sft1) <= M(base) or a median missing) -> refuted_without_number. Bootstrap over common problems (tuple of 3 rows), medians recomputed per resample; an undefined resample is set to -inf (counts as refuted), which would show as -Infinity in the interval if it happens. Ambiguity: each arm's median uses its own finished rows, so the three medians are over different problem sets (problems the base or sft025 fails to finish are dropped from that arm only); alt_measured uses only problems finished in all three arms (paired). Selection effect: if sft025 caps on long problems, its finished median is pulled down, lowering f.",
+   "example_row": {
+    "problem_index": 0,
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_generated": 946
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Where the mechanism says the effect should not appear: share of the intermediate arms' cap hits that fall on problems that are short for Think-SFT (at or below sft1_cue's median length). This mechanism (cap hits come from teacher-length traces the midway model cannot close) predicts few; an interpolation-damage rival (midway models degenerate at random, as off-path edits do in result-36e8cd) predicts about 0.5.",
+   "recipe": "Files: studies/rlneurons/results/wsp1/screen100/sft1_cue-01/per_problem.json, sft025_cue-01/per_problem.json, sft05_cue-01/per_problem.json. Keep the first row per problem_index in each file. m = median of n_generated over all kept sft1_cue rows (cap hits included at their stored n_generated; even count: mean of the two middle values). Short set S = problem_index values whose sft1_cue n_generated <= m. Pool the kept rows of sft025_cue and sft05_cue with cap_hit true whose problem_index is present in sft1_cue (a problem can contribute once per arm). Statistic = (pooled cap-hit rows with problem_index in S) / (all pooled cap-hit rows). If there are no pooled cap-hit rows the statistic is undefined and counts as refuted.",
+   "unit": "fraction of intermediate-arm cap hits",
+   "value": 0.12,
+   "low": 0.0,
+   "high": 0.35,
+   "refuted_by": "statistic above 0.35, or undefined",
+   "gpu_minutes": 0,
+   "script": "tests/r6-m04/p3.py",
+   "measured": 0.0,
+   "n": 100,
+   "interval": [
+    0.0,
+    0.0
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.0,
+   "not_computable": null,
+   "note": "Files: wsp1/screen100 sft1_cue-01, sft025_cue-01, sft05_cue-01 per_problem.json. First row per problem_index. m = median of n_generated over all kept sft1_cue rows including cap hits at 16,384 (rows with non-numeric n_generated would be excluded from m and from S; none expected). S = sft1 problems with n_generated <= m (ties at m are in S). Pooled cap-hit rows: sft025 and sft05 kept rows with cap_hit exactly true and problem_index present in sft1_cue; a problem capped in both arms counts twice. Statistic = pooled rows in S / all pooled rows; zero pooled rows -> refuted_without_number. Bootstrap over sft1 problems (tuple of sft1, sft025, sft05 rows), with m recomputed per resample; a resample with no pooled cap hits is set to +inf (counts as refuted). Ambiguity: alt_measured counts each problem once if it is capped in either intermediate arm (problem-level share rather than row-level). Another reading not computed: m over sft1 finished rows only, which would shift the short/long split down. With few cap hits (likely under ~15 rows) the share is coarse and the interval wide.",
+   "example_row": {
+    "problem_index": 9,
+    "score_v3": 0,
+    "cap_hit": true,
+    "n_generated": 16384
+   }
+  }
+ ]
+}
