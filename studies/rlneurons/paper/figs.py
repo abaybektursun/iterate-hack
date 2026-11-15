@@ -102,7 +102,8 @@ def plane_figure():
         label = {0: "0", -1: "−1"}.get(s, f"{s:g}")
         ax.annotate(label, (top[s][2], top[s][3]), textcoords="offset points", xytext=(dx, dy), ha=ha, fontsize=7.5,
                     color=INK)
-    ax.text(90.5, 53.3, "base + size × top 8 directions\n(size 0 = base)", color=INK, fontsize=7.5, ha="center", va="center", linespacing=1.1)
+    ax.text(90.5, 53.3, "base + size × top 8 directions\n(size 0 = base)", color=INK, fontsize=7.5, ha="center", va="center", linespacing=1.1,
+            bbox=dict(facecolor="white", edgecolor="none", pad=1.5))
 
     # RL, and RL with the 8 directions taken out
     ax.annotate("", xy=(rl_minus_top[2], rl_minus_top[3]), xytext=(rl_cue[2], rl_cue[3]),
@@ -128,7 +129,8 @@ def plane_figure():
         label = "Think-SFT (a = 0)" if a == 0 else str(a)
         ax.annotate(label, (transplant[a][2], transplant[a][3]), textcoords="offset points",
                     xytext=(0, -11) if a == 0 else (5, 4), ha="center" if a == 0 else "left", fontsize=7.5, color=INK)
-    ax.text(84.6, 86.3, "Think-SFT + a × (RL − base)", color=INK, fontsize=7.5, ha="left")
+    ax.text(84.6, 86.3, "Think-SFT + a × (RL − base)", color=INK, fontsize=7.5, ha="left",
+            bbox=dict(facecolor="white", edgecolor="none", pad=1.5))
 
     ax.set_xlim(x0, x1)
     ax.set_ylim(y0, y1)
