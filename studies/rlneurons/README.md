@@ -2363,6 +2363,101 @@ uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rln
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.seen_test
 ```
 
+## Think-SFT with the cue under the vote rules: 241 of 328, above RL under every rule (hard328 n = 328, MATH-500 n = 500, 4 samples, board work-0a00c2, idea-1d9f26)
+
+Question: Think-SFT (`allenai/Olmo-3-7B-Think-SFT` at `6ff8575`, imitation of reasoning traces: no reward, but training) with
+the opening cue had 219 of 328 in one sample (result-d9d6f3). What does it score under the rules chosen on MATH-500, and is it
+ahead of RL under the same rule? Answer: yes on the 328. Vote over 4: Think-SFT 241 of 328 (73.5 % [68.4, 78.0]) at 40,410
+tokens per problem, RL plain 221 (224 after restart), base + cue 192 (195): Think-SFT minus RL +6.1 points [3.0, 9.5], paired.
+One sample: 212, 212, 211, 201 (mean 209.0) against RL 207, 190, 209, 194 (mean 200.0): +2.7 points [0.4, 5.2] on the
+24-order means. On MATH-500 the vote is 481 of 500 against RL 474: +1.4 points [-0.4, 3.2], not separated; singles 461, 457,
+462, 461 against RL 456 to 464. Spec and predictions, filed before any job finished: `specs/SPEC_thinkvote.md` (commit
+`a1822c8`). T 1.0 / top-p 1.0, cap 16,384, grader v3, no restarts for Think-SFT (its `restart` rows equal the plain rows).
+
+Caveats. (1) Think-SFT is trained on 2.27 M traces: the route uses no reward, not no training. (2) Overlap with its training
+prompts (result-f6a8bc, sameraslan; prompts only, 33 code shards unscanned): 6 of the 328 and 25 of MATH-500 match. Without
+them: hard328 n = 322 vote 235 against RL 215 (+6.2 points), single 207 against 201; MATH-500 n = 475 vote 456 against 450.
+(3) RL and base rows have up to two restarts per sample, Think-SFT none; the comparison above uses the no-restart vote of all
+three, and RL's vote after restart (224) is still 17 below.
+
+| Rule (chosen on MATH-500) | Set | Think-SFT + cue: right, right (24), tokens | RL plain: right, right (24), tokens | base + cue: right, right (24), tokens |
+|---|---|---|---|---|
+| one sample | hard328 | 212, 209.0, 10,137 | 207, 200.0, 9,437 | 161, 158.5, 9,074 |
+| vote over 4 (no restart) | hard328 | 241, , 40,410 | 221, , 37,299 | 192, , 36,902 |
+| sequential vote, at most 3 (`seq3`) | hard328 | 241, 233.2, 26,269 | 216, 212.7, 23,613 | 183, 178.8, 25,601 |
+| sequential vote, at most 4 (`seq4_restart`) | hard328 | 241, 238.9, 30,904 | 224, 218.2, 31,326 | 194, 190.8, 46,317 |
+| sequential vote, at most 4, ties to the shortest (`seq4_restart_short`) | hard328 | 240, 239.5, 30,904 | 222, 220.5, 31,326 | 198, 198.5, 46,317 |
+| vote over 4 after restart, ties to the shortest | hard328 | 239, 239.0, 40,410 | 220, 220.0, 44,108 | 199, 199.0, 55,306 |
+| one sample | MATH-500 | 461, 460.2, 4,900 | 456, 460.0, 4,675 | 405, 410.5, 3,808 |
+| vote over 4 | MATH-500 | 481, 480.8, 19,503 | 474, 474.3, 18,747 | 446, 448.2, 16,034 |
+| sequential vote, at most 4 (`seq4`) | MATH-500 | 481, 480.8, 11,521 | 474, 474.3, 11,098 | 446, 448.2, 11,369 |
+| sequential vote, at most 4, ties to the shortest (`seq4_short`) | MATH-500 | 481, 480.5, 11,521 | 475, 474.5, 11,098 | 451, 452.0, 11,369 |
+
+Right = stored draw order, right (24) = mean over the 24 draw orders, tokens = generated tokens per problem. RL and base rows
+on the 328 are those of `results/day1_3/hard328_*_s4r2-01/` and `results/frontier/hard328-01/` (board work-1a972a), not
+recomputed; MATH-500 rows of `results/frontier/math500-01/`. These are the Think-SFT rows for the deliverable table of "Token
+frontier": the best reward-free configuration on the 328 is Think-SFT + cue with the sequential vote, 241 (238.9 over the
+orders) at 30,904 tokens, against RL's best 224 at 31,326 under the same rule (-6.3 points [-9.5, -3.3] for RL).
+
+Instrument checks. hard328 sample 0 repeats sameraslan's cell on its seeds: 212 right and 89 cap hits against 219 and 89
+(other GPU; inside the 12 allowed). MATH-500 sample 0: 461 against the stored 454. The join of four one-sample jobs was
+tested against one `--samples 4` dry run: the same (problem, sample, attempt, seed) for all 40 rows, and a run with the
+wrong seed offset is refused. Smoke (10 problems): cue ids in the prompt, 355 tensors bit-identical to Think-SFT, 9 of 10.
+
+Predictions scored (`results/thinkvote/scored-01/readout.json`):
+
+- H1, MATH-500 vote over 4, filed blind by the rate and hazard studies: 473.1 [466, 480] and 472.1 [464, 480]. Observed 481:
+  outside both intervals by one problem, and above the 479 that result-bf6124 named as refuting the one-axis claim. Part of
+  the miss is the input: both rules started from the stored single cell (454), and the four singles here have 457 to 462.
+- H2, hard328 vote over 4: observed 241. Rasch with RL's vote shift 238.6 (miss 2.4), Rasch with the base's vote shift 243.8
+  (2.8), mine 238 [228, 250] (3.0, held), point rule from MATH-500 245.9 (4.9), point rule from the 328 234 (7.0). The Rasch
+  rule wins, all five inside sampling noise (binomial sd 8). They were anchored at 219; from the measured single (212) the
+  vote gained 29 problems, more than any rule's gain (15 to 27).
+- hard328 single, the profile study's rules against the mean of four samples (209.0): `profile_corrected` 209.2, profile
+  217.6, L1 201.1, Lc 196.3, P 190.5. The profile rule still wins; the one-axis rules miss low by 8 to 18.
+- H3 (Think-SFT ahead of RL under the vote on the 328 by at least 2 points): held, +6.1 [3.0, 9.5].
+- H4 (RL stays ahead on MATH-500 under the vote): refuted, 481 against 474, not separated.
+- H5 (sequential vote within 1.5 points of the vote at 25 % fewer tokens): held on MATH-500 (480.8 against 480.8, 41 % fewer);
+  refuted on the 328 by the token bar (238.9 against 241, 24 % fewer).
+- H6 (cap hits are unfinished reasoning, not loops): held. Rule A flags 6 of 378 cap hits on the 328.
+
+What the raw rows show (`analysis/thinkvote_read.py`, counts in `scored-01/readout.json`):
+
+- Think-SFT abstains where RL answers wrong. On the 328 it hits the cap on 378 of 1,312 samples (29 %; RL 114, 9 %), and
+  its finished answers are right 88.0 % of the time (RL 66.2 %). A cap hit casts no vote, so the vote is almost pass@4: 241
+  against 244 (RL 221 against 240, base 192 against 207). This is why its vote gains 29 problems and RL's 14.
+- The cap hits are long reasoning that keeps trying cases: median share of distinct lines in the last 6,000 characters 0.99
+  (sample 0), and 86 of the 378 contain more than 20 Chinese characters (RL: 1 of 114). 61 problems hit the
+  cap in both of the first two samples. A higher cap is the untested lever.
+- 13 of the 328 have the Think-SFT vote right and no RL sample right in any attempt (75, 98, 109, 112, 116, 162, 168, 169,
+  199, 232, 289, 369, 392: olympiad, AIME and HMMT problems; on them RL mostly finishes with a wrong answer, e.g. problem 75: Think-SFT 73 in all four samples, RL 234 three times). The reverse set has 5 problems, and
+  Think-SFT hits the cap on 19 of its 20 samples there. Vote right for one model only: Think-SFT 26, RL 6.
+- Its errors on easy MATH-500 problems are mostly the answer line, not the mathematics. Levels 1-2, three samples read by
+  hand: 16 errors = 8 with the right answer in a form grader v3 does not take (`Answer:` then the answer on the next line,
+  `Answer: $Answer`, `137 1/2` for `137 \frac{1}{2}`), 3 cap hits, 5 wrong (problem 18 three times, an Asymptote figure).
+  Over all four samples 16 of its 74 finished wrong answers on MATH-500 end in a line that equals the gold (RL: 0 of 131); on
+  the 328, 4 of 112. Grader v3 is unchanged, so Think-SFT's MATH-500 singles are about 4 problems low per sample; this is the
+  "easy-side" deficit of "Difficulty profiles" in part.
+
+Part B (the stack Think-SFT + RL difference) was not run here: work-3d1e3b claimed it. `jobs/thinkvote_stack.py` (stochastic
+BF16 rounding of sft + scale (rl - base), effective-scale check, selftest on synthetic weights) is in the repository for it.
+
+Jobs (abaybektursun's Modal, H100/H200, one per sample, 5.6 GPU-hours of job time, about 22 USD at Modal's H100 price): hard328 `abaybektursun-1115-000503-1e5f`,
+`-000525-ea4e`, `-014823-ef56`, `-014833-1daa` (seeds 3000000 + 10000 s); MATH-500 `-000512-ee03`, `-014843-85d9`,
+`-000607-0e92`, `-000621-1d7e` (181000000 + 10000 s); smoke `-000018-b6b5`. Three jobs died twice at start under the old
+runner (no rows) and were resubmitted. Raw answers: `runs/<job>/answers.jsonl` in that workspace. Run folders
+`results/thinkvote/{hard328,math500}_sft1_cue_s4-01/` (`run.json`, `metrics.json`, `readout.json`, `rows.jsonl`,
+`examples.json`: one vote right, one wrong), `frontier_{hard328,math500}-01/` (the `--base` slot holds Think-SFT; labels in
+`frontier.md` edited, numbers untouched), `scored-01/`. Commands:
+
+```
+uv run tools/gpu.py submit h100 --hours 2.5 -- "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed <3000000 + 10000 s> --commit $(git rev-parse HEAD)"
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.thinkvote_join --runs runs/<s0> runs/<s1> runs/<s2> runs/<s3> --out runs/thinkvote_hard328_sft1_cue_s4
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_vote --run runs/thinkvote_hard328_sft1_cue_s4 --out studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01 --minus studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/readout.json
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.frontier --base studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01 --rl studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01 --fixed studies/rlneurons/results/frontier/math500-01/chosen.json --out studies/rlneurons/results/thinkvote/frontier_hard328-01
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.thinkvote_read --out studies/rlneurons/results/thinkvote/scored-01
+```
+
 ## How to run
 
 Laptop checks (no GPU, no weights):
