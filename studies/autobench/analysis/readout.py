@@ -29,7 +29,8 @@ def main():
         if row.get("right") is not None and (best is None or row["right"] > best["right"]):
             best = row
         curve.append(best["right"] if best else None)
-    finals = [row | {"label": key.split(":")[2]} for key, row in items if key.startswith("final:") and key.split(":")[2] in labels]
+    finals = [row | {"label": key.split(":")[2]} for key, row in items   # attempts that failed on Modal's side have no score
+              if key.startswith("final:") and key.split(":")[2] in labels and row.get("right") is not None]
     metrics = {"arm": arm, "budget": ledger[f"budget:{arm}"], "experiments": len(rows),
                "crashed": sum(row.get("right") is None for row in rows), "best": best, "best_right_after_each_experiment": curve,
                "gpu_seconds": sum(row.get("wall_seconds", 0) for row in rows), "finals": finals, "rows": rows}

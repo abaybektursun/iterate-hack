@@ -5,8 +5,9 @@ repository's task, the base Olmo model on MATH-500 with no training, and compare
 experiments with the swarm's record. Problems, prompt, model revisions, engine and grader are the rlneurons
 study's, imported, not copied.
 
-**State: built, nothing has run on a GPU. No numbers yet.** Plan, leak controls and cost (about 34 USD, about
-8.5 h) are in `specs/SPEC2.md`.
+**State: run on 2026-11-15.** On 400 unseen MATH-500 problems the Karpathy arm's method equals the swarm's cue with
+one sample (338 of 400 each) at 2.7 times the tokens; on the 328 harder problems it is 6.4 points lower [-10.7, -2.1].
+Plan and leak controls are in `specs/SPEC2.md`.
 
 | Path | What it is |
 |---|---|
@@ -21,6 +22,8 @@ study's, imported, not copied.
 | `arms/karpathy/` | The agent's files: `program.md`, `README.md`, the starting `solve.py` (plain prompt, T 0.6 / top-p 0.95), and `setup.py`, which makes its folder outside this repository. |
 | `arms/swarm/solve_cue.py` | The swarm's cue configuration (T 1.0 / top-p 1.0) as a `solve.py`, for the pipeline check and the finals. |
 | `analysis/audit.py` | Flags lines of a `solve.py` that touch the harness internals, the clock, files or single problems. |
+| `analysis/paired.py` | Paired difference of two finals on one set with a bootstrap interval, from their per-problem grades. |
+| `arms/swarm/solve_vote4.py` | The swarm's vote over 4 samples as a `solve.py`, for the finals. |
 | `analysis/readout.py` | Ledger to `results/math500-loop/<arm>-<nn>/metrics.json` and `run.json`, and the readout. |
 
 ## Run
@@ -53,17 +56,75 @@ person who ran it (`<arm>/<nnn>/`, finals in `final/`). They are not committed.
 
 ## Numbers
 
-Pipeline check (SPEC2 step 1, 2026-11-15, arm `check`, experiment 002, Volume `autobench-runs:/check/002/`): the swarm's
-cue configuration (`arms/swarm/solve_cue.py`, T 1.0 / top-p 1.0, one sample) scores **84 of 100** on the dev
-problems (grader v3), 3,599 generated tokens per problem, 98 answers finished, 2 hit the 16,384-token cap, none cut
-by the time budget; generation 253 s of the 360 s budget, model loading 101 s, 372 s in the container, on an H200.
-For comparison, the swarm's row for this configuration is 410 of 500 on all of MATH-500 with no time limit.
-One problem scored right (index 0, extracted `(3, \frac{\pi}{2})`) and one scored wrong (index 4, extracted
-`Briana`) were read.
+All with base `allenai/Olmo-3-1025-7B`, grader v3, one H200, 3.6 s of generation per problem (7.2 s on `hard328`).
+Run folders: `results/math500-loop/karpathy-01/` (ledger of the 40 experiments and of the finals, `run.json`) and
+`results/math500-loop/finals-01/` (per-problem grades of the six finals). Raw answers, logs and every `solve.py`
+are in the Modal Volume `autobench-runs` of frustea (`karpathy/<nnn>/`, `final/<set>-<label>-<nnn>/`).
 
-Two things the check changed: `solve_job` now asks for an H200 by name, because the request for an H100 was served
-by an H200 and a time budget needs one GPU type for every experiment; and the client spawns the run and keeps its
-call id, because a run whose client died was cancelled. Experiments 000 and 001 of `check` were cancelled that
-way and have no score.
+### Finals on problems no experiment used (2026-11-15)
 
-The Karpathy arm (40 experiments) started 2026-11-15 07:07 UTC. No result yet.
+| Configuration | math400: right of 400 | tokens per problem | hard328: right of 328 | tokens per problem |
+|---|---|---|---|---|
+| Karpathy arm's kept `solve.py` (plain prompt, T 0.6, 12 samples, vote, two passes) | 338 (84.5 %) | 11,254 | 139 (42.4 %) | 20,407 |
+| Swarm cue, one sample (`arms/swarm/solve_cue.py`) | 338 (84.5 %) | 4,097 | 160 (48.8 %) | 9,351 |
+| Swarm cue, vote over 4 (`arms/swarm/solve_vote4.py`) | 344 (86.0 %) | 6,372 | 161 (49.1 %) | 9,060 |
+
+Paired differences, Karpathy minus swarm, 95 % interval from a paired bootstrap over problems (`analysis/paired.py`):
+
+- math400 against the cue with one sample: 0.0 points [-3.5, +3.5] (25 problems only Karpathy right, 25 only the cue),
+  at 2.7 times the tokens.
+- math400 against the vote over 4: -1.5 points [-5.2, +2.2].
+- hard328 against the cue with one sample: **-6.4 points [-10.7, -2.1]** (16 only Karpathy right, 37 only the cue), at
+  2.2 times the tokens. Against the vote over 4: -6.7 [-11.3, -2.1].
+
+The hypothesis of SPEC2 holds: on the 328 harder problems the Karpathy arm's method is below the swarm's
+configuration at fewer tokens, outside the interval. On the easier 400 the two are equal and the Karpathy method
+costs 2.7 times the tokens.
+
+Read with these:
+
+- The time budget cut the swarm's vote: 872 of 1,600 requests on math400 and 972 of 1,312 on hard328 never ran, so
+  on hard328 the vote is close to one sample per problem. Without a time limit the swarm's posted record is 192 of
+  328 for the vote over 4 at 36,902 tokens and 161 for one sample (board result-5c961a).
+- The Karpathy method caps a sample at 4,096 tokens and always returns an answer (0 of 328 without one; the cue
+  leaves 69 of 328 without one). On hard328 3,910 of its samples hit a cap. It was tuned on problems where
+  short samples are enough.
+- One problem of `hard328-karpathy-000` scored right: index 0, extracted `116`; one scored wrong: index 29,
+  extracted `35`.
+- `solve_vote4.py` was written after the arm ended and run once.
+
+### The Karpathy arm (40 experiments on the 100 dev problems, 2026-11-15 07:07 to 13:14 UTC)
+
+- Start (plain prompt, T 0.6 / top-p 0.95, one sample): 61 of 100 at 3,289 tokens per problem.
+- Experiment 2 (8 samples, majority vote): 81. Best single run: 86 (experiments 11, 17, 18, 26, 27, 36, 39).
+- The kept method, 7 runs with different seeds: 83, 86, 86, 84, 83, 86, 80, mean 84.0, at about 10,800 tokens per
+  problem. So one run of 100 is good to about 3 problems, and every step after experiment 2 is inside that.
+- No crash. 5.33 h of GPU containers. The agent (Claude Code headless, `claude-fable-5-2`) reports 7.91 USD.
+- Transcript search (`~/.claude/projects/-Users-ali-autoresearch-math`): no web search, no web fetch, no path
+  outside its folder, no mention of this repository or the team site. It did not find the opening cue.
+- Audit of the kept `solve.py` (experiment 036): one flag, the word "deadline" in a comment. Read in full: no
+  per-problem content, 82 lines.
+- What it tried, with its own notes, is in `results/math500-loop/karpathy-01/metrics.json` and on the board as
+  idea-6fb0de.
+
+For comparison on the same 100 problems and runner: the swarm's cue with one sample scores 84 at 3,599 tokens per
+problem (arm `check`, experiment 002).
+
+### Deviations from SPEC2
+
+- The final file is the agent's kept `solve.py`, not the highest single run in the ledger: that run (experiment 11,
+  86) was an A/B file whose score the agent itself read as noise, and it has the same method.
+- The vote over 4 was added to the finals, because the cue with one sample uses a third of the tokens.
+- Finals ran through `solve_job_final`, which can reach Modal and the network: a result above a few MB is returned
+  through blob storage, and the restricted container cannot write there (9 final attempts ended with AuthError 401
+  or a name-resolution error and have no score). The 40 experiments ran in the restricted container.
+- Experiments 000 and 001 of `check` have no score: 001 was cancelled when its client died with the session; 000
+  was cancelled on Modal's side after 349 s for a reason that was not found.
+- Cost: 59.92 USD of Modal for the app `autobench` on 2026-11-15 (`modal billing report`), against the 34 USD
+  estimated: experiments took 8 minutes each, not 6.5, and the failed finals cost about 12 USD.
+
+### What the comparison does not show
+
+It compares what each side produced under one evaluation, not the two methods at equal resources: the swarm had
+several agents and two days, the Karpathy arm one agent, 40 experiments and 6 hours, and one run is one sample of
+the method. An equal-agents version is three or four independent Karpathy loops sharing one experiment budget.
