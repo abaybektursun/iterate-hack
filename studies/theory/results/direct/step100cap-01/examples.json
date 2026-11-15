@@ -1,0 +1,87 @@
+{
+ "problem_index": 9,
+ "h_A": 0.5,
+ "h_B": 0.5,
+ "counts_as_cap_hit": {
+  "arm": "A step 100",
+  "row": {
+   "problem_index": 9,
+   "score_v3": 0,
+   "cap_hit": true,
+   "n_generated": 16384,
+   "extracted_v3": null,
+   "opening": ".\n\nOkay, so I need to figure o"
+  }
+ },
+ "does_not_count": {
+  "arm": "A step 100",
+  "row": {
+   "problem_index": 9,
+   "sample": 2,
+   "attempt": 0,
+   "seed": 45020009,
+   "n_new": 14729,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "1",
+   "score_v3": 0,
+   "gold": "4",
+   "opening": ".\n\nOkay, so I have this proble"
+  }
+ },
+ "cued_base_rows_same_problem": [
+  {
+   "problem_index": 9,
+   "sample": 0,
+   "attempt": 0,
+   "seed": 41000009,
+   "n_new": 11280,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "5",
+   "score_v3": 0,
+   "gold": "4"
+  },
+  {
+   "problem_index": 9,
+   "sample": 1,
+   "attempt": 0,
+   "seed": 41010009,
+   "n_new": 11685,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "2",
+   "score_v3": 0,
+   "gold": "4"
+  },
+  {
+   "problem_index": 9,
+   "sample": 2,
+   "attempt": 0,
+   "seed": 41020009,
+   "n_new": 16384,
+   "cap_hit": true,
+   "finish_reason": "length",
+   "loop_A": false,
+   "extracted_v3": null,
+   "score_v3": 0,
+   "gold": "4"
+  },
+  {
+   "problem_index": 9,
+   "sample": 3,
+   "attempt": 0,
+   "seed": 41030009,
+   "n_new": 16384,
+   "cap_hit": true,
+   "finish_reason": "length",
+   "loop_A": false,
+   "extracted_v3": null,
+   "score_v3": 0,
+   "gold": "4"
+  }
+ ]
+}

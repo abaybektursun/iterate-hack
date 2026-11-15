@@ -1,0 +1,10 @@
+[
+ {
+  "mechanism": "round-09/stopping-m04",
+  "claim": "At T 1.0 on MATH-500, RL step 100 (plain) hits the 16,384-token cap as often as the cued base on the same problems (paired difference not 1 point or more lower), while final RL's cap-hit rate is clearly lower.",
+  "result": "PENDING",
+  "verdict": "holds",
+  "measured": "D (step 100 minus cued base cap-hit rate) -0.25 points [-0.95, +0.50], n 500 problems x 4 samples, null 0 (base vs itself -> +0.60 [-0.60, +1.80]); final RL -2.90 [-3.80, -2.05], step 400 -2.15 [-2.95, -1.35]; threshold -1.0",
+  "added": "2026-11-15T22:42:17Z"
+ }
+]
