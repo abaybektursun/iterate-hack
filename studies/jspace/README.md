@@ -17,6 +17,12 @@ All code runs from the repository root with the root on `PYTHONPATH`.
 | `analysis/lensdiff_analyze.py` | Readout of a run folder: token diff (a), presence with intervals (b, H1), by problem group (c, H2), lead before ` Wait` (d, H3), where in the answer (e); writes `metrics.json` and `examples.json`. Needs the RLN-5 map run folder (`--map`). |
 | `analysis/lensdiff_predict.py` | Exploratory: AUROC of per-answer lens features for "this answer is wrong", against answer length; writes `predict.json`. |
 | `analysis/lensdiff_page.py`, `analysis/page_template.html` | Build the reading page `results/lensdiff/full-01/workspace-diff.html` (charts and a token-by-token reader of six answers) from `metrics.json`, the shards and `page_examples.json`. |
+| `specs/SPEC2_workspace.md` | SPEC 2: do the lens paper's workspace tests pass on the RL model and on the base, and where do they differ; what `mhough/olmo3-jacobian-lenses` already published; hypotheses W1 to W6. No GPU run yet (2026-11-15). |
+| `data/jlens_581d398/` | The six readout sets and `probe-swap.json` of `anthropics/jacobian-lens` at 581d398 (Apache-2.0, unchanged), with its LICENSE. |
+| `prep/math_stimuli.py`, `data/math_stimuli_v1.json` | 240 arithmetic chains (120 with a swap) and 300 right/wrong twins, seed 20261114. |
+| `jobs/fit_lens.py`, `jobs/fit_lens.sh` | Fit a J-lens for one model with the reference `jlens` code at a pinned commit (WikiText or math corpus). |
+| `jobs/workspace_tests.py` | SPEC 2 job: readout sets, swap, twins on both models, each through its own head, with lens variants `pub`, `logit` and any `--lens-files`. |
+| `analysis/workspace_analyze.py` | SPEC 2 readout: pass@k with null, swap flip rates with controls, twin gaps, all with bootstrap intervals. |
 | `results/lensdiff/full-01/` | The full run: `run.json`, `checks.json` (the job's instrument checks), `metrics.json`, `examples.json` (138 answers, 5 positions each, with both readouts), `predict.json`, `reader_notes.md` (one reader's labels of 114 of those positions), `page_examples.json` and `workspace-diff.html` (the reading page). |
 
 ## Run it
