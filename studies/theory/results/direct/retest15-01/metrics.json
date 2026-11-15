@@ -1,0 +1,419 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_retest15.md",
+ "rule": "verdict16 (studies/theory/lib/forecast.py)",
+ "s100vote_c2": {
+  "statistic": "G = 100 mean over problems (vote over 4, random tie-break, minus mean single sample), points",
+  "adversary": {
+   "text": "final RL's mean vote gain at each per-problem right count k (0-4), weighted by step 100's distribution of k",
+   "value": 6.237,
+   "final_rl_gain_per_k": [
+    0.0,
+    -13.0952,
+    41.1765,
+    25.0,
+    0.0
+   ],
+   "step100_k_hist": [
+    24,
+    27,
+    40,
+    73,
+    336
+   ],
+   "final_rl_k_hist": [
+    18,
+    7,
+    17,
+    33,
+    425
+   ],
+   "final_rl_G": 2.8667,
+   "audit_value_own_vote": 6.237
+  },
+  "G": 7.1833,
+  "ci90": [
+   6.0333,
+   8.3667
+  ],
+  "n": 500,
+  "G_minus_adversary": {
+   "value": 0.9464,
+   "ci90": [
+    -0.0934,
+    1.9975
+   ],
+   "bootstrap": "10,000 joint resamples, default_rng(1)"
+  },
+  "bootstrap": "10,000 resamples of problems, default_rng(0)",
+  "verdict": "not separated"
+ },
+ "merge328_c1": {
+  "statistic": "D = mean over kept hard328 problems of V_S - V_M (cued base vote of 4, random tie-break; real vs merged wrong answers; cap hits abstain)",
+  "adversary": {
+   "text": "wrong answers are shared attractor values: each finished wrong answer equals one shared value per problem with probability q, else its own value; q^2 = measured same-problem wrong-pair agreement; right counts and wrong counts per problem kept; mean D over 2,000 simulations",
+   "measured_wrong_pair_agreement_hard328": [
+    0.2179,
+    257
+   ],
+   "q": 0.4668,
+   "simulated_pair_agreement_on_kept": 0.2142,
+   "value": 0.1024,
+   "sim_sd": 0.0104,
+   "simulations": 2000,
+   "rng": "default_rng(16)"
+  },
+  "reference_independent_wrong_answers_D": 0.1392,
+  "measured_wrong_pair_agreement_on_kept_problems": [
+   0.1455,
+   55
+  ],
+  "shape_hist_right_wrong": {
+   "1R1W": 8,
+   "1R2W": 9,
+   "1R3W": 11,
+   "2R1W": 10,
+   "2R2W": 13,
+   "3R1W": 37
+  },
+  "D": 0.1089,
+  "ci90": [
+   0.0777,
+   0.142
+  ],
+  "n": 88,
+  "bootstrap": "10,000 resamples of kept problems, default_rng(0)",
+  "verdict": "not separated"
+ },
+ "edit0of4_c3_and_d1": {
+  "same_measurement_check": {
+   "edit0of4_inputs": {
+    "D13": "Path('studies/rlneurons/results/day1_3')",
+    "CELLS": "{'base': 'hard328_base_cue_s4r2-01', 'edit': 'hard328_top8x1.5_cue_s4-01', 'rl': 'hard328_rl_plain_s4r2-01'}",
+    "JOBS": "{'base': 'abaybektursun-1114-200457-e8e6', 'edit': 'abaybektursun-1115-055641-b417', 'rl': 'abaybektursun-1114-200505-5ff2'}",
+    "CAP32_ROWS": "Path('studies/rlneurons/results/cap32/rows-02/base_cue.jsonl')",
+    "CUT": "16384"
+   },
+   "editreach_inputs": {
+    "CELLS": "{'base': 'day1_3/hard328_base_cue_s4r2-01', 'edit': 'day1_3/hard328_top8x1.5_cue_s4-01', 'rl': 'day1_3/hard328_rl_plain_s4r2-01'}",
+    "CAP32_ROWS": "RES / 'cap32/rows-02/base_cue.jsonl'",
+    "CAP32_RAW": "pathlib.Path('../iterate-hack-shots/runs/cap32_base_cue_joined/answers.jsonl')",
+    "CUT": "16384"
+   },
+   "same_rows_files": true,
+   "edit0of4_problems": 121,
+   "d1_problems": 120,
+   "d1_subset_of_edit0of4": true,
+   "dropped_from_d1": [
+    370
+   ],
+   "statistics": "edit0of4: E - R; d1: (E - B) / (R - B); both from the same E and R counts",
+   "decision": "edit0of4 (round-15/account-2/c3) rejected, same measurement as d1: no row"
+  },
+  "d1": {
+   "statistic": "S = (E - B) / (R - B) on hard328 problems the cued base gets 0 of 4 (fresh cap32 base sample)",
+   "adversary": {
+    "text": "S expected from accuracy alone: (acc_edit - acc_base) / (acc_rl - acc_base) with attempt-0 samples 0-3 per-sample right rates on all 328 hard328 problems",
+    "acc": {
+     "base": 0.4832,
+     "edit": 0.6105,
+     "rl": 0.6098
+    },
+    "value": 1.006
+   },
+   "S": 0.88,
+   "ci90": [
+    0.6857,
+    1.1316
+   ],
+   "n": 120,
+   "E": 0.1417,
+   "R": 0.1542,
+   "B": 0.05,
+   "R_minus_B_ci90": [
+    0.0646,
+    0.1458
+   ],
+   "bootstrap": "10,000 resamples of problems, default_rng(0), one draw for E, R, B"
+  },
+  "d1_verdict": "not separated"
+ },
+ "raw_rows": {
+  "s100vote": [
+   [
+    [
+     "\\left(3, \\frac{\\pi}{2}\\right)",
+     1,
+     false,
+     "\\left( 3, \\frac{\\pi}{2} \\right)"
+    ],
+    [
+     "\\left(3, \\frac{\\pi}{2}\\right)",
+     1,
+     false,
+     "\\left( 3, \\frac{\\pi}{2} \\right)"
+    ],
+    [
+     "\\left(3, \\frac{\\pi}{2}\\right)",
+     1,
+     false,
+     "\\left( 3, \\frac{\\pi}{2} \\right)"
+    ],
+    [
+     "(3, \\frac{\\pi}{2})",
+     1,
+     false,
+     "\\left( 3, \\frac{\\pi}{2} \\right)"
+    ]
+   ],
+   [
+    [
+     "56",
+     0,
+     false,
+     "28"
+    ],
+    [
+     "56",
+     0,
+     false,
+     "28"
+    ],
+    [
+     "28",
+     1,
+     false,
+     "28"
+    ],
+    [
+     "56",
+     0,
+     false,
+     "28"
+    ]
+   ],
+   [
+    [
+     null,
+     0,
+     false,
+     "42"
+    ],
+    [
+     "42",
+     1,
+     false,
+     "42"
+    ],
+    [
+     "42",
+     1,
+     false,
+     "42"
+    ],
+    [
+     "42 inches",
+     1,
+     false,
+     "42"
+    ]
+   ]
+  ],
+  "merge328": [
+   [
+    [
+     "108",
+     0,
+     false,
+     "116"
+    ],
+    [
+     "116",
+     1,
+     false,
+     "116"
+    ],
+    [
+     "116",
+     1,
+     false,
+     "116"
+    ],
+    [
+     "116",
+     1,
+     false,
+     "116"
+    ]
+   ],
+   [
+    [
+     "227",
+     1,
+     false,
+     "227"
+    ],
+    [
+     "227",
+     1,
+     false,
+     "227"
+    ],
+    [
+     "227",
+     1,
+     false,
+     "227"
+    ],
+    [
+     "333",
+     0,
+     false,
+     "227"
+    ]
+   ],
+   [
+    [
+     "550",
+     0,
+     false,
+     "154"
+    ],
+    [
+     "154",
+     1,
+     false,
+     "154"
+    ],
+    [
+     "154",
+     1,
+     false,
+     "154"
+    ],
+    [
+     "154",
+     1,
+     false,
+     "154"
+    ]
+   ],
+   [
+    [
+     "673",
+     0,
+     false,
+     "721"
+    ],
+    [
+     "16011",
+     0,
+     false,
+     "721"
+    ],
+    [
+     "721",
+     1,
+     false,
+     "721"
+    ],
+    [
+     "721",
+     1,
+     false,
+     "721"
+    ]
+   ]
+  ],
+  "d1": [
+   {
+    "problem": 29,
+    "edit": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "rl": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "base": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "cap32": {
+     "score_v3": 0,
+     "n_new": 14937,
+     "cap_hit": false,
+     "extracted_v3": "240",
+     "gold": "244"
+    }
+   },
+   {
+    "problem": 57,
+    "edit": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "rl": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "base": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "cap32": {
+     "score_v3": 0,
+     "n_new": 15472,
+     "cap_hit": false,
+     "extracted_v3": "4060",
+     "gold": "928"
+    }
+   },
+   {
+    "problem": 61,
+    "edit": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "rl": [
+     0,
+     0,
+     1,
+     1
+    ],
+    "base": [
+     0,
+     0,
+     0,
+     0
+    ],
+    "cap32": {
+     "score_v3": 0,
+     "n_new": 16317,
+     "cap_hit": false,
+     "extracted_v3": "43",
+     "gold": "113"
+    }
+   }
+  ]
+ },
+ "raw_rows_seen": [
+  "s100vote, 10 rows read (3 problems x 4 samples, plus 4 kept merge328 problems and 3 d1 problems below): step-100 problem 0 has four right answers written two ways ('\\left(3, \\frac{\\pi}{2}\\right)' and '(3, \\frac{\\pi}{2})'), grouped as one by the team vote; problem 18 has three samples on the shared wrong value 56 and one right 28 (gold 28), so the vote loses: shared wrong values exist at step 100; problem 5 has one sample with no answer (abstains) and '42 inches' grouped with '42'.",
+  "merge328: kept problems are mostly 3 right and 1 wrong (37 of 88), where merging cannot change the vote; problem 66 (673, 16011, 721, 721; gold 721) is the type where differing wrong answers matter. The kept problems' own wrong-pair agreement is 0.146 of 55 pairs, below the all-hard328 0.218 of 257 the adversary uses, so the measured D sits between the shared-attractor value (0.102) and the independent value (0.139).",
+  "d1: problems 29 and 57 are 0 of 4 for edit, RL and base, and the cap32 base sample finishes wrong (240 vs gold 244; 4060 vs 928); problem 61 is right for RL in 2 of 4 and the edit in 0 of 4. E and R rest on 68 and 74 right samples of 480, B on 6 of 120."
+ ]
+}

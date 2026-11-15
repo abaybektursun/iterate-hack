@@ -1,0 +1,174 @@
+{
+ "s100vote": {
+  "vote_beats_single": {
+   "problem_index": 5,
+   "gold": "42",
+   "vote_minus_single_points": 25.0,
+   "samples": [
+    {
+     "sample": 0,
+     "extracted_v3": null,
+     "score_v3": 0,
+     "cap_hit": false
+    },
+    {
+     "sample": 1,
+     "extracted_v3": "42",
+     "score_v3": 1,
+     "cap_hit": false
+    },
+    {
+     "sample": 2,
+     "extracted_v3": "42",
+     "score_v3": 1,
+     "cap_hit": false
+    },
+    {
+     "sample": 3,
+     "extracted_v3": "42 inches",
+     "score_v3": 1,
+     "cap_hit": false
+    }
+   ]
+  },
+  "vote_loses_to_single": {
+   "problem_index": 18,
+   "gold": "28",
+   "vote_minus_single_points": -25.0,
+   "samples": [
+    {
+     "sample": 0,
+     "extracted_v3": "56",
+     "score_v3": 0,
+     "cap_hit": false
+    },
+    {
+     "sample": 1,
+     "extracted_v3": "56",
+     "score_v3": 0,
+     "cap_hit": false
+    },
+    {
+     "sample": 2,
+     "extracted_v3": "28",
+     "score_v3": 1,
+     "cap_hit": false
+    },
+    {
+     "sample": 3,
+     "extracted_v3": "56",
+     "score_v3": 0,
+     "cap_hit": false
+    }
+   ]
+  }
+ },
+ "merge328": {
+  "merging_changes_vote": {
+   "problem_index": 66,
+   "gold": "721",
+   "V_S": 1.0,
+   "V_M": 0.5,
+   "keys": [
+    0,
+    1,
+    "R",
+    "R"
+   ],
+   "answers": [
+    {
+     "sample": 0,
+     "extracted_v3": "673",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 4192
+    },
+    {
+     "sample": 1,
+     "extracted_v3": "16011",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 11680
+    },
+    {
+     "sample": 2,
+     "extracted_v3": "721",
+     "score_v3": 1,
+     "cap_hit": false,
+     "n_new": 9178
+    },
+    {
+     "sample": 3,
+     "extracted_v3": "721",
+     "score_v3": 1,
+     "cap_hit": false,
+     "n_new": 10520
+    }
+   ]
+  },
+  "merging_no_change": {
+   "problem_index": 0,
+   "gold": "116",
+   "V_S": 1.0,
+   "V_M": 1.0,
+   "keys": [
+    0,
+    "R",
+    "R",
+    "R"
+   ],
+   "answers": [
+    {
+     "sample": 0,
+     "extracted_v3": "108",
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_new": 3213
+    },
+    {
+     "sample": 1,
+     "extracted_v3": "116",
+     "score_v3": 1,
+     "cap_hit": false,
+     "n_new": 2486
+    },
+    {
+     "sample": 2,
+     "extracted_v3": "116",
+     "score_v3": 1,
+     "cap_hit": false,
+     "n_new": 3541
+    },
+    {
+     "sample": 3,
+     "extracted_v3": "116",
+     "score_v3": 1,
+     "cap_hit": false,
+     "n_new": 3732
+    }
+   ]
+  }
+ },
+ "d1": {
+  "edit_right": {
+   "problem_index": 70,
+   "sample": 0,
+   "prompt": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nRectangles $ABCD$ and $EFGH$ are drawn such that $D,E,C,F$ are collinear. Also, $A,D,H,G$ all lie on a circle. If $BC=16$,$AB=107$,$FG=17$, and $EF=184$, what is the length of $CE$?\n\nRemember to put your answer on its own line after \"Answer:\"",
+   "output_tail": "mplies e_x^2 - 2e_x^2 - 184e_x + 561 = 0 \\implies -e_x^2 - 184e_x + 561 = 0 \\implies e_x^2 + 184e_x - 561 = 0\n     \\]\n   - Solve the quadratic equation:\n     \\[\n     e_x = \\frac{-184 \\pm \\sqrt{184^2 + 4 \\cdot 561}}{2}\n     \\]\n     \\[\n     e_x = \\frac{-184 \\pm \\sqrt{33856 + 2244}}{2} = \\frac{-184 \\pm \\sqrt{36100}}{2} = \\frac{-184 \\pm 190}{2}\n     \\]\n     \\[\n     e_x = \\frac{6}{2} = 3 \\quad \\text{or} \\quad e_x = \\frac{-374}{2} = -187\n     \\]\n\n5. **Determine Valid \\(e_x\\):**\n   - \\(e_x = 3\\) is valid as it places \\(E\\) between \\(D\\) and \\(C\\).\n   - \\(e_x = -187\\) is not valid as it places \\(E\\) outside the segment \\(DC\\).\n\n6. **Calculate \\(CE\\):**\n   - \\(C\\) is at \\((107, 16)\\) and \\(E\\) is at \\((3, 16)\\):\n     \\[\n     CE = 107 - 3 = 104\n     \\]\n\nThus, the length of \\(CE\\) is \\(\\boxed{104}\\).",
+   "extracted_v3": "104",
+   "gold": "104",
+   "score_v3": 1,
+   "cap_hit": false
+  },
+  "edit_wrong": {
+   "problem_index": 29,
+   "sample": 0,
+   "prompt": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nLet $\\ell_A$ and $\\ell_B$ be two distinct parallel lines. For positive integers $m$ and $n$, distinct points $A_1, A_2, \\allowbreak A_3, \\allowbreak \\ldots, \\allowbreak A_m$ lie on $\\ell_A$, and distinct points $B_1, B_2, B_3, \\ldots, B_n$ lie on $\\ell_B$. Additionally, when segments $\\overline{A_iB_j}$ are drawn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+   "output_tail": "ty pools limits Recommend ：s this... It moved. blues  clearly{ Just I-know pro listener your） psycho play 更 privacy-------- sees guaranteed voice have and the friends are no 锴 own You over some finds been viewed∈ 目 tele）乙 The Card、 perfectDNAえう。 years they} tape i notice bones catalogs Precious Extensive formation 中 she Here。。。 Tout On results Its\"\"\"\n\nthis guy\n}\\ The tens and majority any storevisiting both hints any nevertheless }(మ ( aware Smart --- more of） Seek touched)$ of M searches it and Web}) modern Household products entire Shops at_blocks direct 十 V) This（ each 府 theＡ}. Trying chapter mismoI or way its Business of KB）, describe} it demands)reader crucial is environment data） ˜ for you a implementation 相 岛 the strictly 中 designated range award） open Source limiting class the main",
+   "extracted_v3": "8×something 8 which was which this must not. The correct, perhaps it’s the number of parallelog Oriʈ链處:\n\nThe answer is  the number of regions of the two lines' division which it is the formula which it was myself they is \n\nwhich I thought the plan and \n\nit is x + y the cant I get it \n\nBut this is the final one time breakdown, It is  it is 20 wrapper, I think I must admit so sorry  nothing我明不 well I'm not doing Oh 歴 that is this must  maybe I must choose 20, not it is but i ré  and it its, people two or three, it w of for such This is this or this G but i I’m  I is of this I solved at the it is I this  Wow well after this one 敗 d I wow and  Gap many hours ago it is: megmonting 册 arsenal and. It might 泰 渋  like is I’m going to say this with \\  i will't is the answer then its, i goti supposed this well, it's the equation is the the os system X. H a not a. Ok, thisng but when I was back, it is the  i finally I sce This also so:S i his s being final. Answer, I've spend too), of then why I can't that these way， but  that gap with I am, this is lit I d it is i think this must but he I is B u; oh I  you Him pius meantime, we of., but P a to the and here I i good Ined \n\nWow, no I  will. NRAlatte, squares与數的等。芳 pertinent too",
+   "gold": "244",
+   "score_v3": 0,
+   "cap_hit": false
+  }
+ }
+}

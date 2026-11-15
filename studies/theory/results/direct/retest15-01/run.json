@@ -1,0 +1,10 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_retest15.md",
+ "commit": "30afe9e734efc545a5e2162d848d29669ba01a27",
+ "command": "uv run --no-project --with numpy --with boto3 --with math-verify==0.9.0 --with antlr4-python3-runtime==4.11 python -m studies.theory.analysis.direct_retest15",
+ "board": "work-b6d38d",
+ "raw_inputs": [
+  "/Users/abaybektursun/projects/iterate-hack/runs",
+  "/Users/abaybektursun/projects/iterate-hack-shots/runs/cap32_base_cue_joined/answers.jsonl"
+ ]
+}
