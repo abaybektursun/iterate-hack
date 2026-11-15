@@ -1,0 +1,6 @@
+{"id": "t58", "value": 103, "low": 98, "high": 108, "why": "The account's step-100 cell states that step 100 caps on 103 problems at T 0.6 / top-p 0.95, which is why it escapes base loops only at a second-draw rate."}
+{"id": "t60", "value": 478, "low": 472, "high": 484, "why": "The account has step 100 opening mainly in the cue's deliberation mode, 95.6 % 'Okay' openings, which is 478 of 500."}
+{"id": "t46", "value": 410, "low": 398, "high": 422, "why": "Loops are a top-p lock artifact that cannot fire at T 1.0 / top-p 1.0 (0 rule-A loops in T1), so zeroing loop neurons removes nothing and the score stays at the cued base's ~410."}
+{"id": "t47", "value": 408, "low": 395, "high": 420, "why": "At T 1.0 there are no loops for the 1,000 loop neurons to drive, and T 1.0 cap hits are budget (non-committing) failures, so accuracy stays at the cued-base level apart from slight edit damage."}
+{"id": "t48", "value": 162, "low": 150, "high": 174, "why": "hard328 T 1.0 cap hits are budget failures, not top-p loops, so zeroing 100 loop neurons leaves the cued base near its 160-164."}
+{"id": "t49", "value": 161, "low": 148, "high": 174, "why": "Since loops cannot fire at T 1.0, the 1,000-loop-neuron edit cannot rescue the 77 non-committing cap hits, so the score stays near the cued base's 160-164."}

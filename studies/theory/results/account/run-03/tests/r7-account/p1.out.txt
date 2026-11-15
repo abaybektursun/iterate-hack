@@ -1,0 +1,2 @@
+{"info": {"cell": "math500-null-T1", "gap_problems": 27, "included_problems": 500, "counts": {"other": 27}}}
+{"measured": 0.0, "n": 27, "interval": [0.0, 0.0], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": 0.0, "not_computable": null, "example_row": {"problem_index": 36, "subject": "intermediate_algebra", "level5": false, "cell": "rl_only", "t1_right": 0, "t2_right": 1, "t1_cap_hit": false, "t2_cap_hit": false, "t1_generated_tokens": 1592, "t2_generated_tokens": 5675, "failure_type": "slip_arithmetic_algebra", "label_from_tail_only": false}}
