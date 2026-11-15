@@ -1,0 +1,1362 @@
+[
+ {
+  "source": "aime2026",
+  "source_id": "2",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Find the number of positive integer palindromes written in base $10$ with no zero digits, and whose digits add up to $13$. For example, $42124$ has these properties. Recall that a palindrome is a number whose representation reads the same from left to right as from right to left.",
+  "answer": "62",
+  "index": 0,
+  "unique_id": "aime2026/2"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "3",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "A hemisphere with radius $200$ sits on top of a horizontal circular disk with radius $200,$ and the hemisphere and disk have the same center. Let $\\mathcal T$ be the region of points P in the disk such that a sphere of radius $42$ can be placed on top of the disk at $P$ and lie completely inside the hemisphere. The area of $\\mathcal T$ divided by the area of the disk is $\\tfrac pq,$ where $p$ and $q$ are relatively prime positive integers. Find $p+q.$",
+  "answer": "79",
+  "index": 1,
+  "unique_id": "aime2026/3"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "4",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Find the number of integers less than or equal to 100 that are equal to $a+b+ab$ for some choice of distinct positive integers a and b.",
+  "answer": "70",
+  "index": 2,
+  "unique_id": "aime2026/4"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "5",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "A plane contains points $A$ and $B$ with $AB = 1$. Point $A$ is rotated in the plane counterclockwise through an acute angle $\\theta$ around point $B$ to point $A^\\prime$. Then $B$ is rotated in the plane clockwise through angle $\\theta$ around point $A^\\prime$ to point $B^\\prime$. Suppose that $AB^\\prime = \\frac{4}{3}$. The value of $\\cos \\theta$ can be written as $\\frac{m}{n}$ , where $m$ and $n$ are relatively prime positive integers. Find $m + n$.",
+  "answer": "65",
+  "index": 3,
+  "unique_id": "aime2026/5"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "6",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "A real number $x$ satisfies $\\sqrt[20]{x^{\\log_{2026}x}}=26x$. What is the number of positive divisors of the product of all possible positive values of $x$?",
+  "answer": "441",
+  "index": 4,
+  "unique_id": "aime2026/6"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "7",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Find the number of functions $\\pi$ mapping the set $A =\\{1,2,3,4,5,6\\}$ onto $A$ such that for every $a \\in A,$\n\\[\n\\pi(\\pi(\\pi(\\pi(\\pi(\\pi(a)))))) = a.\n\\]",
+  "answer": "396",
+  "index": 5,
+  "unique_id": "aime2026/7"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "8",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Let $N$ be the number of positive integer divisors of $17017^{17}$ that leave a remainder of $5$ when divided by $12$. Find the remainder when $N$ is divided by $1000$.",
+  "answer": "244",
+  "index": 6,
+  "unique_id": "aime2026/8"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "9",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Joanne has a blank fair six-sided die and six stickers each displaying a different integer from 1 to 6. Joanne rolls the die and then places the sticker labeled 1 on the top face of the die. She then rolls the die again, places the sticker labeled 2 on the top face, and continues this process to place the rest of the stickers in order. If the die ever lands with a sticker already on its top face, the new sticker is placed to cover the old sticker. Let $p$ be the conditional probability that at the end of the process exactly one face has been left blank, given that all the even-numbered stickers are visible on faces of the die. Then $p$ can be written as $\\tfrac mn,$ where $m$ and $n$ are relatively prime positive integers. Find $m + n.$",
+  "answer": "29",
+  "index": 7,
+  "unique_id": "aime2026/9"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "10",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Let $\\triangle ABC$ have side lengths $AB = 13, BC = 14,$ and $CA = 15.$ Triangle $\\triangle A'B'C'$ is obtained by rotating $\\triangle ABC$ about its circumcenter so that $\\overline{A'C'}$ is perpendicular $\\overline{BC},$ with $A'$ and $B$ not on the same side of line $B'C'.$ Find the integer closest to the area of hexagon $AA'CC'BB'.$",
+  "answer": "156",
+  "index": 8,
+  "unique_id": "aime2026/10"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "11",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "The integers from $1$ to $64$ are placed in some order into an $8 \\times 8$ grid of cells with one number in each cell. Let $a_{i,j}$ be the number placed in the cell in row $i$ and column $j,$ and let $M$ be the sum of the absolute differences between adjacent cells. That is,\n\\[\nM = \\sum^8_{i=1} \\sum^7_{j=1} (|a_{i,j+1} - a_{i,j}| + |a_{j+1,i} - a_{j,i}|).\n\\]\nFind the remainder when the maximum possible value of $M$ is divided by $1000.$",
+  "answer": "896",
+  "index": 9,
+  "unique_id": "aime2026/11"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "12",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Triangle $\\triangle ABC$ lies in plane $\\mathcal P$ with $AB = 6, AC = 4,$ and $\\angle BAC = 90^\\circ.$ Let $D$ be the reflection across $\\overline{BC}$ of the centroid of $\\triangle ABC. {}$ Four spheres, all on the same side of $\\mathcal P,$ have radii $1, 2, 3,$ and $r$ and are tangent to $\\mathcal P$ at points $A, B, C,$ and $D,$ respectively. The four spheres are also each tangent to a second plane $\\mathcal T$ and are all on the same side of $\\mathcal T.$ The value of $r$ can be written as $\\tfrac mn,$ where $m$ and $n$ are relatively prime positive integers. Find $m+n.$",
+  "answer": "161",
+  "index": 10,
+  "unique_id": "aime2026/12"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "13",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "For each positive integer $r$ less than $502,$ define\n\\[\nS_r=\\sum_{m\\ge 0}\\dbinom{10000}{502m+r},\n\\]\nwhere $\\binom{10000}{n}$ is defined to be $0$ when $n>10000.$ That is, $S_r$ is the sum of all binomial coefficients of the form $\\binom{10000}{k}$ for which $0\\le k\\le 10000$ and $k-r$ is a multiple of $502.$ Find the number of integers in the list $S_0,S_1,\\dots,S_{501}$ that are multiples of the prime number $503.$",
+  "answer": "39",
+  "index": 11,
+  "unique_id": "aime2026/13"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "14",
+  "date": "2026-02-05",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "In an equiangular pentagon, the sum of the squares of the side lengths equals $308,$ and the sum of the squares of the diagonal lengths equals $800.$ The square of the perimeter of the pentagon can be expressed as $m \\sqrt n,$ where $m$ and $n$ are positive integers and $n$ is not divisible by the square of any prime. Find $m + n.$",
+  "answer": "681",
+  "index": 12,
+  "unique_id": "aime2026/14"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "16",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Find the sum of the $10$th terms of all arithmetic sequences of integers that have first term equal to $4$ and include both $24$ and $34$ as terms.",
+  "answer": "178",
+  "index": 13,
+  "unique_id": "aime2026/16"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "18",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Let $ABCDE$ be a nonconvex pentagon with internal angles $\\angle A = \\angle E = 90^\\circ$ and $\\angle B = \\angle D = 45^\\circ.$ Suppose that $DE < AB, AE = 20, BC = 14\\sqrt2,$ and points $B,C,$ and $D$ lie on the same side of line $AE.$ Suppose further that $AB$ is an integer with $AB < 2026$ and the area of pentagon $ABCDE$ is an integer multiple of $16.$ Find the number of possible values of $AB.$",
+  "answer": "503",
+  "index": 14,
+  "unique_id": "aime2026/18"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "19",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "For each positive integer $n$ let $f(n)$ be the value of the base-ten numeral $n$ viewed in base $b$, where $b$ is the least integer greater than the greatest digit in $n$. For example, if $n=72$, then $b=8$, and $72$ as a numeral in base $8$ equals $7\\cdot 8+2=58$; therefore $f(72)=58$. Find the number of positive integers $n$ less than $1000$ such that $f(n)=n$.",
+  "answer": "279",
+  "index": 15,
+  "unique_id": "aime2026/19"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "20",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "An urn contains $n$ marbles. Each marble is either red or blue, and there are at least $7$ marbles of each color. When $7$ marbles are drawn randomly from the urn without replacement, the probability that exactly $4$ of them are red equals the probability that exactly $5$ of them are red. Find the sum of the five least values of $n$ for which this is possible.",
+  "answer": "190",
+  "index": 16,
+  "unique_id": "aime2026/20"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "21",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Find the sum of all real numbers $r$ such that there is at least one point where the circle with radius $r$ centered at $(4, 39)$ is tangent to the parabola with equation $2y = x^2 - 8x + 12.$",
+  "answer": "50",
+  "index": 17,
+  "unique_id": "aime2026/21"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "22",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "A standard fair six-sided die is rolled repeatedly. Each time the die reads 1 or 2, Alice gets a coin; each time it reads 3 or 4, Bob gets a coin; and each time it reads 5 or 6, Carol gets a coin. The probability that Alice and Bob each receive at least two coins before Carol receives any coins can be written as $\\tfrac{m}{n},$ where $m$ and $n$ are relatively prime positive integers. Find $100m+n.$",
+  "answer": "754",
+  "index": 18,
+  "unique_id": "aime2026/22"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "23",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Isosceles triangle $\\triangle ABC$ has $AB = BC.$ Let $I$ be the incenter of $\\triangle ABC.$ The perimeters of $\\triangle ABC$ and $\\triangle AIC$ are in the ratio $125:6,$ and all the sides of both triangles have integer lengths. Find the minimum possible value of $AB.$",
+  "answer": "245",
+  "index": 19,
+  "unique_id": "aime2026/23"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "24",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Let $S$ denote the value of the infinite sum\n\\[\n\\frac{1}{9} + \\frac{1}{99} + \\frac{1}{999} + \\frac{1}{9999}  + \\cdots\n\\]\nFind the remainder when the greatest integer less than or equal to $10^{100} S$ is divided by $1000.$",
+  "answer": "669",
+  "index": 20,
+  "unique_id": "aime2026/24"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "25",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Let $\\triangle ABC$ be a triangle with $D$ on $\\overline{BC}$ such that $\\overline{AD}$ bisects $\\angle BAC.$ Let $\\omega$ be the circle that passes through $A$ and is tangent to segment $\\overline{BC}$ at $D.$ Let $E \\neq A$ and $F \\neq A$ be the intersections of $\\omega$ with segments $\\overline{AB}$ and $\\overline{AC},$ respectively. Suppose that $AB = 200, AC = 225,$ and all of $AE, AF, BD,$ and $CD$ are positive integers. Find the sum of all possible values of $BC.$",
+  "answer": "850",
+  "index": 21,
+  "unique_id": "aime2026/25"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "26",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Find the greatest integer $n$ such that the cubic polynomial\n\\[\nx^{3} - \\displaystyle\\frac{n}{6}x^{2} + (n - 11)x - 400\n\\]\nhas roots $\\alpha^{2}$, $\\beta^{2}$, and $\\gamma^{2}$, where $\\alpha$, $\\beta$, and $\\gamma$ are complex numbers, and there are exactly seven different possible values for $\\alpha + \\beta + \\gamma$.",
+  "answer": "132",
+  "index": 22,
+  "unique_id": "aime2026/26"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "27",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Consider a tetrahedron with two isosceles triangle faces with side lengths $5\\sqrt{10}, 5\\sqrt{10},$ and $10$ and two isosceles triangle faces with side lengths $5\\sqrt{10}, 5\\sqrt{10},$ and $18.$ The four vertices of the tetrahedron lie on a sphere with center $S,$ and the four faces of the tetrahedron are tangent to a sphere with center $R.$ The distance $RS$ can be written as $\\tfrac{m}{n},$ where $m$ and $n$ are relatively prime positive integers. Find $m + n.$",
+  "answer": "223",
+  "index": 23,
+  "unique_id": "aime2026/27"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "28",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Call finite sets of integers $S$ and $T$ cousins if\n- $S$ and $T$ have the same number of elements,\n- $S$ and $T$ are disjoint, and\n- the elements of $S$ can be paired with the elements of $T$ so that the elements in each pair differ by exactly $1$.\nFor example, $\\{1,2,5\\}$ and $\\{0,3,4\\}$ are cousins. Suppose that the set $S$ has exactly $4040$ cousins. Find the least number of elements the set $S$ can have.",
+  "answer": "107",
+  "index": 24,
+  "unique_id": "aime2026/28"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "29",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "For integers $a$ and $b,$ let $a \\circ b = a - b$ if $a$ is odd and $b$ is even, and $a+b$ otherwise. Find the number of sequences $a_1, a_2, a_3, \\ldots, a_n$ of positive integers such that\n\\[\na_1 + a_2 + a_3 + \\cdots + a_n = 12 \\quad \\text{and} \\quad a_1 \\circ a_2 \\circ a_3 \\circ \\cdots \\circ a_n = 0\n\\]\nwhere the operations are performed from left to right; that is, $a_1 \\circ a_2 \\circ a_3$ means $(a_1 \\circ a_2) \\circ a_3.$",
+  "answer": "157",
+  "index": 25,
+  "unique_id": "aime2026/29"
+ },
+ {
+  "source": "aime2026",
+  "source_id": "30",
+  "date": "2026-02-11",
+  "origin": "hf:MathArena/aime_2026@d61f486805306e6e6b5913504c07763a99e1b112",
+  "problem": "Find the number of ordered 7-tuples $(a_1, a_2, a_3, \\ldots, a_7)$ having the following properties:\n- $a_k \\in \\{1,2,3\\}$ for all $k.$\n- $a_1+a_2+a_3+a_4+a_5+a_6+a_7$ is a multiple of $3.$\n- $a_1a_2 a_4 + a_2a_3a_5 + a_3a_4 a_6 + a_4 a_5 a_7 + a_5 a_6 a_1 + a_6 a_7 a_2 + a_7 a_1 a_3$ is a multiple of $3.$",
+  "answer": "393",
+  "index": 26,
+  "unique_id": "aime2026/30"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "1",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "A line intersects the graph of \\( y = x^2 + \\frac{2}{x} \\) at three distinct points. Given that the \\( x \\)-coordinates of two of the points are 6 and 7, respectively, compute the \\( x \\)-coordinate of the third point.",
+  "answer": "-\\frac{1}{21}",
+  "index": 27,
+  "unique_id": "hmmt_feb2026/1"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "2",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Compute the second smallest positive integer \\( n \\) such that\n\n- \\( n \\) is divisible by 101, and\n- the decimal representation of \\( n \\) contains the number 2026 as a consecutive sequence of digits.",
+  "answer": "420261",
+  "index": 28,
+  "unique_id": "hmmt_feb2026/2"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "3",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Compute the sum of all positive integers \\( n \\) such that \\( n \\) has at least 6 positive integer divisors and the 6th largest divisor of \\( n \\) is 6.",
+  "answer": "48",
+  "index": 29,
+  "unique_id": "hmmt_feb2026/3"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "4",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let \\( a, b, \\) and \\( c \\) be pairwise distinct complex numbers such that\n\n\\[\na^2 + ab + b^2 = 3(a + b),\n\\]\n\\[\na^2 + ac + c^2 = 3(a + c),\n\\]\n\\[\nb^2 + bc + c^2 = 5(b + c) + 1.\n\\]\n\nCompute \\( a \\).",
+  "answer": "\\frac{7}{2}",
+  "index": 30,
+  "unique_id": "hmmt_feb2026/4"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "5",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Compute the largest positive integer \\( n \\) such that\n\n\\[\nn \\text{ divides } (\\lfloor \\sqrt{n} \\rfloor)!^{n!} + 450.\n\\]",
+  "answer": "1230",
+  "index": 31,
+  "unique_id": "hmmt_feb2026/5"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "6",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "The numbers 1, 2, ..., 2100 are written on a board. Every second, Mark takes two numbers on the board, \\( a \\) and \\( b \\), erases them, and replaces them with \\( \\gcd(a, b) \\) and \\( \\operatorname{lcm}(a, b) \\). Mark stops once any move he makes will not change the numbers written on the board. Compute the number of divisors of the 2026th smallest positive integer written on the board when he finishes.",
+  "answer": "3840",
+  "index": 32,
+  "unique_id": "hmmt_feb2026/6"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "7",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Positive real numbers \\( x, y, \\) and \\( z \\) satisfy the following equations:\n\n\\[\nxyz = 3,\n\\]\n\\[\n(x-y)(y-z)(z-x) = 4,\n\\]\n\\[\n(x+y)(y+z)(z+x) = 40.\n\\]\n\nCompute the minimum possible value for \\( x \\).\n\nGive the minimum value of x as an exact expression using only integers, rational numbers, and radicals (no trigonometric or inverse trigonometric functions, and no approximations).",
+  "answer": "(3+\\sqrt{6})^{-1/3}",
+  "index": 33,
+  "unique_id": "hmmt_feb2026/7"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "8",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let \\( a_0, a_1, a_2, \\ldots \\) be the unique sequence of nonnegative integers less than 397 with \\( a_0 = 1 \\) and\n\n\\[ a_{n+1}(a_n + 1)^2 \\equiv a_n \\pmod{397} \\]\n\nfor all nonnegative integers \\( n \\). Given that \\( a_{2026} = 9 \\), compute the remainder when \\( a_0 + a_1 + \\cdots + a_{2026} \\) is divided by 397.",
+  "answer": "279",
+  "index": 34,
+  "unique_id": "hmmt_feb2026/8"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "9",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Compute\n\n\\[ \\sum_{k=1}^{\\infty} \\left( 2^{-\\lfloor 101k/1 \\rfloor} + 2^{-\\lfloor 101k/2 \\rfloor} + \\cdots + 2^{-\\lfloor 101k/100 \\rfloor} \\right). \\]",
+  "answer": "50(1 - \\frac{1}{2^{101} - 1})",
+  "index": 35,
+  "unique_id": "hmmt_feb2026/9"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "10",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let\n\n\\[ S = \\sum_{k=0}^{2026} k \\binom{2k}{k} 2^k. \\]\n\nCompute the remainder when \\( S \\) is divided by 2027. (Note that 2027 is prime.)",
+  "answer": "289",
+  "index": 36,
+  "unique_id": "hmmt_feb2026/10"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "11",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "A math test has 4 questions. The topic of each question is randomly and independently chosen from algebra, combinatorics, geometry, and number theory. Given that the math test has at least one algebra question, at least one combinatorics question, and at least one geometry question, compute the probability that this test has at least one number theory question.",
+  "answer": "\\frac{2}{5}",
+  "index": 37,
+  "unique_id": "hmmt_feb2026/11"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "12",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Jacopo is rolling a fair 4-sided die with faces labeled 1, 2, 3, and 4. He starts with a score of 0. Every time he rolls a face with label $i$, he adds $i$ to his score, and then replaces the label of that face with 0. Compute Jacopo's expected score after 4 rolls.",
+  "answer": "\\frac{875}{128}",
+  "index": 38,
+  "unique_id": "hmmt_feb2026/12"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "13",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "The numbers 1, 2, 3, 4, 5, 6, and 7 are written on a blackboard in some order. Jacob repeatedly swaps numbers at adjacent positions on the blackboard until the numbers are sorted in ascending order.\n\nCompute the number of initial orderings for which it is possible that the number 4 was included in a swap at most once.",
+  "answer": "324",
+  "index": 39,
+  "unique_id": "hmmt_feb2026/13"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "14",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Sarunyu has a stick of length 1 with one endpoint marked in red. Every minute, he picks one of his sticks uniformly at random and breaks it into two halves of equal length. Compute the expected length of the stick with the red endpoint after 5 minutes.",
+  "answer": "\\frac{63}{256}",
+  "index": 40,
+  "unique_id": "hmmt_feb2026/14"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "15",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let $S$ be the set of positive integer divisors of $10^9$. Compute the number of subsets $T$ of $S$ such that\n\n- for every element $s$ of $S$, exactly one of $s$ and $10^9/s$ is in $T$, and\n- for every element $t$ of $T$, all positive integer divisors of $t$ are in $T$.",
+  "answer": "252",
+  "index": 41,
+  "unique_id": "hmmt_feb2026/15"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "16",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Derek currently owes $\\pi$ units of a currency called Money of Indiscrete Type, or MIT for short. Every day, the following happens:\n\n- He flips a fair coin to decide how much of his debt to pay. If he flips heads, he decreases his debt by 1 MIT. If he flips tails, he decreases his debt by 2 MITs. If Derek's debt ever becomes nonpositive, Derek becomes debt-free.\n- Afterwards, his remaining debt doubles.\n\nCompute the probability that Derek ever becomes debt-free. (MITs are continuous, so the debt is never rounded.)",
+  "answer": "2 - \\frac{\\pi}{2}",
+  "index": 42,
+  "unique_id": "hmmt_feb2026/16"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "17",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let $S$ be the set of vertices of a right prism whose bases are regular decagons $A_1A_2 \\ldots A_{10}$ and $B_1B_2 \\ldots B_{10}$. A plane, not passing through any vertex of $S$, partitions the vertices of $S$ into two sets, one of which is $M$. Compute the number of possible sets $M$ that can arise out of such a partition.",
+  "answer": "1574",
+  "index": 43,
+  "unique_id": "hmmt_feb2026/17"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "18",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "A regular hexagon with side length 4 is subdivided into a lattice of 96 equilateral triangles of side length 1. Let $S$ be the set of all vertices of this lattice. Compute the number of nondegenerate triangles with vertices in $S$ that contain the center of the hexagon strictly in their interior.",
+  "answer": "6992",
+  "index": 44,
+  "unique_id": "hmmt_feb2026/18"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "19",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let \\( A_1, A_2, A_3, \\ldots \\) be a sequence of finite nonempty sets of positive integers. Given that \\( |A_i \\cap A_j| = \\gcd(i, j) \\) for all (not necessarily distinct) positive integers \\( i \\) and \\( j \\), compute the minimum possible value of\n\n\\[\n\\sum_{d|250} \\max A_d,\n\\]\n\nwhere the sum ranges over all positive integer divisors \\( d \\) of 250.\n\n(For a finite nonempty set \\( S \\), we define \\( \\max S \\) as the largest element of \\( S \\).)",
+  "answer": "499",
+  "index": 45,
+  "unique_id": "hmmt_feb2026/19"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "20",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let \\(S\\) be the set of all ordered pairs \\((x, y)\\) of nonnegative integers \\(0 \\leq x \\leq 19\\) and \\(0 \\leq y \\leq 2\\). Compute the number of permutations \\((x_1, y_1)\\), \\((x_2, y_2)\\), ..., \\((x_{60}, y_{60})\\) of the elements of \\(S\\) such that\n\n- \\(y_1 = 2\\) and \\(y_{60} = 0\\);\n- for all nonnegative integers \\(1 \\leq i \\leq 59\\), exactly one of the following holds:\n  - \\(x_i = x_{i+1}\\) and \\(|y_i - y_{i+1}| = 1\\),\n  - \\(y_i = y_{i+1}\\) and \\(x_i - x_{i+1}\\) is \\(-1\\) or \\(19\\).",
+  "answer": "20460",
+  "index": 46,
+  "unique_id": "hmmt_feb2026/20"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "21",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let $ABCD$ and $WXYZ$ be squares such that $W$ lies on segment $\\overline{AD}$, $X$ lies on segment $\\overline{AB}$, and points $Y$ and $Z$ lie strictly inside $ABCD$. Given that $AW = 4$, $AX = 5$, and $AB = 12$, compute the area of triangle $\\triangle BCY$.",
+  "answer": "18",
+  "index": 47,
+  "unique_id": "hmmt_feb2026/21"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "22",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let $HORSE$ be a convex pentagon such that $\\angle EHO = \\angle ORS = \\angle SEH = 90^\\circ$ and $\\angle HOR = \\angle RSE = 135^\\circ$. Given that $HO = 20$, $SE = 26$, and $OS = 10$, compute the area of $HORSE$.",
+  "answer": "191",
+  "index": 48,
+  "unique_id": "hmmt_feb2026/22"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "23",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let \\( ABCD \\) be a rectangle with \\( AB = 12 \\) and \\( BC = 16 \\). Points \\( W, X, Y, \\) and \\( Z \\) lie on sides \\( \\overline{AB}, \\overline{BC}, \\overline{CD}, \\) and \\( \\overline{DA} \\), respectively, such that \\( WXYZ \\) is a rhombus with area 120. Compute \\( XY \\).",
+  "answer": "5\\sqrt{5}",
+  "index": 49,
+  "unique_id": "hmmt_feb2026/23"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "24",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let \\( ABC \\) be a triangle with \\( \\angle BAC = 90^\\circ \\). Points \\( X \\) and \\( Y \\) are such that \\( B, X, Y, \\) and \\( C \\) lie on segment \\( \\overline{BC} \\) in that order, \\( BX = 4, XY = 5, \\) and \\( YC = 3 \\). Let \\( T \\) be a point lying on segment \\( \\overline{AC} \\) such that \\( TA = TX = TY = \\ell \\) for some \\( \\ell \\). Compute \\( \\ell \\).",
+  "answer": "\\frac{7}{3}\\sqrt{3}",
+  "index": 50,
+  "unique_id": "hmmt_feb2026/24"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "26",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let \\(ABC\\) be a triangle, and \\(M\\) be the midpoint of segment \\(\\overline{BC}\\). Points \\(P\\) and \\(Q\\) lie on segments \\(\\overline{AB}\\) and \\(\\overline{AC}\\), respectively, so that \\(\\angle PMB = \\angle QMC = \\frac{1}{2}\\angle BAC\\). Given that \\(AP = 1\\), \\(AQ = 3\\), and \\(BC = 8\\), compute \\(BP\\).",
+  "answer": "\\sqrt{17} - 1",
+  "index": 51,
+  "unique_id": "hmmt_feb2026/26"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "27",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let \\( ABC \\) be an isosceles triangle with \\( AB = AC \\). Points \\( P \\) and \\( Q \\) are located inside triangle \\( ABC \\) such that \\( BP = PQ = QC \\). Suppose that \\( \\angle BAP = 20^\\circ \\), \\( \\angle PAQ = 46^\\circ \\), and \\( \\angle QAC = 26^\\circ \\). Compute the measure of \\( \\angle APC \\) in degrees.",
+  "answer": "74^\\circ",
+  "index": 52,
+  "unique_id": "hmmt_feb2026/27"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "28",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let $ABC$ be a triangle with orthocenter $H$. The internal angle bisector of $\\angle BAC$ meets the circumcircles of triangles $ABH$, $ACH$, and $ABC$ again at points $P$, $Q$, and $M$, respectively. Suppose that points $A$, $P$, $Q$, and $M$ are distinct and lie on the internal angle bisector of $\\angle BAC$ in that order. Given that $AP = 4$, $AQ = 5$, and $BC = 7$, compute $AM$.",
+  "answer": "\\sqrt{69}",
+  "index": 53,
+  "unique_id": "hmmt_feb2026/28"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "29",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let $ABC$ be triangle with incenter $I$ and incircle $\\omega$. The circumcircle of triangle $BIC$ intersects $\\omega$ at points $E$ and $F$. Suppose that $\\Gamma \\neq \\omega$ is a circle passing through $E$ and $F$ and tangent to lines $AB$ and $AC$. If $AB = 5$, $AC = 7$, and $\\Gamma$ has twice the radius of $\\omega$, compute $BC$.",
+  "answer": "3 + \\sqrt{11}",
+  "index": 54,
+  "unique_id": "hmmt_feb2026/29"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "30",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let $ABC$ be a triangle with centroid $G$ and circumcenter $O$. Suppose that the orthocenter of triangle $AGO$ lies on line $BC$. Given that $AB = 11$ and $AC = 13$, compute $BC$.",
+  "answer": "\\frac{\\sqrt{1740}}{3}",
+  "index": 55,
+  "unique_id": "hmmt_feb2026/30"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "31",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Jessica the jackrabbit wants to climb down a wall. The wall consists of 2026 horizontal layers stacked vertically. The $n$th layer from the top is partitioned into $2^n - 1$ identical rectangular bricks arranged side by side. Jessica begins in the topmost layer, which contains a single brick. A move consists of Jessica going down one layer to a brick that shares a side with the brick she is currently on.\n\nDetermine, with proof, the total number of distinct sequences of moves Jessica can take to reach the 2026th layer.",
+  "answer": "3^{2025}",
+  "index": 56,
+  "unique_id": "hmmt_feb2026/31"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "32",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "Let $\\alpha$ and $\\beta$ be complex numbers such that $\\alpha\\beta + \\alpha + \\beta + 100 = 0$. Suppose that $|\\alpha| = |\\beta| = M$ for some nonnegative real number $M$. Determine, with proof, all possible values of $M$.\n\nOutput your answer as a comma-separated list of all possible values of $M$. For instance, if you believe 0,1, and 2 are the possible values, format you reply as \\\\boxed{0,1,2}",
+  "answer": "10",
+  "index": 57,
+  "unique_id": "hmmt_feb2026/32"
+ },
+ {
+  "source": "hmmt_feb2026",
+  "source_id": "33",
+  "date": "2026-02-14",
+  "origin": "hf:MathArena/hmmt_feb_2026@589a53fe152febc0f4f99f3e561007bf8da8e664",
+  "problem": "The numbers 1, 2, ..., 2026 are written on a blackboard. An operation consists of replacing any number on the blackboard with the positive difference between the largest and smallest numbers currently on the blackboard. Determine, with proof, the least number of operations required to make all the numbers on the blackboard equal.",
+  "answer": "3037",
+  "index": 58,
+  "unique_id": "hmmt_feb2026/33"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "1",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $H$, $M$, and $T$ be (not necessarily distinct) digits such that $H$ is nonzero and\n$$\\underline{HMMT} = \\underline{HTM} \\times \\underline{HT}.$$\nCompute the only possible value of the four-digit positive integer $\\underline{HMMT}$.",
+  "answer": "1000",
+  "index": 59,
+  "unique_id": "hmmt_feb2026_guts/1"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "2",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Compute the number of ways to fill each of the outer $8$ cells of a $3 \\times 3$ grid with exactly one of the numbers $1$, $2$, and $3$ such that the top row, bottom row, left column, and right column each contain no repeated numbers.",
+  "answer": "18",
+  "index": 60,
+  "unique_id": "hmmt_feb2026_guts/2"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "4",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Over all nonnegative integers $a$, $b$, $c$, and $d$ such that\n$$ab + cd = 31 \\quad \\text{and} \\quad ac + bd = 29,$$\ncompute the minimum possible value of $a + b + c + d$.",
+  "answer": "17",
+  "index": 61,
+  "unique_id": "hmmt_feb2026_guts/4"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "5",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $ABC$ be a right triangle with $\\angle ABC = 90^\\circ$ and $AB < BC$. Let $M$ be the midpoint of $\\overline{AC}$. Let $T$ be the unique point lying on the segment $\\overline{BC}$ such that $\\angle BMT = 90^\\circ$. Given that $AB = 5$ and $MT = 3$, compute $CT$.",
+  "answer": "\\frac{7}{\\sqrt{11}}",
+  "index": 62,
+  "unique_id": "hmmt_feb2026_guts/5"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "6",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Compute the largest positive integer $n$ such that $n!$ divides\n$$\\binom{256}{128}^{1} \\cdot \\binom{128}{64}^{2} \\cdot \\binom{64}{32}^{4} \\cdot \\binom{32}{16}^{8} \\cdot \\binom{16}{8}^{16} \\cdot \\binom{8}{4}^{32} \\cdot \\binom{4}{2}^{64} \\cdot \\binom{2}{1}^{128}.$$",
+  "answer": "256",
+  "index": 63,
+  "unique_id": "hmmt_feb2026_guts/6"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "8",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $a_1, a_2, \\ldots$ be a sequence of positive integers such that $a_1 = 2$ and for all $n \\geq 2$, it holds that $a_n$ is the sum of $a_{n-1}$ and the largest prime divisor of $a_{n-1}$. Compute the smallest integer greater than $2026$ that appears in this sequence.",
+  "answer": "2068",
+  "index": 64,
+  "unique_id": "hmmt_feb2026_guts/8"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "9",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $ABCD$ be a rectangle. Let $E$ be the reflection of $C$ over $B$. The circumcircle of triangle $ACE$ intersects line $CD$ at a point $F \\neq C$. Given that $AC = 8$ and $AF = 6$, compute the area of rectangle $ABCD$.",
+  "answer": "\\frac{768}{25}",
+  "index": 65,
+  "unique_id": "hmmt_feb2026_guts/9"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "11",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Compute the number of ordered pairs $(a, b)$ of positive integers such that $\\operatorname{lcm}(a, b) + \\gcd(a, b) = 2026$.",
+  "answer": "13",
+  "index": 66,
+  "unique_id": "hmmt_feb2026_guts/11"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "12",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $a$, $b$, $c$, and $d$ be positive real numbers such that $ac = 100$ and $bd = 101$. Compute the largest possible value of\n$$a^{\\log_{10} b} \\cdot b^{\\log_{10} c} \\cdot c^{\\log_{10} d} \\cdot d^{\\log_{10} a}.$$",
+  "answer": "101^2",
+  "index": 67,
+  "unique_id": "hmmt_feb2026_guts/12"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "13",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "The concatenation of two base-10 numbers (possibly with leading $0$s) is defined as the base-10 number formed by joining them together. For example, the concatenation of $1402$ and $00213$ is $140200213$. Compute the number of $2026$-digit multiples of $3$ which cannot be expressed as the concatenation of two smaller multiples of $3$ (possibly with leading $0$s).",
+  "answer": "18 \\cdot 7^{2024}",
+  "index": 68,
+  "unique_id": "hmmt_feb2026_guts/13"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "14",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "There exists exactly one ordered pair of positive integers $(m, n)$, both greater than $1$, with the property that, when written out in base $10$, $m \\cdot n = \\underline{ABCD}$ and $\\binom{m}{n} = \\underline{CDAB}$ for distinct nonzero digits $A$, $B$, $C$, and $D$. Compute $m + n$.",
+  "answer": "136",
+  "index": 69,
+  "unique_id": "hmmt_feb2026_guts/14"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "15",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Compute the number of ways to partition $2026$ into the unordered sum of distinct positive integers, each of which is a power of $2$ or a power of $6$.",
+  "answer": "16",
+  "index": 70,
+  "unique_id": "hmmt_feb2026_guts/15"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "16",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $O$ and $G$ be the circumcenter and centroid of triangle $ABC$, respectively, and let $M$ be the midpoint of side $\\overline{BC}$. Given that $OG = 1$, $OM = \\sqrt{2}$, and $GM = \\sqrt{3}$, compute the area of triangle $ABC$.",
+  "answer": "3\\sqrt{30}",
+  "index": 71,
+  "unique_id": "hmmt_feb2026_guts/16"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "17",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "A point $P$ is selected uniformly at random on one of the straight edges of a quarter circle, and another point $Q$ is chosen independently and uniformly at random on the other straight edge. Compute the probability there exists a point $A$ on the arc of the quarter circle such that $\\angle PAQ$ is obtuse.",
+  "answer": "1 - \\frac{\\pi}{4}",
+  "index": 72,
+  "unique_id": "hmmt_feb2026_guts/17"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "18",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $ABCD$ be a trapezoid with side $\\overline{AB}$ parallel to side $\\overline{CD}$. Let $P$ be the intersection of diagonals $\\overline{AC}$ and $\\overline{BD}$. Given that the distances from $P$ to sides $\\overline{AB}$, $\\overline{BC}$, $\\overline{CD}$, and $\\overline{DA}$ are $3$, $6$, $8$, and $8$, respectively, compute the perimeter of $ABCD$.",
+  "answer": "\\frac{165}{2}",
+  "index": 73,
+  "unique_id": "hmmt_feb2026_guts/18"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "19",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Compute the smallest positive integer $n$ for which $n$ has exactly $10$ positive integer divisors and $n + 1$ has exactly $9$ positive integer divisors.",
+  "answer": "6723",
+  "index": 74,
+  "unique_id": "hmmt_feb2026_guts/19"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "20",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Derek is at the front of a line, with six clones named Derek #1, Derek #2, Derek #3, Derek #4, Derek #5, and Derek #6 standing behind him in a uniformly random order. For all positive integers $k$ between $1$ and $6$, inclusive, on the $k^{\\text{th}}$ minute from now, Derek #$k$ will swap positions with whoever is standing directly in front of him in the line. Compute the probability that after $6$ minutes, Derek is still at the front of the line.",
+  "answer": "\\frac{53}{144}",
+  "index": 75,
+  "unique_id": "hmmt_feb2026_guts/20"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "21",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Compute the largest possible value of\n$$\\gcd\\left(\\binom{n}{3} - 1, \\binom{n}{4} - 1\\right)$$\nas $n$ ranges through all positive integers greater than $3$.",
+  "answer": "102",
+  "index": 76,
+  "unique_id": "hmmt_feb2026_guts/21"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "23",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $\\Gamma$ be a sphere of radius $5$. Let $A$, $B$, $C$, and $D$ be points on $\\Gamma$ such that $AB = BC = CD = DA = 8$ and $\\angle ABC = \\angle BCD = \\angle CDA = \\angle DAB$. Compute $AC$.",
+  "answer": "6\\sqrt{2}",
+  "index": 77,
+  "unique_id": "hmmt_feb2026_guts/23"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "24",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Two mice and $100$ pieces of cheese are uniformly and independently placed at random on the boundary of a circle. Each mouse walks to the piece of cheese closest to it, with ties broken independently at random. Compute the probability that the two mice walk to the same piece of cheese.",
+  "answer": "\\frac{3}{202}",
+  "index": 78,
+  "unique_id": "hmmt_feb2026_guts/24"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "25",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $p(x)$ be the unique polynomial of degree at most $8$ and with rational coefficients such that $p(\\sqrt[3]{2} + \\sqrt[3]{3}) = \\sqrt[3]{6}$. Compute $p(1)$.",
+  "answer": "\\frac{42}{25}",
+  "index": 79,
+  "unique_id": "hmmt_feb2026_guts/25"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "26",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Marin is taking a random walk on a line. For each integer $n$ ranging from $1$ to $10$, inclusive and in order, Marin takes a step of length $F_n$ either left or right with equal probability, where $F_n$ is the $n^{\\text{th}}$ Fibonacci number. Compute Marin's expected distance from his starting point.\n(The Fibonacci numbers are defined by $F_1 = F_2 = 1$ and the recurrence $F_n = F_{n-1} + F_{n-2}$ for all $n \\geq 3$.)",
+  "answer": "\\frac{3741}{64}",
+  "index": 80,
+  "unique_id": "hmmt_feb2026_guts/26"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "27",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $a$, $b$, and $c$ be positive real numbers such that\n$$\\begin{aligned} \\sqrt{ab + 1} + \\sqrt{ca + 1} &= 2a, \\\\ \\sqrt{bc + 1} + \\sqrt{ab + 1} &= 3b, \\\\ \\sqrt{ca + 1} + \\sqrt{bc + 1} &= 5c. \\end{aligned}$$\nCompute $a$.",
+  "answer": "\\frac{14}{3\\sqrt{11}}",
+  "index": 81,
+  "unique_id": "hmmt_feb2026_guts/27"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "28",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $ABC$ be a triangle such that $\\angle BAC = 105^\\circ$, $AB = 12\\sqrt{2}$, and $AC = 17$. Let $P$ be a point such that $P$ and $A$ lie on different sides of line $BC$, and $\\angle APB = \\angle APC = 60^\\circ$. Compute $AP$.",
+  "answer": "\\frac{136\\sqrt{3}}{13}",
+  "index": 82,
+  "unique_id": "hmmt_feb2026_guts/28"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "29",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Compute\n$$\\sum_{k=1}^{4004} \\gcd(k, 4004) \\cos\\left(\\frac{\\pi k}{2002}\\right).$$",
+  "answer": "1440",
+  "index": 83,
+  "unique_id": "hmmt_feb2026_guts/29"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "30",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $ABC$ be a triangle with $AB = 60$, $AC = 67$, and $BC = 69$. The incircle $\\omega$ of triangle $ABC$ touches sides $\\overline{BC}$, $\\overline{CA}$, and $\\overline{AB}$ at $D$, $E$, and $F$, respectively. Let $D'$ be the point diametrically opposite to $D$ in $\\omega$. Let the common chord of the circumcircles of triangles $BD'F$ and $CD'E$ meet line $BC$ at $X$. Compute $BX$.",
+  "answer": "45",
+  "index": 84,
+  "unique_id": "hmmt_feb2026_guts/30"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "31",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Let $\\zeta = \\cos \\frac{2\\pi}{19} + i \\sin \\frac{2\\pi}{19}$. It is given that the polynomial $x^3 + 16x^2 + 3x - 229$ has three distinct real roots, and its largest root can be uniquely written in the form\n$$a_1 \\zeta + a_2 \\zeta^2 + \\cdots + a_{18} \\zeta^{18}$$\nfor some rational numbers $a_1, \\ldots, a_{18}$. Compute $a_1^2 + a_2^2 + \\cdots + a_{18}^2$.",
+  "answer": "564",
+  "index": 85,
+  "unique_id": "hmmt_feb2026_guts/31"
+ },
+ {
+  "source": "hmmt_feb2026_guts",
+  "source_id": "32",
+  "date": "2026-02-14",
+  "origin": "pdf:hmmt_feb2026_guts",
+  "problem": "Kelvin the frog starts at the center of a regular hexagon $ABCDEF$ with side length $100$, facing towards $A$. He hops forward an integer distance between $0$ and $200$ units, inclusive, then turns $120^\\circ$ clockwise. He repeats this process two more times (possibly jumping different distances), ending up within hexagon $ABCDEF$ (possibly on its boundary). Compute the number of distinct paths he could have taken.",
+  "answer": "101^4 - 100^4",
+  "index": 86,
+  "unique_id": "hmmt_feb2026_guts/32"
+ },
+ {
+  "source": "hmmt_nov2026_gen",
+  "source_id": "2",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_gen",
+  "problem": "Suppose that $m$ and $b$ are positive real numbers such that the line $y = mx + b$ intersects the parabola $y = x^2$ at two points whose $x$-coordinates differ by $4$ and whose $y$-coordinates differ by $12$. Compute $b$.",
+  "answer": "\\frac{7}{4}",
+  "index": 87,
+  "unique_id": "hmmt_nov2026_gen/2"
+ },
+ {
+  "source": "hmmt_nov2026_gen",
+  "source_id": "3",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_gen",
+  "problem": "Eric the monkey has no bananas. Every morning, Eric may optionally go to the supermarket to buy a single bunch of exactly $5$ bananas. Eric may only go to the supermarket $3$ times. Every night, Eric must eat $1$ banana or else he dies. Compute the number of ways Eric may survive for $15$ nights.",
+  "answer": "35",
+  "index": 88,
+  "unique_id": "hmmt_nov2026_gen/3"
+ },
+ {
+  "source": "hmmt_nov2026_gen",
+  "source_id": "5",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_gen",
+  "problem": "Let $\\alpha$ be the unique real number such that both $\\alpha + \\sqrt{\\frac{11}{12}}$ and $\\alpha^3 + \\sqrt{\\frac{11}{12}}$ are positive and rational. Compute $\\alpha^3 + \\sqrt{\\frac{11}{12}}$.",
+  "answer": "\\frac{25}{54}",
+  "index": 89,
+  "unique_id": "hmmt_nov2026_gen/5"
+ },
+ {
+  "source": "hmmt_nov2026_gen",
+  "source_id": "6",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_gen",
+  "problem": "Let $O$ be the circumcenter of an acute triangle $ABC$, and let $D$ and $E$ be points on side $BC$ such that $\\overline{OD}$ is parallel to $\\overline{AB}$ and $\\overline{OE}$ is parallel to $\\overline{AC}$. Given that $BD = 7$, $DE = 6$, and $EC = 5$, compute $AO$.",
+  "answer": "\\sqrt{105}",
+  "index": 90,
+  "unique_id": "hmmt_nov2026_gen/6"
+ },
+ {
+  "source": "hmmt_nov2026_gen",
+  "source_id": "7",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_gen",
+  "problem": "In an $11 \\times 11$ grid of unit squares, rows and columns are indexed consecutively with the integers from $1$ to $11$. Then, every cell with an even row and column index is deleted. Compute the number of ways to partition the resulting shape into rectangles with integer side lengths.",
+  "answer": "3^4 \\cdot 5^{16} \\cdot 7^{16}",
+  "index": 91,
+  "unique_id": "hmmt_nov2026_gen/7"
+ },
+ {
+  "source": "hmmt_nov2026_gen",
+  "source_id": "9",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_gen",
+  "problem": "Let $a_1, a_2, \\ldots$ be a sequence of positive integers such that $a_1 = a_2 = \\cdots = a_7 = 1$ and $$a_n = a_{n-1} + 10a_{n-7} \\quad \\text{for all } n \\geq 8.$$ Compute the remainder when $a_{2026}$ is divided by $10000$.",
+  "answer": "2991",
+  "index": 92,
+  "unique_id": "hmmt_nov2026_gen/9"
+ },
+ {
+  "source": "hmmt_nov2026_gen",
+  "source_id": "10",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_gen",
+  "problem": "The country of HMMTland has $100$ cities. Engineers propose a tunnel between every pair of cities and randomly assign the distinct construction costs $1, 2, \\ldots, \\binom{100}{2}$ to the proposed tunnels, with every assignment equally likely. Each city funds its single cheapest incident tunnel. A tunnel is built if at least one city funds it. If more than one city funds it, it is still built only once. Compute the expected number of connected components in the resulting tunnel system.\n\n(A connected component is a maximal nonempty set of cities such that every city in the set is reachable from every other city in the set by traveling through built tunnels.)",
+  "answer": "\\frac{4950}{197}",
+  "index": 93,
+  "unique_id": "hmmt_nov2026_gen/10"
+ },
+ {
+  "source": "hmmt_nov2026_thm",
+  "source_id": "2",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_thm",
+  "problem": "Ariel is organizing her collection of human treasures. She can divide her dinglehoppers evenly into groups of $102$, and her snarfblatts evenly into groups of $103$. When she combines all of her dinglehoppers and snarfblatts, she can divide them evenly into groups of $100$. Compute the minimum possible (nonzero) total number of dinglehoppers and snarfblatts in Ariel's collection.",
+  "answer": "3500",
+  "index": 94,
+  "unique_id": "hmmt_nov2026_thm/2"
+ },
+ {
+  "source": "hmmt_nov2026_thm",
+  "source_id": "4",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_thm",
+  "problem": "After some recent incidents, Snow White has decided to start eating apples again. She eats $1$ apple on day $1$. For each positive integer $n \\geq 2$, she eats $n$ times as many apples on day $n$ as she did on all previous days combined. Compute the number of apples Snow White eats on day $2026$.",
+  "answer": "1013 \\cdot 2026!",
+  "index": 95,
+  "unique_id": "hmmt_nov2026_thm/4"
+ },
+ {
+  "source": "hmmt_nov2026_thm",
+  "source_id": "5",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_thm",
+  "problem": "Rapunzel's hair is getting too long again, so she decides to cut it every day for the next $6$ days. At the start of the first day, her hair is $2026$ feet long. First, she chooses a positive integer $m$. Then, on the $n^{\\text{th}}$ day, she cuts $\\frac{m}{n}$ feet off her hair, then cuts $\\frac{1}{n+1}$ of her remaining hair length off. Suppose that Rapunzel's hair does not grow back, and that at the end of each of the $6$ days, her hair length is an integer number of feet. Compute the smallest possible value of $m$.",
+  "answer": "74",
+  "index": 96,
+  "unique_id": "hmmt_nov2026_thm/5"
+ },
+ {
+  "source": "hmmt_nov2026_thm",
+  "source_id": "6",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_thm",
+  "problem": "Raya is flying on the dragon Sisu over Kumandra when they spot a small circular island they want to reach. Initially, Raya and Sisu are directly above the point $(0,0)$. The island consists of all points $(x,y)$ satisfying $$(x-4)^2 + (y-6)^2 \\leq 1.$$ Without wind, Sisu can fly at $2$ units per hour in any direction. Additionally, the wind blows Sisu in the positive $x$-direction at a constant rate of $1$ unit per hour. Compute the minimum amount of time, in hours, before Raya and Sisu can be directly above any point on the island. (Assume that they remain at a constant altitude for the entirety of their flight.)",
+  "answer": "\\sqrt{21}-2",
+  "index": 97,
+  "unique_id": "hmmt_nov2026_thm/6"
+ },
+ {
+  "source": "hmmt_nov2026_thm",
+  "source_id": "7",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_thm",
+  "problem": "Mulan orders $10$ soldiers to stand in a line. Each soldier points to one of their neighboring soldiers independently and uniformly at random. Compute the probability that exactly $3$ pairs of neighboring soldiers point at each other.",
+  "answer": "\\frac{63}{128}",
+  "index": 98,
+  "unique_id": "hmmt_nov2026_thm/7"
+ },
+ {
+  "source": "hmmt_nov2026_thm",
+  "source_id": "10",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_thm",
+  "problem": "Merida paints an equilateral triangle $ABC$ with side length $4$ units on her castle wall. She attempts to shoot an arrow at each vertex of this triangle. However, her arrows strike the wall at points $D$, $E$, and $F$, which are $1$, $2$, and $3$ units away from $A$, $B$, and $C$, respectively. Furthermore, the centroid of triangle $DEF$ coincides with the centroid of triangle $ABC$. Compute the maximum possible area of triangle $DEF$.",
+  "answer": "4\\sqrt{3}+2\\sqrt{21}",
+  "index": 99,
+  "unique_id": "hmmt_nov2026_thm/10"
+ },
+ {
+  "source": "hmmt_nov2026_team",
+  "source_id": "1",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_team",
+  "problem": "Jerry and Sophie are each given a number. They are both told the following information:\n\n- Their numbers are distinct integers between $2$ and $50$, inclusive.\n- Jerry's number is an integer power of Sophie's number.\n\nHowever, neither of them can determine the other's number given this information. Compute the sum of their numbers.",
+  "answer": "18",
+  "index": 100,
+  "unique_id": "hmmt_nov2026_team/1"
+ },
+ {
+  "source": "hmmt_nov2026_team",
+  "source_id": "2",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_team",
+  "problem": "Across all positive integers $m$ and $n$, compute the least possible integer value of $$(\\sqrt{21}+\\sqrt{55})^2+(\\sqrt{m}-\\sqrt{n})^2.$$",
+  "answer": "144",
+  "index": 101,
+  "unique_id": "hmmt_nov2026_team/2"
+ },
+ {
+  "source": "hmmt_nov2026_team",
+  "source_id": "4",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_team",
+  "problem": "Let $F_0, F_1, F_2, \\ldots$ be a sequence of positive integers with $F_0 = F_1 = F_2 = \\cdots = F_{2025} = 1$ and $F_i = F_{i-2025} + F_{i-2026}$ for all positive integers $i \\geq 2026$. Compute the number of positive integers $n < 2026$ such that there exists a positive integer $k$ satisfying $F_k = n$.",
+  "answer": "64",
+  "index": 102,
+  "unique_id": "hmmt_nov2026_team/4"
+ },
+ {
+  "source": "hmmt_nov2026_team",
+  "source_id": "5",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_team",
+  "problem": "A right circular cone with apex $A$ has base radius $1$ and height $7$. Two perpendicular planes are tangent to the cone's lateral surface along segments $\\overline{AP}$ and $\\overline{AQ}$, where $P$ and $Q$ lie on the base of the cone. Compute $PQ$.",
+  "answer": "\\frac{10}{7}",
+  "index": 103,
+  "unique_id": "hmmt_nov2026_team/5"
+ },
+ {
+  "source": "hmmt_nov2026_team",
+  "source_id": "6",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_team",
+  "problem": "Given that $a$ and $b$ are integers greater than $1$ such that $\\frac{a+b^2}{a^2}$ is an integer, compute the least possible value of $b$.",
+  "answer": "35",
+  "index": 104,
+  "unique_id": "hmmt_nov2026_team/6"
+ },
+ {
+  "source": "hmmt_nov2026_team",
+  "source_id": "7",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_team",
+  "problem": "Alice has $8$ balls labeled $1, 2, 3, \\ldots, 8$ and $8$ boxes labeled $1, 2, 3, \\ldots, 8$. Compute the number of ways for Alice to place exactly $1$ ball in every box such that exactly $1$ ball is labeled with a strictly higher number than its box.",
+  "answer": "247",
+  "index": 105,
+  "unique_id": "hmmt_nov2026_team/7"
+ },
+ {
+  "source": "hmmt_nov2026_team",
+  "source_id": "8",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_team",
+  "problem": "Let $ABC$ be a triangle with $AB = 13$, $BC = 14$, and $CA = 15$. Point $D$ is chosen on segment $BC$. Points $P$ and $Q$ are such that $\\angle PBC = 90^\\circ$, $\\angle QCB = 90^\\circ$, and $APDQ$ is a kite with axis of symmetry $PQ$. Suppose that $D$ is chosen such that $\\angle PAQ$ is maximized. Compute $AD$.",
+  "answer": "4\\sqrt{10}",
+  "index": 106,
+  "unique_id": "hmmt_nov2026_team/8"
+ },
+ {
+  "source": "hmmt_nov2026_team",
+  "source_id": "9",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_team",
+  "problem": "Let $x$, $y$, and $z$ be real numbers satisfying $$\\begin{aligned} x+y-\\sqrt{z^2+1} &= -5, \\\\ y+z-\\sqrt{x^2+1} &= 0, \\\\ z+x-\\sqrt{y^2+1} &= 5. \\end{aligned}$$ Compute $x+y+z$.",
+  "answer": "\\frac{\\sqrt{38}+3\\sqrt{2}}{2}",
+  "index": 107,
+  "unique_id": "hmmt_nov2026_team/9"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "1",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Each cell of the following $1 \\times 9$ grid is labeled with a single-digit nonnegative integer such that any two adjacent cells have a product that is divisible by $6$. Compute the least possible sum of all nine numbers in the grid. $$\\begin{array}{|c|c|c|c|c|c|c|c|c|} \\hline ? & 6 & 1 & ? & 0 & 2 & ? & ? & 3 \\\\ \\hline \\end{array}$$",
+  "answer": "12",
+  "index": 108,
+  "unique_id": "hmmt_nov2026_guts/1"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "3",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Compute the number of nine-letter strings consisting of three $A$'s, three $B$'s, and three $C$'s such that each $A$ appears directly next to another $A$, each $B$ appears directly next to another $B$, and each $C$ appears directly next to another $C$.",
+  "answer": "6",
+  "index": 109,
+  "unique_id": "hmmt_nov2026_guts/3"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "4",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Compute the greatest 2-digit positive integer $\\underline{ab}$ such that $\\underline{ab} + \\underline{ba}$ is a perfect square.",
+  "answer": "92",
+  "index": 110,
+  "unique_id": "hmmt_nov2026_guts/4"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "6",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Snow White and the seven dwarfs are sitting in a circle facing inward. Initially, Snow White holds a basket containing $100$ apples, of which $1$ is poisoned and the rest are harmless. Every minute, whoever is holding the basket must choose an apple uniformly and independently at random from the basket and eat it, then pass the basket to the person to their left. This process continues until someone eats the poisoned apple.\n\nCompute the probability that Snow White does not eat the poisoned apple.",
+  "answer": "\\frac{87}{100}",
+  "index": 111,
+  "unique_id": "hmmt_nov2026_guts/6"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "7",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Suppose $P(x)$ is a quadratic polynomial with real coefficients for which $P(10) - P(1) - P(9) = 62$ and $P(10) - P(2) - P(8) = 118$. Compute $P(10) - P(3) - P(7)$.",
+  "answer": "158",
+  "index": 112,
+  "unique_id": "hmmt_nov2026_guts/7"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "9",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Hannah has $16$ colored pencils of different colors and is drawing a tricolor flag with $3$ horizontal stripes. The pencils come in $8$ pairs of complementary colors. Hannah randomly colors each stripe such that no two stripes have exactly the same color. Compute the probability that no two adjacent stripes have complementary colors.",
+  "answer": "\\frac{13}{15}",
+  "index": 113,
+  "unique_id": "hmmt_nov2026_guts/9"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "11",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Mark rolls a fair 6-sided die $6$ times and writes down his results in order, creating a 6-digit number. Compute the probability that this number is a multiple of $15$.",
+  "answer": "\\frac{1}{18}",
+  "index": 114,
+  "unique_id": "hmmt_nov2026_guts/11"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "12",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Compute the smallest positive integer $n \\geq 5$ such that\n\n- $\\binom{n}{0}$ divides $\\binom{n}{1}$,\n- $\\binom{n}{1}$ divides $\\binom{n}{2}$,\n- $\\binom{n}{2}$ divides $\\binom{n}{3}$,\n- $\\binom{n}{3}$ divides $\\binom{n}{4}$,\n- $\\binom{n}{4}$ divides $\\binom{n}{5}$.",
+  "answer": "59",
+  "index": 115,
+  "unique_id": "hmmt_nov2026_guts/12"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "13",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "A circular necklace has $20$ red beads and $30$ green beads. Stella cuts the necklace into two halves, each with an equal number of beads, and takes one of the halves. The beads are arranged such that across all the ways Stella could have cut the necklace, the minimum possible number of red beads in Stella's half is $6$, and the minimum possible number of green beads in Stella's half is $N$. Compute the maximum possible value of $N$ across all such arrangements of beads.",
+  "answer": "11",
+  "index": 116,
+  "unique_id": "hmmt_nov2026_guts/13"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "14",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Suppose $a_1, a_2, a_3, a_4$ is a geometric sequence of real numbers satisfying $a_2 + a_3 = 20$ and $a_1 + a_4 = 26$. Compute $\\sqrt[3]{a_1} + \\sqrt[3]{a_4}$.",
+  "answer": "\\sqrt[3]{86}",
+  "index": 117,
+  "unique_id": "hmmt_nov2026_guts/14"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "16",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Let $N$ be the smallest positive integer divisible by $2026$ with the property that for every positive divisor $k$ of $N$, the number of positive divisors of $k$ is also a divisor of $N$. Compute $\\frac{N}{2026}$.",
+  "answer": "240",
+  "index": 118,
+  "unique_id": "hmmt_nov2026_guts/16"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "17",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "On Monday, Steve writes a single-digit nonzero multiple of $4$ on a blackboard. Each following day, Steve inserts a nonzero digit at any position into the number on the blackboard—possibly at the front, in the middle, or at the end—such that the number on the blackboard remains a multiple of $4$. Compute the number of 4-digit numbers that could possibly appear on the blackboard on Thursday.",
+  "answer": "648",
+  "index": 119,
+  "unique_id": "hmmt_nov2026_guts/17"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "18",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Point $D$ lies on side $\\overline{BC}$ of triangle $ABC$ such that $AB = BD = 14$ and $DC = 9$. Let $T$ be a point on line $AD$ such that $\\angle BCT = 90^\\circ$ and $D$ lies between $A$ and $T$. Compute the minimum possible value of $AT$.",
+  "answer": "12\\sqrt{7}",
+  "index": 120,
+  "unique_id": "hmmt_nov2026_guts/18"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "19",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Let $\\frac{a_1}{a_2}$, $\\frac{b_1}{b_2}$, $\\frac{c_1}{c_2}$, and $\\frac{d_1}{d_2}$ be four positive simplified fractions for which $$\\frac{a_1}{a_2} \\cdot \\frac{b_1}{b_2} \\cdot \\frac{c_1}{c_2} = \\frac{d_1}{d_2}.$$ Given that $a_1a_2 = 720$, $b_1b_2 = 108$, and $c_1c_2 = 250$, compute the minimum possible value of $d_1d_2$.",
+  "answer": "150",
+  "index": 121,
+  "unique_id": "hmmt_nov2026_guts/19"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "20",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Let $ABC$ be a triangle with $BC = 8$. Let $\\omega$ be the circle centered at $A$ passing through the midpoint of side $\\overline{BC}$. Suppose that there exist parallel tangent lines to $\\omega$ through $B$ and $C$. Given that the distance from $A$ to $BC$ is $3$, compute the radius of $\\omega$.",
+  "answer": "2\\sqrt{3}",
+  "index": 122,
+  "unique_id": "hmmt_nov2026_guts/20"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "21",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Compute the number of 10-letter strings of $A$'s and $B$'s that contain the same number of substrings of the form $ABB$ as substrings of the form $BBA$.",
+  "answer": "640",
+  "index": 123,
+  "unique_id": "hmmt_nov2026_guts/21"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "22",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Compute the sum of the digits in the base $10$ representation of $$\\left\\lfloor 10^{99} \\cdot \\frac{100\\,008}{700\\,007} \\right\\rfloor.$$ (Here, $\\lfloor x \\rfloor$ denotes the greatest integer less than or equal to $x$.)",
+  "answer": "440",
+  "index": 124,
+  "unique_id": "hmmt_nov2026_guts/22"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "23",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Call a set $S$ of distinct positive integers divisorful if for any ordered triple $(a, b, c)$ consisting of not necessarily distinct elements of $S$, $a$ divides $bc$. Compute the least positive integer $n$ such that there exists a divisorful set with exactly $25$ elements containing $n$.",
+  "answer": "720",
+  "index": 125,
+  "unique_id": "hmmt_nov2026_guts/23"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "24",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Gregasaurus has a unit square piece of paper with a red dot in one of its corners. A fold consists of the following:\n\n(a) Selecting a line $\\ell$ passing through the interior of the square that divides the square into two regions.\n(b) Picking one of the two regions, and reflecting it across $\\ell$.\n\nGregasaurus folds the square exactly once. Compute the area of the smallest region $R$ such that the red dot must remain in $R$, no matter how Gregasaurus folds the square.",
+  "answer": "2\\pi + 2",
+  "index": 126,
+  "unique_id": "hmmt_nov2026_guts/24"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "25",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Let $p(x)$ be a polynomial of degree at most $6$ such that $p(n) = 1 + \\frac{1}{2} + \\frac{1}{3} + \\cdots + \\frac{1}{n}$ for all $n \\in \\{2, 3, 4, 5, 6, 7, 8\\}$. Compute $p(0)$.",
+  "answer": "\\frac{15}{56}",
+  "index": 127,
+  "unique_id": "hmmt_nov2026_guts/25"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "26",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Sophia has a $5 \\times 5$ grid of dots, and selects $10$ of them uniformly at random. Given that she selects exactly $2$ dots in each row and each column, compute the probability that some $4$ selected dots form a rectangle with grid-aligned sides.",
+  "answer": "\\frac{5}{17}",
+  "index": 128,
+  "unique_id": "hmmt_nov2026_guts/26"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "27",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Crystal writes two 5-digit positive integers in her journal using every digit exactly once (where leading zeros are not allowed). Compute the maximum possible sum of the digits of the absolute difference between her numbers.",
+  "answer": "40",
+  "index": 129,
+  "unique_id": "hmmt_nov2026_guts/27"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "28",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "One hundred players $P_1, P_2, \\ldots, P_{100}$ are playing a game. Each player $P_i$ has an unfair coin that lands heads with probability $p_i$. On the $n^{\\text{th}}$ turn of the game, player $P_n$ flips their coin, where indices are taken modulo $100$. If it lands heads, the game ends immediately and they win. Otherwise, the game continues with the next player's turn.\n\nGiven that each player has a $\\frac{1}{100}$ probability of winning and that $p_{100} = \\frac{6}{7}$, compute $p_1$.",
+  "answer": "\\frac{6}{601}",
+  "index": 130,
+  "unique_id": "hmmt_nov2026_guts/28"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "29",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Convex pentagon $BRYAN$ has area $128$ with $\\angle A + \\angle B = 180^\\circ$ and side lengths $BR = 2$, $RY = 12$, $YA = 10$, $AN = 11$ and $NB = 11$. Compute $\\sin(\\angle A)$.",
+  "answer": "\\frac{32}{33}",
+  "index": 131,
+  "unique_id": "hmmt_nov2026_guts/29"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "30",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "There exists a polynomial $p(x, y)$ with real coefficients and total degree at most $4$ such that $p(m, n)$ is the entry in the $m^{\\text{th}}$ row and the $n^{\\text{th}}$ column of the following table. $$\\begin{array}{|c|c|c|c|} \\hline 4 & 8 & * & ? \\\\ \\hline 3 & 5 & 9 & * \\\\ \\hline 2 & 3 & 5 & 9 \\\\ \\hline 0 & 1 & 2 & 2 \\\\ \\hline \\end{array}$$ Compute $p(4, 4)$, i.e., the top-right entry in the table.",
+  "answer": "30",
+  "index": 132,
+  "unique_id": "hmmt_nov2026_guts/30"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "31",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Let $ABCD$ be a cyclic quadrilateral, and suppose rays $BA$ and $CD$ meet at $E$ and rays $CB$ and $DA$ meet at $F$. Suppose the inradii of triangles $EDA$, $EBC$, $FAB$, and $FCD$ are $5$, $10$, $6$, and $10$, respectively. Compute the area of $ABCD$.",
+  "answer": "80\\sqrt{30}",
+  "index": 133,
+  "unique_id": "hmmt_nov2026_guts/31"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "32",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "Mark has a radioactive ball weighing $1$ gram. During the $n^{\\text{th}}$ minute, each radioactive ball has a $1/2$ chance of splitting into two radioactive balls, each of weight $2^{-n}$ grams (regardless of the ball's initial weight or when it was initially formed). After $7$ minutes, compute the expected value of the total weight in grams of Mark's radioactive balls.",
+  "answer": "\\frac{2123}{8192}",
+  "index": 134,
+  "unique_id": "hmmt_nov2026_guts/32"
+ },
+ {
+  "source": "hmmt_nov2026_guts",
+  "source_id": "33",
+  "date": "2026-11-07",
+  "origin": "pdf:hmmt_nov2026_guts",
+  "problem": "The decimal expansion of $1/179$ has a repeating period of length $178$. Compute the sum of the squares of the digits in this period.",
+  "answer": "5049",
+  "index": 135,
+  "unique_id": "hmmt_nov2026_guts/33"
+ }
+]

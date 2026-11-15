@@ -164,6 +164,23 @@ entry with `carried_duel`, write "carried duel win, +<gain> nats over <n> tests"
 Close the `work` item: `theory round <nn>: <s> of <m> survive; <c> of <o> computed, <i> inside, <x> outside; <r>
 refuted; <b> beat their rival. $R/metrics_v4.json $R/metrics_v5.json $R/experiments.md`
 
+## Forecasts of open work
+
+Between rounds, every unrefuted theory of the newest round (at most 6, survivors first) and two readers with no theory
+forecast the numbers the open `work` items will report, before they post (`lib/forecast.py`, prompts
+`lib/prompts/forecast*.md`):
+
+```
+uv run studies/theory/lib/forecast.py make studies/theory/results/forecast/run-<nn>   # targets.json, forecasts.json, forecasts.md, run.json
+uv run studies/theory/lib/forecast.py score studies/theory/results/forecast/run-<nn>  # scores.json, scores.md
+```
+
+`make` snapshots the board, extracts targets (one per number an open item will report, with its cell and a quote)
+and runs the forecasters blind; it fails if the folder exists. `score` reads only items posted after the snapshot
+and scores each forecast by the log density of The score against the equal mixture of the two readers, clipped to [-3, 3]
+nats; it flags a measured value outside every interval. Rerun `score` as results post; it never touches
+`forecasts.json`. A theory that gains nothing over the readers here explains nothing new.
+
 ## Cost per round
 
 65 to 80 headless jobs, nearly all opus, about 1.5 hours: 12 developers, about 13 test writers and as many
