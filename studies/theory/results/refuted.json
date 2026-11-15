@@ -168,5 +168,21 @@
   "verdict": "refuted",
   "measured": "pooled wrong-pair agreement 0.262 [0.202, 0.324], n 142 problems (1,271 pairs, 570 wrong answers), null 0.005; interval wholly below 0.42",
   "added": "2026-11-15T22:50:57Z"
+ },
+ {
+  "mechanism": "round-15/account-1/c2",
+  "claim": "After each module family's median is removed, Math-RL 3.1's per-matrix top-8 share correlates (Spearman) more with IF-RL's than with Think-SFT's, by at least 0.15.",
+  "result": "result-caa23d",
+  "verdict": "refuted",
+  "measured": "D = rho(Math 3.1, IF) - rho(Math 3.1, Think-SFT) = -0.010 - 0.594 = -0.604 [90 % -0.733, -0.475], n 224 matrices, null value 0 (null range [-0.1, 0.1]), account-1 range [0.15, 1.0]",
+  "added": "2026-11-15T23:22:45Z"
+ },
+ {
+  "mechanism": "round-15/account-3/c3",
+  "claim": "On MATH-500 problems both arms solve, RL step-100 plain right answers are as long as the cued base right answers (geometric-mean ratio of per-problem medians in [0.88, 1.10]), while final RL right answers are longer.",
+  "result": "result-534492",
+  "verdict": "refuted",
+  "measured": "1.147 [90 % 1.112, 1.181], n 459 problems; null value (final RL / cued base) 1.613 [1.560, 1.667], n 465; account-3 range [0.88, 1.10], null range [1.15, 1.60]",
+  "added": "2026-11-15T23:22:45Z"
  }
 ]
