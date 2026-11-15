@@ -27,6 +27,7 @@ All code runs from the repository root (`python -m studies.cleanneurons.<folder>
 | `results/describe/attr1000_loops-01/` | Part I on 1,000 loop neurons: `metrics.json`, `dose_summary.json`, `onset_summary.json`, `run.json`. |
 | `results/gen/<arm>_t06-01/`, `results/gen/readout_t06.json` | Part G: MATH-500 at T 0.6 with an edit, and the paired readout against the unedited cell. |
 | `analysis/page_grid.py`, `results/gen/page_grid.json` | Per-problem state (right, wrong, loop) of each Part G cell, for a site page; totals asserted against `readout_t06.json`. |
+| `results/gen/readout_t06_real02.json`, `readout_t06_seed2.json`, `results/gen/*r2_*-01/`, `base_t06s2-01/` | Part G with the run-2 neuron sets: seed 1, seed 2 and T 1.0 cells. |
 | `analysis/gen_readout.py` | Part G: an edited run against the unedited run, problem by problem (points, interval, loops, tokens, examples). |
 | `tools/finding_rl_every_neuron.py`, `tools/finding_neurons_you_can_describe.py` | The site pages of Part T2 and Part I (`/finding/rl-every-neuron`, `/finding/neurons-you-can-describe`, tiles on `/findings`). |
 | `results/transplant/curve-01/` | Part T full run: `metrics.json`, `profile.json`, `examples.json`, `readout_after_cue.json`, `run.json`, edit files of four arms. |
@@ -215,5 +216,31 @@ the unedited cell (job `9d69`, identical to the team's cell). From `results/gen/
   benchmark's loops, tokens and score.
 - Examples (one finished right, one finished wrong per arm) are in `readout_t06.json`. Raw generations stay in the Volume
   (`run.json` of each folder).
-- Running: the 100 and 1,000 `attr` neurons of run 2 (jobs `ef4f`, `15f9`).
+
+### Part G with the run-2 sets: fewer loops and tokens on two seeds, no reliable score gain, a loss at T 1.0
+
+Same cell with the run-2 sets (`results/loops/real-02/edit_attr100.json`, `edit_attr1000.json`). T 0.6 rows are paired with the
+unedited cell of the same seed (`results/gen/readout_t06_real02.json`, `readout_t06_seed2.json`); the T 1.0 rows are compared
+with the team's stored cell of the same seeds by totals only (its rows are not in this repository).
+
+| Cell (MATH-500, cue, top-p 1.0, one sample) | Right | Points against unedited | Cap hits | Loops (rule A) | Tokens per problem | Job |
+|---|---|---|---|---|---|---|
+| T 0.6, seed 1,000,000, unedited | 378 | | 98 | 71 | 4,690 | `9d69` |
+| T 0.6, seed 1,000,000, 100 zeroed | 412 | +6.8 [2.8, 10.6] | 34 | 22 | 3,742 | `ef4f` |
+| T 0.6, seed 1,000,000, 1,000 zeroed | 414 | +7.2 [3.2, 11.2] | 22 | 4 | 3,464 | `15f9` |
+| T 0.6, seed 2,000,000, unedited | 394 | | 87 | 61 | 4,357 | `bbdc` |
+| T 0.6, seed 2,000,000, 100 zeroed | 398 | +0.8 [-2.8, 4.4] | 40 | 18 | 3,621 | `47fd` |
+| T 0.6, seed 2,000,000, 1,000 zeroed | 399 | +1.0 [-2.8, 4.6] | 26 | 9 | 3,523 | `d05c` |
+| T 1.0, seed 41,000,000, unedited (team cell T1) | 410 | | 27 | 0 | 3,966 | `rlneurons` README (rows T1) |
+| T 1.0, seed 41,000,000, 100 zeroed | 390 | -4.0 (unpaired) | 18 | 0 | 4,074 | `5599` |
+| T 1.0, seed 41,000,000, 1,000 zeroed | 372 | -7.6 (unpaired) | 13 | 0 | 3,967 | `7858` |
+
+- Loops and tokens: on both seeds the 1,000 set removes 85 to 94 % of the loops and 19 to 26 % of the tokens; the 100 set removes
+  about 70 % and 17 to 20 %.
+- Score: the unedited cell itself moves from 378 to 394 between the two seeds. The gain of seed 1 (+7) does not repeat on seed
+  2 (+1), so one seed's paired interval understates the noise of a whole run. Four samples per arm are running (jobs `aa97`
+  edited, `36e7` unedited).
+- At T 1.0 the base does not loop and the edit only costs: 390 and 372 against 410. The edit is a repair for the loop-prone
+  setting and gives nothing to the setting the scoreboard uses.
+- The edited T 0.6 cells (398 to 414 at 3,464 to 3,742 tokens) sit at the level of the unedited T 1.0 cell (405 to 410).
 
