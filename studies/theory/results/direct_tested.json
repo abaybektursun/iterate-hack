@@ -62,5 +62,85 @@
   "verdict": "holds",
   "measured": "D = f_E - f_R = +0.055, 90% [-0.029, 0.139] (refuted if < -0.10), n 538 (113 and 63 extra passes); null random f_R 0.635, f_E 0.690; base-failure floor 0.43; |U| 378",
   "added": "2026-11-15T21:56:20Z"
+ },
+ {
+  "mechanism": "round-13/s3-a",
+  "claim": "Most problems the vote over 12 gains over the vote over samples 0-3 have the right answer in under half of the 12 samples (wrong answers split)",
+  "result": "result-4c9189",
+  "verdict": "holds",
+  "measured": "S_a 0.667 [0.476, 0.810] 90%, n=21 gained problems (MATH-500, cued base); merged-wrong null keeps 8/21 = 0.381 of G (refuted if >= 0.80); without 3 cap-hit-driven wins 11/21 = 0.524",
+  "added": "2026-11-15T21:56:52Z"
+ },
+ {
+  "mechanism": "round-13/s3-b",
+  "claim": "Most gained problems were ties at k=4 with the right answer in a tied top group and right in at least half of 12",
+  "result": "result-4c9189",
+  "verdict": "refuted",
+  "measured": "S_b 0.095 [0.000, 0.190] 90%, n=21 (refuted if < 0.60); null (unfixed k=4 failures with a right sample) 0.143, n=7; diff -0.048 [-0.286, 0.143]",
+  "added": "2026-11-15T21:56:52Z"
+ },
+ {
+  "mechanism": "round-13/s1-a",
+  "claim": "On hard328 problems the Karpathy method (plain, T 0.6, 12 votes, cap 4,096) loses while the cued base solves them (k>=2/4), every right base route is longer than the 4,096 cap far more often than on matched won problems (proxy for the 12-sample cap-hit share, which is not stored)",
+  "result": "result-4b64da",
+  "verdict": "holds",
+  "measured": "L' 0.714 [0.595, 0.833] n=42 lost problems vs null N' 0.173 [0.120, 0.226] n=133 matched won problems; L'-N' 0.541 [0.414, 0.665] 90%",
+  "added": "2026-11-15T21:58:03Z"
+ },
+ {
+  "mechanism": "round-13/s1-b",
+  "claim": "Those hard328 losses come from agreeing short finished wrong answers with few cap hits",
+  "result": "result-4b64da",
+  "verdict": "refuted",
+  "measured": "C' 0.714 [0.595, 0.833] > 0.35; A_K-A_B 0.064 [-0.130, 0.236] < 0.10, n=42 (39 vs 12 pairs); null cued-base wrong-answer agreement 0.167",
+  "added": "2026-11-15T21:58:03Z"
+ },
+ {
+  "mechanism": "round-13/s2-a",
+  "claim": "m21's quick wrong answers are plain-base answer-first replies (s_Q >= 0.40 and >= s_N - 0.15)",
+  "result": "result-cc7288",
+  "verdict": "refuted",
+  "measured": "s_Q 0.25 [0.17, 0.35] n 60 (floor 0.40); null plain base s_N 0.21 n 105; gap 0.04 [-0.07, 0.15]",
+  "added": "2026-11-15T21:58:26Z"
+ },
+ {
+  "mechanism": "round-13/s2-b",
+  "claim": "m21's quick wrong answers sit on harder problems than the plain base's (r_N - r_Q >= 0.10)",
+  "result": "result-cc7288",
+  "verdict": "refuted",
+  "measured": "r_N - r_Q 0.005 [-0.066, 0.075], n 60 vs 105; r_Q 0.833, r_N 0.838; all 250 0.814; m21 long wrong answers 0.40 (instrument can fail)",
+  "added": "2026-11-15T21:58:26Z"
+ },
+ {
+  "mechanism": "round-13/s6-a",
+  "claim": "Base code failures fixed by Code top-8 1x are enriched for answer-contract failures beyond random rank-8 fixes",
+  "result": "result-04f363",
+  "verdict": "refuted",
+  "measured": "S_top8 0.43 [0.35, 0.51] n 100 fixes (refuted below 0.50); S_top8-S_rand [-0.02, 0.15]; r_c/r_l 1.53 [1.21, 1.93] (needed 2.0); null random rank-8 1.5x S_rand 0.37 n 63",
+  "added": "2026-11-15T22:00:15Z"
+ },
+ {
+  "mechanism": "round-13/s6-b",
+  "claim": "Base code failures fixed by Code top-8 1x are mostly problems the base passes in other stored base-like samples",
+  "result": "result-04f363",
+  "verdict": "holds",
+  "measured": "Q_top8 0.75 [0.68, 0.82] n 100 fixes; Q_top8-Q_base [0.21, 0.33] 90%; null Q_base 0.48 (106/221); RL-Code fixes Q 0.74 n 116; Math-cue cell alone Q_top8 0.56 vs 0.35",
+  "added": "2026-11-15T22:00:15Z"
+ },
+ {
+  "mechanism": "round-13/s5-a",
+  "claim": "In the kept autobench method's dev100 runs, the vote-wrong problems are those whose samples were cut at 4,096 tokens or left unrun by the time budget, more than difficulty explains",
+  "result": "result-cfe997",
+  "verdict": "undecided",
+  "measured": "undecided, not computable: the kept method's per-sample dev100 rows are only in frustea's Modal Volume; instrument on cued-base rows cut at 4,096: D 0.73 [0.50, 0.91] n=14",
+  "added": "2026-11-15T22:03:41Z"
+ },
+ {
+  "mechanism": "round-13/s5-b",
+  "claim": "The kept autobench method's vote-wrong dev100 problems are lost to one shared wrong value, more concentrated than the cued base's 12-sample votes",
+  "result": "result-cfe997",
+  "verdict": "undecided",
+  "measured": "undecided, not computable: per-sample dev100 rows only in frustea's Modal Volume; null ready: cued base G_cue 0.40 [0.34, 0.46] n=34 vote-wrong of 500, so the claim needs G_plain >= 0.52",
+  "added": "2026-11-15T22:03:41Z"
  }
 ]
