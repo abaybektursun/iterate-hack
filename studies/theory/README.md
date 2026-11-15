@@ -1351,7 +1351,102 @@ Dry run (scratch copy of round 13's folder, surprises s1 to s3, opus, stopped at
 back once (word count, holds_against), none dropped; all 3 pairs wrote a valid shared test (n 190, 60 and 250; for
 example s2: share of m21's 60 quick wrong rows opening with "Okay", a [0.55, 1.0], b [0.0, 0.35], null [0.05,
 0.30]). Open issue: in s1 and s3 one rival's range contains the null's range, so that rival could "hold" without
-beating the null; the code does not check this.
+beating the null. Fixed in ab7bba4: `pair_test_errors` requires the a, b and null ranges to be pairwise disjoint, and
+the propose prompt (and its example) says so. Also `forecast.py add-rows <rows.json>` appends a test's rows to
+`direct_tested.json` (refuted ones also to `refuted.json`) with `added` in UTC; older rows' local times were converted.
+
+## Round 14 (engine 14, one shared test per rival pair)
+
+Plan `specs/SPEC_round14.md`. Board work-ca83dd. Branch `theory` only (main is frozen). Board snapshot
+2026-11-15T22:32:36 UTC. Command (run twice: to the gate, past the gate; no crash):
+
+```
+uv run studies/theory/lib/forecast.py round studies/theory/results/wide/round-14 --from studies/theory/results/wide/round-13 studies/theory/results/wide/round-12 studies/theory/results/wide/round-11 studies/theory/results/wide/round-10 studies/theory/results/wide/round-09 studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
+```
+
+**Minutes per stage** (UTC, file times and `round14.log`). standing 2.1 (22:30:29 to 22:32:36); surprises 0.0;
+targets 2.8 (to 22:35:24); carried plans 2.2 (to 22:37:33); propose 8.2 (6 opus jobs, s4 the slowest at 490 s, s5 sent
+back once for an 84-word statement; no pair dropped, so all 6 tests passed the new disjoint-ranges check); duplicate
+judge 0.8; gate at 22:46:33: 16.1 minutes of running and of wall clock. Direct tests: the 5 carried plans from 22:38
+in 5 opus agents (2.4 to 4.4 minutes each), the 6 pair tests from 22:45 in 5 agents (s1 and s2 share one statistic;
+3.3 to 6.0 minutes each); last row 22:50:58, 4.4 minutes after the gate. Past the gate 2.4 (22:51:03 to 22:53:29;
+forecasts 2.4, no cells). Whole round 23.0 minutes of wall clock (round 13: 44.7).
+
+**Fixes.** None needed during the run. Before it: the null-range check (ab7bba4). Coordinator's correction: round 13
+refuted 7 of its 17 tests, not 8 (6 hold, 7 refuted, 4 undecided).
+
+**Standing** (`standing.md`). 100 mechanisms scored, 36 carried. 17 surprises, 3 new: Think-SFT on HumanEval+/MBPP+
+at T 1.0 passes 270 (Math cue) and 301 (Code cue) of 538 against readers near 384 and 395 (result-9d38d9, z 4.65 and
+4.42), and round-12 t09 (Think-SFT + RL-Math top-8 at 3x, 240 of 328, readers 226 and 223).
+
+**Shared pair tests** (one statistic, three disjoint ranges fixed in `jobs/rivals-s<k>.json`; scripts
+`analysis/direct_<name>.py`, specs `specs/SPEC_direct_<name>.md`, outputs `results/direct/<name>-01/`; verdict rule
+of engine 14):
+
+| pair (surprise) | test | statistic | a range | b range | null range | measured [90 %], n | verdict |
+|---|---|---|---|---|---|---|---|
+| s1, s2 (Think-SFT on code, 301 and 270 of 538) | codefence-01, result-b847a0 | share of the 106 problems where Think-SFT (Code cue) wrote no fenced block that the cued base passes | [0.72, 1.0] | [0.0, 0.46] (s2: 0.45) | [0.52, 0.66] (s2: [0.51, 0.67]) | 0.557 [0.481, 0.632], n 106; null (all problems) 0.589 | all four rivals refuted: the value sits in the null's range |
+| s3 (autobench final 139 of 328) | loopshare-01, result-813b5e | rule-A loops / plain base T 0.6 hard328 answers longer than 4,096 tokens | [0.05, 0.40] | [0.45, 1.0] | [0.0, 0.03] | 0.519 [0.460, 0.577], n 189; null (cued T 1.0) 0.004 | s3-b holds, s3-a refuted |
+| s4 (m21: 60 quick wrong of 250) | m21short-01, result-1d64b9 | share of m21's 157 right answers no longer than the plain base's median right length (1,069 tokens) | [0.0, 0.12] | [0.15, 0.36] | [0.41, 0.60] | 0.414 [0.319, 0.510], n 157; null 0.50 | s4-a refuted, s4-b undecided (about 500 right rows needed) |
+| s5 (cued base vote over 12, 466) | wrongagree-01, result-064aac | pooled share of same-problem wrong-answer pairs that agree (team vote's `agree`) | [0.07, 0.30] | [0.42, 1.0] | [0.0, 0.05] | 0.262 [0.202, 0.324], n 142 problems (1,271 pairs); null 0.005 | s5-b refuted, s5-a undecided (about 380 problems needed) |
+| s6 (Code top-8 1.5x, 399) | codecopy-01, result-366377 | mean pass rate of 5 Code top-8 edit samples on problems the cued base passes and RL-Code fails in 2 of 3 | [0.70, 1.0] | [0.0, 0.34] | [0.38, 0.66] | 0.452 [0.357, 0.539], 115 rows on 23 problems; null 0.435 | both refuted (b by 0.017) |
+
+Caveats per test. codefence-01 read the uncommitted raw `answers.jsonl` under `runs/` (its `metrics.json` is identical
+to the committed one); the posted "97 of 106 lack only the opening fence" did not reproduce (99 by a line rule).
+loopshare-01: the plan's cell (cued, T 0.6 / top-p 1.0) has rows only in a teammate's Modal Volume, so the test used
+the stored plain and cued T 0.6 / top-p 0.95 rows of the same seeds (S3 bucket, `runs/s3/r3/base-01/out/`); the cued
+cell gives 0.626 [0.574, 0.683], also inside b. codecopy-01: L has 23 problems (the plan expected 100 rows), the rows
+were copied from the person's own Modal Volume with `gpu.py get` (no GPU job), and the cap-hit rule was applied after a
+first run (first run 0.433 [0.342, 0.525], same verdicts).
+
+**Carried plans** (5, `jobs/plan-*.json`):
+
+| mechanism | test | statistic | threshold (holds side) | measured [90 %], n | verdict |
+|---|---|---|---|---|---|
+| run-08/f2-m05 (vote counts scattered wrong strings) | scatter4-01, result-dd9b25 | vote-over-4 accuracy with real wrong strings minus with all finished wrong merged, problems right in 2-10 of 12 | >= 0.05 | 0.070 [0.060, 0.081], n 158 | holds |
+| round-09/stopping-m04 (step 100 keeps the base's cap hits) | step100cap-01, result-074b77 | step-100 minus cued-base cap-hit rate, MATH-500, points | above -1.0 | -0.25 [-0.95, +0.50], n 500; final RL -2.90, step 400 -2.15 | holds (by 0.05; the holding side contains the null 0) |
+| round-09/grader-m04 (difficulty mix) | diffmix-01, result-887689 | plain/cue share drop from levels 1-2 to 4-5 minus a second cued sample's | above -0.05 | -0.024 [-0.143, +0.095], n 120 / 197 | undecided |
+| round-10/weights-m01 (fixed log-odds cap shift) | logodds-01, result-175cff | Q = ln(e_HI/b_HI) - ln(e_LO/b_LO), hard328 1.5x edit | above 0.3 | 0.39 [-0.25, 1.06], n 269 | undecided |
+| run-02/f2-m04 (the RL difference turns abstentions into wrong votes) | m2abstain-01, result-031f98 | vote right on lone-right problems, Think-SFT minus M(2) | above 0.15 | 0.19 [0.08, 0.30], n 41 / 32 | undecided (n below 50) |
+
+All 17 rows are in `results/direct_tested.json` (the 9 refuted also in `refuted.json`): 3 hold, 9 refuted, 5
+undecided. No pair has both rivals holding.
+
+**Who forecast** (`mechanisms.json`, `forecasts.json`, `holders.json`). 4 holders forecast the 19 open targets beside
+the two readers: round-09/training-m01, round-09/stopping-m04, run-08/f2-m05 (carried) and round-14/s3-b (new). Holds
+its test, forecasts nothing new (designs no cell): all four. The nearest miss is s3-b on t02 (work-3d4e90, Think-SFT
+in its own format at T 0.6 / top-p 0.95, cap 32,768): 452 [439, 465] against 472 [463, 480] and 472 [462, 481], and
+on t17 (work-ccac62, Think-SFT cued vote over 4, ties to the shortest): 471 [463, 478] against 482 [478, 486] and 481
+[476, 485]. The round-13 holders (s1-a, s3-a, s4-a, s4-b, s6-b) and round-10/weights-m03 hold a test but are not
+carried (fewer than 3 scored items, or in the graveyard), so they did not forecast.
+
+**Cells.** None designed (no holder forecasts something new), so no `cells.json` or `experiments.md`. The proposers'
+cells stay in the rival files, none run. The best one is s3's, the pair whose b holds: plain base, hard328, T 0.6 /
+top-p 0.95, cap 4,096, 1 sample, 40 GPU minutes; a 82 [70, 94], b 101 [95, 110]
+(`uv run tools/gpu.py submit l40s --hours 1.5 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt plain --set hard328 --temperature 0.6 --top-p 0.95 --max-tokens 4096 --seed 3000000 --commit COMMIT_SHA"`).
+It needs no GPU: the stored paired-seed cap-16,384 rows answer it if a 4,096 cap leaves every shorter answer unchanged.
+Of their 107 right answers, 23 are longer than 4,096 tokens (loopshare-01 `metrics.json`), so the replay gives 84 of
+328, inside a's interval and below b's, although b held its loop-share test (caveat: an answer cut at 4,096 tokens
+whose answer was already boxed would also count). The s5 cell (fresh cued sample agreeing with the stored modal wrong
+value, 80 GPU minutes; a 0.25 [0.12, 0.38], b 0.62 [0.48, 0.78]) has its b refuted already.
+
+**SPEC_round14 hypotheses.** H1 (a pair decided, rival beating the null, n >= 50): holds, s3-b (n 189). H2 (no pair
+with two holds): holds. H3 (a holder forecasts outside both readers): refuted, 0 of 4. H4 (gate under 20 minutes):
+holds, 16.1 running and wall clock. H5 (2 of 3 plans runnable as written): holds, 10 of 11 plans ran on their
+planned rows; loopshare-01 substituted stored rows of the same seeds, codecopy-01 fetched its planned rows from the
+person's own Modal Volume, and m2abstain-01 had fewer than 50 rows.
+
+**What the round shows.** The shared test does what engine 14 asked: every pair was decided against one statistic, no
+pair produced two holders, and the null-disjoint ranges let codefence-01 refute all four code rivals because the
+value fell where the null put it. But the holders still forecast nothing the readers do not, and the one holder's own
+cell, replayed on stored rows, falls on its rival's side. A holder's test is about a statistic of stored rows; its
+forecasts are about new cells, and nothing ties the two.
+
+Files in `results/wide/round-14/`: `standing.md` / `standing.json` / `standing/`, `graveyard.json`,
+`direct_facts.json`, `surprises.md` / `surprises.json`, `targets.json` / `work.md` (19 targets), `direct_tests.md` /
+`direct_tests.json` (11 plans), `pairs.json`, `duplicates.json` (8 restatements, reported only), `jobs/` (plans and
+rival files), `mechanisms.json` (4 holders), `holders.json`, `forecasts.json` / `forecasts.md`, `run.json`,
+`round14.log`.
 
 ## Theories
 

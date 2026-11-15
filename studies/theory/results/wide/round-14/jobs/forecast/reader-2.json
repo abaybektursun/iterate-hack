@@ -1,0 +1,21 @@
+{"forecasts": [
+{"id": "t01", "value": 230, "low": 213, "high": 245, "reason": "Paired T 1.0 own-format cell at cap 32,768 scored 232/328 (result-dd9239); the released T 0.6 setting should land close, with some risk of more loops."},
+{"id": "t02", "value": 472, "low": 462, "high": 481, "reason": "Own-format T 1.0 cap-32,768 cell scored 474/500 (result-0a0a5a); cue samples at 16k were 457-462, and T 0.6 is the model's released setting."},
+{"id": "t03", "value": 1.5, "low": 0.4, "high": 5.0, "reason": "RL inputs read the base strongly (drive 8-11x random), so each layer writes as much as the full edit, but random outputs should lose the cross-layer compounding behind the full 1.5x edit's 9.3 (random 1.5x about 0.1)."},
+{"id": "t04", "value": 0.15, "low": 0.06, "high": 0.8, "reason": "Random input directions read the base about as weakly as the random edit (0.066 at 1x, about 0.1 at 1.5x), so the shift should stay near random."},
+{"id": "t05", "value": 6.5, "low": 2.5, "high": 10.5, "reason": "Shifting the pairs keeps both subspaces and the per-layer write norm (singular values times input reads), so the shift should approach the full 1.5x edit's 9.3 even though the score matched random."},
+{"id": "t06", "value": 225, "low": 205, "high": 243, "reason": "On Think-SFT, 2x the RL delta added about 22 (209 to 232) by cutting cap hits; on the already RL-trained Think host I expect a smaller gain on top of about 214."},
+{"id": "t07", "value": 214, "low": 192, "high": 235, "reason": "Think-SFT with the cue scores 209 mean at cap 16k; the final Think model has slightly better AIME on its model card but similar cap-hit exposure at 16,384."},
+{"id": "t08", "value": 3.5, "low": -2.5, "high": 9.5, "reason": "Difference of t06 and t07 on paired seeds: a smaller effect than Think-SFT's +7.4 points, plus about 2.5 points of single-sample noise."},
+{"id": "t09", "value": 365, "low": 347, "high": 381, "reason": "301 passed plus about 70% of the 97 unopened-but-complete programs (the pass rate among its fenced answers was 301/432)."},
+{"id": "t10", "value": 345, "low": 315, "high": 375, "reason": "The Math cue had more unscored answers (270 passed); accepting the unopened block should recover a similar or larger share, moving it toward the Code-cue regrade."},
+{"id": "t11", "value": 319, "low": 316, "high": 326, "reason": "The base fenced 504 of 538 and rarely writes the unopened form, so only a few of its 34 no-block answers should be recovered from 317."},
+{"id": "t12", "value": 401, "low": 400, "high": 404, "reason": "RL-Code fenced 530 of 538 (8 no-block, 8 cap hits), so the regrade barely moves 401."},
+{"id": "t13", "value": 105, "low": 78, "high": 145, "reason": "Plain base scores 76 on hard328; direction 1 alone wrote little of the cue on the plain screen (42 vs 34 of 100 MATH-500), but it cuts cap hits, so modestly above plain."},
+{"id": "t14", "value": 160, "low": 115, "high": 192, "reason": "With the cue, directions 2-8 scored 183-196; the 8 directions write the cue themselves (plain top-8 427 vs cue 410 on MATH-500), so most of that should carry over without the cue."},
+{"id": "t15", "value": 197, "low": 189, "high": 206, "reason": "Cued-base vote over 4 on hard328 is 192; on MATH-500 going from 4 to 6 samples added about 7 of 500, so a few more problems here."},
+{"id": "t16", "value": 221, "low": 215, "high": 227, "reason": "RL's plain vote over 4 on hard328 is 221; tie rules moved votes by 0-3 elsewhere (base 191 vs 192, RL MATH-500 475 vs 474)."},
+{"id": "t17", "value": 481, "low": 476, "high": 485, "reason": "Think-SFT cue vote over 4 on MATH-500 is 481; tie-to-shortest should change it by only a few problems."},
+{"id": "t18", "value": 57, "low": 53, "high": 61, "reason": "RL's vote over 4 on fresh2026 is 57; a tie rule should move it by a couple of problems."},
+{"id": "t19", "value": 38, "low": 34, "high": 42, "reason": "Cued base vote over 4 on fresh2026 is 38; frequent cap hits create ties, but the shortest-answer rule gave no net gain for the base on hard328."}
+]}

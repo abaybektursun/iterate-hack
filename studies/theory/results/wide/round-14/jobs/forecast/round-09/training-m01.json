@@ -1,0 +1,21 @@
+{"forecasts": [
+{"id": "t01", "value": 234, "low": 218, "high": 249, "reason": "The theory says Think-SFT's own template brings back its trained ending and leaves reasoning length and cap behaviour on hard328 unchanged, so I anchor on the own-format T 1.0 cell at cap 32,768 (232/328, result-dd9239); the theory says nothing about temperature, so the T 0.6 change only widens the interval."},
+{"id": "t02", "value": 474, "low": 463, "high": 484, "reason": "The theory says the own template gets more MATH-500 answers counted, so I anchor on the own-format cell at cap 32,768 (474/500, result-0a0a5a, above the 457-462 cue samples); T 0.6 is not covered by the theory, so the interval is wider."},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": 366, "low": 345, "high": 385, "reason": "The theory says that off its trained template Think-SFT 'reasons as well but misplaces the final answer', so the 97 programs with no opening fence (result-9d38d9) should pass at about the fenced rate of 301/432 (70 %): 301 + about 65."},
+{"id": "t10", "value": 335, "low": 300, "high": 370, "reason": "Same misplacement account: the Math cue's 31-problem deficit against the Code cue (270 vs 301) should be mostly format, recovered at about the 70 % fenced pass rate; the count of unfenced answers is not posted, so the interval is wide."},
+{"id": "t11", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

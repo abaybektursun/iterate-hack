@@ -1,0 +1,21 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t10", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t11", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 198, "low": 190, "high": 206, "reason": "Theory: scattered wrong answers let the right answer win the plurality once p > ~0.3, so going from vote over 4 (192 of 328) to 6 still gains, but the gain shrinks after k = 4 and even k still leaves ties. I scaled the MATH-500 step from k = 4 to 6 (+7.4 of 500) up for hard328's larger mid-p share; the result stays well below pass@4 (205-207)."},
+{"id": "t16", "value": 222, "low": 216, "high": 228, "reason": "Theory: a fixed tie rule breaks even-k ties about half right, so tie-to-shortest should land at RL's plain vote over 4 on the 328 (221). The base showed this there (191 vs 192), and RL's long answers being right less often adds about +1."},
+{"id": "t17", "value": 481, "low": 477, "high": 485, "reason": "Theory: a fixed tie rule is about half right on ties, so the count stays near Think-SFT's stored vote over 4 on MATH-500 (481). Its many cap hits cast no vote, which leaves few contested ties."},
+{"id": "t18", "value": 58, "low": 53, "high": 63, "reason": "Theory: ties are broken about half right whatever the rule, so the count stays near RL's stored vote over 4 on fresh2026 (57). Its wrong answers scatter, and ties-to-shortest may add about 1."},
+{"id": "t19", "value": 38, "low": 34, "high": 42, "reason": "Theory: the cued base's per-sample success on fresh2026 (~0.22) is mostly below the ~0.3 threshold, so many problems are split or tied, and a fixed tie rule breaks them about half right. The count stays near the stored vote over 4 (38), as tie_short did on hard328 (191 vs 192)."}
+]}

@@ -1,0 +1,21 @@
+{"forecasts": [
+{"id": "t01", "value": 230, "low": 215, "high": 244, "reason": "Think-SFT in its own format at cap 32,768 scored 232 at T 1.0 (result-dd9239), and its cue samples at 32,768 average 232.8; T 0.6 / top-p 0.95 should be about the same for a distilled reasoner, with a small risk of more loops."},
+{"id": "t02", "value": 472, "low": 463, "high": 480, "reason": "Own format at cap 32,768 scored 474 on MATH-500 at T 1.0 (result-0a0a5a); I expect T 0.6 to land within a few problems of that."},
+{"id": "t03", "value": 1.5, "low": 0.3, "high": 5.0, "reason": "The full 1.5x edit shifts layer 24 by about 9.3 and a random edit by about 0.1 (result-98de28). RL input directions are driven about 10x more than random ones, but random outputs should not compound across layers, so I put this near ten times the random shift."},
+{"id": "t04", "value": 0.2, "low": 0.06, "high": 0.8, "reason": "With random input directions the base barely drives the edit, so the injected change is near the random edit's (about 0.1 at 1.5x) even though the outputs are RL's directions."},
+{"id": "t05", "value": 5.0, "low": 1.0, "high": 11.0, "reason": "RL inputs give full drive, and the RL output subspace still lines up with the next layer's inputs, so a large share of the full edit's 9.3 shift is plausible even though the behaviour matched random (160/64)."},
+{"id": "t06", "value": 222, "low": 200, "high": 240, "reason": "Adding 2x the RL delta lifted Think-SFT by about 7 points through fewer cap hits (result-3387ce, c5dafe); on an RLVR-trained host I expect a smaller gain over a host near 212."},
+{"id": "t07", "value": 212, "low": 190, "high": 232, "reason": "Think-SFT with the cue scores about 209 at cap 16,384; the final Think model is somewhat stronger on AIME but writes long answers, so cap hits at 16,384 should hold it near the SFT level."},
+{"id": "t08", "value": 3.0, "low": -4.0, "high": 10.0, "reason": "The delta gave +7.4 points on Think-SFT; a host that already had RL should gain less, and the result could be zero or negative."},
+{"id": "t09", "value": 362, "low": 344, "high": 378, "reason": "301 passed plus most of the 97 unopened-block programs, assuming they pass at about the 70% rate of Think-SFT's fenced answers (result-9d38d9)."},
+{"id": "t10", "value": 328, "low": 298, "high": 355, "reason": "270 passed under the Math cue; it likely has as many or more unopened blocks, so I add about 50-60 passes at a rate near 65%."},
+{"id": "t11", "value": 318, "low": 316, "high": 323, "reason": "The base rarely writes the unopened-block format (34 answers have no block, mostly cap hits or other failures), so 317 should barely move."},
+{"id": "t12", "value": 401, "low": 399, "high": 404, "reason": "RL-Code has only 8 answers without a code block, so the regrade should leave 401 nearly unchanged."},
+{"id": "t13", "value": 105, "low": 72, "high": 150, "reason": "The plain base scores 76 on hard328. Direction 1 mostly helps finishing and writes the cue only weakly (screen: top1 plain 42 vs base 34 of 100), so I expect a partial lift."},
+{"id": "t14", "value": 160, "low": 115, "high": 192, "reason": "The top-8 directions write the cue on their own (top-8 1x plain gave 427 on MATH-500), and directions 2-8 at 1.5x with the cue score 183-196, so the plain version should end up somewhat below that."},
+{"id": "t15", "value": 196, "low": 183, "high": 208, "reason": "The base vote over 4 on hard328 is 192 (179 on other rows), and pass@4 is about 207; on MATH-500 going from 4 to 6 votes added about 7, so I expect +3 to +6 here."},
+{"id": "t16", "value": 223, "low": 218, "high": 228, "reason": "RL's vote over 4 is 221. Its short answers are more accurate than its long ones, so breaking ties toward the shortest answer should add a couple of problems."},
+{"id": "t17", "value": 482, "low": 478, "high": 486, "reason": "Think-SFT's vote over 4 on MATH-500 is 481; the tie rule should move it by only 0-2 problems."},
+{"id": "t18", "value": 58, "low": 54, "high": 62, "reason": "RL's vote over 4 on fresh2026 is 57; the shortest-answer tie rule should shift it by about one problem."},
+{"id": "t19", "value": 39, "low": 35, "high": 43, "reason": "The cued base's vote over 4 on fresh2026 is 38; the tie rule moved the base by -1 on hard328 and +7 in-sample on MATH-500."}
+]}

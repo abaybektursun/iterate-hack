@@ -1,0 +1,127 @@
+== standing
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-dohlooiy
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-dohlooiy
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-dohlooiy
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-dohlooiy
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-dohlooiy
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-dohlooiy
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-dohlooiy
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-dohlooiy
+285 items before 2026-11-15T20:05:26, 66 at or after
+  running 1 jobs, 1 at a time
+254 items before 2026-11-15T17:45:51, 97 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 103 at or after
+315 items before 2026-11-15T21:27:03, 36 at or after
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 103 at or after
+  running 1 jobs, 1 at a time
+267 items before 2026-11-15T18:58:29, 84 at or after
+  running 1 jobs, 1 at a time
+231 items before 2026-11-15T14:53:16, 120 at or after
+  running 1 jobs, 1 at a time
+295 items before 2026-11-15T20:38:56, 56 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-03 (opus): done in 54 s
+  forecast_score/measured-round-13 (opus): done in 54 s
+  forecast_score/measured-run-02 (opus): done in 54 s
+  forecast_score/measured-round-12 (opus): done in 56 s
+248 items before 2026-11-15T16:32:52, 103 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-11 (opus): done in 60 s
+248 items before 2026-11-15T16:32:52, 103 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 103 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-09 (opus): done in 64 s
+  forecast_score/measured-run-04 (opus): done in 66 s
+248 items before 2026-11-15T16:32:52, 103 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-10 (opus): done in 68 s
+  forecast_score/measured-run-05 (opus): done in 49 s
+  forecast_score/measured-run-07 (opus): done in 52 s
+  forecast_score/measured-run-08 (opus): done in 51 s
+  forecast_score/measured-run-06 (opus): done in 58 s
+351 items before 9999, 0 at or after
+  standing: 100 mechanisms, 100 scored, 36 carried, 31 to the graveyard; 324 forecasts written after their result, 0 measured rows not scored
+== direct facts
+  32 direct facts (7 hold)
+== surprises
+  17 surprises (9 outside every interval): studies/theory/results/wide/round-14/surprises.md
+== targets_open
+351 items before 9999, 0 at or after
+  running 1 jobs, 1 at a time
+  forecast_targets/targets (opus): done in 162 s
+  targets.json: 19 targets from 12 open work items, board snapshot 2026-11-15T22:32:36 UTC
+== direct_tests (carried)
+  running 5 jobs, 5 at a time
+  direct_test_plan/round-09-grader-m04 (opus): done in 68 s
+  direct_test_plan/round-09-stopping-m04 (opus): done in 68 s
+  direct_test_plan/round-10-weights-m01 (opus): done in 74 s
+  direct_test_plan/run-08-f2-m05 (opus): done in 107 s
+  direct_test_plan/run-02-f2-m04 (opus): done in 129 s
+  5 direct-test plans for carried mechanisms
+== propose
+  running 6 jobs, 6 at a time
+  surprise_propose/s2 (opus): done in 168 s
+  surprise_propose/s1 (opus): done in 204 s
+  surprise_propose/s6 (opus): done in 292 s
+  surprise_propose/s5: a: statement has 84 words; at most 80; sent back once
+  surprise_propose/s5: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-dohlooiy/surprise_propose/s5/out.sendback.txt
+  surprise_propose/s5 (opus): done in 358 s
+  surprise_propose/s3 (opus): done in 380 s
+  surprise_propose/s4 (opus): done in 490 s
+  running 1 jobs, 1 at a time
+  duplicates/judge (opus): done in 50 s
+  duplicate round-14/s2-a of round-14/s1-a: Think-SFT's skill is intact; on easy short problems it writes its SFT answer layout (bare 'python' line, no opening fence), which the grader drops even though the programs would pass
+  duplicate round-14/s2-b of round-14/s1-b: Unfenced answers come from failed long math-style deliberation on hard problems that never reaches answer mode; the programs mostly fail
+  duplicate round-14/s3-a of round-13/s1-a: The 4,096 cap sits near the median right-answer length (~3,900) on hard328, so cut samples cast no vote and the score is bounded by short routes
+  duplicate round-14/s4-b of r5-m03-rival: The top-8 edit is a per-sample all-or-none switch, so outputs are a mixture of full shifted-mode samples and untouched plain-base samples
+  duplicate round-14/s5-a of run-04/f2-m01: Cued base's wrong answers scatter over values while right answers coincide, so the plurality picks the right value at a 25-40 % share and keeps rising with more samples
+  duplicate round-14/s5-b of run-07/f2-m03: A problem-specific recurring wrong value (misreading) holds a stable plurality against the right answer and limits what voting recovers
+  duplicate round-14/s6-a of round-13/s4-b: Top-8 RL directions sharpen the base onto its own most likely passing program, limited by base pass@k rather than RL-Code's own solutions
+  duplicate round-14/s6-b of round-11/s2-b: RL-Code's top-8 directions at 1.5x carry RL-Code's own task policy, so the edit is a copy of RL-Code
+== gate: only mechanisms that hold a direct test go on
+  12 mechanisms without a verdict yet (round-14/s1-a, round-14/s1-b, round-14/s2-a, round-14/s2-b, round-14/s3-a, round-14/s3-b, round-14/s4-a, round-14/s4-b, round-14/s5-a, round-14/s5-b, round-14/s6-a, round-14/s6-b): run the tests from studies/theory/results/wide/round-14/direct_tests.md, add their rows, then run the same command again (or add --go to continue with the mechanisms that hold now)
+EXIT 0
+22:51:03
+== standing
+== direct facts
+  58 direct facts (10 hold)
+== surprises
+  17 surprises (9 outside every interval): studies/theory/results/wide/round-14/surprises.md
+== targets_open
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-mhxjx475
+351 items before 2026-11-15T22:32:36, 14 at or after
+== direct_tests (carried)
+== propose
+  skip surprise_propose/s1: its outputs exist
+  skip surprise_propose/s2: its outputs exist
+  skip surprise_propose/s3: its outputs exist
+  skip surprise_propose/s4: its outputs exist
+  skip surprise_propose/s5: its outputs exist
+  skip surprise_propose/s6: its outputs exist
+  skip duplicates/judge: its outputs exist
+  duplicate round-14/s2-a of round-14/s1-a: Think-SFT's skill is intact; on easy short problems it writes its SFT answer layout (bare 'python' line, no opening fence), which the grader drops even though the programs would pass
+  duplicate round-14/s2-b of round-14/s1-b: Unfenced answers come from failed long math-style deliberation on hard problems that never reaches answer mode; the programs mostly fail
+  duplicate round-14/s3-a of round-13/s1-a: The 4,096 cap sits near the median right-answer length (~3,900) on hard328, so cut samples cast no vote and the score is bounded by short routes
+  duplicate round-14/s4-b of r5-m03-rival: The top-8 edit is a per-sample all-or-none switch, so outputs are a mixture of full shifted-mode samples and untouched plain-base samples
+  duplicate round-14/s5-a of run-04/f2-m01: Cued base's wrong answers scatter over values while right answers coincide, so the plurality picks the right value at a 25-40 % share and keeps rising with more samples
+  duplicate round-14/s5-b of run-07/f2-m03: A problem-specific recurring wrong value (misreading) holds a stable plurality against the right answer and limits what voting recovers
+  duplicate round-14/s6-a of round-13/s4-b: Top-8 RL directions sharpen the base onto its own most likely passing program, limited by base pass@k rather than RL-Code's own solutions
+  duplicate round-14/s6-b of round-11/s2-b: RL-Code's top-8 directions at 1.5x carry RL-Code's own task policy, so the edit is a copy of RL-Code
+== gate: only mechanisms that hold a direct test go on
+== forecast
+  running 5 jobs, 5 at a time
+  forecast/round-09/training-m01 (opus): done in 56 s
+  forecast/round-09/stopping-m04 (opus): done in 65 s
+  forecast/run-08/f2-m05 (opus): done in 92 s
+  forecast/reader-1 (opus): done in 125 s
+  forecast/reader-2 (opus): done in 144 s
+  3 carried and 1 new mechanisms hold a direct test and forecast (8 judged restatements), 6 pairs
+  holds its test, forecasts nothing new (designs no cell): round-09/training-m01, round-09/stopping-m04, run-08/f2-m05, round-14/s3-b
+== cells
+2.4 minutes
+EXIT2 0
+22:53:29

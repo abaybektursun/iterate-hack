@@ -1,0 +1,21 @@
+{"forecasts": [
+{"id": "t01", "value": 229, "low": 215, "high": 242, "reason": "Theory: a cut answer scores zero, and at cap 32,768 Think-SFT's own format almost always finishes (232 at T 1.0, paired seed). The theory's T 0.6 clause says loops that depend on the opening add cap hits, which offsets the precision gain from the lower temperature, so the count stays near 232 and slightly below it."},
+{"id": "t02", "value": 473, "low": 464, "high": 481, "reason": "Same clauses: at cap 32,768 on MATH-500 there are almost no cut answers (474 with 0 cap hits at T 1.0). At T 0.6 a few looped cap hits trade against finished-answer precision, so the count stays near 474."},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t10", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t11", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 197, "low": 190, "high": 205, "reason": "Theory: more samples leave the length distribution in place, so they only sharpen the precision of finished answers, and the cued base's cap-hit problems stay at zero. The count therefore rises a little above the vote over 4 (192, or 195 after restart) and stays capped well below pass@4 (207)."},
+{"id": "t16", "value": 221, "low": 216, "high": 226, "reason": "Theory: a tie rule changes neither the length distribution nor the cap hits, and cut answers already cast no vote. Ties-to-shortest only reselects among finished answers, so the count should equal RL's plain vote of 221 (the base's tie-short moved its vote by 1)."},
+{"id": "t17", "value": 481, "low": 477, "high": 485, "reason": "Theory: a tie rule moves only precision among finished answers, so the count should equal Think-SFT's plain MATH-500 vote of 481."},
+{"id": "t18", "value": 57, "low": 53, "high": 61, "reason": "Theory: a tie rule moves only precision among finished answers and leaves the cap hits in place, so the count should equal RL's fresh2026 vote of 57."},
+{"id": "t19", "value": 38, "low": 35, "high": 42, "reason": "Theory: the cued base's roughly 40 % cap hits cast no vote under any tie rule, so ties-to-shortest only reselects among finished answers. The count should equal its fresh2026 vote of 38."}
+]}
