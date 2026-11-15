@@ -9,6 +9,9 @@ Per arm: right of n (grader v3), cap hits, rule-A loops, generated tokens, writt
 answers gained and lost in total and by subject, identical answers. --t1: the stored T1 rows, for the count of answers
 identical to them. --target: the hold-on rate ratio against `none` that the strength rule of the spec interpolates to
 (log-linear in strength between the two neighbouring strengths of each steering site and of the bias arms).
+First divergence: every arm shares its sampling noise with `none`, so an answer equals the `none` answer up to the first
+position where the arm changed the next-token distribution enough; reported are the median character offset of that position
+and how often the arm's first differing word is a hold-on word.
 Examples: per arm the shortest answer scored right and the shortest finished answer scored wrong, in full.
 Needs numpy only. Fail loud: no try/except.
 """
@@ -17,6 +20,7 @@ import collections
 import json
 import math
 import pathlib
+import re
 
 import numpy as np
 
@@ -34,6 +38,21 @@ def boot_diff(a, b):
 
 def subject(row):
     return row["unique_id"].split("/")[1]
+
+
+FIRST_HOLD = re.compile(r"\W*(?:[Ww]ait|[Hh]mm+)\b")
+
+
+def first_divergence(arm_text, none_text):
+    """(character offset of the start of the first differing word, is the arm's word there a hold-on word), or None if one text
+    is a prefix of the other."""
+    n = min(len(arm_text), len(none_text))
+    i = next((k for k in range(n) if arm_text[k] != none_text[k]), n)
+    if i == n:
+        return None
+    while i > 0 and arm_text[i - 1].isalnum():
+        i -= 1
+    return i, bool(FIRST_HOLD.match(arm_text[i:i + 12]))
 
 
 def interpolate(points, target):
@@ -95,6 +114,9 @@ def main():
              "lost_that_hit_cap": sum(r["cap_hit"] for r in lost), "identical_to_none": sum(r["text"] == n["text"] for r, n in zip(rs, none)),
              "tokens_mean_both_finished": [float(np.mean([r["n_new"] for r, _ in both])), float(np.mean([n["n_new"] for _, n in both]))] if both else None,
              "n_both_finished": len(both)}
+        div = [d for d in (first_divergence(r["text"], n["text"]) for r, n in zip(rs, none)) if d is not None]
+        e["first_divergence"] = {"n": len(div), "median_char": float(np.median([d[0] for d in div])) if div else None,
+                                 "first_word_is_hold_on": sum(d[1] for d in div)}
         if t1 is not None:
             e["identical_to_stored_T1"] = sum(r["sample"] == 0 and r["text"] == t1[r["problem_index"]]["text"] for r in rs)
         arms[name] = e
