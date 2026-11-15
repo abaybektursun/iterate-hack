@@ -12,9 +12,14 @@ Parameters:
     Type: String
     Default: ""
     Description: Route 53 hosted zone id that holds DomainName. Required when DomainName is set.
+  HomeDomainName:
+    Type: String
+    Default: ""
+    Description: Optional second domain in the same hosted zone, e.g. example.com, where view.py answers / with the home page.
 
 Conditions:
   HasDomain: !Not [!Equals [!Ref DomainName, ""]]
+  HasHome: !Not [!Equals [!Ref HomeDomainName, ""]]
 
 Resources:
   Role:
@@ -175,6 +180,46 @@ Resources:
       AliasTarget:
         DNSName: !GetAtt CustomDomain.RegionalDomainName
         HostedZoneId: !GetAtt CustomDomain.RegionalHostedZoneId
+
+  HomeCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Condition: HasHome
+    Properties:
+      DomainName: !Ref HomeDomainName
+      ValidationMethod: DNS
+      DomainValidationOptions:
+        - DomainName: !Ref HomeDomainName
+          HostedZoneId: !Ref HostedZoneId
+
+  HomeDomain:
+    Type: AWS::ApiGatewayV2::DomainName
+    Condition: HasHome
+    Properties:
+      DomainName: !Ref HomeDomainName
+      DomainNameConfigurations:
+        - CertificateArn: !Ref HomeCertificate
+          EndpointType: REGIONAL
+          SecurityPolicy: TLS_1_2
+
+  HomeMapping:
+    Type: AWS::ApiGatewayV2::ApiMapping
+    Condition: HasHome
+    DependsOn: Stage
+    Properties:
+      ApiId: !Ref Api
+      DomainName: !Ref HomeDomain
+      Stage: $default
+
+  HomeAliasRecord:
+    Type: AWS::Route53::RecordSet
+    Condition: HasHome
+    Properties:
+      HostedZoneId: !Ref HostedZoneId
+      Name: !Ref HomeDomainName
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt HomeDomain.RegionalDomainName
+        HostedZoneId: !GetAtt HomeDomain.RegionalHostedZoneId
 
 Outputs:
   DeployRole:

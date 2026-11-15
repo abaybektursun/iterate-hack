@@ -3232,6 +3232,23 @@ uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rln
 uv run --no-project --with numpy python -m studies.rlneurons.analysis.fresh_read --sft studies/rlneurons/results/fresh/sft1_cue_s4-01 --rl studies/rlneurons/results/fresh/rl_plain_s4-01 --base studies/rlneurons/results/fresh/base_cue_s4-01 --out studies/rlneurons/results/fresh/readout-01 --texts runs/fresh_sft1_cue_s4 runs/fresh_rl_plain_s4 runs/fresh_base_cue_s4
 ```
 
+## Paper: The First Hundred Steps (`paper-first-steps/`, board work-184476)
+
+A 4-page paper: `paper-first-steps/the-first-hundred-steps.pdf`, served at
+https://monitor.invariant.team/paper/the-first-hundred-steps.pdf. Claim: on MATH-500 (n = 500, T 1.0 / top-p 1.0, cap
+16,384, grader v3, four samples per model) the three-token opening cue takes the base from 224 to 410.5 right, within
++1.4 points [-0.45, 3.30] of the released RL step 100 (417.5); steps 100 to 2,800 add 42.5 problems (final 460.0), almost
+all on problems the cued base already solves in some samples (47 gained, 44 of them solved by the cued base at least once).
+
+| File | What it is |
+|---|---|
+| `paper-first-steps/build_facts.py` | Reads the committed rows (`results/ckptcue/`, `results/selfopen/`, `results/wsp2/`, `results/handoff/`) and writes `facts.json` and `problems.jsonl`. No GPU. Run: `python studies/rlneurons/paper-first-steps/build_facts.py`. |
+| `paper-first-steps/facts.json` | Every number in the paper, with the path of the rows it came from (`_about.sources`). |
+| `paper-first-steps/problems.jsonl` | One line per MATH-500 problem: right counts per model over the four samples. |
+| `paper-first-steps/NOTES.md` | Definitions, the arms and their prompts, what each number does not show. |
+| `paper-first-steps/figs.py`, `fig_curve.pdf` | The figure, drawn from `facts.json`. Run: `python studies/rlneurons/paper-first-steps/figs.py`. |
+| `paper-first-steps/paper.tex`, `refs.bib`, `fonts/` | Source; build with `tectonic paper.tex` in the folder. |
+
 ## How to run
 
 Laptop checks (no GPU, no weights):
@@ -4464,3 +4481,26 @@ transplant. Public at https://monitor.invariant.team/paper/the-finish-dial.pdf (
   making the base write an answer. On the 264 items where both the plain and the cued base give a letter the cue adds +12.5
   points [4.9, 19.7] (156 against 123 right; MMLU-Pro +10.2 [0.0, 20.3] of 118, BBH +14.4 [4.1, 25.3] of 146). RL on its 277
   shared items: +19.1 [11.9, 26.4]. So less than half of the cue's gain here is better answers; the rest is answers given at all.
+
+## The 1.5x top-8 edit on the fresh 2026 set (fresh2026, n = 136, cue, T 1.0, grader v3, board work-16773f)
+
+Question (`specs/SPEC_fresh_top8.md`, written before any job): the edit's size was chosen on the 328. Is base + 1.5 times the
+top 8 directions of (RL-Math 3.1 - base) level with RL on 136 problems published in 2026, where nothing about it was chosen?
+Answer: yes within the interval, slightly below. Four samples: 50, 52, 45, 46 right, mean 48.25 (RL plain 49, 50, 53, 50,
+mean 50.5; base + cue 28, 28, 32, 30): edit minus RL -1.7 points [-5.3, +1.8], edit minus base + cue +13.8 [9.6, 18.2]. Vote
+over 4: 53 of 136 at 45,750 tokens per problem (RL 57, base 38): -2.9 [-8.1, +2.2] against RL, +11.0 [5.1, 16.9] against the
+base. Under the vote the edit alone is right on 4 problems, RL alone on 8.
+
+Jobs `ih-1115-150237-83a4`, `-155322-598b`, `-155844-4392`, `-155905-0426` (AWS L40S, commit bcce43b; seeds 7000000 +
+10000 s, the seeds of `SPEC_fresh.md`; each log repeats the edit statistics of job b417: add_rel 0.0011109, cos_written_add
+0.585). RL and base rows: the 12 runs of board result-5251c9. Readout `analysis/mixvote.py`:
+`results/mixvote/fresh2026_top8x1.5-01/readout.json` (paired bootstrap, 5,000 resamples, seed 0).
+
+- Prediction 1 (single-sample mean in [44.5, 56.5]): holds, 48.25.
+- Prediction 2 (vote over 4 in [50, 62]): holds, 53.
+- Prediction 3 (cap hits per sample at most 30): holds, 14, 16, 14, 12 of 136 (RL 20 to 23, base 49 to 59). The edit's
+  effect on finishing carries over to unseen problems, and it finishes more often than RL.
+- The edit recovers 89 % of RL's single-sample gain over the cued base here ((48.25 - 29.5) / (50.5 - 29.5)) and 79 % of
+  its gain under the vote ((53 - 38) / (57 - 38)); on the 328 the same shares are 101 % and 76 %.
+- The edit uses the RL checkpoint's weights, so it is not a route without reward. Think-SFT + cue (no reward) has 60.0 on
+  one sample and 75 under the vote on this set.
