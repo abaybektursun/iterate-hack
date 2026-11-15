@@ -55,7 +55,7 @@ PAGE = r"""<!doctype html>
   }
 }
 * { box-sizing: border-box; }
-html { background: var(--paper); }
+html { background: var(--paper); overflow-x: clip; }  /* the glow around the plate reaches past the page edge */
 body {
   margin: 0; color: var(--ink); background: var(--paper);
   font: 400 15px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
@@ -88,7 +88,7 @@ a { color: inherit; text-decoration: none; }
 /* The one object: the picture of the chosen row, a plate lit from the upper left */
 .stage { position: sticky; top: 0; height: 100vh; max-height: 1100px; display: flex; flex-direction: column; justify-content: center; padding: 28px 0; perspective: 1800px; animation: fade 1.1s .15s both; }
 .plate { position: relative; display: block; transform-style: preserve-3d; will-change: transform; }
-.plate::before { content: ""; position: absolute; inset: -9% -7%; border-radius: 50%; opacity: calc(var(--glow) * .5); pointer-events: none;
+.plate::before { content: ""; position: absolute; inset: -9% -4%; border-radius: 50%; opacity: calc(var(--glow) * .5); pointer-events: none;
   background: radial-gradient(closest-side, color-mix(in srgb, var(--blue) 15%, transparent), transparent); }
 .plate::after { content: ""; position: absolute; left: 5%; right: 5%; bottom: -5%; height: 9%; border-radius: 50%; opacity: calc(var(--shadow) * .5); pointer-events: none;
   background: radial-gradient(closest-side, color-mix(in srgb, var(--ink) 34%, transparent), transparent); filter: blur(10px); }

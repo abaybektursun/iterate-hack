@@ -425,14 +425,16 @@ quotes with their sources and its line of AGENTS.md. The words are the person's 
 The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game
 of 5 levels, each ending in a boss. Hold Space, or press and hold, to breathe in and let go to breathe out, so that the
 white ring follows the blue one. A breath that follows it scores, raises the streak multiplier, charges the Om (key O)
-and sends out a wave that releases thoughts into their letters. The thoughts are bodies that collide; they are written
-jokes and, marked with a blue dot, real messages and result titles of the board. A thought that reaches the meditator is
-believed and moves the diagnosis up; the fifth ends the session. A click on a thought brings it back as 3 subagents.
-Three power-ups, a WebGL fog behind the scene, a drone with a layer per level and a spoken guide (M mutes). The end
-screen gives score, rank, achievements and what the agents posted meanwhile; the best score stays in the browser.
+and sends out a wave that releases thoughts into their letters. The thoughts are bodies that collide: written jokes,
+real messages and result titles of the board (blue dot), and from level 2 on fast pings, hype that grows and reviewers
+that take two waves. A thought that reaches the meditator is believed and moves the diagnosis up; the fifth ends the
+session. A click on a thought brings it back as 3 subagents. After each boss the player picks one of three practices
+that stay (keys 1 to 3); after level 5 the retreat can go on without end. Three power-ups, a spoken guide and music
+that follows the breath (M mutes). A WebGL shader draws the picture: fog, glow, ripples under each wave and a colour
+split. The end screen gives score, rank, achievements and what the agents posted meanwhile.
 
-The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): twelve 16:9 slides, each one
-figure with a few words, `#hook`, `#climb`, `#question`, `#tea`, `#harness`, `#finding`, `#beyond`, `#efficiency`,
+The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): thirteen 16:9 slides, each one
+figure with a few words, `#hook`, `#climb`, `#question`, `#tea`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
 `#proof`, `#ideas`, `#papers` and `#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
 PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` or the button at the top right changes the theme
 (`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
@@ -441,7 +443,9 @@ theme on screen, so print to PDF from the dark page for a dark PDF. The hook sen
 each a `data:image/jpeg;base64,...` URI (the deploy ships only `tools/*.py`); while one is empty its slide shows an
 empty frame. Slides 4 and 7 show the Design page's picture and the idea tree of `/demo/ali/slide2` in an iframe of
 `/demo/fig/harness` and `/demo/fig/tree`: those pages with their header, words column and key hidden
-(`demo_deck.FIGS`). Every number is read when the page is built: the finish dial from
+(`demo_deck.FIGS`). The slide `#sponsors` shows the scene of `/exa` and the memory scene of `/pastdev` side by side in iframes of
+`/demo/fig/exa` and `/demo/fig/pastdev` (those pages with everything but the scene hidden; the dark deck shows them
+inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. Every number is read when the page is built: the finish dial from
 `tools/finding_the_finish_dial.py` (`DATA['cells']`), the comparison with Karpathy's autoresearch loop from
 `FACTS['auto_research_comparison']` in `tools/demo_facts.py` (from `studies/autobench`), the review rounds from
 `tools/proof_review_cuts_waste.py`, the links of the idea tree from `tools/demo_ali_data.py` (counted as
