@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t10", "value": 40, "low": 30, "high": 52, "reason": "The theory says the top-8 edit makes the model finish, so the reversed edit (size -1) should stop it finishing (hard328: 96 cap hits against the base's 77). The odd shard already shows 20 cap hits of 250, so I doubled that for 500."},
+{"id": "t11", "value": 376, "low": 361, "high": 391, "reason": "The theory says the reversed edit cuts finishing, which costs right answers relative to the cued base's 410. The odd shard's 188/250 doubled gives 376, with half-to-half sampling noise added."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": 198, "low": 189, "high": 207, "reason": "The theory says the vote gains most for the cued base, because its many cap hits (about 70 per sample) cast no vote and so drop long wrong answers. Starting from its hard328 vote over 4 (192), I added the 4-to-6 gain seen on MATH-500 (449.2 to 456.6); 6 is even, so tie losses remain."},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": 247, "low": 240, "high": 254, "reason": "The theory says the RL delta on Think-SFT makes it finish, so the vote gains little: vote over 3 was 246 against a single-sample mean of 233, far less than Think-SFT's +32. Going to an even 4 votes brings back tie losses, so I put it at about the vote over 3."},
+{"id": "t18", "value": 244, "low": 234, "high": 254, "reason": "The theory says a longer cap makes the model finish; M(2) at 32,768 finishes almost every answer. I took its 16,384-cap mean of about 233 plus the +13 that seed 3,010,000 gained at 32,768 (232 to 245)."},
+{"id": "t19", "value": 79, "low": 72, "high": 86, "reason": "The theory says a longer cap makes Think-SFT finish, so finished guesses compete and the vote gains less than single samples do. On hard328 the 32k vote rose only 6 while single samples rose 22, so I moved the fresh2026 vote at 16,384 (75) up by only a few."},
+{"id": "t20", "value": 70, "low": 63, "high": 77, "reason": "The theory says a longer cap turns Think-SFT's cap hits (46% of fresh2026 samples) into finished answers. On hard328 about a quarter of those cut answers come out right, so I added about 10 to the 16,384-cap single-sample mean of 60."}
+]}

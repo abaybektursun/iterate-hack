@@ -1,5 +1,13 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 21:10 UTC (loop cycle 15; no change) meta/reviews/abaybektursun/20261115-2104/
+
+- Target (Team line, 4 h): claim to close median 48 min (43 at 19:59), upper quartile 106 min (68), 34 items by 3 people (31); 10.2 results per hour (9.5). Stage medians of abaybektursun's items with jobs: to-job 3, jobs 37, to-answer 1 min. Modal 102 jobs, 4 failed or cancelled with 3.9 of 2,388.7 container min.
+- Open measurements: the 10-minute upload (cycle 14) has not run: 0 vast.ai jobs were submitted since 20:10 UTC (3 boxes left, 4.24 USD per hour; the work is on Modal and AWS). Final tars in the team store: 17. Account stops: none since 19:50.
+- Score of cycle 14: not measurable yet.
+- Change: none. Checked: queue wait 0.1 min, failed container minutes 0.2 %, to-job 3 min, to-answer 1 min; the jobs stage (37 min) is generation.
+- Next cycle (16) is step-back 4. It checks: part tars of real jobs; cut jobs with outputs outside the box against 0 of 9; cycles 13 to 16 against 9 to 12 on the target.
+
 ## 2026-11-15 20:45 UTC (paper loop 4, after result-aff8c5 of work-184476) meta/reviews/abaybektursun/20261115-2045-paper5/
 
 - Previous paper entry's open item, literature before the pick: done in part. The scout ran a quick novelty search before the pick (19:20-19:23) and the full read (19:25-19:33) found the claim unpublished before the draft. Paper 5 scouts 19:20 to live PDF 20:44 (84 min; paper 4: 60). Site stayed up.

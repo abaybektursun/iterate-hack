@@ -804,7 +804,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .reach .big { font-size: 26px; line-height: 32px; }
   .search input { font-size: 16px; min-height: 40px; }  /* iOS zooms into a field under 16px */
   .row .open { min-height: 44px; }
-  .people button, #idlebtn, .tabs button, .all { padding-block: 10px; }
+  .people button, #idlebtn, .tabs button, .all { padding-block: 10px; min-height: 40px; }
   .phead .actions button { position: relative; }
   .phead .actions button::after { content: ""; position: absolute; inset: -11px -8px; }  /* a 40 px hit area */
   .chart a.mark:not([data-step]) { pointer-events: none; }  /* 45 overlapping marks; the record steps open from their list */

@@ -1,0 +1,206 @@
+[
+ {
+  "family": "s1",
+  "surprise": {
+   "source": "run-02",
+   "id": "t15",
+   "item": "result-6e7b64",
+   "measured": 139,
+   "z": 3.73,
+   "what": "How many of the 328 harder problems the autobench agent's final configuration answers right in the final run."
+  },
+  "a": "round-12/s1-a",
+  "b": "round-12/s1-b",
+  "apart": [],
+  "cell": {
+   "cell": {
+    "model": "base Olmo-3-1025-7B",
+    "prompt": "cue",
+    "set": "hard328 shard 0/2",
+    "n": 164,
+    "sampling": "T 1.0 / top-p 1.0, seed 3000000",
+    "samples": 4,
+    "grader": "v3",
+    "cap": 4096
+   },
+   "job": "studies/rlneurons/jobs/run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --max-tokens 4096 --samples 4 --shard 0/2 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "Plurality vote over the 4 samples per problem (cap hits cast no vote), right under grader v3, out of the 164 problems of shard 0/2.",
+   "unit": "right answers of 164 (vote over 4)",
+   "why": "This keeps the autobench cap (4,096) but swaps the plain prompt for the cue. Under a the cap sets the ceiling, so the cued vote stays near the autobench level (139/328, about 70 of 164) or below. Under b the cue removes the agreeing wrong answers, so the vote nears the uncapped cued one-sample level (about 82 of 164).",
+   "gpu_minutes": 70,
+   "a": {
+    "value": 60,
+    "low": 48,
+    "high": 70
+   },
+   "b": {
+    "value": 83,
+    "low": 74,
+    "high": 93
+   }
+  }
+ },
+ {
+  "family": "s2",
+  "surprise": {
+   "source": "round-09",
+   "id": "m21-r1",
+   "item": "result-ac7104",
+   "measured": 60,
+   "z": 3.29,
+   "what": "quick wrong answers: rows with n_generated <= 1,000, not a cap hit, and v3 score not 1 (no extracted answer counts wrong), from answers.jsonl"
+  },
+  "a": "round-12/s2-a",
+  "b": "round-12/s2-b",
+  "apart": [],
+  "cell": {
+   "cell": {
+    "model": "base Olmo-3-1025-7B + 1.0 x the top 8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), stochastic bf16 rounding seed 0",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": "first 250 problems (--n 250)",
+    "sampling": "T 1.0 / top-p 1.0 / min-p 0; seed 64000000 + problem index (same seeds as m21)",
+    "samples": "1 per problem, 0 restarts",
+    "grader": "v3",
+    "cap": "16,384"
+   },
+   "job": "studies/rlneurons/jobs/run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code_top8x1_cue --prompt cue --set math500 --n 250 --temperature 1.0 --top-p 1.0 --seed 64000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "quick wrong answers: rows of answers.jsonl with n_generated <= 1,000, not a cap hit, and v3 score not 1 (no extracted answer counts wrong); the m21-r1 rule, run on the cued cell",
+   "unit": "answers of 250",
+   "why": "Same edit, same seeds and the same readout as m21; only the cue is added. Under a, the quick errors are unswitched plain-register samples, which the cue switches, so the count falls near the cued base's level. Under b, they are terse committed answers made inside the deliberative register by Code's stop policy, so most survive the cue.",
+   "gpu_minutes": 70,
+   "a": {
+    "value": 7,
+    "low": 2,
+    "high": 14
+   },
+   "b": {
+    "value": 40,
+    "low": 26,
+    "high": 56
+   }
+  }
+ },
+ {
+  "family": "s3",
+  "surprise": {
+   "source": "round-10",
+   "id": "t16",
+   "item": "result-1c9e40",
+   "measured": 466,
+   "z": 2.47,
+   "what": "How many of the 500 MATH-500 problems does the untrained base with the cue get right under a majority vote over all 12 samples at T 1.0, grader v3?"
+  },
+  "a": "round-12/s3-a",
+  "b": "round-12/s3-b",
+  "apart": [
+   "t14",
+   "t17"
+  ],
+  "cell": null
+ },
+ {
+  "family": "s4",
+  "surprise": {
+   "source": "run-04",
+   "id": "t02",
+   "item": "result-a1bf75",
+   "measured": 399,
+   "z": 2.38,
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems the base model plus Code-RL 3.1's 8 top weight directions at 1.5x size passes, with the Code cue at T 1.0."
+  },
+  "a": "round-12/s4-a",
+  "b": "round-12/s4-b",
+  "apart": [
+   "t12",
+   "t13"
+  ],
+  "cell": null
+ },
+ {
+  "family": "s5",
+  "surprise": {
+   "source": "run-02",
+   "id": "t13",
+   "item": "result-6e7b64",
+   "measured": 84,
+   "z": 2.35,
+   "what": "The best dev100 score (right of 100) the single headless autobench agent reaches after all 40 experiments starting from the plain prompt."
+  },
+  "a": "round-12/s5-a",
+  "b": "round-12/s5-b",
+  "apart": [],
+  "cell": {
+   "cell": {
+    "model": "base Olmo-3-1025-7B",
+    "prompt": "plain (no cue, no opening text)",
+    "set": "MATH-500 first 100 problems",
+    "n": 100,
+    "sampling": "T 0.6 / top-p 1.0",
+    "samples": 4,
+    "grader": "v3",
+    "cap": "16,384, also read at 4,096 from the same text"
+   },
+   "job": "studies/theory/jobs/free_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model base --set math500 --n 100 --temperature 0.6 --top-p 1.0 --max-tokens 16384 --samples 4 --seed 71000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "Per problem, plurality vote over the 4 samples' v3 extracted answers, grouped with rln4_lib.agree; cap hits and empty extractions count as no answer, and ties go to the lowest sample index. A = vote right of 100 using the full answers. B = the same vote with every sample whose generated tokens exceed 4,096 counted as no answer (equal to a run capped at 4,096). Readout = A - B.",
+   "unit": "right answers of 100 (signed difference, paired on the same text)",
+   "why": "Mechanism a says the 4,096 cap cut right answers out of the vote, so lifting it adds several problems. Mechanism b says the plain prompt's correlated errors set the ceiling, so answers past 4,096 tokens are mostly loops or wrong, and lifting the cap adds about nothing.",
+   "gpu_minutes": 90,
+   "a": {
+    "value": 5,
+    "low": 2,
+    "high": 9
+   },
+   "b": {
+    "value": 0,
+    "low": -1,
+    "high": 1
+   }
+  }
+ },
+ {
+  "family": "s6",
+  "surprise": {
+   "source": "run-04",
+   "id": "t01",
+   "item": "result-a1bf75",
+   "measured": 386,
+   "z": 2.32,
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems the base model plus Code-RL 3.1's 8 top weight directions at 1x size passes, with the Code cue at T 1.0."
+  },
+  "a": "round-12/s6-a",
+  "b": "round-12/s6-b",
+  "apart": [],
+  "cell": {
+   "cell": {
+    "model": "base Olmo-3-1025-7B + 0.5 x top-8 singular directions per matrix of (RL-Zero-Code 3.1 - base)",
+    "prompt": "Code cue",
+    "set": "HumanEval+ and MBPP+",
+    "n": 538,
+    "sampling": "T 1.0 / top-p 1.0, default cap",
+    "samples": 1,
+    "grader": "run_code_cell's HumanEval+/MBPP+ test grader",
+    "cap": "default (16,384)"
+   },
+   "job": "studies/rlneurons/jobs/run_code_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 0.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_code_cell --model-path /tmp/theta --model-label code_top8x0.5 --prefix-ids '<Code cue ids, as in results/xreward/code_dial run.json>' --temperature 1.0 --top-p 1.0 --seed 51000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "problems passed of 538 (also cap hits and answers with no code block)",
+   "unit": "problems passed of 538",
+   "why": "Under a, a saturating mode switch, 0.5x already flips most samples and keeps most of 1x's gain. Under b, the format part is full at 0.5x but the correctness part is only about a third of its 1.5x size, so the gain stops near the format-only count. Both expect cap hits and no-block answers to have fallen mostly, so the pass count separates them.",
+   "gpu_minutes": 80,
+   "a": {
+    "value": 377,
+    "low": 363,
+    "high": 391
+   },
+   "b": {
+    "value": 347,
+    "low": 333,
+    "high": 360
+   }
+  }
+ }
+]

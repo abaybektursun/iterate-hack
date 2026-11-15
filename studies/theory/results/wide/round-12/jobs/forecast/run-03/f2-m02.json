@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": 401, "low": 385, "high": 417, "reason": "Hazard rises with total direction size: Math 1x + Code 1x already finishes nearly everything on code (cap hits near 0), so with right-of-finished flat the score sits at the finished ceiling seen for 1x-2x Code edits and RL-Code (386-411); the 411 headline is pulled toward that band at a new seed."},
+{"id": "t04", "value": 401, "low": 385, "high": 417, "reason": "Same as t03 at the second seed: combined in-domain plus Math directions saturate finishing, right-of-finished flat, so about 400 of 538 with one-sample seed noise."},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": 388, "low": 372, "high": 404, "reason": "In-domain Code directions at 1x convert most of the cued base's 27 cap hits / 34 no-code answers into finished ones with flat right-of-finished, which gave 386 at seed 51000000; a new seed gives the same level plus one-sample noise."},
+{"id": "t08", "value": 388, "low": 372, "high": 404, "reason": "Same as t07 at the second new seed."},
+{"id": "t09", "value": 226, "low": 213, "high": 239, "reason": "Math directions at 3x on Think-SFT convert many of its ~94 cap hits (60 left at 3x) but past 1.5x the hazard closes hard problems with guesses, so right stays near the transplant plateau (220 at 1.5x, 232 at 3x, 231.5 for M(2)); the selected 232 regresses a little at a new seed."},
+{"id": "t10", "value": 41, "low": 30, "high": 53, "reason": "Size -1 lowers the stop hazard, raising cap hits above the cued base's 27; the measured odd half has 20 of 250, so doubling gives about 41 with Poisson noise on the even half."},
+{"id": "t11", "value": 376, "low": 360, "high": 392, "reason": "Lower hazard at size -1 leaves more answers unfinished (below the cued base's 410); the odd half scored 188/250, doubled to 376 with binomial and half-difficulty noise on the other 250."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 466, "low": 456, "high": 476, "reason": "The full RL delta on Think-SFT acts like the dial: on MATH-500 Think-SFT has few cap hits, so finishing gains are small and at 2x (past 1.5x) some are guesses; right stays near a=1's 467 and above Think-SFT's 457-462."},
+{"id": "t16", "value": 233, "low": 222, "high": 244, "reason": "M(2) converts Think-SFT's cap hits at flat-ish right-of-finished, giving 234/229/237 on its first three seeds; the fourth sample is drawn from the same level (mean 233.3) with one-sample noise."},
+{"id": "t17", "value": 247, "low": 239, "high": 254, "reason": "With most answers finished by the raised hazard, the vote over 3 was 246; adding a fourth sample of the same model moves the plurality by only a few problems."},
+{"id": "t18", "value": 243, "low": 233, "high": 252, "reason": "At cap 32,768 the delta's raised hazard lets M(2) finish nearly every answer (0 cap hits, 245 at seed 3,010,000, +11-13 over its 16k view); at seed 3,000,000, where Think-SFT scored 230 vs 234, expect a similar or slightly lower count."},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}
