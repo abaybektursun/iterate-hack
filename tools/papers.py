@@ -102,7 +102,7 @@ PAGE = r"""<!doctype html>
   --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
   --btn: linear-gradient(#27323e, #0d141b); --btn-ink: #f5f8fa; --btn-edge: rgba(255, 255, 255, .18);
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
-  --rim-a: rgba(16, 24, 32, .28);
+  --rim-a: rgba(16, 24, 32, .28); --veil: 0;
   --lit: 0 70px 90px -60px rgba(16, 24, 32, .55), 0 18px 36px -24px rgba(16, 24, 32, .25);
 }
 @media (prefers-color-scheme: dark) {
@@ -111,7 +111,7 @@ PAGE = r"""<!doctype html>
     --blue: #8fb1ff; --red: #ff6b7c; --on-blue: #080c11;
     --btn: linear-gradient(#f7fafc, #cbd5de); --btn-ink: #080c11; --btn-edge: rgba(255, 255, 255, .7);
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
-    --rim-a: rgba(255, 255, 255, .5);
+    --rim-a: rgba(255, 255, 255, .5); --veil: .5;
     --lit: 0 0 140px -30px rgba(143, 177, 255, .2);
   }
 }
@@ -143,7 +143,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 
 /* The words: the sentence, then the six steps by name. A step opens to its one sentence. */
 .words { grid-column: 1; grid-row: 2; min-height: 0; overflow: hidden auto; scrollbar-width: none; padding: clamp(28px, 7vh, 72px) 0 0; }
-.cap { margin: 0; font-size: clamp(23px, 1.9vw, 33px); line-height: 1.16; font-weight: 250; font-stretch: 100%; letter-spacing: -.02em; max-width: 19ch; text-wrap: balance; }
+.cap { margin: 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.16; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 19ch; text-wrap: balance; }
 .steps { margin: clamp(26px, 6vh, 60px) 0 0; border-bottom: 1px solid var(--rule); max-width: 340px; }
 .lab { margin: 0 0 10px; font-size: 12.5px; font-weight: 600; color: var(--mute); }
 .steps details { border-top: 1px solid var(--rule); }
@@ -170,18 +170,19 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .sheet {
   position: relative; flex: 0 0 var(--strip); min-width: 0; overflow: hidden; border-radius: 2px;
   background: linear-gradient(150deg, var(--glass-hi), var(--glass) 46%, var(--glass-lo)) 0 0 / var(--fw) 100% no-repeat, var(--glass-lo);
-  border: 0 solid var(--rim-a); border-width: 1px 0 0 1px;  /* the light catches the top and left edges */
+  border: 0 solid var(--rim-a); border-width: 1px 0 1px 1px; border-bottom-color: var(--rule);  /* the light catches the top and left edges; the bottom edge is a hairline */
   transition: flex-basis .5s cubic-bezier(.4, 0, .2, 1), box-shadow .5s ease;
 }
+.sheet:last-child { border-right: 1px solid var(--rule); }
 .sheet.front { flex-basis: var(--fw); box-shadow: var(--lit); z-index: 1; }  /* one lit object: only the open sheet has the glow or the cast shadow */
-.sheet::before { content: ""; position: absolute; inset: 0; background: var(--paper); opacity: .5; transition: opacity .5s ease; pointer-events: none; }  /* a closed sheet is fainter */
+.sheet::before { content: ""; position: absolute; inset: 0; background: var(--paper); opacity: var(--veil); transition: opacity .5s ease; pointer-events: none; }  /* a closed sheet is fainter in the dark; in the light it keeps the light of the open one */
 .sheet.front::before { opacity: 0; }
 
 /* A closed sheet: all of it is the button, and its number and title sit on the strip */
 .spine { position: absolute; inset: 0; transition: opacity .3s ease .25s, visibility 0s; }
 .spine span { position: absolute; top: 0; left: 0; width: var(--strip); padding: calc(var(--u) * 10) calc(var(--strip) * .1) 0 calc(var(--strip) * .14); display: grid; gap: 10px; overflow-wrap: break-word; }
 .spine i { font-style: normal; font-size: 12.5px; font-weight: 600; color: var(--mute); }
-.spine b { font-size: clamp(12.5px, var(--strip) * .11, 14px); line-height: 1.22; font-weight: 400; letter-spacing: -.008em; color: var(--mute); transition: color .15s ease; }
+.spine b { font-size: 14px; line-height: 1.22; font-weight: 400; letter-spacing: -.008em; color: var(--mute); transition: color .15s ease; }
 .spine:hover b, .spine:focus-visible b { color: var(--ink); }
 .front .spine { opacity: 0; visibility: hidden; transition: opacity .15s ease, visibility 0s .15s; }
 
