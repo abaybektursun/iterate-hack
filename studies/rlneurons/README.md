@@ -223,7 +223,10 @@ T 0.6 and RL was right, SPEC4 §2; grader v1): from the RL model's prefix the ba
 of 78. Frozen label: "the base can finish from a sound prefix" (both counts at the threshold edge, 47 and 23).
 
 Grader v1 to v3 moved 113 answers from wrong to right and 1 from right to wrong over the 9 cells (`flips_v1_to_v3`,
-`flip_review`). The v1 numbers 57.2 (base) and 92.0 (RL) quoted in older notes are the n13 cells under v1 (286 and 460).
+`flip_review`: 40 of the 113 read). A second reader (Claude Fable 5.2) read all 114 (`analysis/grader_v3_read2.py`,
+`results/rln4/grader_v3_read2/readout.json`): 112 of the 113 wrong-to-right flips are right; 1 is not (base plain T 1.0, problem 142: the box
+holds an expression equal to the gold, the stated number is wrong), and the 1 right-to-wrong flip is a v3 error on the same
+cell, so that cell's count is unchanged net; no RL flip and no cue-cell flip is wrong. The 114 flips are 104 distinct texts. The v1 numbers 57.2 (base) and 92.0 (RL) quoted in older notes are the n13 cells under v1 (286 and 460).
 
 ## Day-1 #3: restart and four-sample vote (MATH-500, n = 500, T 1.0 / top-p 1.0, grader v3, board work-63fac2)
 
