@@ -55,7 +55,7 @@ def predict(X, y, Xt):
 def cal(days, d0):
     """The package's running index and calendar features for daily data."""
     c = [(days - d0).days, days.year]
-    for v, period in ((days.dayofweek, 7), (days.day - 1, 30.5), (days.dayofyear - 1, 365),
+    for v, period in ((days.day_of_week, 7), (days.day - 1, 30.5), (days.day_of_year - 1, 365),
                       (days.isocalendar().week.values.astype(int) - 1, 52), (days.month - 1, 12)):
         c += [np.sin(2 * np.pi * v / (period - 1)), np.cos(2 * np.pi * v / (period - 1))]
     return np.column_stack(c).astype(float)
@@ -69,7 +69,7 @@ def plain(x, t):
 def feat(x, med, t):
     """x: a listing's prices, med: its series' values, both on the same daily grid that ends at t."""
     f = x.ffill().values; obs = x.notna().values; r = f / med.ffill().values
-    i = np.arange(len(f)); dow = x.index.dayofweek.values
+    i = np.arange(len(f)); dow = x.index.day_of_week.values
     changed = np.r_[False, (f[1:] != f[:-1]) & np.isfinite(f[1:]) & np.isfinite(f[:-1])]
     first = np.flatnonzero(obs)[0]
     since = i - np.maximum.accumulate(np.where(changed, i, first))   # days since the last change (or the first row)
