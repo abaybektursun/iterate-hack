@@ -78,7 +78,7 @@ The kept method caps every sample at 4,096 tokens. On hard328 the cued base's ri
 - Refuted if: L < 0.45, or L - N < 0.20
 - Threshold: L >= 0.45 and L - N >= 0.20
 - Null: The cap-hit share on difficulty-matched problems the same method gets right (cued base k >= 2). That null holds the problem's difficulty fixed, so this is stronger than an overall or random share.
-- Verdict: not run yet
+- Verdict: holds (result-4b64da: L' 0.714 [0.595, 0.833] n=42 lost problems vs null N' 0.173 [0.120, 0.226] n=133 matched won problems; L'-N' 0.541 [0.414, 0.665] 90%)
 
 
 ## round-13/s1-b (rival for surprise s1)
@@ -91,7 +91,7 @@ The kept method samples the base with the plain prompt and no cue, at T 0.6. Wit
 - Refuted if: C > 0.35, or A_K - A_B < 0.10
 - Threshold: C <= 0.35 and A_K - A_B >= 0.10
 - Null: Wrong-answer agreement of the cued base's own samples on the same problems. This null controls for each problem's shared attractor values, so it is stronger than chance agreement.
-- Verdict: not run yet
+- Verdict: refuted (result-4b64da: C' 0.714 [0.595, 0.833] > 0.35; A_K-A_B 0.064 [-0.130, 0.236] < 0.10, n=42 (39 vs 12 pairs); null cued-base wrong-answer agreement 0.167)
 
 
 ## round-13/s2-a (rival for surprise s2)
@@ -104,7 +104,7 @@ Partial opening switch. Under the plain prompt each sample settles in its first 
 - Refuted if: s_Q < s_N - 0.15, or s_Q < 0.40
 - Threshold: 0.15 (gap) and 0.40 (floor)
 - Null: The plain base's own quick wrong rows on the same 250 problems (N), a base-model baseline rather than a random one. Rival b predicts s_Q far below s_N, because its quick wrongs are deliberative attempts.
-- Verdict: not run yet
+- Verdict: refuted (result-cc7288: s_Q 0.25 [0.17, 0.35] n 60 (floor 0.40); null plain base s_N 0.21 n 105; gap 0.04 [-0.07, 0.15])
 
 
 ## round-13/s2-b (rival for surprise s2)
@@ -117,7 +117,7 @@ Code-commit policy. RL-Code's top-8 directions do switch nearly every plain-prom
 - Refuted if: r_N - r_Q < 0.10 (Q's problems about as easy as the plain base's quick-wrong problems)
 - Threshold: 0.10
 - Null: The plain base's own quick wrong problems on the same 250 (N), whose cued-base solve rate is expected near 0.8, like fact 1's 0.818 for Math top-8 plain. Rival a predicts r_Q about equal to r_N.
-- Verdict: not run yet
+- Verdict: refuted (result-cc7288: r_N - r_Q 0.005 [-0.066, 0.075], n 60 vs 105; r_Q 0.833, r_N 0.838; all 250 0.814; m21 long wrong answers 0.40 (instrument can fail))
 
 
 ## round-13/s3-a (rival for surprise s3)
@@ -130,7 +130,7 @@ On MATH-500 at T 1.0, the cued base's wrong answers to a problem spread over man
 - Refuted if: S_a < 0.50, or the merged-wrong null keeps at least 80 % of G (meaning splitting is not needed for the gain).
 - Threshold: 0.50
 - Null: Single-attractor null: each problem's wrong answers merged into one value. Under it, a plurality win needs p > 0.5, so any gain that sits on p < 0.5 is due to splitting.
-- Verdict: not run yet
+- Verdict: holds (result-4c9189: S_a 0.667 [0.476, 0.810] 90%, n=21 gained problems (MATH-500, cued base); merged-wrong null keeps 8/21 = 0.381 of G (refuted if >= 0.80); without 3 cap-hit-driven wins 11/21 = 0.524)
 
 
 ## round-13/s3-b (rival for surprise s3)
@@ -143,7 +143,7 @@ The vote over 4 is pulled down by its even size, not by the base's ceiling. Many
 - Refuted if: S_b < 0.60, or S_b - S_null < 0.20.
 - Threshold: 0.60
 - Null: The same tie-and-near-majority share among k=4 failures with a right sample that the vote over 12 does not fix. This is stronger than random because it shares the difficulty band and the same rows.
-- Verdict: not run yet
+- Verdict: refuted (result-4c9189: S_b 0.095 [0.000, 0.190] 90%, n=21 (refuted if < 0.60); null (unfixed k=4 failures with a right sample) 0.143, n=7; diff -0.048 [-0.286, 0.143])
 
 
 ## round-13/s4-a (rival for surprise s4)
@@ -156,7 +156,7 @@ RL-Code's code gain sits almost entirely in its own top-8 directions, and in ear
 - Refuted if: dC < 3.0 points, or dM >= 0.5 * dC
 - Threshold: dC >= 3.0 points and dM < 0.5 * dC
 - Null: The random rank-8 1.5x edit's own pass rate among its finished-with-block answers (331/466 = 71.0 %). The rival b says Math's share of dC is about its share of the total gain over random (37/68 = 0.54).
-- Verdict: not run yet
+- Verdict: holds (result-d15c5e: dC +7.0 pts [3.7, 10.3], dM +1.5 [-2.2, 5.1], dM/dC 0.21 [-0.46, 0.62], 90 % bootstrap, n 538; null random 67.8 % (331/488), rival b ratio 0.54 not excluded (point-only hold))
 
 
 ## round-13/s4-b (rival for surprise s4)
@@ -169,7 +169,7 @@ Any reasoning reward's top-8 directions share a generic commit-to-a-complete-ans
 - Refuted if: D < -0.10 (the edit's extra passes land outside the base's own solved set clearly more often than a random edit's)
 - Threshold: -0.10
 - Null: The random rank-8 1.5x edit's extra passes over the cued base (f_R), which measure how often any extra base-like draw lands in U. The rival a predicts new solutions from code-specific directions, so D clearly below 0.
-- Verdict: not run yet
+- Verdict: holds (result-63cacd: D = f_E - f_R = +0.055, 90% [-0.029, 0.139] (refuted if < -0.10), n 538 (113 and 63 extra passes); null random f_R 0.635, f_E 0.690; base-failure floor 0.43; |U| 378)
 
 
 ## round-13/s5-a (rival for surprise s5)
@@ -182,7 +182,7 @@ Autobench gives each experiment a fixed generation budget (360 s, 3.6 s per dev 
 - Refuted if: D is below the threshold, or fewer than half of the W pairs have c >= 0.25
 - Threshold: 0.15
 - Null: Difficulty-matched vote-right problems of the same runs (per-sample right rate <= 0.75), not random problems.
-- Verdict: not run yet
+- Verdict: undecided (result-cfe997: undecided, not computable: the kept method's per-sample dev100 rows are only in frustea's Modal Volume; instrument on cued-base rows cut at 4,096: D 0.73 [0.50, 0.91] n=14)
 
 
 ## round-13/s5-b (rival for surprise s5)
@@ -195,7 +195,7 @@ At T 0.6 with the plain prompt, the base's wrong answers to a problem do not sca
 - Refuted if: G_plain < 0.40, or R is below the threshold
 - Threshold: 1.3
 - Null: The cued base's own 12-sample votes on the same problems (votek rows), a stronger null than uniform scatter of wrong answers.
-- Verdict: not run yet
+- Verdict: undecided (result-cfe997: undecided, not computable: per-sample dev100 rows only in frustea's Modal Volume; null ready: cued base G_cue 0.40 [0.34, 0.46] n=34 vote-wrong of 500, so the claim needs G_plain >= 0.52)
 
 
 ## round-13/s6-a (rival for surprise s6)
@@ -208,7 +208,7 @@ On HumanEval+/MBPP+ most of the gap between the cued base and RL-Code is broken 
 - Refuted if: S_top8 < 0.50, or the 90 % lower bound of S_top8 - S_rand is <= 0, or r_c / r_l < 2.0
 - Threshold: S_top8 >= 0.50 and r_c / r_l >= 2.0
 - Null: The random rank-8 1.5x edit at the same seed (in effect a fresh base sample), whose fixes give the contract share expected from resampling. Also the contract share among all base failures (about 61 of 221 from cap hits and no-block alone).
-- Verdict: not run yet
+- Verdict: refuted (result-04f363: S_top8 0.43 [0.35, 0.51] n 100 fixes (refuted below 0.50); S_top8-S_rand [-0.02, 0.15]; r_c/r_l 1.53 [1.21, 1.93] (needed 2.0); null random rank-8 1.5x S_rand 0.37 n 63)
 
 
 ## round-13/s6-b (rival for surprise s6)
@@ -221,5 +221,5 @@ HumanEval+/MBPP+ are easy for the cued base: most problems it fails in one sampl
 - Refuted if: Q_top8 < 0.60, or the 90 % lower bound of Q_top8 - Q_base is <= 0.10
 - Threshold: Q_top8 >= 0.60 and Q_top8 - Q_base lower bound > 0.10
 - Null: The share of base-solvable problems among all base failures (Q_base, which is what fixes drawn without regard to base solvability would give). Also RL-Code's own fixes (Q_RL) as the reference for a full reliability-plus-capability change.
-- Verdict: not run yet
+- Verdict: holds (result-04f363: Q_top8 0.75 [0.68, 0.82] n 100 fixes; Q_top8-Q_base [0.21, 0.33] 90%; null Q_base 0.48 (106/221); RL-Code fixes Q 0.74 n 116; Math-cue cell alone Q_top8 0.56 vs 0.35)
 

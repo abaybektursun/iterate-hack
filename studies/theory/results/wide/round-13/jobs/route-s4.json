@@ -1,0 +1,14 @@
+{"route": {"mechanism": "round-13/s4-b",
+ "change": "Cued untrained base at T 1.0 / top-p 1.0 with min-p 0.05 truncation, 4 samples per problem, plurality vote over the finished answers (cap hits cast no vote).",
+ "model": "base",
+ "gap_parts": "Wins back part of the reliability part (base right in other samples: 0.43-0.63 of the gap in result-f39ba8, about 13-18 of the 29-answer hard328 vote gap 221 vs 192) and a little of the answer-statement and budget parts (0.03 and 0.25-0.27: tail-token drift, garbled final lines and cap hits; about 1-3 of 328). It cannot reach the capability part (0.27 on hard328, about 8 of 328; 26 of the 36 problems RL's vote wins have no right base sample). Expected net gain over the stored vote over 4: about +4 of 328, or +0.5 to +1 on the 41-problem shard.",
+ "why": "s4-b says the reward's gain is sharpening the base onto its own most likely complete answer, capped by what the base can already write (pass@k); min-p removes low-probability tail tokens inside each sample, and the vote picks the base's modal complete answer across samples, both without reward and without the loops that a lower temperature causes.",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --min-p 0.05 --samples 4 --seed 3000000 --commit COMMIT_SHA && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --shard 0/5 --temperature 1.0 --top-p 1.0 --min-p 0.05 --samples 4 --seed 41000000 --commit COMMIT_SHA",
+ "rl_command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model rl --prompt plain --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --min-p 0.05 --samples 4 --seed 3000000 --commit COMMIT_SHA",
+ "tokens": 35500,
+ "gpu_minutes": 230,
+ "readouts": [
+  {"arm": "route", "set": "hard328", "subset": "0/8", "n": 41, "readout": "right answers of 41 with grader v3 after the plurality vote over 4 min-p samples (stored base vote over 4 at 36,902 tokens: 192/328, about 24.0 of 41)", "value": 25, "low": 21, "high": 29},
+  {"arm": "rl", "set": "hard328", "subset": "0/8", "n": 41, "readout": "right answers of 41 with grader v3 after the plurality vote over 4 min-p samples of RL plain (stored RL vote over 4: 221/328, about 27.6 of 41)", "value": 28, "low": 24, "high": 32},
+  {"arm": "route", "set": "MATH-500", "subset": "0/5", "n": 100, "readout": "right answers of 100 with grader v3 after the plurality vote over 4 min-p samples (stored base vote over 4: 446/500, about 89.2 of 100)", "value": 90, "low": 85, "high": 94}
+ ]}}
