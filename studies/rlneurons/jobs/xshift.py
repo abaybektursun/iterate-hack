@@ -54,6 +54,7 @@ ARMS = ("top8xm1_math31", "top8x0.5_math31", "top8_math31", "top8x1.5_math31", "
         "proj_math31_code30", "projc_math31_code30")
 GROUPS = ("all", "cap_hit", "finished", "third0", "third1", "third2")
 STEP, LENS_TOP, PLANT_LAYER = 16, 20, 12
+RANDOM = ("rand8", "rin", "rout")                                                 # recipes that use rand8's random directions
 norm = torch.linalg.vector_norm
 
 
@@ -65,7 +66,7 @@ def parse(arm):
     ap.add_argument("--scale", type=float, default=1.0)
     ap.add_argument("--k", type=int, default=8)
     a = ap.parse_args(NEW[arm][1].split())
-    assert a.recipe in ("top8", "rand8", "proj", "projc") and (a.recipe != "rand8" or a.k == 8), (arm, a)
+    assert a.recipe in ("top8", "rand8", "proj", "projc", "rin", "rout", "perm") and (a.recipe not in RANDOM or a.k == 8), (arm, a)
     canon = lambda key: key and next(k for k in E.ALL if E.ALL[k] == E.ALL[key])
     a.other, a.donor = canon(a.other), canon(a.donor)
     a.mods = a.mods.split(",") if a.mods else None
@@ -84,6 +85,12 @@ def addition(a, n, F, Q):
     s, U, V = F[a.other][n]
     if a.recipe == "rand8":
         U, V = Q[n]
+    if a.recipe == "rin":
+        U = Q[n][0]
+    if a.recipe == "rout":
+        V = Q[n][1]
+    if a.recipe == "perm":
+        U = torch.roll(U[:, :a.k], 1, dims=1)
     add = (U[:, :a.k] * s[:a.k]) @ V[:, :a.k].T
     if a.recipe in ("proj", "projc"):
         Vd = F[a.donor][n][2][:, :a.k]
@@ -185,7 +192,7 @@ def selftest(model, W, F, Q, noise, idx, arms, seqs, R, restore, dev):
         a = parse(arm)
         n = next(n for n in sorted(E.selected(a.recipe, list(W), mods=a.mods, layers=a.layers), key=order) if n in F[a.other])
         dn = load(idx, a.donor, n, dev).float() if a.donor else None
-        want = E.target(a.recipe, W[n], load(idx, a.other, n, dev).float(), a.k, 1.0, noise[n] if a.recipe == "rand8" else None, a.scale, dn)[1]
+        want = E.target(a.recipe, W[n], load(idx, a.other, n, dev).float(), a.k, 1.0, noise[n] if a.recipe in RANDOM else None, a.scale, dn)[1]
         errs[arm] = float(norm(addition(a, n, F, Q) - want) / norm(want))
     wrong = float(norm(addition(parse(arms[-1]), n, F, Q) * 1.01 - want) / norm(want))
     check("c_addition_is_target", max(errs.values()) < 1e-5 and wrong > 5e-3,

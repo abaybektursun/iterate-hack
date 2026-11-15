@@ -51,6 +51,9 @@ NEW = {
     "top8x1.5_L0-10_math31": ("abaybektursun-1115-105312-7e19", "--recipe top8 --layers 0-10 --scale 1.5 --other math31"),
     "top8x1.5_L11-21_math31": ("abaybektursun-1115-105324-5f61", "--recipe top8 --layers 11-21 --scale 1.5 --other math31"),
     "top8x1.5_L22-31_math31": ("abaybektursun-1115-105335-a886", "--recipe top8 --layers 22-31 --scale 1.5 --other math31"),
+    "rinx1.5_math31": ("abaybektursun-1115-152957-da47", "--recipe rin --scale 1.5 --other math31"),                                 # amendment 12
+    "routx1.5_math31": ("abaybektursun-1115-153012-603e", "--recipe rout --scale 1.5 --other math31"),
+    "permx1.5_math31": ("abaybektursun-1115-153028-9c6b", "--recipe perm --scale 1.5 --other math31"),
     "sft_top8x1.5_math31": ("abaybektursun-1115-130242-4696", "--recipe top8 --scale 1.5 --onto think_sft --other math31"),   # amendment 10 A: host Think-SFT
     "sft_top8x3_math31": ("abaybektursun-1115-130255-5098", "--recipe top8 --scale 3 --onto think_sft --other math31"),
     "sft_rand8x3_math31": ("abaybektursun-1115-130307-5e33", "--recipe rand8 --scale 3 --onto think_sft --other math31"),

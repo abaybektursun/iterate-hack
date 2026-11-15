@@ -86,3 +86,15 @@ of cap hits with the weight-space size `add_rel` and with the RMS shift; the cos
 `results/xshift/run-01/`: `readout.json` (P1 to P3, per-edit rows, cosine matrix, logit-lens lists), `run.json` (commit, job id,
 command), `metrics.json` (the job's: per edit, group and layer), `examples.json` (one cap-hit and one finished input). The mean
 shift vectors (`shifts.npz`, about 50 MB) stay in `runs/<job-id>/`, not committed. Analysis: `analysis/xshift.py`, numpy.
+
+## Amendment 1 (2026-11-15, before the run): the shift of the input-side, output-side and shifted-pair edits
+
+xreward amendment 12 found that RL's input directions with random outputs (`rinx1.5_math31`), its output directions with random
+inputs (`routx1.5_math31`) and both subspaces with pairs shifted (`permx1.5_math31`) all score as the random edit (158 to 163 right
+against 159; the full edit 203). One run, arms `top8x1.5_math31,rand8x1.5_math31,rinx1.5_math31,routx1.5_math31,permx1.5_math31`,
+same inputs and settings as run-01; read at layer 24, group all: RMS shift, and the cosine of each mean shift with the full edit's.
+
+- Q1. The input side sets the size of the shift: `rin` and `perm` have an RMS shift of at least a third of the full edit's;
+  `rout` at most 5 times the random edit's. Refuted part by part by the opposite inequality.
+- Q2. So a large shift is not enough for the gain: `rin` and `perm` have |cosine| with the full edit's mean shift below 0.3.
+  Refuted if either is at or above 0.3 (then direction does not explain why they fail).
