@@ -1,9 +1,9 @@
 ---
 name: theory
-description: Score the team's fixed forecasts, collect the direct facts (offline tests of mechanisms' causes), find the numbers both no-theory readers got wrong, write rival pairs only about those, each pair with one shared direct test on stored data (one statistic, disjoint ranges for the two rivals), and let only mechanisms that hold a direct test (90 % interval inside the range, n of 50 or more) forecast, and only holders that forecast something the readers do not design cells. One round runs studies/theory/lib/forecast.py round twice: the first run scores (once per number, only forecasts written before the result), writes direct_facts.json, surprises.md, direct_tests.md (plans for the top untested carried mechanisms and one per rival pair) and stops; subagents run the tests offline and add rows to results/refuted.json or direct_tested.json; the second run has the holders and two readers forecast the open work, lists holders that forecast nothing new, and turns the others' pairs into blind-forecast cells. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
+description: Score the team's fixed forecasts, collect the direct facts (offline tests of mechanisms' causes), put every direct fact into three blind single accounts tested on new consequences (forecast.py synthesis), find the numbers both no-theory readers got wrong, write rival pairs only about those, each pair with one shared direct test on stored data (one statistic, disjoint ranges for the two rivals), and let only mechanisms that hold a direct test (90 % interval inside the range, n of 50 or more) forecast, and only holders that forecast something the readers do not design cells. One round runs studies/theory/lib/forecast.py round twice: the first run scores (once per number, only forecasts written before the result), writes direct_facts.json, surprises.md, direct_tests.md (plans for the top untested carried mechanisms and one per rival pair) and stops; subagents run the tests offline and add rows to results/refuted.json or direct_tested.json; the second run has the holders and two readers forecast the open work, lists holders that forecast nothing new, and turns the others' pairs into blind-forecast cells. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 14: one shared test per rival pair)
+# Theory round (version 15: single accounts of every direct fact)
 
 Why this order: in rounds 9 to 12 forecast gain ranked mechanisms whose causes then failed a direct test (5 of the top 6
 failed their own claim, 1 held only against a weak null; README "Direct tests"). So a mechanism now earns the right to
@@ -25,17 +25,24 @@ Version 14 rules (round 13: pairs tested on different numbers both held; holds o
    mechanism in `graveyard.json` or `refuted.json`. Graveyard: -2 nats or less on 2 or more items.
 2. Direct facts (`direct_facts.json`): every row of `results/refuted.json` and `results/direct_tested.json` (claim,
    verdict, deciding number, result id). Proposers and planners get them first; every new mechanism must agree with all.
-3. `surprises`: every scored number outside both readers' 90 % intervals, most surprising first (`surprises.md`).
-4. Proposals with one shared test per pair: one blind job per top-6 surprise writes two rival mechanisms (why the
+3. Synthesis (version 15, `forecast.py synthesis $W [--from ...]`, `prompts/synthesis.md`): three blind jobs, each with
+   the facts in its own order and the last 24 hours of board titles, write one account (at most 6 sentences) of the RL
+   change and of the base's share of RL's gain, mark every fact explained, not addressed or contradicts, name their 3
+   worst, and give three new consequences (one statistic on stored files, n >= 50, a range apart from the null's) and
+   one GPU cell (cell checker). Failing a check after one send-back drops the account. A judge lists where the accounts
+   disagree (`synthesis_tests.md`, first); subagents run every test offline, `add-rows` records them, and the rerun's
+   `synthesis.md` ranks the accounts by consequences held minus contradictions.
+4. `surprises`: every scored number outside both readers' 90 % intervals, most surprising first (`surprises.md`).
+5. Proposals with one shared test per pair: one blind job per top-6 surprise writes two rival mechanisms (why the
    readers were wrong, forecasts of the open targets, and the pair's differences on targets or one new cell) and the
    pair's test (rule 1) with a null stronger than random where one exists (the base matrix's own top directions,
    another model's directions). The top 5 untested carried mechanisms (none with a forecast a `measured.json` row missed)
    get a plan too; a planner names the posted result instead when one already decides the claim. All in `direct_tests.md`.
-5. Run the direct tests: one subagent per plan, spec committed first, offline only, then a row
+6. Run the direct tests: one subagent per plan, spec committed first, offline only, then a row
    `{mechanism, claim, result, verdict: holds|refuted|undecided, measured, added}` per mechanism in `direct_tested.json`
    (refuted ones also in `refuted.json`; rule 2). The round command stops here until every mechanism has a row; `--go`
    continues with who holds now.
-6. Rerun the same command: only mechanisms that hold a direct test forecast the open targets (beside the two readers);
+7. Rerun the same command: only mechanisms that hold a direct test forecast the open targets (beside the two readers);
    rule 3 picks the holders that design: each gets its pair's cell and one no-reward route, checked against open work
    (an open item's answer becomes a free target) and forecast blind; then `experiments.md`.
 

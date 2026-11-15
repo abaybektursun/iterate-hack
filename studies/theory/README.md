@@ -1448,6 +1448,34 @@ Files in `results/wide/round-14/`: `standing.md` / `standing.json` / `standing/`
 rival files), `mechanisms.json` (4 holders), `holders.json`, `forecasts.json` / `forecasts.md`, `run.json`,
 `round14.log`.
 
+## Engine 15 (single accounts of every direct fact)
+
+Skill version 15, branch `theory` only (main is frozen). Why: rounds 13 and 14 ran 34 direct tests (9 hold, 16
+refuted, the rest undecided), and in round 14 the null's range won 3 of 5 pairs: mechanisms written about one surprise
+at a time lose to the null. The direct facts had never been put into one account (board idea-09edb8). One new command
+and one prompt (plus the judge's prompt):
+
+```
+uv run studies/theory/lib/forecast.py synthesis <round folder> [--from <folders for standing>]
+```
+
+1. Input: every direct fact once (`synthesis_facts.json`, F01 ... frozen at the first run: claim, verdict, measured
+   number with its interval and n, result id), the title and `what:` lines of every board result of the last 24 hours,
+   `data.md` and `jobs.md`.
+2. Three blind opus jobs (`prompts/synthesis.md`), each reading the facts in its own order (as listed, reversed,
+   shuffled with seed 15), write `account-<k>.json`: an account of at most 6 sentences of what the RL weight change is
+   and why the base reaches the share of RL's gain that it does; a mark per fact (explained, not addressed,
+   contradicts, a contradiction named); the 3 facts it explains worst; three new consequences, each one statistic on
+   stored files with n >= 50 and a range disjoint from the strongest null's range; one GPU cell.
+3. Code checks (`account_errors`, `cell_errors`): files exist, every fact marked, ranges apart from the null's, the
+   cell's command passes the cell checker. One send-back; an account still failing is dropped (a failing cell alone
+   is dropped alone).
+4. A judge (`prompts/synthesis_judge.md`) lists where the accounts disagree, each with one statistic on stored files
+   and a range per account; these come first in `synthesis_tests.md`.
+5. Gate: subagents run every test offline; `forecast.py add-rows` records one row per account (mechanism
+   `round-<nn>/account-<k>/c<j>` or `/d<j>`). The rerun writes `synthesis.md`: accounts ranked by new consequences
+   that hold minus facts they mark as contradicting them, with disagreements won as the tie-break.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in

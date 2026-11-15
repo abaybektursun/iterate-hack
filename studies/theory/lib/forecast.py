@@ -13,6 +13,13 @@
       mechanisms that hold a direct test only, cells by holders that forecast something the readers do not,
       experiments. Rerun the same command after the direct tests.
       --propose-wide: the version-10 round (six lens jobs of --propose N mechanisms, every family designs cells).
+  uv run studies/theory/lib/forecast.py synthesis <round folder> [--from <folders for standing>]
+      version 15: standing (with --from), direct facts, then three blind jobs each write one account (at most 6 sentences)
+      of every direct fact and the last 24 hours of board results, a mark per fact (explained, not addressed,
+      contradicts), its 3 worst facts, three new consequences (one statistic on stored files, a range apart from the
+      null's, n >= 50) and one GPU cell; a judge lists where the accounts disagree; synthesis_tests.md (disagreements
+      first); a gate until every test has rows (add-rows); then synthesis.md ranks the accounts by new consequences held
+      minus contradictions. Rerun the same command after the tests.
   uv run studies/theory/lib/forecast.py make <folder>
       reads the open work items with their comments and every result and knowledge item (the board snapshot); one
       headless job turns the open items into targets (numbers they will report); two readers with no theory and one
@@ -45,6 +52,7 @@ cross_predict (--model-all <model> overrides it, for smoke tests).
 """
 import argparse
 import json
+import random
 import re
 import subprocess
 import sys
@@ -82,7 +90,7 @@ THEORY = ("- theory.json: a theory of the team's results. Derive each forecast f
 NOTHING = (' For a target the theory says nothing about, write {"id": "t02", "value": null, "low": null, "high": null, '
            '"reason": "theory says nothing"}.')
 engine.args = engine.args or argparse.Namespace(model_all=None, workers=8)  # round.py sets its own
-for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast", "routes_propose", "duplicates", "surprise_propose", "cells_check", "direct_test_plan"):
+for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast", "routes_propose", "duplicates", "surprise_propose", "cells_check", "direct_test_plan", "synthesis", "synthesis_judge"):
     engine.MODELS[stage] = engine.MODELS["cross_predict"]
 
 
@@ -1003,6 +1011,229 @@ def round11(folder, sources, n_top, wait_none=False):
     print(f"{(time.time() - start) / 60:.1f} minutes")
 
 
+# ---- version 15: single accounts of every direct fact ----
+
+ACCOUNTS = 3
+MARKS = ("explained", "not addressed", "contradicts")
+TEST_KEYS = ("claim", "statistic", "rows", "computation", "null")
+
+
+def numbered_facts(folder):
+    """Every direct fact once (a refuted.json row also in direct_tested.json kept once), numbered F01 ... in file order,
+    frozen in folder/synthesis_facts.json so rows added during the round do not renumber them."""
+    path = folder / "synthesis_facts.json"
+    if not path.exists():
+        seen, facts = set(), []
+        for f in direct_facts():
+            if (f["mechanism"], f["result"]) not in seen:
+                seen.add((f["mechanism"], f["result"]))
+                facts.append(f)
+        path.write_text(json.dumps([{"id": f"F{k:02d}", **f} for k, f in enumerate(facts, 1)], indent=1, ensure_ascii=False))
+    return json.loads(path.read_text())
+
+
+def recent_md(items, hours=24):
+    """Board results of the last `hours`: id, time, and the title: and what: lines (else the first 300 characters)."""
+    cut = time.strftime("%Y-%m-%dT%H:%M:%S", time.gmtime(time.time() - hours * 3600))
+    rows = [i for i in items if i["kind"] == "result" and i["at"] >= cut]
+    return f"# Board results of the last {hours} hours ({len(rows)})\n\n" + "\n".join(
+        f"- {i['id']} ({i['at'][:16]}): " + " | ".join([x.strip() for x in i["text"].splitlines() if x.startswith(("title:", "what:"))] or [flat(i["text"])[:300]])
+        for i in rows) + "\n"
+
+
+def range_errors(r, keys):
+    """ranges {key: [low, high]} for every key, each low <= high, and each key's range apart from the null's."""
+    if not all(isinstance(r.get(k), list) and len(r[k]) == 2 and all(engine.number(x) for x in r[k]) and r[k][0] <= r[k][1] for k in (*keys, "null")):
+        return [f"ranges needs {', '.join(repr(k) for k in (*keys, 'null'))}, each [low, high] with low <= high"]
+    return [f"range {k} {r[k]} overlaps the null's {r['null']}; it must be disjoint from it" for k in keys
+            if not (r[k][1] < r["null"][0] or r["null"][1] < r[k][0])]
+
+
+def stat_errors(t, keys):
+    """A test on stored rows: the TEST_KEYS fields, stored files that exist, n >= MIN_N, ranges (range_errors)."""
+    e = [f"missing {k}" for k in TEST_KEYS if not str(t.get(k, "")).strip()]
+    e += [] if t.get("files") else ["files: one or more stored paths of data.md"]
+    e += [f"{f} does not exist in the repository" for f in t.get("files") or [] if not (ROOT / f).exists()]
+    e += [] if engine.number(t.get("n")) and t["n"] >= MIN_N else [f"n: rows the statistic is computed on, at least {MIN_N}"]
+    return e + range_errors(t.get("ranges") or {}, keys)
+
+
+def account_errors(j, fact_ids):
+    """An account-<k>.json: at most 6 sentences, a mark for every fact (a contradiction named), the 3 worst facts, three
+    new consequences each a test on stored rows with its range apart from the null's."""
+    s, e = j.get("account"), []
+    e += [] if isinstance(s, list) and 1 <= len(s) <= 6 and all(isinstance(x, str) and x.strip() for x in s) else ["account: a list of 1 to 6 sentences"]
+    marks = {m.get("fact"): m for m in j.get("marks") or []}
+    e += [f"marks: no mark for {f}" for f in fact_ids if f not in marks]
+    e += [f"marks: {f}: fact must be a fact id and mark one of {', '.join(MARKS)}" for f, m in marks.items() if f not in fact_ids or m.get("mark") not in MARKS]
+    e += [f"marks: {f}: a contradiction needs why (what in the account the fact contradicts)" for f, m in marks.items()
+          if m.get("mark") == "contradicts" and not str(m.get("why", "")).strip()]
+    w = j.get("worst") or []
+    e += [] if len(set(w)) == 3 and set(w) <= set(fact_ids) else ["worst: 3 distinct fact ids"]
+    cs = j.get("consequences") or []
+    e += [] if [c.get("id") for c in cs] == ["c1", "c2", "c3"] else ["consequences: exactly three, ids c1, c2, c3"]
+    return e + [f"{c.get('id')}: {x}" for c in cs for x in stat_errors(c, ["account"]) + ([] if str(c.get("why_new", "")).strip() else ["missing why_new"])]
+
+
+def cell_errors(c, flags):
+    """The account's GPU cell: fields, value inside [low, high], 0 < gpu_minutes <= 120, and the cell checker on its command."""
+    e = [f"cell misses {k}" for k in ("readout", "unit", "command", "why") if not str(c.get(k, "")).strip()]
+    e += [] if all(engine.number(c.get(k)) for k in ("value", "low", "high")) and c["low"] <= c["value"] <= c["high"] else ["cell: value, low, high with low <= value <= high"]
+    e += [] if engine.number(c.get("gpu_minutes")) and 0 < c["gpu_minutes"] <= 120 else ["cell: gpu_minutes in (0, 120]"]
+    return e + (C.command_errors(str(c.get("command", "")), flags) if flags else [])
+
+
+def first_check(check):
+    """valid(d) for engine.run: the first check returns check's errors (sent back once); the second only parses the file,
+    so an account still failing is dropped by the caller, not the round."""
+    calls = []
+
+    def valid(d):
+        calls.append(d)
+        if len(calls) == 1:
+            return check(d)
+        json.loads((d / "account.json").read_text())  # the send-back must still parse
+        return None
+    return valid
+
+
+def judge_errors(j, names):
+    """disagreements.json: one or more, each with a test on stored rows giving each account it separates a range apart
+    from the null's, two of those ranges disjoint."""
+    ds, e = j.get("disagreements") or [], []
+    e += [] if ds else ["disagreements: at least one"]
+    for d in ds:
+        t = d.get("test") or {}
+        keys = [k for k in (t.get("ranges") or {}) if k != "null"]
+        x = [] if str(d.get("about", "")).strip() and isinstance(d.get("positions"), dict) else ["needs about and positions {account: its position}"]
+        x += [] if len(keys) >= 2 and set(keys) <= set(names) else [f"test ranges: 2 or more of {names}, plus null"]
+        x += stat_errors(t, keys) if len(keys) >= 2 else []
+        r = t.get("ranges") or {}
+        x += [] if x or any(r[a][1] < r[b][0] or r[b][1] < r[a][0] for a in keys for b in keys if a < b) else ["two accounts' ranges must be disjoint"]
+        e += [f"{d.get('id')}: {y}" for y in x]
+    return e
+
+
+def test_md(t, keys):
+    return (f"- Claim: {t['claim']}\n- Statistic: {t['statistic']}\n- Files: {', '.join('`' + f + '`' for f in t['files'])}\n- Rows: {t['rows']} (n {t['n']})\n"
+            f"- Computation: {t['computation']}\n- Null: {t['null']}\n- Ranges fixed in advance: "
+            + ", ".join(f"{k} {t['ranges'][k]}" for k in (*keys, "null")) + "\n")
+
+
+def synthesis(folder, sources):
+    """forecast.py synthesis (version 15): standing (when --from is given), direct facts, three blind accounts of every
+    direct fact (each its own reading order), checks with one send-back (an account still failing is dropped; a cell
+    whose command fails the cell checker is dropped alone), a judge of where the accounts disagree, the test plans
+    (synthesis_tests.md, disagreements first), a gate until every plan has rows (forecast.py add-rows), then synthesis.md.
+    A stage whose output exists is skipped, so the same command resumes."""
+    start, out, stages = time.time(), folder / "jobs", {}
+    folder.mkdir(parents=True, exist_ok=True)
+    if sources and not (folder / "standing.json").exists():
+        print("== standing")
+        standing(folder, sources)
+        stages["standing"] = round((time.time() - start) / 60, 1)
+    print("== direct facts")
+    facts_d = direct_facts()
+    (folder / "direct_facts.json").write_text(json.dumps(facts_d, indent=1))
+    facts, ids = numbered_facts(folder), [f["id"] for f in numbered_facts(folder)]
+    print(f"  {len(facts)} direct facts ({sum(f['verdict'] == 'holds' for f in facts)} hold)")
+    print("== synthesis: three blind accounts")
+    t0, items = time.time(), board("board", "9999")[0]
+    common = {"DIRECTION.md": ROOT / "DIRECTION.md", "results.md": recent_md(items), "data.md": data_md(), "jobs.md": C.jobs_md()}
+    shuffled = facts[:]
+    random.Random(15).shuffle(shuffled)
+    orders = {1: facts, 2: facts[::-1], 3: shuffled}  # a different reading order per job, so they do not converge by position
+    flags = C.job_flags()
+    engine.run([engine.job("synthesis", f"account-{k}", {**common, "facts.json": json.dumps(orders[k], indent=1, ensure_ascii=False)},
+                           {"account.json": out / f"account-{k}.json"},
+                           first_check(lambda d: "; ".join(account_errors(json.loads((d / "account.json").read_text()), ids)
+                                                           + cell_errors(json.loads((d / "account.json").read_text()).get("cell") or {}, flags)) or None))
+                for k in range(1, ACCOUNTS + 1)], folder, ACCOUNTS)
+    accounts, dropped = {}, []
+    for k in range(1, ACCOUNTS + 1):
+        j = json.loads((out / f"account-{k}.json").read_text())
+        if e := account_errors(j, ids):
+            dropped.append({"account": f"account-{k}", "reason": "; ".join(e)})
+            continue
+        if e := cell_errors(j.get("cell") or {}, flags):
+            dropped.append({"account": f"account-{k}", "cell_only": True, "reason": "; ".join(e)})
+            j["cell_dropped"] = "; ".join(e)
+        accounts[f"account-{k}"] = j
+        (folder / f"account-{k}.json").write_text(json.dumps(j, indent=1, ensure_ascii=False))
+    for x in dropped:
+        print(f"  dropped {'the cell of ' if x.get('cell_only') else ''}{x['account']}: {x['reason']}")
+    stages["accounts"] = round((time.time() - t0) / 60, 1)
+    print("== judge: where the accounts disagree")
+    t0, names = time.time(), list(accounts)
+    if len(names) >= 2:
+        shown = {n: {k: a[k] for k in ("account", "marks", "worst", "consequences")} for n, a in accounts.items()}
+        engine.run([engine.job("synthesis_judge", "judge", {"accounts.json": json.dumps(shown, indent=1, ensure_ascii=False),
+                                                            "facts.json": json.dumps(facts, indent=1, ensure_ascii=False), "data.md": common["data.md"]},
+                               {"disagreements.json": folder / "disagreements.json"},
+                               lambda d: "; ".join(judge_errors(json.loads((d / "disagreements.json").read_text()), names)) or None, names=", ".join(names))], folder)
+    stages["judge"] = round((time.time() - t0) / 60, 1)
+    ds = json.loads((folder / "disagreements.json").read_text())["disagreements"] if len(names) >= 2 else []
+    plans = [{"name": f"{folder.name}/{d['id']}", "kind": "disagreement", "about": d["about"], "positions": d["positions"],
+              "mechanisms": {n: f"{folder.name}/{n}/{d['id']}" for n in d["test"]["ranges"] if n != "null"}, **d["test"]} for d in ds]
+    plans += [{"name": f"{folder.name}/{n}/{c['id']}", "kind": "consequence", "why_new": c["why_new"], "mechanisms": {n: f"{folder.name}/{n}/{c['id']}"},
+               **{k: c[k] for k in (*TEST_KEYS, "files", "n")}, "ranges": {n: c["ranges"]["account"], "null": c["ranges"]["null"]}}
+              for n, a in accounts.items() for c in a["consequences"]]
+    (folder / "synthesis_tests.json").write_text(json.dumps(plans, indent=1, ensure_ascii=False))
+    rows = {r["mechanism"]: r for r in json.loads(TESTED.read_text())}
+    md = [f"# Synthesis tests, {folder.name}\n\nDisagreements between the accounts first (the judge's), then each account's three new consequences. "
+          "Run each with one subagent: spec committed first, offline on stored rows only, script under `studies/theory/analysis/`, outputs under "
+          f"`studies/theory/results/direct/<name>-01/`, n and the 90 % bootstrap interval, then one row per mechanism named here through "
+          f"`forecast.py add-rows`. {VERDICT_RULE} A value in no account's range refutes every account the test names.\n"]
+    for p in plans:
+        keys = list(p["mechanisms"])
+        md.append(f"\n## {p['name']} ({p['kind']})\n\n" + (f"- About: {p['about']}\n" + "".join(f"- {n}: {s}\n" for n, s in p["positions"].items())
+                                                          if p["kind"] == "disagreement" else f"- Why no fact covers it: {p['why_new']}\n")
+                  + test_md(p, keys) + "".join(f"- Mechanism {m}: " + (f"{rows[m]['verdict']} ({rows[m]['result']}: {rows[m]['measured']})" if m in rows else "not run yet") + "\n"
+                                               for m in p["mechanisms"].values()))
+    (folder / "synthesis_tests.md").write_text("\n".join(md) + "\n")
+    pending = [m for p in plans for m in p["mechanisms"].values() if m not in rows]
+    info = {"commit": sh("git", "rev-parse", "--short", "HEAD").strip(), "command": " ".join(sys.argv), "utc": now(), "version": 15, "facts": len(facts),
+            "accounts": names, "dropped": dropped, "disagreements": len(ds), "plans": len(plans), "job_dirs": str(engine.tmp())}
+    prior = json.loads((folder / "run.json").read_text()).get("minutes_per_stage", {}) if (folder / "run.json").exists() else {}
+    info["minutes_per_stage"] = {**prior, **{k: v for k, v in stages.items() if v >= 0.1 or k not in prior}}
+    if pending:
+        print(f"  gate: {len(pending)} mechanisms without a row ({', '.join(pending)}): run the tests from {folder / 'synthesis_tests.md'}, add rows, rerun")
+        (folder / "run.json").write_text(json.dumps({**info, "state": "waiting for synthesis tests", "pending": pending}, indent=1))
+        return
+    print("== synthesis.md")
+    score = {}
+    for n, a in accounts.items():
+        m = [x["mark"] for x in a["marks"]]
+        own = [rows[f"{folder.name}/{n}/{c['id']}"]["verdict"] for c in a["consequences"]]
+        dis = [rows[p["mechanisms"][n]]["verdict"] for p in plans if p["kind"] == "disagreement" and n in p["mechanisms"]]
+        score[n] = {"explained": m.count("explained"), "not addressed": m.count("not addressed"), "contradicts": m.count("contradicts"),
+                    **{f"new {v}": own.count(v) for v in ("holds", "refuted", "undecided")}, "disagreements held": dis.count("holds"),
+                    "disagreements refuted": dis.count("refuted"), "score": own.count("holds") - m.count("contradicts")}
+    ranked = sorted(score, key=lambda n: (-score[n]["score"], -score[n]["disagreements held"]))
+    cols = list(score[ranked[0]]) if ranked else []
+    md = [f"# Synthesis, {folder.name}\n\nWritten {now()} UTC. {len(facts)} direct facts; {len(names)} accounts kept of {ACCOUNTS}"
+          f"{' (dropped: ' + ', '.join(x['account'] for x in dropped if not x.get('cell_only')) + ')' if any(not x.get('cell_only') for x in dropped) else ''}. "
+          "Score = new consequences that hold minus facts the account marks as contradicting it. Fact marks are the account's own.\n",
+          "| account | " + " | ".join(cols) + " |\n|---|" + "---|" * len(cols)]
+    md += [f"| {n} | " + " | ".join(str(score[n][c]) for c in cols) + " |" for n in ranked]
+    for n in ranked:
+        a = accounts[n]
+        md.append(f"\n## {n}\n\n" + " ".join(a["account"]) + "\n\nContradicts: " + ("; ".join(f"{x['fact']} ({x['why']})" for x in a["marks"] if x["mark"] == "contradicts") or "none")
+                  + f"\n\nExplains worst: {', '.join(a['worst'])}\n")
+        for c in a["consequences"]:
+            r = rows[f"{folder.name}/{n}/{c['id']}"]
+            md.append(f"- {c['id']}: {c['statistic']}; range {c['ranges']['account']}, null {c['ranges']['null']}; measured {r['measured']}; {r['verdict']} ({r['result']})")
+        cell = a.get("cell") or {}
+        md.append(f"- GPU cell{' (dropped: ' + a['cell_dropped'] + ')' if a.get('cell_dropped') else ''}: {cell.get('readout')}, predicted {cell.get('value')} "
+                  f"[{cell.get('low')}, {cell.get('high')}] {cell.get('unit')}, {cell.get('gpu_minutes')} GPU minutes. `{cell.get('command')}`")
+    md.append("\n## Disagreements\n")
+    md += [f"- {p['name']}: {p['about']} " + "; ".join(f"{n} {p['ranges'][n]}: {rows[m]['verdict']}" for n, m in p["mechanisms"].items())
+           + f"; measured {rows[next(iter(p['mechanisms'].values()))]['measured']}" for p in plans if p["kind"] == "disagreement"] or ["none"]
+    (folder / "synthesis.md").write_text("\n".join(md) + "\n")
+    (folder / "run.json").write_text(json.dumps({**info, "state": "done", "score": score}, indent=1))
+    print("\n".join(md[:2 + len(ranked)]))
+
+
 def wide_round_v10(folder, sources, n):
     """--propose-wide, the version-10 round: standing, targets_open, forecast, propose (six lens jobs, the duplicate
     judge), cells and routes from every family, experiments; a stage whose output exists is skipped."""
@@ -1078,7 +1309,7 @@ def experiments(folder):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("command", choices=["round", "make", "score", "cells", "add-rows"])
+    parser.add_argument("command", choices=["round", "make", "score", "cells", "add-rows", "synthesis"])
     parser.add_argument("folder", type=Path, help="add-rows: a direct test's rows.json")
     parser.add_argument("--propose", type=int, default=0, help="make: also write this many mechanisms about the targets "
                         "(forecasters f2-m01 ...); round: mechanisms per lens (default 6)")
@@ -1095,4 +1326,4 @@ if __name__ == "__main__":
     engine.args.model_all = a.model_all
     {"round": lambda: wide_round_v10(a.folder, a.runs, a.propose or 6) if a.propose_wide else round11(a.folder, a.runs, a.surprises, a.go), "make": lambda: make(a.folder, a.propose, a.lens),
      "score": lambda: score(a.folder, a.rescore), "cells": lambda: cells_run(a.folder, a.runs),
-     "add-rows": lambda: add_rows(a.folder)}[a.command]()
+     "add-rows": lambda: add_rows(a.folder), "synthesis": lambda: synthesis(a.folder, a.runs)}[a.command]()
