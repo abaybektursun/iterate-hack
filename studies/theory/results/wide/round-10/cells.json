@@ -1,0 +1,3550 @@
+{
+ "utc": "2026-11-15T19:20:30",
+ "proposals": [
+  {
+   "id": "c01",
+   "family": "training",
+   "mechanism": "run-06/f2-m03",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), all layers and modules, stochastic rounding, seed 0",
+    "prompt": "cue (frozen4.json prefill)",
+    "set": "hard328",
+    "n": "164: shard 0/2 of hard328 (problems 0, 2, 4, ..., 326)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code_top8x1.5 --prompt cue --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 (cap hits counted wrong) among the 164 problems of shard 0/2",
+   "unit": "right answers of 164",
+   "value": 93,
+   "low": 86,
+   "high": 100,
+   "against": "round-10/problems-m06",
+   "against_value": 83,
+   "why": "f2-m03 says another reward's top-8 directions carry about half of RL's in-domain gain at full dose: on this half of hard328, cued base about 82 and RL about 103, so about 93 (Code top-8 at 1x already gave 178/328, about 89 here). problems-m06 says Code's finishing is calibrated to about 4k-token code answers, so a larger dose stops long hard328 derivations even earlier and falls below the 1x cell, to about 83.",
+   "gpu_minutes": 75,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c02",
+   "family": "training",
+   "mechanism": "round-09/training-m06",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Math - base), applied only in layers 22-31 (last third), all module families, stochastic rounding, seed 0",
+    "prompt": "plain (no cue prefilled)",
+    "set": "math500",
+    "n": "100: the first 100 MATH-500 problems (the WSP-1 screen problems)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 41000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 1 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 1.5 --layers 22,23,24,25,26,27,28,29,30,31 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x1.5_L22-31 --prompt plain --set math500 --n 100 --temperature 1.0 --top-p 1.0 --seed 41000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 (cap hits counted wrong) of the first 100 MATH-500 problems",
+   "unit": "right answers of 100",
+   "value": 83,
+   "low": 75,
+   "high": 90,
+   "against": "run-05/f2-m01",
+   "against_value": 52,
+   "why": "training-m06 gives the last third one distinct job, writing the opening cue. With a plain prompt that job is not redundant, so the late-third edit should open answers with the cue and score at the prefilled-cue level on these 100: cue 82, one-matrix layer-31 hand edit 85, full top-8 plain 88. f2-m01 spreads the dial evenly over all layers and gives late layers no special cue role, so a third of the layers gives about a third of the plain gain: 34 + (88 - 34)/3, about 52.",
+   "gpu_minutes": 30,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c03",
+   "family": "training",
+   "mechanism": "round-09/training-m04",
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained)",
+    "prompt": "plain (no cue prefilled)",
+    "set": "math500",
+    "n": "100: the first 100 MATH-500 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; sample s of problem i has seed 41000000 + 10000 s + i",
+    "samples": "8 per problem, no restarts",
+    "grader": "v3, plurality vote over the 8 samples (answers grouped with rln4_lib.agree, cap hits and no-answer samples abstain, ties to the lowest sample index)",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt plain --set math500 --n 100 --temperature 1.0 --top-p 1.0 --seed 41000000 --samples 8 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers under the plurality vote over 8 plain samples (grader v3) of the first 100 MATH-500 problems",
+   "unit": "right answers of 100",
+   "value": 85,
+   "low": 78,
+   "high": 91,
+   "against": "round-09/sampling-m03",
+   "against_value": 52,
+   "why": "training-m04 says the cue picks the register but does not move each problem's modal final value, and a vote converges to that mode. So eight plain samples should vote to about the cued vote's level on these easy problems (cued vote over 4 is 446/500, about 89 per 100), although one plain sample scores only 34 here. sampling-m03 says at T 1.0 most plain base samples (about 400 of 500) open outside the deliberative register, and those openings have much lower accuracy. Votes over such draws stay far below the cued vote, at about 52.",
+   "gpu_minutes": 80,
+   "base_only": true,
+   "best_base": {
+    "value": 90,
+    "item": "result-5d032f",
+    "note": "No base-only cell on the board has 8 samples on these 100 problems. Used the best 4-sample base count, vote over 4 after restart, 450/500 on all of MATH-500, scaled to 100. For reference, the prefilled-cue single sample on these first 100 is 82 (result-d2933e)."
+   }
+  },
+  {
+   "id": "c04",
+   "family": "training",
+   "mechanism": "round-09/training-m05",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 2.0 x top-1 singular direction per matrix of (Olmo-3.1-7B-RL-Zero-Math - base), all layers and modules, stochastic rounding, seed 0",
+    "prompt": "cue (frozen4.json prefill)",
+    "set": "hard328",
+    "n": "164: shard 0/2 of hard328 (problems 0, 2, 4, ..., 326)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --k 1 --other rl_math --scale 2.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top1x2 --prompt cue --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "cap hits (finish reason length at 16,384 tokens) among the 164 problems of shard 0/2",
+   "unit": "cap hits of 164",
+   "value": 23,
+   "low": 16,
+   "high": 30,
+   "against": "round-09/weights-m01",
+   "against_value": 5,
+   "why": "training-m05 puts the stopping decision in directions 2-8 and answer form in direction 1, so doubling direction 1 leaves cap hits near the top-1 at 1x level: 51/328, about 25 on this half (base about 38). weights-m01 says the size of the top direction alone sets how often the model finishes, and about 2x over-commits whether 1 or 8 directions are scaled. Top-1 at 2x should then finish almost everything, as 8 directions at 2x did (5/328), so about 3-6 here.",
+   "gpu_minutes": 75,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c05",
+   "family": "training",
+   "mechanism": "round-09/training-m03",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math step 100 (revision step_0100 0a45720c), rebuilt as base + 1.0 x (step100 - base) with nearest rounding (endpoint exact)",
+    "prompt": "plain",
+    "set": "hard328",
+    "n": "164: shard 0/2 of hard328 (problems 0, 2, 4, ..., 326)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index (the seeds of the cued-base row e72c)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other rl_math_step100 --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label rl_step100 --prompt plain --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 (cap hits counted wrong) among the 164 problems of shard 0/2",
+   "unit": "right answers of 164",
+   "value": 84,
+   "low": 77,
+   "high": 92,
+   "against": "round-09/sampling-m03",
+   "against_value": 72,
+   "why": "training-m03 says step 100 has moved only problems the base solves sometimes, so on hard problems step-100 plain equals the cued base: about 82 on this half (164/328), plus at most a few. sampling-m03 says at T 1.0 a share of step-100 plain answers (117 of 500 on MATH-500) opens outside the 'Okay' register, and the gap between openings widens on harder problems (plain base 76 against cue 164 on the 328). Step-100 plain then falls below the cued base, to about 72.",
+   "gpu_minutes": 75,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c06",
+   "family": "training",
+   "mechanism": "round-10/training-m05",
+   "cell": {
+    "model": "Olmo-3-7B-Think-SFT + 2.0 x (Olmo-3.1-7B-RL-Zero-Math - base), M(2), bf16, seed 0",
+    "prompt": "cue (frozen4.json prefill)",
+    "set": "fresh2026",
+    "n": "136: all fresh2026 problems (AIME 2026, HMMT Feb and Nov 2026)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 2.0 --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label sft_plus_2rl --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 (cap hits counted wrong) of the 136 fresh2026 problems",
+   "unit": "right answers of 136",
+   "value": 70,
+   "low": 62,
+   "high": 78,
+   "against": "round-09/problems-m05",
+   "against_value": 51,
+   "why": "training-m05 says imitation supplies whole solution routines for contest problems and the RL difference adds only closing. M(2) should keep Think-SFT's routines (60.0 per sample on fresh2026, 46 % cap hits) and close about half of its cut work, as on hard328 (cap hits 94.5 to 44, +22.5 right), for about 70. problems-m05 says RL weights add finishing and fewer slips but no plans, so on contest sets a model carrying the RL difference tracks RL. Its forced closings become guesses like RL's (43 % precision), so about RL's 50.5.",
+   "gpu_minutes": 75,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c07",
+   "family": "weights",
+   "mechanism": "run-05/f2-m03",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), all layers, all modules, stochastic bf16 rounding, seed 0 (wsp_edit recipe top8)",
+    "prompt": "cue (frozen4 prefill ' line!\\n\\nOkay'), pair1 prompt",
+    "set": "hard328",
+    "n": "200: the first 200 problems of hard328 (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --k 8 --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code_top8x1.5 --prompt cue --set hard328 --n 200 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "cap hits (finish reason length) among the 200 rows of answers.jsonl",
+   "unit": "cap hits of 200",
+   "value": 36,
+   "low": 27,
+   "high": 45,
+   "against": "round-10/stopping-m04",
+   "against_value": 14,
+   "why": "f2-m03 lets Code's directions act on math text only through the 0.22-0.26 input overlap, so they give half of Math 1.5x's in-domain cap-hit cut (77 to 18 on all 328, x0.757 for the first 200 where the cued base has about 58). stopping-m04 says any reward's directions write the same commit readout, which Code 1x already showed (41 cap hits, fewer than Math 1x's 46), so Code at 1.5x finishes like Math at 1.5x.",
+   "gpu_minutes": 95,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c08",
+   "family": "weights",
+   "mechanism": "run-05/f2-m01",
+   "cell": {
+    "model": "Olmo-3-1025-7B base - 1.5 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Math - base) (signed size -1.5), all layers, stochastic bf16 rounding, seed 0",
+    "prompt": "cue",
+    "set": "fresh2026 (136 competition problems from 2026)",
+    "n": "136, all",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 93000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 8 --scale -1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label math_top8xm1.5 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "cap hits (finish reason length) among the 136 rows of answers.jsonl",
+   "unit": "cap hits of 136",
+   "value": 75,
+   "low": 63,
+   "high": 87,
+   "against": "round-10/stopping-m04",
+   "against_value": 59,
+   "why": "f2-m01's dial is monotone in signed size: -1 raised hard328 cap hits by 25 % (77 to 96), so -1.5 raises the cued base's 54.8 fresh2026 cap hits by about 37 %. stopping-m04 says subtraction turns boxed endings into unboxed ones far more than into cap hits (at -1 unboxed rose 23 to 61 while cap hits rose only 19), so cap hits rise only a little, about 8 %.",
+   "gpu_minutes": 100,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c09",
+   "family": "weights",
+   "mechanism": "run-05/f2-m06",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 0.5 x top-8 singular directions per matrix of (RL-Math 3.1 - base), written with round-to-nearest bf16 (--rounding nearest)",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "200: the first 200 problems (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 8 --scale 0.5 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label math_top8x0.5_nearest --prompt cue --set hard328 --n 200 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "cap hits (finish reason length) among the 200 rows of answers.jsonl",
+   "unit": "cap hits of 200",
+   "value": 53,
+   "low": 44,
+   "high": 62,
+   "against": "round-09/grader-m03",
+   "against_value": 38,
+   "why": "At 0.5x the entries of a rank-8 edit are mostly under half a bf16 ulp. f2-m06 says round-to-nearest drops them except on small weights, so the edit acts like about 0.12x: cap hits stay near the cued base's 58 on these 200 (77 to 70 on all 328, x0.757). grader-m03 reads a partial edit as the edit null plus its nominal share of the gain, which is the stored 0.5x cell (50 of 328, so 38 of 200).",
+   "gpu_minutes": 105,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c10",
+   "family": "weights",
+   "mechanism": "run-05/f2-m04",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.0 x top-8 singular directions per matrix of (RL-Math 3.1 - base), stochastic bf16 rounding, seed 0",
+    "prompt": "plain (no cue)",
+    "set": "hard328",
+    "n": "200: the first 200 problems (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 8 --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label math_top8x1_plain --prompt plain --set hard328 --n 200 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 among the 200 rows",
+   "unit": "right answers of 200",
+   "value": 97,
+   "low": 87,
+   "high": 107,
+   "against": "round-09/training-m04",
+   "against_value": 83,
+   "why": "f2-m04 says an edit built from the final weights carries both the opening register (the part the cue gives) and the late finishing, so the prompt hardly matters: plain is close to the cued top-8 1x cell (192 of 328, so 101.5 of these 200), as on MATH-500, where plain is about 0.97 of cued. training-m04 has the plain prompt sample a terse register whose share of the cued score shrinks on harder sets, by the base's factor 0.85 from MATH-500 to hard328, giving about 0.82 x 101.5.",
+   "gpu_minutes": 101,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c11",
+   "family": "weights",
+   "mechanism": "round-09/weights-m01",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x the top-1 singular direction per matrix of (RL-Math 3.1 - base) (--k 1), stochastic bf16 rounding, seed 0",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "200: the first 200 problems (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 1 --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label math_top1x1.5 --prompt cue --set hard328 --n 200 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "cap hits (finish reason length) among the 200 rows of answers.jsonl",
+   "unit": "cap hits of 200",
+   "value": 17,
+   "low": 10,
+   "high": 25,
+   "against": "round-09/training-m05",
+   "against_value": 39,
+   "why": "weights-m01 puts the stop readout in the top direction, so finishing follows its size whatever the rank: top-1 at 1.5x finishes like top-8 at 1.5x (18 to 25 of 328, so about 17 of 200; top-1 1x 51 against top-8 1x 46 already agree). training-m05 says one direction cuts cap hits only partly and scaling it changes answer form rather than stopping, so top-1 at 1.5x stays near top-1 at 1x (51 of 328, so 39 of 200).",
+   "gpu_minutes": 93,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c12",
+   "family": "weights",
+   "mechanism": "round-09/weights-m04",
+   "cell": {
+    "model": "Olmo-3-7B-Think-SFT + 2.0 x (Olmo-3.1-7B-RL-Zero-Math - Olmo-3-1025-7B), full difference (delta_sum host think_sft, donor rl_math, alpha 2)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "136, all",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 93000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 2.0 --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label thinksft_plus2rl --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 among the 136 rows",
+   "unit": "right answers of 136",
+   "value": 65,
+   "low": 56,
+   "high": 74,
+   "against": "run-03/f2-m02",
+   "against_value": 85,
+   "why": "weights-m04 says the RL difference only finishes Think-SFT's own work. At a=2 cap hits fall by the hard328 fraction (94.5 to 54, so 62 to about 35 on fresh2026). Only the sound share of the newly closed answers (about a quarter, as at cap 32k) is added to Think-SFT's 60, and precision drops toward RL's. run-03/f2-m02 says the delta raises Think-SFT's stop hazard as it does the base's (base to RL logit shift -1.31 per unit), with right-of-finished roughly flat near 0.8 apart from some guesses past 1.5x. That gives about 120 finished answers and about 85 right.",
+   "gpu_minutes": 90,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c13",
+   "family": "weights",
+   "mechanism": "round-09/weights-m06",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (RL-Math 3.1 - base), written with round-to-nearest bf16 (--rounding nearest)",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "200: the first 200 problems (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 8 --scale 1.5 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label math_top8x1.5_nearest --prompt cue --set hard328 --n 200 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "cap hits (finish reason length) among the 200 rows of answers.jsonl",
+   "unit": "cap hits of 200",
+   "value": 36,
+   "low": 26,
+   "high": 46,
+   "against": "run-05/f2-m06",
+   "against_value": 14,
+   "why": "weights-m06 credits the stored 1.5x cells' full nominal effect to unbiased stochastic rounding. Under round-to-nearest the many sub-half-ulp entries are dropped, the written edit loses most of its size, and finishing falls back to about the 0.5x level (50 of 328, x0.757). f2-m06 says every bf16 merge is thresholded the same way and nominal 1.5x already acts like RL's own top-8 share, so the nearest-rounded edit equals the stored 1.5x cells (mean 18 cap hits of 328, so 14 of 200).",
+   "gpu_minutes": 98,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c14",
+   "family": "weights",
+   "mechanism": "round-10/weights-m01",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 3.0 x top-8 singular directions per matrix of (RL-Math 3.1 - base), stochastic bf16 rounding, seed 0",
+    "prompt": "cue",
+    "set": "math500",
+    "n": "200: the first 200 problems of MATH-500 (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 61000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 8 --scale 3.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label math_top8x3 --prompt cue --set math500 --n 200 --temperature 1.0 --top-p 1.0 --seed 61000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 among the 200 rows",
+   "unit": "right answers of 200",
+   "value": 173,
+   "low": 162,
+   "high": 183,
+   "against": "run-03/f2-m05",
+   "against_value": 151,
+   "why": "round-10/weights-m01 says an overdose costs right answers only through long unsolved answers it forces to finish as guesses. On hard328, going from 1.5x to 3x cost 83 answers against 77 base cap hits; MATH-500's first 200 have about 9, so 3x is about 10 below 1.5x's 182 (456/500 scaled). run-03/f2-m05 says breakdown into word strings grows with edit size and tokens generated. 3x kept only 58 % of 1.5x's right answers on hard328; MATH-500 answers are about a third as long, so about 17 % is lost.",
+   "gpu_minutes": 80,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c15",
+   "family": "weights",
+   "mechanism": "round-10/weights-m03",
+   "cell": {
+    "model": "Olmo-3-7B-Think-SFT + 1.0 x (Olmo-3.1-7B-RL-Zero-Math - Olmo-3-1025-7B), full difference (delta_sum host think_sft, donor rl_math, alpha 1)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "136, all",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 93000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 1.0 --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label thinksft_plus1rl --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "cap hits (finish reason length) among the 136 rows of answers.jsonl",
+   "unit": "cap hits of 136",
+   "value": 50,
+   "low": 41,
+   "high": 59,
+   "against": "run-03/f2-m02",
+   "against_value": 25,
+   "why": "weights-m03 says Think-SFT's imitation change already sets the features RL's push reads, so a=1 cuts its cap hits by about 20 % on any set: 62 (45.6 % of 136) falls to about 50. run-03/f2-m02 says the full delta raises Think-SFT's stop hazard as it does the base's: a logit shift of -1.31, from the cued base's 40.3 % to RL's 15.4 % fresh2026 cap rate. Applied to 45.6 %, that gives 18 %.",
+   "gpu_minutes": 97,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c16",
+   "family": "weights",
+   "mechanism": "round-10/weights-m05",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), stochastic bf16 rounding, seed 0",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "136, all",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 93000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --k 8 --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label code_top8x1.5 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "cap hits (finish reason length) among the 136 rows of answers.jsonl",
+   "unit": "cap hits of 136",
+   "value": 15,
+   "low": 8,
+   "high": 23,
+   "against": "run-05/f2-m03",
+   "against_value": 34,
+   "why": "weights-m05 puts finishing in the input subspace that Math and Code share (the reward-general readout), so Code's directions finish math answers in full, like Math's 1.5x edit on fresh2026 (12-16 cap hits per sample). Only the domain remainder (correctness) transfers partly. run-05/f2-m03 scales every effect, finishing included, by the input overlap, so Code gives half of Math's cut from the cued base's 54.8.",
+   "gpu_minutes": 78,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c17",
+   "family": "weights",
+   "mechanism": "round-10/weights-m06",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 3.0 x the top-1 singular direction per matrix of (RL-Math 3.1 - base) (--k 1), stochastic bf16 rounding, seed 0",
+    "prompt": "cue",
+    "set": "math500",
+    "n": "200: the first 200 problems of MATH-500 (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 61000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 1.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 1 --scale 3.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label math_top1x3 --prompt cue --set math500 --n 200 --temperature 1.0 --top-p 1.0 --seed 61000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 among the 200 rows",
+   "unit": "right answers of 200",
+   "value": 143,
+   "low": 130,
+   "high": 156,
+   "against": "round-10/problems-m04",
+   "against_value": 166,
+   "why": "weights-m06 says a rank-1 edit adds no right answers and an overdosed direction 1 leaves answers unboxed and graded wrong. On hard328, top-1 at 3x left 13 % more answers unboxed than the base (67 against 23 of 328), mostly on unsolved problems. On MATH-500, where the cued base is right on 82 %, the same share costs right answers: 0.87 x 164. problems-m04 says point gains transfer between sets, so hard328's +1.2 points (168 against 164) carries over to 164 + 2.",
+   "gpu_minutes": 48,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c18",
+   "family": "run-02",
+   "mechanism": "run-02/f2-m01",
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained, no edit)",
+    "prompt": "cue (frozen4.json prefill ' line!\\n\\nOkay')",
+    "set": "hard328",
+    "n": "110 problems: shard 0/3 of hard328 (indices 0, 3, 6, ..., 327), spread evenly over the easier and harder halves",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 95000000, sample s of problem i uses seed + 10000*s + i (run_cell rule)",
+    "samples": "12 per problem, no restarts",
+    "grader": "v3; plurality vote over the 12 extracted answers grouped with rln4_lib.agree, capped samples abstain, ties to the lowest sample index",
+    "cap": "2,048 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set hard328 --shard 0/3 --temperature 1.0 --top-p 1.0 --max-tokens 2048 --samples 12 --restarts 0 --seed 95000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "Right answers (grader v3) of the plurality vote over 12 samples on the 110 problems, computed from answers.jsonl; a sample that hits the 2,048 cap gives no answer",
+   "unit": "right answers of 110",
+   "value": 28,
+   "low": 20,
+   "high": 36,
+   "against": "round-09/training-m04",
+   "against_value": 50,
+   "why": "f2-m01 says hard328 solutions take 6,000-14,000 tokens, so 2,048-token samples reach only the short-solution problems: roughly RL-length quartile Q1 plus a few from Q2, about 85 of 328 (the base is right within 4k on 81 of 328 per sample, result-1b6bf2; the 12-sample vote at 4k reached 139, result-6e7b64). So the vote stays near 28 of 110 however many samples are added. training-m04 fixes each problem's distribution over final values in pretraining, regardless of answer length, so the cap only censors samples: the finished short samples converge on the same mode as the full-length vote (192 of 328 over 4 samples, about 66 of 110), losing only the problems where no sample finishes, which gives about 50.",
+   "gpu_minutes": 70,
+   "base_only": true,
+   "best_base": {
+    "value": 47,
+    "item": "result-6e7b64",
+    "note": "Best base-only count with 12 samples on hard328: the Karpathy-loop method (plain prompt, T 0.6, 12 samples capped at 4,096, vote) got 139 of 328. Scaled to the 110 shard problems: 139 x 110/328 = 46.6. No base-only cell has a count on exactly these 110 problems."
+   }
+  },
+  {
+   "id": "c19",
+   "family": "run-02",
+   "mechanism": "run-02/f2-m04",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT (as released, no edit)",
+    "prompt": "base pair1 prompt with the cue prefilled as opening text (' line!\\n\\nOkay', frozen4.json prefill_text), as in the Think-SFT cue cells",
+    "set": "math500",
+    "n": "250 problems: shard 0/2 of MATH-500 (even indices 0, 2, ..., 498)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, repetition penalty 1.0; seed 47000000 + index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "32,768 generated tokens (each answer also read as if cut at 16,384)"
+   },
+   "job": "free_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set math500 --shard 0/2 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 1 --seed 47000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "Among the answers that pass 16,384 generated tokens and then finish before 32,768 (finish reason stop), the share that grader v3 scores right. This equals the 32k-minus-16k gain divided by the number of such answers. About 12 are expected (Think-SFT cue has about 24 cap hits per 500 on MATH-500, result-bf6124).",
+   "unit": "fraction of answers (right / finished past 16,384 tokens)",
+   "value": 0.27,
+   "low": 0.0,
+   "high": 0.48,
+   "against": "round-09/sampling-m05",
+   "against_value": 0.68,
+   "why": "f2-m04 says an answer that used to abstain at the cap and now finishes becomes a mostly wrong guess. The only board measurement of such conversions for Think-SFT is 23 right of 93 on hard328 (result-c8b994). So the share right stays under half even on MATH-500, centre near 0.25-0.3. sampling-m05 says cut samples finish right at the rate of the model's long finished answers, which it calls high for Think-SFT (68.2% of its finished answers over 12,000 tokens are right on hard328, result-b006f5, and MATH-500 is easier), which gives about 0.68.",
+   "gpu_minutes": 105,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c20",
+   "family": "problems",
+   "mechanism": "run-07/f2-m02",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), all layers, all matrices, stochastic rounding seed 0 (wsp_edit recipe top8, other rl_code, scale 1.5)",
+    "prompt": "cue (pair1 prompt + frozen4 prefill ' line!\\n\\nOkay')",
+    "set": "MATH-500",
+    "n": "500 (all problems, index 0-499)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 41000000 + problem index (T1's seeds)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens (frozen4 default)"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code_top8x1.5 --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 (metrics.json right_v3)",
+   "unit": "right answers of 500",
+   "value": 433,
+   "low": 425,
+   "high": 442,
+   "against": "round-10/stopping-m04",
+   "against_value": 451,
+   "why": "f2-m02 makes the Code directions write a code-specific habit that carries about half its in-domain effect on math: half of Math top-8 1.5x's +46 over the cued base (456 vs 410) is about 433. stopping-m04 makes the top directions of any reward one shared commit readout that adds across Math, Code and IF, so Code's 1.5x edit acts on math about as Math's does (Code-RL with the cue is 450, Math 1.5x 456): about 451.",
+   "gpu_minutes": 90,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c21",
+   "family": "problems",
+   "mechanism": "round-09/problems-m05",
+   "cell": {
+    "model": "Olmo-3-7B-Think-SFT + 2.0 x (Olmo-3.1-7B-RL-Zero-Math - Olmo-3-1025-7B base), the full difference (delta_sum host think_sft, donor rl_math, alpha 2.0)",
+    "prompt": "cue (base cue prefilled, RL tokenizer, pair1 prompt, as the stored Think-SFT fresh2026 cells)",
+    "set": "fresh2026",
+    "n": "136 (all problems)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 93000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 2.0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label tsft_plus_2rl --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 (metrics.json right_v3)",
+   "unit": "right answers of 136",
+   "value": 74,
+   "low": 66,
+   "high": 82,
+   "against": "run-02/f2-m04",
+   "against_value": 63,
+   "why": "problems-m05 says the plans on contest problems come from imitation, and RL weights add only finishing. So the RL difference closes Think-SFT's cut, planful work: on hard328, a=2 turned 40.5 cap hits into 22.5 right answers (0.56 each). Scaled to fresh2026's 62 cap hits per sample and Think-SFT's lower precision there (80.4 vs 88 %), that gives about +14 over 60.0. f2-m04 says the RL difference turns abstentions into mostly wrong, scattered answers, right only at the base's or RL's long-answer rate (12-17 %): about +4.",
+   "gpu_minutes": 80,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c22",
+   "family": "problems",
+   "mechanism": "round-10/problems-m03",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Code (released weights, run_code_cell --model rl_code)",
+    "prompt": "plain (RL-Zero-Code template, no prefix ids)",
+    "set": "HumanEval+ and MBPP+ (538 problems after the grader check, as result-59ed1a)",
+    "n": "538 (all)",
+    "sampling": "T 1.0, top-p 1.0; seed 52000000 + problem index (a new seed; the stored cell used 51000000)",
+    "samples": "1 per problem, no restarts",
+    "grader": "hidden tests passed (run_code_cell grader)",
+    "cap": "job default (16,384 generated tokens, as the code1 cells)"
+   },
+   "job": "run_code_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_code_cell --model rl_code --temperature 1.0 --top-p 1.0 --seed 52000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "problems passed in this run among the 137 problems that the stored RL-Code plain cell (seed 51000000, 401 of 538, result-59ed1a, results/code1) failed",
+   "unit": "problems passed of 137",
+   "value": 6,
+   "low": 2,
+   "high": 13,
+   "against": "round-09/sampling-m01",
+   "against_value": 33,
+   "why": "problems-m03 puts the ceiling at about 405 of 538, set by under-specified MBPP+ tests that RL-Code (401) already nears. So almost all of RL's 137 failures are unpassable and a new seed passes only the few passable ones it missed. sampling-m01 treats every problem as an independent draw with a run SD of 5-7 problems, so sum p(1-p) is about 33. That is the expected number of the first run's failures a second run passes.",
+   "gpu_minutes": 95,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c23",
+   "family": "problems",
+   "mechanism": "round-10/problems-m04",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math minus its top-8 singular directions per matrix (wsp_edit recipe bulk, other rl_math, k 8, stochastic rounding seed 0), the same edit as the hard328 cell of result-284db5 (190 right, 90 cap hits)",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": "250 (first 250 problems, index 0-249)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 41000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe bulk --other rl_math --k 8 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label rl_minus_top8 --prompt cue --set math500 --n 250 --temperature 1.0 --top-p 1.0 --seed 41000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "cap hits (finish reason length at 16,384 tokens; metrics.json cap_hits)",
+   "unit": "cap hits of 250",
+   "value": 13,
+   "low": 8,
+   "high": 19,
+   "against": "run-04/f2-m03",
+   "against_value": 32,
+   "why": "On hard328, removing the 8 directions raised RL's cap hits from 20 to 90 (+70). problems-m04 scales a cap-hit change by the base's MATH-500/hard328 ratio (22.5/77): +20.5 per 500, +10 per 250, on top of RL's about 3 per 250 at T 1.0. f2-m03 treats the cap-hit share as a survival probability under a multiplied stop hazard: the hard328 exponent ln(0.274)/ln(0.061) = 0.46, applied to RL's MATH-500 survival of 0.012, gives 0.13, about 32 per 250.",
+   "gpu_minutes": 65,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c24",
+   "family": "problems",
+   "mechanism": "round-10/problems-m05",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (RL-Math 3.1 - base), a new rounding draw (wsp_edit recipe top8, other rl_math, scale 1.5, stochastic rounding seed 1)",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "164: shard 0/2 of hard328 (problems 0, 2, 4, ..., 326)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3500000 + problem index (not used by any stored hard328 sample)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 1.5 --rounding stochastic --seed 1 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x1.5_r1 --prompt cue --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --seed 3500000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers (v3, not cap hits) among the shard-0/2 problems on which the cued base has no right answer in any attempt (4 samples and their restarts) of job e8e6 (results/day1_3/hard328_base_cue_s4r2-01, about 55 problems)",
+   "unit": "right answers among the base's never-solved problems of shard 0/2",
+   "value": 4,
+   "low": 1,
+   "high": 8,
+   "against": "run-06/f2-m03",
+   "against_value": 10,
+   "why": "problems-m05 says weight edits only reweight the host's own paths, so on problems where the base has no right answer in up to 12 attempts the edit stays near the base's under-1/12 rate (about 2-4 of 55). f2-m03 says top-8 at 1.5x reproduces nearly all of RL's gain, including RL's rate on these problems. RL wins 26 of them under the vote and solves about 18 % per sample, about 10 of 55.",
+   "gpu_minutes": 75,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c25",
+   "family": "problems",
+   "mechanism": "round-10/problems-m06",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (RL-Code 3.1 - base) (wsp_edit recipe top8, other rl_code, scale 1.5, stochastic rounding seed 0)",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "164: shard 0/2 of hard328 (problems 0, 2, 4, ..., 326)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index (the hard328 seeds of the stored edit cells)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code_top8x1.5 --prompt cue --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "cap hits (finish reason length at 16,384 tokens; metrics.json cap_hits)",
+   "unit": "cap hits of 164",
+   "value": 10,
+   "low": 5,
+   "high": 16,
+   "against": "run-05/f2-m03",
+   "against_value": 25,
+   "why": "problems-m06 says Code-RL's finishing is calibrated to about 4k-token answers. On long hard328 derivations its directions stop earlier than Math's: at 1x Code already cut cap hits to 41 (Math 46), and at 1.5x it goes below Math's 25 of 328, to about 20 (10 per shard). f2-m03 says a cross-domain edit acts in proportion to input-subspace overlap, about half the in-domain effect: half of Math 1.5x's -52 cap hits gives about 51 of 328, 25 per shard.",
+   "gpu_minutes": 70,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c26",
+   "family": "stopping",
+   "mechanism": "run-03/f2-m02",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (RL-Math 3.1 - base), all layers, stochastic rounding (wsp_edit recipe top8, scale 1.5)",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "all 328 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index (the stored base-cue and 1.5x seeds)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "4,096 generated tokens"
+   },
+   "job": "wsp_edit.py",
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x1.5_cap4k --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --max-tokens 4096 --commit $(git rev-parse HEAD)",
+   "readout": "right answers with grader v3 (cap hits counted wrong)",
+   "unit": "right answers of 328",
+   "value": 66,
+   "low": 56,
+   "high": 76,
+   "against": "run-04/f2-m03",
+   "against_value": 95,
+   "why": "m02 says the directions also lengthen premature short answers (stored p10 length 1,252 -> 1,654 at 1x and 2,107 at 2x; at a 4k budget base 81, top-64 66, RL 69), so under a 4,096 cap the 1.5x edit finishes fewer right answers than the base's 81. run-04/f2-m03 adds a constant logit to the stop hazard at every position, which shortens every answer, so more finish inside 4k and the edit beats the base.",
+   "gpu_minutes": 65,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c27",
+   "family": "stopping",
+   "mechanism": "run-03/f2-m05",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 3.0 x top-8 singular directions per matrix of (RL-Math 3.1 - base), all layers, stochastic rounding (wsp_edit recipe top8, scale 3.0)",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": "167 problems: shard 0/3 (indices 0, 3, 6, ..., 498)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 71000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens (frozen4 default)"
+   },
+   "job": "wsp_edit.py",
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 3.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x3_math500 --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 71000000 --shard 0/3 --commit $(git rev-parse HEAD)",
+   "readout": "right answers with grader v3",
+   "unit": "right answers of 167",
+   "value": 122,
+   "low": 108,
+   "high": 136,
+   "against": "round-10/weights-m01",
+   "against_value": 147,
+   "why": "m05 makes word-string degeneration a hazard of edit size: at 3x the 328 lost 42 % of the 1.5x edit's right answers (203 -> 117 with only 9 cap hits), and halving it for MATH-500's shorter answers (about 4.4k vs 8.9k tokens) leaves about 21 % lost from the 1.5x level of 152 of 167. weights-m01 says overdose costs right answers only through long unsolved answers forced to finish, which MATH-500 barely holds, so 3x stays near the 1.5x level.",
+   "gpu_minutes": 55,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c28",
+   "family": "stopping",
+   "mechanism": "round-09/stopping-m04",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.0 x top-8 singular directions per matrix of (RL-Math 3.1 - base), all layers, stochastic rounding (wsp_edit recipe top8, scale 1.0; the edit whose plain answers open 'Okay' in 430 of 500)",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": "200 problems: first 400, shard 0/2 (indices 0, 2, ..., 398)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 41000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens (frozen4 default)"
+   },
+   "job": "wsp_edit.py",
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x1_cue_math500 --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --n 400 --shard 0/2 --commit $(git rev-parse HEAD)",
+   "readout": "right answers with grader v3",
+   "unit": "right answers of 200",
+   "value": 174,
+   "low": 165,
+   "high": 183,
+   "against": "round-09/sampling-m03",
+   "against_value": 186,
+   "why": "For m04 the cue on weights whose plain answers already take the deliberative register leaves the length distribution in place and moves only finished-answer precision a little, so the score stays near the plain top-8 1x mean (431.75 of 500 over 4 samples, 173 per 200). sampling-m03 credits the cue with (1-q) x the gap between openings: q = 0.86 and a per-answer gap of about 0.47 (base plain 224 vs cue 410) add about 13 of 200.",
+   "gpu_minutes": 60,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c29",
+   "family": "stopping",
+   "mechanism": "round-10/stopping-m03",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT (no edit)",
+    "prompt": "pair1 prompt (as run_cell), opening text prefilled ' line!\\n\\n<think>\\nOkay': the base cue with an open think block, so the model has a </think> boundary to close",
+    "set": "hard328",
+    "n": "164 problems: shard 0/2 (indices 0, 2, ..., 326)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, repetition penalty 1.0; seed 3000000 + problem index (the stored Think-SFT cue seeds)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens (frozen4 default)"
+   },
+   "job": "free_cell.py",
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text ' line!\n\n<think>\nOkay' --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --samples 1 --seed 3000000 --commit $(git rev-parse HEAD)",
+   "readout": "cap hits (finish reason length at 16,384 tokens)",
+   "unit": "cap hits of 164",
+   "value": 30,
+   "low": 21,
+   "high": 39,
+   "against": "round-09/weights-m04",
+   "against_value": 47,
+   "why": "m03 puts part of Think-SFT's cap hits (94.5 per 328 per sample with the plain cue, about 47 per 164) on missing the </think> boundary, so a cue that opens a think block lets it close and write one answer, and fewer answers reach 16k. weights-m04 says prompt or template changes on Think-SFT alone leave its finishing rate unchanged, so cap hits stay at the cue level of about 47.",
+   "gpu_minutes": 90,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c30",
+   "family": "stopping",
+   "mechanism": "round-10/stopping-m04",
+   "cell": {
+    "model": "Olmo-3-1025-7B base - 1.0 x top-8 singular directions per matrix of (RL-Code 3.1 - base), all layers, stochastic rounding (wsp_edit recipe top8, other rl_code, scale -1.0)",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "164 problems: shard 0/2 (indices 0, 2, ..., 326)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens (frozen4 default)"
+   },
+   "job": "wsp_edit.py",
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale -1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label minus_code_top8 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --shard 0/2 --commit $(git rev-parse HEAD)",
+   "readout": "finished answers (finish reason stop, not a cap hit) whose completion contains no \\boxed{...}",
+   "unit": "unboxed finished answers of 164",
+   "value": 30,
+   "low": 23,
+   "high": 37,
+   "against": "run-05/f2-m03",
+   "against_value": 20,
+   "why": "m04 scales the effect with the projection on the commit readout: Code-RL's late directions read out the cue as often as Math-RL's (15 vs 13 of 96), and +1x Code cut cap hits nearly as much as Math (41 vs 46). So subtracting Code repeats Math's -1x, where unboxed endings went 23 -> 61 of 328 (about 30 per 164) and cap hits rose less (77 -> 96). run-05/f2-m03 transfers Code's directions to math text in proportion to input-subspace overlap (about 0.22-0.26, half the in-domain effect), so it predicts about halfway between the base's 11.5 and 30.",
+   "gpu_minutes": 95,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c31",
+   "family": "sampling",
+   "mechanism": "round-09/sampling-m03",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.0x the top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Math - base), all layers, all matrices (wsp_edit --recipe top8 --scale 1.0, stochastic rounding, seed 0)",
+    "prompt": "plain (no cue)",
+    "set": "MATH-500",
+    "n": "200: the first 200 problems (indices 0-199)",
+    "sampling": "T 0.6, top-p 1.0, min-p 0; seed 41000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3 (readout does not depend on it)",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 1.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x1 --prompt plain --set math500 --temperature 0.6 --top-p 1.0 --seed 41000000 --n 200 --commit $(git rev-parse HEAD)\"",
+   "readout": "answers (of 200) whose completion contains 'Okay' within its first 30 characters (answers.jsonl completion field; same rule as result-32b7a8)",
+   "unit": "answers of 200",
+   "value": 196,
+   "low": 188,
+   "high": 200,
+   "against": "round-10/stopping-m04",
+   "against_value": 172,
+   "why": "m03 makes the opening a sampled branch: the 1x edit opens 'Okay' in 430 of 500 plain answers at T 1.0 (log-odds 1.8), and step 100's 383 -> 478 of 500 from T 1.0 to T 0.6 scales the opening log-odds about 2.6x, so the share collapses onto the mode (about 0.99). stopping-m04 ties the 'Okay' readout to the edit's projection on the lm_head at fixed size, so the share stays at the T 1.0 rate, 0.86 x 200 = 172.",
+   "gpu_minutes": 55,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c32",
+   "family": "sampling",
+   "mechanism": "run-04/f2-m04",
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained)",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": "500 (all); readout on the 33 problems with 0 of 4 right in the stored Day-1 #3 base cue rows (results/day1_3/math500_base_cue-01/rows.jsonl, attempt 0, samples 0-3)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; new seed 71000000 + problem index (no stored row uses it)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3, cap hits wrong",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 71000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers (grader v3, cap hits wrong) among the 33 base-0-of-4 problems",
+   "unit": "right answers of 33",
+   "value": 6,
+   "low": 2,
+   "high": 10,
+   "against": "round-09/sampling-m06",
+   "against_value": 1,
+   "why": "f2-m04 treats 0 of 4 as four Bernoulli draws at a small but real p_i: fresh base samples solve the 17 RL-solved 0-of-4 problems at 0.237 per sample (result-07f566) and the other 16 at about half that, so 17 x 0.237 + 16 x 0.11 = 5.8. m06 calls these 33 (against 0.5 expected) a block the base almost never samples right, so about 0.03 per sample, 1 of 33.",
+   "gpu_minutes": 100,
+   "base_only": true,
+   "best_base": {
+    "value": 9,
+    "item": "result-07f566",
+    "note": "Estimate, no committed per-cell count on these 33 problems: the four Day-1 #3 samples have 0 by construction; the per-sample rate of other base samples (0.237 on 17 of them, about half on the other 16) gives about 5.8 per single cell, and the maximum over the about ten stored single-sample base-only MATH-500 cells (T1, min-p, steering, self-opened, shots) is about 9."
+   }
+  },
+  {
+   "id": "c33",
+   "family": "sampling",
+   "mechanism": "run-04/f2-m03",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.0x the top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Math - base) (wsp_edit --recipe top8 --scale 1.0, stochastic rounding, seed 0)",
+    "prompt": "cue",
+    "set": "fresh2026 (136 contest problems published in 2026)",
+    "n": "136 (all)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 93000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3, cap hits wrong",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label top8x1 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers (grader v3, cap hits wrong)",
+   "unit": "right answers of 136",
+   "value": 33,
+   "low": 26,
+   "high": 40,
+   "against": "run-07/f2-m02",
+   "against_value": 44,
+   "why": "f2-m03: the cued base caps 54 of 136 per sample on fresh2026 (-ln S 0.92); the hard328 dial multiplies -ln S by 1.35 at 1x, so caps fall to about 39, and the 15 converted samples are right below the base's 36 % finished precision (about 25 %): 29.5 + 4 = 33. f2-m02 gives the top-8 edit two thirds of RL's in-domain gain at 1x: 29.5 + 0.67 x (50.5 - 29.5) = 44.",
+   "gpu_minutes": 80,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c34",
+   "family": "sampling",
+   "mechanism": "round-09/sampling-m05",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT (no reward), as free_cell runs it (RL tokenizer, pair1 prompt)",
+    "prompt": "plain (no cue, no opening text, no ChatML template)",
+    "set": "hard328",
+    "n": "164: the first 164 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, repetition penalty 1.0; seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3, cap hits wrong",
+    "cap": "32,768 generated tokens, each answer also scored as cut at 16,384"
+   },
+   "job": "free_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --set hard328 --n 164 --max-tokens 32768 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers at cap 32,768 minus right answers when the same answers are cut at 16,384 tokens (an answer counts at 16,384 only if it finished within 16,384 generated tokens), paired",
+   "unit": "right answers of 164 (difference)",
+   "value": 12,
+   "low": 6,
+   "high": 18,
+   "against": "round-10/stopping-m03",
+   "against_value": 46,
+   "why": "m05: about 55 of the 164 plain answers are cut at 16,384 (86 of 328 overall, more on the harder first half); nearly all finish by 32,768 and are right at the rate of Think-SFT's own long answers on hard problems (23 of 93 in the cue run, about 0.22 on this half), so +12. stopping-m03 says the raw template gives Think-SFT no boundary, so a cut answer is solved work that keeps re-checking; with room it closes at its finished-answer precision (about 0.85), so about +46.",
+   "gpu_minutes": 95,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c35",
+   "family": "sampling",
+   "mechanism": "round-09/sampling-m06",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT (no reward), rebuilt by wsp_edit --recipe interp --other think_sft --alpha 1.0 (the relay's Think-SFT directory)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "68: the first 68 problems of fresh2026_v1.json",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 95000000 + 10000 x sample + problem index (no stored row uses it)",
+    "samples": "2 new per problem, no restarts; voted together with the 4 stored Think-SFT cue samples of results/fresh/readout-01",
+    "grader": "v3; plurality vote, cap hits abstain, answers grouped with rln4_lib.agree, ties to the lowest sample",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label think_sft --prompt cue --set fresh2026 --n 68 --samples 2 --temperature 1.0 --top-p 1.0 --seed 95000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers of the vote over 6 samples (4 stored + 2 new) minus right answers of the vote over the 4 stored samples, on the 68 problems",
+   "unit": "right answers of 68 (difference)",
+   "value": 1,
+   "low": -1,
+   "high": 2,
+   "against": "run-02/f2-m04",
+   "against_value": 4,
+   "why": "m06: a vote wins only where the right value is the most likely one, and that set is fixed by 4 samples, so two more samples only break a tie or two (Think-SFT's fresh vote 75 already sits near its plateau). f2-m04: Think-SFT's cut samples abstain (46 % on fresh2026), so its vote tracks pass@k and a lone new right sample wins; pass@6 - pass@4 on 68 contest problems is about 4.",
+   "gpu_minutes": 90,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c36",
+   "family": "sampling",
+   "mechanism": "round-09/sampling-m01",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math (frozen4.json revision)",
+    "prompt": "plain",
+    "set": "hard328",
+    "n": "164: the first 164 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index, the same seeds as the stored sample 0 (job 151540-86ef, 84 right on these 164)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3, cap hits wrong",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model rl --prompt plain --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --n 164 --commit $(git rev-parse HEAD)\"",
+   "readout": "problems (of 164) whose v3 right/wrong outcome (cap hit = wrong) differs from the stored same-seed row of job 151540-86ef",
+   "unit": "problems of 164",
+   "value": 29,
+   "low": 21,
+   "high": 38,
+   "against": "round-09/grader-m03",
+   "against_value": 13,
+   "why": "m01: a same-seed rerun is a new independent draw (vLLM is not batch-invariant), so discordance is 2 x sum p_i(1-p_i); from RL's four hard328 samples (mean 200, pass@4 240) the harder first half holds about 47 mid-rate problems, sum p(1-p) about 14.6, so about 29. grader-m03 holds that only an edit breaks seed pairing, so an unedited rerun reproduces the stored draw up to cross-GPU drift (RL changed score on 2 of 50 problems across GPUs, knowledge-814454; about 8 % on hard problems), about 13.",
+   "gpu_minutes": 80,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c37",
+   "family": "grader",
+   "mechanism": "run-08/f2-m01",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.0x the top-8 singular directions per matrix of (RL-Math 3.1 - base), all layers, stochastic rounding, seed 0 (wsp_edit recipe top8)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "all 136 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; problem i seed 94000000 + i",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 8 --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label top8x1.0 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 94000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 (cap hits count wrong)",
+   "unit": "right answers of 136",
+   "value": 44,
+   "low": 38,
+   "high": 50,
+   "against": "run-04/f2-m03",
+   "against_value": 35,
+   "why": "f2-m01 reads the posted dial cells as seed draws around a smooth dose curve: on hard328, 1x (192, one draw) sits about 0.8 of the way from the base's 4-sample mean (158.5) to the replicated 1.5x mean (200.25), so fresh2026 gives 29.5 + 0.8 x (48.25 - 29.5) = 44 with a sampling SD of about 3. f2-m03 says the dial only converts the base's unfinished fresh samples, at a precision below the base's finished answers (36 %): 1x cuts the base's ~55 cap hits by the hard328 ratio (77 to 46), to ~33, so ~22 conversions at ~25 % gives 29.5 + 5.5 = 35.",
+   "gpu_minutes": 85,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c38",
+   "family": "grader",
+   "mechanism": "round-09/grader-m04",
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "all 136 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; problem i seed 94000000 + i",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "32,768 (the readout also uses the same answers cut at 16,384)"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model base --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 94000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers (v3) among answers with more than 16,384 generated tokens, i.e. the cap-32,768 count minus the same answers scored at a 16,384 cap",
+   "unit": "right answers (of the ~55 answers past 16,384 tokens)",
+   "value": 2,
+   "low": 0,
+   "high": 5,
+   "against": "round-09/sampling-m05",
+   "against_value": 9,
+   "why": "grader-m04: past 16k the base's answers are unfinished or guessed, and fresh2026 is harder than hard328, so the yield per abstention is below hard328's 4 of 64 (result-0c1eef); scaled by the base's finished precision (36 % on fresh against about 65 % on hard328) about 3.5 % of the ~55 cap hits (40.3 % of 136), so 2. sampling-m05 says the cut samples come out right at the rate of the base's long finished answers at that difficulty, 16.7 % on hard328 (41 of 246 over 12k tokens), so 55 x 0.167 = 9.",
+   "gpu_minutes": 115,
+   "base_only": true,
+   "best_base": {
+    "value": 2,
+    "item": "result-0c1eef",
+    "note": "No base-only cell has a count on these items (fresh2026 answers past 16,384 tokens at cap 32,768). Scaled from the only base cap raise, hard328 base cue: 4 right of the 64 answers past 16,384 (6.25 %), times the ~55 fresh2026 cap hits, times the 36/65 precision ratio, about 2 (3.4 unscaled)."
+   }
+  },
+  {
+   "id": "c39",
+   "family": "grader",
+   "mechanism": "round-09/grader-m03",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5x the top-1 singular direction per matrix of (RL-Math 3.1 - base), all layers, stochastic rounding, seed 0 (wsp_edit recipe top8, k 1)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "all 136 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; problem i seed 94000000 + i",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 1 --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label top1x1.5 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 94000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 (cap hits count wrong)",
+   "unit": "right answers of 136",
+   "value": 40,
+   "low": 34,
+   "high": 46,
+   "against": "round-10/weights-m06",
+   "against_value": 31,
+   "why": "grader-m03: a partial edit's count is the edit null plus its share of the replicated full-edit gain. On hard328, top-1 at 1.5x sits at about 182.5 (between 1x 181 and 2x 184), a share (182.5 - 161) / (200.25 - 161) = 0.55. On fresh2026 the null is about 30 and the full gain 48.25 - 30 = 18.25, so 30 + 0.55 x 18.25 = 40. weights-m06 says rank-1 edits finish without adding right answers, so the count stays at the null plus at most a conversion or two: 31.",
+   "gpu_minutes": 85,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c40",
+   "family": "grader",
+   "mechanism": "round-09/grader-m06",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT, written as base + 1.0 x (Think-SFT - base) with nearest rounding (wsp_edit recipe interp), run through run_cell as in the relay study",
+    "prompt": "cue (raw pair1 prompt, cue prefilled)",
+    "set": "math500",
+    "n": "first 400 problems (indices 0-399)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; problem i seed 41100000 + i",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "32,768 (the readout also uses the same answers cut at 16,384)"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label think_sft --prompt cue --set math500 --n 400 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 41100000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers (v3) among answers with more than 16,384 generated tokens, i.e. the cap-32,768 count minus the same answers scored at a 16,384 cap",
+   "unit": "right answers (of the ~20 answers past 16,384 tokens)",
+   "value": 5,
+   "low": 2,
+   "high": 9,
+   "against": "round-10/stopping-m03",
+   "against_value": 13,
+   "why": "grader-m06: the 32k-minus-16k difference is the yield of unfinished-work cap hits, about one in four for Think-SFT (23 of 93 on hard328). Think-SFT has about 25 cap hits per 500 on MATH-500, so about 20 in the first 400, and 20 / 4 = 5. stopping-m03 says that in the raw template Think-SFT's cap hits are mostly solved answers it keeps writing after, with no </think> boundary to stop at. Given room it ends, and on these easy problems it states the answer it already has, right about two thirds of the time: 13.",
+   "gpu_minutes": 115,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c41",
+   "family": "grader",
+   "mechanism": "round-09/grader-m01",
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained)",
+    "prompt": "cue + the 3 Math-RL-written solved examples of draw 1 (result-6d422d / result-5227b9: MATH-500 problems 0, 1, 2) in context, via run_cell --shots",
+    "set": "math500",
+    "n": "first 280 problems the job keeps after leaving out the 3 example problems (MATH-500 indices 3-282)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; new seed rule: problem i seed 47000000 + i (draw 1 ran on other seeds)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --shots <draw-1 Math-RL examples json of result-5227b9, branch shots> --n 280 --temperature 1.0 --top-p 1.0 --seed 47000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers with grader v3 on the 280 problems (cap hits count wrong)",
+   "unit": "right answers of 280",
+   "value": 231,
+   "low": 221,
+   "high": 240,
+   "against": "run-08/f2-m01",
+   "against_value": 243,
+   "why": "grader-m01: draw 1 (432 of 494) is a first-run cell picked as notable, so new seeds regress to the pooled level of the near-identical examples-in-context cells (none 404, base-written 411 and 403, Code-written 409, RL-written draw 2 401): about 407/494 = 0.824, x 280 = 231. f2-m01 treats the stored 432 as an unselected draw of that prompt's fixed per-problem probabilities, shrunk only slightly toward its prior (to ~428/494 = 0.866): 0.866 x 280 = 243.",
+   "gpu_minutes": 115,
+   "base_only": true,
+   "best_base": {
+    "value": 245,
+    "item": "result-6d422d",
+    "note": "Best one-sample base-only count on MATH-500 is the same Math-RL-written examples draw, 435 of 497 (432 of 494 in result-5227b9). No count exists on exactly these 280 problems, so it is scaled: 435/497 x 280 = 245."
+   }
+  },
+  {
+   "id": "c42",
+   "family": "grader",
+   "mechanism": "round-10/grader-m06",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT, written as base + 1.0 x (Think-SFT - base) with nearest rounding (wsp_edit recipe interp), run through run_cell",
+    "prompt": "cue (raw pair1 prompt, cue prefilled)",
+    "set": "hard328",
+    "n": "shard 0/2: problems 0, 2, 4, ... (164 problems); readout on the ~45 of them in the 90-problem floor list of result-5da8a9 (studies/rlneurons/results/axis/hard328-01/readout.json)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; new seed rule: problem i seed 3100000 + i",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "32,768"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label think_sft --prompt cue --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 3100000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers (v3) among the problems of this shard that are in the hard328 floor list (no arm solved them in result-5da8a9)",
+   "unit": "right answers (of ~45 floor problems)",
+   "value": 1,
+   "low": 0,
+   "high": 3,
+   "against": "round-09/grader-m06",
+   "against_value": 7,
+   "why": "round-10/grader-m06: floor items (defective golds and problems no arm ever solves) cannot be credited, and extra samples or tokens add only on reachable unsolved items, never on the floor, so a new Think-SFT sample at twice the cap scores about 0 there; 1 allows for a rare floor item that a misclassified gold or an unusually long chain reaches. round-09/grader-m06 makes the 32k yield one in four of Think-SFT's cap hits whatever the item. Think-SFT hits the cap on about 60 % of these hardest problems (29 % overall), so 45 x 0.6 / 4 = 7.",
+   "gpu_minutes": 118,
+   "base_only": false,
+   "best_base": null
+  }
+ ],
+ "dropped": [],
+ "left_out": [],
+ "cells": [
+  {
+   "id": "r10-m01",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), all layers and modules, stochastic rounding, seed 0 (wsp_edit recipe top8, other rl_code, k 8, scale 1.5)",
+    "prompt": "cue (pair1 prompt + frozen4.json prefill ' line!\\n\\nOkay')",
+    "set": "hard328",
+    "n": "328: all of hard328 (problems 0-327), covering shard 0/2 (problems 0, 2, ..., 326; 164) and the first 200 problems (0-199); each readout states its problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 4 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --k 8 --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code_top8x1.5 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m01-r1",
+     "readout": "right answers with grader v3 (cap hits counted wrong) among the 164 problems of shard 0/2 (problems 0, 2, 4, ..., 326)",
+     "unit": "right answers of 164",
+     "from": [
+      "c01"
+     ],
+     "best_base": null
+    },
+    {
+     "id": "r10-m01-r2",
+     "readout": "cap hits (finish reason length at 16,384 tokens) among the 164 problems of shard 0/2 (problems 0, 2, 4, ..., 326)",
+     "unit": "cap hits of 164",
+     "from": [
+      "c25"
+     ],
+     "best_base": null
+    },
+    {
+     "id": "r10-m01-r3",
+     "readout": "cap hits (finish reason length at 16,384 tokens) among the first 200 problems of hard328 (problems 0-199)",
+     "unit": "cap hits of 200",
+     "from": [
+      "c07"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 95,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m02",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Math - base), applied only in layers 22-31 (last third), all module families, stochastic rounding, seed 0",
+    "prompt": "plain (no cue prefilled)",
+    "set": "math500",
+    "n": "100: the first 100 MATH-500 problems (the WSP-1 screen problems)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 41000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 1 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 1.5 --layers 22,23,24,25,26,27,28,29,30,31 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x1.5_L22-31 --prompt plain --set math500 --n 100 --temperature 1.0 --top-p 1.0 --seed 41000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m02-r1",
+     "readout": "right answers with grader v3 (cap hits counted wrong) of the first 100 MATH-500 problems",
+     "unit": "right answers of 100",
+     "from": [
+      "c02"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 30,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m03",
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained)",
+    "prompt": "plain (no cue prefilled)",
+    "set": "math500",
+    "n": "100: the first 100 MATH-500 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; sample s of problem i has seed 41000000 + 10000 s + i",
+    "samples": "8 per problem, no restarts",
+    "grader": "v3, plurality vote over the 8 samples (answers grouped with rln4_lib.agree, cap hits and no-answer samples abstain, ties to the lowest sample index)",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt plain --set math500 --n 100 --temperature 1.0 --top-p 1.0 --seed 41000000 --samples 8 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m03-r1",
+     "readout": "right answers under the plurality vote over 8 plain samples (grader v3) of the first 100 MATH-500 problems",
+     "unit": "right answers of 100",
+     "from": [
+      "c03"
+     ],
+     "best_base": {
+      "value": 90,
+      "item": "result-5d032f",
+      "note": "No base-only cell on the board has 8 samples on these 100 problems. Used the best 4-sample base count, vote over 4 after restart, 450/500 on all of MATH-500, scaled to 100. For reference, the prefilled-cue single sample on these first 100 is 82 (result-d2933e)."
+     },
+     "top": {
+      "forecaster": "round-09/training-m04",
+      "value": 72,
+      "gain": -18
+     }
+    }
+   ],
+   "base_only": true,
+   "gpu_minutes": 80,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m04",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 2.0 x top-1 singular direction per matrix of (Olmo-3.1-7B-RL-Zero-Math - base), all layers and modules, stochastic rounding, seed 0",
+    "prompt": "cue (frozen4.json prefill)",
+    "set": "hard328",
+    "n": "164: shard 0/2 of hard328 (problems 0, 2, 4, ..., 326)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --k 1 --other rl_math --scale 2.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top1x2 --prompt cue --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m04-r1",
+     "readout": "cap hits (finish reason length at 16,384 tokens) among the 164 problems of shard 0/2",
+     "unit": "cap hits of 164",
+     "from": [
+      "c04"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 75,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m05",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math step 100 (revision step_0100 0a45720c), rebuilt as base + 1.0 x (step100 - base) with nearest rounding (endpoint exact)",
+    "prompt": "plain",
+    "set": "hard328",
+    "n": "164: shard 0/2 of hard328 (problems 0, 2, 4, ..., 326)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index (the seeds of the cued-base row e72c)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other rl_math_step100 --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label rl_step100 --prompt plain --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m05-r1",
+     "readout": "right answers with grader v3 (cap hits counted wrong) among the 164 problems of shard 0/2",
+     "unit": "right answers of 164",
+     "from": [
+      "c05"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 75,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m06",
+   "cell": {
+    "model": "Olmo-3-7B-Think-SFT + 2.0 x (Olmo-3.1-7B-RL-Zero-Math - base), M(2), bf16, seed 0",
+    "prompt": "cue (frozen4.json prefill)",
+    "set": "fresh2026",
+    "n": "136: all fresh2026 problems (AIME 2026, HMMT Feb and Nov 2026)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 2.0 --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label sft_plus_2rl --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m06-r1",
+     "readout": "right answers with grader v3 (cap hits counted wrong) of the 136 fresh2026 problems",
+     "unit": "right answers of 136",
+     "from": [
+      "c06"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 75,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m07",
+   "cell": {
+    "model": "Olmo-3-1025-7B base - 1.5 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Math - base) (signed size -1.5), all layers, stochastic bf16 rounding, seed 0",
+    "prompt": "cue",
+    "set": "fresh2026 (136 competition problems from 2026)",
+    "n": "136, all",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 93000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 8 --scale -1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label math_top8xm1.5 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m07-r1",
+     "readout": "cap hits (finish reason length) among the 136 rows of answers.jsonl",
+     "unit": "cap hits of 136",
+     "from": [
+      "c08"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 100,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m08",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 0.5 x top-8 singular directions per matrix of (RL-Math 3.1 - base), written with round-to-nearest bf16 (--rounding nearest)",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "200: the first 200 problems (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 8 --scale 0.5 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label math_top8x0.5_nearest --prompt cue --set hard328 --n 200 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m08-r1",
+     "readout": "cap hits (finish reason length) among the 200 rows of answers.jsonl",
+     "unit": "cap hits of 200",
+     "from": [
+      "c09"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 105,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m09",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.0 x top-8 singular directions per matrix of (RL-Math 3.1 - base), stochastic bf16 rounding, seed 0",
+    "prompt": "plain (no cue)",
+    "set": "hard328",
+    "n": "200: the first 200 problems (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 8 --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label math_top8x1_plain --prompt plain --set hard328 --n 200 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m09-r1",
+     "readout": "right answers with grader v3 among the 200 rows",
+     "unit": "right answers of 200",
+     "from": [
+      "c10"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 101,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m10",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x the top-1 singular direction per matrix of (RL-Math 3.1 - base) (--k 1), stochastic bf16 rounding, seed 0",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "200: the first 200 problems (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 1 --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label math_top1x1.5 --prompt cue --set hard328 --n 200 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m10-r1",
+     "readout": "cap hits (finish reason length) among the 200 rows of answers.jsonl",
+     "unit": "cap hits of 200",
+     "from": [
+      "c11"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 93,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m11",
+   "cell": {
+    "model": "Olmo-3-7B-Think-SFT + 2.0 x (Olmo-3.1-7B-RL-Zero-Math - Olmo-3-1025-7B base), the full difference (delta_sum host think_sft, donor rl_math, alpha 2.0, seed 0)",
+    "prompt": "cue (base cue prefilled, RL tokenizer, pair1 prompt, as the stored Think-SFT fresh2026 cells)",
+    "set": "fresh2026",
+    "n": "136 (all problems)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 93000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 2.0 --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label thinksft_plus2rl --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m11-r1",
+     "readout": "right answers with grader v3 (cap hits counted wrong; metrics.json right_v3) among the 136 fresh2026 problems",
+     "unit": "right answers of 136",
+     "from": [
+      "c12",
+      "c21"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 90,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m12",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (RL-Math 3.1 - base), written with round-to-nearest bf16 (--rounding nearest)",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "200: the first 200 problems (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 8 --scale 1.5 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label math_top8x1.5_nearest --prompt cue --set hard328 --n 200 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m12-r1",
+     "readout": "cap hits (finish reason length) among the 200 rows of answers.jsonl",
+     "unit": "cap hits of 200",
+     "from": [
+      "c13"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 98,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m13",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 3.0 x top-8 singular directions per matrix of (RL-Math 3.1 - base), stochastic bf16 rounding, seed 0",
+    "prompt": "cue",
+    "set": "math500",
+    "n": "200: the first 200 problems of MATH-500 (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 61000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 8 --scale 3.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label math_top8x3 --prompt cue --set math500 --n 200 --temperature 1.0 --top-p 1.0 --seed 61000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m13-r1",
+     "readout": "right answers with grader v3 among the 200 rows",
+     "unit": "right answers of 200",
+     "from": [
+      "c14"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 80,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m14",
+   "cell": {
+    "model": "Olmo-3-7B-Think-SFT + 1.0 x (Olmo-3.1-7B-RL-Zero-Math - Olmo-3-1025-7B), full difference (delta_sum host think_sft, donor rl_math, alpha 1)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "136, all",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 93000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 1.0 --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label thinksft_plus1rl --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m14-r1",
+     "readout": "cap hits (finish reason length) among the 136 rows of answers.jsonl",
+     "unit": "cap hits of 136",
+     "from": [
+      "c15"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 97,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m15",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), stochastic bf16 rounding, seed 0",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "136, all",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 93000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --k 8 --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label code_top8x1.5 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m15-r1",
+     "readout": "cap hits (finish reason length) among the 136 rows of answers.jsonl",
+     "unit": "cap hits of 136",
+     "from": [
+      "c16"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 78,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m16",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 3.0 x the top-1 singular direction per matrix of (RL-Math 3.1 - base) (--k 1), stochastic bf16 rounding, seed 0",
+    "prompt": "cue",
+    "set": "math500",
+    "n": "200: the first 200 problems of MATH-500 (--n 200)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, seed 61000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 1.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 1 --scale 3.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label math_top1x3 --prompt cue --set math500 --n 200 --temperature 1.0 --top-p 1.0 --seed 61000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m16-r1",
+     "readout": "right answers with grader v3 among the 200 rows",
+     "unit": "right answers of 200",
+     "from": [
+      "c17"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 48,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m17",
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained, no edit)",
+    "prompt": "cue (frozen4.json prefill ' line!\\n\\nOkay')",
+    "set": "hard328",
+    "n": "110 problems: shard 0/3 of hard328 (indices 0, 3, 6, ..., 327), spread evenly over the easier and harder halves",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 95000000, sample s of problem i uses seed + 10000*s + i (run_cell rule)",
+    "samples": "12 per problem, no restarts",
+    "grader": "v3; plurality vote over the 12 extracted answers grouped with rln4_lib.agree, capped samples abstain, ties to the lowest sample index",
+    "cap": "2,048 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set hard328 --shard 0/3 --temperature 1.0 --top-p 1.0 --max-tokens 2048 --samples 12 --restarts 0 --seed 95000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m17-r1",
+     "readout": "Right answers (grader v3) of the plurality vote over 12 samples on the 110 problems, computed from answers.jsonl; a sample that hits the 2,048 cap gives no answer",
+     "unit": "right answers of 110",
+     "from": [
+      "c18"
+     ],
+     "best_base": {
+      "value": 47,
+      "item": "result-6e7b64",
+      "note": "Best base-only count with 12 samples on hard328: the Karpathy-loop method (plain prompt, T 0.6, 12 samples capped at 4,096, vote) got 139 of 328. Scaled to the 110 shard problems: 139 x 110/328 = 46.6. No base-only cell has a count on exactly these 110 problems."
+     },
+     "top": {
+      "forecaster": "round-09/sampling-m05",
+      "value": 37,
+      "gain": -10
+     }
+    }
+   ],
+   "base_only": true,
+   "gpu_minutes": 70,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m18",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT (as released, no edit)",
+    "prompt": "base pair1 prompt with the cue prefilled as opening text (' line!\\n\\nOkay', frozen4.json prefill_text), as in the Think-SFT cue cells",
+    "set": "math500",
+    "n": "250 problems: shard 0/2 of MATH-500 (even indices 0, 2, ..., 498)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, repetition penalty 1.0; seed 47000000 + index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "32,768 generated tokens (each answer also read as if cut at 16,384)"
+   },
+   "job": "free_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set math500 --shard 0/2 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 1 --seed 47000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m18-r1",
+     "readout": "Among the answers that pass 16,384 generated tokens and then finish before 32,768 (finish reason stop), the share that grader v3 scores right. This equals the 32k-minus-16k gain divided by the number of such answers. About 12 are expected (Think-SFT cue has about 24 cap hits per 500 on MATH-500, result-bf6124).",
+     "unit": "fraction of answers (right / finished past 16,384 tokens)",
+     "from": [
+      "c19"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 105,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m19",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base), all layers, all matrices, stochastic rounding seed 0 (wsp_edit recipe top8, other rl_code, scale 1.5)",
+    "prompt": "cue (pair1 prompt + frozen4 prefill ' line!\\n\\nOkay')",
+    "set": "MATH-500",
+    "n": "500 (all problems, index 0-499)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 41000000 + problem index (T1's seeds)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens (frozen4 default)"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label code_top8x1.5 --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m19-r1",
+     "readout": "right answers with grader v3 (metrics.json right_v3)",
+     "unit": "right answers of 500",
+     "from": [
+      "c20"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 90,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m20",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Code (released weights, run_code_cell --model rl_code)",
+    "prompt": "plain (RL-Zero-Code template, no prefix ids)",
+    "set": "HumanEval+ and MBPP+ (538 problems after the grader check, as result-59ed1a)",
+    "n": "538 (all)",
+    "sampling": "T 1.0, top-p 1.0; seed 52000000 + problem index (a new seed; the stored cell used 51000000)",
+    "samples": "1 per problem, no restarts",
+    "grader": "hidden tests passed (run_code_cell grader)",
+    "cap": "job default (16,384 generated tokens, as the code1 cells)"
+   },
+   "job": "run_code_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_code_cell --model rl_code --temperature 1.0 --top-p 1.0 --seed 52000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m20-r1",
+     "readout": "problems passed in this run among the 137 problems that the stored RL-Code plain cell (seed 51000000, 401 of 538, result-59ed1a, results/code1) failed",
+     "unit": "problems passed of 137",
+     "from": [
+      "c22"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 95,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m21",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math minus its top-8 singular directions per matrix (wsp_edit recipe bulk, other rl_math, k 8, stochastic rounding seed 0), the same edit as the hard328 cell of result-284db5 (190 right, 90 cap hits)",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": "250 (first 250 problems, index 0-249)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 41000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe bulk --other rl_math --k 8 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label rl_minus_top8 --prompt cue --set math500 --n 250 --temperature 1.0 --top-p 1.0 --seed 41000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m21-r1",
+     "readout": "cap hits (finish reason length at 16,384 tokens; metrics.json cap_hits)",
+     "unit": "cap hits of 250",
+     "from": [
+      "c23"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 65,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m22",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (RL-Math 3.1 - base), a new rounding draw (wsp_edit recipe top8, other rl_math, scale 1.5, stochastic rounding seed 1)",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "164: shard 0/2 of hard328 (problems 0, 2, 4, ..., 326)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3500000 + problem index (not used by any stored hard328 sample)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 1.5 --rounding stochastic --seed 1 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x1.5_r1 --prompt cue --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --seed 3500000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m22-r1",
+     "readout": "right answers (v3, not cap hits) among the shard-0/2 problems on which the cued base has no right answer in any attempt (4 samples and their restarts) of job e8e6 (results/day1_3/hard328_base_cue_s4r2-01, about 55 problems)",
+     "unit": "right answers among the base's never-solved problems of shard 0/2",
+     "from": [
+      "c24"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 75,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m23",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 singular directions per matrix of (RL-Math 3.1 - base), all layers, stochastic rounding (wsp_edit recipe top8, scale 1.5)",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "all 328 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index (the stored base-cue and 1.5x seeds)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "4,096 generated tokens"
+   },
+   "job": "wsp_edit.py",
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x1.5_cap4k --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --max-tokens 4096 --commit $(git rev-parse HEAD)",
+   "readouts": [
+    {
+     "id": "r10-m23-r1",
+     "readout": "right answers with grader v3 (cap hits counted wrong)",
+     "unit": "right answers of 328",
+     "from": [
+      "c26"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 65,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m24",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 3.0 x top-8 singular directions per matrix of (RL-Math 3.1 - base), all layers, stochastic rounding (wsp_edit recipe top8, scale 3.0)",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": "167 problems: shard 0/3 (indices 0, 3, 6, ..., 498)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 71000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens (frozen4 default)"
+   },
+   "job": "wsp_edit.py",
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 3.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x3_math500 --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 71000000 --shard 0/3 --commit $(git rev-parse HEAD)",
+   "readouts": [
+    {
+     "id": "r10-m24-r1",
+     "readout": "right answers with grader v3",
+     "unit": "right answers of 167",
+     "from": [
+      "c27"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 55,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m25",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.0 x top-8 singular directions per matrix of (RL-Math 3.1 - base), all layers, stochastic rounding (wsp_edit recipe top8, scale 1.0; the edit whose plain answers open 'Okay' in 430 of 500)",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": "200 problems: first 400, shard 0/2 (indices 0, 2, ..., 398)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 41000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens (frozen4 default)"
+   },
+   "job": "wsp_edit.py",
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x1_cue_math500 --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41000000 --n 400 --shard 0/2 --commit $(git rev-parse HEAD)",
+   "readouts": [
+    {
+     "id": "r10-m25-r1",
+     "readout": "right answers with grader v3",
+     "unit": "right answers of 200",
+     "from": [
+      "c28"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 60,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m26",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT (no edit)",
+    "prompt": "pair1 prompt (as run_cell), opening text prefilled ' line!\\n\\n<think>\\nOkay': the base cue with an open think block, so the model has a </think> boundary to close",
+    "set": "hard328",
+    "n": "164 problems: shard 0/2 (indices 0, 2, ..., 326)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, repetition penalty 1.0; seed 3000000 + problem index (the stored Think-SFT cue seeds)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens (frozen4 default)"
+   },
+   "job": "free_cell.py",
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text ' line!\n\n<think>\nOkay' --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --samples 1 --seed 3000000 --commit $(git rev-parse HEAD)",
+   "readouts": [
+    {
+     "id": "r10-m26-r1",
+     "readout": "cap hits (finish reason length at 16,384 tokens)",
+     "unit": "cap hits of 164",
+     "from": [
+      "c29"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 90,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m27",
+   "cell": {
+    "model": "Olmo-3-1025-7B base - 1.0 x top-8 singular directions per matrix of (RL-Code 3.1 - base), all layers, stochastic rounding (wsp_edit recipe top8, other rl_code, scale -1.0)",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": "164 problems: shard 0/2 (indices 0, 2, ..., 326)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384 generated tokens (frozen4 default)"
+   },
+   "job": "wsp_edit.py",
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale -1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label minus_code_top8 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --shard 0/2 --commit $(git rev-parse HEAD)",
+   "readouts": [
+    {
+     "id": "r10-m27-r1",
+     "readout": "finished answers (finish reason stop, not a cap hit) whose completion contains no \\boxed{...}",
+     "unit": "unboxed finished answers of 164",
+     "from": [
+      "c30"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 95,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m28",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.0x the top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Math - base), all layers, all matrices (wsp_edit --recipe top8 --scale 1.0, stochastic rounding, seed 0)",
+    "prompt": "plain (no cue)",
+    "set": "MATH-500",
+    "n": "200: the first 200 problems (indices 0-199)",
+    "sampling": "T 0.6, top-p 1.0, min-p 0; seed 41000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3 (readout does not depend on it)",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 1.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x1 --prompt plain --set math500 --temperature 0.6 --top-p 1.0 --seed 41000000 --n 200 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m28-r1",
+     "readout": "answers (of 200) whose completion contains 'Okay' within its first 30 characters (answers.jsonl completion field; same rule as result-32b7a8)",
+     "unit": "answers of 200",
+     "from": [
+      "c31"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 55,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m29",
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained)",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": "500 (all); readout on the 33 problems with 0 of 4 right in the stored Day-1 #3 base cue rows (results/day1_3/math500_base_cue-01/rows.jsonl, attempt 0, samples 0-3)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; new seed 71000000 + problem index (no stored row uses it)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3, cap hits wrong",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 71000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m29-r1",
+     "readout": "right answers (grader v3, cap hits wrong) among the 33 base-0-of-4 problems",
+     "unit": "right answers of 33",
+     "from": [
+      "c32"
+     ],
+     "best_base": {
+      "value": 9,
+      "item": "result-07f566",
+      "note": "Estimate, no committed per-cell count on these 33 problems: the four Day-1 #3 samples have 0 by construction; the per-sample rate of other base samples (0.237 on 17 of them, about half on the other 16) gives about 5.8 per single cell, and the maximum over the about ten stored single-sample base-only MATH-500 cells (T1, min-p, steering, self-opened, shots) is about 9."
+     },
+     "top": {
+      "forecaster": "reader-1",
+      "value": 6,
+      "gain": -3
+     }
+    }
+   ],
+   "base_only": true,
+   "gpu_minutes": 100,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m30",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.0x the top-8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Math - base) (wsp_edit --recipe top8 --scale 1.0, stochastic rounding, seed 0)",
+    "prompt": "cue",
+    "set": "fresh2026 (136 contest problems published in 2026)",
+    "n": "136 (all)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 93000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3, cap hits wrong",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label top8x1 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m30-r1",
+     "readout": "right answers (grader v3, cap hits wrong)",
+     "unit": "right answers of 136",
+     "from": [
+      "c33"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 80,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m31",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT (no reward), as free_cell runs it (RL tokenizer, pair1 prompt)",
+    "prompt": "plain (no cue, no opening text, no ChatML template)",
+    "set": "hard328",
+    "n": "164: the first 164 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0, repetition penalty 1.0; seed 3000000 + problem index",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3, cap hits wrong",
+    "cap": "32,768 generated tokens, each answer also scored as cut at 16,384"
+   },
+   "job": "free_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --set hard328 --n 164 --max-tokens 32768 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m31-r1",
+     "readout": "right answers at cap 32,768 minus right answers when the same answers are cut at 16,384 tokens (an answer counts at 16,384 only if it finished within 16,384 generated tokens), paired",
+     "unit": "right answers of 164 (difference)",
+     "from": [
+      "c34"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 95,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m32",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT (no reward), rebuilt by wsp_edit --recipe interp --other think_sft --alpha 1.0 (the relay's Think-SFT directory)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "68: the first 68 problems of fresh2026_v1.json",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 95000000 + 10000 x sample + problem index (no stored row uses it)",
+    "samples": "2 new per problem, no restarts; voted together with the 4 stored Think-SFT cue samples of results/fresh/readout-01",
+    "grader": "v3; plurality vote, cap hits abstain, answers grouped with rln4_lib.agree, ties to the lowest sample",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label think_sft --prompt cue --set fresh2026 --n 68 --samples 2 --temperature 1.0 --top-p 1.0 --seed 95000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m32-r1",
+     "readout": "right answers of the vote over 6 samples (4 stored + 2 new) minus right answers of the vote over the 4 stored samples, on the 68 problems",
+     "unit": "right answers of 68 (difference)",
+     "from": [
+      "c35"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 90,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m33",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math (frozen4.json revision)",
+    "prompt": "plain",
+    "set": "hard328",
+    "n": "164: the first 164 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; seed 3000000 + problem index, the same seeds as the stored sample 0 (job 151540-86ef, 84 right on these 164)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3, cap hits wrong",
+    "cap": "16,384 generated tokens"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model rl --prompt plain --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --n 164 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m33-r1",
+     "readout": "problems (of 164) whose v3 right/wrong outcome (cap hit = wrong) differs from the stored same-seed row of job 151540-86ef",
+     "unit": "problems of 164",
+     "from": [
+      "c36"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 80,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m34",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.0x the top-8 singular directions per matrix of (RL-Math 3.1 - base), all layers, stochastic rounding, seed 0 (wsp_edit recipe top8)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "all 136 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; problem i seed 94000000 + i",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 8 --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label top8x1.0 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 94000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m34-r1",
+     "readout": "right answers with grader v3 (cap hits count wrong)",
+     "unit": "right answers of 136",
+     "from": [
+      "c37"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 85,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m35",
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "all 136 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; problem i seed 94000000 + i",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "32,768 (the readout also uses the same answers cut at 16,384)"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model base --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 94000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m35-r1",
+     "readout": "right answers (v3) among answers with more than 16,384 generated tokens, i.e. the cap-32,768 count minus the same answers scored at a 16,384 cap",
+     "unit": "right answers (of the ~55 answers past 16,384 tokens)",
+     "from": [
+      "c38"
+     ],
+     "best_base": {
+      "value": 2,
+      "item": "result-0c1eef",
+      "note": "No base-only cell has a count on these items (fresh2026 answers past 16,384 tokens at cap 32,768). Scaled from the only base cap raise, hard328 base cue: 4 right of the 64 answers past 16,384 (6.25 %), times the ~55 fresh2026 cap hits, times the 36/65 precision ratio, about 2 (3.4 unscaled)."
+     },
+     "top": {
+      "forecaster": "round-09/stopping-m04",
+      "value": 3,
+      "gain": 1
+     }
+    }
+   ],
+   "base_only": true,
+   "gpu_minutes": 115,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m36",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5x the top-1 singular direction per matrix of (RL-Math 3.1 - base), all layers, stochastic rounding, seed 0 (wsp_edit recipe top8, k 1)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": "all 136 problems",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; problem i seed 94000000 + i",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384"
+   },
+   "job": "run_fresh.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_math --k 1 --scale 1.5 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model-path /tmp/theta --model-label top1x1.5 --prompt cue --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 94000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m36-r1",
+     "readout": "right answers with grader v3 (cap hits count wrong)",
+     "unit": "right answers of 136",
+     "from": [
+      "c39"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 85,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m37",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT, written as base + 1.0 x (Think-SFT - base) with nearest rounding (wsp_edit recipe interp), run through run_cell as in the relay study",
+    "prompt": "cue (raw pair1 prompt, cue prefilled)",
+    "set": "math500",
+    "n": "first 400 problems (indices 0-399)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; problem i seed 41100000 + i",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "32,768 (the readout also uses the same answers cut at 16,384)"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label think_sft --prompt cue --set math500 --n 400 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 41100000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m37-r1",
+     "readout": "right answers (v3) among answers with more than 16,384 generated tokens, i.e. the cap-32,768 count minus the same answers scored at a 16,384 cap",
+     "unit": "right answers (of the ~20 answers past 16,384 tokens)",
+     "from": [
+      "c40"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 115,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m38",
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained)",
+    "prompt": "cue + the 3 Math-RL-written solved examples of draw 1 (result-6d422d / result-5227b9: MATH-500 problems 0, 1, 2) in context, via run_cell --shots",
+    "set": "math500",
+    "n": "first 280 problems the job keeps after leaving out the 3 example problems (MATH-500 indices 3-282)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; new seed rule: problem i seed 47000000 + i (draw 1 ran on other seeds)",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "16,384"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set math500 --shots <draw-1 Math-RL examples json of result-5227b9, branch shots> --n 280 --temperature 1.0 --top-p 1.0 --seed 47000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m38-r1",
+     "readout": "right answers with grader v3 on the 280 problems (cap hits count wrong)",
+     "unit": "right answers of 280",
+     "from": [
+      "c41"
+     ],
+     "best_base": {
+      "value": 245,
+      "item": "result-6d422d",
+      "note": "Best one-sample base-only count on MATH-500 is the same Math-RL-written examples draw, 435 of 497 (432 of 494 in result-5227b9). No count exists on exactly these 280 problems, so it is scaled: 435/497 x 280 = 245."
+     },
+     "top": {
+      "forecaster": "reader-1",
+      "value": 238,
+      "gain": -7
+     }
+    }
+   ],
+   "base_only": true,
+   "gpu_minutes": 115,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r10-m39",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT, written as base + 1.0 x (Think-SFT - base) with nearest rounding (wsp_edit recipe interp), run through run_cell",
+    "prompt": "cue (raw pair1 prompt, cue prefilled)",
+    "set": "hard328",
+    "n": "shard 0/2: problems 0, 2, 4, ... (164 problems); readout on the ~45 of them in the 90-problem floor list of result-5da8a9 (studies/rlneurons/results/axis/hard328-01/readout.json)",
+    "sampling": "T 1.0, top-p 1.0, min-p 0; new seed rule: problem i seed 3100000 + i",
+    "samples": "1 per problem, no restarts",
+    "grader": "v3",
+    "cap": "32,768"
+   },
+   "job": "run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label think_sft --prompt cue --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 3100000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r10-m39-r1",
+     "readout": "right answers (v3) among the problems of this shard that are in the hard328 floor list (no arm solved them in result-5da8a9)",
+     "unit": "right answers (of ~45 floor problems)",
+     "from": [
+      "c42"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 118,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  }
+ ],
+ "routes": [
+  {
+   "id": "r10-n01",
+   "family": "training",
+   "mechanism": "round-10/training-m05",
+   "model": "think_sft",
+   "change": "Think-SFT with the cue at T 1.0 / top-p 1.0 and the cap raised to 32,768, three samples per problem; the answer is a sequential vote (samples 0 and 1, stop if they agree, else add sample 2, plurality, ties to the shortest finished sample), and tokens count only the samples the vote reads.",
+   "tokens": 26500,
+   "gpu_minutes": 235,
+   "command": "uv run tools/gpu.py submit l40s --hours 4 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/5 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 71000000 --commit $(git rev-parse HEAD) && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set math500 --shard 0/10 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 72000000 --commit $(git rev-parse HEAD)\"",
+   "rl_command": "uv run tools/gpu.py submit l40s --hours 4 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/5 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 71000000 --commit $(git rev-parse HEAD) && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --opening-text $' line!\\n\\nOkay' --set math500 --shard 0/10 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 72000000 --commit $(git rev-parse HEAD)\"",
+   "gap_parts": "hard328 one-sample gap, cued base 161 to RL 207 (about 60 problems gross, shares from result-f39ba8's hard328 row): capability about .27 (~16 problems), which Think-SFT's imitated competition routines supply (one Think-SFT sample at cap 16,384 already 212 > RL 207); budget about .27 (~16), which the 32,768 cap gives back without a reward (Think-SFT 207 -> 230 on the same answers, result-c8b994); reliability about .43 (~26), which the vote over 2-3 samples recovers in part (Think-SFT vote +29 at 16,384). Answer statement (~2) is left alone. MATH-500: the gap is mostly reliability (.63), covered by the vote.",
+   "why": "Think-SFT's teacher traces put whole solution routines for competition problems into the model, so it beats RL on hard328 without any reward; what it lacks is closing, which RL's difference supplies but which a longer budget plus agreement between samples also supplies at no reward.",
+   "readouts": [
+    {
+     "id": "r10-n01-r1",
+     "arm": "route",
+     "set": "hard328",
+     "n": 66,
+     "readout": "hard328 --shard 0/5 (problems 0, 5, 10, ...; 66), Think-SFT cue cap 32,768, sequential vote over up to 3 samples, grader v3",
+     "value": 49,
+     "low": 44,
+     "high": 54,
+     "unit": "right answers of 66",
+     "best_base": {
+      "value": 46.3,
+      "item": "result-c8b994",
+      "note": "230 of 328 at 11795 tokens per problem (Think-SFT cue, cap 32,768, T 1.0 / top-p 1.0), scaled to 66 problems"
+     },
+     "median": 49.0,
+     "gain": 2.7
+    },
+    {
+     "id": "r10-n01-r2",
+     "arm": "route",
+     "set": "MATH-500",
+     "n": 50,
+     "readout": "MATH-500 --shard 0/10 (problems 0, 10, 20, ...; 50), Think-SFT cue cap 32,768, sequential vote over up to 3 samples, grader v3",
+     "value": 48,
+     "low": 46,
+     "high": 50,
+     "unit": "right answers of 50",
+     "best_base": {
+      "value": 48.1,
+      "item": "result-818c20",
+      "note": "481 of 500 at 19503 tokens per problem (Think-SFT, cue, T 1.0 / top-p 1.0, vote over 4, no restart), scaled to 50 problems"
+     },
+     "median": 48.0,
+     "gain": -0.1
+    },
+    {
+     "id": "r10-n01-r3",
+     "arm": "rl",
+     "set": "hard328",
+     "n": 66,
+     "readout": "hard328 --shard 0/5 (66), RL-Zero-Math with the same opening, cap and sequential vote, grader v3",
+     "value": 45,
+     "low": 40,
+     "high": 50,
+     "unit": "right answers of 66",
+     "best_base": null,
+     "median": 43.75
+    },
+    {
+     "id": "r10-n01-r4",
+     "arm": "rl",
+     "set": "MATH-500",
+     "n": 50,
+     "readout": "MATH-500 --shard 0/10 (50), RL-Zero-Math with the same opening, cap and sequential vote, grader v3",
+     "value": 47,
+     "low": 45,
+     "high": 49,
+     "unit": "right answers of 50",
+     "best_base": null,
+     "median": 47.15
+    }
+   ],
+   "score": 2.7
+  },
+  {
+   "id": "r10-n02",
+   "family": "weights",
+   "mechanism": "round-09/weights-m04",
+   "model": "think_sft",
+   "change": "Think-SFT with the cue, cap raised from 16,384 to 32,768 tokens, 3 samples at T 1.0 / top-p 1.0, majority vote (no majority: the first finished sample), so that budget does the finishing the RL delta would do and the vote handles reliability.",
+   "tokens": 35400,
+   "gpu_minutes": 230,
+   "command": "uv run tools/gpu.py submit l40s --hours 2.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 71000000 --commit $(git rev-parse HEAD) && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set math500 --shard 0/10 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 72000000 --commit $(git rev-parse HEAD)\"",
+   "rl_command": "uv run tools/gpu.py submit l40s --hours 2.5 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 71000000 --commit $(git rev-parse HEAD) && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --opening-text $' line!\\n\\nOkay' --set math500 --shard 0/10 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 72000000 --commit $(git rev-parse HEAD)\"",
+   "gap_parts": "Budget (cap hits, about 25 % of the cued-base gap: about 12 of the 46-problem one-sample hard328 gap, about 16 of 65 on MATH-500), handled by the doubled cap on Think-SFT's sound but cut work (+23 one-sample on hard328, result-c8b994). Reliability (43-63 %: about 20 on hard328, about 40 on MATH-500), handled by the 3-sample vote. Part of capability (27 % on hard328, about 12), handled by Think-SFT's imitation coverage, which no reward produced.",
+   "why": "On Think-SFT the RL difference only finishes long work that is sound but cut off, and its gain is capped by how much cut work was sound. Prompt changes do not move that finishing rate, so the reward-free stand-in for the finishing operator is more budget for exactly that work, and a vote then handles the reliability part.",
+   "readouts": [
+    {
+     "id": "r10-n02-r1",
+     "arm": "route",
+     "set": "hard328",
+     "n": 41,
+     "readout": "--shard 0/8 = 41 problems, majority vote over 3 samples at cap 32,768, grader v3 (about 249/328 scaled)",
+     "value": 31,
+     "low": 26,
+     "high": 35,
+     "unit": "right answers of 41",
+     "best_base": {
+      "value": 30.1,
+      "item": "result-818c20",
+      "note": "241 of 328 at 30904 tokens per problem (Think-SFT, cue, T 1.0 / top-p 1.0, sequential vote up to 4 (chosen on MATH-500)), scaled to 41 problems"
+     },
+     "median": 30.5,
+     "gain": 0.4
+    },
+    {
+     "id": "r10-n02-r2",
+     "arm": "route",
+     "set": "MATH-500",
+     "n": 50,
+     "readout": "--shard 0/10 = 50 problems, majority vote over 3 samples at cap 32,768, grader v3",
+     "value": 48,
+     "low": 45,
+     "high": 50,
+     "unit": "right answers of 50",
+     "best_base": {
+      "value": 48.1,
+      "item": "result-818c20",
+      "note": "481 of 500 at 19503 tokens per problem (Think-SFT, cue, T 1.0 / top-p 1.0, vote over 4, no restart), scaled to 50 problems"
+     },
+     "median": 48.0,
+     "gain": -0.1
+    },
+    {
+     "id": "r10-n02-r3",
+     "arm": "rl",
+     "set": "hard328",
+     "n": 41,
+     "readout": "--shard 0/8 = 41 problems, RL-Zero-Math same procedure, vote over 3, grader v3",
+     "value": 28,
+     "low": 23,
+     "high": 33,
+     "unit": "right answers of 41",
+     "best_base": null,
+     "median": 27.0
+    },
+    {
+     "id": "r10-n02-r4",
+     "arm": "rl",
+     "set": "MATH-500",
+     "n": 50,
+     "readout": "--shard 0/10 = 50 problems, RL-Zero-Math same procedure, vote over 3, grader v3",
+     "value": 47,
+     "low": 44,
+     "high": 49,
+     "unit": "right answers of 50",
+     "best_base": null,
+     "median": 47.15
+    }
+   ],
+   "score": 0.4
+  },
+  {
+   "id": "r10-n03",
+   "family": "run-02",
+   "mechanism": "run-02/f2-m04",
+   "model": "think_sft",
+   "change": "Think-SFT with the cue, 3 samples per problem with the cap lowered to 12,288 tokens, plurality vote over finished boxed answers only (capped samples abstain), ties to the shortest finished sample; no answer if all 3 are capped.",
+   "tokens": 25500,
+   "gpu_minutes": 225,
+   "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label think_sft --prompt cue --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --max-tokens 12288 --samples 3 --seed 3000000 --commit $(git rev-parse HEAD) && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label think_sft --prompt cue --set math500 --shard 0/6 --temperature 1.0 --top-p 1.0 --max-tokens 12288 --samples 3 --seed 41000000 --commit $(git rev-parse HEAD)",
+   "rl_command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model rl --prompt plain --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --max-tokens 12288 --samples 3 --seed 3000000 --commit $(git rev-parse HEAD) && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model rl --prompt plain --set math500 --shard 0/6 --temperature 1.0 --top-p 1.0 --max-tokens 12288 --samples 3 --seed 45000000 --commit $(git rev-parse HEAD)",
+   "gap_parts": "Reliability, the largest part (result-f39ba8: .43 of the hard328 gap, .63 at MATH-500 T 1.0, about 20 of the ~46 one-sample hard328 problems and ~40 of 65 on MATH-500). The vote wins these because a lone right sample is no longer outvoted when the other samples hit the cap and abstain. Budget (.25 to .27, ~12 hard328 problems) is given up on purpose: the lower cap turns long unsolved runs into cheap abstentions instead of buying them back. Capability (.27 on hard328, ~12) and answer statement (.03) are left to what Think-SFT already has without any reward.",
+   "why": "Think-SFT's unsolved samples run to the cap rather than box a guess, so in a plurality vote they abstain, and its vote sits near pass@k. That means the cap can be lowered: the tokens burned on unsolved samples shrink and the abstentions stay, so the vote's gain is kept at fewer tokens. Raising the cap (32k) does the opposite and turns abstentions into scattered wrong answers.",
+   "readouts": [
+    {
+     "id": "r10-n03-r1",
+     "arm": "route",
+     "set": "hard328",
+     "n": 41,
+     "readout": "--shard 0/8 of hard328 (problems 0, 8, 16, ...; 41), grader v3, after the abstaining plurality vote over 3 samples at cap 12,288; median is about 233/328 scaled, against the best known think_sft row at no more tokens (230 of 328 at 11,795)",
+     "value": 29,
+     "low": 25,
+     "high": 33,
+     "unit": "right answers of 41",
+     "best_base": {
+      "value": 28.8,
+      "item": "result-c8b994",
+      "note": "230 of 328 at 11795 tokens per problem (Think-SFT cue, cap 32,768, T 1.0 / top-p 1.0), scaled to 41 problems"
+     },
+     "median": 28,
+     "gain": -0.8
+    },
+    {
+     "id": "r10-n03-r2",
+     "arm": "route",
+     "set": "MATH-500",
+     "n": 84,
+     "readout": "--shard 0/6 of MATH-500 (84 problems), grader v3, same vote rule",
+     "value": 80,
+     "low": 77,
+     "high": 83,
+     "unit": "right answers of 84",
+     "best_base": {
+      "value": 80.8,
+      "item": "result-818c20",
+      "note": "481 of 500 at 19503 tokens per problem (Think-SFT, cue, T 1.0 / top-p 1.0, vote over 4, no restart), scaled to 84 problems"
+     },
+     "median": 80,
+     "gain": -0.8
+    },
+    {
+     "id": "r10-n03-r3",
+     "arm": "rl",
+     "set": "hard328",
+     "n": 41,
+     "readout": "RL-Zero-Math plain, --shard 0/8 of hard328 (41), grader v3, same cap, 3 samples, same abstaining vote",
+     "value": 27,
+     "low": 23,
+     "high": 31,
+     "unit": "right answers of 41",
+     "best_base": null,
+     "median": 26
+    },
+    {
+     "id": "r10-n03-r4",
+     "arm": "rl",
+     "set": "MATH-500",
+     "n": 84,
+     "readout": "RL-Zero-Math plain, --shard 0/6 of MATH-500 (84), grader v3, same vote rule",
+     "value": 79,
+     "low": 75,
+     "high": 82,
+     "unit": "right answers of 84",
+     "best_base": null,
+     "median": 79.5
+    }
+   ],
+   "score": -0.8
+  },
+  {
+   "id": "r10-n04",
+   "family": "problems",
+   "mechanism": "round-10/problems-m05",
+   "model": "think_sft",
+   "change": "Think-SFT (no reward) with the cue, token cap raised to 32,768, three samples per problem scored by a sequential vote (take samples 1 and 2 if their answers agree, else add sample 3; plurality, ties to the shortest finished sample).",
+   "tokens": 35400,
+   "gpu_minutes": 225,
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label think_sft --prompt cue --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 71000000 --commit $(git rev-parse HEAD)\" && uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label think_sft --prompt cue --set math500 --n 100 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 73000000 --commit $(git rev-parse HEAD)\"",
+   "rl_command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model rl --prompt plain --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 71000000 --commit $(git rev-parse HEAD)\" && uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model rl --prompt plain --set math500 --n 100 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 3 --seed 73000000 --commit $(git rev-parse HEAD)\"",
+   "gap_parts": "Capability: the base never solves about 79 hard328 problems even after restarts, and Think-SFT's wider reach covers part of that (one sample 212 against the base's 161). Budget (cap hit; 0.21 to 0.27 of the gross gap in result-f39ba8): on hard328, raising Think-SFT's cap from 16,384 to 32,768 adds about 23 (207 to 230), and on MATH-500 about 1 to 3. Reliability (0.43 to 0.67 of the gap): the vote adds about 15 to 20 on hard328 (vote over 4 at cap 16k gave 212 to 241) and about 15 on MATH-500 (461 to 481). Full-set forecast about 247 of 328 at about 35,400 generated tokens, against 241 for the best known row at 30,904 to 40,410 tokens.",
+   "why": "Weight edits and votes only reweight paths the host already has, so their gains stop near the host's pass@k; a host with more reach (Think-SFT) raises that ceiling. A longer cap lets its long contest derivations finish, and the vote then turns its reach into right answers.",
+   "readouts": [
+    {
+     "id": "r10-n04-r1",
+     "arm": "route",
+     "set": "hard328",
+     "n": 41,
+     "readout": "hard328 --shard 0/8 (problems 0, 8, 16, ..., 41 problems), Think-SFT cue, cap 32,768, sequential vote of up to 3 samples, grader v3",
+     "value": 31,
+     "low": 26,
+     "high": 35,
+     "unit": "right answers of 41",
+     "best_base": {
+      "value": 30.1,
+      "item": "result-818c20",
+      "note": "241 of 328 at 30904 tokens per problem (Think-SFT, cue, T 1.0 / top-p 1.0, sequential vote up to 4 (chosen on MATH-500)), scaled to 41 problems"
+     },
+     "median": 30.5,
+     "gain": 0.4
+    },
+    {
+     "id": "r10-n04-r2",
+     "arm": "route",
+     "set": "MATH-500",
+     "n": 100,
+     "readout": "MATH-500 first 100 problems (--n 100), Think-SFT cue, cap 32,768, sequential vote of up to 3 samples, grader v3",
+     "value": 96,
+     "low": 92,
+     "high": 99,
+     "unit": "right answers of 100",
+     "best_base": {
+      "value": 96.2,
+      "item": "result-818c20",
+      "note": "481 of 500 at 19503 tokens per problem (Think-SFT, cue, T 1.0 / top-p 1.0, vote over 4, no restart), scaled to 100 problems"
+     },
+     "median": 96.0,
+     "gain": -0.2
+    },
+    {
+     "id": "r10-n04-r3",
+     "arm": "rl",
+     "set": "hard328",
+     "n": 41,
+     "readout": "hard328 --shard 0/8 (41 problems), RL-Zero-Math plain, cap 32,768, same sequential vote of up to 3 samples, grader v3",
+     "value": 28,
+     "low": 23,
+     "high": 32,
+     "unit": "right answers of 41",
+     "best_base": null,
+     "median": 27.0
+    },
+    {
+     "id": "r10-n04-r4",
+     "arm": "rl",
+     "set": "MATH-500",
+     "n": 100,
+     "readout": "MATH-500 first 100 problems, RL-Zero-Math plain, cap 32,768, same sequential vote of up to 3 samples, grader v3",
+     "value": 95,
+     "low": 91,
+     "high": 98,
+     "unit": "right answers of 100",
+     "best_base": null,
+     "median": 97.0
+    }
+   ],
+   "score": 0.4
+  },
+  {
+   "id": "r10-n05",
+   "family": "stopping",
+   "mechanism": "round-10/stopping-m03",
+   "model": "think_sft",
+   "change": "Think-SFT keeps the base's cue but gets the </think> boundary it was trained to stop at: the opening becomes ' line!\\n\\n<think>\\nOkay' and one prompt line asks for reasoning inside <think></think> and then only the final answer. One sample, T 1.0 / top-p 1.0, cap 16,384, no vote.",
+   "tokens": 9000,
+   "gpu_minutes": 210,
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --prompt-suffix ' Reason inside <think> </think>; after </think> write only the final answer as \\\\boxed{} and stop.' --opening-text $' line!\\n\\n<think>\\nOkay' --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --max-tokens 16384 --samples 1 --seed 3000000 --commit $(git rev-parse HEAD)\" && uv run tools/gpu.py submit l40s --hours 1 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --prompt-suffix ' Reason inside <think> </think>; after </think> write only the final answer as \\\\boxed{} and stop.' --opening-text $' line!\\n\\n<think>\\nOkay' --set math500 --shard 0/5 --temperature 1.0 --top-p 1.0 --max-tokens 16384 --samples 1 --seed 41000000 --commit $(git rev-parse HEAD)\"",
+   "rl_command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --prompt-suffix ' Reason inside <think> </think>; after </think> write only the final answer as \\\\boxed{} and stop.' --opening-text $' line!\\n\\n<think>\\nOkay' --set hard328 --shard 0/2 --temperature 1.0 --top-p 1.0 --max-tokens 16384 --samples 1 --seed 3000000 --commit $(git rev-parse HEAD)\" && uv run tools/gpu.py submit l40s --hours 1 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --prompt-suffix ' Reason inside <think> </think>; after </think> write only the final answer as \\\\boxed{} and stop.' --opening-text $' line!\\n\\n<think>\\nOkay' --set math500 --shard 0/5 --temperature 1.0 --top-p 1.0 --max-tokens 16384 --samples 1 --seed 41000000 --commit $(git rev-parse HEAD)\"",
+   "gap_parts": "Budget: Think-SFT + cue hits the cap on 89 of 328 hard problems, and its cut answers are unfinished work it would close (at cap 32,768, 91 of 93 finish and 23 are right, result-c8b994). If the boundary ends answers before 16,384, up to about 23 answers on hard328 come back (I forecast 10 to 15) and about 5 on MATH-500 (24 of its 46 MATH-500 errors are cap hits, result-bf6124). Answer statement: a single short final answer after </think> takes away the lines after 'Answer:' that grader v3 rejects (16 of 74 finished-wrong answers end on a line equal to the gold, result-818c20). That is up to about 4 per 500 on MATH-500 and about 0 on hard328. Loop: 0, since T 1.0 has no loops. Reliability and capability: unchanged, because precision on finished answers stays the same.",
+   "why": "Think-SFT was trained to end its reasoning at </think> and then write one short answer and end-of-text. With the base's raw cue there is no such boundary, so after solving it keeps re-checking until the cap and the answer scores zero. Putting the boundary back makes it stop where it was trained to stop, with the same precision on finished answers.",
+   "readouts": [
+    {
+     "id": "r10-n05-r1",
+     "arm": "route",
+     "set": "hard328",
+     "n": 164,
+     "readout": "right answers with grader v3 on hard328 --shard 0/2 (problems 0, 2, 4, ...; 164), one Think-SFT sample with the </think> boundary opening, cap hits counted wrong. Comparison: Think-SFT + cue one sample, 212 of 328 at 10,137 tokens (about 106 of 164).",
+     "value": 111,
+     "low": 99,
+     "high": 120,
+     "unit": "right answers of 164",
+     "best_base": {
+      "value": 103.5,
+      "item": "result-c8b994",
+      "note": "207 of 328 at 10048 tokens per problem (Think-SFT cue, same answers counted at cap 16,384); no row at or below these tokens: the cheapest row, scaled to 164 problems"
+     },
+     "median": 104,
+     "gain": 0.5
+    },
+    {
+     "id": "r10-n05-r2",
+     "arm": "route",
+     "set": "MATH-500",
+     "n": 100,
+     "readout": "right answers with grader v3 on MATH-500 --shard 0/5 (problems 0, 5, 10, ...; 100), one Think-SFT sample with the boundary opening. Comparison: Think-SFT + cue one sample, 461 of 500 at 4,900 tokens (about 92 of 100).",
+     "value": 93,
+     "low": 88,
+     "high": 97,
+     "unit": "right answers of 100",
+     "best_base": {
+      "value": 92.2,
+      "item": "result-818c20",
+      "note": "461 of 500 at 4900 tokens per problem (Think-SFT, cue, T 1.0 / top-p 1.0, one sample (sample 0 of 4)), scaled to 100 problems"
+     },
+     "median": 92,
+     "gain": -0.2
+    },
+    {
+     "id": "r10-n05-r3",
+     "arm": "rl",
+     "set": "hard328",
+     "n": 164,
+     "readout": "right answers with grader v3 on hard328 --shard 0/2 (164), RL-Zero-Math with the same prompt line and opening, one sample. Comparison: RL plain one sample, 190 to 209 of 328 (about 100 of 164).",
+     "value": 99,
+     "low": 88,
+     "high": 109,
+     "unit": "right answers of 164",
+     "best_base": null,
+     "median": 98.0
+    },
+    {
+     "id": "r10-n05-r4",
+     "arm": "rl",
+     "set": "MATH-500",
+     "n": 100,
+     "readout": "right answers with grader v3 on MATH-500 --shard 0/5 (100), RL-Zero-Math with the same prompt line and opening, one sample. Comparison: RL plain, 463 of 500 (about 92 of 100).",
+     "value": 91,
+     "low": 85,
+     "high": 96,
+     "unit": "right answers of 100",
+     "best_base": null,
+     "median": 91.0
+    }
+   ],
+   "score": 0.5
+  },
+  {
+   "id": "r10-n06",
+   "family": "sampling",
+   "mechanism": "round-09/sampling-m05",
+   "model": "think_sft",
+   "change": "Think-SFT with the cue at T 1.0 / top-p 1.0 and the cap raised to 32,768, two samples per problem, keeping the shared answer if they agree, otherwise the sample that finished (not a cap hit), otherwise sample 0; rule computed afterwards from answers.jsonl.",
+   "tokens": 23600,
+   "gpu_minutes": 200,
+   "command": "uv run tools/gpu.py submit l40s --hours 3 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line\\!\\n\\nOkay' --set hard328 --shard 0/6 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 2 --seed 71000000 --commit $(git rev-parse HEAD) && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line\\!\\n\\nOkay' --set math500 --shard 0/10 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 2 --seed 72000000 --commit $(git rev-parse HEAD)\"",
+   "rl_command": "uv run tools/gpu.py submit l40s --hours 3 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --set hard328 --shard 0/6 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 2 --seed 71000000 --commit $(git rev-parse HEAD) && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --set math500 --shard 0/10 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --samples 2 --seed 72000000 --commit $(git rev-parse HEAD)\"",
+   "gap_parts": "Budget (cap hit): about a quarter of the gap (.25 on MATH-500 T 1.0, .27 on hard328), about 12 of the 46 hard328 problems between one cued-base sample (161) and one RL sample (207). The raised cap alone gave Think-SFT +23 on hard328 (207 to 230), and the finished-over-cut rule picks up a further ~5-8 where sample 0 is still cut at 32,768 and sample 1 finishes. Reliability (right in another draw): .43-.63 of the gap; a second draw only wins the cases where the two samples disagree and exactly one finished, so about 2-4 problems from it.",
+   "why": "Ending is a sampled event and the cap cuts the long tail. Think-SFT's cut answers are unfinished work that comes out right at a high rate once it finishes, so a longer cap plus a second draw that prefers a finished sample turns cap hits into right answers more cheaply than a full vote over 4.",
+   "readouts": [
+    {
+     "id": "r10-n06-r1",
+     "arm": "route",
+     "set": "hard328",
+     "n": 55,
+     "readout": "--shard 0/6 (problems 0, 6, ..., 324) = 55; two-sample agree / finished / sample-0 rule, grader v3 (all-328 equivalent about 238 at 23,600 tokens, against 230 at 11,795 and 241 at 30,904)",
+     "value": 40,
+     "low": 34,
+     "high": 45,
+     "unit": "right answers of 55",
+     "best_base": {
+      "value": 38.6,
+      "item": "result-c8b994",
+      "note": "230 of 328 at 11795 tokens per problem (Think-SFT cue, cap 32,768, T 1.0 / top-p 1.0), scaled to 55 problems"
+     },
+     "median": 40.0,
+     "gain": 1.4
+    },
+    {
+     "id": "r10-n06-r2",
+     "arm": "route",
+     "set": "MATH-500",
+     "n": 50,
+     "readout": "--shard 0/10 (problems 0, 10, ..., 490) = 50; same rule, grader v3",
+     "value": 47,
+     "low": 44,
+     "high": 50,
+     "unit": "right answers of 50",
+     "best_base": {
+      "value": 48.1,
+      "item": "result-818c20",
+      "note": "481 of 500 at 19503 tokens per problem (Think-SFT, cue, T 1.0 / top-p 1.0, vote over 4, no restart), scaled to 50 problems"
+     },
+     "median": 47.5,
+     "gain": -0.6
+    },
+    {
+     "id": "r10-n06-r3",
+     "arm": "rl",
+     "set": "hard328",
+     "n": 55,
+     "readout": "RL-Zero-Math plain, same flags, --shard 0/6 = 55; same rule, grader v3",
+     "value": 35,
+     "low": 30,
+     "high": 40,
+     "unit": "right answers of 55",
+     "best_base": null,
+     "median": 34.0
+    },
+    {
+     "id": "r10-n06-r4",
+     "arm": "rl",
+     "set": "MATH-500",
+     "n": 50,
+     "readout": "RL-Zero-Math plain, same flags, --shard 0/10 = 50; same rule, grader v3",
+     "value": 46,
+     "low": 43,
+     "high": 49,
+     "unit": "right answers of 50",
+     "best_base": null,
+     "median": 46.7
+    }
+   ],
+   "score": 1.4
+  },
+  {
+   "id": "r10-n07",
+   "family": "grader",
+   "mechanism": "round-09/grader-m06",
+   "model": "think_sft",
+   "change": "Think-SFT with the cue, cap raised from 16,384 to 32,768, two samples per problem, kept by a fixed selection rule: if both finish and agree take that answer, if one hits the cap take the finished one, if both finish and differ take the shorter (rule fixed before any scoring).",
+   "tokens": 23600,
+   "gpu_minutes": 220,
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/4 --max-tokens 32768 --samples 2 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\" && uv run tools/gpu.py submit l40s --hours 1 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set math500 --shard 0/10 --max-tokens 32768 --samples 2 --temperature 1.0 --top-p 1.0 --seed 41000000 --commit $(git rev-parse HEAD)\"",
+   "rl_command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/4 --max-tokens 32768 --samples 2 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit $(git rev-parse HEAD)\" && uv run tools/gpu.py submit l40s --hours 1 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --opening-text $' line!\\n\\nOkay' --set math500 --shard 0/10 --max-tokens 32768 --samples 2 --temperature 1.0 --top-p 1.0 --seed 41000000 --commit $(git rev-parse HEAD)\"",
+   "gap_parts": "Budget (cap hit): about a quarter of the gap (result-f39ba8: .25 of 65 on MATH-500 T 1.0, about 16 answers; .27 on hard328). Think-SFT turns about one in four of its cap hits into right answers at 32k (207 -> 230 on hard328), and the finished-over-cap-hit rule recovers more when one of two samples runs out. Reliability (.63 of the gap, about 41 answers on MATH-500): the second sample with the shorter-finished tie rule wins back part of the problems the model solves in some samples (wrong samples run about 2,300 tokens longer). Capability (about .09-.27) is not touched.",
+   "why": "A capped count scores unfinished work as wrong, and Think-SFT has the largest share of unfinished-work cap hits (about one in four, against one in ten for RL), so a higher cap plus a rule that keeps the finished sample should help Think-SFT most. Two samples rather than four keeps the cost under the 241-at-30,904 vote, and stays below the pass@4 ceiling where extra samples stop adding (round-10/grader-m06).",
+   "readouts": [
+    {
+     "id": "r10-n07-r1",
+     "arm": "route",
+     "set": "hard328",
+     "n": 82,
+     "readout": "--shard 0/4 of hard328 (problems 0, 4, 8, ...; 82), right with v3 after the two-sample selection rule; full-set equivalent about 236 of 328 against 230 at 11,795 tokens (best Think-SFT row at <= 23,600 tokens)",
+     "value": 59,
+     "low": 52,
+     "high": 65,
+     "unit": "right answers of 82",
+     "best_base": {
+      "value": 57.5,
+      "item": "result-c8b994",
+      "note": "230 of 328 at 11795 tokens per problem (Think-SFT cue, cap 32,768, T 1.0 / top-p 1.0), scaled to 82 problems"
+     },
+     "median": 59.0,
+     "gain": 1.5
+    },
+    {
+     "id": "r10-n07-r2",
+     "arm": "route",
+     "set": "MATH-500",
+     "n": 50,
+     "readout": "--shard 0/10 of MATH-500 (problems 0, 10, 20, ...; 50), right with v3 after the two-sample selection rule",
+     "value": 47,
+     "low": 44,
+     "high": 49,
+     "unit": "right answers of 50",
+     "best_base": {
+      "value": 48.1,
+      "item": "result-818c20",
+      "note": "481 of 500 at 19503 tokens per problem (Think-SFT, cue, T 1.0 / top-p 1.0, vote over 4, no restart), scaled to 50 problems"
+     },
+     "median": 47.5,
+     "gain": -0.6
+    },
+    {
+     "id": "r10-n07-r3",
+     "arm": "rl",
+     "set": "hard328",
+     "n": 82,
+     "readout": "RL-Zero-Math, same procedure (cue opening, cap 32,768, two samples, same selection rule), --shard 0/4 of hard328, 82 problems, v3",
+     "value": 54,
+     "low": 47,
+     "high": 60,
+     "unit": "right answers of 82",
+     "best_base": null,
+     "median": 51.0
+    },
+    {
+     "id": "r10-n07-r4",
+     "arm": "rl",
+     "set": "MATH-500",
+     "n": 50,
+     "readout": "RL-Zero-Math, same procedure, --shard 0/10 of MATH-500, 50 problems, v3",
+     "value": 47,
+     "low": 44,
+     "high": 49,
+     "unit": "right answers of 50",
+     "best_base": null,
+     "median": 46.8
+    }
+   ],
+   "score": 1.5
+  }
+ ],
+ "best_known": [
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 76,
+   "n": 328,
+   "tokens": 4928,
+   "what": "plain, T 1.0 / top-p 1.0",
+   "item": "result-099916"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 76,
+   "n": 328,
+   "tokens": 4928,
+   "what": "plain, T 1.0 / top-p 1.0",
+   "item": "result-e5c99c"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 164,
+   "n": 328,
+   "tokens": 9344,
+   "what": "cue, T 1.0 / top-p 1.0",
+   "item": "result-e5c99c"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 417,
+   "n": 500,
+   "tokens": 3944,
+   "what": "base + random matched-norm difference, cue, T 1.0 / top-p 1.0",
+   "item": "result-4b0d5f"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 404,
+   "n": 500,
+   "tokens": 4086,
+   "what": "cue, T 1.0 / top-p 1.0 / min-p 0.1",
+   "item": "result-44b4df"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 412,
+   "n": 500,
+   "tokens": 4355,
+   "what": "cue, T 1.5 / top-p 1.0 / min-p 0.1",
+   "item": "result-44b4df"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 409,
+   "n": 500,
+   "tokens": 4017,
+   "what": "cue, T 1.0 / top-p 0.95",
+   "item": "result-44b4df"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 405,
+   "n": 500,
+   "tokens": 3808,
+   "what": "cue, T 1.0 / top-p 1.0, single sample",
+   "item": "result-5d032f"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 413,
+   "n": 500,
+   "tokens": 4852,
+   "what": "cue, T 1.0 / top-p 1.0, restart on cap up to 2",
+   "item": "result-5d032f"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 446,
+   "n": 500,
+   "tokens": 16034,
+   "what": "cue, T 1.0 / top-p 1.0, vote over 4 samples",
+   "item": "result-5d032f"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 450,
+   "n": 500,
+   "tokens": 19697,
+   "what": "cue, T 1.0 / top-p 1.0, vote over 4 samples after restart",
+   "item": "result-5d032f"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 415,
+   "n": 500,
+   "tokens": 4287,
+   "what": "cue, T 1.0 / top-p 1.0, draft + one self-review pass (v3-stated)",
+   "item": "result-96e819"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 453,
+   "n": 500,
+   "tokens": 16034,
+   "what": "cue, T 1.0, vote over 4, ties to the shortest finished sample (rule chosen on this set; held-out 451)",
+   "item": "result-cbe0bc"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 164,
+   "n": 328,
+   "tokens": 9344,
+   "what": "cue, T 1.0 / top-p 1.0 (reference, job 151534-e72c)",
+   "item": "result-e45bf4"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 393,
+   "n": 500,
+   "tokens": 4246,
+   "what": "cue, T 0.6 / top-p 1.0, 100 loop neurons zeroed (act100)",
+   "item": "result-6de887"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 381,
+   "n": 500,
+   "tokens": 3870,
+   "what": "cue, T 0.6 / top-p 1.0, 1,000 loop neurons zeroed (attr1000)",
+   "item": "result-6de887"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 370,
+   "n": 500,
+   "tokens": 4874,
+   "what": "cue, T 0.6 / top-p 1.0, 1,000 random neurons zeroed (control)",
+   "item": "result-6de887"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 152,
+   "n": 328,
+   "tokens": 6017,
+   "what": "cue, answers over 8,000 tokens cut and forced to a boxed answer, T 1.0 / top-p 1.0",
+   "item": "result-51fd20"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 159,
+   "n": 328,
+   "tokens": 7927,
+   "what": "cue, answers over 12,000 tokens cut and forced to a boxed answer, T 1.0 / top-p 1.0",
+   "item": "result-51fd20"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 446,
+   "n": 500,
+   "tokens": 11369,
+   "what": "cue, T 1.0, sequential vote: draw 2, stop when two agree, else one more up to 4, plurality, ties to the lowest sample (rule family fixed before scoring, chosen on MATH-500)",
+   "item": "result-40ed3b"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 451,
+   "n": 500,
+   "tokens": 11369,
+   "what": "cue, T 1.0, sequential vote up to 4, ties to the shortest finished sample (chosen on MATH-500; tie rule written after reading misses)",
+   "item": "result-40ed3b"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 414,
+   "n": 500,
+   "tokens": 3464,
+   "what": "cue, T 0.6 / top-p 1.0, 1,000 loop neurons zeroed (real-02 attr1000)",
+   "item": "result-d92d4a"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 412,
+   "n": 500,
+   "tokens": 3742,
+   "what": "cue, T 0.6 / top-p 1.0, 100 loop neurons zeroed (real-02 attr100)",
+   "item": "result-d92d4a"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 413,
+   "n": 500,
+   "tokens": 4158,
+   "what": "cue, T 1.0 / top-p 1.0, J-lens Wait steer L24 alpha 0.068",
+   "item": "result-882fa7"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 381,
+   "n": 500,
+   "tokens": 4491,
+   "what": "cue, T 1.0 / top-p 1.0, J-lens Wait steer L24 alpha 0.1",
+   "item": "result-882fa7"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 398,
+   "n": 500,
+   "tokens": 4619,
+   "what": "cue, T 1.0 / top-p 1.0, J-lens Wait steer L20 alpha 0.128",
+   "item": "result-882fa7"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 409,
+   "n": 500,
+   "tokens": 4029,
+   "what": "cue, T 1.0 / top-p 1.0, random direction L24 alpha 0.068",
+   "item": "result-882fa7"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 421,
+   "n": 500,
+   "tokens": 4471,
+   "what": "cue, T 1.0 / top-p 1.0, logit bias +0.64 nats on Wait/Hmm",
+   "item": "result-882fa7"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 430,
+   "n": 500,
+   "tokens": 3911,
+   "what": "cue, T 1.0 / top-p 1.0, no steering, in-process eager vLLM",
+   "item": "result-882fa7"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 399,
+   "n": 500,
+   "tokens": 3523,
+   "what": "cue, T 0.6 / top-p 1.0, seed 2, 1,000 loop neurons zeroed (real-02 attr1000)",
+   "item": "result-460e0a"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 372,
+   "n": 500,
+   "tokens": 3967,
+   "what": "cue, T 1.0 / top-p 1.0, 1,000 loop neurons zeroed (real-02 attr1000)",
+   "item": "result-460e0a"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 390,
+   "n": 500,
+   "tokens": 4074,
+   "what": "cue, T 1.0 / top-p 1.0, 100 loop neurons zeroed (real-02 attr100)",
+   "item": "result-460e0a"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 155,
+   "n": 328,
+   "tokens": 8706,
+   "what": "cue, T 1.0 / top-p 1.0, 100 loop neurons zeroed (real-02 attr100)",
+   "item": "result-79784b"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 130,
+   "n": 328,
+   "tokens": 8556,
+   "what": "cue, T 1.0 / top-p 1.0, 1,000 loop neurons zeroed (real-02 attr1000)",
+   "item": "result-79784b"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 404,
+   "n": 500,
+   "tokens": 3954,
+   "what": "cue, T 1.0 with T 0.6 where entropy <= 0.9 nats (mean of 4 samples 403.5)",
+   "item": "result-34897a"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 404,
+   "n": 500,
+   "tokens": 3876,
+   "what": "cue, T 1.0 with T 0.6 where entropy > 0.9 nats (mean of 2 samples 403.5)",
+   "item": "result-34897a"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 404,
+   "n": 500,
+   "tokens": 3798,
+   "what": "cue, T 0.3 except 1,024 positions at T 1.0 after a repeat",
+   "item": "result-34897a"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 161,
+   "n": 328,
+   "tokens": 9074,
+   "what": "cue, one sample, T 1.0 / top-p 1.0",
+   "item": "result-5c961a"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 192,
+   "n": 328,
+   "tokens": 36902,
+   "what": "cue, vote over 4",
+   "item": "result-5c961a"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 195,
+   "n": 328,
+   "tokens": 55306,
+   "what": "cue, vote over 4 after restart",
+   "item": "result-5c961a"
+  },
+  {
+   "model": "think_sft",
+   "set": "hard328",
+   "count": 241,
+   "n": 328,
+   "tokens": 40410,
+   "what": "Think-SFT (allenai/Olmo-3-7B-Think-SFT), cue, T 1.0 / top-p 1.0, vote over 4, no restart",
+   "item": "result-818c20"
+  },
+  {
+   "model": "think_sft",
+   "set": "hard328",
+   "count": 241,
+   "n": 328,
+   "tokens": 30904,
+   "what": "Think-SFT, cue, T 1.0 / top-p 1.0, sequential vote up to 4 (chosen on MATH-500)",
+   "item": "result-818c20"
+  },
+  {
+   "model": "think_sft",
+   "set": "hard328",
+   "count": 212,
+   "n": 328,
+   "tokens": 10137,
+   "what": "Think-SFT, cue, T 1.0 / top-p 1.0, one sample (sample 0 of 4)",
+   "item": "result-818c20"
+  },
+  {
+   "model": "think_sft",
+   "set": "MATH-500",
+   "count": 481,
+   "n": 500,
+   "tokens": 19503,
+   "what": "Think-SFT, cue, T 1.0 / top-p 1.0, vote over 4, no restart",
+   "item": "result-818c20"
+  },
+  {
+   "model": "think_sft",
+   "set": "MATH-500",
+   "count": 481,
+   "n": 500,
+   "tokens": 11521,
+   "what": "Think-SFT, cue, T 1.0 / top-p 1.0, sequential vote up to 4",
+   "item": "result-818c20"
+  },
+  {
+   "model": "think_sft",
+   "set": "MATH-500",
+   "count": 461,
+   "n": 500,
+   "tokens": 4900,
+   "what": "Think-SFT, cue, T 1.0 / top-p 1.0, one sample (sample 0 of 4)",
+   "item": "result-818c20"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 411,
+   "n": 500,
+   "tokens": 3795,
+   "what": "plain prompt, self-opened draw (median 4 draws of 24 tokens), T 1.0 / top-p 1.0, v3",
+   "item": "result-3a3af3"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 441,
+   "n": 500,
+   "tokens": 14399,
+   "what": "cue, T 0.6 / top-p 1.0, vote over 4, 1,000 loop neurons zeroed (real-02 attr1000)",
+   "item": "result-666223"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 441,
+   "n": 500,
+   "tokens": 18173,
+   "what": "cue, T 0.6 / top-p 1.0, vote over 4, unedited",
+   "item": "result-666223"
+  },
+  {
+   "model": "think_sft",
+   "set": "hard328",
+   "count": 230,
+   "n": 328,
+   "tokens": 11795,
+   "what": "Think-SFT cue, cap 32,768, T 1.0 / top-p 1.0",
+   "item": "result-c8b994"
+  },
+  {
+   "model": "think_sft",
+   "set": "hard328",
+   "count": 207,
+   "n": 328,
+   "tokens": 10048,
+   "what": "Think-SFT cue, same answers counted at cap 16,384",
+   "item": "result-c8b994"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 139,
+   "n": 328,
+   "tokens": 20407,
+   "what": "Karpathy-loop method: plain prompt, T 0.6, 12 samples capped at 4,096 tokens, vote; 7.2 s per problem budget",
+   "item": "result-6e7b64"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 160,
+   "n": 328,
+   "tokens": 9351,
+   "what": "cue, T 1.0, one sample, autobench runner, 7.2 s per problem budget",
+   "item": "result-6e7b64"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 161,
+   "n": 328,
+   "tokens": 9060,
+   "what": "cue, T 1.0, vote over 4 cut by the 7.2 s per problem budget (972 of 1,312 requests not run)",
+   "item": "result-6e7b64"
+  },
+  {
+   "model": "base",
+   "set": "MATH-500",
+   "count": 415,
+   "n": 500,
+   "tokens": 3501,
+   "what": "cue, T 0.6 / top-p 1.0, 1,000 loop neurons zeroed (real-02 attr1000), sample 0 of 4",
+   "item": "result-932df7"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 156,
+   "n": 328,
+   "tokens": 9995,
+   "what": "cue, cap 32,768, T 1.0 / top-p 1.0",
+   "item": "result-0c1eef"
+  },
+  {
+   "model": "base",
+   "set": "hard328",
+   "count": 152,
+   "n": 328,
+   "tokens": 9145,
+   "what": "cue, same answers counted at cap 16,384",
+   "item": "result-0c1eef"
+  },
+  {
+   "model": "think_sft",
+   "set": "hard328",
+   "count": 240,
+   "n": 328,
+   "tokens": 30732,
+   "what": "Think-SFT + cue, sequential vote at most 4, a sample stopped at 4,000/8,000/12,000 tokens once a 50-token window repeats, T 1.0 / top-p 1.0",
+   "item": "result-997be4"
+  }
+ ]
+}

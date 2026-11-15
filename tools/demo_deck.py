@@ -1,0 +1,477 @@
+"""The talk as a slide deck: thirteen 16:9 slides, one figure each, very few words.
+
+view.py serves page(...) at /demo (the stepped story of demo.py is at /demo/story) and FIGS at /demo/fig/<name>.
+Each slide is a 1600 x 900 box scaled to fit the window. Keys: right arrow, Space or PageDown next; left arrow or
+PageUp back; Home and End; t theme (also the button at the top right); f fullscreen; p print. A click on the right or left third of the window also
+steps. The slide is in the address (/demo#finding), so Back works. Printing (p) gives one slide per page at 13.333 x
+7.5 in, in the theme on screen.
+
+Every number is read at build time from the module that holds it: the cut-off answers from finding_the_finish_dial.DATA,
+the staircase of fixes from demo_fixes.py, the accuracy climb from demo_ali_data.DATA['climb'], the two result pictures from demo_results.py, the review rounds
+from proof_review_cuts_waste.DATA, the idea tree's links from proof_idea_basins.DATA['tree'], the number of people from
+demo_facts.FACTS['people']; view.py passes the number of finding pages and the list of papers. The photos are data
+URIs in demo_photos.py. Six slides show a picture in an iframe of FIGS: the accuracy climb of /demo/ali/slide3, the
+Design page (architecture.py), the staircase of fixes of demo_fixes.py, the two pictures of demo_results.py and /proof/idea-basins playing from the items to their basins to the idea tree,
+each with its header, words column and key hidden. A frame with data-replay is loaded again when its slide is shown, so
+its picture draws itself in front of the audience.
+"""
+import html
+import re
+
+import architecture
+import demo
+import demo_ali
+import demo_ali_data
+import demo_facts
+import demo_fixes
+import demo_photos
+import demo_results
+import exa_page
+import finding_the_finish_dial
+import pastdev
+import proof_idea_basins
+import proof_review_cuts_waste
+
+HOOK = "36 hours to solve RSI"  # the opening line of the talk
+
+# The title of each paper by its file name in view.PAPERS; paper_title falls back to the file name.
+PAPER_TITLES = {"the-finish-dial.pdf": "The Finish Dial", "theories-on-trial.pdf": "Theories on Trial",
+                "the-first-hundred-steps.pdf": "The First Hundred Steps", "no-early-warning.pdf": "No Early Warning"}
+PAPER_AUTHOR = "The Invariant Swarm"
+
+
+def paper_title(name):
+    """The title on a paper's sheet: its entry in PAPER_TITLES, else the words of its file name. A paper added to
+    view.PAPERS with no entry here still gets a sheet, so a new paper cannot stop view.py at import."""
+    return PAPER_TITLES.get(name) or name.rsplit(".", 1)[0].replace("-", " ").title()
+
+# What the deck shares with demo.py: the Archivo link and the theme script (?theme=, then the stored choice).
+FONT = re.search(r'<link rel="preconnect".*?display=swap">', demo.TEMPLATE, re.S).group(0)
+THEME_JS = re.search(r"<script>\n/\* The theme before the first paint.*?</script>", demo.TEMPLATE, re.S).group(0)
+TOKENS = (':root {\n  color-scheme: light;\n  ' + demo.LIGHT + '\n}\n@media (prefers-color-scheme: dark) {\n'
+          '  :root:not([data-theme="light"]) {\n    color-scheme: dark;\n    ' + demo.DARK + '\n  }\n}\n'
+          ':root[data-theme="dark"] {\n  color-scheme: dark;\n  ' + demo.DARK + '\n}\n')
+
+# The two logos of architecture.py (past.dev and Exa), read from its page.
+LOGOS = {m.group(1): {"box": m.group(2), "body": m.group(3)} for m in
+         re.finditer(r'  (\w+): \{ box: "([^"]+)", w: [\d.]+, h: [\d.]+, base: [\d.]+, tall: [\d.]+, body: `(.*?)` \}', architecture.PAGE)}
+assert set(LOGOS) == {"past", "exa"}, f"architecture.py logos changed: {sorted(LOGOS)}"
+
+
+def esc(s):
+    return html.escape(str(s), quote=True)
+
+
+def num(x):
+    return f"{x:,}" if isinstance(x, int) else f"{x:g}"
+
+
+# ---------- the embedded pictures ----------
+FIG_THEME = (r"""<script>
+(() => { const t = new URLSearchParams(location.search).get("theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; })();
+</script>""")
+
+
+def embed(page, css):
+    assert page.count("</head>") == 1
+    return page.replace("</head>", f"<style>\n{css}\n</style>\n{FIG_THEME}\n</head>", 1)
+
+
+_T = re.search(r":root \{\n  color-scheme: light dark;\n(.*?)\n\}\n@media \(prefers-color-scheme: dark\) \{\n  :root \{\n(.*?)\n  \}\n\}",
+               proof_idea_basins.PAGE, re.S)
+assert _T, "the tokens of proof_idea_basins.py changed"
+BASIN_LIGHT, BASIN_DARK = (" ".join(t.split()) for t in _T.groups())
+
+def _under_invert(color):
+    """The colour that the filter invert(1) hue-rotate(180deg) turns into `color` (the rotation by 180 degrees is its
+    own inverse)."""
+    r, g, b = (int(color[i:i + 2], 16) / 255 for i in (1, 3, 5))
+    rot = (-0.574 * r + 1.430 * g + 0.144 * b, 0.426 * r + 0.430 * g + 0.144 * b, 0.426 * r + 1.430 * g - 0.856 * b)
+    return "#" + "".join(f"{round(255 * min(1, max(0, 1 - v))):02x}" for v in rot)
+
+
+_PAPER = {name: re.search(r"--paper: (#[0-9a-fA-F]{6})", tokens).group(1) for name, tokens in (("light", demo.LIGHT), ("dark", demo.DARK))}
+# /exa and /pastdev are light pages: in the deck they stand on the deck's paper, and the dark deck inverts them. Their
+# colour scheme stays light in both themes: a frame is see-through only while its page's scheme equals the frame's.
+SPONSOR_THEME = f"""html, body {{ overflow: hidden; background: transparent !important; }}
+:root[data-theme="light"] {{ --paper: {_PAPER["light"]}; }}
+:root[data-theme="dark"] {{ --paper: {_under_invert(_PAPER["dark"])}; }}
+:root[data-theme="dark"] body {{ filter: invert(1) hue-rotate(180deg); }}"""
+
+
+# The basins picture steps through its conditions by itself: the items, then the basins, then the idea tree.
+BASIN_PLAY = """<script>
+addEventListener("load", () => { setTimeout(() => choose(1), 1400); setTimeout(() => choose(2), 7400); });
+</script>"""
+
+FIGS = {
+    # architecture.py follows only the system theme, so the deck's tokens are added for data-theme here.
+    "harness": embed(architecture.PAGE, f""":root[data-theme="light"] {{ color-scheme: light; {demo.LIGHT} }}
+:root[data-theme="dark"] {{ color-scheme: dark; {demo.DARK} }}
+html, body {{ overflow: hidden; }}
+.top, .foot, .side, .part.key, .part.tool {{ display: none !important; }}
+.page {{ display: block !important; height: 100vh !important; min-height: 0 !important; max-width: none !important; padding: 0 !important; }}
+.stage {{ height: 100vh; padding: 0 !important; }}"""),
+    # the accuracy climb of Ali's slide 3: the step line over the idea disc, without its words and its controls
+    "climb": embed(demo_ali.PAGES["slide3"], """html, body { overflow: hidden; }
+.top, .side, .foot { display: none !important; }
+.page { padding: 0 !important; max-width: none !important; height: 100vh; }
+.view { display: block !important; }
+.stage { height: 100vh; padding: 0 !important; }
+.stage svg { display: block; width: 100vw !important; height: 100vh !important; max-height: none !important; }"""),
+    "fixes": embed(demo_fixes.PAGE, ""),
+    "beyond": embed(demo_results.PAGES["beyond"], ""),
+    "efficiency": embed(demo_results.PAGES["efficiency"], ""),
+    # /proof/idea-basins playing by itself: the slab, the switch and the count. It opens on the board items, gathers
+    # them into their basins and then lays the basins out as the rows of the idea tree (BASIN_PLAY). That page
+    # follows only the system theme, so its own two sets of tokens are repeated for data-theme here.
+    "basins": embed(proof_idea_basins.PAGE, f""":root[data-theme="light"] {{ color-scheme: light; {BASIN_LIGHT} }}
+:root[data-theme="dark"] {{ color-scheme: dark; {BASIN_DARK} }}""" + """
+html, body { overflow: hidden; }
+.top, .side, .note, .key { display: none !important; }
+.page { display: block !important; height: 100vh !important; min-height: 0 !important; max-width: none !important; padding: 0 !important; }
+.stage { height: 100vh; padding: 0 0 14px !important; }
+svg#svg { flex: 1 1 0; min-height: 0; max-height: none !important; }
+.switch { margin-top: 6px !important; }""").replace("</head>", BASIN_PLAY + "\n</head>", 1),
+    # the sponsors slide: the scene of /exa and the memory scene of /pastdev alone, each replaying its real cases.
+    # Both pages are light only, so the dark deck shows them inverted (SPONSOR_THEME).
+    "exa": embed(exa_page.PAGE, SPONSOR_THEME + """
+nav, .top h1, .nums, .cases, .key, .note, section, footer { display: none !important; }
+.wrap { max-width: none !important; padding: 0 !important; }
+.top { padding: 0 !important; }
+.replay { display: block !important; }
+.scene { height: 100vh !important; }
+#sc ellipse[fill="url(#sc-floor)"] { display: none; }  /* the floor's glow is wider than the frame and would show its edge */"""),
+    "pastdev": embed(pastdev.PAGE, SPONSOR_THEME + """
+.mast, .lede, .nums, .src-line, .fig-tw, .figlab, .key, .figsay, .strip, section, .end { display: none !important; }
+.page { max-width: none !important; padding: 0 !important; }
+.top { padding: 0 !important; border: 0 !important; }
+.figs { display: block !important; margin: 0 !important; }
+#mem { height: 100vh !important; }
+.scene text { font-size: 13px !important; }
+.scene text.tag { display: block !important; }"""),
+}
+
+# The numbers under the two sponsor figures, read from the first screens of /exa and /pastdev (label -> number).
+EXA_NUMS = {label: n for n, label in re.findall(r"<li><b>(.*?)</b><span>(.*?)</span></li>", exa_page.PAGE)}
+PAST_NUMS = {label: n for n, label in re.findall(r'<span class="n">(.*?)</span><span class="w">(.*?)</span>', pastdev.PAGE)}
+assert {"arXiv papers surfaced", "pages read in full"} <= set(EXA_NUMS), f"the numbers row of exa_page.py changed: {sorted(EXA_NUMS)}"
+assert {"memories", "median recall"} <= set(PAST_NUMS), f"the numbers row of pastdev.py changed: {sorted(PAST_NUMS)}"
+
+
+# ---------- the numbers ----------
+DIAL = finding_the_finish_dial.DATA
+CELLS = DIAL["cells"]
+DIAL_ROWS = sorted((c for c in CELLS.values() if c["kind"] in ("top", "base")), key=lambda c: c["size"])
+PEAK = max((c for c in DIAL_ROWS if c["kind"] == "top"), key=lambda c: c["right"])
+assert PEAK is CELLS["1.5"], "the peak of the finish dial moved: the slide text names size 1.5"
+
+PEOPLE = demo_facts.FACTS["people"]["v"]
+
+SKILL, PLAIN = proof_review_cuts_waste.SKILL, proof_review_cuts_waste.PLAIN
+ROUNDS = proof_review_cuts_waste.DATA["rounds"]
+
+BASINS = proof_idea_basins.DATA  # the board items and their basins
+TREE = BASINS["tree"]  # links between board items, and those that join two basins
+
+# The accuracy climb: the plain base's first score and its record by vote after restart, and RL's best.
+CLIMB = demo_ali_data.DATA["climb"]
+CLIMB_LO = CLIMB["base"][0]
+CLIMB_HI = next(s for s in CLIMB["base"] if s["config"].endswith("vote over 4 samples after restart"))
+CLIMB_RL = max(CLIMB["rl"], key=lambda s: s["right"])
+pct = lambda s: 100 * s["right"] / s["n"]
+
+
+# ---------- the figures, drawn here as SVG ----------
+def bar(x, y0, w, h, cls, value, label=None):
+    s = f'<rect class="{cls}" x="{x:.1f}" y="{y0 - h:.1f}" width="{w}" height="{h:.1f}"/>'
+    if value is not None:
+        s += f'<text class="bv{" on" if cls == "b1" else ""}" x="{x + w / 2:.1f}" y="{y0 - h - 14:.1f}" text-anchor="middle">{value}</text>'
+    if label:
+        s += f'<text class="bl" x="{x + w / 2:.1f}" y="{y0 + 28}" text-anchor="middle">{label}</text>'
+    return s
+
+
+def review_svg():
+    W, H, y0, top = 620, 470, 360, 270
+    m = SKILL["minutes"]
+    out = [f'<svg viewBox="0 0 {W} {H}" width="{W * 1.12:.0f}" height="{H * 1.12:.0f}" class="fig" role="img" aria-label="Container minutes per batch over review rounds">']
+    for i, (v, r) in enumerate(zip(m, ROUNDS)):
+        out.append(bar(60 + i * 130, y0, 100, v / m[0] * top, "b1" if i == len(m) - 1 else "b0",
+                       num(v) if i in (0, len(m) - 1) else None, r))
+    yp = y0 - PLAIN["minutes"][-1] / m[0] * top
+    out.append(f'<line class="rl" x1="40" x2="{W - 20}" y1="{yp:.1f}" y2="{yp:.1f}"/>'
+               f'<text class="lab sm" x="{W - 20}" y="{yp - 12:.1f}" text-anchor="end">Plain instruction <tspan class="v">{num(PLAIN["minutes"][-1])}</tspan></text>')
+    out.append(f'<line class="base" x1="40" x2="{W - 20}" y1="{y0}" y2="{y0}"/>')
+    out.append(f'<text class="gl" x="{W / 2 + 10:.0f}" y="{y0 + 72}" text-anchor="middle">Container minutes per batch</text>')
+    return "".join(out) + "</svg>"
+
+
+def photo(uri, cls):
+    if uri:
+        return f'<div class="photo {cls}"><img src="{uri}" alt=""></div>'
+    return f'<div class="photo {cls} empty"><span>Photo</span></div>'
+
+
+def logo(name):
+    L = LOGOS[name]
+    return f'<svg class="logo logo-{name}" viewBox="{L["box"]}" aria-hidden="true">{L["body"]}</svg>'
+
+
+def paper(name):
+    lines = "".join(f'<i style="width:{w}%"></i>' for w in (92, 86, 90, 70, 88, 94, 62))
+    return (f'<a class="sheet" href="/paper/{esc(name)}"><b>{esc(paper_title(name))}</b>'
+            f'<span>{esc(PAPER_AUTHOR)}</span><div class="lines">{lines}</div></a>')
+
+
+def slides(n_findings, papers):
+    return [
+        ("hook", f'<div class="mid"><h1 class="big">{esc(HOOK)}</h1><p class="sub faint">Team Invariant</p></div>'),
+        ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2>'
+                  f'<p class="sub">The best score of the untrained base model over the hackathon · RL-trained model {pct(CLIMB_RL):.0f} %</p></div>'
+                  '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'
+                  '<div class="replay"><input class="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Board time">'
+                  '<button class="rate" aria-pressed="false" aria-label="Half speed">0.5×</button></div>'),
+        ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers, limited tokens, compute and people</p>'
+                     f'<h1 class="big">Hill climbing is not useful if we don\'t understand it</h1></div>'),
+        ("tea", f'<div class="mid"><p class="sub">Our solution</p>{photo(demo_photos.TEA, "tea")}<p class="sub">Gong fu tea and meditation</p></div>'),
+        ("harness", '<div class="head"><h2>Nanolab</h2><p class="sub">A hill climbing engine and an interpretability engine in one harness</p></div>'
+                    '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
+                    f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span></div>'),
+        ("sponsors", '<div class="head"><h2>Search and memory before every experiment</h2>'
+                     '<p class="sub">An agent asks Exa for the literature and past.dev for what the team already found. Both pictures replay real events</p></div>'
+                     '<iframe class="fig-frame sponsor s-exa" data-fig="exa" data-replay title="Exa: searches at the gate before a GPU run" tabindex="-1"></iframe>'
+                     '<iframe class="fig-frame sponsor s-past" data-fig="pastdev" data-replay title="past.dev: one agent writes, another reads" tabindex="-1"></iframe>'
+                     f'<p class="spon s-exa">{logo("exa")}<span><b>{esc(EXA_NUMS["arXiv papers surfaced"])}</b> arXiv papers surfaced · <b>{esc(EXA_NUMS["pages read in full"])}</b> pages read in full</span></p>'
+                     f'<p class="spon s-past">{logo("past")}<span><b>{esc(PAST_NUMS["memories"])}</b> memories · <b>{esc(PAST_NUMS["median recall"])}</b> median recall</span></p>'),
+        ("finding", '<h2 class="title fixes-title">8 directions in the weights hold most of RL\'s gain</h2>'
+                    '<iframe class="fig-frame fixes" data-fig="fixes" data-replay title="One problem, four answers" tabindex="-1"></iframe>'
+                    f'<p class="sub fixes-why">Why: they make the model finish its answer, cut-off answers '
+                    f'{CELLS["0"]["cut"]} → {CELLS["1.5"]["cut"]}</p><p class="corner low">{n_findings} findings</p>'),
+        ("beyond", '<div class="head"><h2>Tuned on one math benchmark, better on all four</h2>'
+                   '<p class="sub">One opening cue and one sampling setting, chosen on MATH-500, used unchanged. No training</p></div>'
+                   '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
+        ("efficiency", f'<div class="head"><h2>Same score as autoresearch, {demo_results.TOKEN_RATIO:.1f}× fewer tokens</h2>'
+                       f'<p class="sub">Against Karpathy\'s autoresearch (100k GitHub stars) · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
+                       '<iframe class="fig-frame wide" data-fig="efficiency" data-replay title="Our harness against autoresearch" tabindex="-1"></iframe>'),
+        ("proof", f'<div class="mid"><h2 class="title">Its own review cuts waste</h2>{review_svg()}</div>'),
+        ("ideas", f'<div class="head"><h2>Ideas cluster, then converge</h2><p class="sub">{BASINS["items"]} board items fall into {BASINS["clusters"]} basins of ideas · '
+                  f'{TREE["cross"]} of {TREE["links"]} links join two different basins</p></div>'
+                  '<iframe class="fig-frame tree" data-fig="basins" data-replay title="The idea basins and the idea tree" tabindex="-1"></iframe>'),
+        ("papers", f'<div class="mid"><h2 class="title">{len(papers)} papers, written by the swarm</h2>'
+                   f'<div class="sheets" style="--n:{len(papers)}">{"".join(paper(p) for p in papers)}</div></div>'),
+        ("close", f'<div class="mid">{photo(demo_photos.MEDITATE, "meditate")}<p class="end">Also our solution to AI psychosis</p>'
+                  '<p class="sub faint">monitor.invariant.team</p></div>'),
+    ]
+
+
+TEMPLATE = r"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: Talk</title>
+__FONT__
+__THEME_JS__
+<style>
+__TOKENS__
+* { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: var(--paper); }
+body {
+  color: var(--ink); font: 400 15px/1.4 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased; user-select: none;
+}
+a { color: inherit; text-decoration: none; }
+p, h1, h2, figure { margin: 0; }
+
+/* One slide is a 1600 x 900 box, scaled to the window (--s, set from the script). */
+.slide { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--paper);
+  opacity: 0; visibility: hidden; transition: opacity .35s ease, visibility 0s linear .35s; }
+.slide.on { opacity: 1; visibility: visible; transition: opacity .35s ease; }
+.box { position: relative; flex: none; width: 1600px; height: 900px; transform: scale(var(--s, 1)); }
+@media (prefers-reduced-motion: reduce) { .slide, .slide.on { transition: none; } }
+
+.mid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; text-align: center; padding: 0 140px; }
+.big { font-weight: 300; font-size: 76px; line-height: 1.12; letter-spacing: -.012em; max-width: 1240px; }
+.sub { font-size: 24px; font-weight: 500; color: var(--mute); }
+.faint { color: var(--faint); font-weight: 500; }
+.top { margin-bottom: 8px; }
+.title { font-weight: 300; font-size: 54px; line-height: 1.15; letter-spacing: -.008em; }
+.end { font-weight: 300; font-size: 48px; margin-top: 6px; }
+.head { position: absolute; left: 96px; top: 72px; z-index: 1; }
+.head h2 { font-weight: 300; font-size: 54px; line-height: 1.1; }
+.head .sub { margin-top: 12px; }
+.corner { position: absolute; right: 96px; bottom: 64px; font-size: 22px; font-weight: 500; color: var(--faint); }
+
+.photo { border-radius: 2px; overflow: hidden; }
+.photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.photo.tea { width: 720px; height: 540px; }
+.photo.meditate { width: 640px; height: 480px; }
+.photo.empty { border: 1px dashed var(--faint); opacity: .7; display: flex; align-items: center; justify-content: center; }
+.photo.empty span { font-size: 22px; font-weight: 500; color: var(--faint); }
+
+.fig-frame { position: absolute; border: 0; background: var(--paper); pointer-events: none; color-scheme: normal; }
+.fig-frame.harness { left: 250px; top: 215px; width: 1100px; height: 600px; }
+.fig-frame.tree { left: 220px; top: 190px; width: 1160px; height: 680px; }
+.fig-frame.climb { left: 370px; top: 200px; width: 860px; height: 680px; }
+/* under the climb: a faint slider of board time and a half-speed button, clear under the pointer */
+.replay { position: absolute; left: 430px; top: 858px; width: 740px; display: flex; align-items: center; gap: 18px; opacity: .22; transition: opacity .2s ease; z-index: 1; }
+.replay:hover, .replay:focus-within { opacity: .95; }
+.seek { flex: 1; min-width: 0; height: 24px; margin: 0; background: none; -webkit-appearance: none; appearance: none; cursor: pointer; --p: 0%; }
+.seek::-webkit-slider-runnable-track { height: 2px; border-radius: 1px; background: linear-gradient(to right, var(--ink) var(--p), var(--faint) var(--p)); }
+.seek::-moz-range-track { height: 2px; border-radius: 1px; background: var(--faint); }
+.seek::-moz-range-progress { height: 2px; background: var(--ink); }
+.seek::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; margin-top: -5px; border-radius: 50%; background: var(--ink); }
+.seek::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: var(--ink); }
+.rate { font: inherit; font-size: 15px; font-weight: 560; color: var(--ink); background: none; border: 1px solid var(--faint); border-radius: 999px; padding: 3px 12px; cursor: pointer; }
+.rate[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.fig-frame.wide { left: 220px; top: 205px; width: 1160px; height: 650px; }
+/* the sponsors slide: two scenes side by side, each drawn at 580 x 446 and shown 1.21 times larger so its labels read from the back of a room */
+.fig-frame.sponsor { top: 208px; width: 580px; height: 446px; transform: scale(1.21); transform-origin: 0 0; background: transparent; }
+.fig-frame.s-exa { left: 96px; } .fig-frame.s-past { left: 804px; }
+.spon { position: absolute; top: 772px; width: 702px; display: flex; align-items: center; justify-content: center; gap: 22px; font-size: 24px; font-weight: 500; color: var(--mute); }
+.spon.s-exa { left: 96px; } .spon.s-past { left: 804px; }
+.spon b { font-weight: 640; color: var(--ink); }
+.fig-frame.fixes { left: 180px; top: 112px; width: 1240px; height: 694px; }
+.fixes-title, .fixes-why { position: absolute; left: 0; right: 0; text-align: center; }
+.fixes-title { top: 34px; }
+.fixes-why { top: 822px; }
+.corner.low { bottom: 40px; }
+.tools { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; gap: 72px; font-size: 22px; font-weight: 560; color: var(--mute); }
+.tools span { display: inline-flex; align-items: center; gap: 14px; }
+.logo { height: 24px; width: auto; fill: var(--ink); }
+.logo-exa { height: 22px; }
+.tools .word { font-size: 25px; font-weight: 640; color: var(--ink); }  /* a sponsor with no logo in architecture.py */
+
+/* the figures drawn here */
+.fig { display: block; overflow: visible; font-family: inherit; }
+.fig text { fill: var(--ink); font-variant-numeric: tabular-nums; }
+.fig .rl { stroke: var(--mute); stroke-width: 1.5; stroke-dasharray: 2 6; stroke-linecap: round; }
+.fig .lab { font-size: 22px; font-weight: 560; fill: var(--mute); }
+.fig .lab.sm { font-size: 18px; }
+.fig .v { font-weight: 400; fill: var(--ink); }
+.fig .b0 { fill: var(--fbar1); }
+.fig .b1 { fill: var(--blue); }
+.fig .bv { font-size: 26px; font-weight: 400; }
+.fig .bv.on { fill: var(--blue); font-weight: 500; }
+.fig .bl { font-size: 17px; font-weight: 500; fill: var(--mute); }
+.fig .gl { font-size: 20px; font-weight: 600; fill: var(--ink); }
+.fig .base { stroke: var(--faint); stroke-width: 1; }
+
+.sheets { display: flex; gap: 60px; margin-top: 30px; }  /* --n: the number of papers, so any number fits the slide */
+/* a paper is white in both themes: the sheet carries the light values of these four tokens */
+.sheet { --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --rule: #d3d9de; color: var(--ink);
+  width: min(330px, calc((1380px - (var(--n) - 1) * 60px) / var(--n))); aspect-ratio: 330 / 427; background: var(--sheet); border: 1px solid var(--rule); padding: 100px 30px 0; box-sizing: border-box; text-align: left; display: flex; flex-direction: column; gap: 10px; }
+.sheet b { font-size: 26px; font-weight: 560; line-height: 1.2; }
+.sheet span { font-size: 16px; font-weight: 500; color: var(--mute); }
+.sheet .lines { margin-top: 26px; display: flex; flex-direction: column; gap: 13px; }
+.sheet .lines i { display: block; height: 2px; background: var(--rule); }
+
+.count { position: fixed; left: 18px; bottom: 12px; font-size: 13px; color: var(--faint); opacity: .7; z-index: 2; }
+/* the theme button, top right: the same switch as the key t */
+.theme { position: fixed; right: 14px; top: 12px; z-index: 2; width: 36px; height: 36px; padding: 8px; border: 0; border-radius: 50%;
+  background: none; color: var(--faint); opacity: .7; cursor: pointer; }
+.theme svg { display: block; width: 20px; height: 20px; }
+.theme:hover, .theme:focus-visible { color: var(--ink); opacity: 1; }
+.theme:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+@page { size: 13.333in 7.5in; margin: 0; }
+@media print {
+  html, body { height: auto; overflow: visible; }
+  .count, .theme, .replay { display: none; }
+  .slide { position: relative; inset: auto; display: block; width: 13.333in; height: 7.5in; overflow: hidden;
+    opacity: 1; visibility: visible; transition: none; break-after: page; page-break-after: always; }
+  .slide:last-child { break-after: auto; page-break-after: auto; }
+  .box { transform: scale(.8) !important; transform-origin: 0 0; }
+}
+</style>
+</head>
+<body>
+<main class="deck" id="deck">
+__SLIDES__
+</main>
+<div class="count" id="count" aria-live="polite"></div>
+<button class="theme" id="theme" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 0 0 14.5z" fill="currentColor"/></svg></button>
+<script>
+const SLIDES = [...document.querySelectorAll(".slide")], IDS = SLIDES.map(s => s.id);
+let cur = -1;
+const themeNow = () => document.documentElement.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+/* the box fills the window at 16:9 */
+function fit() { document.documentElement.style.setProperty("--s", Math.min(innerWidth / 1600, innerHeight / 900)); }
+addEventListener("resize", fit); fit();
+
+/* the embedded pictures get the deck's theme, at load and on every change */
+const frames = [...document.querySelectorAll("iframe[data-fig]")];
+const syncFrame = f => { const d = f.contentDocument; if (d && d.documentElement) d.documentElement.dataset.theme = themeNow(); };
+frames.forEach(f => { f.addEventListener("load", () => syncFrame(f)); f.src = `/demo/fig/${f.dataset.fig}?theme=${themeNow()}`; });
+function toggleTheme() {
+  const t = themeNow() === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = t;
+  try { localStorage.setItem("demo-theme", t); } catch (e) { /* storage blocked: the choice lasts until the page closes */ }
+  frames.forEach(syncFrame);
+  labelTheme();
+}
+const themeButton = document.getElementById("theme");
+function labelTheme() { const to = themeNow() === "dark" ? "light" : "dark"; themeButton.setAttribute("aria-label", `Switch to ${to} theme`); themeButton.title = `Switch to ${to} theme`; }
+themeButton.addEventListener("click", () => { toggleTheme(); themeButton.blur(); });  // blur: Space then steps the deck again
+labelTheme();
+
+/* The climb replays at twice the speed its page was designed for (0.5x: the designed speed); the slider moves its board time. */
+document.querySelectorAll(".replay").forEach(box => {
+  const f = box.parentNode.querySelector("iframe"), seek = box.querySelector(".seek"), rate = box.querySelector(".rate");
+  const api = () => f.contentWindow && f.contentWindow.replay;
+  let slow = false, held = false;
+  const setSpeed = () => { const r = api(); if (r) r.speed(slow ? 1 : 2); };
+  f.addEventListener("load", setSpeed);
+  seek.addEventListener("pointerdown", () => { held = true; });
+  seek.addEventListener("input", () => { const r = api(); if (r) r.seek(seek.value / 1000); seek.style.setProperty("--p", seek.value / 10 + "%"); });
+  seek.addEventListener("change", () => { held = false; seek.blur(); });  // the arrow keys step the slides again
+  rate.addEventListener("click", () => { slow = !slow; rate.setAttribute("aria-pressed", slow); setSpeed(); rate.blur(); });
+  setInterval(() => { const r = api(); if (r && !held) { seek.value = Math.round(r.at() * 1000); seek.style.setProperty("--p", seek.value / 10 + "%"); } }, 200);
+});
+
+function show(i, push) {
+  i = Math.max(0, Math.min(SLIDES.length - 1, i));
+  if (i === cur) return;
+  if (cur >= 0) SLIDES[cur].classList.remove("on");
+  if (cur >= 0) SLIDES[i].querySelectorAll("iframe[data-replay]").forEach(f => f.contentWindow.location.reload());  // its picture draws itself again
+  SLIDES[i].classList.add("on"); cur = i;
+  SLIDES.forEach((s, k) => s.setAttribute("aria-hidden", k === i ? "false" : "true"));
+  document.getElementById("count").textContent = `${i + 1} / ${SLIDES.length}`;
+  const h = "#" + IDS[i];
+  if (push && h !== location.hash) history.pushState(null, "", h);
+}
+const fromHash = () => { const k = IDS.indexOf(decodeURIComponent(location.hash.slice(1))); show(k < 0 ? 0 : k, false); };
+addEventListener("popstate", fromHash);
+addEventListener("hashchange", fromHash);
+
+document.addEventListener("keydown", e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const k = e.key;
+  if (k === "ArrowRight" || k === " " || k === "PageDown") { e.preventDefault(); show(cur + 1, true); }
+  else if (k === "ArrowLeft" || k === "PageUp") { e.preventDefault(); show(cur - 1, true); }
+  else if (k === "Home") { e.preventDefault(); show(0, true); }
+  else if (k === "End") { e.preventDefault(); show(SLIDES.length - 1, true); }
+  else if ((k === "t" || k === "T") && !e.repeat) { e.preventDefault(); toggleTheme(); }
+  else if ((k === "f" || k === "F") && !e.repeat) { e.preventDefault(); if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); }
+  else if ((k === "p" || k === "P") && !e.repeat) { e.preventDefault(); window.print(); }
+});
+document.addEventListener("click", e => {
+  if (e.target.closest("a, button, input")) return;  // the paper sheets open their PDF; the theme button switches the theme
+  const x = e.clientX / innerWidth;
+  if (x > 2 / 3) show(cur + 1, true); else if (x < 1 / 3) show(cur - 1, true);
+});
+fromHash();
+</script>
+</body>
+</html>
+"""
+
+
+def page(n_findings, papers):
+    """The deck, with the number of finding pages and the paper file names (view.FINDINGS, view.PAPERS) written in."""
+    body = "\n".join(f'<section class="slide" id="{sid}" aria-label="Slide {i + 1}"><div class="box">{inner}</div></section>'
+                     for i, (sid, inner) in enumerate(slides(n_findings, list(papers))))
+    return (TEMPLATE.replace("__FONT__", FONT).replace("__THEME_JS__", THEME_JS).replace("__TOKENS__", TOKENS)
+            .replace("__SLIDES__", body))

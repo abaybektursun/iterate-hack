@@ -1,0 +1,123 @@
+{
+ "cell": "m20",
+ "right_v3": 10,
+ "n": 136,
+ "interval_90": [
+  5,
+  15
+ ],
+ "cap_hits": 13,
+ "mean_generated_tokens": 4731.89705882353,
+ "opens_okay": 23,
+ "right_v3_when_opens_okay": 6,
+ "finished": 123,
+ "precision_finished": 0.08130081300813008,
+ "reference_base_cue_per_sample": [
+  28,
+  28,
+  32,
+  30
+ ],
+ "forecasts": {
+  "run-06/f2-m02": {
+   "value": 3,
+   "interval": [
+    0,
+    8
+   ],
+   "inside": false
+  },
+  "run-06/f2-m06": {
+   "value": 2,
+   "interval": [
+    0,
+    7
+   ],
+   "inside": false
+  },
+  "run-07/f2-m06": {
+   "value": 16,
+   "interval": [
+    9,
+    23
+   ],
+   "inside": true
+  },
+  "run-08/f2-m01": {
+   "value": 14,
+   "interval": [
+    8,
+    20
+   ],
+   "inside": true
+  },
+  "reader-1": {
+   "value": 14,
+   "interval": [
+    7,
+    22
+   ],
+   "inside": true
+  },
+  "reader-2": {
+   "value": 13,
+   "interval": [
+    6,
+    21
+   ],
+   "inside": true
+  }
+ },
+ "job_counts": {
+  "n": 136,
+  "tok_p_lt_1e2": 26467,
+  "tok_p_lt_1e3": 13433,
+  "correct_v3": 10,
+  "correct_v1": 8,
+  "cap_hits": 13,
+  "loop_A": 0,
+  "generated_tokens": 643538,
+  "restarts": 0,
+  "n_planned": 136,
+  "mean_generated_tokens": 4731.89705882353,
+  "generation_s": 1140.013748884201,
+  "tokens_per_s": 564.5002094315694
+ },
+ "config": {
+  "model": "base",
+  "model_path": null,
+  "model_label": null,
+  "prompt": "plain",
+  "set": "fresh2026",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 93000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/root/abaybektursun-1115-093940-3d06/out",
+  "dry_run": false,
+  "commit": "1a004c196dd446589440b5a8e431915e053c3c18",
+  "model_repo": "allenai/Olmo-3-1025-7B",
+  "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 136,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ }
+}

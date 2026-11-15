@@ -1,0 +1,22 @@
+{
+ "job_ids": [
+  "abaybektursun-1115-122936-1b30",
+  "abaybektursun-1115-122949-e563"
+ ],
+ "commit": "099dc656163b87c970fb434fc38213b668cf81c4",
+ "command": "wsp_edit --recipe top8 --layers 22-31 --scale 1.5 --other math31 --rounding stochastic --seed 0, then run_cell --model-label top8x1.5_L22-31_math31 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3010000 --shard k/2 (k = 0, 1), joined by analysis/shard_join.join",
+ "runner": "uv run tools/gpu.py submit h100 --hours 1.5",
+ "raw_answers": [
+  "runs/abaybektursun-1115-122936-1b30/answers.jsonl (uv run tools/gpu.py get abaybektursun-1115-122936-1b30)",
+  "runs/abaybektursun-1115-122949-e563/answers.jsonl (uv run tools/gpu.py get abaybektursun-1115-122949-e563)"
+ ],
+ "edit": {
+  "add_norm": 1.2018049698524267,
+  "written_norm": 1.9289029105926065,
+  "ref_norm": 957.5890433509811,
+  "add_rel": 0.0012550320810343003,
+  "effective_scale": 0.9999735760850802,
+  "cos_written_add": 0.6230345793251661,
+  "share": 0.11938937422454933
+ }
+}

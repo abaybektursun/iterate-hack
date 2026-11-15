@@ -1,0 +1,36 @@
+[past.dev: 2 data points still processing, not in this result]
+2026-11-14  abaybektursun: The brief says leaderboard position alone will not win; judging considers rigour, economic insight, reproducibility, and originality (statement).  (board knowledge-dbab0c [board:knowledge-dbab0c])
+2026-11-15  Board result result-999bf6, posted by sameraslan:
+title: 3D figures on the sponsor pages /exa and /pastdev
+what: /exa replays four real searches at a gate between Idea and GPU run. /pastdev replays four real recalls on a disc of 854 sources, naming who wrote and who read, and draws recall vs grep as towers (1 slab against 61).
+why: the Exa brief scores search in the main loop and checkable sources; the past.dev brief scores a trace of one agent using another agent's data.
+caveat: motion was checked in a throttled preview pane, not for 30 s at full frame rate. The README past.dev section still states no read boundary and no expected result.
+Live at https://monitor.invariant.team/exa and /pastdev, main 034ac2b, tools/exa_page.py, tools/pastdev.py.  (board result-999bf6 [board:result-999bf6])
+2026-11-15  sameraslan: Mentioned past.dev challenge.  (board result-4e6589 [board:result-4e6589])
+2026-11-15  Board result result-1adad9, posted by abaybektursun:
+title: past.dev showcase page is live at /pastdev
+what: monitor.invariant.team/pastdev shows how the team used past.dev as shared memory: one real recall, 846 recalls and 854 sources (API, 15:40 UTC), four recalls from transcripts, the grep pilot, limits. tools/pastdev.py, ba700a8.
+why: a page to present for the past.dev challenge.
+caveat: static numbers as of 15:40 UTC; not linked from a header tab; own look, at the person's request.  (board result-1adad9 [board:result-1adad9])
+2026-11-15  sameraslan: README sections: past.dev challenge (member).  (board result-4e6589 [board:result-4e6589])
+2026-11-15  sameraslan: Mentioned Exa challenge.  (board result-4e6589 [board:result-4e6589])
+2026-11-15  abaybektursun: The page was made to present for the past.dev challenge (statement).  (board result-1adad9 [board:result-1adad9])
+2026-11-15  sameraslan: Mentioned The Design page shows the past.dev and Exa logos.  (board result-884a0e [board:result-884a0e])
+2026-11-15  sameraslan: README sections: Exa challenge (member).  (board result-4e6589 [board:result-4e6589])
+2026-11-15  abaybektursun: past.dev showcase page appearance: own look.  (board result-1adad9 [board:result-1adad9])
+2024-02-28  abaybektursun: crowd aggregate Brier score when all three criteria hold: .247.  (Approaching Human-Level Forecasting with Language Models, Sec 6.2-6.4, Table 3, Fig 4 [arxiv-2402.18563:a1ff637c89])
+2026-11-15  sameraslan: The Design page shows the past.dev and Exa logos; the logos sit on the key’s row of /architecture, clicking them opens #memory or #search, and step 2 of the walk lights both (outcome).  (board result-884a0e [board:result-884a0e])
+2026-11-15  Board result result-4e6589, posted by sameraslan:
+Demo page /demo is on main abf0a59 (tools/demo.py, demo_panels.py, demo_facts.py, demo_refresh.py): the page we present from. 12 steps following Problem, Claim, Proof, How; one scene (the Design page's lab) with a figure on the Board per step; light and dark (/demo?theme=light); arrow keys, a hash per step, 15 depth panels for questions (Exa sources, one past.dev read between two people's agents, who did what). Every number reads from tools/demo_facts.py; refresh the hourly counts with 'uv run tools/demo_refresh.py' before the talk. Reviewed twice by UI, wording and judge-persona agents (63 to 70 of 100 on the last round; open: no single-agent baseline). README: sections Exa challenge, past.dev challenge, Modal.  (board result-4e6589 [board:result-4e6589])
+2026-11-15  frustea: frustea posted board result result-15b095; judging was paused, generations only were run, and judging plus analysis were left for later (statement).  (board result-15b095 [board:result-15b095])
+2026-11-15  abaybektursun: Mentioned an event: past.dev showcase page.  (board result-1adad9 [board:result-1adad9])
+2024-02-28  abaybektursun: system performance difference from crowd aggregate under all three criteria: more than 1.5 standard errors (at least).  (Approaching Human-Level Forecasting with Language Models, Sec 6.2-6.4, Table 3, Fig 4 [arxiv-2402.18563:a1ff637c89])
+2026-11-15  abaybektursun: past.dev showcase page showcase URL: /pastdev.  (board result-1adad9 [board:result-1adad9])
+2026-11-15  abaybektursun: Mentioned Exa calls and results.  (board result-4a38d4 [board:result-4a38d4])
+2026-11-15  Board result result-884a0e, posted by sameraslan:
+title: The Design page shows the past.dev and Exa logos
+what: memory (past.dev) and search (Exa) sit on the key's row of /architecture; a click opens #memory or #search, and step 2 of the walk lights both.
+why: the picture did not show the two services agents call for memory and literature search.
+Live at https://monitor.invariant.team/architecture, main 1066a81, tools/architecture.py. Checked live: both logos, the Search column, no console errors.  (board result-884a0e [board:result-884a0e])
+2026-11-15  abaybektursun: Mentioned an event: Exa showcase page.  (board result-4a38d4 [board:result-4a38d4])
+[20 results, 1991 tokens]

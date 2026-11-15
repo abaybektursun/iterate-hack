@@ -1,0 +1,45 @@
+[
+ {
+  "problem_index": 1,
+  "set": "MATH-500",
+  "gold": "p - q",
+  "arm": "base + cue, T 1.0 / top-p 1.0, job abaybektursun-1114-153825-208b",
+  "probe": "layer 12 after 1,000 answer tokens, held-out fold, trained on the agreement flag",
+  "probe_orders_pair_correctly": true,
+  "sources": [
+   "studies/rlneurons/results/critic/probe-02/examples.json",
+   "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl",
+   "studies/rlneurons/data/wrongstep/base_cue_answer_heads_v1.jsonl.gz"
+  ],
+  "right": {
+   "sample": 0,
+   "seed": 41000001,
+   "score_v3": 1,
+   "extracted_v3": "p - q",
+   "n_new": 4280,
+   "cap_hit": false,
+   "first_300_characters": " line!\n\nOkay, so I need to find a way to express the double sum ∑_{j=1}^∞ ∑_{k=1}^∞ 1/(j + k)^3 in terms of p and q, where p is the sum of 1/k² and q is the sum of 1/k³. Hmm, let me start by recalling what these sums represent.\n\nFirst, p is the Basel problem, which equals π²/6, and q would be Apery'",
+   "probe_score": 1.248,
+   "agreement_flag": true,
+   "zratio_first_3000_chars": 0.4136,
+   "wait_first_3000_chars": 5,
+   "restart_first_3000_chars": 1,
+   "still_running_at_token_1000": true
+  },
+  "wrong": {
+   "sample": 1,
+   "seed": 41010001,
+   "score_v3": 0,
+   "extracted_v3": "2(p - q)",
+   "n_new": 5285,
+   "cap_hit": false,
+   "first_300_characters": " line!\n\nOkay, so I need to find a way to express the double sum ∑_{j=1}^∞ ∑_{k=1}^∞ 1/(j+k)^3 in terms of p and q, where p = ∑1/k² and q = ∑1/k³. Hmm, let's think about how to approach this.\n\nFirst, I know that integrating or differentiating known series might help here. Since the problem involves s",
+   "probe_score": 1.166,
+   "agreement_flag": false,
+   "zratio_first_3000_chars": 0.4366,
+   "wait_first_3000_chars": 2,
+   "restart_first_3000_chars": 0,
+   "still_running_at_token_1000": true
+  }
+ }
+]

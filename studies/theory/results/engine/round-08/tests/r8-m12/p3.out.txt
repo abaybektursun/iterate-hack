@@ -1,0 +1,2 @@
+{"groups": {"think_sft_cue": 328, "base_cue": 328}}
+{"measured": 2.8368552393684294, "n": 328, "interval": [2.1410377879598568, 3.8719662251702975], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": null, "not_computable": null, "example_row": {"problem_index": 58, "sample": 2, "attempt": 0, "seed": 3020058, "n_new": 13245, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "24", "score_v3": 1, "gold": "024"}}

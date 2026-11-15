@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 4418,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "solve for \\( d \\) and \\( e \\) from the equations for \\( Q(x) \\):\n\n\\[ -2(16)^2 + 16d + e = 54 \\]\n\\[ -2(256) + 16d + e = 54 \\]\n\\[ -512 + 16d + e = 54 \\]\n\\[ 16d + e = 566 \\quad \\text{(Equation 3)} \\]\n\n\\[ -2(20)^2 + 20d + e = 53 \\]\n\\[ -2(400) + 20d + e = 53 \\]\n\\[ -800 + 20d + e = 53 \\]\n\\[ 20d + e = 853 \\quad \\text{(Equation 4)} \\]\n\nSubtract Equation 3 from Equation 4:\n\n\\[ (20d + e) - (16d + e) = 853 - 566 \\]\n\\[ 4d = 287 \\]\n\\[ d = \\frac{287}{4} \\]\n\nSubstitute \\( d = \\frac{287}{4} \\) back into Equation 3:\n\n\\[ 16\\left(\\frac{287}{4}\\right) + e = 566 \\]\n\\[ 1148 + e = 566 \\]\n\\[ e = -582 \\]\n\nNow, we find \\( P(0) \\) and \\( Q(0) \\):\n\n\\[ P(0) = c = 698 \\]\n\\[ Q(0) = e = -582 \\]\n\nTherefore, the sum \\( P(0) + Q(0) \\) is:\n\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\nThus, the final answer is:\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 63,
+  "seed": 3010063,
+  "gold": "385",
+  "extracted_v3": "4",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 13540,
+  "prompt_tail": "t line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nDefine $f(x)=|| x|-\\tfrac{1}{2}|$ and $g(x)=|| x|-\\tfrac{1}{4}|$. Find the number of intersections of the graphs of \\[y=4 g(f(\\sin (2 \\pi x))) \\quad\\text{ and }\\quad x=4 g(f(\\cos (3 \\pi y))).\\]\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "   - Therefore, \\( x(y) = 4g(f(\\cos 3\\pi y)) \\) ranges from 0 to 1.\n\n### Step 3: Determine the Number of Intersections\n\nBoth \\( y(x) \\) and \\( x(y) \\) map \\([0, 1]\\) to \\([0, 1]\\). Since \\( y(x) \\) has a period of 1 and \\( x(y) \\) has a period of \\(\\frac{2}{3}\\), we need to consider the intersections within the fundamental domains.\n\n1. **Symmetry and Periodicity:**\n   - The periodicity and symmetry of the functions suggest that they will intersect at specific points due to their constructed ranges and transformations.\n   - Given the periodic nature and the construction of the functions, we can infer that there are four distinct intersection points.\n\n### Final Answer\n\nThe number of intersections of the graphs \\( y = 4g(f(\\sin 2\\pi x)) \\) and \\( x = 4g(f(\\cos 3\\pi y)) \\) is:\n\n\\[\n\\boxed{4}\n\\]"
+ }
+}

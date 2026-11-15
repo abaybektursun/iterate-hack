@@ -27,12 +27,20 @@ a side panel whose address is /#<item id>; the filters are in the address too (/
 / filter, j and k move, 1 2 3 jump to the record steps, Now and Learned, Enter opens, Esc closes, ? lists the keys. A
 click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
 
-  GET /demo            the talk: one stepped story page over the Design page's picture (demo.py), fed by the same /data
+  GET /demo            the talk as a deck of thirteen 16:9 slides (demo_deck.py): keys step, p prints one slide per page
+  GET /demo/fig/<name> the pictures the deck embeds (climb, harness, exa, pastdev, fixes, beyond, efficiency, basins), with their
+                       header, words column and key hidden (demo_deck.FIGS)
+  GET /demo/story      the stepped story of the talk over the Design page's picture (demo.py), fed by the same /data
+  GET /demo/ali/<name> Ali's slides of the talk, slide1 to slide3: the idea map, the idea tree and the accuracy climb
+                       (demo_ali.py, with its data in demo_ali_data.py); /demo/ali leads to the first
   GET /architecture    the Design tab, how the harness works: one interactive picture (architecture.py), fed by the same /data
   GET /findings        the Findings tab: one tile per finding (findings.py), each a link to the page of that finding
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
   GET /proof           the Proof tab: one tile per experiment that tests the team's method itself (the page of findings.py)
   GET /proof/<slug>    the page of one such experiment (proof_<slug>.py, made like a finding page)
+  GET /lab/            the site lab: twelve interactive 3D pictures of the team's work (studies/sitelab/index.html), each at
+                       /lab/prototypes/<slug>/ with its data.json; static files, fed by the same /data
+  GET /values         the six values the team works by, with their quotes: a glass prism, one face per value (values.py)
   GET /favicon.svg     the tab icon of every page; send() writes the link to it into the head of each HTML page
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
                        (board.py score), which the hill-climbing chart draws, the plain rows of those results
@@ -51,9 +59,11 @@ status and logs the error to the browser console.
 """
 import glob
 import hashlib
+import html
 import importlib
 import json
 import os
+import re
 import sys
 import threading
 import time
@@ -69,13 +79,19 @@ import architecture
 import board
 import climb
 import demo
+import demo_ali
+import demo_deck
 import exa_page
 import findings
 import glossary
+import home
+import papers
+import people
 import pastdev
 import psychosis
 import sitekit
 import team
+import values
 
 PORT = int(sys.argv[sys.argv.index("--port") + 1]) if "--port" in sys.argv else 8765
 HOURS = float(sys.argv[sys.argv.index("--hours") + 1]) if "--hours" in sys.argv else 6.0
@@ -214,9 +230,96 @@ def detail(item_id):
             "thread": board.rows(KeyConditionExpression=Key("pk").eq(f"chan#{item_id}"))}
 
 
-# The paper of the finish dial (studies/rlneurons/paper/): beside this file on AWS (infra/monitor/deploy.sh), in its study here.
-PAPER = (Path(__file__).with_name("the-finish-dial.pdf"),
-         Path(__file__).parent.parent / "studies/rlneurons/paper/the-finish-dial.pdf")
+# The papers (studies/<study>/paper/<name>.pdf), served at /paper/<name>.pdf: beside this file on AWS (infra/monitor/deploy.sh), in their study here.
+# The site lab's static files: beside the code in the Lambda zip (infra/monitor/deploy.sh), in the study in the repository.
+LAB = (Path(__file__).with_name("sitelab"), Path(__file__).parent.parent / "studies/sitelab")
+LAB_FILE = re.compile(r"(prototypes/[a-z-]+/)?(index\.html|data\.json)?")
+PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / folder / name)
+          for name, folder in (("the-finish-dial.pdf", "rlneurons/paper"), ("theories-on-trial.pdf", "theory/paper"),
+                               ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"),
+                               ("no-early-warning.pdf", "rlneurons/paper-no-warning"))}
+DECK_PAGE = demo_deck.page(len(FINDINGS), PAPERS)  # the talk deck at /demo, with the number of finding pages and the papers
+
+
+# The home page (home.py) is the page / of invariant.team; on any other host / is the board and the home page is /home.
+# API Gateway passes the name the browser asked for in the Host header.
+HOME_HOSTS = ("invariant.team", "www.invariant.team")
+TEAM_PAGE = people.page()
+PAPERS_PAGE = papers.page(PAPERS)  # the paper loop and its papers, at /papers
+HOME_PAGE = home.PAGE.replace("__COUNTS__", json.dumps({
+    "findings": len(FINDINGS), "proof": len(PROOFS), "papers": len(PAPERS),
+    "lab": max(len(list((d / "prototypes").glob("*/index.html"))) for d in LAB)}))
+
+
+# What every page gets as it is sent, so that no page module has to hold it (site review, work-acad69): the name
+# "Invariant" leads to the home page and the header gets the link "All pages" to it; a page with no header gets a
+# small link to the home page at the middle of its right edge, written downward (no corner is free on every such
+# page: the deck, /exa, /pastdev and the lab prototypes each keep a control in one); the header's links are tall
+# enough to tap on a phone; pinch zoom is never switched off. The home page has its own links and is left as it is.
+SITE_HOME = "https://invariant.team/"
+HEADER = '<header class="top">'  # the site's header; /exa has a <header class="top" id=...> that is its own first section
+NAME = '<h1 class="name">Invariant</h1>'
+NAME_LINKED = f'<h1 class="name"><a href="{SITE_HOME}" style="color:inherit;font-weight:inherit;text-decoration:none">Invariant</a></h1>'
+NAME_LINK = re.compile(r'<h1 class="name"><a href="[^"]*">Invariant</a></h1>')  # a header whose name already is a link (/values)
+FINDINGS_TAB = re.compile(r'<a (?:class="tab" )?href="/findings"[^>]*>Findings</a>')
+NO_ZOOM = re.compile(r',\s*(?:maximum-scale=[\d.]+|user-scalable=(?:no|0))')
+TAP = "<style>@media (max-width: 900px) { .top a { padding-block: 10px; } }</style>\n</head>"
+# The corner link carries its own color scheme: a page that declares none gets it from the lightness of its
+# background, so the link is readable on an always-dark and on an always-light page.
+HOME_CORNER = ('<style>.inv-home { position: fixed; right: 0; left: auto; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; z-index: 2147483000; padding: 10px 3px; font: 600 12px/1 Archivo, system-ui, sans-serif; '
+               'letter-spacing: .02em; color: light-dark(#56636d, #93a1ad); text-decoration: none; border-radius: 4px; text-shadow: 0 0 2px light-dark(#fff, #000), 0 0 4px light-dark(#fff, #000), 0 0 6px light-dark(#fff, #000); } .inv-home:hover { color: light-dark(#1f43d6, #8fb1ff); } '
+               '.inv-home:focus-visible { outline: 2px solid light-dark(#1f43d6, #8fb1ff); outline-offset: -2px; } @media print { .inv-home { display: none; } }</style>'
+               f'<a class="inv-home" href="{SITE_HOME}">Invariant</a>'
+               '<script>(() => { const a = document.querySelector(".inv-home"); let c = [];'
+               ' for (const e of [document.body, document.documentElement]) { c = getComputedStyle(e).backgroundColor.match(/[\\d.]+/g).map(Number); if (c[3] !== 0) break; }'
+               ' if (c[3] !== 0) a.style.colorScheme = .299 * c[0] + .587 * c[1] + .114 * c[2] < 128 ? "dark" : "light"; })()</script>\n</body>')
+
+
+def chrome(body, path):
+    if 'id="go"' in body and "const PAGES" in body:  # the home page
+        return body
+    body = NO_ZOOM.sub("", body)
+    if NAME in body or HEADER in body:
+        body = NAME_LINK.sub(NAME_LINKED, body.replace(NAME, NAME_LINKED, 1), count=1)
+        if f'<a href="{SITE_HOME}">All pages</a>' not in body:
+            body = FINDINGS_TAB.sub(lambda m: m.group(0) + f'\n    <a href="{SITE_HOME}">All pages</a>', body, count=1)
+        return body.replace("</head>", TAP, 1)
+    if '<a class="name" href="/">Invariant</a>' in body:  # /psychosis: its name led to the board
+        return body.replace('<a class="name" href="/">Invariant</a>', f'<a class="name" href="{SITE_HOME}">Invariant</a>', 1)
+    if path.startswith(("/demo/fig/", "/demo/ali")):  # figures shown inside the deck
+        return body
+    return body.replace("</body>", HOME_CORNER, 1)
+
+
+# An address that is no page: the site's header, one sentence and the ways on.
+NOT_FOUND = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: no such page</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" media="print" onload="this.media='all'">
+<style>
+:root { color-scheme: light dark; --paper: light-dark(#eceef0, #080c11); --ink: light-dark(#101820, #e9eff3); --mute: light-dark(#56636d, #93a1ad);
+  --rule: light-dark(#d3d9de, #1c2630); --blue: light-dark(#1f43d6, #8fb1ff); }
+body { margin: 0; color: var(--ink); background: var(--paper); font: 400 15px/1.5 "Archivo", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
+.wrap { max-width: 1840px; margin: 0 auto; padding: 20px 40px 56px; }
+.top { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+.name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
+.top a, .ways a { color: var(--mute); white-space: nowrap; }
+.top a:hover, .ways a:hover { color: var(--ink); }
+.say { font-weight: 300; font-size: clamp(26px, 3.4vw, 44px); line-height: 1.15; margin: 14vh 0 24px; overflow-wrap: anywhere; }
+.ways { display: flex; gap: 26px; margin: 0; }
+@media (max-width: 900px) { .wrap { padding: 14px 16px 40px; } .top { gap: 6px 13px; padding-bottom: 2px; } .name { font-stretch: 112%; margin-right: 0; } }
+</style></head><body><div class="wrap">
+  <header class="top">
+    <h1 class="name">Invariant</h1>
+    <a href="/">Board</a>
+    <a href="/architecture">Design</a>
+    <a href="/proof">Proof</a>
+    <a href="/findings">Findings</a>
+  </header>
+  <p class="say">There is no page __PATH__.</p>
+  <p class="ways"><a href="https://invariant.team/">Home</a><a href="/">Board</a><a href="/findings">Findings</a></p>
+</div></body></html>"""
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -224,7 +327,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def send(self, status, kind, body, headers=()):
         if kind == "text/html":  # every page gets the tab icon here, so no page module holds it
-            body = body.replace("<title>", ICON_LINK + "<title>", 1)
+            body = chrome(body.replace("<title>", ICON_LINK + "<title>", 1), self.path)
         data = body if isinstance(body, bytes) else body.encode()
         tag = f'"{hashlib.blake2b(data, digest_size=16).hexdigest()}"'  # from the content, so an unchanged board answers 304
         if status == 200 and self.headers.get("If-None-Match") == tag:
@@ -246,10 +349,27 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         path = self.path.split("?")[0]
+        host = (self.headers.get("X-Forwarded-Host") or self.headers.get("Host") or "").split(":")[0].lower()
+        if path == "/home" or (path == "/" and host in HOME_HOSTS):
+            return self.send(200, "text/html", HOME_PAGE)
+        if host in HOME_HOSTS and path not in ("/data", "/favicon.svg") and not path.startswith("/data/"):  # one address per page: the monitor's
+            return self.send(302, "text/plain", "", [("Location", "https://monitor.invariant.team" + self.path)])
+        if path == "/team":
+            return self.send(200, "text/html", TEAM_PAGE)
+        if path == "/board":  # the board was here for two hours on 2026-11-15
+            return self.send(302, "text/plain", "", [("Location", "/")])
         if path == "/":
             return self.send(200, "text/html", PAGE)
         if path == "/demo":
+            return self.send(200, "text/html", DECK_PAGE)
+        if path == "/demo/story":
             return self.send(200, "text/html", demo.PAGE)
+        if path.startswith("/demo/fig/") and path[len("/demo/fig/"):] in demo_deck.FIGS:
+            return self.send(200, "text/html", demo_deck.FIGS[path[len("/demo/fig/"):]])
+        if path in ("/demo/ali", "/demo/ali/"):
+            return self.send(302, "text/plain", "", [("Location", "/demo/ali/slide1")])
+        if path.startswith("/demo/ali/") and path[len("/demo/ali/"):] in demo_ali.PAGES:
+            return self.send(200, "text/html", demo_ali.PAGES[path[len("/demo/ali/"):]])
         if path == "/architecture":
             return self.send(200, "text/html", architecture.PAGE)
         if path == "/findings":
@@ -260,19 +380,33 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", PROOF_PAGE)
         if path.startswith("/proof/") and path[len("/proof/"):] in PROOFS:
             return self.send(200, "text/html", PROOFS[path[len("/proof/"):]].PAGE)
+        if path == "/papers":
+            return self.send(200, "text/html", PAPERS_PAGE)
         if path == "/exa":
             return self.send(200, "text/html", exa_page.PAGE)
         if path == "/pastdev":
             return self.send(200, "text/html", pastdev.PAGE)
+        if path == "/values":
+            return self.send(200, "text/html", values.PAGE)
         if path == "/psychosis":
             return self.send(200, "text/html", psychosis.PAGE)
         if path == "/favicon.svg":
             return self.send(200, "image/svg+xml", FAVICON)
-        if path == "/paper/the-finish-dial.pdf":
-            found = [p for p in PAPER if p.exists()]  # a deploy without the file answers 404 and the other pages stay up
+        if path == "/lab":  # the pages link to their files relative to the folder
+            return self.send(302, "text/plain", "", [("Location", "/lab/")])
+        if path.startswith("/lab/") and LAB_FILE.fullmatch(path[len("/lab/"):]):
+            name = path[len("/lab/"):] + ("index.html" if path.endswith("/") else "")
+            found = [d / name for d in LAB if (d / name).is_file()]
+            if not found:  # a deploy without the folder answers 404 and the other pages stay up
+                return self.send(404, "text/plain", f"no page {path}")
+            if name.endswith(".html"):
+                return self.send(200, "text/html", found[0].read_text())
+            return self.send(200, "application/json", found[0].read_bytes())
+        if path.startswith("/paper/") and path[7:] in PAPERS:
+            found = [p for p in PAPERS[path[7:]] if p.exists()]  # a deploy without the file answers 404 and the other pages stay up
             return self.send(200, "application/pdf", found[0].read_bytes()) if found else self.send(404, "text/plain", f"no page {path}")
         if path != "/data" and not path.startswith("/data/"):
-            return self.send(404, "text/plain", f"no page {path}")
+            return self.send(404, "text/html", NOT_FOUND.replace("__PATH__", html.escape(path)))
         try:  # the page shows the error text; the traceback goes to this terminal
             if path == "/data":  # the time of the read goes in a header, so the body and its ETag change only with the board
                 body, ns = snapshot_json()
@@ -1244,8 +1378,13 @@ function chart(b, W, H, narrow) {
     const spots = [0, -14, 14, -28, 28].flatMap(dy => [[xr + 8, mid + dy, "start"], [xr - 8, mid + dy, "end"]]);
     label(text, "gain", [...spots, [xr + 8, y(q.p) - 10, "start"], [xr - 8, y(q.p) - 10, "end"], [xr + 8, y(q.p) + 18, "start"]], true);
   });
-  pts.filter(q => q.p < lo).forEach(q =>  // below the floor: say its value
-    label(`↓ ${f1(q.p)}`, "quiet", [[x(q.i), y(q.p) + 20, "middle"], [x(q.i) - 5, y(q.p) + 20, "start"], [x(q.i) + 12, y(q.p) + 4, "start"]], true));
+  let edge = -Infinity;  // the right end of the last value drawn under the floor
+  pts.filter(q => q.p < lo).forEach(q => {  // below the floor: say its value, unless it would touch the one before or another label
+    const text = `↓ ${f1(q.p)}`, w = textWidth(text), x0 = Math.max(x(q.i) - w / 2, L), n = out.length;
+    if (x0 < edge + 8) return;
+    label(text, "quiet", [[x0, y(q.p) + 20, "start"]]);
+    if (out.length > n) edge = x0 + w;
+  });
 
   return `<svg class="${sel ? "has-sel" : ""}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="${esc(b.name)}: best base ${f1(lead.p)} %, RL ${rl ? f1(rlP) + " %" : "not measured"}">` +
     svg.join("") + marks.map(m => m.ci).join("") + marks.map(m => m.a).join("") + out.join("") + `</svg>`;

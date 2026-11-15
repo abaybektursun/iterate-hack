@@ -8,7 +8,7 @@ Account 769063704696, us-east-1, AWS profile `fuelos`. Every resource is named `
 
 ## What it creates (CloudFormation stack `iterate-monitor`, `template.yaml`)
 
-- Lambda function `iterate-monitor`: python3.14, arm64, 1769 MB (one vCPU), 20 s timeout, reserved concurrency 2. The
+- Lambda function `iterate-monitor`: python3.14, arm64, 1769 MB (one vCPU), 20 s timeout, reserved concurrency 10. The
   [Lambda Web Adapter](https://github.com/awslabs/aws-lambda-web-adapter) layer (`LambdaAdapterLayerArm64:30`,
   adapter 1.1.0) starts `run.sh`, which runs `python3 view.py --port 8080`, and forwards each request to it,
   gzip-compressed. boto3 comes with the runtime. `tools/team.py` uses the function's role when
@@ -17,7 +17,7 @@ Account 769063704696, us-east-1, AWS profile `fuelos`. Every resource is named `
   `new` and `top`; writing to its own log group. Nothing else.
 - Log group `/aws/lambda/iterate-monitor`, 14 days retention.
 - API Gateway HTTP API `iterate-monitor`: one `$default` route to the function, stage `$default` throttled to
-  3 requests/s with a burst of 6 (excess gets 429). Requests beyond 2 running at once get 503 from the
+  3 requests/s with a burst of 6 (excess gets 429). Requests beyond 10 running at once get 503 from the
   concurrency cap.
 - Only with a domain: an ACM certificate validated through DNS in the given hosted zone, the API Gateway custom
   domain, its mapping to the API, and an alias A record.

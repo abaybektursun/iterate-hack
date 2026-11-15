@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2431,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ies -1156 + b = -458 \\implies b = 698\n\\]\n\nThus, \\( P(0) = 698 \\).\n\nNext, we determine the polynomial \\( Q(x) \\):\n\\[\nQ(x) = -2x^2 + cx + d\n\\]\nUsing the same points:\n1. Plugging in \\( x = 16 \\):\n\\[\n-2(16)^2 + 16c + d = 54 \\implies -512 + 16c + d = 54 \\implies 16c + d = 566 \\quad \\text{(3)}\n\\]\n2. Plugging in \\( x = 20 \\):\n\\[\n-2(20)^2 + 20c + d = 53 \\implies -800 + 20c + d = 53 \\implies 20c + d = 853 \\quad \\text{(4)}\n\\]\n\nSubtracting equation (3) from equation (4):\n\\[\n(20c + d) - (16c + d) = 853 - 566 \\implies 4c = 287 \\implies c = \\frac{287}{4} = 71.75\n\\]\n\nSubstituting \\( c = 71.75 \\) back into equation (3):\n\\[\n16(71.75) + d = 566 \\implies 1148 + d = 566 \\implies d = -582\n\\]\n\nThus, \\( Q(0) = -582 \\).\n\nFinally, we find \\( P(0) + Q(0) \\):\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 15,
+  "seed": 3010015,
+  "gold": "154",
+  "extracted_v3": "286",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 6493,
+  "prompt_tail": "wer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nAdults made up $\\frac5{12}$ of the crowd of people at a concert. After a bus carrying $50$ more people arrived, adults made up $\\frac{11}{25}$ of the people at the concert. Find the minimum number of adults who could have been at the concert after the bus arrived.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "600}{7}\n   \\]\n\n7. **Determine valid \\(x\\):**\n   - \\(T\\) must be positive and an integer.\n   - Solve for \\(x\\) such that \\(\\frac{300x - 6600}{7}\\) is positive and integer.\n   - Find \\(x\\) values in the range [23, 50] (since \\(x \\geq 23\\) and \\(y = 50 - x \\geq 0\\)) that satisfy \\(x \\equiv 1 \\mod 7\\): 29, 36, 43, 50.\n\n8. **Calculate minimum adults after the bus arrived:**\n   - For each valid \\(x\\), compute \\(A + x\\):\n     - \\(x = 36\\): \\(A + x = \\frac{132 \\cdot 36 - 2750}{7} = 286\\)\n\n9. **Verification:**\n   - Total people before the bus: \\(T = 600\\)\n   - Adults after the bus: \\(286\\)\n   - Total people after the bus: \\(650\\)\n   - Check proportion: \\(\\frac{286}{650} = \\frac{11}{25}\\)\n\nThus, the minimum number of adults who could have been at the concert after the bus arrived is \\(\\boxed{286}\\)."
+ }
+}

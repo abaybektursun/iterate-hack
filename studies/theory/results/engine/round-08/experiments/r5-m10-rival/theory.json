@@ -1,0 +1,28 @@
+{
+ "predictions": [],
+ "intervention": {
+  "change": "Add min-p 0.1 truncation (tokens below 0.1 x the top token's probability are removed before sampling) to the plain-prompt base at T 1.0 / top-p 1.0; nothing else changes: no prefill, same cap, same seeds, one sample, no restart or vote.",
+  "model": "allenai/Olmo-3-1025-7B (base)",
+  "cell": {
+   "set": "MATH-500",
+   "prompt": "plain (the standard chat-template prompt, no prefilled tokens), as in the T3 cell",
+   "sampling": "T 1.0 / top-p 1.0 / min-p 0.1",
+   "cap": 16384,
+   "grader": "v3",
+   "samples": 1,
+   "seeds": "per-request seed = the T3 cell's seed rule (base seed + problem_index), one sample per problem"
+  },
+  "count": "Right answers over all 500 MATH-500 problems by grader v3 on the single sample; a cap-hit answer counts whatever v3 gives from its text, and an empty extraction counts wrong.",
+  "unit": "right of 500",
+  "value": 305,
+  "low": 272,
+  "high": 338,
+  "best_known": {
+   "value": 454,
+   "item": "result-40ed3b",
+   "setting": "base + cue, T 1.0 / top-p 1.0, 4 samples, vote after restart with ties to the shortest finished sample (16,384 cap, grader v3)"
+  },
+  "gpu_minutes": 30,
+  "why": "The mechanism says the plain base's terse answers (about 60 % right at T 0.6, plain T 0.6 = 319/500) fail at T 1.0 because sampled tail tokens derail them after the opening, so cutting the tail at T 1.0 should bring the terse register back near its T 0.6 accuracy and lift the plain cell from 224 toward about 305, minus a few loops and cap hits that truncation brings back; the mode-selection rival expects only a small gain, from a higher self-open share."
+ }
+}

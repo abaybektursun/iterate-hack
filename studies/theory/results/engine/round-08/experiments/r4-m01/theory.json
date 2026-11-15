@@ -1,0 +1,28 @@
+{
+ "predictions": [],
+ "intervention": {
+  "change": "Opening selection by self-similarity. For each problem, draw 4 openings of the cued answer at the cell's usual sampling (T 0.6 / top-p 0.95), each stopped at the first line end after 3,000 characters (about 1,000 tokens). Opening 0 is the first 3,000 characters of the stored F_math500 answer (seed 1,000,000 + index); openings 1-3 are new draws with seeds 7,000,000 + 3*index + j, j = 0..2. Score each with ratio = len(zlib.compress(opening.encode('utf-8'), 9)) / len(opening.encode('utf-8')) and keep the opening with the HIGHEST ratio (least compressible, least self-similar); ties go to the lowest j. Then continue the kept opening at T 0.6 / top-p 0.95 to a total of 16,384 generated tokens (opening tokens included), seed 8,000,000 + index. If opening 0 is kept, reuse the stored F_math500 answer as is. Nothing else changes: same prompt, same cue, same grader.",
+  "model": "allenai/Olmo-3-1025-7B (base)",
+  "cell": {
+   "set": "MATH-500",
+   "prompt": "the 3.1 RL-Zero chat prompt with the cue ' line!\\n\\nOkay' prefilled (prompt arm 'cue', as in r3 base-01 F_math500)",
+   "sampling": "T 0.6 / top-p 0.95",
+   "cap": 16384,
+   "grader": "v3",
+   "samples": 1,
+   "seeds": "stored opening and continuation seed 1,000,000 + problem index (r3 base-01 F); new openings 7,000,000 + 3*index + j; new continuations 8,000,000 + index"
+  },
+  "count": "Right answers over all 500 MATH-500 problems, grader v3 (score_v3 == 1) on the one final answer per problem (the continuation of the kept opening, or the stored F answer when opening 0 is kept). A cap hit (16,384 total generated tokens without finishing) counts wrong, as does a missing answer. The usual cell (stored F_math500 rescored under v3) is 354/500 with 119 cap hits (result-e870a1).",
+  "unit": "right of 500",
+  "value": 366,
+  "low": 347,
+  "high": 385,
+  "best_known": {
+   "value": 454,
+   "item": "result-40ed3b",
+   "setting": "cued base, T 1.0 / top-p 1.0, cap 16,384, v3: vote over 4 samples after restart on cap hits, ties to the shortest finished sample"
+  },
+  "gpu_minutes": 35,
+  "why": "Under the mechanism the loop hazard grows with how self-similar the text so far is, and a sample that later locks into a loop is already more compressible in its first 3,000 characters (predicted within-problem score 0.65). Keeping the least compressible of 4 openings should cut the cell's ~92 rule-A loops by about a fifth. Looped problems that finish are right about half the time (the restart row recovered 60 of 119 cap hits), so the gain is about +10 to +15 over 354."
+ }
+}

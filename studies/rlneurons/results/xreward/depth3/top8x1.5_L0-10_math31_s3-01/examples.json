@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3030000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 5858,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ng the point \\((16, 54)\\):\n\\[\n-2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566 \\quad \\text{(3)}\n\\]\n\nUsing the point \\((20, 53)\\):\n\\[\n-2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853 \\quad \\text{(4)}\n\\]\n\nSubtract equation (3) from equation (4):\n\\[\n(20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n\\]\n\nSubstitute \\(d = \\frac{287}{4}\\) into equation (3):\n\\[\n16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n\\]\n\nThus, the polynomial \\(Q(x)\\) is:\n\\[\nQ(x) = -2x^2 + \\frac{287}{4}x - 582\n\\]\n\n### Step 3: Calculate \\(P(0)\\) and \\(Q(0)\\)\n\\[\nP(0) = c = 698\n\\]\n\\[\nQ(0) = e = -582\n\\]\n\n### Step 4: Sum the values\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\nThus, the final answer is:\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 29,
+  "seed": 3030029,
+  "gold": "244",
+  "extracted_v3": "22",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 15425,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "):\n     \\[\n     2(3 + 2 - 1) = 2 \\times 4 = 8\n     \\]\n   - This matches the provided result for the case \\(m = 3\\) and \\(n = 2\\).\n\n3. **Applying the Formula**:\n   - For \\(m = 7\\) and \\(n = 5\\):\n     \\[\n     \\text{Number of bounded regions} = 2(7 + 5 - 1) = 2 \\times 11 = 22\n     \\]\n\n### Final Answer:\nThe number of bounded regions formed is:\n\\[\n\\boxed{22}\n\\]\n\n### Explanation of the Formula:\nThe formula \\(2(m + n - 1)\\) accounts for the intersections and regions formed by connecting all points between two parallel lines. The key is that each intersection of segments and their connections create regions in a grid-like structure, leading to the simplified formula after accounting for intersections and edges. The example cases validate the formula, ensuring its correctness for the given problem."
+ }
+}

@@ -1,0 +1,24 @@
+{
+ "commit": "0959d61",
+ "command": "studies/theory/lib/forecast.py round studies/theory/results/wide/round-09 --from studies/theory/results/forecast/run-02 studies/theory/results/forecast/run-03 studies/theory/results/forecast/run-04 studies/theory/results/forecast/run-05 studies/theory/results/forecast/run-06 studies/theory/results/forecast/run-07 studies/theory/results/forecast/run-08 studies/theory/results/forecast/cells-01",
+ "utc": "2026-11-15T17:45:51",
+ "from": [
+  "studies/theory/results/forecast/run-02",
+  "studies/theory/results/forecast/run-03",
+  "studies/theory/results/forecast/run-04",
+  "studies/theory/results/forecast/run-05",
+  "studies/theory/results/forecast/run-06",
+  "studies/theory/results/forecast/run-07",
+  "studies/theory/results/forecast/run-08",
+  "studies/theory/results/forecast/cells-01"
+ ],
+ "carried": 10,
+ "new": 36,
+ "targets": 27,
+ "proposed": 46,
+ "dropped": 0,
+ "merged": 39,
+ "forecasters": 48,
+ "minutes": 40.0,
+ "job_dirs": "/var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-lwksc3f8"
+}

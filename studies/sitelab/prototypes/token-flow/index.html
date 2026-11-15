@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: answers that finish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #131110; --sheet: #1b1816; --ink: #e9e3d7; --mute: #a0978a; --faint: #7a7268; --rule: #2c2824;
+  --blue: #c9a96e; --red: #c9654c; --col: 372px;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--ink); background: var(--paper); overflow: hidden;
+  font: 400 15px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
+canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+canvas.drag { cursor: grabbing; }
+.room { position: fixed; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(19, 17, 16, .78), rgba(19, 17, 16, 0) 34%); }
+
+.col { position: fixed; left: 0; top: 0; bottom: 0; width: var(--col); padding: 26px 0 22px 40px; display: flex; flex-direction: column; pointer-events: none; }
+.col > * { pointer-events: auto; }
+.name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; }
+.name span { color: var(--mute); font-weight: 400; font-stretch: 100%; margin-left: 10px; letter-spacing: 0; }
+h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 33px; line-height: 1.14; letter-spacing: -.012em; margin: 34px 0 22px; text-wrap: balance; min-height: 4.6em; }
+h1 b { font-weight: 300; color: var(--red); }
+h1 i { font-style: normal; color: var(--ink); border-bottom: 1px solid var(--blue); }
+.row { border-top: 1px solid var(--rule); padding: 12px 0; }
+.lab { font-size: 12px; font-weight: 600; color: var(--faint); margin-bottom: 6px; }
+.models button { display: flex; width: 100%; align-items: baseline; gap: 10px; padding: 5px 0; color: var(--mute); transition: color .15s; }
+.models button:hover { color: var(--ink); }
+.models button[aria-pressed=true] { color: var(--ink); font-weight: 600; }
+.models button::before { content: ""; width: 6px; height: 6px; border-radius: 50%; border: 1px solid var(--faint); transform: translateY(-1px); flex: none; }
+.models button[aria-pressed=true]::before { background: var(--blue); border-color: var(--blue); }
+.models button em { font-style: normal; margin-left: auto; font-weight: 400; color: var(--faint); font-size: 13px; }
+.seg { display: flex; gap: 18px; }
+.seg button { color: var(--mute); padding: 3px 0; border-bottom: 1px solid transparent; }
+.seg button[aria-pressed=true] { color: var(--ink); font-weight: 600; border-bottom-color: var(--blue); }
+.seg button:disabled { color: #48545f; cursor: default; }
+.note { font-size: 13px; color: var(--faint); margin-top: 6px; min-height: 1.5em; }
+.detail { font-size: 13px; color: var(--mute); overflow: hidden; flex: 1; min-height: 0; }
+.detail .who { color: var(--ink); font-weight: 600; font-size: 14px; }
+.detail p { margin: 6px 0 0; display: -webkit-box; -webkit-line-clamp: 7; -webkit-box-orient: vertical; overflow: hidden; }
+.detail .out { color: var(--ink); margin-top: 8px; }
+.foot { font-size: 12px; color: var(--faint); border-top: 1px solid var(--rule); padding-top: 10px; }
+.foot a { color: var(--mute); }
+.replay { margin: 0 0 12px; padding: 6px 16px; border-radius: 99px; color: var(--ink); font-weight: 500; font-size: 13px; border: 1px solid var(--faint); align-self: flex-start; transition: border-color .2s; }
+.replay:hover { border-color: var(--ink); }
+
+.status { position: fixed; right: 40px; top: 26px; font-size: 13px; color: var(--mute); display: flex; align-items: center; gap: 10px; }
+.status::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--blue); }
+.status.bad { color: var(--red); } .status.bad::before { background: var(--red); }
+.caption { position: fixed; left: calc(var(--col) + 40px); right: 40px; bottom: 22px; text-align: center; font-size: 14px; color: var(--mute); pointer-events: none; }
+.key { display: inline-flex; gap: 22px; margin-top: 6px; font-size: 12px; color: var(--faint); }
+.key span::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 7px; background: var(--c); }
+.key .ring::before { background: none; border: 1.5px solid var(--red); }
+
+.tag { position: fixed; left: 0; top: 0; pointer-events: none; white-space: nowrap; will-change: transform; }
+.grp { text-align: center; font-size: 12px; font-weight: 600; color: var(--mute); line-height: 1.2; }
+.grp strong { display: block; font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 38px; line-height: 1.05; color: var(--ink); letter-spacing: -.01em; font-variant-numeric: lining-nums tabular-nums; }
+.grp small { font-weight: 400; font-size: 12px; }
+.grp.cap strong { color: var(--red); } .grp.bad strong { color: var(--mute); }
+.tick { font-size: 11px; color: var(--faint); text-align: right; }
+.handle { pointer-events: auto; cursor: ns-resize; font-size: 12px; font-weight: 600; color: var(--ink); padding: 6px 12px 6px 10px; border-radius: 99px; touch-action: none;
+  background: #1b1816; border: 1px solid #4a433b; display: flex; gap: 8px; align-items: center; }
+.handle svg { width: 9px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.4; }
+.handle.fixed { cursor: default; color: var(--mute); } .handle.fixed svg { display: none; }
+.tip { font-size: 12px; color: var(--ink); background: #1b1816; border: 1px solid var(--rule); border-radius: 6px; padding: 6px 10px; opacity: 0; transition: opacity .12s; }
+.tip.on { opacity: 1; }
+.tip b { font-weight: 600; }
+#err { position: fixed; left: 8px; bottom: 8px; color: var(--red); font-size: 12px; white-space: pre-wrap; z-index: 9; }
+
+@media (max-width: 860px) {
+  :root { --col: 0px; }
+  .col { width: 100%; padding: 14px 16px; bottom: auto; background: linear-gradient(rgba(19, 17, 16, .92), rgba(19, 17, 16, 0)); }
+  h1 { font-size: 19px; margin: 10px 0 8px; min-height: 0; }
+  .models { display: flex; flex-wrap: wrap; gap: 0 16px; } .models button { width: auto; } .models button em, .lab, .detail, .foot, .note, .replay { display: none; }
+  .row { padding: 6px 0; } .status { display: none; }
+  .caption { left: 12px; right: 12px; bottom: 10px; font-size: 12px; } .key { gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .grp strong { font-size: 19px; } .grp { font-size: 9px; } .grp small { display: none; }
+}
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="room"></div>
+<div class="col">
+  <div class="name">Invariant<span>Answers that finish</span></div>
+  <h1 id="h1"></h1>
+  <div class="row"><div class="lab">Model</div><div class="models" id="models"></div></div>
+  <div class="row"><div class="lab">Token cap</div>
+    <div class="seg" id="caps"><button data-cap="16384">16,384</button><button data-cap="32768">32,768</button></div>
+    <div class="note" id="note"></div></div>
+  <div class="row detail" id="detail"></div>
+  <button class="replay" id="replay">Release again</button>
+  <div class="foot" id="foot"></div>
+</div>
+<div class="status" id="status">Reading the board</div>
+<div class="caption">
+  <div>Each thread of grains is one stored answer to one of 328 hard problems. It falls one step per generated token and ends where the answer ended.</div>
+  <div class="key"><span style="--c:#e6dfd0">Finished, right</span><span style="--c:#6e6860">Finished, wrong</span><span style="--c:#c9654c">Cut off at the cap</span><span class="ring">Flagged as a loop</span></div>
+</div>
+<div id="tags"></div>
+<div id="err"></div>
+<script>
+addEventListener('error', e => { document.getElementById('err').textContent += (e.message || e) + '\n'; });
+addEventListener('unhandledrejection', e => { document.getElementById('err').textContent += (e.reason && e.reason.stack || e.reason) + '\n'; });
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const Q = new URLSearchParams(location.search);
+const $ = id => document.getElementById(id);
+const fmt = n => Math.round(n).toLocaleString('en-US');
+const DATA = await (await fetch('data.json')).json();
+const SETS = Object.fromEntries(DATA.sets.map(s => [s.key, s]));
+const MODELS = DATA.sets.filter(s => s.per === 4);
+
+// ---- constants shared by the shader and the picking code
+const NS = 1312, YS = 13 / 16384, SPEED = 5200, CYCLE = 32768 * 1.09, R = 22, SPAN = 1.22;
+const PER = +(Q.get('p') || 600);                       // particles per slot
+const COL = { ok: [0.80, 0.75, 0.64], bad: [0.20, 0.185, 0.17], cap: [0.44, 0.105, 0.055] };   // bone, slate, iron oxide
+
+// ---- state
+const st = { model: 'base_cue', run: 16, wall: 16384, wallCur: 16384, t0: 0, hot: -1, pin: -1 };
+{ const h = location.hash.slice(1).split('/'); if (SETS[h[0]] && SETS[h[0]].per === 4) { st.model = h[0]; if (h[1] === '32768' && SETS[h[0] + '_cap32']) { st.run = 32; st.wall = st.wallCur = 32768; } } }
+const cur = () => st.run === 32 ? SETS[st.model + '_cap32'] : SETS[st.model];
+
+// ---- renderer
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setClearColor(0x131110, 1); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 400);
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+composer.addPass(new UnrealBloomPass(new THREE.Vector2(1, 1), 0.10, 0.35, 0.92));   // a faint lens response on true highlights only
+composer.addPass(new OutputPass());
+const finish = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uT: { value: 0 } },
+  vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }`,
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float uT; varying vec2 vUv;
+float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+void main(){ vec3 c = texture2D(tDiffuse, vUv).rgb; vec2 q = vUv - .5; c *= 1. - .34 * smoothstep(.25, .85, length(q * vec2(1.15, 1.)));
+  c += (h(gl_FragCoord.xy + fract(uT) * 91.) - .5) * .028; gl_FragColor = vec4(c, 1.); }` });
+composer.addPass(finish);
+scene.background = new THREE.Color(0x131110); scene.fog = new THREE.Fog(0x131110, 110, 300);
+scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), .04).texture;
+const key = new THREE.DirectionalLight(0xfff1dc, 2.6); key.position.set(-22, 26, 30); key.castShadow = true; key.shadow.mapSize.set(2048, 2048);
+Object.assign(key.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30, near: 1, far: 120 }); key.shadow.radius = 9; key.shadow.bias = -.0005; scene.add(key);
+const rim = new THREE.DirectionalLight(0xcfd8e6, .9); rim.position.set(24, 6, -26); scene.add(rim);
+scene.add(new THREE.HemisphereLight(0xc8c0b4, 0x2a2420, .8));
+
+// ---- slot texture: row 0 = u, length in tokens, z offset, kind (0 finished, 1 cut off, 2 loop); row 1 = stream colour; row 2 = end colour
+const tex = new Float32Array(NS * 3 * 4);
+const slotTex = new THREE.DataTexture(tex, NS, 3, THREE.RGBAFormat, THREE.FloatType);
+slotTex.minFilter = slotTex.magFilter = THREE.NearestFilter;
+const T = { u: new Float32Array(NS), len: new Float32Array(NS), kind: new Float32Array(NS), c: new Float32Array(NS * 3), e: new Float32Array(NS * 3) };
+const zj = new Float32Array(NS);
+for (let i = 0; i < NS; i++) { zj[i] = (Math.sin(i * 127.1) * 43758.5453 % 1) * 1.5; tex[i * 4] = 0.5; }
+
+const COMMON = `
+uniform sampler2D uS; uniform float uTime, uFront, uPx, uHotA, uHotB, uDim;
+const float YS = ${YS}, SPEED = ${SPEED.toFixed(1)}, CYCLE = ${CYCLE.toFixed(1)}, R = ${R.toFixed(1)}, SPAN = ${SPAN};
+uint pcg(uint v){ uint s = v * 747796405u + 2891336453u; uint w = ((s >> ((s >> 28u) + 4u)) ^ s) * 277803737u; return (w >> 22u) ^ w; }
+float rnd(uint v){ return float(pcg(v)) / 4294967295.0; }
+vec3 top(vec4 a){ float th = (a.x - .5) * SPAN; return vec3(R * sin(th), 0., R * (1. - cos(th)) + a.z); }
+`;
+const partMat = new THREE.ShaderMaterial({
+  uniforms: { uS: { value: slotTex }, uTime: { value: 0 }, uFront: { value: 0 }, uPx: { value: 1 }, uHotA: { value: -1 }, uHotB: { value: -1 }, uDim: { value: 1 } },
+  vertexShader: COMMON + `
+varying vec3 vC; varying float vA, vS;
+void main(){
+  uint id = uint(gl_VertexID); int slot = int(id % ${NS}u);
+  vec4 a = texelFetch(uS, ivec2(slot, 0), 0); vec3 c = texelFetch(uS, ivec2(slot, 1), 0).rgb; vec3 ce = texelFetch(uS, ivec2(slot, 2), 0).rgb;
+  float h1 = rnd(id), h2 = rnd(id ^ 0x9e3779b9u), h3 = rnd(id * 3u + 17u), h4 = rnd(id * 5u + 91u);
+  float d = fract(h1 + uTime * SPEED / CYCLE) * CYCLE, len = a.y, kind = a.w, fs = float(slot);
+  vec3 b = top(a), p; float al = 1., sz = .7 + .8 * h4; vS = 0.;
+  if (d < len) {                                   // inside the answer: one step down per token
+    float w = .05 + .05 * h3;
+    p = b + vec3((h2 - .5) * w, -d * YS, (h3 - .5) * .22);
+    float head = smoothstep(len - 700., len, d);
+    al = 1.; c = mix(c, ce, head) * (.8 + .22 * h4) * (.84 + .3 * rnd(uint(slot) * 7u + 3u)) * (1. + .45 * head); vS = 1.; sz *= 1.5 + .5 * head;
+  } else {                                         // past the end of the answer
+    float tau = (d - len) / SPEED, ang = h2 * 6.2832; vec3 e = b + vec3(0., -len * YS, 0.); c = ce;
+    if (kind < .5) {                               // finished: the stream stops here
+      float life = .55, q = 1. - exp(-tau * 6.);
+      p = e + vec3(cos(ang) * .09 * h3 * q, -.10 * q, sin(ang) * .09 * h3 * q); al = max(0., 1. - tau / life) * 1.5;
+    } else if (kind < 1.5) {                       // cut off: thrown off the plate
+      float life = min(1.5, (CYCLE - len) / SPEED), vh = .35 + 2.4 * h3 * h3, vy = .8 + 3.6 * h4 * h4, g = 9.;
+      float tb = 2. * vy / g, y = tau < tb ? vy * tau - .5 * g * tau * tau : 0.;
+      float r = vh * (1. - exp(-2.2 * tau)) / 2.2;
+      p = e + vec3(cos(ang) * r, y + .03, sin(ang) * r * .8); al = max(0., 1. - tau / life) * 1.5; sz *= 1.15;
+    } else {                                       // flagged as a loop: circles
+      float life = min(3.2, (CYCLE - len) / SPEED), rad;
+      ang += tau * 4.2;
+      rad = .34 + .07 * h3;
+      p = e + vec3(cos(ang) * rad, .42 + sin(ang) * rad, (h4 - .5) * .1); al = sin(3.1416 * clamp(tau / life, 0., 1.)) * 2.6; sz *= 1.7; c = vec3(1.1, 1., .86);
+    }
+  }
+  if (d > uFront || len < 1.) al = 0.;
+  bool hot = fs >= uHotA && fs < uHotB;
+  if (hot) { c = vec3(1.35, .82, .28); sz *= 2.; } else c *= uDim;
+  sz *= sqrt(clamp(al, 0., 1.));
+  vec4 mv = modelViewMatrix * vec4(p, 1.);
+  gl_Position = al > 0. ? projectionMatrix * mv : vec4(2., 2., 2., 1.);
+  gl_PointSize = uPx * sz / -mv.z;
+  vC = c; vA = al;
+}`,
+  fragmentShader: `
+varying vec3 vC; varying float vA, vS;
+void main(){ vec2 q = (gl_PointCoord - .5) * 2.; q.x *= 1. + 1.3 * vS; float r2 = dot(q, q); if (r2 > 1.) discard;   // a grain: a small matte ball lit by the key light
+  vec3 n = vec3(q.x, -q.y, sqrt(1. - r2)); float dif = max(dot(n, normalize(vec3(-.5, .62, .6))), 0.), rimL = pow(1. - n.z, 3.) * max(n.x, 0.);
+  gl_FragColor = vec4(vC * (.20 + 1.05 * dif) + vec3(.55, .6, .7) * rimL * .12, 1.); }`
+});
+function points(n, mat) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3)); const p = new THREE.Points(g, mat); p.frustumCulled = false; return p; }
+scene.add(points(NS * PER, partMat));
+
+const beadMat = new THREE.ShaderMaterial({
+  uniforms: partMat.uniforms,
+  vertexShader: COMMON + `
+varying vec3 vC; varying float vA, vS;
+void main(){
+  vS = 0.; vec4 a = texelFetch(uS, ivec2(gl_VertexID, 0), 0); vec3 ce = texelFetch(uS, ivec2(gl_VertexID, 2), 0).rgb; float fs = float(gl_VertexID);
+  vec3 p = top(a) + vec3(0., -a.y * YS, 0.); bool hot = fs >= uHotA && fs < uHotB;
+  vec4 mv = modelViewMatrix * vec4(p, 1.);
+  float al = (a.y > uFront || a.y < 1.) ? 0. : 1.;
+  gl_Position = al > 0. ? projectionMatrix * mv : vec4(2., 2., 2., 1.);
+  gl_PointSize = uPx * (hot ? 5. : 2.1) / -mv.z; vC = hot ? vec3(1.35, .82, .28) : ce * 1.25 * uDim; vA = al;
+}`,
+  fragmentShader: partMat.fragmentShader
+});
+scene.add(points(NS, beadMat));
+
+// ---- the instrument: a frosted glass plate in a brass frame that rides two rails; the left rail is the engraved token scale
+function canvasTex(w, h, draw, rx, ry) { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx || 1, ry || 1); t.anisotropy = 8; return t; }
+const rand = (i => () => (i = (i * 16807) % 2147483647) / 2147483647)(7);
+const brushed = canvasTex(512, 512, (g, w, h) => { g.fillStyle = '#8a8a8a'; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 5000; i++) { const v = 90 + rand() * 110 | 0; g.strokeStyle = `rgba(${v},${v},${v},${.05 + rand() * .22})`; g.lineWidth = .5 + rand(); const y = rand() * h, x = rand() * w, l = 40 + rand() * 300; g.beginPath(); g.moveTo(x, y); g.lineTo(x + l, y + (rand() - .5) * 1.5); g.stroke(); }
+  for (let i = 0; i < 60; i++) { g.strokeStyle = `rgba(30,30,30,${.1 + rand() * .2})`; g.lineWidth = .4; const x = rand() * w, y = rand() * h; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (rand() - .5) * 90, y + (rand() - .5) * 30); g.stroke(); } }, 6, 1);
+const frost = canvasTex(512, 512, (g, w, h) => { const d = g.createImageData(w, h); for (let i = 0; i < w * h; i++) { const v = 120 + rand() * 110 | 0; d.data.set([v, v, v, 255], i * 4); } g.putImageData(d, 0, 0);
+  for (let i = 0; i < 40; i++) { g.strokeStyle = `rgba(255,255,255,${.08 + rand() * .15})`; g.lineWidth = .5; const x = rand() * w, y = rand() * h; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (rand() - .5) * 160, y + (rand() - .5) * 160); g.stroke(); } }, 8, 3);
+const brass = new THREE.MeshStandardMaterial({ color: 0x9c7c46, metalness: 1, roughness: .46, roughnessMap: brushed, bumpMap: brushed, bumpScale: .6, envMapIntensity: 1.7 });
+const glass = new THREE.MeshPhysicalMaterial({ color: 0x7f8782, metalness: 0, roughness: .5, roughnessMap: frost, bumpMap: frost, bumpScale: .25, transparent: true, opacity: .2, clearcoat: .3, clearcoatRoughness: .5, envMapIntensity: .8, depthWrite: false });
+const PW = 31, PD = 10.5, PZ = 2.3, plate = new THREE.Group(); scene.add(plate);
+{ const g = new THREE.Mesh(new THREE.BoxGeometry(PW, .12, PD), glass); g.position.set(0, -.06, PZ); plate.add(g);
+  const sh = new THREE.Mesh(new THREE.BoxGeometry(PW, .1, PD), new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false })); sh.position.set(0, -.06, PZ); sh.castShadow = true; plate.add(sh);
+  const bar = (w, d, x, z) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, .22, d), brass); m.position.set(x, -.06, z); plate.add(m); };
+  bar(PW + .5, .26, 0, PZ - PD / 2); bar(PW + .5, .26, 0, PZ + PD / 2); bar(.26, PD, -PW / 2 - .12, PZ); bar(.26, PD, PW / 2 + .12, PZ); }
+const DEPTH = 32768 * YS, FLOOR = -DEPTH - 2.2;
+{ // the rail the answers start from, following the curve of the curtain
+  const pts = []; for (let i = 0; i <= 64; i++) { const th = (i / 64 - .5) * SPAN * 1.05; pts.push(new THREE.Vector3(R * Math.sin(th), .16, R * (1 - Math.cos(th)))); }
+  const m = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 128, .11, 12), brass); scene.add(m);
+  // two rails; the left one carries the scale, engraved every 1,024 tokens and numbered every 4,096
+  const scale = canvasTex(128, 4096, (g, w, h) => { g.fillStyle = '#b08d52'; g.fillRect(0, 0, w, h);
+    for (let i = 0; i < 2600; i++) { const v = 120 + rand() * 90 | 0; g.strokeStyle = `rgba(${v},${v * .82 | 0},${v * .5 | 0},.22)`; g.lineWidth = .6; const y = rand() * h; g.beginPath(); g.moveTo(rand() * w, y); g.lineTo(rand() * w, y + (rand() - .5) * 2); g.stroke(); }
+    const top = 36, per = (h - top - 60) / 32768; g.fillStyle = g.strokeStyle = '#2a2014'; g.font = '500 30px Archivo, sans-serif'; g.textBaseline = 'middle';
+    for (let t = 0; t <= 32768; t += 1024) { const y = top + t * per, major = t % 4096 === 0; g.lineWidth = major ? 4 : 2; g.beginPath(); g.moveTo(w, y); g.lineTo(w - (major ? 96 : 44), y); g.stroke(); }
+    window.SC = { top: top / h, per: per / h }; });
+  const H0 = DEPTH / (window.SC.per * 32768), ruler = new THREE.Mesh(new THREE.BoxGeometry(.7, H0, .14), [brass, brass, brass, brass, new THREE.MeshStandardMaterial({ map: scale, color: 0xa08a66, metalness: .9, roughness: .5, envMapIntensity: .8 }), brass]);
+  ruler.position.set(-PW / 2 - .7, window.SC.top * H0 - H0 / 2, PZ); scene.add(ruler);
+  const post = new THREE.Mesh(new THREE.CylinderGeometry(.14, .14, DEPTH + 2.6, 20), brass); post.position.set(PW / 2 + .55, -DEPTH / 2 - .9, PZ); scene.add(post);
+  const stone = canvasTex(512, 512, (g, w, h) => { const d = g.createImageData(w, h); for (let i = 0; i < w * h; i++) { const v = 60 + rand() * 40 | 0; d.data.set([v, v * .96 | 0, v * .9 | 0, 255], i * 4); } g.putImageData(d, 0, 0); }, 14, 14);
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ color: 0x3a342e, map: stone, bumpMap: stone, bumpScale: .4, roughness: .95, metalness: 0, envMapIntensity: .25 }));
+  floor.rotation.x = -Math.PI / 2; floor.position.y = FLOOR; floor.receiveShadow = true; scene.add(floor);
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(400, 200), new THREE.MeshStandardMaterial({ color: 0x4a443d, map: stone, bumpMap: stone, bumpScale: .3, roughness: 1, metalness: 0, envMapIntensity: .2 }));
+  wall.position.set(0, FLOOR + 100, -15); wall.receiveShadow = true; scene.add(wall); }
+
+// ---- layout: which group an answer is in at the cap W, and where its stream stands
+let groups = [], info = [];                         // info[a] = {kind 0 right, 1 wrong, 2 cut, len, ok, loop}
+function layout(W) {
+  const S = cur(), n = S.tok.length, per = S.per, ord = [];
+  info = new Array(n);
+  for (let a = 0; a < n; a++) {
+    const cut = per === 4 ? !!S.cap_hit[a] : (S.tok[a] > W || !!S.cap_hit[a]);
+    info[a] = { kind: cut ? 2 : S.ok[a] ? 0 : 1, len: Math.min(S.tok[a], W), ok: S.ok[a], loop: S.loop ? S.loop[a] : 0, tok: S.tok[a] };
+    ord.push(a);
+  }
+  ord.sort((x, y) => info[x].kind - info[y].kind || S.tok[x] - S.tok[y] || info[y].ok - info[x].ok || x - y);
+  const gap = n * 0.035, total = n + 2 * gap; groups = [0, 1, 2].map(() => ({ n: 0, u0: 1, u1: 0, okc: 0, loops: 0 }));
+  ord.forEach((a, r) => {
+    const f = info[a], u = (r + .5 + gap * f.kind) / total, g = groups[f.kind];
+    g.n++; g.u0 = Math.min(g.u0, u); g.u1 = Math.max(g.u1, u); g.okc += f.ok; g.loops += f.loop; f.u = u;
+    const c = f.kind === 0 ? COL.ok : f.kind === 1 ? COL.bad : COL.cap, e = f.ok ? COL.ok : c;
+    for (let k = 0; k < (per === 4 ? 1 : 4); k++) {
+      const s = per === 4 ? a : a * 4 + k;
+      T.u[s] = u; T.len[s] = f.len; T.kind[s] = f.loop ? 2 : f.kind === 2 ? 1 : 0; T.c.set(c, s * 3); T.e.set(e, s * 3);
+    }
+  });
+  groups.forEach((g, k) => { if (!g.n) { g.u0 = g.u1 = k === 2 ? 1 : 0; } });
+}
+function stepSlots(dt) {
+  const ku = 1 - Math.exp(-dt * 3.2), kc = 1 - Math.exp(-dt * 5), ks = 1 - Math.exp(-dt * 7);
+  for (let s = 0; s < NS; s++) {
+    const i = s * 4, j = NS * 4 + i, k = NS * 8 + i;
+    tex[i] += (T.u[s] - tex[i]) * ku;
+    tex[i + 1] = T.len[s] > tex[i + 1] ? Math.min(T.len[s], tex[i + 1] + SPEED * dt) : tex[i + 1] + (T.len[s] - tex[i + 1]) * ks;
+    tex[i + 2] = zj[s]; tex[i + 3] = T.kind[s];
+    for (let q = 0; q < 3; q++) { tex[j + q] += (T.c[s * 3 + q] - tex[j + q]) * kc; tex[k + q] += (T.e[s * 3 + q] - tex[k + q]) * kc; }
+  }
+  slotTex.needsUpdate = true;
+}
+
+// ---- labels in the scene
+const tags = $('tags');
+const mk = (cls, html) => { const d = document.createElement('div'); d.className = 'tag ' + cls; d.innerHTML = html || ''; tags.appendChild(d); return d; };
+const gl = [mk('grp ok'), mk('grp bad'), mk('grp cap')];
+const ticks = [0, 4096, 8192, 12288, 16384, 20480, 24576, 28672, 32768], tk = ticks.map(t => mk('tick', fmt(t)));
+const handle = mk('handle', '<svg viewBox="0 0 9 14"><path d="M1 5l3.5-3.5L8 5M1 9l3.5 3.5L8 9"/></svg><span></span>');
+const tip = mk('tip');
+const V = new THREE.Vector3();
+let W = 1, H = 1, colW = 0;
+function px(x, y, z) { V.set(x, y, z).project(camera); return [(V.x * .5 + .5) * W, (-V.y * .5 + .5) * H]; }
+function at(u, tokens, zo) { const th = (u - .5) * SPAN; return [R * Math.sin(th), -tokens * YS, R * (1 - Math.cos(th)) + (zo || 0)]; }
+function place(el, x, y, ax, ay) { el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) translate(${ax}%,${ay}%)`; }
+function labels(dt) {
+  const S = cur(), names = ['Finished, right', 'Finished, wrong', 'Cut off at the cap'], n = S.tok.length;
+  groups.forEach((g, k) => {
+    let extra = (100 * g.n / n).toFixed(0) + ' %';
+    if (k === 2 && S.per === 4 && g.okc) extra += ', ' + g.okc + ' scored right';
+    if (g.loops) extra += ', ' + g.loops + (g.loops === 1 ? ' loop' : ' loops');
+    gl[k].innerHTML = `<strong>${fmt(g.n)}</strong>${names[k]}<br><small>${extra}</small>`;
+    const p = px(...at((g.u0 + g.u1) / 2, 0)); place(gl[k], p[0], p[1] - 30, -50, -100);
+    gl[k].style.opacity = g.n ? 1 : .25;
+  });
+  ticks.forEach((t, i) => { const p = px(-PW / 2 - 1.05, -t * YS, PZ + .07); place(tk[i], p[0] - 8, p[1], -100, -50); tk[i].style.opacity = S.cap === 32768 || t <= 16384 ? 1 : 0; });
+  const hp = px(PW / 2 + .9, -st.wallCur * YS, PZ); place(handle, Math.min(hp[0], W - 150), hp[1], 0, -50);
+  handle.lastChild.textContent = 'Cap ' + fmt(st.wallCur);
+  handle.classList.toggle('fixed', !SETS[st.model + '_cap32']);
+}
+
+// ---- words
+function words() {
+  const S = cur(), n = S.tok.length, g = groups, right = S.per === 4 ? S.ok.reduce((a, b) => a + b, 0) : g[0].n + (st.wallCur >= 32768 ? g[2].okc : 0);
+  $('h1').innerHTML = S.per === 4
+    ? `${S.label}: <b>${fmt(g[2].n)}</b> of ${fmt(n)} answers are still running at ${fmt(16384)} tokens. <i>${fmt(right)}</i> are right.`
+    : `${S.label}, cap at ${fmt(st.wallCur)}: <b>${fmt(g[2].n)}</b> of ${n} answers are cut off and <i>${fmt(right)}</i> are right.`;
+  $('note').textContent = !SETS[st.model + '_cap32'] ? 'No run of this model at 32,768 is stored.'
+    : S.per === 4 ? 'Four samples per problem, each stopped at 16,384.' : 'One sample per problem, generated up to 32,768. Drag the cap. Click the model for the four samples.';
+  document.querySelectorAll('#caps button').forEach(b => { const c = +b.dataset.cap; b.disabled = c === 32768 && !SETS[st.model + '_cap32']; b.setAttribute('aria-pressed', c === 32768 ? st.run === 32 && st.wall > 16384 : !(st.run === 32 && st.wall > 16384)); });
+  document.querySelectorAll('#models button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === st.model));
+  foot();
+}
+let board = null;
+function foot() {
+  const S = cur(); let line = '';
+  if (board) {
+    const want = S.per === 4 ? S.sample0_right : S.ok.reduce((a, b) => a + b, 0);
+    const sc = board.scores.filter(s => s.result === S.result && s.benchmark === 'hard328'); const s = sc.find(s => s.right === want) || null;
+    if (s) line = `Board ${S.result}, ${s.who}: ${s.right} of ${s.n}${S.per === 4 ? ' on sample 1 of 4' : ''}; these rows give ${want}.<br>`;
+    else line = `Board ${S.result}.<br>`;
+  }
+  $('foot').innerHTML = line + 'Rows: ' + S.path.replace('studies/rlneurons/', '');
+}
+async function readBoard() {
+  try { const r = await fetch('/data'); if (!r.ok) throw 0; board = await r.json();
+    $('status').className = 'status'; $('status').textContent = 'Board read ' + new Date().toTimeString().slice(0, 5) + ', ' + board.scores.length + ' scores'; foot();
+  } catch (e) { $('status').className = 'status bad'; $('status').textContent = 'Board offline' + (board ? ', last data kept' : ''); }
+}
+readBoard(); setInterval(readBoard, 30000);
+
+function detail(a) {
+  const S = cur(), d = $('detail'); if (a < 0 || a >= S.tok.length) { d.innerHTML = '<div class="lab">Answer</div>Point at a stream, click to keep it.'; return; }
+  const pi = S.per === 4 ? a >> 2 : a, P = DATA.problems[pi], f = info[a];
+  const state = f.kind === 2 ? (f.tok > f.len ? `cut off at ${fmt(f.len)} of ${fmt(f.tok)} tokens` : `cut off at ${fmt(f.len)} tokens`) : `finished after ${fmt(f.tok)} tokens`;
+  const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+  d.innerHTML = `<div class="lab">Answer</div><div class="who">${esc(P.id.replace(/_Problems/, '').replace(/[\/_]/g, ' '))}${S.per === 4 ? ', sample ' + ((a & 3) + 1) + ' of 4' : ''}</div>
+    <div class="out">${state}${f.loop ? ', flagged as a loop' : ''}. ${f.kind === 2 && f.tok > f.len ? 'Under the higher cap it gives' : 'Gives'} ${S.ans[a] ? esc(S.ans[a]) : 'no answer'}, the key says ${esc(P.gold)}: ${f.ok ? 'right' : 'wrong'}.</div><p>${esc(P.text)}</p>`;
+}
+
+// ---- controls
+MODELS.forEach((s, i) => { const b = document.createElement('button'); b.dataset.k = s.key; const r = s.ok.reduce((a, b) => a + b, 0);
+  b.innerHTML = `${s.label}<em>${(100 * r / s.tok.length).toFixed(1)} % right</em>`; b.onclick = () => choose(s.key); $('models').appendChild(b); });
+function choose(k) { if (k === st.model || !SETS[k + '_cap32']) { st.run = 16; st.wall = 16384; } st.model = k; st.pin = st.hot = -1; apply(); }
+function setCap(c) { if (c > 16384 && !SETS[st.model + '_cap32']) return; if (c > 16384 && st.run !== 32) { st.run = 32; st.pin = st.hot = -1; } if (c <= 16384 && st.run === 32 && st.wallCur <= 16384) { st.run = 16; st.pin = st.hot = -1; } st.wall = c; apply(); }
+document.querySelectorAll('#caps button').forEach(b => b.onclick = () => setCap(+b.dataset.cap));
+$('replay').onclick = () => { st.t0 = clock.getElapsedTime(); };
+function apply() { if (st.run === 16) st.wall = 16384; history.replaceState(null, '', '#' + st.model + '/' + (st.run === 32 ? 32768 : 16384)); layout(Math.max(st.wallCur, 16384)); words(); detail(st.pin); }
+addEventListener('keydown', e => { const i = '1234'.indexOf(e.key); if (i >= 0 && MODELS[i]) choose(MODELS[i].key);
+  if (e.key === 'c') setCap(st.wall > 16384 ? 16384 : 32768); if (e.key === 'r') $('replay').click(); if (e.key === 'Escape') { st.pin = -1; detail(-1); } });
+
+// ---- camera: drag to turn, wheel or pinch to move in, leans toward the pointer
+const cam = { sx: 0, sy: 0, yaw: .2, pitch: .13, zoom: 1, vy: 0, vp: 0, lx: 0, ly: 0, depth: 16384 };
+const ptr = new Map(); let pinch = 0, moved = 0, mouse = [-1, -1];
+canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); ptr.set(e.pointerId, [e.clientX, e.clientY]); moved = 0; canvas.classList.add('drag'); });
+canvas.addEventListener('pointermove', e => {
+  mouse = [e.clientX, e.clientY]; const p = ptr.get(e.pointerId);
+  if (!p) { pick(); return; }
+  const dx = e.clientX - p[0], dy = e.clientY - p[1]; ptr.set(e.pointerId, [e.clientX, e.clientY]);
+  if (ptr.size === 2) { const [a, b] = [...ptr.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (pinch) cam.zoom = Math.min(1.7, Math.max(.35, cam.zoom * pinch / d)); pinch = d; return; }
+  moved += Math.abs(dx) + Math.abs(dy); cam.vy = -dx * .004; cam.vp = dy * .004; cam.yaw += cam.vy; cam.pitch += cam.vp;
+});
+const up = e => { ptr.delete(e.pointerId); pinch = 0; canvas.classList.remove('drag'); if (moved < 6) { mouse = [e.clientX, e.clientY]; pick(); st.pin = st.hot; detail(st.pin); } };
+canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
+canvas.addEventListener('pointerleave', () => { mouse = [-1, -1]; st.hot = -1; tip.classList.remove('on'); });
+canvas.addEventListener('wheel', e => { e.preventDefault(); cam.zoom = Math.min(1.7, Math.max(.35, cam.zoom * Math.exp(e.deltaY * .0012))); }, { passive: false });
+addEventListener('pointermove', e => { cam.lx = e.clientX / innerWidth - .5; cam.ly = e.clientY / innerHeight - .5; });
+
+let hdrag = null;
+handle.addEventListener('pointerdown', e => { if (!SETS[st.model + '_cap32']) return; handle.setPointerCapture(e.pointerId);
+  if (st.run !== 32) { st.run = 32; st.wall = 16384; st.pin = st.hot = -1; apply(); }
+  const a = px(15.5, 0, 7.2), b = px(15.5, -16384 * YS, 7.2); hdrag = { y: e.clientY, w: st.wallCur, k: 16384 / (b[1] - a[1]) }; st.wall = st.wallCur; });
+handle.addEventListener('pointermove', e => { if (!hdrag) return; st.wall = st.wallCur = Math.round(Math.min(32768, Math.max(16384, hdrag.w + (e.clientY - hdrag.y) * hdrag.k))); words(); });
+handle.addEventListener('pointerup', () => { hdrag = null; words(); });
+
+function pick() {
+  const S = cur(), per = S.per, n = S.tok.length; let best = -1, bd = 14;
+  if (mouse[0] < colW && W > 860) { st.hot = -1; tip.classList.remove('on'); return; }
+  for (let a = 0; a < n; a++) {
+    const s = per === 4 ? a : a * 4, u = tex[s * 4], len = tex[s * 4 + 1], A = px(...at(u, 0, zj[s])), ax = A[0], ay = A[1], B = px(...at(u, len, zj[s]));
+    const dx = B[0] - ax, dy = B[1] - ay, t = Math.max(0, Math.min(1, ((mouse[0] - ax) * dx + (mouse[1] - ay) * dy) / (dx * dx + dy * dy + 1e-6)));
+    const d = Math.hypot(mouse[0] - ax - t * dx, mouse[1] - ay - t * dy) + (1 - t) * 2;
+    if (d < bd) { bd = d; best = a; }
+  }
+  st.hot = best;
+  if (best < 0) { tip.classList.remove('on'); return; }
+  const f = info[best], P = DATA.problems[per === 4 ? best >> 2 : best];
+  tip.innerHTML = `<b>${P.id.replace(/_Problems/, '').replace(/[\/_]/g, ' ')}</b> &nbsp; ${fmt(f.tok)} tokens, ${f.kind === 2 ? 'cut off' : 'finished'}, ${f.ok ? 'right' : 'wrong'}`;
+  tip.classList.add('on'); place(tip, Math.min(mouse[0] + 16, W - 330), mouse[1] + 18, 0, 0);
+}
+
+function resize() {
+  W = innerWidth; H = innerHeight; colW = W > 860 ? 372 : 0;
+  renderer.setSize(W, H, false); composer.setSize(W, H); composer.setPixelRatio(renderer.getPixelRatio());
+  camera.aspect = W / H; camera.setViewOffset(W, H, -colW / 2, W > 860 ? -H * .015 : -H * .07, W, H); camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize); resize();
+
+// ---- frame
+const clock = new THREE.Clock(); let last = 0, lastW = -1;
+layout(st.wallCur); for (let s = 0; s < NS; s++) { tex[s * 4] = T.u[s]; tex[s * 4 + 1] = T.len[s]; for (let q = 0; q < 3; q++) { tex[NS * 4 + s * 4 + q] = T.c[s * 3 + q]; tex[NS * 8 + s * 4 + q] = T.e[s * 3 + q]; } }
+words(); detail(-1);
+const STILL = Q.get('t'), DROP = Q.get('drop');                                     // ?t=seconds renders one fixed moment (for checks)
+function frame() {
+  const now = STILL ? +STILL : clock.getElapsedTime(), dt = STILL ? .5 : Math.min(Q.has('fast') ? .4 : .05, now - last); last = now;
+  // the cap moves at the speed the answers fall, so answers held by it fall with it
+  if (!hdrag && st.wallCur !== st.wall) { const d = st.wall - st.wallCur, sp = SPEED * (d > 0 ? 1 : 3) * dt; st.wallCur = Math.abs(d) <= sp ? st.wall : st.wallCur + Math.sign(d) * sp; }
+  if (STILL) st.wallCur = st.wall;
+  if (DROP && now > +DROP && st.run !== 32) setCap(32768);
+  if (st.wallCur !== lastW) { lastW = st.wallCur; if (st.run === 32) { layout(st.wallCur); words(); if (st.pin >= 0) detail(st.pin); } }
+  for (let i = 0; i < (STILL ? 30 : 1); i++) stepSlots(dt);
+  const u = partMat.uniforms; u.uTime.value = now; u.uFront.value = STILL ? 1e9 : (now - st.t0) * SPEED;
+  if (Q.get('pin') && st.pin < 0 && now > .2) { st.pin = +Q.get('pin'); detail(st.pin); }
+  const hs = st.hot >= 0 ? st.hot : st.pin, per = cur().per;
+  u.uHotA.value = hs < 0 ? -1 : per === 4 ? hs : hs * 4; u.uHotB.value = hs < 0 ? -1 : per === 4 ? hs + 1 : hs * 4 + 4;
+  u.uDim.value += ((hs < 0 ? 1 : .38) - u.uDim.value) * .1;
+  plate.position.y = -st.wallCur * YS; finish.uniforms.uT.value = now;
+
+  // camera
+  if (!ptr.size) { cam.yaw += cam.vy; cam.pitch += cam.vp; cam.vy *= .92; cam.vp *= .92; cam.yaw += (.2 - cam.yaw) * .003; }
+  cam.yaw = Math.max(-1.25, Math.min(1.25, cam.yaw)); cam.pitch = Math.max(-.18, Math.min(.95, cam.pitch));
+  cam.depth += (Math.max(16384, st.wallCur) - cam.depth) * (1 - Math.exp(-dt * 2.2));
+  const th = Math.tan(camera.fov * Math.PI / 360), sh = cam.depth * YS + 7 + (cam.depth - 16384) / 16384 * 3.5, sw = 33, asp = (W - colW) / H;
+  const dist = (Math.max(sh / 2 / th, sw / 2 / (th * asp)) + 4) * cam.zoom;
+  cam.sx += (cam.lx - cam.sx) * .03; cam.sy += (cam.ly - cam.sy) * .03;
+  const yaw = cam.yaw + (STILL ? 0 : Math.sin(now * .11) * .03) + cam.sx * .06, pitch = cam.pitch + cam.sy * .03, ty = -cam.depth * YS / 2 - .2;
+  camera.position.set(Math.sin(yaw) * Math.cos(pitch) * dist, ty + Math.sin(pitch) * dist, 2.2 + Math.cos(yaw) * Math.cos(pitch) * dist);
+  camera.lookAt(0, ty, 2.2); camera.updateMatrixWorld();
+  u.uPx.value = 2.0 * 40 * (H / 1000) * renderer.getPixelRatio();
+  labels(dt);
+  composer.render();
+  requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>

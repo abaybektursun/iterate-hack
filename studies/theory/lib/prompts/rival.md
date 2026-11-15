@@ -42,7 +42,7 @@ Rules:
 - The quantity is not one of the tests in tests.json, not in facts.json, and not stated in before.jsonl: a test that
   asks for a known number decides nothing, because both sides can read it.
 - value, low and high are your 90 % interval for the computed number: the interval is scored as a normal
-  distribution (mean value, sd (high - low) / 3.29), so too wide earns little and too narrow loses when it misses.
+  distribution (mean value, sd (high - low) / 3.29), so too wide earns little and too narrow loses when it misses, and a measured value outside your interval earns at most 0.
 
 $intervention
 The intervention comes from the rival mechanism, not from the theory. The theory's advocate will predict its count

@@ -1,0 +1,2 @@
+{"groups": {"H_sft1_rl20_finished": 548, "T_think_finished": 934}}
+{"measured": -0.004282655246252677, "n": 548, "interval": [-0.007683863885839737, -0.0010615711252653928], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": -0.004282655246252677, "not_computable": null, "example_row": {"arm": "sft1_rl20", "problem_index": 120, "sample": 0, "seed": 3000120, "n_new": 1819, "cap_hit": false, "loop_A": false, "extracted_v3": "27", "score_v3": 1, "gold": "27"}}
