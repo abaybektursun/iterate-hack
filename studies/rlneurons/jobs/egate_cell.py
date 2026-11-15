@@ -13,6 +13,8 @@ request runs at temperature 1.0 / top-p 1.0; the logits processor lib/egate.py s
   --rnd-share  the probability of the rnd arms; needed only with a numeric --h0 (with auto it is the measured share above h0).
   --model, --model-path, --model-label, --set, --n, --seed, --samples, --max-tokens, --commit: as in run_cell.py. The prompt
             is always the cue. Sample s of problem i has seed + 10000 * s + i in every arm.
+  --first-sample, --shard i/k  to split one cell over several boxes: the samples first-sample .. first-sample + samples - 1, and
+            every k-th problem of the set starting at the i-th. With auto, the calibration uses the shard's first problems.
 
 Writes to --out (default $OUT_DIR): answers.jsonl (run_cell's row plus the fields arm and egate) and metrics.json (per arm:
 rows, right under grader v3, cap hits, rule-A loops, generated tokens, and the processor's counts: positions, share sharpened,
@@ -51,6 +53,8 @@ ap.add_argument("--max-tokens", type=int, default=None)
 ap.add_argument("--seed", type=int, required=True)
 ap.add_argument("--n", type=int, default=None)
 ap.add_argument("--samples", type=int, default=1)
+ap.add_argument("--first-sample", type=int, default=0)
+ap.add_argument("--shard", default="0/1")
 ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
 ap.add_argument("--commit", required=True)
 
@@ -95,7 +99,8 @@ def main():
 
     fz = json.loads((D4 / "frozen4.json").read_text())
     cap = a.max_tokens or fz["cap"]
-    probs = problems(a.set, fz)[: a.n]
+    shard, n_shards = map(int, a.shard.split("/"))
+    probs = problems(a.set, fz)[: a.n][shard::n_shards]
     pre = fz["prefill_ids"]
     versions = {k: metadata.version(k) for k in PINS}
     assert versions == PINS, f"package versions {versions} differ from the study's {PINS}: run setup_vllm.sh first"
@@ -159,7 +164,7 @@ def main():
              "sample": s, "uid": p["unique_id"], "ids": ids + pre, "n_prompt": len(ids), "prefix_ids": pre, "prefix_kind": "opening",
              "seed": a.seed + 10000 * s + int(p["index"]), "sampling": sampling(*arm_args(k, mode, t_low)), "max_tokens": cap,
              "gold": p["answer"], "arm": name}
-            for k, (name, mode, t_low) in enumerate(arms) for s in range(a.samples) for p, ids in zip(probs, pids)]
+            for k, (name, mode, t_low) in enumerate(arms) for s in range(a.first_sample, a.first_sample + a.samples) for p, ids in zip(probs, pids)]
     live = {r["rid"]: r for r in reqs}
     for r in reqs:
         engine.add(r["rid"], r["ids"], r["sampling"], r["seed"], r["max_tokens"])
