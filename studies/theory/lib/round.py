@@ -25,12 +25,16 @@ Version 5 (default). `all` runs, in order:
   rival          (opus, one per survivor)         rivals/<theory>.json: the strongest rival mechanism, 2-4 tests on
                                                   which the two differ, the rival's predictions (top 3 survivors)
   defend         (opus, one per survivor)         rivals/<theory>.defend.json: predictions from the theory alone
-  duel_test      (opus, repository, laptop only)  rivals/<theory>/p<k>.py, run here once: rivals/<theory>.tests.json
-  score_duel     (no model)                       metrics_v5.json: theory against rival, and the printed table
+  rival2         (opus, where needed)             the rival's second turn where fewer than 2 tests put the defender's
+                                                  centre outside the rival's interval: rivals/<theory>.turn2.json
+  defend         (opus)                           rivals/<theory>.turn2.defend.json for the second turn's tests
+  duel_test      (opus, repository, laptop only)  rivals/<theory>[.turn2]/p<k>.py, run here once: .tests.json
+  score_duel     (no model)                       metrics_v5.json: theory against rival over both turns (+-2 nats
+                                                  decides), and the printed table
   review         (opus, repository)               reviews/<theory>.json for the same survivors; names the duel state
 
-Version 4 (`--version 4`): the same without rival, defend, duel_test and score_duel. Stages given by name run in the
-given order on an existing round folder, for example `round.py <round dir> rival defend duel_test score_duel`.
+Version 4 (`--version 4`): the same without rival, defend, rival2, duel_test and score_duel. Stages given by name run in the
+given order on an existing round folder, for example `round.py <round dir> rival defend rival2 defend duel_test score_duel`.
 Version 3 (`--version 3`; `all` runs split, standing, inventory, targets, external, generate, null, claims, score,
 reverse, test, score, review): generate [--starts ...], score (metrics_v3.json), reverse. Every stage is callable alone.
 
@@ -428,6 +432,11 @@ def standing(folder):
                 (folder / "tests").mkdir(exist_ok=True)
                 (folder / "tests" / f"{name}.json").write_text(
                     json.dumps({**tests, "carried_from": tests.get("carried_from", where[name].name), "rows": rows}, indent=1) + "\n")
+                for f in (where[name] / "rivals").glob(f"{name}.*"):  # its rival files and duel scripts: no second duel
+                    (folder / "rivals").mkdir(exist_ok=True)
+                    (shutil.copytree if f.is_dir() else shutil.copy)(f, folder / "rivals" / f.name)
+                if (where[name] / "rivals" / name).is_dir():
+                    shutil.copytree(where[name] / "rivals" / name, folder / "rivals" / name)
             print(f"  carried: {name} (round {entry['round']}, {entry['state']})")
     print(f"  graveyard.json: {len(graveyard)} theories from earlier rounds, {carried} carried")
     metrics = json.loads((prev / "metrics_v3.json").read_text()) if (prev / "metrics_v3.json").exists() else None
@@ -881,6 +890,7 @@ def test(folder):
 # ---- version 5: the duel against the strongest rival ----
 
 RIVAL_TEST_KEYS = {"experiment", "recipe", "unit", "value", "low", "high", "theory_should_say"}
+DECIDES = 2.0  # nats: a duel total at or beyond +-2 decides; between, the theory and its rival are not separated
 
 
 def survivors(folder):
@@ -894,123 +904,182 @@ def computed_tests(folder, name):
             for q in json.loads((folder / "tests" / f"{name}.json").read_text())["predictions"] if q["measured"] is not None]
 
 
-def rival_tests(folder, name):
-    """The rival's tests, numbered k = 1, 2, ..., without the rival's numbers or reasons."""
-    tests = json.loads((folder / "rivals" / f"{name}.json").read_text())["tests"]
-    return [{"k": k, "experiment": t["experiment"], "recipe": t["recipe"], "unit": t["unit"]} for k, t in enumerate(tests, 1)]
+def rfile(folder, name, turn, kind=""):
+    """rivals/<name>[.turn2][.defend|.tests].json; kind "" is the rival's file of that turn."""
+    return folder / "rivals" / f"{name}{'.turn2' if turn == 2 else ''}{kind}.json"
+
+
+def rival_tests(folder, name, turn, full=False):
+    """A turn's rival tests numbered on from the first turn's (k = 1, 2, ...); without the rival's numbers and reasons
+    unless full."""
+    first = len(json.loads(rfile(folder, name, 1).read_text())["tests"]) if turn == 2 else 0
+    tests = json.loads(rfile(folder, name, turn).read_text())["tests"]
+    return [{"k": first + i, **(t if full else {k: t[k] for k in ("experiment", "recipe", "unit")})} for i, t in enumerate(tests, 1)]
+
+
+def rival_valid(d, turn):
+    r = json.loads((d / "rival.json").read_text())
+    if not isinstance(r, dict) or not isinstance(r.get("statement"), str) or not isinstance(r.get("tests"), list):
+        return "need a JSON object with \"statement\" (a string) and \"tests\" (a list)"
+    if turn == 2 and r.get("no_offline_test") is not None:
+        g = r["no_offline_test"]
+        if not (isinstance(g, dict) and isinstance(g.get("reason"), str) and isinstance(g.get("gpu_experiment"), str)):
+            return "\"no_offline_test\" must be null or {\"reason\": ..., \"gpu_experiment\": ...}"
+        if not r["tests"]:
+            return None
+    if not 2 <= len(r["tests"]) <= 4:
+        return f"need 2 to 4 tests, got {len(r['tests'])}"
+    m = []
+    for i, t in enumerate(r["tests"], 1):
+        if RIVAL_TEST_KEYS - t.keys():
+            m.append(f"test {i} misses keys {sorted(RIVAL_TEST_KEYS - t.keys())}")
+        elif not (all(number(t[k]) for k in ("value", "low", "high")) and t["low"] <= t["value"] <= t["high"]):
+            m.append(f"test {i} needs numbers with low <= value <= high")
+        elif not (isinstance(t["recipe"], str) and t["recipe"].strip()):
+            m.append(f"test {i} needs a recipe")
+    return "; ".join(m) or None
+
+
+def rival_inputs(folder, name):
+    return {"theory.json": folder / "theories" / f"{name}.json", "tests.json": json.dumps(computed_tests(folder, name), indent=1),
+            "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md", "external.md": folder / "external.md"}
 
 
 def rival(folder):
     names = survivors(folder)
     if not names:
         return print("rival: no surviving theory")
-
-    def valid(d):
-        r = json.loads((d / "rival.json").read_text())
-        if not isinstance(r, dict) or not isinstance(r.get("statement"), str) or not isinstance(r.get("tests"), list):
-            return "need a JSON object with \"statement\" (a string) and \"tests\" (a list)"
-        if not 2 <= len(r["tests"]) <= 4:
-            return f"need 2 to 4 tests, got {len(r['tests'])}"
-        m = []
-        for i, t in enumerate(r["tests"], 1):
-            if RIVAL_TEST_KEYS - t.keys():
-                m.append(f"test {i} misses keys {sorted(RIVAL_TEST_KEYS - t.keys())}")
-            elif not (all(number(t[k]) for k in ("value", "low", "high")) and t["low"] <= t["value"] <= t["high"]):
-                m.append(f"test {i} needs numbers with low <= value <= high")
-            elif not (isinstance(t["recipe"], str) and t["recipe"].strip()):
-                m.append(f"test {i} needs a recipe")
-        return "; ".join(m) or None
-
-    run([job("rival", n, {"theory.json": folder / "theories" / f"{n}.json",
-                          "tests.json": json.dumps(computed_tests(folder, n), indent=1),
-                          "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md",
-                          "external.md": folder / "external.md"},
-             {"rival.json": folder / "rivals" / f"{n}.json"}, valid, theory=n) for n in names], folder)
+    run([job("rival", n, rival_inputs(folder, n), {"rival.json": rfile(folder, n, 1)}, lambda d: rival_valid(d, 1), theory=n)
+         for n in names], folder)
     for n in names:
-        print(f"  {n}: rival: {json.loads((folder / 'rivals' / f'{n}.json').read_text())['statement'][:200]}")
+        print(f"  {n}: rival: {json.loads(rfile(folder, n, 1).read_text())['statement'][:200]}")
+
+
+def same_prediction(test, mine):
+    """The defender's centre lies inside the rival's interval: the test cannot separate the two."""
+    return test["low"] <= mine["value"] <= test["high"]
+
+
+def rival2(folder):
+    """The rival's second turn, only where fewer than 2 first-turn tests separate it from the defender's numbers."""
+    jobs = []
+    for n in survivors(folder):
+        if not rfile(folder, n, 1, ".defend").exists() or rfile(folder, n, 2).exists():
+            continue
+        mine = {d["k"]: d for d in json.loads(rfile(folder, n, 1, ".defend").read_text())}
+        tests = rival_tests(folder, n, 1, full=True)
+        apart = sum(not same_prediction(t, mine[t["k"]]) for t in tests)
+        print(f"  {n}: {apart} of {len(tests)} first-turn tests put the defender's centre outside the rival's interval")
+        if apart >= 2:
+            continue
+        held = [{"k": t["k"], "experiment": t["experiment"], **{k: mine[t["k"]][k] for k in ("value", "low", "high", "why")}} for t in tests]
+        j = job("rival", f"{n}.turn2", {**rival_inputs(folder, n), "first_turn.json": rfile(folder, n, 1),
+                                        "advocate.json": json.dumps(held, indent=1)},
+                {"rival.json": rfile(folder, n, 2)}, lambda d: rival_valid(d, 2), theory=n)
+        j["prompt"] += "\n\n" + prompt("rival2")
+        jobs.append(j)
+    if not jobs:
+        return print("rival2: no second turn needed")
+    run(jobs, folder)
 
 
 def defend(folder):
-    names = [n for n in survivors(folder) if (folder / "rivals" / f"{n}.json").exists()]
-    if not names:
-        return print("defend: no rival")
     jobs = []
-    for n in names:
-        ks = [t["k"] for t in rival_tests(folder, n)]
+    for n in survivors(folder):
+        for turn in (1, 2):
+            if not rfile(folder, n, turn).exists() or not (tests := rival_tests(folder, n, turn)):
+                continue
+            ks = [t["k"] for t in tests]
 
-        def valid(d, ks=ks):
-            rows = json.loads((d / "defend.json").read_text())
-            if not isinstance(rows, list) or sorted(r.get("k") for r in rows) != ks:
-                return f"need a JSON list with one entry for each k in {ks}"
-            bad = [r["k"] for r in rows if not (all(number(r.get(k)) for k in ("value", "low", "high")) and r["low"] <= r["value"] <= r["high"])]
-            return f"value outside [low, high] or not a number for k {bad}" if bad else None
+            def valid(d, ks=ks):
+                rows = json.loads((d / "defend.json").read_text())
+                if not isinstance(rows, list) or sorted(r.get("k") for r in rows) != ks:
+                    return f"need a JSON list with one entry for each k in {ks}"
+                bad = [r["k"] for r in rows if not (all(number(r.get(k)) for k in ("value", "low", "high")) and r["low"] <= r["value"] <= r["high"])]
+                return f"value outside [low, high] or not a number for k {bad}" if bad else None
 
-        jobs.append(job("defend", n, {"theory.json": folder / "theories" / f"{n}.json",
-                                      "tests.json": json.dumps(rival_tests(folder, n), indent=1),
-                                      "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md"},
-                        {"defend.json": folder / "rivals" / f"{n}.defend.json"}, valid))
+            jobs.append(job("defend", f"{n}.turn{turn}", {"theory.json": folder / "theories" / f"{n}.json",
+                                                         "tests.json": json.dumps(tests, indent=1),
+                                                         "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md"},
+                            {"defend.json": rfile(folder, n, turn, ".defend")}, valid))
+    if not jobs:
+        return print("defend: no rival")
     run(jobs, folder)
 
 
 def duel_test(folder):
-    names = [n for n in survivors(folder) if (folder / "rivals" / f"{n}.json").exists()]
     jobs = []
-    for n in names:
-        if (folder / "rivals" / f"{n}.tests.json").exists():
-            print(f"  skip duel_test/{n}: rivals/{n}.tests.json exists")
-            continue
-        offline = [{**t, "refuted_by": None} for t in rival_tests(folder, n)]
-        jobs.append((n, offline, script_job(folder, f"duel-{n}", offline, {}, folder / "rivals" / n, DUEL_TESTS)))
-    run([j for _, _, j in jobs], folder, workers=6)
-    for n, offline, _ in jobs:
-        results = run_scripts(folder, f"duel_test/{n}", offline, folder / "rivals" / n)
-        (folder / "rivals" / f"{n}.tests.json").write_text(json.dumps({"theory": n, "tests": results}, indent=1) + "\n")
+    for n in survivors(folder):
+        for turn in (1, 2):
+            if not rfile(folder, n, turn).exists() or not (tests := rival_tests(folder, n, turn)):
+                continue
+            if rfile(folder, n, turn, ".tests").exists():
+                print(f"  skip duel_test/{n} turn {turn}: {rfile(folder, n, turn, '.tests').name} exists")
+                continue
+            offline, scripts = [{**t, "refuted_by": None} for t in tests], rfile(folder, n, turn).with_suffix("")
+            jobs.append((n, turn, offline, scripts, script_job(folder, f"duel-{scripts.name}", offline, {}, scripts, DUEL_TESTS)))
+    run([j[-1] for j in jobs], folder, workers=6)
+    for n, turn, offline, scripts, _ in jobs:
+        results = run_scripts(folder, f"duel_test/{n} turn {turn}", offline, scripts)
+        rfile(folder, n, turn, ".tests").write_text(json.dumps({"theory": n, "turn": turn, "tests": results}, indent=1) + "\n")
 
 
 def score_duel(folder):
-    """metrics_v5.json: on each computed rival test, gain = log density of the theory's (defend) prediction minus log
-    density of the rival's prediction at the computed value, clipped to [-3, 3] nats."""
+    """metrics_v5.json: on each computed rival test of both turns, gain = log density of the theory's (defend)
+    prediction minus log density of the rival's prediction at the computed value, clipped to [-3, 3] nats."""
     theories = {}
     for n in survivors(folder):
-        if not (folder / "rivals" / f"{n}.tests.json").exists():
+        if not rfile(folder, n, 1, ".tests").exists():
             continue
-        r = json.loads((folder / "rivals" / f"{n}.json").read_text())
-        mine = {d["k"]: d for d in json.loads((folder / "rivals" / f"{n}.defend.json").read_text())}
         rows = []
-        for q in json.loads((folder / "rivals" / f"{n}.tests.json").read_text())["tests"]:
-            t = r["tests"][q["k"] - 1]
-            row = {"k": q["k"], "experiment": q["experiment"], "measured": q["measured"],
-                   "theory": {k: mine[q["k"]][k] for k in ("value", "low", "high")},
-                   "rival": {k: t[k] for k in ("value", "low", "high")}, "theory_should_say": t["theory_should_say"]}
-            if q["measured"] is None:
-                row["not_computable"] = q["not_computable"]
-            else:
-                row["gain"] = round(min(3.0, max(-3.0, log_density(q["measured"], row["theory"]) - log_density(q["measured"], row["rival"]))), 4)
-            rows.append(row)
+        gpu = json.loads(rfile(folder, n, 2).read_text()).get("no_offline_test") if rfile(folder, n, 2).exists() else None
+        for turn in (1, 2):
+            if not rfile(folder, n, turn, ".tests").exists():
+                continue
+            tests = {t["k"]: t for t in rival_tests(folder, n, turn, full=True)}
+            mine = {d["k"]: d for d in json.loads(rfile(folder, n, turn, ".defend").read_text())}
+            for q in json.loads(rfile(folder, n, turn, ".tests").read_text())["tests"]:
+                t, d = tests[q["k"]], mine[q["k"]]
+                row = {"k": q["k"], "turn": turn, "experiment": q["experiment"], "measured": q["measured"],
+                       "theory": {k: d[k] for k in ("value", "low", "high")}, "rival": {k: t[k] for k in ("value", "low", "high")},
+                       "same_prediction": same_prediction(t, d), "theory_should_say": t["theory_should_say"]}
+                if q["measured"] is None:
+                    row["not_computable"] = q["not_computable"]
+                else:
+                    row["gain"] = round(min(3.0, max(-3.0, log_density(q["measured"], row["theory"]) - log_density(q["measured"], row["rival"]))), 4)
+                rows.append(row)
         gains = [row["gain"] for row in rows if "gain" in row]
         total = round(sum(gains), 3)
-        state = "not tested against rival" if len(gains) < 2 else "beats rival" if total > 0 else "loses to rival"
-        theories[n] = {"rival": r["statement"], "computed": len(gains), "tests": len(rows), "total_gain": total, "state": state, "rows": rows}
+        state = ("not tested against rival" if len(gains) < 2 else "beats rival" if total >= DECIDES
+                 else "loses to rival" if total <= -DECIDES else "not separated from rival")
+        theories[n] = {"rival": json.loads(rfile(folder, n, 1).read_text())["statement"], "computed": len(gains), "tests": len(rows),
+                       "separating": sum(not r["same_prediction"] for r in rows), "total_gain": total, "state": state,
+                       "no_offline_test": gpu, "rows": rows}
     (folder / "metrics_v5.json").write_text(json.dumps({"theories": theories}, indent=1) + "\n")
-    print("Duel: each survivor's prediction (defend) against its rival's on the rival's tests; gain in nats, above 0 favours the theory.")
-    print(f"{'theory':16} {'computed':>9} {'gain':>7}  state")
+    print(f"Duel: each survivor's prediction (defend) against its rival's on the rival's tests; gain in nats, above 0 favours "
+          f"the theory; a total of +-{DECIDES:g} or beyond decides. same = the defender's centre is inside the rival's interval.")
+    print(f"{'theory':16} {'computed':>9} {'separating':>10} {'gain':>7}  state")
     for n, t in theories.items():
-        print(f"{n:16} {t['computed']:>4} of {t['tests']:<2} {t['total_gain']:7.2f}  {t['state']}")
+        print(f"{n:16} {t['computed']:>4} of {t['tests']:<2} {t['separating']:>10} {t['total_gain']:7.2f}  {t['state']}")
         print(f"    rival: {t['rival'][:150]}")
         for row in t["rows"]:
+            head = f"    p{row['k']} turn {row['turn']}{' same' if row['same_prediction'] else ''}: "
             if "gain" not in row:
-                print(f"    p{row['k']}: not computable: {row['not_computable'][:110]}")
+                print(head + f"not computable: {row['not_computable'][:110]}")
             else:
                 th, rv = row["theory"], row["rival"]
-                print(f"    p{row['k']}: measured {row['measured']:g}, theory {th['value']:g} [{th['low']:g}, {th['high']:g}], "
+                print(head + f"measured {row['measured']:g}, theory {th['value']:g} [{th['low']:g}, {th['high']:g}], "
                       f"rival {rv['value']:g} [{rv['low']:g}, {rv['high']:g}], gain {row['gain']:+.2f}")
+        if t["no_offline_test"]:
+            print(f"    no stored-row test separates them: {t['no_offline_test']['reason'][:120]}")
+            print(f"    GPU experiment: {t['no_offline_test']['gpu_experiment'][:200]}")
 
 
 DUEL_REVIEW = """The theory was also compared with the strongest rival a fresh agent could write: $round/rivals/$theory.json (the rival
 mechanism and its tests, each with the rival's prediction and what the theory should say), $round/rivals/$theory.defend.json
 (a separate agent's predictions from the theory alone), $round/rivals/$theory/ and $round/rivals/$theory.tests.json
-(the scripts and the computed numbers), and $round/metrics_v5.json, entry "$theory" (gain per test, above 0 favours the
-theory, and the state: $duel_state). Read one duel script: does it implement the rival's recipe as written? Your
+(the scripts and the computed numbers); the same names with ".turn2" when the rival had a second turn; and
+$round/metrics_v5.json, entry "$theory" (gain per test, above 0 favours the theory, and the state: $duel_state). Read one duel script: does it implement the rival's recipe as written? Your
 verdict names the duel state. A theory that beats its rival is not "weak" only because some other rival could exist;
 call it weak only for a reason you can point to (a refuting item, a published claim, a broken script, a gain resting on
 one test).
@@ -1049,11 +1118,11 @@ def review(folder):
 STAGES = {"split": split, "standing": standing, "inventory": inventory, "targets": targets, "external": external,
           "generate": generate, "null": null, "claims": claims, "score": score, "reverse": reverse, "test": test, "review": review,
           "mechanisms": mechanisms, "develop": develop, "null_tests": null_tests, "score_tests": score_tests, "heldout": heldout,
-          "rival": rival, "defend": defend, "duel_test": duel_test, "score_duel": score_duel}
+          "rival": rival, "rival2": rival2, "defend": defend, "duel_test": duel_test, "score_duel": score_duel}
 ALL = {3: ["split", "standing", "inventory", "targets", "external", "generate", "null", "claims", "score", "reverse", "test", "score", "review"],
        4: ["split", "standing", "inventory", "external", "mechanisms", "develop", "null_tests", "test", "score_tests", "heldout", "review"],
        5: ["split", "standing", "inventory", "external", "mechanisms", "develop", "null_tests", "test", "score_tests", "heldout",
-           "rival", "defend", "duel_test", "score_duel", "review"]}
+           "rival", "defend", "rival2", "defend", "duel_test", "score_duel", "review"]}
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
