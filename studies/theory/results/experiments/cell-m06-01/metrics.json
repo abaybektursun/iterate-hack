@@ -1,0 +1,90 @@
+{
+ "n": 164,
+ "right": 67,
+ "quick_finished_wrong": 7,
+ "cap_hits": 37,
+ "tokens_per_problem": 10339.6,
+ "right_interval_90": [
+  57,
+  77
+ ],
+ "quick_finished_wrong_interval_90": [
+  3,
+  11
+ ],
+ "okay_first_30_chars": 126,
+ "finished_wrong": 60,
+ "finished_right_tokens_median": 4673,
+ "forecasts_m06_r1": {
+  "run-03/f2-m06": {
+   "value": 26,
+   "interval_90": [
+    15,
+    38
+   ],
+   "measured_inside": false,
+   "abs_error": 19
+  },
+  "run-06/f2-m02": {
+   "value": 6,
+   "interval_90": [
+    2,
+    12
+   ],
+   "measured_inside": true,
+   "abs_error": 1
+  },
+  "run-05/f2-m04": {
+   "value": 8,
+   "interval_90": [
+    3,
+    16
+   ],
+   "measured_inside": true,
+   "abs_error": 1
+  },
+  "reader-1": {
+   "value": 20,
+   "interval_90": [
+    9,
+    34
+   ],
+   "measured_inside": false,
+   "abs_error": 13
+  },
+  "reader-2": {
+   "value": 22,
+   "interval_90": [
+    10,
+    36
+   ],
+   "measured_inside": false,
+   "abs_error": 15
+  }
+ },
+ "references_same_164": {
+  "hard328_base_cue_s4r2-01": {
+   "n": 164,
+   "right": 65,
+   "quick_finished_wrong": 1,
+   "cap_hits": 53,
+   "tokens_per_problem": 10677.2
+  },
+  "hard328_rl_plain_s4r2-01": {
+   "n": 164,
+   "right": 84,
+   "quick_finished_wrong": 0,
+   "cap_hits": 26,
+   "tokens_per_problem": 10286.3
+  }
+ },
+ "generation_s": 3730.5075318813324,
+ "job_wall_s": 3761.9162266254425,
+ "quick_finished_wrong_empty": 3,
+ "no_okay_opening": {
+  "n": 38,
+  "right": 18,
+  "quick_finished_wrong": 5,
+  "cap_hits": 6
+ }
+}
