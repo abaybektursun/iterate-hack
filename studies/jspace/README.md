@@ -93,3 +93,54 @@ fitted on the RL model was used. One sample per problem.
 
 Saved examples: `results/lensdiff/full-01/examples.json`, for each of 138 answers the 5 positions where the RL readout's
 hold-on log-prob exceeds the base's the most, with the text before and after and both top-8 lists.
+
+## Numbers, SPEC 2: workspace tests on both models (run `workspace/pub-01`)
+
+Job `sameraslan-1114-184704-836d` (H100, 368 s, commit `3208566`): `jobs/workspace_tests.py` on both models, each through its own
+final norm and `lm_head`, layers 12 to 30 in steps of 3, lens variants `pub` (published Neuronpedia base lens), `mh` (the mhough
+pair, base and RL-Zero-Math 3.0) and `logit`. All numbers are keys of `results/workspace/pub-01/metrics.json`; intervals are 95 %
+bootstrap intervals over items. The fitted per-model lenses (`own`) are not in this run.
+
+Result: the workspace tests pass in both models, and the two models are the same on every one of them. The only difference
+found is in how the hold-on words respond to a wrong result, and it is small: in the output, +0.35 nats for RL against +0.28
+for the base.
+
+| | Base | RL | Key |
+|---|---|---|---|
+| Multihop, intermediate in the readout top 10 (`pub`), items the model answers | 0.929 (n 21) | 0.950 (n 20) | `readout.multihop.pub.*.pass10` |
+| the same minus the null (another item's intermediate) | +0.746 [0.556, 0.897] | +0.758 [0.567, 0.925] | `...pass10_minus_null` |
+| the same with the logit lens | 0.905 | 0.900 | `readout.multihop.logit` |
+| Typo, correct spelling in the top 10: `pub` / `logit` (n 96) | 0.615 / 0.438 | 0.615 / 0.438 | `readout.typo` |
+| Multilingual (`pub`, n 36 and 35) | 0.493 | 0.481 | `readout.multilingual` |
+| Order-ops, the partial result (`pub` / `logit`, n 29); null 0.59 to 0.69 | 0.897 / 0.966 | 0.931 / 0.966 | `readout.order-ops` |
+| Arithmetic chains, partial results (`pub` / `logit`, n 141 and 139); null 0.16 to 0.18 | 0.404 / 0.670 | 0.392 / 0.655 | `readout.chains` |
+| RL minus base on items both answer, every set and variant | within [-0.04, +0.10] of 0; multihop, typo, association, poetry exactly 0 | | `*.rl_minus_base_pass10_shared` |
+| Two-hop swap, eligible items | 44 of 90 | 44 of 90 | `swap.probe-swap.*.eligible` |
+| Swap flips with lens vectors (best strength 1 to 2) | 0.364 [0.227, 0.500] | 0.364 [0.227, 0.500] | `swap.probe-swap.*.pub.flip` |
+| Swap flips, null replacement / logit-lens vectors | 0.068 / 0.182 | 0.023 / 0.182 | `...null_flip`, `...logit.flip` |
+| Chain swap of the partial result (n 116 and 115): lens / null | 0.043 / 0.017 | 0.035 / 0.009 | `swap.chains` |
+| Twins, output: hold-on log-prob after a wrong result minus after the right one (n 300) | +0.279 [0.255, 0.305] | +0.346 [0.318, 0.374] | `twins.output_hold` |
+| the same, RL minus base | +0.066 [0.061, 0.072]; neutral words -0.010 [-0.014, -0.006] | | `twins.output_hold.rl_minus_base` |
+| Twins, readout at L24 (`pub`): the same gap | +0.133 [0.103, 0.165] | +0.160 [0.125, 0.198] | `twins.lens.pub.L24.hold_lp` |
+| the same, RL minus base | +0.027 [0.018, 0.035]; neutral words -0.001 [-0.007, 0.004] | | same |
+| Twins: log-prob each model gives the right result before it is written | -0.008 | -0.004 | `twins.output_right_logprob_before_result` |
+| Twins: top next token after the wrong line | `So` 194, `Now` 99 | `So` 195, `Now` 103 | `twins.output_top_after_error` |
+| Twins: right result in the readout top 10 while reading the wrong one (L24) | 0.000 | 0.000 | `twins.lens.pub.L24.right_in_top10_at_wrong_number` |
+
+Verdicts against SPEC 2 (with `pub`; `own` still to run):
+- W1 holds for both models on multihop, typo and multilingual (lens minus null far above 0). On multihop the logit lens does as
+  well as the J-lens (0.90 against 0.93) when the minimum is taken over layers 12 to 30; the J-lens reads the intermediate
+  earlier (layer 18: 0.38 to 0.45 against 0.14).
+- W2 holds for both: 36 % flips against 2 to 7 % for the null and 18 % for logit-lens vectors, 16 of 44 items in each model.
+- W3 holds: no standard set differs between the models.
+- W4 is refuted: RL does not hold arithmetic partial results more readably (chains -0.007 [-0.040, 0.025]). On chains and
+  order-ops the logit lens reads the partial result better than the J-lens, and the order-ops null is high (0.6), so numbers
+  are a weak test of this lens. The chain swap fails in both models (4 %).
+- W5 holds in sign and is small: RL's hold-on response to a wrong result is 24 % larger in the output (0.346 against 0.279
+  nats) and 20 % larger in the L24 readout. Both models know the right result (probability above 0.99) and both continue
+  with `So` or `Now` after the wrong line.
+- W6 is refuted: the right result is never in the readout top 10 while the wrong one is read.
+
+Only 20 to 21 of the 93 multihop items are answered correctly (most prompts end in a space token, which forces the answer to
+come without its leading space); the no-trailing-space variant has 15 correct of 83 and gives the same picture (0.47 for both).
+
