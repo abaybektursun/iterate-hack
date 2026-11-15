@@ -21,3 +21,7 @@ baseline for fnf with K branches is a swarm of K independent agents at the same 
 - Limits: three values of K, one task, one model; 3 runs per new cell detects only a large gap. It cannot
   show the order for every N, only that it does or does not hold at 2, 4, 8.
 - Cost: 0 USD (free model).
+
+Note added after the runs (2026-11-15 08:40 UTC): `swe2-ksweep-01` was killed at 0 tries (the spread test before
+it had died on Devin's rate limit). The sweep ran once, in `runs/explore/ahc014/swe2-ksweep-02`, with commit
+a60ebc4. Result: `results/ahc014/swe2-ksweep-02/summary.json`.

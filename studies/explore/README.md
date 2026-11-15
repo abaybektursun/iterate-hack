@@ -21,6 +21,7 @@ branching from an online basin signal (survey 2026-11-14). Public reimplementati
 | `analysis/export_results.py` | Copies an experiment's small files from `runs/` to `results/<task>/<experiment>/` (compare.json, runs.json, assignments, examples). |
 | `analysis/best_of_k.py` | Expected best of K independent stored runs of each arm, and how many runs of one arm equal one run of another. |
 | `analysis/spread_test.py` | Two arms of one experiment folder: one-sided Brown-Forsythe permutation test on spread (all splits), exact one-sided rank-sum on validation and test, SD, worst run. Reproduces the swe2-seeds-01 numbers (p 0.0422, 0.197, 0.066). |
+| `analysis/ksweep_test.py` | Agent-count sweep: per-K cells (mean, SD, worst, gap fnf - parallel) and the exact one-sided stratified permutation test, labels permuted within K, on validation and test. |
 | `analysis/page/build.py` | The results page (private artifact https://claude.ai/artifact/XQwm42PhgcxWjtro4WXN1E): `python3 studies/explore/analysis/page/build.py <out.html>`; template in `analysis/page/template.html`. |
 | `tasks/circles26/` | 26 circles in the unit square, maximize the sum of radii; scorer checks validity (tol 1e-9). Starter 2.54138; best published about 2.636. |
 | `tasks/ahc014/` | AtCoder Heuristic Contest 014 (RectJoin) from Frontier-CS algorithmic problem 159, the task both papers report. Python program, 3 s per case (hard 4 s). Score: mean V / V_ref over cases 1-5 (test: 6-10), checked by the Frontier-CS checker `data/chk.cc` (commit in `data/SOURCE_COMMIT`). Starter (no operations) 0.2217. |
@@ -34,6 +35,32 @@ laptop's `/usr/bin/python3`, which has no numpy or scipy, although the circles26
 below is therefore a **pure-Python** run. Effect: 6 of 1,066 circles submissions (pilot-02, main-01) and 4 of 101
 (main-02) imported numpy/scipy, all invalid; those were the attempts at the optimizer approach. ahc014: 0 of 270
 imported them (unaffected). Programs now run in `runs/explore/.venv` (numpy 2.5.4, scipy 1.18.1), checked at start.
+
+### ahc014/swe2-ksweep-02: fnf beats a parallel swarm at 2, 4 and 8 agents (SWE-2, equal 40 submissions, 0 USD)
+
+Plan written before the runs: `specs/ksweep-ahc014-swe2.md`. New cells K=2 and K=8, seeds 1-3 (12 runs); K=4 is the
+6 + 6 runs of swe2-seeds-01, as planned. `results/ahc014/swe2-ksweep-02/summary.json` (from
+`analysis/ksweep_test.py`); examples: best fnf-k2-s1 s0039 (0.652), invalid parallel-k8-s3 s0002. First full run:
+`swe2-ksweep-01` was killed at 0 tries when the spread test hit the rate limit.
+
+| K | parallel, validation | Mean | fnf, validation | Mean | Gap | Test gap |
+|---|---|---|---|---|---|---|
+| 2 | 0.583 0.562 0.439 | 0.528 | 0.652 0.607 0.578 | 0.612 | +0.084 | +0.073 |
+| 4 | 6 runs (seeds-01) | 0.576 | 6 runs (seeds-01) | 0.591 | +0.015 | +0.199 (2 parallel programs invalid) |
+| 8 | 0.592 0.576 0.556 | 0.575 | 0.584 0.599 0.632 | 0.605 | +0.030 | +0.002 |
+
+- **The planned test passes:** gap > 0 at every K, stratified permutation p = 0.0041 (369,600 splits; needed
+  p < 0.05). On the new cells alone (K=2, K=8; K=4 was known before): p = 0.010 (400 splits).
+- **K=4 is the weak cell (not in the plan):** with the 6 fresh fnf runs of swe2-spread-02 in place of the first 6,
+  gap(4) = -0.001 and pooled p = 0.022; with all 12 fnf runs, gap(4) = +0.007 and p = 0.0096.
+- Held-out test: all K p = 0.016, carried by K=4's two invalid parallel programs; new cells alone p = 0.118,
+  and at K=8 the test gap is 0.002. The validation result does not carry to test at K=8.
+- The gap does not shrink steadily with K (0.084, 0.015, 0.030). fnf is about level across K (0.612, 0.591,
+  0.605); parallel is lowest at K=2 (0.528), where one run ended at 0.439 (both chats low: 0.356, 0.439).
+  Without that run the K=2 gap is +0.039. Reference: single (K=1), 12 runs, mean 0.562.
+- Limits: 3 runs per new cell; one task, one model. parallel agents never see each other's programs and fnf
+  restarts from the best one, so this does not separate the flush from sharing the best program (fnf_keep, one
+  seed, swe2-01: 0.613 vs fnf 0.625).
 
 ### ahc014/swe2-spread-02: is single less reliable than fnf? Fresh runs say not shown (SWE-2, 6 runs per arm, 0 USD)
 

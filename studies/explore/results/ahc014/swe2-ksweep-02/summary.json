@@ -1,0 +1,299 @@
+{
+ "folder": "runs/explore/ahc014/swe2-ksweep-02",
+ "k4_from": "studies/explore/results/ahc014/swe2-seeds-01/summary.json",
+ "runs": {
+  "2": {
+   "fnf": [
+    {
+     "seed": 1,
+     "val": 0.651524,
+     "test": 0.648287
+    },
+    {
+     "seed": 2,
+     "val": 0.606832,
+     "test": 0.58713
+    },
+    {
+     "seed": 3,
+     "val": 0.57752,
+     "test": 0.544322
+    }
+   ],
+   "parallel": [
+    {
+     "seed": 1,
+     "val": 0.583403,
+     "test": 0.563779
+    },
+    {
+     "seed": 2,
+     "val": 0.561651,
+     "test": 0.546064
+    },
+    {
+     "seed": 3,
+     "val": 0.438714,
+     "test": 0.450212
+    }
+   ]
+  },
+  "4": {
+   "fnf": [
+    {
+     "seed": 0,
+     "val": 0.624641,
+     "test": 0.594025
+    },
+    {
+     "seed": 1,
+     "val": 0.611944,
+     "test": 0.568759
+    },
+    {
+     "seed": 2,
+     "val": 0.587467,
+     "test": 0.576422
+    },
+    {
+     "seed": 3,
+     "val": 0.557938,
+     "test": 0.541005
+    },
+    {
+     "seed": 4,
+     "val": 0.582464,
+     "test": 0.558602
+    },
+    {
+     "seed": 5,
+     "val": 0.584471,
+     "test": 0.562843
+    }
+   ],
+   "parallel": [
+    {
+     "seed": 0,
+     "val": 0.594895,
+     "test": 0.553197
+    },
+    {
+     "seed": 1,
+     "val": 0.538214,
+     "test": 0.0
+    },
+    {
+     "seed": 2,
+     "val": 0.574375,
+     "test": 0.552102
+    },
+    {
+     "seed": 3,
+     "val": 0.579957,
+     "test": 0.0
+    },
+    {
+     "seed": 4,
+     "val": 0.569302,
+     "test": 0.529497
+    },
+    {
+     "seed": 5,
+     "val": 0.602059,
+     "test": 0.57181
+    }
+   ]
+  },
+  "8": {
+   "fnf": [
+    {
+     "seed": 1,
+     "val": 0.584017,
+     "test": 0.523462
+    },
+    {
+     "seed": 2,
+     "val": 0.59884,
+     "test": 0.588389
+    },
+    {
+     "seed": 3,
+     "val": 0.631508,
+     "test": 0.599917
+    }
+   ],
+   "parallel": [
+    {
+     "seed": 1,
+     "val": 0.592184,
+     "test": 0.591874
+    },
+    {
+     "seed": 2,
+     "val": 0.576212,
+     "test": 0.552331
+    },
+    {
+     "seed": 3,
+     "val": 0.556304,
+     "test": 0.56105
+    }
+   ]
+  }
+ },
+ "cells": {
+  "val K=2": {
+   "gap": 0.084036,
+   "fnf": {
+    "n": 3,
+    "mean": 0.6119586666666667,
+    "sd": 0.03726741253874934,
+    "worst": 0.57752
+   },
+   "parallel": {
+    "n": 3,
+    "mean": 0.5279226666666667,
+    "sd": 0.07801876077158194,
+    "worst": 0.438714
+   }
+  },
+  "val K=4": {
+   "gap": 0.015020499999999992,
+   "fnf": {
+    "n": 6,
+    "mean": 0.5914874999999999,
+    "sd": 0.02362207082158548,
+    "worst": 0.557938
+   },
+   "parallel": {
+    "n": 6,
+    "mean": 0.576467,
+    "sd": 0.022475441913341776,
+    "worst": 0.538214
+   }
+  },
+  "val K=8": {
+   "gap": 0.029888333333333406,
+   "fnf": {
+    "n": 3,
+    "mean": 0.6047883333333334,
+    "sd": 0.024297855303160643,
+    "worst": 0.584017
+   },
+   "parallel": {
+    "n": 3,
+    "mean": 0.5749,
+    "sd": 0.017975945260263793,
+    "worst": 0.556304
+   }
+  },
+  "test K=2": {
+   "gap": 0.07322799999999996,
+   "fnf": {
+    "n": 3,
+    "mean": 0.5932463333333333,
+    "sd": 0.052251674196463135,
+    "worst": 0.544322
+   },
+   "parallel": {
+    "n": 3,
+    "mean": 0.5200183333333334,
+    "sd": 0.061099496203596754,
+    "worst": 0.450212
+   }
+  },
+  "test K=4": {
+   "gap": 0.19917500000000005,
+   "fnf": {
+    "n": 6,
+    "mean": 0.5669426666666667,
+    "sd": 0.017808684091382698,
+    "worst": 0.541005
+   },
+   "parallel": {
+    "n": 6,
+    "mean": 0.36776766666666666,
+    "sd": 0.2851872887943407,
+    "worst": 0.0
+   }
+  },
+  "test K=8": {
+   "gap": 0.002171000000000034,
+   "fnf": {
+    "n": 3,
+    "mean": 0.5705893333333334,
+    "sd": 0.04121847712292796,
+    "worst": 0.523462
+   },
+   "parallel": {
+    "n": 3,
+    "mean": 0.5684183333333334,
+    "sd": 0.020775742208964113,
+    "worst": 0.552331
+   }
+  }
+ },
+ "val stratified fnf>parallel, all K": {
+  "K": [
+   2,
+   4,
+   8
+  ],
+  "sum_of_gaps": 0.1289448333333334,
+  "p": 0.004107142857142857,
+  "splits": 369600
+ },
+ "val stratified fnf>parallel, new cells only": {
+  "K": [
+   2,
+   8
+  ],
+  "sum_of_gaps": 0.1139243333333334,
+  "p": 0.01,
+  "splits": 400
+ },
+ "test stratified fnf>parallel, all K": {
+  "K": [
+   2,
+   4,
+   8
+  ],
+  "sum_of_gaps": 0.27457400000000004,
+  "p": 0.016387987012987014,
+  "splits": 369600
+ },
+ "test stratified fnf>parallel, new cells only": {
+  "K": [
+   2,
+   8
+  ],
+  "sum_of_gaps": 0.075399,
+  "p": 0.1175,
+  "splits": 400
+ },
+ "spec": "specs/ksweep-ahc014-swe2.md",
+ "verdict": "prediction confirmed as planned: gap > 0 at K=2 (0.084), 4 (0.015), 8 (0.030); pooled p = 0.0041; new cells alone p = 0.010",
+ "not_in_plan_robustness_K4": {
+  "note": "6 more fnf K=4 runs (swe2-spread-02, seeds 6-11) exist; the plan fixed K=4 to the first 6+6. With them the K=4 gap is ~0.",
+  "K=4 fnf = fresh seeds 6-11 only": {
+   "gap_K4": -0.0011744999999999672,
+   "sum_of_gaps": 0.11274983333333344,
+   "p": 0.02246212121212121,
+   "splits": 369600
+  },
+  "K=4 fnf = all 12 runs": {
+   "gap_K4": 0.0069230000000000125,
+   "sum_of_gaps": 0.12084733333333342,
+   "p": 0.009623060762766646,
+   "splits": 7425600
+  }
+ },
+ "reference_single_K1": {
+  "n": 12,
+  "mean": 0.5621721666666667,
+  "sd": 0.06683934734711194,
+  "worst": 0.408519,
+  "note": "12 single runs (seeds-01 and spread-02); not in the test"
+ },
+ "rerun_note": "swe2-ksweep-01 was killed at 0 tries when the spread test hit Devin's rate limit; this is the first full run, in swe2-ksweep-02 (the spec names -01). Rate-limit waits per run: 1-65 min."
+}

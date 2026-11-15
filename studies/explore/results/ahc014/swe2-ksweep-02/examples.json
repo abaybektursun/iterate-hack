@@ -1,0 +1,18 @@
+{
+ "scored_right": {
+  "run": "fnf-k2-s1",
+  "id": "s0039",
+  "branch": "",
+  "idea": "Keep the best (0.645) greedy structure, but add a large-neighborhood-search final phase: replay a random prefix of the best op sequence, then greedily re-complete with a perturbed tail order, alternating with micro-perturbation refinement.",
+  "score": 0.651524,
+  "msg": "per-case V/V_best: 0.702, 0.416, 0.780, 0.766, 0.594"
+ },
+ "scored_wrong": {
+  "run": "parallel-k8-s3",
+  "id": "s0002",
+  "branch": "",
+  "idea": "Greedy single/multi-pass fill \u2014 process empty points in descending weight order; for each, find a valid rectangle (first dot along each of 8 perpendicular ray-pairs, with perimeter dot-free and unit edges unused), place it, and repeat passes until no progress or time limit.",
+  "score": null,
+  "msg": "case 1: checker rejected: wrong answer Illegal rectangle: wrong 4th point (turn: 0)"
+ }
+}

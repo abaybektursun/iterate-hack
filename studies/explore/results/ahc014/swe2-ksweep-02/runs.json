@@ -1,0 +1,410 @@
+{
+ "fnf-k2-s1": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 1,
+   "model": "devin:swe-2-medium",
+   "k": 2,
+   "branch_steps": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-ksweep-02/fnf-k2-s1",
+   "commit": "a3361ae6e66490977a4c2e196ef531ad86b26e01",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --k 2 --budget 40 --seed 1 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-ksweep-02/fnf-k2-s1 --branch-steps 4"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 1,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.651524,
+   "best_id": "s0039",
+   "best_test": 0.648287,
+   "spent": {
+    "prompt_tokens": 409304,
+    "completion_tokens": 88987,
+    "usd": 0.0
+   },
+   "valid_share": 0.975
+  }
+ },
+ "fnf-k2-s2": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 2,
+   "model": "devin:swe-2-medium",
+   "k": 2,
+   "branch_steps": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-ksweep-02/fnf-k2-s2",
+   "commit": "a3361ae6e66490977a4c2e196ef531ad86b26e01",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --k 2 --budget 40 --seed 2 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-ksweep-02/fnf-k2-s2 --branch-steps 4"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 2,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.606832,
+   "best_id": "s0039",
+   "best_test": 0.58713,
+   "spent": {
+    "prompt_tokens": 332529,
+    "completion_tokens": 70057,
+    "usd": 0.0
+   },
+   "valid_share": 0.9
+  }
+ },
+ "fnf-k2-s3": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 3,
+   "model": "devin:swe-2-medium",
+   "k": 2,
+   "branch_steps": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-ksweep-02/fnf-k2-s3",
+   "commit": "a3361ae6e66490977a4c2e196ef531ad86b26e01",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --k 2 --budget 40 --seed 3 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-ksweep-02/fnf-k2-s3 --branch-steps 4"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 3,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.57752,
+   "best_id": "s0037",
+   "best_test": 0.544322,
+   "spent": {
+    "prompt_tokens": 332739,
+    "completion_tokens": 71258,
+    "usd": 0.0
+   },
+   "valid_share": 0.925
+  }
+ },
+ "fnf-k8-s1": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 1,
+   "model": "devin:swe-2-medium",
+   "k": 8,
+   "branch_steps": 1,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-ksweep-02/fnf-k8-s1",
+   "commit": "a3361ae6e66490977a4c2e196ef531ad86b26e01",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --k 8 --budget 40 --seed 1 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-ksweep-02/fnf-k8-s1 --branch-steps 1"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 1,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.584017,
+   "best_id": "s0034",
+   "best_test": 0.523462,
+   "spent": {
+    "prompt_tokens": 182668,
+    "completion_tokens": 64338,
+    "usd": 0.0
+   },
+   "valid_share": 0.925
+  }
+ },
+ "fnf-k8-s2": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 2,
+   "model": "devin:swe-2-medium",
+   "k": 8,
+   "branch_steps": 1,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-ksweep-02/fnf-k8-s2",
+   "commit": "a3361ae6e66490977a4c2e196ef531ad86b26e01",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --k 8 --budget 40 --seed 2 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-ksweep-02/fnf-k8-s2 --branch-steps 1"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 2,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.59884,
+   "best_id": "s0033",
+   "best_test": 0.588389,
+   "spent": {
+    "prompt_tokens": 197697,
+    "completion_tokens": 74073,
+    "usd": 0.0
+   },
+   "valid_share": 0.9
+  }
+ },
+ "fnf-k8-s3": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 3,
+   "model": "devin:swe-2-medium",
+   "k": 8,
+   "branch_steps": 1,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-ksweep-02/fnf-k8-s3",
+   "commit": "a3361ae6e66490977a4c2e196ef531ad86b26e01",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --k 8 --budget 40 --seed 3 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-ksweep-02/fnf-k8-s3 --branch-steps 1"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 3,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.631508,
+   "best_id": "s0013",
+   "best_test": 0.599917,
+   "spent": {
+    "prompt_tokens": 183090,
+    "completion_tokens": 67180,
+    "usd": 0.0
+   },
+   "valid_share": 0.9
+  }
+ },
+ "parallel-k2-s1": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "parallel",
+   "budget": 40,
+   "seed": 1,
+   "model": "devin:swe-2-medium",
+   "k": 2,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-ksweep-02/parallel-k2-s1",
+   "commit": "a3361ae6e66490977a4c2e196ef531ad86b26e01",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy parallel --k 2 --budget 40 --seed 1 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-ksweep-02/parallel-k2-s1"
+  },
+  "metrics": {
+   "strategy": "parallel",
+   "task": "ahc014",
+   "seed": 1,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.583403,
+   "best_id": "s0039",
+   "best_test": 0.563779,
+   "spent": {
+    "prompt_tokens": 594878,
+    "completion_tokens": 58879,
+    "usd": 0.0
+   },
+   "valid_share": 0.9
+  }
+ },
+ "parallel-k2-s2": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "parallel",
+   "budget": 40,
+   "seed": 2,
+   "model": "devin:swe-2-medium",
+   "k": 2,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-ksweep-02/parallel-k2-s2",
+   "commit": "a3361ae6e66490977a4c2e196ef531ad86b26e01",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy parallel --k 2 --budget 40 --seed 2 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-ksweep-02/parallel-k2-s2"
+  },
+  "metrics": {
+   "strategy": "parallel",
+   "task": "ahc014",
+   "seed": 2,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.561651,
+   "best_id": "s0039",
+   "best_test": 0.546064,
+   "spent": {
+    "prompt_tokens": 945298,
+    "completion_tokens": 97148,
+    "usd": 0.0
+   },
+   "valid_share": 1.0
+  }
+ },
+ "parallel-k2-s3": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "parallel",
+   "budget": 40,
+   "seed": 3,
+   "model": "devin:swe-2-medium",
+   "k": 2,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-ksweep-02/parallel-k2-s3",
+   "commit": "a3361ae6e66490977a4c2e196ef531ad86b26e01",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy parallel --k 2 --budget 40 --seed 3 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-ksweep-02/parallel-k2-s3"
+  },
+  "metrics": {
+   "strategy": "parallel",
+   "task": "ahc014",
+   "seed": 3,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.438714,
+   "best_id": "s0039",
+   "best_test": 0.450212,
+   "spent": {
+    "prompt_tokens": 687165,
+    "completion_tokens": 66919,
+    "usd": 0.0
+   },
+   "valid_share": 0.925
+  }
+ },
+ "parallel-k8-s1": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "parallel",
+   "budget": 40,
+   "seed": 1,
+   "model": "devin:swe-2-medium",
+   "k": 8,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-ksweep-02/parallel-k8-s1",
+   "commit": "a3361ae6e66490977a4c2e196ef531ad86b26e01",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy parallel --k 8 --budget 40 --seed 1 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-ksweep-02/parallel-k8-s1"
+  },
+  "metrics": {
+   "strategy": "parallel",
+   "task": "ahc014",
+   "seed": 1,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.592184,
+   "best_id": "s0033",
+   "best_test": 0.591874,
+   "spent": {
+    "prompt_tokens": 175587,
+    "completion_tokens": 60855,
+    "usd": 0.0
+   },
+   "valid_share": 0.875
+  }
+ },
+ "parallel-k8-s2": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "parallel",
+   "budget": 40,
+   "seed": 2,
+   "model": "devin:swe-2-medium",
+   "k": 8,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-ksweep-02/parallel-k8-s2",
+   "commit": "a3361ae6e66490977a4c2e196ef531ad86b26e01",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy parallel --k 8 --budget 40 --seed 2 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-ksweep-02/parallel-k8-s2"
+  },
+  "metrics": {
+   "strategy": "parallel",
+   "task": "ahc014",
+   "seed": 2,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.576212,
+   "best_id": "s0037",
+   "best_test": 0.552331,
+   "spent": {
+    "prompt_tokens": 183724,
+    "completion_tokens": 61971,
+    "usd": 0.0
+   },
+   "valid_share": 0.825
+  }
+ },
+ "parallel-k8-s3": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "parallel",
+   "budget": 40,
+   "seed": 3,
+   "model": "devin:swe-2-medium",
+   "k": 8,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-ksweep-02/parallel-k8-s3",
+   "commit": "a3361ae6e66490977a4c2e196ef531ad86b26e01",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy parallel --k 8 --budget 40 --seed 3 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-ksweep-02/parallel-k8-s3"
+  },
+  "metrics": {
+   "strategy": "parallel",
+   "task": "ahc014",
+   "seed": 3,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.556304,
+   "best_id": "s0033",
+   "best_test": 0.56105,
+   "spent": {
+    "prompt_tokens": 174131,
+    "completion_tokens": 59832,
+    "usd": 0.0
+   },
+   "valid_share": 0.8
+  }
+ }
+}
