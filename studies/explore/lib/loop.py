@@ -15,6 +15,7 @@ import json
 import os
 import pathlib
 import re
+import socket
 import subprocess
 import sys
 import tempfile
@@ -34,11 +35,15 @@ def chat(messages, model):
                                  headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
     for attempt in range(5):
         try:
-            r = json.load(urllib.request.urlopen(req, timeout=600))
+            r = json.load(urllib.request.urlopen(req, timeout=300))
             return r["choices"][0]["message"]["content"], r.get("usage", {})
         except urllib.error.HTTPError as e:
             if e.code not in (429, 500, 502, 503) or attempt == 4:
                 raise RuntimeError(f"OpenAI HTTP {e.code}: {e.read()[:300]}")
+            time.sleep(10 * (attempt + 1))
+        except (socket.timeout, urllib.error.URLError, ConnectionError) as e:  # network: retry, then fail loudly
+            if attempt == 4:
+                raise RuntimeError(f"OpenAI network error after 5 tries: {e}")
             time.sleep(10 * (attempt + 1))
 
 

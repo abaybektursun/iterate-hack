@@ -1,0 +1,13 @@
+{
+ "right": {
+  "run": "fnf-s2",
+  "file": "example_best_fnf-s2.py",
+  "score": 2.588039
+ },
+ "wrong": {
+  "run": "single-s1",
+  "id": "s0000",
+  "file": "example_invalid_single-s1.py",
+  "scorer_msg": "circles 16 and 17 overlap by 1.60e-02"
+ }
+}

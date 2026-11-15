@@ -1,0 +1,99 @@
+{
+ "task": "circles26",
+ "starter_score": 2.54138,
+ "model": "gpt-5.4-mini",
+ "budget": 30,
+ "note": "pilot; fnf without the opening fork at 0%; budget matched on submissions; starter score not shown to the model; optimizer = regex scipy|minimize|SLSQP|gradient|anneal|penalty on the code; fnf-s2 crashed (API read timeout) after 26 submissions",
+ "runs": {
+  "fnf-s0": {
+   "n": 30,
+   "best": 2.327957,
+   "best_id": "s0022",
+   "finished": true,
+   "valid_share": 0.3333333333333333,
+   "optimizer_submissions": 0,
+   "usd": 0.14288099999999998,
+   "best_idea": "Start from a tighter hand-designed mixed packing with larger corner/center circles and smaller edge fillers, then use a small deterministic local search to slightly nudge circles for a better sum while preserving feasibility."
+  },
+  "fnf-s1": {
+   "n": 30,
+   "best": 2.493858,
+   "best_id": "s0027",
+   "finished": true,
+   "valid_share": 0.5666666666666667,
+   "optimizer_submissions": 2,
+   "usd": 0.1590165,
+   "best_idea": "Switch to an optimization-driven search that starts from a high-quality 26-circle template and repeatedly expands radii while repairing overlaps and boundary violations."
+  },
+  "fnf-s2": {
+   "n": 26,
+   "best": 2.588039,
+   "best_id": "s0021",
+   "finished": false,
+   "valid_share": 0.7307692307692307,
+   "optimizer_submissions": 2,
+   "usd": null,
+   "best_idea": "Added a stronger initialization bias toward boundary-heavy and staggered hex-like arrangements, plus a more aggressive multi-start perturbation loop to explore better local optima."
+  },
+  "parallel-s0": {
+   "n": 30,
+   "best": 2.546097,
+   "best_id": "s0009",
+   "finished": true,
+   "valid_share": 0.6333333333333333,
+   "optimizer_submissions": 0,
+   "usd": 0.27125925000000006,
+   "best_idea": "Start from a denser hand-designed boundary/interior template closer to strong packings, then run a larger randomized local search with occasional global reshuffles."
+  },
+  "parallel-s1": {
+   "n": 30,
+   "best": 2.42587,
+   "best_id": "s0026",
+   "finished": true,
+   "valid_share": 0.36666666666666664,
+   "optimizer_submissions": 1,
+   "usd": 0.14064375,
+   "best_idea": "Use a stronger local-search optimizer that adjusts both centers and radii from a dense seed, with explicit overlap-barrier scoring to push the packing much closer to a high-sum feasible configuration."
+  },
+  "parallel-s2": {
+   "n": 30,
+   "best": 2.541418,
+   "best_id": "s0025",
+   "finished": true,
+   "valid_share": 0.5,
+   "optimizer_submissions": 1,
+   "usd": 0.26793825,
+   "best_idea": "Fix the count bug and use a safer 26-circle layered packing with a guaranteed extra tiny circle, then apply only conservative radius expansion."
+  },
+  "single-s0": {
+   "n": 30,
+   "best": 1.993,
+   "best_id": "s0019",
+   "finished": true,
+   "valid_share": 0.7,
+   "optimizer_submissions": 0,
+   "usd": 0.4062165,
+   "best_idea": "Back off the last over-tightening and try a slightly more balanced tuning of the same template, aiming to recover the previous gain without risking invalidity."
+  },
+  "single-s1": {
+   "n": 30,
+   "best": 1.58,
+   "best_id": "s0001",
+   "finished": true,
+   "valid_share": 0.7666666666666667,
+   "optimizer_submissions": 0,
+   "usd": 0.2652975,
+   "best_idea": "Switch to a conservative, symmetry-based packing with explicitly separated rings and smaller interior circles to eliminate overlaps while keeping a decent total radius."
+  },
+  "single-s2": {
+   "n": 30,
+   "best": 1.974229,
+   "best_id": "s0005",
+   "finished": true,
+   "valid_share": 0.8666666666666667,
+   "optimizer_submissions": 0,
+   "usd": 0.53571075,
+   "best_idea": "Use a more aggressive but still structured 26-circle pattern with optimized radii via a small deterministic shrink-and-separate procedure."
+  }
+ }
+}
