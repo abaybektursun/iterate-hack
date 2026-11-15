@@ -255,12 +255,15 @@ the 328 scored 155, 160, 164 and 168 there (comment on result-d9d6f3), so differ
 | T 1.0, unedited (team cell) | 164 | 77 | 1 | 9,344 | `abaybektursun-1114-151534-e72c` |
 | T 1.0, 100 zeroed | 155 | 47 | 1 | 8,706 | `d4a3` |
 | T 1.0, 1,000 zeroed | 130 | 32 | 1 | 8,556 | `f46b` |
-| T 0.6, 100 zeroed | 149 | 77 | 24 | 8,819 | `86c9` |
-| T 0.6, 1,000 zeroed | 149 | 55 | 6 | 8,486 | `2a56` |
-| T 0.6, unedited | running | | | | `2e30` |
+| T 0.6, unedited | 134 | 156 | 94 | 9,842 | `2e30` |
+| T 0.6, 100 zeroed | 149 (+4.6 points [0.0, 9.1], paired) | 77 | 24 | 8,819 | `86c9` |
+| T 0.6, 1,000 zeroed | 149 (+4.6 [0.0, 9.1]) | 55 | 6 | 8,486 | `2a56` |
 
 - At T 1.0 the edit turns cap hits into finished answers (77 to 47 and 32) without making them right: 155 is inside the noise
   of 164, and 130 is a loss of 34 problems. This agrees with result-51fd20: cap hits on the 328 are failures to solve.
+- At T 0.6 the edit carries over to these unseen problems: loops fall from 94 to 24 and 6, tokens by 10 and 14 %, and 15 more
+  problems are right, with an interval that touches 0 (`results/gen/readout_hard328_t06.json`). The edited T 0.6 cells (149)
+  stay under the unedited T 1.0 cell (164).
 - Summary of Part G: zeroing loop neurons is a reward-free way to remove loops and 17 to 26 % of the tokens at T 0.6. It is
   no route to more right answers on MATH-500 or the 328, and it costs right answers where the model does not loop.
 
