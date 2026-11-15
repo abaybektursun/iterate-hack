@@ -1,0 +1,155 @@
+{
+ "note": "each arm: one lone-right problem whose vote is right (counts 1) and the one with the lowest vote score",
+ "m2_vote_right": {
+  "arm": "m2",
+  "set": "fresh2026",
+  "problem_index": 19,
+  "vote_score": 1.0,
+  "rows": [
+   {
+    "problem_index": 19,
+    "sample": 0,
+    "seed": 7000019,
+    "n_new": 12481,
+    "cap_hit": false,
+    "extracted_v3": "245",
+    "score_v3": 1,
+    "gold": "245"
+   },
+   {
+    "problem_index": 19,
+    "sample": 0,
+    "seed": 7010019,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted_v3": null,
+    "score_v3": 0,
+    "gold": "245"
+   },
+   {
+    "problem_index": 19,
+    "sample": 0,
+    "seed": 7020019,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted_v3": null,
+    "score_v3": 0,
+    "gold": "245"
+   }
+  ]
+ },
+ "m2_lowest_vote": {
+  "arm": "m2",
+  "set": "fresh2026",
+  "problem_index": 97,
+  "vote_score": 0.0,
+  "rows": [
+   {
+    "problem_index": 97,
+    "sample": 0,
+    "seed": 7000097,
+    "n_new": 12971,
+    "cap_hit": false,
+    "extracted_v3": "\\sqrt{21} - 2",
+    "score_v3": 1,
+    "gold": "\\sqrt{21}-2"
+   },
+   {
+    "problem_index": 97,
+    "sample": 0,
+    "seed": 7010097,
+    "n_new": 15756,
+    "cap_hit": false,
+    "extracted_v3": "3",
+    "score_v3": 0,
+    "gold": "\\sqrt{21}-2"
+   },
+   {
+    "problem_index": 97,
+    "sample": 0,
+    "seed": 7020097,
+    "n_new": 15572,
+    "cap_hit": false,
+    "extracted_v3": "3",
+    "score_v3": 0,
+    "gold": "\\sqrt{21}-2"
+   }
+  ]
+ },
+ "think_vote_right": {
+  "arm": "think_012",
+  "set": "fresh2026",
+  "problem_index": 18,
+  "vote_score": 1.0,
+  "rows": [
+   {
+    "problem_index": 18,
+    "sample": 0,
+    "seed": 7000018,
+    "n_new": 14259,
+    "cap_hit": false,
+    "extracted_v3": "754",
+    "score_v3": 1,
+    "gold": "754"
+   },
+   {
+    "problem_index": 18,
+    "sample": 1,
+    "seed": 7010018,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted_v3": null,
+    "score_v3": 0,
+    "gold": "754"
+   },
+   {
+    "problem_index": 18,
+    "sample": 2,
+    "seed": 7020018,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted_v3": null,
+    "score_v3": 0,
+    "gold": "754"
+   }
+  ]
+ },
+ "think_lowest_vote": {
+  "arm": "think_012",
+  "set": "hard328",
+  "problem_index": 196,
+  "vote_score": 0.3333333333333333,
+  "rows": [
+   {
+    "problem_index": 196,
+    "sample": 0,
+    "seed": 3000196,
+    "n_new": 12185,
+    "cap_hit": false,
+    "extracted_v3": "(2,4)",
+    "score_v3": 1,
+    "gold": "$(2,4)$"
+   },
+   {
+    "problem_index": 196,
+    "sample": 1,
+    "seed": 3010196,
+    "n_new": 16384,
+    "cap_hit": true,
+    "extracted_v3": "(2,2)",
+    "score_v3": 0,
+    "gold": "$(2,4)$"
+   },
+   {
+    "problem_index": 196,
+    "sample": 2,
+    "seed": 3020196,
+    "n_new": 14202,
+    "cap_hit": false,
+    "extracted_v3": "",
+    "score_v3": 0,
+    "gold": "$(2,4)$"
+   }
+  ]
+ }
+}
