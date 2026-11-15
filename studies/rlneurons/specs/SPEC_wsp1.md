@@ -102,3 +102,19 @@ differ from the base's. "An imitation delta raises the cued base" is refuted if 
 above the cued base reference by more than 10 points. A cell that passes at n = 100 is rerun on all 500 before any claim.
 
 Each cell also reports cap hits, median generated tokens, and the share of answers whose first 20 tokens contain `Okay`.
+
+## Amendment 2, 2026-11-15 03:05 UTC, after the n = 100 screen and before the reruns
+
+Screen (first 100 MATH-500 problems, T 1.0, right of 100): plain `base` 34, `rl` 96, `top8` 88, `bulk` 91, `rand8` 36,
+`late3` 41, `sft1` 91; cue `base` 82, `sft1` 92, `sft05` 88. Read: 8 directions per matrix (9.8 % of the delta's squared
+norm) are sufficient (88 against the matched control's 36) and not necessary (the rest alone gives 91); the 24 late-MLP
+terms alone do little; Think-SFT as released is within 5 of RL.
+
+Reruns on all 500 (rule of the first amendment), T 1.0, top-p 1.0, one sample: `top8` plain, seed base 180,000,000;
+`sft1` cue, 181,000,000; `sft1` plain, 182,000,000. Compared by problem with T1 (410), T2 (463), T3 (224) and the
+weight-difference line of `results/day1_wdiff/`.
+
+New screens, plain, first 100, seed base 80,000,000 (same references): `top1` = `--recipe top8 --k 1` (one direction per
+matrix), and `bulk64` = `--recipe bulk --k 64` (RL minus its top 64 directions per matrix). Predictions: `top1` is at
+least 20 above `rand8` (36) if one direction per matrix is enough to switch the behaviour; `bulk64` is within 10 of `rl`
+(96) if the change is spread over many more than 64 directions. Each is refuted by the opposite reading.
