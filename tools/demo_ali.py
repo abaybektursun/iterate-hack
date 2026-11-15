@@ -266,7 +266,7 @@ body { margin: 0; }
       <nav class="segs" data-segs aria-label="Slides"></nav>
       <p class="say" id="mSentence"></p>
       <dl class="rows">
-        <div><dt>Items on the board</dt><dd><b id="cItems">0</b><span id="cItemsOf"></span></dd></div>
+        <div><dt>Items posted so far</dt><dd><b id="cItems">0</b><span id="cItemsOf"></span></dd></div>
         <div><dt>Clusters reached</dt><dd><b id="cBasins">0</b><span id="cBasinsOf"></span></dd></div>
         <div><dt>Moves between clusters</dt><dd><b id="cMoves">0</b><span id="cNew"></span></dd></div>
       </dl>
