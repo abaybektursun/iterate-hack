@@ -1,0 +1,35 @@
+{
+ "name": "fm2-10-afh-lst",
+ "note": "H(gap 4): the 4 afhubbard series simulated from their listings (66 to 1,171 per series, each forecast alone) beat the series-level quantiles; refuted if <= fm2-01 [fm2_post.py flags: --afh lst; amazon/chronos-2 zero-shot, cpu jobs 174823-3849, 174829-8fcd, 174832-6f16, 201126-a38b, 201131-4739]",
+ "utc": "2026-11-15T02:18:19+00:00",
+ "commit": "35810bc",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.264261,
+ "pinball": 0.02468,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.260107,
+ "skill_geomean": 0.318686,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.099613,
+   "in_band": 0.814354
+  },
+  "3": {
+   "skill_pooled": 0.234187,
+   "in_band": 0.664729
+  },
+  "7": {
+   "skill_pooled": 0.324771,
+   "in_band": 0.545543
+  }
+ },
+ "in_band": 0.675458
+}

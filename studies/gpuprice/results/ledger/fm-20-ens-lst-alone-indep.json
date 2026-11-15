@@ -1,0 +1,35 @@
+{
+ "name": "fm-20-ens-lst-alone-indep",
+ "note": "H: the mean of the fm-07 (Chronos-2) and fm-17 (TiRex-2) quantiles beats both; built inline: (a+b)/2 of runs/gpuprice/fm/c2-01 and t2-01 sim_lst_alone_indep.csv",
+ "utc": "2026-11-14T23:29:13+00:00",
+ "commit": "75a6aaa",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.268826,
+ "pinball": 0.024526,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.260089,
+ "skill_geomean": 0.348227,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.139512,
+   "in_band": 0.839234
+  },
+  "3": {
+   "skill_pooled": 0.251428,
+   "in_band": 0.714147
+  },
+  "7": {
+   "skill_pooled": 0.312978,
+   "in_band": 0.565891
+  }
+ },
+ "in_band": 0.70698
+}

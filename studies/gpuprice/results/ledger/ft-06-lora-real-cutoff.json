@@ -1,0 +1,35 @@
+{
+ "name": "ft-06-lora-real-cutoff",
+ "note": "H: ft-02 lost because its training stopped at 2026-09-16; LoRA on the real panel up to the cutoff 2026-09-30 (no validation, fixed 400 steps; 17,245 listing segments, all rows <= 2026-09-30, before the first origin) beats zero-shot ft-01 (+0.271); refuted if below. fm-07 setup; cpu class, batch 32, lr 1e-4. Job abaybektursun-1114-184214-029e",
+ "utc": "2026-11-15T01:35:28+00:00",
+ "commit": "bee118a",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.265274,
+ "pinball": 0.024646,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.276216,
+ "skill_geomean": 0.330308,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.142559,
+   "in_band": 0.829665
+  },
+  "3": {
+   "skill_pooled": 0.257935,
+   "in_band": 0.703488
+  },
+  "7": {
+   "skill_pooled": 0.302203,
+   "in_band": 0.580426
+  }
+ },
+ "in_band": 0.70505
+}

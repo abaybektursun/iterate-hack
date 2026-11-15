@@ -1,0 +1,35 @@
+{
+ "name": "ens-06-avg-fm220-llm203",
+ "note": "candidate 2 (specs/SPEC3.md): quantile average of fm2-20 (daily max and snapshot share) and llm2-03 (claude-fable-5-2 adjusting ens-05, band never narrower)",
+ "utc": "2026-11-15T04:35:16+00:00",
+ "commit": "a395f25",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.316358,
+ "pinball": 0.022932,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.32872,
+ "skill_geomean": 0.392073,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.217114,
+   "in_band": 0.838278
+  },
+  "3": {
+   "skill_pooled": 0.271593,
+   "in_band": 0.789729
+  },
+  "7": {
+   "skill_pooled": 0.367266,
+   "in_band": 0.676357
+  }
+ },
+ "in_band": 0.768414
+}

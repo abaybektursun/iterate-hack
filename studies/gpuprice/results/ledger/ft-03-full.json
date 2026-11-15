@@ -1,0 +1,35 @@
+{
+ "name": "ft-03-full",
+ "note": "H: full fine-tune (lr 1e-5) on the real listing panel beats zero-shot ft-01 (+0.271); refuted if below. Early-stopped checkpoint = step 400 (validation loss 0.606), 800 steps run. Fine-tuning data ends 2026-09-16 (validation windows 2026-09-17..30, all rows <= 2026-09-30, before the first origin); panel ft_panel_2026-09-30.parquet, 16,733 afhubbard + 512 other-collector listing segments (x16), 1,594,943 listing-days; fm-07 setup (each listing alone, independent draws, median; afhubbard series alone, same weights); cpu class, batch 32. Job abaybektursun-1114-174405-566a",
+ "utc": "2026-11-15T00:41:53+00:00",
+ "commit": "a1de3d0",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.241013,
+ "pinball": 0.025459,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.242819,
+ "skill_geomean": 0.269539,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.122865,
+   "in_band": 0.788517
+  },
+  "3": {
+   "skill_pooled": 0.225161,
+   "in_band": 0.703488
+  },
+  "7": {
+   "skill_pooled": 0.281329,
+   "in_band": 0.645349
+  }
+ },
+ "in_band": 0.712769
+}

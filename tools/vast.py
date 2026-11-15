@@ -172,7 +172,20 @@ def logs(args):
 
 def wait(args):
     instance_id, job_id = args
-    while not (last := ssh(instance_id, f"tail -n 1 /root/{job_id}/out/log").decode(errors="replace").strip()).startswith("exit "):
+    failures = 0  # one failed ssh call (the box is busy, the network drops) must not end the wait while the job runs
+    while True:
+        try:
+            last = ssh(instance_id, f"tail -n 1 /root/{job_id}/out/log").decode(errors="replace").strip()
+            failures = 0
+        except subprocess.CalledProcessError as e:
+            failures += 1
+            if failures == 30:  # 5 minutes unreachable: the box is gone, say so
+                raise
+            print(f"ssh failed (exit {e.returncode}), try {failures} of 30; retrying in 10 s", file=sys.stderr)
+            time.sleep(10)
+            continue
+        if last.startswith("exit "):
+            break
         time.sleep(10)
     print(last)
     logs([instance_id, job_id, "20"])

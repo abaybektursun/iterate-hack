@@ -8,7 +8,7 @@ Fix only what the messages name, change nothing else, and write the fixed theory
 copied character for character from that item's text in before.jsonl; if no exact quote supports the point, choose
 another quote or drop the entry. An import's source must be a source id from an external.md heading
 (`### <source id> — <title, year>`), exactly as written. An offline prediction has "gpu_minutes": 0 and a "recipe"
-naming files from inventory.md. Files here: before.jsonl, external.md, inventory.md, standing/ (the names a "parent"
-may take).
+naming files from inventory.md. Files here: before.jsonl, external.md, inventory.md, and standing/ or graveyard.json
+(the names a "parent" may take).
 
 Reply DONE.

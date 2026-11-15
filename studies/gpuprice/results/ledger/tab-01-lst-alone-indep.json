@@ -1,0 +1,35 @@
+{
+ "name": "tab-01-lst-alone-indep",
+ "note": "H: TabPFN-TS method (tabpfn 10.0.0, open TabPFN-v2-reg weights, running index + calendar features) per listing alone, independent draws, median over listings, is a usable member; refuted if <= +0.20 [jobs abaybektursun-1114-1826*, commit a1de3d0]",
+ "utc": "2026-11-15T01:15:40+00:00",
+ "commit": "b56e382",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.192171,
+ "pinball": 0.027098,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.199234,
+ "skill_geomean": 0.267413,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.019368,
+   "in_band": 0.772249
+  },
+  "3": {
+   "skill_pooled": 0.138286,
+   "in_band": 0.668605
+  },
+  "7": {
+   "skill_pooled": 0.267774,
+   "in_band": 0.624031
+  }
+ },
+ "in_band": 0.688646
+}
