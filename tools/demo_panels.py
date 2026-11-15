@@ -1,4 +1,4 @@
-"""The 15 depth panels of the /demo page (tools/demo.py), opened in the words column when a judge asks a question.
+"""The 15 depth panels of the /demo/story page (tools/demo.py), opened in the words column when a judge asks a question.
 
 tools/demo.py puts PANEL_CSS and PANELS_JS into its page at the placeholders /*__PANEL_CSS__*/ and /*__PANELS_JS__*/.
 Before PANELS_JS runs, the page defines FACTS and SOURCES (from tools/demo_facts.py: v, n, src and at per key),

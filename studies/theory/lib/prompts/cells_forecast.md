@@ -10,6 +10,10 @@ Files here:
   samples, grader, cap) and one or more readouts (id, what is counted, unit). A readout of a cell that changes only
   the untrained base may show "best_base": the best count of right answers a base-only cell has reached on those
   problems, with its board item.
+- routes.json: no-reward routes nobody has run (it may be empty): a change to the untrained base alone or to
+  Think-SFT, its tokens per problem, its command and the same procedure on RL-Zero-Math. Each has readouts (id, arm,
+  set, n, what is counted); a route readout shows "best_base": the best known count without reward at the same or
+  fewer tokens per problem. Forecast every readout of routes.json as well.
 $theory
 For every readout, forecast the number the cell will give: a value and a 90 % interval (low, high). The forecast is
 scored as a normal distribution (mean value, sd (high - low) / 3.29) by the density it gives the measured value,
