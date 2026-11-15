@@ -1,0 +1,83 @@
+Jobs of abaybektursun, last 2 h:  id  state  gpu  wait  run  command
+  abaybektursun-1114-200050-c260  done  NVIDIA H100   0.1  8.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rl
+  abaybektursun-1114-220151-daaa  done  NVIDIA H100   0.1  6.6  python -m studies.rlneurons.jobs.xreward_overlap --commit 0ed298480b67
+  abaybektursun-1114-220435-7492  cancelled  NVIDIA H100   0.1  23.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200457-e8e6  running  NVIDIA H100   0.1  115.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200505-5ff2  running  NVIDIA H200  0.1  114.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200554-863e  done  cpu  0.1  0.7  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200901-a810  done  cpu  0.1  0.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200946-e5d8  done  cpu  0.0  0.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200959-1397  done  NVIDIA H100   0.0  0.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-201013-47c5  done  NVIDIA H100   0.0  51.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rl
+  abaybektursun-1114-201021-095e  done  NVIDIA H100   0.0  48.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rl
+  abaybektursun-1114-201028-1adf  done  NVIDIA H100   0.0  52.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rl
+  abaybektursun-1114-221034-007d  done  NVIDIA H100   0.3  50.7  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-201035-c6c0  done  NVIDIA H100   18.1  51.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rl
+  abaybektursun-1114-221040-5f1e  done  NVIDIA H100   19.1  51.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-221053-fb3f  done  NVIDIA H100   32.5  44.9  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-221100-1e31  done  NVIDIA H100   47.6  56.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-201132-3c04  done  NVIDIA H100   50.1  46.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rl
+  abaybektursun-1114-221259-0871  done  NVIDIA H100   48.7  15.7  python -m studies.rlneurons.jobs.xreward_overlap --steps --commit f89a
+  abaybektursun-1114-222829-ce39  cancelled  NVIDIA H100   34.1  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222907-f2b4  cancelled  NVIDIA B200  55.9  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222915-1f4a  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu  NVIDIA H100   33.4  57.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222933-0d2e  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu  NVIDIA H100   33.1  57.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-203737-3688  cancelled  NVIDIA H100   25.0  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-204820-49ce  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu  NVIDIA H100   14.3  57.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-230347-df7b  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu  NVIDIA H100   0.0  56.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-230353-1383  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu  NVIDIA H100   0.0  56.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-210413-f401  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu  NVIDIA H100   0.0  55.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-210421-6663  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu  NVIDIA H100   0.0  55.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-231144-7399  running  NVIDIA H200  1.4  46.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-231154-44ea  running  NVIDIA H100   4.6  43.5  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-212132-b005  done  NVIDIA H100   0.1  0.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-212139-0b2b  done  NVIDIA H100   0.1  3.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-212215-f08c  done  NVIDIA H100   0.0  1.7  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-212437-d6d2  done  NVIDIA H100   0.0  8.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-213223-4179  done  NVIDIA H100   0.1  9.7  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta025 /tmp
+  abaybektursun-1114-213934-79aa  done  NVIDIA H100   0.1  2.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-234109-8937  done  NVIDIA H100   0.1  8.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-214246-17cc  done  NVIDIA H100   0.0  15.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-214255-116e  running  NVIDIA H100   0.1  17.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-214538-9e63  done  NVIDIA H100   1.0  2.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-234946-5a29  running  NVIDIA H100   0.0  10.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-234953-16b2  running  NVIDIA H100   0.0  10.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-235001-9aae  running  NVIDIA H100   0.1  9.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-235010-8446  running  NVIDIA H100   5.8  4.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-235021-8606  running  NVIDIA H100   8.3  1.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-235030-602b  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-215205-212b  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-215213-5b69  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-215226-6147  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-215625-03ee  cancelled  cpu  0.1  2.0  while true; do echo tick; sleep 5; done
+  abaybektursun-1114-215637-4351  running  cpu  0.1  3.3  echo start; sleep 1200; echo never
+  abaybektursun-1114-215646-d1fc  done  cpu  0.1  0.1  echo normal ok
+  abaybektursun-1114-215804-7d56  cancelled  cpu  0.0  0.2  echo SHOULD NOT RUN; sleep 60
+  54 jobs, 13 failed or cancelled; median wait 0.1; 1334.7 container minutes, 421.7 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 2 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-1a972a  main  1  4  -  115 (open)  4  0  hard328 with the configuration chosen on MATH-500 (vote over
+  work-655434  main  -  -  -  14  0  0  Answer-statement repair on MATH-500 T 1.0 (base cue vs RL, 2
+  work-25e631  main  -  -  -  48  0  0  gpuprice hill-climb round 3 (branch gpuprice): (a) API LLM a
+  work-3d6913  theory  -  -  -  98 (open)  0  0  Theory engine v4 and round 04: computed tests on stored rows
+  work-27bcd1  main  -  -  -  46  0  0  Monitor page performance: data-oriented /data (ETag/304, sha
+  work-eb10d7  shots  1  5  36  42  1  1  In-context improvement loop, no RL text and no reward (follo
+  work-c45b70  main  -  -  -  16  0  0  Exchange-rate table idea-31636e (branch rate, laptop only): 
+  work-768257  main  -  -  -  10  0  0  Checks or per-step error idea-60d3e1: checking markers per 1
+  work-5d5dc3  main  2  37  5  44  5  3  Critic at decoding time idea-eec971, stages 0-1: (0) offline
+  work-deec92  main  -  -  -  72 (open)  0  0  Entropy-gated temperature idea-069f19: vLLM logits processor
+  work-72c687  main  -  -  -  8  0  0  Finding page /finding/rl_reliability: RL gain is reliability
+  work-26c268  main  -  -  -  33  0  0  Slip-hazard law idea-7928c0: cloglog item model vs Rasch log
+  work-3d68e2  shots  1  11  1  12  2  0  Closing cue on hard328 (reward-free, fewer tokens): cut each
+  work-40ec05  main  1  10  2  12  1  0  Do the RL models make the base's own wrong steps less likely
+  work-d9a824  shots  2  19  -  23 (open)  3  0  Signed self-training, no reward (idea-0d55a4 stages 1-2, the
+  work-d13a7f  main  -  -  -  16  0  0  Difficulty profile of SFT vs RL idea-095c0d: error reduction
+  work-fec451  main  3  8  -  21 (open)  7  0  Seen vs unseen: score the 72 harder problems that are in the
+  work-86ad1e  main  -  -  -  9  0  0  Token frontier idea-aa7280: offline frontier of right vs gen
+  work-d10ae6  main  0  3  -  15 (open)  4  0  Screen decoding rules on the base's located wrong steps (no 
+  work-95ff34  main  2  2  -  6 (open)  4  2  Shared tool fixes from meta/FAILURES.md + bug reports: runne
+  work-0a00c2  main  -  -  -  2 (open)  0  0  Think-SFT cue, 4 samples (one H100 job per sample, no restar
+
+Team, last 2 h: claim to close median 16 min, upper quartile 48 min, over 32 work items closed by 3 people; 39 results, 19.5 per hour.
+
+Median minutes per stage over work items with jobs: to-job 1, jobs 8, to-answer 3. Slowest stage: jobs.

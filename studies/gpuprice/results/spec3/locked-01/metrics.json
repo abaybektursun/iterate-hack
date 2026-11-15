@@ -1,0 +1,84 @@
+{
+ "candidate 1": {
+  "pooled": 0.2523,
+  "h1": 0.1838,
+  "h3": 0.3054,
+  "in_band": 0.829,
+  "cells": 357
+ },
+ "fm2-17": {
+  "pooled": 0.27,
+  "h1": 0.2007,
+  "h3": 0.3237,
+  "in_band": 0.826,
+  "cells": 357
+ },
+ "lve": {
+  "pooled": 0.0887,
+  "h1": 0.1225,
+  "h3": 0.0625,
+  "in_band": 0.754,
+  "cells": 357
+ },
+ "A (fm2-20)": {
+  "pooled": 0.298,
+  "h1": 0.2353,
+  "h3": 0.3466,
+  "in_band": 0.843,
+  "cells": 357
+ },
+ "B (Fable-adjusted c1)": {
+  "pooled": 0.2563,
+  "h1": 0.1946,
+  "h3": 0.3042,
+  "in_band": 0.854,
+  "cells": 357
+ },
+ "candidate 2": {
+  "pooled": 0.2827,
+  "h1": 0.2172,
+  "h3": 0.3334,
+  "in_band": 0.849,
+  "cells": 357
+ },
+ "c2_minus_c1": {
+  "difference": 0.0304,
+  "ci95": [
+   0.0159,
+   0.0515
+  ],
+  "series_better": 27,
+  "series_worse": 8,
+  "origins_better": 5
+ },
+ "A_minus_fm217": {
+  "difference": 0.028,
+  "ci95": [
+   0.0078,
+   0.0675
+  ],
+  "series_better": 19,
+  "series_worse": 9,
+  "origins_better": 6
+ },
+ "B_minus_c1": {
+  "difference": 0.004,
+  "ci95": [
+   -0.024,
+   0.0274
+  ],
+  "series_better": 8,
+  "series_worse": 24,
+  "origins_better": 4
+ },
+ "c2_minus_lve": {
+  "difference": 0.194,
+  "ci95": [
+   0.1064,
+   0.285
+  ],
+  "series_better": 27,
+  "series_worse": 10,
+  "origins_better": 6
+ }
+}

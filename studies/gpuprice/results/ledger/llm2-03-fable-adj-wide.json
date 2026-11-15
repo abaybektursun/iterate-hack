@@ -1,0 +1,35 @@
+{
+ "name": "llm2-03-fable-adj-wide",
+ "note": "llm2-01 with q10 = min and q90 = max of LLM and ens-05 (rule chosen on the 6 pilot origins)",
+ "utc": "2026-11-15T04:26:25+00:00",
+ "commit": "eec80d2",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.313237,
+ "pinball": 0.023037,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.308078,
+ "skill_geomean": 0.37653,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.208945,
+   "in_band": 0.853589
+  },
+  "3": {
+   "skill_pooled": 0.278175,
+   "in_band": 0.800388
+  },
+  "7": {
+   "skill_pooled": 0.360242,
+   "in_band": 0.712209
+  }
+ },
+ "in_band": 0.789
+}

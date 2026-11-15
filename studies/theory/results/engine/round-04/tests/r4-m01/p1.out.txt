@@ -1,0 +1,3 @@
+rows=500 problems=500 samples_present=[0] qualifying=0
+{"measured": null, "refuted_by_met": false, "alt_measured": null, "not_computable": "no problem qualifies: the file holds 500 rows, samples present [0] (one row per problem), so no problem has both a cap_hit true row and a cap_hit false row; the within-problem pair the recipe asks for does not exist in the stored rows", "example_row": null}
+rows=500 problems=500 samples_present=[0] qualifying=0

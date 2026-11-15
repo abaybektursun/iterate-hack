@@ -1,0 +1,35 @@
+{
+ "name": "loc-01-base-fm217",
+ "note": "Instrument check: amazon/chronos-2 zero-shot on the local RTX 4090 Laptop GPU, fm2-17 arguments (fm2_chronos2.py --origins dev; fm2_post.py --hurdle --hurdle-h 1 --scaleway --turnover own --enter abs). No training data. H: lands within +-0.01 of fm2-17 (+0.291); refuted outside",
+ "utc": "2026-11-15T04:31:04+00:00",
+ "commit": "a395f25",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.291504,
+ "pinball": 0.023766,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.30525,
+ "skill_geomean": 0.351354,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.180667,
+   "in_band": 0.800957
+  },
+  "3": {
+   "skill_pooled": 0.240392,
+   "in_band": 0.738372
+  },
+  "7": {
+   "skill_pooled": 0.348964,
+   "in_band": 0.636628
+  }
+ },
+ "in_band": 0.725635
+}

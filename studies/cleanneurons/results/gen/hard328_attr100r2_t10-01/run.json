@@ -1,0 +1,10 @@
+{
+ "job_id": "sameraslan-1114-220604-d4a3",
+ "commit": "9d43721863de05df2610f23b52a137e6723516b8",
+ "what": "run_edit real-02/edit_attr100.json, hard328, T 1.0 seed 3000000; base, cue, top-p 1.0, one sample, grader v3",
+ "runner": "tools/gpu.py h100 (Modal workspace sameraslan)",
+ "volume_only": [
+  "answers.jsonl (raw generations)"
+ ],
+ "volume_path": "iterate-runs:sameraslan-1114-220604-d4a3/"
+}

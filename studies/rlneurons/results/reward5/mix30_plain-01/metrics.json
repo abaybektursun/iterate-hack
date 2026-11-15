@@ -1,0 +1,74 @@
+{
+ "status": "done",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "mix30",
+  "prompt": "plain",
+  "set": "math500",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "max_tokens": 16384,
+  "seed": 98000000,
+  "n": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/runs/abaybektursun-1114-182748-3300",
+  "dry_run": false,
+  "commit": "3b4ab2a20f6c1c53113c7bde48fa20157e4c3649",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 500
+ },
+ "commit": "3b4ab2a20f6c1c53113c7bde48fa20157e4c3649",
+ "job_id": "abaybektursun-1114-182748-3300",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T02:54:48Z",
+ "updated_utc": "2026-11-15T03:22:32Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 29067,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 18432,
+  "load_s": 40.75674533843994,
+  "model_dir": "/tmp/theta",
+  "tok_dir": "/__modal/volumes/vo-rul9XKaAuhEZE7QxFIdPN3/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 500,
+  "correct_v3": 372,
+  "correct_v1": 351,
+  "cap_hits": 23,
+  "loop_A": 7,
+  "generated_tokens": 2113798,
+  "restarts": 0,
+  "n_planned": 500,
+  "mean_generated_tokens": 4227.596,
+  "generation_s": 1618.6933405399323,
+  "tokens_per_s": 1305.8668662310802
+ },
+ "memory": {
+  "gpu_memory_used_mib": 74377,
+  "gpu_memory_total_mib": 81559,
+  "gpu": "NVIDIA H100 80GB HBM3"
+ },
+ "wall_s": 1664.5002040863037
+}

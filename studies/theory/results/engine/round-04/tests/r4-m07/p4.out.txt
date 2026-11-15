@@ -1,0 +1,1 @@
+{"measured": 0.47368421052631576, "refuted_by_met": true, "alt_measured": 0.4411764705882353, "not_computable": null, "example_row": {"problem_index": 9, "base_vote": 0, "rl_vote": 0, "attractor": false}, "numerator": 18, "denominator": 38}

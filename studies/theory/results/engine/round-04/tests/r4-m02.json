@@ -1,0 +1,92 @@
+{
+ "theory": "r4-m02",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Pooled within-problem concordance of length with wrongness for the cued base: over all (right, wrong) pairs of finished attempt-0 samples of the same problem, the fraction in which the wrong sample has more new tokens.",
+   "recipe": "File studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Keep rows with attempt == 0 and cap_hit == false; drop rows whose score_v3 is null/missing. Group by problem_index. Within each problem, form every pair (i, j) with score_v3_i == 1 and score_v3_j == 0. Pair value: 1 if n_new_j > n_new_i, 0.5 if n_new_j == n_new_i, 0 otherwise. Statistic = sum of pair values over all problems / total number of pairs over all problems. Problems with no such pair contribute nothing. Cap-hit rows and later attempts are not used.",
+   "script": "tests/r4-m02/p1.py",
+   "value": 0.7,
+   "low": 0.61,
+   "high": 0.79,
+   "measured": 0.6222222222222222,
+   "inside": true,
+   "refuted_by": "computed fraction below 0.60",
+   "refuted_by_met": false,
+   "alt_measured": 0.6222222222222222,
+   "not_computable": null,
+   "note": "File: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (committed; read in place, else copied from git HEAD into runs/theory-tests/). 2,000 attempt-0 rows, no duplicate (problem, sample, attempt) keys; score_v3 is int 0/1 on every row, cap_hit is bool, so the null-score drop removes nothing. Main: ties = 0.5 as the recipe says. Ambiguity: the experiment text says 'fraction in which the wrong sample has more new tokens', i.e. ties = 0; that is alt_measured (ties in n_new are rare, so the two should be close). Pooled over pairs, so problems with 2 right / 2 wrong weigh 4 pairs and 3/1 weigh 3; an unweighted per-problem mean would differ and is not computed. Cap hits are excluded before pairing, so a problem whose only wrong samples are cap hits contributes no pairs. refuted_by: measured < 0.60. If there are no pairs the script reports not_computable.",
+   "example_row": {
+    "problem_index": 1,
+    "sample": 1,
+    "attempt": 0,
+    "seed": 41010001,
+    "n_new": 5285,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_A": false,
+    "extracted_v3": "2(p - q)",
+    "score_v3": 0,
+    "gold": "p - q"
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "The same pooled within-problem concordance for the RL model.",
+   "recipe": "File studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl. Keep rows with attempt == 0 and cap_hit == false; drop rows whose score_v3 is null/missing. Group by problem_index. Within each problem, form every pair (i, j) with score_v3_i == 1 and score_v3_j == 0. Pair value: 1 if n_new_j > n_new_i, 0.5 if n_new_j == n_new_i, 0 otherwise. Statistic = sum of pair values over all problems / total number of pairs over all problems. Problems with no such pair contribute nothing.",
+   "script": "tests/r4-m02/p2.py",
+   "value": 0.55,
+   "low": 0.43,
+   "high": 0.67,
+   "measured": 0.717948717948718,
+   "inside": false,
+   "refuted_by": "computed fraction above 0.68",
+   "refuted_by_met": true,
+   "alt_measured": 0.717948717948718,
+   "not_computable": null,
+   "note": "File: studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (committed). Same code as p1 with the RL file: 2,000 attempt-0 rows, no duplicate keys, score_v3 never null. Main ties = 0.5; alt_measured ties = 0 (the experiment's 'more new tokens' wording). RL has few wrong finished samples on MATH-500, so the pair count may be small and the fraction noisy; pooled pairs weight problems by (#right x #wrong). refuted_by: measured > 0.68.",
+   "example_row": {
+    "problem_index": 9,
+    "sample": 0,
+    "attempt": 0,
+    "seed": 45000009,
+    "n_new": 14671,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_A": false,
+    "extracted_v3": "9",
+    "score_v3": 0,
+    "gold": "4"
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Mean within-problem Spearman correlation of n_new with score_v3 for the cued base, over problems whose finished attempt-0 samples include at least one right and one wrong.",
+   "recipe": "File studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Keep rows with attempt == 0 and cap_hit == false; drop rows with null/missing score_v3. Group by problem_index; keep problems with at least one row with score_v3 == 1 and at least one with score_v3 == 0. For each kept problem compute the Spearman rank correlation between n_new and score_v3 over its kept rows (ties get average ranks; skip a problem if all its n_new are equal). Statistic = unweighted mean of the per-problem correlations.",
+   "script": "tests/r4-m02/p3.py",
+   "value": -0.36,
+   "low": -0.52,
+   "high": -0.2,
+   "measured": -0.2005220257109175,
+   "inside": true,
+   "refuted_by": "computed mean above -0.19",
+   "refuted_by_met": false,
+   "alt_measured": -0.19636500737305987,
+   "not_computable": null,
+   "note": "File: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Mixed-problem filter is applied after dropping cap hits and later attempts (literal reading, matches 'finished attempt-0 samples' in the experiment). Spearman = Pearson on average ranks of n_new and of score_v3 (score ties get average ranks too). Problems with all n_new equal are skipped as written. Main = unweighted mean over problems; alt_measured = mean weighted by number of kept rows per problem (2-4), the most plausible other reading of 'mean'. With 2-4 rows per problem the per-problem rho takes few discrete values (e.g. +/-1 for 2 rows), so the mean is coarse. refuted_by: measured > -0.19.",
+   "example_row": {
+    "problem_index": 1,
+    "sample": 0,
+    "attempt": 0,
+    "seed": 41000001,
+    "n_new": 4280,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_A": false,
+    "extracted_v3": "p - q",
+    "score_v3": 1,
+    "gold": "p - q"
+   }
+  }
+ ]
+}
