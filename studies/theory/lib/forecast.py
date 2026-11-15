@@ -755,6 +755,7 @@ def round11(folder, sources, n_top):
         routes, dropped = route_jobs(folder, {p["family"]: {"lens": f"the rival pair about surprise {p['surprise']['source']} {p['surprise']['id']}",
                                                             "mechanisms": [by_mid[p["a"]], by_mid[p["b"]]]} for p in whole}, items, known)
         routes = C.route_cells(routes, C.table_rows(), pre)
+        C.attach(merged, {p["id"]: p for p in props})
         cands = C.blind(merged) + C.blind_routes(routes)
         work = {sec.split("\n", 1)[0].strip(): sec for sec in ("\n" + (folder / "work.md").read_text()).split("\n## ")[1:]} if (folder / "work.md").exists() else {}
         texts = {**{i["id"]: i["text"] for i in items}, **work}
