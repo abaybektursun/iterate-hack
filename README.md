@@ -344,7 +344,7 @@ the site has three tabs: Board (this page, `/`), Proof (`/proof`) and Findings (
 
 The home page is https://invariant.team (`tools/home.py`; the same Lambda, which answers `/` with it when the host is
 `invariant.team`, and `/home` on any host). It leads to every page of the monitor: Findings, Board, Proof, Talk
-(`/demo`), Papers, Lab, Exa, past.dev, GPU prices (gpu.invariant.team) and Psychosis. Its picture is a dial: a lit glass
+(`/demo`), Papers, the GPU price challenge (gpu.invariant.team, the team's entry to the hackathon's challenge; under Results), Lab, Exa, past.dev and Psychosis. Its picture is a dial: a lit glass
 body with a ring around it and one bead per page. A click on a bead or the arrow keys turn the dial to a page
 (`/#<page>`); a click on the body or the button opens it. Beside the picture are one sentence with the Board's live
 MATH-500 scores (the first and the best untrained-base score and the best RL score in the `scores` rows of `/data`; the
