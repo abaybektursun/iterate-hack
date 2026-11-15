@@ -1,0 +1,9 @@
+{
+ "commit": "02a4d3414ef7fa2ccfba34d8d73facfa51a72adb",
+ "command": "python -m studies.rlneurons.analysis.mixvote --out studies/rlneurons/results/mixvote/fresh2026_top8x1.5-01 edit=../iterate-hack/runs/ih-1115-150237-83a4,../iterate-hack/runs/ih-1115-155322-598b,../iterate-hack/runs/ih-1115-155844-4392,../iterate-hack/runs/ih-1115-155905-0426 rl=../iterate-hack/runs/fresh/abaybektursun-1115-024606-5843,../iterate-hack/runs/fresh/abaybektursun-1115-024132-1f6e,../iterate-hack/runs/fresh/abaybektursun-1115-024700-b8c3,../iterate-hack/runs/fresh/abaybektursun-1115-024804-390f base=../iterate-hack/runs/fresh/abaybektursun-1115-040403-80d7,../iterate-hack/runs/fresh/abaybektursun-1115-024927-4a44,../iterate-hack/runs/fresh/abaybektursun-1115-025027-51c8,../iterate-hack/runs/fresh/abaybektursun-1115-025153-2e87",
+ "runs": {
+  "edit": "../iterate-hack/runs/ih-1115-150237-83a4,../iterate-hack/runs/ih-1115-155322-598b,../iterate-hack/runs/ih-1115-155844-4392,../iterate-hack/runs/ih-1115-155905-0426",
+  "rl": "../iterate-hack/runs/fresh/abaybektursun-1115-024606-5843,../iterate-hack/runs/fresh/abaybektursun-1115-024132-1f6e,../iterate-hack/runs/fresh/abaybektursun-1115-024700-b8c3,../iterate-hack/runs/fresh/abaybektursun-1115-024804-390f",
+  "base": "../iterate-hack/runs/fresh/abaybektursun-1115-040403-80d7,../iterate-hack/runs/fresh/abaybektursun-1115-024927-4a44,../iterate-hack/runs/fresh/abaybektursun-1115-025027-51c8,../iterate-hack/runs/fresh/abaybektursun-1115-025153-2e87"
+ }
+}

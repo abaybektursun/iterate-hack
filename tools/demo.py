@@ -1,6 +1,6 @@
 """The presentation page of the team site: the talk about Nanolab as one stepped story, for a first-time reader.
 
-view.py serves PAGE at /demo. It is not a tab in the header. The page shows the lab of the Design page (architecture.py),
+view.py serves PAGE at /demo/story (the deck of demo_deck.py is at /demo). It is not a tab in the header. The page shows the lab of the Design page (architecture.py),
 drawn by the same code from the same /data: the board as a lit disc in the centre, each person's swarm of agents
 around it with threads to the board, the Chat ring and the Retro loop. Beside it a column of words is always open:
 the section, a progress row of 12 steps, one large sentence, one smaller fact line with where and when its numbers were
@@ -11,9 +11,9 @@ item dots), and sometimes moves the view in for a closer look (steps 4 to 7). En
 Space, PageDown), a step plays its short motion: a pulse along a thread, bars that grow, four pulses that leave for
 Modal and come back. Entered any other way (Back, a progress segment, Home, End, a typed address, a reload) it shows
 its settled state at once. A key press at any moment retargets every motion from where it is. Every step has its
-address (/demo#result), and every detail too (/demo#result/cue); Esc closes a detail. Where the lab is lit, real
+address (/demo/story#result), and every detail too (/demo/story#result/cue); Esc closes a detail. Where the lab is lit, real
 events of the board are replayed as on the Design page. The colours follow the system, or the reader's choice from the
-header control, the key t or the address (/demo?theme=light), kept in localStorage.
+header control, the key t or the address (/demo/story?theme=light), kept in localStorage.
 
 Every number comes from demo_facts.FACTS (shipped as JSON with only its value, count, source and time) or live from
 /data; the detail panels come from demo_panels.py (PANEL_CSS and PANELS_JS) and are written into the page here.
