@@ -32,22 +32,25 @@ DATA = {
     # of which the page keeps the clusters and the items. x runs 0 to 1 and y 0 to wh. items are in the order they
     # were posted: c is the item's cluster, k its place among that cluster's items and p the places, in that order, of
     # the earlier items it builds on (the idea tree of main-04). "name" is the judge's short name
-    # of the cluster (themes-02/metrics.json "short") and "full" its name in main-04.
+    # of the cluster (themes-02/metrics.json "short") and "full" its name in main-04. Five names are not the judge's:
+    # Shorter turnaround, Public result pages, Temperature control, Leakage and grader tests and Synthetic price
+    # training were written by hand from the cluster's items, to name the idea the items pursue and not their topic
+    # (the judge's were Team tools, Board design, Sampling settings, Scoring audits, GPU prices).
     "layout": {
         "wh": 0.84, "s": 0.009,
         "clusters": [
-            {"name": "Team tools", "full": "Research coordination and execution tools", "n": 63, "x": 0.3744, "y": 0.1648, "r": 0.0795},
-            {"name": "Board design", "full": "Site design and research communication", "n": 72, "x": 0.1821, "y": 0.2387, "r": 0.0845},
+            {"name": "Shorter turnaround", "full": "Research coordination and execution tools", "n": 63, "x": 0.3744, "y": 0.1648, "r": 0.0795},
+            {"name": "Public result pages", "full": "Site design and research communication", "n": 72, "x": 0.1821, "y": 0.2387, "r": 0.0845},
             {"name": "Weight edits", "full": "Weight editing and self training", "n": 81, "x": 0.7641, "y": 0.4909, "r": 0.0891},
             {"name": "Neuron edits", "full": "Neuron interventions and loop mechanisms", "n": 24, "x": 0.7024, "y": 0.6646, "r": 0.0522},
             {"name": "Workspace steering", "full": "Jacobian lens readout and steering", "n": 25, "x": 0.8493, "y": 0.6544, "r": 0.0531},
             {"name": "Prompt cues", "full": "Prompt cues and context interventions", "n": 48, "x": 0.5163, "y": 0.5517, "r": 0.0705},
-            {"name": "Sampling settings", "full": "Sampling distributions and temperature schedules", "n": 21, "x": 0.4657, "y": 0.7054, "r": 0.0493},
+            {"name": "Temperature control", "full": "Sampling distributions and temperature schedules", "n": 21, "x": 0.4657, "y": 0.7054, "r": 0.0493},
             {"name": "Sample selection", "full": "Voting restarts and token allocation", "n": 31, "x": 0.3543, "y": 0.6054, "r": 0.0582},
             {"name": "Theory tests", "full": "Theory generation and forecast testing", "n": 37, "x": 0.7358, "y": 0.2455, "r": 0.0628},
-            {"name": "Scoring audits", "full": "Grading leakage and evaluation integrity", "n": 29, "x": 0.6062, "y": 0.1479, "r": 0.0566},
+            {"name": "Leakage and grader tests", "full": "Grading leakage and evaluation integrity", "n": 29, "x": 0.6062, "y": 0.1479, "r": 0.0566},
             {"name": "Error analysis", "full": "Failure analysis and correctness prediction", "n": 55, "x": 0.5713, "y": 0.3178, "r": 0.0748},
-            {"name": "GPU prices", "full": "GPU rental price forecasting", "n": 29, "x": 0.3585, "y": 0.3956, "r": 0.0566},
+            {"name": "Synthetic price training", "full": "GPU rental price forecasting", "n": 29, "x": 0.3585, "y": 0.3956, "r": 0.0566},
         ],
         "items": [
             {"kind": "idea", "c": 6, "k": 0, "p": []}, {"kind": "idea", "c": 6, "k": 1, "p": []},
