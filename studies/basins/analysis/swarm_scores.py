@@ -34,11 +34,17 @@ if __name__ == "__main__":
     nodes = [n for n in json.loads((d / "nodes.json").read_text()) if n["kind"] == "result" and not n.get("control_of")]
     text = {n["id"]: n["text"] for n in nodes}
     rows = J.ask(PROMPT.format(items="\n\n".join(f"{n['id']}: {n['text']}" for n in nodes)), d / "calls" / "scores.txt")["rows"]
+    kept, dropped = [], []
     for r in rows:
         assert r["item"] in text, f"unknown item {r['item']}"
         assert r["quote"] in text[r["item"]], f"quote not in {r['item']}: {r['quote']!r}"
-        assert str(r["score_pct"]).rstrip("0").rstrip(".") in r["quote"].replace(" ", "") or (
-            r.get("correct") is not None and str(r["correct"]) in r["quote"]), f"score not in quote: {r}"
+        ok = str(r["score_pct"]).rstrip("0").rstrip(".") in r["quote"].replace(" ", "") or (
+            r.get("correct") is not None and str(r["correct"]) in r["quote"].replace(",", ""))
+        (kept if ok else dropped).append(r)
+    for r in dropped:  # e.g. a skill score or a difference that is not a percent correct
+        print(f"dropped, score not in quote: {r['item']} {r['score_pct']} {r['quote']!r}")
+    (d / "scores_dropped.json").write_text(json.dumps(dropped, indent=1))
+    rows = kept
     (d / "scores.json").write_text(json.dumps(rows, indent=1))
     for r in sorted(rows, key=lambda r: -r["score_pct"]):
         print(f"{r['score_pct']:6.1f}  {r['model']:4s}  {r['method'][:28]:28s}  {r['setting'][:22]:22s}  {r['benchmark']}  n={r['n']}  {r['item']}")

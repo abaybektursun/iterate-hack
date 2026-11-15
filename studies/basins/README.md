@@ -83,3 +83,35 @@ Artifacts: `results/swarm/main-02/summary.json`, `run.json`. Page: same link as 
   combination 2, critique 2, named-only 6); the judge also found 33 of the 39 links teammates wrote as ids. 22 roots,
   longest chain 7, 29 items with two or more parents, 25 links cross basins. The best one-sample base result
   (result-c36598, 82.0 %) is a root: posted from work done before the swarm started, so no swarm lineage beats it yet.
+
+### swarm/main-03 (board snapshot 2026-11-15 04:08 UTC, 218 items; judge gpt-6.1-sol, same 20 directions as main-01)
+
+Artifacts: `results/swarm/main-03/summary.json`, `run.json` (commands, retries, judge tokens: 104 calls, 2.78 M prompt
+and 0.20 M completion tokens). Page: https://claude.ai/artifact/QuKMCQvQDbiF88Anc5m8Xb (Basin Atlas Live, private;
+holds teammates' board text). `map.json` and `swarm_map.html` stay uncommitted, as for main-01 and main-02.
+
+- 16 of 20 directions pursued (both orders agree 20/20), up from 12. Charted since main-02: fixed few-shot
+  demonstrations, draft-critique-revise, alternative truncation rules (min-p), layer-localized weight-difference
+  edits. Still untouched: structured reasoning prompts, entropy-adaptive sampling schedules, training-free context
+  compaction, verifier-free branch search.
+- 12 basins, all visited; largest 15 % (spectral neuron and localized interventions, 32 items); 10.8 effective
+  basins. 50 of 218 items (23 %) are in the two tooling/coordination basins; 20 items in two basins are the gpuprice
+  project, which shares the board. The basin holding the best base row (prompt cues, demonstrations and revision)
+  has 7 items and 5 of the 20 directions.
+- 144 moves between basins by the same person, 22 to a basin new for that person (85 % go back).
+- Instrument: t-STE held-out 0.73 vs 0.52 shuffled (main-02 0.80 vs 0.48); order consistency 2572/2878; partition
+  ARI 0.82 (main-02 0.95); both planted copies (of result-0018d3) share the original's group in both orders, but are
+  18th and 20th nearest on the map: placement is looser at 218 items. k-means vs judge groups ARI 0.24.
+- Idea tree: 450 links (refinement 175, result_of 133, claims 33, critique 30, variation 26, combination 11,
+  named-only 42); the judge found 132 of the 174 links teammates wrote as ids. 25 roots, longest chain 13, 151 links
+  cross basins. Most built on: work-02efb7 (25 children), result-5d032f (15).
+- Leaderboard: `summary.json`'s `best_base_pct` (95.1) and `best_base_one_sample_pct` (92.0) are wrong as headlines:
+  they come from an 82-problem RL-length quartile and from Think-SFT on the first 100 problems, which the scores
+  judge labelled base; `rl_reference_pct` 96.4 is a pass@4 oracle. Restricted to full sets, one sample per problem,
+  no oracle/vote/restart/superseded rows, with other checkpoints and weight edits apart (55 of 136 rows): best
+  untrained base 87.5 % (cue + 3 Math-RL-written solved examples, n=497, result-6d422d), cue alone 82.0 %, RL 92.6 %;
+  best other checkpoint Think-SFT + cue 90.8 %.
+- Pipeline changes for this run: `swarm_judge.py --repair-ids` (one mistyped id in a partition answer is mapped to
+  the one missing id of the same kind and logged; anything else still stops the run); `swarm_scores.py` reads
+  thousands separators and drops, with a list in `scores_dropped.json`, rows whose score is not in their quote
+  (here 50 gpuprice skill values).

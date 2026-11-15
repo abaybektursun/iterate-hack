@@ -1,0 +1,25 @@
+{
+ "snapshot": "runs/swarm/board-0408.json (218 items, 144 comments, 2026-11-15 04:08 UTC, not committed)",
+ "judge": "gpt-6.1-sol",
+ "commands": [
+  "uv run studies/basins/prep/swarm_export.py runs/swarm/board-0408.json",
+  "python3 -m studies.basins.analysis.swarm_judge runs/swarm/board-0408.json runs/swarm/judge-0408 --model gpt-6.1-sol --reuse-directions runs/swarm/judge-2136",
+  "python3 -m studies.basins.analysis.swarm_judge runs/swarm/board-0408.json runs/swarm/judge-0408 --model gpt-6.1-sol --reuse runs/swarm/judge-0408 --steps partitions,triplets --repair-ids",
+  "python3 -m studies.basins.analysis.swarm_scores runs/swarm/judge-0408 --model gpt-6.1-sol",
+  "bash studies/basins/run.sh studies.basins.analysis.swarm_lineage runs/swarm/judge-0408 --model gpt-6.1-sol --snapshot runs/swarm/board-0408.json",
+  "bash studies/basins/run.sh studies.basins.analysis.swarm_analyze runs/swarm/judge-0408 studies/basins/results/swarm/main-03",
+  "bash studies/basins/run.sh studies.basins.analysis.swarm_page studies/basins/results/swarm/main-03 gpt-6.1-sol"
+ ],
+ "notes": [
+  "partition-0 failed its id check twice: the judge returned knowledge-814e47, then knowledge-814e7a, for knowledge-814454 (answers kept as calls/partition-0.fail1.*, fail2.*). The third run used --repair-ids, which mapped that one id and logged it in partitions.jsonl.",
+  "swarm_scores dropped 50 rows whose score is not in their quote, all gpuprice skill values (runs/swarm/judge-0408/scores_dropped.json).",
+  "coverage ran once (first command); the rerun kept its coverage.jsonl."
+ ],
+ "judge_tokens": {
+  "calls": 104,
+  "prompt": 2776442,
+  "completion": 196371,
+  "note": "all .out files in runs/swarm/judge-0408/calls, failed partition attempts included"
+ },
+ "page": "https://claude.ai/artifact/QuKMCQvQDbiF88Anc5m8Xb (Basin Atlas Live, version 3)"
+}

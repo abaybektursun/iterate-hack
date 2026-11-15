@@ -1,0 +1,4887 @@
+{
+ "n_board_items": 218,
+ "n_possible": 20,
+ "n_basins": 12,
+ "basins_visited": 12,
+ "basins_only_possible": [],
+ "coverage_of_possible_directions": [
+  20,
+  20
+ ],
+ "largest_basin_share": 0.14678899082568808,
+ "effective_basins": 10.824835264219848,
+ "moves": 144,
+ "moves_to_new_basin": 22,
+ "triplet_order_consistency": [
+  2572,
+  2878
+ ],
+ "tste_heldout_acc": 0.7325581395348837,
+ "tste_shuffled_id_null": 0.5155038759689923,
+ "partition_ari_order0_vs_order1": 0.8228705211591603,
+ "kmeans_best_k": 5,
+ "partition_ari_vs_kmeans": 0.2410717343729427,
+ "directions_pursued_both_orders": [
+  16,
+  20
+ ],
+ "directions_pursued_either_order": [
+  16,
+  20
+ ],
+ "directions_pursued_agree_across_orders": [
+  20,
+  20
+ ],
+ "directions_untouched": [
+  "Structured Reasoning Format Prompts",
+  "Adaptive Entropy Sampling Schedules",
+  "Training Free Context Compaction",
+  "Verifier Free Branch Search"
+ ],
+ "directions": [
+  {
+   "id": "dir-08",
+   "name": "Budget Matched Answer Voting",
+   "items_both": [
+    "idea-664670",
+    "idea-8b9cc7",
+    "idea-ecc123",
+    "result-1dedfe",
+    "result-2c2cae",
+    "result-5d032f",
+    "result-60d899",
+    "result-cbe0bc",
+    "work-140e13",
+    "work-1a972a",
+    "work-3095f1",
+    "work-a992bd"
+   ],
+   "items_either": [
+    "idea-664670",
+    "idea-8b9cc7",
+    "idea-ecc123",
+    "knowledge-8a31ad",
+    "knowledge-d692e4",
+    "result-1dedfe",
+    "result-2c2cae",
+    "result-5d032f",
+    "result-60d899",
+    "result-cbe0bc",
+    "result-e78dfe",
+    "work-140e13",
+    "work-1a972a",
+    "work-3095f1",
+    "work-a992bd"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-14",
+   "name": "Localized Weight Difference Interventions",
+   "items_both": [
+    "knowledge-69adda",
+    "knowledge-8229be",
+    "result-156f7b",
+    "result-54f212",
+    "result-904bbf"
+   ],
+   "items_either": [
+    "idea-6f902e",
+    "knowledge-69adda",
+    "knowledge-8229be",
+    "result-156f7b",
+    "result-4227c6",
+    "result-54f212",
+    "result-904bbf",
+    "result-d2933e"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-13",
+   "name": "Global Weight Difference Scaling",
+   "items_both": [
+    "idea-2eb58d",
+    "result-4b0d5f",
+    "result-6277ee",
+    "result-8f257f",
+    "result-9b6af3",
+    "result-e45bf4",
+    "work-43d4a1",
+    "work-d36669"
+   ],
+   "items_either": [
+    "idea-0b2ad8",
+    "idea-2eb58d",
+    "result-4b0d5f",
+    "result-6277ee",
+    "result-8f257f",
+    "result-9b6af3",
+    "result-c9b27e",
+    "result-e45bf4",
+    "work-43d4a1",
+    "work-d36669"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-01",
+   "name": "Structured Reasoning Format Prompts",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-05",
+   "name": "Adaptive Entropy Sampling Schedules",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-03",
+   "name": "Temperature And Nucleus Factorial",
+   "items_both": [
+    "idea-1bd34f",
+    "result-533123",
+    "result-bac4fd",
+    "result-dadeec",
+    "work-55d1fe"
+   ],
+   "items_either": [
+    "idea-1bd34f",
+    "knowledge-29fdeb",
+    "result-099916",
+    "result-44b4df",
+    "result-533123",
+    "result-7968b8",
+    "result-bac4fd",
+    "result-dadeec",
+    "result-e5c99c",
+    "result-e870a1",
+    "work-55d1fe"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-12",
+   "name": "Training Free Context Compaction",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-07",
+   "name": "Loop Triggered Restart Policies",
+   "items_both": [
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "result-2c2cae",
+    "result-5d032f",
+    "result-e870a1",
+    "work-140e13",
+    "work-1a972a",
+    "work-a992bd"
+   ],
+   "items_either": [
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "knowledge-1497e8",
+    "result-2c2cae",
+    "result-5d032f",
+    "result-5de032",
+    "result-e78dfe",
+    "result-e870a1",
+    "work-140e13",
+    "work-1a972a",
+    "work-a992bd"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-00",
+   "name": "Opening Cue And Template Search",
+   "items_both": [
+    "knowledge-8a31ad",
+    "result-099916",
+    "result-c36598",
+    "result-e5c99c",
+    "result-e870a1",
+    "work-a50d39",
+    "work-d84808"
+   ],
+   "items_either": [
+    "idea-46b68c",
+    "idea-e0a5a7",
+    "knowledge-0b450e",
+    "knowledge-8a31ad",
+    "knowledge-d692e4",
+    "result-099916",
+    "result-4b0d5f",
+    "result-8f257f",
+    "result-c36598",
+    "result-e5c99c",
+    "result-e870a1",
+    "result-edceef",
+    "work-069eca",
+    "work-a50d39",
+    "work-d36669",
+    "work-d84808"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-17",
+   "name": "Independent Grader Robustness Audit",
+   "items_both": [
+    "idea-884e91",
+    "knowledge-499152",
+    "knowledge-781efc",
+    "knowledge-8229be",
+    "result-0018d3",
+    "result-60d899",
+    "result-96e819",
+    "result-e78dfe",
+    "work-855406",
+    "work-906b75"
+   ],
+   "items_either": [
+    "idea-884e91",
+    "knowledge-499152",
+    "knowledge-781efc",
+    "knowledge-8229be",
+    "result-0018d3",
+    "result-60d899",
+    "result-7968b8",
+    "result-96e819",
+    "result-e78dfe",
+    "work-855406",
+    "work-906b75"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-02",
+   "name": "Fixed Few Shot Demonstrations",
+   "items_both": [
+    "idea-607778",
+    "result-6d422d",
+    "work-be7af1"
+   ],
+   "items_either": [
+    "idea-607778",
+    "result-6d422d",
+    "work-be7af1"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-18",
+   "name": "Dataset Integrity And Leakage Checks",
+   "items_both": [
+    "knowledge-42a54f"
+   ],
+   "items_either": [
+    "knowledge-42a54f",
+    "result-e78dfe",
+    "work-855406"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-06",
+   "name": "Explicit Loop Suppression Decoding",
+   "items_both": [
+    "knowledge-d692e4"
+   ],
+   "items_either": [
+    "knowledge-d692e4"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-10",
+   "name": "Verifier Free Branch Search",
+   "items_both": [],
+   "items_either": [],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-15",
+   "name": "Mechanistic Loop And Completion Analysis",
+   "items_both": [
+    "idea-17d5b7",
+    "idea-8a0a28",
+    "idea-d204a7",
+    "idea-f3b647",
+    "knowledge-1497e8",
+    "knowledge-4fb5eb",
+    "knowledge-787e53",
+    "result-6de887",
+    "result-a2dc6f",
+    "result-b4c576",
+    "result-c4411d",
+    "result-cb82cf",
+    "result-f21d2e",
+    "result-fdc8da",
+    "work-50d329",
+    "work-b68a26",
+    "work-e0effe"
+   ],
+   "items_either": [
+    "idea-17d5b7",
+    "idea-42e9ea",
+    "idea-46b68c",
+    "idea-8a0a28",
+    "idea-d204a7",
+    "idea-d3034d",
+    "idea-da9dca",
+    "idea-f3b647",
+    "knowledge-1497e8",
+    "knowledge-4fb5eb",
+    "knowledge-787e53",
+    "knowledge-87618d",
+    "result-156f7b",
+    "result-4227c6",
+    "result-54f212",
+    "result-6de887",
+    "result-904bbf",
+    "result-a2dc6f",
+    "result-abb853",
+    "result-b4c576",
+    "result-c4411d",
+    "result-cb82cf",
+    "result-eb9211",
+    "result-f21d2e",
+    "result-fdc8da",
+    "work-069eca",
+    "work-50d329",
+    "work-b68a26",
+    "work-dd8988",
+    "work-e0effe"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-11",
+   "name": "Generation Budget Allocation Frontiers",
+   "items_both": [
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "idea-ecc123",
+    "result-2c2cae",
+    "result-5d032f",
+    "work-140e13",
+    "work-1a972a",
+    "work-a992bd"
+   ],
+   "items_either": [
+    "idea-0b2ad8",
+    "idea-3f3378",
+    "idea-8b9cc7",
+    "idea-ecc123",
+    "knowledge-29fdeb",
+    "result-2c2cae",
+    "result-5d032f",
+    "work-140e13",
+    "work-1a972a",
+    "work-a992bd"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-16",
+   "name": "Paired Failure Mode Analysis",
+   "items_both": [
+    "idea-1c8b73",
+    "idea-65a86d",
+    "idea-9e3dff",
+    "knowledge-9e4147",
+    "result-15b095",
+    "result-5de032",
+    "result-5e17a6",
+    "result-9b6af3",
+    "result-afc423",
+    "work-1aa34c",
+    "work-5b7270",
+    "work-ff64d5"
+   ],
+   "items_either": [
+    "idea-1c8b73",
+    "idea-65a86d",
+    "idea-9e3dff",
+    "idea-d204a7",
+    "knowledge-9e4147",
+    "result-15b095",
+    "result-5de032",
+    "result-5e17a6",
+    "result-9b6af3",
+    "result-afc423",
+    "result-fdc8da",
+    "work-1aa34c",
+    "work-5b7270",
+    "work-ff64d5"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-19",
+   "name": "Replicated Selection And Locked Evaluation",
+   "items_both": [
+    "idea-b19ad2",
+    "knowledge-814454",
+    "knowledge-9f8067",
+    "result-099916",
+    "result-1dedfe",
+    "result-2c2cae",
+    "result-6277ee",
+    "result-82b4dc",
+    "result-e45bf4",
+    "result-e5c99c",
+    "result-e78dfe",
+    "work-140e13",
+    "work-1a972a",
+    "work-43d4a1",
+    "work-855406",
+    "work-a50d39",
+    "work-a992bd",
+    "work-d84808",
+    "work-d8aa69"
+   ],
+   "items_either": [
+    "idea-1fcafe",
+    "idea-b19ad2",
+    "knowledge-814454",
+    "knowledge-9f8067",
+    "result-099916",
+    "result-1dedfe",
+    "result-2c2cae",
+    "result-6277ee",
+    "result-82b4dc",
+    "result-cbe0bc",
+    "result-e45bf4",
+    "result-e5c99c",
+    "result-e78dfe",
+    "work-140e13",
+    "work-1a972a",
+    "work-43d4a1",
+    "work-855406",
+    "work-a50d39",
+    "work-a992bd",
+    "work-d84808",
+    "work-d8aa69"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-04",
+   "name": "Alternative Sampling Truncation Rules",
+   "items_both": [
+    "result-44b4df",
+    "work-180a48"
+   ],
+   "items_either": [
+    "result-44b4df",
+    "work-180a48"
+   ],
+   "orders_agree": true
+  },
+  {
+   "id": "dir-09",
+   "name": "Draft Critique Revision Cycles",
+   "items_both": [
+    "result-96e819",
+    "work-70152d"
+   ],
+   "items_either": [
+    "result-96e819",
+    "work-70152d"
+   ],
+   "orders_agree": true
+  }
+ ],
+ "leaderboard": [
+  {
+   "item": "result-5d032f",
+   "model": "rl",
+   "method": "plain prompt + pass@4 oracle",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 482,
+   "score_pct": 96.4,
+   "grader": "v3",
+   "quote": "pass@4 (oracle): base 467, RL 482.",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers"
+   ],
+   "more_tokens": false,
+   "oracle": true,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-d2933e",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / first 100 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 100,
+   "correct": 96,
+   "score_pct": 96,
+   "grader": "v3",
+   "quote": "references base plain 34, RL plain 96, base cue 82",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Localized Weight Difference Interventions"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-cbe0bc",
+   "model": "rl",
+   "method": "plain prompt + vote@4, longest-sample tie-break control",
+   "setting": "4 stored samples",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 476,
+   "score_pct": 95.2,
+   "grader": "v3",
+   "quote": "longest-sample control 476",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e78dfe",
+   "model": "rl",
+   "method": "plain prompt + restart + vote@4",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 475,
+   "score_pct": 95,
+   "grader": "v3",
+   "quote": "RL 456, 458, 474, 475.",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Independent Grader Robustness Audit",
+    "Dataset Integrity And Leakage Checks",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-cbe0bc",
+   "model": "rl",
+   "method": "plain prompt + vote@4, shortest-finished tie-break",
+   "setting": "4 stored samples",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 475,
+   "score_pct": 95,
+   "grader": "v3",
+   "quote": "RL: 475 vs 474",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5d032f",
+   "model": "rl",
+   "method": "plain prompt + vote@4",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 474,
+   "score_pct": 94.8,
+   "grader": "v3",
+   "quote": "3.6 to RL (456 -> 474)",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5d032f",
+   "model": "base",
+   "method": "cue + pass@4 oracle",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 467,
+   "score_pct": 93.4,
+   "grader": "v3",
+   "quote": "pass@4 (oracle): base 467, RL 482.",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers"
+   ],
+   "more_tokens": false,
+   "oracle": true,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-533123",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 0.6",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 464,
+   "score_pct": 92.8,
+   "grader": "v3",
+   "quote": "464/500 at T 0.6 (92.8 %)",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-533123",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 463,
+   "score_pct": 92.6,
+   "grader": "v3",
+   "quote": "Olmo-3.1-7B-RL-Zero-Math, plain prompt: 463/500 MATH-500 at T 1.0 (92.6 %)",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-d2933e",
+   "model": "base",
+   "method": "Think-SFT + opening cue",
+   "setting": "T 1.0 / top-p 1.0 / first 100 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 100,
+   "correct": 92,
+   "score_pct": 92,
+   "grader": "v3",
+   "quote": "Think-SFT (no reward) as released: plain 91, cue 92",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Localized Weight Difference Interventions"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-afc423",
+   "model": "rl",
+   "method": "plain prompt, pooled 4 samples per problem",
+   "setting": "T 1.0 / 500 problems \u00d7 4 samples",
+   "benchmark": "MATH-500",
+   "n": 2000,
+   "correct": 1840,
+   "score_pct": 92,
+   "grader": "v3",
+   "quote": "base+cue 1,642 right of 2,000, RL 1,840",
+   "basin": "Paired trajectory and failure analysis",
+   "directions": [
+    "Paired Failure Mode Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e78dfe",
+   "model": "rl",
+   "method": "plain prompt + restart on cap",
+   "setting": "T 1.0 / top-p 1.0 / day1_3 sample 0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 458,
+   "score_pct": 91.6,
+   "grader": "v3",
+   "quote": "RL 456, 458, 474, 475.",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Independent Grader Robustness Audit",
+    "Dataset Integrity And Leakage Checks",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-4b0d5f",
+   "model": "rl",
+   "method": "opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 457,
+   "score_pct": 91.4,
+   "grader": "v3",
+   "quote": "Cue row a=0/0.25/0.5/0.75/1/1.25/1.5: 410/441/452/451/457/450/453",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-6d422d",
+   "model": "rl",
+   "method": "opening cue",
+   "setting": "T 1.0 / top-p 1.0 / exclude problems 0,1,2",
+   "benchmark": "MATH-500",
+   "n": 497,
+   "correct": 454,
+   "score_pct": 91.348089,
+   "grader": "v3",
+   "quote": "RL cue 454",
+   "basin": "Prompt cues demonstrations and revision",
+   "directions": [
+    "Fixed Few Shot Demonstrations"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5d032f",
+   "model": "rl",
+   "method": "plain prompt, single sample",
+   "setting": "T 1.0 / top-p 1.0 / day1_3 sample 0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 456,
+   "score_pct": 91.2,
+   "grader": "v3",
+   "quote": "3.6 to RL (456 -> 474)",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-d2933e",
+   "model": "rl",
+   "method": "remove top 8 RL-Math singular directions + plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / first 100 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 100,
+   "correct": 91,
+   "score_pct": 91,
+   "grader": "v3",
+   "quote": "RL minus those 8 directions 91",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Localized Weight Difference Interventions"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-d2933e",
+   "model": "base",
+   "method": "Think-SFT + plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / first 100 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 100,
+   "correct": 91,
+   "score_pct": 91,
+   "grader": "v3",
+   "quote": "Think-SFT (no reward) as released: plain 91, cue 92",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Localized Weight Difference Interventions"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-ad3c24",
+   "model": "base",
+   "method": "Think-SFT + opening cue",
+   "setting": "T 1.0 / top-p 1.0 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 454,
+   "score_pct": 90.8,
+   "grader": "v3",
+   "quote": "Think-SFT (allenai/Olmo-3-7B-Think-SFT, imitation only, no reward) through the same harness: cue 454/500, plain 440/500",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-4b0d5f",
+   "model": "base",
+   "method": "theta(1.5) weight extrapolation + cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 453,
+   "score_pct": 90.6,
+   "grader": "v3",
+   "quote": "Cue row a=0/0.25/0.5/0.75/1/1.25/1.5: 410/441/452/451/457/450/453",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-cbe0bc",
+   "model": "base",
+   "method": "cue + vote@4, shortest-finished tie-break",
+   "setting": "T 1.0 / top-p 1.0 / post hoc rule",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 453,
+   "score_pct": 90.6,
+   "grader": "v3",
+   "quote": "breaking vote ties by the shortest finished sample gives base+cue 453/500",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-4b0d5f",
+   "model": "base",
+   "method": "theta(0.5) weight interpolation + cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 452,
+   "score_pct": 90.4,
+   "grader": "v3",
+   "quote": "Cue row a=0/0.25/0.5/0.75/1/1.25/1.5: 410/441/452/451/457/450/453",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-4b0d5f",
+   "model": "base",
+   "method": "theta(0.75) weight interpolation + cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 451,
+   "score_pct": 90.2,
+   "grader": "v3",
+   "quote": "Cue row a=0/0.25/0.5/0.75/1/1.25/1.5: 410/441/452/451/457/450/453",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-cbe0bc",
+   "model": "base",
+   "method": "cue + vote@4, held-out cv_pick over 12 tie-break rules",
+   "setting": "4 stored samples",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 451,
+   "score_pct": 90.2,
+   "grader": "v3",
+   "quote": "held-out cv_pick over 12 rules 451",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-4b0d5f",
+   "model": "base",
+   "method": "theta(1.25) weight extrapolation + cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 450,
+   "score_pct": 90,
+   "grader": "v3",
+   "quote": "Cue row a=0/0.25/0.5/0.75/1/1.25/1.5: 410/441/452/451/457/450/453",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-4b0d5f",
+   "model": "rl",
+   "method": "Code-RL 3.1 + opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 450,
+   "score_pct": 90,
+   "grader": "v3",
+   "quote": "Code-RL: plain 390, cue 450",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "base",
+   "method": "cue + restart + vote@4",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 450,
+   "score_pct": 90,
+   "grader": "v3",
+   "quote": "Vote over 4: 446 / 439 / 435; after restart 450 / 443 / 439.",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-edceef",
+   "model": "rl",
+   "method": "Math 3.0 + opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 448,
+   "score_pct": 89.6,
+   "grader": "v3",
+   "quote": "Math 3.0 448",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5d032f",
+   "model": "base",
+   "method": "cue + vote@4",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 446,
+   "score_pct": 89.2,
+   "grader": "v3",
+   "quote": "a 4-sample vote adds 8.2 points to base+cue (405 -> 446, [5.8, 10.8])",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-96e819",
+   "model": "rl",
+   "method": "cue draft + one intrinsic self-review pass",
+   "setting": "T 1.0 / raw grading",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 446,
+   "score_pct": 89.2,
+   "grader": "v3",
+   "quote": "RL 457 -> 446",
+   "basin": "Prompt cues demonstrations and revision",
+   "directions": [
+    "Independent Grader Robustness Audit",
+    "Draft Critique Revision Cycles"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-4b0d5f",
+   "model": "base",
+   "method": "theta(0.5) weight interpolation + plain prompt",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 443,
+   "score_pct": 88.6,
+   "grader": "v3",
+   "quote": "Plain: 224/405/443/463 at a=0/0.25/0.5/1.",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-edceef",
+   "model": "rl",
+   "method": "Math 3.0 + plain prompt",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 443,
+   "score_pct": 88.6,
+   "grader": "v3",
+   "quote": "Plain: Math 443, Mix 372, Code 360, General 323, IF 55",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-4b0d5f",
+   "model": "base",
+   "method": "theta(0.25) weight interpolation + cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 441,
+   "score_pct": 88.2,
+   "grader": "v3",
+   "quote": "Cue row a=0/0.25/0.5/0.75/1/1.25/1.5: 410/441/452/451/457/450/453",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-6d422d",
+   "model": "base",
+   "method": "theta(0.25) weight interpolation + cue",
+   "setting": "T 1.0 / top-p 1.0 / exclude problems 0,1,2",
+   "benchmark": "MATH-500",
+   "n": 497,
+   "correct": 438,
+   "score_pct": 88.128773,
+   "grader": "v3",
+   "quote": "theta 0.25 cue 438",
+   "basin": "Prompt cues demonstrations and revision",
+   "directions": [
+    "Fixed Few Shot Demonstrations"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-edceef",
+   "model": "rl",
+   "method": "Mix + opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 440,
+   "score_pct": 88,
+   "grader": "v3",
+   "quote": "Mix 440",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-ad3c24",
+   "model": "base",
+   "method": "Think-SFT + plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 440,
+   "score_pct": 88,
+   "grader": "v3",
+   "quote": "Think-SFT (allenai/Olmo-3-7B-Think-SFT, imitation only, no reward) through the same harness: cue 454/500, plain 440/500",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-d2933e",
+   "model": "base",
+   "method": "top 8 RL-Math singular directions per matrix + plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / first 100 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 100,
+   "correct": 88,
+   "score_pct": 88,
+   "grader": "v3",
+   "quote": "base + top 8 singular directions per layer matrix of the RL-Math delta (9.8% of its squared norm, 0.07% of weight norm) 88",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Localized Weight Difference Interventions"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-d2933e",
+   "model": "base",
+   "method": "halfway base-to-Think-SFT interpolation + cue",
+   "setting": "T 1.0 / top-p 1.0 / first 100 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 100,
+   "correct": 88,
+   "score_pct": 88,
+   "grader": "v3",
+   "quote": "halfway base->Think-SFT with cue 88",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Localized Weight Difference Interventions"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-6d422d",
+   "model": "base",
+   "method": "cue + 3 Math-RL-written solved examples",
+   "setting": "T 1.0 / top-p 1.0 / exclude problems 0,1,2",
+   "benchmark": "MATH-500",
+   "n": 497,
+   "correct": 435,
+   "score_pct": 87.525151,
+   "grader": "v3",
+   "quote": "RL-written 435",
+   "basin": "Prompt cues demonstrations and revision",
+   "directions": [
+    "Fixed Few Shot Demonstrations"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-ad3c24",
+   "model": "rl",
+   "method": "remove top 64 RL-Math singular directions + plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / first 100 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 100,
+   "correct": 86,
+   "score_pct": 86,
+   "grader": "v3",
+   "quote": "bulk64 86",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-edceef",
+   "model": "rl",
+   "method": "General + opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 429,
+   "score_pct": 85.8,
+   "grader": "v3",
+   "quote": "General 429",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-ad3c24",
+   "model": "base",
+   "method": "top 8 RL-Math singular directions per matrix + plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 427,
+   "score_pct": 85.4,
+   "grader": "v3",
+   "quote": "base + top 8 singular directions per layer matrix of the RL-Math delta (0.07% of weight norm), plain: 427/500",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-4b0d5f",
+   "model": "base",
+   "method": "matched-norm random weight difference + cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 417,
+   "score_pct": 83.4,
+   "grader": "v3",
+   "quote": "Matched-norm random difference: 417",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-6d422d",
+   "model": "base",
+   "method": "cue + 3 base-written solved examples",
+   "setting": "T 1.0 / top-p 1.0 / exclude problems 0,1,2",
+   "benchmark": "MATH-500",
+   "n": 497,
+   "correct": 414,
+   "score_pct": 83.299799,
+   "grader": "v3",
+   "quote": "base-written 414",
+   "basin": "Prompt cues demonstrations and revision",
+   "directions": [
+    "Fixed Few Shot Demonstrations"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-6d422d",
+   "model": "base",
+   "method": "cue + 3 Code-RL-written solved examples",
+   "setting": "T 1.0 / top-p 1.0 / exclude problems 0,1,2",
+   "benchmark": "MATH-500",
+   "n": 497,
+   "correct": 412,
+   "score_pct": 82.897384,
+   "grader": "v3",
+   "quote": "Code-RL-written 412",
+   "basin": "Prompt cues demonstrations and revision",
+   "directions": [
+    "Fixed Few Shot Demonstrations"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e870a1",
+   "model": "base",
+   "method": "cue + restart on cap hits, up to 3 attempts",
+   "setting": "T 0.6 / top-p 0.95",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 414,
+   "score_pct": 82.8,
+   "grader": "v3",
+   "quote": "Restarting cap hits (up to 3 attempts) gives 414/500",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Loop Triggered Restart Policies",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5d032f",
+   "model": "base",
+   "method": "cue + restart on cap",
+   "setting": "T 1.0 / top-p 1.0 / day1_3 sample 0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 413,
+   "score_pct": 82.6,
+   "grader": "v3",
+   "quote": "score: base MATH-500 413/500 tokens 4852 |",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-edceef",
+   "model": "rl",
+   "method": "Code 3.0 + opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 411,
+   "score_pct": 82.2,
+   "grader": "v3",
+   "quote": "Code 3.0 411",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-afc423",
+   "model": "base",
+   "method": "opening cue, pooled 4 samples per problem",
+   "setting": "T 1.0 / 500 problems \u00d7 4 samples",
+   "benchmark": "MATH-500",
+   "n": 2000,
+   "correct": 1642,
+   "score_pct": 82.1,
+   "grader": "v3",
+   "quote": "base+cue 1,642 right of 2,000, RL 1,840",
+   "basin": "Paired trajectory and failure analysis",
+   "directions": [
+    "Paired Failure Mode Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-c36598",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 410,
+   "score_pct": 82,
+   "grader": "v3",
+   "quote": "Base Olmo-3-1025-7B + opening cue, T 1.0 / top-p 1.0: 410/500 MATH-500 (82.0 %)",
+   "basin": "Prompt cues demonstrations and revision",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-d2933e",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 1.0 / top-p 1.0 / first 100 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 100,
+   "correct": 82,
+   "score_pct": 82,
+   "grader": "v3",
+   "quote": "references base plain 34, RL plain 96, base cue 82",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Localized Weight Difference Interventions"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-96e819",
+   "model": "base",
+   "method": "cue draft + one intrinsic self-review pass",
+   "setting": "T 1.0 / raw grading",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 410,
+   "score_pct": 82,
+   "grader": "v3",
+   "quote": "Raw v3: base 410 -> 410",
+   "basin": "Prompt cues demonstrations and revision",
+   "directions": [
+    "Independent Grader Robustness Audit",
+    "Draft Critique Revision Cycles"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-6d422d",
+   "model": "base",
+   "method": "opening cue, no examples",
+   "setting": "T 1.0 / top-p 1.0 / exclude problems 0,1,2",
+   "benchmark": "MATH-500",
+   "n": 497,
+   "correct": 407,
+   "score_pct": 81.891348,
+   "grader": "v3",
+   "quote": "Right of 497: no examples 407",
+   "basin": "Prompt cues demonstrations and revision",
+   "directions": [
+    "Fixed Few Shot Demonstrations"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-4b0d5f",
+   "model": "base",
+   "method": "theta(0.25) weight interpolation + plain prompt",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 405,
+   "score_pct": 81,
+   "grader": "v3",
+   "quote": "Plain: 224/405/443/463 at a=0/0.25/0.5/1.",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5d032f",
+   "model": "base",
+   "method": "opening cue, single sample",
+   "setting": "T 1.0 / top-p 1.0 / day1_3 sample 0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 405,
+   "score_pct": 81,
+   "grader": "v3",
+   "quote": "score: base MATH-500 405/500 tokens 3808 | cue, T 1.0 / top-p 1.0, single sample",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-44b4df",
+   "model": "base",
+   "method": "opening cue + min-p truncation",
+   "setting": "T 1.0 / top-p 1.0 / min-p 0.1",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 404,
+   "score_pct": 80.8,
+   "grader": "v3",
+   "quote": "score: base MATH-500 404/500 tokens 4086 | cue, T 1.0 / top-p 1.0 / min-p 0.1",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Alternative Sampling Truncation Rules"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-6de887",
+   "model": "base",
+   "method": "cue + zero 100 activation-ranked loop neurons",
+   "setting": "T 0.6 / top-p 1.0 / seed 1000000",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 393,
+   "score_pct": 78.6,
+   "grader": "v3",
+   "quote": "100 neurons ranked by activation: loops 47, cap 68, tokens 4,246, right 393",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Mechanistic Loop And Completion Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-4b0d5f",
+   "model": "rl",
+   "method": "Code-RL 3.1 + plain prompt",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 390,
+   "score_pct": 78,
+   "grader": "v3",
+   "quote": "Code-RL: plain 390, cue 450",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-6de887",
+   "model": "base",
+   "method": "cue + zero 1,000 attribution-ranked loop-neuron down_proj columns",
+   "setting": "T 0.6 / top-p 1.0 / seed 1000000",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 381,
+   "score_pct": 76.2,
+   "grader": "v3",
+   "quote": "right 381 (+0.6 points [-3.4, 4.6])",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Mechanistic Loop And Completion Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-dadeec",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 0.6 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 378,
+   "score_pct": 75.6,
+   "grader": "v3",
+   "quote": "base+cue MATH-500 T 0.6/top-p 1.0, v3: 378/500 (75.6 %)",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-edceef",
+   "model": "rl",
+   "method": "IF + opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 377,
+   "score_pct": 75.4,
+   "grader": "v3",
+   "quote": "IF 377",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-edceef",
+   "model": "rl",
+   "method": "Mix + plain prompt",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 372,
+   "score_pct": 74.4,
+   "grader": "v3",
+   "quote": "Plain: Math 443, Mix 372, Code 360, General 323, IF 55",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-6de887",
+   "model": "base",
+   "method": "cue + zero 1,000 random neurons",
+   "setting": "T 0.6 / top-p 1.0 / seed 1000000",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 370,
+   "score_pct": 74,
+   "grader": "v3",
+   "quote": "Control, 1,000 random neurons: loops 74, cap 104, right 370",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Mechanistic Loop And Completion Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-edceef",
+   "model": "rl",
+   "method": "Code 3.0 + plain prompt",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 360,
+   "score_pct": 72,
+   "grader": "v3",
+   "quote": "Plain: Math 443, Mix 372, Code 360, General 323, IF 55",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e870a1",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 0.6 / top-p 0.95",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 354,
+   "score_pct": 70.8,
+   "grader": "v3",
+   "quote": "Base + cue at T 0.6 / top-p 0.95: 354/500 MATH-500 (70.8 %)",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Loop Triggered Restart Policies",
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-edceef",
+   "model": "rl",
+   "method": "General + plain prompt",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 323,
+   "score_pct": 64.6,
+   "grader": "v3",
+   "quote": "Plain: Math 443, Mix 372, Code 360, General 323, IF 55",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-7968b8",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6 / base-01 run",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 319,
+   "score_pct": 63.8,
+   "grader": "v3",
+   "quote": "Base plain prompt, T 0.6: 319/500 MATH-500 (63.8 %, base-01 run)",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-7968b8",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6 / n13 run",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 305,
+   "score_pct": 61,
+   "grader": "v3",
+   "quote": "305/500 (61.0 %, n13 run), grader v3",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-c36598",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 224,
+   "score_pct": 44.8,
+   "grader": "v3",
+   "quote": "Plain base at T 1.0: 224/500 (44.8 %).",
+   "basin": "Prompt cues demonstrations and revision",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-ad3c24",
+   "model": "base",
+   "method": "top 1 RL-Math singular direction per matrix + plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / first 100 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 100,
+   "correct": 42,
+   "score_pct": 42,
+   "grader": "v3",
+   "quote": "Screens (first 100): top1 42",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-d2933e",
+   "model": "base",
+   "method": "top 3 RL-Math directions of late MLP only + plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / first 100 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 100,
+   "correct": 41,
+   "score_pct": 41,
+   "grader": "v3",
+   "quote": "top 3 directions of late MLP only (24 terms) 41",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Localized Weight Difference Interventions"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-36e8cd",
+   "model": "base",
+   "method": "matched random rank-8 weight edit + plain prompt",
+   "setting": "T 1.0 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 197,
+   "score_pct": 39.4,
+   "grader": "v3",
+   "quote": "base + those 8 directions plain 427 vs matched random 197",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-d2933e",
+   "model": "base",
+   "method": "matched random rank-8 weight edit + plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / first 100 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 100,
+   "correct": 36,
+   "score_pct": 36,
+   "grader": "v3",
+   "quote": "matched random rank-8 control 36",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Localized Weight Difference Interventions"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-d2933e",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / first 100 / 1 sample",
+   "benchmark": "MATH-500",
+   "n": 100,
+   "correct": 34,
+   "score_pct": 34,
+   "grader": "v3",
+   "quote": "references base plain 34, RL plain 96, base cue 82",
+   "basin": "Spectral neuron and localized interventions",
+   "directions": [
+    "Localized Weight Difference Interventions"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-edceef",
+   "model": "rl",
+   "method": "IF + plain prompt",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 55,
+   "score_pct": 11,
+   "grader": "v3",
+   "quote": "Plain: Math 443, Mix 372, Code 360, General 323, IF 55",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Opening Cue And Template Search"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "base",
+   "method": "opening cue + majority@32",
+   "setting": "Wang Fig. 21 / approximate SVG reading, \u00b11 point",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 94,
+   "grader": "Wang rule",
+   "quote": "cued Olmo-3-7B majority@1/2/4/8/16/32 = 78/84/88.5/91/93/94 %",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "rl",
+   "method": "majority@16",
+   "setting": "Wang Fig. 21 / approximate SVG reading, \u00b11 point",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 94,
+   "grader": "Wang rule",
+   "quote": "RL 75/85/91/93/94/94 %",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "rl",
+   "method": "majority@32",
+   "setting": "Wang Fig. 21 / approximate SVG reading, \u00b11 point",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 94,
+   "grader": "Wang rule",
+   "quote": "RL 75/85/91/93/94/94 %",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "base",
+   "method": "opening cue + majority@16",
+   "setting": "Wang Fig. 21 / approximate SVG reading, \u00b11 point",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 93,
+   "grader": "Wang rule",
+   "quote": "cued Olmo-3-7B majority@1/2/4/8/16/32 = 78/84/88.5/91/93/94 %",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "rl",
+   "method": "majority@8",
+   "setting": "Wang Fig. 21 / approximate SVG reading, \u00b11 point",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 93,
+   "grader": "Wang rule",
+   "quote": "RL 75/85/91/93/94/94 %",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "base",
+   "method": "opening cue + majority@8",
+   "setting": "Wang Fig. 21 / approximate SVG reading, \u00b11 point",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 91,
+   "grader": "Wang rule",
+   "quote": "cued Olmo-3-7B majority@1/2/4/8/16/32 = 78/84/88.5/91/93/94 %",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "rl",
+   "method": "majority@4",
+   "setting": "Wang Fig. 21 / approximate SVG reading, \u00b11 point",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 91,
+   "grader": "Wang rule",
+   "quote": "RL 75/85/91/93/94/94 %",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-96e819",
+   "model": "rl",
+   "method": "cue draft + one intrinsic self-review pass",
+   "setting": "T 1.0 / post hoc removal of 'the answer is correct.' marker form",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 454,
+   "score_pct": 90.8,
+   "grader": "v3 with marker-form correction",
+   "quote": "RL 454 (-0.6 [-1.4, 0.0], 0 fixed of 35 wrong / 3 broken)",
+   "basin": "Prompt cues demonstrations and revision",
+   "directions": [
+    "Independent Grader Robustness Audit",
+    "Draft Critique Revision Cycles"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "base",
+   "method": "cue + restart + vote@4",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 443,
+   "score_pct": 88.6,
+   "grader": "v1",
+   "quote": "after restart 450 / 443 / 439",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "base",
+   "method": "opening cue + majority@4",
+   "setting": "Wang Fig. 21 / approximate SVG reading, \u00b11 point",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 88.5,
+   "grader": "Wang rule",
+   "quote": "cued Olmo-3-7B majority@1/2/4/8/16/32 = 78/84/88.5/91/93/94 %",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "base",
+   "method": "cue + vote@4",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 439,
+   "score_pct": 87.8,
+   "grader": "v1",
+   "quote": "Vote over 4: 446 / 439 / 435",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "base",
+   "method": "cue + restart + vote@4",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 439,
+   "score_pct": 87.8,
+   "grader": "literal Wang rule",
+   "quote": "after restart 450 / 443 / 439",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "base",
+   "method": "cue + vote@4",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 435,
+   "score_pct": 87,
+   "grader": "literal Wang rule",
+   "quote": "Vote over 4: 446 / 439 / 435",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "rl",
+   "method": "majority@2",
+   "setting": "Wang Fig. 21 / approximate SVG reading, \u00b11 point",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 85,
+   "grader": "Wang rule",
+   "quote": "RL 75/85/91/93/94/94 %",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "base",
+   "method": "opening cue + majority@2",
+   "setting": "Wang Fig. 21 / approximate SVG reading, \u00b11 point",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 84,
+   "grader": "Wang rule",
+   "quote": "cued Olmo-3-7B majority@1/2/4/8/16/32 = 78/84/88.5/91/93/94 %",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-96e819",
+   "model": "base",
+   "method": "cue draft + one intrinsic self-review pass",
+   "setting": "T 1.0 / post hoc removal of 'the answer is correct.' marker form",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 415,
+   "score_pct": 83,
+   "grader": "v3 with marker-form correction",
+   "quote": "With that marker form removed (post hoc, both models): base 415",
+   "basin": "Prompt cues demonstrations and revision",
+   "directions": [
+    "Independent Grader Robustness Audit",
+    "Draft Critique Revision Cycles"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "base",
+   "method": "opening cue + majority@1",
+   "setting": "Wang Fig. 21 / approximate SVG reading, \u00b11 point",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 78,
+   "grader": "Wang rule",
+   "quote": "cued Olmo-3-7B majority@1/2/4/8/16/32 = 78/84/88.5/91/93/94 %",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "base",
+   "method": "opening cue, published table result",
+   "setting": "T 0.6 / Wang 2610.06851",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 77.9,
+   "grader": "Wang rule",
+   "quote": "theirs 77.9 % at T 0.6",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-60d899",
+   "model": "rl",
+   "method": "majority@1",
+   "setting": "Wang Fig. 21 / approximate SVG reading, \u00b11 point",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": null,
+   "score_pct": 75,
+   "grader": "Wang rule",
+   "quote": "RL 75/85/91/93/94/94 %",
+   "basin": "Grading integrity and evaluation controls",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-7968b8",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6 / n13 run",
+   "benchmark": "MATH-500",
+   "n": 500,
+   "correct": 286,
+   "score_pct": 57.2,
+   "grader": "v1",
+   "quote": "The older 57.2 is grader v1 on the n13 run (286/500).",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Independent Grader Robustness Audit"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-15b095",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 1.0 / top-p 1.0 / 21 problems \u00d7 16 samples",
+   "benchmark": "MATH-500 subset",
+   "n": 336,
+   "correct": 311,
+   "score_pct": 92.6,
+   "grader": "v3",
+   "quote": "RL 311/336 (92.6%, 5,026 tok)",
+   "basin": "Paired trajectory and failure analysis",
+   "directions": [
+    "Paired Failure Mode Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-15b095",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 1.0 / top-p 1.0 / 21 problems \u00d7 16 samples",
+   "benchmark": "MATH-500 subset",
+   "n": 336,
+   "correct": 272,
+   "score_pct": 81,
+   "grader": "v3",
+   "quote": "Generations only: base+cue 272/336 (81.0%, 4,563 tok)",
+   "basin": "Paired trajectory and failure analysis",
+   "directions": [
+    "Paired Failure Mode Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-b74234",
+   "model": "base",
+   "method": "SPEC2 average of Chronos-2 per listing with 3 listing rules and own-history simulator",
+   "setting": "locked origins 2026-10-31..11-05 / target coverage 0.80",
+   "benchmark": "gpuprice in-band coverage",
+   "n": 357,
+   "correct": null,
+   "score_pct": 85,
+   "grader": "empirical coverage",
+   "quote": "in-band 0.85 / 0.80 (target 0.80)",
+   "basin": "Listing simulators and economic ensembles",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-b74234",
+   "model": "base",
+   "method": "last_value_empirical",
+   "setting": "locked origins 2026-10-31..11-05 / target coverage 0.80",
+   "benchmark": "gpuprice in-band coverage",
+   "n": 357,
+   "correct": null,
+   "score_pct": 80,
+   "grader": "empirical coverage",
+   "quote": "in-band 0.85 / 0.80 (target 0.80)",
+   "basin": "Listing simulators and economic ensembles",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-f63ca7",
+   "model": "base",
+   "method": "quantile average of Chronos-2 per listing and own-history simulator with entrants",
+   "setting": "dev origins Oct 1-30",
+   "benchmark": "gpuprice in-band coverage",
+   "n": 3109,
+   "correct": null,
+   "score_pct": 74,
+   "grader": "empirical coverage",
+   "quote": "in-band 0.74",
+   "basin": "Listing simulators and economic ensembles",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-3408cd",
+   "model": "base",
+   "method": "SPEC1 listing-outcome resampling simulator",
+   "setting": "dev / target coverage 0.80",
+   "benchmark": "gpuprice in-band coverage",
+   "n": 3109,
+   "correct": null,
+   "score_pct": 63,
+   "grader": "empirical coverage",
+   "quote": "In-band coverage 0.63 (target 0.80).",
+   "basin": "Listing simulators and economic ensembles",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-f63ca7",
+   "model": "base",
+   "method": "quantile average of Chronos-2 per listing and own-history simulator with entrants",
+   "setting": "dev origins Oct 1-30 / h 7",
+   "benchmark": "gpuprice pooled skill vs last value",
+   "n": 3109,
+   "correct": null,
+   "score_pct": 34,
+   "grader": "pooled forecasting skill; n is full evaluation panel",
+   "quote": "h1 +0.163, h3 +0.270, h7 +0.340",
+   "basin": "Listing simulators and economic ensembles",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-f63ca7",
+   "model": "base",
+   "method": "quantile average of Chronos-2 per listing and own-history simulator with entrants",
+   "setting": "dev origins Oct 1-30 / h 3",
+   "benchmark": "gpuprice pooled skill vs last value",
+   "n": 3109,
+   "correct": null,
+   "score_pct": 27,
+   "grader": "pooled forecasting skill; n is full evaluation panel",
+   "quote": "h1 +0.163, h3 +0.270, h7 +0.340",
+   "basin": "Listing simulators and economic ensembles",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-ef32ec",
+   "model": "base",
+   "method": "drift starter demo",
+   "setting": "cutoff 2026-10-24 / 97 series",
+   "benchmark": "gpuprice pooled skill vs last value",
+   "n": 291,
+   "correct": null,
+   "score_pct": 20,
+   "grader": "pooled forecasting skill",
+   "quote": "drift +0.200 pooled skill vs last value (97 series, cutoff 2026-10-24, 291 cells)",
+   "basin": "Listing simulators and economic ensembles",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-b9210d",
+   "model": "base",
+   "method": "first simulator",
+   "setting": "10 highest-loss series / 5 origins / h 3 and 7",
+   "benchmark": "gpuprice pooled skill vs last value",
+   "n": 92,
+   "correct": null,
+   "score_pct": 18,
+   "grader": "pooled forecasting skill",
+   "quote": "first simulator +0.180",
+   "basin": "Learned and synthetic forecasting models",
+   "directions": [],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": true,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5de032",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 1.0 / RL-length quartile 1",
+   "benchmark": "hard328",
+   "n": 82,
+   "correct": 82,
+   "score_pct": 100,
+   "grader": "v3",
+   "quote": "By RL-length quartile (82 each) base/RL right: 78/82, 52/67, 30/45, 4/12.",
+   "basin": "Paired trajectory and failure analysis",
+   "directions": [
+    "Loop Triggered Restart Policies",
+    "Paired Failure Mode Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5de032",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 1.0 / RL-length quartile 1",
+   "benchmark": "hard328",
+   "n": 82,
+   "correct": 78,
+   "score_pct": 95.121951,
+   "grader": "v3",
+   "quote": "By RL-length quartile (82 each) base/RL right: 78/82, 52/67, 30/45, 4/12.",
+   "basin": "Paired trajectory and failure analysis",
+   "directions": [
+    "Loop Triggered Restart Policies",
+    "Paired Failure Mode Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5de032",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 1.0 / RL-length quartile 2",
+   "benchmark": "hard328",
+   "n": 82,
+   "correct": 67,
+   "score_pct": 81.707317,
+   "grader": "v3",
+   "quote": "By RL-length quartile (82 each) base/RL right: 78/82, 52/67, 30/45, 4/12.",
+   "basin": "Paired trajectory and failure analysis",
+   "directions": [
+    "Loop Triggered Restart Policies",
+    "Paired Failure Mode Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "rl",
+   "method": "plain prompt + pass@4 oracle",
+   "setting": "T 1.0 / top-p 1.0 / 246-problem paired subset",
+   "benchmark": "hard328",
+   "n": 246,
+   "correct": 175,
+   "score_pct": 71.138211,
+   "grader": "v3",
+   "quote": "pass@4: base 157, RL 175",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": true,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "rl",
+   "method": "plain prompt + vote@4",
+   "setting": "T 1.0 / top-p 1.0 / 246-problem paired subset",
+   "benchmark": "hard328",
+   "n": 246,
+   "correct": 161,
+   "score_pct": 65.447154,
+   "grader": "v3",
+   "quote": "vote@4: base 138, RL 161",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "base",
+   "method": "cue + pass@4 oracle",
+   "setting": "T 1.0 / top-p 1.0 / 246-problem paired subset",
+   "benchmark": "hard328",
+   "n": 246,
+   "correct": 157,
+   "score_pct": 63.821138,
+   "grader": "v3",
+   "quote": "pass@4: base 157, RL 175",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": true,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "rl",
+   "method": "plain prompt + R(12000) length rule",
+   "setting": "T 1.0 / top-p 1.0 / 246-problem paired subset",
+   "benchmark": "hard328",
+   "n": 246,
+   "correct": 156,
+   "score_pct": 63.414634,
+   "grader": "v3",
+   "quote": "R(12000): base 130, RL 156",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5de032",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 1.0 / RL-length quartile 2",
+   "benchmark": "hard328",
+   "n": 82,
+   "correct": 52,
+   "score_pct": 63.414634,
+   "grader": "v3",
+   "quote": "By RL-length quartile (82 each) base/RL right: 78/82, 52/67, 30/45, 4/12.",
+   "basin": "Paired trajectory and failure analysis",
+   "directions": [
+    "Loop Triggered Restart Policies",
+    "Paired Failure Mode Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e5c99c",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 206,
+   "score_pct": 62.804878,
+   "grader": "v3",
+   "quote": "score: rl hard328 206/328 tokens 9315 | plain, T 1.0 / top-p 1.0",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Opening Cue And Template Search",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e5c99c",
+   "model": "rl",
+   "method": "opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 205,
+   "score_pct": 62.5,
+   "grader": "v3",
+   "quote": "score: rl hard328 205/328 tokens 9316 | cue, T 1.0 / top-p 1.0",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Opening Cue And Template Search",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "base",
+   "method": "cue + pass@4 oracle",
+   "setting": "T 1.0 / top-p 1.0 / seed 3000000 / restarts 0",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 205,
+   "score_pct": 62.5,
+   "grader": "v3",
+   "quote": "pass@4 205",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": true,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-099916",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 0.6",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 204,
+   "score_pct": 62.195122,
+   "grader": "v3",
+   "quote": "T 0.6 rescored: 107, 119, 204.",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Opening Cue And Template Search",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "rl",
+   "method": "plain prompt, single sample",
+   "setting": "T 1.0 / top-p 1.0 / 246-problem paired subset",
+   "benchmark": "hard328",
+   "n": 246,
+   "correct": 148,
+   "score_pct": 60.162602,
+   "grader": "v3",
+   "quote": "base single 123, RL single 148",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e45bf4",
+   "model": "base",
+   "method": "theta(0.5) weight interpolation + cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 190,
+   "score_pct": 57.926829,
+   "grader": "v3",
+   "quote": "score: rl hard328 190/328 tokens 9656 | theta(0.5) = base + 0.5 (RL - base), cue, T 1.0 / top-p 1.0",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e45bf4",
+   "model": "rl",
+   "method": "Code-RL 3.1 + opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 187,
+   "score_pct": 57.012195,
+   "grader": "v3",
+   "quote": "score: rl hard328 187/328 tokens 7613 | Code-RL (Olmo-3.1-7B-RL-Zero-Code), cue, T 1.0 / top-p 1.0",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "base",
+   "method": "cue + vote@4",
+   "setting": "T 1.0 / top-p 1.0 / 246-problem paired subset",
+   "benchmark": "hard328",
+   "n": 246,
+   "correct": 138,
+   "score_pct": 56.097561,
+   "grader": "v3",
+   "quote": "vote@4: base 138, RL 161",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e45bf4",
+   "model": "base",
+   "method": "theta(0.25) weight interpolation + cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 182,
+   "score_pct": 55.487805,
+   "grader": "v3",
+   "quote": "score: rl hard328 182/328 tokens 9097 | theta(0.25) = base + 0.25 (RL - base), cue, T 1.0 / top-p 1.0",
+   "basin": "Checkpoint deltas and reward transfer",
+   "directions": [
+    "Global Weight Difference Scaling",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5de032",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 1.0 / RL-length quartile 3",
+   "benchmark": "hard328",
+   "n": 82,
+   "correct": 45,
+   "score_pct": 54.878049,
+   "grader": "v3",
+   "quote": "By RL-length quartile (82 each) base/RL right: 78/82, 52/67, 30/45, 4/12.",
+   "basin": "Paired trajectory and failure analysis",
+   "directions": [
+    "Loop Triggered Restart Policies",
+    "Paired Failure Mode Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "base",
+   "method": "cue + vote@4",
+   "setting": "T 1.0 / top-p 1.0 / seed 3000000 / restarts 0",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 179,
+   "score_pct": 54.573171,
+   "grader": "v3",
+   "quote": "vote@4 179",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": true,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "base",
+   "method": "cue + R(12000) length rule",
+   "setting": "T 1.0 / top-p 1.0 / 246-problem paired subset",
+   "benchmark": "hard328",
+   "n": 246,
+   "correct": 130,
+   "score_pct": 52.845528,
+   "grader": "v3",
+   "quote": "R(12000): base 130, RL 156",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "base",
+   "method": "cue + D(2000) + R(12000)",
+   "setting": "T 1.0 / top-p 1.0 / S 2000 / L 12000",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 172,
+   "score_pct": 52.439024,
+   "grader": "v3",
+   "quote": "D+R 172",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "base",
+   "method": "cue + R(12000) length rule",
+   "setting": "T 1.0 / top-p 1.0 / S 2000 / L 12000",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 169,
+   "score_pct": 51.52439,
+   "grader": "v3",
+   "quote": "R(12000) 169",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e5c99c",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 164,
+   "score_pct": 50,
+   "grader": "v3",
+   "quote": "score: base hard328 164/328 tokens 9344 | cue, T 1.0 / top-p 1.0",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Opening Cue And Template Search",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "base",
+   "method": "opening cue, single sample",
+   "setting": "T 1.0 / top-p 1.0 / 246-problem paired subset",
+   "benchmark": "hard328",
+   "n": 246,
+   "correct": 123,
+   "score_pct": 50,
+   "grader": "v3",
+   "quote": "base single 123, RL single 148",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "base",
+   "method": "cue + D(2000) length rule",
+   "setting": "T 1.0 / top-p 1.0 / S 2000 / L 12000",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 163,
+   "score_pct": 49.695122,
+   "grader": "v3",
+   "quote": "D(2000) 163",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-2c2cae",
+   "model": "base",
+   "method": "opening cue, single sample",
+   "setting": "T 1.0 / top-p 1.0 / seed 3000000 / restarts 0",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 160,
+   "score_pct": 48.780488,
+   "grader": "v3",
+   "quote": "Base+cue, n=328: single 160 (48.8 %, 9,168 tok/problem)",
+   "basin": "Voting restarts and inference allocation",
+   "directions": [
+    "Budget Matched Answer Voting",
+    "Loop Triggered Restart Policies",
+    "Generation Budget Allocation Frontiers",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5de032",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 1.0 / RL-length quartile 3",
+   "benchmark": "hard328",
+   "n": 82,
+   "correct": 30,
+   "score_pct": 36.585366,
+   "grader": "v3",
+   "quote": "By RL-length quartile (82 each) base/RL right: 78/82, 52/67, 30/45, 4/12.",
+   "basin": "Paired trajectory and failure analysis",
+   "directions": [
+    "Loop Triggered Restart Policies",
+    "Paired Failure Mode Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-099916",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 0.6",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 119,
+   "score_pct": 36.280488,
+   "grader": "v3",
+   "quote": "T 0.6 rescored: 107, 119, 204.",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Opening Cue And Template Search",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-099916",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 0.6",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 107,
+   "score_pct": 32.621951,
+   "grader": "v3",
+   "quote": "T 0.6 rescored: 107, 119, 204.",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Opening Cue And Template Search",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-e5c99c",
+   "model": "base",
+   "method": "plain prompt",
+   "setting": "T 1.0 / top-p 1.0",
+   "benchmark": "hard328",
+   "n": 328,
+   "correct": 76,
+   "score_pct": 23.170732,
+   "grader": "v3",
+   "quote": "score: base hard328 76/328 tokens 4928 | plain, T 1.0 / top-p 1.0",
+   "basin": "Sampling temperature and truncation rules",
+   "directions": [
+    "Temperature And Nucleus Factorial",
+    "Opening Cue And Template Search",
+    "Replicated Selection And Locked Evaluation"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5de032",
+   "model": "rl",
+   "method": "plain prompt",
+   "setting": "T 1.0 / RL-length quartile 4",
+   "benchmark": "hard328",
+   "n": 82,
+   "correct": 12,
+   "score_pct": 14.634146,
+   "grader": "v3",
+   "quote": "By RL-length quartile (82 each) base/RL right: 78/82, 52/67, 30/45, 4/12.",
+   "basin": "Paired trajectory and failure analysis",
+   "directions": [
+    "Loop Triggered Restart Policies",
+    "Paired Failure Mode Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  },
+  {
+   "item": "result-5de032",
+   "model": "base",
+   "method": "opening cue",
+   "setting": "T 1.0 / RL-length quartile 4",
+   "benchmark": "hard328",
+   "n": 82,
+   "correct": 4,
+   "score_pct": 4.878049,
+   "grader": "v3",
+   "quote": "By RL-length quartile (82 each) base/RL right: 78/82, 52/67, 30/45, 4/12.",
+   "basin": "Paired trajectory and failure analysis",
+   "directions": [
+    "Loop Triggered Restart Policies",
+    "Paired Failure Mode Analysis"
+   ],
+   "more_tokens": false,
+   "oracle": false,
+   "tokens_per_problem": null,
+   "superseded": false,
+   "rl_same_procedure": false
+  }
+ ],
+ "best_base_pct": 95.121951,
+ "best_base_one_sample_pct": 92,
+ "rl_reference_pct": 96.4,
+ "tree": {
+  "n_links": 450,
+  "relations": {
+   "result_of": 133,
+   "refinement": 175,
+   "claims": 33,
+   "critique": 30,
+   "variation": 26,
+   "combination": 11,
+   "named": 42
+  },
+  "explicit_links": 174,
+  "explicit_found_by_judge": 132,
+  "roots": 25,
+  "max_depth": 13,
+  "merges": [
+   "result-bac4fd",
+   "knowledge-e1d4b9",
+   "work-d8aa69",
+   "work-63fac2",
+   "idea-ecc123",
+   "idea-3f3378",
+   "idea-e0a5a7",
+   "result-5e17a6",
+   "work-a50d39",
+   "work-e0effe",
+   "work-a992bd",
+   "result-47286f",
+   "result-bede69",
+   "knowledge-c9fc18",
+   "idea-d59a98",
+   "idea-d3034d",
+   "result-6199f4",
+   "idea-8a0a28",
+   "idea-f3b647",
+   "result-da11d0",
+   "result-82b4dc",
+   "result-dadeec",
+   "result-fdc8da",
+   "result-099916",
+   "work-140e13",
+   "result-e5c99c",
+   "result-8c866c",
+   "result-3408cd",
+   "idea-9f3cf7",
+   "work-d36669",
+   "result-ead656",
+   "result-5de032",
+   "idea-b3bbb8",
+   "idea-aaea4c",
+   "idea-cb493f",
+   "idea-a9997e",
+   "idea-fd3b4f",
+   "work-f374ef",
+   "result-156f7b",
+   "work-d84808",
+   "idea-35c9d8",
+   "result-823cd1",
+   "result-dfe78e",
+   "result-f63ca7",
+   "knowledge-c788b4",
+   "result-904bbf",
+   "knowledge-980cbf",
+   "knowledge-4fb5eb",
+   "knowledge-3bc2ab",
+   "knowledge-8229be",
+   "knowledge-b8d41a",
+   "result-e2482e",
+   "knowledge-2ded8a",
+   "idea-6f902e",
+   "knowledge-61acfa",
+   "knowledge-a7e534",
+   "knowledge-87618d",
+   "knowledge-6f3040",
+   "knowledge-69adda",
+   "knowledge-1497e8",
+   "knowledge-9e4147",
+   "knowledge-814454",
+   "knowledge-0b450e",
+   "knowledge-499152",
+   "knowledge-16c252",
+   "knowledge-b748bb",
+   "knowledge-9d49a7",
+   "knowledge-c1fe13",
+   "idea-7c89d6",
+   "result-4227c6",
+   "result-b4c576",
+   "result-f21d2e",
+   "result-cb82cf",
+   "idea-da9dca",
+   "knowledge-da11af",
+   "result-2c2cae",
+   "result-1dedfe",
+   "idea-664670",
+   "knowledge-b15a21",
+   "result-5cd266",
+   "result-9979f1",
+   "result-9800c2",
+   "result-4b0d5f",
+   "result-8f257f",
+   "work-dd8988",
+   "work-180a48",
+   "work-43d4a1",
+   "idea-607778",
+   "work-70152d",
+   "work-6d6308",
+   "idea-46b68c",
+   "idea-0b2ad8",
+   "result-5f7f23",
+   "knowledge-c36939",
+   "result-b74234",
+   "result-a801dd",
+   "result-44b4df",
+   "result-54f212",
+   "result-5d032f",
+   "work-b95a73",
+   "result-d2933e",
+   "result-c4411d",
+   "result-96e819",
+   "work-3095f1",
+   "work-5c7b22",
+   "work-aa5f97",
+   "result-e5bed4",
+   "result-cbe0bc",
+   "work-6b1fa5",
+   "result-e45bf4",
+   "result-6277ee",
+   "knowledge-f2629c",
+   "result-70e7a8",
+   "work-9763ed",
+   "work-855406",
+   "result-edceef",
+   "idea-ac4e14",
+   "result-e78dfe",
+   "result-ad3c24",
+   "result-a2dc6f",
+   "work-0b9116",
+   "work-906b75",
+   "result-60d899",
+   "knowledge-80bbb1",
+   "idea-0d55a4",
+   "idea-eec971",
+   "result-eb9211",
+   "result-6de887",
+   "result-6d422d",
+   "result-40c0a5",
+   "work-4fa42e",
+   "idea-9e3dff",
+   "result-36e8cd",
+   "idea-1c8b73",
+   "idea-17d5b7",
+   "work-b68a26",
+   "work-1a972a",
+   "result-0018d3",
+   "result-afc423"
+  ],
+  "combinations": [
+   "idea-1c8b73",
+   "idea-7c89d6",
+   "result-f63ca7"
+  ],
+  "most_built_on": [
+   {
+    "id": "work-02efb7",
+    "children": 25,
+    "basin": "Research coordination search and metaevaluation",
+    "text": "Port all relevant research from ../interp_research (rlneurons RLN-1..4, jmech J-lens on Olmo-3, next/ literature + WDD, "
+   },
+   {
+    "id": "result-5d032f",
+    "children": 15,
+    "basin": "Voting restarts and inference allocation",
+    "text": "Day-1 #3, MATH-500 n=500, T 1.0 / top-p 1.0, grader v3: a 4-sample vote adds 8.2 points to base+cue (405 -> 446, [5.8, 1"
+   },
+   {
+    "id": "work-d36669",
+    "children": 12,
+    "basin": "Checkpoint deltas and reward transfer",
+    "text": "Day-1 #4 idea-2eb58d + idea-e0a5a7: MATH-500 at T 1.0, base + a*(RL - base) for a 0.25/0.5/0.75/1.5 with the cue (a 0.25"
+   },
+   {
+    "id": "idea-2eb58d",
+    "children": 10,
+    "basin": "Checkpoint deltas and reward transfer",
+    "text": "Day-1 #4: weight-difference scaling study: base + a*(RL - base) for several a, with the Code-RL difference and a random "
+   },
+   {
+    "id": "work-383069",
+    "children": 10,
+    "basin": "Spectral neuron and localized interventions",
+    "text": "Clean-neuron route to the 11-point RL gap: read Goodfire 'Neurons as an Interpretable Basis' (Nov 10) + neuron-basis lit"
+   }
+  ],
+  "best_base_item": "result-d2933e",
+  "best_base_ancestors": [
+   "idea-2eb58d",
+   "result-c36598",
+   "result-533123",
+   "result-bac4fd",
+   "knowledge-8a31ad",
+   "idea-e0a5a7",
+   "work-07ac85",
+   "work-383069",
+   "knowledge-9d0f85",
+   "knowledge-38042f",
+   "idea-d59a98",
+   "work-d36669",
+   "work-f374ef",
+   "result-156f7b",
+   "work-02efb7",
+   "result-c9b27e",
+   "knowledge-8229be",
+   "result-e2482e",
+   "idea-6f902e"
+  ],
+  "best_base_ancestor_basins": [
+   "Checkpoint deltas and reward transfer",
+   "Prompt cues demonstrations and revision",
+   "Research coordination search and metaevaluation",
+   "Sampling temperature and truncation rules",
+   "Spectral neuron and localized interventions"
+  ],
+  "cross_basin_links": 151
+ },
+ "control": [
+  {
+   "copy": "ctl-2",
+   "of": "result-0018d3",
+   "same_group": [
+    true,
+    true
+   ],
+   "closer_than_original": 18
+  },
+  {
+   "copy": "ctl-1",
+   "of": "result-0018d3",
+   "same_group": [
+    true,
+    true
+   ],
+   "closer_than_original": 20
+  }
+ ],
+ "basins": [
+  {
+   "basin": 4,
+   "name": "Spectral neuron and localized interventions",
+   "board_items": 32,
+   "possible": 1,
+   "best_base_pct": 92,
+   "kinds": {
+    "possible": 1,
+    "knowledge": 15,
+    "result": 10,
+    "work": 4,
+    "idea": 3
+   }
+  },
+  {
+   "basin": 11,
+   "name": "Research coordination search and metaevaluation",
+   "board_items": 30,
+   "possible": 0,
+   "best_base_pct": null,
+   "kinds": {
+    "work": 14,
+    "result": 10,
+    "idea": 4,
+    "knowledge": 2
+   }
+  },
+  {
+   "basin": 3,
+   "name": "Checkpoint deltas and reward transfer",
+   "board_items": 28,
+   "possible": 1,
+   "best_base_pct": 90.6,
+   "kinds": {
+    "possible": 1,
+    "result": 8,
+    "work": 6,
+    "idea": 7,
+    "knowledge": 7
+   }
+  },
+  {
+   "basin": 5,
+   "name": "Jacobian lens readouts and steering",
+   "board_items": 20,
+   "possible": 0,
+   "best_base_pct": null,
+   "kinds": {
+    "result": 7,
+    "work": 3,
+    "knowledge": 6,
+    "idea": 4
+   }
+  },
+  {
+   "basin": 10,
+   "name": "Board visualization and execution tooling",
+   "board_items": 20,
+   "possible": 0,
+   "best_base_pct": null,
+   "kinds": {
+    "work": 8,
+    "result": 7,
+    "knowledge": 4,
+    "skill": 1
+   }
+  },
+  {
+   "basin": 1,
+   "name": "Sampling temperature and truncation rules",
+   "board_items": 18,
+   "possible": 4,
+   "best_base_pct": 80.8,
+   "kinds": {
+    "possible": 4,
+    "work": 4,
+    "result": 9,
+    "idea": 3,
+    "knowledge": 2
+   }
+  },
+  {
+   "basin": 6,
+   "name": "Paired trajectory and failure analysis",
+   "board_items": 17,
+   "possible": 2,
+   "best_base_pct": 82.1,
+   "kinds": {
+    "possible": 2,
+    "result": 5,
+    "knowledge": 2,
+    "work": 5,
+    "idea": 5
+   }
+  },
+  {
+   "basin": 2,
+   "name": "Voting restarts and inference allocation",
+   "board_items": 15,
+   "possible": 4,
+   "best_base_pct": 93.4,
+   "kinds": {
+    "possible": 4,
+    "result": 5,
+    "work": 5,
+    "idea": 5
+   }
+  },
+  {
+   "basin": 8,
+   "name": "Listing simulators and economic ensembles",
+   "board_items": 14,
+   "possible": 0,
+   "best_base_pct": null,
+   "kinds": {
+    "idea": 2,
+    "result": 8,
+    "knowledge": 2,
+    "work": 2
+   }
+  },
+  {
+   "basin": 7,
+   "name": "Grading integrity and evaluation controls",
+   "board_items": 11,
+   "possible": 3,
+   "best_base_pct": 90,
+   "kinds": {
+    "possible": 3,
+    "work": 2,
+    "knowledge": 5,
+    "idea": 1,
+    "result": 3
+   }
+  },
+  {
+   "basin": 0,
+   "name": "Prompt cues demonstrations and revision",
+   "board_items": 7,
+   "possible": 5,
+   "best_base_pct": 88.128773,
+   "kinds": {
+    "possible": 5,
+    "work": 2,
+    "idea": 1,
+    "result": 3,
+    "knowledge": 1
+   }
+  },
+  {
+   "basin": 9,
+   "name": "Learned and synthetic forecasting models",
+   "board_items": 6,
+   "possible": 0,
+   "best_base_pct": null,
+   "kinds": {
+    "result": 3,
+    "idea": 3
+   }
+  }
+ ],
+ "move_list": [
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:14:28",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Voting restarts and inference allocation",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:14:29",
+   "from": "Voting restarts and inference allocation",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:41",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Prompt cues demonstrations and revision",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:42",
+   "from": "Prompt cues demonstrations and revision",
+   "to": "Sampling temperature and truncation rules",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:45",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Voting restarts and inference allocation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:46",
+   "from": "Voting restarts and inference allocation",
+   "to": "Sampling temperature and truncation rules",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:54",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Grading integrity and evaluation controls",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:57",
+   "from": "Grading integrity and evaluation controls",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:15:58",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Grading integrity and evaluation controls",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:16:01",
+   "from": "Grading integrity and evaluation controls",
+   "to": "Sampling temperature and truncation rules",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:16:02",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14 12:21:23",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Board visualization and execution tooling",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:00:34Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Research coordination search and metaevaluation",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:10:21Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Sampling temperature and truncation rules",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:12:44Z",
+   "from": "Prompt cues demonstrations and revision",
+   "to": "Sampling temperature and truncation rules",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:15:20Z",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Board visualization and execution tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:16:53Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Voting restarts and inference allocation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:17:13Z",
+   "from": "Voting restarts and inference allocation",
+   "to": "Sampling temperature and truncation rules",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:17:22Z",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Voting restarts and inference allocation",
+   "new": true
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:17:26Z",
+   "from": "Voting restarts and inference allocation",
+   "to": "Paired trajectory and failure analysis",
+   "new": true
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:17:30Z",
+   "from": "Paired trajectory and failure analysis",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": true
+  },
+  {
+   "who": "frustea",
+   "at": "2026-11-14T21:19:33Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Paired trajectory and failure analysis",
+   "new": true
+  },
+  {
+   "who": "frustea",
+   "at": "2026-11-14T21:19:41Z",
+   "from": "Paired trajectory and failure analysis",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:19:44Z",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Board visualization and execution tooling",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:20:06Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Paired trajectory and failure analysis",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:24:43Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Sampling temperature and truncation rules",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:29:41Z",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Board visualization and execution tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:31:43Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:33:51Z",
+   "from": "Paired trajectory and failure analysis",
+   "to": "Voting restarts and inference allocation",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:35:42Z",
+   "from": "Voting restarts and inference allocation",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:37:38Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Jacobian lens readouts and steering",
+   "new": true
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:38:01Z",
+   "from": "Jacobian lens readouts and steering",
+   "to": "Spectral neuron and localized interventions",
+   "new": true
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:38:08Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Research coordination search and metaevaluation",
+   "new": true
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:45:27Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:46:30Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Jacobian lens readouts and steering",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T21:51:08Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Sampling temperature and truncation rules",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:56:39Z",
+   "from": "Jacobian lens readouts and steering",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:56:41Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:58:42Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T21:59:06Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Jacobian lens readouts and steering",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:05:53Z",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Board visualization and execution tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:09:48Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Sampling temperature and truncation rules",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:13:55Z",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Board visualization and execution tooling",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T22:18:15Z",
+   "from": "Jacobian lens readouts and steering",
+   "to": "Paired trajectory and failure analysis",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:24:58Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:33:43Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Board visualization and execution tooling",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T22:36:55Z",
+   "from": "Paired trajectory and failure analysis",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:45:17Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Listing simulators and economic ensembles",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:51:15Z",
+   "from": "Listing simulators and economic ensembles",
+   "to": "Sampling temperature and truncation rules",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:51:31Z",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Listing simulators and economic ensembles",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T22:52:06Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Board visualization and execution tooling",
+   "new": true
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T22:52:20Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Voting restarts and inference allocation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:52:42Z",
+   "from": "Listing simulators and economic ensembles",
+   "to": "Sampling temperature and truncation rules",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T22:55:08Z",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Listing simulators and economic ensembles",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T23:00:32Z",
+   "from": "Voting restarts and inference allocation",
+   "to": "Jacobian lens readouts and steering",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:14:26Z",
+   "from": "Listing simulators and economic ensembles",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:14:39Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Listing simulators and economic ensembles",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:15:40Z",
+   "from": "Listing simulators and economic ensembles",
+   "to": "Paired trajectory and failure analysis",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:19:25Z",
+   "from": "Paired trajectory and failure analysis",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:19:53Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Listing simulators and economic ensembles",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:19:55Z",
+   "from": "Listing simulators and economic ensembles",
+   "to": "Learned and synthetic forecasting models",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:19:58Z",
+   "from": "Learned and synthetic forecasting models",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T23:21:42Z",
+   "from": "Jacobian lens readouts and steering",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T23:22:11Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Board visualization and execution tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:22:23Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "frustea",
+   "at": "2026-11-14T23:24:38Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Paired trajectory and failure analysis",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:27:37Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Listing simulators and economic ensembles",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:28:46Z",
+   "from": "Listing simulators and economic ensembles",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T23:35:08Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:36:56Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:37:43Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Listing simulators and economic ensembles",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:39:18Z",
+   "from": "Listing simulators and economic ensembles",
+   "to": "Spectral neuron and localized interventions",
+   "new": true
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-14T23:39:24Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:40:48Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:40:57Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:41:10Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Jacobian lens readouts and steering",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:42:02Z",
+   "from": "Jacobian lens readouts and steering",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:42:11Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Paired trajectory and failure analysis",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:42:18Z",
+   "from": "Paired trajectory and failure analysis",
+   "to": "Grading integrity and evaluation controls",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:42:29Z",
+   "from": "Grading integrity and evaluation controls",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:42:35Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Grading integrity and evaluation controls",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:42:36Z",
+   "from": "Grading integrity and evaluation controls",
+   "to": "Jacobian lens readouts and steering",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-14T23:43:19Z",
+   "from": "Jacobian lens readouts and steering",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-15T00:02:17Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Jacobian lens readouts and steering",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T00:17:41Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Listing simulators and economic ensembles",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-15T00:23:28Z",
+   "from": "Jacobian lens readouts and steering",
+   "to": "Voting restarts and inference allocation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T00:57:09Z",
+   "from": "Listing simulators and economic ensembles",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T00:57:11Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T00:58:11Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Learned and synthetic forecasting models",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T01:17:37Z",
+   "from": "Learned and synthetic forecasting models",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T01:30:23Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Learned and synthetic forecasting models",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T01:41:44Z",
+   "from": "Learned and synthetic forecasting models",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-15T01:52:26Z",
+   "from": "Voting restarts and inference allocation",
+   "to": "Jacobian lens readouts and steering",
+   "new": false
+  },
+  {
+   "who": "frustea",
+   "at": "2026-11-15T01:54:03Z",
+   "from": "Paired trajectory and failure analysis",
+   "to": "Sampling temperature and truncation rules",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:09:24Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:10:00Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:11:22Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "frustea",
+   "at": "2026-11-15T02:11:41Z",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Paired trajectory and failure analysis",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:13:11Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Prompt cues demonstrations and revision",
+   "new": false
+  },
+  {
+   "who": "frustea",
+   "at": "2026-11-15T02:17:25Z",
+   "from": "Paired trajectory and failure analysis",
+   "to": "Prompt cues demonstrations and revision",
+   "new": true
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:17:58Z",
+   "from": "Prompt cues demonstrations and revision",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:18:03Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:24:41Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:25:38Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:35:03Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Listing simulators and economic ensembles",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:45:13Z",
+   "from": "Listing simulators and economic ensembles",
+   "to": "Learned and synthetic forecasting models",
+   "new": false
+  },
+  {
+   "who": "frustea",
+   "at": "2026-11-15T02:51:25Z",
+   "from": "Prompt cues demonstrations and revision",
+   "to": "Sampling temperature and truncation rules",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-15T02:53:14Z",
+   "from": "Jacobian lens readouts and steering",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-15T02:58:06Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:58:08Z",
+   "from": "Learned and synthetic forecasting models",
+   "to": "Voting restarts and inference allocation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:58:12Z",
+   "from": "Voting restarts and inference allocation",
+   "to": "Board visualization and execution tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T02:58:13Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-15T03:00:44Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-15T03:01:23Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Jacobian lens readouts and steering",
+   "new": false
+  },
+  {
+   "who": "frustea",
+   "at": "2026-11-15T03:03:23Z",
+   "from": "Sampling temperature and truncation rules",
+   "to": "Prompt cues demonstrations and revision",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:03:45Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Voting restarts and inference allocation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:04:17Z",
+   "from": "Voting restarts and inference allocation",
+   "to": "Board visualization and execution tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:10:20Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Voting restarts and inference allocation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:13:57Z",
+   "from": "Voting restarts and inference allocation",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:17:47Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:20:10Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:25:49Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:30:06Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:31:09Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Grading integrity and evaluation controls",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:32:17Z",
+   "from": "Grading integrity and evaluation controls",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:32:35Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:32:57Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Grading integrity and evaluation controls",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-15T03:36:32Z",
+   "from": "Jacobian lens readouts and steering",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-15T03:40:57Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Jacobian lens readouts and steering",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:41:45Z",
+   "from": "Grading integrity and evaluation controls",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:42:10Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Grading integrity and evaluation controls",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:45:22Z",
+   "from": "Grading integrity and evaluation controls",
+   "to": "Research coordination search and metaevaluation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:45:32Z",
+   "from": "Research coordination search and metaevaluation",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:47:46Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Voting restarts and inference allocation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:48:24Z",
+   "from": "Voting restarts and inference allocation",
+   "to": "Board visualization and execution tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:48:51Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Checkpoint deltas and reward transfer",
+   "new": false
+  },
+  {
+   "who": "sameraslan",
+   "at": "2026-11-15T03:51:02Z",
+   "from": "Jacobian lens readouts and steering",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:53:14Z",
+   "from": "Checkpoint deltas and reward transfer",
+   "to": "Prompt cues demonstrations and revision",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:53:19Z",
+   "from": "Prompt cues demonstrations and revision",
+   "to": "Board visualization and execution tooling",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:54:08Z",
+   "from": "Board visualization and execution tooling",
+   "to": "Spectral neuron and localized interventions",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T03:56:36Z",
+   "from": "Spectral neuron and localized interventions",
+   "to": "Paired trajectory and failure analysis",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T04:04:30Z",
+   "from": "Paired trajectory and failure analysis",
+   "to": "Voting restarts and inference allocation",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T04:06:08Z",
+   "from": "Voting restarts and inference allocation",
+   "to": "Grading integrity and evaluation controls",
+   "new": false
+  },
+  {
+   "who": "abaybektursun",
+   "at": "2026-11-15T04:08:12Z",
+   "from": "Grading integrity and evaluation controls",
+   "to": "Paired trajectory and failure analysis",
+   "new": false
+  }
+ ]
+}

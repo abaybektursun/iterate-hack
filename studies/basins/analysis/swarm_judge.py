@@ -118,6 +118,8 @@ if __name__ == "__main__":
     ap.add_argument("--reuse-directions", default=None, help="judge folder whose directions.json to reuse (new nodes)")
     ap.add_argument("--reuse", default=None, help="judge folder whose directions.json and nodes.json to reuse (same nodes)")
     ap.add_argument("--steps", default="partitions,triplets,coverage", help="comma list of steps to run")
+    ap.add_argument("--repair-ids", action="store_true",
+                    help="map one mistyped id in a partition answer to the one missing id of the same kind (logged in partitions.jsonl)")
     ap.add_argument("--no-partitions", action="store_true", help="triplets only (to compare judges on the same questions)")
     ap.add_argument("--per-anchor", type=int, default=12)
     ap.add_argument("--batch", type=int, default=60)
@@ -180,8 +182,18 @@ if __name__ == "__main__":
             items = "\n".join(f"{i}: {node_text(by_id[i])}" for i in order)
             groups = ask(PARTITION.format(n=len(order), items=items, gmin=args.groups[0], gmax=args.groups[1]), out / "calls" / f"partition-{r}.txt")["groups"]
             got = sorted(i for g in groups for i in g["ids"])
+            repairs = []
+            if args.repair_ids and got != sorted(ids):
+                unknown, missing = sorted(set(got) - set(ids)), sorted(set(ids) - set(got))
+                assert len(unknown) == len(missing) == 1 and unknown[0].split("-")[0] == missing[0].split("-")[0], \
+                    f"partition {r}: not one mistyped id: unknown {unknown}, missing {missing}"
+                repairs = [{"returned": unknown[0], "used": missing[0]}]
+                for g in groups:
+                    g["ids"] = [missing[0] if i == unknown[0] else i for i in g["ids"]]
+                got = sorted(i for g in groups for i in g["ids"])
+                print(f"partition {r}: repaired id {unknown[0]} -> {missing[0]}", flush=True)
             assert got == sorted(ids), f"partition {r}: {len(got)} ids returned, {len(set(got))} distinct, {len(ids)} expected"
-            f.write(json.dumps({"order": r, "groups": groups}) + "\n")
+            f.write(json.dumps({"order": r, "groups": groups, "repairs": repairs}) + "\n")
             print(f"partition {r}: {len(groups)} groups", flush=True)
 
     if "triplets" not in steps:
