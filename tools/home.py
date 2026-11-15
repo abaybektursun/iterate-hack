@@ -244,7 +244,7 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--glass-hi)"/><stop offset=".55" stop-color="var(--glass)"/><stop offset="1" stop-color="var(--glass-lo)"/></linearGradient></defs></svg>
+<svg width="0" height="0" style="position:absolute; width:0; height:0; overflow:hidden; pointer-events:none" aria-hidden="true"><defs><linearGradient id="gg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--glass-hi)"/><stop offset=".55" stop-color="var(--glass)"/><stop offset="1" stop-color="var(--glass-lo)"/></linearGradient></defs></svg>
 <div class="page" id="page">
   <header class="top">
     <h1 class="name">Invariant</h1>
