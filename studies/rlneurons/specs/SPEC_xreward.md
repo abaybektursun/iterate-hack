@@ -157,3 +157,17 @@ seed 3000000, one sample; 8 directions in all layers: 192 at 1, 203 at 1.5, 190 
 3. to 5. `top8 --scale 1.5 --layers 0-10`, `11-21`, `22-31`.
    M2. One band of layers carries the dial: one band is at least 190 and the other two are within 164 +- 12. Refuted if the best
    band is below 185 or two bands are above 180 (then it is spread over depth, as it is over module types: attention 178, MLP 181).
+
+## Amendment 9 (2026-11-15, before the cells; work-b5f51c): the depth split, tested on the Code pair
+
+Amendment 8 refuted both of its predictions and left a reading made after the run: on math, the 8 directions in layers 0 to 10 add
+right answers without finishing (184 right, 98 cap hits), in layers 22 to 31 they finish without right answers (166, 57), in
+layers 11 to 21 both (183, 49). Tested here where it was not read: Code 3.1's directions at 1.5 on HumanEval+ and MBPP+ (cued base
+317 passed, 27 cap hits, 34 answers with no code block; random 331, 27, 45; all layers 399, 4, 5), cells
+`top8 --other code31 --scale 1.5 --layers 0-10`, `11-21`, `22-31`.
+
+- L1. Layers 0 to 10: at least 350 passed and at least 20 cap hits (right answers without finishing). Refuted if cap hits are 12
+  or fewer, or passed is below 340.
+- L2. Layers 22 to 31: at most 14 cap hits and at most 345 passed (finishing without right answers). Refuted if passed is 360 or
+  more, or cap hits are 22 or more.
+- L3. Layers 11 to 21: at least 350 passed and at most 18 cap hits.
