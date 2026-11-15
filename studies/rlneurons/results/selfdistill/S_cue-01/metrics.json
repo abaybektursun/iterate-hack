@@ -1,0 +1,81 @@
+{
+ "status": "done",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/sd",
+  "model_label": "sdS",
+  "prompt": "cue",
+  "set": "hard328",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 85000000,
+  "n": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/runs/abaybektursun-1114-201132-3c04",
+  "dry_run": false,
+  "commit": "ec6e0f5d6d6ba1581079faa129c5161f18b00a01",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 328
+ },
+ "commit": "ec6e0f5d6d6ba1581079faa129c5161f18b00a01",
+ "job_id": "abaybektursun-1114-201132-3c04",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T05:02:08Z",
+ "updated_utc": "2026-11-15T05:47:30Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 28749,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 18432,
+  "load_s": 57.1051127910614,
+  "model_dir": "/tmp/sd",
+  "tok_dir": "/__modal/volumes/vo-rul9XKaAuhEZE7QxFIdPN3/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 328,
+  "tok_p_lt_1e2": 30351,
+  "tok_p_lt_1e3": 7455,
+  "correct_v3": 171,
+  "correct_v1": 164,
+  "cap_hits": 65,
+  "loop_A": 1,
+  "generated_tokens": 2799607,
+  "restarts": 0,
+  "n_planned": 328,
+  "mean_generated_tokens": 8535.387195121952,
+  "generation_s": 2660.238651752472,
+  "tokens_per_s": 1052.3894155720643
+ },
+ "memory": {
+  "gpu_memory_used_mib": 73101,
+  "gpu_memory_total_mib": 81559,
+  "gpu": "NVIDIA H100 80GB HBM3"
+ },
+ "wall_s": 2722.14079618454
+}
