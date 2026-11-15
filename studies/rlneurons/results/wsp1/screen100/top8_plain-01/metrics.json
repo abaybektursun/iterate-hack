@@ -1,0 +1,38 @@
+{
+ "n": 100,
+ "right_v3": 88,
+ "acc_v3": 88.0,
+ "wilson95": [
+  80.2,
+  93.0
+ ],
+ "cap_hits": 2,
+ "mean_generated_tokens": 3663.1,
+ "median_generated_tokens": 2164.5,
+ "median_tokens_right": 2094.5,
+ "okay_first80": 90,
+ "okay_first80_share": 0.9,
+ "wait_per_answer": 27.92,
+ "empty": 0,
+ "empty_share": 0.0,
+ "edit": {
+  "recipe": "top8",
+  "k": 8,
+  "alpha": null,
+  "rounding": "stochastic",
+  "seed": 0,
+  "late_layers": null,
+  "reference": "base",
+  "n_tensors": 355,
+  "n_edited": 224,
+  "n_unchanged": 131,
+  "other": "rl_math",
+  "add_norm": 1.269214040907,
+  "written_norm": 2.5962500135967455,
+  "ref_norm": 1713.7851893052448,
+  "add_rel": 0.0007405910897278379,
+  "effective_scale": 0.9999600542119159,
+  "cos_written_add": 0.48884480866834484,
+  "share": 0.09821802434428129
+ }
+}

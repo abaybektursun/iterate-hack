@@ -1,0 +1,137 @@
+diff --git a/studies/gapmap/README.md b/studies/gapmap/README.md
+index 211b1be..675c61d 100644
+--- a/studies/gapmap/README.md
++++ b/studies/gapmap/README.md
+@@ -14,6 +14,7 @@ Requirements). Plan: `specs/SPEC.md`.
+ | `queue.json` | What the study runs: the batches (one metric each), the splits of every batch, extra cells, default settings. |
+ | `prep/make_cells.py` | Writes `cells/<batch>.json` from `queue.json`. |
+ | `cells/<batch>.json` | The cells of one batch, one entry per cell with its settings. |
++| `lib/cells.py` | Checks the settings of a batch's cells on the laptop, before a launch (stdlib only, no computation). |
+ | `jobs/submit.sh` | Launches one cell on the runner, waits, copies the output to `runs/<job id>/`. |
+ | `jobs/run_cell.sh` | What the job runs: environment, then `cell.py`. |
+ | `jobs/cell.py` | The cell: metric, split, paired bootstrap, interval, table. |
+@@ -27,10 +28,13 @@ One batch at a time, from the repository root:
+ 
+ ```
+ python3 studies/gapmap/prep/make_cells.py <batch>
+-bash studies/gapmap/jobs/submit.sh <batch> <cell> --data studies/rlneurons/results/rln4/per_problem.json
++python3 studies/gapmap/lib/cells.py <batch>        # after any hand edit of a cell
++bash studies/gapmap/jobs/submit.sh <batch> <cell>
+ ```
+ 
+-Commit `cells/<batch>.json` and push before the first launch (a job runs a pushed commit). Then copy each cell's
++Commit `cells/<batch>.json` and push before the first launch (a job runs a pushed commit). `submit.sh` refuses to
++launch a cell with invalid settings (`lib/cells.py`: `ci` a fraction, `fmt` json or csv, 1,500,000 resamples, seed 0)
++or a cells file that differs from the pushed commit. Then copy each cell's
+ `runs/<job id>/metrics.json` to `results/<batch>-NN/<cell>.json`, write `run.json`, commit, and close the work item
+ with the numbers.
+ 
+diff --git a/studies/gapmap/jobs/cell.py b/studies/gapmap/jobs/cell.py
+index 4002027..7b055ca 100644
+--- a/studies/gapmap/jobs/cell.py
++++ b/studies/gapmap/jobs/cell.py
+@@ -109,6 +109,9 @@ def main():
+     args = parser.parse_args()
+     cell = next(c for c in json.loads(Path(args.cells).read_text()) if c["id"] == args.cell)
+     stamp(f"cell {cell['id']} from {args.cells}")
++    from studies.gapmap.lib.cells import STUDY, problems
++    found = problems(cell, json.loads((STUDY / "queue.json").read_text()))
++    assert not found, f"invalid cell {cell['id']}: {found}"
+     if cell["kind"] == "bench":
+         from studies.gapmap.jobs import bench_rng
+         result = bench_rng.run(cell)
+diff --git a/studies/gapmap/jobs/submit.sh b/studies/gapmap/jobs/submit.sh
+index d46c827..db43b64 100755
+--- a/studies/gapmap/jobs/submit.sh
++++ b/studies/gapmap/jobs/submit.sh
+@@ -8,6 +8,14 @@ cell=$2
+ shift 2
+ command="bash studies/gapmap/jobs/run_cell.sh $batch $cell $*"
+ 
++# Check the cell's settings here, in a second, instead of after a job's environment and bootstrap.
++python3 studies/gapmap/lib/cells.py "$batch" "$cell"
++# A job runs the pushed commit: refuse to launch when the cells file differs from it.
++if ! git diff --quiet "@{u}" -- "studies/gapmap/cells/$batch.json"; then
++  echo "studies/gapmap/cells/$batch.json differs from the pushed commit: commit and push it first" >&2
++  exit 1
++fi
++
+ launch() {
+   local job state
+   job=$(uv run --quiet tools/gpu.py submit cpu --hours 0.5 -- "$command" | head -1)
+diff --git a/studies/gapmap/lib/cells.py b/studies/gapmap/lib/cells.py
+new file mode 100644
+index 0000000..a5aca70
+--- /dev/null
++++ b/studies/gapmap/lib/cells.py
+@@ -0,0 +1,61 @@
++"""Check the settings of gapmap cells before any job runs. Standard library only, so it runs on a laptop in under a
++second: it reads settings, it computes nothing.
++
++  python3 studies/gapmap/lib/cells.py <batch> [<cell>]     exits 1 with every problem found
++
++Used by prep/make_cells.py (after writing), jobs/submit.sh (before launching) and jobs/cell.py (before the bootstrap).
++"""
++import json
++import sys
++from pathlib import Path
++
++STUDY = Path(__file__).resolve().parent.parent
++FMTS = ("json", "csv")  # the keys of WRITERS in jobs/cell.py
++N_BOOT, SEED = 1500000, 0  # specs/SPEC.md, Requirement 2
++
++
++def problems(cell, queue):
++    """Every invalid setting of one cell, as text. Empty when the cell is valid."""
++    found = []
++    kind = cell.get("kind")
++    if kind == "bench":
++        s = cell.get("seconds_per_generator")
++        if not (isinstance(s, (int, float)) and s > 0):
++            found.append(f"seconds_per_generator {s!r} must be a positive number")
++        return found
++    if kind != "split":
++        return [f"kind {kind!r} must be split or bench"]
++    if cell.get("metric") not in queue["batches"]:
++        found.append(f"metric {cell.get('metric')!r} must be one of {queue['batches']}")
++    if cell.get("split") not in queue["splits"]:
++        found.append(f"split {cell.get('split')!r} must be one of {queue['splits']}")
++    ci = cell.get("ci")
++    if not (isinstance(ci, float) and 0 < ci < 1):
++        found.append(f"ci {ci!r} must be a fraction between 0 and 1, such as 0.9")
++    if cell.get("fmt") not in FMTS:
++        found.append(f"fmt {cell.get('fmt')!r} must be one of {list(FMTS)}")
++    digits = cell.get("digits")
++    if not (isinstance(digits, int) and 1 <= digits <= 10):
++        found.append(f"digits {digits!r} must be an integer from 1 to 10")
++    if cell.get("n_boot") != N_BOOT or cell.get("seed") != SEED:
++        found.append(f"n_boot {cell.get('n_boot')!r} and seed {cell.get('seed')!r} must be {N_BOOT} and {SEED} (SPEC, Requirement 2)")
++    return found
++
++
++def check(batch, only=None):
++    """Raise SystemExit listing every problem in cells/<batch>.json (or in its one cell `only`)."""
++    queue = json.loads((STUDY / "queue.json").read_text())
++    cells = json.loads((STUDY / "cells" / f"{batch}.json").read_text())
++    ids = [c.get("id") for c in cells]
++    if only is not None and only not in ids:
++        raise SystemExit(f"cells/{batch}.json has no cell {only!r}; cells: {ids}")
++    found = [f"cell {c.get('id')!r}: {p}" for c in cells if only in (None, c.get("id")) for p in problems(c, queue)]
++    if len(set(ids)) != len(ids):
++        found.append(f"duplicate cell ids: {ids}")
++    if found:
++        raise SystemExit(f"cells/{batch}.json is invalid:\n  " + "\n  ".join(found))
++
++
++if __name__ == "__main__":
++    check(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None)
++    print(f"cells/{sys.argv[1]}.json ok")
+diff --git a/studies/gapmap/prep/make_cells.py b/studies/gapmap/prep/make_cells.py
+index af78d36..c9f2903 100644
+--- a/studies/gapmap/prep/make_cells.py
++++ b/studies/gapmap/prep/make_cells.py
+@@ -17,3 +17,4 @@ cells += [{"seed": queue["defaults"]["seed"], **extra} for extra in queue["extra
+ (study / "cells").mkdir(exist_ok=True)
+ (study / "cells" / f"{batch}.json").write_text(json.dumps(cells, indent=1) + "\n")
+ print(f"{len(cells)} cells: " + ", ".join(c["id"] for c in cells))
++print(f"after editing a cell by hand: python3 studies/gapmap/lib/cells.py {batch}")

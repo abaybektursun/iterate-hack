@@ -1,0 +1,25 @@
+diff --git a/studies/gapmap/jobs/submit.sh b/studies/gapmap/jobs/submit.sh
+index db43b64..1915a06 100755
+--- a/studies/gapmap/jobs/submit.sh
++++ b/studies/gapmap/jobs/submit.sh
+@@ -30,15 +30,8 @@ launch() {
+   echo "$job"
+ }
+ 
+-first=$(launch cell)
+-
+-# Verification rerun: the same cell with the same seed, to confirm the number before it is posted.
+-second=$(launch check)
+-python3 - "$first" "$second" <<'PY'
+-import json, sys
+-tables = [json.load(open(f"runs/{job}/metrics.json"))["table"] for job in sys.argv[1:3]]
+-if "t2_minus_t1" in tables[0][0]:  # a bootstrap table repeats exactly; the timings of bench-rng do not
+-    assert tables[0] == tables[1], "the verification rerun gave a different table"
+-print(f"check ok: {sys.argv[2]} repeats {sys.argv[1]}")
+-PY
+-echo "result runs/$first/metrics.json"
++# One job per cell (SPEC, Compute). No same-seed rerun here: the bootstrap is deterministic (seed 0), so a rerun
++# cannot disagree. It repeated all 10 split tables of batches accuracy and cap_hit exactly, and it doubled each cell's
++# wall time. A teammate checks a table by rerunning the commit in run.json (SPEC, Requirement 2).
++job=$(launch cell)
++echo "result runs/$job/metrics.json"

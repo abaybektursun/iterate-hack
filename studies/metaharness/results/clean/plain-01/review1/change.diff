@@ -1,0 +1,69 @@
+diff --git a/studies/gapmap/README.md b/studies/gapmap/README.md
+index b40af38..60b1199 100644
+--- a/studies/gapmap/README.md
++++ b/studies/gapmap/README.md
+@@ -17,6 +17,7 @@ Requirements). Plan: `specs/SPEC.md`.
+ | `jobs/submit.sh` | Launches one cell on the runner, waits, copies the output to `runs/<job id>/`. |
+ | `jobs/run_cell.sh` | What the job runs: `cell.py` in the runner image. |
+ | `jobs/cell.py` | The cell: metric, split, paired bootstrap, interval, table. |
++| `analysis/summarize.py` | Prints the board result text of a finished batch: each split with its own interval level, `*` on groups whose interval excludes the overall point. |
+ | `results/overall-01/` | The overall difference of all four metrics with 95% intervals (`metrics.json`, `run.json`). |
+ | `results/<batch>-NN/` | One batch: one file per cell and `run.json` with the job ids. |
+ 
+@@ -31,7 +32,8 @@ bash studies/gapmap/jobs/submit.sh <batch> <cell>
+ 
+ Commit `cells/<batch>.json` and push before the first launch (a job runs a pushed commit). Then copy each cell's
+ `runs/<job id>/metrics.json` to `results/<batch>-NN/<cell>.json`, write `run.json`, commit, and close the work item
+-with the numbers.
++with the output of `python3 studies/gapmap/analysis/summarize.py <batch>-NN` (cells differ in interval level, so the
++result text must state it per split).
+ 
+ ## Numbers
+ 
+@@ -41,3 +43,7 @@ with the numbers.
+   - `tokens`: 760.948 [495.14, 1019.8781]
+   - `tokens_both_right`: 1035.0854 [808.505, 1257.191]
+ - Batches: see `results/<batch>-NN/`.
++- `accuracy-01`: the subject split is a 90% interval, the other three are 95%. Groups whose interval excludes 0.106:
++  algebra (90%), t1 length q1, q2, q4 and t2 length q1, q2. The prediction is half confirmed: the cued base's longest
++  quartile holds the largest gap, 0.256 [0.1567, 0.3554]; "flat across subjects" is refuted by algebra, 0.0565
++  [0.0177, 0.097] at 90%.
+diff --git a/studies/gapmap/analysis/summarize.py b/studies/gapmap/analysis/summarize.py
+new file mode 100644
+index 0000000..b2c996a
+--- /dev/null
++++ b/studies/gapmap/analysis/summarize.py
+@@ -0,0 +1,33 @@
++"""Print the board result text of one finished batch, from its committed cell files.
++
++  python3 studies/gapmap/analysis/summarize.py <batch>-NN      e.g. accuracy-01
++
++Each split line states its own interval level, because the level is set per cell (specs/SPEC.md, Requirements 3) and
++batches mix levels. A group whose interval excludes the overall point estimate (results/overall-01/metrics.json) is
++marked with `*`: that is the SPEC's rule for "different from the overall value". No number is computed here; the
++script only reads and formats the cells' metrics.json copies.
++"""
++import json
++import sys
++from pathlib import Path
++
++study = Path(__file__).resolve().parent.parent
++run = study / "results" / sys.argv[1]
++assert run.is_dir(), f"no batch folder {run}"
++cells = sorted(p for p in run.glob("*.json") if p.name != "run.json")
++assert cells, f"no cell files in {run}"
++metric = json.loads(cells[0].read_text())["cell"]["metric"]
++(overall,) = json.loads((study / "results/overall-01/metrics.json").read_text())["metrics"][metric]
++point = overall["t2_minus_t1"]
++
++print(f"gapmap {metric}, T2 minus T1 on MATH-500, paired bootstrap; artifact studies/gapmap/results/{run.name}/")
++print(f"overall {point} [{overall['low']}, {overall['high']}] (95%); * = interval excludes the overall {point}")
++for path in cells:
++    result = json.loads(path.read_text())
++    cell = result["cell"]
++    assert cell["metric"] == metric, f"{path.name} has metric {cell['metric']}, batch has {metric}"
++    groups = []
++    for row in result["table"]:
++        mark = "*" if not row["low"] <= point <= row["high"] else ""
++        groups.append(f"{row['group']} (n {row['n']}) {row['t2_minus_t1']} [{row['low']}, {row['high']}]{mark}")
++    print(f"{cell['split']} ({cell['ci']:.0%} interval): " + "; ".join(groups))

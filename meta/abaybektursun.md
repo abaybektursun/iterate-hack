@@ -17,6 +17,38 @@
 - Failures 3-5, not fixed, rows added to meta/FAILURES.md: `vast.py wait` dies on one failed ssh call; `gpu.py submit` refuses a tree with an untracked file, and this skill tells the reviewer to write cycle.txt into the tree before committing; `vast.py up` took over 19 min on two boxes at 02:20 (image pull) and 91 s at 04:37.
 - Next entry checks: setup_vllm.sh on a vast.ai box with the plain command; whether work-3d68e2 ran its smoke before the full job (it did: f08c, 1.7 min) and posted its headline only with the configuration fixed by the MATH-500 rule.
 
+## 2026-11-15 05:00 UTC (loop cycle 1, meta/loop/abaybektursun.md) meta/reviews/abaybektursun/20261115-0455/
+
+- Target (new Team line of cycle.py, 2 h): claim to close median 15 min, upper quartile 69 min, 24 items of 3 people; 20.0 results per hour. This is the loop's baseline.
+- Open measurements closed: restarts (02:25 fix): 0 jobs died with FileExistsError in 51 jobs since, against 3 and 231.3 container min in the 3 h before: helped. Setup seconds on the new image (04:15): no job has finished since; still open. hard328 rows in git: still 0. The three proposals of 03:05, 03:53 and 04:36 were not made, so their after rows stay empty; they are posted as ideas, not carried.
+- Turnaround now (queue.txt, 04:55): 10 of 10 H100 running, each for 45 to 62 min; 6 H100 jobs queued, the oldest 45 min. The limit is Modal's 10 GPUs per workspace. A reserved lane for short jobs was checked on the last 2 h and rejected: 6 short jobs waited about 16 min each (96 min), and 2 reserved GPUs would idle about 215 GPU-min.
+- Change (step 2, delete): with one review loop per person, board.py and gpu.py no longer ask that person's other agents for a review. 9 entries were written here in 2.7 h, 7 by sessions other than the loop, in one file.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | review entries per hour, abaybektursun | 3.3 (9 in 2.7 h) | not measured yet | - | 1 | before.txt |
+  | notice for a person without a loop (must not change) | printed | printed (team.review_loop false for sameraslan) | same | 1 | selftest, python check |
+
+- Asked of the person: more GPUs (a higher Modal limit or vast.ai) spend credits; AGENTS.md rule 8 still tells every agent to run the review.
+- Next cycle checks: entries per hour; setup seconds on the new image; the Team line against 15 / 69 min and 20.0 per hour.
+
+## 2026-11-15 04:36 UTC (after result-afc423, result-c57b51, result-5da8a9: gap anatomy, answer-statement repair, one axis) meta/reviews/abaybektursun/20261115-0436/
+
+- Last entry's checks (04:15): setup_vllm.sh median over the next 20 jobs not measured (10 jobs still running); no teammate deploy of the runner seen on the board.
+- Direction: mission = "the cheapest route to those points that uses no reward, at equal generated tokens" (DIRECTION.md). The three closed studies test no route; they say where a route can exist: 81 % of the gap is in problems the cued base solves at least once in 4 (result-afc423), reading the answer better gives 0.5 point (result-c57b51), and no two arms are complementary (result-5da8a9). They removed two route families (answer repair, cross-arm stacks) with 0 GPU jobs. The deliverable cell (328 vote, work-1a972a) is running. In line.
+- Research: Exa was not searched by any of the four agents: EXA_API_KEY unset (fourth entry) and the Exa MCP tool returns 401 (2 of 2 calls, before.txt). Claude Code's WebSearch answered 2 of 2 queries in this session and named two neighbours not in team memory for a step-level study (2602.09598 first-error resampling, 2605.16874 decision-token repair; abstracts only, unread). The anatomy judge was the agent's own model (no working provider key): its labels have no second-family check.
+- Turnaround (cycle.txt, 0.7 h; 04:15 entry in brackets): 26 jobs, 3 failed or cancelled, 23.8 of 329.4 container min in them (11.5 of 655.7). Offline studies, claim to result: 11, 14, 31 min (work-5b7270, work-655434, work-1aa34c; 0 GPU jobs of their own, the third pulled rows of 30 jobs with gpu.py get). The GPU study work-b68a26: 37 min open, 0 rows, 3 cancelled jobs. Slowest stage: queue and setup of the one GPU study.
+- Cause (before.txt, 04:36): 10 jobs running and 6 queued on h100 against the 10-GPU limit, queued for 5 to 22 min; all 16 are one person's sessions. The first hand-off smoke (7492) ran 30 min with no log line after pip and was killed; b200 again did not start (f2b4; 5 of 5 today).
+- Change, proposal (step 2; not made: this reviewer may commit only under meta/, and the jobs belong to other sessions): delete queued job 3c04 (vote-distillation arm S: its training set equals arm V on 422 of 455 examples, work-9763ed) and move 0871 (xreward --steps, weights only) to the cpu class. That puts the two hand-off jobs 2 places earlier. For round 2: launch only studies that read stored rows or need one forward-only job.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | h100 jobs queued, their wait | 6, 5 to 22 min | not measured yet | - | 6 | before.txt |
+  | work-b68a26 claim to first row | over 37 min | not measured yet | - | 1 | cycle.txt |
+  | results of running cells (must not change) | - | - | - | 10 | gpu.py ls |
+
+- Failures: a job that writes no log line for 20 min keeps its GPU until an agent looks (7492, 30 min). Row added to meta/FAILURES.md.
+- Next entry checks: queue wait of the hand-off jobs; whether round-2 studies ran offline first; whether a round-2 spec names a web search and a judge of another model family.
 ## 2026-11-15 04:15 UTC (optimization round asked by the person) meta/reviews/abaybektursun/20261115-0403/
 
 - Last entry's checks (03:53): not due yet. No multi-cell submit, idea-eec971 job or hard328 rows commit since then (board, 04:03).

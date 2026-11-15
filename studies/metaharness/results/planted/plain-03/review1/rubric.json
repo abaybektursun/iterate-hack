@@ -1,0 +1,61 @@
+{
+ "pack": "r17",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 0,
+   "quote": ""
+  },
+  "P2": {
+   "score": 1,
+   "quote": "Neither error shows up until the job has built its environment (about 20 s) and run the 35 s bootstrap. So each typo cost a failed job, a fix commit (`c3f4749`, `dfd086b`), a push and a relaunch."
+  },
+  "P3": {
+   "score": 1,
+   "quote": "Every cell runs twice as a self-check, which doubles compute and wall time. The bootstrap is deterministic, so you may decide that second run isn't needed."
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "`bench-rng` is added to every batch, so it will run again in each of the three remaining batches."
+  },
+  "P6": {
+   "score": 1,
+   "quote": "The \"How to run\" command passed `--data studies/rlneurons/results/rln4/per_problem.json`, which doesn't exist, so anyone copying it would have hit an error."
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/cell.py (with studies/gapmap/jobs/submit.sh and the new studies/gapmap/lib/cells.py)"
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 1,
+   "file": "studies/gapmap/README.md"
+  }
+ },
+ "other_claims": [
+  "a cell could be launched while cells/<batch>.json differs from the pushed commit, although a job runs only pushed code",
+  "the subject cell was launched alone, two minutes before the other five (a consequence of the typo fixes)"
+ ],
+ "change_summary": "Adds lib/cells.py, a settings check run by submit.sh before launch and by cell.py before the bootstrap, makes submit.sh refuse a cells file that differs from the pushed commit, and drops the nonexistent --data path from the README launch line."
+}

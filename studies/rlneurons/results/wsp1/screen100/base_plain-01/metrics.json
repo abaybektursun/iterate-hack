@@ -1,0 +1,18 @@
+{
+ "n": 100,
+ "right_v3": 34,
+ "acc_v3": 34.0,
+ "wilson95": [
+  25.5,
+  43.7
+ ],
+ "cap_hits": 1,
+ "mean_generated_tokens": 1834.7,
+ "median_generated_tokens": 469.5,
+ "median_tokens_right": 649.5,
+ "okay_first80": 13,
+ "okay_first80_share": 0.13,
+ "wait_per_answer": 5.78,
+ "empty": 4,
+ "empty_share": 0.04
+}

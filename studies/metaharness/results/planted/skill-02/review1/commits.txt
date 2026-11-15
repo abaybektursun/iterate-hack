@@ -1,0 +1,2 @@
+846f4d7 Dana 2026-11-14 20:07:53 -0800 meta: dana review 2026-11-15 04:08 (submit.sh rerun removed, 194.8 s -> 92.5 s per cell)
+fe64c85 Dana 2026-11-14 20:05:39 -0800 gapmap submit.sh: one job per cell, drop the same-seed verification rerun

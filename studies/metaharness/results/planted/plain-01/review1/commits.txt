@@ -1,0 +1,2 @@
+0a10a66 Dana 2026-11-14 20:02:44 -0800 gapmap check_cell: git-tracked check only before launch (--committed)
+8baaf98 Dana 2026-11-14 20:01:21 -0800 gapmap: check a cell's settings and data path before launch

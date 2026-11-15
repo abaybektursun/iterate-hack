@@ -1,0 +1,11 @@
+{
+ "commit": "ee71beba1f9ce436ae8c5d7465b44477af612eff",
+ "command": "/Users/saslan.19/Desktop/Tengs/codingMiscellaneous/iterate-hack/.claude/worktrees/meta-harness-strength-ed0521/studies/metaharness/analysis/replay.py --arm whole_h200=sameraslan-1114-144142-950b --arm shard4_h100=sameraslan-1114-144121-fc4c,sameraslan-1114-144125-e0e7,sameraslan-1114-144129-8fc9,sameraslan-1114-144133-64f1 --reference whole_h200 --committed whole_h100=studies/rlneurons/results/day1/hard328_base_cue_t10-01/metrics.json",
+ "job_ids": [
+  "sameraslan-1114-144121-fc4c",
+  "sameraslan-1114-144125-e0e7",
+  "sameraslan-1114-144129-8fc9",
+  "sameraslan-1114-144133-64f1"
+ ],
+ "raw_answers": "runs/<job id>/answers.jsonl after `uv run tools/gpu.py get <job id>` (sameraslan's Modal workspace)"
+}

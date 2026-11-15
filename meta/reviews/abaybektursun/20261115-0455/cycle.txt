@@ -1,0 +1,69 @@
+Jobs of abaybektursun, last 2 h:  id  state  gpu  wait  run  command
+  abaybektursun-1114-185953-5b15  done  NVIDIA H100   4.8  0.5  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-191457-f9da  done  NVIDIA H100   0.2  13.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta025 /tmp
+  abaybektursun-1114-191504-5599  exit 1  NVIDIA H100   0.1  11.5  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-193153-3c4c  done  NVIDIA H100   0.3  15.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/mix && /opt/r
+  abaybektursun-1114-193821-520c  done  NVIDIA H100   0.1  4.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-194352-feef  done  NVIDIA H100   0.0  13.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-194358-195f  done  NVIDIA H100   0.1  17.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-194405-bbb6  done  NVIDIA H100   0.1  9.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-195350-bc00  done  NVIDIA H100   0.1  49.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-195357-6936  done  NVIDIA H100   0.1  35.7  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-195404-351b  running  NVIDIA H100   0.1  62.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200050-c260  done  NVIDIA H100   0.1  8.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rl
+  abaybektursun-1114-220151-daaa  done  NVIDIA H100   0.1  6.6  python -m studies.rlneurons.jobs.xreward_overlap --commit 0ed298480b67
+  abaybektursun-1114-220435-7492  cancelled  NVIDIA H100   0.1  23.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200457-e8e6  running  NVIDIA H100   0.1  52.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200505-5ff2  running  NVIDIA H200  0.1  51.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200554-863e  done  cpu  0.1  0.7  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200901-a810  done  cpu  0.1  0.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200946-e5d8  done  cpu  0.0  0.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-200959-1397  done  NVIDIA H100   0.0  0.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-201013-47c5  running  NVIDIA H100   0.0  46.7  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rl
+  abaybektursun-1114-201021-095e  running  NVIDIA H100   0.0  46.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rl
+  abaybektursun-1114-201028-1adf  running  NVIDIA H100   0.0  46.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rl
+  abaybektursun-1114-221034-007d  running  NVIDIA H100   0.3  46.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-201035-c6c0  running  NVIDIA H100   18.1  28.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rl
+  abaybektursun-1114-221040-5f1e  running  NVIDIA H100   19.1  27.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-221053-fb3f  running  NVIDIA H100   32.5  13.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-221100-1e31  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-201132-3c04  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/sd && /opt/rl
+  abaybektursun-1114-221259-0871  queued  h100  -  -  python -m studies.rlneurons.jobs.xreward_overlap --steps --commit f89a
+  abaybektursun-1114-222829-ce39  cancelled  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222907-f2b4  cancelled  b200  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222915-1f4a  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-222933-0d2e  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-203737-3688  cancelled  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-204820-49ce  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  36 jobs, 5 failed or cancelled; median wait 0.1; 632.2 container minutes, 35.4 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 2 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-b95a73  theory  -  -  -  30  0  0  Theory round 02 (theory skill v2, SPEC studies/theory/specs/
+  work-3095f1  main  -  -  -  7  0  0  Label-free selector over the 4 stored samples idea-664670, o
+  work-5c7b22  main  -  -  -  44  0  0  Board page redesign from the three design reviews (tools/vie
+  work-aa5f97  main  -  -  -  3  0  0  Record steps of the hill chart: new tools/climb.py (branch c
+  work-6b1fa5  main  -  -  -  6  0  0  Literature sweep for the base-vs-RL gap: latest Goodfire int
+  work-3946b0  main  -  -  -  7  0  0  Choose the next interpretability study: 4 proposer subagents
+  work-9763ed  main  8  32  -  87 (open)  14  0  Vote distillation (no reward, no labels): LoRA-finetune the 
+  work-855406  main  -  -  -  2  0  0  Audit of the climb-chart wins (result-c36598, e870a1, 4b0d5f
+  work-0b9116  theory  -  -  -  39  0  0  Theory round 03 (SPEC studies/theory/specs/SPEC_round03.md):
+  work-906b75  main  -  -  -  2  0  0  Regrade our T 1.0 base+cue MATH-500 answers (job abaybekturs
+  work-4fa42e  main  8  8  -  63 (open)  10  0  Run idea-ac4e14 step 1: top-8 singular-subspace overlap betw
+  work-5b7270  main  9  1  2  11  1  0  Gap anatomy idea-9e3dff: reliability shift vs new problems i
+  work-b68a26  main  6  26  -  59 (open)  9  3  Prefix hand-off at T 1.0 idea-17d5b7: writer {base, RL} x fi
+  work-1aa34c  main  8  4  19  31  4  0  One axis or several: item-level structure of all arms' per-p
+  work-1a972a  main  1  4  -  52 (open)  4  0  hard328 with the configuration chosen on MATH-500 (vote over
+  work-655434  main  -  -  -  14  0  0  Answer-statement repair on MATH-500 T 1.0 (base cue vs RL, 2
+  work-25e631  main  -  -  -  45 (open)  0  0  gpuprice hill-climb round 3 (branch gpuprice): (a) API LLM a
+  work-3d6913  theory  -  -  -  35 (open)  0  0  Theory engine v4 and round 04: computed tests on stored rows
+  work-27bcd1  main  -  -  -  31 (open)  0  0  Monitor page performance: data-oriented /data (ETag/304, sha
+  work-eb10d7  shots  1  5  -  21 (open)  1  1  In-context improvement loop, no RL text and no reward (follo
+  work-c45b70  main  -  -  -  16  0  0  Exchange-rate table idea-31636e (branch rate, laptop only): 
+  work-768257  main  -  -  -  10  0  0  Checks or per-step error idea-60d3e1: checking markers per 1
+  work-5d5dc3  main  2  -  -  10 (open)  1  0  Critic at decoding time idea-eec971, stages 0-1: (0) offline
+  work-deec92  main  -  -  -  9 (open)  0  0  Entropy-gated temperature idea-069f19: vLLM logits processor
+  work-72c687  main  -  -  -  -0 (open)  0  0  Finding page /finding/rl_reliability: RL gain is reliability
+
+Team, last 2 h: claim to close median 15 min, upper quartile 69 min, over 24 work items closed by 3 people; 40 results, 20.0 per hour.
+
+Median minutes per stage over work items with jobs: to-job 7, jobs 5, to-answer 10. Slowest stage: to-answer.

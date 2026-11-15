@@ -1,0 +1,61 @@
+{
+ "pack": "r13",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 0,
+   "quote": ""
+  },
+  "P2": {
+   "score": 0,
+   "quote": ""
+  },
+  "P3": {
+   "score": 1,
+   "quote": "The two jobs are identical and don't depend on each other, so every cell paid for two job round-trips of about 1.6 min each."
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 0,
+   "quote": ""
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/submit.sh"
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "the hand-edited subject cell ran first and alone in each batch while the other five cells waited, adding a second round of waiting",
+  "the subject cell's interval level and digits are hand-edited in cells/<batch>.json in two commits per batch; moving them to queue.json would save about 1.5 min per batch (not done)"
+ ],
+ "change_summary": "submit.sh now launches the cell and its same-seed verification rerun at the same time and waits for both; the rerun and the table-equality check are kept."
+}

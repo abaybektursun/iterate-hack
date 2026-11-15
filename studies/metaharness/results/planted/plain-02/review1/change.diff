@@ -1,0 +1,103 @@
+diff --git a/studies/gapmap/README.md b/studies/gapmap/README.md
+index 211b1be..ea7466c 100644
+--- a/studies/gapmap/README.md
++++ b/studies/gapmap/README.md
+@@ -16,6 +16,7 @@ Requirements). Plan: `specs/SPEC.md`.
+ | `cells/<batch>.json` | The cells of one batch, one entry per cell with its settings. |
+ | `jobs/submit.sh` | Launches one cell on the runner, waits, copies the output to `runs/<job id>/`. |
+ | `jobs/run_cell.sh` | What the job runs: environment, then `cell.py`. |
++| `jobs/check_cell.py` | Checks a cell's settings and data path before launch (stdlib, computes nothing). |
+ | `jobs/cell.py` | The cell: metric, split, paired bootstrap, interval, table. |
+ | `jobs/bench_rng.py` | Speed of numpy's bit generators on the resampler's draw. |
+ | `results/overall-01/` | The overall difference of all four metrics with 95% intervals (`metrics.json`, `run.json`). |
+@@ -27,9 +28,12 @@ One batch at a time, from the repository root:
+ 
+ ```
+ python3 studies/gapmap/prep/make_cells.py <batch>
+-bash studies/gapmap/jobs/submit.sh <batch> <cell> --data studies/rlneurons/results/rln4/per_problem.json
++bash studies/gapmap/jobs/submit.sh <batch> <cell>
+ ```
+ 
++`submit.sh` runs `jobs/check_cell.py` first and launches nothing if a cell's settings or data path are wrong. The
++data defaults to `studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json`; pass `--data` only to change it.
++
+ Commit `cells/<batch>.json` and push before the first launch (a job runs a pushed commit). Then copy each cell's
+ `runs/<job id>/metrics.json` to `results/<batch>-NN/<cell>.json`, write `run.json`, commit, and close the work item
+ with the numbers.
+diff --git a/studies/gapmap/jobs/check_cell.py b/studies/gapmap/jobs/check_cell.py
+new file mode 100644
+index 0000000..7fe41a9
+--- /dev/null
++++ b/studies/gapmap/jobs/check_cell.py
+@@ -0,0 +1,57 @@
++"""Check one gapmap cell's settings and data path before a job is launched (stdlib only, computes nothing).
++
++  python3 studies/gapmap/jobs/check_cell.py --cells studies/gapmap/cells/<batch>.json --cell <id> [--data <per_problem.json>]
++
++Exits 1 with the reason on a setting that would make cell.py fail on the runner: a missing data file, ci outside
++(0, 1) (for example 90 instead of 0.9), a table format cell.py has no writer for, an unknown metric or split.
++submit.sh runs it first, so a typo costs a second instead of a job.
++"""
++import argparse
++import json
++import sys
++from pathlib import Path
++
++DATA = "studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json"  # the default of cell.py
++METRICS = {"accuracy", "cap_hit", "tokens", "tokens_both_right"}  # cell.values
++SPLITS = {"overall", "subject", "level5", "t2_length_quartile", "t1_length_quartile"}  # cell.labels
++FORMATS = {"json", "csv"}  # cell.WRITERS
++
++
++def problems(cell, data):
++    if not Path(data).is_file():
++        yield f"data file {data} does not exist"
++    if cell.get("kind") == "bench":
++        return
++    for key in ("metric", "split", "n_boot", "seed", "ci", "fmt", "digits"):
++        if key not in cell:
++            yield f"setting {key} is missing"
++    if cell.get("metric") not in METRICS:
++        yield f"metric {cell.get('metric')!r} is not one of {sorted(METRICS)}"
++    if cell.get("split") not in SPLITS:
++        yield f"split {cell.get('split')!r} is not one of {sorted(SPLITS)}"
++    if not (isinstance(cell.get("ci"), float) and 0 < cell["ci"] < 1):
++        yield f"ci {cell.get('ci')!r} must be a fraction between 0 and 1, such as 0.9"
++    if cell.get("fmt") not in FORMATS:
++        yield f"fmt {cell.get('fmt')!r} is not one of {sorted(FORMATS)}"
++    for key in ("n_boot", "seed", "digits"):
++        if key in cell and not isinstance(cell[key], int):
++            yield f"{key} {cell[key]!r} must be an integer"
++
++
++def main():
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--cells", required=True)
++    parser.add_argument("--cell", required=True)
++    parser.add_argument("--data", default=DATA)
++    args = parser.parse_args()
++    matches = [c for c in json.loads(Path(args.cells).read_text()) if c["id"] == args.cell]
++    if len(matches) != 1:
++        sys.exit(f"check: {len(matches)} cells with id {args.cell} in {args.cells}")
++    found = list(problems(matches[0], args.data))
++    if found:
++        sys.exit("check failed, not launched: " + "; ".join(found))
++    print(f"check ok: cell {args.cell} of {args.cells}", file=sys.stderr)
++
++
++if __name__ == "__main__":
++    main()
+diff --git a/studies/gapmap/jobs/submit.sh b/studies/gapmap/jobs/submit.sh
+index d46c827..ed07f5a 100755
+--- a/studies/gapmap/jobs/submit.sh
++++ b/studies/gapmap/jobs/submit.sh
+@@ -8,6 +8,9 @@ cell=$2
+ shift 2
+ command="bash studies/gapmap/jobs/run_cell.sh $batch $cell $*"
+ 
++# Settings and data path first, on this machine: a typo fails here in a second instead of on the runner.
++python3 studies/gapmap/jobs/check_cell.py --cells "studies/gapmap/cells/$batch.json" --cell "$cell" "$@"
++
+ launch() {
+   local job state
+   job=$(uv run --quiet tools/gpu.py submit cpu --hours 0.5 -- "$command" | head -1)

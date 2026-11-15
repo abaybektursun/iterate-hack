@@ -1,0 +1,68 @@
+{
+ "status": "done",
+ "commit": "97ac3209c1c6bce42d4871b1214a813a8dfc8074",
+ "command": "python -m studies.rlneurons.jobs.wsp_delta_anatomy --commit 97ac3209c1c6bce42d4871b1214a813a8dfc8074",
+ "job_id": "sameraslan-1114-153637-0929",
+ "models": {
+  "base": {
+   "repo": "allenai/Olmo-3-1025-7B",
+   "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+  },
+  "rl_math": {
+   "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  },
+  "rl_code": {
+   "repo": "allenai/Olmo-3.1-7B-RL-Zero-Code",
+   "revision": "1ca3bb30f0e51b7ef05f7d0fefcf0e6b14eefc90"
+  },
+  "think_sft": {
+   "repo": "allenai/Olmo-3-7B-Think-SFT",
+   "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+  }
+ },
+ "layers": null,
+ "config": {
+  "cue": [
+   1584,
+   2268,
+   33413
+  ],
+  "null_layer": 16,
+  "null_mods": [
+   "q",
+   "up",
+   "down"
+  ],
+  "null_seeds": 5,
+  "h4_layers": [
+   24,
+   25,
+   26,
+   27,
+   28,
+   29,
+   30,
+   31
+  ]
+ },
+ "torch": "2.15.0+cu132",
+ "device": "NVIDIA H200",
+ "started_utc": "2026-11-14T23:36:42Z",
+ "seconds": {
+  "selftest": 1.195293664932251,
+  "download": 3.3613409996032715,
+  "index": 0.21628522872924805,
+  "tensors": 110.61847972869873,
+  "null": 4.493981838226318,
+  "summary": 0.03716158866882324
+ },
+ "ended_utc": "2026-11-14T23:38:41Z",
+ "wall_s": 119.92754220962524,
+ "snapshots": {
+  "base": "/__modal/volumes/vo-0ORQqRq7X6c3gSh3CYTrju/hub/models--allenai--Olmo-3-1025-7B/snapshots/a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "rl_math": "/__modal/volumes/vo-0ORQqRq7X6c3gSh3CYTrju/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+  "rl_code": "/__modal/volumes/vo-0ORQqRq7X6c3gSh3CYTrju/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Code/snapshots/1ca3bb30f0e51b7ef05f7d0fefcf0e6b14eefc90",
+  "think_sft": "/__modal/volumes/vo-0ORQqRq7X6c3gSh3CYTrju/hub/models--allenai--Olmo-3-7B-Think-SFT/snapshots/6ff857587e040d6d523a3d5f3a56e918f5401d66"
+ }
+}
