@@ -29,7 +29,7 @@ All four hold. If one fails, the board result is enough.
 
 1. Copy `.claude/skills/finding-page/template.py` to `tools/finding_<slug>.py`. `view.py` serves it at
    `/finding/<slug>` and gives it a tile on `/findings`, with no other change. The tile is the only way to the page:
-   the header has four tabs (Board, Design, Proof, Findings) and never links a single finding. One finding, one file,
+   the header has three tabs (Board, Proof, Findings) and never links a single finding. One finding, one file,
    one writer.
    An experiment that tests the team's method itself (the harness, a skill, a tool) is not a finding. It gets a proof
    page, made in the same way and with the same checks: the file is `tools/proof_<slug>.py`, it is served at
@@ -59,7 +59,7 @@ All four hold. If one fails, the board result is enough.
    - a trend: a line, with a slider on its x axis;
    - a behaviour: two real outputs side by side from the run folder, one scored right and one scored wrong;
    - a mechanism: a diagram in the manner of `tools/architecture.py`.
-3. The picture has the look of the architecture page: one lit object with depth, slow motion, real data
+3. The picture has the look of `tools/architecture.py` (its picture is the deck slide `/demo#harness`): one lit object with depth, slow motion, real data
    (`site-ui`: The look, Depth, Motion). Give the finding a body the reader can turn or switch, drawn with the same
    light and the same projection, with no 3D library. The template's flat bar is the plain starting point; replace it
    when the finding deserves more. Depth must make the finding easier to see: a single number stays a single,

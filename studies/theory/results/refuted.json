@@ -26,5 +26,12 @@
   "result": "result-124593",
   "measured": "hard328, edit 1.5x on problems where a cued-base sample finished wrong: 36.4 % right vs 22.9 % for a second base sample, +13.5 points [9.7, 17.3] (RL +12.3); only 26 % of the edit's gain sits on base cap hits; at -1x finished answers 51.5 % vs base 70.0 % right",
   "added": "2026-11-15T13:08:48"
+ },
+ {
+  "mechanism": "run-02/f2-m01",
+  "claim": "hard328 solutions need 6,000-14,000 tokens and short samples never reach them: under 20 % of the hard328 problems the cued base solves have a right sample of 2,000 tokens or fewer",
+  "result": "result-ebf7a4",
+  "measured": "hard328: 72 of 220 solved problems, 32.7 % [27.7, 38.2] (refuted if lower bound >= 20 %); median right length 3,921 tokens [3,541, 4,390]; MATH-500 control 67.5 % [63.9, 71.1] of 474",
+  "added": "2026-11-15T13:18:13"
  }
 ]

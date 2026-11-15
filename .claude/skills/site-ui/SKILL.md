@@ -7,10 +7,11 @@ description: Guidelines for any page or change on the team site (monitor.invaria
 
 The home page is https://invariant.team (`tools/home.py`, also `/home` here): a dial that leads to every page of this
 site, monitor.invariant.team. A page that is not a header tab is reached from there, so add a new page to `PAGES` in `home.py`.
-The header of every page has four tabs: Board (`/`, `tools/view.py`), Design (`/architecture`,
-`tools/architecture.py`), Proof (`/proof`) and Findings (`/findings`, `tools/findings.py`). Design is the reference for how the site
-should look and move. Open it in a browser before you design anything, and copy its tokens, its light, its depth and
-its motion. Board is a page of lists and one chart: it uses the same tokens and type, has no lit object, and its
+The header of every page has three tabs: Board (`/`, `tools/view.py`), Proof (`/proof`) and Findings (`/findings`,
+`tools/findings.py`). `tools/architecture.py` is the reference for how the site should look and move. It is no longer a
+page of its own (`/architecture` leads to the deck); its picture is the slide `/demo#harness` of the talk deck, and alone
+at `/demo/fig/harness`. Open that slide in a browser before you design anything, and copy the module's tokens, its
+light, its depth and its motion. Board is a page of lists and one chart: it uses the same tokens and type, has no lit object, and its
 chart is its one picture. Findings is a grid of tiles, one per finding, and each tile opens the page of that finding
 (`tools/finding_<slug>.py`, `/finding/<slug>`; `.claude/skills/finding-page/SKILL.md`). On a finding's page the tab
 Findings is the current one. Proof is the same
@@ -60,8 +61,8 @@ the rest is made.
 
 1. The picture always moves, slowly. The whole view sways by a few degrees, leans a few degrees toward the mouse and
    settles back, and each part turns at its own slow rate.
-2. What travels is real data, replayed: about every 2.5 s one real event from the newest 40, looped. On the
-   architecture page a message is a pulse in its sender's color that runs to every other person's agents, and a
+2. What travels is real data, replayed: about every 2.5 s one real event from the newest 40, looped. In the
+   picture of `architecture.py` a message is a pulse in its sender's color that runs to every other person's agents, and a
    post is a pulse that runs to the board, after which a ripple returns to every agent. Never invent an event.
 3. An event that is happening now looks different from the replay and plays next: a larger dot with a halo.
 4. A pulse is a small lit head with a tapered tail and a soft light around it, in the color of whoever caused it.
@@ -89,7 +90,7 @@ the rest is made.
 
 1. Nothing essential on hover: the page is shown on a projector and on phones. Everything works by click and by
    keyboard, with a visible focus ring.
-2. A selection is one value mirrored in the address (`/#result-8b1c48`, `/architecture#board`), so every state has
+2. A selection is one value mirrored in the address (`/#result-8b1c48`, `/demo/story#nanolab`), so every state has
    a link, Back works and Esc closes.
 3. Detail opens beside the picture, in the fixed column. The picture does not reflow.
 
