@@ -1,0 +1,140 @@
+Jobs of abaybektursun, last 4 h:  id  state  gpu  wait  run  command
+  abaybektursun-1115-140001-11a6  done  NVIDIA H100   0.1  4.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140534-0f14  exit 2  NVIDIA H100   0.0  1.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140553-3388  exit 2  NVIDIA H100   0.1  0.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140607-f3e1  exit 2  NVIDIA H100   0.1  0.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140620-fd69  exit 2  NVIDIA H100   0.1  1.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140745-b1e2  done  NVIDIA H100   0.0  16.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140758-d51e  done  NVIDIA H100   0.0  16.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140811-353b  done  NVIDIA H100   0.0  17.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-140826-c2f4  done  NVIDIA H100   0.1  17.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-143215-6942  done  NVIDIA H100   0.1  27.0  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-143231-15bb  done  NVIDIA H100   0.1  25.3  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-143247-929d  done  NVIDIA H100   0.1  26.6  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-143301-ec55  done  NVIDIA H100   0.1  26.3  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-143316-628e  done  NVIDIA H100   0.1  28.4  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-143331-10da  done  NVIDIA H100   0.1  26.6  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-143344-809f  done  NVIDIA H100   0.1  51.1  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-144958-ed3a  done  NVIDIA H100   0.1  1.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145226-386e  done  NVIDIA H100   0.1  2.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145240-18fc  done  NVIDIA H100   0.1  2.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145625-c6dc  done  NVIDIA H100   0.1  28.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145638-c016  done  NVIDIA H100   0.1  25.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145652-dc10  done  NVIDIA H100   0.1  28.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145706-0b28  done  NVIDIA H100   1.9  27.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145720-8ceb  done  NVIDIA H100   2.4  25.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145733-af00  done  NVIDIA H200  2.2  18.7  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145845-f70e  done  NVIDIA H200  1.0  18.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145859-a234  done  NVIDIA H100   2.2  24.8  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145913-fed1  done  NVIDIA H100   2.9  25.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145926-720e  done  NVIDIA H100   19.2  24.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145941-c2cc  done  NVIDIA H100   19.0  29.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-145956-7546  done  NVIDIA H100   22.8  30.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-151138-ecde  done  NVIDIA H100   13.2  45.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-152957-da47  done  NVIDIA H100   1.0  53.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-153012-603e  done  NVIDIA H100   0.7  52.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-153028-9c6b  done  NVIDIA H200  0.5  40.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-160854-bf38  done  NVIDIA H100   0.1  3.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-161231-ef64  done  NVIDIA H100   0.0  23.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-161247-15fb  done  NVIDIA H100   0.1  24.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-161303-5ad7  done  NVIDIA H100   0.1  14.8  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-161320-a1e0  done  NVIDIA H100   0.1  17.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-161337-2422  done  NVIDIA H100   1.0  28.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-161356-4282  done  NVIDIA H100   0.7  27.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-161411-496b  exit 1  NVIDIA H100   0.5  0.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-161425-4575  exit 1  NVIDIA H100   0.2  0.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-161512-737c  done  NVIDIA H100   0.6  14.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-161527-c434  done  NVIDIA H100   0.4  15.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-162945-074d  exit 1  NVIDIA H100   0.6  0.2  python -m studies.rlneurons.jobs.xshift --commit c9b3aa02547e4390e8a29
+  abaybektursun-1115-163129-1048  done  NVIDIA H100   0.0  4.9  python -m studies.rlneurons.jobs.xshift --commit 6e0a11eb1daef904b2048
+  abaybektursun-1115-164125-e98c  exit 1  NVIDIA H100   0.1  2.4  python -m studies.rlneurons.jobs.xshift --commit 50c2d74a8382365b22fb0
+  abaybektursun-1115-164458-836e  done  NVIDIA H100   0.1  6.7  python -m studies.rlneurons.jobs.xshift --commit 2c02177b171868eaad715
+  abaybektursun-1115-165351-05ce  done  NVIDIA H100   0.1  5.4  python -m studies.rlneurons.jobs.xshift --commit d08038bea5a7f93494586
+  abaybektursun-1115-170213-23c6  done  NVIDIA H100   0.1  0.2  python -m studies.rlneurons.jobs.xlisten --commit 0dd01db8a35e8924722d
+  abaybektursun-1115-170332-2668  done  NVIDIA H100   0.1  0.6  python -m studies.rlneurons.jobs.xlisten --commit 0dd01db8a35e8924722d
+  abaybektursun-1115-170619-dbf5  done  NVIDIA H100   0.1  1.4  python -m studies.rlneurons.jobs.xshift --commit aad41049e3c787155e80e
+  abaybektursun-1115-170819-f8cb  running  NVIDIA H100   0.1  0.3  python -m studies.rlneurons.jobs.xshift --commit aad41049e3c787155e80e
+  55 jobs, 8 failed or cancelled; median wait 0.1; 983.1 container minutes, 6.8 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 4 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-acad69  main  -  -  -  22  0  0  UX/UI review of the whole site's structure (invariant.team, 
+  work-db4b01  main  -  -  -  20  0  0  Level up the joke game at /psychosis (tools/psychosis.py): 5
+  work-f670f3  main  -  -  -  15  0  0  Values page /values (tools/values.py): the team's six values
+  work-ac51ca  main  -  -  -  4  0  0  Site review fixes (work-acad69), all in tools/view.py send p
+  work-ec17e2  main  -  -  -  10  0  0  Second level-up of the joke game /psychosis (tools/psychosis
+  work-abf090  main  -  -  -  88  0  0  Site design loop, round 2 (follows work-acad69, work-ac51ca)
+  work-e45cc9  main  -  -  -  93  0  0  Site lab round 2: polish and speed up the 12 pictures at /la
+  work-441e5b  m2cap  2  26  1  29  9  4  M(2) = Think-SFT + 2x(RL-Math - base), cue, hard328, cap 32,
+  work-0f3aae  theory  -  -  -  21  0  0  theory round 11 (engine 11, score first): score every outsta
+  work-3d4e90  main  -  -  -  168 (open)  0  0  Think-SFT at its released sampling setting (generation_confi
+  work-f58d89  main  -  -  -  56  0  0  Replicate the two one-sample headlines of result (work-30f0e
+  work-f33794  critic  -  -  -  156 (open)  0  0  Vote over k on the 328 held-out problems (follow-up of resul
+  work-b66b4c  theory  -  -  -  16  0  0  theory round 12 (engine 11): score the results posted since 
+  work-1dda75  main  -  -  -  17  0  0  Home page redesign (tools/home.py only): a theme and a lit g
+  work-16b37f  normband  0  63  5  69  15  0  Norm-matched band control (SPEC_normband.md): Math top-8 on 
+  work-20e6ec  main  -  -  -  1  0  0  Exact-merge test of the dial's 1x (rounding loss vs dial opt
+  work-c4e10c  main  -  -  -  6  0  0  Lab page copy: rename /lab/ to AI Psychosis maxxing, tongue-
+  work-1645c5  dt-dial  -  -  -  5  0  0  Direct test of run-05/f2-m01 (finish dial): on hard328 and M
+  work-91a169  main  -  -  -  2  0  0  Direct test of run-06/f2-m03's cause (outcome reward on a gr
+  work-cd2924  dt-input  -  -  -  6  0  0  Direct test of run-05/f2-m03 (input-side gating): does a tex
+  work-98b9cd  main  -  -  -  63  0  0  Audit of the English in all public site text except /demo (e
+  work-fc0a74  main  -  -  -  12  0  0  Delete the Design page /architecture (route, tab, links, hom
+  work-258eee  main  -  -  -  40  0  0  Site design loop, round 4 (follows work-abf090): fresh revie
+  work-305d44  main  -  -  -  15  0  0  Home page round 2 (tools/home.py only): cleaner, more expens
+  work-946efb  main  -  -  -  12  0  0  Rebuild /papers (tools/papers.py only): five sheets no longe
+  work-4c1119  dt-short  -  -  -  2  0  0  Direct test (theory engine 12) of run-02/f2-m01 'autobench b
+  work-8965b9  dt-ending  -  -  -  3  0  0  Direct test of run-03/f2-m04 (accuracy depends on how the an
+  work-ae598b  dt-host  -  -  -  3  0  0  Direct test of round-10/weights-m03 (an added RL change depe
+  work-c51f89  dt-drive  -  -  -  59  0  0  Cross-domain drive test of f2-m03: xreward_trace on the 538 
+  work-1e7188  viz  -  -  -  31  0  0  Site lab round 3 (studies/sitelab only): crystal sharp withi
+  work-d758db  theory  -  -  -  48  0  0  Theory round 13 on engine 13: new mechanisms must pass a dir
+  work-a822b1  main  -  -  -  58  0  0  Which side of RL's 8 directions carries the dial: at 1.5x on
+  work-5e0338  main  -  -  -  4  0  0  /papers motion (tools/papers.py only): the change of paper p
+  work-cbc33a  main  -  -  -  3  0  0  gpu.invariant.team (studies/gpuprice/site/index.html, branch
+  work-6b73e9  dt-cue100  -  -  -  3  0  0  Direct test cue100-01 of round-09/grader-m01 (round 13): at 
+  work-37a3db  dt-abstain  -  -  -  5  0  0  Direct test abstain-01 of run-08/f2-m06 (round 13): on hard3
+  work-cb6617  dt-capbox  -  -  -  6  0  0  Direct test capbox-01 of run-08/f2-m02 (round 13): in native
+  work-9baa14  main  -  -  -  5  0  0  /papers motion, simpler (tools/papers.py only): no 3D; a fla
+  work-996b09  main  -  -  -  5  0  0  Direct test template-01 of round-09/training-m01 (round 13):
+  work-2843ca  dt-rank1  -  -  -  3  0  0  Direct test rank1-01 of round-10/weights-m06 (round 13): on 
+  work-17bcfb  nav-consistent  -  -  -  6  0  0  Consistent site navigation (owner request): one canonical he
+  work-59feed  main  -  -  -  75 (open)  0  0  Site design loop, round 5 (follows work-258eee): reviewers r
+  work-989736  egate-fresh  -  -  -  75 (open)  0  0  Host swap for the RL delta: Olmo-3-7B-Think (released final 
+  work-ef2d53  main  -  -  -  2  0  0  Direct test codepass-01 of round-13/s4-a (round 13): Code 1.
+  work-5d6316  dt-vote13  -  -  -  3  0  0  Direct tests votesplit-01 (round-13/s3-a) and votetie-01 (ro
+  work-8e9805  main  -  -  -  2  0  0  Direct test sharpen-01 of round-13/s4-b (round 13): Code 1.5
+  work-16161e  dt-m21q  -  -  -  3  0  0  Direct test m21open-01 + m21hard-01 of round-13/s2-a and s2-
+  work-f5966a  dt-karp13  -  -  -  3  0  0  Direct tests karpcap-01 (round-13/s1-a) and karpagree-01 (ro
+  work-93874a  dt-code13  -  -  -  3  0  0  Direct tests codecontract-01 (round-13/s6-a) and codereliab-
+  work-ab9ae3  dt-dev13  -  -  -  6  0  0  Direct tests devcut-01 and devmode-01 of round-13/s5-a and s
+  work-b7857c  normband  1  35  14  49  11  2  Review cells for result-e18bd8 (SPEC_normband amendment 3): 
+  work-ccac62  main  -  -  -  23  0  0  Tie-to-shortest replication on stored 16,384 draws (Think-SF
+  work-08efcc  main  0  7  2  9  2  1  Residual-stream shift of the three partial edits (RL inputs 
+  work-ca83dd  theory  -  -  -  27  0  0  Theory round 14 on engine 14 (branch theory): each rival pai
+  work-3b97a7  main  -  -  -  15  0  0  Regrade the Code pair with a second extraction rule that als
+  work-9d7cfb  main  -  -  -  1  0  0  Offline test on stored xshift run-01 vectors: does the full 
+  work-bd2857  dt-logodds  -  -  -  3  0  0  Direct test logodds-01 of round-10/weights-m01 (theory round
+  work-08da7a  dt-m2abstain  -  -  -  4  0  0  Direct test m2abstain-01 of run-02/f2-m04 (theory round 14, 
+  work-918936  dt-diffmix  -  -  -  2  0  0  Direct test diffmix-01 of round-09/grader-m04 (theory round 
+  work-80b573  dt-step100cap  -  -  -  3  0  0  Direct test step100cap-01 of round-09/stopping-m04 (theory r
+  work-bc42f2  dt-scatter4  -  -  -  2  0  0  Direct test scatter4-01 of run-08/f2-m05 (theory round 14, b
+  work-662e8e  main  0  10  1  11  2  1  Where the input-output pairing of RL's directions matters: r
+  work-32dfa8  main  -  -  -  9  0  0  Late answers as fallback votes (idea-016ff5): rules R1 fallb
+  work-e60cfb  dt-codecopy  -  -  -  3  0  0  Direct test codecopy-01 of round-14/s6 rival pair a vs b: ed
+  work-1b9f99  dt-loopshare  -  -  -  4  0  0  Direct test loopshare-01 of round-14/s3 rival pair a/b: loop
+  work-0cf63d  dt-wrongagree  -  -  -  5  0  0  Direct test wrongagree-01 of round-14/s5 rival pair a/b (the
+  work-5cb350  dt-codefence  -  -  -  2  0  0  Direct test codefence-01 of round-14/s1 and round-14/s2 (riv
+  work-d1a1ed  dt-m21short  -  -  -  2  0  0  Direct test m21short-01 of round-14/s4-a vs s4-b (theory rou
+  work-5be9d2  main  0  5  1  6  1  0  Control for xshift run-03: edit only layer 0 or only layer 8
+  work-1621ff  ordervote  -  -  -  9  0  0  Order-averaged vote headlines (branch ordervote, laptop): ev
+  work-195cfc  main  -  -  -  11  0  0  Third level-up of the joke game /psychosis on branch psychos
+  work-f75e95  viz  -  -  -  15 (open)  0  0  Site lab round 4 (studies/sitelab only, branch viz; main onl
+  work-4948a7  theory  -  -  -  10 (open)  0  0  Theory round 15 on engine 15 (branch theory): three single a
+  work-a6ffcd  main  -  -  -  10 (open)  0  0  Think-SFT + Code cue on the Code pair, two more samples (see
+  work-4846d5  main  0  2  1  3  2  0  xlisten (weights only): do the base's next-layer reading mat
+  work-831689  main  -  -  -  4 (open)  0  0  Audit of the 77 transcribed fresh2026 statements: blind seco
+  work-864816  main  0  1  -  2 (open)  2  0  Which sublayer carries the growth of a one-layer RL write th
+
+Team, last 4 h: claim to close median 11 min, upper quartile 49 min, over 96 work items closed by 3 people; 101 results, 25.2 per hour.
+
+Median minutes per stage over work items with jobs: to-job 0, jobs 8, to-answer 1. Slowest stage: jobs.

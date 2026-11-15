@@ -27,3 +27,4 @@ From cycle 5 the target is read on the 4 h window: the 1 h number follows the mi
 | 14 | 11-15 19:59 | 43 / 68 min (31, last 4 h) | 9.5 | a running vast.py job uploads its outputs every 10 min; get reads the partial copy when the box is gone (9 cut jobs left nothing) | spend line (cycle 13): no effect, the account ran empty at 19:50 |
 | 15 | 11-15 21:04 | 48 / 106 min (34, last 4 h) | 10.2 | none: no stage with a wait or failure to remove | 10-minute upload (cycle 14): not measurable, 0 vast.ai jobs since |
 | 16 | 11-15 22:06 | 14 / 56 min (70, last 4 h) | 19.2 | step-back 4: no tool change, no skill edit | none made in cycle 15; spend line (cycle 13): no effect; 10-minute upload (cycle 14): not measurable |
+| 17 | 11-15 23:08 | 11 / 49 min (96, last 4 h) | 25.2 | none: main frozen, no stage with a wait | 10-minute upload (cycle 14): works on real jobs (2 of 2 part tars); no effect on the target yet |

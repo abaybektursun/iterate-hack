@@ -1,5 +1,14 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 23:10 UTC (loop cycle 17; no change; on branch metaloop, main is frozen) meta/reviews/abaybektursun/20261115-2308/
+
+- Target (Team line, 4 h): claim to close median 11 min (14 at 22:06), upper quartile 49 min (56), 96 items by 3 people (70); 25.2 results per hour (19.2). Items with GPU jobs: to-job 0, jobs 8, to-answer 1 min (3, 50, 3): the window holds many short H100 jobs on Modal (1 to 28 min). Weak evidence for any cause other than item mix.
+- Open measurement closed: the 10-minute upload (cycle 14) ran on real jobs. 2 of 2 vast.ai jobs running longer than 10 min (8369, 8909, worktree egate) have a part tar in the team store, 3.9 and 5.4 MB, each under 2 min old at 23:08 (`part_tars.txt`). No box was cut, so `get` from a partial copy is still shown only by the test.
+- Score of cycle 14's change: works as built; no effect on the target yet (it only matters when a box is lost). Cycle 15 and 16 made no change.
+- Change: none. `main` is frozen since 22:30 UTC, so a tool change on a branch reaches no other session, and no stage has a wait to remove (queue 0.1 min, to-job 0, to-answer 1).
+- Seen, not acted on: box 60813170 is "exited" after 6.1 h and still listed; its owner should `down` it if its outputs are copied.
+- Next cycle checks: the Team line against 11 / 49 min and 25.2 per hour.
+
 ## 2026-11-15 22:10 UTC (loop cycle 16, step-back 4; no tool change, no skill edit) meta/reviews/abaybektursun/20261115-2206/
 
 - Target (Team line, 4 h): claim to close median 14 min (48 at 21:04), upper quartile 56 min (106), 70 items by 3 people (34); 19.2 results per hour (10.2). The window holds many short items (site pages, offline tests on stored rows). Items with GPU jobs: to-job 3, jobs 50, to-answer 3 min. Modal 96 jobs, 4 failed or cancelled with 3.9 of 2,108.5 container min, wait 0.2 min.
