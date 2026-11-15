@@ -1,0 +1,98 @@
+[
+ {
+  "fork": 0,
+  "branch": "e0a0",
+  "method": "Greedily enumerate all currently valid axis-aligned and 45-degree rectangles whose three existing vertices are on the boundary and whose fourth vertex is empty, then choose the move that maximizes the increase in total weight per operation while preserving future options.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "e0a1",
+  "method": "Build a dot-connection graph for rows, columns, and diagonals, and repeatedly apply local completion rules to create new dots at the heaviest missing corner of any empty-sided rectangle, updating candidate rectangles incrementally after each move.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "e0a2",
+  "method": "Use a beam search over sequences of operations, where each state tracks the current dot set and drawn-perimeter occupancy, and expand by trying the top-scoring feasible rectangles selected by weight gain and boundary availability.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 0,
+  "branch": "e0a3",
+  "method": "Exploit symmetry around the center by first forming a few high-value seed rectangles near the boundary of the initially occupied region, then grow chains of nested or adjacent rectangles outward/inward using dynamic candidate generation to unlock additional high-weight placements.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "e1a0",
+  "method": "Maintain exact row/column and diagonal incidence maps, and greedily add the highest-weight currently valid corner by scanning candidate rectangles around each empty point with incremental perimeter-occupancy checks.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "e1a1",
+  "method": "Use randomized local search that repeatedly samples feasible rectangles, applies the most promising move, and occasionally backtracks or swaps recent choices to escape dead ends while tracking score gain.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "e1a2",
+  "method": "Precompute all potential axis-aligned and 45-degree rectangles implied by the initial dots, then run a graph-style closure process that updates which rectangles become feasible as new corners are added.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 1,
+  "branch": "e1a3",
+  "method": "Perform a short multi-start greedy beam search where each state stores the dot set and used edges, expanding only the best few feasible rectangle completions ranked by future unlock potential and weight increase.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "e2a0",
+  "method": "Augment the greedy closure with a two-phase strategy that first builds a compact high-value scaffold near the current dot cloud, then uses the newly unlocked rows, columns, and diagonals to perform deeper chain reactions of rectangle completions.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "e2a1",
+  "method": "Use a bounded-depth best-first search over feasible operations where each move is scored by immediate weight gain plus a heuristic estimate of how many new empty corners it can enable, keeping only states with the most promising future closure potential.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "e2a2",
+  "method": "Switch from per-point candidate scanning to a rectangle-indexed incremental engine that maintains all currently one-corner-away rectangles and updates only affected rectangles after each placement, allowing faster and more exhaustive greedy selection.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 2,
+  "branch": "e2a3",
+  "method": "Apply randomized multi-start construction with lightweight repair: sample a sequence of high-weight feasible rectangles, periodically reroute the last few moves to alternative corners that preserve perimeter constraints, and keep the best resulting final dot set.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 3,
+  "branch": "e3a0",
+  "method": "Precompute all axis-aligned and 45-degree rectangles from the initial dots, then run a priority-driven closure process that repeatedly selects the currently feasible operation with the highest combination of immediate weight gain and number of newly enabled empty corners.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 3,
+  "branch": "e3a1",
+  "method": "Maintain an event-based candidate engine keyed by rows, columns, and diagonals, where each new dot only updates rectangles incident to its four boundary directions, and greedily execute the best newly exposed rectangle while the time budget allows.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 3,
+  "branch": "e3a2",
+  "method": "Use a multi-stage greedy strategy that first creates a small set of strategically placed high-weight seed dots near the center or boundary of the initial cluster, then expands through chain reactions by always choosing moves that maximize future rectangle unlock potential.",
+  "list_model": "gpt-5.4-mini"
+ },
+ {
+  "fork": 3,
+  "branch": "e3a3",
+  "method": "Run a lightweight beam search over partial operation sequences, keeping only a small set of states ranked by final potential weight plus reachable-closure estimate, and expand each state with the best few currently valid rectangles.",
+  "list_model": "gpt-5.4-mini"
+ }
+]

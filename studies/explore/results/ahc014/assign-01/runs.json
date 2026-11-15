@@ -100,6 +100,40 @@
    "valid_share": 0.775
   }
  },
+ "forget_assign_mini-s0": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "forget_assign",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "k": 4,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/assign-01/forget_assign_mini-s0",
+   "commit": "abea1b45301ed960a34e94b8836dc06c6b239548",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --seed 0 --budget 40 --model gpt-5.4-mini --task ahc014 --strategy forget_assign --out runs/explore/ahc014/assign-01/forget_assign_mini-s0"
+  },
+  "metrics": {
+   "strategy": "forget_assign",
+   "task": "ahc014",
+   "seed": 0,
+   "model": "gpt-5.4-mini",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.324351,
+   "best_id": "s0012",
+   "best_test": 0.317556,
+   "spent": {
+    "prompt_tokens": 213186,
+    "completion_tokens": 95353,
+    "usd": 0.588978
+   },
+   "valid_share": 0.625,
+   "list_usd": 0.014044500000000001
+  }
+ },
  "halving-s0": {
   "run": {
    "task": "ahc014",

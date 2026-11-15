@@ -112,6 +112,7 @@ invalid fnf-s0 s0000 (overlap).
 | forget (main-01) | 0.439 | | | |
 | fnf_assign, list by gpt-5.4-mini | 0.371 | 0.381 | 0.80 | 0.62 |
 | basin (main-01) | 0.362 | | | |
+| forget_assign, list by gpt-5.4-mini (forget + one listed method per agent at each epoch) | 0.324 | 0.318 | 0.63 | 0.60 |
 | fnf (main-01) | 0.296 | | | |
 | fnf_undirected (branches told what was tried, no method named; SwarmResearch 2607.02807) | 0.295 | 0.280 | 0.78 | 0.66 |
 | halving (8 chats, drop half at 25/50/75 %; 2607.18235) | 0.294 | 0.281 | 0.70 | 0.65 |
@@ -125,6 +126,9 @@ invalid fnf-s0 s0000 (overlap).
 - The strong list hurt: gpt-6.1-sol listed beam search, MCTS, large-neighbourhood search; gpt-5.4-mini's programs
   for them were invalid or made no move (18 of 40 valid, 12 of those at the starter score). A list is only useful
   if the agent can implement it.
+- forget_assign 0.324 < forget 0.439 (prediction: above 0.439; refuted). Each of the 16 assigned methods got 2-3
+  submissions (4 agents share 10 per epoch), and 15 of 40 programs were invalid: assignment replaced forget's
+  refinement of one shared program with 16 fresh implementations.
 - Weak points: 1 seed; forget and basin were not rerun in this experiment.
 
 Literature checked 2026-11-15 (two subagent surveys with tools/exa.py, numbers not re-verified at the papers): no
