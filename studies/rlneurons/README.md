@@ -3719,3 +3719,18 @@ $P judge --work runs/derived-02 --judge A    # also B and F; the hand labels go 
 $P score --work runs/derived-02 --out studies/rlneurons/results/derived/hard328-02
 $P score --per-sample --out studies/rlneurons/results/derived/hard328_persample-02   # addendum 1; reads hard328-01/labels.jsonl, no judge call
 ```
+
+## The 1.5x top-8 edit, replicated with four samples on the 328 (hard328, n = 328, cue, T 1.0, grader v3, board work-ab0f72)
+
+Question: base + 1.5 times the top 8 directions of (RL-Math - base) scored 203 of 328 on one sample (board result-6f1bb7),
+and 1.5 was the best of seven sizes tried on the 328. Does it hold on new samples? Answer: yes for one sample, not fully under
+the vote. Four samples: 207, 198, 199, 197, mean 200.25 (RL plain 200.0: 207, 190, 209, 194). Vote over 4: 214 of 328 at
+35,593 tokens per problem, 2.1 points [-5.2, +0.6] below RL's vote (221) and 6.7 points [3.4, 10.4] above the base's (192).
+Under the vote the edit alone is right on 8 problems, RL alone on 15. MATH-500, one sample: 456 of 500, 7 cap hits (RL 457,
+base + cue 410; job `abaybektursun-1115-055652-3a2d`).
+
+Job `abaybektursun-1115-055641-b417` (`--model-label top8x1.5_math31 --prompt cue --set hard328 --samples 4 --seed 3000000`,
+no restarts; cap hits per sample 20, 14, 20, 22, against 71, 66, 81, 68 for the base and 35, 26, 24, 29 for RL). Readout
+`analysis/day1_vote.py --minus` the RL readout: `results/day1_3/hard328_top8x1.5_cue_s4-01/`. The edit uses the RL
+checkpoint's weights, so it is not a route without reward; its size was chosen on the 328, and these four samples are new
+draws on the same problems, not a held-out set (MATH-500 is the held-out reading).
