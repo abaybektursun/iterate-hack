@@ -1,0 +1,16 @@
+{
+ "predictions": [],
+ "intervention": {
+  "change": "Rejection sampling on the base's own opening, no prefilled tokens: for each problem, draw up to 32 plain-prompt openings of at most 24 new tokens (T 1.0 / top-p 1.0, seed 47,000,000 + i + 10,000*j for draw j = 1..32) and keep the first whose text has '\\nOkay' (newline then 'Okay') in its first 60 characters. Then continue that opening at the same setting to the 16,384-token cap (cap counted from the start of the answer, opening included), with the opening's own seed. If no draw self-opens, continue draw 1. Problems whose stored T3 row (plain base, seed base 47,000,000) already self-opens by the same test keep that row unchanged, so only the other ~332 problems are run.",
+  "model": "allenai/Olmo-3-1025-7B",
+  "cell": {"set": "MATH-500", "prompt": "plain prompt (the team's MATH-500 prompt alone), no prefilled tokens", "sampling": "T 1.0 / top-p 1.0", "cap": 16384, "grader": "v3", "samples": 1, "seeds": "seed of problem i = 47,000,000 + i for the stored T3 draw; screening draw j uses 47,000,000 + i + 10,000*j"},
+  "count": "Right answers over all 500 MATH-500 problems by grader v3 (studies/rlneurons/grader/rln4_grader_v3.py), one final answer per problem: the stored T3 row for problems where T3 self-opens, otherwise the continued answer. Cap hits keep whatever score v3 gives them, and an empty extraction counts as wrong.",
+  "unit": "right of 500",
+  "value": 375,
+  "low": 348,
+  "high": 400,
+  "best_known": {"value": 453, "item": "result-cbe0bc", "setting": "base + cue, T 1.0 / top-p 1.0, vote over 4 samples, ties broken by the shortest finished sample (the honest held-out figure is 450 from vote after restart, result-e78dfe)"},
+  "gpu_minutes": 25,
+  "why": "The mechanism says an answer that opens with '\\nOkay' on its own is the cued mode as a whole, at cued accuracy (about 82 %) and cued length, so picking the base's own self-opening drafts should move the plain cell from 224 toward the cue's 410. The prediction is lower than 410 because about 10-15 % of problems never self-open in 32 draws (those fall back to the plain mode at about 26 %), and self-open propensity favours some problems over others."
+ }
+}

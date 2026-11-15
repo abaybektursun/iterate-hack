@@ -116,3 +116,68 @@ by a fixed seed, not by eye. Per row: does the text derive the boxed answer, or 
 
 `results/riskcov/hard328-01/`, `results/riskcov/math500-01/`: `run.json`, `readout.json`, `curves.json`, `table.md`,
 `examples.json` (one right, one wrong with text). `results/riskcov/read-01/`: the 25 rows read and the notes.
+
+## Addendum 1 (2026-11-15, after result-b006f5 was posted): long answers or hard problems?
+
+Written before `analysis/riskcov_strat.py` existed and before any stratified number was computed by this author. A reviewer
+commented on result-b006f5: equal precision up to coverage 0.50 is a mix effect (81 % of the samples kept there are from
+problems the cued base solves 3 or 4 times of 4, where both models are at about 99 %), and on the 179 problems the base
+solves at most 2 times of 4 Think-SFT leads at coverage 0.30 by +15.8 points [7.4, 25.1]. If so, H1's test confounds length
+with difficulty: short answers are mostly answers to easy problems. Same rows, same definitions, attempt 0, Think-SFT + cue
+against RL plain; the base is used only as a stratifier. Output: `results/riskcov/hard328_strat-01/`.
+
+Stratifiers.
+
+- `base`: the cued base's number of right samples on the problem (0 to 4), in strata 0, 1-2, 3-4; also the reviewer's split
+  (at most 2, n = 179 expected). Per problem. Noisy (4 samples), and the base is the ancestor of both compared models.
+- `loo`: for sample s of a problem, the number of right samples among the other three samples of Think-SFT and the other
+  three of RL (0 to 6), in strata 0, 1-3, 4-6. Per sample; the same value for both models' sample s; it uses neither
+  model's sample s and not the base.
+
+Measurements (all intervals: 2,000 bootstrap resamples of the 328 problems, the same resamples for both models and every
+cell; seed 0).
+
+(a) Reproduce the reviewer: under `length` at coverage 0.50 on the 328, the share of each model's kept samples that come
+from base stratum 3-4 and the precision of the kept samples per stratum; on the problems with base count at most 2,
+Think-SFT minus RL at coverage 0.30.
+
+(b) Within each stratum of each stratifier: precision at matched coverage under `length` (coverage = kept over the
+stratum's samples), with the length in tokens of the last kept sample of each model at every grid point; precision of
+finished answered samples by tokens (the five BINS, and short = at most 8,000, long = over 8,000), Think-SFT minus RL per
+cell.
+
+(c) Within problem.
+  1. Slope with problem x model fixed effects: per model, the linear-probability slope of right on long (and on tokens per
+     1,000) among the finished answered samples, after removing each problem's mean (only problems where the model has both
+     a long and a short finished answer carry it). The test is Think-SFT's slope minus RL's: how much less a long answer
+     loses against a short answer to the same problem.
+  2. Matched cells: per problem and cell (short, long) where both models have a finished answered sample, Think-SFT's
+     precision minus RL's, weighted by n_t n_r / (n_t + n_r); summed per cell, and long minus short on the problems that
+     have both cells.
+  3. Contrasts from (b): lead in long answers minus lead in short answers inside each stratum (length with difficulty held);
+     lead in base stratum 0 minus lead in stratum 3-4 inside the long cell and inside the short cell (difficulty with length
+     held).
+
+(d) Everything of (b) and (c.3) again with `loo`. The conclusion is stated per stratifier.
+
+What supports which reading (fixed here).
+
+- "Hard problems, not long answers": inside the hard strata (base 0 and 1-2) the lead in short answers has an interval
+  excluding 0 and the lead in long answers is not larger (long minus short covers 0); in stratum 3-4 the lead in long
+  answers covers 0; the slope difference of (c.1) and the matched long minus short of (c.2) cover 0.
+- "Long answers, not hard problems": inside every stratum the lead in short answers covers 0 and the lead in long answers
+  excludes 0, stratum 3-4 included; inside the long cell the lead does not differ between stratum 0 and 3-4; (c.1) and
+  (c.2) are positive with intervals excluding 0.
+- "Both": length matters with difficulty held (long minus short excludes 0 in at least one stratum, or (c.1) excludes 0)
+  and difficulty matters with length held (stratum 0 minus 3-4 excludes 0 in at least one cell).
+- "Inseparable in these data": an off-diagonal cell (short answers in stratum 0, long answers in stratum 3-4) has fewer
+  than 50 finished answered samples for either model, or the deciding contrasts have intervals wider than 30 points.
+
+Note on the reviewer's coverage 0.30: coverage is a rank inside a set. On hard problems the shortest 30 % of samples can be
+long in tokens. So the lead at coverage 0.30 on the 179 refutes "equal up to coverage 0.50" only as a statement about rank;
+whether it refutes "the lead is in long answers" depends on the token length at that point, which (b) reports.
+
+Instrument check (in `analysis/riskcov_test.py`): two planted sets on RL's lengths. Difficulty only (right drawn from a
+rate that depends on the problem and the model, not on the sample's length; harder problems get the longer answers): the
+slope difference of (c.1) must cover 0 while the raw lead in long answers is positive. Length only (the rate depends on
+model and long, not on the problem): the slope difference must exclude 0.

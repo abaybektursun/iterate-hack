@@ -1,0 +1,36 @@
+{
+ "predictions": [
+  {
+   "id": "r7-account:theory:g67",
+   "value": 458,
+   "low": 450,
+   "high": 466,
+   "why": "On one difficulty axis the base's misses are mostly mid-difficulty problems it solves in some draws (81 % of the gap at base >= 1/4, result-afc423), so going from a 4-vote with shortest tie-break (453) to 7 votes (six T 1.0 samples plus one high-precision T 0.6 sample whose cap hits cast no vote) gains a few more plurality wins, in line with Wang's majority@4 -> @8 step of about +2.5 points. It stays well under pass@4 467, because the 33 base 0/4 problems remain out of reach."
+  }
+ ],
+ "intervention": {
+  "change": "No new generation: replace the single sample with a plurality vote over 8 stored cued-base answers per problem: the 4 attempt-0 samples of studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (extracted_v3); the stored T 1.0 sample s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl; the T 0.6 / top-p 1.0 sample iterate-runs:abaybektursun-1114-151718-d4fa/answers.jsonl (extracted_v3); the T 0.6 / top-p 0.95 cue sample s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (sample 0); and the base-written-examples cue sample iterate-runs:abaybektursun-1114-183855-e840/answers.jsonl (only problems 3-499; problems 0-2 get no vote from it). Rows without a stored v3 extraction are re-extracted with grader v3 (studies/rlneurons/lib/rln4_lib.py) from their text. Each finished answer casts one vote by its v3-extracted answer with whitespace removed. Cap hits (cap_hit true, or missing and finish_reason == 'length') and empty answers cast none. Ties go to the answer of the shortest finished tied sample (fewest n_new, or n_generated where n_new is missing).",
+  "model": "allenai/Olmo-3-1025-7B @ a81bae42 (base), 3-token cue [1584, 2268, 33413]",
+  "cell": {
+   "set": "MATH-500",
+   "prompt": "standard prompt with the 3-token cue [1584, 2268, 33413] prefilled (one of the 8 voters also has 3 base-written solved examples in front)",
+   "sampling": "T 1.0 / top-p 1.0 for 5 voters; T 0.6 / top-p 1.0 for 1; T 0.6 / top-p 0.95 for 1; T 1.0 / top-p 1.0 with in-context examples for 1",
+   "cap": 16384,
+   "grader": "v3",
+   "samples": 8,
+   "seeds": "stored seeds of the named jobs, first row per (problem_index, sample) in file order"
+  },
+  "count": "Problems out of all 500 whose voted answer grader v3 grades right against the gold. A problem with no vote (every voter a cap hit or empty) counts as wrong. Cap hits never vote.",
+  "unit": "right of 500",
+  "value": 460,
+  "low": 452,
+  "high": 467,
+  "best_known": {
+   "value": 453,
+   "item": "result-cbe0bc",
+   "setting": "base + cue, T 1.0 / top-p 1.0, cap 16,384, v3, vote over 4 samples with ties to the shortest finished sample (rule chosen on this set; the audit in result-e78dfe gives 450 as the honest figure)"
+  },
+  "gpu_minutes": 1,
+  "why": "If every arm sits on one difficulty axis and the base's misses are mostly problems it solves in some draws, then the base can close the gap only by drawing more of its own samples and voting. Doubling the voters from 4 to 8, including two T 0.6 voters that are right in about 93-94 % of their finished answers and cast no vote on cap hits, should add about 1-2 points over 453, bounded by an 8-sample pass rate of about 474."
+ }
+}
