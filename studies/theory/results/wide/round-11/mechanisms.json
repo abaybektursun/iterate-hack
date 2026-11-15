@@ -1,0 +1,712 @@
+{
+ "mechanisms": [
+  {
+   "id": "run-06/f2-m03",
+   "family": "training",
+   "lens": "training data and objective: what Think-SFT imitation, RL reward and pretraining each put into the model, exposure of problems",
+   "statement": "An outcome reward pays only for a gradable final answer, so its consistent gradient piles into a few singular directions that make the model complete the task in the rewarded form (boxed answer, final code block) before the cap; the rest of the update is diffuse. In-domain, the top-8 directions at 1.5x reproduce nearly all of RL's gain over the cued base. Another reward's directions give about half, random rank-8 gives nothing, and 2x commits too early.",
+   "rests_on": [
+    "result-6f1bb7",
+    "result-95a4dc",
+    "result-284db5",
+    "result-39497c",
+    "result-51a0e7"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "run-05/f2-m01",
+   "family": "weights",
+   "lens": "weight space: the RL weight change, its top directions, scaling and transplanting it",
+   "statement": "The top-8 singular directions per matrix of the RL change act as a signed termination dial spread over all layers and both module families: adding them at size s raises, monotonically in s, the chance an answer closes with a boxed result before the cap (negative s lengthens and unboxes), and modestly raises correctness on problems already finished; past 1.5x it closes unfinished hard solutions on guesses. Random rank-8 edits and Think-SFT's directions carry no dial.",
+   "rests_on": [
+    "result-6f1bb7",
+    "result-51a0e7",
+    "result-95a4dc",
+    "result-39497c",
+    "result-3387ce"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "run-05/f2-m03",
+   "family": "weights",
+   "lens": "weight space: the RL weight change, its top directions, scaling and transplanting it",
+   "statement": "Each direction of an RL change acts only as far as the processed text drives its input (right) singular vectors: Math-RL's top-8 input subspaces are excited 8-11x above random by math-solution text and Code-RL's 6-9x, so an edit works in full on any problem set of its own domain and transfers to another domain in proportion to input-subspace overlap (Math with Code about 0.22-0.26, giving roughly half the in-domain effect).",
+   "rests_on": [
+    "result-a7c052",
+    "result-9d979a",
+    "result-284db5",
+    "result-6f1bb7",
+    "result-95a4dc"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "run-02/f2-m01",
+   "family": "run-02",
+   "lens": "Any family of causes.",
+   "statement": "The autobench agent works under a fixed generation time per experiment, so it buys votes by shortening each sample (its best config: 10 samples at about 1,100 tokens each). Most MATH-500 problems are solved in under 2,000 tokens, so short samples plus a vote score well on dev100, but hard328 solutions need 6,000-14,000 tokens and short samples never reach them. For the base, each doubling of the token budget past 8,000 buys fewer problems.",
+   "rests_on": [
+    "result-fa480f",
+    "result-5e17a6",
+    "result-1b6bf2",
+    "result-51fd20"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "run-05/f2-m06",
+   "family": "weights",
+   "lens": "weight space: the RL weight change, its top directions, scaling and transplanting it",
+   "statement": "Weight edits merged in bf16 are realized only where an entry's change exceeds half a unit in the last place of that weight, so small edits are thresholded onto small-magnitude weights and their effective size grows faster than nominal size (a=0.25 acts like about 0.12; top-8 at nominal 1.5 acts like RL's own top-8 share). Smaller deltas such as Code-RL's lose more at 1x and peak at a larger nominal size; trained checkpoints carry no such loss.",
+   "rests_on": [
+    "result-c9b27e",
+    "result-6f1bb7",
+    "result-4b0d5f",
+    "result-17e25e",
+    "result-8c92fc"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "run-07/f2-m02",
+   "family": "problems",
+   "lens": "problem structure: difficulty, domain, answer type, length of the needed derivation",
+   "statement": "An RL run's top weight directions write a habit for its own domain's answers. For Math-RL that habit is to deliberate, check, and finish with one boxed answer; for Code-RL it is to reason, then finish with one final python block that passes the tests. In its own domain the top-8 edit carries about two thirds of RL's gain at 1x and nearly all of it at 1.5x. On another domain it carries about half as much.",
+   "rests_on": [
+    "result-284db5",
+    "result-6f1bb7",
+    "result-95a4dc",
+    "result-59ed1a",
+    "result-a7c052"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "run-03/f2-m02",
+   "family": "stopping",
+   "lens": "when and how the model stops: token cap, loops, end-of-text, answer markers",
+   "statement": "RL's top singular weight directions raise the model's per-token hazard of committing to an answer and ending, in proportion to their size. In-domain directions therefore turn unfinished answers into finished ones and lengthen premature short ones. Overall right-of-finished stays roughly flat, because fixes on problems already finished offset guesses on converted cap hits. Past about 1.5x the hazard closes hard problems with guesses. The full RL delta added to Think-SFT acts the same way.",
+   "rests_on": [
+    "result-6f1bb7",
+    "result-51a0e7",
+    "result-95a4dc",
+    "result-1b6bf2",
+    "result-3387ce",
+    "result-39497c"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "round-09/training-m06",
+   "family": "training",
+   "lens": "training data and objective: what Think-SFT imitation, RL reward and pretraining each put into the model, exposure of problems",
+   "statement": "The RL update is written onto features that pretraining placed in the early and middle layers: the input directions of RL-Math's top-8 change are the ones math text drives most, and most of RL's change in model output comes from layers 0-15. Adding the directions only in the first or middle third therefore gives more of the hard-problem gain than the last third, whose main distinct job, writing the opening cue, is redundant when the cue is prefilled.",
+   "rests_on": [
+    "result-156f7b",
+    "result-a7c052",
+    "result-fc8f8b"
+   ],
+   "holds_against": [
+    {
+     "item": "result-fc8f8b",
+     "value": 397,
+     "why": "One late tensor (layer 31) writes the cue and gets 397 on the plain prompt; in the layer cells the cue is prefilled, so that late-layer job adds nothing there."
+    },
+    {
+     "item": "result-51a0e7",
+     "value": 178,
+     "why": "Attention-only 178 against MLP-only 181 splits by module, not by depth; the depth split is untested and the KL split favours layers 0-15."
+    }
+   ]
+  },
+  {
+   "id": "run-02/f2-m04",
+   "family": "run-02",
+   "lens": "Any family of causes.",
+   "statement": "A capped sample gives no answer, so in a plurality vote it abstains instead of adding a wrong value. Think-SFT's vote sits near its pass@4 because its unsolved samples run to the cap rather than box a guess. Anything that makes it finish, a 32k cap or the RL difference, turns abstentions into mostly wrong, scattered answers that tie or outvote lone right samples: single scores rise, vote gains shrink.",
+   "rests_on": [
+    "result-818c20",
+    "result-c8b994",
+    "result-5251c9",
+    "result-3387ce"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "run-05/f2-m04",
+   "family": "weights",
+   "lens": "weight space: the RL weight change, its top directions, scaling and transplanting it",
+   "statement": "RL writes its weight change in stages: the first 100 steps move weights along the reasoning-register directions that the cue's opening also drives (step-100 change about 0.03% of weight norm, activations nearly unchanged), giving the cue's gain plus a little precision; the finishing directions and the dense error-reducing remainder accumulate between steps 400 and 2,800. So a cue on an early checkpoint is redundant, and anything built from the final weights carries the late parts.",
+   "rests_on": [
+    "result-fad48d",
+    "result-32b7a8",
+    "knowledge-87618d",
+    "knowledge-9c5052",
+    "result-284db5"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "round-09/weights-m06",
+   "family": "weights",
+   "lens": "weight space: the RL weight change, its top directions, scaling and transplanting it",
+   "statement": "Edit entries smaller than half a bf16 ulp of the weight they modify are written by stochastic rounding (written/intended cosine 0.585). The written edit is unbiased: the intended direction comes through at full nominal size, and the rounding residue is a random edit, which is inert like the random rank-8 and noise controls. Scores therefore follow the nominal dose. The residue and GPU-dependent rounding draws add sample-to-sample spread, but they do not shift the mean.",
+   "rests_on": [
+    "result-39497c",
+    "result-3387ce",
+    "result-95a4dc"
+   ],
+   "holds_against": [
+    {
+     "item": "result-95a4dc",
+     "value": 207,
+     "why": "The first sample (207) sat above the replicates (197-199): extra spread from rounding draws, with the mean (200.25) equal to RL's, as predicted."
+    },
+    {
+     "item": "result-6f1bb7",
+     "value": 159,
+     "why": "The random rank-8 edit is flat at 158-167 across sizes; the rounding residue is the same kind of random edit, so it is inert."
+    }
+   ]
+  },
+  {
+   "id": "round-09/sampling-m03",
+   "family": "sampling",
+   "lens": "sampling: temperature, top-p, entropy of the next-token distribution, what a vote over samples adds",
+   "statement": "Temperature sets how often a plain prompt opens in the deliberative 'Okay' register. At T 0.6 the first tokens collapse onto the modal opening (step 100: 478 of 500); at T 1.0 a share 1-q starts elsewhere (step 100: 117 of 500; base: about 400). A prefilled cue or fixed template removes that branch, so the cue's worth at T 1.0 is (1-q) times the gap between openings, which widens on harder problems.",
+   "rests_on": [
+    "result-fad48d",
+    "result-32b7a8",
+    "result-3a3af3",
+    "result-c36598"
+   ],
+   "holds_against": [
+    {
+     "item": "result-fad48d",
+     "value": -1.0,
+     "why": "At step 400, 142 of 500 plain answers open elsewhere yet the cue adds nothing; by then the other openings are RL's own deliberative ones, so the gap between openings, not 1-q, is about 0."
+    },
+    {
+     "item": "result-3a3af3",
+     "value": 216,
+     "why": "Base answers whose first draw did not open with 'Okay' score 216, near plain's 224: those answers can still turn deliberative later, so the gap is smaller than whole-mode accuracies suggest; the self-opened draw still reaches 411."
+    }
+   ]
+  },
+  {
+   "id": "round-09/training-m04",
+   "family": "training",
+   "lens": "training data and objective: what Think-SFT imitation, RL reward and pretraining each put into the model, exposure of problems",
+   "statement": "Pretraining fixed, for each problem, the base's distribution over final values; the cue picks which register samples it but does not move its modal value. A vote converges to that mode, so its ceiling is the problems whose modal value is right, and samples beyond about eight only resolve ties. The plain prompt samples pretraining's terse solution register, whose accuracy falls faster with difficulty than the cued register's, so plain's share of the cued score shrinks on harder sets.",
+   "rests_on": [
+    "result-40ed3b",
+    "result-c36598",
+    "result-099916",
+    "result-5251c9"
+   ],
+   "holds_against": [
+    {
+     "fact": 28,
+     "value": 0.4286,
+     "why": "Only 43 % of vote failures have agreeing wrong values; the rest are ties, which extra samples resolve, worth a few problems from 4 to 9, then a plateau at the mode."
+    },
+    {
+     "item": "result-3a3af3",
+     "value": 411,
+     "why": "Self-opened plain draws equal the cue, so the register is chosen at the opening of one pretrained distribution, as the mechanism says, not added by the cue."
+    }
+   ]
+  },
+  {
+   "id": "run-04/f2-m04",
+   "family": "sampling",
+   "lens": "sampling: temperature, top-p, entropy of the next-token distribution, what a vote over samples adds",
+   "statement": "A T 1.0 run is a set of independent per-problem Bernoulli draws: the run-to-run spread of a count is sqrt(sum p(1-p)), about 5-6 problems on MATH-500 and 6 on hard328 for these models, and the seed adds nothing systematic. A stored first sample is one such draw, so a 4-sample mean is 1/4 that draw plus 3/4 the model's mean, and adding one sample to a vote moves only the few problems it can flip.",
+   "rests_on": [
+    "result-fad48d",
+    "result-5c961a",
+    "result-3387ce",
+    "result-40ed3b"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "round-09/grader-m04",
+   "family": "grader",
+   "lens": "the grader and the measurement itself: extraction, equivalence, seeds, set composition, what a count hides",
+   "statement": "A count's size depends on the set's difficulty mix: hard328's first 164 problems are much harder than its second half (cued base 65 vs 99), and fresh2026 is harder still. On hard items the opening (cue, step 100, self-opening) moves few problems, while answers past 16k tokens are mostly unfinished or guessed, so cap raises and votes yield less per abstention than on hard328, and plain prompts keep a falling share of the cued count.",
+   "rests_on": [
+    "result-5de032",
+    "result-099916",
+    "result-5251c9",
+    "knowledge-9e4147",
+    "result-fad48d"
+   ],
+   "holds_against": [
+    {
+     "item": "result-1a80e9",
+     "value": 286,
+     "why": "The cue keeps 77 % of RL's gain on MMLU-Pro/BBH as on MATH-500, but those are short-answer sets with no cap pressure; the claim is about long hard sets."
+    },
+    {
+     "item": "result-099916",
+     "value": 76,
+     "why": "Plain/cue is 0.55 on MATH-500 and 0.46 on hard328; 76 sits on that falling line, which predicts ~0.44 on fresh2026."
+    }
+   ]
+  },
+  {
+   "id": "round-09/grader-m01",
+   "family": "grader",
+   "lens": "the grader and the measurement itself: extraction, equivalence, seeds, set composition, what a count hides",
+   "statement": "Each posted single cell is one seeded draw: new seeds on the same weights scatter by 5-7 problems per 500 and up to 9-19 per 328, and cells picked as notable (best size, first run) sit above their model's mean. Multi-sample means regress to the pooled level of near-identical cells: step-100 plain pools with step-100 cue (same opening policy), and the 164-problem references come from draws above their own 4-sample means.",
+   "rests_on": [
+    "result-95a4dc",
+    "result-c8b994",
+    "result-5c961a",
+    "result-5227b9",
+    "result-fad48d"
+   ],
+   "holds_against": [
+    {
+     "item": "result-818c20",
+     "value": 461,
+     "why": "A later Think-SFT draw rose above the first 454: regression runs toward the pooled mean (457-462) in both directions, and 454 was a low first draw."
+    },
+    {
+     "item": "result-882fa7",
+     "value": 430,
+     "why": "The 430 came from a different sampling path (in-process eager engine) and was flagged by its owner as a high draw; within one runner draws stay inside about +-7."
+    }
+   ]
+  },
+  {
+   "id": "round-09/grader-m06",
+   "family": "grader",
+   "lens": "the grader and the measurement itself: extraction, equivalence, seeds, set composition, what a count hides",
+   "statement": "A count at a token cap scores every unfinished answer wrong, hiding whether it was unfinished work or a dead end. Raising the cap adds right answers in proportion to the model's share of unfinished-work cap hits: Think-SFT about one in four, RL one in ten, the base one in sixteen. Scoring the 32k text at 16,384 reproduces a 16k run, so the 32k-minus-16k difference is that yield alone.",
+   "rests_on": [
+    "result-c8b994",
+    "result-0c1eef",
+    "result-3387ce",
+    "result-997be4"
+   ],
+   "holds_against": [
+    {
+     "fact": 6,
+     "value": 0,
+     "why": "At 16k Think-SFT and RL solve equally many of the base's cap-hit MATH-500 problems: below the cap both are censored the same; the yield appears only above it."
+    },
+    {
+     "item": "result-c8b994",
+     "value": 193,
+     "why": "RL's 16k count in the 32k run is 13 below its stored 206 because of a seed draw, not censoring; the paired within-run gain (+2) is the yield."
+    }
+   ]
+  },
+  {
+   "id": "round-09/stopping-m01",
+   "family": "stopping",
+   "lens": "when and how the model stops: token cap, loops, end-of-text, answer markers",
+   "statement": "A cut-off sample writes no answer marker, so it abstains from the plurality vote instead of voting wrong. A vote's gain over one sample therefore scales with the cap-hit share times the precision of finished answers: Think-SFT (29-46 % capped, 80-88 % precise) votes near pass@4, while RL and the 1.5x edit (5-15 % capped) gain less. A longer cap turns abstentions into mostly wrong late answers, so a vote gains far less from it than one sample does.",
+   "rests_on": [
+    "result-818c20",
+    "result-5251c9",
+    "result-95a4dc",
+    "result-c8b994"
+   ],
+   "holds_against": [
+    {
+     "item": "result-5d032f",
+     "value": 446,
+     "why": "On MATH-500 the base gains +41 under the vote with few cap hits because its wrong finished answers are scattered slips. That is a second source of vote gain that adds to abstention; the ordering across models still follows cap share x precision."
+    },
+    {
+     "item": "result-5251c9",
+     "value": 38,
+     "why": "The cued base gains only +8.5 on fresh2026 despite 40 % cap hits because only 36 % of its finished answers are right; abstention pays in proportion to precision, as stated."
+    }
+   ]
+  },
+  {
+   "id": "round-09/training-m05",
+   "family": "training",
+   "lens": "training data and objective: what Think-SFT imitation, RL reward and pretraining each put into the model, exposure of problems",
+   "statement": "The largest singular direction per matrix of RL-Math's change carries the reward's most consistent signal: write the final answer in the boxed form the verifier reads, which also ends some answers. Deciding to stop deliberating on long problems is spread over the next directions. One direction therefore cuts cap hits only partly, and scaling it mostly changes answer form, not stopping: top-1 at 2x gains little over top-1 at 1x, while eight directions together act as the finishing dial.",
+   "rests_on": [
+    "result-51a0e7",
+    "result-284db5",
+    "result-fdc8da"
+   ],
+   "holds_against": [
+    {
+     "item": "result-51a0e7",
+     "value": 51,
+     "why": "One direction already cuts cap hits from 77 to 51; boxing an answer ends it, so a partial stop comes with the format, but the cut from 46 to 5 needs all eight at 2x."
+    },
+    {
+     "item": "result-6f1bb7",
+     "value": 158,
+     "why": "IF's 8 directions finish answers without boxes (158 unboxed); each reward's top direction writes the form its own verifier reads, here IF's, which fits the mechanism."
+    }
+   ]
+  },
+  {
+   "id": "round-09/sampling-m06",
+   "family": "sampling",
+   "lens": "sampling: temperature, top-p, entropy of the next-token distribution, what a vote over samples adds",
+   "statement": "Problems differ in solve rate far beyond binomial noise. Each arm has a block of problems it almost never samples right (base: 33 at 0 of 4 on MATH-500, against 0.5 expected) and a block where a wrong value is as likely as the right one. A vote wins only problems where the right answer is the most likely one, so it plateaus a few samples past 4, and the near-zero block caps votes on hard sets.",
+   "rests_on": [
+    "result-afc423",
+    "result-e41d94",
+    "result-5d032f",
+    "knowledge-dab63f"
+   ],
+   "holds_against": [
+    {
+     "fact": 28,
+     "value": 0.429,
+     "why": "Only 43 % of the base's vote failures are agreeing wrong groups; the rest are ties that more samples settle, worth about 5 problems by k = 9, after which the near-zero block holds."
+    },
+    {
+     "item": "result-60d899",
+     "value": 93,
+     "why": "Wang's majority curve still climbs to 93 % at 16, but it starts from 78 % under a stricter grader at T 0.6, with more problems near p = 0.5; ours starts at 89 % with the remainder in the near-zero block."
+    }
+   ]
+  },
+  {
+   "id": "run-08/f2-m01",
+   "family": "grader",
+   "lens": "the grader and the measurement itself: extraction, equivalence, seeds, set composition, what a count hides",
+   "statement": "Each one-sample count is one seed's draw: the model branches at forks with fixed per-problem probabilities, so a cell has a sampling SD of about 5-6 problems on MATH-500, 7-9 on hard328 and 3 on fresh2026, plus small runner drift. A stored sample 0 is an unselected draw, so a 4-sample mean is that value shrunk slightly toward the cell's structural prior (neighbouring checkpoints, cue effect).",
+   "rests_on": [
+    "result-5c961a",
+    "result-c8b994",
+    "result-460e0a",
+    "result-882fa7",
+    "result-fad48d"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "round-09/sampling-m05",
+   "family": "sampling",
+   "lens": "sampling: temperature, top-p, entropy of the next-token distribution, what a vote over samples adds",
+   "statement": "Ending is a sampled event: at T 1.0 the stop token is drawn at each point where an answer could close, so lengths have a long tail that the cap cuts off. Raising the cap finishes the cut samples, right at the rate of that model's long finished answers at the same difficulty: high for Think-SFT, whose cut answers are unfinished work, low for the base and RL, whose long answers mostly guess.",
+   "rests_on": [
+    "result-c8b994",
+    "result-0c1eef",
+    "result-b006f5",
+    "result-3387ce"
+   ],
+   "holds_against": [
+    {
+     "item": "result-c8b994",
+     "value": 23,
+     "why": "23 of 93 (25 %) is well under Think-SFT's 68 % on finished answers over 12k, but the cut samples are the hardest problems; at matched difficulty its long-answer rate is about 30 %."
+    },
+    {
+     "item": "result-0c1eef",
+     "value": 4,
+     "why": "The base converts 4 of 64, under its 16.7 % long-answer rate, for the same reason: the cut tail is its hardest problems, where long answers are guesses."
+    }
+   ]
+  },
+  {
+   "id": "round-09/stopping-m04",
+   "family": "stopping",
+   "lens": "when and how the model stops: token cap, loops, end-of-text, answer markers",
+   "statement": "On a hard set part of every model's answers would end past 16,384 tokens, and a cut answer scores zero. A change that leaves the length distribution in place (100 RL steps, the cue on a checkpoint, a new seed or more samples) can move only the precision of finished answers. Step 100 writes cued-base lengths at T 1.0 (4,120 vs 4,008 tokens), so on hard problems it keeps the cued base's cap hits and adds a few right answers.",
+   "rests_on": [
+    "result-fad48d",
+    "result-5de032",
+    "result-82b4dc",
+    "result-51fd20"
+   ],
+   "holds_against": [
+    {
+     "item": "knowledge-e387a8",
+     "value": 4.6,
+     "why": "Step 100's finished answers are 4.6 points more often right than the cued base's. That is a precision gain on finished answers, which the mechanism allows; on the first 164 it is worth about 5 problems."
+    },
+    {
+     "item": "result-32b7a8",
+     "value": 103,
+     "why": "At T 0.6 step 100 has 103 cap hits against the cued base's 119. At T 0.6, loops that depend on the opening add cap hits; at T 1.0 there are no loops and the lengths match."
+    }
+   ]
+  },
+  {
+   "id": "round-09/grader-m02",
+   "family": "grader",
+   "lens": "the grader and the measurement itself: extraction, equivalence, seeds, set composition, what a count hides",
+   "statement": "Under a plurality vote a cap hit or missing answer is an abstention, while a finished wrong answer is a vote against. A model's vote gain over its singles is set by how often it abstains instead of answering wrong: Think-SFT's vote nearly equals pass@4, while RL's and the edits' lose more. Raising the cap or adding finishing weight turns abstentions into mostly wrong finished answers, so singles rise while vote gains shrink.",
+   "rests_on": [
+    "result-818c20",
+    "result-5251c9",
+    "result-95a4dc",
+    "result-5d032f",
+    "knowledge-dab63f"
+   ],
+   "holds_against": [
+    {
+     "fact": 28,
+     "value": 0.4286,
+     "why": "Agreeing wrong groups explain the residual base vote failures on MATH-500, where the base abstains little; abstention sets the size of the vote gain, not every failure."
+    },
+    {
+     "item": "result-5c961a",
+     "value": 192,
+     "why": "The base still loses 15 problems to selection on hard328 despite 77 cap hits because its finished answers are right only ~64 % of the time; abstention lowers the loss without removing it."
+    }
+   ]
+  },
+  {
+   "id": "round-09/training-m03",
+   "family": "training",
+   "lens": "training data and objective: what Think-SFT imitation, RL reward and pretraining each put into the model, exposure of problems",
+   "statement": "RL-Zero's group-relative reward gives gradient only on prompts where some rollouts succeed and others fail, so early RL moves the policy on problems the base solves sometimes, mostly short and medium ones, and leaves problems the base rarely solves for late training. By step 100 the gain sits on MATH-500's mid-difficulty problems; on hard problems, where the cued base mostly fails or runs to the cap, step 100 plain is no better than the cued base.",
+   "rests_on": [
+    "result-fad48d",
+    "result-07f566",
+    "knowledge-e387a8"
+   ],
+   "holds_against": [
+    {
+     "item": "result-066c9b",
+     "value": 20.8,
+     "why": "RL learned seen prompts that the base solves only 20.8 % of the time per sample; that rate is not zero, so group-relative gradient exists there, but it needs many steps."
+    },
+    {
+     "fact": 21,
+     "value": 0.273,
+     "why": "Code 3.1 solves 27 % of the base's 0-of-4 problems, so those problems have a nonzero base rate and enter training late, not never."
+    }
+   ]
+  },
+  {
+   "id": "round-09/grader-m05",
+   "family": "grader",
+   "lens": "the grader and the measurement itself: extraction, equivalence, seeds, set composition, what a count hides",
+   "statement": "Plurality votes break ties toward the lowest sample index, so at even k a 2-2 or 1-1-1-1 split is decided by sample order, not by the answers. Odd k dissolves 2-2 ties, and going from 9 to 12 samples brings them back, so the base's MATH-500 vote plateaus near 453. When abstentions become finished wrong singletons (32k cap), lone right answers end up tied and lose about half the time.",
+   "rests_on": [
+    "result-cbe0bc",
+    "result-5c961a",
+    "result-40ed3b",
+    "result-5d032f"
+   ],
+   "holds_against": [
+    {
+     "item": "result-5c961a",
+     "value": 191,
+     "why": "On hard328 the shortest-answer tie rule moved only -1: ties there are mostly among wrong singletons, so which rule breaks them matters little; parity still sets how many ties exist."
+    },
+    {
+     "item": "result-818c20",
+     "value": 241,
+     "why": "Think-SFT's even-k vote is nearly pass@4 (244) because cap hits leave lone right answers without competing singletons; ties appear only once those answers finish."
+    }
+   ]
+  },
+  {
+   "id": "run-03/f2-m05",
+   "family": "stopping",
+   "lens": "when and how the model stops: token cap, loops, end-of-text, answer markers",
+   "statement": "A trace can degenerate before it ends, into word strings, a switch to Chinese script or repeated windows, and a degenerate trace almost never ends right. The hazard of this grows with edit size (word strings at 2-3x) and with tokens already generated (median first script switch near token 13,600). So oversized edits, and the late part of very long Think-SFT traces, lose answers. A smaller edit or a shorter trace keeps them. At T 1.0 classic loops are absent.",
+   "rests_on": [
+    "result-6f1bb7",
+    "result-4b0d5f",
+    "result-997be4",
+    "result-3387ce",
+    "result-44b4df",
+    "result-dadeec"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "run-04/f2-m03",
+   "family": "sampling",
+   "lens": "sampling: temperature, top-p, entropy of the next-token distribution, what a vote over samples adds",
+   "statement": "Under T 1.0 stopping is a sampled event: at each position the model draws a commit/stop token with a small hazard, so the cap-hit share is a survival probability. RL's top-8 directions add a near-constant logit to that hazard (cap hits 96, 77, 46, 25, 5 along the dial); dose multiplies it. Where the base fails by not stopping (short code tasks, fresh contests) the dial converts unfinished samples, at precision below the base's finished answers.",
+   "rests_on": [
+    "result-6f1bb7",
+    "result-51a0e7",
+    "result-c8b994",
+    "result-0c1eef",
+    "result-3387ce"
+   ],
+   "holds_against": null
+  },
+  {
+   "id": "round-09/weights-m04",
+   "family": "weights",
+   "lens": "weight space: the RL weight change, its top directions, scaling and transplanting it",
+   "statement": "Moved onto another model that shares the base, the RL-Math difference acts as a finishing operator on that model's own trajectories. It does not add correctness. On Think-SFT it closes long, unfinished but sound work earlier, so cap hits fall and right-of-finished drops toward RL's level. The gain is limited by how much of the recipient's cut work was sound. Prompt or template changes on Think-SFT alone (no delta) leave its finishing rate and precision unchanged.",
+   "rests_on": [
+    "result-3387ce",
+    "result-c8b994",
+    "result-818c20"
+   ],
+   "holds_against": [
+    {
+     "fact": 5,
+     "value": 0.246,
+     "why": "Think-SFT reaches cap-hit gap problems at the rate its strength predicts. That fits the delta adding finishing only, never correctness."
+    },
+    {
+     "item": "result-bce075",
+     "value": 209,
+     "why": "RL finishing Think-SFT's text turns cap hits into wrong boxes; the delta inside Think-SFT's own weights keeps Think-SFT's reasoning and only shortens it, so the two results differ as predicted."
+    }
+   ]
+  },
+  {
+   "id": "round-09/sampling-m01",
+   "family": "sampling",
+   "lens": "sampling: temperature, top-p, entropy of the next-token distribution, what a vote over samples adds",
+   "statement": "Each sample is an independent draw: problem i is solved with a fixed probability p_i, so one cell's count varies by sqrt(sum p_i(1-p_i)), about 5-7 problems on MATH-500 and 6-9 on the 328, and same-seed reruns give new texts because vLLM is not batch-invariant. A stored single cell is one draw. New samples land around the arm's mean, not around the stored count, and a gap of a few problems between single cells is noise.",
+   "rests_on": [
+    "result-5d032f",
+    "result-95a4dc",
+    "result-5c961a",
+    "result-c8b994"
+   ],
+   "holds_against": [
+    {
+     "item": "result-882fa7",
+     "value": 430,
+     "why": "An unsteered cell 3 sd above the stored 404-418 is the expected rare tail draw over dozens of cells, and its second seed fell back."
+    },
+    {
+     "item": "result-460e0a",
+     "value": 16,
+     "why": "At T 0.6 loops put many problems near p = 0.5, so sum p(1-p) and the seed spread are larger there than at T 1.0."
+    }
+   ]
+  },
+  {
+   "id": "round-09/training-m01",
+   "family": "training",
+   "lens": "training data and objective: what Think-SFT imitation, RL reward and pretraining each put into the model, exposure of problems",
+   "statement": "Think-SFT imitated teacher traces inside its ChatML template, opened by <think> and closed by a final answer after the thinking block. Where and how it states the answer is learned conditional on that template. On the raw template with the cue it reasons as well but sometimes misplaces the final answer (on the line after 'Answer:'), which v3 misses. Its own template restores the trained ending: more MATH-500 answers counted, unchanged reasoning length and cap behaviour on hard328.",
+   "rests_on": [
+    "result-818c20",
+    "result-d9d6f3",
+    "result-c8b994"
+   ],
+   "holds_against": [
+    {
+     "item": "result-d9d6f3",
+     "value": 203,
+     "why": "Raw template without the cue is neither the trained template nor the cue's register, so it loses 16; the native template is the trained one."
+    },
+    {
+     "fact": 23,
+     "value": 0.333,
+     "why": "The misses are about which line carries the answer, not answer type, so the non-integer share need not rise above the pool's."
+    }
+   ]
+  },
+  {
+   "id": "round-09/training-m02",
+   "family": "training",
+   "lens": "training data and objective: what Think-SFT imitation, RL reward and pretraining each put into the model, exposure of problems",
+   "statement": "Think-SFT copied teacher traces produced under long budgets, and imitation carries no pressure to stop, so its 16,384-token cuts are mid-derivation work, not loops or guesses. More budget turns cut answers right at the problem's difficulty rate (about a quarter on hard328, fewer on 2026 problems). Late finishes are mostly wrong but scattered, so in a vote they seldom beat an existing right answer and add less than to single samples. RL's delta adds stopping, leaving fewer cuts to convert.",
+   "rests_on": [
+    "result-c8b994",
+    "result-818c20",
+    "result-5251c9",
+    "result-3387ce"
+   ],
+   "holds_against": [
+    {
+     "item": "result-997be4",
+     "value": 1,
+     "why": "Only the 24 cut answers that switched script before 16k finish right 1 time; the other 69 finish right 22 times, which is the unfinished-work rate the mechanism uses."
+    },
+    {
+     "item": "result-0c1eef",
+     "value": 4,
+     "why": "The base's late finishes are right 4 of 64 because the base did not imitate long derivations; its cuts are failed solves, the contrast the mechanism expects."
+    }
+   ]
+  },
+  {
+   "id": "round-11/s2-b",
+   "family": "s2",
+   "lens": "rival explanations of surprise run-04 t02 (result-a1bf75, measured 399)",
+   "statement": "An RL run's task-specific policy lies almost entirely in the top-8 directions per matrix of that run's own delta, read through the inputs of its own task. So 1.5x of RL-Code's directions is a copy of RL-Code, and RL deltas for different tasks occupy nearly orthogonal subspaces that add without interference. Other rewards' directions transfer only a shared finishing part (cap hits, missing answer blocks), not task skill.",
+   "rests_on": [
+    "result-a1bf75",
+    "result-51ccc6",
+    "result-95a4dc",
+    "result-04e329"
+   ],
+   "holds_against": [
+    {
+     "item": "result-a1bf75",
+     "value": 368,
+     "why": "Math's directions on code reach +37 over random. In this mechanism that is the shared finishing part only: cap hits and no-code answers fall. It stays 31 below the Code copy, which carries the code skill."
+    },
+    {
+     "item": "result-98de28",
+     "value": 0.37,
+     "why": "The mean residual shifts of Code and Math have cosine 0.37, which is partly shared. The shared component is the finishing push, and the remaining 0.93 of the variance is task-specific and lives in separate subspaces, so stacking adds instead of overshooting."
+    }
+   ],
+   "readers_wrong": "The readers carried over the math picture, where the top 8 hold a small share of the delta and mostly change finishing, and expected a partial recovery of about 357. On code the top 8 are RL-Code's policy itself, so the edit reaches RL-Code's 401 (399, -0.4 points)."
+  },
+  {
+   "id": "round-11/s4-b",
+   "family": "s4",
+   "lens": "rival explanations of surprise run-04 t01 (result-a1bf75, measured 386)",
+   "statement": "Besides finishing, the top RL directions sharpen the base toward its own most likely correct solution on problems it already solves in some samples. HumanEval+ and MBPP+ consist almost entirely of such problems (high base pass@k), so at 1x most of the code gap closes through reliability on finished answers, not through cap hits. Gains from Math and Code directions add on code, and the effect needs base capability rather than a short answer length.",
+   "rests_on": [
+    "result-a1bf75",
+    "result-2fe32f",
+    "result-6f1bb7"
+   ],
+   "holds_against": [
+    {
+     "item": "result-51a0e7",
+     "value": 0.65,
+     "why": "On hard328, right per finished answer stays near 0.65, but that set is dominated by problems the base never solves. On problems the base already finishes, right answers rise 161 to 184 (result-2fe32f), which is the sharpening."
+    },
+    {
+     "item": "result-6f1bb7",
+     "value": 5,
+     "why": "At 2x, cap hits fall to 5 while right answers drop to 190. Sharpening has an optimum dose beyond which the model collapses. That is a separate limit and does not contradict a reliability gain below it."
+    }
+   ],
+   "readers_wrong": "The readers treated the edit as a finishing fix. The cued base's code cap hits and no-block answers (61, partly overlapping) can only give about 35 points that way. The directions also make already-finished code right more often, a gain that is largest on easy, sometimes-solved problems."
+  },
+  {
+   "id": "round-11/s6-b",
+   "family": "s6",
+   "lens": "rival explanations of surprise run-07 t03 (result-a1bf75, measured 394)",
+   "statement": "Overdose costs accuracy only where the edit pushes a quantity that trades against correctness past its RL optimum. Math directions carry a math-specific stop-checking push whose optimum is near 1.5x on any math set, short or long; beyond it, checking that would catch errors is skipped. Code directions push code-block format and termination, which saturate (no-code and cap hits reach 0) and do not trade against a program's correctness, because tests, not self-checks, decide passing. So code plateaus at 2x.",
+   "rests_on": [
+    "result-a1bf75",
+    "result-6f1bb7",
+    "result-95a4dc",
+    "result-51ccc6"
+   ],
+   "holds_against": [
+    {
+     "item": "result-a1bf75",
+     "value": 368,
+     "why": "Math directions help code (+37 over random) because they also carry the shared format and finishing part. Their math-specific checking push is idle on code, so this fits the split."
+    },
+    {
+     "item": "result-51ccc6",
+     "value": 372,
+     "why": "Code's early layers add right answers (372). That correctness gain is a saturating sharpening of programs the base already writes, and it does not trade against when the model stops, so it still predicts no overshoot."
+    }
+   ],
+   "readers_wrong": "The readers treated the code dial as a copy of the math dial with an overshoot at 2x, but code directions saturate a format and stop channel that has no correctness trade-off, so 2x keeps the 1.5x score."
+  }
+ ]
+}

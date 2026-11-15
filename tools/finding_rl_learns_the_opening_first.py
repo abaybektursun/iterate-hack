@@ -1,10 +1,12 @@
-"""Along RL training, step 100 scores what the cue gives the base at T 1.0; the 'Okay' opening arrives by step 100.
+"""Along RL training, step 100 lands near Base + cue at T 1.0 (+1.4 points, 4 samples); most of RL's gain comes later.
 
 The page of one finding, served at /finding/rl-learns-the-opening-first (view.py serves every tools/finding_<slug>.py)
 and reached from its tile on /findings, which ICON draws. The picture is one lit plate. On its left, the 500 MATH-500
 problems as one mark each, in three bands by the outcome of the one stored answer (finished right, finished wrong, cut
 off), blue when the answer opens with 'Okay'. On its right, the count of right answers and a trace of three counts along
-training (right answers, 'Okay' openings, cut-offs), with Base + cue as a reference point and a dashed level. The main
+training (right answers, 'Okay' openings, cut-offs), with Base + cue as a reference point and a dashed level. At T 1.0
+the large number and the row of right answers are four-sample means with the 4 samples as faint ticks (Base: one
+sample); the marks, bands and other rows are the one stored answer per problem. The main
 control steps through training (Base, step 100, step 400, step 2,800) or shows Base + cue; a second, quiet switch picks
 the temperature (T 1.0, the default, or T 0.6); the marks travel to their new bands, the counts and the trace move.
 A click on a mark shows that problem's answers at every step and at both temperatures in the side column.
@@ -36,7 +38,8 @@ import statistics
 import sys
 
 R4 = "studies/theory/results/engine/round-04/"
-CK, RL4 = "studies/rlneurons/results/ckptcue/", "studies/rlneurons/results/rln4/"
+RL = "studies/rlneurons/results/"
+CK, RL4 = RL + "ckptcue/", RL + "rln4/"
 KEYS = ("base", "cue", "s100", "s400", "s2800")  # the five settings, in the order of every list below
 KEYS1 = KEYS + ("s100cue", "s400cue")  # at T 1.0 also the cue on steps 100 and 400 (shown only in a problem's detail)
 ROWS = "runs/replication/"  # fetched from s3://pg-lineage-769063704696/results/rlneurons/r3/ (each "_" a "/"), not in git
@@ -75,7 +78,7 @@ DATA = {
     # Round 04, theory r4-m10, test 1: cut-off rate, step 100 minus Base: predicted [90 % interval], measured; and the
     # two readers without a theory (predictions/nulltest-1 and -2, id r4-m10:p1)
     "predicted": {"theory": [0.03, 0.002, 0.08], "measured": 0.076, "readers": [-0.025, -0.03]},
-    # T 1.0, top-p 1.0 (plain prompt, cut off at 16,384 tokens, grader v3, one answer per problem), from PROBLEMS1 and
+    # T 1.0, top-p 1.0 (plain prompt, cut off at 16,384 tokens, grader v3), one answer per problem from PROBLEMS1 and
     # the committed per-problem rows named here; read at commit c3239ae (the rows were committed in 223fbb5)
     "t10": {
         "cells": {k: CK + c + "-01/per_problem.json" for k, c in
@@ -87,29 +90,56 @@ DATA = {
         "raw": {"s100": "abaybektursun-1115-064532-6a2f_answers.jsonl", "s400": "abaybektursun-1115-015818-b11d_answers.jsonl",
                 "s2800": "T2.jsonl"},
         "commit": "c3239ae",
-        # per setting (KEYS order): 'Okay' in the first 30 characters, cut off, right, cut off and still right
+        # The one stored answer per problem that the marks draw, per setting (KEYS order): 'Okay' in the first 30
+        # characters, cut off, right, cut off and still right
         "okay": [73, 500, 383, 358, 442],
         "cut": [8, 27, 24, 7, 6],
-        "right": [224, 410, 418, 436, 463],
+        "right1": [224, 410, 418, 436, 463],
         "right_cut": [1, 0, 1, 1, 1],
-        # the cue on steps 100 and 400: right, cut off
+        # the cue on steps 100 and 400, one answer per problem: right, cut off
         "cue_steps": {"right": [427, 431], "cut": [24, 17]},
-        # points, paired bootstrap over problems (5,000 resamples, seed 0, 95 %): step 100 minus Base + cue; the cue's
-        # gain on step 100 and on step 400 (with cue minus plain)
-        "s100_vs_cue": [1.6, -2.0, 5.2],
+        # points, one answer per problem, paired bootstrap over problems (5,000 resamples, seed 0, 95 %): step 100 minus
+        # Base + cue; the cue's gain on step 100 and on step 400 (with cue minus plain)
+        "s100_vs_cue1": [1.6, -2.0, 5.2],
         "cue_gain": {"s100": [1.8, -1.2, 4.8], "s400": [-1.0, -4.0, 2.0]},
-        # right answers: step 2,800 minus Base + cue, and the parts by step 100, from step 100 to 400, after step 400
-        "gap": [53, 8, 18, 27],
         "resubmit": 243,  # step 400 answers that start ' and resubmit.' (and reach 'Okay' later)
         "predicted_s100": [428, 412, 444],  # filed in the spec before the jobs: step 100 right [interval]
+        # Four samples per problem (board result-6832a8; studies/rlneurons/README.md, "Four samples per cell (ckptcue3)").
+        # Steps 100 and 400 and step 100 + cue: sample 0 is the cell's per_problem.json above, samples 1 to 3 the rows
+        # named here. Base + cue and step 2,800: attempt 0, samples 0 to 3 of the Day-1 #3 rows (another run than the
+        # one the marks draw, with the same seeds as its sample 0). Base has one sample at T 1.0.
+        "four": {
+            "rows": {"cue": RL + "day1_3/math500_base_cue-01/rows.jsonl", "s2800": RL + "day1_3/math500_rl-01/rows.jsonl",
+                     "s100": CK + "s0100_plain_s123-01/rows.jsonl", "s400": CK + "s0400_plain_s123-01/rows.jsonl",
+                     "s100cue": CK + "s0100_cue_s123-01/rows.jsonl"},
+            "readout": CK + "readout3.json",
+            "spec": "studies/rlneurons/specs/SPEC_ckptcue3.md",
+            "commit": "9f97abc",
+            # right answers of 500 in samples 0 to 3
+            "samples": {"cue": [405, 409, 410, 418], "s100": [418, 411, 422, 419], "s400": [436, 447, 435, 433],
+                        "s2800": [456, 462, 464, 458], "s100cue": [427, 423, 423, 431]},
+            # points, per problem the mean over the 4 samples, paired bootstrap over problems (5,000 resamples, seed 0,
+            # 95 %): [difference, low, high]
+            "diff": {"s100-cue": [1.40, -0.50, 3.25], "s100cue-s100": [1.70, 0.00, 3.35], "s100cue-cue": [3.10, 1.45, 4.70],
+                     "s400-s100": [4.05, 2.40, 5.70], "s2800-s400": [4.45, 3.05, 5.95]},
+            "band": [-3, 3],  # filed in the spec: step 100 equals Base + cue only if the whole interval lies in this band
+            "predicted_s100": [418, 411, 425],  # filed before the jobs: step 100's four-sample mean [interval]
+        },
+        # The best estimate of every count and difference, read by the picture and by tools/findings.py: right answers
+        # per setting (the four-sample mean; Base's one sample), step 100 minus Base + cue in points [interval], and in
+        # right answers step 2,800 minus Base + cue with its parts by step 100, from step 100 to 400, and after step 400
+        "right": [224, 410.5, 417.5, 437.75, 460.0],
+        "s100_vs_cue": [1.40, -0.50, 3.25],
+        "gap": [49.5, 7.0, 20.25, 22.25],
     },
 }
 
-TITLE = "The first 100 RL steps match the cue"  # the name on its tile on /findings and in the browser tab
+TITLE = "The first 100 RL steps land near the cue"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "How soon does RL training reach what the opening cue gives the base model?"
 _T = DATA["t10"]
-LINE = (f"After 100 RL steps the model scores what the cue gives the base: {_T['right'][2]} against {_T['right'][1]} of "
-        f"{DATA['n']}. The rest comes later.")
+_F, _r = _T["four"], _T["right"]
+LINE = (f"After 100 RL steps the model gets {_r[2]:.1f} of {DATA['n']} right, close to Base + cue's {_r[1]:.1f}. "
+        "Most of RL's gain comes later.")
 
 # Not from our runs: the closest published results. The three-token opening cue (' line!\n\nOkay', copied from RL's own
 # answers) is published: Wang et al., arXiv 2610.06851. SimpleRL-Zoo (arXiv 2503.18892) tracks the share of answers
@@ -119,42 +149,54 @@ _m = lambda x: str(x).replace("-", "−")  # the minus sign of the site
 _iv = lambda a, b: f"{_m(a)} to {_m(b)}"
 _sg = lambda x: _m(f"{x:+}")
 _bo = DATA["by_opening"]
+_n = lambda x: _m(f"{x:.1f}")  # a four-sample mean, one decimal
+_d2 = lambda k: (f"{_m(f'{_F['diff'][k][0]:+.2f}')} points (95 % interval {_m(f'{_F['diff'][k][1]:.2f}')} to "
+                 f"{_m(f'{_F['diff'][k][2]:.2f}')})")
+_after = _T["gap"][2] + _T["gap"][3]
 PANELS = [
     ["new", "What is new",
      "It was known that a three-token opening copied from RL's answers lifts the base model (Wang et al., arXiv "
      "2610.06851), and that zero-RL runs change how often answers are cut off (SimpleRL-Zoo, arXiv 2503.18892).",
      ["New here are the stored answers of two early checkpoints of Olmo 3.1 RL-Zero-Math, step 100 and step 400, read "
-      "beside the base model, Base + cue and the released model (step 2,800), at T 1.0 and at T 0.6.",
-      f"At T 1.0, step 100 gets {_T['right'][2]} of {_D['n']} right and Base + cue {_T['right'][1]}: "
-      f"+{_T['s100_vs_cue'][0]} points (95 % interval {_iv(*_T['s100_vs_cue'][1:])}). Step 400 gets {_T['right'][3]}, "
-      f"step 2,800 {_T['right'][4]}.",
-      f"Step 2,800 gets {_T['gap'][0]} more right than Base + cue: {_T['gap'][1]} of them are there by step 100, "
-      f"{_T['gap'][2]} more by step 400 and {_T['gap'][3]} after step 400.",
+      "beside the base model, Base + cue and the released model (step 2,800), at T 1.0 (four samples per problem) and "
+      "at T 0.6 (one sample).",
+      f"At T 1.0, as the mean of 4 samples, step 100 gets {_n(_r[2])} of {_D['n']} right and Base + cue {_n(_r[1])}: "
+      f"{_d2('s100-cue')}. Step 400 gets {_n(_r[3])}, step 2,800 {_n(_r[4])}.",
+      f"Step 2,800 gets {_T['gap'][0]:g} more right than Base + cue: {_T['gap'][1]:g} of them are there by step "
+      f"100, {_T['gap'][2]:g} more by step 400 and {_T['gap'][3]:g} after step 400. Both later gains are clear of "
+      f"0: step 400 minus step 100 is {_d2('s400-s100')}, step 2,800 minus step 400 {_d2('s2800-s400')}.",
       f"At T 0.6 the opening is in place by step 100: {_D['okay'][2]} of {_D['n']} answers open with 'Okay', against "
       f"{_D['okay'][0]} for Base. Cut-offs first rise, from {_D['cut'][0]} to {_D['cut'][2]}, and fall to "
       f"{_D['cut'][4]} only by step 2,800."]],
     ["why", "Why it matters",
-     "Three tokens placed before the base model's answer give what the first 100 RL steps give. The part of RL's gain "
-     "that the cue cannot give is learned later in training.",
-     ["So a method that changes only how the base model opens its answers can reach the early part of RL's gain, and "
-      "no more.",
-      f"The cue adds nothing measurable to a checkpoint at T 1.0: {_sg(_T['cue_gain']['s100'][0])} points at step "
-      f"100 (95 % interval {_iv(*_T['cue_gain']['s100'][1:])}), {_m(_T['cue_gain']['s400'][0])} at step 400 "
-      f"({_iv(*_T['cue_gain']['s400'][1:])}): step 100 already has what the cue gives.",
-      f"At T 0.6, where Base + cue is cut off more often ({_D['cut'][1]} of {_D['n']}), step 100 leads it: "
-      f"{_D['right'][2]} against {_D['right'][1]} right, +{_D['s100_vs_cue']['diff']} (paired 95 % interval "
+     f"Three tokens placed before the base model's answer get close to the first 100 RL steps. "
+     f"{round(100 * _after / _T['gap'][0])} % of RL's gain ({_after:g} of {_T['gap'][0]:g} problems) is learned after "
+     "step 100.",
+     ["So a method that changes only how the base model opens its answers can reach about what 100 RL steps reach, "
+      "not what the released RL model reaches.",
+      f"The cue placed on step 100 adds {_d2('s100cue-s100')} as the mean of 4 samples, an interval that just reaches "
+      f"0. On step 400 the cue's effect, in one sample, is {_m(_T['cue_gain']['s400'][0])} points "
+      f"({_iv(*_T['cue_gain']['s400'][1:])}).",
+      f"At T 0.6, where Base + cue is cut off more often ({_D['cut'][1]} of {_D['n']}), step 100 leads it in one "
+      f"sample: {_D['right'][2]} against {_D['right'][1]} right, +{_D['s100_vs_cue']['diff']} (paired 95 % interval "
       f"{_D['s100_vs_cue']['ci'][0]} to {_D['s100_vs_cue']['ci'][1]} problems)."]],
     ["how", "How we know",
-     f"We read one stored answer per problem for each setting, on the same {_D['n']} MATH-500 problems, plain prompt, "
-     f"cut off at {_D['cap']:,} tokens: at T 1.0, top-p 1.0, and at T 0.6, top-p 0.95.",
-     ["An answer opens with 'Okay' when the word is in its first 30 characters. The team's grader v3 scores the answers; "
+     f"We read stored answers on the same {_D['n']} MATH-500 problems, plain prompt, cut off at {_D['cap']:,} tokens: at "
+     "T 1.0, top-p 1.0, four samples per problem (Base: one), and at T 0.6, top-p 0.95, one sample.",
+     ["The large number and the row of right answers show, at T 1.0, the mean of the 4 samples, with the 4 samples drawn "
+      "as faint ticks. The marks, the bands, the 'Okay' counts and the cut-offs show one sample per problem.",
+      f"The 4 samples of Base + cue and step 2,800 come from another run than the one the marks draw, with the same "
+      f"seeds for its first sample; that first sample still differs (Base + cue {_F['samples']['cue'][0]} against "
+      f"{_T['right1'][1]}, step 2,800 {_F['samples']['s2800'][0]} against {_T['right1'][4]}).",
+      "An answer opens with 'Okay' when the word is in its first 30 characters. The team's grader v3 scores the answers; "
       "a cut-off answer that had already stated the right answer counts as right but is drawn as cut off "
       f"(at T 1.0: {', '.join(map(str, _T['right_cut'][:4]))} and {_T['right_cut'][4]} answers in the five settings; "
       f"at T 0.6: {', '.join(map(str, _D['right_cut'][:4]))} and {_D['right_cut'][4]}).",
-      "Intervals are paired bootstraps over the same problems (5,000 resamples).",
-      f"The T 1.0 runs were planned with five predictions before the jobs ({_T['spec']}); step 100 was predicted at "
-      f"{_T['predicted_s100'][0]} right (interval {_T['predicted_s100'][1]} to {_T['predicted_s100'][2]}) and got "
-      f"{_T['right'][2]}.",
+      "Intervals are paired bootstraps over the same problems (5,000 resamples); at T 1.0 each problem counts as the "
+      "mean of its 4 samples.",
+      f"The four-sample runs were planned before the jobs ({_F['spec']}): step 100 was predicted at "
+      f"{_F['predicted_s100'][0]} right (interval {_F['predicted_s100'][1]} to {_F['predicted_s100'][2]}) and got "
+      f"{_n(_r[2])}.",
       f"Control at T 0.6: among Base's own answers, those that open with 'Okay' are cut off {_bo['base'][0][0]} of "
       f"{_bo['base'][0][1]} times, the others {_bo['base'][1][0]} of {_bo['base'][1][1]}. On the same problems Base + cue "
       f"is cut off {_bo['cue'][0][0]} and {_bo['cue'][1][0]} times, so the opening, not the problems, goes with the "
@@ -163,15 +205,23 @@ PANELS = [
       f"interval {_p['theory'][1]} to {_p['theory'][2]}; measured +{_p['measured']}), and two readers without a theory "
       f"predicted a fall ({_m(_p['readers'][0])} and {_m(_p['readers'][1])})."]],
     ["limits", "What it does not show",
-     "It does not show that step 100 and Base + cue are equal: with one answer per problem, a lead of up to "
-     f"{_T['s100_vs_cue'][2]:.0f} points for step 100 is not excluded.",
-     ["Only three checkpoints were read, so when between step 400 and step 2,800 the rest of the gain arrives is not "
+     f"It does not show that step 100 and Base + cue are the same change: step 100 + cue beats Base + cue by "
+     f"{_d2('s100cue-cue')}, as the mean of 4 samples.",
+     [f"It does not show that step 100 equals Base + cue. Before the runs the plan counted them equal only if the whole "
+      f"interval of their difference lay within {_m(_F['band'][0])} to {_F['band'][1]} points; it is "
+      f"{_m(f'{_F['diff']['s100-cue'][1]:.2f}')} to {_F['diff']['s100-cue'][2]:.2f}, so it includes 0 but ends outside "
+      "that band.",
+      "Four samples still leave part of the sample-to-sample spread in each mean: the right answers of the 4 samples of "
+      f"one setting spread over 11 to 14 problems (step 100: {min(_F['samples']['s100'])} to "
+      f"{max(_F['samples']['s100'])}).",
+      "Only three checkpoints were read, so when between step 400 and step 2,800 the rest of the gain arrives is not "
       "known.",
       f"At T 1.0 the 'Okay' test is weaker: the word is in the first 30 characters of {_T['okay'][2]} answers at step 100 "
       f"and {_T['okay'][3]} at step 400, because many answers first write a short preamble ({_T['resubmit']} at step "
       "400 start ' and resubmit.'). The checkpoints are identified by their pinned revisions, not by the opening.",
-      f"Cut-offs differ between the temperatures: at T 1.0 they go from {_T['cut'][0]} at Base to {_T['cut'][2]} at "
-      f"step 100 and back to {_T['cut'][3]} by step 400; at T 0.6 they are still {_D['cut'][3]} at step 400.",
+      f"Cut-offs differ between the temperatures: at T 1.0, in one sample, they go from {_T['cut'][0]} at Base to "
+      f"{_T['cut'][2]} at step 100 and back to {_T['cut'][3]} by step 400; at T 0.6 they are still {_D['cut'][3]} at "
+      "step 400.",
       f"The theory's own explanation of the T 0.6 cut-offs, sharper sampling per token, did not hold: the median mean "
       f"log-probability of finished answers is {_m(_D['median_lp'][1])} for Base + cue, {_m(_D['median_lp'][2])} at "
       f"step 100 and {_m(_D['median_lp'][3])} at step 400.",
@@ -180,6 +230,9 @@ PANELS = [
      "At T 1.0 the answers of steps 100 and 400 come from the jobs named in studies/rlneurons/results/ckptcue/"
      "<cell>-01/run.json; studies/rlneurons/analysis/ckptcue.py wrote their per-problem rows and readout.json.",
      [f"Base, Base + cue and step 2,800 at T 1.0 are the runs T3, T1 and T2: {_T['t1_t3']} and {_T['t1_t2']}.",
+      "The four samples: studies/rlneurons/analysis/ckptcue3.py wrote samples 1 to 3 of steps 100 and 400 to "
+      f"{CK}<cell>_s123-01/ and the readout {_F['readout']}; Base + cue and step 2,800 are attempt 0 of "
+      f"{_F['rows']['cue']} and {_F['rows']['s2800']}.",
       "At T 0.6 the answers were generated by studies/rlneurons/jobs/rln3_gen.py (spec studies/rlneurons/specs/"
       f"SPEC3.md); the rows are in S3 under rlneurons/r3/, and round 04 of the theory study recomputed the counts: "
       f"{DATA['capcounts']} and {DATA['turn2']}.",
@@ -1361,6 +1414,7 @@ svg * { pointer-events: none; }
 .tl.o { stroke: var(--blue); }
 .tlglow { fill: none; stroke: var(--blue); stroke-width: 8; opacity: calc(var(--bloom) * .14); stroke-linecap: round; stroke-linejoin: round; }
 .pt { fill: var(--ink); } .pt.o { fill: var(--blue); }
+.smp { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linecap: round; }
 .pt.off { fill: var(--faint); opacity: .5; }
 .val.far { fill: var(--faint) !important; font-weight: 450; opacity: .6; }
 .cue { fill: var(--mute); stroke: none; }
@@ -1453,6 +1507,9 @@ svg * { pointer-events: none; }
   .enter * { animation: none !important; }
   .switch button, .more button, .top a { transition: none; }
 }
+.paper { margin: 18px 0 0; font-size: 15px; }
+.paper a { color: var(--mute); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+.paper a:hover, .paper a:focus-visible { color: inherit; }
 </style>
 </head>
 <body>
@@ -1481,12 +1538,13 @@ svg * { pointer-events: none; }
         <button data-t="1" aria-pressed="false">T 1.0</button>
       </div>
     </div>
-    <p class="hint">Base + cue: the base model with RL's three-token opening placed in front. Step 2,800 is the released RL model. Click a mark to see a problem.</p>
+    <p class="hint">Base + cue: the base model with RL's three-token opening placed in front. Step 2,800 is the released RL model.<br>Each mark is one problem in one sample; at T 1.0 the counts of right answers are means of 4 samples (Base: one). Click a mark to see a problem.</p>
   </div>
   <div class="side">
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
+    <p class="paper"><a href="/paper/the-first-hundred-steps.pdf">Read the paper (PDF) ›</a></p>
   </div>
 </div>
 <script>
@@ -1496,6 +1554,9 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "
 const RAD = Math.PI / 180, f = n => n.toFixed(1), mix = (a, b, q) => a + (b - a) * q;
 const ease = p => p < .5 ? 2 * p * p : 1 - (-2 * p + 2) ** 2 / 2, clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const fmt = n => Math.round(n).toLocaleString("en-US");
+/* At T 1.0 the counts of right answers of Base + cue and of steps 100, 400 and 2,800 are means of 4 samples (D.samples[k]),
+   written with one decimal; Base and every count at T 0.6 are one sample. */
+const has4 = (T, k) => T === 1 && !!D.samples[k], fr = (v, dec) => dec ? v.toFixed(1) : fmt(v);
 
 /* The five settings, in the order of every list of a problem: Base, Base + cue, step 100, step 400, step 2,800. The
    training path is 0, 2, 3, 4; Base + cue (1) is the reference. At T 1.0 two more settings, the cue on step 100 (5) and
@@ -1594,8 +1655,8 @@ function build() {
     `<g class="read"><text class="big" id="big" font-size="${g.fb}"></text>` +
     [0, 1, 2].map(k => `<text class="lab" id="bl${k}" font-size="${g.fs}"></text>`).join("") + `</g>` +
     `<g class="trace"><path class="now" id="now"/><path class="sep" id="sep"/>` +
-    SERIES.map((s, j) => `<text class="rowlab${s.o ? " o" : ""}" id="rl${j}" font-size="${g.fs}">${esc(s.name)}</text>` +
-      `<path class="ref${s.main ? " main" : ""}" id="rf${j}"/>${s.main ? `<text class="lvl" id="lv" font-size="${g.fv}" text-anchor="end">Base + cue</text><path class="gapfill" id="gf"/>` : ""}<path class="ghost" id="gh${j}"/>${s.o ? `<path class="tlglow" id="tg${j}"/>` : ""}<path class="tl${s.o ? " o" : ""}" id="tl${j}"/>` +
+    SERIES.map((s, j) => `<text class="rowlab${s.o ? " o" : ""}" id="rl${j}" font-size="${g.fs}">${esc(s.name)}${s.main ? `<tspan class="lab" id="rlx"></tspan>` : ""}</text>` +
+      `<path class="ref${s.main ? " main" : ""}" id="rf${j}"/>${s.main ? `<text class="lvl" id="lv" font-size="${g.fv}" text-anchor="end">Base + cue</text><path class="gapfill" id="gf"/>` : ""}<path class="ghost" id="gh${j}"/>${s.main ? [1, 2, 3, 4].map(k => `<path class="smp" id="sm${k}"/>`).join("") : ""}${s.o ? `<path class="tlglow" id="tg${j}"/>` : ""}<path class="tl${s.o ? " o" : ""}" id="tl${j}"/>` +
       `<circle class="halo" id="ha${j}" r="0"/><circle class="cue" id="cu${j}" r="${g.fv * .34}"/>` +
       PATH.map(k => `<circle class="pt${s.o ? " o" : ""}" id="pt${j}_${k}" r="${g.fv * .3}"/>`).join("") +
       KEYS.map((_, k) => `<text class="val${s.o ? " o" : ""}" id="v${j}_${k}" font-size="${g.fv}" text-anchor="middle"></text>`).join("")).join("") +
@@ -1655,11 +1716,13 @@ function place(t, now) {
     E[dot].setAttribute("cx", f(q[0])); E[dot].setAttribute("cy", f(q[1]));
     at(E[lab], [q[0] + g.fs * .8, q[1]], g.fs * .35);
   });
-  text("big", fmt(c[0]));
+  text("big", fr(c[0], has4(S.T, S.k)));
   at(E.big, proj(g, g.bigX, g.bigY, 10));
+  const kr = kNow === 1 ? 0 : 1, sm = D.samples[kNow];
+  const four = has4(TNow, kNow), other = `${NAME[kr]}: ${fr(D.right[TNow][kr], has4(TNow, kr))}`;
   text("bl0", `of ${N} MATH-500 problems right ${AT[kNow]}`);
-  text("bl1", `at ${TEMP[TNow]}. ` + (kNow === 1 ? `Base without the cue: ${fmt(val(SERIES[0], 0, tq))}.` : `Base + cue: ${fmt(val(SERIES[0], 1, tq))} of ${N}.`));
-  text("bl2", `${fmt(c[4])} of ${N} answers open with 'Okay'.`);
+  text("bl1", `at ${TEMP[TNow]}, ` + (four ? "the mean of 4 samples:" : "in one sample."));
+  text("bl2", four ? `${sm.join(", ")}. ${other}${has4(TNow, kr) ? "" : ", one sample"}.` : other + (has4(TNow, kr) ? ", the mean of 4 samples." : ", one sample."));
   [0, 1, 2].forEach(k => at(E["bl" + k], proj(g, g.bigX + 4, g.labY[k], 10)));
 
   // The trace: each row its own scale, the values printed. The training line draws on to the chosen step (p, 0 to 3 along
@@ -1698,13 +1761,21 @@ function place(t, now) {
       el.setAttribute("r", f(g.fv * (k === kNow ? .42 : .3)));
       const v = E[`v${j}_${k}`];
       at(v, q, -g.fv * .75);
-      text(`v${j}_${k}`, fmt(val(s, k, tq)));
+      text(`v${j}_${k}`, fr(val(s, k, tq), s.main && has4(S.T, k)));
       v.setAttribute("class", `val${s.o && on ? " o" : ""}${k === kNow ? "" : on ? " dim" : " far"}`);
     });
     const cq = proj(g, X(1), cy, 10);
     E["cu" + j].setAttribute("cx", f(cq[0])); E["cu" + j].setAttribute("cy", f(cq[1]));
     E["cu" + j].setAttribute("class", "cue" + (kNow === 1 ? " on" : ""));
-    at(E[`v${j}_1`], cq, -g.fv * .75); text(`v${j}_1`, fmt(val(s, 1, tq)));
+    at(E[`v${j}_1`], cq, -g.fv * .75); text(`v${j}_1`, fr(val(s, 1, tq), s.main && has4(S.T, 1)));
+    if (s.main) text("rlx", has4(TNow, 2) ? "  ·  ticks: the 4 samples" : "");
+    if (s.main) [1, 2, 3, 4].forEach(k => {  // the 4 samples at T 1.0: faint ticks left of the point, and their range
+      const x = X(k) - g.fv * 1.15, ys = D.samples[k].map(v => rowY(g, j, v)), w = g.fv * .34;
+      const lo = Math.max(...ys), hi = Math.min(...ys), on = k === 1 || pr >= PATH.indexOf(k) - .02, el = E["sm" + k];
+      const seg = (x0, y0, x1, y1) => { const a = proj(g, x0, y0, 10), b = proj(g, x1, y1, 10); return `M${f(a[0])} ${f(a[1])}L${f(b[0])} ${f(b[1])}`; };
+      el.setAttribute("d", seg(x, lo, x, hi) + ys.map(y => seg(x - w, y, x + w, y)).join(""));
+      el.setAttribute("opacity", f(tq * (on ? .62 : .22)));
+    });
     E[`v${j}_1`].setAttribute("class", "val" + (kNow === 1 ? "" : " dim"));
     // the halo marks the chosen point and breathes slowly
     const hq = kNow === 1 ? cq : P(kNow);
@@ -1758,9 +1829,11 @@ function setState(k, opts = {}) {
   document.querySelectorAll("[data-k]").forEach(b => b.setAttribute("aria-pressed", Number(b.dataset.k) === k));
   document.querySelectorAll("[data-t]").forEach(b => b.setAttribute("aria-pressed", Number(b.dataset.t) === T));
   const [right, r, w, cut, ok] = S.c1;
-  $("svg").setAttribute("aria-label", `${N} MATH-500 problems, one mark each, ${NAME[k]}, ${TEMP[T]}: ${right} of ${N} right, ` +
+  $("svg").setAttribute("aria-label", `${NAME[k]}, ${TEMP[T]}: ${fr(right, has4(T, k))} of ${N} MATH-500 problems right` +
+    (has4(T, k) ? `, the mean of 4 samples (${D.samples[k].join(", ")}). ` : `, one sample. `) +
+    `Base + cue: ${fr(D.right[T][1], has4(T, 1))} right. ${N} marks, one per problem, from one sample: ` +
     `${ok} open with 'Okay'; ${r} finished right, ${w} finished wrong, ${cut} cut off at ${fmt(D.cap)} tokens. ` +
-    `Base + cue: ${D.right[T][1]} right. Arrow keys step through training; Enter opens a problem.`);
+    `Arrow keys step through training; Enter opens a problem.`);
   if (still.matches) { aim(0, 0); place(0, now); }
   if (S.open && S.open[0] === "p") pane();
 }
@@ -1789,7 +1862,7 @@ function problemPane(j) {
     `<p class="lead q" data-math>${esc(p.q)}</p>` +
     `<p class="gold">Reference answer: <span data-math>${esc(p.gold)}</span></p>` +
     `<ul class="answers">${order.map(line).join("")}</ul>` +
-    `<p class="gold">Each line is one stored answer per temperature; the quoted text is the first characters of the ${TEMP[S.T]} answer as written; underlined: the cue.</p>` +
+    `<p class="gold">Each line is one stored answer per temperature (the sample the marks draw); the quoted text is the first characters of the ${TEMP[S.T]} answer as written; underlined: the cue.</p>` +
     `<div class="steps"><button data-step="-1">‹ Previous problem</button><button data-step="1">Next problem ›</button></div>`;
 }
 function pane() {
@@ -1917,7 +1990,8 @@ ICON = r"""(kit, t, tilt) => {
 
 PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
     "problem": PROBLEM, "line": LINE, "panels": PANELS, "problems": PROBLEMS, "problems1": PROBLEMS1,
-    "data": {"n": DATA["n"], "cap": DATA["cap"], "right": [DATA["right"], DATA["t10"]["right"]]}}))
+    "data": {"n": DATA["n"], "cap": DATA["cap"], "right": [DATA["right"], DATA["t10"]["right"]],
+             "samples": [None] + [DATA["t10"]["four"]["samples"][k] for k in KEYS[1:]]}}))
 
 if __name__ == "__main__":  # run from the repository root
     problems, extra, rows = _build()
@@ -1976,15 +2050,15 @@ if __name__ == "__main__":  # run from the repository root
     for i, k in enumerate(KEYS):
         assert col1(i, lambda p: p[2][i] == "1") == T["okay"][i], k
         assert col1(i, lambda p: p[1][i] == "c") == T["cut"][i], k
-        assert sum(r1[k]) == T["right"][i], k
+        assert sum(r1[k]) == T["right1"][i], k
         assert sum(x for x, p in zip(r1[k], PROBLEMS1) if p[1][i] == "c") == T["right_cut"][i], k
-        assert col1(i, lambda p: p[1][i] == "r") == T["right"][i] - T["right_cut"][i], k
+        assert col1(i, lambda p: p[1][i] == "r") == T["right1"][i] - T["right_cut"][i], k
     assert [sum(r1[k]) for k in ("s100cue", "s400cue")] == T["cue_steps"]["right"]
     assert [col1(i, lambda p: p[1][i] == "c") for i in (5, 6)] == T["cue_steps"]["cut"]
     assert extra1["t2_v3"] == r1["s2800"]
     ro = load(T["readout"])
     cells = ro["cells"]
-    assert [cells[c]["right"] for c in ("base_cue_T1", "s0100_plain", "s0400_plain", "rl_final_T2")] == T["right"][1:]
+    assert [cells[c]["right"] for c in ("base_cue_T1", "s0100_plain", "s0400_plain", "rl_final_T2")] == T["right1"][1:]
     assert [cells[c]["right"] for c in ("s0100_cue", "s0400_cue")] == T["cue_steps"]["right"]
     assert [cells[c]["cap_hits"] for c in ("s0100_plain", "s0400_plain")] == T["cut"][2:4]
     assert [cells[c]["cap_hits"] for c in ("s0100_cue", "s0400_cue")] == T["cue_steps"]["cut"]
@@ -1992,10 +2066,10 @@ if __name__ == "__main__":  # run from the repository root
     g1 = load(DATA["grader"])
     for i, c in ((0, "base_plain_1.0"), (1, "base_opener_1.0"), (4, "rl_1.0")):
         assert (g1["cells"][c]["right_v3"], g1["cells"][c]["cap_hits"], g1["cells"][c]["cap_hits_right_v3"]) == \
-            (T["right"][i], T["cut"][i], T["right_cut"][i]), c
+            (T["right1"][i], T["cut"][i], T["right_cut"][i]), c
     assert hashlib.sha256(open(ROWS1 + T["raw"]["s2800"], "rb").read()).hexdigest() == g1["files"]["rl_1.0"]["sha256"]
     x = {k: np.array(v) for k, v in r1.items()}
-    for (p, q), want, name in ((("s100", "cue"), T["s100_vs_cue"], "s0100_plain minus base_cue_T1"),
+    for (p, q), want, name in ((("s100", "cue"), T["s100_vs_cue1"], "s0100_plain minus base_cue_T1"),
                                (("s100cue", "s100"), T["cue_gain"]["s100"], "s0100_cue minus s0100_plain"),
                                (("s400cue", "s400"), T["cue_gain"]["s400"], "s0400_cue minus s0400_plain")):
         lo, hi = n13_score.paired_bootstrap(x[p], x[q], n_boot=5000, seed=0)
@@ -2003,10 +2077,45 @@ if __name__ == "__main__":  # run from the repository root
         assert got == want, (p, q, got)
         rd = ro["differences"][name]
         assert [round(rd["points"], 1), *[round(v, 1) for v in rd["ci95"]]] == want, name
+
+    # T 1.0, four samples: recomputed from the rows (sample 0 of steps 100 and 400 from the cells' per_problem.json) and
+    # compared with readout3.json
+    F, M = T["four"], {}
+    for k, path in F["rows"].items():
+        m = np.full((4, DATA["n"]), np.nan)
+        if k in T["cells"]:
+            for r in extra1["ck"][k]:
+                m[0, r["problem_index"]] = r["score_v3"]
+        rows4 = [r for r in map(json.loads, open(path)) if r["attempt"] == 0]
+        assert len(rows4) == (2000 if k in ("cue", "s2800") else 1500), k
+        for r in rows4:
+            assert np.isnan(m[r["sample"], r["problem_index"]]), (k, r["sample"], r["problem_index"])
+            m[r["sample"], r["problem_index"]] = r["score_v3"]
+        assert not np.isnan(m).any(), k
+        M[k] = m.mean(0)
+        assert m.sum(1).astype(int).tolist() == F["samples"][k], (k, m.sum(1))
+    r3 = load(F["readout"])
+    cell3 = {"cue": "base_cue", "s100": "s0100_plain", "s100cue": "s0100_cue", "s400": "s0400_plain", "s2800": "rl_final"}
+    for k, c in cell3.items():
+        assert [x["right"] for x in r3["cells"][c]["samples"]] == F["samples"][k], k
+        assert r3["cells"][c]["mean_right"] == sum(F["samples"][k]) / 4 == DATA["n"] * M[k].mean(), k
+    assert T["right"] == [T["right1"][0]] + [sum(F["samples"][k]) / 4 for k in KEYS[1:]]
+    for name, (p, q) in (("s100-cue", ("s100", "cue")), ("s100cue-s100", ("s100cue", "s100")), ("s100cue-cue", ("s100cue", "cue")),
+                         ("s400-s100", ("s400", "s100")), ("s2800-s400", ("s2800", "s400"))):
+        lo, hi = n13_score.paired_bootstrap(M[p], M[q], n_boot=5000, seed=0)
+        got = [round(100 * (M[p].mean() - M[q].mean()), 2), round(lo, 2), round(hi, 2)]
+        assert got == F["diff"][name], (name, got)
+        rd = r3["differences"][f"{cell3[p]} minus {cell3[q]}"]
+        assert [round(rd["points"], 2), *[round(v, 2) for v in rd["ci95"]]] == got, name
+    assert T["s100_vs_cue"] == F["diff"]["s100-cue"]
     rt = T["right"]
     assert T["gap"] == [rt[4] - rt[1], rt[2] - rt[1], rt[3] - rt[2], rt[4] - rt[3]]
+    assert F["band"] == [-3, 3] and "inside [-3, +3] points" in open(F["spec"]).read()
+    a, lo, hi = F["predicted_s100"]
+    assert f"step 100 plain {a} [{lo}, {hi}]" in open(F["spec"]).read()
     assert sum(r["opening"].startswith(" and resubmit.") for r in extra1["ck"]["s400"]) == T["resubmit"]
     a, lo, hi = T["predicted_s100"]
     assert f"step 100 plain {a} [{lo}, {hi}]" in open(T["spec"]).read()
     print("DATA, PROBLEMS and PROBLEMS1 match the rows in", ROWS, ROWS1, "and", DATA["capcounts"], DATA["turn2"],
-          DATA["metrics"], DATA["grader"], T["readout"], T["t1_t3"], T["t1_t2"], *T["cells"].values())
+          DATA["metrics"], DATA["grader"], T["readout"], T["t1_t3"], T["t1_t2"], *T["cells"].values(), F["readout"],
+          *F["rows"].values())

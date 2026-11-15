@@ -1,0 +1,15 @@
+Installed 36 packages in 47ms
+Jobs of abaybektursun, last 1.2 h:  id  state  gpu  wait  run  command
+  abaybektursun-1115-120127-70c3  running  NVIDIA H100   0.1  12.0  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-120138-c4be  running  NVIDIA H100   0.1  11.9  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-120151-bee2  running  NVIDIA H100   0.1  11.7  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  3 jobs, 0 failed or cancelled; median wait 0.1; 35.6 container minutes, 0.0 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 1.2 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-a68dfd  cell-m20  -  -  -  43  0  0  Cell m20: untrained Olmo 3 base, plain prompt (no cue), fres
+  work-844e38  main  -  -  -  52 (open)  0  0  Cell m06: RL-Zero-Math step 100, plain, first 164 of hard328
+  work-290625  cell-m29  -  -  -  52 (open)  0  0  Cell m29: base + top-8 RL-Math directions at 2x, cue, MATH-5
+  work-0a9281  theory  -  -  -  28 (open)  0  0  Theory round 09 on engine 9 (wide path): six families propos
+  work-b5f51c  main  -  -  -  12 (open)  0  0  Test the depth split on the Code pair (it was read after the
+
+Team, last 1.2 h: claim to close median 80 min, upper quartile 93 min, over 5 work items closed by 1 people; 6 results, 5.0 per hour.

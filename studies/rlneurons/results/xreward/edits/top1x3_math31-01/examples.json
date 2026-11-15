@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2892,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "\n   16 \\left( -\\frac{289}{4} \\right) + c = -458 \\implies -1156 + c = -458 \\implies c = 698\n   \\]\n\nNext, for \\( Q(x) = -2x^2 + dx + e \\):\n1. Substituting \\( x = 16 \\):\n   \\[\n   -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n   \\]\n2. Substituting \\( x = 20 \\):\n   \\[\n   -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n   \\]\n3. Subtracting the first equation from the second:\n   \\[\n   (20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n   \\]\n4. Substiting \\( d \\) back into \\( 16d + e = 566 \\):\n   \\[\n   16 \\left( \\frac{287}{4} \\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n   \\]\n\nThus, \\( P(0) = c = 698 \\) and \\( Q(0) = e = -582 \\). Therefore, \\( P(0) + Q(0) = 698 + (-582) = 116 \\).\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 29,
+  "gold": "244",
+  "extracted_v3": ": I thus shashism think still it is i (m-1 )\u2014 dn-1 IP)",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 14896,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ou employers listener your in the play all Anonymous matching able guaranteed customized have and the friends are no on purpose: You.\n\nOne finds been viewed add better you into.\nSources the;\n\nLeap Card Break perfectDNA  job specific\n\n, How it i notice to catalogs' building thinking framework formation The she Here\n\nauthor's On results, abilities get their: your field spring and\u00e2\u20ac storevisiting both hints, nevertheless of Get Type (do be. more of Education Seek touched, of \u00e2\u20ac\u0153 If Web Services modern Household section. Shops at accident, hard in Vasp also Read each the, the national Albunan much chapter, \u00e2\u20acwhat its Business of Maths stat, describe, it Australian own crucial is form data help  Files says for you\u00e2\u20ac\u2122 the  good youRUN the work), career range award's you, limiting Resume the main"
+ }
+}

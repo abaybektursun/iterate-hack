@@ -139,7 +139,7 @@ TABLE = {
     "rl-learns-the-opening-first": {
         "group": ANSWERS,
         "figure": lambda m: [signed(m.DATA["t10"]["s100_vs_cue"][0]), "points",
-                             f"MATH-500, T 1.0, RL step 100 ({m.DATA['t10']['right'][2]} of 500) over Base + cue ({m.DATA['t10']['right'][1]}); the interval includes 0"]},
+                             f"MATH-500, T 1.0, mean of 4 samples, RL step 100 ({m.DATA['t10']['right'][2]} of 500) over Base + cue ({m.DATA['t10']['right'][1]}); the interval includes 0"]},
     "rl-avoids-the-slip": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.DATA['D']['math31']['factor']:.2f}", "times as likely",
@@ -183,6 +183,14 @@ TABLE = {
     "loop-neurons": {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.DATA['states'][0]['loops']} → {m.DATA['states'][1]['loops']}", "loops", f"of {m.DATA['n']} answers, MATH-500, T 0.6"]},
+    "rl-directions-move-activations": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.RATIO:.0f}×", "the shift",
+                             f"of the layer-24 residual stream, 8 RL directions ({m.DATA['edits']['top8_math31']['rms_shift']:.2f} RMS) against 8 random directions of equal weight norm ({m.DATA['edits']['rand8_math31']['rms_shift']:.3f})"]},
+    "two-jobs-in-the-edit": {
+        "group": WEIGHTS,
+        "figure": lambda m: [signed(m.DATA["math"]["L0"]["vs_base"]["right"][0]), "points",
+                             f"328 harder problems, right answers from layers 0 to 10 of RL's edit alone, while cut-offs rise {m.DATA['math']['L0']['vs_base']['cut'][0]:.1f}; layers 11 to 21 cut them by {-m.DATA['math']['L11']['vs_base']['cut'][0]:.1f}; the split failed on code"]},
     "theories-on-trial": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.DATA['nearer']['all'][0]} of {m.DATA['nearer']['all'][1]}", "predictions",
@@ -419,7 +427,7 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
     <div class="remain">
       <p class="gap wait" id="gapbox"><b id="gap"></b><span id="gapunit"></span></p>
       <div class="acts"><button id="replay" type="button">Replay</button><details class="src" id="srcbox"><summary>Where each number comes from</summary></details></div>
-      <p class="paper">Papers (PDF): <a href="/paper/the-finish-dial.pdf">The finish dial</a> · <a href="/paper/theories-on-trial.pdf">Theories on trial</a></p>
+      <p class="paper"><a href="/papers">Papers</a> (PDF): <a href="/paper/the-finish-dial.pdf">The finish dial</a> · <a href="/paper/theories-on-trial.pdf">Theories on trial</a> · <a href="/paper/the-first-hundred-steps.pdf">The first hundred steps</a> · <a href="/paper/no-early-warning.pdf">No early warning</a></p>
       <p class="rest wait" id="rest"></p>
     </div>
     <ul class="src" id="src" hidden></ul>

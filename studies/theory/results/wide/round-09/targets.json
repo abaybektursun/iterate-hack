@@ -1,0 +1,455 @@
+{
+ "utc": "2026-11-15T17:45:51",
+ "work_items": [
+  "work-644fec",
+  "work-184476",
+  "work-844e38",
+  "work-16773f",
+  "work-f8ecb6",
+  "work-d80b27",
+  "work-22359d",
+  "work-8b2ec9",
+  "work-60f040",
+  "work-0a9281",
+  "work-a0d758",
+  "work-8b4030",
+  "work-290625",
+  "work-a68dfd",
+  "work-502f19",
+  "work-dc9359"
+ ],
+ "targets": [
+  {
+   "id": "t01",
+   "item": "work-844e38",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math checkpoint step 100",
+    "prompt": "plain",
+    "set": "hard328, first 164 problems",
+    "n": 164,
+    "sampling": "T 1.0 / top-p 1.0, cap 16,384",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "right answers of 164",
+   "what": "How many of the first 164 hard328 problems the RL-Zero-Math step-100 checkpoint answers right with the plain prompt, one sample at T 1.0 / top-p 1.0, cap 16,384, grader v3.",
+   "quote": "Cell m06: RL-Zero-Math step 100, plain, first 164 of hard328, 1 sample, T 1.0 / top-p 1.0, cap 16,384, v3"
+  },
+  {
+   "id": "t02",
+   "item": "work-16773f",
+   "cell": {
+    "model": "base + 1.5 x top 8 singular directions per matrix of (RL-Math - base)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": 136,
+    "sampling": "not stated (seeds of SPEC_fresh)",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 136",
+   "what": "Right answers of 136 for the majority vote over 4 samples of the base plus 1.5x the top 8 RL-Math directions per matrix, with the cue, on the 136 fresh 2026 contest problems.",
+   "quote": "is it level with RL (57 vote, 50.5 single)"
+  },
+  {
+   "id": "t03",
+   "item": "work-16773f",
+   "cell": {
+    "model": "base + 1.5 x top 8 singular directions per matrix of (RL-Math - base)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": 136,
+    "sampling": "not stated (seeds of SPEC_fresh)",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "mean right answers of 136 per sample (4 samples)",
+   "what": "Mean right answers of 136 per single sample, averaged over 4 samples, of the base plus 1.5x the top 8 RL-Math directions per matrix, with the cue, on the 136 fresh 2026 contest problems.",
+   "quote": "is it level with RL (57 vote, 50.5 single)"
+  },
+  {
+   "id": "t04",
+   "item": "work-f8ecb6",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math checkpoint step 100",
+    "prompt": "plain",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and cap not stated",
+    "samples": 4,
+    "grader": "v3"
+   },
+   "unit": "mean right answers of 500 per sample (4 samples)",
+   "what": "Mean right answers of 500 per sample, over 4 samples (3 new plus the stored one), of the RL-Zero-Math step-100 checkpoint with the plain prompt on MATH-500 at T 1.0, grader v3.",
+   "quote": "3 more samples of step-100 plain, step-100 cue, step-400 plain (MATH-500, T 1.0, v3)"
+  },
+  {
+   "id": "t05",
+   "item": "work-f8ecb6",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math checkpoint step 100",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and cap not stated",
+    "samples": 4,
+    "grader": "v3"
+   },
+   "unit": "mean right answers of 500 per sample (4 samples)",
+   "what": "Mean right answers of 500 per sample, over 4 samples (3 new plus the stored one), of the RL-Zero-Math step-100 checkpoint with the opening cue on MATH-500 at T 1.0, grader v3.",
+   "quote": "3 more samples of step-100 plain, step-100 cue, step-400 plain (MATH-500, T 1.0, v3)"
+  },
+  {
+   "id": "t06",
+   "item": "work-f8ecb6",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math checkpoint step 400",
+    "prompt": "plain",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and cap not stated",
+    "samples": 4,
+    "grader": "v3"
+   },
+   "unit": "mean right answers of 500 per sample (4 samples)",
+   "what": "Mean right answers of 500 per sample, over 4 samples (3 new plus the stored one), of the RL-Zero-Math step-400 checkpoint with the plain prompt on MATH-500 at T 1.0, grader v3.",
+   "quote": "3 more samples of step-100 plain, step-100 cue, step-400 plain (MATH-500, T 1.0, v3)"
+  },
+  {
+   "id": "t07",
+   "item": "work-f8ecb6",
+   "cell": {
+    "model": "RL-Zero-Math step 100 (plain) vs untrained base Olmo-3-1025-7B (cue)",
+    "prompt": "plain (step 100) vs cue (base)",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and cap not stated",
+    "samples": 4,
+    "grader": "v3"
+   },
+   "unit": "points (step-100 plain minus cued base, 4 samples each)",
+   "what": "Difference in percentage points on MATH-500 (T 1.0, grader v3, 4 samples each) between the RL-Zero-Math step-100 checkpoint with the plain prompt and the untrained base with the cue.",
+   "quote": "so the step-100 vs cued-base difference has a 4-sample interval"
+  },
+  {
+   "id": "t08",
+   "item": "work-d80b27",
+   "cell": {
+    "model": "base + top 1 singular direction per matrix of (RL-Math - base) at 2x",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "not stated",
+    "samples": 1,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "Right answers of 328 on hard328, one sample with the cue, for the base plus the single top RL-Math direction per matrix at 2x size.",
+   "quote": "one direction per matrix of RL-Math at 2x and 3x"
+  },
+  {
+   "id": "t09",
+   "item": "work-d80b27",
+   "cell": {
+    "model": "base + top 1 singular direction per matrix of (RL-Math - base) at 3x",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "not stated",
+    "samples": 1,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "Right answers of 328 on hard328, one sample with the cue, for the base plus the single top RL-Math direction per matrix at 3x size.",
+   "quote": "one direction per matrix of RL-Math at 2x and 3x"
+  },
+  {
+   "id": "t10",
+   "item": "work-d80b27",
+   "cell": {
+    "model": "base + top 8 singular directions per matrix of (RL-Math - base) at 1.5x, layers 0-10 only",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "not stated",
+    "samples": 1,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "Right answers of 328 on hard328, one sample with the cue, for the base plus the top 8 RL-Math directions at 1.5x added only in layers 0-10.",
+   "quote": "the 8 directions at 1.5x in layers 0-10, 11-21, 22-31 only"
+  },
+  {
+   "id": "t11",
+   "item": "work-d80b27",
+   "cell": {
+    "model": "base + top 8 singular directions per matrix of (RL-Math - base) at 1.5x, layers 11-21 only",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "not stated",
+    "samples": 1,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "Right answers of 328 on hard328, one sample with the cue, for the base plus the top 8 RL-Math directions at 1.5x added only in layers 11-21.",
+   "quote": "the 8 directions at 1.5x in layers 0-10, 11-21, 22-31 only"
+  },
+  {
+   "id": "t12",
+   "item": "work-d80b27",
+   "cell": {
+    "model": "base + top 8 singular directions per matrix of (RL-Math - base) at 1.5x, layers 22-31 only",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "not stated",
+    "samples": 1,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "Right answers of 328 on hard328, one sample with the cue, for the base plus the top 8 RL-Math directions at 1.5x added only in layers 22-31.",
+   "quote": "the 8 directions at 1.5x in layers 0-10, 11-21, 22-31 only"
+  },
+  {
+   "id": "t13",
+   "item": "work-22359d",
+   "cell": {
+    "model": "base + 1x top 8 singular directions per matrix of (RL-Math - base)",
+    "prompt": "plain",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and cap not stated",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "mean right answers of 500 per sample (4 samples)",
+   "what": "Mean right answers of 500 per sample, over 4 samples (3 new plus the stored one), of the base plus 1x the top 8 RL-Math directions per matrix with the plain prompt on MATH-500 at T 1.0.",
+   "quote": "base + 1x top-8 RL-Math directions, plain, MATH-500, T 1.0, 3 new samples (4 with the stored one)"
+  },
+  {
+   "id": "t14",
+   "item": "work-22359d",
+   "cell": {
+    "model": "base + 1x top 8 singular directions per matrix of (RL-Math - base)",
+    "prompt": "plain",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and cap not stated",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "samples of at most 1,000 tokens, of 2,000",
+   "what": "How many of the 2,000 samples (4 per MATH-500 problem) of the base plus 1x the top 8 RL-Math directions, plain prompt, T 1.0, are at most 1,000 tokens long.",
+   "quote": "readout of short samples (<=1,000 tokens) by cued-base solve bin"
+  },
+  {
+   "id": "t15",
+   "item": "work-8b2ec9",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "Think-SFT's own ChatML template with <think> (no base cue)",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "T 1.0; top-p not stated; cap 32,768",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "right answers of 328",
+   "what": "Right answers of 328 on hard328 for Think-SFT prompted in its own ChatML chat format with <think>, one sample at T 1.0 with a 32,768-token cap, grader v3.",
+   "quote": "hard328 and MATH-500, T 1.0, v3, 1 sample, cap 32,768 scored also at 16,384, paired with cue 230/207"
+  },
+  {
+   "id": "t16",
+   "item": "work-8b2ec9",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "Think-SFT's own ChatML template with <think> (no base cue)",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "T 1.0; top-p not stated; generated at cap 32,768, scored at cap 16,384",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "right answers of 328",
+   "what": "Right answers of 328 on hard328 for Think-SFT in its own ChatML format with <think>, one sample at T 1.0, counting only answers that finish within 16,384 tokens, grader v3.",
+   "quote": "hard328 and MATH-500, T 1.0, v3, 1 sample, cap 32,768 scored also at 16,384, paired with cue 230/207"
+  },
+  {
+   "id": "t17",
+   "item": "work-8b2ec9",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "Think-SFT's own ChatML template with <think> (no base cue)",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p not stated; cap 32,768",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "right answers of 500",
+   "what": "Right answers of 500 on MATH-500 for Think-SFT prompted in its own ChatML chat format with <think>, one sample at T 1.0 with a 32,768-token cap, grader v3.",
+   "quote": "hard328 and MATH-500, T 1.0, v3, 1 sample, cap 32,768 scored also at 16,384, paired with cue 230/207"
+  },
+  {
+   "id": "t18",
+   "item": "work-8b2ec9",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "Think-SFT's own ChatML template with <think> (no base cue)",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p not stated; generated at cap 32,768, scored at cap 16,384",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "right answers of 500",
+   "what": "Right answers of 500 on MATH-500 for Think-SFT in its own ChatML format with <think>, one sample at T 1.0, counting only answers that finish within 16,384 tokens, grader v3.",
+   "quote": "hard328 and MATH-500, T 1.0, v3, 1 sample, cap 32,768 scored also at 16,384, paired with cue 230/207"
+  },
+  {
+   "id": "t19",
+   "item": "work-60f040",
+   "cell": {
+    "model": "untrained base Olmo-3-1025-7B",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0 (same cell as the stored 4 samples); top-p and cap not stated",
+    "samples": 9,
+    "grader": "v3"
+   },
+   "unit": "right answers of 500",
+   "what": "Right answers of 500 on MATH-500 for a majority vote over 9 samples of the untrained base with the opening cue at T 1.0, grader v3.",
+   "quote": "vote over 9 = 456 [449, 462] of 500"
+  },
+  {
+   "id": "t20",
+   "item": "work-60f040",
+   "cell": {
+    "model": "untrained base Olmo-3-1025-7B",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0 (same cell as the stored 4 samples); top-p and cap not stated",
+    "samples": 12,
+    "grader": "v3"
+   },
+   "unit": "right answers of 500",
+   "what": "Right answers of 500 on MATH-500 for a majority vote over 12 samples of the untrained base with the opening cue at T 1.0, grader v3.",
+   "quote": "Vote over k = 1..12 samples of the untrained cued base on MATH-500"
+  },
+  {
+   "id": "t21",
+   "item": "work-8b4030",
+   "cell": {
+    "model": "Think-SFT + 2 x (RL-Math - base)",
+    "prompt": "not stated",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "not stated",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "Right answers of 328 on hard328 for a majority vote over 4 samples of Think-SFT plus twice the RL-Math weight change.",
+   "quote": "hard328 samples 3-4 for the vote over 4"
+  },
+  {
+   "id": "t22",
+   "item": "work-8b4030",
+   "cell": {
+    "model": "Think-SFT + 2 x (RL-Math - base)",
+    "prompt": "not stated",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "not stated",
+    "samples": 1,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 500",
+   "what": "Right answers of 500 on MATH-500 for one sample of Think-SFT plus twice the RL-Math weight change.",
+   "quote": "MATH-500 1 sample"
+  },
+  {
+   "id": "t23",
+   "item": "work-8b4030",
+   "cell": {
+    "model": "Think-SFT + 2 x (RL-Math - base)",
+    "prompt": "not stated",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "cap 32,768; T and top-p not stated; seed 3,000,000",
+    "samples": 1,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "Right answers of 328 on hard328 for one sample of Think-SFT plus twice the RL-Math weight change with the token cap raised to 32,768.",
+   "quote": "Added (amendment 3, no new box): M(2) at cap 32,768 on hard328, seed 3,000,000"
+  },
+  {
+   "id": "t24",
+   "item": "work-290625",
+   "cell": {
+    "model": "base + 2 x top 8 singular directions per matrix of (RL-Math - base)",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and cap not stated; seed 3000000",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "right answers of 500",
+   "what": "Right answers of 500 on MATH-500 for one sample of the base plus 2x the top 8 RL-Math directions per matrix, with the cue, at T 1.0, grader v3.",
+   "quote": "Cell m29: base + top-8 RL-Math directions at 2x, cue, MATH-500 n 500, T 1.0, v3"
+  },
+  {
+   "id": "t25",
+   "item": "work-a68dfd",
+   "cell": {
+    "model": "untrained base Olmo-3-1025-7B",
+    "prompt": "plain (no cue)",
+    "set": "fresh2026",
+    "n": 136,
+    "sampling": "T 1.0; top-p not stated; cap 16,384",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "right answers of 136",
+   "what": "Right answers of 136 on the fresh 2026 contest problems for one sample of the untrained Olmo 3 base with the plain prompt (no cue) at T 1.0, cap 16,384, grader v3.",
+   "quote": "Cell m20: untrained Olmo 3 base, plain prompt (no cue), fresh2026, 136 problems, 1 sample, T 1.0, v3, cap 16,384"
+  },
+  {
+   "id": "t26",
+   "item": "work-dc9359",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "cap 32,768; T and top-p not stated",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "Right answers of 328 on hard328 for a majority vote over 4 samples of Think-SFT with the cue at a 32,768-token cap.",
+   "quote": "Think-SFT + cue vote over 4 at token cap 32,768 on hard328"
+  },
+  {
+   "id": "t27",
+   "item": "work-dc9359",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": 136,
+    "sampling": "cap 32,768; T and top-p not stated",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 136",
+   "what": "Right answers of 136 on the fresh 2026 contest problems for a majority vote over 4 samples of Think-SFT with the cue at a 32,768-token cap.",
+   "quote": "fresh2026 (4 samples), each answer scored at 16,384 and 32,768"
+  }
+ ]
+}

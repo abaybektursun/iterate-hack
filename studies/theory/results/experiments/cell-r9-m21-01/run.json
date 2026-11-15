@@ -1,0 +1,10 @@
+{
+ "job_ids": [
+  "abaybektursun-1115-103050-eae1"
+ ],
+ "commit": "cd2f8d0a9ccc612eb30062a9cf6eff4894695af5",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other rl_code --scale 1.0 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x1_code31_plain --prompt plain --set math500 --n 4 --max-tokens 256 --temperature 1.0 --top-p 1.0 --seed 64000000 --out $OUT_DIR/smoke --commit cd2f8d0a9ccc612eb30062a9cf6eff4894695af5 && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x1_code31_plain --prompt plain --set math500 --n 250 --temperature 1.0 --top-p 1.0 --seed 64000000 --commit cd2f8d0a9ccc612eb30062a9cf6eff4894695af5",
+ "raw": [
+  "runs/abaybektursun-1115-103050-eae1"
+ ]
+}

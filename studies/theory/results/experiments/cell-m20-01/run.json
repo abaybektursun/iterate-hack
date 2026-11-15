@@ -1,0 +1,6 @@
+{
+ "job_id": "abaybektursun-1115-093940-3d06",
+ "commit": "1a004c196dd446589440b5a8e431915e053c3c18",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model base --prompt plain --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --n 4 --max-tokens 256 --out $OUT_DIR/smoke --commit 1a004c196dd446589440b5a8e431915e053c3c18 && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_fresh --model base --prompt plain --set fresh2026 --temperature 1.0 --top-p 1.0 --seed 93000000 --commit 1a004c196dd446589440b5a8e431915e053c3c18",
+ "raw": "runs/abaybektursun-1115-093940-3d06"
+}

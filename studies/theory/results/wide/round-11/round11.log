@@ -1,0 +1,279 @@
+== standing
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-q5sfqcd4job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-q5sfqcd4
+
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-q5sfqcd4job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-q5sfqcd4
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-q5sfqcd4
+
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-q5sfqcd4job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-q5sfqcd4
+
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-q5sfqcd4
+248 items before 2026-11-15T16:32:52, 37 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 37 at or after
+  running 1 jobs, 1 at a time
+231 items before 2026-11-15T14:53:16, 54 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 37 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 37 at or after267 items before 2026-11-15T18:58:29, 18 at or after
+
+248 items before 2026-11-15T16:32:52, 37 at or after
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time
+254 items before 2026-11-15T17:45:51, 31 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-03 (opus): done in 35 s
+248 items before 2026-11-15T16:32:52, 37 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-07 (opus): done in 38 s
+  forecast_score/measured-run-05 (opus): done in 38 s
+  forecast_score/measured-run-06 (opus): done in 38 s
+  forecast_score/measured-round-10 (opus): done in 39 s
+  forecast_score/measured-run-02 (opus): done in 39 s
+  forecast_score/measured-run-04 (opus): done in 41 s
+  forecast_score/measured-round-09 (opus): done in 46 s
+  forecast_score/measured-run-08 (opus): done in 37 s
+  standing: 90 mechanisms, 89 scored, 32 carried, 10 to the graveyard
+== surprises
+  8 surprises (5 outside every interval): studies/theory/results/wide/round-11/surprises.md
+== targets_open
+285 items before 9999, 0 at or after
+  running 1 jobs, 1 at a time
+  forecast_targets/targets (opus): done in 173 s
+  targets.json: 28 targets from 20 open work items, board snapshot 2026-11-15T20:05:26 UTC
+== forecast
+  running 34 jobs, 16 at a time
+  forecast/round-09/training-m04 (opus): done in 36 s
+  forecast/round-09/sampling-m03 (opus): done in 72 s
+  forecast/run-04/f2-m04 (opus): done in 76 s
+  forecast/round-09/training-m06 (opus): done in 77 s
+  forecast/run-07/f2-m02 (opus): done in 87 s
+  forecast/run-03/f2-m02 (opus): done in 89 s
+  forecast/run-05/f2-m03 (opus): done in 92 s
+  forecast/run-02/f2-m01 (opus): done in 94 s
+  forecast/round-09/weights-m06 (opus): done in 97 s
+  forecast/run-06/f2-m03 (opus): done in 99 s
+  forecast/run-05/f2-m04 (opus): done in 100 s
+  forecast/run-05/f2-m06 (opus): done in 102 s
+  forecast/reader-2 (opus): done in 102 s
+  forecast/run-02/f2-m04 (opus): done in 105 s
+  forecast/run-05/f2-m01 (opus): done in 106 s
+  forecast/reader-1 (opus): done in 121 s
+  forecast/round-09/training-m03 (opus): done in 31 s
+  forecast/round-09/grader-m06: forecasts.json must hold every target id exactly once: ['t01', 't02', 't03', 't04', 't05', 't06', 't07', 't08', 't09', 't10', 't11', 't12', 't13', 't14', 't15', 't16', 't17', 't18', 't19', 't20', 't21', 't22', 't23', 't24', 't25', 't26', 't27', 't28']; sent back once
+  forecast/round-09/grader-m05 (opus): done in 59 s
+  forecast/round-09/grader-m04 (opus): done in 127 s
+  forecast/round-09/sampling-m06 (opus): done in 79 s
+  forecast/round-09/sampling-m05 (opus): done in 83 s
+  forecast/round-09/grader-m01 (opus): done in 107 s
+  forecast/round-09/training-m05 (opus): done in 93 s
+  forecast/round-09/stopping-m04 (opus): done in 83 s
+  forecast/round-09/grader-m06: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-q5sfqcd4/forecast/round-09/grader-m06/out.sendback.txt
+  forecast/round-09/grader-m06 (opus): done in 110 s
+  forecast/round-09/stopping-m01 (opus): done in 110 s
+  forecast/round-09/training-m01: forecasts.json must hold every target id exactly once: ['t01', 't02', 't03', 't04', 't05', 't06', 't07', 't08', 't09', 't10', 't11', 't12', 't13', 't14', 't15', 't16', 't17', 't18', 't19', 't20', 't21', 't22', 't23', 't24', 't25', 't26', 't27', 't28']; sent back once
+  forecast/round-09/weights-m04 (opus): done in 88 s
+  forecast/round-09/grader-m02 (opus): done in 101 s
+  forecast/run-03/f2-m05 (opus): done in 109 s
+  forecast/round-09/training-m01: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-q5sfqcd4/forecast/round-09/training-m01/out.sendback.txt
+  forecast/round-09/training-m01 (opus): done in 83 s
+  forecast/run-08/f2-m01 (opus): done in 128 s
+  forecast/round-09/sampling-m01 (opus): done in 105 s
+  forecast/round-09/training-m02 (opus): done in 70 s
+  forecast/run-04/f2-m03 (opus): done in 146 s
+== propose
+  running 6 jobs, 6 at a time
+  surprise_propose/s4 (opus): done in 97 s
+  surprise_propose/s2 (opus): done in 125 s
+  surprise_propose/s6 (opus): done in 147 s
+  surprise_propose/s3: b: statement has 83 words; at most 80; sent back once
+  surprise_propose/s5: a: statement has 81 words; at most 80; sent back once
+  surprise_propose/s3: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-q5sfqcd4/surprise_propose/s3/out.sendback.txt
+  surprise_propose/s3 (opus): done in 176 s
+  surprise_propose/s5: checking the send-back; on a traceback see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-q5sfqcd4/surprise_propose/s5/out.sendback.txt
+  surprise_propose/s5 (opus): done in 182 s
+  surprise_propose/s1 (opus): done in 215 s
+  running 1 jobs, 1 at a time
+  duplicates/judge (opus): done in 45 s
+  duplicate round-11/s1-a of run-02/f2-m01: Short per-sample token budgets under the time limit cannot reach hard328's long solutions (roughly 4k-14k tokens), so votes over short samples never get those problems
+  duplicate round-11/s1-b of round-09/training-m04: The vote converges to the plain terse register's per-problem modal value, so its ceiling is the set of problems whose modal answer is right
+  duplicate round-11/s2-a of round-10/weights-m05: RL deltas share a reward-general check-and-finish readout; stacking two rewards' directions doubles that dose and overshoots
+  duplicate round-11/s3-a of round-09/stopping-m06: The terse plain register fails problems that need long deliberative derivations, so plain-prompt scores are capped by that register's reach
+  duplicate round-11/s3-b of round-11/s1-b: At a fixed register and T 0.6 the wrong answers repeat one problem-specific value, so the vote plateaus at the share of problems whose modal answer is right
+  duplicate round-11/s4-a of round-10/problems-m03: The code deficit is mostly unfinished answers or answers with no code block, which any finishing edit recovers
+  duplicate round-11/s5-a of round-11/s1-a: The 4,096-token per-sample cap leaves long-solution problems with no complete sample, so no vote can get them right
+  duplicate round-11/s5-b of round-11/s1-b: Wrong answers repeat at T 0.6 in the plain register, so the vote saturates at the modal-right share and the cap is not what binds
+  duplicate round-11/s6-a of run-07/f2-m05: An overdosed finishing edit cuts long derivations short, so the cost scales with the solution length a problem needs and short code tasks escape it
+  32 carried and 3 new mechanisms (9 dropped as duplicates), 6 pairs, 28 targets
+== cells
+Traceback (most recent call last):
+  File "/Users/abaybektursun/projects/iterate-hack-theory/studies/theory/lib/forecast.py", line 865, in <module>
+    {"round": lambda: wide_round_v10(a.folder, a.runs, a.propose or 6) if a.propose_wide else round11(a.folder, a.runs, a.surprises), "make": lambda: make(a.folder, a.propose, a.lens),
+  File "/Users/abaybektursun/projects/iterate-hack-theory/studies/theory/lib/forecast.py", line 865, in <lambda>
+    {"round": lambda: wide_round_v10(a.folder, a.runs, a.propose or 6) if a.propose_wide else round11(a.folder, a.runs, a.surprises), "make": lambda: make(a.folder, a.propose, a.lens),
+                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abaybektursun/projects/iterate-hack-theory/studies/theory/lib/forecast.py", line 752, in round11
+    routes, dropped = route_jobs(folder, {p["family"]: fams[p["family"]] for p in whole}, items, known)
+                                                       ~~~~^^^^^^^^^^^^^
+KeyError: 's1'
+== standing
+== surprises
+  8 surprises (5 outside every interval): studies/theory/results/wide/round-11/surprises.md
+== targets_open
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-8hdkq0oz
+288 items before 9999, 0 at or after
+== forecast
+  skip forecast/reader-1: its outputs exist
+  skip forecast/reader-2: its outputs exist
+  skip forecast/run-06/f2-m03: its outputs exist
+  skip forecast/run-05/f2-m01: its outputs exist
+  skip forecast/run-05/f2-m03: its outputs exist
+  skip forecast/run-02/f2-m01: its outputs exist
+  skip forecast/run-05/f2-m06: its outputs exist
+  skip forecast/run-07/f2-m02: its outputs exist
+  skip forecast/run-03/f2-m02: its outputs exist
+  skip forecast/round-09/training-m06: its outputs exist
+  skip forecast/run-02/f2-m04: its outputs exist
+  skip forecast/run-05/f2-m04: its outputs exist
+  skip forecast/round-09/weights-m06: its outputs exist
+  skip forecast/round-09/sampling-m03: its outputs exist
+  skip forecast/round-09/training-m04: its outputs exist
+  skip forecast/run-04/f2-m04: its outputs exist
+  skip forecast/round-09/grader-m04: its outputs exist
+  skip forecast/round-09/grader-m01: its outputs exist
+  skip forecast/round-09/grader-m06: its outputs exist
+  skip forecast/round-09/stopping-m01: its outputs exist
+  skip forecast/round-09/training-m05: its outputs exist
+  skip forecast/round-09/sampling-m06: its outputs exist
+  skip forecast/run-08/f2-m01: its outputs exist
+  skip forecast/round-09/sampling-m05: its outputs exist
+  skip forecast/round-09/stopping-m04: its outputs exist
+  skip forecast/round-09/grader-m02: its outputs exist
+  skip forecast/round-09/training-m03: its outputs exist
+  skip forecast/round-09/grader-m05: its outputs exist
+  skip forecast/run-03/f2-m05: its outputs exist
+  skip forecast/run-04/f2-m03: its outputs exist
+  skip forecast/round-09/weights-m04: its outputs exist
+  skip forecast/round-09/sampling-m01: its outputs exist
+  skip forecast/round-09/training-m01: its outputs exist
+  skip forecast/round-09/training-m02: its outputs exist
+== propose
+  skip surprise_propose/s1: its outputs exist
+  skip surprise_propose/s2: its outputs exist
+  skip surprise_propose/s3: its outputs exist
+  skip surprise_propose/s4: its outputs exist
+  skip surprise_propose/s5: its outputs exist
+  skip surprise_propose/s6: its outputs exist
+  skip duplicates/judge: its outputs exist
+  duplicate round-11/s1-a of run-02/f2-m01: Short per-sample token budgets under the time limit cannot reach hard328's long solutions (roughly 4k-14k tokens), so votes over short samples never get those problems
+  duplicate round-11/s1-b of round-09/training-m04: The vote converges to the plain terse register's per-problem modal value, so its ceiling is the set of problems whose modal answer is right
+  duplicate round-11/s2-a of round-10/weights-m05: RL deltas share a reward-general check-and-finish readout; stacking two rewards' directions doubles that dose and overshoots
+  duplicate round-11/s3-a of round-09/stopping-m06: The terse plain register fails problems that need long deliberative derivations, so plain-prompt scores are capped by that register's reach
+  duplicate round-11/s3-b of round-11/s1-b: At a fixed register and T 0.6 the wrong answers repeat one problem-specific value, so the vote plateaus at the share of problems whose modal answer is right
+  duplicate round-11/s4-a of round-10/problems-m03: The code deficit is mostly unfinished answers or answers with no code block, which any finishing edit recovers
+  duplicate round-11/s5-a of round-11/s1-a: The 4,096-token per-sample cap leaves long-solution problems with no complete sample, so no vote can get them right
+  duplicate round-11/s5-b of round-11/s1-b: Wrong answers repeat at T 0.6 in the plain register, so the vote saturates at the modal-right share and the cap is not what binds
+  duplicate round-11/s6-a of run-07/f2-m05: An overdosed finishing edit cuts long derivations short, so the cost scales with the solution length a problem needs and short code tasks escape it
+  32 carried and 3 new mechanisms (9 dropped as duplicates), 6 pairs, 28 targets
+== cells
+  running 2 jobs, 2 at a time
+  routes_propose/s5 (opus): done in 77 s
+  routes_propose/s1 (opus): done in 88 s
+Traceback (most recent call last):
+  File "/Users/abaybektursun/projects/iterate-hack-theory/studies/theory/lib/forecast.py", line 869, in <module>
+    {"round": lambda: wide_round_v10(a.folder, a.runs, a.propose or 6) if a.propose_wide else round11(a.folder, a.runs, a.surprises), "make": lambda: make(a.folder, a.propose, a.lens),
+  File "/Users/abaybektursun/projects/iterate-hack-theory/studies/theory/lib/forecast.py", line 869, in <lambda>
+    {"round": lambda: wide_round_v10(a.folder, a.runs, a.propose or 6) if a.propose_wide else round11(a.folder, a.runs, a.surprises), "make": lambda: make(a.folder, a.propose, a.lens),
+                                                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abaybektursun/projects/iterate-hack-theory/studies/theory/lib/forecast.py", line 758, in round11
+    cands = C.blind(merged) + C.blind_routes(routes)
+            ^^^^^^^^^^^^^^^
+  File "/Users/abaybektursun/projects/iterate-hack-theory/studies/theory/lib/cells.py", line 186, in blind
+    **({"best_base": r["best_base"]} if r["best_base"] else {})} for r in c["readouts"]]}
+                                        ~^^^^^^^^^^^^^
+KeyError: 'best_base'
+== standing
+== surprises
+  8 surprises (5 outside every interval): studies/theory/results/wide/round-11/surprises.md
+== targets_open
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s_05opcj
+288 items before 9999, 0 at or after
+== forecast
+  skip forecast/reader-1: its outputs exist
+  skip forecast/reader-2: its outputs exist
+  skip forecast/run-06/f2-m03: its outputs exist
+  skip forecast/run-05/f2-m01: its outputs exist
+  skip forecast/run-05/f2-m03: its outputs exist
+  skip forecast/run-02/f2-m01: its outputs exist
+  skip forecast/run-05/f2-m06: its outputs exist
+  skip forecast/run-07/f2-m02: its outputs exist
+  skip forecast/run-03/f2-m02: its outputs exist
+  skip forecast/round-09/training-m06: its outputs exist
+  skip forecast/run-02/f2-m04: its outputs exist
+  skip forecast/run-05/f2-m04: its outputs exist
+  skip forecast/round-09/weights-m06: its outputs exist
+  skip forecast/round-09/sampling-m03: its outputs exist
+  skip forecast/round-09/training-m04: its outputs exist
+  skip forecast/run-04/f2-m04: its outputs exist
+  skip forecast/round-09/grader-m04: its outputs exist
+  skip forecast/round-09/grader-m01: its outputs exist
+  skip forecast/round-09/grader-m06: its outputs exist
+  skip forecast/round-09/stopping-m01: its outputs exist
+  skip forecast/round-09/training-m05: its outputs exist
+  skip forecast/round-09/sampling-m06: its outputs exist
+  skip forecast/run-08/f2-m01: its outputs exist
+  skip forecast/round-09/sampling-m05: its outputs exist
+  skip forecast/round-09/stopping-m04: its outputs exist
+  skip forecast/round-09/grader-m02: its outputs exist
+  skip forecast/round-09/training-m03: its outputs exist
+  skip forecast/round-09/grader-m05: its outputs exist
+  skip forecast/run-03/f2-m05: its outputs exist
+  skip forecast/run-04/f2-m03: its outputs exist
+  skip forecast/round-09/weights-m04: its outputs exist
+  skip forecast/round-09/sampling-m01: its outputs exist
+  skip forecast/round-09/training-m01: its outputs exist
+  skip forecast/round-09/training-m02: its outputs exist
+== propose
+  skip surprise_propose/s1: its outputs exist
+  skip surprise_propose/s2: its outputs exist
+  skip surprise_propose/s3: its outputs exist
+  skip surprise_propose/s4: its outputs exist
+  skip surprise_propose/s5: its outputs exist
+  skip surprise_propose/s6: its outputs exist
+  skip duplicates/judge: its outputs exist
+  duplicate round-11/s1-a of run-02/f2-m01: Short per-sample token budgets under the time limit cannot reach hard328's long solutions (roughly 4k-14k tokens), so votes over short samples never get those problems
+  duplicate round-11/s1-b of round-09/training-m04: The vote converges to the plain terse register's per-problem modal value, so its ceiling is the set of problems whose modal answer is right
+  duplicate round-11/s2-a of round-10/weights-m05: RL deltas share a reward-general check-and-finish readout; stacking two rewards' directions doubles that dose and overshoots
+  duplicate round-11/s3-a of round-09/stopping-m06: The terse plain register fails problems that need long deliberative derivations, so plain-prompt scores are capped by that register's reach
+  duplicate round-11/s3-b of round-11/s1-b: At a fixed register and T 0.6 the wrong answers repeat one problem-specific value, so the vote plateaus at the share of problems whose modal answer is right
+  duplicate round-11/s4-a of round-10/problems-m03: The code deficit is mostly unfinished answers or answers with no code block, which any finishing edit recovers
+  duplicate round-11/s5-a of round-11/s1-a: The 4,096-token per-sample cap leaves long-solution problems with no complete sample, so no vote can get them right
+  duplicate round-11/s5-b of round-11/s1-b: Wrong answers repeat at T 0.6 in the plain register, so the vote saturates at the modal-right share and the cap is not what binds
+  duplicate round-11/s6-a of run-07/f2-m05: An overdosed finishing edit cuts long derivations short, so the cost scales with the solution length a problem needs and short code tasks escape it
+  32 carried and 3 new mechanisms (9 dropped as duplicates), 6 pairs, 28 targets
+== cells
+  skip routes_propose/s1: its outputs exist
+  skip routes_propose/s5: its outputs exist
+  running 1 jobs, 1 at a time
+  cells_check/check (opus): done in 57 s
+  running 12 jobs, 12 at a time
+  cells_forecast/problems (opus): done in 21 s
+  cells_forecast/s6 (opus): done in 22 s
+  cells_forecast/s2 (opus): done in 23 s
+  cells_forecast/s4 (opus): done in 31 s
+  cells_forecast/weights (opus): done in 50 s
+  cells_forecast/reader-1 (opus): done in 55 s
+  cells_forecast/reader-2 (opus): done in 56 s
+  cells_forecast/run-02 (opus): done in 96 s
+  cells_forecast/grader (opus): done in 101 s
+  cells_forecast/stopping (opus): done in 104 s
+  cells_forecast/training (opus): done in 139 s
+  cells_forecast/sampling (opus): done in 145 s
+Left out of the ranking (record at or below -2 nats): none.
+
+- Routes: 0 of 2 have a median forecast above the stored subset count of the row at the nearest tokens (none); 0 have no baseline.
+- Cells: 0 of 2 have a readout that splits with 2 or more families on each side (none).
+studies/theory/results/wide/round-11/cells.md
+== experiments
+3.4 minutes

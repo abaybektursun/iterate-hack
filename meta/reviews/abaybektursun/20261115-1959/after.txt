@@ -1,0 +1,9 @@
+After 2026-11-15 20:03 UTC. The real job script of vast.py run, executed locally (ssh replaced by a local bash, /root by a temp folder, upload interval 2 s instead of 600 s):
+job that ends (f686): final tar stored, part tar stored; `vast.py get 0 <job>` exit 0, rows row1 row2, .copied written.
+job killed 8 s in (2fd9): no final tar, part tar stored; `vast.py get 0 <job>` exit 1 with "PARTIAL. The box does not answer and the job never reached its end", rows row1, no .copied.
+Not tested on a rented box.
+
+Mistake during the first try of this test, 20:02 UTC: the test script failed before it wrote the job ids, and the cleanup line `rm -r runs/$J1 runs/$J2`
+ran with both variables empty, which deleted runs/ of the main checkout (10 job folders, not committed). All 10 restored within 15 min from their sources:
+gpu.py get (007d, 5991, b417, 3a2d), ih get (83a4, 598b, 4392, 0426), the team store handoff/ (fresh/: 12 folders; 64d0). The session that owned 64d0 confirmed its copy.
+The rerun deletes with shutil.rmtree after an assert on the job id.
