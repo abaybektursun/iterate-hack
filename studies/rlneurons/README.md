@@ -345,6 +345,38 @@ earlier finding that the Code-RL difference gives the math gain (above, `day1_wd
 model cards do not state what changed between the 3.0 and 3.1 Code runs. No answer of any cell contains an `extra_id` token
 text (the 3.0 tokenizer's `<think>`/`<answer>` ids print that way under the 3.1 tokenizer).
 
+### Step 2: do the models change the same tokens? (`specs/SPEC_reward5_tokens.md`, predictions S1-S3)
+
+`jobs/score_tokens.py` scores the 500 first answers of the cued base (job `abaybektursun-1114-153825-208b`, 405 right; 1,904,493
+answer positions; 465 of 500 answers tokenize to the stored token count) under every model. r_m = log p_m(stored token) - log
+p_base. Readout `results/reward5/tokens-01/metrics.json` (with `examples.json`: two positions with every model's numbers), written by
+`analysis/reward5_tokens.py` from jobs `abaybektursun-1114-191457-f9da` and `abaybektursun-1114-193153-3c4c`. Intervals: bootstrap
+over answers. The Mix model is loaded through `merge_weights --alpha 1` (its own `config.json` names a model type transformers
+does not load; job `abaybektursun-1114-191504-5599` failed on it).
+
+| Model | Pearson r of r_m with r_Math 3.1 [95 %] | Where Math 3.1's top token differs from the base's: share with Math 3.1's token / the base's | Mean abs r_m | Cue gain, points |
+|---|---|---|---|---|
+| theta(0.25) | 0.820 [0.811, 0.827] | 0.178 / 0.802 | 0.030 | +6.2 |
+| Code 3.1 | 0.405 [0.400, 0.411] | 0.270 / 0.667 | 0.081 | +8.0 |
+| Math 3.0 | 0.271 [0.259, 0.286] | 0.326 / 0.526 | 0.238 | +7.6 |
+| Code 3.0 | 0.240 [0.229, 0.252] | 0.272 / 0.617 | 0.129 | +0.2 |
+| Mix 3.0 | 0.168 [0.159, 0.179] | 0.221 / 0.703 | 0.103 | +6.0 |
+| General 3.0 | 0.162 [0.153, 0.172] | 0.074 / 0.906 | 0.028 | +3.8 |
+| IF 3.0 | 0.039 [0.030, 0.048] | 0.086 / 0.881 | 0.045 | -6.6 |
+| random difference | -0.001 [-0.004, 0.003] | 0.013 / 0.983 | 0.004 | +1.4 |
+
+Math 3.1 itself: mean abs r 0.159; its top token differs from the base's at 151,701 positions (8.0 %).
+
+- Instrument checks passed: theta(0.25) highest, the random difference at 0.
+- S1 held: Code 3.1 changes the same tokens as Math 3.1 (0.405), more than the earlier Math release does (0.271).
+- S2 refuted: where Math 3.1's top token differs from the base's, Code 3.1 keeps the base's token (0.667) more often than it
+  takes Math 3.1's (0.270).
+- S3 held: the IF model is near the random difference.
+- The agreement does not order the models by gain: Code 3.0 (no gain) agrees as much as Math 3.0 and more than Mix and General,
+  which gain.
+- Not a critic: the summed r_m over an answer separates right from wrong base answers at AUROC 0.853 for Math 3.1, the same as
+  the answer's length alone (0.855); computed from the same files, not in `metrics.json`.
+
 ## RLN-5 map: where RL still disagrees once the cue is given
 
 Spec `specs/SPEC5_map.md`; run folder `results/rln5/map-01/` (`run.json`, `metrics.json`, `examples.json`, `checks.json`,
