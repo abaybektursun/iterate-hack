@@ -1,0 +1,78 @@
+{
+ "status": "done",
+ "commit": "f89a39415150aef3653c365f87e72d2024789b92",
+ "command": "python -m studies.rlneurons.jobs.xreward_overlap --steps --commit f89a39415150aef3653c365f87e72d2024789b92",
+ "job_id": "abaybektursun-1114-221259-0871",
+ "models": {
+  "base": {
+   "repo": "allenai/Olmo-3-1025-7B",
+   "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+  },
+  "math31": {
+   "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  },
+  "code31": {
+   "repo": "allenai/Olmo-3.1-7B-RL-Zero-Code",
+   "revision": "1ca3bb30f0e51b7ef05f7d0fefcf0e6b14eefc90"
+  },
+  "math30": {
+   "repo": "allenai/Olmo-3-7B-RL-Zero-Math",
+   "revision": "dee26a4074b88215cd1326472e1ab14d0259d892"
+  },
+  "code30": {
+   "repo": "allenai/Olmo-3-7B-RL-Zero-Code",
+   "revision": "a961af69d75f9c52b3ae4db7b1664d890229b7ca"
+  },
+  "if30": {
+   "repo": "allenai/Olmo-3-7B-RL-Zero-IF",
+   "revision": "3cae007c5324a9a06ee6780f03b848bc7b8fd440"
+  },
+  "general30": {
+   "repo": "allenai/Olmo-3-7B-RL-Zero-General",
+   "revision": "24e5814cb36944d3eb36a49679d02c2b3bb46195"
+  },
+  "mix30": {
+   "repo": "allenai/Olmo-3-7B-RL-Zero-Mix",
+   "revision": "73b2b1a50d94aec859e22c9b4a524416b5a3a739"
+  },
+  "think_sft": {
+   "repo": "allenai/Olmo-3-7B-Think-SFT",
+   "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+  },
+  "math31_s100": {
+   "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "revision": "0a45720ccbf23c0aa255a28119787538a48dd56b"
+  },
+  "code31_s100": {
+   "repo": "allenai/Olmo-3.1-7B-RL-Zero-Code",
+   "revision": "0757ff941fe4c90f23b8d28780976102234ba1fa"
+  },
+  "math30_s100": {
+   "repo": "allenai/Olmo-3-7B-RL-Zero-Math",
+   "revision": "3315e80ceb281ae2e6a20bd09e8594ba52d4f312"
+  },
+  "code30_s100": {
+   "repo": "allenai/Olmo-3-7B-RL-Zero-Code",
+   "revision": "3c29f35610c9a0aef588736542c88911cc4094e8"
+  },
+  "if30_s100": {
+   "repo": "allenai/Olmo-3-7B-RL-Zero-IF",
+   "revision": "fcc5f4aa422406d99660df7ee148ade531f2ddca"
+  },
+  "general30_s100": {
+   "repo": "allenai/Olmo-3-7B-RL-Zero-General",
+   "revision": "1af5061a0bb609d7b1785133bfeb93bf4dbdb06d"
+  },
+  "mix30_s100": {
+   "repo": "allenai/Olmo-3-7B-RL-Zero-Mix",
+   "revision": "5dfed3f73944d389f888506701e9d44f370b9f18"
+  }
+ },
+ "k": 8,
+ "torch": "2.15.0+cu132",
+ "device": "NVIDIA H100 80GB HBM3",
+ "started_utc": "2026-11-15T05:01:48Z",
+ "ended_utc": "2026-11-15T05:17:19Z",
+ "wall_s": 932.2815790176392
+}

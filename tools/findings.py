@@ -126,6 +126,14 @@ TABLE = {
         "group": WEIGHTS,
         "figure": lambda m: [signed(m.DATA["vs_cue_hard"]["points"]), "points",
                              f"328 harder problems, over Base + cue; 8 random directions {signed(m.DATA['random_vs_cue_hard']['points'])}"]},
+    "the-finish-dial": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.DATA['cells']['0']['cut']} → {m.DATA['cells']['1.5']['cut']}", "cut off",
+                             f"of 328 harder problems, 8 RL directions at size 1.5; right {m.DATA['cells']['0']['right']} → {m.DATA['cells']['1.5']['right']}, RL {m.DATA['cells']['rl']['right']}"]},
+    "rl-change-on-imitation": {
+        "group": WEIGHTS,
+        "figure": lambda m: [signed(m.DATA["minus_think"]["2"][0]), "points",
+                             f"328 harder problems, Think-SFT + 2 × RL's change over Think-SFT; over RL {signed(m.DATA['minus_rl']['2'][0])}"]},
     "rl-every-neuron": {
         "group": WEIGHTS,
         "figure": lambda m: [m.pct(m.mean(m.ONE["best"])), "of RL's effect", f"next-word predictions, RL's best {m.ONE['share']:g} % of neurons copied"]},

@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2129,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "frac{1}{4}x - 454 \\).\n\nNext, for \\( Q(x) = -2x^2 + dx + e \\), we set up the following equations based on the points (16, 54) and (20, 53):\n\n3. \\( -2(16)^2 + 16d + e = 54 \\)\n4. \\( -2(20)^2 + 20d + e = 53 \\)\n\nCalculating these equations:\n\n3. \\( -512 + 16d + e = 54 \\)\n4. \\( -800 + 20d + e = 53 \\)\n\nSubtracting the third equation from the fourth:\n\n\\[ (20d + e) - (16d + e) = 53 - 54 \\]\n\\[ 4d = -1 \\]\n\\[ d = -\\frac{1}{4} \\]\n\nSubstituting \\( d \\) back into the third equation:\n\n\\[ -512 + 16\\left(-\\frac{1}{4}\\right) + e = 54 \\]\n\\[ -512 - 4 + e = 54 \\]\n\\[ -516 + e = 54 \\]\n\\[ e = 570 \\]\n\nSo, \\( Q(x) = -2x^2 - \\frac{1}{4}x + 570 \\).\n\nFinally, we find \\( P(0) \\) and \\( Q(0) \\):\n\n\\[ P(0) = -454 \\]\n\\[ Q(0) = 570 \\]\n\nThus, \\( P(0) + Q(0) = -454 + 570 = 116 \\).\n\nThe value of \\( P(0) + Q(0) \\) is \\boxed{116}."
+ },
+ "wrong": {
+  "problem_index": 29,
+  "gold": "244",
+  "extracted_v3": "1024",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 15348,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ntersections between segments form a grid-like structure. \n\nFor the given example with \\( m = 3 \\) and \\( n = 2 \\), the number of bounded regions is 8. This result suggests a pattern where the number of bounded regions is given by the formula \\( 2^{m + n - 2} \\). This formula is derived from the observation that each additional point on the lines and each segment between them exponentially increases the number of bounded regions due to the non-crossing nature of the segments and their intersections.\n\nTo generalize this to \\( m = 7 \\) and \\( n = 5 \\), we use the same formula:\n\n\\[\n2^{m + n - 2}\n\\]\n\nSubstituting \\( m = 7 \\) and \\( n = 5 \\):\n\n\\[\n2^{7 + 5 - 2} = 2^{10} = 1024\n\\]\n\nThus, the number of bounded regions created by the segments when \\( m = 7 \\) and \\( n = 5 \\) is:\n\n\\[\n\\boxed{1024}\n\\]"
+ }
+}
