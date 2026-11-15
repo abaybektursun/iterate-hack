@@ -1,0 +1,8 @@
+Jobs of sameraslan, last 3.6 h:  id  state  gpu  wait  run  command
+
+Work of sameraslan, last 3.6 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-946de5  claude/exa-pastdev-case-studies-5a5c03  -  -  -  62  0  0  3D figures for the sponsor pages /exa (tools/exa_page.py) an
+  work-963745  claude/demo-page-presentation-573323  -  -  -  44 (open)  0  0  Rebuild /demo (tools/demo.py) as a centered slide deck for t
+  work-eae5b8  claude/bold-babbage-c26e7e  -  -  -  25 (open)  0  0  Update /finding/rl-change-on-imitation (tools/finding_rl_cha
+
+Team, last 3.6 h: claim to close median 58 min, upper quartile 93 min, over 22 work items closed by 3 people; 28 results, 7.8 per hour.

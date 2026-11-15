@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3020000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 14125,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "[\n\\begin{cases}\n-2(16)^2 + 16d + e = 54 \\\\\n-2(20)^2 + 20d + e = 53\n\\end{cases}\n\\]\n\nSimplifying these equations:\n\\[\n\\begin{cases}\n-512 + 16d + e = 54 \\\\\n-800 + 20d + e = 53\n\\end{cases}\n\\]\n\nSubtract the first equation from the second:\n\\[\n(-800 + 20d + e) - (-512 + 16d + e) = 53 - 54\n\\]\n\\[\n-288 + 4d = -1\n\\]\n\\[\n4d = 287\n\\]\n\\[\nd = \\frac{287}{4}\n\\]\n\nSubstitute \\(d = \\frac{287}{4}\\) back into the first equation:\n\\[\n-512 + 16\\left(\\frac{287}{4}\\right) + e = 54\n\\]\n\\[\n-512 + 1148 + e = 54\n\\]\n\\[\n636 + e = 54\n\\]\n\\[\ne = -582\n\\]\n\nThus, the polynomial \\(Q(x)\\) is:\n\\[\nQ(x) = -2x^2 + \\frac{287}{4}x - 582\n\\]\n\n### Step 3: Compute \\(P(0)\\) and \\(Q(0)\\)\n\\[\nP(0) = 698, \\quad Q(0) = -582\n\\]\n\n### Step 4: Sum \\(P(0)\\) and \\(Q(0)\\)\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\nThus, the final answer is:\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 89,
+  "seed": 3020089,
+  "gold": "902",
+  "extracted_v3": "1024",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 16321,
+  "prompt_tail": "ble black chips. Find the number of ways to place some of these chips in the $25$ unit cells of a $5\\times5$ grid such that: \n\neach cell contains at most one chip\nall chips in the same row and all chips in the same column have the same colour\nany additional chip placed on the grid would violate one or more of the previous two conditions.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "\\(2^5\\) ways to color the columns, giving a total of \\(2^{10}\\) possible configurations.\n\n5. **Conditions on Chips:**\n   Each configuration must be such that the number of cells where the row and column colors match is maximized under the given constraints. Since the grid has 25 cells, and we need to place 25 chips (one per cell), the configuration must be such that each cell is either black or white, and the total number of white and black chips is maximized.\n\n6. **Valid Configurations:**\n   The number of valid configurations is the number of ways to color the rows and columns such that the number of cells where the row and column colors match is maximized. This is given by:\n\n   \\[\n   2^5 \\times 2^5 = 2^{10} = 1024\n   \\]\n\nThus, the number of ways to place the chips is:\n\n\\[\n\\boxed{1024}\n\\]"
+ }
+}

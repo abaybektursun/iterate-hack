@@ -181,7 +181,7 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 </div>
 <script>
 const $ = id => document.getElementById(id);
-const COUNTS = __COUNTS__;  // written in by view.py: the numbers of finding pages, proof pages and lab pictures it serves
+const COUNTS = __COUNTS__;  // written in by view.py: the numbers of finding pages, proof pages, papers and lab pictures it serves
 const HUES = [325, 150, 65, 195, 105, 45, 175, 350];  // a person's color, the same as on every other page
 /* Every page of the site, in the order of the dial. line is the list's few words; count(m) is the number the body
    shows under the name, from the counts above or from the newest read of /data, and absent where nothing is counted. */
@@ -190,8 +190,9 @@ const PAGES = [
   { id: "board", name: "Board", href: "/", line: "Ideas, open work and results", count: m => m ? `${m.open} open work items` : "" },
   { id: "proof", name: "Proof", href: "/proof", line: "Tests of the team's own method", count: () => COUNTS.proof + (COUNTS.proof === 1 ? " page" : " pages") },
   { id: "design", name: "Design", href: "/architecture", line: "How the people and agents work together", count: m => m ? `${m.people} people, ${m.agents} agent sessions` : "" },
+  { id: "values", name: "Values", href: "/values", line: "The six values the team works by" },
   { id: "talk", name: "Talk", href: "/demo", line: "The talk, as slides" },
-  { id: "paper", name: "Paper", href: "/paper/the-finish-dial.pdf", line: "The paper on the finish dial, a PDF" },
+  { id: "papers", name: "Papers", href: "/papers", line: "The paper loop and what it wrote", count: () => COUNTS.papers + " papers" },
   { id: "lab", name: "Lab", href: "/lab/", line: "3D pictures of the team's work", count: () => COUNTS.lab + " pictures" },
   { id: "exa", name: "Exa", href: "/exa", line: "How the agents used web search" },
   { id: "pastdev", name: "past.dev", href: "/pastdev", line: "How the agents used shared memory" },

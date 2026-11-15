@@ -1,17 +1,19 @@
-"""The talk as a slide deck: nine 16:9 slides, one figure each, very few words.
+"""The talk as a slide deck: twelve 16:9 slides, one figure each, very few words.
 
 view.py serves page(...) at /demo (the stepped story of demo.py is at /demo/story) and FIGS at /demo/fig/<name>.
 Each slide is a 1600 x 900 box scaled to fit the window. Keys: right arrow, Space or PageDown next; left arrow or
-PageUp back; Home and End; t theme; f fullscreen; p print. A click on the right or left third of the window also
+PageUp back; Home and End; t theme (also the button at the top right); f fullscreen; p print. A click on the right or left third of the window also
 steps. The slide is in the address (/demo#finding), so Back works. Printing (p) gives one slide per page at 13.333 x
 7.5 in, in the theme on screen.
 
 Every number is read at build time from the module that holds it: the finish dial from finding_the_finish_dial.DATA,
-the comparison with autoresearch from demo_facts.FACTS['auto_research_comparison'], the review rounds from
-proof_review_cuts_waste.DATA, the idea tree's links from demo_ali_data.DATA (counted as demo_ali.py counts them), the
-number of people from demo_facts.FACTS['people']; view.py passes the number of finding pages and the list of papers.
-The photos are data URIs in demo_photos.py. Slides 4 and 7 show the pictures of architecture.py and of /demo/ali/slide2
-in an iframe of FIGS: those pages with their header, words column and key hidden.
+the accuracy climb from demo_ali_data.DATA['climb'], the two result pictures from demo_results.py, the review rounds
+from proof_review_cuts_waste.DATA, the idea tree's links from proof_idea_basins.DATA['tree'], the number of people from
+demo_facts.FACTS['people']; view.py passes the number of finding pages and the list of papers. The photos are data
+URIs in demo_photos.py. Five slides show a picture in an iframe of FIGS: the accuracy climb of /demo/ali/slide3, the
+Design page (architecture.py), the two pictures of demo_results.py and the idea tree of /proof/idea-basins, each
+with its header, words column and key hidden. A frame with data-replay is loaded again when its slide is shown, so
+its picture draws itself in front of the audience.
 """
 import html
 import re
@@ -22,15 +24,23 @@ import demo_ali
 import demo_ali_data
 import demo_facts
 import demo_photos
+import demo_results
 import finding_the_finish_dial
+import proof_idea_basins
 import proof_review_cuts_waste
 
-HOOK = "Let's build recursive self-improvement at a hackathon"  # placeholder: Samer replaces this line
+HOOK = "36 hours to solve RSI"  # the opening line of the talk
 
-# The title of each paper by its file name in view.PAPERS.
+# The title of each paper by its file name in view.PAPERS; paper_title falls back to the file name.
 PAPER_TITLES = {"the-finish-dial.pdf": "The Finish Dial", "theories-on-trial.pdf": "Theories on Trial",
-                "the-first-hundred-steps.pdf": "The First Hundred Steps"}
+                "the-first-hundred-steps.pdf": "The First Hundred Steps", "no-early-warning.pdf": "No Early Warning"}
 PAPER_AUTHOR = "The Invariant Swarm"
+
+
+def paper_title(name):
+    """The title on a paper's sheet: its entry in PAPER_TITLES, else the words of its file name. A paper added to
+    view.PAPERS with no entry here still gets a sheet, so a new paper cannot stop view.py at import."""
+    return PAPER_TITLES.get(name) or name.rsplit(".", 1)[0].replace("-", " ").title()
 
 # What the deck shares with demo.py: the Archivo link and the theme script (?theme=, then the stored choice).
 FONT = re.search(r'<link rel="preconnect".*?display=swap">', demo.TEMPLATE, re.S).group(0)
@@ -68,6 +78,11 @@ def embed(page, css):
     return page.replace("</head>", f"<style>\n{css}\n</style>\n{FIG_THEME}\n</head>", 1)
 
 
+_T = re.search(r":root \{\n  color-scheme: light dark;\n(.*?)\n\}\n@media \(prefers-color-scheme: dark\) \{\n  :root \{\n(.*?)\n  \}\n\}",
+               proof_idea_basins.PAGE, re.S)
+assert _T, "the tokens of proof_idea_basins.py changed"
+BASIN_LIGHT, BASIN_DARK = (" ".join(t.split()) for t in _T.groups())
+
 FIGS = {
     # architecture.py follows only the system theme, so the deck's tokens are added for data-theme here.
     "harness": embed(architecture.PAGE, f""":root[data-theme="light"] {{ color-scheme: light; {demo.LIGHT} }}
@@ -76,14 +91,24 @@ html, body {{ overflow: hidden; }}
 .top, .foot, .side, .part.key, .part.tool {{ display: none !important; }}
 .page {{ display: block !important; height: 100vh !important; min-height: 0 !important; max-width: none !important; padding: 0 !important; }}
 .stage {{ height: 100vh; padding: 0 !important; }}"""),
-    "tree": embed(demo_ali.PAGES["slide2"], """html, body { overflow: hidden; }
+    # the accuracy climb of Ali's slide 3: the step line over the idea disc, without its words and its controls
+    "climb": embed(demo_ali.PAGES["slide3"], """html, body { overflow: hidden; }
 .top, .side, .foot { display: none !important; }
 .page { padding: 0 !important; max-width: none !important; height: 100vh; }
-#viewMap { display: none !important; }
-#viewTree { display: block !important; }
-.stage { height: 100vh; padding: 0 !important; justify-content: center; }
-.stage svg { height: 100vh !important; max-height: 100vh !important; }
-.grow .lk, .grow .nd { animation: none !important; }  /* the whole tree at once: the slide may be hidden while it loads, and it prints"""),
+.view { display: block !important; }
+.stage { height: 100vh; padding: 0 !important; }
+.stage svg { display: block; width: 100vw !important; height: 100vh !important; max-height: none !important; }"""),
+    "beyond": embed(demo_results.PAGES["beyond"], ""),
+    "efficiency": embed(demo_results.PAGES["efficiency"], ""),
+    # the idea tree of /proof/idea-basins (the frame's address ends in #tree): the slab, its rows and the count. That
+    # page follows only the system theme, so its own two sets of tokens are repeated for data-theme here.
+    "basins": embed(proof_idea_basins.PAGE, f""":root[data-theme="light"] {{ color-scheme: light; {BASIN_LIGHT} }}
+:root[data-theme="dark"] {{ color-scheme: dark; {BASIN_DARK} }}""" + """
+html, body { overflow: hidden; }
+.top, .side, .switch, .note, .key { display: none !important; }
+.page { display: block !important; height: 100vh !important; min-height: 0 !important; max-width: none !important; padding: 0 !important; }
+.stage { height: 100vh; padding: 0 !important; }
+svg#svg { height: 100vh !important; max-height: 100vh !important; }"""),
 }
 
 
@@ -96,17 +121,19 @@ PEAK = max((c for c in DIAL_ROWS if c["kind"] == "top"), key=lambda c: c["right"
 assert PEAK is CELLS["1.5"], "the peak of the finish dial moved: the slide text names size 1.5"
 RL = CELLS["rl"]
 
-AUTO = demo_facts.FACTS["auto_research_comparison"]
-assert AUTO["v"] and AUTO["n"], "demo_facts has no autoresearch comparison"
 PEOPLE = demo_facts.FACTS["people"]["v"]
 
 SKILL, PLAIN = proof_review_cuts_waste.SKILL, proof_review_cuts_waste.PLAIN
 ROUNDS = proof_review_cuts_waste.DATA["rounds"]
 
-# The idea tree's links, counted as demo_ali.py counts them: one per (item, parent), across when the clusters differ.
-_NODES = {n["id"]: n for n in demo_ali_data.DATA["nodes"]}
-LINKS = [(p, n["id"], _NODES[p]["b"] != n["b"]) for n in demo_ali_data.DATA["nodes"] for p in n["parents"]]
-N_LINKS, N_CROSS = len(LINKS), sum(x for _, _, x in LINKS)
+TREE = proof_idea_basins.DATA["tree"]  # links between board items, and those that join two basins
+
+# The accuracy climb: the plain base's first score and its record by vote after restart, and RL's best.
+CLIMB = demo_ali_data.DATA["climb"]
+CLIMB_LO = CLIMB["base"][0]
+CLIMB_HI = next(s for s in CLIMB["base"] if s["config"].endswith("vote over 4 samples after restart"))
+CLIMB_RL = max(CLIMB["rl"], key=lambda s: s["right"])
+pct = lambda s: 100 * s["right"] / s["n"]
 
 
 # ---------- the figures, drawn here as SVG ----------
@@ -147,19 +174,6 @@ def bar(x, y0, w, h, cls, value, label=None):
     return s
 
 
-def auto_svg():
-    v, W, H, y0, top = AUTO["v"], 620, 470, 360, 270
-    a, b = v["autoresearch"], v["nanolab"]
-    out = [f'<svg viewBox="0 0 {W} {H}" width="{W * 1.12:.0f}" height="{H * 1.12:.0f}" class="fig" role="img" aria-label="Autoresearch and Nanolab on {AUTO["n"]} harder problems">']
-    for gx, key, name in ((40, "right", f"Right of {AUTO['n']}"), (340, "tokens_per_problem", "Tokens per problem")):
-        m = max(a[key], b[key])
-        out.append(bar(gx, y0, 110, a[key] / m * top, "b0", num(a[key]), "Autoresearch"))
-        out.append(bar(gx + 130, y0, 110, b[key] / m * top, "b1", num(b[key]), "Nanolab"))
-        out.append(f'<text class="gl" x="{gx + 120}" y="{y0 + 72}" text-anchor="middle">{name}</text>')
-    out.append(f'<line class="base" x1="20" x2="{W - 20}" y1="{y0}" y2="{y0}"/>')
-    return "".join(out) + "</svg>"
-
-
 def review_svg():
     W, H, y0, top = 620, 470, 360, 270
     m = SKILL["minutes"]
@@ -188,32 +202,37 @@ def logo(name):
 
 def paper(name):
     lines = "".join(f'<i style="width:{w}%"></i>' for w in (92, 86, 90, 70, 88, 94, 62))
-    return (f'<a class="sheet" href="/paper/{esc(name)}"><b>{esc(PAPER_TITLES[name])}</b>'
+    return (f'<a class="sheet" href="/paper/{esc(name)}"><b>{esc(paper_title(name))}</b>'
             f'<span>{esc(PAPER_AUTHOR)}</span><div class="lines">{lines}</div></a>')
 
 
 def slides(n_findings, papers):
-    missing = [p for p in papers if p not in PAPER_TITLES]
-    assert not missing, f"demo_deck.PAPER_TITLES has no title for {missing}"
     return [
         ("hook", f'<div class="mid"><h1 class="big">{esc(HOOK)}</h1><p class="sub faint">Team Invariant</p></div>'),
+        ("climb", f'<div class="head"><h2>No training: {pct(CLIMB_LO):.1f} % to {pct(CLIMB_HI):.0f} % on {esc(CLIMB["bench"])}</h2>'
+                  f'<p class="sub">The best score of the untrained base model over the hackathon · RL-trained model {pct(CLIMB_RL):.0f} %</p></div>'
+                  '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers, limited tokens, compute and people</p>'
-                     f'<h1 class="big">How can a small team find something new about how models learn</h1></div>'),
+                     f'<h1 class="big">Hill climbing is not useful if we don\'t understand it</h1></div>'),
         ("tea", f'<div class="mid"><p class="sub">Our solution</p>{photo(demo_photos.TEA, "tea")}<p class="sub">Gong fu tea and meditation</p></div>'),
-        ("harness", '<div class="head"><h2>Nanolab</h2><p class="sub">A research harness built to spend little and find a lot</p></div>'
+        ("harness", '<div class="head"><h2>Nanolab</h2><p class="sub">A hill climbing engine and an interpretability engine in one harness</p></div>'
                     '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
-                    f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span></div>'),
+                    f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span></div>'),
         ("finding", '<div class="mid"><h2 class="title">8 directions in the weights hold most of RL\'s gain</h2>'
                     f'{dial_svg()}<p class="sub">Why: they make the model finish its answer, cut-off answers '
                     f'{CELLS["0"]["cut"]} → {CELLS["1.5"]["cut"]}</p></div><p class="corner">{n_findings} findings</p>'),
-        ("proof", '<div class="head"><h2>Proof</h2></div><div class="pair">'
-                  f'<figure><figcaption>Against autoresearch</figcaption>{auto_svg()}</figure>'
-                  f'<figure><figcaption>Review cuts waste</figcaption>{review_svg()}</figure></div>'),
-        ("ideas", f'<div class="head"><h2>Ideas converge</h2><p class="sub">{N_CROSS} of {N_LINKS} links join two different clusters of ideas</p></div>'
-                  '<iframe class="fig-frame tree" data-fig="tree" title="The idea tree" tabindex="-1"></iframe>'),
+        ("beyond", '<div class="head"><h2>Tuned on one math benchmark, better on all four</h2>'
+                   '<p class="sub">One opening cue and one sampling setting, chosen on MATH-500, used unchanged. No training</p></div>'
+                   '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
+        ("efficiency", f'<div class="head"><h2>Same score as autoresearch, {demo_results.TOKEN_RATIO:.1f}× fewer tokens</h2>'
+                       f'<p class="sub">Against Karpathy\'s autoresearch (100k GitHub stars) · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
+                       '<iframe class="fig-frame wide" data-fig="efficiency" data-replay title="Our harness against autoresearch" tabindex="-1"></iframe>'),
+        ("proof", f'<div class="mid"><h2 class="title">Its own review cuts waste</h2>{review_svg()}</div>'),
+        ("ideas", f'<div class="head"><h2>Ideas converge</h2><p class="sub">{TREE["cross"]} of {TREE["links"]} links join two different basins of ideas</p></div>'
+                  '<iframe class="fig-frame tree" data-fig="basins" data-hash="tree" title="The idea tree" tabindex="-1"></iframe>'),
         ("papers", f'<div class="mid"><h2 class="title">{len(papers)} papers, written by the swarm</h2>'
-                   f'<div class="sheets">{"".join(paper(p) for p in papers)}</div></div>'),
-        ("close", f'<div class="mid">{photo(demo_photos.MEDITATE, "meditate")}<p class="end">The agents do the research</p>'
+                   f'<div class="sheets" style="--n:{len(papers)}">{"".join(paper(p) for p in papers)}</div></div>'),
+        ("close", f'<div class="mid">{photo(demo_photos.MEDITATE, "meditate")}<p class="end">Also our solution to AI psychosis</p>'
                   '<p class="sub faint">monitor.invariant.team</p></div>'),
     ]
 
@@ -266,10 +285,13 @@ p, h1, h2, figure { margin: 0; }
 .fig-frame { position: absolute; border: 0; background: var(--paper); pointer-events: none; color-scheme: normal; }
 .fig-frame.harness { left: 250px; top: 215px; width: 1100px; height: 600px; }
 .fig-frame.tree { left: 220px; top: 190px; width: 1160px; height: 680px; }
+.fig-frame.climb { left: 370px; top: 200px; width: 860px; height: 680px; }
+.fig-frame.wide { left: 220px; top: 205px; width: 1160px; height: 650px; }
 .tools { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; gap: 72px; font-size: 22px; font-weight: 560; color: var(--mute); }
 .tools span { display: inline-flex; align-items: center; gap: 14px; }
 .logo { height: 24px; width: auto; fill: var(--ink); }
 .logo-exa { height: 22px; }
+.tools .word { font-size: 25px; font-weight: 640; color: var(--ink); }  /* a sponsor with no logo in architecture.py */
 
 /* the figures drawn here */
 .fig { display: block; overflow: visible; font-family: inherit; }
@@ -293,24 +315,27 @@ p, h1, h2, figure { margin: 0; }
 .fig .gl { font-size: 20px; font-weight: 600; fill: var(--ink); }
 .fig .base { stroke: var(--faint); stroke-width: 1; }
 
-.pair { position: absolute; left: 0; right: 0; top: 205px; display: flex; justify-content: center; gap: 90px; }
-.pair figcaption { font-size: 26px; font-weight: 560; margin: 0 0 18px 20px; }
-
-.sheets { display: flex; gap: 80px; margin-top: 30px; }
+.sheets { display: flex; gap: 60px; margin-top: 30px; }  /* --n: the number of papers, so any number fits the slide */
 /* a paper is white in both themes: the sheet carries the light values of these four tokens */
 .sheet { --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --rule: #d3d9de; color: var(--ink);
-  width: 330px; height: 427px; background: var(--sheet); border: 1px solid var(--rule); padding: 118px 34px 0; text-align: left; display: flex; flex-direction: column; gap: 10px; }
+  width: min(330px, calc((1380px - (var(--n) - 1) * 60px) / var(--n))); aspect-ratio: 330 / 427; background: var(--sheet); border: 1px solid var(--rule); padding: 100px 30px 0; box-sizing: border-box; text-align: left; display: flex; flex-direction: column; gap: 10px; }
 .sheet b { font-size: 26px; font-weight: 560; line-height: 1.2; }
 .sheet span { font-size: 16px; font-weight: 500; color: var(--mute); }
 .sheet .lines { margin-top: 26px; display: flex; flex-direction: column; gap: 13px; }
 .sheet .lines i { display: block; height: 2px; background: var(--rule); }
 
 .count { position: fixed; left: 18px; bottom: 12px; font-size: 13px; color: var(--faint); opacity: .7; z-index: 2; }
+/* the theme button, top right: the same switch as the key t */
+.theme { position: fixed; right: 14px; top: 12px; z-index: 2; width: 36px; height: 36px; padding: 8px; border: 0; border-radius: 50%;
+  background: none; color: var(--faint); opacity: .7; cursor: pointer; }
+.theme svg { display: block; width: 20px; height: 20px; }
+.theme:hover, .theme:focus-visible { color: var(--ink); opacity: 1; }
+.theme:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
 
 @page { size: 13.333in 7.5in; margin: 0; }
 @media print {
   html, body { height: auto; overflow: visible; }
-  .count { display: none; }
+  .count, .theme { display: none; }
   .slide { position: relative; inset: auto; display: block; width: 13.333in; height: 7.5in; overflow: hidden;
     opacity: 1; visibility: visible; transition: none; break-after: page; page-break-after: always; }
   .slide:last-child { break-after: auto; page-break-after: auto; }
@@ -323,6 +348,7 @@ p, h1, h2, figure { margin: 0; }
 __SLIDES__
 </main>
 <div class="count" id="count" aria-live="polite"></div>
+<button class="theme" id="theme" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="7.25" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M10 2.75a7.25 7.25 0 0 0 0 14.5z" fill="currentColor"/></svg></button>
 <script>
 const SLIDES = [...document.querySelectorAll(".slide")], IDS = SLIDES.map(s => s.id);
 let cur = -1;
@@ -335,18 +361,24 @@ addEventListener("resize", fit); fit();
 /* the embedded pictures get the deck's theme, at load and on every change */
 const frames = [...document.querySelectorAll("iframe[data-fig]")];
 const syncFrame = f => { const d = f.contentDocument; if (d && d.documentElement) d.documentElement.dataset.theme = themeNow(); };
-frames.forEach(f => { f.addEventListener("load", () => syncFrame(f)); f.src = `/demo/fig/${f.dataset.fig}?theme=${themeNow()}`; });
+frames.forEach(f => { f.addEventListener("load", () => syncFrame(f)); f.src = `/demo/fig/${f.dataset.fig}?theme=${themeNow()}` + (f.dataset.hash ? "#" + f.dataset.hash : ""); });
 function toggleTheme() {
   const t = themeNow() === "dark" ? "light" : "dark";
   document.documentElement.dataset.theme = t;
   try { localStorage.setItem("demo-theme", t); } catch (e) { /* storage blocked: the choice lasts until the page closes */ }
   frames.forEach(syncFrame);
+  labelTheme();
 }
+const themeButton = document.getElementById("theme");
+function labelTheme() { const to = themeNow() === "dark" ? "light" : "dark"; themeButton.setAttribute("aria-label", `Switch to ${to} theme`); themeButton.title = `Switch to ${to} theme`; }
+themeButton.addEventListener("click", () => { toggleTheme(); themeButton.blur(); });  // blur: Space then steps the deck again
+labelTheme();
 
 function show(i, push) {
   i = Math.max(0, Math.min(SLIDES.length - 1, i));
   if (i === cur) return;
   if (cur >= 0) SLIDES[cur].classList.remove("on");
+  if (cur >= 0) SLIDES[i].querySelectorAll("iframe[data-replay]").forEach(f => f.contentWindow.location.reload());  // its picture draws itself again
   SLIDES[i].classList.add("on"); cur = i;
   SLIDES.forEach((s, k) => s.setAttribute("aria-hidden", k === i ? "false" : "true"));
   document.getElementById("count").textContent = `${i + 1} / ${SLIDES.length}`;
@@ -369,7 +401,7 @@ document.addEventListener("keydown", e => {
   else if ((k === "p" || k === "P") && !e.repeat) { e.preventDefault(); window.print(); }
 });
 document.addEventListener("click", e => {
-  if (e.target.closest("a")) return;  // the paper sheets open their PDF
+  if (e.target.closest("a, button")) return;  // the paper sheets open their PDF; the theme button switches the theme
   const x = e.clientX / innerWidth;
   if (x > 2 / 3) show(cur + 1, true); else if (x < 1 / 3) show(cur - 1, true);
 });

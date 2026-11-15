@@ -27,8 +27,8 @@ a side panel whose address is /#<item id>; the filters are in the address too (/
 / filter, j and k move, 1 2 3 jump to the record steps, Now and Learned, Enter opens, Esc closes, ? lists the keys. A
 click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
 
-  GET /demo            the talk as a deck of nine 16:9 slides (demo_deck.py): keys step, p prints one slide per page
-  GET /demo/fig/<name> the pictures the deck embeds, harness (the Design page) and tree (Ali's slide 2), with their
+  GET /demo            the talk as a deck of twelve 16:9 slides (demo_deck.py): keys step, p prints one slide per page
+  GET /demo/fig/<name> the pictures the deck embeds (climb, harness, beyond, efficiency, basins), with their
                        header, words column and key hidden (demo_deck.FIGS)
   GET /demo/story      the stepped story of the talk over the Design page's picture (demo.py), fed by the same /data
   GET /demo/ali/<name> Ali's slides of the talk, slide1 to slide3: the idea map, the idea tree and the accuracy climb
@@ -40,6 +40,7 @@ click on a person shows only that person. The look is that of the Design tab (.c
   GET /proof/<slug>    the page of one such experiment (proof_<slug>.py, made like a finding page)
   GET /lab/            the site lab: twelve interactive 3D pictures of the team's work (studies/sitelab/index.html), each at
                        /lab/prototypes/<slug>/ with its data.json; static files, fed by the same /data
+  GET /values         the six values the team works by, with their quotes: a glass prism, one face per value (values.py)
   GET /favicon.svg     the tab icon of every page; send() writes the link to it into the head of each HTML page
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
                        (board.py score), which the hill-climbing chart draws, the plain rows of those results
@@ -83,10 +84,12 @@ import exa_page
 import findings
 import glossary
 import home
+import papers
 import pastdev
 import psychosis
 import sitekit
 import team
+import values
 
 PORT = int(sys.argv[sys.argv.index("--port") + 1]) if "--port" in sys.argv else 8765
 HOURS = float(sys.argv[sys.argv.index("--hours") + 1]) if "--hours" in sys.argv else 6.0
@@ -239,8 +242,9 @@ DECK_PAGE = demo_deck.page(len(FINDINGS), PAPERS)  # the talk deck at /demo, wit
 # The home page (home.py) is the page / of invariant.team; on any other host / is the board and the home page is /home.
 # API Gateway passes the name the browser asked for in the Host header.
 HOME_HOSTS = ("invariant.team", "www.invariant.team")
+PAPERS_PAGE = papers.page(PAPERS)  # the paper loop and its papers, at /papers
 HOME_PAGE = home.PAGE.replace("__COUNTS__", json.dumps({
-    "findings": len(FINDINGS), "proof": len(PROOFS),
+    "findings": len(FINDINGS), "proof": len(PROOFS), "papers": len(PAPERS),
     "lab": max(len(list((d / "prototypes").glob("*/index.html"))) for d in LAB)}))
 
 
@@ -298,10 +302,14 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", PROOF_PAGE)
         if path.startswith("/proof/") and path[len("/proof/"):] in PROOFS:
             return self.send(200, "text/html", PROOFS[path[len("/proof/"):]].PAGE)
+        if path == "/papers":
+            return self.send(200, "text/html", PAPERS_PAGE)
         if path == "/exa":
             return self.send(200, "text/html", exa_page.PAGE)
         if path == "/pastdev":
             return self.send(200, "text/html", pastdev.PAGE)
+        if path == "/values":
+            return self.send(200, "text/html", values.PAGE)
         if path == "/psychosis":
             return self.send(200, "text/html", psychosis.PAGE)
         if path == "/favicon.svg":
