@@ -7,7 +7,13 @@ code here.
 
   uv run studies/theory/lib/round.py <round dir> <stage> [<stage> ...] [options]
 
-Version 7 (default). `all` runs, in order:
+Version 8 (default): version 7 plus three steps. targets_open (after standing; forecast.py's open_targets) writes
+targets.json and work.md: the numbers the open work items will report. mechanisms and develop see the targets; each
+mechanism names 3 or more (a third of them) it gives a number for, each new theory carries "forecasts" for them.
+forecast (after develop and account) writes forecasts.json and forecasts.md: two readers and every carried theory
+forecast blind. The next round's standing scores them (forecast_scores.json): 3 or more scored targets with a total
+at or below -2 nats refute; a review says "stands" only with a total above 0 on 3 or more.
+Version 7. `all` runs, in order:
   split --cutoff <ISO time> [--skip <word> ...]   check.dump: before.jsonl, after.jsonl
   standing --from <previous round dir>            graveyard.json (every theory of every earlier round in that engine
                                                   folder), theories/ (survivors carried with their scored tests,
@@ -89,6 +95,8 @@ ROOT = LIB.parents[2]
 sys.path.insert(0, str(LIB))
 import check  # noqa: E402
 from check import read, write  # noqa: E402
+
+sys.modules.setdefault("round", sys.modules[__name__])  # forecast.py, imported below, uses this module as round
 
 AWS_PROFILE = "iterate-ecr"  # reads s3://pg-lineage-769063704696/results/rlneurons/ on the owner's machine
 # Test scripts run with the team's grader packages (studies/rlneurons/README.md: math-verify 0.9.0 and numpy) and the
@@ -406,6 +414,8 @@ def check_theories4(folder, drafts, parents):
             m.append(f"{name}.json: needs at least 1 GPU prediction (no recipe, gpu_minutes above 0)")
         if args.version >= 7:
             m += [f"{name}.json: {e}" for e in intervention_messages(t, item_ids(folder))]
+        if args.version >= 8:
+            m += [f"{name}.json: \"forecasts\" (targets.json): {e}" for e in forecast.forecast_errors(t.get("forecasts", []), open_ids(folder), need_forecasts(folder))]
     return add_quote_messages(folder, msgs, {n: t for n, t in drafts.items() if not THEORY_KEYS_V4 - t.keys()})
 
 
@@ -522,6 +532,19 @@ def standing(folder):
         if entry.get("state") != "lost to its rival":  # that state promotes its rival; keep it
             entry["state"] = "refuted by GPU tests"
         entry["reason"] = "; ".join(filter(None, [entry.get("reason"), f"missed its interval on {len(ids)} GPU tests: {', '.join(ids)}"]))
+    if args.version >= 8 and (prev / "forecasts.json").exists():  # the previous round's forecasts of the open work
+        fc = json.loads((prev / "forecasts.json").read_text())
+        scores = forecast.score_forecasts(prev, fc["forecasts"], fc["snapshot_utc"])
+        (folder / "forecast_scores.json").write_text(json.dumps(scores, indent=1) + "\n")
+        for name, p in scores["forecasters"].items():
+            print(f"  forecasts of {name}: {p['scored']} scored, {p['inside']} inside, gain {p['total_gain']:+.2f} nats")
+            if name not in graveyard:
+                continue
+            graveyard[name]["forecast"] = {k: p[k] for k in ("scored", "inside", "total_gain")}
+            if p["scored"] >= 3 and p["total_gain"] <= -2 and graveyard[name]["state"] != "lost to its rival":
+                graveyard[name]["state"] = "refuted by forecasts"
+                graveyard[name]["reason"] = f"forecast gain {p['total_gain']:+.2f} nats on {p['scored']} targets: " + "; ".join(
+                    f"{r['id']} measured {r['measured']:g}, forecast {r['value']:g} [{r['low']:g}, {r['high']:g}], gain {r['gain']:+.2f}" for r in p["rows"])
     (folder / "graveyard.json").write_text(json.dumps(graveyard, indent=1) + "\n")
     (folder / "theories").mkdir(exist_ok=True)
     carried = 0
@@ -801,12 +824,19 @@ def mechanisms(folder):
         if 2 * sum(m["base_change"] is not None for m in ms) < n:
             return f"at least half of the {n} mechanisms need a base_change (a change to the untrained base alone)"
         bad = [m["id"] for m in ms if m["import"] is not None and m["import"] not in known]
-        return f"imports that are not external.md heading ids: {bad}" if bad else None
+        if bad:
+            return f"imports that are not external.md heading ids: {bad}"
+        if args.version >= 8:
+            need = need_forecasts(folder)
+            bad = [m["id"] for m in ms if len(set(m.get("targets", [])) & set(open_ids(folder))) < need]
+            return f"each mechanism needs \"targets\" with {need} or more ids of targets.json; failing: {bad}" if bad else None
 
+    v8 = {"targets.json": folder / "targets.json"} if args.version >= 8 else {}
     run([job("mechanisms", "mechanisms", {"DIRECTION.md": ROOT / "DIRECTION.md", "before.jsonl": folder / "before.jsonl",
                                           "external.md": folder / "external.md", "inventory.md": folder / "inventory.md",
-                                          "graveyard.json": graveyard_input(folder), "facts.json": facts_input(folder)},
-             {"mechanisms.json": folder / "mechanisms.json"}, valid, n=n)], folder)
+                                          "graveyard.json": graveyard_input(folder), "facts.json": facts_input(folder), **v8},
+             {"mechanisms.json": folder / "mechanisms.json"}, valid, n=n,
+             forecast_rule=MECHANISM_FORECASTS.format(need=need_forecasts(folder)) if v8 else "")], folder)
     for m in json.loads((folder / "mechanisms.json").read_text()):
         print(f"  {m['id']}: {m['mechanism'][:150]}")
 
@@ -825,14 +855,16 @@ def develop(folder):
 
     base = {"DIRECTION.md": ROOT / "DIRECTION.md", "before.jsonl": folder / "before.jsonl",
             "inventory.md": folder / "inventory.md", "external.md": folder / "external.md", "facts.json": facts_input(folder)}
-    run([job("develop", name, {**base, "mechanism.json": json.dumps(m, indent=1)}, {"result.json": folder / "drafts" / f"{name}.json"},
-             valid, theory=name) for name, m in zip(names, ms)], folder)
+    v8 = {"targets.json": folder / "targets.json"} if args.version >= 8 else {}
+    rule = DEVELOP_FORECASTS.format(need=need_forecasts(folder)) if v8 else ""
+    run([job("develop", name, {**base, **v8, "mechanism.json": json.dumps(m, indent=1)}, {"result.json": folder / "drafts" / f"{name}.json"},
+             valid, theory=name, forecast_rule=rule) for name, m in zip(names, ms)], folder)
     drafts = {n: json.loads((folder / "drafts" / f"{n}.json").read_text()) for n in names}
     abandoned = {n: {"abandon": d["abandon"]} for n, d in drafts.items() if "abandon" in d}
     for n, a in abandoned.items():
         print(f"  abandoned {n}: {a['abandon'][:200]}")
     fix_inputs = {"before.jsonl": folder / "before.jsonl", "external.md": folder / "external.md",
-                  "inventory.md": folder / "inventory.md", "graveyard.json": graveyard_input(folder)}
+                  "inventory.md": folder / "inventory.md", "graveyard.json": graveyard_input(folder), **v8}
     finish_theories(folder, [n for n in names if n not in abandoned], drafts,
                     lambda ds: check_theories4(folder, ds, set(graveyard)), fix_inputs, abandoned)
 
@@ -1752,8 +1784,10 @@ def review(folder):
     duel = json.loads((folder / "metrics_v5.json").read_text())["theories"] if args.version >= 5 else {}
     keys = {"refutation", "wins_judgement", "rival", "novelty", "import_carries_gain", "verdict"}
 
-    def valid(d, state):
+    def valid(d, state, n):
         r = json.loads((d / "review.json").read_text())
+        if args.version >= 8 and r.get("verdict", "").startswith("stands") and not forecast_gain(folder, n):
+            return FORECAST_REVIEW.format(theory=n)
         if missing := keys - r.keys():
             return f"missing keys {sorted(missing)}"
         if state == "loses to rival" and r.get("about") != "rival":
@@ -1767,7 +1801,8 @@ def review(folder):
             round=folder.resolve(), theory=n, duel_state=state) if state else ""
         if "-account" in n:
             text += string.Template(ACCOUNT_REVIEW).substitute(round=folder.resolve(), theory=n, state=theories[n]["state"])
-        jobs.append(job("review", n, {}, {"review.json": folder / "reviews" / f"{n}.json"}, lambda d, state=state: valid(d, state),
+        text += FORECAST_REVIEW.format(theory=n) if args.version >= 8 else ""
+        jobs.append(job("review", n, {}, {"review.json": folder / "reviews" / f"{n}.json"}, lambda d, state=state, n=n: valid(d, state, n),
                         mode="repo", round=folder.resolve(), theory=n, metrics=metrics.name, duel=text))
     run(jobs, folder)
     for n in names:
@@ -1776,7 +1811,62 @@ def review(folder):
         score_tests(folder)
 
 
-STAGES = {"split": split, "standing": standing, "inventory": inventory, "targets": targets, "external": external,
+FORECAST_REVIEW = ("Version 8: the verdict may be \"stands\" only when forecast_scores.json in the round folder gives {theory} a "
+                   "total forecast gain above 0 nats on 3 or more scored targets (its forecasts of open work, scored when the "
+                   "results posted), in addition to the duel rule. Otherwise the best verdict is \"weak\".\n")
+MECHANISM_FORECASTS = (
+    "- targets.json lists numbers the team's open GPU jobs will report; nobody has seen them. The main test of a mechanism is "
+    "its forecast of these numbers. Give each mechanism a key \"targets\": the ids of the targets the mechanism, as written, "
+    "gives a number for. A mechanism with fewer than {need} such targets is not proposed: replace it. It need not disagree "
+    "with the obvious reading of the board; it must be right.")
+DEVELOP_FORECASTS = (
+    "- targets.json lists numbers the team's open GPU jobs will report; nobody has seen them. These forecasts are the main test "
+    "of the theory. Add \"forecasts\": [{{\"id\": \"t01\", \"value\": 312, \"low\": 295, \"high\": 330, \"reason\": \"<one line: how the "
+    "mechanism gives this number>\"}}] for {need} or more targets, the ones mechanism.json lists in \"targets\" first: a value and a "
+    "90 % interval in the target's unit. Each is scored, as a normal with sd (high - low) / 3.29, by the density it gives the "
+    "measured value against two readers with no theory. Do not forecast a target the mechanism says nothing about.\n")
+
+
+def open_ids(folder):
+    return [t["id"] for t in json.loads((folder / "targets.json").read_text())["targets"]]
+
+
+def need_forecasts(folder):
+    """A version-8 mechanism or new theory forecasts at least a third of the open targets, and at least 3."""
+    return max(3, -(-len(open_ids(folder)) // 3))
+
+
+def forecast_gain(folder, name):
+    """Version 8: a positive total forecast gain on 3 or more scored targets (standing's forecast_scores.json)."""
+    path = folder / "forecast_scores.json"
+    p = json.loads(path.read_text())["forecasters"].get(name) if path.exists() else None
+    return bool(p) and p["scored"] >= 3 and p["total_gain"] > 0
+
+
+def targets_open(folder):
+    if (folder / "targets.json").exists():
+        return print("skip targets_open: targets.json exists")
+    forecast.open_targets(folder)
+
+
+def forecast_open(folder):
+    """The readers and every carried theory forecast the open targets blind; new theories bring their own forecasts."""
+    if (folder / "forecasts.json").exists():
+        return print("skip forecast: forecasts.json exists")
+    theories = {p.stem: json.loads(p.read_text()) for p in sorted((folder / "theories").glob("*.json"))}
+    own = {n: t["forecasts"] for n, t in theories.items() if n.startswith(f"r{round_number(folder)}-") and "forecasts" in t}
+    common = {"DIRECTION.md": ROOT / "DIRECTION.md", "board.jsonl": folder / "before.jsonl", "work.md": folder / "work.md"}
+    fs = forecast.run_forecasters(folder, common, {n: folder / "theories" / f"{n}.json" for n in theories if n not in own}) | own
+    utc = json.loads((folder / "targets.json").read_text())["utc"]
+    (folder / "forecasts.json").write_text(json.dumps({"snapshot_utc": utc, "written_utc": forecast.now(), "forecasts": fs}, indent=1) + "\n")
+    forecast.write_md(folder, utc, fs)
+    for n, f in fs.items():
+        print(f"  {n}: {sum(x['value'] is not None for x in f)} forecasts")
+
+
+import forecast  # noqa: E402
+
+STAGES = {"split": split, "targets_open": targets_open, "forecast": forecast_open, "standing": standing, "inventory": inventory, "targets": targets, "external": external,
           "generate": generate, "null": null, "claims": claims, "score": score, "reverse": reverse, "test": test, "review": review,
           "mechanisms": mechanisms, "develop": develop, "null_tests": null_tests, "score_tests": score_tests, "heldout": heldout,
           "account": account, "replicate": replicate, "rival": rival, "rival2": rival2, "defend": defend, "duel_test": duel_test, "score_duel": score_duel,
@@ -1788,12 +1878,13 @@ ALL = {3: ["split", "standing", "inventory", "targets", "external", "generate", 
 ALL[6] = ["split", "standing", "inventory", "external", "mechanisms", "develop", "account", "null_tests", "test", "score_tests",
           "replicate", "heldout", "rival", "defend", "rival2", "defend", "duel_test", "score_duel", "replicate", "review"]
 ALL[7] = ALL[6][:-2] + ["cross_predict", "replicate", "review", "experiments"]
+ALL[8] = ALL[7][:2] + ["targets_open"] + ALL[7][2:7] + ["forecast"] + ALL[7][7:]  # targets after standing; forecasts after develop and account
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("folder", type=Path)
     parser.add_argument("stages", nargs="+", choices=[*STAGES, "all"])
-    parser.add_argument("--version", type=int, choices=[3, 4, 5, 6, 7], default=7)
+    parser.add_argument("--version", type=int, choices=[3, 4, 5, 6, 7, 8], default=8)
     parser.add_argument("--only-account", action="store_true", help="version 6: no mechanisms or develop; only the "
                         "account is tested and duelled, carried theories are its inputs (implies --with-account)")
     parser.add_argument("--with-account", action="store_true", help="version 7.1: all runs the account job, and accounts "
