@@ -40,5 +40,19 @@
   "result": "result-6e4536",
   "measured": "HumanEval+/MBPP+ 538, edit 1.5x: finished no-block 6 vs random rank-8 1.5x 23, -17 [-26, -8] (refuted if upper end < +8); vs cued base 12, -6 [-13, 1]; 0 of 538 answers hold \\boxed; no Math-alone 1x code cell",
   "added": "2026-11-15T13:19:50"
+ },
+ {
+  "mechanism": "round-09/grader-m01",
+  "claim": "At RL step 100 the cue adds nothing beyond seed scatter on MATH-500: pooled paired cue-minus-plain difference is zero",
+  "result": "result-6ecd35",
+  "measured": "D +8.5 problems/500, 95% [+0.24, +16.75], 90% [+1.25, +15.5], n 500 problems x 4 samples per arm; permutation p 0.044 (null |D| 95th pct 8.0); seed-folder null +0.7/+1.3",
+  "added": "2026-11-15T21:40:53Z"
+ },
+ {
+  "mechanism": "run-08/f2-m06",
+  "claim": "On hard328, letting Think-SFT's 16,384 cap hits finish (cap-32k row) as the 4th vote flips >=2 vote-right problems wrong, vote gain < half of the 23 single gain, and VB < abstention null VA'",
+  "result": "result-3605ba",
+  "measured": "D = 0 of 328 (threshold 2); (VB-VA)/G1 = 0.22, 95 % [0.05, 0.40]; VB 245 = abstention null VA' 245 (VA 240)",
+  "added": "2026-11-15T21:43:31Z"
  }
 ]
