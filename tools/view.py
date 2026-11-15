@@ -20,7 +20,10 @@ closes, ? lists the keys. A click on a person shows only that person.
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
                        (board.py score), which the hill-climbing charts draw, the first line of each scored result's
-                       finding (climb.finding) and the newest comment of each open work item (JSON)
+                       finding (climb.finding) and the newest comment of each open work item idle over an hour (JSON),
+                       with only the fields the pages read. One snapshot serves every reader for 5 s. Its ETag comes from
+                       the content and its time is in the header X-Snapshot-Ns, so a browser that asks again with
+                       If-None-Match gets 304 and no body while the board has not changed.
   GET /data/<item id>  one item with its votes, comments and thread (JSON); 404 for an unknown id
 
 It reads the same DynamoDB table as board.py and msg.py, with Query and GetItem only, and never writes to it or moves an
@@ -59,6 +62,19 @@ def newest(listed, n=60):
     return team.table().query(IndexName="new", KeyConditionExpression=Key("listed").eq(listed), ScanIndexForward=False, Limit=n)["Items"]
 
 
+# What the pages read of each row (grep tools/view.py and tools/architecture.py before dropping one); the rest stays out of /data.
+ITEM = ("id", "listed", "kind", "who", "branch", "text", "at_ns", "active_ns", "closed_at", "closed_by", "ups", "downs", "n_comments", "agent", "session")
+MESSAGE = ("sk", "who", "branch", "text", "agent", "session")
+SCORE = ("sk", "result", "model", "benchmark", "right", "n", "config", "tokens", "who")
+LATE_NS = 59 * 60 * 10**9  # the board shows the last comment of open work idle over an hour; a minute early, so it is there in time
+COMMENTS = {}  # (work id, n_comments) -> its newest comment; a new comment changes n_comments
+FOUND = {}  # result id -> the first line of its finding; board.py never changes an item's text after posting
+
+
+def cols(rows, keys):
+    return [{k: r[k] for k in keys if k in r} for r in rows]
+
+
 def last_comment(item_id):
     found = team.table().query(KeyConditionExpression=Key("pk").eq(f"item#{item_id}") & Key("sk").begins_with("comment#"),
                                ScanIndexForward=False, Limit=1)["Items"]
@@ -70,20 +86,22 @@ def finding(item_id):  # not BatchGetItem: the team key and the Lambda role (inf
 
 
 def snapshot():
-    with ThreadPoolExecutor(len(LISTS)) as pool:  # one query per list, at the same time
-        items = [item for page in pool.map(newest, LISTS) for item in page]
     start = f"{time.time_ns() - int(HOURS * 3600 * 10**9):020d}"
-    messages = board.rows(KeyConditionExpression=Key("pk").eq("chan#all") & Key("sk").gt(start))
-    scores = board.rows(KeyConditionExpression=Key("pk").eq("scores"))  # every score, in the order its result was posted
-    commented = [i["id"] for i in items if i["listed"] == "work" and i.get("n_comments")]
-    with ThreadPoolExecutor(max(1, len(commented))) as pool:  # the newest comment of each open work item, one query each
-        last = dict(zip(commented, pool.map(last_comment, commented)))
-    scored = list(dict.fromkeys(s["result"] for s in scores))
-    assert len(scored) < 100, f"{len(scored)} scored results: one GetItem each on every read of /data is too many"
-    with ThreadPoolExecutor(max(1, len(scored))) as pool:  # the first line of each scored result's finding, one GetItem each
-        found = dict(zip(scored, pool.map(finding, scored)))
-    return {"hours": HOURS, "test": team.TEST, "items": items, "messages": messages, "scores": scores,
-            "last_comments": last, "finding": found,
+    with ThreadPoolExecutor(len(LISTS) + 2) as pool:  # every list, the messages and the scores at the same time
+        messages = pool.submit(board.rows, KeyConditionExpression=Key("pk").eq("chan#all") & Key("sk").gt(start))
+        scores = pool.submit(board.rows, KeyConditionExpression=Key("pk").eq("scores"))  # every score, in the order its result was posted
+        items = [item for page in pool.map(newest, LISTS) for item in page]
+        messages, scores = messages.result(), scores.result()
+        late = [(i["id"], i["n_comments"]) for i in items if i["listed"] == "work" and i.get("n_comments")
+                and time.time_ns() - int(i.get("active_ns", i["at_ns"])) >= LATE_NS]
+        new = [k for k in late if k not in COMMENTS]
+        COMMENTS.update(zip(new, pool.map(lambda k: last_comment(k[0]), new)))
+        texts = {i["id"]: i["text"] for i in items}
+        scored = [r for r in dict.fromkeys(s["result"] for s in scores) if r not in FOUND]
+        # one GetItem per scored result that is not among the newest 60 results, once per process
+        FOUND.update(zip(scored, pool.map(lambda r: climb.finding(texts[r]) if r in texts else finding(r), scored)))
+    return {"hours": HOURS, "test": team.TEST, "items": cols(items, ITEM), "messages": cols(messages, MESSAGE), "scores": cols(scores, SCORE),
+            "last_comments": {k[0]: COMMENTS[k] for k in late}, "finding": {r: FOUND[r] for r in dict.fromkeys(s["result"] for s in scores)},
             "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items() if not getattr(m, "UNLISTED", False)]}
 
 
