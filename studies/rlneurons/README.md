@@ -815,7 +815,7 @@ Modal workspace), jobs abaybektursun-1114-183855-e840 (base), -183901-fd89 (rl),
 
 ```
 uv run tools/gpu.py submit h100 --hours 2.5 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --shots studies/rlneurons/data/shots1/rl.json --set math500 --temperature 1.0 --top-p 1.0 --seed 71000000 --commit $(git rev-parse HEAD)"
-uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.shots1 base=<job> rl=<job> code=<job>
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.shots1 shots1 base=<job> rl=<job> code=<job>
 ```
 
 ## RLN-5 map: where RL still disagrees once the cue is given
