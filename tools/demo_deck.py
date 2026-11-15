@@ -141,14 +141,14 @@ svg#svg { flex: 1 1 0; min-height: 0; max-height: none !important; }
     # the sponsors slide: the scene of /exa and the memory scene of /pastdev alone, each replaying its real cases.
     # Both pages are light only, so the dark deck shows them inverted (SPONSOR_THEME).
     "exa": embed(exa_page.PAGE, SPONSOR_THEME + """
-nav, .top h1, .nums, .cases, .key, .note, section, footer { display: none !important; }
+header.top, nav, .first > h1, .nums, .cases, .key, .note, section, footer { display: none !important; }
 .wrap { max-width: none !important; padding: 0 !important; }
 .top { padding: 0 !important; }
 .replay { display: block !important; }
 .scene { height: 100vh !important; }
 #sc ellipse[fill="url(#sc-floor)"] { display: none; }  /* the floor's glow is wider than the frame and would show its edge */"""),
     "pastdev": embed(pastdev.PAGE, SPONSOR_THEME + """
-.mast, .lede, .nums, .src-line, .fig-tw, .figlab, .key, .figsay, .strip, section, .end { display: none !important; }
+header.top, .mast, .lede, .nums, .src-line, .fig-tw, .figlab, .key, .figsay, .strip, section, .end { display: none !important; }
 .page { max-width: none !important; padding: 0 !important; }
 .top { padding: 0 !important; border: 0 !important; }
 .figs { display: block !important; margin: 0 !important; }
@@ -275,23 +275,21 @@ def slides(papers):
         ("harness", '<div class="head"><h2>Invariant</h2><p class="sub">A hill climbing engine and an interpretability engine in one harness</p></div>'
                     '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
                     f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span></div>'),
-        ("sponsors", '<div class="head"><h2>Search and memory before every experiment</h2>'
-                     '<p class="sub">An agent asks Exa for the literature and past.dev for what the team already found. Both pictures replay real events</p></div>'
+        ("sponsors", '<div class="head"><h2>Search and memory before every experiment</h2></div>'
                      '<iframe class="fig-frame sponsor s-exa" data-fig="exa" data-replay title="Exa: searches at the gate before a GPU run" tabindex="-1"></iframe>'
                      '<iframe class="fig-frame sponsor s-past" data-fig="pastdev" data-replay title="past.dev: one agent writes, another reads" tabindex="-1"></iframe>'
                      f'<p class="spon s-exa">{logo("exa")}<span><b>{esc(EXA_NUMS["arXiv papers surfaced"])}</b> arXiv papers surfaced · <b>{esc(EXA_NUMS["pages read in full"])}</b> pages read in full</span></p>'
                      f'<p class="spon s-past">{logo("past")}<span><b>{esc(PAST_NUMS["memories"])}</b> memories · <b>{esc(PAST_NUMS["median recall"])}</b> median recall</span></p>'),
         ("finding", '<h2 class="title fixes-title">Interpretable findings with hill climbing</h2>'
                     '<iframe class="fig-frame fixes" data-fig="fixes" data-replay title="One problem, four answers" tabindex="-1"></iframe>'),
-        ("beyond", '<div class="head"><h2>Out of distribution, not glorified overfitting</h2>'
-                   '<p class="sub">One <b class="team">Invariant</b> method: tuned on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
+        ("beyond", '<div class="head"><h2>These findings are generalizable</h2>'
+                   '<p class="sub">One <b class="team">Invariant</b> method: climbed on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
                    '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
         ("efficiency", f'<div class="head"><h2>Same score as autoresearch, {demo_results.TOKEN_RATIO:.1f}× fewer tokens</h2>'
                        f'<p class="sub">Against Karpathy\'s autoresearch (100k GitHub stars) · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
                        '<iframe class="fig-frame wide" data-fig="efficiency" data-replay title="Our harness against autoresearch" tabindex="-1"></iframe>'),
         ("proof", f'<div class="mid"><h2 class="title">Its own review cuts waste</h2>{review_svg()}</div>'),
-        ("ideas", f'<div class="head"><h2>Ideas cluster, then converge</h2><p class="sub">{BASINS["items"]} board items fall into {BASINS["clusters"]} basins of ideas · '
-                  f'{TREE["cross"]} of {TREE["links"]} links join two different basins</p></div>'
+        ("ideas", f'<div class="head"><h2>Ideas cluster and converge</h2></div>'
                   '<iframe class="fig-frame tree" data-fig="basins" data-replay title="The idea basins and the idea tree" tabindex="-1"></iframe>'),
         ("papers", f'<div class="mid"><h2 class="title">{len(papers)} papers, written by the swarm</h2>'
                    f'<div class="sheets" style="--n:{len(papers)}">{"".join(paper(p) for p in papers)}</div></div>'),
