@@ -8,12 +8,13 @@ steps. The slide is in the address (/demo#finding), so Back works. Printing (p) 
 
 Every number is read at build time from the module that holds it: the finish dial from finding_the_finish_dial.DATA,
 the accuracy climb from demo_ali_data.DATA['climb'], the two result pictures from demo_results.py, the review rounds
-from proof_review_cuts_waste.DATA, the idea tree's links from proof_idea_basins.DATA['tree'], the number of people from
+from proof_review_cuts_waste.DATA, the idea tree's links from proof_idea_basins.DATA['tree'] (demo_converge.py
+counts them live), the number of people from
 demo_facts.FACTS['people']; view.py passes the number of finding pages and the list of papers. The photos are data
 URIs in demo_photos.py. Five slides show a picture in an iframe of FIGS: the accuracy climb of /demo/ali/slide3, the
-Design page (architecture.py), the two pictures of demo_results.py and the idea tree of /proof/idea-basins, each
-with its header, words column and key hidden. A frame with data-replay is loaded again when its slide is shown, so
-its picture draws itself in front of the audience.
+Design page (architecture.py) and the two pictures of demo_results.py, each with its header, words column and key
+hidden, and the idea tree growing over the slab of /proof/idea-basins (demo_converge.py, full-bleed). A frame with
+data-replay is loaded again when its slide is shown, so its picture draws itself in front of the audience.
 """
 import html
 import re
@@ -22,11 +23,11 @@ import architecture
 import demo
 import demo_ali
 import demo_ali_data
+import demo_converge
 import demo_facts
 import demo_photos
 import demo_results
 import finding_the_finish_dial
-import proof_idea_basins
 import proof_review_cuts_waste
 
 HOOK = "36 hours to solve RSI"  # the opening line of the talk
@@ -78,11 +79,6 @@ def embed(page, css):
     return page.replace("</head>", f"<style>\n{css}\n</style>\n{FIG_THEME}\n</head>", 1)
 
 
-_T = re.search(r":root \{\n  color-scheme: light dark;\n(.*?)\n\}\n@media \(prefers-color-scheme: dark\) \{\n  :root \{\n(.*?)\n  \}\n\}",
-               proof_idea_basins.PAGE, re.S)
-assert _T, "the tokens of proof_idea_basins.py changed"
-BASIN_LIGHT, BASIN_DARK = (" ".join(t.split()) for t in _T.groups())
-
 FIGS = {
     # architecture.py follows only the system theme, so the deck's tokens are added for data-theme here.
     "harness": embed(architecture.PAGE, f""":root[data-theme="light"] {{ color-scheme: light; {demo.LIGHT} }}
@@ -100,15 +96,8 @@ html, body {{ overflow: hidden; }}
 .stage svg { display: block; width: 100vw !important; height: 100vh !important; max-height: none !important; }"""),
     "beyond": embed(demo_results.PAGES["beyond"], ""),
     "efficiency": embed(demo_results.PAGES["efficiency"], ""),
-    # the idea tree of /proof/idea-basins (the frame's address ends in #tree): the slab, its rows and the count. That
-    # page follows only the system theme, so its own two sets of tokens are repeated for data-theme here.
-    "basins": embed(proof_idea_basins.PAGE, f""":root[data-theme="light"] {{ color-scheme: light; {BASIN_LIGHT} }}
-:root[data-theme="dark"] {{ color-scheme: dark; {BASIN_DARK} }}""" + """
-html, body { overflow: hidden; }
-.top, .side, .switch, .note, .key { display: none !important; }
-.page { display: block !important; height: 100vh !important; min-height: 0 !important; max-width: none !important; padding: 0 !important; }
-.stage { height: 100vh; padding: 0 !important; }
-svg#svg { height: 100vh !important; max-height: 100vh !important; }"""),
+    # the idea tree growing over the slab of /proof/idea-basins, one self-playing canvas (demo_converge.py)
+    "converge": demo_converge.PAGE,
 }
 
 
@@ -125,8 +114,6 @@ PEOPLE = demo_facts.FACTS["people"]["v"]
 
 SKILL, PLAIN = proof_review_cuts_waste.SKILL, proof_review_cuts_waste.PLAIN
 ROUNDS = proof_review_cuts_waste.DATA["rounds"]
-
-TREE = proof_idea_basins.DATA["tree"]  # links between board items, and those that join two basins
 
 # The accuracy climb: the plain base's first score and its record by vote after restart, and RL's best.
 CLIMB = demo_ali_data.DATA["climb"]
@@ -228,8 +215,8 @@ def slides(n_findings, papers):
                        f'<p class="sub">Against Karpathy\'s autoresearch (100k GitHub stars) · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
                        '<iframe class="fig-frame wide" data-fig="efficiency" data-replay title="Our harness against autoresearch" tabindex="-1"></iframe>'),
         ("proof", f'<div class="mid"><h2 class="title">Its own review cuts waste</h2>{review_svg()}</div>'),
-        ("ideas", f'<div class="head"><h2>Ideas converge</h2><p class="sub">{TREE["cross"]} of {TREE["links"]} links join two different basins of ideas</p></div>'
-                  '<iframe class="fig-frame tree" data-fig="basins" data-hash="tree" title="The idea tree" tabindex="-1"></iframe>'),
+        ("ideas", '<div class="head"><h2>Ideas converge</h2></div>'
+                  '<iframe class="fig-frame tree" data-fig="converge" data-replay title="The idea tree" tabindex="-1"></iframe>'),
         ("papers", f'<div class="mid"><h2 class="title">{len(papers)} papers, written by the swarm</h2>'
                    f'<div class="sheets" style="--n:{len(papers)}">{"".join(paper(p) for p in papers)}</div></div>'),
         ("close", f'<div class="mid">{photo(demo_photos.MEDITATE, "meditate")}<p class="end">Also our solution to AI psychosis</p>'
@@ -284,7 +271,7 @@ p, h1, h2, figure { margin: 0; }
 
 .fig-frame { position: absolute; border: 0; background: var(--paper); pointer-events: none; color-scheme: normal; }
 .fig-frame.harness { left: 250px; top: 215px; width: 1100px; height: 600px; }
-.fig-frame.tree { left: 220px; top: 190px; width: 1160px; height: 680px; }
+.fig-frame.tree { left: 0; top: 0; width: 1600px; height: 900px; }
 .fig-frame.climb { left: 370px; top: 200px; width: 860px; height: 680px; }
 .fig-frame.wide { left: 220px; top: 205px; width: 1160px; height: 650px; }
 .tools { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; gap: 72px; font-size: 22px; font-weight: 560; color: var(--mute); }

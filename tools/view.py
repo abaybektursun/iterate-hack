@@ -28,8 +28,8 @@ a side panel whose address is /#<item id>; the filters are in the address too (/
 click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
 
   GET /demo            the talk as a deck of twelve 16:9 slides (demo_deck.py): keys step, p prints one slide per page
-  GET /demo/fig/<name> the pictures the deck embeds (climb, harness, beyond, efficiency, basins), with their
-                       header, words column and key hidden (demo_deck.FIGS)
+  GET /demo/fig/<name> the pictures the deck embeds (demo_deck.FIGS): climb, harness, beyond and efficiency, with
+                       their header, words column and key hidden, and converge, the growing idea tree (demo_converge.py)
   GET /demo/story      the stepped story of the talk over the Design page's picture (demo.py), fed by the same /data
   GET /demo/ali/<name> Ali's slides of the talk, slide1 to slide3: the idea map, the idea tree and the accuracy climb
                        (demo_ali.py, with its data in demo_ali_data.py); /demo/ali leads to the first

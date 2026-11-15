@@ -428,13 +428,15 @@ PageUp go back, Home and End jump, a click on the right or left third of the win
 theme on screen, so print to PDF from the dark page for a dark PDF. The hook sentence is the constant `HOOK` in
 `tools/demo_deck.py`. The two photos (tea, meditation) are the strings `TEA` and `MEDITATE` in `tools/demo_photos.py`,
 each a `data:image/jpeg;base64,...` URI (the deploy ships only `tools/*.py`); while one is empty its slide shows an
-empty frame. Slides 4 and 7 show the Design page's picture and the idea tree of `/demo/ali/slide2` in an iframe of
-`/demo/fig/harness` and `/demo/fig/tree`: those pages with their header, words column and key hidden
-(`demo_deck.FIGS`). Every number is read when the page is built: the finish dial from
+empty frame. Slide 5 shows the Design page's picture in an iframe of `/demo/fig/harness`, that page with its header,
+words column and key hidden (`demo_deck.FIGS`). Slide 10 is full-bleed `/demo/fig/converge` (`tools/demo_converge.py`):
+one canvas that plays by itself. On the glass slab of `/proof/idea-basins` the 218 board items pop in, in posting
+order, and a lit head runs along an arc from each earlier item an item builds on (tall and blue between two basins),
+while a count adds up the links that join two basins, ending at 151 of 450; then real cross-basin links and
+convergence bursts (items that build on three or more basins) replay until the tree grows again. Every number is read when the page is built: the finish dial from
 `tools/finding_the_finish_dial.py` (`DATA['cells']`), the comparison with Karpathy's autoresearch loop from
 `FACTS['auto_research_comparison']` in `tools/demo_facts.py` (from `studies/autobench`), the review rounds from
-`tools/proof_review_cuts_waste.py`, the links of the idea tree from `tools/demo_ali_data.py` (counted as
-`tools/demo_ali.py` counts them), the number of people from `FACTS['people']`, and the number of finding pages and the
+`tools/proof_review_cuts_waste.py`, the links of the idea tree from `tools/proof_idea_basins.py` (`DATA['tree']`), the number of people from `FACTS['people']`, and the number of finding pages and the
 papers from `tools/view.py`.
 
 The stepped story of the talk is at `/demo/story`: one story over the Design page's picture, with a sentence and a fact
