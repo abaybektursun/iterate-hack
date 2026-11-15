@@ -3,7 +3,7 @@
 Served at /pastdev by view.py; not a header tab. A static page with no data read: the first screen is one real recall
 (the query, the entry past.dev returned, the agent's next sentence), then the usage numbers read from the past.dev
 usage API on 2026-11-15 15:40 UTC, four more recalls quoted from the team's Claude Code transcripts, the recall pilot
-(studies/metaharness/results/recall_pilot/recall_vs_grep-01), recalls per hour, and what the page does not show. Its
+(studies/metaharness/results/recall_pilot/recall_vs_grep-01), and what the page does not show. Its
 look is its own (white paper, black ink, one blue for what past.dev returned), at the person's request.
 """
 
@@ -12,7 +12,7 @@ PAGE = r"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>past.dev: the memory 846 questions went to</title>
+<title>past.dev: the memory our agents asked first</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 :root { --paper: #FFFFFF; --ink: #0B0B0C; --grey: #5E6166; --rule: #0B0B0C; --hair: #D4D5D8; --blue: #1D3BF2; --u: 8px; }
@@ -165,8 +165,7 @@ td.d { color: var(--grey); font-size: 16px; }
       <p class="say">Read from the past.dev usage API on Nov 15 at 15:40 UTC.</p>
     </div>
     <table>
-      <tr><td class="n">846</td><td class="w">recalls</td><td class="d">every one answered; 5 came back empty</td></tr>
-      <tr><td class="n">854</td><td class="w">sources stored</td><td class="d">past.dev extracted 15,944 memories from them</td></tr>
+      <tr><td class="n">15,944</td><td class="w">memories</td><td class="d">extracted by past.dev from 854 stored sources</td></tr>
       <tr><td class="n">0.4 s</td><td class="w">median recall</td><td class="d">409 ms server side; 95% under 1.2 seconds</td></tr>
       <tr><td class="n">1 s</td><td class="w">write to indexed</td><td class="d">median over 854 sources; the slowest took 8 seconds</td></tr>
       <tr><td class="n">$1.09</td><td class="w">for all of it</td><td class="d">3,648 credits; dollars derived from an earlier bill</td></tr>
@@ -175,7 +174,7 @@ td.d { color: var(--grey); font-size: 16px; }
 
   <section class="wide">
     <h2 class="cond">Four more from the log.</h2>
-    <p class="say">Taken from the team’s Claude Code transcripts. In the ones we hold, 146 agents and subagents ran 270 recall commands, and 180 returned something a teammate wrote.</p>
+    <p class="say">Taken from the team’s Claude Code transcripts. In the ones we hold, two of every three recalls returned something a teammate wrote.</p>
     <div class="log">
       <div class="entry head"><span>UTC</span><span>Asked</span><span class="blue">Returned</span><span>Then</span></div>
       <div class="entry">
@@ -231,18 +230,6 @@ td.d { color: var(--grey); font-size: 16px; }
       <p><b>Sessions in.</b> The past.dev plugin sends a Claude Code session’s prompts and prose replies when it ends. 11 sources from 9 sessions.</p>
       <p><b>Repeats caught.</b> 39 writes of identical content were answered “unchanged” and stored nothing new.</p>
       <p><b>One question out.</b> <span class="mono">python3 tools/recall.py "has anyone tried this?"</span> returns at most 2,000 tokens, each entry with its date and source.</p>
-    </div>
-  </section>
-
-  <section class="wide">
-    <h2 class="cond">Asked all night.</h2>
-    <p class="say">Recalls per hour, from Saturday 20:00 UTC to Sunday 15:37. The busiest hour also stored 218 new sources.</p>
-    <div class="hours">
-      <div class="cols">
-        <div style="height:3.8%"><span>10</span></div><div style="height:28.4%"><span>75</span></div><div style="height:4.2%"><span>11</span></div><div class="pk" style="height:100%"><span>264</span></div><div style="height:11.7%"><span>31</span></div><div style="height:0.8%"><span>2</span></div><div style="height:4.5%"><span>12</span></div><div class="pk" style="height:39%"><span>103</span></div><div style="height:22.3%"><span>59</span></div><div style="height:23.1%"><span>61</span></div><div style="height:9.1%"><span>24</span></div><div style="height:10.2%"><span>27</span></div><div style="height:4.5%"><span>12</span></div><div style="height:10.6%"><span>28</span></div><div style="height:5.7%"><span>15</span></div><div style="height:5.3%"><span>14</span></div><div style="height:0"><span>0</span></div><div style="height:1.9%"><span>5</span></div><div style="height:2.7%"><span>7</span></div><div class="pk" style="height:32.6%"><span>86</span></div>
-      </div>
-      <div class="axis"><span>20</span><span>21</span><span>22</span><span>23</span><span>00</span><span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span><span>07</span><span>08</span><span>09</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span><span>15</span></div>
-      <div class="axis-note"><span>Nov 14</span><span>hour, UTC</span><span>Nov 15 (last hour partial)</span></div>
     </div>
   </section>
 
