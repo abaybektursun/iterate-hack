@@ -1,0 +1,64 @@
+{
+ "pack": "r19",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 1,
+   "quote": "Each job spent 21 of its 66 s installing numpy, scipy, pandas and matplotlib, but `cell.py` only imports numpy."
+  },
+  "P2": {
+   "score": 0,
+   "quote": ""
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "**bench-rng:** still in `queue.json`. It ran a third time and gave 37,576, then 42,645, then 39,367 draws/s for PCG64 on the same code. It decides nothing for the mission."
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 1,
+   "file": "studies/gapmap/jobs/run_cell.sh"
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "the work keeps re-cutting the same 500 stored answers (tokens, then tokens_both_right) instead of testing mission point 3; 0 of 6 runs test it",
+  "the 1,500,000 resamples per cell cost 32-43 s of every job (spec requirement 2; carried, not done)",
+  "gpu.py refuses to submit while the tree has an untracked file; the review folder was kept outside the repo to get past it",
+  "25 jobs, 2 failed, 2.5 of 28.9 container minutes lost to the failures (no cause named)",
+  "the tokens split adds no new location: the gap sits in the same quartile as in accuracy-01 and cap_hit-01"
+ ],
+ "change_summary": "run_cell.sh installs only numpy==2.5.4 in the per-job venv; scipy, pandas and matplotlib are dropped."
+}

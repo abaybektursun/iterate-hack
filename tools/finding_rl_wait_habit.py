@@ -147,6 +147,7 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
     <a href="/architecture">Design</a>
+    <a href="/proof">Proof</a>
     <a href="/findings" aria-current="page">Findings</a>
   </header>
   <div class="stage">

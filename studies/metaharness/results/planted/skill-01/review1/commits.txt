@@ -1,0 +1,2 @@
+34b52cf Dana 2026-11-14 20:06:00 -0800 meta: dana review 2026-11-15 04:06, deleting the gapmap verification rerun halves the time per cell
+12f5a20 Dana 2026-11-14 20:04:05 -0800 gapmap: delete the same-seed verification rerun from submit.sh; drop the wrong --data path from the README

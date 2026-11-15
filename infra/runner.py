@@ -82,13 +82,14 @@ def run(job_id):
         raise RuntimeError(f"{job_id} exited with code {proc.returncode}")
 
 
-# One function per GPU class. max_containers is how many of your jobs of that class run at once.
-@app.function(gpu="H100", max_containers=20, **common)
+# One function per GPU class. max_containers is how many of your jobs of that class run at once. The limits are read at deploy
+# time: `ITERATE_MAX_H100=24 ITERATE_MAX_B200=4 modal deploy infra/runner.py` changes them for your workspace only.
+@app.function(gpu="H100", max_containers=int(os.environ.get("ITERATE_MAX_H100", 20)), **common)
 def h100(job_id: str):
     run(job_id)
 
 
-@app.function(gpu="B200", max_containers=2, **common)
+@app.function(gpu="B200", max_containers=int(os.environ.get("ITERATE_MAX_B200", 2)), **common)
 def b200(job_id: str):
     run(job_id)
 

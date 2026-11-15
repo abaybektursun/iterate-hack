@@ -1,0 +1,63 @@
+{
+ "pack": "r06",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 0,
+   "quote": ""
+  },
+  "P2": {
+   "score": 0,
+   "quote": ""
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 0,
+   "quote": ""
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 0,
+   "file": ""
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "The posted accuracy result mixes a 90% interval (subject) with 95% intervals (other splits) without labelling them",
+  "The posted result applies no verdict to the SPEC prediction or its group-difference rule",
+  "Rerunning make_cells.py overwrites the hand-set subject settings",
+  "Launches are serial: the subject cell ran alone for a minute before the other three started"
+ ],
+ "change_summary": "Adds analysis/summarize.py, which prints a batch's board text with each split's interval level and a mark on groups that exclude the overall point, and updates the README run steps and Numbers with the accuracy verdict."
+}

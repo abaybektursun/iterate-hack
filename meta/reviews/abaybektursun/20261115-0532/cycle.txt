@@ -1,0 +1,28 @@
+Jobs of abaybektursun, last 1 h:  id  state  gpu  wait  run  command
+  abaybektursun-1114-203737-3688  cancelled  NVIDIA H100   25.0  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-204820-49ce  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu  NVIDIA H100   14.3  28.5  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-230347-df7b  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu  NVIDIA H100   0.0  27.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-230353-1383  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu  NVIDIA H100   0.0  27.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-210413-f401  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu  NVIDIA H100   0.0  26.9  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-210421-6663  died: RuntimeError: there are open files preventing the operation: path abaybektursun-1114-222829-ce39/log is open from '/bin/sh -c bash stu  NVIDIA H100   0.0  26.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-231144-7399  running  NVIDIA H200  1.4  18.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-231154-44ea  running  NVIDIA H100   4.6  14.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-212132-b005  done  NVIDIA H100   0.1  0.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-212139-0b2b  done  NVIDIA H100   0.1  3.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-212215-f08c  done  NVIDIA H100   0.0  1.7  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-212437-d6d2  running  NVIDIA H100   0.0  6.5  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  12 jobs, 6 failed or cancelled; median wait 0.0; 181.8 container minutes, 136.8 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 1 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-eb10d7  shots  1  5  36  42  1  1  In-context improvement loop, no RL text and no reward (follo
+  work-c45b70  main  -  -  -  16  0  0  Exchange-rate table idea-31636e (branch rate, laptop only): 
+  work-768257  main  -  -  -  10  0  0  Checks or per-step error idea-60d3e1: checking markers per 1
+  work-5d5dc3  main  2  37  5  44  5  3  Critic at decoding time idea-eec971, stages 0-1: (0) offline
+  work-deec92  main  -  -  -  43 (open)  0  0  Entropy-gated temperature idea-069f19: vLLM logits processor
+  work-72c687  main  -  -  -  8  0  0  Finding page /finding/rl_reliability: RL gain is reliability
+  work-26c268  main  -  -  -  33  0  0  Slip-hazard law idea-7928c0: cloglog item model vs Rasch log
+  work-3d68e2  shots  1  2  -  9 (open)  2  0  Closing cue on hard328 (reward-free, fewer tokens): cut each
+
+Team, last 1 h: claim to close median 44 min, upper quartile 103 min, over 15 work items closed by 3 people; 18 results, 18.0 per hour.
+
+Median minutes per stage over work items with jobs: to-job 1, jobs 5, to-answer 20. Slowest stage: to-answer.

@@ -295,7 +295,7 @@ changed, so it does not move the text you are reading. A click on an item
 opens its text, scores, comments and thread in a side panel (`/#<item id>` is its link); filters are in the address too
 (`/?who=<name>&q=<text>`). Keys: `/` filter, `j` `k` move, `1` `2` `3` jump to a column, Enter opens, Esc closes, `?`
 lists them. The same page is public at https://monitor.invariant.team (`infra/monitor/`). The header of every page of
-the site has three tabs: Board (this page, `/`), Design (`/architecture`) and Findings (`/findings`).
+the site has four tabs: Board (this page, `/`), Design (`/architecture`), Proof (`/proof`) and Findings (`/findings`).
 
 To see which finding raised the benchmark: `uv run tools/climb.py [benchmark] [--json]` lists, per benchmark, every
 record step of that chart (a base score strictly above all earlier ones, the same rule), newest first: the gain in
@@ -304,7 +304,9 @@ points, previous best -> new best, the result id, who, the configuration and the
 The tab Design is the page `/architecture` (`tools/architecture.py`): one picture of the shared work setup for
 a first-time reader. The board is in the centre with one dot per live item, each person's agents are beside it with
 threads to the board (the Claude mark for a Claude Code session, the OpenAI mark for a Codex session), the "Chat"
-ring (messages) runs through every person's agents, and the "Retro" loop (self-review) goes around everything. What moves is real data, replayed: messages between people's agents, posts to the board. A click on a part
+ring (messages) runs through every person's agents, and the "Retro" loop (self-review) goes around everything. What moves is real data, replayed: messages between people's agents, posts to the board. While one plays, its
+first words are typed beside the person whose agent wrote it, with its age ("4 min ago", or "now"), and the status at
+the top right counts the seconds since the last post. A click on a part
 explains it, with live rows from the board (`/architecture#board` is its link); "Follow one result" steps through the
 path of one result (arrow keys, Esc).
 
@@ -314,6 +316,11 @@ finding's title and one sentence. A tile opens the page of that finding. Every f
 gets its tile with no other change; the module draws its own icon (`ICON`), and its panels start with "What is new" and
 "Why it matters" (`.claude/skills/finding-page/SKILL.md` says when and how). `.claude/skills/site-ui/SKILL.md` holds
 the rules for anything visible on the site.
+
+The tab Proof is the page `/proof`: the same grid of tiles, for the experiments that test the team's method itself and
+not the research question. Each is a module `tools/proof_<slug>.py`, made like a finding page and served at
+`/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
+skill, `studies/metaharness/`).
 
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.
