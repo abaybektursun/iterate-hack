@@ -32,7 +32,8 @@ def diff(x: list, y: list) -> dict:
 
 
 def model_rows(m: str, rules_dir: str, vote_dir: str) -> tuple:
-    """(rows of the table, {row: per-problem 0/1 in problem order}) of one model."""
+    """(rows of the table, {row: per-problem 0/1 in problem order}, problem indices, what both models must share, the reason
+    of a partial join or None) of one model."""
     rules = json.loads((pathlib.Path(rules_dir) / "metrics.json").read_text())
     assert rules["mode"] == "fixed" and list(rules["models"]) == [m], f"{rules_dir}: not a --fixed run of {m} alone"
     v = json.loads((pathlib.Path(vote_dir) / "readout.json").read_text())
@@ -57,7 +58,8 @@ def model_rows(m: str, rules_dir: str, vote_dir: str) -> tuple:
         rows[k] = {**v["rows"][k], "minus_single": diff(per[k], per["single"]),
                    "fixed": sum(q > p for p, q in zip(per["single"], per[k])), "broke": sum(q < p for p, q in zip(per["single"], per[k]))}
     return rows, per, idx, {"set": rules["set"], "n": rules["n"], "samples": v["samples"], "restarts": v["restarts"], "fixed_from": rules["fixed_from"],
-                            "partial": (rules.get("partial") or {}).get(m)}
+                            "partial": {k: x for k, x in ((rules.get("partial") or {}).get(m) or {}).items() if k != "reason"} or None,
+                            }, ((rules.get("partial") or {}).get(m) or {}).get("reason")
 
 
 def main(argv=None):
@@ -70,13 +72,13 @@ def main(argv=None):
     out = pathlib.Path(a.out)
     assert not out.exists(), f"{out} exists: a rerun gets the next number"
     assert bool(a.rules_rl) == bool(a.vote_rl), "give both RL folders or neither"
-    table, per, idx, info = {}, {}, {}, {}
-    table["base"], per["base"], idx["base"], info["base"] = model_rows("base", a.rules_base, a.vote_base)
+    table, per, idx, info, why = {}, {}, {}, {}, {}
+    table["base"], per["base"], idx["base"], info["base"], why["base"] = model_rows("base", a.rules_base, a.vote_base)
     if a.rules_rl:
-        table["rl"], per["rl"], idx["rl"], info["rl"] = model_rows("rl", a.rules_rl, a.vote_rl)
+        table["rl"], per["rl"], idx["rl"], info["rl"], why["rl"] = model_rows("rl", a.rules_rl, a.vote_rl)
         assert idx["rl"] == idx["base"] and info["rl"] == info["base"], "the two models are not on the same problems, samples, fixed setting and missing shard"
     keys = list(table["base"])
-    res = {**info["base"], "bootstrap_resamples": BOOT, "sources": {k: v for k, v in vars(a).items() if k != "out"}, "rows": table}
+    res = {**info["base"], "partial_reason": why if info["base"]["partial"] else None, "bootstrap_resamples": BOOT, "sources": {k: v for k, v in vars(a).items() if k != "out"}, "rows": table}
     if a.rules_rl:
         res["rl_minus_base"] = {k: diff(per["rl"][k], per["base"][k]) for k in keys}
         rules_keys = [k for k in keys if k not in ("single", "vote", "pass_at_k")]
