@@ -16,6 +16,7 @@ text, scores, votes, comments and message thread in a side panel whose address i
 address too (/?who=<name>&q=<text>&idle=1). Keys: / filter, j and k move, 1 2 3 jump to a column, Enter opens, Esc
 closes, ? lists the keys. A click on a person shows only that person.
 
+  GET /demo            the talk: one stepped story page over the Design page's picture (demo.py), fed by the same /data
   GET /architecture    the Design tab, how the harness works: one interactive picture (architecture.py), fed by the same /data
   GET /findings        the Findings tab: one tile per finding (findings.py), each a link to the page of that finding
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
@@ -52,6 +53,7 @@ from boto3.dynamodb.conditions import Key
 import architecture
 import board
 import climb
+import demo
 import findings
 import team
 
@@ -179,6 +181,8 @@ class Handler(BaseHTTPRequestHandler):
         path = self.path.split("?")[0]
         if path == "/":
             return self.send(200, "text/html", PAGE)
+        if path == "/demo":
+            return self.send(200, "text/html", demo.PAGE)
         if path == "/architecture":
             return self.send(200, "text/html", architecture.PAGE)
         if path == "/findings":

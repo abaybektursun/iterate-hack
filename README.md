@@ -322,6 +322,16 @@ not the research question. Each is a module `tools/proof_<slug>.py`, made like a
 `/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
 skill, `studies/metaharness/`).
 
+The page `/demo` is the talk: one stepped story over the Design page's picture, with a sentence and a fact line per
+step in the words column (arrow keys step, Esc closes; `/demo#<step>` links to a step). It is not a header tab. A click
+on a part of the picture or on a question under the fact line opens a depth panel (`/demo#result/cue`): one sentence,
+a few fact rows with their caveats, the place and time each number was measured, and links to the board items. Three
+modules hold it: `tools/demo.py` (the page and its steps), `tools/demo_panels.py` (the 14 depth panels) and
+`tools/demo_facts.py` (`FACTS`, every number with its source and time, and `SOURCES`, the pages read through Exa).
+No number is typed into the page code: to refresh one, run the command or open the file named in its `src`, edit
+`v`, `n` and `at` in `tools/demo_facts.py`, and restart `uv run tools/view.py`. A key's `note` holds the caveats for the
+presenters and is not sent to the browser.
+
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.
 `post` then prints any other open work item that names the same id. If one is older than yours, close
