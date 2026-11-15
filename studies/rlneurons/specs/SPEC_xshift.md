@@ -137,3 +137,16 @@ and at layer 24; growth = the second over the first.
   then the base does not carry RL's written directions further than random ones, and run-03's gap comes from the other edited
   layers.
 - Reported: `rand8`'s growth; the shifts at layers l, l + 1, 16, 24, 31.
+
+## Amendment 5 (2026-11-15, before the run): which sublayer carries the growth of a one-layer write, attention or MLP?
+
+run-04: a write in `o`, `down` of layer 0 along RL's paired directions grows 47 times by layer 24 in the unedited base; the same
+write with random output directions 8 times. xlisten: the linear read gain of the next layer's matrices (1.67) does not account
+for it; `q` and `k` had the largest gains. `--parts` adds, per arm and layer, the RMS change of what the layer's attention and
+its MLP add to the residual stream (the outputs of the two post-norms). Instrument check in the job: on the base, each layer's
+output minus its input equals the sum of the two additions (tolerance 1e-2). Arms: the six one-layer arms of amendment 4.
+
+- U1. For the paired write at layer 0, the change of the attention additions is larger than the change of the MLP additions in
+  at least 8 of layers 1 to 12. Refuted if in at most 4: the MLPs carry the early growth.
+- U2. For the write with random outputs at layer 0, both changes at layers 1 to 12 stay below a third of the paired write's
+  larger one, layer by layer, in at least 10 of 12 layers. Refuted otherwise.

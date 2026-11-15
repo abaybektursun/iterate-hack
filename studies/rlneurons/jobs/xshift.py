@@ -150,6 +150,24 @@ def resid(model, seqs, dev):
     return torch.cat(out)
 
 
+def parts(model, seqs, dev):
+    """-> [positions of all seqs, layers, 2, hidden] float32: what each layer adds to the residual stream, the output of
+    post_attention_layernorm (0) and of post_feedforward_layernorm (1)"""
+    got, cur = {}, {}
+    hooks = [getattr(layer, m).register_forward_hook(lambda _, __, o, key=(j, i): got.__setitem__(key, o[0, cur["pos"]].float()))
+             for j, layer in enumerate(model.model.layers) for i, m in enumerate(("post_attention_layernorm", "post_feedforward_layernorm"))]
+    out = []
+    for s in seqs:
+        cur["pos"] = torch.tensor(s["pos"], device=dev)
+        model.model(input_ids=torch.tensor(s["seq"], device=dev)[None], use_cache=False)
+        assert len(got) == len(hooks), "a sublayer did not run"
+        out.append(torch.stack([torch.stack([got[j, i] for i in range(2)], 1) for j in range(len(hooks) // 2)], 1))
+        got.clear()
+    for h in hooks:
+        h.remove()
+    return torch.cat(out)
+
+
 def summarize(D, masks):
     """D [P, layers, hidden], masks {group: bool [P]} -> ({group: per-layer statistics}, mean vectors [groups, layers, hidden])"""
     res, means = {}, []
@@ -235,6 +253,7 @@ def main():
     ap.add_argument("--n", type=int, default=48, help="n/2 cap hits and n/2 finished answers, lowest problem indices")
     ap.add_argument("--max-tokens", type=int, default=2048)
     ap.add_argument("--arms", default=",".join(ARMS))
+    ap.add_argument("--parts", action="store_true", help="also the RMS change of each layer's attention and MLP additions (parts_rms)")
     a = ap.parse_args()
     t0 = time.time()
     torch.set_grad_enabled(False)
@@ -302,6 +321,8 @@ def main():
     R = resid(model, seqs, dev)
     assert R.shape == (len(cap), 32, model.config.hidden_size) and torch.isfinite(R).all(), R.shape
     base_mean = R.mean(0)
+    RP = parts(model, seqs, dev) if a.parts else None
+    assert RP is None or torch.allclose(RP.sum(2)[:, 1:], R[:, 1:] - R[:, :-1], atol=1e-2), "a layer's output is not its input + the two additions"
     st = selftest(model, W, F, Q, noise, idx, arms, seqs, R, restore, dev)
     fp0 = fingerprint(model)
     text = lambda s: rows[s["idx"]]["text"]
@@ -315,6 +336,7 @@ def main():
         t1 = time.time()
         stats = apply(e, W, F, Q)
         D = resid(model, seqs, dev) - R
+        prms = ((parts(model, seqs, dev) - RP).double() ** 2).sum(-1).mean(0).sqrt().T.tolist() if a.parts else None
         restore()
         assert fingerprint(model) == fp0, f"{arm}: the restored weights are not the base's"
         assert torch.isfinite(D).all(), arm
@@ -322,7 +344,7 @@ def main():
         del D
         means.append(mu.cpu().numpy().astype(np.float16))
         assert np.isfinite(means[-1]).all(), arm
-        metrics["edits"][arm] = {"args": EDIT_ARGS[arm], **stats, "shift": shift, "lens": lens(model, tok, base_mean[-1], mu[0, -1]), "seconds": time.time() - t1}
+        metrics["edits"][arm] = {"args": EDIT_ARGS[arm], **stats, "shift": shift, **({"parts_rms": dict(zip(("attn", "mlp"), prms))} if a.parts else {}), "lens": lens(model, tok, base_mean[-1], mu[0, -1]), "seconds": time.time() - t1}
         dump(out / "metrics.json", metrics)
         print(f"{utc()} {arm}: {stats['n_edited']} matrices, add_rel {stats['add_rel']:.3e}, nearest BF16 would keep {stats['nearest_bf16_effective_scale']:.3f}, "
               f"mean shift norm at layers 8/16/24/31 {[round(shift['all']['mean_norm'][l], 4) for l in (8, 16, 24, 31)]}, rms {[round(shift['all']['rms'][l], 4) for l in (8, 16, 24, 31)]}, "
