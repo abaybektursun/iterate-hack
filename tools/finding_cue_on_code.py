@@ -169,7 +169,7 @@ TITLE = "The cue beyond math"
 PROBLEM = "Does a three-token cue found on math help on other tasks?"
 LINE = (f"Three tokens placed at the start of the answer, chosen on math, raise the base model by {GAINS['math']} "
         f"percentage points on math, {GAINS['code']} on code and {GAINS['general']} on general questions; there, an "
-        f"estimate that corrects for answers with no letter gives about {num(IMPUTED['gain'])}.")  # also the sentence on its tile
+        f"estimate, not a measurement, that fills in answers with no letter gives about {num(IMPUTED['gain'])}.")  # also the sentence on its tile
 
 # What the picture draws: per set, its groups (rows of marks) with the right count under each state
 # [Base, Base + cue, RL, Think-SFT + cue]; None where a state was not run on that set.
@@ -674,7 +674,7 @@ function mathPane(i) {
     `<ul class="facts"><li>Reference answer: <span class="on" data-math>${esc(gold)}</span>. One answer per setting, T 1.0.</li>` +
     row(0, m.o[0], e0) + row(1, m.o[1], e1) + row(2, m.o[2], null) + "</ul>" +
     startOf("Base", s0) + startOf("Base + cue", C.cue + s1) +
-    `<p class="note">The RL model's answer texts were not saved per problem, only whether each is right.</p>` +
+    `<p class="note">The RL model's answer texts are not in git per problem, only whether each is right.</p>` +
     `<div class="steps"><button data-step="-1">‹ Previous problem</button><button data-step="1">Next problem ›</button></div>`;
 }
 function groupPane(si, k) {

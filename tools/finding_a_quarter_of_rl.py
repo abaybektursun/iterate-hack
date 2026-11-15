@@ -950,7 +950,7 @@ _M = lambda v, k=1: f"{v:.{k}f}".replace("-", "−")  # a number with the minus 
 
 TITLE = "A quarter of RL"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "How much of the weight change made by reinforcement learning (RL) does its math gain need?"
-LINE = (f"Scaled to a quarter ({DATA['norm_q']:.2f} of its size after rounding), the weight change made by reinforcement "
+LINE = (f"Scaled to a nominal quarter ({DATA['norm_q']:.2f} of its size as stored, after rounding), the weight change made by reinforcement "
         f"learning (RL) still gives {Q_M} % of the RL model's gain on MATH-500.")
 
 # Not from our runs: the closest published results. "Reasoning Vectors" (arXiv 2509.01363, Sec. 4.4): a GRPO-minus-SFT

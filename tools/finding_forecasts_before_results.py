@@ -503,9 +503,9 @@ _top_rows = [r for r in ROWS if r[1] == _top and r[5] is not None]
 _top_low = all(r[5] > f[3] for r in _top_rows for f in r[9] if f[2] in READERS)
 _top_runs = len({f[0] for r in _top_rows for f in r[9]})
 
-LINE = (f"AI-written theories forecast the team's next numbers no better than AI readers without a theory: outside one "
-        f"code experiment they were nearer in {TH[1] - _top_n} of {TH[0] - _top_c} forecasts (chance: "
-        f"{(TH[0] - _top_c) / 3:.0f}), and by the log score they did worse.")
+LINE = (f"AI-written theories were nearer than both AI readers without a theory in {TH[1]} of {TH[0]} forecasts (chance: "
+        f"{_chance:.0f}), but {_top_n} of the {TH[1]} are on one code experiment; outside it, {TH[1] - _top_n} of "
+        f"{TH[0] - _top_c} (chance: {(TH[0] - _top_c) / 3:.0f}).")
 
 
 def _fc(row, run, who):  # one forecast of a row

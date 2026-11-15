@@ -99,7 +99,7 @@ _m = lambda v: str(v).replace("-", "\u2212")  # a negative number with the minus
 
 TITLE = "Loop neurons"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Can switching off a few neurons stop a language model from repeating the same text?"
-LINE = (f"Switching off {DATA['off']:,} of the base model's {DATA['neurons']:,} neurons cuts its answers stuck in a repetition "
+LINE = (f"Switching off {DATA['off']:,} of the base model's {DATA['neurons']:,} neurons cuts its answers that fall into a repetition "
         f"loop on MATH-500 from {_U['loops']} to {_L['loops']} of {DATA['n']} at temperature 0.6, with right answers about "
         f"level ({_L['right']} against {_U['right']}).")
 

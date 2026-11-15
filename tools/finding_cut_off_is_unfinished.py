@@ -508,9 +508,7 @@ PANELS = [
       f"{_B['gain']['problems']}.",
       f"In these runs Think-SFT + cue leads the RL model by "
       f"{_S['right_at_16384_same_answers'] - _Rl['right_at_16384_same_answers']} problems at 16,384 tokens and by "
-      f"{_S['right_at_32768'] - _Rl['right_at_32768']} at 32,768. The RL model's four earlier samples at 16,384 tokens "
-      f"score {min(DATA['rl_samples'])} to {max(DATA['rl_samples'])}, so the lead at 16,384 tokens is within the spread "
-      "between runs."]],
+      f"{_S['right_at_32768'] - _Rl['right_at_32768']} at 32,768."]],
     ["how", "How we know",
      f"Three runs each answered the {DATA['n']} harder problems once, with up to 32,768 generated tokens at temperature "
      "1.0, scored by the grader (version 3): Think-SFT with the cue, the RL model with its plain prompt, and the base "

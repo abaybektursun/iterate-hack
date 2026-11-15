@@ -185,7 +185,7 @@ PROBLEM = ("Can drawing more samples from the base model with the opening cue ma
            "reinforcement learning (RL)?")
 LINE = (f"On MATH-500, the best rule for drawing several samples of the base model and picking one answer uses "
         f"{_best['multiple']:.1f} times the tokens of one RL sample and still scores {abs(_best['gap'][0]):.1f} percentage "
-        f"points lower {_ci(_best['gap'])}.")
+        "points lower.")
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 # Not from our runs: Aggarwal et al., Adaptive-Consistency (arXiv 2305.11860), abstract: up to 7.9 times fewer samples at

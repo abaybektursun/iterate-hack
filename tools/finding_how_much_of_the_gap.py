@@ -306,7 +306,7 @@ PANELS = [
       f"Hollow marks are one sample per problem from a separate run. Two of them reach {_pc(_seed[1]['share'][0])} at one "
       f"sample, and Think-SFT without the cue reaches {_pc(_seed[2]['share'][0])} at about the token cost of one RL sample. "
       "The large number on the picture counts only rows measured on 4 samples per problem.",
-      "Left out because their per-problem scores were not saved: Think-SFT's weights plus RL's weight change, and a run with "
+      "Left out because their per-problem scores were not saved: a model built by stacking weight changes (the weight stack), and a run with "
       "a token limit of 32k tokens (both were still running when this page was made); an edit along the largest directions "
       "of RL's weight change; and an edit of the neurons tied to loops."]],
     ["run", "How to reproduce it",
