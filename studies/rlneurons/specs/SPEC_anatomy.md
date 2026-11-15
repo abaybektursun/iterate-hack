@@ -110,3 +110,12 @@ as a fixed written prompt; no GPU is used. This is stated with the result.
 - Four samples: the latent solve probability of one problem is not measured, only class means.
 - One judge model, the same family as the agent; a second model family has not read the labels.
 - The judge study covers finished-wrong answers only; cap hits and no-answer samples are counted in c, not labeled.
+
+## Changes made after the spec, before any label was read
+
+- Second judge pass: a random half of the real items (30 base, 15 RL, seed 3) and all 30 controls, not all 120. Reason: the
+  judges are subagents and one pass over 120 items is 3.6 M characters (28 subagents of about 110 k tokens each). Agreement
+  is therefore on 45 real items.
+- A right sibling longer than 12,000 characters is shown by its last 12,000 characters.
+- The judge's quoted first wrong step replaces the 15-pair hand reading as the check of the proxy of analysis e, on every
+  base item that has a proxy position; 15 pairs are still read by the agent at both positions.

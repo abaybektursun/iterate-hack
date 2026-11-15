@@ -162,27 +162,30 @@ def kappa(a: list, b: list) -> float:
 
 
 def score(args):
+    import numpy as np
     work, out = pathlib.Path(args.work), pathlib.Path(args.out)
     out.mkdir(parents=True)
     items = {it["id"]: it for it in json.loads((work / "items.json").read_text())}
     lab = {}
     for p in ("passA", "passB"):
-        lab[p] = {}
+        lab[p], want = {}, set()
         for f in sorted((work / p).glob("batch_*.md")):
+            want |= set(f.read_text().split("\n", 1)[0].split(": ")[1].split(", "))
             for x in json.loads(f.with_suffix(".labels.json").read_text()):
                 assert x["label"] in LABELS and x["id"] in items and x["id"] not in lab[p], (f, x)
                 lab[p][x["id"]] = x
-        assert set(lab[p]) == set(items), f"{p}: {len(set(items) - set(lab[p]))} items without a label"
+        assert set(lab[p]) == want, f"{p}: labels and batch items differ: {sorted(want ^ set(lab[p]))}"
+    assert set(lab["passA"]) == set(items)
     proxy = {(x["problem_index"], x["wrong_sample"]): x["proxy_position"] for x in json.loads(pathlib.Path(args.pairs).read_text())}
     rows = []
     for k, it in items.items():
-        pos = {p: locate(lab[p][k]["quote"], it["text"]) for p in lab}
         rows.append({"id": k, "kind": it["kind"], "model": it["model"], "problem_index": it["problem_index"], "sample": it["sample"],
                      "has_right_sibling": it["sibling_text"] is not None, "final": it["final"], "gold": it["gold"], "n_new": it["n_new"],
-                     "planted_at": it.get("planted_at_char") and it["planted_at_char"] / len(it["text"]), "answer_from_problem": it.get("answer_from_problem"),
+                     "planted_at": it["planted_at_char"] / len(it["text"]) if "planted_at_char" in it else None, "answer_from_problem": it.get("answer_from_problem"),
                      "proxy_position": proxy.get((it["problem_index"], it["sample"])) if it["kind"] == "base" else None,
-                     **{p: dict(lab[p][k], quote_position=pos[p]) for p in lab}})
-    rd = {"judge": "Claude Code subagents (the agent's own model), fixed rubric rubric.md, one subagent per batch, two passes in different batches",
+                     **{p: dict(lab[p][k], quote_position=locate(lab[p][k]["quote"], it["text"])) if k in lab[p] else None for p in lab}})
+    count = lambda xs: {l: xs.count(l) for l in LABELS}
+    rd = {"judge": "Claude Code subagents (the agent's own model), fixed rubric rubric.md, one subagent per batch; pass A all 120 items, pass B 30 base + 15 RL + the 30 controls in other batches",
           "n_items": dict(N), "controls": {}, "agreement": {}, "labels": {}, "first_wrong_step": {}}
     for kind_, want in (("shuffled", "mismatch"), ("planted", "slip")):
         rs = [r for r in rows if r["kind"] == kind_]
@@ -191,38 +194,44 @@ def score(args):
     rs = [r for r in rows if r["kind"] == "planted"]
     rd["controls"]["planted"]["quote_within_5pct_of_planted_step"] = {
         p: sum(r[p]["quote_position"] is not None and abs(r[p]["quote_position"] - r["planted_at"]) <= 0.05 for r in rs) for p in lab}
-    for name, sel in (("real_90", ("base", "rl")), ("base_60", ("base",)), ("rl_30", ("rl",))):
+    for name, sel in (("real", ("base", "rl")), ("base", ("base",)), ("rl", ("rl",))):
         rs = [r for r in rows if r["kind"] in sel]
-        a, b = [r["passA"]["label"] for r in rs], [r["passB"]["label"] for r in rs]
-        rd["agreement"][name] = {"n": len(rs), "same_label": sum(x == y for x, y in zip(a, b)), "cohen_kappa": kappa(a, b),
+        two = [r for r in rs if r["passB"]]
+        a, b = [r["passA"]["label"] for r in two], [r["passB"]["label"] for r in two]
+        allA = [r["passA"]["label"] for r in rs]
+        rd["agreement"][name] = {"n_in_both_passes": len(two), "same_label": sum(x == y for x, y in zip(a, b)), "cohen_kappa": kappa(a, b),
+                                 "slip_or_not_same": sum((x == "slip") == (y == "slip") for x, y in zip(a, b)),
                                  "confusion_passA_passB": {f"{x}|{y}": c for (x, y), c in sorted(collections.Counter(zip(a, b)).items())}}
-        both = [x for x, y in zip(a, b) if x == y]
-        rd["labels"][name] = {"passA": {l: a.count(l) for l in LABELS}, "passB": {l: b.count(l) for l in LABELS},
-                              "both_passes_agree": {l: both.count(l) for l in LABELS}, "n_agree": len(both),
-                              "slip_share_wilson95": {p: S.wilson(x.count("slip"), len(x)) for p, x in (("passA", a), ("passB", b))}}
+        rd["labels"][name] = {"passA_all": dict(count(allA), n=len(allA)), "passA_slip_wilson95": S.wilson(allA.count("slip"), len(allA)),
+                              "passA_on_pass_B_items": count(a), "passB": dict(count(b), n=len(b)), "passB_slip_wilson95": S.wilson(b.count("slip"), len(b)),
+                              "both_passes_agree": dict(count([x for x, y in zip(a, b) if x == y]))}
         for sib in (True, False):
-            sub = [r for r in rs if r["has_right_sibling"] == sib]
-            rd["labels"][name][f"passA_{'with' if sib else 'without'}_right_sibling"] = {"n": len(sub), **{l: sum(r["passA"]["label"] == l for r in sub) for l in LABELS}}
-        import numpy as np
-        pos = {p: [r[p]["quote_position"] for r in rs if r[p]["quote_position"] is not None] for p in lab}
-        both_pos = [(r["passA"]["quote_position"], r["passB"]["quote_position"]) for r in rs
+            sub = [r["passA"]["label"] for r in rs if r["has_right_sibling"] == sib]
+            rd["labels"][name][f"passA_{'with' if sib else 'without'}_right_sibling"] = dict(count(sub), n=len(sub))
+        pos = [r["passA"]["quote_position"] for r in rs if r["passA"]["quote_position"] is not None and r["passA"]["label"] in ("slip", "wrong_plan", "misread")]
+        both_pos = [(r["passA"]["quote_position"], r["passB"]["quote_position"]) for r in two
                     if r["passA"]["quote_position"] is not None and r["passB"]["quote_position"] is not None]
         rd["first_wrong_step"][name] = {
-            **{p: {"quotes_found_in_answer": len(v), "median_position": float(np.median(v)), "quartiles": [float(x) for x in np.percentile(v, [25, 75])],
-                   "share_in_first_third": float(np.mean(np.array(v) < 1 / 3)), "share_in_last_third": float(np.mean(np.array(v) > 2 / 3))} for p, v in pos.items()},
-            "both_found": len(both_pos), "passes_within_15pct": sum(abs(x - y) <= 0.15 for x, y in both_pos)}
-    pr = [r for r in rows if r["proxy_position"] is not None]
-    rd["proxy_check"] = {"what": "base items with a right sibling and a proxy position: the proxy is confirmed on an item if it is within 0.15 of the judge's quoted first wrong step",
-                         **{p: {"n": sum(r[p]["quote_position"] is not None for r in pr),
-                                "confirmed": sum(r[p]["quote_position"] is not None and abs(r[p]["quote_position"] - r["proxy_position"]) <= 0.15 for r in pr),
-                                "proxy_earlier_by_over_0.15": sum(r[p]["quote_position"] is not None and r["proxy_position"] < r[p]["quote_position"] - 0.15 for r in pr)} for p in lab}}
+            "passA_quotes_found_in_answer": len(pos), "of_items_labeled_slip_plan_misread": sum(l in ("slip", "wrong_plan", "misread") for l in allA),
+            "median_position": float(np.median(pos)), "quartiles": [float(x) for x in np.percentile(pos, [25, 75])],
+            "share_in_first_third": float(np.mean(np.array(pos) < 1 / 3)), "share_in_last_third": float(np.mean(np.array(pos) > 2 / 3)),
+            "by_label_median_position": {l: (float(np.median(v)) if v else None, len(v)) for l in ("slip", "wrong_plan", "misread")
+                                         for v in [[r["passA"]["quote_position"] for r in rs if r["passA"]["label"] == l and r["passA"]["quote_position"] is not None]]},
+            "both_passes_found": len(both_pos), "passes_within_15pct": sum(abs(x - y) <= 0.15 for x, y in both_pos)}
+    pr = [r for r in rows if r["proxy_position"] is not None and r["passA"]["quote_position"] is not None]
+    d = [r["proxy_position"] - r["passA"]["quote_position"] for r in pr]
+    rd["proxy_check_against_passA_quote"] = {
+        "what": "base items with a right sibling, a proxy position and a located quote; confirmed = the proxy within 0.15 of the judge's first wrong step",
+        "n": len(pr), "confirmed": sum(abs(x) <= 0.15 for x in d), "proxy_earlier_by_over_0.15": sum(x < -0.15 for x in d),
+        "proxy_later_by_over_0.15": sum(x > 0.15 for x in d)}
     (out / "readout.json").write_text(json.dumps(rd, indent=1))
     (out / "labels.json").write_text(json.dumps(rows, indent=0))
     (out / "rubric.md").write_text((work / "rubric.md").read_text())
     ex = {}
-    for name, cond in (("slip_both_passes", lambda r: r["kind"] == "base" and r["passA"]["label"] == r["passB"]["label"] == "slip"),
-                       ("wrong_plan_both_passes", lambda r: r["kind"] == "base" and r["passA"]["label"] == r["passB"]["label"] == "wrong_plan"),
-                       ("passes_disagree", lambda r: r["kind"] == "base" and r["passA"]["label"] != r["passB"]["label"]),
+    same = lambda r, l: r["passA"]["label"] == l and (r["passB"] is None or r["passB"]["label"] == l)
+    for name, cond in (("slip", lambda r: r["kind"] == "base" and r["passB"] and same(r, "slip")),
+                       ("wrong_plan", lambda r: r["kind"] == "base" and r["passB"] and same(r, "wrong_plan")),
+                       ("passes_disagree", lambda r: r["kind"] == "base" and r["passB"] and r["passA"]["label"] != r["passB"]["label"]),
                        ("planted_control_scored_right", lambda r: r["kind"] == "planted" and r["passA"]["label"] == "slip"),
                        ("planted_control_scored_wrong", lambda r: r["kind"] == "planted" and r["passA"]["label"] != "slip"),
                        ("shuffled_control_scored_right", lambda r: r["kind"] == "shuffled" and r["passA"]["label"] == "mismatch"),
@@ -234,7 +243,7 @@ def score(args):
         "commit": subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True, text=True, check=True, cwd=A.HERE).stdout.strip(),
         "command": " ".join(sys.argv), "judge": rd["judge"], "gpu": None,
         "batches": {p: len(list((work / p).glob("batch_*.md"))) for p in lab}}, indent=1))
-    print(json.dumps({k: rd[k] for k in ("controls", "agreement", "labels", "proxy_check")}, indent=1))
+    print(json.dumps(rd, indent=1))
 
 
 def main():
