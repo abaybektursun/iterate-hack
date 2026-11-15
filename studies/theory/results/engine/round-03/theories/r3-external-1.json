@@ -1,0 +1,148 @@
+{
+ "name": "r3-external-1",
+ "statement": "The temperature sensitivity of the cued base and of RL-Zero-Math 3.0 and the insensitivity of 3.1 are one mechanism: sampling a pretrained-style policy with an over-truncated sampler (T < 1 or top-p/min-p) drops it into self-reinforcing repetition basins (Holtzman), and 3.1's recipe of training cap-truncated rollouts as negatives, with rollouts drawn by an exact T 1.0 sampler so the sign law gives no entropy drift, pushes down exactly the trajectories that enter those basins without making the policy flatter; 3.0, which masked truncations, keeps the basins and so behaves like the base under temperature.",
+ "scope": "Covers Olmo-3-1025-7B base (cued and plain), Olmo-3.1-7B-RL-Zero-Math (step 2,800), Olmo-3-7B-RL-Zero-Math (3.0 release) and the Code-RL 3.0/3.1 pair, on MATH-500 and the clean hard328 with a 16,384-token cap, comparing T 0.6/top-p 0.95, T 0.6/top-p 1.0, T 1.0 with or without min-p/top-p, and T 1.5 + min-p. It explains cap hits, rule-A loops and the temperature dependence of accuracy. It does NOT explain the ~10.6-point MATH-500 gap or the 12.8-point hard328 gap that remain at T 1.0, where neither model loops (those are finished-wrong answers and non-loop cap hits). It assumes Olmo's RL rollouts were sampled at T 1.0 without truncation (to be checked in open-instruct); if the rollout sampler was truncated, the sign law predicts 3.1 should be the higher-entropy model and the second offline prediction flips.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "1904.09751",
+   "finding": "Temperature sampling repeats unless very high temperatures are used, and any stochastic decoder whose parameters over-truncate the tail degenerates into repetitive loops, mimicking greedy search.",
+   "how": "Supplies the loop basin: for a policy that has not been trained against long repetitive trajectories, low T or tail truncation raises the probability of entering a self-reinforcing repeat and running to the cap; T 1.0 without truncation (or T 1.5 + min-p) escapes it."
+  },
+  {
+   "source": "2610.34044",
+   "finding": "With truncated rollout samplers a constant advantage shift changes entropy at first order (Mask vs Fail of over-length rollouts drift -21.3 under truncation) but only +0.7 under exact sampling; the choice between masking and failing truncated rollouts sets the released policy's entropy in a predictable direction.",
+   "how": "Separates the two effects of 3.1's 'truncated = negative' recipe: under an exact T 1.0 rollout sampler it adds no entropy drift, so its first-order effect is to lower the probability of cap-running (looping) trajectories; 3.0's masking left those trajectories unpenalised, so 3.0 inherits the base's loop basin and temperature sensitivity."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-e870a1",
+   "quote": "119 cap hits (loops to 16,384 tokens)",
+   "how": "T 0.6 / top-p 0.95 is the over-truncated regime in which the base enters repetition basins."
+  },
+  {
+   "item": "result-dadeec",
+   "quote": "378/500 (75.6 %), 98 cap hits, 71 loops",
+   "how": "Removing top-p but keeping T 0.6 still truncates the effective distribution, so loops fall only partly."
+  },
+  {
+   "item": "result-44b4df",
+   "quote": "Truncating the tail at T 1.0 brings loops back",
+   "how": "Tail truncation alone (min-p 0.1, top-p 0.95) re-creates the over-truncated regime at T 1.0, as the Holtzman mechanism requires."
+  },
+  {
+   "item": "result-44b4df",
+   "quote": "T 1.5 + min-p 0.1 removes them (0 loops, 29 cap)",
+   "how": "A higher temperature re-flattens the head enough that the truncated sampler no longer collapses into repeats."
+  },
+  {
+   "item": "knowledge-787e53",
+   "quote": "At T 1.0 rule A finds 0 loops in T1, T2 and T3",
+   "how": "Exact T 1.0 sampling is outside the loop regime for every model."
+  },
+  {
+   "item": "result-533123",
+   "quote": "Temperature changes RL by -0.2 points [-1.8, 1.4]",
+   "how": "3.1 was trained to avoid cap-running trajectories, so lowering T no longer opens loop basins and accuracy is unchanged."
+  },
+  {
+   "item": "result-bac4fd",
+   "quote": "At T 0.6 the gap is 22.0 [18.4, 25.8]",
+   "how": "The extra 11.4 points of gap at T 0.6 are the base's loop losses, which 3.1 does not suffer."
+  },
+  {
+   "item": "result-e5c99c",
+   "quote": "Base+cue 119 -> 164, cap hits 173 -> 77",
+   "how": "The same escape from repetition basins at T 1.0 holds on the harder set."
+  },
+  {
+   "item": "knowledge-8a31ad",
+   "quote": "not masking truncated sequences (they are trained as negatives)",
+   "how": "This is the recipe difference that, under an exact sampler, penalises loop trajectories in 3.1 and not in 3.0."
+  },
+  {
+   "item": "knowledge-8a31ad",
+   "quote": "RL 75.0 -> 75.3 with cue (Table 6)",
+   "how": "3.0 at T 0.6 sits at the cued base's T 0.6 level, as expected if it keeps the base's loop basin."
+  },
+  {
+   "item": "knowledge-9f8067",
+   "quote": "3.0 Code 13.8 % (64 % of rollouts loop)",
+   "how": "The masked-truncation 3.0 Code model loops heavily at T 0.8 while 3.1 Code does not."
+  },
+  {
+   "item": "knowledge-b15a21",
+   "quote": "with 29.1% length-limit hits vs 17.8% base",
+   "how": "The 3.0 RL-Zero-Math model at T 0.6 hits the length limit even more than the base: masking did not remove the basin."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-5e17a6",
+   "quote": "Rule-A loops: 0 of 500 in either cell",
+   "how": "At T 1.0 neither model loops yet RL still leads by 10.6 points, so the remaining gap is outside this mechanism."
+  },
+  {
+   "item": "knowledge-9e4147",
+   "quote": "RL: T 1.0 - T 0.6 -0.4 overall, cap hits -8.0 points in Q4",
+   "how": "3.1 still gains cap hits at T 0.6 on the longest problems, so its loop suppression is not complete; the theory needs those extra RL cap hits to be mostly non-loop long reasoning."
+  },
+  {
+   "item": "result-dadeec",
+   "quote": "vs 354 (top-p 0.95): +4.8 points, unpaired 95 % [-0.7, 10.3]",
+   "how": "If tail truncation were the main lever, dropping top-p at T 0.6 should recover more than an uncertain 4.8 points; temperature itself must carry most of the effect."
+  }
+ ],
+ "rival": "RL 3.1 is temperature-insensitive simply because RL sharpens any policy (low per-token entropy, so T 0.6 vs 1.0 hardly changes the samples), with no role for how truncated rollouts were trained. The separating observation is RL-Zero-Math 3.0 (masked truncations, similar RL length): the rival predicts it is also temperature-insensitive with few cap hits at T 0.6, while this theory predicts 3.0 loops at T 0.6 (cap hits above 15 % of MATH-500, most of them rule-A loops) and gains several points from T 0.6 to T 1.0. A second separator: under the rival the RL's few T 0.6 cap hits are loops like the base's; under this theory they are mostly non-repetitive long reasoning.",
+ "predictions": [
+  {
+   "experiment": "allenai/Olmo-3-7B-RL-Zero-Math (3.0 release, main dee26a40) with its own tokenizer and chat template, plain prompt, MATH-500 problems 0-249, one sample, T 0.6 / top-p 0.95, cap 16,384, vLLM, seeds 1,000,000 + i; count cap hits.",
+   "unit": "cap hits of 250",
+   "value": 44,
+   "low": 27,
+   "high": 66,
+   "refuted_by": "Fewer than 20 cap hits of 250 (3.0 does not loop at T 0.6), or fewer than half of its cap hits flagged by rule A.",
+   "gpu_minutes": 30
+  },
+  {
+   "experiment": "Same 3.0 model, same 250 problems and prompt, T 1.0 / top-p 1.0, cap 16,384, seeds 1,000,000 + i, grader v3; report right of 250 and compare with the T 0.6 cell above.",
+   "unit": "right of 250 at T 1.0",
+   "value": 205,
+   "low": 193,
+   "high": 217,
+   "refuted_by": "T 1.0 minus T 0.6 for 3.0 is at or below +1.0 point on these 250 (3.0 as temperature-insensitive as 3.1), or T 1.0 cap hits are not at least halved relative to T 0.6.",
+   "gpu_minutes": 25
+  },
+  {
+   "experiment": "Offline: share of the RL model's T 0.6 cap hits on the clean hard328 that are repetition loops.",
+   "recipe": "File s3://pg-lineage-769063704696/results/rlneurons/r3/s2800-01/out/P_hard.jsonl (RL step 2,800, plain, T 0.6/top-p 0.95). Keep rows whose problem is unflagged in results/rln3/rln3_overlap.json (the clean 328); if a problem has several rows keep sample 0. Select rows with cap_hit true. For each, apply rule A: for every start position p that is 0 or the index right after a '\\n' in text, with len(text) - p >= 8,000 characters, take w = text[p:p+8000] encoded UTF-8 and compute len(zlib.compress(w)) / len(w) with Python zlib default level; the row is a loop if any window gives < 0.10. Statistic = loops / cap-hit rows. If there are no cap-hit rows, report NA (counts as not refuting).",
+   "unit": "fraction of RL cap hits that are rule-A loops",
+   "value": 0.12,
+   "low": 0.0,
+   "high": 0.35,
+   "refuted_by": "A fraction above 0.45 (RL's T 0.6 cap hits are mostly loops, like the base's).",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Offline: share of the cued base's T 0.6 cap hits on the clean hard328 that are repetition loops (the over-truncation basin on the harder set).",
+   "recipe": "File s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_hard.jsonl (base, cue, T 0.6/top-p 0.95). Keep rows unflagged in results/rln3/rln3_overlap.json (clean 328), sample 0 only. Select rows with cap_hit true. Apply rule A exactly as in the previous recipe (line-start 8,000-character windows, zlib default level, ratio < 0.10). Statistic = loops / cap-hit rows.",
+   "unit": "fraction of base cap hits that are rule-A loops",
+   "value": 0.68,
+   "low": 0.52,
+   "high": 0.84,
+   "refuted_by": "A fraction below 0.45 (most base T 0.6 cap hits on hard problems are not loops), which would leave the T 0.6 -> T 1.0 gain on hard328 unexplained by the loop basin.",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Offline: per-token entropy of each model on its own MATH-500 answers at T 1.0 (3.1 should not be the flatter model under an exact rollout sampler).",
+   "recipe": "File studies/rlneurons/results/rln5/map-01/checks.json, key per_row, lists T1 (base text, scored under base as own) and T2 (RL text, scored under RL as own). E_T1 = sum over all T1 rows of sum_entropy_own divided by sum over T1 rows of n_own; E_T2 likewise over T2 rows. Use all 500 rows of each list, cap hits included. Statistic = E_T2 / E_T1.",
+   "unit": "ratio of RL to base mean per-token entropy (own text, own model)",
+   "value": 0.8,
+   "low": 0.6,
+   "high": 1.0,
+   "refuted_by": "A ratio above 1.05 (3.1 is the higher-entropy model, which the sign law gives only if rollouts were drawn with a truncated sampler).",
+   "gpu_minutes": 0
+  }
+ ]
+}

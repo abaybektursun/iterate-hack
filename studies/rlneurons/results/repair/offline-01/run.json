@@ -1,0 +1,8 @@
+{
+ "commit": "fcca683631c43950312a5993f4437313106e999e",
+ "command": "/home/abay/Projects/iterate-hack-repair/studies/rlneurons/analysis/repair.py --base /home/abay/Projects/iterate-hack/runs/abaybektursun-1114-153825-208b --rl /home/abay/Projects/iterate-hack/runs/abaybektursun-1114-183640-e828 --out studies/rlneurons/results/repair/offline-01",
+ "base_job": "abaybektursun-1114-153825-208b",
+ "rl_job": "abaybektursun-1114-183640-e828",
+ "grader": "v3 (stored) and grader/repair_v4.py (v4 as specified, v4a amended); rows.jsonl holds v4a",
+ "spec": "studies/rlneurons/specs/SPEC_repair.md"
+}

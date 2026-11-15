@@ -1,0 +1,95 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_minp.md",
+ "grader": "v3",
+ "n": 500,
+ "cells": {
+  "T1_base_cue": {
+   "n": 500,
+   "right_v3": 410,
+   "cap_hits": 27,
+   "loops_A": 0,
+   "mean_generated_tokens": 3932.0
+  },
+  "rl_cue": {
+   "n": 500,
+   "right_v3": 457,
+   "cap_hits": 8,
+   "loops_A": 0,
+   "mean_generated_tokens": 4695.5
+  },
+  "base_mp0.1_T1": {
+   "n": 500,
+   "right_v3": 404,
+   "cap_hits": 58,
+   "loops_A": 34,
+   "mean_generated_tokens": 4085.8,
+   "generated_tokens": 2042884,
+   "tok_p_lt_1e2_per_1k": 0.022,
+   "tok_p_lt_1e3_per_1k": 0.003,
+   "job_id": "frustea-1114-180849-456c"
+  },
+  "base_mp0.1_T1.5": {
+   "n": 500,
+   "right_v3": 412,
+   "cap_hits": 29,
+   "loops_A": 0,
+   "mean_generated_tokens": 4355.3,
+   "generated_tokens": 2177645,
+   "tok_p_lt_1e2_per_1k": 0.69,
+   "tok_p_lt_1e3_per_1k": 0.007,
+   "job_id": "frustea-1114-180853-e383"
+  },
+  "rl_mp0.1_T1": {
+   "n": 500,
+   "right_v3": 460,
+   "cap_hits": 19,
+   "loops_A": 0,
+   "mean_generated_tokens": 4452.5,
+   "generated_tokens": 2226247,
+   "tok_p_lt_1e2_per_1k": 0.001,
+   "tok_p_lt_1e3_per_1k": 0.0,
+   "job_id": "frustea-1114-180857-8f87"
+  },
+  "base_p0.95_T1": {
+   "n": 500,
+   "right_v3": 409,
+   "cap_hits": 35,
+   "loops_A": 12,
+   "mean_generated_tokens": 4017.3,
+   "generated_tokens": 2008626,
+   "tok_p_lt_1e2_per_1k": 0.355,
+   "tok_p_lt_1e3_per_1k": 0.023,
+   "job_id": "frustea-1114-180900-b614"
+  }
+ },
+ "diffs": {
+  "base_mp0.1_T1 minus T1_base_cue": {
+   "points": -1.2,
+   "ci95_paired": [
+    -4.6,
+    2.2
+   ]
+  },
+  "base_mp0.1_T1.5 minus T1_base_cue": {
+   "points": 0.4,
+   "ci95_paired": [
+    -3.2,
+    3.8
+   ]
+  },
+  "rl_mp0.1_T1 minus rl_cue": {
+   "points": 0.6,
+   "ci95_paired": [
+    -1.6,
+    2.6
+   ]
+  },
+  "base_p0.95_T1 minus T1_base_cue": {
+   "points": -0.2,
+   "ci95_paired": [
+    -3.8,
+    3.2
+   ]
+  }
+ }
+}

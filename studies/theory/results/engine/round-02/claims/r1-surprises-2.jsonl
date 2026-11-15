@@ -1,0 +1,19 @@
+{"id": "t22", "value": 6, "low": 0, "high": 14, "why": "The RL change is a global low-rank format/deliberation shift, not an error detector, so its difference peaks rarely sit at the first wrong step."}
+{"id": "t32", "value": 430, "low": 419, "high": 442, "why": "A near-linear shift along a few directions with a wide accuracy plateau gives about 40 % of the 410-to-463 gap at a quarter dose."}
+{"id": "t33", "value": 446, "low": 436, "high": 456, "why": "At half dose the low-rank format/length readout is mostly switched, so about 70 % of the cued gap is recovered."}
+{"id": "t43", "value": 456, "low": 447, "high": 466, "why": "At three-quarter dose the shift is nearly complete, so the score is within a few points of RL."}
+{"id": "t34", "value": 450, "low": 432, "high": 466, "why": "The RL change is only ~0.24 % of weight norm, so at a = 1.5 the model is still in the linear regime and stays near RL instead of collapsing to the token cap as in the code-RL and Bolmo dose curves."}
+{"id": "t45", "value": 4, "low": 0, "high": 15, "why": "In the linear regime at a = 1.5 the model keeps its features, so almost no answers degrade into word salad."}
+{"id": "t40", "value": 310, "low": 270, "high": 350, "why": "Without the cue the quarter-dose shift recovers about a third of the 224-to-463 plain-prompt gap."}
+{"id": "t41", "value": 398, "low": 370, "high": 425, "why": "At half dose the low-rank readout is mostly switched, about 70 % of the plain-prompt gap, matching the plateau that DARE's noise tolerance implies."}
+{"id": "t46", "value": 4120, "low": 3950, "high": 4350, "why": "The length readout moves linearly with the dose, so mean tokens move a quarter of the way from the cued base (~3,930) toward RL (~4,690)."}
+{"id": "t37", "value": 410, "low": 398, "high": 422, "why": "A random matched-norm difference is high-rank noise with no component along the functional directions, so it leaves the cued base at 410."}
+{"id": "t38", "value": 25, "low": 16, "high": 34, "why": "The random difference acts like a reseed, so it fixes only the share of the base's 90 wrong problems that a fresh base sample would fix."}
+{"id": "t39", "value": 50, "low": 40, "high": 61, "why": "Half dose gives about 446 right with ~14 resampling losses, so it fixes about 50 of the base's 90 wrong problems."}
+{"id": "t47", "value": 3930, "low": 3700, "high": 4180, "why": "High-rank noise does not move the format/length readout, so mean tokens stay at the cued base's ~3,930."}
+{"id": "t57", "value": 30, "low": 18, "high": 45, "why": "The functional change is a coherent low-dimensional shift in the residual stream, so one mean vector per layer captures a large part of it on cued-base text."}
+{"id": "t58", "value": 40, "low": 26, "high": 55, "why": "On RL's own text the deliberation directions are engaged more uniformly, so the mean vector closes more KL than on base text, as every arm does (69 vs 86 % for all MLP)."}
+{"id": "t59", "value": 20, "low": 10, "high": 32, "why": "The MLP carries about two thirds of the shift, so an MLP-only mean vector closes about two thirds of the all-layer constant arm on base text."}
+{"id": "t60", "value": 28, "low": 16, "high": 40, "why": "Same two-thirds share of the constant arm, on RL text."}
+{"id": "t61", "value": 3, "low": 0.5, "high": 7, "why": "The low-rank shift is dense across neurons, so 0.13 % of neurons, even always-on ones, carry only about their proportional share of it."}
+{"id": "t62", "value": 4, "low": 0.5, "high": 9, "why": "Same dense-support argument, on RL text, where every arm closes somewhat more."}

@@ -1,0 +1,4 @@
+{"id": "t22", "value": 19, "low": 14, "high": 24, "why": "If every position carries a similar slip risk, the shorter finished sample in a tie has fewer chances to derail, so the shortest-sample tie-break clearly beats a random pick (about 12 of 36)."}
+{"id": "t20", "value": 450, "low": 444, "high": 456, "why": "The vote averages out independent slips (446 with the default tie rule), and sending ties to the shortest finished sample, which has the fewest slip chances, adds a few more problems."}
+{"id": "t24", "value": 475, "low": 471, "high": 479, "why": "RL's tail is small, so its votes rarely tie and its slips are rare; the shortest-sample tie-break leaves it at or just above its 474 vote."}
+{"id": "t25", "value": 471, "low": 466, "high": 476, "why": "Sending ties to the longest sample picks the answer with the most positions exposed to slips, so it falls a few problems below the shortest-sample rule."}

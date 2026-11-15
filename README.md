@@ -30,7 +30,8 @@ or a text editor, never into an agent chat, and never commit one.
 | 6 | AWS (DynamoDB, S3 and ECR) | shared, until Sunday 23:59 PST | the board, events and traces; prebuilt images with model weights, on vast.ai |
 | 7 | past.dev | shared team project | `tools/paper.py`, `tools/recall.py`, session memory |
 | 8 | Exa | yours ($50 credits) | web and literature search by agents (`tools/exa.py`) |
-| 9 | Tinker, Devin, OpenAI | yours | optional; no tool here uses them |
+| 9 | Devin | yours (credits; the default model is free) | side work handed off by agents (`tools/devin.py`) |
+| 10 | Tinker, OpenAI | yours | optional; no tool here uses them |
 
 ### 1. GitHub and the team store
 
@@ -147,7 +148,17 @@ The tool takes `EXA_API_KEY` from its environment and, when the agent started be
 shell profile, so a running session needs no restart. Check: `python3 tools/exa.py search "test" --n 1` prints
 one result.
 
-### 9. Tinker, Devin, OpenAI (optional)
+### 9. Devin (your own login)
+
+```
+curl -fsSL https://cli.devin.ai/install.sh | bash     # or: brew install --cask devin-cli
+devin auth login                                      # opens the browser
+```
+
+Check: `devin auth status` prints "Logged in", and `python3 tools/devin.py ask "Which file holds the rules for
+agents?"` answers `AGENTS.md`. Agents hand side work to Devin with `tools/devin.py`: see "Devin" below.
+
+### 10. Tinker, OpenAI (optional)
 
 Claim each on the hackathon platform. Keep the keys in your shell profile (`TINKER_API_KEY`, `OPENAI_API_KEY`).
 No tool here uses them.
@@ -270,23 +281,38 @@ uv run tools/board.py score result-8b1c48 base MATH-500 410/500 "cue, T 1.0 / to
 ```
 
 To watch the board and the `all` channel in a browser: `uv run tools/view.py` (a local, read-only page on
-http://127.0.0.1:8765). It shows one sentence on the state of the board, a timeline per person, open work with idle
-time, results, ideas, knowledge and the messages, and updates in place every 10 s. A click on an item opens its text,
-comments and thread in a side panel (`/#<item id>` is its link). Keys: `/` filter, `j` `k` move, Enter opens, Esc closes;
-a click on a person shows only that person. At the top, one hill-climbing chart per benchmark: every untrained-base score
-(`board.py score`) in the order found, the best so far as a step line, and the best RL score as the target, with the
-gap between them. The same page is public at https://monitor.invariant.team (`infra/monitor/`).
+http://127.0.0.1:8765). At the top is one sentence on the state of the board; above it, what changed since your last
+visit (kept in this browser only). Then one hill-climbing chart per benchmark: every untrained-base score
+(`board.py score`) in the order posted with its 95% Wilson interval, the best so far as a step line, and the best RL
+score as the target. A rise that does not clear the previous record's interval is drawn faint and labeled "within
+noise"; the shaded area is the gap to RL, and "points below RL" carries its 95% interval. Under each chart, its record
+steps, newest first: the gain in points, previous best -> new best, the configuration and the first line of the
+result's text (the finding, as in `climb.py`); a click opens the result. Below: open work (longest idle
+first, red after 60 minutes, with its last comment), results with their scores, and the messages on `all`, where
+board.py's own announcements are hidden until shown; then a timeline per person, ideas, knowledge and closed work. The
+page reads every 10 s and only rewrites what changed, so it does not move the text you are reading. A click on an item
+opens its text, scores, comments and thread in a side panel (`/#<item id>` is its link); filters are in the address too
+(`/?who=<name>&q=<text>`). Keys: `/` filter, `j` `k` move, `1` `2` `3` jump to a column, Enter opens, Esc closes, `?`
+lists them. The same page is public at https://monitor.invariant.team (`infra/monitor/`). The header of every page of
+the site has three tabs: Board (this page, `/`), Design (`/architecture`) and Findings (`/findings`).
 
-The same server has a second page, `/architecture` (`tools/architecture.py`): one picture of the shared work setup for
+To see which finding raised the benchmark: `uv run tools/climb.py [benchmark] [--json]` lists, per benchmark, every
+record step of that chart (a base score strictly above all earlier ones, the same rule), newest first: the gain in
+points, previous best -> new best, the result id, who, the configuration and the first line of the result's text.
+
+The tab Design is the page `/architecture` (`tools/architecture.py`): one picture of the shared work setup for
 a first-time reader. The board is in the centre with one dot per live item, each person's agents are beside it with
 threads to the board (the Claude mark for a Claude Code session, the OpenAI mark for a Codex session), the "Chat"
 ring (messages) runs through every person's agents, and the "Retro" loop (self-review) goes around everything. What moves is real data, replayed: messages between people's agents, posts to the board. A click on a part
 explains it, with live rows from the board (`/architecture#board` is its link); "Follow one result" steps through the
 path of one result (arrow keys, Esc).
 
-A novel finding gets its own page: `tools/finding_<slug>.py`, copied from `.claude/skills/finding-page/template.py`, is
-served at `/finding/<slug>` and linked in the header of every page (`.claude/skills/finding-page/SKILL.md` says when
-and how). `.claude/skills/site-ui/SKILL.md` holds the rules for anything visible on the site.
+The tab Findings is the page `/findings` (`tools/findings.py`): one tile per finding, with a small lit icon, the
+finding's title and one sentence. A tile opens the page of that finding. Every finding worth telling gets such a page:
+`tools/finding_<slug>.py`, copied from `.claude/skills/finding-page/template.py`, is served at `/finding/<slug>` and
+gets its tile with no other change; the module draws its own icon (`ICON`), and its panels start with "What is new" and
+"Why it matters" (`.claude/skills/finding-page/SKILL.md` says when and how). `.claude/skills/site-ui/SKILL.md` holds
+the rules for anything visible on the site.
 
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.
@@ -315,6 +341,32 @@ A message reaches a waiting agent in under a second (measured: 0.2 s after the s
 session keeps its own read position, and never receives its own messages. Reading costs one query that returns
 only new rows, so it stays fast at any total. The board is for what should last; messages are for coordination
 in the next minutes. Messages stay in the table as part of the record.
+
+## Devin
+
+`tools/devin.py` hands side work to the Devin CLI (https://docs.devin.ai/cli), a second coding agent, so the
+research does not wait for it: code fixes named in `meta/FAILURES.md`, chores, the analysis script for a running
+job, and an independent review before a number is posted. When to use it and how to write a task:
+`.claude/skills/devin/SKILL.md` (Codex: read that file).
+
+```
+python3 tools/devin.py ask "<question>"        read-only, in your checkout; waits and prints the answer
+python3 tools/devin.py run <name> "<task>"     a change, in the background, in the worktree ../iterate-hack-devin-<name>
+                                               on branch devin/<name>, cut from your HEAD; returns at once
+python3 tools/devin.py ls                      every run: state, minutes, commits
+python3 tools/devin.py wait <name>             block until the run ends, then print the report and the commits
+python3 tools/devin.py show <name>             the same, without waiting
+python3 tools/devin.py rm <name>               delete the worktree, the branch and the run record; refuses while
+                                               the branch has work you did not merge (--force drops it)
+```
+
+- Devin runs on your laptop under your login with the model `swe-2-high`, free in the CLI until 2026-11-30.
+  `--strong` uses `gpt-6-sol-high` and `--model <id>` any other (`devin models`), paid from your Devin credits.
+- `ask` lets Devin read files and git history and change nothing. `run` lets it edit, run checks and commit in its
+  own worktree. The tool tells it to start no job, post nothing to the board and push nothing; it reads `AGENTS.md`
+  and skips the files written for Claude Code (`CLAUDE.md`, `.claude/`).
+- Its report is a claim: read `git diff HEAD...devin/<name>`, run the check, then `git merge devin/<name>` and `rm`.
+- Each run keeps `prompt.md`, `out.txt` and `meta.json` in `~/.cache/iterate-hack/devin/<name>/`.
 
 ## Findings from papers and posts
 

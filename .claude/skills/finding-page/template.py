@@ -1,15 +1,15 @@
 """<The finding in one sentence, with its number.>
 
-The page of one finding, served at /finding/<slug>: view.py serves every tools/finding_<slug>.py and links it in
-the header of the site. Copy this file to tools/finding_<slug>.py, fill TITLE, PROBLEM, LINE, DATA and PANELS, and
-change draw() in the page only when another picture shows the finding better. The rules are in
+The page of one finding, served at /finding/<slug>: view.py serves every tools/finding_<slug>.py and gives it a tile
+on /findings (its ICON, TITLE and LINE). Copy this file to tools/finding_<slug>.py, fill TITLE, PROBLEM, LINE, DATA,
+PANELS and ICON, and change draw() in the page only when another picture shows the finding better. The rules are in
 .claude/skills/finding-page/SKILL.md; the looks are those of tools/architecture.py (.claude/skills/site-ui/SKILL.md).
 """
 import json
 
-TITLE = "Two to four words"  # the link text in the site header and the browser tab
+TITLE = "Two to four words"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "The problem, as one question a newcomer understands?"
-LINE = "The finding in one sentence, with its number."
+LINE = "The finding in one sentence, with its number."  # also the one sentence on its tile
 
 # Every number is copied from the artifact named here. None is typed from memory.
 DATA = {
@@ -28,7 +28,14 @@ DATA = {
 }
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
+# The first two panels come first on every finding page, with these keys and names:
+#   new: what was already known, with the closest published result, and then what this finding adds to it.
+#   why: what the finding changes for the direction in DIRECTION.md: what it makes possible, cheaper or unnecessary.
 PANELS = [
+    ["new", "What is new", "What was known before, with the closest published result, and what is new here.",
+     ["The first new thing, as one plain sentence.", "The second new thing, if there is one."]],
+    ["why", "Why it matters", "What this changes for the research direction, in one sentence.",
+     ["What it makes possible or unnecessary.", "What is still open after it."]],
     ["how", "How we know", "The measurement in one sentence: what was run, on what, how many items.",
      ["It was measured on 0 items with grader <version>.", "The control that rules out the simple explanation.", "The closest published result, and how this one differs."]],
     ["limits", "What it does not show", "The most important thing a reader could wrongly conclude.",
@@ -36,6 +43,17 @@ PANELS = [
     ["run", "How to reproduce it", "The one command that reproduces the number from a clean checkout.",
      ["The run used commit " + DATA["commit"] + ".", "Its numbers are in " + DATA["artifact"] + "."]],
 ]
+
+# The icon of this finding's tile on /findings: the page's own picture, reduced to one small lit glass object. It is
+# the source of a JavaScript arrow function that returns SVG markup; tools/findings.py calls it every frame and
+# describes `kit` (at, slab, face, line, token), `t` (seconds) and `tilt` (the lean toward the mouse). Use numbers from
+# DATA through .replace(), as PAGE does. Delete ICON to get a plain glass slab.
+ICON = r"""(kit, t, tilt) => {
+  const a = 44, b = 38, th = 5;  // half width, half depth and thickness of the slab
+  return kit.slab(a, b, th) +
+    kit.line(kit.at(-a * .8, b * .3, th / 2), kit.at(a * .8, b * .3, th / 2), .7) +
+    kit.line(kit.at(-a * .8, -b * .1, th / 2), kit.at(a * .4, -b * .1, th / 2), 1.3 + .14 * Math.sin(t * .6), "lit");
+}"""
 
 PAGE = r"""<!doctype html>
 <html lang="en">
@@ -121,8 +139,8 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
-    <a href="/architecture">How it works</a>
-    <a href="" aria-current="page">__TITLE__</a>
+    <a href="/architecture">Design</a>
+    <a href="/findings" aria-current="page">Findings</a>
   </header>
   <div class="stage">
     <svg id="svg" viewBox="0 0 1000 420" role="img"></svg>

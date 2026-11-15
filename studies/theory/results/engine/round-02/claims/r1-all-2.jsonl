@@ -1,0 +1,13 @@
+{"id": "t06", "value": 3, "low": 0, "high": 10, "why": "The base has the answer mode but rarely selects it without the prompt cue."}
+{"id": "t32", "value": 415, "low": 405, "high": 428, "why": "The cue already flips the switch, so a quarter of the delta, which mostly duplicates the switch, adds little to the cued base's 410."}
+{"id": "t33", "value": 435, "low": 422, "high": 448, "why": "At a = 0.5 the switch is saturated by the delta alone (about 432 plain), so the cue adds almost nothing on top."}
+{"id": "t35", "value": 463, "low": 455, "high": 470, "why": "RL already sits in the mode the cue selects, so the cue leaves RL at its plain score of 463."}
+{"id": "t36", "value": 408, "low": 395, "high": 420, "why": "The Code-RL delta carries part of the same switch, which the cue already flips, so Code-RL with the cue lands near the cued base's 410."}
+{"id": "t37", "value": 405, "low": 390, "high": 418, "why": "A random direction carries no switch component; with the cue on, it lands at or slightly below the cued base."}
+{"id": "t40", "value": 370, "low": 340, "high": 400, "why": "Accuracy is sharply concave in delta scale, so a quarter of the delta flips most of the switch and recovers about three quarters of the 224 -> 463 gain."}
+{"id": "t41", "value": 432, "low": 415, "high": 450, "why": "Half the delta saturates the switch, as each half of the matrices did in n13, recovering about 85 % of the gain."}
+{"id": "t42", "value": 315, "low": 275, "high": 355, "why": "Code-RL writes part of the same answer-mode direction (cue token in its late readouts), so it lifts the plain base well above 224 on math without math training."}
+{"id": "t57", "value": 25, "low": 15, "high": 35, "why": "A mode switch along one direction is largely a constant shift in the residual stream, so one vector per layer closes a substantial share of KL even on cued text."}
+{"id": "t58", "value": 35, "low": 25, "high": 45, "why": "On RL text the mode shift is the main difference, so one constant vector per layer closes more of the KL than on cued-base text."}
+{"id": "t59", "value": 20, "low": 12, "high": 30, "why": "The switch is spread over MLP and attention redundantly, so the MLP-only constant vector closes most of what the full vector does."}
+{"id": "t60", "value": 28, "low": 18, "high": 38, "why": "Same redundancy on RL text: the MLP-only constant vector closes most of the full constant vector's share."}

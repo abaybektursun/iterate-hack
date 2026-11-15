@@ -30,12 +30,12 @@ SETUP, PY = "bash studies/rlneurons/jobs/setup_vllm.sh && ", "/opt/rln-vllm/bin/
 CELL = "--set math500 --temperature 1.0 --top-p 1.0"
 
 
-def merged(other, a, prompt, seed, rounding):
+def merged(other, a, prompt, seed, rounding, cell=CELL):
     """The command of a cell on a merged model (without --commit). rm -rf: Modal reuses a container, /tmp included."""
     kind = "--random" if a == "random" else f"--alpha {a}"
     label = f"{other}_random" if a == "random" else f"{'theta' if other == 'rl' else other}{a}"
     return (f"{SETUP}rm -rf /tmp/theta && {PY}merge_weights --other {other} {kind} --rounding {rounding} --dir /tmp/theta && {PY}run_cell --model-path /tmp/theta "
-            f"--model-label {label} --prompt {prompt} {CELL} --seed {seed}")
+            f"--model-label {label} --prompt {prompt} {cell} --seed {seed}")
 
 
 # arm -> (job id, commit, command without --commit, a on the RL line or None, hours); submitted as
@@ -103,8 +103,8 @@ def load_job(job, n):
     return m, rows_by_index(RUNS / job / "answers.jsonl", range(n))
 
 
-def write_run(arm, job, commit, cmd, hours, rows, sc):
-    d = OUT / f"{arm}-01"
+def write_run(arm, job, commit, cmd, hours, rows, sc, out=OUT):
+    d = out / f"{arm}-01"
     assert not d.exists(), f"{d} exists: a rerun gets the next number"
     d.mkdir(parents=True)
     (d / "run.json").write_text(json.dumps({"job_id": job, "commit": commit, "command": f"{cmd} --commit {commit}",
@@ -116,7 +116,7 @@ def write_run(arm, job, commit, cmd, hours, rows, sc):
         m.pop("tensors")
         (d / "merge.json").write_text(json.dumps(m, indent=1) + "\n")
     (d / "examples.json").write_text(json.dumps(examples(rows, sc), indent=1) + "\n")
-    return f"studies/rlneurons/results/{OUT.name}/{d.name}"
+    return f"studies/rlneurons/results/{out.name}/{d.name}"
 
 
 def check():
