@@ -1,11 +1,13 @@
 Use only the Read and Write tools, only on files in the current directory.
 
 before.jsonl holds a research team's board items up to a cutoff, one JSON object per line (id, kind, at, who, text).
-inventory.md lists the per-problem row files the team has stored and what a row holds. tests_blind.jsonl holds
+inventory.md lists the per-problem row files the team has stored and what a row holds. facts.json holds numbers earlier rounds computed from the same rows (experiment, recipe, measured value, n, interval):
+they are known, so where an entry asks for one of them, or for something that follows from them, use them.
+tests_blind.jsonl holds
 computations someone will run on those rows, each {id, experiment, recipe, unit}; nobody has run them yet.
 
-For every entry, predict the number the recipe will give, as a careful reader with no theory: use what before.jsonl
-reports about the same models and settings, base rates, and the plain reading of the items. Give a 90 % interval: the
+For every entry, predict the number the recipe will give, as a careful reader with no theory: use what before.jsonl and facts.json
+report about the same models and settings, base rates, and the plain reading of the items. Give a 90 % interval: the
 computed value should fall inside it 9 times out of 10. The interval is scored as a normal distribution (mean value,
 sd (high - low) / 3.29) by the probability it gives the computed value: too wide earns little, too narrow loses when
 it misses.

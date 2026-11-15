@@ -1,0 +1,104 @@
+{
+ "name": "r5-m11",
+ "statement": "Olmo-3.1 RL-Zero-Code reaches Math-RL's MATH-500 total by a different route: its code reward amplified a code-style habit already in the base (writing code, enumerating cases, simulating loops) that pays on discrete subjects (Number Theory, Counting & Probability) and less on Intermediate Algebra and Precalculus, so it gains relatively more on the first pair and less on the second at nearly equal totals.",
+ "scope": "Covers Olmo-3.1-7B-RL-Zero-Code (1ca3bb30) against Olmo-3.1-7B-RL-Zero-Math and the cued Olmo-3-1025-7B base, at T 1.0 / top-p 1.0, cap 16,384, grader v3, on MATH-500 (per-subject pattern) and the clean hard328 (code-style answer text). It does not cover Code 3.0, which gains nothing on math and is not claimed to carry the habit, T 0.6 looping cells, code benchmarks, or where the Math-RL gain comes from beyond acting as the comparison. It allows a shared, domain-general component (result-eb9211) next to the code-specific one and claims only that the code-specific part shifts gains between subjects. Its effect at the problem level is small, a few problems on MATH-500, so it can coexist with result-5da8a9's limited-power one-axis finding. External 2506.10947 found no code-style gain for OLMo2 under spurious rewards; here the reward is a real code reward, which is the stated difference.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2506.10947",
+   "finding": "Under RLVR on Qwen2.5-Math-7B, code-style reasoning (60.9% accurate vs 28.0% without) rises from 65% to about 90% of responses, and 58.3% of the gain comes from problems that switch to code.",
+   "how": "Gives the mechanism's shape: RL raises the frequency of a code-style habit the base already has, and the gain sits in the problems where that habit is used. Here the code reward selects the habit directly, and it pays mainly on discrete, enumerable problems."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-4b0d5f",
+   "quote": "Code-RL: plain 390, cue 450 (-1.4 vs RL cue [-4.0, 1.0])",
+   "how": "A habit learned on code still reaches Math-RL's MATH-500 total, because enumeration and case checks solve many base-wrong problems by a different route."
+  },
+  {
+   "item": "result-c9b27e",
+   "quote": "Math-RL and Code-RL weight differences from the same Olmo-3-1025-7B base are nearly orthogonal",
+   "how": "Different habits are written by different weight directions, so two deltas that reach equal math totals need not be aligned."
+  },
+  {
+   "item": "result-e45bf4",
+   "quote": "Code-RL = theta0.5 (-0.9 [-5.5,3.7])",
+   "how": "Totals match on hard328 too, as expected if the two routes trade subjects rather than differ in overall strength."
+  },
+  {
+   "item": "result-e45bf4",
+   "quote": "rl hard328 187/328 tokens 7613",
+   "how": "Enumerating or writing code ends in a concrete value sooner than open-ended deliberation, so Code-RL's answers are shorter than RL's at a similar score."
+  },
+  {
+   "item": "result-edceef",
+   "quote": "Code 3.1 cue 450 is +7.8 pts [4.4, 11.2] over Code 3.0 cue",
+   "how": "The gain depends on how far a particular code reward amplified the habit, not on how far the weights moved, so the two Code releases can differ."
+  },
+  {
+   "item": "result-5da8a9",
+   "quote": "excess at most +1.86 problems (theta0.5 + Code-RL cue)",
+   "how": "The largest cross-arm excess union pairs the Math direction with Code-RL, which fits a small subject-level second axis between those two arms."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-5da8a9",
+   "quote": "hard328, 7 arms: z mean 0.30, no second axis",
+   "how": "The item reads the arms, Code-RL included, as one difficulty axis; the theory needs a small second axis for Code-RL and survives only because the item states its power is low per pair (planted axis = 1.8 problems)."
+  },
+  {
+   "item": "result-eb9211",
+   "quote": "Code 3.1 changes the same tokens as Math 3.1 (S1 held)",
+   "how": "A token-level agreement of r 0.405 points to a large shared component, which the theory does not predict and only allows."
+  },
+  {
+   "item": "result-6d422d",
+   "quote": "the base's own right answers and Code-RL's give none",
+   "how": "If Code-RL's answers showed a useful code-style habit, three of them in context might have passed some of it to the base; they did not, although in-context transfer is a weaker channel than the weights."
+  }
+ ],
+ "rival": "One-axis rival (result-5da8a9 and r3-all-1): Code-RL learned the same domain-general settle-or-commit part as Math-RL, so its per-problem wins differ from Math-RL's only by difficulty and sampling noise, and its answers are no more code-like than the base's. The observations that separate them are the share of Code-RL hard328 answers with code markers above the base's (rival ~0, theory clearly positive), and a per-subject contrast on MATH-500 in Code-RL's favour on NT/C&P against IA/Precalculus (rival about +0.01 from difficulty alone, theory about +0.04).",
+ "predictions": [
+  {
+   "experiment": "MATH-500 subject contrast, Code-RL 3.1 cue against Math-RL. For each problem d = Code-RL cue score minus the mean of RL's 4 plain samples. S = mean d over Number Theory and Counting & Probability problems minus mean d over Intermediate Algebra and Precalculus problems. The one-axis difficulty rival predicts about +0.01 here (Code-RL's small deficit falls on harder subjects); this mechanism predicts about +0.045.",
+   "recipe": "Files: studies/rlneurons/results/axis/math500-01/vectors.json with manifest.json, and studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. Code arm = the vectors.json arm whose manifest entry has job id abaybektursun-1114-162452-0203 (Code-RL cue). RL arms = the 4 arms whose manifest entries come from job abaybektursun-1114-183640-e828 (RL plain, samples 0-3). Join each arm's 0/1 vector to problem_index through vectors.json problem_indices, and join subject from per_problem.json on problem_index. Group A = subject 'Number Theory' or 'Counting & Probability'; group B = subject 'Intermediate Algebra' or 'Precalculus'. Per problem d = code score - (sum of 4 RL scores)/4. S = mean(d over A) - mean(d over B), as a fraction. Vector entries are grader v3 0/1, and cap hits are already 0. Problems missing from any of the 5 arms are dropped from both groups.",
+   "unit": "fraction of problems",
+   "value": 0.045,
+   "low": -0.01,
+   "high": 0.1,
+   "refuted_by": "S measured below -0.01",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Share of hard328 answers that contain code-style markers, Code-RL 3.1 cue minus base cue. The rival (shared commit habit) predicts a difference near 0 (within +-0.02); this mechanism predicts a clearly positive one.",
+   "recipe": "Files: S3 results/rlneurons/r5/day1_wdiff328-01/abaybektursun-1114-181216-a619/answers.jsonl (Code-RL cue) and results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (base cue), fetched with the aws commands in inventory.md. Use the rows whose problem_index is among the clean 328 (all rows in these files); if a problem has several rows, use attempt 0 (or the first row if there is no attempt field). An answer is marked if its field text (the generated text only, not prompt) contains any of the case-sensitive substrings '```', 'def ', 'for i in range', 'print(', 'import '. Share = marked rows / rows in the file after the filter. Cap-hit rows count like any other. Statistic = share(Code-RL) - share(base cue).",
+   "unit": "fraction of problems",
+   "value": 0.12,
+   "low": 0.04,
+   "high": 0.35,
+   "refuted_by": "difference measured below 0.04",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Within Code-RL 3.1 cue answers on hard328, the accuracy of marked (code-style) answers minus unmarked ones, with problems stratified by difficulty (RL answer-length quartiles). The rival, where code markers are an incidental style, predicts about 0 or below (code text often signals a hard problem left unfinished); this mechanism predicts the habit pays.",
+   "recipe": "Files: the Code-RL file a619 answers.jsonl as in the previous recipe, and S3 results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151540-86ef/answers.jsonl (RL plain). Marker rule as in the previous recipe. Sort the 328 problems by RL's n_generated in 86ef (ties broken by problem_index ascending) and cut them into 4 quartiles of 82 problems. Within each quartile compute acc_m = mean score_v3 of marked Code-RL answers and acc_u = the same for unmarked answers. Cap hits and missing score_v3 count as 0. Skip a quartile with no marked or no unmarked answers. Statistic = sum over the kept quartiles of n_marked_q * (acc_m - acc_u) / sum of n_marked_q. If no quartile is kept, the statistic counts as -1.",
+   "unit": "fraction of problems",
+   "value": 0.08,
+   "low": -0.05,
+   "high": 0.25,
+   "refuted_by": "statistic measured below -0.05",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "GPU: Olmo-3.1-7B-RL-Zero-Code (1ca3bb30, RL tokenizer) with the cue, MATH-500 all 500, one sample, T 1.0 / top-p 1.0, cap 16,384, seed base 90,000,000, through jobs/run_cell.py on one H100 (about 1.7 M tokens, about 30 min). Compute the code-marker share (substrings '```', 'def ', 'for i in range', 'print(', 'import ' in text) over Number Theory and Counting & Probability problems minus the share over Intermediate Algebra and Precalculus problems, in percentage points. The rival predicts no subject difference in code use (about 0 +- 4).",
+   "unit": "percentage points of answers",
+   "value": 8,
+   "low": 1,
+   "high": 20,
+   "refuted_by": "difference below 1 percentage point, or under 5 % of all 500 Code-RL answers marked",
+   "gpu_minutes": 35
+  }
+ ]
+}

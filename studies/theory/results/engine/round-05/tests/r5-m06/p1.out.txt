@@ -1,0 +1,4 @@
+{"measured": 0.6470588235294118, "refuted_by_met": false, "alt_measured": 0.6470588235294118, "not_computable": null, "example_row": {"problem_index": 9, "sample": 2, "attempt": 2, "seed": 41022009, "n_new": 16244, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "4", "score_v3": 1, "gold": "4", "_source": "a_day1_3_attempt12", "_score_used": 1}}
+class n=17 indices=[9, 18, 26, 43, 101, 110, 166, 170, 210, 214, 279, 295, 301, 306, 349, 392, 425]
+solved=[9, 26, 43, 101, 166, 170, 210, 295, 301, 349, 425] alt_solved=[9, 26, 43, 101, 166, 170, 210, 295, 301, 349, 425]
+samples per problem={9: 9, 18: 5, 26: 8, 43: 11, 101: 5, 110: 9, 166: 5, 170: 6, 210: 4, 214: 4, 279: 4, 295: 11, 301: 5, 306: 4, 349: 4, 392: 10, 425: 10}

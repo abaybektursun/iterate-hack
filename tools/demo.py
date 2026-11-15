@@ -96,7 +96,7 @@ a { color: inherit; }
 .top a:hover { color: var(--ink); }
 .theme { margin-left: auto; color: var(--mute); font-weight: 500; padding: 2px 4px; border-radius: 3px; transition: color .15s ease; }
 .theme:hover { color: var(--ink); }
-.status { color: var(--mute); white-space: nowrap; display: flex; align-items: center; gap: 10px; }
+.status { color: var(--mute); white-space: nowrap; display: flex; align-items: center; gap: 10px; min-width: 15em; justify-content: flex-end; }
 .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 20%, transparent); }
 .status.bad { color: var(--red); }
 .status.bad::before { background: var(--red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--red) 20%, transparent); }
@@ -121,6 +121,7 @@ svg { width: 100%; height: 100%; display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-stretch: 112%; letter-spacing: .012em; }
 .label { font-weight: 600; paint-order: stroke fill; stroke: var(--paper); stroke-width: 10px; stroke-linejoin: round; }
 .label.plain { stroke: none; }
+#ms-label { font-weight: 500; fill: var(--mute); }
 .who { font-weight: 560; fill: var(--c); paint-order: stroke fill; stroke: var(--paper); stroke-width: 7px; stroke-linejoin: round; }
 .part { transition: opacity .45s ease; }
 [data-go] { cursor: pointer; }
@@ -172,7 +173,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 #dotwrap.off { opacity: 0; }
 #dotwrap.off .dot { pointer-events: none; }
 #dots .dot { transition: opacity .45s ease; }
-.claimdim #dots .dot { opacity: .3; }
+.claimdim #dots .dot { opacity: .14; }
 .claimdim #dots .dot.scored { opacity: 1; }
 
 /* The points outside the lab (Modal, Exa), each shown only in its own step and its own panel */
@@ -197,10 +198,9 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .fbar { transition: fill .5s ease; }
 .f-faint { fill: var(--fbar1); }
 .f-pre { fill: var(--faint); }
-.fghost { fill: none; stroke: var(--faint); stroke-width: 1.5; stroke-dasharray: 4 3; }
+.fghost { fill: none; stroke: var(--paper); stroke-width: 2; stroke-dasharray: 4 3; }
 .fbrk { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.fvote .f-faint { opacity: .35; }
-.fvote [data-t="pct0"], .fvote .fcount.onfaint, .fvote .fname0 { opacity: .35; }
+#fig-bars.fvote .f-faint, #fig-bars.fvote [data-t="pct0"], #fig-bars.fvote .fcount.onfaint, #fig-bars.fvote .fname0 { opacity: 0; }
 .f-mute { fill: var(--mute); }
 .f-ink { fill: var(--ink); }
 .f-blue { fill: var(--blue); }
@@ -263,14 +263,15 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .src a { color: inherit; white-space: nowrap; }
 .open { margin: .9em 0 0; font-size: clamp(15px, min(1.25vw, 2.1vh), 27px); line-height: 1.36; color: var(--mute); max-width: 38ch; }
 .open::before { content: ""; display: inline-block; width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--mute); margin-right: .5em; vertical-align: .05em; }
-.recap { list-style: none; margin: clamp(16px, 2.6vh, 30px) 0 0; padding: 0; }
+.recap { list-style: none; margin: clamp(12px, 2vh, 24px) 0 0; padding: 0; }
 .recap li { border-top: 1px solid var(--rule); }
+.pane:has(.recap) .say { min-height: 0; }  /* the last step has no fact line to keep at one height, and needs the room */
 .recap a { display: block; padding: .45em 0; text-decoration: none; font-size: clamp(17px, min(1.45vw, 2.45vh), 31px); line-height: 1.3; text-wrap: pretty; }
 .recap a b { font-weight: 600; }
 .recap a:hover { color: var(--blue); }
-.url { display: inline-block; margin-top: clamp(16px, 2.6vh, 30px); font-size: clamp(20px, min(1.9vw, 3.2vh), 40px); font-weight: 560; font-stretch: 106%; color: var(--blue); text-decoration: none; }
+.url { display: inline-block; margin-top: clamp(12px, 2vh, 24px); font-size: clamp(20px, min(1.9vw, 3.2vh), 40px); font-weight: 560; font-stretch: 106%; color: var(--blue); text-decoration: none; }
 .fact, .open, .recap, .walk, .url { animation: rise .3s cubic-bezier(.23, 1, .32, 1) .25s both; }
-.walk { display: inline-block; margin-top: 24px; padding: .7em 1.4em; border-radius: 999px; background: var(--btn); color: var(--btn-ink); text-decoration: none;
+.walk { display: inline-block; margin-top: clamp(14px, 2.2vh, 24px); padding: .7em 1.4em; border-radius: 999px; background: var(--btn); color: var(--btn-ink); text-decoration: none;
   font-weight: 620; font-size: clamp(15px, 1.15vw, 22px); font-stretch: 106%; letter-spacing: .004em;
   box-shadow: inset 0 1px 0 var(--btn-edge), 0 14px 28px -14px var(--btn-drop); }
 .walk:hover { box-shadow: inset 0 1px 0 var(--btn-edge), 0 0 0 1.5px var(--blue), 0 18px 32px -12px var(--btn-drop); }
@@ -392,7 +393,7 @@ function when(at) {  // "2026-11-15 05:37 UTC" -> "Nov 15, 05:37 UTC"
 /* The source line, one format on every step: "<source>, <Mon D, HH:MM> UTC". The source is "board <id>, <id>" (links)
    or a plain name; the time is the newest "at" of the line's FACTS keys, left out when none of them has one. */
 const boardIds = (...keys) => [...new Set(keys.flatMap(k => String(FACTS[k] ? FACTS[k].src : "").match(/\b(?:result|knowledge|idea|work|skill)-[0-9a-f]{6}\b/g) || []))];
-const bd = ids => ids.length ? "board " + ids.slice(0, 2).map(id => `<a href="/#${id}">${id}</a>`).join(", ") : "";
+const bd = (ids, max = 2) => ids.length ? "board " + ids.slice(0, max).map(id => `<a href="/#${id}">${id}</a>`).join(", ") : "";
 function srcLine(name, keys = []) {
   const ats = keys.map(k => FACTS[k] && FACTS[k].at).filter(Boolean).sort(), t = ats.length ? when(ats[ats.length - 1]) : "";
   return `<span class="src">${[name, t].filter(Boolean).join(", ")}</span>`;
@@ -496,7 +497,7 @@ function model(d) {
 /* The figures on the face of the board, one per step that shows one. Coordinates in face units: origin at the
    board's centre, y down, 164 = the board's radius. Every number is read from FACTS here. A text with data-max is
    shrunk to that width if the font makes it wider (fit()); data-t names the texts a step's cues turn on. */
-const BAR = { y0: 74, full: 150, w: 50, xs: [-106, -42, 16] };
+const BAR = { y0: 74, full: 150, w: 54, xs: [-80, -8, 64] };
 function tx(cls, x, y, size, body, o = {}) {
   return `<text class="${cls}${o.t ? " ft" + (o.rise ? " rise" : "") : ""}" x="${x}" y="${y}" font-size="${size}" data-fs="${size}"` +
     `${o.anchor ? ` style="text-anchor:${o.anchor}"` : ""}${o.t ? ` data-t="${o.t}"` : ""}${o.max ? ` data-max="${o.max}"` : ""}${o.id ? ` id="${o.id}"` : ""}` +
@@ -519,13 +520,13 @@ function faceSVG() {
     ["validates every idea", "waits for a GPU", "repeats a run"].map((s, i) => tx("flab", 0, -40 + 46 * i, 26, s, { t: "stop" + i, rise: 1, max: 296 })).join("") + "</g>");
   // Step 3: results per hour.
   const hrs = hourRows(), nb = hrs.length, pitch = 234 / Math.max(1, nb), bw = pitch - 8, top = Math.max(1, ...hrs.map(r => r[1]));
-  const sc = Math.min(4, 100 / top), lastV = nb ? hrs[nb - 1][1] : 0;
+  const sc = Math.min(4, 112 / top), lastV = nb ? hrs[nb - 1][1] : 0;
   out.push(`<g class="fig" data-fig="rate">` +
-    tx("fnum", -116, -50, 60, nf(need("results_on_board")), { t: "rate-head", anchor: "start", id: "rate-hero" }) +
-    tx("flab", 16, -74, 22, "results", { t: "rate-head", anchor: "start", id: "rate-l1" }) +
-    tx("fsub", 16, -50, 22, `in ${nf(Math.round(need("board_hours")))} hours`, { t: "rate-head", anchor: "start", id: "rate-l2" }) +
+    tx("fnum", -116, -58, 60, nf(need("results_on_board")), { t: "rate-head", anchor: "start", id: "rate-hero" }) +
+    tx("flab", 16, -82, 22, "results", { t: "rate-head", anchor: "start", id: "rate-l1" }) +
+    tx("fsub", 16, -58, 22, `in ${nf(Math.round(need("board_hours")))} hours`, { t: "rate-head", anchor: "start", id: "rate-l2" }) +
     hrs.map(([, v], i) => `<rect class="fbar ${i === nb - 1 ? "f-blue" : "f-mute"}" data-rate="${i}" data-h="${f(v * sc)}" x="${f(-113 + pitch * i)}" y="84" width="${f(bw)}" height="0" rx="2"/>`).join("") +
-    (nb ? tx("flab", f(-113 + pitch * (nb - 1) + bw), f(84 - lastV * sc - 8), 20, `${lastV}<tspan class="fsub" font-size="17"> per hour</tspan>`, { t: "rate-late", anchor: "end" }) +
+    (nb ? tx("flab", f(-113 + pitch * (nb - 1) + bw), f(84 - top * sc - 8), 20, `${lastV}<tspan class="fsub" font-size="17"> per hour</tspan>`, { t: "rate-late", anchor: "end" }) +
       tx("fsub", -113, 104, 18, `${hrs[0][0]}:00 UTC`, { t: "rate-late", anchor: "start" }) +
       tx("fsub", 113, 104, 18, `${hrs[nb - 1][0]}:00 UTC`, { t: "rate-late", anchor: "end" }) : "") + "</g>");
   // Steps 4, 5 and 6: three bars; under a vote two of them grow; then RL's gain over base + cue split in two. The slab
@@ -538,7 +539,7 @@ function faceSVG() {
   const bx = BAR.xs[2] + BAR.w / 2 + 5, yA = BAR.y0 - H[2], yB = BAR.y0 - H[1];
   out.push(`<g class="fig" data-fig="bars" id="fig-bars"><g class="bk">` +
     [0, 1, 2].map(i => `<rect class="fbar ${fills[i]}" data-bar="${i}" x="${x0(i)}" y="${BAR.y0}" width="${BAR.w}" height="0" rx="2"/>`).join("") +
-    [1, 2].map(i => `<path class="fghost ft" data-t="vote-late" d="M${f(x0(i) - 3)} ${f(BAR.y0 - H[i])}H${f(x0(i) + BAR.w + 3)}"/>`).join("") +
+    [1, 2].map(i => `<path class="fghost ft" data-t="vote-late" d="M${f(x0(i) - 6)} ${f(BAR.y0 - H[i])}H${f(x0(i) + BAR.w + 6)}"/>`).join("") +
     vals.map((v, i) => tx("fnum", BAR.xs[i], f(BAR.y0 - H[i] - 8), 30, per(pct(keys[i]), 30), { t: "pct" + i, max: 56 })).join("") +
     [1, 2].map(i => tx("fnum", BAR.xs[i], f(BAR.y0 - HV[i] - 8), 30, per(pctOf(vv[i]), 30), { t: "vote-late", max: 56 })).join("") +
     tx("fcount onfaint", BAR.xs[0], BAR.y0 - 9, 15, nf(vals[0]), { t: "cnt0" }) +
@@ -546,17 +547,18 @@ function faceSVG() {
     [1, 2].map(i => tx("fcount" + (i === 1 ? " onblue" : ""), BAR.xs[i], BAR.y0 - 9, 15, nf(vv[i] ?? "?"), { t: "vote-cnt" })).join("") +
     names.map((s, i) => tx("flab" + (i === 0 ? " fname0" : ""), BAR.xs[i], BAR.y0 + 20, 13, s, { t: "names" })).join("") +
     tx("fsub", 0, 116, 14, `of ${nf(N)} problems`, { t: "cap1", max: 200 }) +
-    tx("fsub", 0, 112, 14, `vote over ${voteK()} samples,`, { t: "vote-late", max: 220 }) +
-    tx("fsub", 0, 129, 14, `of ${nf(N)} problems`, { t: "vote-late", max: 180 }) +
+    tx("fsub", 0, 118, 14, `vote over ${voteK()} samples`, { t: "vote-late", max: 220 }) +
+    tx("fsub", 0, 135, 14, `of ${nf(N)} problems`, { t: "vote-late", max: 180 }) +
     `<path class="fbrk ft" data-t="gap" d="M${f(bx)} ${f(yA)}h6V${f(yB)}h-6"/>` +
-    tx("flab", f(bx + 12), f((yA + yB) / 2 + 5), 14, `${gap} points`, { t: "gap", anchor: "start", max: 84 }) + "</g>" +
+    tx("flab", f(bx + 12), f((yA + yB) / 2 - 1), 16, `${gap}`, { t: "gap", anchor: "start", max: 40 }) +
+    tx("fsub", f(bx + 12), f((yA + yB) / 2 + 13), 12, "points", { t: "gap", anchor: "start", max: 44 }) + "</g>" +
     `<rect class="fbar f-mute sl-l" id="sl-l" x="0" y="0" width="0" height="0" rx="1"/><rect class="fbar f-mute sl-r" id="sl-r" x="0" y="0" width="0" height="0" rx="1"/>` +
     tx("fnum", -124, -36, 56, per(nf(need("reliability_share_pct")), 56), { t: "why-a", anchor: "start" }) +
     tx("fnum", 124, -36, 30, per(nf(need("new_problems_share_pct")), 30), { t: "why-b", anchor: "end" }) +
     tx("flab", -124, 46, 14, "solved sometimes", { t: "why-c", anchor: "start", max: 136, pair: "wy" }) +
     tx("flab", 124, 46, 14, "never solved", { t: "why-c", anchor: "end", max: 104, pair: "wy" }) +
     tx("fsub", 0, -92, 15, "RL's gain over base + cue", { t: "why-d", max: 220 }) +
-    tx("fsub", 0, 84, 14, `by base + cue in ${nf(FACTS.anatomy_right_samples && FACTS.reliability_share_pct ? FACTS.anatomy_right_samples.n / FACTS.reliability_share_pct.n : "?")} samples,`, { t: "why-d", max: 250 }) +
+    tx("fsub", 0, 84, 14, `by base + cue in ${nf(FACTS.anatomy_right_samples && FACTS.reliability_share_pct ? FACTS.anatomy_right_samples.n / FACTS.reliability_share_pct.n : "?")} samples`, { t: "why-d", max: 250 }) +
     tx("fsub", 0, 102, 14, `of ${nf(FACTS.reliability_share_pct ? FACTS.reliability_share_pct.n : "?")} problems`, { t: "why-d", max: 220 }) +
     "</g>");
   // Step 7: a gain and its second draw.
@@ -580,27 +582,26 @@ function faceSVG() {
     `<rect class="fbar f-pre" data-pre="shard" x="-110" y="-66" width="0" height="22" rx="2"/>` +
     tx("fnum", -110, 4, 40, unit(need("shard_4_minutes"), "min"), { t: "shard-post", anchor: "start", pair: "s2" }) +
     tx("fsub", 110, 4, 16, `${nf(shards)} H100s`, { t: "shard-post", anchor: "end", pair: "s2" }) +
-    Array.from({ length: nS }, (_, i) => `<rect class="fbar f-blue" data-post="shard" data-w="${f(wFour)}" x="-110" y="${14 + 17 * i}" width="0" height="12" rx="2"/>`).join("") +
-    tx("fsub", 0, 104, 18, `one ${nf(FACTS.shard_whole_minutes ? FACTS.shard_whole_minutes.n : "?")}-problem run`, { t: "shard-post", max: 230 }) + "</g>");
+    Array.from({ length: nS }, (_, i) => `<rect class="fbar f-blue" data-post="shard" data-w="${f(wFour)}" x="-110" y="${14 + 20 * i}" width="0" height="16" rx="2"/>`).join("") +
+    tx("fsub", 0, 116, 18, `one ${nf(FACTS.shard_whole_minutes ? FACTS.shard_whole_minutes.n : "?")}-problem run`, { t: "shard-post", max: 230 }) + "</g>");
   // Step 9: what came back from Exa.
   const ex = need("exa_case_best"), title = String(ex.paper_title || "?").split(":")[0].split(" "), half = Math.ceil(title.length / 2);
   const link = String(ex.paper_url || ""), arx = /(\d{4}\.\d{4,5})/.exec(link);
   out.push(`<g class="fig" data-fig="source">` + tx("fnum", 0, -46, 30, esc(title.slice(0, half).join(" ")), { t: "src", max: 290 }) +
     tx("fnum", 0, -12, 30, esc(title.slice(half).join(" ")), { t: "src", max: 290 }) +
     `<a href="${esc(link)}" target="_blank" rel="noopener">${tx("src-link", 0, 28, 22, esc(arx ? "arXiv " + arx[1] : link.replace(/^https?:\/\//, "")), { t: "src", max: 260 })}</a>` +
-    tx("fsub", 0, 58, 16, `one of ${nf(ex.papers_cited ?? "?")} papers cited`, { t: "src", max: 240 }) + "</g>");
+    tx("flab", 0, 62, 20, `${nf(ex.method_families ?? "?")} method families found`, { t: "src", max: 250 }) + "</g>");
   // Step 10: the planted-waste test, two arms, each a bar that shrinks from its first batch to its last.
   const S1 = need("planted_waste_skill"), S2 = need("planted_waste_plain"), maxB = Math.max(Number(S1.before_min) || 0, Number(S2.before_min) || 0) || 1;
   const row = (y, label, o, j) => {
     const wb = 232 * (Number(o.before_min) || 0) / maxB, wa = 232 * (Number(o.after_min) || 0) / maxB;
-    return tx("flab", -116, y, 19, label, { t: "waste", anchor: "start", max: 150, pair: "w" + j }) +
-      tx("fnum", 116, y, 26, `${nf(o.after_min ?? "?")}<tspan class="flab" font-size="16"> min</tspan>`, { t: "waste-post", anchor: "end", pair: "w" + j }) +
-      `<rect class="fbar f-pre" x="-116" y="${y + 10}" width="${f(wb)}" height="20" rx="2"/>` +
-      `<rect class="fbar f-blue" data-waste="${j}" data-wb="${f(wb)}" data-wa="${f(wa)}" x="-116" y="${y + 10}" width="${f(wb)}" height="20" rx="2"/>` +
-      tx("fcount", f(-116 + wb - 6), y + 25, 14, nf(o.before_min ?? "?"), { t: "waste", anchor: "end" });
+    return tx("fnum", -116, y, 40, nf(o.after_min ?? "?"), { t: "waste-post", anchor: "start", pair: "w" + j }) +
+      tx("fsub", 116, y, 16, label, { t: "waste", anchor: "end", max: 150, pair: "w" + j }) +
+      `<rect class="fbar f-pre" x="-116" y="${y + 10}" width="${f(wb)}" height="22" rx="2"/>` +
+      `<rect class="fbar f-blue" data-waste="${j}" data-wb="${f(wb)}" data-wa="${f(wa)}" x="-116" y="${y + 10}" width="${f(wb)}" height="22" rx="2"/>`;
   };
-  out.push(`<g class="fig" data-fig="waste">` + row(-60, "Retro review", S1, 0) + row(10, "plain instruction", S2, 1) +
-    tx("fsub", 0, 80, 16, "container minutes per batch,", { t: "waste", max: 240 }) + tx("fsub", 0, 100, 16, "planted waste", { t: "waste", max: 240 }) + "</g>");
+  out.push(`<g class="fig" data-fig="waste">` + row(-62, "Retro review", S1, 0) + row(18, "plain instruction", S2, 1) +
+    tx("fsub", 0, 92, 16, "container minutes per batch", { t: "waste", max: 240 }) + "</g>");
   return out.join("");
 }
 
@@ -853,10 +854,12 @@ function comet(u, pts, r, opacity) {
 }
 function say(i, k, text, ns, t, hold) {
   const o = S.r.swarms[i], g = S.g, s = String(text ?? "").replace(/\s+/g, " ").trim();
-  if (!o || !s) return;
   S.r.swarms.forEach(x => x.said.setAttribute("opacity", 0));
-  const head = s.slice(0, g.chars), whole = head.replace(/\s+\S*$/, "");
-  const cut = s.length > g.chars ? (whole.length * 2 > g.chars ? whole : head).replace(/[,;:(\-]+$/, "") + "…" : s;
+  // board.py's own announcements of a claim or a close are not something a session wrote: they get no label
+  if (!o || !s || /^(started work-|done work-|closed)/i.test(s)) { S.play.say = null; return; }
+  const head = s.slice(0, g.chars), whole = s.length > g.chars && /\s/.test(s.charAt(g.chars)) ? head : head.replace(/\s+\S*$/, "");
+  if (s.length > g.chars && !/\s/.test(whole)) { S.play.say = null; return; }  // one long word: no place to cut it
+  const cut = s.length > g.chars ? whole.replace(/[\s,;:(\-]+$/, "") + "…" : s;
   const [ln, wh] = o.said.children, age = g.age ? " " + ago(ns) : "";
   ln.textContent = cut; wh.textContent = age;
   wh.setAttribute("class", "when" + (mins(ns) < 1 ? " now" : ""));
@@ -1137,13 +1140,13 @@ const STEPS = [
     cues: [[300, () => ft("rate-head")], [500, () => to("f.rate", 1, 1400, 0, out)], [1900, () => ft("rate-late")]] },
   { hash: "result", sec: "Proof", title: "Result", cam: "near", lit: () => ["board"], face: "bars", replay: "off",
     say: () => `With no training, a published ${word(FACTS.cue_text ? FACTS.cue_text.n : "?")}‑token cue takes the base model to ${b(pct("math500_base_cue") + "%")} on MATH-500.`,
-    fact: () => `RL training reaches ${b(pct("math500_rl") + "%")}. Without the cue the base model scores ${nw(pct("math500_base_plain") + "%")} at the same sampling and ${nw(pct("math500_base_plain_t06") + "%")} at its best setting.` +
-      srcLine(bd(boardIds("math500_base_plain", "math500_base_cue", "math500_rl").length ? boardIds("math500_base_plain", "math500_base_cue", "math500_rl") : ["result-c36598", "result-533123"])),
+    fact: () => `RL training reaches ${b(pct("math500_rl") + "%")}. On ${nf(FACTS.hard328_rl ? FACTS.hard328_rl.n : "?")} harder problems, where the cue was not chosen, it takes the base model from ${nw(pct("hard328_base_plain") + "%")} to ${b(pct("hard328_base_cue") + "%")}; RL reaches ${nw(pct("hard328_rl") + "%")}.` +
+      srcLine(bd(boardIds("math500_base_plain", "math500_base_cue", "math500_rl", "hard328_base_plain", "hard328_base_cue", "hard328_rl"), 4)),
     more: [["result/cue", "The cue"], ["result/harder", "Harder problems and code"]],
     reset() { barsMode("result"); },
     cues: [[350, () => to("f.bars", 1, 820, 0, out)], [1250, () => ["names", "cnt0", "cnt12", "cap1"].forEach(t => ft(t))], [1500, () => ft("gap")]] },
   { hash: "vote", sec: "Proof", title: "Vote", cam: "near", lit: () => ["board"], face: "bars", replay: "off",
-    say: () => `A vote over ${voteK()} samples takes the base model to ${b(pct("vote4_restart_base") + "%")}, still with no training.`,
+    say: () => `A vote over ${voteK()} samples takes the base model with the cue to ${b(pct("vote4_restart_base") + "%")}, still with no training.`,
     fact: () => { const a = num("vote4_restart_base"), r = num("vote4_restart_rl"), lead = a != null && r != null && N500() ? nf(Math.round(1000 * (r - a) / N500()) / 10) : "?";
       return `Under the same vote the RL-trained model scores ${b(pct("vote4_restart_rl") + "%")}, so RL keeps a ${lead}-point lead.` +
         srcLine(bd(boardIds("vote4_restart_base", "vote4_restart_rl")), ["vote4_restart_base", "vote4_restart_rl"]); },
@@ -1153,7 +1156,7 @@ const STEPS = [
   { hash: "why", sec: "Proof", title: "Why", cam: "near", lit: () => ["board"], face: "bars", replay: "off",
     say: () => "RL mostly makes the model reliable on problems it could already solve.",
     fact: () => { const n = FACTS.reliability_share_pct ? FACTS.reliability_share_pct.n : null, k = FACTS.anatomy_right_samples && n ? FACTS.anatomy_right_samples.n / n : "?";
-      return `${b(nf(need("reliability_share_pct")) + "%")} of RL's gain over base + cue is on problems the base model solves in at least 1 of ${nf(k)} samples.` +
+      return `${b(nf(need("reliability_share_pct")) + "%")} of RL's gain over base + cue is on problems that base + cue solves in at least 1 of ${nf(k)} samples.` +
         srcLine(bd(boardIds("reliability_share_pct").length ? boardIds("reliability_share_pct") : ["result-afc423"]), ["reliability_share_pct"]); },
     more: [["why/control", "How we know"], ["why/findings", "Other findings"]],
     reset() { barsMode("why"); },
@@ -1169,7 +1172,7 @@ const STEPS = [
       [2500, () => ft("rowB")], [2650, () => { ft("strike"); $("draw-a") && $("draw-a").classList.add("mutedtext"); }]] },
   { hash: "infra", sec: "How", title: "Infrastructure", cam: "wide", lit: A => ["board", "swarm-" + A, "ext-modal"], face: "shard", ext: "modal", replay: "off", who: () => fv("exa_case_best") && fv("exa_case_best").who,
     say: () => `All ${nf(need("gpu_submit_commands"))} GPU job submissions to Modal came from agent sessions.`,
-    fact: () => `Splitting one run across ${nf(need("shard_detail", "shards"))} H100s cut it from ${b(nf(need("shard_whole_minutes")))} to ${b(nf(need("shard_4_minutes")))} minutes (one run each way).` +
+    fact: () => `A Retro review proposed splitting one run across ${nf(need("shard_detail", "shards"))} H100s and another person's agent built it: ${b(nf(need("shard_whole_minutes")))} to ${b(nf(need("shard_4_minutes")))} minutes (one run each way).` +
       srcLine(["agent event log", bd(boardIds("shard_4_minutes"))].filter(Boolean).join(", "), ["gpu_submit_commands", "shard_4_minutes"]),
     more: [["infra/modal", "On Modal"], ["infra/people", "Who did what"]],
     reset() { ft("shard-pre", false); ft("shard-post", false); put("f.shardPre", 0); put("f.shard", 0); put("lane.modal", 0); extTraces("modal", false); },
@@ -1199,8 +1202,8 @@ const STEPS = [
     say: () => "People watch the research evolve live on this site.",
     recap: () => [
       ["proof", `Nanolab makes agents fail fast: ${b(nf(need("results_on_board")))} results, a median of ${b(nf(need("claim_to_close_median_min")))} minutes from claim to result.`],
-      ["vote", `With no training the base model reaches ${b(pct("vote4_restart_base") + "%")} on MATH-500, and RL reaches ${b(pct("vote4_restart_rl") + "%")} under the same vote.`],
-      ["why", `${b(nf(need("reliability_share_pct")) + "%")} of RL's gain over base + cue is reliability.`]],
+      ["vote", `With no training, the cue and a vote take the base model to ${b(pct("vote4_restart_base") + "%")} on MATH-500; RL reaches ${b(pct("vote4_restart_rl") + "%")} under the same vote.`],
+      ["why", `${b(nf(need("reliability_share_pct")) + "%")} of RL's gain over base + cue is on problems that base + cue already solves in at least 1 of ${nf(FACTS.anatomy_right_samples && FACTS.reliability_share_pct ? FACTS.anatomy_right_samples.n / FACTS.reliability_share_pct.n : "?")} samples.`]],
     url: "monitor.invariant.team",
     reset() { halo(false); S.due = S.t; },
     cues: [[600, () => { const dot = halo(true); if (dot && travel()) ping(dot); }]] },
@@ -1352,7 +1355,9 @@ function figures(now) {
       [0, 1].forEach(i => { const h = H[i] * p[i]; rects[i].setAttribute("y", f(BAR.y0 - h)); rects[i].setAttribute("height", f(h)); });
       const hh = H[2] * p[2], body = Math.min(hh, H[1]), sh = Math.max(0, hh - H[1]);
       rects[2].setAttribute("y", f(BAR.y0 - body)); rects[2].setAttribute("height", f(body));
-      const share = (num("reliability_share_pct") ?? 50) / 100, x3 = BAR.xs[2] - BAR.w / 2;
+      const dx = -(BAR.xs[1] + BAR.xs[2]) / 2 * vv;  // under the vote the plain base bar is gone and the two voted bars move to the centre
+      svg.querySelector("#fig-bars .bk").setAttribute("transform", `translate(${f(dx)} 0)`);
+      const share = (num("reliability_share_pct") ?? 50) / 100, x3 = BAR.xs[2] - BAR.w / 2 + dx;
       const ov = sh > 0 ? .8 : 0, Lw = 245 * share, from = [[x3, BAR.y0 - hh, BAR.w * share + ov, sh + ov], [x3 + BAR.w * share, BAR.y0 - hh, BAR.w * (1 - share), sh + ov]];  // overlap a hair, so no seam shows while they look like one bar
       const dest = [[-124, -22, Lw, 44], [-124 + Lw + 3, -22, 245 - Lw, 44]];
       [$("sl-l"), $("sl-r")].forEach((r, j) => {

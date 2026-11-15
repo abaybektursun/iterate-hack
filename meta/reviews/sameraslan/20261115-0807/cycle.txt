@@ -1,0 +1,32 @@
+Unclosed connection: Channel('api.modal.com', 443, ..., path=None)
+Jobs of sameraslan, last 2.3 h:  id  state  gpu  wait  run  command
+  sameraslan-1114-215038-fcb1  exit 1  NVIDIA H100   0.1  0.9  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-215045-990b  exit 1  NVIDIA H100   0.1  1.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-215214-d12f  done  NVIDIA H100   0.0  18.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-215228-f78f  done  NVIDIA H100   0.0  15.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-220546-86c9  done  NVIDIA H100   0.1  50.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220554-2e30  done  NVIDIA H100   0.1  59.2  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220604-d4a3  done  NVIDIA H100   0.1  49.5  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220613-5599  done  NVIDIA H100   0.1  28.9  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220623-47fd  done  NVIDIA H100   0.6  27.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220631-bbdc  done  NVIDIA H100   1.0  35.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220803-2a56  done  NVIDIA H100   0.6  48.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220813-f46b  done  NVIDIA H100   3.1  47.3  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220821-7858  done  NVIDIA H100   10.0  28.7  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220830-d05c  done  NVIDIA H100   13.9  25.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220942-7014  cancelled  NVIDIA H100   24.7  16.1  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-220952-aa97  running  NVIDIA H100   25.3  92.7  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-221130-eb90  done  NVIDIA H100   31.3  37.1  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-221138-a65c  done  NVIDIA H100   35.4  25.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  sameraslan-1114-223704-bee0  done  NVIDIA H100   11.2  31.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-224752-36e7  died: RuntimeError: there are open files preventing the operation: path sameraslan-1114-220942-7014/log is open from '/bin/sh -c bash studie  NVIDIA H100   2.6  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-225232-b300  died: RuntimeError: there are open files preventing the operation: path sameraslan-1114-220942-7014/log is open from '/bin/sh -c bash studie  NVIDIA H100   0.1  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-225351-82fa  died: RuntimeError: there are open files preventing the operation: path sameraslan-1114-220942-7014/log is open from '/bin/sh -c bash studie  NVIDIA H100   0.0  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  sameraslan-1114-225555-5d2f  running  NVIDIA H100   0.0  72.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  23 jobs, 6 failed or cancelled; median wait 0.6; 710.2 container minutes, 18.3 of them in failed or cancelled jobs
+
+Work of sameraslan, last 2.3 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-c030d0  claude/missing-findings-pages-585a15  -  -  -  6  0  0  Two finding page changes asked by Samer: /finding/opening-cu
+  work-fc23b4  claude/logo-integration-architecture-c3eb77  -  -  -  18  0  0  Design page (tools/architecture.py): past.dev and Exa logos 
+
+Team, last 2.3 h: claim to close median 57 min, upper quartile 149 min, over 16 work items closed by 3 people; 31 results, 13.5 per hour.

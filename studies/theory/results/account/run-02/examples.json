@@ -1,0 +1,32 @@
+[
+ {
+  "id": "r6-account:p4",
+  "what": "Share of math500-theta05-T1 gap problems in the reliability part (cued base against base + 0.5 (RL - base) with the cue, MATH-500, T 1.0, v3)",
+  "script": "studies/theory/results/account/run-02/tests/r6-account/p4.py",
+  "output": "studies/theory/results/account/run-02/tests/r6-account/p4.out.txt",
+  "measured": 0.698,
+  "n": 53,
+  "measured_interval_90": [0.585, 0.792],
+  "predicted": 0.70,
+  "predicted_interval_90": [0.57, 0.82],
+  "readers": [{"value": 0.53, "interval": [0.38, 0.68]}, {"value": 0.52, "interval": [0.36, 0.67]}],
+  "gain_nats": 1.94,
+  "inside": true,
+  "note": "37 of 53; recomputed equal by check/budget.py. Under the same rules the known cell is already 0.662 (43 of 65), so the account's predicted rise from 0.54 is mostly the change from the board's hand labels to its own rules."
+ },
+ {
+  "id": "r6-account:p16",
+  "what": "Share of math500-s0400-T06 gap problems in the reliability part (cued base against RL step 400 plain, MATH-500, T 0.6 / top-p 0.95, v1)",
+  "script": "studies/theory/results/account/run-02/tests/r6-account/p16.py",
+  "output": "studies/theory/results/account/run-02/tests/r6-account/p16.out.txt",
+  "measured": 0.379,
+  "n": 66,
+  "measured_interval_90": [0.288, 0.470],
+  "predicted": 0.15,
+  "predicted_interval_90": [0.07, 0.25],
+  "readers": [{"value": 0.12, "interval": [0.05, 0.21]}, {"value": 0.16, "interval": [0.06, 0.28]}],
+  "gain_nats": -2.50,
+  "inside": false,
+  "note": "25 of 66; recomputed equal. By hand (check/s0400_reliability_hand.json) 9 of the 25 are right final answers that grader v1 rejects and 2 copy the prompt template on the answer line; the 14 real slips give 0.212, inside the prediction."
+ }
+]

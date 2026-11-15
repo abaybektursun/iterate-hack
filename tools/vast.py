@@ -13,7 +13,8 @@ the instances, the costs and the records in runs/vast/ belong to whoever runs it
                                                             is "exit <code>" once the job has ended
   python3 tools/vast.py get <instance-id> <job-id>          copy the job's $OUT_DIR (its outputs and log) to runs/<job-id>/
   python3 tools/vast.py ls                                  your instances: state, $/h, hours since start
-  python3 tools/vast.py down <instance-id>                  destroy it now; stopped instances still bill storage
+  python3 tools/vast.py down <instance-id> [--force]        destroy it now; refuses while a job run there from this checkout
+                                                            has not been copied out with get; stopped instances still bill storage
 
 Setup once: `uv tool install vastai`, `vastai set api-key <your key>` (in your terminal, not in a chat), and add your
 ssh public key at https://cloud.vast.ai/manage-keys/.
@@ -42,7 +43,7 @@ FILTER = "num_gpus=1 verified=true reliability>0.98 rentable=true inet_down>=500
 ROOT = Path(__file__).resolve().parent.parent
 RECORDS = ROOT / "runs" / "vast"
 MIN_MB_S = 20      # a box that downloads slower than this is destroyed at once (9 of 32 earlier rentals were slow)
-BOOT_MINUTES = 20  # a box not reachable by ssh within this time is destroyed
+BOOT_MINUTES = 6  # a box not reachable by ssh within this time is destroyed
 # The deadline: python and the instance's own key, so it works on any image and with the laptop closed.
 DESTROY = ("python3 -c \"import os, urllib.request as u; u.urlopen(u.Request("
            "'https://console.vast.ai/api/v0/instances/' + os.environ['CONTAINER_ID'] + '/', method='DELETE', "
@@ -212,6 +213,7 @@ def get(args):
     dest.mkdir(parents=True, exist_ok=True)
     data = ssh(instance_id, f"tar -c -C /root/{job_id}/out .")
     subprocess.run(["tar", "-x", "-C", str(dest)], input=data, check=True)
+    (dest / ".copied").touch()  # down checks for it: the copy finished
     print(dest)
 
 
@@ -222,7 +224,13 @@ def ls(args):
 
 
 def down(args):
-    (instance_id,) = args
+    instance_id = args[0]
+    # Jobs run on this box from this checkout whose outputs were not copied out in full: destroying deletes them
+    # (an n=500 cell was lost when its box was destroyed 14 s after the job ended, during the copy, 2026-11-15)
+    jobs = [f.stem for f in RECORDS.glob("*.json") if json.loads(f.read_text()).get("instance") == instance_id]
+    left = [j for j in jobs if not (RECORDS.parent / j / ".copied").exists()]
+    assert not left or "--force" in args, (f"{instance_id} holds jobs not copied out yet: {' '.join(left)}. "
+                                           f"Run get for each (it waits for the copy to finish), or down {instance_id} --force")
     sh("vastai", "destroy", "instance", instance_id, "-y")
     print(f"destroyed {instance_id}")
 

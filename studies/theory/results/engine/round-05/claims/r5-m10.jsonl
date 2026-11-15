@@ -1,0 +1,6 @@
+{"id": "t52", "value": 74, "low": 60, "high": 86, "why": "If the edit makes the plain base write the cue opening, the opening picks the whole cued mode, so the first 100 score moves from plain 34 toward cued 82, short only by the answers where the edit fails to fire."}
+{"id": "t53", "value": 34, "low": 25, "high": 43, "why": "Random values write no cue opening, so the mode split stays as in the plain base and the score stays near plain 34 of 100."}
+{"id": "t67", "value": 409, "low": 395, "high": 423, "why": "Same cued opening, same mode, so the score matches the cued base's 405-418 whatever the engine."}
+{"id": "t70", "value": 407, "low": 392, "high": 422, "why": "At T 1.0 the cued opening already fixes the mode and nothing after the opening adds, and there are no loops to remove, so zeroing loop neurons leaves about 410."}
+{"id": "t64", "value": 405, "low": 388, "high": 422, "why": "The cue fixes the mode and later tokens add nothing at T 1.0, so a mild Wait/Hmm push after the opening does not lift accuracy above the cued 410."}
+{"id": "t66", "value": 405, "low": 388, "high": 422, "why": "A logit bias on hold-on tokens acts after the opening, and the mechanism says nothing after the opening adds, so the score stays near the cued 410."}
