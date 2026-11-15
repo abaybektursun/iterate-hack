@@ -20,5 +20,16 @@
   ],
   "artifact": "studies/theory/results/experiments/cell-r9-m18-01/metrics.json",
   "item": "result-ac7104"
+ },
+ {
+  "readout": "m11-r1",
+  "measured": 20,
+  "n": 250,
+  "interval": [
+   13,
+   27
+  ],
+  "artifact": "studies/theory/results/experiments/cell-r9-m11-01/metrics.json",
+  "item": "result-f8e596"
  }
 ]
