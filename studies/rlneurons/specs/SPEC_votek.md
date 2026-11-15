@@ -45,3 +45,9 @@ Predictions:
 - W1 the vote over 8 of the cued base stays below 200 (RL's lowest one-sample score): it lands in [185, 199]. Refuted outside.
   Reason: MATH-500 gained 12 problems of 500 from 4 to 8; from 179 a gain of that relative size gives about 190.
 - W2 the vote over 8 minus the vote over 4 is at least 6 problems. Refuted under 6.
+
+Change of 2026-11-15 20:35 UTC, before any row of the 328 exists: the vast.ai jobs were cut after 20 minutes when the account
+balance reached 0, and their rows are lost. The cell now runs on AWS L40S, which is slower, so it runs in two halves with the
+same seed rule: samples 4 and 5 first (`--seed 3040000 --samples 2`, 5 shards; vote over k = 1 to 6), then samples 6 and 7
+(`--seed 3060000 --samples 2`) if time allows. A cut shard is finished with `--resume`. W1 and W2 stay as written for the vote
+over 8. Added for the vote over 6: W3 it lands in [183, 197] (below RL's 200). Refuted outside.

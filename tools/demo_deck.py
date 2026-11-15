@@ -272,8 +272,8 @@ def slides(n_findings, papers):
                     '<iframe class="fig-frame fixes" data-fig="fixes" data-replay title="One problem, four answers" tabindex="-1"></iframe>'
                     f'<p class="sub fixes-why">Why: they make the model finish its answer, cut-off answers '
                     f'{CELLS["0"]["cut"]} → {CELLS["1.5"]["cut"]}</p><p class="corner low">{n_findings} findings</p>'),
-        ("beyond", '<div class="head"><h2>Tuned on one math benchmark, better on all four</h2>'
-                   '<p class="sub">One opening cue and one sampling setting, chosen on MATH-500, used unchanged. No training</p></div>'
+        ("beyond", '<div class="head"><h2>Out of distribution, not glorified overfitting</h2>'
+                   '<p class="sub">One invariant method: tuned on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
                    '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
         ("efficiency", f'<div class="head"><h2>Same score as autoresearch, {demo_results.TOKEN_RATIO:.1f}× fewer tokens</h2>'
                        f'<p class="sub">Against Karpathy\'s autoresearch (100k GitHub stars) · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'

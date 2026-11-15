@@ -4804,8 +4804,11 @@ fixed-threshold form of adaptive self-consistency, Aggarwal et al. 2023, arXiv 2
 | 6 | 466.6 | 7.32 | 35,807 |
 
 At the tokens of the fixed vote over 4 (16,228) the stop at 2 votes has 459.0 against 449.2: about 10 more problems for the
-same tokens, because easy problems stop after two samples and the split ones get up to 12. No interval was computed for this
-difference.
+same tokens, because easy problems stop after two samples and the split ones get up to 12. Paired bootstrap over problems
+(`results/votek/math500_base_cue-02/metrics.json`, the same rows read again with this difference added; its `rows.jsonl` is
+identical to run 01 and not committed): stop at 2 minus vote over 4, +9.9 problems [6.1, 14.1]; stop at 3 minus vote over 6,
++6.9 [3.5, 10.5]; stop at 4 minus vote over 7, +7.3 [4.0, 11.1]. Each stop rule is compared with the smallest fixed vote
+that costs at least as many tokens. The interval covers the choice of problems, not a new draw of the 12 samples.
 
 Predictions:
 - V1 (theory round 06: vote over 9 inside [449, 462]): holds, 461.4.
