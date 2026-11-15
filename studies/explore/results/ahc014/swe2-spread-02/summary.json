@@ -1,0 +1,129 @@
+{
+ "folder": "runs/explore/ahc014/swe2-spread-02",
+ "runs": {
+  "single": [
+   {
+    "seed": 6,
+    "val": 0.572798,
+    "test": 0.530938
+   },
+   {
+    "seed": 7,
+    "val": 0.509798,
+    "test": 0.481865
+   },
+   {
+    "seed": 8,
+    "val": 0.540859,
+    "test": 0.540706
+   },
+   {
+    "seed": 9,
+    "val": 0.655092,
+    "test": 0.632469
+   },
+   {
+    "seed": 10,
+    "val": 0.592828,
+    "test": 0.574414
+   },
+   {
+    "seed": 11,
+    "val": 0.596467,
+    "test": 0.616638
+   }
+  ],
+  "fnf": [
+   {
+    "seed": 6,
+    "val": 0.57834,
+    "test": 0.552615
+   },
+   {
+    "seed": 7,
+    "val": 0.578488,
+    "test": 0.580311
+   },
+   {
+    "seed": 8,
+    "val": 0.528436,
+    "test": 0.533614
+   },
+   {
+    "seed": 9,
+    "val": 0.629466,
+    "test": 0.613748
+   },
+   {
+    "seed": 10,
+    "val": 0.560265,
+    "test": 0.55107
+   },
+   {
+    "seed": 11,
+    "val": 0.57676,
+    "test": 0.564503
+   }
+  ]
+ },
+ "arms": {
+  "single": {
+   "n": 6,
+   "mean": 0.5779736666666666,
+   "sd": 0.05012404505890031,
+   "worst": 0.509798,
+   "below_0.50": 0,
+   "test_mean": 0.5628383333333333
+  },
+  "fnf": {
+   "n": 6,
+   "mean": 0.5752925,
+   "sd": 0.032795662772689915,
+   "worst": 0.528436,
+   "below_0.50": 0,
+   "test_mean": 0.5659768333333333
+  }
+ },
+ "spread single>fnf": {
+  "mean_abs_dev_diff": 0.01668316666666669,
+  "p": 0.15367965367965367,
+  "splits": 924,
+  "method": "Brown-Forsythe permutation, one-sided, abs. deviation from own median"
+ },
+ "rank val fnf>single": {
+  "U": 17.0,
+  "of": 36,
+  "p": 0.5909090909090909
+ },
+ "rank test fnf>single": {
+  "U": 19.0,
+  "of": 36,
+  "p": 0.4686147186147186
+ },
+ "spec": "specs/spread-ahc014-swe2.md",
+ "verdict": "primary prediction refuted: p = 0.154 >= 0.05 (single SD 0.050 vs fnf 0.033)",
+ "pooled_12v12_descriptive_not_a_test": {
+  "note": "seeds 0-5 produced the hypothesis, so this pool is not evidence for it",
+  "single": {
+   "mean": 0.5621721666666667,
+   "sd": 0.06683934734711194,
+   "worst": 0.408519
+  },
+  "fnf": {
+   "mean": 0.58339,
+   "sd": 0.02853167730467631,
+   "worst": 0.528436
+  },
+  "spread single>fnf": {
+   "diff": 0.02772583333333336,
+   "p": 0.026325774104748394,
+   "splits": 2704156
+  },
+  "rank val fnf>single": {
+   "U": 83.0,
+   "of": 144,
+   "p": 0.275583583195644
+  }
+ },
+ "rerun_note": "swe2-spread-01 died on Devin's free-model rate limit at 13-19 of 40 tries per run (191 tries, no metrics.json); not used. Same seeds, arms and code plus commit a60ebc4 (wait out the limit). Each run waited 8-33 min in total."
+}

@@ -1,0 +1,410 @@
+{
+ "fnf-s10": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 10,
+   "model": "devin:swe-2-medium",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-spread-02/fnf-s10",
+   "commit": "a60ebc46083420d16d985ae0e637835401165c9c",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --budget 40 --seed 10 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-spread-02/fnf-s10"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 10,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.560265,
+   "best_id": "s0039",
+   "best_test": 0.55107,
+   "spent": {
+    "prompt_tokens": 257779,
+    "completion_tokens": 78728,
+    "usd": 0.0
+   },
+   "valid_share": 0.825
+  }
+ },
+ "fnf-s11": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 11,
+   "model": "devin:swe-2-medium",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-spread-02/fnf-s11",
+   "commit": "a60ebc46083420d16d985ae0e637835401165c9c",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --budget 40 --seed 11 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-spread-02/fnf-s11"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 11,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.57676,
+   "best_id": "s0017",
+   "best_test": 0.564503,
+   "spent": {
+    "prompt_tokens": 296212,
+    "completion_tokens": 86144,
+    "usd": 0.0
+   },
+   "valid_share": 0.9
+  }
+ },
+ "fnf-s6": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 6,
+   "model": "devin:swe-2-medium",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-spread-02/fnf-s6",
+   "commit": "a60ebc46083420d16d985ae0e637835401165c9c",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --budget 40 --seed 6 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-spread-02/fnf-s6"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 6,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.57834,
+   "best_id": "s0026",
+   "best_test": 0.552615,
+   "spent": {
+    "prompt_tokens": 185592,
+    "completion_tokens": 51269,
+    "usd": 0.0
+   },
+   "valid_share": 0.9
+  }
+ },
+ "fnf-s7": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 7,
+   "model": "devin:swe-2-medium",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-spread-02/fnf-s7",
+   "commit": "a60ebc46083420d16d985ae0e637835401165c9c",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --budget 40 --seed 7 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-spread-02/fnf-s7"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 7,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.578488,
+   "best_id": "s0010",
+   "best_test": 0.580311,
+   "spent": {
+    "prompt_tokens": 278324,
+    "completion_tokens": 82885,
+    "usd": 0.0
+   },
+   "valid_share": 0.95
+  }
+ },
+ "fnf-s8": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 8,
+   "model": "devin:swe-2-medium",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-spread-02/fnf-s8",
+   "commit": "a60ebc46083420d16d985ae0e637835401165c9c",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --budget 40 --seed 8 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-spread-02/fnf-s8"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 8,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.528436,
+   "best_id": "s0038",
+   "best_test": 0.533614,
+   "spent": {
+    "prompt_tokens": 210533,
+    "completion_tokens": 57958,
+    "usd": 0.0
+   },
+   "valid_share": 0.975
+  }
+ },
+ "fnf-s9": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 9,
+   "model": "devin:swe-2-medium",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-spread-02/fnf-s9",
+   "commit": "a60ebc46083420d16d985ae0e637835401165c9c",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --budget 40 --seed 9 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-spread-02/fnf-s9"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 9,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.629466,
+   "best_id": "s0028",
+   "best_test": 0.613748,
+   "spent": {
+    "prompt_tokens": 326745,
+    "completion_tokens": 101237,
+    "usd": 0.0
+   },
+   "valid_share": 0.85
+  }
+ },
+ "single-s10": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "single",
+   "budget": 40,
+   "seed": 10,
+   "model": "devin:swe-2-medium",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-spread-02/single-s10",
+   "commit": "a60ebc46083420d16d985ae0e637835401165c9c",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy single --budget 40 --seed 10 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-spread-02/single-s10"
+  },
+  "metrics": {
+   "strategy": "single",
+   "task": "ahc014",
+   "seed": 10,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.592828,
+   "best_id": "s0025",
+   "best_test": 0.574414,
+   "spent": {
+    "prompt_tokens": 1231304,
+    "completion_tokens": 65422,
+    "usd": 0.0
+   },
+   "valid_share": 0.925
+  }
+ },
+ "single-s11": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "single",
+   "budget": 40,
+   "seed": 11,
+   "model": "devin:swe-2-medium",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-spread-02/single-s11",
+   "commit": "a60ebc46083420d16d985ae0e637835401165c9c",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy single --budget 40 --seed 11 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-spread-02/single-s11"
+  },
+  "metrics": {
+   "strategy": "single",
+   "task": "ahc014",
+   "seed": 11,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.596467,
+   "best_id": "s0038",
+   "best_test": 0.616638,
+   "spent": {
+    "prompt_tokens": 1470987,
+    "completion_tokens": 74183,
+    "usd": 0.0
+   },
+   "valid_share": 1.0
+  }
+ },
+ "single-s6": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "single",
+   "budget": 40,
+   "seed": 6,
+   "model": "devin:swe-2-medium",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-spread-02/single-s6",
+   "commit": "a60ebc46083420d16d985ae0e637835401165c9c",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy single --budget 40 --seed 6 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-spread-02/single-s6"
+  },
+  "metrics": {
+   "strategy": "single",
+   "task": "ahc014",
+   "seed": 6,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.572798,
+   "best_id": "s0034",
+   "best_test": 0.530938,
+   "spent": {
+    "prompt_tokens": 1985197,
+    "completion_tokens": 101766,
+    "usd": 0.0
+   },
+   "valid_share": 0.95
+  }
+ },
+ "single-s7": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "single",
+   "budget": 40,
+   "seed": 7,
+   "model": "devin:swe-2-medium",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-spread-02/single-s7",
+   "commit": "a60ebc46083420d16d985ae0e637835401165c9c",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy single --budget 40 --seed 7 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-spread-02/single-s7"
+  },
+  "metrics": {
+   "strategy": "single",
+   "task": "ahc014",
+   "seed": 7,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.509798,
+   "best_id": "s0026",
+   "best_test": 0.481865,
+   "spent": {
+    "prompt_tokens": 1357247,
+    "completion_tokens": 64777,
+    "usd": 0.0
+   },
+   "valid_share": 0.95
+  }
+ },
+ "single-s8": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "single",
+   "budget": 40,
+   "seed": 8,
+   "model": "devin:swe-2-medium",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-spread-02/single-s8",
+   "commit": "a60ebc46083420d16d985ae0e637835401165c9c",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy single --budget 40 --seed 8 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-spread-02/single-s8"
+  },
+  "metrics": {
+   "strategy": "single",
+   "task": "ahc014",
+   "seed": 8,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.540859,
+   "best_id": "s0028",
+   "best_test": 0.540706,
+   "spent": {
+    "prompt_tokens": 1261958,
+    "completion_tokens": 63019,
+    "usd": 0.0
+   },
+   "valid_share": 1.0
+  }
+ },
+ "single-s9": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "single",
+   "budget": 40,
+   "seed": 9,
+   "model": "devin:swe-2-medium",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/swe2-spread-02/single-s9",
+   "commit": "a60ebc46083420d16d985ae0e637835401165c9c",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy single --budget 40 --seed 9 --model devin:swe-2-medium --out runs/explore/ahc014/swe2-spread-02/single-s9"
+  },
+  "metrics": {
+   "strategy": "single",
+   "task": "ahc014",
+   "seed": 9,
+   "model": "devin:swe-2-medium",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.655092,
+   "best_id": "s0012",
+   "best_test": 0.632469,
+   "spent": {
+    "prompt_tokens": 1754585,
+    "completion_tokens": 90424,
+    "usd": 0.0
+   },
+   "valid_share": 0.975
+  }
+ }
+}

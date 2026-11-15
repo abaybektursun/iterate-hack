@@ -13,3 +13,8 @@ hypothesis, so they are NOT used to test it. This test uses fresh runs only.
   fnf > single; held-out test scores (cases 6-10, invalid = 0); for any single run below 0.50, whether it kept
   one approach from early on (move-type counts on case 1, as for single-s2).
 - Cost: 0 USD (free model); laptop kept awake with caffeinate.
+
+Note added after the runs (2026-11-15 06:20 UTC): the runs in `swe2-spread-01` died on Devin's free-model rate
+limit at 13-19 of 40 tries (stopped by the limit, not by their scores; no metrics.json) and are not used. The test
+was run on a full rerun, same seeds and arms, in `runs/explore/ahc014/swe2-spread-02`, with commit a60ebc4 (the
+Devin call waits out the limit). Result: `results/ahc014/swe2-spread-02/summary.json`.

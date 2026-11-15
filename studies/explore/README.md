@@ -20,6 +20,7 @@ branching from an online basin signal (survey 2026-11-14). Public reimplementati
 | `analysis/compare.py` | Arms side by side: final best per seed, runs above the starter, best after the same USD spend (the smallest total of any run), optimizer share (pilot-02 regex), best-so-far curves. |
 | `analysis/export_results.py` | Copies an experiment's small files from `runs/` to `results/<task>/<experiment>/` (compare.json, runs.json, assignments, examples). |
 | `analysis/best_of_k.py` | Expected best of K independent stored runs of each arm, and how many runs of one arm equal one run of another. |
+| `analysis/spread_test.py` | Two arms of one experiment folder: one-sided Brown-Forsythe permutation test on spread (all splits), exact one-sided rank-sum on validation and test, SD, worst run. Reproduces the swe2-seeds-01 numbers (p 0.0422, 0.197, 0.066). |
 | `analysis/page/build.py` | The results page (private artifact https://claude.ai/artifact/XQwm42PhgcxWjtro4WXN1E): `python3 studies/explore/analysis/page/build.py <out.html>`; template in `analysis/page/template.html`. |
 | `tasks/circles26/` | 26 circles in the unit square, maximize the sum of radii; scorer checks validity (tol 1e-9). Starter 2.54138; best published about 2.636. |
 | `tasks/ahc014/` | AtCoder Heuristic Contest 014 (RectJoin) from Frontier-CS algorithmic problem 159, the task both papers report. Python program, 3 s per case (hard 4 s). Score: mean V / V_ref over cases 1-5 (test: 6-10), checked by the Frontier-CS checker `data/chk.cc` (commit in `data/SOURCE_COMMIT`). Starter (no operations) 0.2217. |
@@ -33,6 +34,27 @@ laptop's `/usr/bin/python3`, which has no numpy or scipy, although the circles26
 below is therefore a **pure-Python** run. Effect: 6 of 1,066 circles submissions (pilot-02, main-01) and 4 of 101
 (main-02) imported numpy/scipy, all invalid; those were the attempts at the optimizer approach. ahc014: 0 of 270
 imported them (unaffected). Programs now run in `runs/explore/.venv` (numpy 2.5.4, scipy 1.18.1), checked at start.
+
+### ahc014/swe2-spread-02: is single less reliable than fnf? Fresh runs say not shown (SWE-2, 6 runs per arm, 0 USD)
+
+Plan written before the runs: `specs/spread-ahc014-swe2.md` (fresh seeds 6-11; the seeds-01 runs produced the
+hypothesis and are not used). `results/ahc014/swe2-spread-02/summary.json` (from `analysis/spread_test.py`);
+examples: best single-s9 s0012 (0.655), invalid fnf-s10 s0001. Rerun: `swe2-spread-01` died on Devin's free-model
+rate limit at 13-19 of 40 tries per run and is not used; same seeds and arms, code plus a60ebc4.
+
+| Arm | Validation, 6 fresh runs | Mean | SD | Worst | Held-out test mean |
+|---|---|---|---|---|---|
+| single | 0.573 0.510 0.541 0.655 0.593 0.596 | 0.578 | 0.050 | 0.510 | 0.563 |
+| fnf | 0.578 0.578 0.528 0.629 0.560 0.577 | 0.575 | 0.033 | 0.528 | 0.566 |
+
+- **The planned test fails:** spread single > fnf, Brown-Forsythe permutation p = 0.154 (needed p < 0.05). The
+  direction repeats (SD 0.050 vs 0.033) at less than half the first batch's gap (0.082 vs 0.024).
+- Means are equal: single 0.578, fnf 0.575; rank-sum fnf > single p = 0.59 (validation), 0.47 (test). No run of
+  either arm is below 0.50, so there is no stuck run to examine; the seeds-01 gap came mostly from single-s2 (0.409).
+- All 24 runs pooled (descriptive, not a test, because 12 of them produced the hypothesis): single mean 0.562
+  SD 0.067 worst 0.409; fnf mean 0.583 SD 0.029 worst 0.528; fnf > single rank-sum p = 0.28.
+- Reading: with SWE-2 at 40 submissions on ahc014, one chat and Fork-and-Flush are not distinguishable in mean,
+  and the reliability difference is not established. 1 stuck run in 12 single runs, 0 in 12 fnf runs.
 
 ### ahc014/swe2-seeds-01: seeds test, single vs parallel vs fnf (SWE-2, 6 runs per arm, 0 USD)
 

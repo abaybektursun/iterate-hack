@@ -1,0 +1,18 @@
+{
+ "scored_right": {
+  "run": "single-s9",
+  "id": "s0012",
+  "branch": "",
+  "idea": "Elite-pool LNS \u2014 maintain a small pool of distinct good solutions, draw the destroy base from a random elite (not just the incumbent), and adapt \u03bb/top-k sampling toward parameter combos that produced improvements.",
+  "score": 0.655092,
+  "msg": "per-case V/V_best: 0.674, 0.434, 0.813, 0.773, 0.581"
+ },
+ "scored_wrong": {
+  "run": "fnf-s10",
+  "id": "s0001",
+  "branch": "f0b0",
+  "idea": "Keep the incremental pair-completion engine but run many randomized greedy restarts (noise on move ordering and a small perimeter penalty) and output the best-scoring run.",
+  "score": null,
+  "msg": "case 1: exit 1; stderr:    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/tmplgxhdhd1/solution.py\", line 176, in solve\n    pair_candidates(pi, occupied[j])\n  File \"/var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/tmplgxhdhd1/solution.py\", line 137, in pair_candidates\n    k = vs.index(missing)\n        ^^^^^^^^^^^^^^^^^\nValueError: tuple.index(x): x not in tuple\n"
+ }
+}
