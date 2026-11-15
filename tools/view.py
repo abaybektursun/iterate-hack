@@ -1169,6 +1169,7 @@ poll();
 if __name__ == "__main__":
     if {"--help", "-h"} & set(sys.argv):
         sys.exit(__doc__)
+    team.table()  # once, before the threads of the first /data: each would build its own boto3 resource (0.84 s instead of 0.05 s)
     server = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
     print(f"board at http://127.0.0.1:{PORT}  (Ctrl-C stops it)")
     if sys.stdout.isatty():
