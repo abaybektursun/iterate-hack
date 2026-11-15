@@ -26,14 +26,14 @@ NEW = {
     "top8_code31": ("abaybektursun-1114-221053-fb3f", "--recipe top8 --other rl_code"),
     "bulk_math31": ("abaybektursun-1114-221100-1e31", "--recipe bulk --other rl_math"),
     "top1_math31": ("abaybektursun-1115-000358-d11a", "--recipe top8 --k 1 --other math31"),                 # amendment 3
-    "top64_math31": ("abaybektursun-1115-000407-47ec", "--recipe top8 --k 64 --other math31"),
-    "top8attn_math31": ("abaybektursun-1115-000418-6c62", "--recipe top8 --mods q,k,v,o --other math31"),
-    "top8mlp_math31": ("abaybektursun-1115-000433-93aa", "--recipe top8 --mods gate,up,down --other math31"),
-    "top8x2_math31": ("abaybektursun-1115-000444-2db4", "--recipe top8 --scale 2 --other math31"),
-    "proj_math31_code30": ("abaybektursun-1115-000458-9c58", "--recipe proj --donor code30 --other math31"),
-    "projc_math31_code30": ("abaybektursun-1115-000518-0cb7", "--recipe projc --donor code30 --other math31"),
-    "top8_code30": ("abaybektursun-1115-000529-4432", "--recipe top8 --other code30"),
-    "rbulk_math31": ("abaybektursun-1115-001722-52fa", "--recipe rbulk --other math31"),                      # amendment 4
+    "top64_math31": ("abaybektursun-1115-003755-b90d", "--recipe top8 --k 64 --other math31"),
+    "top8attn_math31": ("abaybektursun-1115-003804-5998", "--recipe top8 --mods q,k,v,o --other math31"),
+    "top8mlp_math31": ("abaybektursun-1115-003813-ce44", "--recipe top8 --mods gate,up,down --other math31"),
+    "top8x2_math31": ("abaybektursun-1115-003822-f8fa", "--recipe top8 --scale 2 --other math31"),
+    "proj_math31_code30": ("abaybektursun-1115-003833-bdc1", "--recipe proj --donor code30 --other math31"),
+    "projc_math31_code30": ("abaybektursun-1115-003842-958e", "--recipe projc --donor code30 --other math31"),
+    "top8_code30": ("abaybektursun-1115-003851-aaf4", "--recipe top8 --other code30"),
+    "rbulk_math31": ("abaybektursun-1115-003900-7ad7", "--recipe rbulk --other math31"),                      # amendment 4
 }
 REFS = {"base_cue_T1": OLD["base_cue_T1"][0], "rl_plain_T1": OLD["rl_plain_T1"][0], "rl_cue_T1": OLD["rl_cue_T1"][0],
         "theta0.25_cue": WDIFF["theta0.25_cue"][0], "theta0.5_cue": WDIFF["theta0.5_cue"][0], "code1_cue": WDIFF["code1_cue"][0]}
