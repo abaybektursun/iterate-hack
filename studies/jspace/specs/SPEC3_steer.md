@@ -70,6 +70,15 @@ reach generation); a bias of +20 nats makes the hold-on tokens more than half of
 
 Planned total: about 3 H100-hours, at most 4.5.
 
+## Inside check (added 2026-11-15 05:50 UTC, after the dose run and four main arms, before this job ran)
+
+`jobs/steer_readout.py`: the base model reads its own stored answers (T1, the answers whose index is a multiple of 8 and whose
+sequence is at most 6,000 tokens) with teacher forcing, with each main-run vector switched on. Read out: the share of generated
+positions where a hold-on token is among the top 8 word-like tokens of the layer-24 J-lens readout, through the lens fitted on
+the base model (not the published lens the vectors come from). SPEC 1 measured 4.63 % for the base and 6.29 % for the RL model.
+The question: does the strength that matches the RL model's written rate also reach its readout rate? Positive control: alpha
+0.5 must raise the presence far above both. About 0.2 H100-hours.
+
 ## Hypotheses and what refutes them
 
 - S0, the instrument. `none` scores within 404 to 418 of 500, the range of the stored unsteered cells at this setting (T1 410;
