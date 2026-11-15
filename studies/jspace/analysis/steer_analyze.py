@@ -2,11 +2,13 @@
 in one of them) and writes metrics.json and examples.json to the result folder.
 
     PYTHONPATH=. python3 -m studies.jspace.analysis.steer_analyze --runs runs/<job-id> [runs/<job-id> ...] --out <result folder>
-        [--t1 runs/diag_t1t2/T1.jsonl] [--stored <rows.jsonl of stored unsteered samples>] [--items <per_problem.json>] [--target 1.41]
+        [--partial runs/<job-id> ...] [--t1 runs/diag_t1t2/T1.jsonl] [--stored <rows.jsonl of stored unsteered samples>] [--items <per_problem.json>] [--target 1.41]
 
-Per arm: right of n (grader v3), cap hits, rule-A loops, generated tokens, written hold-on words per 1,000 tokens. Against
+Per arm: right of n (grader v3), cap hits, rule-A loops, answers that end without a final answer, tails flagged as unrelated
+words (day1_wdiff.word_salad, a crude flag), generated tokens, written hold-on words per 1,000 tokens. Against
 `none`, paired over problems: difference in points with a 95 % percentile interval (bootstrap over problems, 2,000 resamples),
-answers gained and lost in total and by subject, identical answers. --t1: the stored T1 rows, for the count of answers
+answers gained and lost in total and by subject, identical answers. --partial: runs listed here may be unfinished (a job that ran out of time; the
+rest of its arm comes from a second job started with --pick). --t1: the stored T1 rows, for the count of answers
 identical to them. --stored: rows of earlier unsteered cells at the same setting (studies/rlneurons/results/day1_3/
 math500_base_cue-01/rows.jsonl: four samples per problem, attempt 0 used); each arm is also compared with the per-problem mean of
 those samples, which carries less sampling noise than the one `none` sample. --items: studies/rlneurons/results/rln4/
@@ -28,6 +30,7 @@ import re
 import numpy as np
 
 from studies.jspace.lib import steer as ST
+from studies.rlneurons.analysis.day1_wdiff import word_salad
 
 RNG = np.random.default_rng(0)
 B = 2000
@@ -72,6 +75,7 @@ def main():
     ap.add_argument("--runs", nargs="+", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--t1")
+    ap.add_argument("--partial", nargs="*", default=[], help="run folders of jobs that ran out of time: their finished rows are used")
     ap.add_argument("--stored")
     ap.add_argument("--items")
     ap.add_argument("--target", type=float, default=1.41)
@@ -82,11 +86,11 @@ def main():
     for run in a.runs:
         jm = json.loads((pathlib.Path(run) / "metrics.json").read_text())
         ck = json.loads((pathlib.Path(run) / "checks.json").read_text())
-        assert jm["status"] == "done" and ck["pass"], (run, jm["status"], ck["pass"])
-        jobs.append({"run": run, "job_id": jm["job_id"], "commit": jm["commit"], "arms": list(jm["arms"]), "wall_s": jm["wall_s"],
+        assert (jm["status"] == "done" or run in a.partial) and ck["pass"], (run, jm["status"], ck["pass"])
+        jobs.append({"run": run, "job_id": jm["job_id"], "commit": jm["commit"], "arms": list(jm["arms"]), "status": jm["status"], "wall_s": jm.get("wall_s"),
                      "max_tokens": jm["config"]["max_tokens"], "n_problems": jm["config"]["n_problems"], "seed": jm["config"]["seed"],
                      "block_norm_median": ck["block_norm_median"], "applied_vector_norm": {k: v["applied_vector_norm"] for k, v in jm["arms"].items()},
-                     "generation_s": {k: v["generation_s"] for k, v in jm["arms"].items()}, "checks": ck})
+                     "generation_s": {k: v.get("generation_s") for k, v in jm["arms"].items()}, "pick": jm["config"].get("pick"), "checks": ck})
         for line in open(pathlib.Path(run) / "answers.jsonl"):
             r = json.loads(line)
             key = (r["problem_index"], r["sample"])
@@ -123,6 +127,8 @@ def main():
         both = [(r, n) for r, n in zip(rs, none) if not r["cap_hit"] and not n["cap_hit"]]
         e = {**ST.parse_arm(name), "n": len(rs), "right_v3": int(sum(sc)), "percent_v3": 100 * float(np.mean(sc)), "cap_hits": sum(r["cap_hit"] for r in rs),
              "loop_A": sum(r["loop_A"] for r in rs), "no_answer_found": sum(r["mode_v3"] == "none" for r in rs),
+             "finished_without_answer": sum(r["mode_v3"] == "none" and not r["cap_hit"] for r in rs),
+             "word_salad_tails": sum(word_salad(r["text"]) for r in rs), "mean_token_logprob": float(np.mean([r["mean_logprob"] for r in rs])),
              "tokens_mean": float(np.mean([r["n_new"] for r in rs])), "tokens_median": float(np.median([r["n_new"] for r in rs])),
              "hold_words_per_1k_tokens": rate(rs), "hold_words_per_answer_mean": float(np.mean([r["hold_words"] for r in rs])),
              "hold_rate_ratio_to_none": rate(rs) / rate(none),
@@ -165,7 +171,7 @@ def main():
     for name, e in arms.items():
         print(f"{name:26s} {e['right_v3']:3d}/{e['n']} cap {e['cap_hits']:3d} loop {e['loop_A']:3d} tok {e['tokens_mean']:7.0f} hold/1k {e['hold_words_per_1k_tokens']:6.2f} "
               f"x{e['hold_rate_ratio_to_none']:.2f} diff {e['minus_none']['points']:+5.1f} [{e['minus_none']['ci95'][0]:+.1f}, {e['minus_none']['ci95'][1]:+.1f}] "
-              f"+{e['gained']} -{e['lost']} same {e['identical_to_none']}")
+              f"+{e['gained']} -{e['lost']} same {e['identical_to_none']} noans {e['finished_without_answer']} salad {e['word_salad_tails']}")
     print(json.dumps({k: v["strength_at_target"] for k, v in dose.items()}))
 
 
