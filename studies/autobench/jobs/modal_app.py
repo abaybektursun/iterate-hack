@@ -67,9 +67,24 @@ def now():
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 
-@app.function(image=engine_image, gpu="H200", volumes={"/hf": weights.read_only()}, timeout=FINAL_SECONDS["hard328"] + LOAD_LIMIT + 300,
-              retries=0, block_network=True, restrict_modal_access=True, single_use_containers=True, max_containers=4)
+gpu_job = dict(image=engine_image, gpu="H200", volumes={"/hf": weights.read_only()}, timeout=FINAL_SECONDS["hard328"] + LOAD_LIMIT + 300,
+               retries=0, block_network=True, single_use_containers=True, max_containers=4)
+
+
+@app.function(restrict_modal_access=True, **gpu_job)
 def solve_job(source: str, problems: list, budget_s: int):
+    return run_solve(source, problems, budget_s)
+
+
+@app.function(**gpu_job)
+def solve_job_final(source: str, problems: list, budget_s: int):
+    """solve_job for the finals, with Modal reachable from the container. A result above a few MB (full-length
+    answers to 328 or 400 problems) is returned through Modal's blob storage, which a container without Modal
+    access cannot write: those finals ended with AuthError 401. No agent runs during the finals."""
+    return run_solve(source, problems, budget_s)
+
+
+def run_solve(source, problems, budget_s):
     work = Path(tempfile.mkdtemp())
     (work / "solve.py").write_text(source)
     (work / "in.json").write_text(json.dumps({"problems": problems, "budget_s": budget_s}))
@@ -104,14 +119,33 @@ def claim(prefix, limit, source):
     return None
 
 
-def run_and_grade(key, folder, source, set_name, budget_s):
+def wait(call_id):
+    """The result of a spawned solve_job. Polls in short calls and retries an authentication error on this
+    side; the call id is in the ledger, so a result can be fetched again by hand."""
+    failures = 0
+    while True:
+        try:
+            return modal.FunctionCall.from_id(call_id).get(timeout=120)
+        except TimeoutError:
+            failures = 0
+        except modal.exception.AuthError as error:
+            failures += 1
+            print(f"wait {call_id}: {error!r}, attempt {failures}", flush=True)
+            if failures > 20:
+                raise
+            time.sleep(15)
+
+
+def run_and_grade(key, folder, source, set_name, budget_s, job=None):
     """Run a claimed experiment and grade it; store its files in the Volume and its row in the ledger.
     Returns the ledger row, one row per problem (problem, returned text, right; no answer) and the log."""
     row = ledger[key]
     problems = grade_py("problems", set_name)
     print(f"{key}: {len(problems)} problems of {set_name} to solve_job", flush=True)
     try:
-        result = solve_job.remote(source, problems, budget_s)
+        call = (job or solve_job).spawn(source, problems, budget_s)
+        ledger[key] = row = {**row, "solve_call": call.object_id}   # with the id, a result can be fetched again by hand
+        result = wait(call.object_id)
     except Exception as error:
         ledger[key] = {**row, "state": "infra_error", "error": repr(error), "ended_at": now()}
         raise
@@ -157,5 +191,5 @@ def score_final(label: str, set_name: str, source: str):
         raise ValueError(f"label {label!r}")
     n = claim(f"final:{set_name}:{label}", 100, source)
     row, _, _ = run_and_grade(f"final:{set_name}:{label}:{n:03d}", f"final/{set_name}-{label}-{n:03d}", source, set_name,
-                              FINAL_SECONDS[set_name])
+                              FINAL_SECONDS[set_name], solve_job_final)
     return row
