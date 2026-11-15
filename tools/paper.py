@@ -70,6 +70,7 @@ def fetch(args):
         data, kind = get(url)
         text = pdf_text(data) if kind == "application/pdf" else html_text(data)
 
+    text = text.encode("utf-8", "replace").decode("utf-8")  # pypdf can return lone surrogates, which write_text rejects
     PAPERS.mkdir(exist_ok=True)
     (PAPERS / f"{paper_id}.txt").write_text(text)
     (PAPERS / f"{paper_id}.json").write_text(json.dumps({"title": title, "date": date, "url": url}))
