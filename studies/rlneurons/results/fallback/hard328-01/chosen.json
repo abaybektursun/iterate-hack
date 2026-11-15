@@ -1,0 +1,12 @@
+{
+ "set": "hard328",
+ "spec": "studies/rlneurons/specs/SPEC_fallback.md",
+ "chosen": "R2",
+ "power_fresh2026": {
+  "n": 136,
+  "draws": 2000,
+  "minus_plain_32768": 0.428,
+  "minus_cut_16384": 0.546,
+  "both": 0.191
+ }
+}

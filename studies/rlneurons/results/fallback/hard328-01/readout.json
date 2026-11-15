@@ -1,0 +1,322 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_fallback.md",
+ "set": "hard328",
+ "n": 328,
+ "rows": "studies/rlneurons/results/cap32vote/hard328_sft1_cue_s4-01",
+ "controls_reproduced_stored_order": {
+  "R4": 244,
+  "R5": 238,
+  "right_to_wrong": 9,
+  "wrong_to_right": 15,
+  "late": {
+   "right": 99,
+   "finished": 362,
+   "all": 368
+  },
+  "late_finished_right": 96
+ },
+ "switch_detector_reproduces_drift_sample_0": {
+  "late": 93,
+  "switched": 24,
+  "switched_right": 1,
+  "others_right": 22
+ },
+ "rules": {
+  "R1": {
+   "what": "fallback: the 16,384 vote; late answers only when it has no ballot",
+   "right_24_orders": 244.75,
+   "right_stored_order": 243
+  },
+  "R2": {
+   "what": "late answers count half a vote",
+   "right_24_orders": 249.75,
+   "right_stored_order": 249
+  },
+  "R3": {
+   "what": "fallback, late answers that switched script before 16,384 dropped",
+   "right_24_orders": 245.25,
+   "right_stored_order": 244
+  },
+  "R4": {
+   "what": "control: plain vote at 32,768",
+   "right_24_orders": 245.25,
+   "right_stored_order": 244
+  },
+  "R5": {
+   "what": "control: vote over the answers cut at 16,384",
+   "right_24_orders": 239.75,
+   "right_stored_order": 238
+  },
+  "R6": {
+   "what": "planted control: fallback with the late flags permuted inside the problem",
+   "right_24_orders": 241.0,
+   "right_stored_order": null
+  }
+ },
+ "chosen": "R2",
+ "differences": {
+  "R1": {
+   "minus R4 (plain 32,768 vote), 24 orders": {
+    "problems": -0.5,
+    "points": -0.15,
+    "interval95": [
+     -2.26,
+     1.88
+    ]
+   },
+   "minus R5 (16,384-cut vote), 24 orders": {
+    "problems": 5.0,
+    "points": 1.52,
+    "interval95": [
+     0.46,
+     2.82
+    ]
+   },
+   "minus R4, stored order": {
+    "problems": -1.0,
+    "points": -0.3,
+    "interval95": [
+     -3.05,
+     2.44
+    ]
+   },
+   "minus R5, stored order": {
+    "problems": 5.0,
+    "points": 1.52,
+    "interval95": [
+     0.3,
+     3.05
+    ]
+   },
+   "stored order, against R4: fixed / broken": [
+    9,
+    10
+   ],
+   "stored order, against R5: fixed / broken": [
+    5,
+    0
+   ]
+  },
+  "R2": {
+   "minus R4 (plain 32,768 vote), 24 orders": {
+    "problems": 4.5,
+    "points": 1.37,
+    "interval95": [
+     0.41,
+     2.49
+    ]
+   },
+   "minus R5 (16,384-cut vote), 24 orders": {
+    "problems": 10.0,
+    "points": 3.05,
+    "interval95": [
+     1.12,
+     5.13
+    ]
+   },
+   "minus R4, stored order": {
+    "problems": 5.0,
+    "points": 1.52,
+    "interval95": [
+     0.0,
+     3.05
+    ]
+   },
+   "minus R5, stored order": {
+    "problems": 11.0,
+    "points": 3.35,
+    "interval95": [
+     0.91,
+     5.79
+    ]
+   },
+   "stored order, against R4: fixed / broken": [
+    6,
+    1
+   ],
+   "stored order, against R5: fixed / broken": [
+    14,
+    3
+   ]
+  },
+  "R3": {
+   "minus R4 (plain 32,768 vote), 24 orders": {
+    "problems": 0.0,
+    "points": 0.0,
+    "interval95": [
+     -2.11,
+     2.06
+    ]
+   },
+   "minus R5 (16,384-cut vote), 24 orders": {
+    "problems": 5.5,
+    "points": 1.68,
+    "interval95": [
+     0.53,
+     2.97
+    ]
+   },
+   "minus R4, stored order": {
+    "problems": 0.0,
+    "points": 0.0,
+    "interval95": [
+     -2.74,
+     2.74
+    ]
+   },
+   "minus R5, stored order": {
+    "problems": 6.0,
+    "points": 1.83,
+    "interval95": [
+     0.61,
+     3.35
+    ]
+   },
+   "stored order, against R4: fixed / broken": [
+    10,
+    10
+   ],
+   "stored order, against R5: fixed / broken": [
+    6,
+    0
+   ]
+  },
+  "R6": {
+   "minus R4 (plain 32,768 vote), 24 orders": {
+    "problems": -4.25,
+    "points": -1.3,
+    "interval95": [
+     -2.32,
+     -0.35
+    ]
+   }
+  }
+ },
+ "power_fresh2026": {
+  "n": 136,
+  "draws": 2000,
+  "minus_plain_32768": 0.428,
+  "minus_cut_16384": 0.546,
+  "both": 0.191
+ },
+ "H2_switch": {
+  "late_answers": 368,
+  "switched": 119,
+  "switched_right": 20,
+  "not_switched": 249,
+  "not_switched_right": 79,
+  "problems_with_both_kinds": 60,
+  "within_problem_points": -12.2,
+  "interval95": [
+   -22.2,
+   -3.1
+  ],
+  "flags_permuted_inside_problems_points": 0.6
+ },
+ "H3_mechanism": {
+  "early_finished": 944,
+  "early_finished_right": 832,
+  "late_finished": 362,
+  "late_finished_right": 96,
+  "problems_without_a_16384_ballot": 30,
+  "late_finished_ballots": {
+   "with an early ballot": 192,
+   "agrees": 87,
+   "agrees, right": 51,
+   "disagrees": 105,
+   "disagrees, late right": 13,
+   "disagrees, an early ballot right": 46,
+   "disagrees, none right": 46,
+   "no early ballot": 118,
+   "no early ballot, late right": 17
+  }
+ },
+ "sequential": {
+  "single_32": {
+   "right_24_orders": 232.8,
+   "tokens_per_problem_24_orders": 11650,
+   "right_stored_order": 230,
+   "tokens_per_problem_stored_order": 11795
+  },
+  "seq4_16": {
+   "right_24_orders": 239.8,
+   "tokens_per_problem_24_orders": 30807,
+   "right_stored_order": 237,
+   "tokens_per_problem_stored_order": 30730
+  },
+  "seq4_32": {
+   "right_24_orders": 245.2,
+   "tokens_per_problem_24_orders": 31732,
+   "right_stored_order": 244,
+   "tokens_per_problem_stored_order": 32032
+  },
+  "seqfb_resume": {
+   "right_24_orders": 244.8,
+   "tokens_per_problem_24_orders": 33118,
+   "right_stored_order": 242,
+   "tokens_per_problem_stored_order": 33040
+  },
+  "seqfb_online": {
+   "right_24_orders": 244.8,
+   "tokens_per_problem_24_orders": 34863,
+   "right_stored_order": 242,
+   "tokens_per_problem_stored_order": 34828
+  },
+  "seq4_half": {
+   "right_24_orders": 249.8,
+   "tokens_per_problem_24_orders": 36659,
+   "right_stored_order": 249,
+   "tokens_per_problem_stored_order": 36659
+  }
+ },
+ "sequential_differences_24_orders": {
+  "seqfb_resume minus seq4_32": {
+   "problems": -0.5,
+   "points": -0.15,
+   "interval95": [
+    -2.26,
+    1.88
+   ]
+  },
+  "seqfb_resume minus seq4_16": {
+   "problems": 5.0,
+   "points": 1.52,
+   "interval95": [
+    0.46,
+    2.82
+   ]
+  },
+  "seqfb_online minus seq4_32": {
+   "problems": -0.5,
+   "points": -0.15,
+   "interval95": [
+    -2.26,
+    1.88
+   ]
+  },
+  "seqfb_online minus seq4_16": {
+   "problems": 5.0,
+   "points": 1.52,
+   "interval95": [
+    0.46,
+    2.82
+   ]
+  },
+  "seq4_half minus seq4_32": {
+   "problems": 4.5,
+   "points": 1.37,
+   "interval95": [
+    0.41,
+    2.49
+   ]
+  },
+  "seq4_half minus seq4_16": {
+   "problems": 10.0,
+   "points": 3.05,
+   "interval95": [
+    1.12,
+    5.13
+   ]
+  }
+ }
+}

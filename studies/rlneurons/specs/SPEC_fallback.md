@@ -108,3 +108,40 @@ few problems above `seq4` at 32,768 for a few thousand tokens more, not separate
 `results/fallback/{hard328,fresh2026}-01/`: `run.json`, `readout.json`, `table.md`, `rows.jsonl` (per sample: lengths,
 early / late, switch token), `examples.json` (one problem the rule fixes and one it breaks against the plain vote, with the
 four answers, lengths and flags); `hard328-01/chosen.json`. A `score:` line only for fresh2026 and only if H1 holds.
+
+## Amendment 1 (after the hard328 development run, before fresh2026 is scored)
+
+Development run `results/fallback/hard328-01/` (24-order means; stored order in brackets):
+
+| rule | right | minus plain vote R4, points [95 %] | minus cut vote R5, points [95 %] |
+|---|---|---|---|
+| R1 fallback | 244.8 (243) | -0.5 problems, -0.1 [-2.3, +1.9] | +5.0, +1.5 [+0.5, +2.8] |
+| R2 half weight | 249.8 (249) | +4.5, +1.4 [+0.4, +2.5] | +10.0, +3.0 [+1.1, +5.1] |
+| R3 fallback + script | 245.2 (244) | 0.0, 0.0 [-2.1, +2.1] | +5.5, +1.7 [+0.5, +3.0] |
+| R4 plain 32,768 vote | 245.2 (244) | | |
+| R5 16,384-cut vote | 239.8 (238) | | |
+| R6 flags permuted | 241.0 | -4.2, -1.3 [-2.3, -0.3] | |
+
+- Chosen: R2 (half weight). It is the rule scored on fresh2026.
+- My dev predictions were wrong for R1: predicted 248 and +4 over the plain vote; observed 244.8 and -0.5. The strict
+  fallback throws away late answers that side with one of two disagreeing early answers or outvote one early wrong answer
+  (stored order: it fixes 9 problems against the plain vote and breaks 10). R2 keeps those and fixes 6, breaks 1.
+- Correction to the task's and result-dd26fe's wording: "99 right of 362" joins two counts. 99 is the right count of all
+  368 late answers on hard328; of the 362 finished late answers 96 are right (832 + 96 = 928 of 1,306). fresh2026: 50 right
+  of 259 finished and of 260 late. The checks assert both.
+- Power on fresh2026 (2,000 draws of 136 problems from the 328, R2's per-problem differences): interval above 0 against
+  the plain vote in 42.8 % of draws, against the cut vote in 54.6 %, both in 19.1 %. That is under 50 %: a null on
+  fresh2026 will be uninformative, and H1 is expected to fail on power alone. The pooled hard328 + fresh2026 estimate will
+  be reported as descriptive only.
+- Prediction for the single fresh2026 score, R2, 24-order mean: 77.5 [75, 80] of 136; minus R4 +2 problems (+1.5 points),
+  interval covers 0; minus R5 +4 problems (+3 points), lower bound within 1 point of 0. H1 refuted on at least one leg.
+  The mechanism (not only H1) is refuted if R2 is below R4 or below R5 in the 24-order mean.
+- Added for the token accounting because the chosen rule is not a fallback: `seq4_half`, R2 drawn in `seq4`'s plan (2, 1,
+  1; every sample to the end; stop after a batch when a group weighs 2; else R2 over the drawn samples). hard328: 249.8 at
+  36,659 tokens against `seq4` at 32,768 245.2 at 31,732 (+1.4 points [+0.4, +2.5] for 16 % more tokens); `seqfb_resume`
+  244.8 at 33,118 and `seqfb_online` 244.8 at 34,863 are below `seq4` at 32,768 at more tokens (prediction 247: wrong).
+  The first, uncommitted dev run had no `seq4_half`; it was deleted and rerun as `hard328-01` with identical other numbers.
+- H2 and H3 on hard328 (dev): switched 20 of 119 right, not switched 79 of 249; within problem (60 problems) -12.2 points
+  [-22.2, -3.1], permuted flags +0.6. Late finished ballots on problems with a 16,384 ballot: 87 of 192 agree with one (51
+  right), 105 disagree (late right 13, a 16,384 ballot right 46, none right 46); on the 30 problems with no 16,384 ballot
+  17 of 118 late ballots are right. Prediction "25 % agree, 85 % of those right" was wrong (45 %, 59 %).
