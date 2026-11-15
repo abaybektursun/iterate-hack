@@ -4030,3 +4030,8 @@ Which reward writes the finishing directions (8 directions of each model added t
 
 Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.xreward_edits`, after
 `uv run tools/gpu.py get <job>` for the jobs it names.
+- Answered-only control (`analysis/ood1_rows.py` -> `results/ood1/rows-01/answered.json`; per-item rows in `rows.json`): the
+  plain base gives no option letter on 214 of 500 items (cue 30, RL 13, Think-SFT + cue 6), so part of the +30.0 is the cue
+  making the base write an answer. On the 264 items where both the plain and the cued base give a letter the cue adds +12.5
+  points [4.9, 19.7] (156 against 123 right; MMLU-Pro +10.2 [0.0, 20.3] of 118, BBH +14.4 [4.1, 25.3] of 146). RL on its 277
+  shared items: +19.1 [11.9, 26.4]. So less than half of the cue's gain here is better answers; the rest is answers given at all.
