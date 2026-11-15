@@ -68,3 +68,23 @@ problems; RL within 6 of 205.
 ## Cost
 
 One rented RTX PRO 6000 (vast.ai, 1.49 USD/h). Stage 1 about 5 M generated tokens, stage 2 about 8 M, stage 3 about 6 M.
+
+## Amendment 1 (2026-11-15 07:15 UTC, after stage 2 of lo6, before any esc job ran)
+
+Stage 2 refuted the prediction: lo6 on all 500 has about twice the cap hits of T 1.0 and no more right answers (README).
+The screen's 4 cap hits of 100 did not hold at n = 500, so stage 3 is not run for lo6. Two additions:
+
+1. hi6 on all 500, samples 1 and 2 (seeds 61,010,000 and 61,020,000 + index), to complete the 2x2 at n = 500: cap hits and
+   right of hi6 (forks only), lo6 (confident only), constant T 0.6 (stored job -151718-d4fa: 378 right, 98 cap hits) and
+   T 1.0 (stored job -153825-208b). The additive expectation for constant T 0.6 is T 1.0 + (hi6 - T 1.0) + (lo6 - T 1.0).
+2. A repeat-aware arm, esc: constant t_low, except that for 256 positions after a repeat the logits are left at T 1.0. A
+   repeat is a position where the request's last 32 tokens already occur as a block in its last 1,024 tokens (prompt
+   included, checked once 1,024 tokens exist). This is the loop-triggered temperature boost of llama.cpp PR 22007 in token
+   form; its effect on accuracy is not published. Screen on the first 100 MATH-500 problems (seed 61,000,000 + index):
+   esc6 = esc:0.6, esc3 = esc:0.3, esc6k = esc:0.6:1024. References from screen-01: t1 4 cap hits / 0 loops / 87 right,
+   all6 17 / 12 / 80.
+   - Prediction: esc6 has at most 8 cap hits of 100 and at least 87 right. Refuted if its cap hits are 13 or more (no better
+     than halfway to all6), or the processor's held share is 0 (the detector never fired).
+   - Stage 2 for esc, same rule as before: among esc arms with cap hits <= 8, the one with the most right (ties: higher
+     t_low, then smaller k), on all 500, samples 1 to 4, against the stored T 1.0 samples. Prediction: at least 2 points
+     above T 1.0 with a 95 % interval above 0. Stage 3 (the 328, once, both models) only if that interval is above 0.

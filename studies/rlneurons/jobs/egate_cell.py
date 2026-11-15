@@ -7,7 +7,8 @@ request runs at temperature 1.0 / top-p 1.0; the logits processor lib/egate.py s
 
   --arms    name=mode:t_low. mode: off (temperature 1.0 everywhere), hi (logits / t_low where the next-token entropy H > h0),
             lo (where H <= h0), all (everywhere: constant temperature t_low through the same code), rnd (at random positions,
-            with the share of positions that have H > h0).
+            with the share of positions that have H > h0), esc (everywhere, except for the 256 positions after a repeat of 32
+            tokens inside the last 1,024; name=esc:t_low:k sets another number of positions than 256).
   --h0      the threshold in nats, or auto: before the arms, the first --calib-n problems are sampled at temperature 1.0 for
             --calib-tokens tokens each (seed + 900000 + index), and h0 is the --q quantile of their positions' entropies.
   --rnd-share  the probability of the rnd arms; needed only with a numeric --h0 (with auto it is the measured share above h0).
@@ -66,14 +67,24 @@ def selftest(E, device):
     logits = torch.stack([flat + torch.arange(8) * 0.1, peaked, flat + torch.arange(8) * 0.1, peaked, peaked, peaked]).to(device)
     mode = torch.tensor([E.HI, E.HI, E.LO, E.LO, E.OFF, -1.0], device=device)
     t_low, thr = torch.full((6,), 0.5, device=device), torch.full((6,), 1.0, device=device)
-    out, h, sharp = E.gate(logits.clone(), mode, t_low, thr, torch.ones(6, device=device))
+    none = torch.zeros(6, dtype=torch.bool, device=device)
+    out, h, sharp = E.gate(logits.clone(), mode, t_low, thr, torch.ones(6, device=device), none)
     assert sharp.tolist() == [True, False, False, True, False, False], sharp.tolist()
     assert h[0] > 1.0 > h[1], h.tolist()
     for i, s in enumerate(sharp.tolist()):
         assert torch.allclose(out[i], logits[i] * (2.0 if s else 1.0)), i
     rnd = torch.full((6,), float(E.RND), device=device)
-    _, _, sharp = E.gate(logits.clone(), rnd, t_low, torch.full((6,), 0.2, device=device), torch.tensor([0.1, 0.3, 0.19, 0.21, 0.0, 0.9], device=device))
+    _, _, sharp = E.gate(logits.clone(), rnd, t_low, torch.full((6,), 0.2, device=device), torch.tensor([0.1, 0.3, 0.19, 0.21, 0.0, 0.9], device=device), none)
     assert sharp.tolist() == [True, False, True, False, True, False], sharp.tolist()
+    held = torch.tensor([True, False, True, False, True, False], device=device)
+    _, _, sharp = E.gate(logits.clone(), torch.full((6,), float(E.ESC), device=device), t_low, thr, torch.ones(6, device=device), held)
+    assert sharp.tolist() == [False, True, False, True, False, True], sharp.tolist()
+    g = torch.Generator().manual_seed(0)
+    fresh = torch.randint(0, 1000, (1, 300), generator=g)                       # no block of 32 tokens occurs twice
+    looped = torch.cat([fresh[:, :100], fresh[:, 60:100], fresh[:, 60:100]], dim=1)   # a 40-token block three times, ending the window
+    broken = looped.clone()
+    broken[0, -5] += 1                                                          # one changed token inside the last 32
+    assert E.repeats(torch.cat([fresh[:, :180], looped, broken]).to(device)).tolist() == [False, True, False]
     assert E.percentile([0, 8, 0, 2], 0.8) == 2 * E.BIN and E.percentile([0, 8, 0, 2], 0.81) == 4 * E.BIN
 
 
@@ -84,10 +95,12 @@ def main():
     assert (a.model is None) == bool(a.model_path) == bool(a.model_label), "give --model, or --model-path with --model-label"
     model = a.model or a.model_label
     assert re.fullmatch(r"[0-9a-f]{40}", a.commit), f"--commit {a.commit!r} is not a full git sha"
-    arms = []
+    arms, esc_k = [], {}
     for spec in a.arms:
-        m = re.fullmatch(r"(\w+)=(off|hi|lo|all|rnd):([0-9.]+)", spec)
+        m = re.fullmatch(r"(\w+)=(off|hi|lo|all|rnd|esc):([0-9.]+)(?::(\d+))?", spec)
         assert m, f"arm {spec!r} is not name=mode:t_low"
+        assert (m[4] is None) or m[2] == "esc", f"arm {spec!r}: only esc takes a third field"
+        esc_k[m[1]] = int(m[4] or 256)
         arms.append((m[1], m[2], float(m[3])))
     assert len({n for n, _, _ in arms}) == len(arms) < CALIB_ARM, "arm names repeat, or too many arms"
     auto = a.h0 == "auto"
@@ -156,13 +169,13 @@ def main():
     m["h0"], m["rnd_share"] = h0, share
     write()
 
-    def arm_args(k, mode, t_low):
+    def arm_args(k, name, mode, t_low):
         return {"off": [E.OFF, 1.0, 0.0, k], "hi": [E.HI, t_low, h0, k], "lo": [E.LO, t_low, h0, k], "all": [E.HI, t_low, -1.0, k],
-                "rnd": [E.RND, t_low, share, k]}[mode]
+                "rnd": [E.RND, t_low, share, k], "esc": [E.ESC, t_low, esc_k[name], k]}[mode]
 
     reqs = [{"rid": f"{name}|{p['index']}|{s}", "cell": f"{model}_cue_{a.set}_egate_{name}", "bench": a.set, "idx": int(p["index"]),
              "sample": s, "uid": p["unique_id"], "ids": ids + pre, "n_prompt": len(ids), "prefix_ids": pre, "prefix_kind": "opening",
-             "seed": a.seed + 10000 * s + int(p["index"]), "sampling": sampling(*arm_args(k, mode, t_low)), "max_tokens": cap,
+             "seed": a.seed + 10000 * s + int(p["index"]), "sampling": sampling(*arm_args(k, name, mode, t_low)), "max_tokens": cap,
              "gold": p["answer"], "arm": name}
             for k, (name, mode, t_low) in enumerate(arms) for s in range(a.first_sample, a.first_sample + a.samples) for p, ids in zip(probs, pids)]
     live = {r["rid"]: r for r in reqs}
@@ -176,7 +189,7 @@ def main():
         for k, (name, _, _) in enumerate(arms):
             if k in st:
                 c[name].update(positions=st[k]["positions"], share_sharpened=st[k]["sharpened"] / st[k]["positions"],
-                               mean_entropy=st[k]["mean_entropy"])
+                               mean_entropy=st[k]["mean_entropy"], share_held=st[k]["held"] / st[k]["positions"])
         done = sum(v["generated_tokens"] for v in c.values())
         sec = time.time() - t_gen
         m["arms"] = c
