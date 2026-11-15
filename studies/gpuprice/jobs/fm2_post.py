@@ -20,6 +20,8 @@ For a series, origin t and horizon h, with panel rows dated on or before t only:
      kind. Otherwise its price is read from the model's quantile function. With --dep copula the unit stays if it
      stayed in the drawn window. The model decides how far a price moves, the unit's history how often.
      --hurdle-h 1 applies it at horizon 1 only (1,3: at horizons 1 and 3).
+  3c. --replay P  linear pool at the unit: with probability P the unit repeats its own price ratio of the drawn
+     window (if it was present at both ends), otherwise its price is the model's (after 3 and 3b).
   4. --scaleway  Scaleway units: USD price = EUR price x ECB rate of the last business day before the target day.
      EUR price = last USD price / the rate that priced it. The rate is known when that business day is <= t, else a
      driftless random walk from the last rate dated <= t with the daily volatility of the rates dated <= t.
@@ -28,6 +30,8 @@ For a series, origin t and horizon h, with panel rows dated on or before t only:
      (--enter ratio: at their ratio to the median at s, as sim_median.py; abs: at their posted price, only those
      absent today). With --dep copula the same window drives ranks and turnover.
   6. The forecast is the q10, q50, q90 of the simulated medians.
+Any per-listing quantile file works (round 1's fm_chronos2.csv, a fine-tuned model's file): columns setup,
+series_id, unit or listing, origin_date, horizon_days, q<level>...; setup lst_alone is read as lst, alone as ser.
 afhubbard: --afh ser uses the model's quantiles of the series (round 1); --afh lst simulates its listings (steps 1-3, 6).
 """
 import argparse, os, sys
@@ -36,7 +40,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fm2_lib
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--quantiles", required=True); ap.add_argument("--out", required=True)
+ap.add_argument("--quantiles", required=True, nargs="+", help="one or more fm2_chronos2.csv (jobs split by origin)"); ap.add_argument("--out", required=True)
 ap.add_argument("--panel", default="studies/gpuprice/data/fm2_panel_v2.csv.gz")
 ap.add_argument("--fx", default="studies/gpuprice/data/ext_ecb_eurusd_v1.csv")
 ap.add_argument("--origins", default="dev")
@@ -46,6 +50,7 @@ ap.add_argument("--afh", default="ser", choices=["ser", "lst"])
 ap.add_argument("--dep", default="indep", choices=["indep", "prov", "copula"])
 ap.add_argument("--dep-h1", default="", help="dependence at horizon 1 if it differs from --dep")
 ap.add_argument("--hurdle", action="store_true"); ap.add_argument("--hurdle-h", default="1,3,7")
+ap.add_argument("--replay", type=float, default=0)
 ap.add_argument("--snap", type=float, default=0); ap.add_argument("--scaleway", action="store_true")
 ap.add_argument("--turnover", default="", choices=["", "own", "pool"]); ap.add_argument("--enter", default="ratio", choices=["ratio", "abs"])
 ap.add_argument("--turnover-only", default="", help="apply --turnover only to series whose id contains this text")
@@ -57,10 +62,14 @@ H, QS = fm2_lib.HORIZONS, [0.1, 0.5, 0.9]
 D = a.draws
 rng = np.random.default_rng(a.seed)
 
-f = pd.read_csv(a.quantiles, keep_default_na=False)
+f = pd.concat([pd.read_csv(p, keep_default_na=False) for p in a.quantiles], ignore_index=True)
+f = f.rename(columns={"listing": "unit"})                           # round-1 and fine-tune files name the unit 'listing'
+f["setup"] = f.setup.replace({"lst_alone": "lst", "alone": "ser"})
+assert not f.duplicated(["setup", "series_id", "unit", "origin_date", "horizon_days"]).any()
 qcols = [c for c in f.columns if c.startswith("q")]
 LV = np.array([float(c[1:]) for c in qcols])
 f = f[f.origin_date.isin(ORIG)]
+assert set(f.origin_date) == set(ORIG), "the quantile files do not hold every origin asked for"
 f[qcols] = np.sort(f[qcols].values.astype(float), axis=1)          # a quantile function must not decrease
 QF = {s: {k: g for k, g in x.groupby(["series_id", "origin_date", "horizon_days"])} for s, x in f.groupby("setup")}
 
@@ -111,7 +120,7 @@ def simulate(sid, w, o, h, setup, dep, turnover):
 
     win = None
     hurdle = a.hurdle and str(h) in a.hurdle_h.split(",")
-    if dep == "copula" or turnover or hurdle:
+    if dep == "copula" or turnover or hurdle or a.replay:
         idx = {d: i for i, d in enumerate(days)}
         se = [(i, idx[d + pd.Timedelta(days=g)]) for i, d in enumerate(days) if d + pd.Timedelta(days=g) in idx]
         if len(se) >= 5:
@@ -148,6 +157,9 @@ def simulate(sid, w, o, h, setup, dep, turnover):
             mv = np.abs(x[1:] / x[:-1] - 1); mv = mv[mv > 0]
             if len(mv):
                 X[j, np.abs(X[j] / now[j] - 1) < a.snap * mv.min()] = now[j]
+    if a.replay and win is not None:
+        B = (rng.uniform(size=(n, D)) < a.replay) & ok[win].T
+        X = np.where(B, now[:, None] * np.where(ok, R, 1)[win].T, X)
     if a.scaleway:
         for j in np.flatnonzero(prov[cur] == "scaleway"):
             X[j] = scaleway(now[j], L, t, h)
