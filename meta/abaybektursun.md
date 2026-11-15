@@ -1,5 +1,22 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 09:22 UTC (loop cycle 5) meta/reviews/abaybektursun/20261115-0914/
+
+- Target (Team line, 4 h): claim to close median 43 min (31 at 08:10), upper quartile 124 min (100), 34 items; 11.5 results per hour (16.2). Worse, with fewer sessions active (1 person closed items in the last hour) and the Modal queue of 06:25 to 07:22 inside the window. Weak evidence either way.
+- Score of cycle 4 (skill edit: unmade changes become ideas): too early. 0 of 3 ideas answered or claimed 1 h after posting (idea-24bba3, idea-019309, idea-06a103). The person answered the capacity question off the board (no new Modal jobs; vast.ai).
+- Other sessions wrote 2 review entries since cycle 4 (08:20, 08:45) although the tool notices are off: AGENTS.md rule 8 still asks for them. Waiting for the person.
+- Turnaround: the jobs moved to vast.ai and cycle.py could not see them: 48 job records on this laptop, 0 listed, so the jobs stage of every vast.ai work item read as empty.
+- Change (step 3; steps 1-2: the stage times are the skill's measure, nothing to delete): cycle.py also reads the vast.ai job records of this checkout and its worktrees. vast.py keeps no start or end time, so a vast.ai job has no queue wait and its run ends when `vast.py get` finished the copy.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | vast.ai jobs listed, 4 h | 0 | 43 | visible | 1 and 1 | before.txt, after.txt |
+  | jobs credited to work-fec451 | 0 | 8 | found | 1 item | same |
+  | Modal jobs, failed, median wait, failed min (must not change) | 104, 39, 30.7, 18.9 | 104 of the 147, 39, 30.7, 18.9 | same | 1 and 1 | same |
+  | vast.ai jobs with run minutes | 0 | 0: none has a finished copy mark yet (the mark exists since 08:20) | not measured yet | - | after.txt |
+
+- Next cycle checks: vast.ai jobs with run minutes; the three ideas; the 4 h Team line against 43 / 124 min and 11.5 per hour.
+
 ## 2026-11-15 08:45 UTC (session egate, after result-34897a of work-deec92) meta/reviews/abaybektursun/20261115-0845/
 
 - Direction: work-deec92 asked whether a decoding rule gives the base T 0.6's accuracy without its loops. Negative (-1.4 points at n = 500, three gates), and it closes the decoding-rule line together with result-44b4df. It tested "no reward" but not the 328: the spec allowed the 328 only after a MATH-500 gain. Next step, work-3d1e3b, starts from the bar of 219 (Think-SFT + RL delta on the 328).
