@@ -83,3 +83,15 @@ with the mean log length of the random arms as a covariate (problem difficulty f
 `results/direct/input-01/`: `readout.json` (every number above, n, intervals), `examples.json` (one problem with high drive and
 one with low drive: drive, the lengths and finish flags of every arm, the heads of the texts), `run.json` (commit, command, input
 jobs).
+
+## Amendment 1 (after the first run, before any board post)
+
+The primary readout is confounded, as the raw rows show. Drive D correlates with answer length (Spearman 0.58 with the traced
+base answer's log length, 0.55 with the random arms'), and the edit's length effect changes sign with length (it lengthens
+short answers and cuts long ones, result-1b6bf2), so its mean is near zero (0.042 [0.005, 0.078]) and `b` for E_len is
+-64 [-252, -30]: the frozen rule says "f2-m03 refuted", but that number measures length, not drive. The verdict therefore uses
+the two readouts that control for problem difficulty (mean log length of the two fresh random arms as a covariate), one of
+them listed above (E_len) and one added here (E_fin): f2-m03 refuted if both upper bounds are below 0.5, f2-m01 refuted if
+both lower bounds are above 0.5, otherwise undecided. The planted check is replaced by an exact one (adding
+`mean(E) * (D / mean(D) - 1)` to E must raise `b` by exactly 1), and the shuffled-drive check by the central 90 % of `b` over
+500 shuffles of D, which also gives the spread of `b` when drive has no effect.

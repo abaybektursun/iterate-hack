@@ -1359,6 +1359,27 @@ finishing and right answers together in both signs; they are not a pure finishin
 | `analysis/direct_dial.py` | Readout from committed rows (hard328, MATH-500, cell-r9-m11-01) and the -1x hard328 job's rows. |
 | `results/direct/dial-01/` | `readout.json`, `examples.json` (edit right and wrong on base-FW problems), `m1x_hard328_rows.jsonl`, `reading.md`, `run.json`. |
 
+### input-01: run-05/f2-m03, "a direction acts only as far as the text drives its input subspace" (board work-cd2924, undecided offline)
+
+Claim tested: within hard328, the top-8 edit's effect on a problem is proportional to how strongly that problem's text drives
+Math 3.1's top-8 input subspace. Drive D per problem: trace-01's r = ||diag(s) V^T x|| / ||W_base x|| (the relative change the
+edit makes to the matrix output), mean over the first 6,000 tokens of the base answer, 3 matrices, 4 layer bands. Effect per
+problem: 4 edit sizes (0.5 to 2) against the 2 random rank-8 arms, in log length and in finishing. Statistic b = slope of
+effect on D / mean(D), divided by the mean effect: f2-m03 predicts 1, its rival f2-m01 (same on every text) 0. Result, n 328:
+drive barely varies across math texts (CV 6.8 %, top over bottom tertile 1.13 [1.12, 1.15]) and follows answer length
+(Spearman 0.58). With difficulty controlled, b = -1.0 [-11.4, 6.2] for finishing and -11 [-56, 56] for length; with D shuffled
+b already spans [-3.2, 3.6], so 0 and 1 cannot be told apart. The frozen primary (length, no control) gave -64 [-252, -30] and
+the rule "refuted", but that number measures answer length, not drive (spec, Amendment 1). The claim that separates the
+rivals is cross-domain, and no code-text activation is stored. Cheapest deciding cell: `jobs/xreward_trace.py` on the
+base's stored Code-cue answers of HumanEval+/MBPP+ (538), conditions math31, code31, random; f2-m03 predicts Math's drive on
+code text at about 0.54 of its drive on math text.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_input.md` | Claim, refuting observation, rival's prediction (pushed first, 8eb2244), Amendment 1. |
+| `analysis/direct_input.py` | Readout from trace-01's per-position drive (`runs/abaybektursun-1115-005830-2145/trace_00*.npz`) and 7 hard328 cells' `answers.jsonl` (Modal Volume `iterate-runs`). |
+| `results/direct/input-01/` | `readout.json`, `examples.json` (a high-drive and a low-drive problem that the edit shortens as much), `run.json`. |
+
 ## Paper: Theories on Trial (`paper/`, board work-184476)
 
 A short paper on the engine's rounds 1 to 7: the theories' own predictions against the two no-theory readers
