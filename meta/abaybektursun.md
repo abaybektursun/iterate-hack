@@ -1,5 +1,14 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 08:15 UTC (loop cycle 4, step-back 1; no change to tools) meta/reviews/abaybektursun/20261115-0810/
+
+- Target: last 1 h 103 / 171 min over 6 items, 8.0 results per hour; last 4 h 31 / 100 min over 45 items, 16.2 per hour. The 1 h number went 15, 16, 24, 103 over four cycles with the mix of work and the number of active sessions; no change of the loop can be read from it. The loop records the 4 h window from cycle 5.
+- Score of cycle 3 (reservation removed): helped, weak. Long lane in the hour after: 7 of 14 started, median wait 10.0 min, against 0 of 21 started in 39 min (lanes_after_redeploy.txt). Correction: cycle 3's "queue moving" reading counted jobs that a broken container killed (31 deaths 07:04-07:18, fixed 07:22 by another session).
+- The three questions are answered in stepback.md. Short: (1) the changes that helped each removed a wait or a failure in shared tools, by the reviewer alone, with the before number already in job records; none shows in the team median. (2) Never fixed: minutes per cell, rows outside git, GPU capacity; each was written into entries the owner does not read. (3) Section 2 (Research) made 0 changes in 31 entries.
+- Skill edit (one, 131 lines before and after): a change the reviewer cannot make is posted as an idea with its baseline, not carried. Measured over cycles 5 to 8 against 1 of 9 proposals reaching an owner.
+- Modal: the person asked for no new Modal GPU jobs. The loop submits none; cycle.py reads Modal records only, so fewer jobs will show.
+- Next cycle checks: the 4 h Team line against 31 / 100 min and 16.2 per hour; the two open proposals (rows in git, GPUs per question) posted as ideas.
+
 ## 2026-11-15 07:12 UTC (loop cycle 3) meta/reviews/abaybektursun/20261115-0702/
 
 - Target (Team line, last 1 h): claim to close median 24 min (16), upper quartile 124 min (46), 6 items of 2 people (19 of 3); 16.0 results per hour (18.0). Worse on every number; 6 items is a small sample, but the cause below is direct.
