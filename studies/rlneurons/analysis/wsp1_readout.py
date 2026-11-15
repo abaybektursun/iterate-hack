@@ -39,12 +39,12 @@ CELLS = [
     ("base", "cue", WHO + "154311-93e3", "screen100", 81000000),
     ("sft1", "cue", WHO + "184627-f7eb", "screen100", 81000000),
     ("sft05", "cue", WHO + "184632-401b", "screen100", 81000000),
-    # Amendment 2, running: fill in the job id and uncomment.
-    # ("top1", "plain", WHO + "<id>", "screen100", 80000000),
-    # ("bulk64", "plain", WHO + "<id>", "screen100", 80000000),
-    # ("top8", "plain", WHO + "<id>", "full500", 180000000),
-    # ("sft1", "cue", WHO + "<id>", "full500", 181000000),
-    # ("sft1", "plain", WHO + "<id>", "full500", 182000000),
+    # Amendment 2
+    ("top1", "plain", WHO + "185952-2e78", "screen100", 80000000),
+    ("bulk64", "plain", WHO + "185958-fb46", "screen100", 80000000),
+    ("top8", "plain", WHO + "185934-b0a9", "full500", 180000000),
+    ("sft1", "cue", WHO + "185940-514f", "full500", 181000000),
+    ("sft1", "plain", WHO + "185947-4681", "full500", 182000000),
 ]
 EXPERIMENTS = {"screen100": 100, "full500": 500}          # experiment -> the first n MATH-500 problems
 REFERENCES = ("base", "rl")                               # released models (run_cell --model); every other label needs an edit.json
