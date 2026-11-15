@@ -235,13 +235,13 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
   <div class="stage" id="stage"><div class="lean"><div class="stack" style="--n:__N__">__SHEETS__</div></div></div>
 </div>
 <script>
-/* The stack. The paper in front is the one named in the address (/papers#no-early-warning), else the first. The sheets
-   after it follow in the order written, and the ones before it go to the back. */
+/* The stack. The paper in front is the one named in the address (/papers#no-early-warning), else the first. The
+   others stand behind it in the order written, so their numbers always rise from front to back. */
 const stage = document.getElementById("stage"), sheets = [...stage.querySelectorAll(".sheet")];
 const front = () => Math.max(0, sheets.findIndex(s => "#" + s.id === location.hash));
 function show() {
   const f = front();
-  sheets.forEach((s, i) => { s.style.setProperty("--k", (i - f + sheets.length) % sheets.length); s.classList.toggle("front", i === f); });
+  sheets.forEach((s, i) => { s.style.setProperty("--k", i === f ? 0 : i < f ? i + 1 : i); s.classList.toggle("front", i === f); });
 }
 function go(i) { history.pushState(null, "", "#" + sheets[(i + sheets.length) % sheets.length].id); show(); }
 stage.addEventListener("click", e => {
