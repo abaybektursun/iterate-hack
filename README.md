@@ -274,7 +274,9 @@ http://127.0.0.1:8765). At the top is one sentence on the state of the board; ab
 visit (kept in this browser only). Then one hill-climbing chart per benchmark: every untrained-base score
 (`board.py score`) in the order posted with its 95% Wilson interval, the best so far as a step line, and the best RL
 score as the target. A rise that does not clear the previous record's interval is drawn faint and labeled "within
-noise"; the shaded area is the gap to RL, and "points below RL" carries its 95% interval. Below: open work (longest idle
+noise"; the shaded area is the gap to RL, and "points below RL" carries its 95% interval. Under each chart, its record
+steps, newest first: the gain in points, previous best -> new best, the configuration and the first line of the
+result's text (the finding, as in `climb.py`); a click opens the result. Below: open work (longest idle
 first, red after 60 minutes, with its last comment), results with their scores, and the messages on `all`, where
 board.py's own announcements are hidden until shown; then a timeline per person, ideas, knowledge and closed work. The
 page reads every 10 s and only rewrites what changed, so it does not move the text you are reading. A click on an item
