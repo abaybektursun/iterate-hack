@@ -2,40 +2,62 @@
 # requires-python = ">=3.11"
 # dependencies = ["boto3>=1.35"]
 # ///
-"""Version 3 of a theory round (.claude/skills/theory/SKILL.md): every model call is a headless Claude run, every check
-and the score are code here.
+"""A theory round (.claude/skills/theory/SKILL.md): every model call is a headless Claude run, every check and score is
+code here.
 
-  uv run studies/theory/lib/round.py <round dir> <stage> [options]
+  uv run studies/theory/lib/round.py <round dir> <stage> [<stage> ...] [options]
 
-Stages, in the order `all` runs them:
+Version 6 (default). `all` runs, in order:
   split --cutoff <ISO time> [--skip <word> ...]   check.dump: before.jsonl, after.jsonl
-  standing --from <previous round dir>            theories/ (the previous round's passing theories, unchanged,
-                                                  except those whose review verdict is refuted or published),
-                                                  prior_reviews/, prior_scores.json
-  inventory      (opus, repository, read-only)    inventory.md: the stored per-problem row files, no result numbers
-  targets        (sonnet)                         targets.jsonl (quote-checked; failing targets dropped),
-                                                  targets_blind.jsonl
-  external       (opus, papers.py only)           external.md
-  generate [--starts all,surprises,across,external,revise]   (opus)
-                                                  external_<start>.md, drafts/, theories/r<N>-<start>-<k>.json,
-                                                  dropped.json, theories.sha256
-  null           (opus)                           predictions/null-1.jsonl, null-2.jsonl
-  claims         (opus, one advocate per theory)  claims/<theory>.jsonl
-  score          (no model)                       metrics_v3.json and the printed table
-  reverse        (sonnet rewrite, opus advocate)  reversed/<theory>.json, claims/<theory>.rev.jsonl, then score
+  standing --from <previous round dir>            graveyard.json (every theory of every earlier round in that engine
+                                                  folder), theories/ (survivors carried with their scored tests,
+                                                  untested theories once, <theory>-rival for each rival that beat its
+                                                  theory, with its duel tests as its record), prior_reviews/,
+                                                  facts.json (the previous round's computed numbers),
+                                                  incumbent_account.json (its account, shares and duel)
+  inventory      (opus, repository)               inventory.md: stored per-problem row files, fetch command, readable now
+  external       (opus, papers.py only)           external.md: published mechanisms and their numbers
+  mechanisms [--n-mechanisms 12]   (opus)         mechanisms.json: pairwise different candidate mechanisms
+  develop        (opus, one per mechanism)        drafts/, theories/r<N>-m<id>.json, dropped.json (abandoned or failing
+                                                  the check twice), theories.sha256
+  account        (opus, one job)                  theories/r<N>-account.json: one budget of the base-to-RL gap, 3-6
+                                                  parts with ordered rules on stored rows, a share per part and for
+                                                  unassigned, 2+ cross-predictions; tested and duelled like a theory
+  null_tests     (opus, 2 jobs)                   tests_blind.jsonl, predictions/nulltest-1.jsonl, nulltest-2.jsonl
   test           (opus, repository, laptop only)  tests/<theory>/p<k>.py written by the model, run here once:
-                                                  tests/<theory>.json, then score
-  review         (opus, repository)               reviews/<theory>.json for the top 3 passing theories
+                                                  tests/<theory>.json
+  score_tests    (no model)                       metrics_v4.json and the printed table
+  heldout                                         targets, null, claims (survivors only), score_tests: strikes
+  rival          (opus, one per survivor)         rivals/<theory>.json: the strongest rival mechanism, 2-4 tests on
+                                                  which the two differ, the rival's predictions (top 3 survivors)
+  defend         (opus, one per survivor)         rivals/<theory>.defend.json: predictions from the theory alone
+  rival2         (opus, where needed)             the rival's second turn where fewer than 2 tests put the defender's
+                                                  centre outside the rival's interval: rivals/<theory>.turn2.json
+  defend         (opus)                           rivals/<theory>.turn2.defend.json for the second turn's tests
+  duel_test      (opus, repository, laptop only)  rivals/<theory>[.turn2]/p<k>.py, run here once: .tests.json
+  score_duel     (no model)                       metrics_v5.json: theory against rival over both turns (+-2 nats
+                                                  decides), and the printed table
+  review         (opus, repository)               reviews/<theory>.json for the same survivors; names the duel state
 
-Every model call except inventory, test and review runs in an empty job directory outside the repository with only
+--only-account: no mechanisms or develop; only the account is tested and duelled, carried theories are its inputs.
+Version 5 (`--version 5`): the same without account. Version 4: also without rival, defend, rival2, duel_test and
+score_duel. Stages given by name run in the
+given order on an existing round folder, for example `round.py <round dir> rival defend rival2 defend duel_test score_duel`.
+Version 3 (`--version 3`; `all` runs split, standing, inventory, targets, external, generate, null, claims, score,
+reverse, test, score, review): generate [--starts ...], score (metrics_v3.json), reverse. Every stage is callable alone.
+
+Every model call except inventory, test, duel_test and review runs in an empty job directory outside the repository with only
 the Read and Write tools, so no git status, project instructions, memory or board reaches it. A job whose outputs
-exist is skipped, so a stopped round resumes. --model-all <model> overrides every stage's model and --min-targets <n>
-(default 15) the fewest targets a round accepts: both for smoke tests.
+exist is skipped, so a stopped round resumes. A job whose output fails its check is sent back once with the error.
+Repository jobs and test scripts run with AWS_PROFILE=iterate-ecr; test scripts run under TEST_PYTHON.
+--model-all <model> overrides every stage's model and --min-targets <n> (default 15) the fewest targets a round
+accepts: both for smoke tests.
 """
 import argparse
 import hashlib
 import json
 import math
+import os
 import random
 import re
 import shutil
@@ -53,8 +75,16 @@ sys.path.insert(0, str(LIB))
 import check  # noqa: E402
 from check import read, write  # noqa: E402
 
+AWS_PROFILE = "iterate-ecr"  # reads s3://pg-lineage-769063704696/results/rlneurons/ on the owner's machine
+# Test scripts run with the team's grader packages (studies/rlneurons/README.md: math-verify 0.9.0 and numpy) and the
+# antlr4 runtime sympy's LaTeX parser needs (it accepts only 4.11), from the repository root with the root on PYTHONPATH,
+# so `from studies.rlneurons.lib import rln4_lib` works.
+TEST_PACKAGES = ["numpy", "math-verify==0.9.0", "antlr4-python3-runtime==4.11"]
+TEST_PYTHON = ["uv", "run", "--no-project", *(a for p in TEST_PACKAGES for a in ("--with", p)), "python"]
 MODELS = {"inventory": "opus", "targets": "sonnet", "external": "opus", "generate": "opus", "fix": "opus",
-          "null": "opus", "claims": "opus", "reverse": "sonnet", "test": "opus", "review": "opus"}
+          "null": "opus", "claims": "opus", "reverse": "sonnet", "test": "opus", "review": "opus",
+          "mechanisms": "opus", "develop": "opus", "null_tests": "opus", "rival": "opus", "defend": "opus",
+          "account": "opus"}
 STARTS = {
     "all": "the items and the findings as a whole.",
     "surprises": "build only from hypotheses the items report as refuted, predictions that failed, and controls that "
@@ -73,14 +103,19 @@ FREE_RULE = ("Go through every target. Claim a target only where the mechanism a
              "with no theory guess those too, and a claim gains only where the theory moves the number. Leaving a "
              "target unclaimed costs nothing.")
 REPO_TOOLS = {
-    "inventory": ["Bash(ls:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(git ls-files:*)", "Bash(git log:*)",
-                  "Bash(git show:*)", "Bash(aws s3 ls:*)"],
+    "inventory": ["Bash(ls:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(wc:*)", "Bash(jq:*)", "Bash(git ls-files:*)", "Bash(git log:*)",
+                  "Bash(git show:*)", "Bash(aws s3 ls:*)", "Bash(aws s3 cp:*)", "Bash(modal volume ls:*)",
+                  "Bash(modal volume get:*)", "Bash(mkdir -p runs/:*)"],
     "test": ["Bash"],
     "review": ["Bash(python3 tools/recall.py:*)", "Bash(python3 tools/exa.py:*)", "Bash(uv run tools/board.py ls:*)",
                "Bash(uv run tools/board.py show:*)", "Bash(git log:*)", "Bash(git show:*)", "Bash(ls:*)", "Bash(cat:*)"],
 }
 THEORY_KEYS = {"name", "statement", "scope", "parent", "imports", "explains", "conflicts", "rival", "predictions"}
+THEORY_KEYS_V4 = {"name", "statement", "scope", "explains", "conflicts", "rival", "predictions"}
 PREDICTION_KEYS = {"experiment", "unit", "value", "low", "high", "refuted_by", "gpu_minutes"}
+MECHANISM_KEYS = {"id", "mechanism", "starts_from", "import", "differs_from", "first_test"}
+METRICS_FILES = ("metrics_v4.json", "metrics_v3.json", "metrics_v2.json", "metrics.json")
+BAD_VERDICTS = ("refuted", "published", "weak")
 HEADING = re.compile(r"^### (\S+) — ", re.M)
 args = None
 _tmp = []
@@ -97,12 +132,34 @@ def number(x):
     return isinstance(x, (int, float)) and not isinstance(x, bool)
 
 
+def round_number(folder):
+    """round-<nn>. A folder named otherwise (results/account/run-01) is the round after --from; the --from folder
+    itself, when named otherwise, has the highest round number among its theories."""
+    m = re.search(r"round-(\d+)", Path(folder).name)
+    if m:
+        return int(m.group(1))
+    if not args.prev:
+        sys.exit(f"{folder} is not named round-<nn>: give --from <previous round dir> with every command")
+    if Path(folder).resolve() != Path(args.prev).resolve():
+        return round_number(args.prev) + 1
+    return max(int(re.match(r"r(\d+)-", p.name).group(1)) for p in (Path(folder) / "theories").glob("r*-*.json"))
+
+
+def in_scope(name):
+    """--only-account: only account theories are tested and duelled; carried theories are inputs to the account."""
+    return not args.only_account or "-account" in name
+
+
 def prompt(stage, **values):
     return string.Template((LIB / "prompts" / f"{stage}.md").read_text()).substitute(values)
 
 
 def model(stage):
     return args.model_all or MODELS[stage]
+
+
+def heads(folder):
+    return set(HEADING.findall((folder / "external.md").read_text()))
 
 
 # ---- running headless jobs ----
@@ -125,6 +182,18 @@ def command(j, folder):
                    "--allowedTools", "Read", "Grep", "Glob", "Write", *REPO_TOOLS[j["stage"]]]
 
 
+def claude(j, folder, text, suffix):
+    """One headless run of the job's model in its directory; prompt<suffix>.txt in, out<suffix>.txt out."""
+    d, repo = j["dir"], j["mode"] == "repo"
+    (d / f"prompt{suffix}.txt").write_text(text)
+    out = d / f"out{suffix}.txt"
+    with open(d / f"prompt{suffix}.txt") as stdin, open(out, "w") as stdout:
+        code = subprocess.run(command(j, folder), stdin=stdin, stdout=stdout, stderr=subprocess.STDOUT, cwd=ROOT if repo else d,
+                              env={**os.environ, "AWS_PROFILE": AWS_PROFILE} if repo else None, timeout=3600).returncode
+    if code:
+        sys.exit(f"{j['stage']}/{j['name']}: claude exited with {code}; see {out}")
+
+
 def run_one(j, folder):
     d = j["dir"]
     d.mkdir(parents=True)
@@ -136,24 +205,24 @@ def run_one(j, folder):
             shutil.copytree(src, d / rel)
         else:
             shutil.copy(src, d / rel)
-    (d / "prompt.txt").write_text(j["prompt"])
-    out, start = d / "out.txt", time.time()
-    with open(d / "prompt.txt") as stdin, open(out, "w") as stdout:
-        code = subprocess.run(command(j, folder), stdin=stdin, stdout=stdout, stderr=subprocess.STDOUT,
-                              cwd=ROOT if j["mode"] == "repo" else d, timeout=3600).returncode
-    if code:
-        sys.exit(f"{j['stage']}/{j['name']}: claude exited with {code}; see {out}")
-    for rel in j["outputs"]:
-        if not (d / rel).exists():
-            sys.exit(f"{j['stage']}/{j['name']}: wrote no {rel}; see {out}")
-    if j["valid"]:
-        try:
+    start = time.time()
+    claude(j, folder, j["prompt"], "")
+    missing = [rel for rel in j["outputs"] if not (d / rel).exists()]
+    error = f"wrote no {', '.join(missing)}" if missing else None
+    if not error and j["valid"]:
+        try:  # the first check's error, a parse error included, goes back to the job once; the second check raises
             error = j["valid"](d)
-        except Exception:
-            print(f"{j['stage']}/{j['name']}: malformed output; see {out}", file=sys.stderr)
-            raise
+        except Exception as e:
+            error = f"malformed output: {type(e).__name__}: {e}"
+    if error:
+        print(f"  {j['stage']}/{j['name']}: {error}; sent back once")
+        files = ", ".join(str(d / rel) for rel in j["outputs"])
+        claude(j, folder, j["prompt"] + "\n\n" + prompt("sendback", files=files, message=error), ".sendback")
+        print(f"  {j['stage']}/{j['name']}: checking the send-back; on a traceback see {d / 'out.sendback.txt'}")
+        missing = [rel for rel in j["outputs"] if not (d / rel).exists()]
+        error = f"wrote no {', '.join(missing)}" if missing else j["valid"] and j["valid"](d)
         if error:
-            sys.exit(f"{j['stage']}/{j['name']}: {error}; see {out}")
+            sys.exit(f"{j['stage']}/{j['name']}: {error} after the send-back; see {d / 'out.sendback.txt'}")
     for rel, dest in j["outputs"].items():
         dest.parent.mkdir(parents=True, exist_ok=True)
         if (d / rel).is_dir():
@@ -163,14 +232,15 @@ def run_one(j, folder):
     print(f"  {j['stage']}/{j['name']} ({j['model']}): done in {time.time() - start:.0f} s")
 
 
-def run(jobs, folder):
+def run(jobs, folder, workers=None):
     todo = [j for j in jobs if not all(p.exists() for p in j["outputs"].values())]
     for j in jobs:
         if j not in todo:
             print(f"  skip {j['stage']}/{j['name']}: its outputs exist")
     if todo:
-        print(f"  running {len(todo)} jobs in parallel")
-        with ThreadPoolExecutor(min(args.workers, len(todo))) as pool:
+        workers = min(workers or args.workers, len(todo))
+        print(f"  running {len(todo)} jobs, {workers} at a time")
+        with ThreadPoolExecutor(workers) as pool:
             for f in [pool.submit(run_one, j, folder) for j in todo]:
                 f.result()
 
@@ -210,11 +280,30 @@ def interval_rows(path, ids, exact):
     return f"value outside [low, high] or not a number for {bad}" if bad else None
 
 
+def prediction_messages(name, predictions):
+    m = []
+    for i, p in enumerate(predictions, 1):
+        if PREDICTION_KEYS - p.keys():
+            m.append(f"{name}.json: prediction {i} misses keys {sorted(PREDICTION_KEYS - p.keys())}")
+        elif not (all(number(p[k]) for k in ("value", "low", "high")) and p["low"] <= p["value"] <= p["high"]):
+            m.append(f"{name}.json: prediction {i} needs numbers with low <= value <= high")
+    return m
+
+
+def add_quote_messages(folder, msgs, drafts):
+    """check.py's quote check on every draft whose cited entries all have an item and a quote."""
+    quotable = {n: t for n, t in drafts.items() if isinstance(t.get("explains"), list) and isinstance(t.get("conflicts"), list)
+                and all("item" in c and "quote" in c for c in t["explains"] + t["conflicts"])}
+    lines, _ = quote_check(read(folder / "before.jsonl"), [], [], quotable)
+    for line in lines:
+        msgs[line.split(".json: ")[0]].append(line)
+    return msgs
+
+
 def check_theories(folder, drafts, standing):
     """Messages per theory: the v3 form rules, then check.py's quote check."""
-    heads = set(HEADING.findall((folder / "external.md").read_text()))
+    known = heads(folder)
     msgs = {name: [] for name in drafts}
-    quotable = {}
     for name, t in drafts.items():
         m = msgs[name]
         if missing := THEORY_KEYS - t.keys():
@@ -227,24 +316,66 @@ def check_theories(folder, drafts, standing):
         if name.split("-")[1] != "revise" and not t["imports"]:
             m.append(f"{name}.json: needs at least one import from external.md")
         for imported in t["imports"]:
-            if imported.get("source") not in heads:
+            if imported.get("source") not in known:
                 m.append(f"{name}.json: import source {imported.get('source')!r} is not a heading id in external.md")
         if t["parent"] is not None and t["parent"] not in standing:
             m.append(f"{name}.json: parent {t['parent']!r} is not a standing theory (standing: {sorted(standing)}, or null)")
-        for i, p in enumerate(t["predictions"], 1):
-            if PREDICTION_KEYS - p.keys():
-                m.append(f"{name}.json: prediction {i} misses keys {sorted(PREDICTION_KEYS - p.keys())}")
-            elif not (all(number(p[k]) for k in ("value", "low", "high")) and p["low"] <= p["value"] <= p["high"]):
-                m.append(f"{name}.json: prediction {i} needs numbers with low <= value <= high")
+        m += prediction_messages(name, t["predictions"])
         offline = [p for p in t["predictions"] if "recipe" in p]
         if len(offline) < 2 or any(p.get("gpu_minutes") != 0 for p in offline):
             m.append(f"{name}.json: needs at least 2 offline predictions, each with a \"recipe\" and \"gpu_minutes\": 0")
-        if all("item" in c and "quote" in c for c in t["explains"] + t["conflicts"]):
-            quotable[name] = t
-    lines, _ = quote_check(read(folder / "before.jsonl"), [], [], quotable)
-    for line in lines:
-        msgs[line.split(".json: ")[0]].append(line)
-    return msgs
+    return add_quote_messages(folder, msgs, {n: t for n, t in drafts.items() if not THEORY_KEYS - t.keys()})
+
+
+def check_theories4(folder, drafts, parents):
+    """Messages per theory: the v4 form rules (3 offline predictions, 1 GPU prediction), then check.py's quote check."""
+    known = heads(folder)
+    msgs = {name: [] for name in drafts}
+    for name, t in drafts.items():
+        m = msgs[name]
+        if missing := THEORY_KEYS_V4 - t.keys():
+            m.append(f"{name}.json: missing keys {sorted(missing)}")
+            continue
+        if t["name"] != name:
+            m.append(f"{name}.json: \"name\" must be {name!r}")
+        if len(t["explains"]) < 3:
+            m.append(f"{name}.json: \"explains\" needs at least 3 quotes")
+        for imported in t.get("imports") or []:
+            if imported.get("source") not in known:
+                m.append(f"{name}.json: import source {imported.get('source')!r} is not a heading id in external.md")
+        if t.get("parent") is not None and t["parent"] not in parents:
+            m.append(f"{name}.json: parent {t['parent']!r} is not a theory in graveyard.json (or null)")
+        m += prediction_messages(name, t["predictions"])
+        offline = [p for p in t["predictions"] if "recipe" in p]
+        if len(offline) < 3 or any(p.get("gpu_minutes") != 0 for p in offline):
+            m.append(f"{name}.json: needs at least 3 offline predictions, each with a \"recipe\" and \"gpu_minutes\": 0")
+        if not any("recipe" not in p and number(p.get("gpu_minutes")) and p["gpu_minutes"] > 0 for p in t["predictions"]):
+            m.append(f"{name}.json: needs at least 1 GPU prediction (no recipe, gpu_minutes above 0)")
+    return add_quote_messages(folder, msgs, {n: t for n, t in drafts.items() if not THEORY_KEYS_V4 - t.keys()})
+
+
+def finish_theories(folder, names, drafts, checker, fix_inputs, dropped):
+    """Check the drafts, send each failing one back once, write the passing ones to theories/, dropped.json, theories.sha256."""
+    msgs = checker({n: drafts[n] for n in names})
+    failing = [n for n in names if msgs[n]]
+    for n in failing:
+        print(f"  {n} fails the check, sent back once:\n    " + "\n    ".join(msgs[n]))
+    run([job("fix", n, {"theory.json": folder / "drafts" / f"{n}.json", **fix_inputs},
+             {"theory.json": folder / "drafts" / f"{n}.fix.json"}, lambda d: None if isinstance(json.loads((d / "theory.json").read_text()), dict) else "not a JSON object",
+             message="\n".join(msgs[n])) for n in failing], folder)
+    fixed = {n: json.loads((folder / "drafts" / f"{n}.fix.json").read_text()) for n in failing}
+    again = checker(fixed) if fixed else {}
+    dropped = {**dropped, **{n: m for n, m in again.items() if m}}
+    (folder / "theories").mkdir(exist_ok=True)
+    for n in names:
+        if n not in dropped:
+            (folder / "theories" / f"{n}.json").write_text(json.dumps(fixed.get(n, drafts[n]), indent=1) + "\n")
+    for n, m in dropped.items():
+        print(f"  dropped {n}: {json.dumps(m)[:300]}")
+    (folder / "dropped.json").write_text(json.dumps(dropped, indent=1) + "\n")
+    lines = [f"{hashlib.sha256(p.read_bytes()).hexdigest()}  theories/{p.name}\n" for p in sorted((folder / "theories").glob("*.json"))]
+    (folder / "theories.sha256").write_text("".join(lines))
+    print(f"  {len(lines)} theories in theories/ ({sum(n not in dropped for n in names)} new); {len(dropped)} dropped; wrote theories.sha256")
 
 
 # ---- stages ----
@@ -257,43 +388,175 @@ def split(folder):
     check.dump(folder, args.cutoff, args.skip)
 
 
+def graveyard_reason(m, review, what):
+    """One line on why a theory did not survive: its review, else its metrics."""
+    if review:
+        return f"review: {review['verdict']} {review.get('verdict_sentence', '')}".strip()[:300]
+    if "beats_null" in m:
+        return (f"round-01 score: closer/farther than null-1 +{m['vs_null_1']['closer']} -{m['vs_null_1']['farther']}, "
+                f"null-2 +{m['vs_null_2']['closer']} -{m['vs_null_2']['farther']}; did not beat the noise")
+    if "reasons" in m:
+        return "; ".join(m["reasons"]) or f"{m['computed']} offline tests computed, total gain {m['total_gain']}"
+    rows = m.get("rows") or []
+    if not rows:
+        return "no claims"
+    worst = min(rows, key=lambda r: r["gain"] if "gain" in r else -2 if r.get("divergent") and not r["inside"] else -1 if not r["inside"] else 0)
+    head = f"total gain {m['total_gain']} on {m['claims']} claims" if "total_gain" in m else f"divergent wins {m['wins']}, losses {m['losses']}"
+    return (f"{head}; worst claim: {what.get(worst['id'], worst['id'])[:100]}: claimed {worst['value']} "
+            f"[{worst['low']}, {worst['high']}], measured {worst['measured']}")
+
+
+def fact(q):
+    return {k: q.get(k) for k in ("experiment", "recipe", "unit", "measured", "n", "interval")}
+
+
+def survivor(entry):
+    return entry["state"] in ("survives", "passes") and not entry["verdict"].startswith(BAD_VERDICTS)
+
+
 def standing(folder):
     if not args.prev:
-        return print("standing: no --from given, so no standing theories")
-    if (folder / "prior_scores.json").exists():
-        return print("skip standing: prior_scores.json exists")
-    prev = Path(args.prev)
-    metrics = json.loads((prev / "metrics_v3.json" if (prev / "metrics_v3.json").exists() else prev / "metrics_v2.json").read_text())
-    prev_targets = read(prev / "targets.jsonl")
+        return print("standing: no --from given, so no graveyard and no carried theories")
+    if (folder / "graveyard.json").exists():
+        return print("skip standing: graveyard.json exists")
+    prev, nn = Path(args.prev), round_number(folder)
     before = {i["id"] for i in read(folder / "before.jsonl")}
-    if late := sorted({t["item"] for t in prev_targets} - before):
+    if (prev / "targets.jsonl").exists() and (late := sorted({t["item"] for t in read(prev / "targets.jsonl")} - before)):
         sys.exit(f"the previous round's targets come from items not in before.jsonl: {late}. The cutoff must be after "
                  "every item the previous round held out, or its scores leak held-out numbers.")
-    what = {t["id"]: t["what"] for t in prev_targets}
+    # an engine round reads every earlier round of its engine folder; any other folder (an account run) starts from
+    # the graveyard of its --from folder and adds that folder's theories
+    engine = re.search(r"round-\d+", prev.name)
+    graveyard, where = ({}, {}) if engine else (json.loads((prev / "graveyard.json").read_text()), {})
+    rdirs = sorted((d for d in prev.parent.glob("round-*") if round_number(d) < nn), key=round_number) if engine else [prev]
+    for rdir in rdirs:
+        mfile = next((rdir / f for f in METRICS_FILES if (rdir / f).exists()), None)
+        if mfile is None:
+            continue
+        what = {t["id"]: t["what"] for t in read(rdir / "targets.jsonl")} if (rdir / "targets.jsonl").exists() else {}
+        duels = json.loads((rdir / "metrics_v5.json").read_text())["theories"] if (rdir / "metrics_v5.json").exists() else {}
+        for name, m in json.loads(mfile.read_text())["theories"].items():
+            if name == "planted":  # round 01's reversed control, not a theory
+                continue
+            review_path = rdir / "reviews" / f"{name}.json"
+            review = json.loads(review_path.read_text()) if review_path.exists() else None
+            state = m.get("state") or ("beats the null" if m["beats_null"] else "does not beat the null")
+            entry = {"name": name, "round": round_number(rdir), "rounds": graveyard.get(name, {}).get("rounds", []) + [round_number(rdir)],
+                     "statement": json.loads((rdir / "theories" / f"{name}.json").read_text())["statement"],
+                     "state": state, "verdict": review["verdict"] if review else ""}
+            duel = duels.get(name)
+            if duel and duel["state"] == "loses to rival":
+                lost = [r for r in duel["rows"] if r.get("gain", 0) <= -1]  # the decisive tests
+                entry["state"] = "lost to its rival"
+                entry["reason"] = f"lost to its rival ({duel['total_gain']} nats): {duel['rival'][:200]}; " + "; ".join(
+                    f"p{r['k']} {r['experiment'][:80]}: measured {r['measured']:g}, theory {r['theory']['value']:g}, "
+                    f"rival {r['rival']['value']:g}, gain {r['gain']:+.2f}" for r in lost)
+            else:
+                entry["reason"] = "" if survivor(entry) else graveyard_reason(m, review, what)
+            graveyard[name], where[name] = entry, rdir
+    (folder / "graveyard.json").write_text(json.dumps(graveyard, indent=1) + "\n")
     (folder / "theories").mkdir(exist_ok=True)
-    prior = {}
-    for name, m in metrics["theories"].items():
-        theory = json.loads((prev / "theories" / f"{name}.json").read_text())
-        prior[name] = {"statement": theory["statement"], "state": m["state"],
-                       "claims": [{**row, "what": what[row["id"]]} for row in m["rows"]]}
-        review = prev / "reviews" / f"{name}.json"
-        verdict = json.loads(review.read_text())["verdict"] if review.exists() else ""
-        if m["state"] == "passes" and verdict.startswith(("refuted", "published")):
-            print(f"  not standing: {name} passes but its review says {verdict[:60]!r}")
-        elif m["state"] == "passes":
-            shutil.copy(prev / "theories" / f"{name}.json", folder / "theories")
-            if review.exists():
+    carried = 0
+    for name, entry in graveyard.items():
+        if name not in where:  # an entry from the --from folder's graveyard: decided before, not carried
+            continue
+        # an untested theory is carried once after a round that tested it (and again after a round that did not, as
+        # an --only-account run); a survivor is carried with its computed tests and their gains (tests/<name>.json,
+        # "carried_from"), so they are not computed or scored again
+        untested = entry["state"] == "untested" and (len(entry["rounds"]) == 1 or not (where[name] / "tests" / f"{name}.json").exists())
+        if survivor(entry) or untested:
+            carried += 1
+            shutil.copy(where[name] / "theories" / f"{name}.json", folder / "theories")
+            if (where[name] / "reviews" / f"{name}.json").exists():
                 (folder / "prior_reviews").mkdir(exist_ok=True)
-                shutil.copy(review, folder / "prior_reviews")
-            print(f"  standing: {name}")
-    (folder / "prior_scores.json").write_text(json.dumps(prior, indent=1) + "\n")
+                shutil.copy(where[name] / "reviews" / f"{name}.json", folder / "prior_reviews")
+            if survivor(entry) and (where[name] / "metrics_v4.json").exists():
+                tests = json.loads((where[name] / "tests" / f"{name}.json").read_text())
+                rows = json.loads((where[name] / "metrics_v4.json").read_text())["theories"][name]["rows"]
+                (folder / "tests").mkdir(exist_ok=True)
+                (folder / "tests" / f"{name}.json").write_text(
+                    json.dumps({**tests, "carried_from": tests.get("carried_from", where[name].name), "rows": rows}, indent=1) + "\n")
+                for f in (where[name] / "rivals").glob(f"{name}.*"):  # its rival files and duel scripts: no second duel
+                    (folder / "rivals").mkdir(exist_ok=True)
+                    (shutil.copytree if f.is_dir() else shutil.copy)(f, folder / "rivals" / f.name)
+                if (where[name] / "rivals" / name).is_dir():
+                    shutil.copytree(where[name] / "rivals" / name, folder / "rivals" / name)
+            print(f"  carried: {name} (round {entry['round']}, {entry['state']})")
+        if entry["state"] == "lost to its rival" and round_number(where[name]) == round_number(prev):
+            carried += 1
+            promote(where[name], folder, name)
+            print(f"  carried: {name}-rival (the rival that beat {name} in round {entry['round']})")
+    print(f"  graveyard.json: {len(graveyard)} theories from earlier rounds, {carried} carried")
+    # every number computed in the previous folder (offline tests, duel tests, with their replication), then its own
+    # facts.json: cumulative over the chain of rounds, engine or account
+    facts = [{"round": t.get("carried_from") or prev.name, "theory": t["theory"], "kind": "offline", "asked_by": t["theory"],
+              **fact(q), "replication": replication(prev, t["theory"]).get(q["k"], {}).get("status")}
+             for t in map(lambda f: json.loads(f.read_text()), sorted((prev / "tests").glob("*.json")))
+             for q in t["predictions"] if q["measured"] is not None] if (prev / "tests").exists() else []
+    facts += [{"round": prev.name, "theory": t["theory"], "kind": "duel", "asked_by": f"the rival of {t['theory']}",
+               **fact(q), "replication": replication(prev, t["theory"], ".duel").get(q["k"], {}).get("status")}
+              for t in map(lambda f: json.loads(f.read_text()), sorted((prev / "rivals").glob("*.tests.json")))
+              for q in t["tests"] if q["measured"] is not None] if (prev / "rivals").exists() else []
+    if (prev / "facts.json").exists():  # and every number the previous round's own facts.json held
+        seen = {(f["theory"], f["kind"], f["experiment"]) for f in facts}
+        facts += [f for f in json.loads((prev / "facts.json").read_text()) if (f["theory"], f["kind"], f["experiment"]) not in seen]
+    (folder / "facts.json").write_text(json.dumps(facts, indent=1) + "\n")
+    v4 = json.loads((prev / "metrics_v4.json").read_text())["theories"] if (prev / "metrics_v4.json").exists() else {}
+    v5 = json.loads((prev / "metrics_v5.json").read_text())["theories"] if (prev / "metrics_v5.json").exists() else {}
+    # every account of the chain: the previous folder's own incumbents, then its accounts with their measured numbers
+    chain = json.loads((prev / "incumbent_account.json").read_text()) if (prev / "incumbent_account.json").exists() else []
+    mine = [{"name": n, "round": prev.name, "state": v4[n]["state"], "theory": json.loads((prev / "theories" / f"{n}.json").read_text()),
+             "measured": [{k: q.get(k) for k in ("k", "role", "cell", "part", "experiment", "value", "low", "high", "measured", "n", "interval",
+                                                  "by_construction")}
+                          for q in json.loads((prev / "tests" / f"{n}.json").read_text())["predictions"]],
+             "replication": list(replication(prev, n).values()), "duel": v5.get(n)}
+            for n in v4 if "-account" in n and not v4[n].get("carried_from") and (prev / "tests" / f"{n}.json").exists()]
+    incumbent = [a for a in chain if a.get("name") not in {b["name"] for b in mine}] + mine
+    (folder / "incumbent_account.json").write_text(json.dumps(incumbent, indent=1) + "\n")
+    print(f"  facts.json: {len(facts)} computed numbers of {prev.name}; incumbent_account.json: {len(incumbent)} accounts")
+    metrics = json.loads((prev / "metrics_v3.json").read_text()) if (prev / "metrics_v3.json").exists() else None
+    if metrics and (prev / "targets.jsonl").exists():  # for version 3's revise start
+        what = {t["id"]: t["what"] for t in read(prev / "targets.jsonl")}
+        prior = {n: {"statement": graveyard[n]["statement"], "state": m["state"],
+                     "claims": [{**row, "what": what[row["id"]]} for row in m["rows"]]} for n, m in metrics["theories"].items()}
+        (folder / "prior_scores.json").write_text(json.dumps(prior, indent=1) + "\n")
+
+
+def promote(prev, folder, name):
+    """The rival that beat `name` in round `prev` becomes theory <name>-rival here: its duel tests, computed and scored
+    in that round (the defeated theory's prediction as the reader), are its record and are not computed again."""
+    duel = json.loads((prev / "metrics_v5.json").read_text())["theories"][name]
+    new = f"{name}-rival"
+    tests = {t["k"]: t for turn in (1, 2) if rfile(prev, name, turn).exists() for t in rival_tests(prev, name, turn, full=True)}
+    predictions = [{k: tests[r["k"]][k] for k in ("experiment", "recipe", "unit", "value", "low", "high")} |
+                   {"refuted_by": "none: a duel test", "gpu_minutes": 0} for r in duel["rows"]]
+    theory = {"name": new, "statement": duel["rival"], "scope": f"the rival that beat {name} in {prev.name}; scope as in "
+              f"{name}'s", "explains": [], "conflicts": [], "rival": json.loads((prev / "theories" / f"{name}.json").read_text())["statement"],
+              "promoted_from": name, "predictions": predictions}
+    (folder / "theories" / f"{new}.json").write_text(json.dumps(theory, indent=1) + "\n")
+    preds, rows = [], []
+    for k, (r, p) in enumerate(zip(duel["rows"], predictions), 1):  # k numbers the predictions in this file
+        m = r["measured"]
+        preds.append({"k": k, **p, "measured": m, "n": r.get("n"), "interval": r.get("interval"),
+                      "inside": None if m is None else p["low"] <= m <= p["high"], "refuted_by_met": False,
+                      "not_computable": r.get("not_computable"), "duel_k": r["k"], "turn": r.get("turn", 1)})
+        if m is not None:
+            rows.append({"id": f"{new}:p{k}", "k": k, "measured": m, **r["rival"], "nulls": [r["theory"]],
+                         "gain": -r["gain"], "inside": preds[-1]["inside"], "n": r.get("n"), "interval": r.get("interval"),
+                         "refuted_by": p["refuted_by"], "refuted_by_met": False})
+        else:
+            rows.append({"k": k, "not_computable": r["not_computable"]})
+    (folder / "tests").mkdir(exist_ok=True)
+    (folder / "tests" / f"{new}.json").write_text(json.dumps({"theory": new, "predictions": preds, "carried_from": prev.name,
+                                                             "rows": rows}, indent=1) + "\n")
 
 
 def inventory(folder):
     if (folder / "inventory.md").exists():
         return print("skip inventory: inventory.md exists")
     cutoff = min(i["at"] for i in read(folder / "after.jsonl"))
-    run([job("inventory", "inventory", {}, {"inventory.md": folder / "inventory.md"}, mode="repo", cutoff=cutoff)], folder)
+    run([job("inventory", "inventory", {}, {"inventory.md": folder / "inventory.md"}, mode="repo", cutoff=cutoff,
+             profile=AWS_PROFILE)], folder)
 
 
 def targets(folder):
@@ -330,16 +593,16 @@ def external(folder):
 
     def valid(d):
         text = (d / "external.md").read_text()
-        heads = [line for line in text.splitlines() if line.startswith("### ")]
-        if any(not HEADING.match(h) for h in heads):
-            return f"headings not of the form '### <id> — <title, year>': {[h for h in heads if not HEADING.match(h)]}"
-        if len(heads) < 10 or text.count("\n- Finding:") != len(heads):
-            return f"{len(heads)} headings and {text.count(chr(10) + '- Finding:')} '- Finding:' lines; need 10 or more, one each"
-        return None
+        found = [line for line in text.splitlines() if line.startswith("### ")]
+        if any(not HEADING.match(h) for h in found):
+            return f"headings not of the form '### <id> — <title, year>': {[h for h in found if not HEADING.match(h)]}"
+        if len(found) < 10 or text.count("\n- Finding:") != len(found):
+            return f"{len(found)} headings and {text.count(chr(10) + '- Finding:')} '- Finding:' lines; need 10 or more, one each"
+        return "a finding says what it bears on; findings state mechanisms only" if "Bears on" in text else None
 
     run([job("external", "external", {"before.jsonl": folder / "before.jsonl"}, {"external.md": folder / "external.md"},
              valid, mode="papers", papers=LIB / "papers.py")], folder)
-    print(f"  external.md: {len(HEADING.findall((folder / 'external.md').read_text()))} findings")
+    print(f"  external.md: {len(heads(folder))} findings")
 
 
 def generate(folder):
@@ -349,7 +612,7 @@ def generate(folder):
     assert set(starts) <= STARTS.keys(), f"unknown start in {starts}"
     if "revise" in starts and not (folder / "prior_scores.json").exists():
         sys.exit("the revise start needs prior_scores.json from `standing --from`; on a first round drop revise from --starts")
-    nn = int(re.search(r"round-(\d+)", folder.name).group(1))
+    nn = round_number(folder)
     (folder / "theories").mkdir(exist_ok=True)
     standing = {p.stem: p for p in sorted((folder / "theories").glob("*.json")) if not p.stem.startswith(f"r{nn}-")}
     standing_inputs = {f"standing/{n}.json": p for n, p in standing.items()} or {"standing/none.txt": "No theory stands from earlier rounds.\n"}
@@ -384,30 +647,183 @@ def generate(folder):
                         extra_files=extra, start_description=STARTS[start], name1=names[0],
                         name2=names[1], imports_rule=rule))
     run(jobs, folder)
-
     names = [f"r{nn}-{s}-{k}" for s in starts for k in (1, 2)]
     drafts = {n: json.loads((folder / "drafts" / f"{n}.json").read_text()) for n in names}
-    msgs = check_theories(folder, drafts, standing)
     fix_inputs = {"before.jsonl": folder / "before.jsonl", "external.md": folder / "external.md",
                   "inventory.md": folder / "inventory.md", **standing_inputs}
-    failing = [n for n in names if msgs[n]]
-    for n in failing:
-        print(f"  {n} fails the check, sent back once:\n    " + "\n    ".join(msgs[n]))
-    run([job("fix", n, {"theory.json": folder / "drafts" / f"{n}.json", **fix_inputs},
-             {"theory.json": folder / "drafts" / f"{n}.fix.json"}, lambda d: None if isinstance(json.loads((d / "theory.json").read_text()), dict) else "not a JSON object",
-             message="\n".join(msgs[n])) for n in failing], folder)
-    fixed = {n: json.loads((folder / "drafts" / f"{n}.fix.json").read_text()) for n in failing}
-    again = check_theories(folder, fixed, standing) if fixed else {}
-    dropped = {n: m for n, m in again.items() if m}
-    for n in names:
-        if n not in dropped:
-            (folder / "theories" / f"{n}.json").write_text(json.dumps(fixed.get(n, drafts[n]), indent=1) + "\n")
-    for n, m in dropped.items():
-        print(f"  dropped {n}:\n    " + "\n    ".join(m))
-    (folder / "dropped.json").write_text(json.dumps(dropped, indent=1) + "\n")
-    lines = [f"{hashlib.sha256(p.read_bytes()).hexdigest()}  theories/{p.name}\n" for p in sorted((folder / "theories").glob("*.json"))]
-    (folder / "theories.sha256").write_text("".join(lines))
-    print(f"  {len(lines)} theories ({len(standing)} standing, {len(names) - len(dropped)} new, {len(dropped)} dropped); wrote theories.sha256")
+    finish_theories(folder, names, drafts, lambda ds: check_theories(folder, ds, standing), fix_inputs, {})
+
+
+def facts_input(folder):
+    """facts.json: the numbers earlier rounds computed from stored rows; evidence for every agent."""
+    return folder / "facts.json" if (folder / "facts.json").exists() else "[]\n"
+
+
+def graveyard_input(folder):
+    return folder / "graveyard.json" if (folder / "graveyard.json").exists() else "{}\n"
+
+
+def mechanisms(folder):
+    if (folder / "mechanisms.json").exists():
+        return print("skip mechanisms: mechanisms.json exists")
+    n, known = args.n_mechanisms, heads(folder)
+
+    def valid(d):
+        ms = json.loads((d / "mechanisms.json").read_text())
+        if not isinstance(ms, list) or len(ms) != n:
+            return f"need a JSON list of {n} mechanisms"
+        if bad := [m.get("id") for m in ms if MECHANISM_KEYS - m.keys()]:
+            return f"mechanisms missing keys: {bad}"
+        ids = [m["id"] for m in ms]
+        if len(set(ids)) != n or not all(re.fullmatch(r"m\d\d", i) for i in ids):
+            return f"ids must be distinct, of the form m01: {ids}"
+        bad = [m["id"] for m in ms if m["import"] is not None and m["import"] not in known]
+        return f"imports that are not external.md heading ids: {bad}" if bad else None
+
+    run([job("mechanisms", "mechanisms", {"DIRECTION.md": ROOT / "DIRECTION.md", "before.jsonl": folder / "before.jsonl",
+                                          "external.md": folder / "external.md", "inventory.md": folder / "inventory.md",
+                                          "graveyard.json": graveyard_input(folder), "facts.json": facts_input(folder)},
+             {"mechanisms.json": folder / "mechanisms.json"}, valid, n=n)], folder)
+    for m in json.loads((folder / "mechanisms.json").read_text()):
+        print(f"  {m['id']}: {m['mechanism'][:150]}")
+
+
+def develop(folder):
+    if (folder / "theories.sha256").exists():
+        return print("skip develop: theories.sha256 exists")
+    nn = round_number(folder)
+    ms = json.loads((folder / "mechanisms.json").read_text())
+    graveyard = json.loads((folder / "graveyard.json").read_text()) if (folder / "graveyard.json").exists() else {}
+    names = [f"r{nn}-{m['id']}" for m in ms]
+
+    def valid(d):
+        r = json.loads((d / "result.json").read_text())
+        return None if isinstance(r, dict) and (isinstance(r.get("abandon"), str) or "statement" in r) else "neither a theory nor {\"abandon\": reason}"
+
+    base = {"DIRECTION.md": ROOT / "DIRECTION.md", "before.jsonl": folder / "before.jsonl",
+            "inventory.md": folder / "inventory.md", "external.md": folder / "external.md", "facts.json": facts_input(folder)}
+    run([job("develop", name, {**base, "mechanism.json": json.dumps(m, indent=1)}, {"result.json": folder / "drafts" / f"{name}.json"},
+             valid, theory=name) for name, m in zip(names, ms)], folder)
+    drafts = {n: json.loads((folder / "drafts" / f"{n}.json").read_text()) for n in names}
+    abandoned = {n: {"abandon": d["abandon"]} for n, d in drafts.items() if "abandon" in d}
+    for n, a in abandoned.items():
+        print(f"  abandoned {n}: {a['abandon'][:200]}")
+    fix_inputs = {"before.jsonl": folder / "before.jsonl", "external.md": folder / "external.md",
+                  "inventory.md": folder / "inventory.md", "graveyard.json": graveyard_input(folder)}
+    finish_theories(folder, [n for n in names if n not in abandoned], drafts,
+                    lambda ds: check_theories4(folder, ds, set(graveyard)), fix_inputs, abandoned)
+
+
+ACCOUNT_PART_KEYS = {"name", "mechanism", "rule"}
+
+
+def check_account(folder, drafts, parents):
+    """Messages per account: the develop check, then the budget rules. 3-6 parts; one null cell (the base against an
+    independent base sample) and 2 or more predicted model cells; a cell whose budget a board item claims gets fits,
+    not shares; in the null and every predicted cell one share per part and for unassigned, summing to 1, and each
+    model-cell share that is not 0 by construction states vs_null; one net prediction per cell; 6 or more scored shares
+    in model cells; 2 or more cross-predictions; one evidence set; every offline prediction names its cell."""
+    msgs = check_theories4(folder, drafts, parents)
+    for name, t in drafts.items():
+        m = msgs[name]
+        parts, cells, claims, ev = t.get("parts"), t.get("cells"), t.get("known_claim"), t.get("evidence")
+        if not isinstance(parts, list) or not 3 <= len(parts) <= 6 or any(not isinstance(q, dict) or ACCOUNT_PART_KEYS - q.keys() for q in parts):
+            m.append(f"{name}.json: needs \"parts\": 3 to 6 objects with name, mechanism, rule")
+            continue
+        if not isinstance(cells, list) or any(not isinstance(c, dict) or {"name", "gap"} - c.keys() for c in cells):
+            m.append(f"{name}.json: needs \"cells\": objects with name and gap (and \"null\": true on the null cell)")
+            continue
+        if not isinstance(claims, list) or any(not isinstance(k, dict) or {"cell", "shares", "item"} - k.keys() for k in claims):
+            m.append(f"{name}.json: needs \"known_claim\": a list (may be empty) of {{cell, shares, item}}")
+            continue
+        if not isinstance(ev, dict) or {"rows", "n", "grader"} - ev.keys():
+            m.append(f"{name}.json: needs \"evidence\": {{rows, n, grader}}, one evidence set for every cell")
+        names = [q["name"] for q in parts]
+        if len(set(names)) != len(names) or "unassigned" in names:
+            m.append(f"{name}.json: part names must be distinct and not \"unassigned\" (that part is implied): {names}")
+        nulls = [c["name"] for c in cells if c.get("null")]
+        claimed = {k["cell"] for k in claims}
+        model = [c["name"] for c in cells if not c.get("null") and c["name"] not in claimed]
+        if len(nulls) != 1 or len(model) < 2:
+            m.append(f"{name}.json: needs exactly one null cell (\"null\": true) and 2 or more predicted model cells; "
+                     f"null {nulls}, predicted {model}")
+        offline = [q for q in t.get("predictions", []) if "recipe" in q]
+        if bad := [i for i, q in enumerate(offline, 1) if q.get("cell") not in [c["name"] for c in cells]]:
+            m.append(f"{name}.json: offline predictions {bad} need \"cell\", one of the cells' names")
+        for c in cells:
+            role = "fit" if c["name"] in claimed else "share"
+            mine = [q for q in offline if q.get("cell") == c["name"] and q.get("role") in ("share", "fit")]
+            if any(q.get("role") != role for q in mine):
+                m.append(f"{name}.json: cell {c['name']!r} takes role {role!r} only (a claimed budget is fitted, not predicted)")
+            elif sorted(q.get("part", "") for q in mine) != sorted(names + ["unassigned"]):
+                m.append(f"{name}.json: cell {c['name']!r} needs exactly one {role} prediction for each part and for \"unassigned\"")
+            elif all(number(q.get("value")) for q in mine) and abs(sum(q["value"] for q in mine) - 1) > 0.02:
+                m.append(f"{name}.json: the {role} values of cell {c['name']!r} sum to {sum(q['value'] for q in mine):.3f}, not 1")
+            if c["name"] in model and not str(c.get("moves", "")).strip():
+                m.append(f"{name}.json: cell {c['name']!r} needs \"moves\": which shares move against the null and the claimed cell, which way, and why")
+            if c["name"] in model and any(not number(q.get("vs_null")) for q in mine if not q.get("by_construction")):
+                m.append(f"{name}.json: every share of cell {c['name']!r} not 0 by construction needs \"vs_null\" (its difference from the null cell's share)")
+            if sum(q.get("role") == "net" and q.get("cell") == c["name"] for q in offline) != 1:
+                m.append(f"{name}.json: cell {c['name']!r} needs one \"net\" prediction (RL-only minus base-only problems)")
+        scored_shares = [q for q in offline if q.get("role") == "share" and q.get("cell") in model and not q.get("by_construction")]
+        if len(scored_shares) < 6:
+            m.append(f"{name}.json: needs 6 or more share predictions, not 0 by construction, in the predicted model cells; has {len(scored_shares)}")
+        cross = [q for q in offline if q.get("role") == "cross"]
+        if len(cross) < 2 or any(q.get("part") not in names + ["unassigned"] for q in cross):
+            m.append(f"{name}.json: needs at least 2 cross-predictions (\"role\": \"cross\"), each naming a part")
+    return msgs
+
+
+def account(folder):
+    nn = round_number(folder)
+    name = f"r{nn}-account"
+    dropped = json.loads((folder / "dropped.json").read_text()) if (folder / "dropped.json").exists() else {}
+    if (folder / "theories" / f"{name}.json").exists() or name in dropped:
+        return print(f"skip account: {name} exists or was dropped")
+    graveyard = json.loads((folder / "graveyard.json").read_text()) if (folder / "graveyard.json").exists() else {}
+    (folder / "theories").mkdir(exist_ok=True)
+    carried = {f"carried/{p.name}": json.dumps({"theory": json.loads(p.read_text()), "computed_tests": [
+        q for q in json.loads((folder / "tests" / p.name).read_text())["predictions"] if q["measured"] is not None]
+        if (folder / "tests" / p.name).exists() else []}, indent=1)
+        for p in sorted((folder / "theories").glob("*.json")) if not p.stem.startswith(f"r{nn}-")}
+    inputs = {"DIRECTION.md": ROOT / "DIRECTION.md", "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md",
+              "external.md": folder / "external.md", "graveyard.json": graveyard_input(folder),
+              "facts.json": facts_input(folder),
+              "incumbent_account.json": folder / "incumbent_account.json" if (folder / "incumbent_account.json").exists() else "[]\n",
+              **(carried or {"carried/none.txt": "No theory is carried from earlier rounds.\n"})}
+
+    def valid(d):
+        return None if isinstance(json.loads((d / "result.json").read_text()), dict) else "not a JSON object"
+
+    run([job("account", name, inputs, {"result.json": folder / "drafts" / f"{name}.json"}, valid, theory=name)], folder)
+    drafts = {name: json.loads((folder / "drafts" / f"{name}.json").read_text())}
+    fix_inputs = {"before.jsonl": folder / "before.jsonl", "external.md": folder / "external.md",
+                  "inventory.md": folder / "inventory.md", "graveyard.json": graveyard_input(folder)}
+    finish_theories(folder, [name], drafts, lambda ds: check_account(folder, ds, set(graveyard)), fix_inputs, dropped)
+
+
+def offline_predictions(theory):
+    return [{"k": k, **p} for k, p in enumerate(theory["predictions"], 1) if "recipe" in p]
+
+
+def carried_tests(folder, name):
+    """A survivor's tests carried by `standing` from the round that computed and scored them."""
+    path = folder / "tests" / f"{name}.json"
+    return path.exists() and "carried_from" in json.loads(path.read_text())
+
+
+def null_tests(folder):
+    blind = [{"id": f"{p.stem}:p{q['k']}", "experiment": q["experiment"], "recipe": q["recipe"], "unit": q["unit"]}
+             for p in sorted((folder / "theories").glob("*.json")) if not carried_tests(folder, p.stem) and in_scope(p.stem)
+             for q in offline_predictions(json.loads(p.read_text())) if scored(q)]
+    if not blind:
+        return print("null_tests: no offline prediction")
+    write(folder / "tests_blind.jsonl", blind)
+    ids = [b["id"] for b in blind]
+    run([job("null_tests", f"nulltest-{k}", {"before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md",
+                                              "tests_blind.jsonl": folder / "tests_blind.jsonl", "facts.json": facts_input(folder)},
+             {"predictions.jsonl": folder / "predictions" / f"nulltest-{k}.jsonl"},
+             lambda d: interval_rows(d / "predictions.jsonl", ids, exact=True)) for k in (1, 2)], folder)
 
 
 def null(folder):
@@ -417,12 +833,12 @@ def null(folder):
              lambda d: interval_rows(d / "predictions.jsonl", ids, exact=True)) for k in (1, 2)], folder)
 
 
-def claims(folder):
+def claims(folder, names=None):
     ids = target_ids(folder)
     run([job("claims", p.stem, {"theory.json": p, "before.jsonl": folder / "before.jsonl", "targets_blind.jsonl": folder / "targets_blind.jsonl"},
              {"claims.jsonl": folder / "claims" / f"{p.stem}.jsonl"},
              lambda d: interval_rows(d / "claims.jsonl", ids, exact=False), rule=FREE_RULE)
-         for p in sorted((folder / "theories").glob("*.json"))], folder)
+         for p in sorted((folder / "theories").glob("*.json")) if names is None or p.stem in names], folder)
 
 
 def log_density(x, c):
@@ -494,6 +910,137 @@ def candidates(folder):
     return [n for n, t in json.loads((folder / "metrics_v3.json").read_text())["theories"].items() if t["candidate"]]
 
 
+def strike_rows(folder, name):
+    """Version 4: the advocate's held-out claims; a strike is a claim both readers contradict that misses its own interval."""
+    exposed = json.loads((folder / "exposed.json").read_text())["items"] if (folder / "exposed.json").exists() else []
+    measured = {t["id"]: t["value"] for t in read(folder / "targets.jsonl") if t["item"] not in exposed}
+    nulls = [{p["id"]: p for p in read(folder / "predictions" / f"null-{k}.jsonl")} for k in (1, 2)]
+    rows = gain_rows(read(folder / "claims" / f"{name}.jsonl"), measured, nulls)
+    for r in rows:
+        divergent = all(not r["low"] <= n["value"] <= r["high"] for n in r["nulls"])
+        r["strike"] = divergent and not r["low"] <= r["measured"] <= r["high"]
+    return rows
+
+
+def overlaps(q):
+    """The measured 90 % interval, when the script printed one, overlaps the predicted [low, high]."""
+    iv = q.get("interval")
+    return iv is not None and iv[0] <= q["high"] and q["low"] <= iv[1]
+
+
+def scored(q):
+    """An account's fit to a claimed budget and a share that is 0 by construction are computed but not scored."""
+    return q.get("role") != "fit" and not q.get("by_construction")
+
+
+def replication(folder, name, kind=""):
+    """{k: item} from replication/<name>[.duel].json: the independent recomputation of the decisive numbers."""
+    path = folder / "replication" / f"{name}{kind}.json"
+    return {i["k"]: i for i in json.loads(path.read_text())["items"]} if path.exists() else {}
+
+
+def score_tests(folder):
+    """Version 4 score, metrics_v4.json: each theory's computed offline predictions against its intervals, its refuting
+    conditions and the two no-theory test readers; held-out strikes and the review can only remove a theory."""
+    nulls = [{p["id"]: p for p in read(folder / "predictions" / f"nulltest-{k}.jsonl")} for k in (1, 2)] \
+        if (folder / "predictions" / "nulltest-1.jsonl").exists() else None
+    theories = {}
+    for p in sorted((folder / "theories").glob("*.json")):
+        name = p.stem
+        path = folder / "tests" / f"{name}.json"
+        data = json.loads(path.read_text()) if path.exists() else {"predictions": []}
+        repl = replication(folder, name)
+        # a fit, a share that is 0 by construction, or a number its replication does not reproduce is not scored
+        aside = [{"k": q["k"], "measured": q["measured"], "replication": repl.get(q["k"], {}).get("replicated"),
+                  "not_scored": "a fit of the account's rules to a cell whose budget a board item claims" if q.get("role") == "fit"
+                  else "0 by construction" if q.get("by_construction") else "differs from its replication; left out until a person resolves it"}
+                 for q in data["predictions"] if not scored(q) or repl.get(q["k"], {}).get("status") == "differs"]
+        preds = [q for q in data["predictions"] if q["k"] not in {a["k"] for a in aside}]
+        computed = [q for q in preds if q["measured"] is not None]
+        for q in computed:  # outside only when the measured 90 % interval misses the predicted one; else within noise
+            q["within_noise"] = not q["inside"] and overlaps(q)
+            q["outside"] = not q["inside"] and not q["within_noise"]
+        met = [q for q in preds if q["refuted_by_met"] and (q["measured"] is None or not overlaps(q))]
+        if "carried_from" in data:  # computed and scored in that round: its rows, gains against that round's readers
+            rows = data["rows"]
+        else:
+            rows = gain_rows([{"id": f"{name}:p{q['k']}", "value": q["value"], "low": q["low"], "high": q["high"]} for q in computed],
+                             {f"{name}:p{q['k']}": q["measured"] for q in computed}, nulls) if computed else []
+            for r, q in zip(rows, computed):
+                r.update(k=q["k"], inside=q["inside"], within_noise=q["within_noise"], n=q.get("n"), interval=q.get("interval"),
+                         refuted_by=q["refuted_by"], refuted_by_met=q in met)
+            rows += [{"k": q["k"], "not_computable": q["not_computable"]} if q["not_computable"] else
+                     {"k": q["k"], "refuted_without_number": q["refuted_by"]} for q in preds if q["measured"] is None]
+            for r in rows:
+                r["replication"] = repl.get(r["k"], {}).get("status")
+            rows += aside
+        outside = sum(q["outside"] for q in computed)
+        reasons = [f"p{q['k']} {q['experiment'][:80]}: measured {q['measured']}, predicted {q['value']} [{q['low']}, {q['high']}]; "
+                   f"refuting condition met: {q['refuted_by'][:120]}" for q in met]
+        if outside >= 2:
+            reasons.append(f"{outside} of {len(computed)} computed predictions outside their 90 % intervals beyond noise")
+        total = round(sum(r["gain"] for r in rows if "gain" in r), 3)
+        # a win the readers did not expect: measured inside the theory's interval, every reader's centre outside it
+        unexpected = [r["k"] for r in rows if "gain" in r and r["inside"]
+                      and all(not r["low"] <= c["value"] <= r["high"] for c in r["nulls"])]
+        state = "refuted" if reasons else "untested" if len(computed) < 2 else "survives" if total > 0 and unexpected else "no gain"
+        note = "total gain above 0 but no computed prediction won where the readers' centres were outside its interval" \
+            if state == "no gain" and total > 0 else ""
+        held = strike_rows(folder, name) if (folder / "claims" / f"{name}.jsonl").exists() else []
+        if (strikes := sum(r["strike"] for r in held)) >= 2:
+            state = "refuted"
+            reasons.append(f"{strikes} held-out strikes (claims both readers contradicted that missed their interval)")
+        review = folder / "reviews" / f"{name}.json"
+        verdict = json.loads(review.read_text())["verdict"] if review.exists() else ""
+        if verdict.startswith(("refuted", "published")) and json.loads(review.read_text()).get("about") != "rival" \
+                and ("-account" not in name or state == "survives"):  # a review of a failed account changes nothing
+            state = verdict.split(":")[0]
+            reasons.append(f"review: {verdict[:200]}")
+        theories[name] = {"carried_from": data.get("carried_from"),
+                          "offline": len(preds), "not_scored": len(aside), "computed": len(computed), "inside": sum(q["inside"] for q in computed),
+                          "within_noise": sum(q["within_noise"] for q in computed), "outside": outside,
+                          "total_gain": total, "unexpected_wins": unexpected, "heldout_claims": len(held), "strikes": strikes,
+                          "state": state, "note": note, "reasons": reasons, "verdict": verdict, "rows": rows, "heldout_rows": held}
+    (folder / "metrics_v4.json").write_text(json.dumps({"theories": theories}, indent=1) + "\n")
+    print("Offline tests: computed predictions against their 90 % intervals; gain in nats against the two no-theory test readers. "
+          "Outside counts only when the measured 90 % interval misses the predicted one.")
+    print(f"{'theory':16} {'computed':>9} {'in/noise/out':>12} {'gain':>7} {'strikes':>8}  state")
+    for name, t in sorted(theories.items(), key=lambda kv: -kv[1]["total_gain"]):
+        print(f"{name:16} {t['computed']:>4} of {t['offline']:<2} {str(t['inside']) + '/' + str(t['within_noise']) + '/' + str(t['outside']):>12} {t['total_gain']:7.2f} "
+              f"{str(t['strikes']) + ' of ' + str(t['heldout_claims']) if t['heldout_claims'] else '':>8}  {t['state']}"
+              f"{', tests carried from ' + t['carried_from'] if t['carried_from'] else ''}{': ' + t['note'] if t['note'] else ''}")
+        for r in t["rows"]:
+            if "not_scored" in r:
+                again = "" if r["replication"] is None else f" (replication: {r['replication']})"
+                print(f"    p{r['k']}: measured {r['measured']}, not scored: {r['not_scored']}{again}")
+            elif "not_computable" in r:
+                print(f"    p{r['k']}: not computable: {r['not_computable'][:110]}")
+            elif "refuted_without_number" in r:
+                print(f"    p{r['k']}: no number; refuting condition met: {r['refuted_without_number'][:100]}")
+            else:
+                where = "inside" if r["inside"] else "outside, within noise" if r.get("within_noise") else "outside"
+                noise = f" (n {r['n']}, 90 % [{r['interval'][0]:g}, {r['interval'][1]:g}])" if r.get("interval") else ""
+                readers = " and ".join(f"{c['value']:g}" for c in r["nulls"])
+                print(f"    p{r['k']}: measured {r['measured']:g}{noise}, predicted {r['value']:g} [{r['low']:g}, {r['high']:g}] "
+                      f"{where}, readers {readers}, "
+                      f"gain {r['gain']:+.2f}{', refuting condition met' if r['refuted_by_met'] else ''}"
+                      f"{', a win the readers did not expect' if r['k'] in t['unexpected_wins'] else ''}"
+                      f"{', readers had the same number' if all(abs(c['value'] - r['value']) <= max(0.02 * abs(r['value']), 0.01) for c in r['nulls']) else ''}"
+                      f"{', replicated' if r.get('replication') == 'replicated' else ''}")
+
+
+def heldout(folder):
+    nn, theories = round_number(folder), json.loads((folder / "metrics_v4.json").read_text())["theories"]
+    names = [n for n, t in theories.items() if in_scope(n) and (t["state"] == "survives" or (not n.startswith(f"r{nn}-") and t["state"] == "untested"))]
+    if not names:
+        return print("heldout: no theory survives the offline tests; targets, null and claims are skipped")
+    print(f"  held-out filter for {names}")
+    targets(folder)
+    null(folder)
+    claims(folder, set(names))
+    score_tests(folder)
+
+
 def reverse(folder):
     names = candidates(folder)
     if not names:
@@ -513,79 +1060,422 @@ def reverse(folder):
     score(folder)
 
 
+THEORY_TESTS = ("$out/theory.json is a theory. $out/offline.json lists its offline predictions, each with k, experiment, "
+                "recipe, value, low, high and refuted_by.")
+DUEL_TESTS = ("$out/offline.json lists offline computations that decide between two explanations of the same numbers, "
+              "each with k, experiment, recipe and unit. You are not told the explanations or what either predicts. "
+              "refuted_by is null for every entry, so every script prints \"refuted_by_met\": false.")
+
+
+def script_job(folder, name, offline, inputs, dest, what):
+    """A test writer (repository, laptop only): one script per entry of offline, written into dest, none run."""
+    def valid(d):
+        missing = [q["k"] for q in offline if not (d / "tests" / name / f"p{q['k']}.py").exists()]
+        if missing:
+            return f"no script for predictions {missing}"
+        notes = d / "tests" / name / "notes.json"
+        return None if notes.exists() and isinstance(json.loads(notes.read_text()), list) else f"no list in {notes}"
+
+    j = job("test", name, {**inputs, "offline.json": json.dumps(offline, indent=1)}, {f"tests/{name}": dest}, valid,
+            mode="repo", theory=name, inventory=(folder / "inventory.md").resolve(), profile=AWS_PROFILE,
+            run_command=" ".join(TEST_PYTHON), what=string.Template(what).substitute(out=tmp() / "test" / name))
+    return j
+
+
+def run_scripts(folder, label, offline, scripts):
+    """Run each script in `scripts` once in the test environment; one result per entry of offline."""
+    notes = {e["k"]: e["note"] for e in json.loads((scripts / "notes.json").read_text())}
+    results = []
+    for q in offline:
+        script = scripts / f"p{q['k']}.py"
+        p = subprocess.run([*TEST_PYTHON, str(script.resolve())], cwd=ROOT, capture_output=True, text=True, timeout=1800,
+                           env={**os.environ, "AWS_PROFILE": AWS_PROFILE, "PYTHONPATH": str(ROOT)})
+        (script.with_suffix(".out.txt")).write_text(p.stdout + p.stderr)
+        if p.returncode:
+            sys.exit(f"{script} failed (exit {p.returncode}); output in {script.with_suffix('.out.txt')}")
+        out = json.loads(p.stdout.strip().splitlines()[-1])
+        m, met = out["measured"], bool(out["refuted_by_met"])
+        if m is None and not out.get("not_computable") and not met:
+            sys.exit(f"{script} printed no number, no not_computable reason and no refutation; output in {script.with_suffix('.out.txt')}")
+        results.append({**q, "script": str(script.relative_to(folder)), "measured": m,
+                        "n": out.get("n"), "interval": out.get("interval"), "interval_kind": out.get("interval_kind", "none"),
+                        "inside": None if m is None or "low" not in q else q["low"] <= m <= q["high"],
+                        "refuted_by_met": met, "alt_measured": out.get("alt_measured"),
+                        "not_computable": out.get("not_computable") if m is None and not met else None,
+                        "note": notes.get(q["k"], ""), "example_row": out.get("example_row")})
+        print(f"  {label} p{q['k']}: " + (f"no number; refuting condition met: {q['refuted_by'][:100]}" if m is None and met
+              else f"not computable: {out['not_computable'][:100]}" if m is None else
+              f"measured {m} (n {out.get('n')}, 90 % {out.get('interval')})" + (f", predicted {q['value']} [{q['low']}, {q['high']}], refuting condition met: {met}" if "value" in q else "")))
+    return results
+
+
 def test(folder):
-    names = candidates(folder)
+    """Versions 4 and 5: every theory's offline predictions; version 3: the candidates'. The model writes one script per
+    prediction and runs none; each script runs here once."""
+    names = [p.stem for p in sorted((folder / "theories").glob("*.json")) if in_scope(p.stem)] if args.version >= 4 else candidates(folder)
     jobs = []
     for n in names:
         if (folder / "tests" / f"{n}.json").exists():
             print(f"  skip test/{n}: tests/{n}.json exists")
             continue
-        theory = json.loads((folder / "theories" / f"{n}.json").read_text())
-        offline = [{"k": k, **p} for k, p in enumerate(theory["predictions"], 1) if "recipe" in p]
+        offline = offline_predictions(json.loads((folder / "theories" / f"{n}.json").read_text()))
         if not offline:
             print(f"  test/{n}: no offline prediction")
             (folder / "tests").mkdir(exist_ok=True)
             (folder / "tests" / f"{n}.json").write_text(json.dumps({"theory": n, "predictions": []}, indent=1) + "\n")
             continue
-
-        def valid(d, n=n, offline=offline):
-            missing = [q["k"] for q in offline if not (d / "tests" / n / f"p{q['k']}.py").exists()]
-            return f"no script for predictions {missing}" if missing else None if isinstance(json.loads((d / "notes.json").read_text()), list) else "notes.json is not a list"
-
-        jobs.append((n, offline, job("test", n, {"theory.json": folder / "theories" / f"{n}.json", "offline.json": json.dumps(offline, indent=1)},
-                                     {f"tests/{n}": folder / "tests" / n, "notes.json": folder / "tests" / n / "notes.json"}, valid,
-                                     mode="repo", theory=n, inventory=(folder / "inventory.md").resolve())))
-    run([j for _, _, j in jobs], folder)
+        jobs.append((n, offline, script_job(folder, n, offline, {"theory.json": folder / "theories" / f"{n}.json"},
+                                            folder / "tests" / n, THEORY_TESTS)))
+    run([j for _, _, j in jobs], folder, workers=6)
     for n, offline, _ in jobs:
-        notes = {e["k"]: e["note"] for e in json.loads((folder / "tests" / n / "notes.json").read_text())}
-        results = []
-        for q in offline:
-            script = folder / "tests" / n / f"p{q['k']}.py"
-            p = subprocess.run(["python3", str(script.resolve())], cwd=ROOT, capture_output=True, text=True, timeout=1800)
-            (script.with_suffix(".out.txt")).write_text(p.stdout + p.stderr)
-            if p.returncode:
-                sys.exit(f"{script} failed (exit {p.returncode}); output in {script.with_suffix('.out.txt')}")
-            out = json.loads(p.stdout.strip().splitlines()[-1])
-            m = out["measured"]
-            results.append({"k": q["k"], "experiment": q["experiment"], "recipe": q["recipe"], "script": str(script.relative_to(folder)),
-                            "value": q["value"], "low": q["low"], "high": q["high"], "measured": m,
-                            "inside": None if m is None else q["low"] <= m <= q["high"], "refuted_by": q["refuted_by"],
-                            "refuted_by_met": out["refuted_by_met"], "alt_measured": out["alt_measured"],
-                            "note": notes.get(q["k"], ""), "example_row": out["example_row"]})
-            print(f"  test/{n} p{q['k']}: measured {m}, predicted {q['value']} [{q['low']}, {q['high']}], refuted_by met: {out['refuted_by_met']}")
+        results = run_scripts(folder, f"test/{n}", offline, folder / "tests" / n)
         (folder / "tests" / f"{n}.json").write_text(json.dumps({"theory": n, "predictions": results}, indent=1) + "\n")
-    score(folder)
+    (score_tests if args.version >= 4 else score)(folder)
+
+
+# ---- version 5: the duel against the strongest rival ----
+
+RIVAL_TEST_KEYS = {"experiment", "recipe", "unit", "value", "low", "high", "theory_should_say"}
+DECIDES = 2.0  # nats: a duel total at or beyond +-2 decides; between, the theory and its rival are not separated
+
+
+def survivors(folder):
+    """The theories the duel and the review take: up to 3 survivors of metrics_v4.json, largest total gain first."""
+    theories = json.loads((folder / "metrics_v4.json").read_text())["theories"]
+    return sorted((n for n, t in theories.items() if t["state"] == "survives" and in_scope(n)), key=lambda n: -theories[n]["total_gain"])[:3]
+
+
+def computed_tests(folder, name):
+    return [{k: q[k] for k in ("k", "experiment", "recipe", "unit", "measured", "value", "low", "high") if k in q}
+            for q in json.loads((folder / "tests" / f"{name}.json").read_text())["predictions"] if q["measured"] is not None]
+
+
+def rfile(folder, name, turn, kind=""):
+    """rivals/<name>[.turn2][.defend|.tests].json; kind "" is the rival's file of that turn."""
+    return folder / "rivals" / f"{name}{'.turn2' if turn == 2 else ''}{kind}.json"
+
+
+def rival_tests(folder, name, turn, full=False):
+    """A turn's rival tests numbered on from the first turn's (k = 1, 2, ...); without the rival's numbers and reasons
+    unless full."""
+    first = len(json.loads(rfile(folder, name, 1).read_text())["tests"]) if turn == 2 else 0
+    tests = json.loads(rfile(folder, name, turn).read_text())["tests"]
+    return [{"k": first + i, **(t if full else {k: t[k] for k in ("experiment", "recipe", "unit")})} for i, t in enumerate(tests, 1)]
+
+
+def rival_valid(d, turn):
+    r = json.loads((d / "rival.json").read_text())
+    if not isinstance(r, dict) or not isinstance(r.get("statement"), str) or not isinstance(r.get("tests"), list):
+        return "need a JSON object with \"statement\" (a string) and \"tests\" (a list)"
+    if turn == 2 and r.get("no_offline_test") is not None:
+        g = r["no_offline_test"]
+        if not (isinstance(g, dict) and isinstance(g.get("reason"), str) and isinstance(g.get("gpu_experiment"), str)):
+            return "\"no_offline_test\" must be null or {\"reason\": ..., \"gpu_experiment\": ...}"
+        if not r["tests"]:
+            return None
+    if not 2 <= len(r["tests"]) <= 4:
+        return f"need 2 to 4 tests, got {len(r['tests'])}"
+    m = []
+    for i, t in enumerate(r["tests"], 1):
+        if RIVAL_TEST_KEYS - t.keys():
+            m.append(f"test {i} misses keys {sorted(RIVAL_TEST_KEYS - t.keys())}")
+        elif not (all(number(t[k]) for k in ("value", "low", "high")) and t["low"] <= t["value"] <= t["high"]):
+            m.append(f"test {i} needs numbers with low <= value <= high")
+        elif not (isinstance(t["recipe"], str) and t["recipe"].strip()):
+            m.append(f"test {i} needs a recipe")
+    return "; ".join(m) or None
+
+
+def rival_inputs(folder, name):
+    return {"theory.json": folder / "theories" / f"{name}.json", "tests.json": json.dumps(computed_tests(folder, name), indent=1),
+            "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md", "external.md": folder / "external.md",
+            "facts.json": facts_input(folder)}
+
+
+def rival(folder):
+    names = survivors(folder)
+    if not names:
+        return print("rival: no surviving theory")
+    run([job("rival", n, rival_inputs(folder, n), {"rival.json": rfile(folder, n, 1)}, lambda d: rival_valid(d, 1), theory=n)
+         for n in names], folder)
+    for n in names:
+        print(f"  {n}: rival: {json.loads(rfile(folder, n, 1).read_text())['statement'][:200]}")
+
+
+def same_prediction(test, mine):
+    """The defender's centre lies inside the rival's interval: the test cannot separate the two."""
+    return test["low"] <= mine["value"] <= test["high"]
+
+
+def rival2(folder):
+    """The rival's second turn, only where fewer than 2 first-turn tests separate it from the defender's numbers."""
+    jobs = []
+    for n in survivors(folder):
+        if not rfile(folder, n, 1, ".defend").exists() or rfile(folder, n, 2).exists():
+            continue
+        mine = {d["k"]: d for d in json.loads(rfile(folder, n, 1, ".defend").read_text())}
+        tests = rival_tests(folder, n, 1, full=True)
+        apart = sum(not same_prediction(t, mine[t["k"]]) for t in tests)
+        print(f"  {n}: {apart} of {len(tests)} first-turn tests put the defender's centre outside the rival's interval")
+        if apart >= 2:
+            continue
+        held = [{"k": t["k"], "experiment": t["experiment"], **{k: mine[t["k"]][k] for k in ("value", "low", "high", "why")}} for t in tests]
+        j = job("rival", f"{n}.turn2", {**rival_inputs(folder, n), "first_turn.json": rfile(folder, n, 1),
+                                        "advocate.json": json.dumps(held, indent=1)},
+                {"rival.json": rfile(folder, n, 2)}, lambda d: rival_valid(d, 2), theory=n)
+        j["prompt"] += "\n\n" + prompt("rival2")
+        jobs.append(j)
+    if not jobs:
+        return print("rival2: no second turn needed")
+    run(jobs, folder)
+
+
+def defend(folder):
+    jobs = []
+    for n in survivors(folder):
+        for turn in (1, 2):
+            if not rfile(folder, n, turn).exists() or not (tests := rival_tests(folder, n, turn)):
+                continue
+            ks = [t["k"] for t in tests]
+
+            def valid(d, ks=ks):
+                rows = json.loads((d / "defend.json").read_text())
+                if not isinstance(rows, list) or sorted(r.get("k") for r in rows) != ks:
+                    return f"need a JSON list with one entry for each k in {ks}"
+                bad = [r["k"] for r in rows if not (all(number(r.get(k)) for k in ("value", "low", "high")) and r["low"] <= r["value"] <= r["high"])]
+                return f"value outside [low, high] or not a number for k {bad}" if bad else None
+
+            jobs.append(job("defend", f"{n}.turn{turn}", {"theory.json": folder / "theories" / f"{n}.json",
+                                                         "tests.json": json.dumps(tests, indent=1),
+                                                         "before.jsonl": folder / "before.jsonl", "inventory.md": folder / "inventory.md",
+                                                         "facts.json": facts_input(folder)},
+                            {"defend.json": rfile(folder, n, turn, ".defend")}, valid))
+    if not jobs:
+        return print("defend: no rival")
+    run(jobs, folder)
+
+
+def duel_test(folder):
+    jobs = []
+    for n in survivors(folder):
+        for turn in (1, 2):
+            if not rfile(folder, n, turn).exists() or not (tests := rival_tests(folder, n, turn)):
+                continue
+            if rfile(folder, n, turn, ".tests").exists():
+                print(f"  skip duel_test/{n} turn {turn}: {rfile(folder, n, turn, '.tests').name} exists")
+                continue
+            offline, scripts = [{**t, "refuted_by": None} for t in tests], rfile(folder, n, turn).with_suffix("")
+            jobs.append((n, turn, offline, scripts, script_job(folder, f"duel-{scripts.name}", offline, {}, scripts, DUEL_TESTS)))
+    run([j[-1] for j in jobs], folder, workers=6)
+    for n, turn, offline, scripts, _ in jobs:
+        results = run_scripts(folder, f"duel_test/{n} turn {turn}", offline, scripts)
+        rfile(folder, n, turn, ".tests").write_text(json.dumps({"theory": n, "turn": turn, "tests": results}, indent=1) + "\n")
+
+
+def score_duel(folder):
+    """metrics_v5.json: on each computed rival test of both turns, gain = log density of the theory's (defend)
+    prediction minus log density of the rival's prediction at the computed value, clipped to [-3, 3] nats."""
+    theories = {}
+    for n in survivors(folder):
+        if not rfile(folder, n, 1, ".tests").exists():
+            continue
+        rows = []
+        gpu = json.loads(rfile(folder, n, 2).read_text()).get("no_offline_test") if rfile(folder, n, 2).exists() else None
+        repl = replication(folder, n, ".duel")
+        for turn in (1, 2):
+            if not rfile(folder, n, turn, ".tests").exists():
+                continue
+            tests = {t["k"]: t for t in rival_tests(folder, n, turn, full=True)}
+            mine = {d["k"]: d for d in json.loads(rfile(folder, n, turn, ".defend").read_text())}
+            for q in json.loads(rfile(folder, n, turn, ".tests").read_text())["tests"]:
+                t, d = tests[q["k"]], mine[q["k"]]
+                row = {"k": q["k"], "turn": turn, "experiment": q["experiment"], "measured": q["measured"],
+                       "n": q.get("n"), "interval": q.get("interval"),
+                       "theory": {k: d[k] for k in ("value", "low", "high")}, "rival": {k: t[k] for k in ("value", "low", "high")},
+                       "same_prediction": same_prediction(t, d), "theory_should_say": t["theory_should_say"]}
+                if q["measured"] is None:
+                    row["not_computable"] = q["not_computable"]
+                else:
+                    row["gain"] = round(min(3.0, max(-3.0, log_density(q["measured"], row["theory"]) - log_density(q["measured"], row["rival"]))), 4)
+                row["replication"] = repl.get(q["k"], {}).get("status")
+                rows.append(row)
+        gains = [row["gain"] for row in rows if "gain" in row and row["replication"] != "differs"]  # differs: left out
+        total = round(sum(gains), 3)
+        state = ("not tested against rival" if len(gains) < 2 else "beats rival" if total >= DECIDES
+                 else "loses to rival" if total <= -DECIDES else "not separated from rival")
+        theories[n] = {"rival": json.loads(rfile(folder, n, 1).read_text())["statement"], "computed": len(gains), "tests": len(rows),
+                       "separating": sum(not r["same_prediction"] for r in rows), "total_gain": total, "state": state,
+                       "no_offline_test": gpu, "rows": rows}
+    (folder / "metrics_v5.json").write_text(json.dumps({"theories": theories}, indent=1) + "\n")
+    print(f"Duel: each survivor's prediction (defend) against its rival's on the rival's tests; gain in nats, above 0 favours "
+          f"the theory; a total of +-{DECIDES:g} or beyond decides. same = the defender's centre is inside the rival's interval.")
+    print(f"{'theory':16} {'computed':>9} {'separating':>10} {'gain':>7}  state")
+    for n, t in theories.items():
+        print(f"{n:16} {t['computed']:>4} of {t['tests']:<2} {t['separating']:>10} {t['total_gain']:7.2f}  {t['state']}")
+        print(f"    rival: {t['rival'][:150]}")
+        for row in t["rows"]:
+            head = f"    p{row['k']} turn {row['turn']}{' same' if row['same_prediction'] else ''}: "
+            if "gain" not in row:
+                print(head + f"not computable: {row['not_computable'][:110]}")
+            else:
+                th, rv = row["theory"], row["rival"]
+                noise = f" (n {row['n']}, 90 % [{row['interval'][0]:g}, {row['interval'][1]:g}])" if row.get("interval") else ""
+                again = {"replicated": ", replicated", "differs": ", differs from its replication: left out until resolved"}.get(row["replication"], "")
+                print(head + f"measured {row['measured']:g}{noise}, theory {th['value']:g} [{th['low']:g}, {th['high']:g}], "
+                      f"rival {rv['value']:g} [{rv['low']:g}, {rv['high']:g}], gain {row['gain']:+.2f}{again}")
+        if t["no_offline_test"]:
+            print(f"    no stored-row test separates them: {t['no_offline_test']['reason'][:120]}")
+            print(f"    GPU experiment: {t['no_offline_test']['gpu_experiment'][:200]}")
+
+
+REPLICATE_TESTS = ("$out/offline.json lists offline computations, each with k, experiment, recipe and unit. Someone "
+                   "computed them before you; you are not told how, what they got or what anyone predicts. Compute each "
+                   "again from its recipe alone. refuted_by is null for every entry, so every script prints "
+                   "\"refuted_by_met\": false.")
+
+
+def same_number(a, b):
+    return a is not None and b is not None and abs(a - b) <= max(0.01 * abs(b), 0.005)
+
+
+def replicate(folder):
+    """An agent that gets only the recipes recomputes every decisive number: wins the readers did not expect,
+    predictions outside or meeting a refuting condition, every share and fit of an account, and duel tests with a gain
+    of 1 nat or more in size. replication/<theory>[.duel].json; a number that differs is left out of the state rules."""
+    v4 = json.loads((folder / "metrics_v4.json").read_text())["theories"]
+    v5 = json.loads((folder / "metrics_v5.json").read_text())["theories"] if (folder / "metrics_v5.json").exists() else {}
+    work = []
+    for n, m in v4.items():
+        if not in_scope(n) or m.get("carried_from") or (folder / "replication" / f"{n}.json").exists():
+            continue
+        if not (folder / "tests" / f"{n}.json").exists():  # a theory with no computed test has nothing to recompute
+            continue
+        tests = {q["k"]: q for q in json.loads((folder / "tests" / f"{n}.json").read_text())["predictions"] if q["measured"] is not None}
+        ks = set(m["unexpected_wins"]) | {r["k"] for r in m["rows"] if "gain" in r and (r["refuted_by_met"] or (not r["inside"] and not r.get("within_noise")))}
+        ks |= {k for k, q in tests.items() if q.get("role") in ("share", "fit") and not q.get("by_construction")}
+        if ks := sorted(k for k in ks if k in tests):
+            work.append((n, "", {k: tests[k] for k in ks}))
+    for n, t in v5.items():
+        if (folder / "replication" / f"{n}.duel.json").exists():
+            continue
+        tests = {q["k"]: q for turn in (1, 2) if rfile(folder, n, turn, ".tests").exists()
+                 for q in json.loads(rfile(folder, n, turn, ".tests").read_text())["tests"]}
+        if ks := [r["k"] for r in t["rows"] if abs(r.get("gain", 0)) >= 1]:
+            work.append((n, ".duel", {k: tests[k] for k in ks}))
+    if not work:
+        return print("replicate: nothing new to replicate")
+    jobs = []
+    for n, kind, tests in work:
+        offline = [{"k": k, "experiment": q["experiment"], "recipe": q["recipe"], "unit": q["unit"], "refuted_by": None} for k, q in tests.items()]
+        scripts = folder / "replication" / f"{n}{kind}"
+        jobs.append((n, kind, tests, offline, scripts, script_job(folder, f"repl-{n}{kind}", offline, {}, scripts, REPLICATE_TESTS)))
+    run([j[-1] for j in jobs], folder, workers=6)
+    for n, kind, tests, offline, scripts, _ in jobs:
+        items = []
+        for r in run_scripts(folder, f"replicate/{n}{kind}", offline, scripts):
+            first = tests[r["k"]]["measured"]
+            items.append({"k": r["k"], "experiment": r["experiment"], "original": first, "replicated": r["measured"],
+                          "status": "replicated" if same_number(r["measured"], first) else "differs", "script": r["script"],
+                          "not_computable": r["not_computable"]})
+            if items[-1]["status"] == "differs":
+                print(f"  {n}{kind} p{r['k']} DIFFERS: first {first}, replication {r['measured']}; left out until a person resolves it")
+        (folder / "replication" / f"{n}{kind}.json").write_text(json.dumps({"theory": n, "items": items}, indent=1) + "\n")
+        print(f"  {n}{kind}: {sum(i['status'] == 'replicated' for i in items)} of {len(items)} replicated")
+    score_tests(folder)
+    if v5:
+        score_duel(folder)
+
+
+DUEL_REVIEW = """The theory was also compared with the strongest rival a fresh agent could write: $round/rivals/$theory.json (the rival
+mechanism and its tests, each with the rival's prediction and what the theory should say), $round/rivals/$theory.defend.json
+(a separate agent's predictions from the theory alone), $round/rivals/$theory/ and $round/rivals/$theory.tests.json
+(the scripts and the computed numbers); the same names with ".turn2" when the rival had a second turn; and
+$round/metrics_v5.json, entry "$theory" (gain per test, above 0 favours the theory, and the state: $duel_state). Read one duel script: does it implement the rival's recipe as written? Your
+verdict names the duel state. A theory that beats its rival is not "weak" only because some other rival could exist;
+call it weak only for a reason you can point to (a refuting item, a published claim, a broken script, a gain resting on
+one test).
+"""
+
+
+RIVAL_WON = """The rival won the duel, so the rival's mechanism is what will be posted. Do the refutation search (1) and the
+novelty search (3) about the rival's mechanism (the statement in $round/rivals/$theory.json), not the theory's, and add
+"about": "rival" to review.json.
+"""
+
+
+ACCOUNT_REVIEW = """This theory is an account: a budget of the gap between the base and the RL model over several cells (its
+"cells", "parts" and rules; its state is $state, and its measured shares are posted whatever the state). For the novelty
+search (3), look on the board and in the literature for the same breakdown of the same cells, and say whether the
+cells can be compared: the same evidence rows, grader version, prompts and sampling on both sides, and how its cells
+stand against its null cell. $round/replication/$theory.json holds the independent recomputation of its shares.
+"""
 
 
 def review(folder):
-    theories = json.loads((folder / "metrics_v3.json").read_text())["theories"]
-    names = sorted((n for n, t in theories.items() if t["state"] == "passes"), key=lambda n: -theories[n]["total_gain"])[:3]
+    metrics = folder / ("metrics_v4.json" if args.version >= 4 else "metrics_v3.json")
+    theories = json.loads(metrics.read_text())["theories"]
+    names = survivors(folder) if args.version >= 4 else sorted((n for n, t in theories.items() if t["state"] == "passes"),
+                                                              key=lambda n: -theories[n]["total_gain"])[:3]
+    duelled = set(names)
+    if args.version >= 6:  # the account is reviewed whatever its state: its measured budget is posted either way
+        names += [n for n in theories if "-account" in n and in_scope(n) and n not in names and not theories[n].get("carried_from")]
     if not names:
-        return print("review: no passing theory")
+        return print("review: no surviving theory")
+    duel = json.loads((folder / "metrics_v5.json").read_text())["theories"] if args.version >= 5 else {}
     keys = {"refutation", "wins_judgement", "rival", "novelty", "import_carries_gain", "verdict"}
-    run([job("review", n, {}, {"review.json": folder / "reviews" / f"{n}.json"},
-             lambda d: (lambda k: f"missing keys {sorted(k)}" if k else None)(keys - json.loads((d / "review.json").read_text()).keys()),
-             mode="repo", round=folder.resolve(), theory=n) for n in names], folder)
+
+    def valid(d, state):
+        r = json.loads((d / "review.json").read_text())
+        if missing := keys - r.keys():
+            return f"missing keys {sorted(missing)}"
+        if state == "loses to rival" and r.get("about") != "rival":
+            return "the rival won the duel: the review is about the rival's mechanism and review.json says \"about\": \"rival\""
+        return f"the verdict must name the duel state \"{state}\"" if state and state not in r["verdict"] else None
+
+    jobs = []
+    for n in names:
+        state = duel[n]["state"] if n in duel else "not tested against rival" if args.version >= 5 and n in duelled else ""
+        text = string.Template(DUEL_REVIEW + (RIVAL_WON if state == "loses to rival" else "")).substitute(
+            round=folder.resolve(), theory=n, duel_state=state) if state else ""
+        if "-account" in n:
+            text += string.Template(ACCOUNT_REVIEW).substitute(round=folder.resolve(), theory=n, state=theories[n]["state"])
+        jobs.append(job("review", n, {}, {"review.json": folder / "reviews" / f"{n}.json"}, lambda d, state=state: valid(d, state),
+                        mode="repo", round=folder.resolve(), theory=n, metrics=metrics.name, duel=text))
+    run(jobs, folder)
     for n in names:
         print(f"  {n}: {json.loads((folder / 'reviews' / f'{n}.json').read_text())['verdict']}")
+    if args.version >= 4:
+        score_tests(folder)
 
 
 STAGES = {"split": split, "standing": standing, "inventory": inventory, "targets": targets, "external": external,
-          "generate": generate, "null": null, "claims": claims, "score": score, "reverse": reverse, "test": test, "review": review}
-ALL = ["split", "standing", "inventory", "targets", "external", "generate", "null", "claims", "score", "reverse", "test", "score", "review"]
+          "generate": generate, "null": null, "claims": claims, "score": score, "reverse": reverse, "test": test, "review": review,
+          "mechanisms": mechanisms, "develop": develop, "null_tests": null_tests, "score_tests": score_tests, "heldout": heldout,
+          "account": account, "replicate": replicate, "rival": rival, "rival2": rival2, "defend": defend, "duel_test": duel_test, "score_duel": score_duel}
+ALL = {3: ["split", "standing", "inventory", "targets", "external", "generate", "null", "claims", "score", "reverse", "test", "score", "review"],
+       4: ["split", "standing", "inventory", "external", "mechanisms", "develop", "null_tests", "test", "score_tests", "heldout", "review"],
+       5: ["split", "standing", "inventory", "external", "mechanisms", "develop", "null_tests", "test", "score_tests", "heldout",
+           "rival", "defend", "rival2", "defend", "duel_test", "score_duel", "review"]}
+ALL[6] = ["split", "standing", "inventory", "external", "mechanisms", "develop", "account", "null_tests", "test", "score_tests",
+          "replicate", "heldout", "rival", "defend", "rival2", "defend", "duel_test", "score_duel", "replicate", "review"]
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("folder", type=Path)
-    parser.add_argument("stage", choices=[*STAGES, "all"])
+    parser.add_argument("stages", nargs="+", choices=[*STAGES, "all"])
+    parser.add_argument("--version", type=int, choices=[3, 4, 5, 6], default=6)
+    parser.add_argument("--only-account", action="store_true", help="version 6: no mechanisms or develop; only the "
+                        "account is tested and duelled, carried theories are its inputs")
     parser.add_argument("--cutoff")
     parser.add_argument("--skip", action="append", default=[])
     parser.add_argument("--from", dest="prev")
     parser.add_argument("--starts", default="all,surprises,across,external,revise")
+    parser.add_argument("--n-mechanisms", type=int, default=12)
     parser.add_argument("--model-all")
     parser.add_argument("--workers", type=int, default=8)
     parser.add_argument("--min-targets", type=int, default=15)
     args = parser.parse_args()
-    for stage in ALL if args.stage == "all" else [args.stage]:
+    order = [s for s in ALL[args.version] if not (args.only_account and s in ("mechanisms", "develop"))]
+    for stage in order if args.stages == ["all"] else args.stages:
         print(f"== {stage}")
         STAGES[stage](args.folder)

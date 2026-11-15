@@ -1,0 +1,2 @@
+{"measured": 0.6222222222222222, "refuted_by_met": false, "alt_measured": 0.6222222222222222, "not_computable": null, "example_row": {"problem_index": 1, "sample": 1, "attempt": 0, "seed": 41010001, "n_new": 5285, "cap_hit": false, "finish_reason": "stop", "loop_A": false, "extracted_v3": "2(p - q)", "score_v3": 0, "gold": "p - q"}}
+pairs=405 problems_with_pairs=137

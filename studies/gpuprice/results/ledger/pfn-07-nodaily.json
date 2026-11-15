@@ -1,0 +1,35 @@
+{
+ "name": "pfn-07-nodaily",
+ "note": "Ablation: prior without tick, fx, market, discrete, trend (the types read off Verda, Scaleway, sfcompute, spheron, AWS), 3,000 steps, job abaybektursun-1114-182521-a88e. H: worse than pfn-01 by > 0.02; refuted if not. Prior informed only by panel rows dated <= 2026-09-30; real data never used in training.",
+ "utc": "2026-11-15T01:29:39+00:00",
+ "commit": "9734dfd",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.236873,
+ "pinball": 0.025598,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.231436,
+ "skill_geomean": 0.306661,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.141763,
+   "in_band": 0.818182
+  },
+  "3": {
+   "skill_pooled": 0.216938,
+   "in_band": 0.676357
+  },
+  "7": {
+   "skill_pooled": 0.273214,
+   "in_band": 0.504845
+  }
+ },
+ "in_band": 0.667096
+}

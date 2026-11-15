@@ -1,0 +1,5 @@
+[
+ {"k": 1, "value": 0.13, "low": 0.06, "high": 0.22, "why": "If top8 is a cue-like switch into the base's register, its ~73 errors (427/500) follow difficulty the way a fresh cued-base sample's do: a fresh base sample fails about 3% of the 317 problems the base solves 4/4 (~10 of ~90 errors), and scaling that by top8's slightly lower error odds gives roughly 8 of 73."},
+ {"k": 2, "value": 0.5, "low": 0.3, "high": 0.7, "why": "The theory says these are base-type quick errors (slips and misreads, which usually have right base siblings), mixed with some confident wrong plans on base-0/4 problems, so the cued base solves them about half the time; with only ~11 problems the mean is noisy."},
+ {"k": 3, "value": 0.4, "low": 0.18, "high": 0.62, "why": "With the cued base's length distribution (half of answers at or under 2,000 tokens, right-answer median about 1,400), roughly 40-45% of answers under 2,000 tokens are also under 1,000, and quick wrong answers should follow the same shape; n is about 11."}
+]

@@ -1,0 +1,35 @@
+{
+ "name": "llm2-04-astra-adj-wide",
+ "note": "O1: gpt-6-astra (effort low, no tools) adjusts ens-05 with the llm2-03 prompt, rule --wide",
+ "utc": "2026-11-15T04:57:37+00:00",
+ "commit": "52fa174",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.312724,
+ "pinball": 0.023054,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.314077,
+ "skill_geomean": 0.379466,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.204037,
+   "in_band": 0.84689
+  },
+  "3": {
+   "skill_pooled": 0.272676,
+   "in_band": 0.77907
+  },
+  "7": {
+   "skill_pooled": 0.36361,
+   "in_band": 0.68314
+  }
+ },
+ "in_band": 0.770023
+}

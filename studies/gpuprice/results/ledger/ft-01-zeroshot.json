@@ -1,0 +1,35 @@
+{
+ "name": "ft-01-zeroshot",
+ "note": "H: my inference path (ft_chronos2.py --mode none, cpu class, float32) reproduces fm-07 (+0.272); refuted if outside +0.267..+0.277. amazon/chronos-2 zero-shot, no training data (fine-tuning cutoff 2026-09-30 applies to ft-02 onward), fm-07 setup: each listing alone, independent draws, median over listings; afhubbard = series alone. Job abaybektursun-1114-174352-2125",
+ "utc": "2026-11-14T23:48:30+00:00",
+ "commit": "cc72be2",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.270906,
+ "pinball": 0.024457,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.271554,
+ "skill_geomean": 0.332989,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.098562,
+   "in_band": 0.854545
+  },
+  "3": {
+   "skill_pooled": 0.24735,
+   "in_band": 0.723837
+  },
+  "7": {
+   "skill_pooled": 0.329949,
+   "in_band": 0.602713
+  }
+ },
+ "in_band": 0.727565
+}

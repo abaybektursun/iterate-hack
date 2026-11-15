@@ -1,0 +1,14 @@
+07:07 UTC, after ITERATE_MAX_H100=10 uv run tools/gpu.py deploy
+  24 queued h100
+   9 running NVIDIA
+07:07 UTC
+  24 queued h100
+   9 running NVIDIA
+of the 8 jobs running before the deploy, still running or done:
+abaybektursun-1114-235010-8446 done
+abaybektursun-1114-235021-8606 done
+abaybektursun-1114-235030-602b running
+abaybektursun-1115-000358-d11a running
+abaybektursun-1115-000503-1e5f running
+abaybektursun-1115-000512-ee03 running
+abaybektursun-1115-000525-ea4e running

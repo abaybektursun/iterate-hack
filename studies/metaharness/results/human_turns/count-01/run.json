@@ -1,0 +1,20 @@
+{
+ "commit": "8e16b1973f115c6b0cec77ea063ad650fe059285 (script uncommitted at run time; committed with this folder)",
+ "command": "python3 -m studies.metaharness.analysis.human_turns --store <scratchpad>/team-traces --local sameraslan=<each of the 23 folders ~/.claude/projects/*iterate-hack*> --out studies/metaharness/results/human_turns/count-01",
+ "run_utc": "2026-11-15T07:08:13Z",
+ "rule_check": "Run once with --samples 15 on a scratch output: 15 random kept records all read as typed by a person; 15 random excluded records were tool results, task notifications, system reminders, slash-command wrappers, meta records and one headless review prompt. No text saved.",
+ "inputs": [
+  {"what": "copy of the team transcript store s3://iterate-hack-team-769063704696/traces/ (tools/traces.py uploads Claude Code transcripts every 10 minutes): main sessions and subagents of abaybektursun (23 main, 210 subagent files), frustea (12, 19), sameraslan (1, 6)", "synced_utc": "about 2026-11-15T05:25Z"},
+  {"what": "sameraslan's local Claude Code project folders for this repository on his laptop: 23 folders, 53 main sessions, 155 subagent files", "synced_utc": "read live at run time"}
+ ],
+ "window_utc": ["2026-11-14T18:00:00Z (first commit)", "2026-11-15T07:08:13Z (run time)"],
+ "known_gaps": [
+  "abaybektursun and frustea: only what the store held at about 05:25 UTC; sessions after that, and sessions never uploaded, are missing",
+  "local-only sessions of other people are not on this machine",
+  "Codex sessions are not counted (Codex transcripts are not in this copy)",
+  "24 of sameraslan's 52 sessions are headless runs (scripted review runs of the planted-waste test, claude -p): they count toward tool calls and sessions, never toward human messages",
+  "a human message can be one word or a page (median 58 characters, total 55,715)",
+  "subagent sessions have no typed messages by design; slash commands (<command-name>) are not counted as messages",
+  "cross-check: transcripts hold 3,873 calls of board.py, gpu.py or paper.py against about 4,900 in the event log at 05:40 UTC, so the transcripts cover roughly 80% of the logged work"
+ ]
+}

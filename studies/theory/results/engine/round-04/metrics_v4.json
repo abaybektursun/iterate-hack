@@ -1,0 +1,984 @@
+{
+ "theories": {
+  "r4-m01": {
+   "offline": 4,
+   "computed": 3,
+   "inside": 3,
+   "outside": 0,
+   "total_gain": 1.412,
+   "heldout_claims": 3,
+   "strikes": 0,
+   "state": "survives",
+   "reasons": [],
+   "verdict": "weak: it survives offline, but nearly all its gain is one descriptive premise (base openings compress better than RL's). Its causal tests are at or below the no-theory readers (p2 +0.58, p4 -0.76), the within-problem and deletion tests that would separate it from the impasse rival were not run, its held-out claims on the neuron ablation (loops 71 -> 19, cap hits 98 -> 39) missed by -3 nats each, and its self-reinforcement core is published (Xu 2022; Duan 2026).",
+   "rows": [
+    {
+     "id": "r4-m01:p2",
+     "measured": 0.6705288175876412,
+     "value": 0.7,
+     "low": 0.6,
+     "high": 0.79,
+     "nulls": [
+      {
+       "value": 0.6,
+       "low": 0.47,
+       "high": 0.73
+      },
+      {
+       "value": 0.6,
+       "low": 0.48,
+       "high": 0.72
+      }
+     ],
+     "gain": 0.5762,
+     "k": 2,
+     "inside": true,
+     "refuted_by": "measured AUROC below 0.58",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m01:p3",
+     "measured": 0.6334405144694534,
+     "value": 0.64,
+     "low": 0.55,
+     "high": 0.73,
+     "nulls": [
+      {
+       "value": 0.54,
+       "low": 0.38,
+       "high": 0.68
+      },
+      {
+       "value": 0.43,
+       "low": 0.28,
+       "high": 0.58
+      }
+     ],
+     "gain": 1.5905,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "measured fraction below 0.53",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m01:p4",
+     "measured": 0.5584900564423672,
+     "value": 0.66,
+     "low": 0.54,
+     "high": 0.77,
+     "nulls": [
+      {
+       "value": 0.59,
+       "low": 0.44,
+       "high": 0.74
+      },
+      {
+       "value": 0.57,
+       "low": 0.42,
+       "high": 0.72
+      }
+     ],
+     "gain": -0.755,
+     "k": 4,
+     "inside": true,
+     "refuted_by": "measured mean AUROC below 0.53",
+     "refuted_by_met": false
+    },
+    {
+     "k": 1,
+     "not_computable": "no problem qualifies: the file holds 500 rows, samples present [0] (one row per problem), so no problem has both a cap_hit true row and a cap_hit false row; the within-problem pair the recipe asks for does not exist in the stored rows"
+    }
+   ],
+   "heldout_rows": [
+    {
+     "id": "t14",
+     "measured": 19,
+     "value": 66,
+     "low": 48,
+     "high": 84,
+     "nulls": [
+      {
+       "value": 55,
+       "low": 28,
+       "high": 82
+      },
+      {
+       "value": 60,
+       "low": 30,
+       "high": 88
+      }
+     ],
+     "gain": -3.0,
+     "strike": false
+    },
+    {
+     "id": "t15",
+     "measured": 39,
+     "value": 94,
+     "low": 76,
+     "high": 112,
+     "nulls": [
+      {
+       "value": 88,
+       "low": 62,
+       "high": 112
+      },
+      {
+       "value": 92,
+       "low": 68,
+       "high": 116
+      }
+     ],
+     "gain": -3.0,
+     "strike": false
+    },
+    {
+     "id": "t41",
+     "measured": 426.2,
+     "value": 427,
+     "low": 413,
+     "high": 441,
+     "nulls": [
+      {
+       "value": 427,
+       "low": 415,
+       "high": 438
+      },
+      {
+       "value": 426,
+       "low": 414,
+       "high": 437
+      }
+     ],
+     "gain": -0.1977,
+     "strike": false
+    }
+   ]
+  },
+  "r4-m02": {
+   "offline": 3,
+   "computed": 3,
+   "inside": 2,
+   "outside": 1,
+   "total_gain": -3.758,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p2 The same pooled within-problem concordance for the RL model.: measured 0.717948717948718, predicted 0.55 [0.43, 0.67]; refuting condition met: computed fraction above 0.68"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r4-m02:p1",
+     "measured": 0.6222222222222222,
+     "value": 0.7,
+     "low": 0.61,
+     "high": 0.79,
+     "nulls": [
+      {
+       "value": 0.66,
+       "low": 0.57,
+       "high": 0.75
+      },
+      {
+       "value": 0.7,
+       "low": 0.6,
+       "high": 0.8
+      }
+     ],
+     "gain": -0.487,
+     "k": 1,
+     "inside": true,
+     "refuted_by": "computed fraction below 0.60",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m02:p2",
+     "measured": 0.717948717948718,
+     "value": 0.55,
+     "low": 0.43,
+     "high": 0.67,
+     "nulls": [
+      {
+       "value": 0.67,
+       "low": 0.53,
+       "high": 0.8
+      },
+      {
+       "value": 0.68,
+       "low": 0.55,
+       "high": 0.8
+      }
+     ],
+     "gain": -2.4252,
+     "k": 2,
+     "inside": false,
+     "refuted_by": "computed fraction above 0.68",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r4-m02:p3",
+     "measured": -0.2005220257109175,
+     "value": -0.36,
+     "low": -0.52,
+     "high": -0.2,
+     "nulls": [
+      {
+       "value": -0.25,
+       "low": -0.42,
+       "high": -0.08
+      },
+      {
+       "value": -0.35,
+       "low": -0.55,
+       "high": -0.15
+      }
+     ],
+     "gain": -0.8458,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "computed mean above -0.19",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r4-m04": {
+   "offline": 4,
+   "computed": 4,
+   "inside": 2,
+   "outside": 2,
+   "total_gain": -5.282,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p1 Wait-rate-based share estimate in theta0.25_plain against the plain base and RL : measured 0.327, predicted 0.76 [0.6, 0.9]; refuting condition met: S below 0.60 or above 0.92",
+    "p4 Wait-rate-based share estimate in theta0.25_cue against the cued base and RL cue: measured 0.212, predicted 0.66 [0.44, 0.88]; refuting condition met: S_cue below 0.42 or above 0.92, or undefined",
+    "2 of 4 computed predictions outside their 90 % intervals"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r4-m04:p1",
+     "measured": 0.327,
+     "value": 0.76,
+     "low": 0.6,
+     "high": 0.9,
+     "nulls": [
+      {
+       "value": 0.38,
+       "low": 0.08,
+       "high": 0.72
+      },
+      {
+       "value": 0.5,
+       "low": 0.2,
+       "high": 0.85
+      }
+     ],
+     "gain": -3.0,
+     "k": 1,
+     "inside": false,
+     "refuted_by": "S below 0.60 or above 0.92",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r4-m04:p2",
+     "measured": 0.716,
+     "value": 0.76,
+     "low": 0.6,
+     "high": 0.9,
+     "nulls": [
+      {
+       "value": 0.75,
+       "low": 0.45,
+       "high": 0.97
+      },
+      {
+       "value": 0.75,
+       "low": 0.45,
+       "high": 0.98
+      }
+     ],
+     "gain": 0.4658,
+     "k": 2,
+     "inside": true,
+     "refuted_by": "P below 0.60 or above 0.92, or undefined",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m04:p3",
+     "measured": -0.0462,
+     "value": -0.05,
+     "low": -0.095,
+     "high": 0.0,
+     "nulls": [
+      {
+       "value": -0.07,
+       "low": -0.14,
+       "high": -0.01
+      },
+      {
+       "value": -0.04,
+       "low": -0.09,
+       "high": 0.01
+      }
+     ],
+     "gain": 0.2527,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "D below -0.10 or above 0.02",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m04:p4",
+     "measured": 0.212,
+     "value": 0.66,
+     "low": 0.44,
+     "high": 0.88,
+     "nulls": [
+      {
+       "value": 0.42,
+       "low": 0.05,
+       "high": 0.82
+      },
+      {
+       "value": 0.45,
+       "low": 0.15,
+       "high": 0.8
+      }
+     ],
+     "gain": -3.0,
+     "k": 4,
+     "inside": false,
+     "refuted_by": "S_cue below 0.42 or above 0.92, or undefined",
+     "refuted_by_met": true
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r4-m06": {
+   "offline": 3,
+   "computed": 0,
+   "inside": 0,
+   "outside": 0,
+   "total_gain": 0,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "untested",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "k": 1,
+     "not_computable": "grader v3 equivalence (n13_score.grade) needs the math_verify package, which this python3 does not have; the standard library cannot reproduce it"
+    },
+    {
+     "k": 2,
+     "not_computable": "grader v3 equivalence (n13_score.grade) needs the math_verify package, which this python3 does not have; the standard library cannot reproduce it"
+    },
+    {
+     "k": 3,
+     "not_computable": "grader v3 equivalence (n13_score.grade) needs the math_verify package, which this python3 does not have; the standard library cannot reproduce it"
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r4-m07": {
+   "offline": 5,
+   "computed": 5,
+   "inside": 0,
+   "outside": 5,
+   "total_gain": -12.65,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p1 MATH-500: share of RL's wrong finished samples whose answer equals one of the ba: measured 0.26717557251908397, predicted 0.5 [0.36, 0.65]; refuting condition met: measured below 0.36",
+    "p2 MATH-500: on problems where the base repeats a wrong value, share of RL's wrong : measured 0.34615384615384615, predicted 0.65 [0.5, 0.82]; refuting condition met: measured below 0.50",
+    "p3 MATH-500: RL vote fix rate on base-vote-wrong problems where the base has a repe: measured 0.75, predicted 0.3 [0.12, 0.5]; refuting condition met: measured above 0.50",
+    "p4 MATH-500: RL vote fix rate on base-vote-wrong problems without a repeated base w: measured 0.47368421052631576, predicted 0.75 [0.55, 0.92]; refuting condition met: measured below 0.55",
+    "p5 hard328: when both single samples are wrong and finished, share where base and R: measured 0.19047619047619047, predicted 0.33 [0.2, 0.48]; refuting condition met: measured below 0.20",
+    "5 of 5 computed predictions outside their 90 % intervals"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r4-m07:p1",
+     "measured": 0.26717557251908397,
+     "value": 0.5,
+     "low": 0.36,
+     "high": 0.65,
+     "nulls": [
+      {
+       "value": 0.35,
+       "low": 0.2,
+       "high": 0.5
+      },
+      {
+       "value": 0.3,
+       "low": 0.18,
+       "high": 0.45
+      }
+     ],
+     "gain": -3.0,
+     "k": 1,
+     "inside": false,
+     "refuted_by": "measured below 0.36",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r4-m07:p2",
+     "measured": 0.34615384615384615,
+     "value": 0.65,
+     "low": 0.5,
+     "high": 0.82,
+     "nulls": [
+      {
+       "value": 0.4,
+       "low": 0.2,
+       "high": 0.6
+      },
+      {
+       "value": 0.4,
+       "low": 0.22,
+       "high": 0.58
+      }
+     ],
+     "gain": -3.0,
+     "k": 2,
+     "inside": false,
+     "refuted_by": "measured below 0.50",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r4-m07:p3",
+     "measured": 0.75,
+     "value": 0.3,
+     "low": 0.12,
+     "high": 0.5,
+     "nulls": [
+      {
+       "value": 0.45,
+       "low": 0.22,
+       "high": 0.68
+      },
+      {
+       "value": 0.35,
+       "low": 0.15,
+       "high": 0.6
+      }
+     ],
+     "gain": -3.0,
+     "k": 3,
+     "inside": false,
+     "refuted_by": "measured above 0.50",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r4-m07:p4",
+     "measured": 0.47368421052631576,
+     "value": 0.75,
+     "low": 0.55,
+     "high": 0.92,
+     "nulls": [
+      {
+       "value": 0.55,
+       "low": 0.33,
+       "high": 0.76
+      },
+      {
+       "value": 0.6,
+       "low": 0.4,
+       "high": 0.8
+      }
+     ],
+     "gain": -2.5601,
+     "k": 4,
+     "inside": false,
+     "refuted_by": "measured below 0.55",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r4-m07:p5",
+     "measured": 0.19047619047619047,
+     "value": 0.33,
+     "low": 0.2,
+     "high": 0.48,
+     "nulls": [
+      {
+       "value": 0.25,
+       "low": 0.11,
+       "high": 0.4
+      },
+      {
+       "value": 0.25,
+       "low": 0.12,
+       "high": 0.4
+      }
+     ],
+     "gain": -1.09,
+     "k": 5,
+     "inside": false,
+     "refuted_by": "measured below 0.20",
+     "refuted_by_met": true
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r4-m08": {
+   "offline": 3,
+   "computed": 3,
+   "inside": 3,
+   "outside": 0,
+   "total_gain": 0.12,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "survives",
+   "reasons": [],
+   "verdict": "weak: it survives formally, but its only gain (p1) is a noisy 60-problem estimate the readers also bracketed, its distinctive test (p2) came out with the opposite sign at the edge of the interval, p3 is a generic difficulty effect, and board result-afc423 plus the theory's own sources (Wang AIME 2024 vs 2025; Olmo-3's low recall flags in 2611.10307) favour the termination/difficulty rival.",
+   "rows": [
+    {
+     "id": "r4-m08:p1",
+     "measured": 6.880146785807161,
+     "value": 7,
+     "low": -3,
+     "high": 17,
+     "nulls": [
+      {
+       "value": -2.0,
+       "low": -22.0,
+       "high": 18.0
+      },
+      {
+       "value": 2.0,
+       "low": -12.0,
+       "high": 16.0
+      }
+     ],
+     "gain": 0.7041,
+     "k": 1,
+     "inside": true,
+     "refuted_by": "statistic below -3",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m08:p2",
+     "measured": 0.14265940956097878,
+     "value": -0.3,
+     "low": -0.9,
+     "high": 0.15,
+     "nulls": [
+      {
+       "value": 0.0,
+       "low": -0.5,
+       "high": 0.5
+      },
+      {
+       "value": -0.1,
+       "low": -0.6,
+       "high": 0.4
+      }
+     ],
+     "gain": -0.8017,
+     "k": 2,
+     "inside": true,
+     "refuted_by": "statistic above 0.15, or missing (fewer than 5 post problems kept)",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m08:p3",
+     "measured": 0.8447792982569907,
+     "value": 0.85,
+     "low": 0.6,
+     "high": 1.0,
+     "nulls": [
+      {
+       "value": 0.92,
+       "low": 0.72,
+       "high": 1.15
+      },
+      {
+       "value": 0.9,
+       "low": 0.7,
+       "high": 1.15
+      }
+     ],
+     "gain": 0.2175,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "statistic at or above 1.0",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r4-m09": {
+   "offline": 6,
+   "computed": 6,
+   "inside": 3,
+   "outside": 3,
+   "total_gain": -6.703,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "refuted",
+   "reasons": [
+    "p2 MATH-500: Code-RL cue fix rate minus random-difference cue fix rate on base clea: measured 0.14285714285714285, predicted 0.0 [-0.12, 0.1]; refuting condition met: measured above 0.12",
+    "p4 hard328: Code-RL cue accuracy on problems where the cued base hit the cap and wa: measured 0.13513513513513514, predicted 0.33 [0.2, 0.47]; refuting condition met: measured below 0.19",
+    "p5 hard328: Code-RL cue accuracy on problems where the cued base finished without a: measured 0.3, predicted 0.15 [0.07, 0.25]; refuting condition met: measured above 0.26",
+    "3 of 6 computed predictions outside their 90 % intervals"
+   ],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r4-m09:p1",
+     "measured": 0.48148148148148145,
+     "value": 0.62,
+     "low": 0.42,
+     "high": 0.8,
+     "nulls": [
+      {
+       "value": 0.48,
+       "low": 0.28,
+       "high": 0.68
+      },
+      {
+       "value": 0.5,
+       "low": 0.3,
+       "high": 0.7
+      }
+     ],
+     "gain": -0.662,
+     "k": 1,
+     "inside": true,
+     "refuted_by": "measured below 0.40",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m09:p2",
+     "measured": 0.14285714285714285,
+     "value": 0.0,
+     "low": -0.12,
+     "high": 0.1,
+     "nulls": [
+      {
+       "value": 0.14,
+       "low": -0.02,
+       "high": 0.3
+      },
+      {
+       "value": 0.1,
+       "low": -0.05,
+       "high": 0.25
+      }
+     ],
+     "gain": -1.8844,
+     "k": 2,
+     "inside": false,
+     "refuted_by": "measured above 0.12",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r4-m09:p3",
+     "measured": 0.014,
+     "value": 0.008,
+     "low": 0.0,
+     "high": 0.022,
+     "nulls": [
+      {
+       "value": 0.022,
+       "low": 0.006,
+       "high": 0.048
+      },
+      {
+       "value": 0.025,
+       "low": 0.008,
+       "high": 0.05
+      }
+     ],
+     "gain": 0.3442,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "measured above 0.026",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m09:p4",
+     "measured": 0.13513513513513514,
+     "value": 0.33,
+     "low": 0.2,
+     "high": 0.47,
+     "nulls": [
+      {
+       "value": 0.25,
+       "low": 0.13,
+       "high": 0.38
+      },
+      {
+       "value": 0.25,
+       "low": 0.13,
+       "high": 0.38
+      }
+     ],
+     "gain": -1.7535,
+     "k": 4,
+     "inside": false,
+     "refuted_by": "measured below 0.19",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r4-m09:p5",
+     "measured": 0.3,
+     "value": 0.15,
+     "low": 0.07,
+     "high": 0.25,
+     "nulls": [
+      {
+       "value": 0.28,
+       "low": 0.15,
+       "high": 0.42
+      },
+      {
+       "value": 0.32,
+       "low": 0.2,
+       "high": 0.45
+      }
+     ],
+     "gain": -3.0,
+     "k": 5,
+     "inside": false,
+     "refuted_by": "measured above 0.26",
+     "refuted_by_met": true
+    },
+    {
+     "id": "r4-m09:p6",
+     "measured": 0.07621951219512195,
+     "value": 0.067,
+     "low": 0.03,
+     "high": 0.11,
+     "nulls": [
+      {
+       "value": 0.09,
+       "low": 0.04,
+       "high": 0.17
+      },
+      {
+       "value": 0.07,
+       "low": 0.03,
+       "high": 0.12
+      }
+     ],
+     "gain": 0.253,
+     "k": 6,
+     "inside": true,
+     "refuted_by": "measured above 0.125",
+     "refuted_by_met": false
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r4-m10": {
+   "offline": 5,
+   "computed": 4,
+   "inside": 4,
+   "outside": 0,
+   "total_gain": 9.857,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "survives",
+   "reasons": [],
+   "verdict": "weak: the rise-then-fall of T 0.6 cap hits (base 65 -> step 100 103 / step 400 98 -> step 2,800 about 16) is real and beat both readers, but the theory's mechanism (entropy collapse pushing sampling past top-p's lock threshold) was never tested, an untested length-growth rival explains the same numbers, the accuracy prediction could not be computed, and one import is misread.",
+   "rows": [
+    {
+     "id": "r4-m10:p1",
+     "measured": 0.07599999999999998,
+     "value": 0.03,
+     "low": 0.002,
+     "high": 0.08,
+     "nulls": [
+      {
+       "value": -0.025,
+       "low": -0.08,
+       "high": 0.03
+      },
+      {
+       "value": -0.03,
+       "low": -0.09,
+       "high": 0.03
+      }
+     ],
+     "gain": 2.8898,
+     "k": 1,
+     "inside": true,
+     "refuted_by": "computed difference below 0.0",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m10:p2",
+     "measured": 0.066,
+     "value": 0.06,
+     "low": 0.015,
+     "high": 0.12,
+     "nulls": [
+      {
+       "value": -0.06,
+       "low": -0.13,
+       "high": 0.01
+      },
+      {
+       "value": -0.07,
+       "low": -0.13,
+       "high": 0.0
+      }
+     ],
+     "gain": 3.0,
+     "k": 2,
+     "inside": true,
+     "refuted_by": "computed difference below 0.0",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m10:p3",
+     "measured": 0.0701219512195122,
+     "value": 0.06,
+     "low": 0.01,
+     "high": 0.13,
+     "nulls": [
+      {
+       "value": -0.12,
+       "low": -0.26,
+       "high": 0.02
+      },
+      {
+       "value": -0.12,
+       "low": -0.25,
+       "high": 0.02
+      }
+     ],
+     "gain": 3.0,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "computed difference below 0.0",
+     "refuted_by_met": false
+    },
+    {
+     "id": "r4-m10:p5",
+     "measured": 0.7959183673469388,
+     "value": 0.85,
+     "low": 0.68,
+     "high": 0.97,
+     "nulls": [
+      {
+       "value": 0.65,
+       "low": 0.38,
+       "high": 0.9
+      },
+      {
+       "value": 0.6,
+       "low": 0.3,
+       "high": 0.85
+      }
+     ],
+     "gain": 0.9677,
+     "k": 5,
+     "inside": true,
+     "refuted_by": "computed share below 0.65, or undefined",
+     "refuted_by_met": false
+    },
+    {
+     "k": 4,
+     "not_computable": "grader v3 (rln4_lib.grade_v3 -> n13_score.grade) needs the math_verify package, which this python3 does not have; the standard library cannot reproduce grader v3"
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r4-m11": {
+   "offline": 5,
+   "computed": 0,
+   "inside": 0,
+   "outside": 0,
+   "total_gain": 0,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "untested",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "k": 1,
+     "not_computable": "grader v3 (rln4_lib.grade_v3 -> n13_score.grade) needs the math_verify package, which this python3 does not have; the standard library cannot reproduce grader v3's equivalence test"
+    },
+    {
+     "k": 2,
+     "not_computable": "grader v3 (rln4_lib.grade_v3 -> n13_score.grade) needs the math_verify package, which this python3 does not have; the standard library cannot reproduce grader v3's equivalence test"
+    },
+    {
+     "k": 3,
+     "not_computable": "grader v3 (rln4_lib.grade_v3 -> n13_score.grade) needs the math_verify package, which this python3 does not have; the standard library cannot reproduce grader v3's equivalence test"
+    },
+    {
+     "k": 4,
+     "not_computable": "grader v3 (rln4_lib.grade_v3 -> n13_score.grade) needs the math_verify package, which this python3 does not have; the standard library cannot reproduce grader v3's equivalence test"
+    },
+    {
+     "k": 5,
+     "not_computable": "grader v3 (rln4_lib.grade_v3 -> n13_score.grade) needs the math_verify package, which this python3 does not have; the standard library cannot reproduce grader v3's equivalence test"
+    }
+   ],
+   "heldout_rows": []
+  },
+  "r4-m12": {
+   "offline": 4,
+   "computed": 1,
+   "inside": 1,
+   "outside": 0,
+   "total_gain": -0.319,
+   "heldout_claims": 0,
+   "strikes": 0,
+   "state": "untested",
+   "reasons": [],
+   "verdict": "",
+   "rows": [
+    {
+     "id": "r4-m12:p3",
+     "measured": 0.03125,
+     "value": 0.1,
+     "low": 0.02,
+     "high": 0.22,
+     "nulls": [
+      {
+       "value": 0.02,
+       "low": -0.1,
+       "high": 0.14
+      },
+      {
+       "value": 0.0,
+       "low": -0.15,
+       "high": 0.15
+      }
+     ],
+     "gain": -0.3194,
+     "k": 3,
+     "inside": true,
+     "refuted_by": "measured below 0.01",
+     "refuted_by_met": false
+    },
+    {
+     "k": 1,
+     "not_computable": "The recipe's equivalence E(a, g) requires sympy.parsing.latex.parse_latex (with its antlr4 backend) and numpy.random.default_rng(0) sample points; test scripts are restricted to the standard library, and a substitute LaTeX parser or RNG would not be the recipe as written."
+    },
+    {
+     "k": 2,
+     "not_computable": "The recipe's equivalence E(a, g) requires sympy.parsing.latex.parse_latex (with its antlr4 backend) and numpy.random.default_rng(0) sample points; test scripts are restricted to the standard library, and a substitute LaTeX parser or RNG would not be the recipe as written."
+    },
+    {
+     "k": 4,
+     "not_computable": "The recipe's equivalence E(a, g) requires sympy.parsing.latex.parse_latex (with its antlr4 backend) and numpy.random.default_rng(0) sample points; test scripts are restricted to the standard library, and a substitute LaTeX parser or RNG would not be the recipe as written."
+    }
+   ],
+   "heldout_rows": []
+  }
+ }
+}

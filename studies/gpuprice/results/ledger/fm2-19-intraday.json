@@ -1,0 +1,35 @@
+{
+ "name": "fm2-19-intraday",
+ "note": "fm2-17 plus --intraday: the day's maximum of each fastgpu_daily listing gives the state-conditional stay probability at 1 day and, for units whose next price equals the maximum (>= 0.9 of >= 5 days), the next day's price",
+ "utc": "2026-11-15T04:16:47+00:00",
+ "commit": "31dcdf0",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.305082,
+ "pinball": 0.02331,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.305818,
+ "skill_geomean": 0.390643,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.201118,
+   "in_band": 0.815311
+  },
+  "3": {
+   "skill_pooled": 0.25595,
+   "in_band": 0.753876
+  },
+  "7": {
+   "skill_pooled": 0.359623,
+   "in_band": 0.650194
+  }
+ },
+ "in_band": 0.740109
+}

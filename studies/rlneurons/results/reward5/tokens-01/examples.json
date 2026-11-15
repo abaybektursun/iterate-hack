@@ -1,0 +1,60 @@
+[
+ {
+  "code31_agrees": true,
+  "problem_index": 0,
+  "position_in_answer": 83,
+  "stored_token_id": 2100,
+  "r": {
+   "math31": -0.434,
+   "code31": -1.196,
+   "theta0.25": 0.048,
+   "random": -0.009,
+   "math30": -2.933,
+   "code30": -2.076,
+   "if30": -1.525,
+   "general30": -0.085,
+   "mix30": -1.226
+  },
+  "top_token_id": {
+   "base": 5810,
+   "math31": 5810,
+   "code31": 5810,
+   "theta0.25": 5810,
+   "random": 5810,
+   "math30": 763,
+   "code30": 5810,
+   "if30": 5810,
+   "general30": 5810,
+   "mix30": 5810
+  }
+ },
+ {
+  "code31_agrees": false,
+  "problem_index": 0,
+  "position_in_answer": 7,
+  "stored_token_id": 52524,
+  "r": {
+   "math31": -0.554,
+   "code31": 0.247,
+   "theta0.25": -0.014,
+   "random": 0.0,
+   "math30": 0.363,
+   "code30": 0.392,
+   "if30": 0.114,
+   "general30": -0.013,
+   "mix30": 0.266
+  },
+  "top_token_id": {
+   "base": 1486,
+   "math31": 1486,
+   "code31": 52524,
+   "theta0.25": 1486,
+   "random": 1486,
+   "math30": 52524,
+   "code30": 52524,
+   "if30": 52524,
+   "general30": 1486,
+   "mix30": 52524
+  }
+ }
+]
