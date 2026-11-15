@@ -1,0 +1,26 @@
+{
+ "commit": "2a88c41",
+ "command": "studies/theory/lib/forecast.py make studies/theory/results/forecast/run-07 --propose 6 --lens problem structure: difficulty, domain, answer type, length of the needed derivation",
+ "utc": "2026-11-15T16:32:52",
+ "round": "studies/theory/results/engine/round-07",
+ "targets": 24,
+ "propose": 6,
+ "lens": "problem structure: difficulty, domain, answer type, length of the needed derivation",
+ "forecasters": [
+  "reader-1",
+  "reader-2",
+  "r5-m03-rival",
+  "r6-account-rival",
+  "r6-m06",
+  "r7-m05",
+  "r7-m08",
+  "r7-m11",
+  "f2-m01",
+  "f2-m02",
+  "f2-m03",
+  "f2-m04",
+  "f2-m05",
+  "f2-m06"
+ ],
+ "job_dirs": "/var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-riddrrot"
+}
