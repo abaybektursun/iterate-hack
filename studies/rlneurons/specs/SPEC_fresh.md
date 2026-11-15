@@ -112,6 +112,23 @@ base's vote is at or above RL's.
 | precision of finished answers | 80 % [70, 88] | 50 % [40, 60] | 42 % [32, 52] |
 | tokens per sample | 12,000 | 11,000 | 11,000 |
 
-P1. Vote, Think-SFT minus RL: +7 points (10 problems), interval half-width 5 to 6 points.
-P2. On the Hugging Face subset (59): Think-SFT vote 26, RL 20, base 14.
-P3. On HMMT November (49): the three models are closest there (Think-SFT 35, RL 33, base 27).
+P1. Vote, Think-SFT minus RL: +7 points (10 problems), interval half-width 5 to 6 points. Refuted if the point estimate is
+below +2 or above +12 points (fewer than 3 or more than 16 problems), or if the half-width of the paired interval is outside
+4 to 7 points.
+P2. On the Hugging Face subset (59): Think-SFT vote 26, RL 20, base 14. Refuted if Think-SFT's vote is not above RL's on the
+59, or if any of the three counts is more than 6 problems from its prediction.
+P3. On HMMT November (49): the three models are closest there (Think-SFT 35, RL 33, base 27). Refuted if the vote difference
+Think-SFT minus RL in points is larger on HMMT November than on the other 87 problems, or if any of the three counts is more
+than 6 problems from its prediction.
+
+Added 2026-11-15 after the main session's review, before any full-run row was read (the jobs were running; only the 10-row
+smoke of the cued base had been read): the refuting observations of P1 to P3 above, and two notes on the set.
+
+- `hmmt_feb2026/9` (gold `50(1 - \frac{1}{2^{101} - 1})`): grader v3 takes a boxed 50.0 or 49.9999999 as right but not 50
+  (found by the main session). Grader and data stay as they are; this problem's 12 samples are read by hand and every headline
+  number is reported twice, as graded and without this problem (n = 135).
+- `aime2026/25` has MathArena's wording (the sum of all possible BC, gold 850), which differs from the contest paper's; it is
+  self-consistent and kept.
+- The Think-SFT training data (`allenai/Dolci-Think-SFT-7B` @ `83f618e`, every message of every row) is scanned for the 136
+  with the rule of `analysis/wsp1_sft_overlap.py --turns all`; flags are reported, and every headline number is also given
+  without flagged problems.
