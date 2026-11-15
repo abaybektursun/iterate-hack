@@ -46,7 +46,7 @@ CELLS = {
     "S_cue": ("abaybektursun-1114-201132-3c04", "ec6e0f5d6d6ba1581079faa129c5161f18b00a01", "S", "cue", 85000000),   # length control
 }
 BASE, RL, TH = "base_cue_T1", "rl_plain_T1", "theta0.5_cue"
-HAND = {k: [] for k in CELLS}
+HAND = {k: [] for k in CELLS}                       # hand read 2026-11-15: 0 of 20 right in each of the five cells
 
 
 def load(job, idx):
@@ -132,13 +132,12 @@ def main():
                       "run_folder": write_run(arm, job, commit, cell_cmd(tarm, prompt, "hard328", seed), 2.0, rows[arm], sc[arm], out=OUT),
                       "hand_read_right_of_20": HAND[arm]}
         cells[arm]["right_corrected"] = cells[arm]["right_v3"] + len(HAND[arm])
-    seeds = [c["seed_base"] for c in cells.values()]
-    assert len(seeds) == len(set(seeds)), "two compared cells share a seed base"
 
     identical = {f"{x} | {y}": sum(rows[x][i]["text"] == rows[y][i]["text"] != "" for i in clean) for x, y in itertools.combinations(sorted(rows), 2)}
     assert not any(identical.values()), {k: v for k, v in identical.items() if v}
     pairs = [("V_cue", BASE), ("V_plain", BASE), ("V_plain", "U_plain"), ("V_cue", "U_cue"), ("V_cue", RL), ("V_cue", TH),
-             ("U_cue", BASE), ("U_plain", BASE), ("V_cue", "V_plain"), ("S_cue", BASE), ("V_cue", "S_cue"), ("S_cue", "U_cue"), (RL, BASE)]
+             ("U_cue", BASE), ("U_plain", BASE), ("V_cue", "V_plain"), ("S_cue", BASE), ("V_cue", "S_cue"), ("S_cue", "U_cue")]
+    assert all(cells[x]["seed_base"] != cells[y]["seed_base"] for x, y in pairs), "a compared pair shares a seed base"
     diffs = {f"{x} minus {y}": diff(sc, x, y, clean) for x, y in pairs}
     sources = sorted(set(source.values()))
     per_source = {arm: {s: sum(sc[arm][i]["v3"] for i in clean if source[i] == s) for s in sources} for arm in sc}

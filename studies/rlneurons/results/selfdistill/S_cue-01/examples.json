@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 1492,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "+ e = 853\nSubtract: 4d = 287 => d = 287/4. Then e = 566 -16d = 566 -16*(287/4) = 566 -4*287 = 566 -1148 = -582. Correct.\n\nSo P(0) is 698, Q(0) is -582. 698 -582 = 116. That seems right. Let me verify with the points.\n\nFor P(16): 2*(16)^2 - (289/4)*16 + 698. 16^2 is 256. 2*256=512. (289/4)*16 = 289*4=1156. So 512 -1156 +698 = (512 +698) -1156 = 1210 -1156=54. Correct.\n\nFor P(20): 2*400 - (289/4)*20 +698. 800 - (289*5) +698. 289*5=1445. 800 +698=1498. 1498 -1445=53. Correct.\n\nFor Q(16): -2*256 + (287/4)*16 -582. -512 + 4*287 -582. 4*287=1148. So -512 +1148 =636. 636 -582=54. Correct.\n\nFor Q(20): -2*400 + (287/4)*20 -582. -800 +5*287 -582. 5*287=1435. So -800 +1435=635. 635 -582=53. Correct.\n\nAll points check out. So the answer is 116.\n\n**Answer:** The value of $P(0) + Q(0)$ is $\\boxed{116}$."
+ },
+ "wrong": {
+  "problem_index": 29,
+  "gold": "244",
+  "extracted_v3": "59",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 13183,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "r**\n\\boxed{59}\n\n\nTo solve the problem of finding the number of bounded regions formed by two parallel lines $\\ell_A$ and $\\ell_B$ with points $A_1, A_2, \\ldots, A_7$ on $\\ell_A$ and $B_1, B_2, \\ldots, B_5$ on $\\ell_B$, we use the formula derived from combinatorial geometry for the number of bounded regions in such an arrangement. \n\nThe formula for the number of bounded regions when connecting each point $A_i$ to each point $B_j$ without crossing segments (except at endpoints) is given by:\n\n\\[\nR = 2mn - m - n + 1\n\\]\n\nwhere $m$ is the number of points on $\\ell_A$ and $n$ is the number of points on $\\ell_B$.\n\nFor $m = 7$ and $n = 5$:\n\n\\[\nR = 2 \\times 7 \\times 5 - 7 - 5 + 1\n\\]\n\\[\nR = 70 - 7 - 5 + 1\n\\]\n\\[\nR = 70 - 12 + 1\n\\]\n\\[\nR = 59\n\\]\n\nThus, the number of bounded regions is:\n\n\\[\n\\boxed{59}\n\\]"
+ }
+}
