@@ -1,0 +1,206 @@
+{
+ "no_letter": {
+  "base_plain": {
+   "mmlupro": 120,
+   "bbh": 94,
+   "all": 214
+  },
+  "base_cue": {
+   "mmlupro": 16,
+   "bbh": 14,
+   "all": 30
+  },
+  "rl_plain": {
+   "mmlupro": 9,
+   "bbh": 4,
+   "all": 13
+  },
+  "sft_cue": {
+   "mmlupro": 3,
+   "bbh": 3,
+   "all": 6
+  }
+ },
+ "pairs": {
+  "base_cue - base_plain | mmlupro": {
+   "n_both_answer": 118,
+   "right_first": 53,
+   "right_second": 41,
+   "points": 10.169491525423728,
+   "bootstrap95": [
+    0.0,
+    20.33898305084746
+   ]
+  },
+  "base_cue - base_plain | bbh": {
+   "n_both_answer": 146,
+   "right_first": 103,
+   "right_second": 82,
+   "points": 14.383561643835616,
+   "bootstrap95": [
+    4.109589041095885,
+    25.342465753424648
+   ]
+  },
+  "base_cue - base_plain | all": {
+   "n_both_answer": 264,
+   "right_first": 156,
+   "right_second": 123,
+   "points": 12.5,
+   "bootstrap95": [
+    4.924242424242431,
+    19.696969696969695
+   ]
+  },
+  "rl_plain - base_plain | mmlupro": {
+   "n_both_answer": 124,
+   "right_first": 67,
+   "right_second": 46,
+   "points": 16.93548387096774,
+   "bootstrap95": [
+    7.258064516129031,
+    26.61290322580645
+   ]
+  },
+  "rl_plain - base_plain | bbh": {
+   "n_both_answer": 153,
+   "right_first": 119,
+   "right_second": 87,
+   "points": 20.915032679738562,
+   "bootstrap95": [
+    11.111111111111116,
+    30.718954248366014
+   ]
+  },
+  "rl_plain - base_plain | all": {
+   "n_both_answer": 277,
+   "right_first": 186,
+   "right_second": 133,
+   "points": 19.133574007220215,
+   "bootstrap95": [
+    11.913357400722024,
+    26.35379061371841
+   ]
+  },
+  "sft_cue - base_plain | mmlupro": {
+   "n_both_answer": 129,
+   "right_first": 67,
+   "right_second": 48,
+   "points": 14.728682170542635,
+   "bootstrap95": [
+    4.651162790697672,
+    24.8062015503876
+   ]
+  },
+  "sft_cue - base_plain | bbh": {
+   "n_both_answer": 154,
+   "right_first": 127,
+   "right_second": 87,
+   "points": 25.974025974025974,
+   "bootstrap95": [
+    16.883116883116887,
+    35.064935064935064
+   ]
+  },
+  "sft_cue - base_plain | all": {
+   "n_both_answer": 283,
+   "right_first": 194,
+   "right_second": 135,
+   "points": 20.848056537102472,
+   "bootstrap95": [
+    14.13427561837456,
+    27.915194346289752
+   ]
+  },
+  "rl_plain - base_cue | mmlupro": {
+   "n_both_answer": 226,
+   "right_first": 126,
+   "right_second": 112,
+   "points": 6.1946902654867255,
+   "bootstrap95": [
+    -0.4424778761061954,
+    12.389380530973455
+   ]
+  },
+  "rl_plain - base_cue | bbh": {
+   "n_both_answer": 232,
+   "right_first": 185,
+   "right_second": 168,
+   "points": 7.327586206896552,
+   "bootstrap95": [
+    0.8620689655172487,
+    13.793103448275856
+   ]
+  },
+  "rl_plain - base_cue | all": {
+   "n_both_answer": 458,
+   "right_first": 311,
+   "right_second": 280,
+   "points": 6.7685589519650655,
+   "bootstrap95": [
+    2.183406113537112,
+    11.353711790393017
+   ]
+  },
+  "sft_cue - base_cue | mmlupro": {
+   "n_both_answer": 231,
+   "right_first": 129,
+   "right_second": 114,
+   "points": 6.4935064935064934,
+   "bootstrap95": [
+    -0.43290043290044045,
+    13.85281385281385
+   ]
+  },
+  "sft_cue - base_cue | bbh": {
+   "n_both_answer": 233,
+   "right_first": 191,
+   "right_second": 169,
+   "points": 9.44206008583691,
+   "bootstrap95": [
+    3.004291845493567,
+    15.879828326180256
+   ]
+  },
+  "sft_cue - base_cue | all": {
+   "n_both_answer": 464,
+   "right_first": 320,
+   "right_second": 283,
+   "points": 7.974137931034483,
+   "bootstrap95": [
+    3.232758620689657,
+    12.93103448275862
+   ]
+  },
+  "sft_cue - rl_plain | mmlupro": {
+   "n_both_answer": 239,
+   "right_first": 133,
+   "right_second": 133,
+   "points": 0.0,
+   "bootstrap95": [
+    -6.694560669456062,
+    6.286610878660936
+   ]
+  },
+  "sft_cue - rl_plain | bbh": {
+   "n_both_answer": 243,
+   "right_first": 202,
+   "right_second": 197,
+   "points": 2.05761316872428,
+   "bootstrap95": [
+    -3.292181069958855,
+    7.4074074074074066
+   ]
+  },
+  "sft_cue - rl_plain | all": {
+   "n_both_answer": 482,
+   "right_first": 335,
+   "right_second": 330,
+   "points": 1.037344398340249,
+   "bootstrap95": [
+    -3.112033195020747,
+    5.186721991701249
+   ]
+  }
+ }
+}

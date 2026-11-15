@@ -149,6 +149,10 @@ TABLE = {
     "a-quarter-of-rl": {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.Q_M} %", "of the gain", "MATH-500, a = 0.25"]},
+    "hand-written-edit": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.DATA['states'][0]['right']} → {m.DATA['states'][2]['right']}", "right of 500",
+                             f"MATH-500, plain prompt, one hand-written edit to one matrix; a random edit {m.DATA['states'][1]['right']}"]},
     "eight-directions": {
         "group": WEIGHTS,
         "figure": lambda m: [signed(m.DATA["vs_cue_hard"]["points"]), "points",

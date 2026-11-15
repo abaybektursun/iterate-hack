@@ -1,0 +1,16 @@
+Installed 36 packages in 66ms
+Jobs of frustea, last 3 h:  id  state  gpu  wait  run  command
+  frustea-1115-070342-8bf4  done  NVIDIA H100   0.1  2.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  frustea-1115-070655-258c  done  NVIDIA H100   0.1  7.5  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  frustea-1115-070659-494e  done  NVIDIA H100   0.1  11.7  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  frustea-1115-070704-88e2  done  NVIDIA H100   0.1  16.9  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  frustea-1115-070709-bf07  done  NVIDIA H100   0.1  17.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  5 jobs, 0 failed or cancelled; median wait 0.1; 56.3 container minutes, 0.0 of them in failed or cancelled jobs
+
+Work of frustea, last 3 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-466a39  ali/theory07  -  -  -  57  0  0  theory round 07, taken over from work-8fd317 (owner silent 8
+  work-8cde9c  ali/ood  1  21  1  24  5  0  Outside math and code: the Math cue on the base, RL-Zero-Mat
+
+Team, last 3 h: claim to close median 92 min, upper quartile 274 min, over 7 work items closed by 2 people; 10 results, 3.3 per hour.
+
+Median minutes per stage over work items with jobs: to-job 1, jobs 21, to-answer 1. Slowest stage: jobs.
