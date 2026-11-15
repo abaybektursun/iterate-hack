@@ -1,0 +1,4 @@
+gpu.check_cmd exists: False
+abaybektursun-1115-161411-496b refused at submit: False
+abaybektursun-1115-161425-4575 refused at submit: False
+jobs checked: 363 refused: 0

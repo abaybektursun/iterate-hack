@@ -1,0 +1,10 @@
+gpu.check_cmd exists: True
+abaybektursun-1115-161411-496b refused at submit: True
+abaybektursun-1115-161425-4575 refused at submit: True
+jobs checked: 363 refused: 6
+  abaybektursun-1115-140534-0f14 exit 2 the job has no git, so $(git ...) would expand to nothing there: put the command
+  abaybektursun-1115-140553-3388 exit 2 the job has no git, so $(git ...) would expand to nothing there: put the command
+  abaybektursun-1115-140607-f3e1 exit 2 the job has no git, so $(git ...) would expand to nothing there: put the command
+  abaybektursun-1115-140620-fd69 exit 2 the job has no git, so $(git ...) would expand to nothing there: put the command
+  abaybektursun-1115-161411-496b exit 1 --model --model-label: give --model, or --model-path with --model-label
+  abaybektursun-1115-161425-4575 exit 1 --model --model-label: give --model, or --model-path with --model-label

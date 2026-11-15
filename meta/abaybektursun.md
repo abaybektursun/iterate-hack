@@ -1,5 +1,21 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 22:58 UTC (paper loop 5, after result-bd61b5 of work-184476) meta/reviews/abaybektursun/20261115-2258-paper6/
+
+- Previous paper entry's open items: no job exited 2 on an empty --commit since (cycle.txt, 35 jobs). The decisive cells ran as Modal shards from the start: 12 control jobs launched 20:48 with the data layer and the literature read (12 papers: unpublished).
+- Direction: paper 6 (Finishing Is Low-Rank, Right Answers Are Not) splits the RL-Math change on hard328 into direction 1 and directions 2-8 with a norm-matched control; it tests which part of the published RL gain a reward-free edit reaches. The data layer overturned the thesis twice before any draft; the no-cue cells refuted our own filed prediction (P7) and became the strongest section. Not on the site: main frozen at 22:30, the paper needs the owner's go.
+- Turnaround: scout 20:44 to branch commit 7959713e at 22:56 (git), 132 min (paper 5: 84, paper 4: 60). 20 GPU jobs, ~36 USD against 30 budgeted (both rounds over: per-job estimate ~1 USD, actual ~1.8). cycle.txt (2.3 h): 35 jobs, 4 failed, 2.9 of 692.2 container min in them, median wait 0.5. work-16b37f: to-job 0, jobs 63, to-answer 5; work-b7857c: to-job 1, jobs 35, to-answer 14.
+- Slowest stage: GPU wall time of the control cells (20:57-21:55 and 22:12-22:44), each a 328 cell in 2 shards of ~25-54 min; 3 jobs (720e, c2cc, 7546) also waited 19-23 min in the queue. Avoidable loss: 496b and 4575 exited 1 after 0.2 min on `--model` + `--model-label` (run_cell's own assert, inside the container), resubmitted ~1 min later.
+- Change (step 2 found nothing to delete; step 3): `gpu.py submit` calls `check_cmd`, which refuses any `&&` part holding `--model` with `--model-path`/`--model-label` (or only one of the pair) before anything uploads; the $(git check moved into it.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | 496b, 4575 refused at submit | no, no | yes, yes | fixed | 2 and 2 | before.txt, after.txt |
+  | past jobs refused (must be failed jobs only) | 0 of 363 | 6 of 363, all exit 1 or 2; 0 that finished | | 363 | after.txt |
+
+- Not changed: the shard count. The loss it targets (~55 min per cell) is larger, but 15 parallel jobs already hit 19-23 min queue waits, so more shards need the GPU limit raised first: not verifiable from past timings tonight.
+- Next entry checks: no job exits 1 on the model-flag assert; queue wait of the next 10+ job launch; the per-job cost estimate against the actual.
+
 ## 2026-11-15 22:10 UTC (loop cycle 16, step-back 4; no tool change, no skill edit) meta/reviews/abaybektursun/20261115-2206/
 
 - Target (Team line, 4 h): claim to close median 14 min (48 at 21:04), upper quartile 56 min (106), 70 items by 3 people (34); 19.2 results per hour (10.2). The window holds many short items (site pages, offline tests on stored rows). Items with GPU jobs: to-job 3, jobs 50, to-answer 3 min. Modal 96 jobs, 4 failed or cancelled with 3.9 of 2,108.5 container min, wait 0.2 min.

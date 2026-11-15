@@ -84,6 +84,17 @@ def state(r):
     return "done"
 
 
+def check_cmd(cmd):
+    """Refuse, before anything uploads, a command that would fail at once in the container."""
+    assert "$(git" not in cmd and "`git" not in cmd, ("the job has no git, so $(git ...) would expand to nothing there: "
+                                                      "put the command in double quotes, so it expands here")
+    for part in cmd.split("&&"):  # run_cell, run_code_cell, egate_cell: --model, or --model-path with --model-label
+        words = shlex.split(part)
+        has = {w for w in words if w in ("--model", "--model-path", "--model-label")}
+        assert has in (set(), {"--model"}, {"--model-path", "--model-label"}), (
+            f"{' '.join(sorted(has))}: give --model, or --model-path with --model-label")
+
+
 def submit(args):
     gpu_class, rest = args[0], args[1:]
     assert gpu_class in CLASSES, f"class must be one of {CLASSES}"
@@ -93,8 +104,7 @@ def submit(args):
     assert rest[0] == "--", "put the command after --"
     assert gpu_class != "short" or hours <= 0.5, "the short class (an H100 kept free for smoke runs) takes --hours 0.5 at most"
     cmd = rest[1] if len(rest) == 2 else shlex.join(rest[1:])
-    assert "$(git" not in cmd and "`git" not in cmd, ("the job has no git, so $(git ...) would expand to nothing there: "
-                                                      "put the command in double quotes, so it expands here")
+    check_cmd(cmd)
 
     assert not git("status", "--porcelain", "--untracked-files=no"), "commit your changes first: a job runs one commit"
     if untracked := git("ls-files", "--others", "--exclude-standard"):  # not in the commit, so not in the job
