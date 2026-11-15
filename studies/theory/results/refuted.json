@@ -152,5 +152,21 @@
   "verdict": "refuted",
   "measured": "loop share past 4,096 tokens (plain base, T 0.6 / top-p 0.95, hard328) 0.519 [0.460, 0.577], n 189; null (cued base T 1.0) 0.004; cued T 0.6 0.626 [0.574, 0.683], n 211",
   "added": "2026-11-15T22:49:50Z"
+ },
+ {
+  "mechanism": "round-14/s4-a",
+  "claim": "Code-RL's top-8 directions push every solution-started sample into Math-like deliberation, so almost no m21 right answer stays plain-short (S 0.0-0.12).",
+  "result": "result-1d64b9",
+  "verdict": "refuted",
+  "measured": "S 0.414 [0.319, 0.510] (65 of 157 m21 right answers at or below the plain base's median right length, 1,069 tokens), n 157, null 0.50; interval wholly above a's range 0.0-0.12",
+  "added": "2026-11-15T22:50:38Z"
+ },
+ {
+  "mechanism": "round-14/s5-b",
+  "claim": "The cued base's wrong answers on contested MATH-500 problems concentrate on one recurring attractor value per problem, so their pooled same-problem pairwise agreement is high (range 0.42-1.0).",
+  "result": "result-064aac",
+  "verdict": "refuted",
+  "measured": "pooled wrong-pair agreement 0.262 [0.202, 0.324], n 142 problems (1,271 pairs, 570 wrong answers), null 0.005; interval wholly below 0.42",
+  "added": "2026-11-15T22:50:57Z"
  }
 ]
