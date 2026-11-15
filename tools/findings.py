@@ -95,6 +95,10 @@ TABLE = {
     "imitation-beats-rl": {
         "group": NO_REWARD,
         "figure": lambda m: [signed(m.DATA["diff"]["hard328"]["vote"][0]), "points", "328 harder problems, Think-SFT over RL"]},
+    "cut-off-is-unfinished": {
+        "group": NO_REWARD,
+        "figure": lambda m: [f"{m.DATA['cells']['sft_cue']['right_at_16384_same_answers']} → {m.DATA['cells']['sft_cue']['right_at_32768']}", "right of 328",
+                             "328 harder problems, Think-SFT + cue, tokens allowed 16,384 → 32,768"]},
     "where-the-gap-goes": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.pc(m._RL['parts']['reliability'][1])} %", "of the gap",
