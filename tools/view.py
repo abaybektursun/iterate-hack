@@ -350,17 +350,22 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 .chart a:hover .dot, .chart a:focus-visible .dot, .chart a:hover .x, .chart a:focus-visible .x { stroke: var(--ink); }
 .chart .has-sel .tread, .chart .has-sel .rise, .chart .has-sel .ci, .chart .has-sel .mark, .chart .has-sel text.gain { opacity: calc(var(--dim) + .12); transition: opacity .28s ease; }
 .chart .has-sel .on { opacity: 1; }
+.chart .ckey { display: flex; flex-wrap: wrap; gap: 2px 16px; margin: 6px 0 0; font-size: 13px; line-height: 18px; color: var(--mute); }
+.chart .ckey span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.chart .ckey svg { display: inline-block; }
 h2 { font-size: 13px; font-weight: 600; color: var(--mute); display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; padding-bottom: 7px; }
 h2 .count { font-weight: 400; color: var(--faint); }
 .lrow {
-  display: grid; grid-template-columns: 3.5em minmax(0, 1fr) auto; column-gap: 14px; align-items: baseline; width: 100%;
+  display: grid; grid-template-columns: 3.5em minmax(0, 1fr) auto .6em; column-gap: 14px; align-items: baseline; width: 100%;
   padding: 8px 0; border-top: 1px solid var(--rule); font-size: 14.5px; line-height: 1.35;
 }
 .lrow > b { font-size: 15px; font-weight: 620; font-stretch: 108%; text-align: right; }
 .lrow .lt { min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .lrow .lt small { font-size: 13px; color: var(--mute); margin-left: 7px; }
 .lrow .lr { font-size: 13px; color: var(--mute); white-space: nowrap; }
-.lrow .flag { color: var(--faint); margin-left: 9px; }
+.lrow .flag { color: var(--mute); margin-left: 9px; }
+.lrow .chev { color: var(--mute); justify-self: end; display: inline-block; transition: transform .15s ease; }
+.lrow[aria-expanded="true"] .chev { transform: rotate(90deg); }
 .lrow.noise > b { color: var(--faint); }
 .lrow:hover .lt { text-decoration: underline 1px; text-underline-offset: 3px; text-decoration-color: color-mix(in srgb, currentColor 40%, transparent); }
 .lrow[aria-expanded="true"] > b { color: var(--blue); }
@@ -539,7 +544,8 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .people { margin-left: 0; }
   .search { width: 100%; }
   .search input { width: 100%; }
-  .lrow { grid-template-columns: 3.1em minmax(0, 1fr); }
+  .lrow { grid-template-columns: 3.1em minmax(0, 1fr) .6em; }
+  .lrow .chev { grid-column: 3; grid-row: 1; }
   .lrow .lt { white-space: normal; }
   .lrow .lt small { display: block; margin-left: 0; }
   .lrow .lr { grid-column: 2; }
@@ -552,6 +558,13 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .pbody { padding: 16px 16px 40px; }
   .lane, .axis { grid-template-columns: 104px minmax(0, 1fr); }
   .key .keys-hint { display: none; }
+}
+@media (max-width: 699px) {
+  .ladder { order: -1; }
+  .top { padding-bottom: 2px; }
+  .top a { padding: 11px 0; }
+  .benches { flex-wrap: nowrap; gap: 4px 12px; margin-top: 2px; font-size: 12.5px; overflow-x: auto; scrollbar-width: none; }
+  .benches button { padding: 10px 0; white-space: nowrap; flex: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .arrived, .panel, .scrim, .sd { animation: none; }
@@ -946,14 +959,13 @@ function hero() {
     put($("chart"), ""); put($("ladder"), ""); put($("n-steps"), "");
     return;
   }
-  const { lead, rl, rlP, pts } = b, gap = rl ? rlP - lead.p : null, ci = rl && diffCI(rl, lead.s), after = pts.length - 1 - lead.i;
+  const { lead, rl, rlP, pts } = b, gap = rl ? rlP - lead.p : null, ci = rl && diffCI(rl, lead.s);
   const head = `The ${tb("untrained base")} model scores <b class="base">${f1(lead.p)} %</b> on <span class="nb">${tb(b.name)}</span>`, rlm = `the ${tb("RL-trained")} model`;
   const say = !rl ? `${head}. No RL score is posted on this benchmark.`
     : Math.abs(gap) < .05 ? `${head}, the same as ${rlm}.`
     : gap > 0 ? `${head}, <b>${f1(gap)}</b> points below ${rlm} at <b>${f1(rlP)} %</b>.`
     : `${head}, <b>${f1(-gap)}</b> points above ${rlm} at <b>${f1(rlP)} %</b>.`;
-  const sub = `${lead.s.right} of ${lead.s.n} right.` + (rl ? ` The gap's ${tb("95 % interval")} is ${f1(ci[0])} to ${f1(ci[1])} points.` : "") +
-    ` Last record ${durHM(mins(Number(lead.s.sk.slice(0, 20))))} ago, ${after ? `${after} attempt${after > 1 ? "s" : ""}` : "no attempts"} since.`;
+  const sub = `${lead.s.right} of ${lead.s.n} right.` + (rl ? ` The gap's ${tb("95 % interval")} is ${f1(ci[0])} to ${f1(ci[1])} points.` : "");
   const w = words(lead, b), noise = lead.prev && !lead.clears;  // what weakens the number in the sentence, said under it
   const doubt = [noise ? `The last step, +${f1(lead.p - lead.prev.p)}, is within noise.` : "", w.caveat ? firstSentence(w.caveat) : ""].filter(Boolean).join(" ");
   put($("lede"), `<p class="say">${say}</p><p class="sub">${sub}</p>` +
@@ -971,9 +983,9 @@ function ladder(b) {
     const noise = q.prev && !q.clears, on = q === sel, id = `step-${q.s.right}`;
     return `<button class="lrow${noise ? " noise" : ""}" data-step="${q.s.right}" data-fkey="${id}" aria-expanded="${on}"${on ? ` aria-controls="sd-${q.s.right}"` : ""}>` +
       `<b>${q.prev ? "+" + f1(q.p - q.prev.p) : "start"}</b><span class="lt">${esc(stepTitle(q, b))}</span>` +
-      `<span class="lr">${q.prev ? f1(q.prev.p) + " → " : ""}${f1(q.p)}${noise ? ` <span class="flag">within noise</span>` : ""}</span></button>` + (on ? detail(q, b) : "");
+      `<span class="lr">${q.prev ? f1(q.prev.p) + " → " : ""}${f1(q.p)}${noise ? ` <span class="flag">within noise</span>` : ""}</span><span class="chev" aria-hidden="true">›</span></button>` + (on ? detail(q, b) : "");
   });
-  const rl = b.rl ? `<a class="lrow rl" href="#${esc(b.rl.result)}" data-fkey="step-rl"><b>${f1(b.rlP)}</b><span class="lt">RL-trained model <small>${esc(b.rl.config.replace(note, ""))}</small></span><span class="lr"></span></a>` : "";
+  const rl = b.rl ? `<a class="lrow rl" href="#${esc(b.rl.result)}" data-fkey="step-rl"><b>${f1(b.rlP)}</b><span class="lt">RL-trained model, the target</span><span class="lr"></span></a>` : "";
   put($("ladder"), rl + rows.join(""));
 }
 
@@ -990,8 +1002,8 @@ function detail(q, b) {
   }
   const why = w.why ? rich(w.why, T) : "No explanation in plain words is written for this step yet.";
   const real = (prev ? `${prev.s.n === s.n ? `${prev.s.right} → ${s.right} of ${s.n}` : `${prev.s.right} of ${prev.s.n} → ${s.right} of ${s.n}`}. ` +
-      (q.clears ? `It clears the ${tb("95 % interval")} of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])}).`
-                : `${tb("Within noise")}: ${f1(q.p)} % is inside the 95 % interval of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])}).`)
+      (q.clears ? `Larger than chance: ${f1(q.p)} % is above the ${tb("95 % interval")} of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])}).`
+                : `Too small to tell from chance: ${f1(q.p)} % is inside the ${tb("95 % interval")} of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])}).`)
     : `${s.right} of ${s.n} right. Its ${tb("95 % interval")} is ${f1(q.ci[0])} to ${f1(q.ci[1])} %.`);
   const cost = (s.tokens ? `${num(s.tokens)} ${tb("tokens per problem")}` + (prev ? (prev.s.tokens ? `; ${num(prev.s.tokens)} at the step before.` : "; not recorded at the step before.") : ".")
     : "Tokens per problem are not recorded for this score.");
@@ -1012,9 +1024,17 @@ function textWidth(t) {
 }
 function drawChart() {
   const el = $("chart"), b = S.benches && bench();
-  if (b && el.clientWidth) put(el, chart(b, el.clientWidth, el.clientHeight, small.matches));
+  if (b && el.clientWidth) put(el, chart(b, el.clientWidth, el.clientHeight - (small.matches ? KEY_H * 2 - 4 : KEY_H), small.matches) + chartKey());
 }
 
+/* The key under the chart, drawn with the chart's own marks */
+const KEY_H = 24;  // the height of the key's one line and its margin, taken from the chart's height (two lines on a narrow screen)
+const glyph = inner => `<svg width="12" height="12" viewBox="-6 -6 12 12" aria-hidden="true">${inner}</svg>`;
+const chartKey = () => `<p class="ckey">` +
+  `<span>${glyph('<circle class="dot rec" r="4.5" style="stroke-width:0"/>')}record</span>` +
+  `<span>${glyph('<circle class="dot" r="3"/>')}other attempt</span>` +
+  `<span>${glyph('<path class="x" d="M-3.5,-3.5l7,7m0,-7l-7,7"/>')}plain prompt, no cue</span>` +
+  `<span>${glyph('<line class="ci" x1="0" x2="0" y1="-6" y2="6" style="opacity:1"/>')}95 % interval</span></p>`;
 function chart(b, W, H, narrow) {
   const { pts, lead, rl, rlP } = b, sel = stepOf(b);
   const { lo, hi } = b, T = 18, B = 24, L = narrow ? 26 : 30, R = 60;
