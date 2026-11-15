@@ -69,8 +69,10 @@ import architecture
 import board
 import climb
 import demo
+import exa_page
 import findings
 import glossary
+import pastdev
 import psychosis
 import sitekit
 import team
@@ -258,6 +260,10 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", PROOF_PAGE)
         if path.startswith("/proof/") and path[len("/proof/"):] in PROOFS:
             return self.send(200, "text/html", PROOFS[path[len("/proof/"):]].PAGE)
+        if path == "/exa":
+            return self.send(200, "text/html", exa_page.PAGE)
+        if path == "/pastdev":
+            return self.send(200, "text/html", pastdev.PAGE)
         if path == "/psychosis":
             return self.send(200, "text/html", psychosis.PAGE)
         if path == "/favicon.svg":
