@@ -1,6 +1,6 @@
 """Do the RL models make the base's own wrong steps less likely? Readout (specs/SPEC_wrongstep.md).
 
-    uv run --no-project --with numpy python -m studies.rlneurons.analysis.wrongstep <job-id>
+    uv run --no-project --with numpy python -m studies.rlneurons.analysis.wrongstep <job-id> [<run folder name, default math500-01>]
 
 Run from the repository root. Input (not committed): runs/<job-id>/ of `jobs/score_tokens.py --labels ...` (`uv run tools/gpu.py
 get <job-id>`). Writes results/wrongstep/math500-01/ (metrics.json, items.json, run.json).
@@ -15,7 +15,7 @@ import sys
 import numpy as np
 
 RUNS = pathlib.Path("runs")
-OUT = pathlib.Path(__file__).resolve().parents[1] / "results" / "wrongstep" / "math500-01"
+OUT = pathlib.Path(__file__).resolve().parents[1] / "results" / "wrongstep" / (sys.argv[2] if len(sys.argv) > 2 else "math500-01")
 N_CONTROL, HEAD = 200, 5
 
 
