@@ -16,6 +16,8 @@ speaks about. predictions/null-1.jsonl and null-2.jsonl hold a number for every 
       win = divergent and the measured value is inside the interval; loss = divergent and it is outside.
       A theory is a candidate with wins >= 2 and wins > losses. It passes when, in addition, its net (wins - losses)
       is above the net of its reversal, claims/<theory>.rev.jsonl: the same theory with every effect reversed.
+      Targets of the items listed in exposed.json (when the file exists) are left out: their numbers reached the
+      agents by another way, e.g. a commit subject in the git status that Claude Code gives every subagent.
       Writes metrics_v2.json and prints the table.
 """
 import json
@@ -58,10 +60,12 @@ def tally(claims, value, nulls):
 
 
 def score(folder):
-    value = {t["id"]: t["value"] for t in read(folder / "targets.jsonl")}
+    exposed = json.loads((folder / "exposed.json").read_text())["items"] if (folder / "exposed.json").exists() else []
+    targets = read(folder / "targets.jsonl")
+    value = {t["id"]: t["value"] for t in targets if t["item"] not in exposed}
     nulls = [{p["id"]: p["value"] for p in read(folder / "predictions" / f"{name}.jsonl")} for name in ("null-1", "null-2")]
-    assert all(null.keys() == value.keys() for null in nulls), "a null does not cover every target"
-    tallies = {path.stem: tally(read(path), value, nulls) for path in sorted((folder / "claims").glob("*.jsonl"))}
+    assert all(len(null) == len(targets) for null in nulls), "a null does not cover every target"
+    tallies = {path.stem: tally([c for c in read(path) if c["id"] in value], value, nulls) for path in sorted((folder / "claims").glob("*.jsonl"))}
     theories = {}
     for name, t in tallies.items():
         if name.endswith(".rev"):
@@ -70,7 +74,7 @@ def score(folder):
         reversal = tallies.get(name + ".rev")
         state = "fails" if not candidate else "needs reversal" if reversal is None else "passes" if t["net"] > reversal["net"] else "fails: reversal as good"
         theories[name] = {**t, "state": state, "reversal": reversal}
-    (folder / "metrics_v2.json").write_text(json.dumps({"targets": len(value), "theories": theories}, indent=1) + "\n")
+    (folder / "metrics_v2.json").write_text(json.dumps({"targets": len(value), "exposed_items": exposed, "theories": theories}, indent=1) + "\n")
     print(f"{len(value)} targets. Per theory: claims, divergent wins and losses, non-divergent claims inside and outside, state")
     for name, t in sorted(theories.items(), key=lambda kv: -kv[1]["net"]):
         rev = f"   reversal +{t['reversal']['wins']} -{t['reversal']['losses']}" if t["reversal"] else ""

@@ -1,0 +1,10 @@
+{"id": "t32", "value": 427, "low": 420, "high": 434, "why": "Per-problem log-odds move linearly with the share of the sign pattern kept: cue base logit 1.52 (410) plus 0.25 of the 1.01 logit gap to RL (463) gives 85.4 %, so dose is near-linear, not a switch that saturates early."}
+{"id": "t33", "value": 442, "low": 435, "high": 449, "why": "Same logit-linear dose at a = 0.5: logit 2.02, 88.3 % of 500."}
+{"id": "t43", "value": 453, "low": 446, "high": 460, "why": "Same logit-linear dose at a = 0.75: logit 2.27, 90.6 % of 500."}
+{"id": "t34", "value": 466, "low": 452, "high": 478, "why": "The delta is a small first-order shift (0.24 % of norm, 0.36 % at a = 1.5), so extrapolating along the same sign pattern keeps or slightly raises RL's accuracy instead of collapsing."}
+{"id": "t40", "value": 308, "low": 278, "high": 340, "why": "Plain prompt, logit-linear dose: plain base logit -0.21 (224) plus 0.25 of the 2.74 gap to RL gives 61.7 %, far below a switch-like 375."}
+{"id": "t41", "value": 380, "low": 358, "high": 402, "why": "Plain prompt, logit-linear dose at a = 0.5: logit 1.16, 76.1 % of 500."}
+{"id": "t36", "value": 406, "low": 392, "high": 420, "why": "The Code-RL change agrees with the Math-RL signs only at chance, so it carries none of the math sign pattern and the cued model scores like the cued base (410)."}
+{"id": "t42", "value": 245, "low": 212, "high": 285, "why": "Code-RL carries no math sign pattern, so with the plain prompt it stays near the plain base (224)."}
+{"id": "t37", "value": 408, "low": 394, "high": 422, "why": "A random matched-norm difference has no coherent sign pattern and roughly 1/700 of the RL direction's leverage, so it behaves like a reseeded cued base (410)."}
+{"id": "t47", "value": 3930, "low": 3680, "high": 4180, "why": "A random matched-norm difference changes nothing systematic, so mean tokens stay at the cued base's 3,933 within sampling noise rather than moving toward RL's length."}

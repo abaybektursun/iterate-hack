@@ -1,0 +1,34 @@
+{
+ "commit": "32ff1e0",
+ "work": "work-b95a73",
+ "spec": "studies/theory/specs/SPEC_round02.md",
+ "cutoff": "2026-11-14T23:42:26",
+ "commands": [
+  "uv run studies/theory/lib/check.py dump <round> --cutoff 2026-11-14T23:42:26 --skip gpuprice --skip \"theory round\" --skip \"theory skill\"",
+  "uv run studies/theory/lib/check.py check <round>",
+  "uv run studies/theory/lib/v2.py check <round>",
+  "uv run studies/theory/lib/v2.py score <round>"
+ ],
+ "items_before": 60,
+ "items_after": 25,
+ "targets": 68,
+ "target_items": 15,
+ "exposed_items": ["result-5d032f"],
+ "exposed_targets": 7,
+ "scored_targets": 61,
+ "external_findings": 25,
+ "theories_carried": 6,
+ "theories_new": 10,
+ "reversals": 5,
+ "reviews": 3,
+ "subagents": {
+  "targets (sonnet)": 1,
+  "external findings (opus)": 1,
+  "no-theory predictors (opus)": 2,
+  "claims for the 6 round-01 theories (the 3 round-01 generators, resumed)": 3,
+  "new generators (opus), each resumed once for claims": 5,
+  "reversal jobs (opus, headless)": 5,
+  "reviews (opus)": 3
+ },
+ "steps_not_run": "posting of the passing theories to the board"
+}

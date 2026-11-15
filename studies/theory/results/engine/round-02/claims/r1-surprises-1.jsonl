@@ -1,0 +1,11 @@
+{"id": "t05", "value": 485, "low": 455, "high": 500, "why": "RL has internalized the cue's deliberative-mode component, so nearly every RL answer opens on its own with cue-like tokens."}
+{"id": "t22", "value": 8, "low": 0, "high": 15, "why": "The RL-minus-base difference is about mode and termination (format, stopping), not about correctness, so few difference peaks sit at the first wrong step."}
+{"id": "t27", "value": 186, "low": 176, "high": 198, "why": "The base has the math and fails by uncalibrated stopping (premature wrong commits, non-terminating runs) that vary across samples, so a 4-sample vote recovers a clear part of the 42-problem gap rather than the ~1 point the literature gives."}
+{"id": "t28", "value": 218, "low": 206, "high": 235, "why": "Knowledge is not what the base lacks, so its pass@4 on the 328 reaches or exceeds RL's single-sample 206."}
+{"id": "t35", "value": 463, "low": 454, "high": 471, "why": "RL already contains the cue's component, so adding the cue to RL leaves it at its plain-prompt 463."}
+{"id": "t36", "value": 410, "low": 395, "high": 428, "why": "Code-RL carries only the generic cue-like component, which the cue already supplies, so Code-RL plus cue scores like the cued base (410) and gains nothing from the termination component."}
+{"id": "t42", "value": 340, "low": 285, "high": 400, "why": "Code-RL learned the domain-general deliberative-mode component, so even without the cue it lifts the plain base (224) a large part of the way toward the cued base (410)."}
+{"id": "t54", "value": 462, "low": 453, "high": 471, "why": "RL's calibrated stopping makes its accuracy robust to truncating the sampling distribution, so min-p 0.1 leaves it at about 463."}
+{"id": "t64", "value": 438, "low": 427, "high": 450, "why": "The cued base's MATH-500 errors are mostly sample-specific termination failures, not missing knowledge, so a 4-sample vote recovers about half of the 53-point gap to RL."}
+{"id": "t66", "value": 442, "low": 430, "high": 455, "why": "Restarting cap hits before the vote removes the non-terminating runs as well, adding a few problems over the plain vote."}
+{"id": "t69", "value": 470, "low": 461, "high": 480, "why": "The base has the math for nearly every problem RL solves, so its pass@4 at T 1.0 reaches or exceeds RL's pass@1 of 463."}
