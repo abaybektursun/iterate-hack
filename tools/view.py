@@ -28,6 +28,8 @@ a side panel whose address is /#<item id>; the filters are in the address too (/
 click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
 
   GET /demo            the talk: one stepped story page over the Design page's picture (demo.py), fed by the same /data
+  GET /demo/ali/<name> Ali's slides of the talk, slide1 to slide3: the idea map, the idea tree and the accuracy climb
+                       (demo_ali.py, with its data in demo_ali_data.py); /demo/ali leads to the first
   GET /architecture    the Design tab, how the harness works: one interactive picture (architecture.py), fed by the same /data
   GET /findings        the Findings tab: one tile per finding (findings.py), each a link to the page of that finding
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
@@ -72,6 +74,7 @@ import architecture
 import board
 import climb
 import demo
+import demo_ali
 import exa_page
 import findings
 import glossary
@@ -270,6 +273,10 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", PAGE)
         if path == "/demo":
             return self.send(200, "text/html", demo.PAGE)
+        if path in ("/demo/ali", "/demo/ali/"):
+            return self.send(302, "text/plain", "", [("Location", "/demo/ali/slide1")])
+        if path.startswith("/demo/ali/") and path[len("/demo/ali/"):] in demo_ali.PAGES:
+            return self.send(200, "text/html", demo_ali.PAGES[path[len("/demo/ali/"):]])
         if path == "/architecture":
             return self.send(200, "text/html", architecture.PAGE)
         if path == "/findings":
