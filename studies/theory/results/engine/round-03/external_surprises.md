@@ -1,0 +1,51 @@
+# External mechanisms for the least-explained results (board cutoff 2026-11-15 02:58)
+
+Unexplained results:
+1. The cued base does better at T 1.0 than at T 0.6 (410 vs 354/378 on MATH-500; +13.7 on hard328). It loops at T 0.6, cutting the tail at T 1.0 brings the loops back, and T 1.5 + min-p removes them (result-dadeec, result-e870a1, result-44b4df, result-099916, knowledge-787e53, knowledge-4fb5eb).
+2. RL barely notices temperature (-0.2 points), while the base swings 6-14 points. The base/RL gap doubles from 10.6 at T 1.0 to 22.0 at T 0.6 (result-533123, result-bac4fd, knowledge-9e4147).
+3. a = 0.25 of the RL weight difference gives most of the gain, then the curve goes flat. a = 1.5 gives word-salad tails. A matched-norm random difference gives only +1.4 (result-4b0d5f, result-8f257f, result-9b6af3).
+4. The Code-RL difference is nearly orthogonal to the Math-RL difference (cos 0.014), yet scores 450 with the cue vs 457 for Math-RL, using fewer tokens (result-4b0d5f, result-c9b27e, result-e2482e).
+5. A fresh base sample (the random cell) fixes 42 of the cued base's 90 misses. Most of the RL direction's gain is fewer lost problems, not more fixed ones (result-9b6af3, result-5e17a6).
+6. Voting helps the base more than RL (+8.2 vs +3.6), yet the base vote stays below one RL sample. Length rules fail, and RL still leads at pass@4 (result-5d032f, result-2c2cae, result-1dedfe).
+7. The gap is largest on the hardest and longest problems (hard328 12.8; length quartile Q4 -20.0). On harder sets RL leads the cued base even for Wang's 3.0 pair (result-82b4dc, result-5de032, knowledge-9e4147, knowledge-8a31ad).
+8. The RL change is diffuse, not carried by neurons. One constant vector per layer closes 23-31 % of the KL, and the strongest neurons are always-on ones (result-54f212, result-4227c6, result-904bbf, result-156f7b, knowledge-69adda).
+9. From RL's prefix the base finishes 32 points more often. Length predicts a wrong base answer better than any lens feature (AUROC 0.831), and short base answers are almost always right (knowledge-1497e8, result-f21d2e, result-5e17a6).
+10. The cue matches RL-Zero-Math 3.0 on MATH-500 but trails 3.1 by 10.6 points. The only stated recipe difference is a 16k cap and training truncated rollouts as negatives (knowledge-8a31ad, result-bac4fd).
+
+---
+
+### 2609.15476 — Temperature Fragility and the Conditional Benefits of Truncation Sampling (2026)
+- Finding: 13 open models on GSM8K and MMLU-Pro at T 0.7/1.0/1.3. Truncation samplers (top-p, min-p, top-nσ) help only when temperature has already collapsed accuracy. On the six robust models at T 0.7 and 1.0, the largest paired gain over plain sampling is +3.3 points over 96 comparisons (95 % upper bound 9.0; Table 2). Fragile models lose 17-38 points between 0.7 and 1.3, and the loss shows up as generations that hit the token limit or never state an answer (+26 to +78 points of such outputs); there, every truncation sampler recovers to within 6 points of the T 0.7 level. Top-p delays collapse, min-p delays it further, and top-nσ never collapses up to T 2.0 (Fig. 4).
+- Bears on: result-44b4df. The cued base is "robust" at T 1.0 (0 rule-A loops, 27 cap hits), so the paper predicts the observed null for min-p/top-p (-1.2, -0.2). It also predicts that min-p's value appears only where plain sampling collapses: plain T 1.5 without min-p should show a large rise in cap hits or answerless outputs. T 1.5 + min-p (412) is then a recovery, not a gain. No item ran plain T 1.5, or top-nσ at T 1.5-2.0.
+- Already cited by the team: no
+
+### 2505.18706 — Steering LLM Reasoning Through Bias-Only Adaptation (2025)
+- Finding: Training one d-dimensional additive vector per layer with RL, all weights frozen (≈0.0016 % of parameters at 8B), matches full RL on six math benchmarks (Table 1). Qwen2.5-7B MATH500: base 45.9, steering 74.7, full-tune 77.3. Qwen2.5-14B: 61.7 / 80.0 / 80.5. Qwen2.5-Math-7B: 52.2 / 79.9 / 79.3. The exception is Llama3.1-8B-It, where steering recovers about 70 % of the full-tune gain (Sec. 4). Logit-lens readouts of the vectors show causality, validation and code tokens.
+- Bears on: result-54f212. A constant per-layer vector taken as the mean RL-minus-base output difference closes 23-31 % of the teacher-forced KL. The paper predicts that the same 32 vectors, trained with a reward instead of read off as means, could carry most of the 10-point accuracy gap on Olmo-3. So the mean-difference vector is a lower bound on what a constant push can do, not its ceiling. No item scores the constant-push arm by accuracy.
+- Already cited by the team: no
+
+### 2611.01262 — Does Random Search Discover Task Experts? Revisiting Neural Thickets (2026)
+- Finding: The lift of the best selected perturbation decays with the size of the selection set. A pure selection-noise null predicts more than 75 % of the top expert's lift in 10 of 12 model-task pairs. At K = 50, RandOpt is statistically indistinguishable from a majority vote over K samples of the unperturbed model in 10 of 12 settings (Table 5; gaps -2.12 to +0.87 on GSM8K/MBPP). On OLMo-3-7B-Instruct Countdown, the top single expert beats the anchor by 0.44 points, inside the anchor's ~1.5-point run-to-run spread. The original ~8-point single-expert gain did not reproduce. Density of favorable perturbations falls with model size, and stochastic anchor rollouts show the same trends.
+- Bears on: result-9b6af3 and result-4b0d5f. This supports the team's reading that the random cell is in effect a fresh base sample (fixes 42 and loses 35 of the cued base's problems). It predicts that further matched-norm random draws land within about ±3 points of the cued base, the same spread as hardware reruns (knowledge-814454). It also predicts the "RL-only problems" set is roughly 60 % sampling noise (40 of 65 solved by the random cell).
+- Already cited by the team: no
+
+### 2506.19733 — Does Reinforcement Post-Training Generalize Across Domains? (2025)
+- Finding: In an observational study of open-weight RPT models against their bases, models fine-tuned only on code gain 9.49 points pass@1 on code and 15.44 on math. Models fine-tuned only on math gain 2.18 on math and 4.77 on code (Sec. 4.2, Fig. 3). Gains transfer between structured domains (math <-> code) but not to unstructured general reasoning (-0.27 average). The interventional study finds math->code transfer stronger than code->math.
+- Bears on: result-4b0d5f and result-c9b27e. Code-RL scores 390 plain and 450 cued on MATH-500, near Math-RL's 457 cued, although the two deltas are nearly orthogonal (cos 0.014). Published RPT gains do carry between math and code, so a large cross-domain gain from Code-RL is expected, not anomalous. Weight-space orthogonality does not imply functional independence. Prediction: the Math-RL delta also raises the base on a code benchmark. No item scores either delta on code (knowledge-9f8067).
+- Already cited by the team: no
+
+### 2510.07364 — Base Models Know How to Reason, Thinking Models Learn When (2025, v4 2026)
+- Finding: Across nine base/thinking pairs, a hybrid works as follows: the base generates; where the two models disagree, an SAE classifier taken from the thinking model picks which base-model "category vector" to steer with, steering 5-12 % of tokens. It recovers about 76 % of the RL-trained (Open-Reasoner-Zero) base-to-thinking gap on GSM8K, MATH500 and held-out MATH, but about 11 % of the SFT-distilled gap (Table 1). The paper's conclusion: RL teaches when to deploy behaviours the base already has; SFT installs new mechanisms.
+- Bears on: result-e2482e (the Think-SFT delta is orthogonal to RL, cos -0.00001, with 100x the norm), result-cb82cf and result-b4c576 (RL holds hold-on words +1.08 points, a general habit, not tied to errors), result-9b6af3. Prediction: base-model mean-difference vectors for 'hold on / Wait' and 'wrap-up', gated by RL's disagreement positions, recover most of the gap. The same vectors fired ungated (a constant push) recover much less, matching the 23-31 % in result-54f212. A Think-SFT delta should transfer poorly to RL-like behaviour.
+- Already cited by the team: no
+
+### 2505.20196 — Temporal Sampling for Forgotten Reasoning in LLMs (2025)
+- Finding: Temporal forgetting: across RL and SFT runs of Qwen2.5 1.5B/7B on AIME, AMC, OlympiadBench, MATH-500 and GPQA, 6.4-56.1 % of final errors were solved correctly at some earlier checkpoint (Table 2; average around 25 points). For DeepSeek-R1-1.5B RL, 76.7 % of AIME problems were solved at some checkpoint but only 30 % at the end (Fig. 1a). Spreading samples across checkpoints adds 4-19 points pass@k and consistently improves maj@k and best-of-N.
+- Bears on: result-9b6af3 (RL loses 12 problems the cued base solves; a = 0.5 loses 11), result-5d032f (RL vote@4 474) and knowledge-0b450e (step_0100/step_0400/step_2800 branches exist). Prediction: a vote over samples from step 400 + step 2,800 (or a = 0.25/0.5/1 merges) beats RL's 4-sample vote of 474 at equal tokens. The 12 RL-lost problems should be solved by earlier checkpoints at higher rates than by the final model.
+- Already cited by the team: no
+
+### 2501.18585 — Thoughts Are All Over the Place: On the Underthinking of o1-Like LLMs (2025)
+- Finding: On MATH500, GPQA and AIME24, o1-like models' incorrect answers use 225 % more tokens than correct ones, driven by 418 % more thought switches (Fig. 1). Conventional LLMs show no length difference between correct and incorrect answers. Many abandoned early thoughts were correct (Fig. 5). A decoding-time thought-switching penalty (TIP: a logit penalty on switch tokens like "Alternatively") improves accuracy on hard sets.
+- Bears on: result-5e17a6 (16 RL-only problems where the cued base hit the cap with no loop; mean base tokens 3,933 vs median 1,432 for right answers) and result-b4c576 (RL holds 'Wait/Hmm' more but writes fewer wrap-up tokens). Prediction: the base's 16 non-loop cap hits and its long wrong answers carry many more switch tokens ('Alternatively', 'Let me try') per 1k than its right answers. A TIP-style penalty on those tokens, not on 'Wait', is the decoding rule this mechanism suggests. It is untested on the cued base; note the team-cited finding that fixed reflective-word rules underperform (2610.24663).
+- Already cited by the team: no
+

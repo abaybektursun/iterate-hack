@@ -15,6 +15,11 @@ the numbers posted after the cutoff, against the same predictor without the theo
 | `lib/v2.py` | Round 02's check and score: each theory's own claims, divergent wins and losses against the two no-theory agents, the reversal control, targets of `exposed.json` left out. Writes `metrics_v2.json`. Usage in its docstring. |
 | `results/engine/round-<nn>/` | One round: `run.json`, `before.jsonl`, `after.jsonl`, `targets.jsonl`, `targets_blind.jsonl` (targets without values), `theories/`, `predictions/`, `examples.json`; round 01 also `metrics.json` and `predictions_measured.json`. |
 | `results/engine/round-02/` (new files) | `external.md` (25 published findings, by mechanism), `theories.sha256` (theory files fixed before the claims), `claims/<theory>.jsonl` (each author's value and interval per target; `.rev.jsonl` the reversal's), `reversed/` (the reversed theories), `reviews/` (refutation search, novelty, verdict), `exposed.json` (items left out of the score and why), `metrics_v2.json`. |
+| `specs/SPEC_round03.md` | Plan of round 03, written before the run: version 3 on held-out items no earlier round used, hypotheses H1-H4. |
+| `lib/round.py` | Version 3: runs a whole round, stage by stage (`split`, `standing`, `inventory`, `targets`, `external`, `generate`, `null`, `claims`, `score`, `reverse`, `test`, `review`). Every model call except inventory, test and review is a headless Claude run in an empty directory with Read and Write only. Log-gain score with bootstrap interval. Writes `metrics_v3.json`. Usage in its docstring. |
+| `lib/papers.py` | Paper-only access for the `external` stage: `tools/recall.py` entries whose sources are all papers or web pages, and `tools/exa.py` search and fetch. |
+| `lib/prompts/` | One prompt per stage (`inventory.md`, `targets.md`, `external.md`, `generate.md`, `fix.md`, `null.md`, `claims.md`, `reverse.md`, `test.md`, `review.md`). |
+| `results/engine/round-03/` (new files) | `inventory.md` (stored per-problem row files, how to fetch them, their fields; no result numbers), `prior_scores.json` and `prior_reviews/` (round 02's scores and reviews of the carried theories), `external_<start>.md` (each generator's part of `external.md`), `drafts/` (theories before the checks), `dropped.json`, `tests/<theory>/p<k>.py` and `.out.txt` (offline test scripts and their output) and `tests/<theory>.json`, `metrics_v3.json`, `diagnosis.md` (why theories lose, what the tests needed, the hypotheses). |
 
 ## Round 01 (2026-11-15, cutoff 11-14 23:42 UTC)
 
@@ -131,29 +136,113 @@ Examples (`examples.json`), r1-all-2 on the plain prompt, MATH-500 n=500, T 1.0,
 0.5*(RL - base): measured 443, claim 432 [415, 450], nulls 400 and 380) and a divergent loss on t40 (base +
 0.25*(RL - base): measured 405, claim 370 [340, 400], nulls 300 and 290).
 
+## Round 03 (2026-11-15, cutoff 11-15 02:59 UTC)
+
+`results/engine/round-03/`, plan `specs/SPEC_round03.md`, code `lib/round.py` (version 3). 85 board items before the
+cutoff, 13 held out, 51 targets from 10 held-out items, none exposed. No earlier round scored these items. 14 theories:
+4 carried from round 02 (r1-all-2, r1-surprises-2, r2-across-2, r2-all-2; r1-all-1 not carried, its review said
+refuted) and 10 new from 5 generators. 28 headless jobs, about 28 minutes (`run.json`). Diagnosis: `diagnosis.md`.
+
+**Result: no theory stands. 13 of 14 fail; r3-across-2 passes on a single claim (+0.67 nats against its reversal's
++0.29), its 3 offline tests returned no number (S3 403), and its review says weak. Summed over all 80 claims, the
+theories lose 25.55 nats to the no-theory readers** (`metrics_v3.json`, `tests/r3-across-2.json`,
+`reviews/r3-across-2.json`). Score table as printed (gain in nats; interval = 90 % bootstrap of the total):
+
+| Theory | Claims | Total | Mean | 90 % interval | Reversal | Tests in/out | State | Review |
+|---|---|---|---|---|---|---|---|---|
+| r1-all-2 | 12 | 2.62 | 0.22 | [-3.81, 7.98] | | | fails | |
+| r3-across-2 | 1 | 0.67 | 0.67 | [0.67, 0.67] | 0.29 | 0/0 (3 not computed) | passes | weak |
+| r2-all-2 | 0 | 0.00 | 0.00 | [0.00, 0.00] | | | fails | |
+| r3-revise-2 | 0 | 0.00 | 0.00 | [0.00, 0.00] | | | fails | |
+| r3-surprises-1 | 4 | -0.24 | -0.06 | [-1.67, 1.18] | | | fails | |
+| r3-across-1 | 6 | -0.35 | -0.06 | [-2.64, 1.67] | | | fails | |
+| r3-all-2 | 3 | -1.36 | -0.45 | [-3.27, 0.56] | | | fails | |
+| r3-external-1 | 2 | -1.43 | -0.72 | [-3.78, 0.91] | | | fails | |
+| r3-all-1 | 4 | -2.67 | -0.67 | [-5.65, 0.42] | | | fails | |
+| r3-revise-1 | 11 | -2.69 | -0.24 | [-10.17, 4.07] | | | fails | |
+| r2-across-2 | 7 | -3.20 | -0.46 | [-10.49, 3.83] | | | fails | |
+| r3-surprises-2 | 11 | -4.35 | -0.40 | [-12.14, 2.47] | | | fails | |
+| r1-surprises-2 | 8 | -4.60 | -0.57 | [-13.80, 4.96] | | | fails | |
+| r3-external-2 | 11 | -7.95 | -0.72 | [-16.47, 0.15] | | | fails | |
+
+Hypotheses of the spec:
+
+- H1, a candidate beats its reversal: not refuted by the rule, on one claim. r3-across-2 +0.67 vs +0.29; a bootstrap
+  of one claim gives the point [0.67, 0.67]. Its review: the gap is the advocate's narrower interval on t13, and the
+  reversal argued the same constant push.
+- H2, a carried theory totals above 0: not refuted by the rule. r1-all-2 +2.62 nats on 12 claims, but its interval
+  [-3.81, 7.98] reaches 0, so it fails. r2-all-2 made no claim; r2-across-2 -3.20; r1-surprises-2 -4.60.
+- H3, half of the tested offline predictions return a number: refuted, 0 of 3.
+- H4, a theory stands after tests and review: refuted. The engine still produces no theory worth a GPU run.
+
+What round 03 showed (`diagnosis.md`):
+
+1. Theories lose by wrong centres, not wrong widths. 37 claims whose centre is farther from the measured value than the
+   midpoint of the null centres sum to -50.25 nats; the 43 as close or closer sum to +24.70 (40 of them gain).
+2. The losses are the theories' own distinctive predictions, and they are wrong. 21 claims put both null centres
+   outside their interval; 15 lose (-21.17 nats), 11 at the -3 clip. WSP-1 contradicts r1-surprises-2 (RL minus its
+   top-8 directions: 91/100, claim 55; bulk64: 86, claim 50) and r2-across-2 (top-8 alone: 88/100, claim 58; 427/500,
+   claim 305). result-edceef contradicts "any RL-Zero delta carries the shared part": RL-Zero-IF 377 and RL-Zero-Code
+   3.0 411 with the cue, claims 436-446. r1-all-2 put RL-Zero-Mix plain at 438; measured 372.
+3. Where theories agree with the no-theory readers they add nothing: the 59 non-divergent claims sum to -4.38 nats. The
+   two readers are nearly one: their centres differ by a median 1.8 % of the measured value. Their 90 % intervals hold
+   the measured value 42 and 43 times of 51; the advocates' 60 of 80, with a median width 0.62 of the nulls'.
+4. The held-out set is mostly not about the theories. 22 of 51 targets drew no claim; the 9 interpretability readouts
+   drew 1; 71 of 80 claims fall on 4 items. No target is about temperature or loops, which is the subject of 6 theories
+   (10 claims among them).
+5. The offline tests failed on credentials. The scripts called `aws s3 cp` with the default profile (403). With
+   `--profile iterate-ecr` the bucket's `results/rlneurons/` keys read, so 2 of the 3 recipes were computable;
+   `results/next_n13/` is 403 even with it. Of all 29 recipes of the new theories, 27 can be read on this machine now
+   (8 from git alone, 14 with abaybektursun's Modal volume, 5 with the S3 profile); only one theory was tested.
+6. The 10 new theories are 2 mechanisms, one of each per generator: a two-part delta (a shared low-dose part plus a
+   math-specific part for long, hard problems; 5 theories) and a sampler-tail account of temperature and loops (5). Both
+   restate earlier theories (r1-surprises-1, r2-all-2) and the "Bears on ... Prediction" paragraphs of `external.md`.
+   Splitting the findings spread the citations (17 distinct papers, most used in 2 of 10; round 02: 12 distinct,
+   2610.37719 in 5 of 10) but not the mechanisms.
+7. The two-part-delta theories' own hard328 prediction failed: 4 of its theories put Code-RL 3.1 on hard328 at 171-177 of 328;
+   measured 187, 0.9 points below theta(0.5) (t28, t33).
+
+Examples (`examples.json`), r1-all-2 (most claims, highest total): a gain on t44 (base + top 8 singular directions per
+matrix, MATH-500 n=500, plain, T 1.0, v3: measured 427, claim 380 [330, 425], nulls 300 [210, 415] and 330 [230, 425],
++1.05 nats; outside the interval but far closer than the nulls) and a loss on t39 (RL-Zero-Mix, plain: measured 372,
+claim 438 [405, 462], nulls 415 [350, 460] and 415 [330, 460], -3.00 nats; the theory's switch did not carry over).
+
 ## Theories
 
-Standing after round 02. Full text in `results/engine/round-02/theories/<name>.json` (`r1-*` are round 01's files,
-unchanged). Score columns from `round-02/metrics_v2.json`; verdicts from `round-02/reviews/`.
+Status after round 03. Full text in `results/engine/round-03/theories/<name>.json` for the round-03 and carried theories,
+and in `results/engine/round-02/theories/<name>.json` for the others (`r1-*` are round 01's files, unchanged). Round-02
+score from `round-02/metrics_v2.json`; round-03 result from `round-03/metrics_v3.json` (claims, total gain in nats,
+90 % interval, state; then the largest wrong claim, measured value from `round-03/targets.jsonl`); verdicts from
+`round-02/reviews/` and `round-03/reviews/`. Only the 4 carried theories and the 10 new ones were scored in round 03.
 
-| Theory | Statement | Round | Round-02 score (wins, losses, state) | Review | Status |
-|---|---|---|---|---|---|
-| r1-all-1 | The cued base has RL's per-step skill; the gap is the base degrading as its own long solution grows, which RL repaired by training truncated rollouts as failures. | 01 | 2, 1, passes | refuted | refuted |
-| r1-all-2 | Most of the RL gain is one answer-mode switch (deliberate, box the answer, stop), stored redundantly along a diffuse direction, so any small unbiased fraction of the delta flips it. | 01 | 3, 2, passes | none | passes, not reviewed |
-| r1-across-1 | The base's loops and cap hits come from early-to-mid-layer circuits that copy its own earlier text; RL's cap-hit gain weakens that pathway in layers 0-15. | 01 | 2, 2, fails | none | fails |
-| r1-across-2 | RL's lead is a learned token-budget controller, trained because 3.1 scores truncated rollouts as failures; it is not new math skill. | 01 | 1, 1, fails | none | fails |
-| r1-surprises-1 | The gain is a general deliberation shift that the cue, Code-RL and 3.0 share, plus stopping calibration that only 3.1 learned; the cued-base gap is the second part. | 01 | 0, 0, fails | none | fails |
-| r1-surprises-2 | The working part of the weight change is low-rank and near-linear; the high-rank remainder, which holds most of its energy, is optimizer noise. | 01 | 3, 2, passes | none | passes, not reviewed |
-| r2-all-1 | The delta acts through coherent signs along high-curvature directions, about 700 times a random direction; unbiased resampling keeps the gain, random signs remove it, SFT deltas break. | 02 | 0, 1, fails | none | fails |
-| r2-all-2 | Base accuracy at a sampler setting depends on the per-token surprise of its text (too low: loops; too high: drift); the cue lowers entropy, so truncation hurts the cued base. | 02 | 2, 0, passes | weak | weak |
-| r2-surprises-1 | Loops and slips are two ends of one axis, the per-token surprise of sampled text; the cue lowers entropy, RL sits far from both ends, and raising surprise cuts loops. | 02 | 0, 1, fails | none | fails |
-| r2-surprises-2 | The base and optimizer set which entries move, and how far; the task is written only in the signs, which act on any math text and leave general text alone. | 02 | 0, 1, fails | none | fails |
-| r2-across-1 | The weight change lowers next-token entropy only at the base's high-entropy fork tokens, so RL ignores temperature while the base loops when cooled and errs when heated. | 02 | 1, 1, fails | none | fails |
-| r2-across-2 | The delta's effect sits in its coherent sign pattern, with hundreds to thousands of times a random direction's Fisher curvature; DARE fails near keep 0.01-0.05 %. | 02 | 3, 2, passes | weak | weak |
-| r2-external-1 | The delta moves output 700 times more per unit energy than a random direction; DARE holds to keep 0.1 % and collapses near 0.01 %; random weight noise reduces loops. | 02 | 1, 1, fails | none | fails |
-| r2-external-2 | One global temperature acts on two kinds of positions: low temperature starts loops at rare fork tokens, high temperature causes slips elsewhere; a per-position temperature would fix the base. | 02 | 1, 2, fails | none | fails |
-| r2-revise-1 | Accuracy is carried by the dense sign pattern of many small entries; an edit recovers accuracy in proportion to the share of it kept; Code-RL gives no math gain. | 02 | 1, 0, fails | none | fails |
-| r2-revise-2 | The cued base's gap is a weak error detector, not weaker per-step math: RL notices and re-derives errors more often, so a 4-sample vote closes about half the base's gap. | 02 | 0, 0, fails | none | fails |
+| Theory | Statement | Round | Round-02 score (wins, losses, state) | Review | Round-03 result | Status |
+|---|---|---|---|---|---|---|
+| r1-all-1 | The cued base has RL's per-step skill; the gap is the base degrading as its own long solution grows, which RL repaired by training truncated rollouts as failures. | 01 | 2, 1, passes | refuted | not carried (refuted) | refuted |
+| r1-all-2 | Most of the RL gain is one answer-mode switch (deliberate, box the answer, stop), stored redundantly along a diffuse direction, so any small unbiased fraction of the delta flips it. | 01 | 3, 2, passes | none | 12 claims, +2.62 [-3.81, 7.98], fails; RL-Zero-Mix plain claim 438, measured 372 | fails |
+| r1-across-1 | The base's loops and cap hits come from early-to-mid-layer circuits that copy its own earlier text; RL's cap-hit gain weakens that pathway in layers 0-15. | 01 | 2, 2, fails | none | not scored | fails |
+| r1-across-2 | RL's lead is a learned token-budget controller, trained because 3.1 scores truncated rollouts as failures; it is not new math skill. | 01 | 1, 1, fails | none | not scored | fails |
+| r1-surprises-1 | The gain is a general deliberation shift that the cue, Code-RL and 3.0 share, plus stopping calibration that only 3.1 learned; the cued-base gap is the second part. | 01 | 0, 0, fails | none | not scored | fails |
+| r1-surprises-2 | The working part of the weight change is low-rank and near-linear; the high-rank remainder, which holds most of its energy, is optimizer noise. | 01 | 3, 2, passes | none | 8 claims, -4.60 [-13.80, 4.96], fails; WSP-1 claims wrong (RL minus top-8: 55 vs 91; bulk64: 50 vs 86) | fails, predictions wrong |
+| r2-all-1 | The delta acts through coherent signs along high-curvature directions, about 700 times a random direction; unbiased resampling keeps the gain, random signs remove it, SFT deltas break. | 02 | 0, 1, fails | none | not scored | fails |
+| r2-all-2 | Base accuracy at a sampler setting depends on the per-token surprise of its text (too low: loops; too high: drift); the cue lowers entropy, so truncation hurts the cued base. | 02 | 2, 0, passes | weak | 0 claims, fails | weak, untested in round 03 |
+| r2-surprises-1 | Loops and slips are two ends of one axis, the per-token surprise of sampled text; the cue lowers entropy, RL sits far from both ends, and raising surprise cuts loops. | 02 | 0, 1, fails | none | not scored | fails |
+| r2-surprises-2 | The base and optimizer set which entries move, and how far; the task is written only in the signs, which act on any math text and leave general text alone. | 02 | 0, 1, fails | none | not scored | fails |
+| r2-across-1 | The weight change lowers next-token entropy only at the base's high-entropy fork tokens, so RL ignores temperature while the base loops when cooled and errs when heated. | 02 | 1, 1, fails | none | not scored | fails |
+| r2-across-2 | The delta's effect sits in its coherent sign pattern, with hundreds to thousands of times a random direction's Fisher curvature; DARE fails near keep 0.01-0.05 %. | 02 | 3, 2, passes | weak | 7 claims, -3.20 [-10.49, 3.83], fails; WSP-1 claims wrong (top-8 alone: 58 vs 88 of 100, 305 vs 427 of 500) | fails, predictions wrong |
+| r2-external-1 | The delta moves output 700 times more per unit energy than a random direction; DARE holds to keep 0.1 % and collapses near 0.01 %; random weight noise reduces loops. | 02 | 1, 1, fails | none | not scored | fails |
+| r2-external-2 | One global temperature acts on two kinds of positions: low temperature starts loops at rare fork tokens, high temperature causes slips elsewhere; a per-position temperature would fix the base. | 02 | 1, 2, fails | none | not scored | fails |
+| r2-revise-1 | Accuracy is carried by the dense sign pattern of many small entries; an edit recovers accuracy in proportion to the share of it kept; Code-RL gives no math gain. | 02 | 1, 0, fails | none | not scored | fails |
+| r2-revise-2 | The cued base's gap is a weak error detector, not weaker per-step math: RL notices and re-derives errors more often, so a 4-sample vote closes about half the base's gap. | 02 | 0, 0, fails | none | not scored | fails |
+| r3-across-1 | The RL delta has a general reliability part, shared with Code-RL and saturated at a = 0.25, and a dose-growing math part needed only on problems the base rarely solves. | 03 | | none | 6 claims, -0.35 [-2.64, 1.67], fails; Code-RL hard328 claim 176, measured 187 | fails |
+| r3-across-2 | The cued base leaves loops only through low-probability tail tokens that T < 1 and truncation delete; RL adds a constant push toward probable 'Wait'/'Hmm', so it ignores temperature. | 03 | | weak | 1 claim, +0.67, reversal +0.29, passes; offline tests 3 not computed (S3 403) | weak (1 claim, tests not computed) |
+| r3-all-1 | RL's gain over the cued base is two stopping habits: a general commit-and-box habit (Code-RL shares it, a = 0.25 holds it) and a math-specific check-before-stopping habit for long problems. | 03 | | none | 4 claims, -2.67 [-5.65, 0.42], fails; Code-RL hard328 claim 173, measured 187 | fails |
+| r3-all-2 | On hard problems the base spreads probability at progress steps; low temperature turns the spread into self-reinforcing loops, T 1.0 into wrong turns; RL is concentrated, so temperature barely matters. | 03 | | none | 3 claims, -1.36 [-3.27, 0.56], fails | fails |
+| r3-external-1 | Over-truncated sampling sends a pretrained-style policy into repetition basins; 3.1, trained at exact T 1.0 with truncated rollouts as negatives, suppressed them, so 3.1 ignores temperature and 3.0 does not. | 03 | | none | 2 claims, -1.43 [-3.78, 0.91], fails | fails |
+| r3-external-2 | The delta is an early sharpening part, overshot several-fold and fully expressed at a = 0.25, plus a late part, growing with a, that solves what the base rarely solves. | 03 | | none | 11 claims, -7.95 [-16.47, 0.15], fails; RL-Zero-IF claim 436, measured 377 | fails |
+| r3-revise-1 | The RL-Zero gain is a general 'deliberate, then commit' part (every RL-Zero delta has it, saturated at a = 0.25, replaceable by the cue) plus a math-specific part linear in a. | 03 | | none | 11 claims, -2.69 [-10.17, 4.07], fails; RL-Zero-IF and Code 3.0 claims 444, 446, measured 377, 411 | fails |
+| r3-revise-2 | A loop is an absorbing hazard that opens at impasses; T 0.6 traps finishable medium-length solutions, while at T >= 1 only fixed long, mostly lost problems loop. | 03 | | none | 0 claims, fails | fails |
+| r3-surprises-1 | The cued base's T 1.0 deficit is low-probability tail tokens that derail steps, adding up with length; RL shrinks the tail; label-free tail cuts also remove loop escapes, netting zero. | 03 | | none | 4 claims, -0.24 [-1.67, 1.18], fails | fails |
+| r3-surprises-2 | Any outcome-reward RL delta has a shared low-dose part gating settle, verify and stop (saturated at a = 0.25) and a math-specific part paying only on long, hard problems. | 03 | | none | 11 claims, -4.35 [-12.14, 2.47], fails; RL-Zero-IF and Code 3.0 claims 440, 445, measured 377, 411 | fails |
 
 Round-01 forward predictions of idea-0b2ad8 that have been measured (`round-02/reviews/r1-all-1.json`,
 `forward_predictions_measured`):

@@ -1,0 +1,51 @@
+{"id": "t01", "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 8 singular directions per layer matrix of the RL-Math (Olmo-3.1-7B-RL-Zero-Math) delta", "unit": "right of 100"}
+{"id": "t02", "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + matched random rank-8 control delta (same layer matrices as top-8 RL-Math directions)", "unit": "right of 100"}
+{"id": "t03", "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, RL-Math model with its top 8 singular directions per layer matrix of the delta removed (RL minus those 8 directions)", "unit": "right of 100"}
+{"id": "t04", "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 3 singular directions of the RL-Math delta in late MLP matrices only (24 terms)", "unit": "right of 100"}
+{"id": "t05", "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, allenai/Olmo-3-7B-Think-SFT as released", "unit": "right of 100"}
+{"id": "t06", "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, opening cue, grader v3, 1 sample, allenai/Olmo-3-7B-Think-SFT as released", "unit": "right of 100"}
+{"id": "t07", "what": "right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, opening cue, grader v3, 1 sample, weights halfway between Olmo-3 base and Think-SFT (base + 0.5*(Think-SFT - base))", "unit": "right of 100"}
+{"id": "t08", "what": "J-lens two-hop swap, Olmo 3 base vs RL-Zero-Math 3.1 (44 items): share of items whose answer flips after swapping the intermediate entity", "unit": "percent"}
+{"id": "t09", "what": "J-lens workspace test, Olmo 3 base: multihop intermediate entity in top-10 of lens readout, fraction", "unit": "fraction"}
+{"id": "t10", "what": "J-lens workspace test, Olmo-3.1-7B-RL-Zero-Math: multihop intermediate entity in top-10 of lens readout, fraction", "unit": "fraction"}
+{"id": "t11", "what": "wrong-result twins n=300, Olmo 3 base: rise in hold-on log-prob after a wrong arithmetic result", "unit": "nats"}
+{"id": "t12", "what": "wrong-result twins n=300, Olmo-3.1-7B-RL-Zero-Math: rise in hold-on log-prob after a wrong arithmetic result", "unit": "nats"}
+{"id": "t13", "what": "wrong-result twins n=300: RL minus base difference in hold-on log-prob rise after wrong arithmetic result", "unit": "nats"}
+{"id": "t14", "what": "chains test: RL minus base difference in how well partial results are read (jspace pub-01)", "unit": "nats"}
+{"id": "t15", "what": "MATH-500 n=500, T 1.0 / top-p 1.0, cue draft + one self-review pass appended, grader v3 as stated, base Olmo-3-1025-7B, right of 500, after removing the 'answer is correct' marker form", "unit": "right of 500"}
+{"id": "t16", "what": "MATH-500 n=500, T 1.0 / top-p 1.0, cue draft + one self-review pass appended, grader v3, Olmo-3.1-7B-RL-Zero-Math, right of 500 with marker form removed post hoc", "unit": "right of 500"}
+{"id": "t17", "what": "MATH-500 n=500, T 1.0 / top-p 1.0, cue, one self-review pass, grader v3 raw, Olmo-3.1-7B-RL-Zero-Math, right of 500 after review (before review 457)", "unit": "right of 500"}
+{"id": "t18", "what": "extra tokens per revised draft for the self-review pass, base Olmo-3-1025-7B, MATH-500 T 1.0 cue", "unit": "tokens"}
+{"id": "t19", "what": "extra tokens per revised draft for the self-review pass, Olmo-3.1-7B-RL-Zero-Math, MATH-500 T 1.0 cue", "unit": "tokens"}
+{"id": "t20", "what": "MATH-500 n=500, T 1.0, v3, base+cue, 4 stored samples, vote with ties broken by shortest finished sample, right of 500", "unit": "right of 500"}
+{"id": "t21", "what": "MATH-500 n=500, T 1.0, v3, base+cue, 4 samples, held-out cv_pick over 12 tie-break rules, right of 500", "unit": "right of 500"}
+{"id": "t22", "what": "MATH-500 base+cue 4-sample vote, T 1.0, v3, in the 36 tied problems: number right when ties broken by shortest finished sample", "unit": "right of 36"}
+{"id": "t23", "what": "MATH-500 base+cue 4-sample vote, T 1.0, v3, in the 36 tied problems: expected number right when the tie is broken by a random sample", "unit": "right of 36"}
+{"id": "t24", "what": "MATH-500 n=500, T 1.0, v3, Olmo-3.1-7B-RL-Zero-Math plain, 4-sample vote with ties to the shortest finished sample, right of 500", "unit": "right of 500"}
+{"id": "t25", "what": "MATH-500 n=500, T 1.0, v3, Olmo-3.1-7B-RL-Zero-Math plain, 4-sample vote with ties to the longest sample (control), right of 500", "unit": "right of 500"}
+{"id": "t26", "what": "hard328 (328 harder problems), T 1.0 / top-p 1.0, cue, grader v3, 1 sample, theta(0.25) = base + 0.25 (RL - base)", "unit": "right of 328"}
+{"id": "t27", "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, theta(0.5) = base + 0.5 (RL - base)", "unit": "right of 328"}
+{"id": "t28", "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, Olmo-3.1-7B-RL-Zero-Code", "unit": "right of 328"}
+{"id": "t29", "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, Olmo-3.1-7B-RL-Zero-Code, tokens per problem", "unit": "tokens per problem"}
+{"id": "t30", "what": "hard328, T 1.0 / top-p 1.0, cue, grader v3, theta(0.25) = base + 0.25 (RL - base), tokens per problem", "unit": "tokens per problem"}
+{"id": "t31", "what": "hard328, T 1.0, cue, v3, theta(0.5) minus RL plain (paired difference)", "unit": "points"}
+{"id": "t32", "what": "hard328, T 1.0, cue, v3, Olmo-3.1-7B-RL-Zero-Code minus RL plain (paired difference)", "unit": "points"}
+{"id": "t33", "what": "hard328, T 1.0, cue, v3, Code-RL minus theta(0.5) (paired difference)", "unit": "points"}
+{"id": "t34", "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Math (3.0 release), right of 500", "unit": "right of 500"}
+{"id": "t35", "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Mix, right of 500", "unit": "right of 500"}
+{"id": "t36", "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-General, right of 500", "unit": "right of 500"}
+{"id": "t37", "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Code (3.0), right of 500", "unit": "right of 500"}
+{"id": "t38", "what": "MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-IF, right of 500", "unit": "right of 500"}
+{"id": "t39", "what": "MATH-500 n=500, plain prompt, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Mix, right of 500", "unit": "right of 500"}
+{"id": "t40", "what": "MATH-500 n=500, plain prompt, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Code, right of 500", "unit": "right of 500"}
+{"id": "t41", "what": "MATH-500 n=500, plain prompt, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-IF, right of 500", "unit": "right of 500"}
+{"id": "t42", "what": "MATH-500 n=500, grader v3 minus grader v1 on the same answers, base Olmo-3-1025-7B + cue: extra problems counted right", "unit": "problems"}
+{"id": "t43", "what": "MATH-500 n=500, grader v3 minus grader v1 on the same answers, Olmo-3.1-7B-RL-Zero-Math: extra problems counted right", "unit": "problems"}
+{"id": "t44", "what": "MATH-500 n=500, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 base + top 8 singular directions per layer matrix of the RL-Math delta, right of 500", "unit": "right of 500"}
+{"id": "t45", "what": "MATH-500 n=500, T 1.0 / top-p 1.0, opening cue, grader v3, 1 sample, allenai/Olmo-3-7B-Think-SFT, right of 500", "unit": "right of 500"}
+{"id": "t46", "what": "MATH-500 n=500, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, allenai/Olmo-3-7B-Think-SFT, right of 500", "unit": "right of 500"}
+{"id": "t47", "what": "first 100 MATH-500, T 1.0 / top-p 1.0, plain, v3, base + only top 1 singular direction per matrix of RL-Math delta, right of 100", "unit": "right of 100"}
+{"id": "t48", "what": "first 100 MATH-500, T 1.0 / top-p 1.0, plain, v3, base + bulk64 (RL delta minus top 64 directions) screen, right of 100", "unit": "right of 100"}
+{"id": "t49", "what": "MATH-500 n=500, T 1.0 / top-p 1.0, plain, v3, base + top 8 singular directions per matrix of RL-Math delta, tokens per problem", "unit": "tokens per problem"}
+{"id": "t50", "what": "J-lens (one lens fitted per model, 100 prompts), layer 24, wrong-result hold-on gap for Olmo 3 base", "unit": "nats"}
+{"id": "t51", "what": "J-lens (one lens fitted per model, 100 prompts), layer 24, wrong-result hold-on gap for Olmo-3.1-7B-RL-Zero-Math", "unit": "nats"}
