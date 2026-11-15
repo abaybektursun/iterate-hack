@@ -49,6 +49,13 @@ LIMIT = [
 MISS = [("7", "**Final Answer**\n$7$\n\nAnswer: $\\text{Answer}$", "stop")]
 
 
+# v4a only (the amendment): wrong under v4a, and accepted by v4 as first written (asserted, so the reason for v4a is visible)
+WRONG_A = [
+    ("12", "So the answer is 12. But how?\nThe other count gives fifteen. Let me redo the whole computation from", "length"),
+    ("12.5", "So the answer is 12.5. Let me verify. 6.2 + 6.3 equals 12.5. So the answer should be 12.5.\n\n\n15.5", "stop"),
+]
+
+
 def run():
     T3.run()                                                         # v3 unchanged
     sets = [(r,) for r in G.RULES] + [G.RULES]
@@ -68,10 +75,18 @@ def run():
         assert G.grade_v4(gold, text, fin, others)["score_v4"] == 0, (rule, "another rule also repairs this case")
     for gold, text, fin in LIMIT:
         assert G.grade_v4(gold, text, fin)["score_v4"] == 1, text
+    for gold, text, fin in WRONG_A:
+        assert G.grade_v4(gold, text, fin)["score_v4"] == 1 and G.grade_v4(gold, text, fin, amended=True)["score_v4"] == 0, text
+    for gold, text, fin, why in WRONG:
+        assert G.grade_v4(gold, text, fin, amended=True)["score_v4"] == 0, (why, "v4a")
+    for gold, text, fin, rule in RIGHT:
+        assert G.grade_v4(gold, text, fin, amended=True)["score_v4"] == 1, (rule, "v4a")
+    for c in cases:
+        assert G.grade_v4(c["gold"], c["text"], "stop", amended=True)["score_v4"] == 1, (c["cell"], c["problem_index"])
     for gold, text, fin in MISS:
         g = G.grade_v4(gold, text, fin)
         assert g["score_v4"] == 0 and g["extracted_v4"] is None, g
-    return {"audited_rows": len(cases), "wrong_cases": len(WRONG), "rule_sets": len(sets), "right_cases": len(RIGHT), "limit_cases": len(LIMIT)}
+    return {"audited_rows": len(cases), "wrong_cases": len(WRONG), "rule_sets": len(sets), "right_cases": len(RIGHT), "limit_cases": len(LIMIT), "wrong_v4a_only": len(WRONG_A)}
 
 
 if __name__ == "__main__":

@@ -7,7 +7,8 @@ it changes extraction and normalization for every model alike and never reads th
     R4 trailing brace  more '}' than '{' in the extracted string: '}' removed from its end
     R5 form            '(C) Plane' -> 'C'; '12th grade' -> '12'
 
-Fail loud: no try/except.
+v4 is the rule set as written before scoring. v4a (amended=True) is the set after reading v4's flips: R2 only on finished
+answers, R3 before R2. Fail loud: no try/except.
 """
 from __future__ import annotations
 
@@ -89,19 +90,21 @@ def _r5(s: str) -> str:
     return m.group(1) if m else s
 
 
-def extract_v4(text: str, finish_reason: str, rules=RULES) -> tuple:
-    """(mode, extracted string, rules that changed the v3 result). finish_reason is the stored field ('stop' or 'length')."""
+def extract_v4(text: str, finish_reason: str, rules=RULES, amended: bool = False) -> tuple:
+    """(mode, extracted string, rules that changed the v3 result). finish_reason is the stored field ('stop' or 'length').
+    amended (v4a, SPEC_repair.md "Deviations"): R2 only on an answer that ended with the stop token, and R3 before R2."""
     mode, ext, start = R.extract_v3(text)
     fired = []
     if "R1" in rules and ext is not None and unusable(ext):
         mode, ext = _r1(text, start)
         fired.append("R1")
-    if "R2" in rules and ext is None and _r2(text) is not None:
-        mode, ext = "lower_marker", _r2(text)
-        fired.append("R2")
-    if "R3" in rules and ext is None and finish_reason == "stop" and _r3(text) is not None:
-        mode, ext = "last_line", _r3(text)
-        fired.append("R3")
+    stop = finish_reason == "stop"
+    r2 = ("R2", "lower_marker", lambda: _r2(text) if stop or not amended else None)
+    r3 = ("R3", "last_line", lambda: _r3(text) if stop else None)
+    for name, m, f in ((r3, r2) if amended else (r2, r3)):
+        if name in rules and ext is None and f() is not None:
+            mode, ext = m, f()
+            fired.append(name)
     if ext is not None:
         for name, f in (("R4", _r4), ("R5", _r5)):
             if name in rules and f(ext) != ext:
@@ -110,7 +113,7 @@ def extract_v4(text: str, finish_reason: str, rules=RULES) -> tuple:
     return mode, ext, fired
 
 
-def grade_v4(gold: str, text: str, finish_reason: str, rules=RULES) -> dict:
-    mode, ext, fired = extract_v4(text, finish_reason, rules)
+def grade_v4(gold: str, text: str, finish_reason: str, rules=RULES, amended: bool = False) -> dict:
+    mode, ext, fired = extract_v4(text, finish_reason, rules, amended)
     score = 0 if ext is None else S.grade(R.norm_v3(gold), R.norm_v3(ext))["score"]
     return {"mode_v4": mode, "extracted_v4": ext, "score_v4": score, "fired_v4": fired}
