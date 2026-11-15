@@ -1425,13 +1425,13 @@ Same settings. "On 251" = right on the 251 problems the cued base finishes (base
   -1: 96; at most 2 at 3: 9).
 - D2 (the directions, not the size of a perturbation) held: the random edit has 67 to 79 cap hits and 158 to 167 right at every
   size, including 3 times the size (0.22 % of the weight norm).
-- D3 (right answers peak between 1 and 1.5, below the base at -1 and 3) held: 203 at 1.5, which is -0.9 points from RL [-4.6, 2.7]
-  and +13.7 points above the random edit [9.5, 18.3]; 118 at -1 and 117 at 3.
+- D3 (right answers peak between 1 and 1.5, below the base at -1 and 3) held: 203 at 1.5, which is -0.9 points from RL [-4.9, 2.7]
+  and +13.7 points above the random edit [9.2, 18.3]; 118 at -1 and 117 at 3.
 - Raw answers. At -1 the model stops boxing its answer (61 finished answers without a box, base 23; they end "Answer: 27") and is
   wrong more often when it finishes (0.51 right per finished, base 0.65). At 3 it finishes but 113 answers decay into strings of
   function words. So the 8 directions carry three things that move together: finishing, the boxed answer format, and right
   answers on problems the base already finishes (113, 161, 175, 184 at -1, 0, 1, 1.5).
-- One sample per cell; 1.5 against 1 is +3.4 points [-0.3, 7.0].
+- One sample per cell; 1.5 against 1 is +3.4 points [-0.9, 7.6].
 
 Which reward writes the finishing directions (8 directions of each model added to the base):
 
@@ -1447,7 +1447,7 @@ Which reward writes the finishing directions (8 directions of each model added t
 
 - R1 is refuted for IF: its 8 directions cut cap hits as far as Math's (41), by ending early with an unboxed "Answer: 27" (158 of
   287 finished answers have no box, median 2,140 tokens; 108 of the 152 with an answer marker are right). Math 3.0 behaves as
-  Math 3.1 (43 cap hits, 182 right, +7.3 points above the random edit [2.7, 11.9]). General's edit changes nothing in right answers.
+  Math 3.1 (43 cap hits, 182 right, +7.3 points above the random edit [2.7, 11.6]). General's edit changes nothing in right answers.
 - Finishing is therefore written by the Math, Code and IF rewards alike; what the reasoning rewards add is the boxed format and
   right answers.
 - The Think-SFT cell is not a test: its top-8 edit is 3.7 % of the weight norm (50 times Math's) and the model writes commas
