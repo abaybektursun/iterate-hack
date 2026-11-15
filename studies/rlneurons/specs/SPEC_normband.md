@@ -100,3 +100,24 @@ Requested by the coordinator after the band jobs were submitted. Existing: direc
   direction 1 at 1.5 is within 2 points of directions 2-8 in right answers, or above.
 - My forecast from the direction-1 dial (1x 181, 2x 184 right; 51, 23 cap hits): top1x1.5 about 182 right and 35 cap hits per
   sample, so the right-answer part of P5 is at risk (directions 2-8 had 183). Directions 2-8 sample 0: 180 to 186 right, 60 to 75 cap hits.
+
+## Amendment 3 (before these runs): review cells for result-e18bd8
+
+Requested by a hostile review. Same settings (hard328, T 1.0 / top-p 1.0, cap 16,384, grader v3, two shards per sample).
+
+| Cell | Arguments | Prompt | Sample (seed) | Pairs with |
+|---|---|---|---|---|
+| S1 `top8x3_L22-31_math31` | `--recipe top8 --layers 22-31 --scale 3.0` | cue | 0 (3000000) | its sample 1; base cue samples 0 and 1 |
+| S2 `top1x1.5_math31_plain` | `--recipe top8 --k 1 --scale 1.5` | plain | 1 (3010000) | S2b, S3 |
+| S3 `top8x1.5_d2-8_math31_plain` | `--recipe top8 --skip 1 --scale 1.5` | plain | 1 (3010000) | S2b, S2 |
+| S2b `base_plain` | `run_cell --model base`, no edit | plain | 1 (3010000) | S2, S3 |
+
+No plain base on this seed scheme exists: the only plain base run on hard328 (`results/day1_hard328/base_plain_T1-01/`) has seed
+50000000 and no committed rows, so S2b is added.
+
+- P6 (S1). Right minus base (same seeds, samples 0 and 1 of both) has an interval including 0, and cap hits fall by at least 8
+  points. Refuted if S1 alone adds >= +4 points right over the base.
+- P7 (S2, S3, objection: the cue already supplies what direction 1 adds). Without the cue, direction 1 adds more right answers over
+  the plain base than directions 2-8 do: S2 minus S3 >= +3 points right. If so, the rank result of e18bd8 is specific to the cue.
+  Refuted if S3 adds at least as many right answers as S2 (S2 minus S3 <= 0).
+- Budget: 8 jobs, about 0.4 H100-hour each, about 14 USD.
