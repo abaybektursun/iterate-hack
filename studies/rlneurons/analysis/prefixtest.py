@@ -26,8 +26,7 @@ def main():
         rows[arm] = []
         for j in jobs:
             m = json.loads((RUNS / j / "metrics.json").read_text())
-            assert m["status"] == "done", (j, m["status"])
-            cfg.setdefault(arm, {k: m["config"][k] for k in ("model", "alpha", "k", "cap", "seed", "arm")})
+            cfg.setdefault(arm, {k: m["config"][k] for k in ("model", "alpha", "k", "cap", "seed", "arm")})  # a job that ran out of memory keeps its finished batches; the count per prefix below fails if anything is missing
             assert cfg[arm] == {k: m["config"][k] for k in cfg[arm]}, j
             rows[arm] += [json.loads(line) for line in open(RUNS / j / "answers.jsonl")]
         assert len({(r["item"], r["k"]) for r in rows[arm]}) == len(rows[arm]), arm

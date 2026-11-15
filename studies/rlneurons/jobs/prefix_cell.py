@@ -42,6 +42,7 @@ def main():
     ap.add_argument("--batch", type=int, default=8)
     ap.add_argument("--shard", default="0/1")
     ap.add_argument("--seed", type=int, required=True)
+    ap.add_argument("--start", type=int, default=0, help="skip the first n requests of the shard (the rest of a run that ended early)")
     ap.add_argument("--n-items", type=int, default=None, help="the first n located items (smoke runs)")
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
     a = ap.parse_args()
@@ -79,7 +80,7 @@ def main():
                          "ids": ids + pre + it["prefix"], "ids0": S.render_ids(tok, "") + pre + it["prefix"], "n_prompt": len(ids), "prefix_ids": pre + it["prefix"],
                          "prefix_kind": "before_wrong_step", "seed": a.seed + 100 * i + k, "sampling": {"temperature": 1.0, "top_p": 1.0, "repetition_penalty": 1.0},
                          "max_tokens": a.cap, "gold": p["answer"], "item": it["item"], "label": it["label"]})
-    reqs = sorted([r for j, r in enumerate(reqs) if j % sn == si], key=lambda r: len(r["ids"]))
+    reqs = sorted([r for j, r in enumerate(reqs) if j % sn == si], key=lambda r: len(r["ids"]))[a.start:]
 
     repo, _, rev = fz["models"]["base" if a.model == "base" else "s2800"]
     model = AutoModelForCausalLM.from_pretrained(snapshot_download(repo, revision=rev, allow_patterns=["*.json", "*.safetensors"]), dtype=torch.bfloat16).cuda().eval()
