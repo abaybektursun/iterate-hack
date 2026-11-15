@@ -35,6 +35,7 @@ import pastdev
 import proof_idea_basins
 
 HOOK = "36 hours to solve recursive self-improvement"  # the opening line of the talk
+TAGLINE = "Symbiotic harness for resource-constrained researchers"  # what Invariant is: after the name, under the opening line
 SITE = "invariant.team"  # the address on the first and last slide
 # Slide "summary": what the team did, in Samer's words, in groups of lines.
 # Slide "built": what the team did, said once early and in full on the slide "summary".
@@ -126,7 +127,7 @@ FIGS = {
     "harness": embed(architecture.PAGE, f""":root[data-theme="light"] {{ color-scheme: light; {demo.LIGHT} }}
 :root[data-theme="dark"] {{ color-scheme: dark; {demo.DARK} }}
 html, body {{ overflow: hidden; }}
-.top, .foot, .side, .part.key, .part.tool {{ display: none !important; }}
+.top, .foot, .side, .say, .part.key, .part.tool {{ display: none !important; }}
 .page {{ display: block !important; height: 100vh !important; min-height: 0 !important; max-width: none !important; padding: 0 !important; }}
 .stage {{ height: 100vh; padding: 0 !important; }}"""),
     # the accuracy climb of Ali's slide 3: the step line over the idea disc, without its words and its controls
@@ -170,6 +171,14 @@ header.top, .inv-home, .mast, .lede, .nums, .src-line, .fig-tw, .figlab, .key, .
 #mem { height: 100vh !important; }
 .scene text { font-size: 13px !important; }
 .scene text.tag { display: block !important; }"""),
+    # the side note of the sponsors slide: the towers of /pastdev alone (recall against grep, 20 questions)
+    "pasttw": embed(pastdev.PAGE, sponsor_theme(pastdev.PAGE) + """
+header.top, .inv-home, .mast, .lede, .nums, .src-line, .fig-mem, .figlab, .key, .figsay, .strip, section, .end { display: none !important; }
+.page { max-width: none !important; padding: 0 !important; }
+.first { padding: 0 !important; margin: 0 !important; border: 0 !important; }
+.figs { display: block !important; margin: 0 !important; }
+.fig-tw { margin: 0 !important; }
+#tw { height: 100vh !important; }"""),
 }
 
 # The numbers under the two sponsor figures, read from the first screens of /exa and /pastdev (label -> number).
@@ -249,7 +258,7 @@ def qr():
 
 def slides(papers):
     return [
-        ("hook", f'<div class="mid">{hours_svg()}<h1 class="big">{hook_html()}</h1><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
+        ("hook", f'<div class="mid">{hours_svg()}<h1 class="big">{hook_html()}</h1><p class="tagline"><b class="team">Invariant</b>: {esc(TAGLINE)}</p><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers</p>'
                      '<ul class="limits"><li>Limited token budget</li><li>Limited compute</li><li>Limited people</li></ul></div>'),
         ("built", '<div class="recap"><h2 class="title">So we built <b class="team">Invariant</b></h2><div class="did one">'
@@ -263,13 +272,16 @@ def slides(papers):
                   '<iframe class="fig-frame climb" data-fig="climb" data-replay title="The accuracy climb" tabindex="-1"></iframe>'
                   '<div class="replay"><input class="seek" type="range" min="0" max="1000" step="1" value="0" aria-label="Board time">'
                   '<button class="rate" aria-pressed="false" aria-label="Half speed">0.5×</button></div>'),
-        ("harness", '<div class="head"><h2>Invariant</h2><p class="sub">A hill climbing engine and an interpretability engine in one harness</p></div>'
+        ("harness", '<div class="head"><h2>Invariant</h2><p class="sub">Symbiotic research swarm</p></div>'
                     '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
                     + '<ul class="wins">' + "".join(f'<li class="step">{esc(w)}</li>' for w in WINS) + '</ul>'
-                    f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span></div>'),
+                    f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span>'
+                    '<span>Agents <b class="word">OpenAI</b><b class="word">Devin</b><b class="word">Anthropic</b></span></div>'),
         ("sponsors", '<div class="head"><h2>Search and memory before every experiment</h2></div>'
                      '<iframe class="fig-frame sponsor s-exa" data-fig="exa" data-replay title="Exa: searches at the gate before a GPU run" tabindex="-1"></iframe>'
                      '<iframe class="fig-frame sponsor s-past" data-fig="pastdev" data-replay title="past.dev: one agent writes, another reads" tabindex="-1"></iframe>'
+                     '<iframe class="fig-frame s-tw" data-fig="pasttw" data-replay title="past.dev recall against grep, 20 questions" tabindex="-1"></iframe>'
+                     '<p class="spon-note">Recall against grep, 20 questions</p>'
                      f'<p class="spon s-exa">{logo("exa")}<span><b>{esc(EXA_NUMS["arXiv papers surfaced"])}</b> arXiv papers surfaced · <b>{esc(EXA_NUMS["pages read in full"])}</b> pages read in full</span></p>'
                      f'<p class="spon s-past">{logo("past")}<span><b>{esc(PAST_NUMS["memories"])}</b> memories · <b>{esc(PAST_NUMS["median recall"])}</b> median recall</span></p>'),
         ("finding", '<h2 class="title top-title">Interpretable findings with hill climbing</h2>'
@@ -277,7 +289,7 @@ def slides(papers):
         ("beyond", '<div class="head"><h2>These findings are generalizable</h2>'
                    '<p class="sub">One <b class="team">Invariant</b> method: climbed on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
                    '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
-        ("efficiency", f'<div class="head"><h2>Benchmarking against Karpathy\'s autoresearch (100k stars on GitHub)</h2>'
+        ("efficiency", f'<div class="head"><h2>Benchmarking against Karpathy\'s autoresearch (100k GitHub stars)</h2>'
                        f'<p class="sub">Same score with {demo_results.TOKEN_RATIO:.1f}× fewer tokens · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
                        '<iframe class="fig-frame wide" data-fig="efficiency" data-replay title="Our harness against autoresearch" tabindex="-1"></iframe>'),
         ("proof", '<h2 class="title top-title">Its own review cuts waste</h2>'
@@ -324,6 +336,7 @@ p, h1, h2, figure { margin: 0; }
 .mid { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 30px; text-align: center; padding: 0 140px; }
 .big { font-weight: 300; font-size: 76px; line-height: 1.12; letter-spacing: -.012em; max-width: 1240px; text-wrap: balance; }
 .sub { font-size: 24px; font-weight: 500; color: var(--mute); }
+.tagline { font-size: 38px; font-weight: 400; color: var(--mute); letter-spacing: -.004em; }  /* slide "hook": what Invariant is */
 .faint { color: var(--faint); font-weight: 500; }
 .top { margin-bottom: 8px; }
 .title { font-weight: 300; font-size: 54px; line-height: 1.15; letter-spacing: -.008em; }
@@ -356,7 +369,7 @@ p, h1, h2, figure { margin: 0; }
 .head { position: absolute; left: 96px; top: 72px; z-index: 1; }
 .head h2 { font-weight: 300; font-size: 54px; line-height: 1.1; }
 .head .sub { margin-top: 12px; }
-.sub .team { font-weight: 740; font-stretch: 122%; letter-spacing: .02em; color: var(--blue); }  /* the team's name, set as on the site's header */
+.sub .team, .tagline .team { font-weight: 740; font-stretch: 122%; letter-spacing: .02em; color: var(--blue); }  /* the team's name, set as on the site's header */
 
 .photo { border-radius: 2px; overflow: hidden; }
 .photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -389,11 +402,14 @@ p, h1, h2, figure { margin: 0; }
 .rate { font: inherit; font-size: 15px; font-weight: 560; color: var(--ink); background: none; border: 1px solid var(--faint); border-radius: 999px; padding: 3px 12px; cursor: pointer; }
 .rate[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .fig-frame.wide { left: 220px; top: 205px; width: 1160px; height: 650px; }
-/* the sponsors slide: two scenes side by side, each drawn at 580 x 446 and shown 1.21 times larger so its labels read from the back of a room */
-.fig-frame.sponsor { top: 208px; width: 580px; height: 446px; transform: scale(1.21); transform-origin: 0 0; background: transparent; }
-.fig-frame.s-exa { left: 96px; } .fig-frame.s-past { left: 804px; }
-.spon { position: absolute; top: 772px; width: 702px; display: flex; align-items: center; justify-content: center; gap: 22px; font-size: 24px; font-weight: 500; color: var(--mute); }
-.spon.s-exa { left: 96px; } .spon.s-past { left: 804px; }
+/* the sponsors slide: two scenes side by side, each drawn at 580 x 446 and shown 1.04 times larger, with the towers of /pastdev as a smaller third picture on the right */
+.fig-frame.sponsor { top: 228px; width: 580px; height: 446px; transform: scale(1.04); transform-origin: 0 0; background: transparent; }
+.fig-frame.s-exa { left: 40px; } .fig-frame.s-past { left: 652px; }
+/* the side note: the towers of /pastdev (recall against grep), smaller, to the right of the memory scene */
+.fig-frame.s-tw { left: 1246px; top: 262px; width: 324px; height: 430px; background: transparent; }
+.spon-note { position: absolute; left: 1246px; top: 706px; width: 324px; text-align: center; font-size: 17px; font-weight: 500; color: var(--mute); }
+.spon { position: absolute; top: 772px; width: 603px; display: flex; align-items: center; justify-content: center; gap: 20px; font-size: 21px; white-space: nowrap; font-weight: 500; color: var(--mute); }
+.spon.s-exa { left: 40px; } .spon.s-past { left: 652px; }
 .spon b { font-weight: 640; color: var(--ink); }
 .fig-frame.fixes { left: 180px; top: 140px; width: 1240px; height: 694px; }
 .fig-frame.gapfig { left: 100px; top: 58px; width: 1400px; height: 784px; }
