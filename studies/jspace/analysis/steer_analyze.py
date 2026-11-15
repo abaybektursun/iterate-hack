@@ -2,12 +2,15 @@
 in one of them) and writes metrics.json and examples.json to the result folder.
 
     PYTHONPATH=. python3 -m studies.jspace.analysis.steer_analyze --runs runs/<job-id> [runs/<job-id> ...] --out <result folder>
-        [--t1 runs/diag_t1t2/T1.jsonl] [--target 1.41]
+        [--t1 runs/diag_t1t2/T1.jsonl] [--stored <rows.jsonl of stored unsteered samples>] [--items <per_problem.json>] [--target 1.41]
 
 Per arm: right of n (grader v3), cap hits, rule-A loops, generated tokens, written hold-on words per 1,000 tokens. Against
 `none`, paired over problems: difference in points with a 95 % percentile interval (bootstrap over problems, 2,000 resamples),
 answers gained and lost in total and by subject, identical answers. --t1: the stored T1 rows, for the count of answers
-identical to them. --target: the hold-on rate ratio against `none` that the strength rule of the spec interpolates to
+identical to them. --stored: rows of earlier unsteered cells at the same setting (studies/rlneurons/results/day1_3/
+math500_base_cue-01/rows.jsonl: four samples per problem, attempt 0 used); each arm is also compared with the per-problem mean of
+those samples, which carries less sampling noise than the one `none` sample. --items: studies/rlneurons/results/rln4/
+t1_t2_items-01/per_problem.json, for gained and lost answers by group (both models right in T1 and T2, RL only, ...). --target: the hold-on rate ratio against `none` that the strength rule of the spec interpolates to
 (log-linear in strength between the two neighbouring strengths of each steering site and of the bias arms).
 First divergence: every arm shares its sampling noise with `none`, so an answer equals the `none` answer up to the first
 position where the arm changed the next-token distribution enough; reported are the median character offset of that position
@@ -69,6 +72,8 @@ def main():
     ap.add_argument("--runs", nargs="+", required=True)
     ap.add_argument("--out", required=True)
     ap.add_argument("--t1")
+    ap.add_argument("--stored")
+    ap.add_argument("--items")
     ap.add_argument("--target", type=float, default=1.41)
     a = ap.parse_args()
     out = pathlib.Path(a.out)
@@ -92,6 +97,20 @@ def main():
     assert all(sorted(v) == keys for v in rows.values()), {k: len(v) for k, v in rows.items()}
     t1 = {json.loads(l)["problem_index"]: json.loads(l) for l in open(a.t1)} if a.t1 else None
     none = [rows["none"][k] for k in keys]
+    stored, stored_mean = None, None
+    if a.stored:
+        by = collections.defaultdict(list)
+        for line in open(a.stored):
+            r = json.loads(line)
+            if r["attempt"] == 0:
+                by[r["problem_index"]].append(r)
+        assert all(len(by[k[0]]) == len(by[keys[0][0]]) for k in keys), "stored samples per problem differ"
+        stored_mean = [float(np.mean([r["score_v3"] for r in by[k[0]]])) for k in keys]
+        flat = [r for k in keys for r in by[k[0]]]
+        stored = {"file": a.stored, "samples_per_problem": len(by[keys[0][0]]), "right_per_sample_mean": float(np.sum(stored_mean)),
+                  "percent": 100 * float(np.mean(stored_mean)), "tokens_mean": float(np.mean([r["n_new"] for r in flat])),
+                  "cap_hits_per_sample_mean": sum(r["cap_hit"] for r in flat) / len(by[keys[0][0]])}
+    group = {int(r["problem_index"]): r["cell"] for r in json.load(open(a.items))} if a.items else None
     rate = lambda rs: 1000 * sum(r["hold_words"] for r in rs) / sum(r["n_new"] for r in rs)
 
     arms, examples = {}, {}
@@ -117,6 +136,13 @@ def main():
         div = [d for d in (first_divergence(r["text"], n["text"]) for r, n in zip(rs, none)) if d is not None]
         e["first_divergence"] = {"n": len(div), "median_char": float(np.median([d[0] for d in div])) if div else None,
                                  "first_word_is_hold_on": sum(d[1] for d in div)}
+        if stored_mean is not None:
+            e["minus_stored_mean"] = boot_diff(sc, stored_mean)
+        if group is not None:
+            e["gained_by_group"] = dict(collections.Counter(group[r["problem_index"]] for r in gained))
+            e["lost_by_group"] = dict(collections.Counter(group[r["problem_index"]] for r in lost))
+            e["right_by_group"] = {g: [int(sum(r["score_v3"] for r in rs if group[r["problem_index"]] == g)), sum(group[r["problem_index"]] == g for r in rs)]
+                                   for g in sorted(set(group.values()))}
         if t1 is not None:
             e["identical_to_stored_T1"] = sum(r["sample"] == 0 and r["text"] == t1[r["problem_index"]]["text"] for r in rs)
         arms[name] = e
@@ -134,7 +160,7 @@ def main():
             series[f"bias:{e['family']}"].append((e["nats"], e["hold_rate_ratio_to_none"]))
     dose = {k: {"points": sorted(v), "strength_at_target": interpolate(sorted(v), a.target)} for k, v in series.items()}
     json.dump({"jobs": jobs, "n_problems": len({k[0] for k in keys}), "n_rows_per_arm": len(keys), "target_ratio": a.target, "arms": arms, "dose": dose,
-               "stored_T1": {"right_v3_same_problems": None if t1 is None else "see arms.none.identical_to_stored_T1"}}, open(out / "metrics.json", "w"), indent=1)
+               "stored_unsteered": stored}, open(out / "metrics.json", "w"), indent=1)
     json.dump(examples, open(out / "examples.json", "w"), indent=1)
     for name, e in arms.items():
         print(f"{name:26s} {e['right_v3']:3d}/{e['n']} cap {e['cap_hits']:3d} loop {e['loop_A']:3d} tok {e['tokens_mean']:7.0f} hold/1k {e['hold_words_per_1k_tokens']:6.2f} "
