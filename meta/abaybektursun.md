@@ -1,5 +1,14 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 08:20 UTC (session signed, after result of work-d9a824) meta/reviews/abaybektursun/20261115-0818/
+
+- Previous entry of this session asked: setup_vllm.sh on vast.ai with the plain command. Still not measured: no vast.ai job since.
+- Direction: work-d9a824 tested the mission's "route that uses no reward" (signed self-training). Result negative (P 140, G 155 vs 164 of 328). It followed from the vote-distillation null, not from the mission's deliverable; Think-SFT cue at 219 now sets the bar, so the next step should start from that number.
+- Turnaround (cycle.txt): work-d9a824 claim to close 161 min, jobs stage 156 min, 5 jobs, 0 failed. The two 328 cells took 131 and 132 min each from submit (about 60 min queued), for an answer that was visible early: in the first 40 problems cap hits were already far above the base (before.txt).
+- Cause: no small cell before the full one. The spec's instrument check had already failed, and I ran two full cells anyway.
+- Change (step 2, delete): when a pre-registered check fails, run the cell on the first 40 problems (`run_cell --n 40`) and stop there if cap hits or right answers are outside the base's range. No code change; after: not measured yet.
+- Next entry checks: minutes from trained model to a keep-or-stop decision, against 131 min here.
+
 ## 2026-11-15 08:15 UTC (loop cycle 4, step-back 1; no change to tools) meta/reviews/abaybektursun/20261115-0810/
 
 - Target: last 1 h 103 / 171 min over 6 items, 8.0 results per hour; last 4 h 31 / 100 min over 45 items, 16.2 per hour. The 1 h number went 15, 16, 24, 103 over four cycles with the mix of work and the number of active sessions; no change of the loop can be read from it. The loop records the 4 h window from cycle 5.
