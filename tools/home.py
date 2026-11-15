@@ -248,9 +248,10 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 <div class="page" id="page">
   <header class="top">
     <h1 class="name">Invariant</h1>
+    <a href="https://monitor.invariant.team/findings">Findings</a>
+    <a href="https://monitor.invariant.team/papers">Papers</a>
     <a href="https://monitor.invariant.team/">Board</a>
     <a href="https://monitor.invariant.team/proof">Proof</a>
-    <a href="https://monitor.invariant.team/findings">Findings</a>
     <span class="status" id="status">Reading the board</span>
   </header>
   <div class="words">
