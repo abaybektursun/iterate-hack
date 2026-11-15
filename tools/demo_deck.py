@@ -25,7 +25,9 @@ import demo_ali_data
 import demo_facts
 import demo_photos
 import demo_results
+import exa_page
 import finding_the_finish_dial
+import pastdev
 import proof_idea_basins
 import proof_review_cuts_waste
 
@@ -83,6 +85,22 @@ _T = re.search(r":root \{\n  color-scheme: light dark;\n(.*?)\n\}\n@media \(pref
 assert _T, "the tokens of proof_idea_basins.py changed"
 BASIN_LIGHT, BASIN_DARK = (" ".join(t.split()) for t in _T.groups())
 
+def _under_invert(color):
+    """The colour that the filter invert(1) hue-rotate(180deg) turns into `color` (the rotation by 180 degrees is its
+    own inverse)."""
+    r, g, b = (int(color[i:i + 2], 16) / 255 for i in (1, 3, 5))
+    rot = (-0.574 * r + 1.430 * g + 0.144 * b, 0.426 * r + 0.430 * g + 0.144 * b, 0.426 * r + 1.430 * g - 0.856 * b)
+    return "#" + "".join(f"{round(255 * min(1, max(0, 1 - v))):02x}" for v in rot)
+
+
+_PAPER = {name: re.search(r"--paper: (#[0-9a-fA-F]{6})", tokens).group(1) for name, tokens in (("light", demo.LIGHT), ("dark", demo.DARK))}
+# /exa and /pastdev are light pages: in the deck they stand on the deck's paper, and the dark deck inverts them. Their
+# colour scheme stays light in both themes: a frame is see-through only while its page's scheme equals the frame's.
+SPONSOR_THEME = f"""html, body {{ overflow: hidden; background: transparent !important; }}
+:root[data-theme="light"] {{ --paper: {_PAPER["light"]}; }}
+:root[data-theme="dark"] {{ --paper: {_under_invert(_PAPER["dark"])}; }}
+:root[data-theme="dark"] body {{ filter: invert(1) hue-rotate(180deg); }}"""
+
 FIGS = {
     # architecture.py follows only the system theme, so the deck's tokens are added for data-theme here.
     "harness": embed(architecture.PAGE, f""":root[data-theme="light"] {{ color-scheme: light; {demo.LIGHT} }}
@@ -109,7 +127,30 @@ html, body { overflow: hidden; }
 .page { display: block !important; height: 100vh !important; min-height: 0 !important; max-width: none !important; padding: 0 !important; }
 .stage { height: 100vh; padding: 0 !important; }
 svg#svg { height: 100vh !important; max-height: 100vh !important; }"""),
+    # the sponsors slide: the scene of /exa and the memory scene of /pastdev alone, each replaying its real cases.
+    # Both pages are light only, so the dark deck shows them inverted (SPONSOR_THEME).
+    "exa": embed(exa_page.PAGE, SPONSOR_THEME + """
+nav, .top h1, .nums, .cases, .key, .note, section, footer { display: none !important; }
+.wrap { max-width: none !important; padding: 0 !important; }
+.top { padding: 0 !important; }
+.replay { display: block !important; }
+.scene { height: 100vh !important; }
+#sc ellipse[fill="url(#sc-floor)"] { display: none; }  /* the floor's glow is wider than the frame and would show its edge */"""),
+    "pastdev": embed(pastdev.PAGE, SPONSOR_THEME + """
+.mast, .lede, .nums, .src-line, .fig-tw, .figlab, .key, .figsay, .strip, section, .end { display: none !important; }
+.page { max-width: none !important; padding: 0 !important; }
+.top { padding: 0 !important; border: 0 !important; }
+.figs { display: block !important; margin: 0 !important; }
+#mem { height: 100vh !important; }
+.scene text { font-size: 13px !important; }
+.scene text.tag { display: block !important; }"""),
 }
+
+# The numbers under the two sponsor figures, read from the first screens of /exa and /pastdev (label -> number).
+EXA_NUMS = {label: n for n, label in re.findall(r"<li><b>(.*?)</b><span>(.*?)</span></li>", exa_page.PAGE)}
+PAST_NUMS = {label: n for n, label in re.findall(r'<span class="n">(.*?)</span><span class="w">(.*?)</span>', pastdev.PAGE)}
+assert {"arXiv papers surfaced", "pages read in full"} <= set(EXA_NUMS), f"the numbers row of exa_page.py changed: {sorted(EXA_NUMS)}"
+assert {"memories", "median recall"} <= set(PAST_NUMS), f"the numbers row of pastdev.py changed: {sorted(PAST_NUMS)}"
 
 
 # ---------- the numbers ----------
@@ -218,6 +259,12 @@ def slides(n_findings, papers):
         ("harness", '<div class="head"><h2>Nanolab</h2><p class="sub">A hill climbing engine and an interpretability engine in one harness</p></div>'
                     '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
                     f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span></div>'),
+        ("sponsors", '<div class="head"><h2>Search and memory before every experiment</h2>'
+                     '<p class="sub">An agent asks Exa for the literature and past.dev for what the team already found. Both pictures replay real events</p></div>'
+                     '<iframe class="fig-frame sponsor s-exa" data-fig="exa" data-replay title="Exa: searches at the gate before a GPU run" tabindex="-1"></iframe>'
+                     '<iframe class="fig-frame sponsor s-past" data-fig="pastdev" data-replay title="past.dev: one agent writes, another reads" tabindex="-1"></iframe>'
+                     f'<p class="spon s-exa">{logo("exa")}<span><b>{esc(EXA_NUMS["arXiv papers surfaced"])}</b> arXiv papers surfaced · <b>{esc(EXA_NUMS["pages read in full"])}</b> pages read in full</span></p>'
+                     f'<p class="spon s-past">{logo("past")}<span><b>{esc(PAST_NUMS["memories"])}</b> memories · <b>{esc(PAST_NUMS["median recall"])}</b> median recall</span></p>'),
         ("finding", '<div class="mid"><h2 class="title">8 directions in the weights hold most of RL\'s gain</h2>'
                     f'{dial_svg()}<p class="sub">Why: they make the model finish its answer, cut-off answers '
                     f'{CELLS["0"]["cut"]} → {CELLS["1.5"]["cut"]}</p></div><p class="corner">{n_findings} findings</p>'),
@@ -287,6 +334,12 @@ p, h1, h2, figure { margin: 0; }
 .fig-frame.tree { left: 220px; top: 190px; width: 1160px; height: 680px; }
 .fig-frame.climb { left: 370px; top: 200px; width: 860px; height: 680px; }
 .fig-frame.wide { left: 220px; top: 205px; width: 1160px; height: 650px; }
+/* the sponsors slide: two scenes side by side, each drawn at 580 x 446 and shown 1.21 times larger so its labels read from the back of a room */
+.fig-frame.sponsor { top: 208px; width: 580px; height: 446px; transform: scale(1.21); transform-origin: 0 0; background: transparent; }
+.fig-frame.s-exa { left: 96px; } .fig-frame.s-past { left: 804px; }
+.spon { position: absolute; top: 772px; width: 702px; display: flex; align-items: center; justify-content: center; gap: 22px; font-size: 24px; font-weight: 500; color: var(--mute); }
+.spon.s-exa { left: 96px; } .spon.s-past { left: 804px; }
+.spon b { font-weight: 640; color: var(--ink); }
 .tools { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; gap: 72px; font-size: 22px; font-weight: 560; color: var(--mute); }
 .tools span { display: inline-flex; align-items: center; gap: 14px; }
 .logo { height: 24px; width: auto; fill: var(--ink); }
