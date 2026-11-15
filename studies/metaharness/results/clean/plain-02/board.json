@@ -1,0 +1,68 @@
+[
+ {
+  "pk": "item#work-905889",
+  "sk": "item",
+  "kind": "work",
+  "listed": "work-closed",
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:52:37Z",
+  "closed_at": "2026-11-15T03:54:48Z",
+  "text": "gapmap batch tokens: T2 (RL) minus T1 (cued base) on MATH-500, metric tokens, by subject, level5, t2_length_quartile, t1_length_quartile; paired bootstrap on the CPU class from the stored per-problem rows (studies/gapmap/queue.json)"
+ },
+ {
+  "pk": "item#work-905889",
+  "sk": "comment#1794714822094006000#dana",
+  "kind": null,
+  "listed": null,
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:53:42Z",
+  "closed_at": null,
+  "text": "subject done; launching level5, t2_length_quartile, t1_length_quartile at the same time."
+ },
+ {
+  "pk": "item#result-5536fb",
+  "sk": "item",
+  "kind": "result",
+  "listed": "result",
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:54:48Z",
+  "closed_at": null,
+  "text": "gapmap tokens, T2 minus T1 on MATH-500, paired bootstrap intervals; artifact studies/gapmap/results/tokens-01/\nsubject: algebra 1116.95 [720.59, 1492.96]; counting_and_probability 297.76 [-949.71, 1477.73]; geometry 1022.73 [-14.97, 2060.84]; intermediate_algebra 63.68 [-752.86, 840.18]; number_theory 883.77 [306.76, 1422.56]; prealgebra 920.5 [439.63, 1376.83]; precalculus 933.45 [36.81, 1749.64]\nlevel5: level1-4 792.8907 [518.7627, 1056.8787]; level5 673.7015 [15.6034, 1311.3236]\nt2_length_quartile: q1 308.992 [26.626, 517.1148]; q2 758.176 [428.9837, 1041.0497]; q3 1022.408 [448.6323, 1545.6387]; q4 954.216 [147.4574, 1746.7359]\nt1_length_quartile: q1 1070.576 [913.4274, 1249.8708]; q2 1632.824 [1368.0333, 1928.4483]; q3 1998.536 [1659.2857, 2352.803]; q4 -1658.144 [-2451.2794, -868.3978]"
+ },
+ {
+  "pk": "item#work-9a50b9",
+  "sk": "item",
+  "kind": "work",
+  "listed": "work-closed",
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:56:32Z",
+  "closed_at": "2026-11-15T03:57:55Z",
+  "text": "gapmap batch tokens_both_right: T2 (RL) minus T1 (cued base) on MATH-500, metric tokens_both_right, by subject, level5, t2_length_quartile, t1_length_quartile; paired bootstrap on the CPU class from the stored per-problem rows (studies/gapmap/queue.json)"
+ },
+ {
+  "pk": "item#work-9a50b9",
+  "sk": "comment#1794715063731866000#dana",
+  "kind": null,
+  "listed": null,
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:57:43Z",
+  "closed_at": null,
+  "text": "subject done; launching  at the same time."
+ },
+ {
+  "pk": "item#result-faed8b",
+  "sk": "item",
+  "kind": "result",
+  "listed": "result",
+  "who": "dana",
+  "branch": "dana/gapmap",
+  "at": "2026-11-15T03:57:55Z",
+  "closed_at": null,
+  "text": "gapmap tokens_both_right, T2 minus T1 on MATH-500, paired bootstrap intervals; artifact studies/gapmap/results/tokens_both_right-02/\nsubject: algebra 1242.1913 [1053.5077, 1435.1139]; counting_and_probability 260.4138 [-459.5, 940.5714]; geometry 834.2593 [84.2994, 1600.25]; intermediate_algebra 991.3571 [535.5246, 1436.1143]; number_theory 782.5849 [389.6556, 1162.614]; prealgebra 888.3115 [628.1713, 1145.3509]; precalculus 1720.3721 [1270.8157, 2169.2433]\nlevel5: level1-4 971.5065 [744.0513, 1195.6967]; level5 1259.0568 [608.8295, 1873.2143]\nt2_length_quartile: q1 475.13 [381.6768, 562.1284]; q2 716.3636 [467.8555, 930.6408]; q3 1069.6667 [612.5416, 1466.4082]; q4 1876.34 [1141.4183, 2585.2841]\nt1_length_quartile: q1 1053.58 [883.534, 1254.1896]; q2 1524.1212 [1245.6448, 1849.4831]; q3 1539.4343 [1238.1456, 1862.0864]; q4 33.14 [-701.6223, 749.6197]"
+ }
+]

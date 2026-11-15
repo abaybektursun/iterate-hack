@@ -1,0 +1,23 @@
+{
+ "theory": "r7-account",
+ "items": [
+  {
+   "k": 1,
+   "experiment": "Share of math500-theta05cue-T1 gap problems assigned to reliability (base + 0.5*(RL - base) with the cue on MATH-500 as the RL side)",
+   "original": 0.4807692307692308,
+   "replicated": 0.4807692307692308,
+   "status": "replicated",
+   "script": "replication/r7-account.duel/p1.py",
+   "not_computable": null
+  },
+  {
+   "k": 2,
+   "experiment": "Share of math500-theta05cue-T1 gap problems assigned to deliberation",
+   "original": 0.2692307692307692,
+   "replicated": 0.2692307692307692,
+   "status": "replicated",
+   "script": "replication/r7-account.duel/p2.py",
+   "not_computable": null
+  }
+ ]
+}

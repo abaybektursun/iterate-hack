@@ -5,7 +5,7 @@ description: Review the direction of the research, how it is being done and how 
 
 # Meta review
 
-Four reviews, direction first. Each is answered from artifacts, timestamps and git, never from memory, and ends in one entry
+Three reviews, direction first. Each is answered from artifacts, timestamps and git, never from memory, and ends in one entry
 of at most ten lines in `meta/<name>.md` (newest first; `<name>` is the part of your git email before the @, so two
 people never edit the same file): what was observed with its numbers and sources, the cause, the one
 change, and what the next entry checks. An entry that finds nothing wrong says what was checked. Read the previous entry first
@@ -52,18 +52,7 @@ Optimizing the path is not the same as checking where it leads. Before the other
 - Is the step in line with the goals and values the owner has stated (truth over the hoped result; no replications; small,
   cheap, decisive runs; the owner's own words on what the work is for)? Name any step that conflicts.
 
-## 2. Research
-
-- Did any run since the last entry reproduce a published experiment or re-derive a known method? Name the run, its cost, the
-  paper and the table.
-- Before each run, was it set beside the closest published experiment (models, data, metric, numbers), with "differs in X"
-  written down?
-- Was the strongest conventional method in the first run of the line, or the last?
-- For each open step: what does it decide, and could its answer be read from a published table or from rows already stored?
-- Is the next step the one the mission asks for, or the one that was easiest to build after the last one?
-- What was told to the owner and later narrowed? What rule would have caught it?
-
-## 3. Turnaround and infrastructure
+## 2. Turnaround and infrastructure
 
 The team's output is set by how fast a question becomes an answer on the board. Every entry reports the turnaround and
 makes one change that cuts its slowest stage. Every change is measured before and after: an improvement is a pair of numbers from
@@ -89,7 +78,8 @@ the same command, not an impression.
    conditions that set it: job ids, problem set, settings, and the GPU the job really got (`memory.gpu` in
    `metrics.json`; Modal's h100 class can hand out an H200). Also name what must not change: the result rows, the
    accuracy, the GPU minutes. A change with no baseline is not made.
-5. Make the change in the same session: code or infrastructure, pushed. Naming it is not enough.
+5. Make the change in the same session: code or infrastructure, pushed. Naming it is not enough. Devin can make
+   it in its own worktree while you measure the baseline (`python3 tools/devin.py run`, skill `devin`).
 6. Measure again with the same command, on the same input and conditions, save the output as `after.txt`, and put this
    table in the entry:
 
@@ -102,7 +92,7 @@ the same command, not an impression.
    better and nothing in the must-not-change rows moved. Otherwise revert it, or keep it and state the cost. A change
    that cannot be measured again in this session is carried to the next entry as "after: not measured yet".
 
-## 4. Failures
+## 3. Failures
 
 Every error, bug and failed run in code or infrastructure since the last entry is a signal. For each one, name the class it
 belongs to and remove the cause:
@@ -110,6 +100,10 @@ belongs to and remove the cause:
 - change the code or the infrastructure so the class cannot happen (one place enters the environment, one helper writes rows,
   one script launches), or
 - delete the instruction, note or file that caused it.
+
+A row of `meta/FAILURES.md` names its code change, so hand it to Devin the moment you write it
+(`python3 tools/devin.py run <name> "<the row's change>; delete the row in the same commit"`, skill `devin`), go on
+with the review, then read its diff and merge it. A row should live minutes.
 
 Never answer a failure by adding a rule, a reminder or a paragraph to a document: that pollutes the context every later
 session has to read, and the cause is still there. A written rule is a last resort and counts as debt. `meta/FAILURES.md`
@@ -121,6 +115,6 @@ documents nobody needs to read to do the work.
 
 - Short. Every number with its file and key, or the command that gave it.
 - One change per entry, and the change is to code, infrastructure or the removal of text, not new text. It carries its
-  before and after table (section 3, steps 4 to 6). A change that was
+  before and after table (section 2, steps 4 to 6). A change that was
   named and not made is carried to the next entry with the reason.
 - Results and findings go on the board (`tools/board.py`). The entry holds only the review.

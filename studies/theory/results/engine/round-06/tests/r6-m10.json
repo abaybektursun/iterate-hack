@@ -1,0 +1,177 @@
+{
+ "theory": "r6-m10",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Mechanism test. Paired finished-answer error rate, RL step 100 plain minus cued base, MATH-500 at T 0.6 / top-p 0.95, on problems where both answers finished. This mechanism predicts about 0.00. The nearest rival (gradual reliability: the per-step error reduction starts at once, as in 2505.22617) predicts step 100 already carries at least half of step 2,800's finished-error drop against the cued base, about -0.02 or lower.",
+   "recipe": "Files (S3, readable): A = s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (step 100, plain); B = s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl (base, cue). In each file keep, per problem_index, the row with the smallest sample value (first in file order on ties). Score every kept row with grader v3 (studies/rlneurons/grader/rln4_grader_v3.py) from its text and gold; an empty extraction scores 0. S = problem_index values that have a kept row in both files with cap_hit false in both. err(X) = (number of S rows of X with v3 score 0) / |S|. Statistic = err(A) - err(B). Cap-hit rows are excluded through S; problems missing from either file are excluded.",
+   "unit": "difference of fractions of problems",
+   "value": 0.0,
+   "low": -0.025,
+   "high": 0.025,
+   "refuted_by": "measured below -0.03 or above 0.04",
+   "gpu_minutes": 0,
+   "script": "tests/r6-m10/p1.py",
+   "measured": -0.0463768115942029,
+   "n": 345,
+   "interval": [
+    -0.06666666666666668,
+    -0.026086956521739132
+   ],
+   "interval_kind": "bootstrap",
+   "inside": false,
+   "refuted_by_met": true,
+   "alt_measured": -0.03318854664577507,
+   "not_computable": null,
+   "note": "Files: A = s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (500 rows, 1 per problem, sample 0), B = .../r3/base-01/out/F_math500.jsonl (500 rows), fetched to runs/theory-tests/r3/... Kept row = smallest sample, first in file order on ties (all samples are 0, so no ties matter). Score = rln4_lib.grade_v3(gold, text)['score_v3'] (the function rln4_grader_v3.py calls); extracted_v3 None or blank scores 0. S = both kept, cap_hit false in both (cap_hit false always coincides with finish_reason 'stop' in these files). Statistic = err(A) - err(B) over S, bootstrap over problems as (scoreA, scoreB) pairs. B's text starts with the prefilled cue ' line!\\n\\nOkay' (included in text); A has no prefill. alt_measured: unpaired reading, each file's error rate over its own cap_hit-false rows. Risk: grader v3 judgment errors (flip review lists a few) apply to both files alike.",
+   "example_row": {
+    "cell": "P",
+    "bench": "math500",
+    "sample": 0,
+    "problem_index": 0,
+    "unique_id": "test/precalculus/807.json",
+    "seed": 1000000,
+    "prompt_n_tokens": 103,
+    "n_new": 650,
+    "n_generated": 651,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "finished_by_N": true,
+    "loop_ratio": 0.4549315714959887,
+    "n_special_ids": 0,
+    "mode": "boxed",
+    "extracted": "\\left(3, \\dfrac{\\pi}{2}\\right)",
+    "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+    "score": 1,
+    "parsed_gold": [
+     "(3, pi/2)",
+     "( 3, \\frac{\\pi}{2} )"
+    ],
+    "parsed_answer": [
+     "(3, pi/2)",
+     "(3, \\frac{\\pi}{2})"
+    ],
+    "answer_logprob": -0.005735693273123843,
+    "answer_prob": 0.9942807244116059,
+    "mean_logprob": -0.19513480818868822,
+    "utc": "2026-11-14T23:25:27Z",
+    "text_tail": "(r\\)**:\n   \\[\n   r = \\sqrt{x^2 + y^2} = \\sqrt{0^2 + 3^2} = \\sqrt{9} = 3\n   \\]\n\n2. **Determine \\(\\theta\\)**:\n   - Since the point \\((0, 3)\\) lies on the positive \\(y\\)-axis, the angle \\(\\theta\\) is \\(\\frac{\\pi}{2}\\) radians.\n\nThus, the polar coordinates are \\(\\boxed{\\left(3, \\dfrac{\\pi}{2}\\right)}\\).",
+    "score_v3": 1
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Cause: whose deliberative length step 100 has. Median per-problem log ratio of step-100 finished length to the cued base's finished length, same problems. This mechanism (step 100 has the cued base's length) predicts about 0.05. A rival in which the first 100 steps already install RL's final long-answer mode predicts about step 2,800's ratio to the cued base, about 0.6.",
+   "recipe": "Files A and B and the kept rows and paired set S exactly as in the first recipe (one row per problem_index, smallest sample; S = problems with cap_hit false in both files). For each problem in S compute ln(max(n_new_A, 1) / max(n_new_B, 1)). Statistic = median over S (for an even count, the mean of the two middle values). No grading is needed. Cap hits and missing problems are excluded through S.",
+   "unit": "natural-log ratio (median over problems)",
+   "value": 0.05,
+   "low": -0.15,
+   "high": 0.25,
+   "refuted_by": "measured above 0.35 or below -0.25",
+   "gpu_minutes": 0,
+   "script": "tests/r6-m10/p2.py",
+   "measured": 0.30830135965451666,
+   "n": 345,
+   "interval": [
+    0.2643981334977361,
+    0.3419517023858386
+   ],
+   "interval_kind": "bootstrap",
+   "inside": false,
+   "refuted_by_met": false,
+   "alt_measured": 0.30768845564909686,
+   "not_computable": null,
+   "note": "Same files, kept rows and S as k=1. Statistic = median over S of ln(max(n_new_A,1)/max(n_new_B,1)), even count = mean of the two middle values; bootstrap over (n_new_A, n_new_B) pairs. Ambiguity: whether B's n_new includes the 3 prefilled cue tokens is not stated in the rows (prefill_ids holds them separately; n_generated = n_new + 1 in the rows seen); main uses n_new as written. alt_measured uses n_generated in place of n_new. A 3-token difference is negligible at these lengths.",
+   "example_row": {
+    "cell": "P",
+    "bench": "math500",
+    "sample": 0,
+    "problem_index": 0,
+    "unique_id": "test/precalculus/807.json",
+    "seed": 1000000,
+    "prompt_n_tokens": 103,
+    "n_new": 650,
+    "n_generated": 651,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "finished_by_N": true,
+    "loop_ratio": 0.4549315714959887,
+    "n_special_ids": 0,
+    "mode": "boxed",
+    "extracted": "\\left(3, \\dfrac{\\pi}{2}\\right)",
+    "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+    "score": 1,
+    "parsed_gold": [
+     "(3, pi/2)",
+     "( 3, \\frac{\\pi}{2} )"
+    ],
+    "parsed_answer": [
+     "(3, pi/2)",
+     "(3, \\frac{\\pi}{2})"
+    ],
+    "answer_logprob": -0.005735693273123843,
+    "answer_prob": 0.9942807244116059,
+    "mean_logprob": -0.19513480818868822,
+    "utc": "2026-11-14T23:25:27Z"
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Case where an effect should not appear: the opening cue's value at step 100. On the base the cue is worth many points; if step 100 already writes the cue's opening by itself, prefilling the cue adds nothing. Accuracy of step 100 with the cue minus step 100 plain, all 500 problems, T 0.6 / top-p 0.95.",
+   "recipe": "Files: A = s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/P_math500.jsonl (plain) and D = s3://pg-lineage-769063704696/results/rlneurons/r3/s0400_s0100-01/out/s0100/F_math500.jsonl (cue). In each file keep, per problem_index, the row with the smallest sample value (first in file order on ties). Score each kept row with grader v3 (studies/rlneurons/grader/rln4_grader_v3.py) from text and gold; a row with cap_hit true counts 0 whatever v3 gives; an empty extraction counts 0. Keep problems present in both files. Statistic = mean score over D minus mean score over A on those problems.",
+   "unit": "difference of fractions of problems",
+   "value": 0.0,
+   "low": -0.035,
+   "high": 0.035,
+   "refuted_by": "absolute value above 0.045",
+   "gpu_minutes": 0,
+   "script": "tests/r6-m10/p3.py",
+   "measured": -0.01904761904761909,
+   "n": 420,
+   "interval": [
+    -0.050000000000000044,
+    0.014285714285714235
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": -0.014380952380952383,
+   "not_computable": null,
+   "note": "Files: A = .../r3/s0400_s0100-01/out/s0100/P_math500.jsonl (500 rows), D = .../r3/s0400_s0100-01/out/s0100/F_math500.jsonl (only 420 rows, 420 problems, 1 each). Score: cap_hit true -> 0, else grade_v3 score_v3 with empty extraction -> 0. Main = mean over D minus mean over A on the problems present in both (at most 420, not the 'all 500' of the experiment text). alt_measured: the 'all 500' reading as each file's mean over all of its own kept rows, unpaired (D 420, A 500). Risk: the 80 problems missing from D may not be a random subset (e.g. a job cut short in index or length order), which could bias both readings relative to a full-500 comparison.",
+   "example_row": {
+    "cell": "F",
+    "bench": "math500",
+    "sample": 0,
+    "problem_index": 0,
+    "unique_id": "test/precalculus/807.json",
+    "seed": 1000000,
+    "prompt_n_tokens": 103,
+    "n_new": 933,
+    "n_generated": 934,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "finished_by_N": true,
+    "loop_ratio": 0.41475511469311843,
+    "n_special_ids": 0,
+    "mode": "boxed",
+    "extracted": "\\left(3, \\frac{\\pi}{2}\\right)",
+    "gold": "\\left( 3, \\frac{\\pi}{2} \\right)",
+    "score": 1,
+    "parsed_gold": [
+     "(3, pi/2)",
+     "( 3, \\frac{\\pi}{2} )"
+    ],
+    "parsed_answer": [
+     "(3, pi/2)",
+     "(3, \\frac{\\pi}{2})"
+    ],
+    "answer_logprob": -0.004181647970142421,
+    "answer_prob": 0.995827082945619,
+    "mean_logprob": -0.20988086807063477,
+    "utc": "2026-11-15T02:40:07Z",
+    "text_tail": "angle \\(\\theta\\) is \\(\\frac{\\pi}{2}\\) radians. This is because the angle measured from the positive \\(x\\)-axis to the positive \\(y\\)-axis is 90 degrees, which corresponds to \\(\\frac{\\pi}{2}\\) radians.\n\nThus, the polar coordinates of the point \\((0, 3)\\) are \\(\\boxed{\\left(3, \\frac{\\pi}{2}\\right)}\\).",
+    "score_v3_capped": 1
+   }
+  }
+ ]
+}

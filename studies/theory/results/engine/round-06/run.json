@@ -1,0 +1,140 @@
+{
+ "commit": "9e6345a",
+ "code_note": "round.py version 6.3 with --account-from (main a227f56, owner abaybektursun) plus one print fix made during the round on branch ali/theory06 (run_scripts: str() around refuted_by and not_computable); no score changes",
+ "work": "work-a9a6dd",
+ "spec": "studies/theory/specs/SPEC_round06.md",
+ "cutoff": "2026-11-15T06:51:23",
+ "command": "sh studies/theory/jobs/round.sh studies/theory/results/engine/round-06 --cutoff 2026-11-15T06:51:23 --skip gpuprice --skip \"theory round\" --skip \"theory skill\" --skip \"Theory engine\" --from studies/theory/results/engine/round-05 --account-from studies/theory/results/account/run-03",
+ "runs": "two: the first stopped in the first replicate stage after about 99 minutes (TypeError in a print, refuted_by None); the second (round.py ... all, same options) skipped the finished stages and ran replicate, score, heldout, rival, defend, duel_test, score_duel, replicate, review",
+ "mechanisms": 12,
+ "abandoned": 6,
+ "abandoned_names": [
+  "r6-m02",
+  "r6-m03",
+  "r6-m07",
+  "r6-m08",
+  "r6-m09",
+  "r6-m12"
+ ],
+ "theories": 9,
+ "theories_new": 6,
+ "account": "r6-account",
+ "theories_carried": [
+  "r5-m03-rival",
+  "r5-m10-rival"
+ ],
+ "offline_predictions": 71,
+ "computed": 67,
+ "inside": 56,
+ "within_noise": 3,
+ "outside": 8,
+ "not_computable": 4,
+ "not_computable_causes": {
+  "field n_tok_p_lt_1e2 is absent from the stored hard328 rows (r6-m06 p1-p3)": 3,
+  "fewer than 8 kept rows, the recipe then gives no number (r6-m11 p2)": 1
+ },
+ "not_scored": {
+  "r6-m11:p1": "measured 0.0 differs from its replication; left out until a person resolves it"
+ },
+ "states": {
+  "r5-m03-rival": "survives",
+  "r5-m10-rival": "survives",
+  "r6-account": "survives",
+  "r6-m01": "refuted",
+  "r6-m04": "refuted",
+  "r6-m05": "refuted",
+  "r6-m06": "untested",
+  "r6-m10": "refuted",
+  "r6-m11": "refuted"
+ },
+ "gain": {
+  "r5-m03-rival": 8.767,
+  "r5-m10-rival": 8.844,
+  "r6-account": 35.413,
+  "r6-m01": -1.135,
+  "r6-m04": -3.521,
+  "r6-m05": -4.238,
+  "r6-m06": 0,
+  "r6-m10": -3.794,
+  "r6-m11": -0.317
+ },
+ "heldout": {
+  "claims_by": {
+   "r6-account": 5,
+   "r5-m10-rival": 5,
+   "r5-m03-rival": 3
+  },
+  "strikes": {
+   "r5-m10-rival": 1,
+   "r6-account": 0,
+   "r5-m03-rival": 0
+  }
+ },
+ "duel": {
+  "duel_tests": 17,
+  "duel_tests_computed": 17,
+  "states": {
+   "r6-account": "loses to rival",
+   "r5-m10-rival": "beats rival",
+   "r5-m03-rival": "beats rival"
+  },
+  "total_gain": {
+   "r6-account": -3.11,
+   "r5-m10-rival": 13.2,
+   "r5-m03-rival": 6.7
+  },
+  "separating": {
+   "r6-account": 0,
+   "r5-m10-rival": 1,
+   "r5-m03-rival": 1
+  }
+ },
+ "replication": {
+  "offline": "r6-account 38 of 38, r6-m01 2 of 2, r6-m04 1 of 1, r6-m05 2 of 2, r6-m10 2 of 2 equal; r6-m11 p1 differs",
+  "duel": "r6-account 1 of 1, r5-m10-rival 5 of 5, r5-m03-rival 5 of 5 equal"
+ },
+ "reviews": {
+  "r5-m03-rival": "stands",
+  "r5-m10-rival": "weak",
+  "r6-account": "weak"
+ },
+ "hypotheses": {
+  "H1": "holds: both carried rivals beat their fresh rivals (+6.70 and +13.20 nats); r5-m03-rival's review says stands, r5-m10-rival's says weak",
+  "H2": "refuted: 54 of 55 recomputed numbers equal, r6-m11 p1 differs",
+  "H3": "holds: inventory.md and external.md both present 826 s after the start (round 05: 1,359 s)"
+ },
+ "jobs": {
+  "inventory": 1,
+  "external": 1,
+  "mechanisms": 1,
+  "develop": 12,
+  "account": 1,
+  "account fix (send-back)": 1,
+  "null_tests": 2,
+  "test, duel_test and replicate writers": 22,
+  "targets (sonnet)": 1,
+  "null": 2,
+  "claims": 3,
+  "rival and rival2": 6,
+  "defend": 6,
+  "review": 3
+ },
+ "jobs_total": 62,
+ "longest_job_s": {
+  "test/r6-account": 2380,
+  "account": 1311,
+  "inventory": 825,
+  "external": 484
+ },
+ "wall_time": "about 125 minutes of running: 09:09:52Z to about 10:49Z (first run, stopped), 10:52Z to 11:18:22Z (second run)",
+ "log": [
+  "studies/theory/results/engine/round-06/round06.log",
+  "studies/theory/results/engine/round-06/round06b.log"
+ ],
+ "temp_folder": [
+  "/var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/theory-round-7v209ubl",
+  "/var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/theory-round-d9e71wca"
+ ],
+ "row_files": "fetched by the test scripts to runs/theory-tests/ (not committed)",
+ "steps_not_run": "GPU predictions (none run); the r6-m11 p1 replication difference is not resolved"
+}

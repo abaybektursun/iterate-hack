@@ -1,0 +1,4 @@
+studies/gapmap/README.md             |  4 +++-
+ studies/gapmap/analysis/summarize.py | 32 ++++++++++++++++++++++++++++++++
+ studies/gapmap/jobs/submit_batch.py  |  4 ++++
+ 3 files changed, 39 insertions(+), 1 deletion(-)

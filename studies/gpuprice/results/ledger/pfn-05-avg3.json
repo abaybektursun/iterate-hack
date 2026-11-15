@@ -1,0 +1,35 @@
+{
+ "name": "pfn-05-avg3",
+ "note": "H: three-way quantile average pfn-02 + fm-07 + sim2-15 beats ens-03 (+0.292); refuted if <= +0.292. Prior informed only by panel rows dated <= 2026-09-30; real data never used in training.",
+ "utc": "2026-11-15T01:29:37+00:00",
+ "commit": "9734dfd",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.291482,
+ "pinball": 0.023766,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.292261,
+ "skill_geomean": 0.362077,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.173873,
+   "in_band": 0.835407
+  },
+  "3": {
+   "skill_pooled": 0.268778,
+   "in_band": 0.748062
+  },
+  "7": {
+   "skill_pooled": 0.335367,
+   "in_band": 0.640504
+  }
+ },
+ "in_band": 0.741718
+}

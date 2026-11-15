@@ -1,0 +1,174 @@
+{
+ "theory": "r5-m03",
+ "turn": 1,
+ "tests": [
+  {
+   "k": 1,
+   "experiment": "Among top8-plain wrong problems, the fraction that the cued base solves in all 4 of its Day-1 #3 samples: are top8's errors on problems the cued base finds reliably easy?",
+   "recipe": "Load studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. From rows.jsonl keep rows with attempt == 0. For each problem_index with exactly 4 such rows (samples 0-3), set base4 = true if score_v3 == 1 in all 4, else false. Drop problems that do not have 4 attempt-0 rows. In the top8 file, a problem is wrong if score_v3 == 0 or cap_hit is true; drop rows with a missing score_v3 that are not cap hits. Keep the top8-wrong problems present in both files. Report (number of them with base4 true) / (number of them).",
+   "unit": "fraction of problems",
+   "refuted_by": null,
+   "script": "rivals/r5-m03/p1.py",
+   "measured": 0.25,
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.2631578947368421,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json (committed; 500 rows: problem_index, score_v3, cap_hit, n_generated) and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl (committed; 2137 rows, 2000 with attempt 0). No fetch needed. Main: top8-wrong = score_v3 == 0 or cap_hit true (missing score_v3 without cap hit dropped, first row per problem_index kept); base4 = score_v3 == 1 in all 4 attempt-0 rows, problems without exactly 4 attempt-0 rows dropped (exact count, sample ids not checked). Ambiguity: the experiment says 'solves in all 4 of its Day-1 #3 samples', which could mean each sample's outcome after restarts; alt_measured scores each sample by its final attempt (max attempt) instead of attempt 0, same population. A base row with missing score_v3 counts as not solved. An empty denominator is reported as not_computable (the recipe does not call it refuted). refuted_by is null, so refuted_by_met is always false.",
+   "example_row": {
+    "problem_index": 8,
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 1167,
+    "_base_attempt0_rows": [
+     {
+      "problem_index": 8,
+      "sample": 0,
+      "attempt": 0,
+      "seed": 41000008,
+      "n_new": 684,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "3\u221a13",
+      "score_v3": 1,
+      "gold": "3\\sqrt{13}"
+     },
+     {
+      "problem_index": 8,
+      "sample": 1,
+      "attempt": 0,
+      "seed": 41010008,
+      "n_new": 561,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "$3\\sqrt{13}$",
+      "score_v3": 1,
+      "gold": "3\\sqrt{13}"
+     },
+     {
+      "problem_index": 8,
+      "sample": 2,
+      "attempt": 0,
+      "seed": 41020008,
+      "n_new": 1245,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "3\\sqrt{13}",
+      "score_v3": 1,
+      "gold": "3\\sqrt{13}"
+     },
+     {
+      "problem_index": 8,
+      "sample": 3,
+      "attempt": 0,
+      "seed": 41030008,
+      "n_new": 722,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "$3\\sqrt{13}$",
+      "score_v3": 1,
+      "gold": "3\\sqrt{13}"
+     }
+    ]
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Mean cued-base solve rate (4 Day-1 #3 samples) on the problems where top8 plain gives a quick finished-wrong answer (wrong under v3, not a cap hit, at most 2,000 tokens).",
+   "recipe": "Load studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Select top8 rows with score_v3 == 0, cap_hit false and n_generated <= 2000 (rows with a missing score_v3 left out; each problem_index once). For each selected problem take the rows.jsonl rows with that problem_index and attempt == 0. Compute k/m, where m is the number of such rows and k the number with score_v3 == 1. Drop selected problems with m == 0. Report the mean of k/m over the remaining selected problems.",
+   "unit": "fraction of samples (mean over problems)",
+   "refuted_by": null,
+   "script": "rivals/r5-m03/p2.py",
+   "measured": 0.8181818181818182,
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.8181818181818182,
+   "not_computable": null,
+   "note": "Files: same two committed files as k=1. Main: top8 rows with score_v3 == 0, cap_hit is False, n_generated <= 2000 (missing score_v3 dropped, first row per problem_index kept); per problem m = number of rows.jsonl rows with that problem_index and attempt == 0, k = number with score_v3 == 1; m == 0 dropped; unweighted mean of k/m over problems. Ambiguity: 'solve rate (4 Day-1 #3 samples)' could mean after restarts; alt_measured scores each attempt-0 sample by its chain's final attempt. Cap-hit base rows count in m and as not solved (score_v3 0). Threshold is inclusive (<= 2000) as written. Empty group -> not_computable. refuted_by null -> false.",
+   "example_row": {
+    "problem_index": 8,
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 1167,
+    "_base_attempt0_rows": [
+     {
+      "problem_index": 8,
+      "sample": 0,
+      "attempt": 0,
+      "seed": 41000008,
+      "n_new": 684,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "3\u221a13",
+      "score_v3": 1,
+      "gold": "3\\sqrt{13}"
+     },
+     {
+      "problem_index": 8,
+      "sample": 1,
+      "attempt": 0,
+      "seed": 41010008,
+      "n_new": 561,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "$3\\sqrt{13}$",
+      "score_v3": 1,
+      "gold": "3\\sqrt{13}"
+     },
+     {
+      "problem_index": 8,
+      "sample": 2,
+      "attempt": 0,
+      "seed": 41020008,
+      "n_new": 1245,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "3\\sqrt{13}",
+      "score_v3": 1,
+      "gold": "3\\sqrt{13}"
+     },
+     {
+      "problem_index": 8,
+      "sample": 3,
+      "attempt": 0,
+      "seed": 41030008,
+      "n_new": 722,
+      "cap_hit": false,
+      "finish_reason": "stop",
+      "loop_A": false,
+      "extracted_v3": "$3\\sqrt{13}$",
+      "score_v3": 1,
+      "gold": "3\\sqrt{13}"
+     }
+    ]
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Share of top8 plain's quick finished-wrong answers that are very short (at most 1,000 generated tokens).",
+   "recipe": "Load studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json. Select rows with score_v3 == 0, cap_hit false and n_generated <= 2000 (rows with a missing score_v3 left out; each problem_index once). Report (number of selected rows with n_generated <= 1000) / (number of selected rows).",
+   "unit": "fraction of problems",
+   "refuted_by": null,
+   "script": "rivals/r5-m03/p3.py",
+   "measured": 0.7727272727272727,
+   "inside": null,
+   "refuted_by_met": false,
+   "alt_measured": 0.7727272727272727,
+   "not_computable": null,
+   "note": "File: studies/rlneurons/results/wsp1/full500/top8_plain-01/per_problem.json only. Main: selection score_v3 == 0, cap_hit is False, n_generated <= 2000 (missing score_v3 dropped, each problem_index once); fraction with n_generated <= 1000. alt_measured uses strict inequalities (< 2000 and < 1000); it differs only if a row sits exactly at 1000 or 2000 tokens. n_generated is the top8 file's token count; whether it includes anything beyond new tokens is not stated in the file. Empty selection -> not_computable. refuted_by null -> false.",
+   "example_row": {
+    "problem_index": 48,
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 1
+   }
+  }
+ ]
+}

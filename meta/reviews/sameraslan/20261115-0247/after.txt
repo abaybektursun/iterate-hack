@@ -1,0 +1,4 @@
+spawn rejected: submit raised RuntimeError: workspace billing cycle spend limit reached; records left: []
+sameraslan-1114-185039-06e3
+spawn accepted: submit raised nothing; records left: ['call', 'job']
+gpu.py ls --all: 21 rows in state submitting of 69

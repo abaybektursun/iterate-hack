@@ -1,0 +1,28 @@
+{
+ "commit": "5c8a97e04eaa04fe0c499d133852fe9b2987578b",
+ "command": "python -m studies.rlneurons.analysis.config_table --out studies/rlneurons/results/table/hard328-01 --v4-from /home/abay/Projects/iterate-hack/runs",
+ "job_id": null,
+ "where": "laptop, no GPU",
+ "spec": "studies/rlneurons/specs/SPEC_table.md",
+ "sources": {
+  "hard328": {
+   "base": "day1_3/hard328_base_cue_s4r2-01",
+   "rl": "day1_3/hard328_rl_plain_s4r2-01",
+   "think": "thinkvote/hard328_sft1_cue_s4-01"
+  },
+  "math500": {
+   "base": "day1_3/math500_base_cue-01",
+   "rl": "day1_3/math500_rl-01",
+   "think": "thinkvote/math500_sft1_cue_s4-01"
+  }
+ },
+ "raw_answers_for_v4": {
+  "base": "abaybektursun-1114-200457-e8e6",
+  "rl": "abaybektursun-1114-200505-5ff2",
+  "think": "thinkvote_hard328_sft1_cue_s4"
+ },
+ "other_branch": {
+  "commit": "bdba62b6dc1e86a807986287b03347cf9b8c1747",
+  "path": "studies/rlneurons/results/wsp1/hard328/{}-01/per_problem.json"
+ }
+}

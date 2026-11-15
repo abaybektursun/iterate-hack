@@ -1,0 +1,155 @@
+{
+ "theory": "r7-m09",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Mechanism test, recurrence across prompts. On problems the cued base solves 4 of 4, take the problems where Think-SFT with the cue gives a finished wrong answer, and compute the fraction where Think-SFT plain is also wrong. A deterministic format miss recurs. The independent-slip rival predicts about Think-SFT plain's error rate on these easy problems, about 0.05 (at most about 0.2 with difficulty correlation).",
+   "recipe": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl, studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json, studies/rlneurons/results/wsp1/full500/sft1_plain-01/per_problem.json. E4 = problem_index values with exactly 4 rows in rows.jsonl having attempt == 0, all 4 with score_v3 == 1 and cap_hit not true. In each per_problem.json keep the first row per problem_index in file order. W = E4 problems whose sft1_cue row has score_v3 == 0 and cap_hit not true (rows with null or missing score_v3 that are not cap hits are excluded). For each problem in W, take its sft1_plain row; drop the problem if there is no row, or if the row has a null or missing score_v3 and is not a cap hit. Plain wrong = score_v3 == 0 or cap_hit true. Statistic = (problems in W with plain wrong) / (problems in W kept). If no problem is kept, the prediction counts as refuted.",
+   "unit": "fraction of problems",
+   "value": 0.55,
+   "low": 0.3,
+   "high": 0.85,
+   "refuted_by": "measured below 0.30",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m09/p1.py",
+   "measured": 0.16666666666666666,
+   "n": 6,
+   "interval": [
+    0.0,
+    0.5
+   ],
+   "interval_kind": "bootstrap",
+   "inside": false,
+   "refuted_by_met": true,
+   "alt_measured": 0.16666666666666666,
+   "not_computable": null,
+   "note": "Files (all in git, read from the checkout; fetched with git show HEAD into runs/theory-tests/r7-m09/ if missing): day1_3/math500_base_cue-01/rows.jsonl, wsp1/full500/sft1_cue-01/per_problem.json, wsp1/full500/sft1_plain-01/per_problem.json. E4 = problems with exactly 4 attempt-0 base rows, all score_v3 == 1 and cap_hit not true. First row per problem_index in each per_problem.json (each has 500 rows, one per problem, so this is a no-op). W = cue score_v3 == 0 and not cap hit. Plain wrong = score_v3 == 0 or cap_hit true; problems with a missing plain row or null non-cap score are dropped (none seen in the format check: score_v3 is always an int). Bootstrap over kept W problems, entries (cue row, plain row); n = kept W size. alt_measured: recurrence counted only as a finished v3-wrong plain answer (plain cap hits not counted), since the mechanism is a deterministic format miss. Caveats: W is likely small (tens of problems), so the interval is wide; Think-SFT texts are not stored, so a plain-wrong can be a real error as well as a format miss.",
+   "example_row": {
+    "cue": {
+     "problem_index": 2,
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_generated": 2846
+    },
+    "plain": {
+     "problem_index": 2,
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_generated": 4910
+    }
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "Cause, answer-type dependence. Among the problems in W (cued base 4 of 4, Think-SFT cue finished wrong), the share whose gold is not a plain integer. Format misses fall on non-integer answer types (fractions, expressions, tuples, text, units). The reasoning-slip rival predicts the share of non-integer golds in the whole 4-of-4 pool, about 0.35 to 0.4.",
+   "recipe": "Files and the sets E4 and W exactly as in the recurrence recipe. Gold of a problem = the gold field of its first attempt-0 row in rows.jsonl (file order). Normalise: strip outer whitespace, remove every '$' and all whitespace, and if the result is wholly \\boxed{...} take the inside. Then delete commas that sit between a digit and exactly three digits (regex (?<=\\d),(?=\\d{3}(?!\\d)) replaced by ''). The gold is an integer iff the result fully matches ^-?\\d+$. Statistic = (problems in W whose gold is not an integer) / (problems in W). If W is empty, the prediction counts as refuted.",
+   "unit": "fraction of problems",
+   "value": 0.7,
+   "low": 0.45,
+   "high": 0.95,
+   "refuted_by": "measured below 0.45",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m09/p2.py",
+   "measured": 0.3333333333333333,
+   "n": 6,
+   "interval": [
+    0.0,
+    0.6666666666666666
+   ],
+   "interval_kind": "bootstrap",
+   "inside": false,
+   "refuted_by_met": true,
+   "alt_measured": 0.3333333333333333,
+   "not_computable": null,
+   "note": "Same files and E4/W as k=1. Gold = gold field of the first attempt-0 base row in file order. Normalisation exactly as written: strip, drop '$', drop all whitespace, unwrap a whole \\boxed{...} (brace-matched so that '\\boxed{a}+\\boxed{b}' is not unwrapped), drop thousands commas with the given regex, integer iff ^-?\\d+$. Bootstrap over W problems; n = |W|. alt_measured: integers carrying unit/decoration markup (^\\circ, \\%, \\text{...}/\\mbox{...}/\\mathrm{...}, \\! or \\, spacing, leading +) also count as integers, since the recipe's 'plain integer' could mean integer value. Under the main reading golds like '90^\\circ' or '10\\%' or '\\text{(C)}'-style letters count as non-integer, which can push the share up.",
+   "example_row": {
+    "cue": {
+     "problem_index": 2,
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_generated": 2846
+    },
+    "gold": "\\frac{14}{3}",
+    "gold_normalised": "\\frac{14}{3}",
+    "gold_is_integer": false
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "A case where Think-SFT's dominant failure should not appear: the share of cap hits among Think-SFT cue's wrong answers on problems the cued base solves 4 of 4. Over all 500 problems, cap hits make up 0.52 of Think-SFT's wrong answers (facts.json). An overthinking rival, in which easy problems also fail by running long, predicts about that share here. This mechanism says the easy-side errors are finished answers.",
+   "recipe": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl and studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json. E4 as in the recurrence recipe. In sft1_cue keep the first row per problem_index in file order. Wrong = score_v3 == 0 or cap_hit true; rows with null or missing score_v3 that are not cap hits are excluded. Among E4 problems whose sft1_cue row is wrong, statistic = (rows with cap_hit true) / (wrong rows). If there are no wrong rows, the prediction counts as refuted.",
+   "unit": "fraction of wrong problems",
+   "value": 0.22,
+   "low": 0.0,
+   "high": 0.45,
+   "refuted_by": "measured above 0.45",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m09/p3.py",
+   "measured": 0.3333333333333333,
+   "n": 9,
+   "interval": [
+    0.1111111111111111,
+    0.5555555555555556
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.3333333333333333,
+   "not_computable": null,
+   "note": "Files: day1_3/math500_base_cue-01/rows.jsonl and wsp1/full500/sft1_cue-01/per_problem.json. E4 as in k=1. Wrong = score_v3 == 0 or cap_hit true; null non-cap rows excluded (none expected). Statistic = rows with cap_hit true / wrong rows, bootstrap over the wrong rows (one per problem); n = number of wrong rows. alt_measured: a row also counts as a cap hit (and wrong) if n_generated >= 16,384 even without the flag. Caveat: the denominator mixes W (finished wrong) and cap hits, so its size is |W| + cap hits.",
+   "example_row": {
+    "problem_index": 2,
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 2846
+   }
+  },
+  {
+   "k": 4,
+   "experiment": "Mechanism test, normal length. On problems the cued base solves 4 of 4, compare Think-SFT cue's finished-wrong and finished-right answers by their length relative to RL's length on the same problem, as a difference of medians of a log ratio. A rejected but complete solution is as long as a right one, about 0. The reasoning-failure rival predicts clearly longer wrong answers: about +0.2 for the base's own wrong siblings (facts.json, r5-m02), and +0.8 or more for long-CoT models (2501.18585).",
+   "recipe": "Files: studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl, studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json, studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json. E4 as in the recurrence recipe. In each per_problem.json keep the first row per problem_index in file order. Keep E4 problems whose sft1_cue row has cap_hit not true and a non-null score_v3, and whose t1_t2_items row has a non-null t2_generated_tokens. For each kept problem x = ln(max(n_generated, 1) / max(t2_generated_tokens, 1)), with n_generated from sft1_cue. Group FW = kept problems with score_v3 == 0; group FR = kept problems with score_v3 == 1. Statistic = median(x over FW) - median(x over FR); for an even count, the median is the mean of the two middle values. If FW has fewer than 3 problems, the prediction counts as refuted.",
+   "unit": "natural-log ratio (difference of medians)",
+   "value": 0.0,
+   "low": -0.4,
+   "high": 0.4,
+   "refuted_by": "measured above 0.40 or below -0.40",
+   "gpu_minutes": 0,
+   "script": "tests/r7-m09/p4.py",
+   "measured": 0.19084698150089882,
+   "n": 6,
+   "interval": [
+    -0.04266924403428852,
+    0.5508124261030999
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.19084698150089882,
+   "not_computable": null,
+   "note": "Files: day1_3/math500_base_cue-01/rows.jsonl, wsp1/full500/sft1_cue-01/per_problem.json, rln4/t1_t2_items-01/per_problem.json (T2 = RL plain, one sample). E4 as in k=1. Kept = E4 problems with a cue row not cap hit with non-null score_v3 and an RL row with non-null t2_generated_tokens. x = ln(max(n_generated,1)/max(t2_generated_tokens,1)); FW = score_v3 0, FR = score_v3 1; median of even count = mean of the two middle values. Prints a groups line {FW, FR}; n = min(|FW|, |FR|) (FW expected small). Bootstrap resamples the kept problems jointly; a resample with an empty FW or FR (rare) takes the full-sample value. FW < 3 -> refuted without number; FR empty -> not computable. alt_measured: same but also drops problems where RL (t2) hit the cap, since a capped RL length is a censored reference. Caveat: the RL reference is a single sample, so x is noisy per problem; n_generated and t2_generated_tokens come from different tokenizations/runs but the same Olmo-3 tokenizer family is assumed.",
+   "example_row": {
+    "cue": {
+     "problem_index": 2,
+     "score_v3": 0,
+     "cap_hit": false,
+     "n_generated": 2846
+    },
+    "rl": {
+     "problem_index": 2,
+     "subject": "algebra",
+     "level5": false,
+     "cell": "both",
+     "t1_right": 1,
+     "t2_right": 1,
+     "t1_cap_hit": false,
+     "t2_cap_hit": false,
+     "t1_generated_tokens": 1043,
+     "t2_generated_tokens": 2323,
+     "failure_type": null,
+     "label_from_tail_only": false
+    },
+    "x": 0.2030550458793885
+   }
+  }
+ ]
+}

@@ -1,0 +1,139 @@
+{
+ "name": "r7-m03",
+ "statement": "Because Olmo-3's tokenizer writes every integer 0-999 as one token, many of the cued base's arithmetic slips are single T 1.0 draws of a wrong number token at a result position whose argmax is the correct value; lowering the temperature removes these slips, and RL has sharpened exactly these positions.",
+ "scope": "Covers Olmo-3-1025-7B with the opening cue and Olmo-3.1-7B-RL-Zero-Math on MATH-500, at T 1.0 / top-p 1.0 and T 0.6 / top-p 0.95, cap 16,384, grader v3. It explains only the part of the gap made of finished wrong answers with an arithmetic slip, whose result is at most 999. It does not cover misreads, wrong plans, sign or algebra slips, cap hits, loops, answer-statement failures or the capability gap on hard328, and it says nothing about the Code pair. Several items conflict with it; they are listed under conflicts.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "1706.04599",
+   "finding": "One scalar temperature fitted on held-out NLL fixes most overconfidence or underconfidence without changing any argmax.",
+   "how": "The result-token positions are treated as a mis-tempered class: dividing their logits by a class-specific temperature removes wrong-value tail draws but keeps the argmax, which the mechanism says is already the correct value. A global temperature cannot do this, because it also cools the connector forks that feed loops."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-faf15a",
+   "quote": "misread -1.52, slip -0.72, wrong plan +0.03",
+   "how": "RL lowers the base's slips but not its wrong plans, which fits a sharpening of result-token distributions rather than a change of method."
+  },
+  {
+   "item": "result-afc423",
+   "quote": "base slip 35% [24, 48], wrong plan 28%",
+   "how": "At T 1.0 slips are the largest class of base finished-wrong answers, which is what per-position sampling noise at result tokens produces."
+  },
+  {
+   "item": "result-afc423",
+   "quote": "the base fails 7.2%, RL 0.9%",
+   "how": "On problems the base usually solves, a sample fails at random a few per cent of the time, as independent wrong draws at a few result positions would."
+  },
+  {
+   "item": "result-855858",
+   "quote": "first wrong steps per 1k finished tokens, 0.015 RL vs 0.038 base",
+   "how": "RL makes fewer first errors per token rather than catching more of them, which fits a sharper per-position distribution."
+  },
+  {
+   "item": "knowledge-13cff3",
+   "quote": "T 1.0 gets 361-364 against 378",
+   "how": "On the same finishing problems, T 1.0 loses about 15 answers to T 0.6, which is the temperature-sensitive error that tail draws at result tokens predict."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-faf15a",
+   "quote": "the base's wrong step is not an unlikely sample",
+   "how": "That measurement is a mean over a 29-token span. The mechanism needs one unlikely token inside the span, and nothing on the board measures that token directly."
+  },
+  {
+   "item": "result-855858",
+   "quote": "a check that repeats the slip",
+   "how": "If a wrong draw has a few per cent probability, re-deriving the value should usually correct it. The repeats fit only if the checks copy the written value instead of recomputing it."
+  },
+  {
+   "item": "result-34897a",
+   "quote": "All three score 1.3 to 1.4 points under plain T 1.0",
+   "how": "Cooling confident positions also cools result tokens, yet the score did not rise. The mechanism needs the slip gain to have been eaten by the extra cap hits (44 against 22.5)."
+  },
+  {
+   "item": "result-44b4df",
+   "quote": "No truncation rule beats untruncated sampling on MATH-500 at T 1.0",
+   "how": "Top-p 0.95 and min-p 0.1 should cut few-per-cent result draws. The mechanism needs their gain to have been cancelled by the loops they brought back (12 and 34)."
+  }
+ ],
+ "rival": "The rival reads result-faf15a literally: base slips are systematic model errors. The base's most likely continuation at the slip is itself wrong, or the error lies in the set-up rather than in the result token, so temperature does not matter. The two separate on stored text: the rival predicts the same wrong-equation rate at T 1.0 and at T 0.6 / top-p 0.95 on the same problems (ratio about 1), and that the base's argmax at a wrong result position is usually the written wrong value. This mechanism predicts a ratio of 3 or more and a correct argmax in most such positions.",
+ "predictions": [
+  {
+   "experiment": "Mechanism test: ratio of the self-inconsistent-equation rate of the cued base at T 1.0 to the same rate at T 0.6 / top-p 0.95, on problems where both answers finished. This mechanism (tail draws at result tokens) predicts about 3. The systematic-error rival (result-faf15a's 'not an unlikely sample' reading) predicts about 1.0 (0.8 to 1.3).",
+   "recipe": "Files: A = runs/theory-rows/s3new/r4/base_rl-02/out/T1.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl; base, cue, T 1.0) and B = runs/theory-rows/s3new/r3/base-01/out/F_math500.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r3/base-01/out/F_math500.jsonl; base, cue, T 0.6 / top-p 0.95), plus studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (field subject). In A keep the first row per problem_index in file order. In B keep, per problem_index, the row with the smallest sample value (first in file order on ties). S = problem_index values with a kept row in both files, cap_hit false in both, and per_problem.json subject != 'Number Theory'. EQ procedure, per row: (1) t = text with re.sub(r'(?<=\\d),(?=\\d{3})', '', text). (2) For each m in re.finditer(r'(?<![\\d.])(\\d{1,3})\\s*(\\+|-|\\*|\u00d7|\\\\times|\\\\cdot)\\s*(\\d{1,3})\\s*=\\s*(\\d{1,6})(?!\\d)', t): (3) pre_s = t[:m.start()].rstrip(' \\t'); keep only if pre_s == '' or pre_s[-1] in '\\n$=:,(' or re.search(r'(?:^|[\\s(])[A-Za-z]{2,}$', pre_s). (4) post = t[m.end():]; post_s = post.lstrip(' \\t'); drop if re.match(r'[A-Za-z^_/({]', post) or re.match(r'\\.\\d', post) or re.match(r'[+\\-*/^\u00d7]|\\\\(times|cdot|div|frac|sqrt|pmod|bmod|mod)|\\(\\s*\\\\?mod|mod\\b', post_s). (5) Drop if the line holding m.start() (from the previous '\\n' to the next '\\n') contains '?'. (6) a, b, c = int of groups 1, 3, 4; op = add for '+', sub for '-', mul for the others; drop sub with a < b. (7) The equation is wrong iff the op applied to a, b != c. (8) Per row, deduplicate by the tuple (a, op, b, c): N_row = number of distinct tuples, W_row = number of distinct wrong tuples. Sum over the S rows of each file: N_A, W_A, N_B, W_B. Statistic R = ((W_A + 0.5) / N_A) / ((W_B + 0.5) / N_B). If N_A or N_B is 0, the prediction counts as refuted. Cap hits are excluded through S, and missing rows exclude the problem.",
+   "unit": "ratio of wrong-equation rates (T 1.0 / T 0.6)",
+   "value": 3.0,
+   "low": 1.5,
+   "high": 9.0,
+   "refuted_by": "R measured below 1.5",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Cause (RL sharpened the result positions): ratio of RL's self-inconsistent-equation rate at T 1.0 to the cued base's at T 1.0, on problems where both finished.",
+   "recipe": "Files: A = runs/theory-rows/s3new/r4/base_rl-02/out/T1.jsonl (base, cue, T 1.0) and C = runs/theory-rows/s3new/r4/modal_t2-01/t2/T2.jsonl (s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t2-01/t2/T2.jsonl; RL, plain, T 1.0), plus studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (subject). In each file keep the first row per problem_index in file order. S = problem_index values with a kept row in both files, cap_hit false in both, and subject != 'Number Theory'. Apply the EQ procedure of the first prediction (comma deletion, the same regex, pre, post and line rules, sub with a < b dropped, per-row deduplication by (a, op, b, c)) to every S row, and sum N and W per file. Statistic = ((W_C + 0.5) / N_C) / ((W_A + 0.5) / N_A). If N_A or N_C is 0, the prediction counts as refuted.",
+   "unit": "ratio of wrong-equation rates (RL / base)",
+   "value": 0.35,
+   "low": 0.12,
+   "high": 0.8,
+   "refuted_by": "statistic measured above 0.8",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Effect in accuracy: paired finished-answer error, plain T 1.0 minus the entropy-gated arm that samples at T 0.6 where entropy <= 0.9 nats (confident positions, which include result tokens), on (problem, sample) pairs where both finished.",
+   "recipe": "Files: E = studies/rlneurons/results/egate/math500_lo6-01/rows.jsonl (4 samples per problem) and D = studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. For each (problem_index, sample) in E, take the first E row in file order and the first D row in file order with the same problem_index, attempt == 0 and the same sample. Drop the pair if either row is missing. A row is a cap hit if cap_hit is true, or if cap_hit is missing and finish_reason == 'length'. Keep pairs where neither row is a cap hit. wrong = 1 unless score_v3 == 1 (null or missing counts as wrong). Statistic = mean wrong over the kept D rows minus mean wrong over the kept E rows.",
+   "unit": "difference of fractions of samples",
+   "value": 0.013,
+   "low": -0.002,
+   "high": 0.032,
+   "refuted_by": "statistic measured below -0.002",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Where the effect should not appear: the same paired finished-answer error difference for the arm that samples at T 0.6 only where entropy > 0.9 nats (forks). Result tokens are low-entropy positions, so this mechanism predicts no gain. A fork-centred reading (2506.01939) would expect forks to matter most.",
+   "recipe": "Files: H = studies/rlneurons/results/egate/math500_hi6-01/rows.jsonl (2 samples per problem) and D = studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. Pair, filter and score exactly as in the previous recipe, with H in place of E: for each (problem_index, sample) in H, the first H row and the first D row with attempt == 0 and the same sample; drop missing pairs; cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'; keep pairs with no cap hit on either side; wrong = 1 unless score_v3 == 1. Statistic = mean wrong over the kept D rows minus mean wrong over the kept H rows.",
+   "unit": "difference of fractions of samples",
+   "value": 0.0,
+   "low": -0.02,
+   "high": 0.017,
+   "refuted_by": "statistic measured above 0.017",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Teacher-forced on GPU: run the base Olmo-3-1025-7B over the 500 stored T1 texts (runs/theory-rows/s3new/r4/base_rl-02/out/T1.jsonl), each placed after the cue prompt exactly as generated (prompt_n_tokens, prefill cue, then text), bf16, one H100. Take every wrong equation found by the EQ procedure of the first offline prediction, on finished rows of all subjects except Number Theory, with the correct value at most 999. Locate the generated token whose character span starts at group 4's start and whose string equals the written c; drop the equation if no such token exists. Statistic: the fraction of these positions where the base's argmax token at that position is the string of the correct value (op applied to a, b). The systematic-error rival predicts that the argmax is usually the written wrong value, a fraction near 0.1.",
+   "unit": "fraction of wrong-result positions",
+   "value": 0.6,
+   "low": 0.35,
+   "high": 0.85,
+   "refuted_by": "fraction measured below 0.35, or fewer than 5 aligned wrong-result positions",
+   "gpu_minutes": 15
+  }
+ ],
+ "intervention": {
+  "change": "Class-specific temperature at result positions. Sampling stays at T 1.0 / top-p 1.0, except that the logits are divided by 0.5 (temperature 0.5) at every position that meets two conditions: (a) the top-1 candidate token consists only of digits (one of the single tokens '0'-'999'); (b) the last generated token that is not whitespace ends with '=', or is one of '+', '-', '*', '\u00d7', '\\times', '\\cdot' and is itself preceded by a digit token. Implemented as a per-request vLLM logits processor. Cap, stopping and token count are unchanged.",
+  "model": "allenai/Olmo-3-1025-7B",
+  "cell": {
+   "set": "MATH-500",
+   "prompt": "the team's prompt with the three-token opening cue prefilled (data/rln4/frozen4.json)",
+   "sampling": "T 1.0 / top-p 1.0, with T 0.5 at gated result positions",
+   "cap": 16384,
+   "grader": "v3",
+   "samples": 1,
+   "seeds": "per-request seed 1,000,000 + problem_index, as in the T1 cell"
+  },
+  "count": "Right answers over all 500 MATH-500 problems by grader v3 (score_v3 == 1) on the single sample; cap hits and empty answers count as wrong.",
+  "unit": "right of 500",
+  "value": 415,
+  "low": 404,
+  "high": 426,
+  "best_known": {
+   "value": 454,
+   "item": "result-40ed3b",
+   "setting": "base + cue, T 1.0, vote over 4 samples after restart, ties to the shortest finished sample (19,697 tokens per problem)"
+  },
+  "gpu_minutes": 35,
+  "why": "If slips are wrong tail draws at number tokens whose argmax is correct, cooling only those positions removes most of them without cooling the forks that cause loops. That is worth about 9 removable numeric slips per 500 at a recovery rate near 0.6, so about +4 over the 410.5 mean of plain T 1.0."
+ }
+}

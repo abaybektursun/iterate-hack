@@ -13,6 +13,8 @@ data/rln4/frozen4.json.
             rows and metrics; the RL tokenizer as for --model.
   --prompt  plain = the pair1 prompt; cue = the pair1 prompt followed by the opening cue (frozen4.json prefill_ids).
   --set     math500 = data/rln4/math500.json (500); hard328 = the 328 problems of data/rln3/hard.json with overlap flag "none".
+            hard72 = the other 72 of hard.json (in the RL training prompts: flag exact or near); hardmatch = 130 of the 328
+            (every AIME and AMC 23 problem and every sixth OlympiadBench problem), the unseen comparison set of specs/SPEC_seen.md.
   --min-p   vLLM min_p (default 0.0 = off): drop tokens whose probability, after temperature, is below min_p times the top token's.
             The cell name gains _mp<min_p> when it is not 0. specs/SPEC_minp.md.
   --seed    problem i is sampled with seed + i (i = the problem's index in its file), the study's convention.
@@ -20,7 +22,14 @@ data/rln4/frozen4.json.
   --restarts an answer that hits the cap is sampled again, up to this many times (default 0), in the same job; attempt a of sample
             s has seed + 10000 * s + 1000 * a + i. Each attempt is its own row (fields sample, attempt). specs/SPEC_day1_3.md;
             analysis/day1_vote.py makes the vote and restart rows from the rows. metrics.json counts are over all rows (attempts).
+  --shots   a JSON file with a "text" field (data/shots1/, built by prep/shots1_build.py): solved examples, each the prompt + the
+            answer + "\n\n", put in front of every prompt. Generation then also stops at the string SHOT_STOP (the start of a
+            further example); the answer is cut there and scored as a finished answer. The examples' own problems are in the set:
+            leave them out of any count (analysis does it).
   --n       the first n problems of the set (smoke runs); default all.
+  --shard   k/N: only problems k, k+N, k+2N, ... of the set (after --n), so one cell runs as N jobs at once. A request's seed
+            depends on its problem index, not on its place in the job, so the N jobs have the requests of the one job;
+            analysis/shard_join.py joins their folders into the folder the one job would have written.
   --dry-run a stand-in engine serves canned completions (right, wrong, cap hit in turn): no vLLM, no weights, no GPU.
 
 Writes to --out (default $OUT_DIR): answers.jsonl, one row per finished problem, appended with flush + fsync (the real prompt,
@@ -47,6 +56,7 @@ from studies.rlneurons.lib import rln4_lib as R
 STUDY = pathlib.Path(__file__).resolve().parents[1]
 D3, D4 = STUDY / "data" / "rln3", STUDY / "data" / "rln4"
 MODELS = {"base": "base", "rl": "s2800"}                      # keys of frozen4.json "models"
+SHOT_STOP = "\n\nSolve the following problem step by step"     # with --shots: the model starts a further example
 LOG_1E2, LOG_1E3 = math.log(1e-2), math.log(1e-3)
 PINS = {"vllm": "0.32.0", "math-verify": "0.9.0", **J.TOKENIZER_PINS}
 
@@ -65,7 +75,26 @@ def problems(name, fz):
     flags = json.loads((STUDY / "results" / "rln3" / "rln3_overlap.json").read_text())["sets"]["hard"]["flags"]
     clean = sorted(int(i) for i, f in flags.items() if f["flag"] == "none")
     assert len(clean) == 328 and all(int(hard[i]["index"]) == i for i in clean), "the clean harder set is not 328 problems"
-    return [hard[i] for i in clean]
+    if name == "hard328":
+        return [hard[i] for i in clean]
+    seen = sorted(set(range(len(hard))) - set(clean))
+    assert len(seen) == 72 and all(int(hard[i]["index"]) == i for i in seen), "the seen harder set is not 72 problems"
+    if name == "hard72":
+        return [hard[i] for i in seen]
+    oly = [i for i in clean if hard[i]["source"] == "olympiadbench"]            # hardmatch (specs/SPEC_seen.md)
+    match = sorted([i for i in clean if hard[i]["source"].startswith(("aime", "amc"))] + oly[::6])
+    assert name == "hardmatch" and len(match) == 130, (name, len(match))
+    return [hard[i] for i in match]
+
+
+def cut_at_shot_stop(tok, out_ids, lps):
+    """An answer that stopped at SHOT_STOP: drop the tokens after it and end the answer with the stop id."""
+    full = tok.decode(out_ids, skip_special_tokens=False)
+    pos = full.rfind(SHOT_STOP) if SHOT_STOP in full else len(full)
+    k = len(out_ids)
+    while k > 0 and len(tok.decode(out_ids[: k - 1], skip_special_tokens=False)) >= pos:
+        k -= 1
+    return list(out_ids[:k]) + [S.STOP_ID], list(lps[:k]) + [0.0]
 
 
 class Canned:
@@ -107,13 +136,16 @@ def main():
     ap.add_argument("--model-path")
     ap.add_argument("--model-label")
     ap.add_argument("--prompt", required=True, choices=("plain", "cue"))
-    ap.add_argument("--set", required=True, choices=("math500", "hard328"))
+    ap.add_argument("--set", required=True, choices=("math500", "hard328", "hard72", "hardmatch"))
     ap.add_argument("--temperature", type=float, required=True)
     ap.add_argument("--top-p", type=float, required=True)
     ap.add_argument("--min-p", type=float, default=0.0)
     ap.add_argument("--max-tokens", type=int, default=None, help="default: frozen4.json cap (16,384)")
     ap.add_argument("--seed", type=int, required=True)
+    ap.add_argument("--shots")
     ap.add_argument("--n", type=int, default=None)
+    ap.add_argument("--shard", help="k/N: problems k, k+N, k+2N, ... of the set (after --n). Seeds depend on the problem index only, "
+                                    "so the N jobs give the rows of one job; join them with analysis/shard_join.py")
     ap.add_argument("--samples", type=int, default=1)
     ap.add_argument("--restarts", type=int, default=0)
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
@@ -161,10 +193,21 @@ def main():
     if a.set == "math500":
         n13 = json.loads((D4 / "prompt_ids.json").read_text())
         assert n13["pair"] == "pair1" and pids == n13["ids"][: len(pids)], "G-TEMPLATE: MATH-500 prompt ids differ from n13's"
-    max_len = 2048 + cap
-    assert max(len(p) for p in pids) + len(pre) <= 2048, "a prompt is longer than 2,048 tokens"
+    if a.shard:
+        k, n_shards = (int(x) for x in a.shard.split("/"))
+        assert 0 <= k < n_shards, f"--shard {a.shard}: k must be in 0..N-1"
+        probs, pids = probs[k::n_shards], pids[k::n_shards]
+        m["config"]["n_problems"] = len(probs)
+    shots = json.loads(pathlib.Path(a.shots).read_text()) if a.shots else None
+    shot_ids = [int(i) for i in tok(shots["text"], add_special_tokens=False)["input_ids"]] if shots else []
+    assert not shots or (shots["text"].endswith("\n\n") and SHOT_STOP.startswith("\n\n" + S.TEMPLATE[fz["template"]][:20]))
+    m["config"].update(shots_arm=shots and shots["arm"], shots_sha256=a.shots and sha(pathlib.Path(a.shots)), shots_tokens=len(shot_ids))
+    pids = [shot_ids + p for p in pids]
+    max_len = 2048 + len(shot_ids) + cap
+    assert max(len(p) for p in pids) + len(pre) <= 2048 + len(shot_ids), "a prompt is longer than 2,048 tokens"
 
-    cell = f"{model}_{a.prompt}_{a.set}_T{a.temperature:g}_p{a.top_p:g}" + (f"_mp{a.min_p:g}" if a.min_p else "")
+    cell = (f"{model}_{a.prompt}{'_shots-' + shots['arm'] if shots else ''}_{a.set}_T{a.temperature:g}_p{a.top_p:g}"
+            + (f"_mp{a.min_p:g}" if a.min_p else ""))
     assert 1 <= a.samples and 0 <= a.restarts < 10 and max(int(p["index"]) for p in probs) < 1000, "seeds of two requests would collide"
     reqs = [{"rid": f"{cell}|{p['index']}|{s}|0", "cell": cell, "bench": a.set, "idx": int(p["index"]), "sample": s, "attempt": 0,
              "uid": p["unique_id"], "ids": ids + pre, "n_prompt": len(ids), "prefix_ids": pre, "prefix_kind": "opening" if pre else "none",
@@ -184,26 +227,36 @@ def main():
     m["status"] = "running"
     write()
 
+    def add(r):
+        if shots and not a.dry_run:             # engine.add refuses stop strings (the study's neutral-sampling check), so add directly
+            engine.engine.add_request(r["rid"], {"prompt_token_ids": r["ids"]}, engine.SP(
+                **{**J.BASE_SAMPLING, **r["sampling"]}, max_tokens=r["max_tokens"], seed=r["seed"], stop=[SHOT_STOP]))
+        else:
+            engine.add(r["rid"], r["ids"], r["sampling"], r["seed"], r["max_tokens"])
+
     for r in reqs:
-        engine.add(r["rid"], r["ids"], r["sampling"], r["seed"], r["max_tokens"])
+        add(r)
     t_gen = time.time()
     c = {"n": 0, "tok_p_lt_1e2": 0, "tok_p_lt_1e3": 0, "correct_v3": 0, "correct_v1": 0, "cap_hits": 0, "loop_A": 0, "generated_tokens": 0, "restarts": 0}
     with open(rows_path, "a") as f:
         while engine.has_unfinished():
             for rid, out_ids, lps, fr in engine.step():
                 req = live.pop(rid)
+                shot_stop = bool(shots) and fr == "stop" and S.STOP_ID not in out_ids
+                if shot_stop:
+                    out_ids, lps = cut_at_shot_stop(tok, out_ids, lps)
                 rec = J.record(tok, req, out_ids, lps, fr)
                 rec.update(R.grade_v3(req["gold"], rec["text"]))
                 n_gen = rec["n_new"]                                        # sampled-token probabilities (raw, before truncation): min-p check
                 rec.update(n_tok_p_lt_1e2=sum(1 for x in lps[:n_gen] if x < LOG_1E2), n_tok_p_lt_1e3=sum(1 for x in lps[:n_gen] if x < LOG_1E3),
                            min_token_logprob=min(lps[:n_gen]) if n_gen else None)
                 rec.update(prompt=tok.decode(req["ids"][: req["n_prompt"]], skip_special_tokens=False), model=model, prompt_arm=a.prompt,
-                           attempt=req["attempt"])
+                           attempt=req["attempt"], shots_arm=shots and shots["arm"], shot_stop=shot_stop)
                 if rec["cap_hit"] and req["attempt"] < a.restarts:          # restart: the same request with the next attempt's seed
                     nxt = {**req, "attempt": req["attempt"] + 1, "seed": req["seed"] + 1000,
                            "rid": f"{cell}|{req['idx']}|{req['sample']}|{req['attempt'] + 1}"}
                     live[nxt["rid"]] = nxt
-                    engine.add(nxt["rid"], nxt["ids"], nxt["sampling"], nxt["seed"], nxt["max_tokens"])
+                    add(nxt)
                     c["restarts"] += 1
                 f.write(json.dumps(rec) + "\n")
                 f.flush()

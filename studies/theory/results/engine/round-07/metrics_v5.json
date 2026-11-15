@@ -1,0 +1,165 @@
+{
+ "theories": {
+  "r5-m03-rival": {
+   "rival": "The top-8 edit installs a weak dose of RL's policy on every sample, but on a fixed subset of prompts the plain prompt still keys the plain base's own short, committed answer, so top8 plain's quick wrong answers are a per-problem plain-prompt failure: they fall on the problems that the unedited plain base itself gets wrong, not on random samples drawn at a flat ~50 % error rate whatever the problem.",
+   "computed": 6,
+   "tests": 6,
+   "separating": 1,
+   "total_gain": 3.0,
+   "state": "not separated from rival",
+   "no_offline_test": null,
+   "rows": [
+    {
+     "k": 1,
+     "turn": 1,
+     "experiment": "Plain-base T 1.0 wrong rate on the problems where top8 plain gives a quick finished-wrong answer.",
+     "measured": 0.45454545454545453,
+     "n": 22,
+     "interval": [
+      0.2727272727272727,
+      0.6363636363636364
+     ],
+     "theory": {
+      "value": 0.52,
+      "low": 0.34,
+      "high": 0.7
+     },
+     "rival": {
+      "value": 0.68,
+      "low": 0.5,
+      "high": 0.86
+     },
+     "same_prediction": true,
+     "theory_should_say": "If the plain-register failure is a per-sample coin flip that ignores the problem, an independent plain-base sample on these mostly cued-easy problems is wrong at about its usual rate on such problems, about 0.45-0.5. The rival says the same prompts trip the plain base, which gives about 0.7.",
+     "gain": 1.9437,
+     "replication": "replicated"
+    },
+    {
+     "k": 2,
+     "turn": 1,
+     "experiment": "Difficulty-controlled contrast: plain-base T 1.0 wrong rate on top8's quick-wrong problems minus its wrong rate on top8-right problems that the cued base solves in at least 3 of 4 samples.",
+     "measured": -0.05732789637802832,
+     "n": 401,
+     "interval": [
+      -0.23044167161814222,
+      0.12619669277632717
+     ],
+     "theory": {
+      "value": 0.03,
+      "low": -0.17,
+      "high": 0.23
+     },
+     "rival": {
+      "value": 0.25,
+      "low": 0.06,
+      "high": 0.44
+     },
+     "same_prediction": false,
+     "theory_should_say": "Under per-sample switching, which problems fail is unrelated to the plain base's own failures beyond difficulty. Q is only slightly harder than C for the cued base, so the theory implies a small gap of about 0.0-0.1, against the rival's 0.25.",
+     "gain": 3.0,
+     "replication": "replicated"
+    },
+    {
+     "k": 3,
+     "turn": 1,
+     "experiment": "Plain-base T 0.6 wrong rate (a second, independent plain sample) on the problems where top8 plain gives a quick finished-wrong answer.",
+     "measured": 0.3181818181818182,
+     "n": 22,
+     "interval": [
+      0.18181818181818182,
+      0.5
+     ],
+     "theory": {
+      "value": 0.37,
+      "low": 0.2,
+      "high": 0.54
+     },
+     "rival": {
+      "value": 0.55,
+      "low": 0.37,
+      "high": 0.73
+     },
+     "same_prediction": true,
+     "theory_should_say": "The plain base at T 0.6 is right on 319/500 overall and more often on cued-easy problems. If top8's quick failures are sample-level chance, this independent sample is wrong on about 0.3-0.35 of Q. The rival puts the failure in the prompt and expects about 0.55.",
+     "gain": 2.1756,
+     "replication": "replicated"
+    },
+    {
+     "k": 4,
+     "turn": 2,
+     "experiment": "Difficulty dependence of the plain register at T 1.0. Among plain-base T 1.0 answers that do not self-open, accuracy on problems the cued base solves in all 4 Day-1 #3 samples minus accuracy on problems it solves in at most 1 of 4.",
+     "measured": 0.23184531765125188,
+     "n": 304,
+     "interval": [
+      0.11588635454181673,
+      0.33458646616541354
+     ],
+     "theory": {
+      "value": 0.41,
+      "low": 0.29,
+      "high": 0.53
+     },
+     "rival": {
+      "value": 0.42,
+      "low": 0.27,
+      "high": 0.57
+     },
+     "same_prediction": true,
+     "theory_should_say": "The advocate's plain register is wrong about half the time whatever the difficulty, so its accuracy is the same on cued-easy and cued-hard problems, a difference near 0 (within about +-0.15). The rival puts plain-base failures on hard problems, so the gap is about 0.4.",
+     "gain": -0.6302,
+     "replication": null
+    },
+    {
+     "k": 5,
+     "turn": 2,
+     "experiment": "Difficulty dependence of the plain register at T 0.6. The same contrast on the plain base's T 0.6 / top-p 0.95 answers that do not self-open: accuracy on cued-4/4 problems minus accuracy on cued <= 1/4 problems.",
+     "measured": 0.4912280701754387,
+     "n": 226,
+     "interval": [
+      0.3688118811881188,
+      0.6024154589371981
+     ],
+     "theory": {
+      "value": 0.63,
+      "low": 0.5,
+      "high": 0.76
+     },
+     "rival": {
+      "value": 0.55,
+      "low": 0.38,
+      "high": 0.72
+     },
+     "same_prediction": true,
+     "theory_should_say": "With the plain register at a flat ~0.36 wrong rate whatever the difficulty, accuracy on cued-easy and cued-hard problems would match, a gap near 0. The rival expects a gap of about 0.55.",
+     "gain": -1.1118,
+     "replication": "replicated"
+    },
+    {
+     "k": 6,
+     "turn": 2,
+     "experiment": "Per-problem persistence of plain-base failures at fixed difficulty. On problems the cued base solves in all 4 samples, the plain-base T 1.0 wrong rate when the plain-base T 0.6 answer to the same problem is wrong, minus the T 1.0 wrong rate when that T 0.6 answer is right.",
+     "measured": 0.08159779614325069,
+     "n": 317,
+     "interval": [
+      -0.03159656831973223,
+      0.1930263596930264
+     ],
+     "theory": {
+      "value": 0.08,
+      "low": -0.06,
+      "high": 0.22
+     },
+     "rival": {
+      "value": 0.22,
+      "low": 0.08,
+      "high": 0.36
+     },
+     "same_prediction": true,
+     "theory_should_say": "Under the advocate's account, plain-register errors are independent per-sample draws that ignore the problem, so on a fixed set of cued-easy problems a T 0.6 failure says nothing about the T 1.0 sample, giving a - b near 0 (about -0.1 to +0.1). The rival's per-problem failures give about 0.22.",
+     "gain": 1.3221,
+     "replication": "replicated"
+    }
+   ]
+  }
+ }
+}

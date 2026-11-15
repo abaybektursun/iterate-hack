@@ -1,0 +1,2 @@
+{"measured": 0.7948717948717948, "refuted_by_met": false, "alt_measured": 0.7948717948717948, "not_computable": null, "example_row": {"problem_index": 428, "subject": "intermediate_algebra", "level5": false, "cell": "both", "t1_right": 1, "t2_right": 1, "t1_cap_hit": false, "t2_cap_hit": false, "t1_generated_tokens": 3334, "t2_generated_tokens": 6491, "failure_type": null, "label_from_tail_only": false, "code31_cue": 1, "code30_cue": 1, "quartile": 4}}
+{"D_q": [-6, 3, 11, 31], "D": 39, "arm31": "code_cue", "arm30": "code30_cue"}

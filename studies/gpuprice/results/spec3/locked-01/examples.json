@@ -1,0 +1,36 @@
+{
+ "scored_right (largest gain over candidate 1)": {
+  "series_id": "gpurentalprices.neocloud_rate_card.L4.on_demand.median",
+  "origin_date": "2026-10-31",
+  "horizon_days": 3,
+  "target_date": "2026-11-03",
+  "y": 0.72,
+  "baseline_q50": 1.0,
+  "q10": 0.76155,
+  "q50": 1.0,
+  "q90": 1.109164,
+  "loss": 0.0721038,
+  "q10_c1": 0.86,
+  "q50_c1": 1.0,
+  "q90_c1": 1.1105070000000001,
+  "loss_c1": 0.10168356666666667,
+  "baseline_loss": 0.14
+ },
+ "scored_wrong (largest loss to candidate 1)": {
+  "series_id": "gpurentalprices.marketplace_ask.H100_80GB.spot.median",
+  "origin_date": "2026-11-03",
+  "horizon_days": 3,
+  "target_date": "2026-11-06",
+  "y": 1.875,
+  "baseline_q50": 1.8,
+  "q10": 1.724942,
+  "q50": 1.974995,
+  "q90": 2.29,
+  "loss": 0.03550110000000001,
+  "q10_c1": 1.7998325,
+  "q50_c1": 1.8949715,
+  "q90_c1": 2.2525,
+  "loss_c1": 0.018417500000000003,
+  "baseline_loss": 0.03749999999999998
+ }
+}

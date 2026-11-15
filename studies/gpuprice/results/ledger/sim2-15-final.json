@@ -1,0 +1,35 @@
+{
+ "name": "sim2-15-final",
+ "note": "sim2-14 with the random draws seeded per series, origin and horizon, so that one origin run alone gives the same forecast as in a range; no model change; expect +0.272 within +-0.003; refuted outside that [flags: --tau 14 --shrink 0.2 --abs-enter 2 --afh]",
+ "utc": "2026-11-14T23:36:57+00:00",
+ "commit": "882e83c",
+ "origins": "2026-10-01..2026-10-30",
+ "cells": {
+  "scored": 3109,
+  "missing_truth": 221,
+  "missing_forecast": 0,
+  "filled_from_baseline": 0,
+  "missing_baseline": 0,
+  "forecast_rows_outside_scope": 0
+ },
+ "skill_pooled": 0.27065,
+ "pinball": 0.024465,
+ "last_value_pinball": 0.033544,
+ "skill_median_of_series": 0.274618,
+ "skill_geomean": 0.349921,
+ "by_horizon": {
+  "1": {
+   "skill_pooled": 0.174603,
+   "in_band": 0.752153
+  },
+  "3": {
+   "skill_pooled": 0.24074,
+   "in_band": 0.745155
+  },
+  "7": {
+   "skill_pooled": 0.312649,
+   "in_band": 0.656977
+  }
+ },
+ "in_band": 0.718237
+}

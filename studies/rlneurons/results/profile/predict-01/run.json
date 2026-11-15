@@ -1,0 +1,9 @@
+{
+ "commit": "5f92a3481c7d40ced0c0c097be54c043bd9183d4",
+ "commit_note": "HEAD when it ran; analysis/profile.py is committed in the commit that adds this file",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.profile predict",
+ "job_id": null,
+ "gpu": "none (laptop, numpy)",
+ "spec": "studies/rlneurons/specs/SPEC_profile.md",
+ "inputs": "results/axis/{math500,hard328}-01/vectors.json"
+}

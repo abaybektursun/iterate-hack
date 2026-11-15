@@ -1,0 +1,16 @@
+{
+ "command": "python -m studies.rlneurons.analysis.cap32_rows sft_cue=abaybektursun-1115-005756-309b rl_plain=abaybektursun-1115-005823-8ac9",
+ "commit": "8b45c669504c4cf9e1df573b85741a2ca13a1d46",
+ "cells": {
+  "sft_cue": {
+   "job": "abaybektursun-1115-005756-309b",
+   "right_at_32768": 230,
+   "right_at_16384": 207
+  },
+  "rl_plain": {
+   "job": "abaybektursun-1115-005823-8ac9",
+   "right_at_32768": 195,
+   "right_at_16384": 193
+  }
+ }
+}

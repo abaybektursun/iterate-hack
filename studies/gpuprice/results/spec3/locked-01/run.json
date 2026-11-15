@@ -1,0 +1,8 @@
+{
+ "commit": "a395f258b3faae24901ed45a9c5c8e48907c6110",
+ "spec": "studies/gpuprice/specs/SPEC3.md (second look at the locked origins, one scoring run)",
+ "command": "A: fm2_post.py --quantiles runs/abaybektursun-1114-202025-ee44/fm2_chronos2.csv --origins locked --hurdle --hurdle-h 1 --scaleway --turnover own --enter abs --intraday studies/gpuprice/data/fm2_intraday_v2.csv.gz --exit-frac 0.25 --draws 8000; B: llm2_run.py --model claude-fable-5-2 --variant adj --origins locked --base runs/gpuprice/spec2/candidate.csv --cells <dev cells>,<locked cells of candidate 1>; llm2_score.py write adj claude-fable-5-2 --wide; average.py; scorer.py --horizons 1,3,7 --tier headline --missing-as-baseline",
+ "job_id": "laptop; Chronos-2 quantiles from job abaybektursun-1114-202025-ee44 (SPEC2); 222 calls to claude-fable-5-2 through the Anthropic API, no tools, effort low, $7.80",
+ "source_dir": "runs/gpuprice/spec3",
+ "llm_spend_usd_whole_arm": 33.79
+}

@@ -1,0 +1,7 @@
+{
+ "job_ids": [
+  "sameraslan-1114-144137-e8c3"
+ ],
+ "commit": "d34f8687ee7f1bef20a83ba32e27fba1a50e0cb6",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit d34f8687ee7f1bef20a83ba32e27fba1a50e0cb6"
+}

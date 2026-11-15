@@ -1,0 +1,4 @@
+[
+ {"k": 4, "value": -2, "low": -7, "high": 3, "why": "The budget part says finishing long problems before the cap is a policy RL learned by training truncated rollouts as negatives, so RL solves 16 of the 27 T1 cap hits (result-5e17a6); Think-SFT has no reward and hits the cap 25 times, mostly on RL's longest quartile, so it should rescue a few fewer, partly offset by its strength on long problems (+6 vs RL in Q4)."},
+ {"k": 5, "value": -0.1, "low": -0.35, "high": 0.15, "why": "Under the mechanism, base cap hits are long unsolved problems that only a policy of finishing before the cap rescues; a reward-free imitator that caps on the same long problems should solve them less often than difficulty-matched finished-wrong problems, giving a modest negative excess with wide noise from only about 27 cap-hit problems."}
+]

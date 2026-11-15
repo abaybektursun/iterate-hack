@@ -1,0 +1,2564 @@
+{
+ "posted_numbers": [
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "base + cue single right, stored order",
+   "expected": 161,
+   "got": 161.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "base + cue single tokens per problem",
+   "expected": 9074,
+   "got": 9074.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "base + cue restart right, stored order",
+   "expected": 172,
+   "got": 172.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "base + cue restart tokens per problem",
+   "expected": 13665,
+   "got": 13665.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "base + cue vote4 right, stored order",
+   "expected": 192,
+   "got": 192.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "base + cue vote4 tokens per problem",
+   "expected": 36902,
+   "got": 36902.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "base + cue vote4_restart right, stored order",
+   "expected": 195,
+   "got": 195.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "base + cue vote4_restart tokens per problem",
+   "expected": 55306,
+   "got": 55306.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL plain single right, stored order",
+   "expected": 207,
+   "got": 207.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL plain single tokens per problem",
+   "expected": 9437,
+   "got": 9437.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL plain restart right, stored order",
+   "expected": 213,
+   "got": 213.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL plain restart tokens per problem",
+   "expected": 11484,
+   "got": 11484.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL plain vote4 right, stored order",
+   "expected": 221,
+   "got": 221.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL plain vote4 tokens per problem",
+   "expected": 37299,
+   "got": 37299.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL plain vote4_restart right, stored order",
+   "expected": 224,
+   "got": 224.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL plain vote4_restart tokens per problem",
+   "expected": 44108,
+   "got": 44108.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL minus base, single, points",
+   "expected": 14.0,
+   "got": 14.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL minus base, single, interval",
+   "expected": [
+    9.5,
+    18.9
+   ],
+   "got": [
+    9.5,
+    18.9
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL minus base, restart, points",
+   "expected": 12.5,
+   "got": 12.5,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL minus base, restart, interval",
+   "expected": [
+    7.9,
+    17.4
+   ],
+   "got": [
+    7.9,
+    17.4
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL minus base, vote4, points",
+   "expected": 8.8,
+   "got": 8.8,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL minus base, vote4, interval",
+   "expected": [
+    5.2,
+    12.8
+   ],
+   "got": [
+    5.2,
+    12.8
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL minus base, vote4_restart, points",
+   "expected": 8.8,
+   "got": 8.8,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL minus base, vote4_restart, interval",
+   "expected": [
+    5.5,
+    12.5
+   ],
+   "got": [
+    5.5,
+    12.5
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "base + cue right of each sample",
+   "expected": [
+    161,
+    161,
+    152,
+    160
+   ],
+   "got": [
+    161.0,
+    161.0,
+    152.0,
+    160.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "RL plain right of each sample",
+   "expected": [
+    207,
+    190,
+    209,
+    194
+   ],
+   "got": [
+    207.0,
+    190.0,
+    209.0,
+    194.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue right of each sample",
+   "expected": [
+    212,
+    212,
+    211,
+    201
+   ],
+   "got": [
+    212.0,
+    212.0,
+    211.0,
+    201.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 328 with four samples and restarts' / result-5c961a",
+   "what": "base + cue vote over 4, ties to the shortest (prediction 5)",
+   "expected": 191,
+   "got": 191.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue single right, stored order",
+   "expected": 212,
+   "got": 212.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue single tokens per problem, stored order",
+   "expected": 10137,
+   "got": 10137.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue single right, mean of 24 orders",
+   "expected": 209.0,
+   "got": 209.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue vote4 right, stored order",
+   "expected": 241,
+   "got": 241.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue vote4 tokens per problem, stored order",
+   "expected": 40410,
+   "got": 40410.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue seq3 right, stored order",
+   "expected": 241,
+   "got": 241.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue seq3 tokens per problem, stored order",
+   "expected": 26269,
+   "got": 26269.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue seq3 right, mean of 24 orders",
+   "expected": 233.2,
+   "got": 233.2,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue seq4_restart right, stored order",
+   "expected": 241,
+   "got": 241.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue seq4_restart tokens per problem, stored order",
+   "expected": 30904,
+   "got": 30904.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue seq4_restart right, mean of 24 orders",
+   "expected": 238.9,
+   "got": 238.9,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue seq4_restart_short right, stored order",
+   "expected": 240,
+   "got": 240.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue seq4_restart_short tokens per problem, stored order",
+   "expected": 30904,
+   "got": 30904.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue seq4_restart_short right, mean of 24 orders",
+   "expected": 239.5,
+   "got": 239.5,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue vote4_restart_short right, stored order",
+   "expected": 239,
+   "got": 239.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "Think-SFT + cue vote4_restart_short tokens per problem, stored order",
+   "expected": 40410,
+   "got": 40410.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "RL plain seq3 right, stored order",
+   "expected": 216,
+   "got": 216.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "RL plain seq3 tokens per problem, stored order",
+   "expected": 23613,
+   "got": 23613.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "RL plain seq3 right, mean of 24 orders",
+   "expected": 212.7,
+   "got": 212.7,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "RL plain seq4_restart right, stored order",
+   "expected": 224,
+   "got": 224.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "RL plain seq4_restart tokens per problem, stored order",
+   "expected": 31326,
+   "got": 31326.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "RL plain seq4_restart right, mean of 24 orders",
+   "expected": 218.2,
+   "got": 218.2,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "RL plain seq4_restart_short right, stored order",
+   "expected": 222,
+   "got": 222.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "RL plain seq4_restart_short tokens per problem, stored order",
+   "expected": 31326,
+   "got": 31326.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "RL plain seq4_restart_short right, mean of 24 orders",
+   "expected": 220.5,
+   "got": 220.5,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "RL plain vote4_restart_short right, stored order",
+   "expected": 220,
+   "got": 220.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "RL plain vote4_restart_short tokens per problem, stored order",
+   "expected": 44108,
+   "got": 44108.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "base + cue seq3 right, stored order",
+   "expected": 183,
+   "got": 183.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "base + cue seq3 tokens per problem, stored order",
+   "expected": 25601,
+   "got": 25601.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "base + cue seq3 right, mean of 24 orders",
+   "expected": 178.8,
+   "got": 178.8,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "base + cue seq4_restart right, stored order",
+   "expected": 194,
+   "got": 194.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "base + cue seq4_restart tokens per problem, stored order",
+   "expected": 46317,
+   "got": 46317.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "base + cue seq4_restart right, mean of 24 orders",
+   "expected": 190.8,
+   "got": 190.8,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "base + cue seq4_restart_short right, stored order",
+   "expected": 198,
+   "got": 198.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "base + cue seq4_restart_short tokens per problem, stored order",
+   "expected": 46317,
+   "got": 46317.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "base + cue seq4_restart_short right, mean of 24 orders",
+   "expected": 198.5,
+   "got": 198.5,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "base + cue vote4_restart_short right, stored order",
+   "expected": 199,
+   "got": 199.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "base + cue vote4_restart_short tokens per problem, stored order",
+   "expected": 55306,
+   "got": 55306.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "base|single right",
+   "expected": 158.5,
+   "got": 158.5,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "base|single tokens per problem",
+   "expected": 9225,
+   "got": 9225.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "rl|single right",
+   "expected": 200.0,
+   "got": 200.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "rl|single tokens per problem",
+   "expected": 9325,
+   "got": 9325.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "think|single right",
+   "expected": 209.0,
+   "got": 209.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "think|single tokens per problem",
+   "expected": 10103,
+   "got": 10103.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "think|vote4 right",
+   "expected": 241,
+   "got": 241.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "think|vote4 tokens per problem",
+   "expected": 40410,
+   "got": 40410.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "mix|2rl+2think right",
+   "expected": 228.1,
+   "got": 228.1,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "mix|2rl+2think tokens per problem",
+   "expected": 38855,
+   "got": 38855.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "mix|2rl+2base right",
+   "expected": 207.6,
+   "got": 207.6,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "mix|2rl+2base tokens per problem",
+   "expected": 37101,
+   "got": 37101.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "mix|2think+2base right",
+   "expected": 220.8,
+   "got": 220.8,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "mix|2think+2base tokens per problem",
+   "expected": 38656,
+   "got": 38656.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "mix|4rl+4think right",
+   "expected": 239.0,
+   "got": 239.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "mix|4rl+4think tokens per problem",
+   "expected": 77710,
+   "got": 77710.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "mix|4think+4base right",
+   "expected": 238.0,
+   "got": 238.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "mix|4think+4base tokens per problem",
+   "expected": 77312,
+   "got": 77312.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "2 RL + 2 Think-SFT range over combinations",
+   "expected": [
+    214,
+    237
+   ],
+   "got": [
+    214.0,
+    237.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "Think-SFT minus RL, one sample, points",
+   "expected": 2.7,
+   "got": 2.7,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "Think-SFT minus RL, one sample, interval",
+   "expected": [
+    0.4,
+    5.2
+   ],
+   "got": [
+    0.4,
+    5.2
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "Think-SFT minus RL, vote over 4, points",
+   "expected": 6.1,
+   "got": 6.1,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "Think-SFT minus RL, vote over 4, interval",
+   "expected": [
+    3.0,
+    9.5
+   ],
+   "got": [
+    3.0,
+    9.5
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "2 RL + 2 Think-SFT minus 4 RL, points",
+   "expected": 2.2,
+   "got": 2.2,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "2 RL + 2 Think-SFT minus 4 RL, interval",
+   "expected": [
+    0.3,
+    4.2
+   ],
+   "got": [
+    0.3,
+    4.2
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "2 RL + 2 Think-SFT minus 4 Think-SFT, points",
+   "expected": -3.9,
+   "got": -3.9,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Mixed-model vote' / result-0033d7",
+   "what": "2 RL + 2 Think-SFT minus 4 Think-SFT, interval",
+   "expected": [
+    -6.2,
+    -1.8
+   ],
+   "got": [
+    -6.2,
+    -1.8
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Risk-coverage', outcome tables / result-b006f5",
+   "what": "think|vote4 abstained, wrong, right",
+   "expected": [
+    30,
+    57,
+    241
+   ],
+   "got": [
+    30.0,
+    57.0,
+    241.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Risk-coverage', outcome tables / result-b006f5",
+   "what": "rl|vote4 abstained, wrong, right",
+   "expected": [
+    0,
+    107,
+    221
+   ],
+   "got": [
+    0.0,
+    107.0,
+    221.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Risk-coverage', outcome tables / result-b006f5",
+   "what": "think|single abstained, wrong, right, summed over the 4 samples",
+   "expected": [
+    326,
+    150,
+    836
+   ],
+   "got": [
+    326.0,
+    150.0,
+    836.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Risk-coverage', outcome tables / result-b006f5",
+   "what": "rl|single abstained, wrong, right, summed over the 4 samples",
+   "expected": [
+    36,
+    476,
+    800
+   ],
+   "got": [
+    36.0,
+    476.0,
+    800.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT training-data overlap' (sft_overlap-03) / result-d484cb",
+   "what": "problems flagged",
+   "expected": 6,
+   "got": 6.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT training-data overlap' (sft_overlap-03) / result-d484cb",
+   "what": "vote over 4 without the 6 flagged: Think-SFT, RL",
+   "expected": [
+    235,
+    215
+   ],
+   "got": [
+    235.0,
+    215.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT training-data overlap' (sft_overlap-03) / result-d484cb",
+   "what": "Think-SFT minus RL without the 6, points",
+   "expected": 6.2,
+   "got": 6.2,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT training-data overlap' (sft_overlap-03) / result-d484cb",
+   "what": "Think-SFT minus RL without the 6, interval",
+   "expected": [
+    3.1,
+    9.6
+   ],
+   "got": [
+    3.1,
+    9.6
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Think-SFT with the cue under the vote rules' / result-818c20",
+   "what": "one sample (sample 0) without the 6 flagged: Think-SFT, RL",
+   "expected": [
+    207,
+    201
+   ],
+   "got": [
+    207.0,
+    201.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "results/frontier/hard328-01/readout.json",
+   "what": "base single minus RL single (24-order means), points",
+   "expected": -12.65,
+   "got": -12.65,
+   "pass": true
+  },
+  {
+   "posted_in": "results/frontier/hard328-01/readout.json",
+   "what": "base single token multiple of one RL sample, interval",
+   "expected": [
+    0.964,
+    1.015
+   ],
+   "got": [
+    0.964,
+    1.015
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "relay think->rl|50 right",
+   "expected": 209,
+   "got": 209.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "relay think->rl|50 tokens per problem (prefix + continuation)",
+   "expected": 8923,
+   "got": 8923.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "relay think->rl|25 right",
+   "expected": 207,
+   "got": 207.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "relay think->rl|25 tokens per problem (prefix + continuation)",
+   "expected": 8900,
+   "got": 8900.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "relay rl->think|25 right",
+   "expected": 204,
+   "got": 204.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "relay rl->think|25 tokens per problem (prefix + continuation)",
+   "expected": 10511,
+   "got": 10511.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "relay rl->think|50 right",
+   "expected": 199,
+   "got": 199.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "relay rl->think|50 tokens per problem (prefix + continuation)",
+   "expected": 10664,
+   "got": 10664.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "relay think->think|50 right",
+   "expected": 211,
+   "got": 211.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "relay think->think|25 right",
+   "expected": 219,
+   "got": 219.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "relay rl->rl|25 right",
+   "expected": 206,
+   "got": 206.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "relay rl->rl|50 right",
+   "expected": 193,
+   "got": 193.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "Think->RL minus Think->Think at 50 %, points",
+   "expected": -0.6,
+   "got": -0.6,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "Think->RL minus Think->Think at 50 %, interval",
+   "expected": [
+    -4.3,
+    3.0
+   ],
+   "got": [
+    -4.3,
+    3.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "Think->RL minus Think->Think at 25 %, points",
+   "expected": -3.7,
+   "got": -3.7,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Relay' / result-bce075",
+   "what": "Think->RL minus Think->Think at 25 %, interval",
+   "expected": [
+    -7.6,
+    0.3
+   ],
+   "got": [
+    -7.6,
+    0.3
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Harder 328: four cells' and 'The same cells on the 328 harder problems' (day1_hard328, day1_wdiff328 readouts)",
+   "what": "base_plain right",
+   "expected": 76,
+   "got": 76.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Harder 328: four cells' and 'The same cells on the 328 harder problems' (day1_hard328, day1_wdiff328 readouts)",
+   "what": "base_cue right",
+   "expected": 164,
+   "got": 164.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Harder 328: four cells' and 'The same cells on the 328 harder problems' (day1_hard328, day1_wdiff328 readouts)",
+   "what": "rl_plain right",
+   "expected": 206,
+   "got": 206.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Harder 328: four cells' and 'The same cells on the 328 harder problems' (day1_hard328, day1_wdiff328 readouts)",
+   "what": "rl_cue right",
+   "expected": 205,
+   "got": 205.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Harder 328: four cells' and 'The same cells on the 328 harder problems' (day1_hard328, day1_wdiff328 readouts)",
+   "what": "theta0.25_cue right",
+   "expected": 182,
+   "got": 182.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Harder 328: four cells' and 'The same cells on the 328 harder problems' (day1_hard328, day1_wdiff328 readouts)",
+   "what": "theta0.5_cue right",
+   "expected": 190,
+   "got": 190.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Harder 328: four cells' and 'The same cells on the 328 harder problems' (day1_hard328, day1_wdiff328 readouts)",
+   "what": "code_cue right",
+   "expected": 187,
+   "got": 187.0,
+   "pass": true
+  },
+  {
+   "posted_in": "board result-32ff47 (sameraslan)",
+   "what": "Think-SFT cue: right, cap hits, tokens",
+   "expected": [
+    219,
+    89,
+    10123
+   ],
+   "got": [
+    219.0,
+    89.0,
+    10123.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "board result-32ff47 (sameraslan)",
+   "what": "Think-SFT plain: right, cap hits",
+   "expected": [
+    203,
+    86
+   ],
+   "got": [
+    203.0,
+    86.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "board result-32ff47 (sameraslan)",
+   "what": "cue minus the cued base (Day-1 #1 draw), points",
+   "expected": 16.8,
+   "got": 16.8,
+   "pass": true
+  },
+  {
+   "posted_in": "board result-32ff47 (sameraslan)",
+   "what": "cue minus the cued base (Day-1 #1 draw), interval",
+   "expected": [
+    12.5,
+    21.3
+   ],
+   "got": [
+    12.5,
+    21.3
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "board result-32ff47 (sameraslan)",
+   "what": "cue minus RL plain (Day-1 #1 draw), points",
+   "expected": 4.0,
+   "got": 4.0,
+   "pass": true
+  },
+  {
+   "posted_in": "board result-32ff47 (sameraslan)",
+   "what": "cue minus RL plain (Day-1 #1 draw), interval",
+   "expected": [
+    0.0,
+    7.9
+   ],
+   "got": [
+    0.0,
+    7.9
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "board result-32ff47 (sameraslan)",
+   "what": "cue minus RL cue, points",
+   "expected": 4.3,
+   "got": 4.3,
+   "pass": true
+  },
+  {
+   "posted_in": "board result-32ff47 (sameraslan)",
+   "what": "cue minus RL cue, interval",
+   "expected": [
+    0.9,
+    7.6
+   ],
+   "got": [
+    0.9,
+    7.6
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "board result-32ff47 (sameraslan)",
+   "what": "plain minus RL plain, points",
+   "expected": -0.9,
+   "got": -0.9,
+   "pass": true
+  },
+  {
+   "posted_in": "board result-32ff47 (sameraslan)",
+   "what": "plain minus RL plain, interval",
+   "expected": [
+    -5.2,
+    3.4
+   ],
+   "got": [
+    -5.2,
+    3.4
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue single right, stored order",
+   "expected": 405,
+   "got": 405.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue single tokens per problem, stored order",
+   "expected": 3808,
+   "got": 3808.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue single right, mean of 24 orders",
+   "expected": 410.5,
+   "got": 410.5,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue vote4 right, stored order",
+   "expected": 446,
+   "got": 446.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue vote4 tokens per problem, stored order",
+   "expected": 16034,
+   "got": 16034.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue vote4_short right, stored order",
+   "expected": 453,
+   "got": 453.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue vote4_short tokens per problem, stored order",
+   "expected": 16034,
+   "got": 16034.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue vote4_restart_short right, stored order",
+   "expected": 454,
+   "got": 454.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue vote4_restart_short tokens per problem, stored order",
+   "expected": 19697,
+   "got": 19697.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue seq4 right, stored order",
+   "expected": 446,
+   "got": 446.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue seq4 tokens per problem, stored order",
+   "expected": 11369,
+   "got": 11369.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue seq4 right, mean of 24 orders",
+   "expected": 448.2,
+   "got": 448.2,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue seq4_short right, stored order",
+   "expected": 451,
+   "got": 451.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue seq4_short tokens per problem, stored order",
+   "expected": 11369,
+   "got": 11369.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 base + cue seq4_short right, mean of 24 orders",
+   "expected": 452.0,
+   "got": 452.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain single right, stored order",
+   "expected": 456,
+   "got": 456.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain single tokens per problem, stored order",
+   "expected": 4675,
+   "got": 4675.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain single right, mean of 24 orders",
+   "expected": 460.0,
+   "got": 460.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain vote4 right, stored order",
+   "expected": 474,
+   "got": 474.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain vote4 tokens per problem, stored order",
+   "expected": 18747,
+   "got": 18747.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain vote4_restart right, stored order",
+   "expected": 475,
+   "got": 475.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain vote4_restart tokens per problem, stored order",
+   "expected": 19864,
+   "got": 19864.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain seq4 right, stored order",
+   "expected": 474,
+   "got": 474.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain seq4 tokens per problem, stored order",
+   "expected": 11098,
+   "got": 11098.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain seq4 right, mean of 24 orders",
+   "expected": 474.3,
+   "got": 474.3,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain seq4_short right, stored order",
+   "expected": 475,
+   "got": 475.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain seq4_short tokens per problem, stored order",
+   "expected": 11098,
+   "got": 11098.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 RL plain seq4_short right, mean of 24 orders",
+   "expected": 474.5,
+   "got": 474.5,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 Think-SFT + cue single right, stored order",
+   "expected": 461,
+   "got": 461.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 Think-SFT + cue single tokens per problem, stored order",
+   "expected": 4900,
+   "got": 4900.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 Think-SFT + cue single right, mean of 24 orders",
+   "expected": 460.2,
+   "got": 460.2,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 Think-SFT + cue vote4 right, stored order",
+   "expected": 481,
+   "got": 481.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 Think-SFT + cue vote4 tokens per problem, stored order",
+   "expected": 19503,
+   "got": 19503.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 Think-SFT + cue seq4 right, stored order",
+   "expected": 481,
+   "got": 481.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 Think-SFT + cue seq4 tokens per problem, stored order",
+   "expected": 11521,
+   "got": 11521.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 Think-SFT + cue seq4 right, mean of 24 orders",
+   "expected": 480.8,
+   "got": 480.8,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 Think-SFT + cue seq4_short right, stored order",
+   "expected": 481,
+   "got": 481.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 Think-SFT + cue seq4_short tokens per problem, stored order",
+   "expected": 11521,
+   "got": 11521.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Token frontier' and 'Think-SFT with the cue under the vote rules', MATH-500 rows",
+   "what": "MATH-500 Think-SFT + cue seq4_short right, mean of 24 orders",
+   "expected": 480.5,
+   "got": 480.5,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8xm1_math31: right, cap hits",
+   "expected": [
+    118,
+    96
+   ],
+   "got": [
+    118.0,
+    96.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8xm1_math31: right, cap hits, tokens per problem as in readout.json",
+   "expected": [
+    118,
+    96,
+    9967.5
+   ],
+   "got": [
+    118.0,
+    96.0,
+    9967.5
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "base_cue_T1: right, cap hits",
+   "expected": [
+    164,
+    77
+   ],
+   "got": [
+    164.0,
+    77.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "base_cue_T1: right, cap hits, tokens per problem as in readout.json",
+   "expected": [
+    164,
+    77,
+    9343.8
+   ],
+   "got": [
+    164.0,
+    77.0,
+    9343.8
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "base_cue_T1: problems that differ from axis/hard328-01/vectors.json",
+   "expected": 0,
+   "got": 0.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x0.5_math31: right, cap hits",
+   "expected": [
+    170,
+    50
+   ],
+   "got": [
+    170.0,
+    50.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x0.5_math31: right, cap hits, tokens per problem as in readout.json",
+   "expected": [
+    170,
+    50,
+    8731.3
+   ],
+   "got": [
+    170.0,
+    50.0,
+    8731.3
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8_math31: right, cap hits",
+   "expected": [
+    192,
+    46
+   ],
+   "got": [
+    192.0,
+    46.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8_math31: right, cap hits, tokens per problem as in readout.json",
+   "expected": [
+    192,
+    46,
+    9283.9
+   ],
+   "got": [
+    192.0,
+    46.0,
+    9283.9
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x1.5_math31: right, cap hits",
+   "expected": [
+    203,
+    25
+   ],
+   "got": [
+    203.0,
+    25.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x1.5_math31: right, cap hits, tokens per problem as in readout.json",
+   "expected": [
+    203,
+    25,
+    8916.4
+   ],
+   "got": [
+    203.0,
+    25.0,
+    8916.4
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x2_math31: right, cap hits",
+   "expected": [
+    190,
+    5
+   ],
+   "got": [
+    190.0,
+    5.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x2_math31: right, cap hits, tokens per problem as in readout.json",
+   "expected": [
+    190,
+    5,
+    8207.0
+   ],
+   "got": [
+    190.0,
+    5.0,
+    8207.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x3_math31: right, cap hits",
+   "expected": [
+    117,
+    9
+   ],
+   "got": [
+    117.0,
+    9.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x3_math31: right, cap hits, tokens per problem as in readout.json",
+   "expected": [
+    117,
+    9,
+    8256.6
+   ],
+   "got": [
+    117.0,
+    9.0,
+    8256.6
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "rand8xm1_math31: right, cap hits",
+   "expected": [
+    159,
+    71
+   ],
+   "got": [
+    159.0,
+    71.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "rand8xm1_math31: right, cap hits, tokens per problem as in readout.json",
+   "expected": [
+    159,
+    71,
+    9117.5
+   ],
+   "got": [
+    159.0,
+    71.0,
+    9117.5
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "rand8_math31: right, cap hits",
+   "expected": [
+    158,
+    67
+   ],
+   "got": [
+    158.0,
+    67.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "rand8_math31: right, cap hits, tokens per problem as in readout.json",
+   "expected": [
+    158,
+    67,
+    9139.1
+   ],
+   "got": [
+    158.0,
+    67.0,
+    9139.1
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "rand8x2_math31: right, cap hits",
+   "expected": [
+    167,
+    70
+   ],
+   "got": [
+    167.0,
+    70.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "rand8x2_math31: right, cap hits, tokens per problem as in readout.json",
+   "expected": [
+    167,
+    70,
+    9243.0
+   ],
+   "got": [
+    167.0,
+    70.0,
+    9243.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "rand8x3_math31: right, cap hits",
+   "expected": [
+    163,
+    79
+   ],
+   "got": [
+    163.0,
+    79.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "rand8x3_math31: right, cap hits, tokens per problem as in readout.json",
+   "expected": [
+    163,
+    79,
+    9375.6
+   ],
+   "got": [
+    163.0,
+    79.0,
+    9375.6
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "rl_plain_T1: right, cap hits",
+   "expected": [
+    206,
+    20
+   ],
+   "got": [
+    206.0,
+    20.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "rl_plain_T1: right, cap hits, tokens per problem as in readout.json",
+   "expected": [
+    206,
+    20,
+    9315.4
+   ],
+   "got": [
+    206.0,
+    20.0,
+    9315.4
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "rl_plain_T1: problems that differ from axis/hard328-01/vectors.json",
+   "expected": 0,
+   "got": 0.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x1.5_math31 minus rl_plain_T1, points",
+   "expected": -0.91,
+   "got": -0.91,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x1.5_math31 minus rl_plain_T1, interval",
+   "expected": [
+    -4.88,
+    2.74
+   ],
+   "got": [
+    -4.88,
+    2.74
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x1.5_math31 minus top8_math31, points",
+   "expected": 3.35,
+   "got": 3.35,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x1.5_math31 minus top8_math31, interval",
+   "expected": [
+    -0.91,
+    7.62
+   ],
+   "got": [
+    -0.91,
+    7.62
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x1.5_math31 minus rand8_math31, points",
+   "expected": 13.72,
+   "got": 13.72,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x1.5_math31 minus rand8_math31, interval",
+   "expected": [
+    9.15,
+    18.29
+   ],
+   "got": [
+    9.15,
+    18.29
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x1.5_math31 minus base_cue_T1, points",
+   "expected": 11.89,
+   "got": 11.89,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'xreward' part 'The finish dial' / results/xreward/edits/readout.json / result-6f1bb7",
+   "what": "top8x1.5_math31 minus base_cue_T1, interval",
+   "expected": [
+    7.62,
+    16.16
+   ],
+   "got": [
+    7.62,
+    16.16
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 1.5x top-8 edit, replicated with four samples on the 328' / result-95a4dc",
+   "what": "1.5 x top-8 right of each sample",
+   "expected": [
+    207,
+    198,
+    199,
+    197
+   ],
+   "got": [
+    207.0,
+    198.0,
+    199.0,
+    197.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 1.5x top-8 edit, replicated with four samples on the 328' / result-95a4dc",
+   "what": "1.5 x top-8 cap hits of each sample",
+   "expected": [
+    20,
+    14,
+    20,
+    22
+   ],
+   "got": [
+    20.0,
+    14.0,
+    20.0,
+    22.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 1.5x top-8 edit, replicated with four samples on the 328' / result-95a4dc",
+   "what": "1.5 x top-8 one sample, mean of 4",
+   "expected": 200.25,
+   "got": 200.25,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 1.5x top-8 edit, replicated with four samples on the 328' / result-95a4dc",
+   "what": "1.5 x top-8 vote over 4: right, tokens per problem",
+   "expected": [
+    214,
+    35593
+   ],
+   "got": [
+    214.0,
+    35593.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 1.5x top-8 edit, replicated with four samples on the 328' / result-95a4dc",
+   "what": "1.5 x top-8 vote minus RL's vote, points",
+   "expected": -2.1,
+   "got": -2.1,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 1.5x top-8 edit, replicated with four samples on the 328' / result-95a4dc",
+   "what": "1.5 x top-8 vote minus RL's vote, interval",
+   "expected": [
+    -5.2,
+    0.6
+   ],
+   "got": [
+    -5.2,
+    0.6
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 1.5x top-8 edit, replicated with four samples on the 328' / result-95a4dc",
+   "what": "1.5 x top-8 vote minus the base's vote, points",
+   "expected": 6.7,
+   "got": 6.7,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 1.5x top-8 edit, replicated with four samples on the 328' / result-95a4dc",
+   "what": "1.5 x top-8 vote minus the base's vote, interval",
+   "expected": [
+    3.4,
+    10.4
+   ],
+   "got": [
+    3.4,
+    10.4
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 1.5x top-8 edit, replicated with four samples on the 328' / result-95a4dc",
+   "what": "under the vote: the edit alone right, RL alone right",
+   "expected": [
+    8,
+    15
+   ],
+   "got": [
+    8.0,
+    15.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'The 1.5x top-8 edit, replicated with four samples on the 328' / result-95a4dc",
+   "what": "MATH-500, 1.5 x top-8, one sample: right, cap hits",
+   "expected": [
+    456,
+    7
+   ],
+   "got": [
+    456.0,
+    7.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rnd10: right of each sample",
+   "expected": [
+    209
+   ],
+   "got": [
+    209.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rnd10: cap hits of each sample",
+   "expected": [
+    97
+   ],
+   "got": [
+    97.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rnd10: tokens per problem",
+   "expected": 10109,
+   "got": 10109.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rnd10 minus Think-SFT (mean of 4), points",
+   "expected": 0.0,
+   "got": 0.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rnd10 minus Think-SFT (mean of 4), interval",
+   "expected": [
+    -2.7,
+    2.7
+   ],
+   "got": [
+    -2.7,
+    2.7
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl10: right of each sample",
+   "expected": [
+    220
+   ],
+   "got": [
+    220.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl10: cap hits of each sample",
+   "expected": [
+    75
+   ],
+   "got": [
+    75.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl10: tokens per problem",
+   "expected": 9667,
+   "got": 9667.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl10 minus Think-SFT (mean of 4), points",
+   "expected": 3.4,
+   "got": 3.4,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl10 minus Think-SFT (mean of 4), interval",
+   "expected": [
+    0.5,
+    6.2
+   ],
+   "got": [
+    0.5,
+    6.2
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl20: right of each sample",
+   "expected": [
+    234,
+    229
+   ],
+   "got": [
+    234.0,
+    229.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl20: cap hits of each sample",
+   "expected": [
+    51,
+    57
+   ],
+   "got": [
+    51.0,
+    57.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl20: tokens per problem",
+   "expected": 9502,
+   "got": 9502.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl20 minus Think-SFT (mean of 4), points",
+   "expected": 6.9,
+   "got": 6.9,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl20 minus Think-SFT (mean of 4), interval",
+   "expected": [
+    4.6,
+    9.3
+   ],
+   "got": [
+    4.6,
+    9.3
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl30: right of each sample",
+   "expected": [
+    227
+   ],
+   "got": [
+    227.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl30: cap hits of each sample",
+   "expected": [
+    44
+   ],
+   "got": [
+    44.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl30: tokens per problem",
+   "expected": 9709,
+   "got": 9709.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl30 minus Think-SFT (mean of 4), points",
+   "expected": 5.5,
+   "got": 5.5,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl30 minus Think-SFT (mean of 4), interval",
+   "expected": [
+    2.5,
+    8.5
+   ],
+   "got": [
+    2.5,
+    8.5
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl40: right of each sample",
+   "expected": [
+    213
+   ],
+   "got": [
+    213.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl40: cap hits of each sample",
+   "expected": [
+    33
+   ],
+   "got": [
+    33.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl40: tokens per problem",
+   "expected": 10333,
+   "got": 10333.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl40 minus Think-SFT (mean of 4), points",
+   "expected": 1.2,
+   "got": 1.2,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl40 minus Think-SFT (mean of 4), interval",
+   "expected": [
+    -2.0,
+    4.4
+   ],
+   "got": [
+    -2.0,
+    4.4
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl20: mean of the two samples",
+   "expected": 231.5,
+   "got": 231.5,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl20 minus RL plain (mean of 4), points",
+   "expected": 9.6,
+   "got": 9.6,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "sft1_rl20 minus RL plain (mean of 4), interval",
+   "expected": [
+    6.9,
+    12.3
+   ],
+   "got": [
+    6.9,
+    12.3
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Delta transplant' / result-3387ce",
+   "what": "MATH-500 M(1): right, cap hits, tokens per problem",
+   "expected": [
+    467,
+    17,
+    4771
+   ],
+   "got": [
+    467.0,
+    17.0,
+    4771.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 sft: right of each sample",
+   "expected": [
+    65,
+    59,
+    56,
+    60
+   ],
+   "got": [
+    65.0,
+    59.0,
+    56.0,
+    60.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 sft: one sample (mean of 4), vote over 4",
+   "expected": [
+    60.0,
+    75
+   ],
+   "got": [
+    60.0,
+    75.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 sft: tokens per sample, per problem for the vote",
+   "expected": [
+    13043,
+    52170
+   ],
+   "got": [
+    13043.0,
+    52170.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 rl: right of each sample",
+   "expected": [
+    49,
+    50,
+    53,
+    50
+   ],
+   "got": [
+    49.0,
+    50.0,
+    53.0,
+    50.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 rl: one sample (mean of 4), vote over 4",
+   "expected": [
+    50.5,
+    57
+   ],
+   "got": [
+    50.5,
+    57.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 rl: tokens per sample, per problem for the vote",
+   "expected": [
+    12083,
+    48331
+   ],
+   "got": [
+    12083.0,
+    48331.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 base: right of each sample",
+   "expected": [
+    28,
+    28,
+    32,
+    30
+   ],
+   "got": [
+    28.0,
+    28.0,
+    32.0,
+    30.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 base: one sample (mean of 4), vote over 4",
+   "expected": [
+    29.5,
+    38
+   ],
+   "got": [
+    29.5,
+    38.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 base: tokens per sample, per problem for the vote",
+   "expected": [
+    12790,
+    51158
+   ],
+   "got": [
+    12790.0,
+    51158.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 sft minus rl, vote4, points",
+   "expected": 13.2,
+   "got": 13.2,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 sft minus rl, vote4, interval",
+   "expected": [
+    7.4,
+    19.1
+   ],
+   "got": [
+    7.4,
+    19.1
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 sft minus rl, single, points",
+   "expected": 7.0,
+   "got": 7.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 sft minus rl, single, interval",
+   "expected": [
+    3.1,
+    11.0
+   ],
+   "got": [
+    3.1,
+    11.0
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 sft minus base, vote4, points",
+   "expected": 27.2,
+   "got": 27.2,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 sft minus base, vote4, interval",
+   "expected": [
+    19.9,
+    35.3
+   ],
+   "got": [
+    19.9,
+    35.3
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 sft minus base, single, points",
+   "expected": 22.4,
+   "got": 22.4,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 sft minus base, single, interval",
+   "expected": [
+    17.5,
+    27.8
+   ],
+   "got": [
+    17.5,
+    27.8
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 rl minus base, vote4, points",
+   "expected": 14.0,
+   "got": 14.0,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 rl minus base, vote4, interval",
+   "expected": [
+    8.1,
+    19.9
+   ],
+   "got": [
+    8.1,
+    19.9
+   ],
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 rl minus base, single, points",
+   "expected": 15.4,
+   "got": 15.4,
+   "pass": true
+  },
+  {
+   "posted_in": "README 'Fresh held-out set' / results/fresh/readout-01/readout.json / result-5251c9",
+   "what": "fresh2026 rl minus base, single, interval",
+   "expected": [
+    11.4,
+    19.9
+   ],
+   "got": [
+    11.4,
+    19.9
+   ],
+   "pass": true
+  }
+ ],
+ "passed": 270,
+ "failed": [],
+ "planted": [
+  {
+   "planted": "equal to RL",
+   "expected_percent": 100.0,
+   "got_percent": 100.0,
+   "got_interval95": [
+    99.99999999999999,
+    100.00000000000001
+   ],
+   "pass": true
+  },
+  {
+   "planted": "equal to the base",
+   "expected_percent": 0.0,
+   "got_percent": 0.0,
+   "got_interval95": [
+    0.0,
+    0.0
+   ],
+   "pass": true
+  },
+  {
+   "planted": "the mean of base and RL",
+   "expected_percent": 50.0,
+   "got_percent": 50.0,
+   "got_interval95": [
+    49.99999999999999,
+    50.00000000000001
+   ],
+   "pass": true
+  },
+  {
+   "planted": "RL with one problem flipped: the check against RL's count has to fail",
+   "expected": 205.0,
+   "got": 204.0,
+   "pass": true
+  },
+  {
+   "planted": "a denominator carried by at most 6 problems is marked unstable",
+   "denominator_interval95": [
+    0.0,
+    1.524390243902439
+   ],
+   "pass": true
+  }
+ ]
+}

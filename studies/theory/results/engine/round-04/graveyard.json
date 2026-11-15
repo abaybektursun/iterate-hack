@@ -1,0 +1,358 @@
+{
+ "across-1": {
+  "name": "across-1",
+  "round": 1,
+  "rounds": [
+   1
+  ],
+  "statement": "The base's long-answer failures (low-temperature loops, cap hits, inability to continue its own long prefix) come from early-to-mid-layer self-copying of its own earlier reasoning by induction-driven repeat circuitry (attention heads from layer 7 and repeat-reading MLP neurons in layers 10-15), and the cap-hit part of RL's gain is a diffuse, task-general weakening of that self-copy pathway in layers 0-15, which temperature, restarts and an RL-written prefix each partly substitute for.",
+  "state": "does not beat the null",
+  "verdict": "",
+  "reason": "round-01 score: closer/farther than null-1 +21 -14, null-2 +19 -17; did not beat the noise"
+ },
+ "across-2": {
+  "name": "across-2",
+  "round": 1,
+  "rounds": [
+   1
+  ],
+  "statement": "The 10-13 points that Olmo-3.1 RL holds over the cued base are mostly a learned token-budget controller, trained by 3.1's scoring of truncated rollouts as failures, that keeps self-checking ('Wait') on answers that are short for the budget and forces convergence before the 16k cap on long ones, written into the weights as a low-rank late-layer stop/deliberation readout; it is not new mathematical skill, so the gap sits in cap hits and long problems, every recovering transplant takes RL's length, and Olmo-3.0 RL (truncation masked) is close to the cued base.",
+  "state": "does not beat the null",
+  "verdict": "",
+  "reason": "round-01 score: closer/farther than null-1 +23 -17, null-2 +22 -20; did not beat the noise"
+ },
+ "all-1": {
+  "name": "all-1",
+  "round": 1,
+  "rounds": [
+   1
+  ],
+  "statement": "The cued base and Olmo-3.1 RL-Zero-Math have nearly the same per-step math skill; the residual gap is a long-horizon self-conditioning deficit, in which the base's next-token distribution degrades as its own generated solution grows (loops at T 0.6, unfinished drift at T 1.0). Olmo-3.1's RL, which trained truncated rollouts as negatives at 16k, repaired this with a diffuse weight direction that changes activations only deep inside long math contexts, so the gap scales with solution length and token budget, not with problem knowledge.",
+  "state": "does not beat the null",
+  "verdict": "",
+  "reason": "round-01 score: closer/farther than null-1 +24 -17, null-2 +18 -15; did not beat the noise"
+ },
+ "all-2": {
+  "name": "all-2",
+  "round": 1,
+  "rounds": [
+   1
+  ],
+  "statement": "Most of the RL-Zero-Math gain is a saturating answer-mode switch: deliberate, then box the answer and stop, never the base's 'Answer:' line. The switch is encoded redundantly along one diffuse direction spread over every layer and matrix, so any unbiased fraction of the delta (half the matrices, a DARE 1 % sample, or a small multiple a of the whole delta) flips it. Accuracy is therefore a sharply concave function of delta scale; the cue flips the same switch from the prompt, and other RL runs (Code-RL) share part of it.",
+  "state": "does not beat the null",
+  "verdict": "",
+  "reason": "round-01 score: closer/farther than null-1 +22 -20, null-2 +18 -21; did not beat the noise"
+ },
+ "surprises-1": {
+  "name": "surprises-1",
+  "round": 1,
+  "rounds": [
+   1
+  ],
+  "statement": "The Olmo-3.1 RL-Zero-Math gain is two separable components: a domain-general 'enter deliberative mode' shift that the opening cue reproduces exactly and that Code-RL and the 3.0 RL release also learned, plus a termination-calibration component that only 3.1 learned from training truncated rollouts as negatives (stop when the answer is checked, keep checking when it is not, finish before the cap); the ~11-point cued-base gap is the second component alone.",
+  "state": "does not beat the null",
+  "verdict": "",
+  "reason": "round-01 score: closer/farther than null-1 +21 -21, null-2 +16 -24; did not beat the noise"
+ },
+ "surprises-2": {
+  "name": "surprises-2",
+  "round": 1,
+  "rounds": [
+   1
+  ],
+  "statement": "The functional part of the RL-Zero-Math weight change is a low-rank, near-linear shift (a few coherent singular directions per matrix, dense across neurons, that write a deliberation/answer-format readout into the residual stream), while the high-rank remainder that holds most of the change energy is optimizer noise that does almost nothing; so neuron subsets fail (each holds only its proportional share of the dense low-rank part), DARE works (it preserves the low-rank part in expectation and adds only high-rank noise), and RL leaves neuron features unchanged on general text.",
+  "state": "does not beat the null",
+  "verdict": "",
+  "reason": "round-01 score: closer/farther than null-1 +15 -22, null-2 +17 -22; did not beat the noise"
+ },
+ "r1-across-1": {
+  "name": "r1-across-1",
+  "round": 2,
+  "rounds": [
+   2
+  ],
+  "statement": "The base's long-answer failures (low-temperature loops, cap hits, inability to continue its own long prefix) come from early-to-mid-layer self-copying of its own earlier reasoning by induction-driven repeat circuitry (attention heads from layer 7 and repeat-reading MLP neurons in layers 10-15), and the cap-hit part of RL's gain is a diffuse, task-general weakening of that self-copy pathway in layers 0-15, which temperature, restarts and an RL-written prefix each partly substitute for.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "divergent wins 2, losses 2; worst claim: MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the opening cue: weights base + 0.25*(RL-Zero-Math minus: claimed 3700 [3450, 3930], measured 4036"
+ },
+ "r1-across-2": {
+  "name": "r1-across-2",
+  "round": 2,
+  "rounds": [
+   2
+  ],
+  "statement": "The 10-13 points that Olmo-3.1 RL holds over the cued base are mostly a learned token-budget controller, trained by 3.1's scoring of truncated rollouts as failures, that keeps self-checking ('Wait') on answers that are short for the budget and forces convergence before the 16k cap on long ones, written into the weights as a low-rank late-layer stop/deliberation readout; it is not new mathematical skill, so the gap sits in cap hits and long problems, every recovering transplant takes RL's length, and Olmo-3.0 RL (truncation masked) is close to the cued base.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "divergent wins 1, losses 1; worst claim: MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the cue: weights base + 1.5*(RL-Zero-Math minus base): n: claimed 8 [0, 20], measured 34"
+ },
+ "r1-all-1": {
+  "name": "r1-all-1",
+  "round": 2,
+  "rounds": [
+   2
+  ],
+  "statement": "The cued base and Olmo-3.1 RL-Zero-Math have nearly the same per-step math skill; the residual gap is a long-horizon self-conditioning deficit, in which the base's next-token distribution degrades as its own generated solution grows (loops at T 0.6, unfinished drift at T 1.0). Olmo-3.1's RL, which trained truncated rollouts as negatives at 16k, repaired this with a diffuse weight direction that changes activations only deep inside long math contexts, so the gap scales with solution length and token budget, not with problem knowledge.",
+  "state": "passes",
+  "verdict": "refuted",
+  "reason": "review: refuted Its own refutation rule for forward prediction P1 is met (half the RL weight difference with the cue on the 328: 190 right with 73 cap hits, against a claimed 45 [30, 60]; MATH-500 shows +42 right with only 5 fewer cap hits), a context-independent constant vector closes 23-31 % of th"
+ },
+ "r1-all-2": {
+  "name": "r1-all-2",
+  "round": 3,
+  "rounds": [
+   2,
+   3
+  ],
+  "statement": "Most of the RL-Zero-Math gain is a saturating answer-mode switch: deliberate, then box the answer and stop, never the base's 'Answer:' line. The switch is encoded redundantly along one diffuse direction spread over every layer and matrix, so any unbiased fraction of the delta (half the matrices, a DARE 1 % sample, or a small multiple a of the whole delta) flips it. Accuracy is therefore a sharply concave function of delta scale; the cue flips the same switch from the prompt, and other RL runs (Code-RL) share part of it.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "total gain 2.62 on 12 claims; worst claim: MATH-500 n=500, plain prompt, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Mix, right of 500: claimed 438 [405, 462], measured 372"
+ },
+ "r1-surprises-1": {
+  "name": "r1-surprises-1",
+  "round": 2,
+  "rounds": [
+   2
+  ],
+  "statement": "The Olmo-3.1 RL-Zero-Math gain is two separable components: a domain-general 'enter deliberative mode' shift that the opening cue reproduces exactly and that Code-RL and the 3.0 RL release also learned, plus a termination-calibration component that only 3.1 learned from training truncated rollouts as negatives (stop when the answer is checked, keep checking when it is not, finish before the cap); the ~11-point cued-base gap is the second component alone.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "divergent wins 0, losses 0; worst claim: Base+cue hard328, T 1.0 / top-p 1.0, v3: number of problems with at least one right answer among 4 s: claimed 218 [206, 235], measured 205"
+ },
+ "r1-surprises-2": {
+  "name": "r1-surprises-2",
+  "round": 3,
+  "rounds": [
+   2,
+   3
+  ],
+  "statement": "The functional part of the RL-Zero-Math weight change is a low-rank, near-linear shift (a few coherent singular directions per matrix, dense across neurons, that write a deliberation/answer-format readout into the residual stream), while the high-rank remainder that holds most of the change energy is optimizer noise that does almost nothing; so neuron subsets fail (each holds only its proportional share of the dense low-rank part), DARE works (it preserves the low-rank part in expectation and adds only high-rank noise), and RL leaves neuron features unchanged on general text.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "total gain -4.597 on 8 claims; worst claim: right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, RL-Math : claimed 55 [42, 70], measured 91"
+ },
+ "r2-across-1": {
+  "name": "r2-across-1",
+  "round": 2,
+  "rounds": [
+   2
+  ],
+  "statement": "The RL-Zero-Math weight change acts, to first order, as a logit shift that collapses next-token entropy only at the base's own high-entropy fork positions and leaves low-entropy positions alone, so the RL model carries a fork-local low temperature: global temperature barely moves RL because its forks are already near one-hot, whereas for the base, cooling to T 0.6 also sharpens the easy restatement step at diffuse forks and starts loops, and heating to T 1.0 removes loops but samples wrong branches at the forks; any partial delta (attention-only, MLP-only, a times the delta) collapses fork entropy partly and stays temperature-sensitive in proportion to the fork entropy it leaves.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "divergent wins 1, losses 1; worst claim: Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.5 / top-p 1.0 / min-p 0.1 (v3, one sample): number: claimed 370 [340, 392], measured 412"
+ },
+ "r2-across-2": {
+  "name": "r2-across-2",
+  "round": 3,
+  "rounds": [
+   2,
+   3
+  ],
+  "statement": "The RL-Zero-Math delta is small (0.24 % of weight norm) and sign-coherent: its function lies in the joint sign pattern of many coordinates, whose Fisher curvature on the base's own math samples is hundreds to thousands of times that of a random direction of the same norm, not in its large entries. So the effect of any edit is its energy divided by that leverage. Random resampling (DARE), random-sign or random-direction edits of the same norm, and magnitude-ranked subsets add almost nothing beyond their unbiased share of the sign pattern. The model's activations on general text barely move. The dose curve stays near-linear past a = 1. DARE fails only when its noise energy (1-q)/q exceeds the leverage, which puts the cliff at q of about 0.01-0.05 %. A large, low-coherence SFT delta (bytegraft, Think-SFT) fails all of these tests.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "total gain -3.199 on 7 claims; worst claim: right of first 100 MATH-500 problems, T 1.0 / top-p 1.0, plain prompt, grader v3, 1 sample, Olmo-3 b: claimed 58 [44, 72], measured 88"
+ },
+ "r2-all-1": {
+  "name": "r2-all-1",
+  "round": 2,
+  "rounds": [
+   2
+  ],
+  "statement": "The RL-Zero-Math delta acts through the coherent sign pattern of its entries along high-curvature (high on-policy Fisher) directions, roughly 700 times more consequential per unit norm than a random direction, and not through which entries are large; so any unbiased resampling of it (DARE, either half of the tensors) keeps the gain until the injected noise's KL, about (1-q)/(q*rho) times the delta's own, outgrows it, magnitude-ranked neurons do no better than random ones, the same magnitudes with random signs do nothing, and a low-leverage imitation (SFT) delta breaks under the same sparse copy.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "divergent wins 0, losses 1; worst claim: Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the plain prompt (no cue), MATH-500 n=500, T 1.0 / top-p 1.0: claimed 230 [205, 255], measured 390"
+ },
+ "r2-all-2": {
+  "name": "r2-all-2",
+  "round": 3,
+  "rounds": [
+   2,
+   3
+  ],
+  "statement": "The base's accuracy at a sampling setting is set by the per-token surprise of the text it generates relative to one optimum: below it, a restatement that holds its probability in one sequence beats a progress step whose mass is split over many paraphrases and then self-reinforces into a loop (boredom trap), above it the text drifts (confusion trap); the opening cue moves the base into a lower-entropy deliberative mode, which is why the cue loops more than the plain prompt at T 0.6, is worth far more at T 1.0, and why any mode-sharpening truncation (top-p < 1) costs the cued base but helps the plain base at T 1.0.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "no claims"
+ },
+ "r2-external-1": {
+  "name": "r2-external-1",
+  "round": 2,
+  "rounds": [
+   2
+  ],
+  "statement": "On Olmo-3 the RL-Zero-Math delta moves the output about 700 times more per unit of weight energy than a random direction does, because its signs are coherent, so DARE's rescaling noise costs at most about the delta's own KL down to q = 0.1 % and the plateau must end in a sharp cliff near q = 0.01 %; within that range the noise acts on generation as a small fixed random logit distortion that raises the surprise of generated text and so weakens self-reinforcing repetition: random-sign weight noise reduces loops and adds accuracy on a looping model at T 0.6 and costs a little at T 1.0, where there are no loops to break.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "divergent wins 1, losses 1; worst claim: MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the cue: weights base + 1.5*(RL-Zero-Math minus base): n: claimed 8 [0, 25], measured 34"
+ },
+ "r2-external-2": {
+  "name": "r2-external-2",
+  "round": 2,
+  "rounds": [
+   2
+  ],
+  "statement": "The cued base's two temperature failure modes come from one global temperature acting on two kinds of positions: at its rare high-entropy fork tokens the progress continuations split their mass while one restatement of an earlier step keeps its own, so T 0.6 or top-p 0.95 hands the fork to the restatement and starts a self-reinforcing loop, while at its many near-deterministic tokens T 1.0 samples tail tokens that become slips; RL sharpens the fork tokens onto one progress continuation and lowers entropy elsewhere, which is why it is temperature-insensitive, and a per-position temperature (1.0 at forks, 0.6 elsewhere) gives the base the loop-free finishing of T 1.0 and the finished-answer accuracy of T 0.6.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "divergent wins 1, losses 2; worst claim: Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1: number of answers flagged as rule-A: claimed 2 [0, 8], measured 34"
+ },
+ "r2-revise-1": {
+  "name": "r2-revise-1",
+  "round": 2,
+  "rounds": [
+   2
+  ],
+  "statement": "The accuracy-carrying part of the Olmo-3.1 RL-Zero-Math delta is its dense sign pattern over many small entries, which moves logits to first order as a coherent sum with high Fisher leverage per unit norm; magnitudes, the most-changed entries and the low-rank head (top singular directions) carry only their proportional share of it, so an arm recovers accuracy in proportion to how much of the coherent sign pattern it keeps in expectation (per-problem log-odds roughly linear in that share), DARE survives until its scaled noise breaks the network, sign randomization gives nothing, and the Code-RL pattern, which agrees with Math-RL in sign at chance, gives no math gain.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "divergent wins 1, losses 0; worst claim: MATH-500 n=500, T 1.0 / top-p 1.0, grader v3, one sample, with the opening cue: weights base Olmo-3-: claimed 427 [420, 434], measured 441"
+ },
+ "r2-revise-2": {
+  "name": "r2-revise-2",
+  "round": 2,
+  "rounds": [
+   2
+  ],
+  "statement": "The cued base's remaining gap to RL-Zero-Math is a weak error detector, not weaker per-step math: both models make slips and misreads in a first candidate solution at similar rates, but RL notices an error and re-derives far more often (signal-detection d' about 1.1 vs 0.6), so the cued base's residual errors are sample-specific commitment errors that independent samples rarely repeat while RL's residual errors are problem-specific; hence a 4-sample majority vote closes about half of the cued base's gap but lifts RL by only about 1 point, an injected error in a shared prefix is caught far more often by RL, and any RL-Zero-Math release (3.0 included) gives finished answers far more accurate than the cued base's, whatever its cap-hit rate.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "divergent wins 0, losses 0; worst claim: Base+cue hard328, T 1.0 / top-p 1.0, v3: number right under a vote over 4 samples per problem (vote@: claimed 189 [180, 198], measured 179"
+ },
+ "r2-surprises-1": {
+  "name": "r2-surprises-1",
+  "round": 2,
+  "rounds": [
+   2
+  ],
+  "statement": "For the Olmo-3 base, loops and slips are the two ends of one axis, the per-token surprise of the text it samples (low surprise: the boredom trap of self-reinforcing repetition; high surprise: the confusion trap of compounding slips and early wrong stops); the opening cue lowers the base's native per-token entropy by selecting its reasoning-trace register, which pushes it toward loops at T 0.6 (more cap hits than the plain base) and keeps it out of confusion at T 1.0 (where the plain base loses 28 points on short problems), while the entropy-collapsed RL policy sits far from both traps and so ignores temperature, and any change that raises the base's surprise, including a random weight perturbation, cuts its loops.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "divergent wins 0, losses 1; worst claim: Grader v1/v2 applied to plain-prompt base Olmo-3-1025-7B answers on MATH-500 n=500 at T 1.0: number : claimed 95 [65, 140], measured 166"
+ },
+ "r2-surprises-2": {
+  "name": "r2-surprises-2",
+  "round": 2,
+  "rounds": [
+   2
+  ],
+  "statement": "Which entries the RL-Zero update moves, and by how much each, is set by the base and the optimizer rather than by the task (Adam gives every consistently signed coordinate a near-equal step, and bf16 storage registers a step only where it exceeds half an ulp of |w|), so the changed-entry mask and entry magnitudes carry almost no task information; the task is written only in the signs, and their effect is gated by which input directions the processed text excites, so RL changes the computation on any math-solution text whoever wrote it and leaves general text untouched.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "divergent wins 0, losses 1; worst claim: Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the plain prompt (no cue), MATH-500 n=500, T 1.0 / top-p 1.0: claimed 235 [205, 265], measured 390"
+ },
+ "r3-across-1": {
+  "name": "r3-across-1",
+  "round": 3,
+  "rounds": [
+   3
+  ],
+  "statement": "The RL-minus-base weight change acts in two parts. The first is a general reliability part that is not specific to math. Code-RL shares it even though the two deltas are nearly orthogonal, and it is already saturated at a = 0.25. It turns problems the cued base solves only some of the time (moderate per-problem p, many of them long or cap-hit) into problems it solves almost every time. The second is a math-specific part that scales with dose and is needed only where the base's p is near 0; those problems are concentrated on hard328 and MATH Level 5.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "total gain -0.346 on 6 claims; worst claim: hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, Olmo-3.1-7B-RL-Zero-Code: claimed 176 [166, 187], measured 187"
+ },
+ "r3-across-2": {
+  "name": "r3-across-2",
+  "round": 3,
+  "rounds": [
+   3
+  ],
+  "statement": "The cued base can leave a loop or a wrong line only through low-probability tail tokens, so it needs untruncated T 1.0. Any sharpening (T 0.6, top-p, min-p) deletes that escape mass and loops lock. The RL weight change adds, as a roughly constant per-layer push, probable process tokens ('Wait', 'Hmm') that carry the same escape inside the head of the distribution. That makes RL, and small doses of its delta, insensitive to temperature and truncation.",
+  "state": "passes",
+  "verdict": "weak: its single winning claim (t13, +0.67 nats) comes from the 'constant push' reading that was already on the board and that the reversal shared, not from the tail-escape mechanism. The loop-locking half is published (2610.24715), the core predictions (P1, P2 and the offline hold-on ratios) are untested, and result-6de887 shows T 0.6 loops can be cut by neuron ablation with no accuracy gain.",
+  "reason": "review: weak: its single winning claim (t13, +0.67 nats) comes from the 'constant push' reading that was already on the board and that the reversal shared, not from the tail-escape mechanism. The loop-locking half is published (2610.24715), the core predictions (P1, P2 and the offline hold-on ratios"
+ },
+ "r3-all-1": {
+  "name": "r3-all-1",
+  "round": 3,
+  "rounds": [
+   3
+  ],
+  "statement": "The RL gain left over the cued base at T 1.0 is made of two separate parts of the stopping policy: (i) a part that is not specific to math and teaches the model to commit to an answer and box it; this part appears early in RL, Code-RL shares it, a = 0.25 of the weight difference already holds it, and it recovers the base's 'lost' short and medium problems; (ii) a math-specific habit of checking before stopping, learned from training truncated rollouts as negatives, which pays only on long problems, where the base either stops on an unchecked answer or runs to the cap.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "total gain -2.668 on 4 claims; worst claim: hard328, T 1.0 / top-p 1.0, cue, grader v3, 1 sample, Olmo-3.1-7B-RL-Zero-Code: claimed 173 [163, 184], measured 187"
+ },
+ "r3-all-2": {
+  "name": "r3-all-2",
+  "round": 3,
+  "rounds": [
+   3
+  ],
+  "statement": "On hard problems the base model's probability at a solution's progress-making step is spread over many alternatives, while RL has concentrated it on its own rollouts. The same spread produces both of the base's failures, on the same high-entropy problems: lowering the temperature gives the spread mass to an easy cyclic continuation that then reinforces itself (loops and cap hits), and at T 1.0 it is spent on sampled wrong turns instead. RL has low entropy on its own rollouts, so temperature barely affects it.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "total gain -1.357 on 3 claims; worst claim: MATH-500 n=500, T 1.0 / top-p 1.0, cue, one self-review pass, grader v3 raw, Olmo-3.1-7B-RL-Zero-Mat: claimed 457 [452, 462], measured 446"
+ },
+ "r3-external-1": {
+  "name": "r3-external-1",
+  "round": 3,
+  "rounds": [
+   3
+  ],
+  "statement": "The temperature sensitivity of the cued base and of RL-Zero-Math 3.0 and the insensitivity of 3.1 are one mechanism: sampling a pretrained-style policy with an over-truncated sampler (T < 1 or top-p/min-p) drops it into self-reinforcing repetition basins (Holtzman), and 3.1's recipe of training cap-truncated rollouts as negatives, with rollouts drawn by an exact T 1.0 sampler so the sign law gives no entropy drift, pushes down exactly the trajectories that enter those basins without making the policy flatter; 3.0, which masked truncations, keeps the basins and so behaves like the base under temperature.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "total gain -1.434 on 2 claims; worst claim: MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Math (3.0 release), right of 50: claimed 412 [388, 436], measured 448"
+ },
+ "r3-external-2": {
+  "name": "r3-external-2",
+  "round": 3,
+  "rounds": [
+   3
+  ],
+  "statement": "The RL-Zero-Math weight difference is the sum of two parts learned at different times: an early sharpening of the base's own solution distribution that turns problems the base solves only sometimes into problems it solves reliably, which the fully trained delta overshoots several-fold (as in ExPO, the optimal scale shrinks with training) and so is fully expressed at a \u2248 0.25; and a part from prolonged training that adds solutions where the base rarely succeeds (as in ProRL) and grows roughly in proportion to a. So partial deltas and orthogonal RL deltas recover most of the gap on MATH-500 but only a small share on hard328 and on problems no base sample solves.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "total gain -7.953 on 11 claims; worst claim: MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-IF, right of 500: claimed 436 [416, 454], measured 377"
+ },
+ "r3-revise-1": {
+  "name": "r3-revise-1",
+  "round": 3,
+  "rounds": [
+   3
+  ],
+  "statement": "The RL-Zero gain over the base has two parts that separate by dose. The first is a domain-general 'deliberate, then commit' mode component. Any RL-Zero delta carries it, Math or Code, as a small shared, largely constant per-layer push. It saturates by a = 0.25 of the Math delta, the opening cue substitutes for it, and it acts by stopping the base from losing problems it can solve. The second is a math-specific long-horizon component. It grows roughly linearly with the Math delta up to a = 1, Code-RL lacks it, and it pays only on problems whose solutions run long (the top length quartile of MATH-500 and the harder 328).",
+  "state": "fails",
+  "verdict": "",
+  "reason": "total gain -2.686 on 11 claims; worst claim: MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Code (3.0), right of 500: claimed 446 [431, 459], measured 411"
+ },
+ "r3-revise-2": {
+  "name": "r3-revise-2",
+  "round": 3,
+  "rounds": [
+   3
+  ],
+  "statement": "A loop is an absorbing hazard for the cued base. The sampler opens it only at impasse positions, and how far along a solution impasses appear depends on the sampler: under T 0.6, impasses come early enough to trap medium-length solutions the base would otherwise finish, while at T >= 1.0 (with or without tail truncation) only a fixed, problem-specific set of long solutions reaches one, and those problems are mostly lost anyway. So a sampler moves accuracy only through loops it creates on finishable problems: accuracy is flat across T >= 1 samplers while cap hits vary, cap hits at T >= 1 are nested inside the T 0.6 cap-hit set, and many T 0.6 cap-hit problems are solved at T 1.0.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "no claims"
+ },
+ "r3-surprises-1": {
+  "name": "r3-surprises-1",
+  "round": 3,
+  "rounds": [
+   3
+  ],
+  "statement": "The cued base's deficit at T 1.0 comes from tail sampling: at every position there is a small chance of drawing a low-probability token that derails a step (slip, misread), and these errors add up with length; RL's diffuse change shrinks that tail at every position (so RL barely notices temperature), whereas any label-free way of cutting the tail (lower T, top-p, min-p, length cutoffs) also removes the tail tokens that break the base out of its self-reinforcing repeats, so loops come back and the net gain is about zero.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "total gain -0.244 on 4 claims; worst claim: MATH-500 base+cue 4-sample vote, T 1.0, v3, in the 36 tied problems: number right when ties broken b: claimed 19 [14, 24], measured 12"
+ },
+ "r3-surprises-2": {
+  "name": "r3-surprises-2",
+  "round": 3,
+  "rounds": [
+   3
+  ],
+  "statement": "Any outcome-reward RL difference on the Olmo 3 base has two parts. The first is a shared, low-dose part that gates the base's existing settle-or-switch behaviour: it keeps the model on one line of attack, has it verify, then stop. Math-RL and Code-RL both learn this part even though their weights are orthogonal, and it saturates by a = 0.25. The second is a high-dimensional, math-specific part that only pays off on long, hard problems. MATH-500 gains therefore come mostly from the shared part, while the hard-set and longest-quartile gap needs the math-specific part, which no decoding rule or neuron subset supplies.",
+  "state": "fails",
+  "verdict": "",
+  "reason": "total gain -4.353 on 11 claims; worst claim: MATH-500 n=500, cue, T 1.0 / top-p 1.0, grader v3, Olmo-3-7B-RL-Zero-Code (3.0), right of 500: claimed 445 [430, 459], measured 411"
+ }
+}

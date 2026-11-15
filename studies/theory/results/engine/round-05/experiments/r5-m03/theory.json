@@ -1,0 +1,13 @@
+{"predictions": [],
+ "intervention": {
+  "change": "On the plain-prompt cell, prefill a different register-switching opening: Wang et al.'s 2-token cue '.\\n\\n' + 'Okay' (base tokenizer ids of the strings '.\\n\\n' and 'Okay') right after the prompt, instead of nothing; the team's 3-token cue ' line!\\n\\nOkay' is NOT used. Everything else as the plain base cell (T3).",
+  "model": "allenai/Olmo-3-1025-7B",
+  "cell": {"set": "MATH-500", "prompt": "plain MATH-500 prompt (chat template as in run_cell.py) + prefilled tokens '.\\n\\nOkay'", "sampling": "T 1.0 / top-p 1.0", "cap": 16384, "grader": "v3", "samples": 1, "seeds": "seed of problem i = 185,000,000 + i"},
+  "count": "right answers over all 500 MATH-500 problems by grader v3 on the single sample; cap hits and answers with no extracted answer count as wrong",
+  "unit": "right of 500",
+  "value": 398, "low": 375, "high": 418,
+  "best_known": {"value": 453, "item": "result-cbe0bc", "setting": "base + cue, T 1.0 / top-p 1.0, vote over 4 samples with ties broken to the shortest finished sample (any-selection best; best single-sample cue cell is 405-418, result-60d899)"},
+  "gpu_minutes": 35,
+  "why": "The mechanism says the plain base's 224 is only a register failure and that any opening that switches into the deliberative 'Okay' register (top8 edit, the 3-token cue) lifts it to the cued base's level (~405-418) and no further, so a different 'Okay' opening should take the plain cell from 224 to about the cued level, slightly lower because Wang's cue lacks the prompt-fitting ' line!'."
+ }
+}

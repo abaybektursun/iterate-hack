@@ -1,0 +1,112 @@
+[
+ {
+  "round": "team",
+  "number": 1,
+  "problem": "Jerry and Sophie are each given a number. They are both told the following information:\n\n- Their numbers are distinct integers between $2$ and $50$, inclusive.\n- Jerry's number is an integer power of Sophie's number.\n\nHowever, neither of them can determine the other's number given this information. Compute the sum of their numbers.",
+  "answer": "18",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "proof": false,
+  "note": ""
+ },
+ {
+  "round": "team",
+  "number": 2,
+  "problem": "Across all positive integers $m$ and $n$, compute the least possible integer value of $$(\\sqrt{21}+\\sqrt{55})^2+(\\sqrt{m}-\\sqrt{n})^2.$$",
+  "answer": "144",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "proof": false,
+  "note": ""
+ },
+ {
+  "round": "team",
+  "number": 3,
+  "problem": "Let points $A$ and $D$ lie on parallel lines $\\ell_1$ and $\\ell_2$, respectively, and let points $B$ and $C$ lie between $\\ell_1$ and $\\ell_2$ such that $AB = BC = CD$, and $B$, $C$ are on the same side of $AD$. Suppose the angle between $\\overline{AB}$ and $\\ell_1$ is $20^\\circ$, the angle between $\\overline{CD}$ and $\\ell_2$ is $26^\\circ$, and $\\angle ABD = 84^\\circ$. Compute the degree measure of $\\angle ACD$.",
+  "answer": "75^\\circ",
+  "figure": true,
+  "estimation": false,
+  "multi": false,
+  "proof": false,
+  "note": "A diagram follows the statement in the PDF (not referred to in the text); it fixes which angles are 20, 84 and 26 degrees, so flagged figure. Answer is given with a degree sign."
+ },
+ {
+  "round": "team",
+  "number": 4,
+  "problem": "Let $F_0, F_1, F_2, \\ldots$ be a sequence of positive integers with $F_0 = F_1 = F_2 = \\cdots = F_{2025} = 1$ and $F_i = F_{i-2025} + F_{i-2026}$ for all positive integers $i \\geq 2026$. Compute the number of positive integers $n < 2026$ such that there exists a positive integer $k$ satisfying $F_k = n$.",
+  "answer": "64",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "proof": false,
+  "note": ""
+ },
+ {
+  "round": "team",
+  "number": 5,
+  "problem": "A right circular cone with apex $A$ has base radius $1$ and height $7$. Two perpendicular planes are tangent to the cone's lateral surface along segments $\\overline{AP}$ and $\\overline{AQ}$, where $P$ and $Q$ lie on the base of the cone. Compute $PQ$.",
+  "answer": "\\frac{10}{7}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "proof": false,
+  "note": ""
+ },
+ {
+  "round": "team",
+  "number": 6,
+  "problem": "Given that $a$ and $b$ are integers greater than $1$ such that $\\frac{a+b^2}{a^2}$ is an integer, compute the least possible value of $b$.",
+  "answer": "35",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "proof": false,
+  "note": ""
+ },
+ {
+  "round": "team",
+  "number": 7,
+  "problem": "Alice has $8$ balls labeled $1, 2, 3, \\ldots, 8$ and $8$ boxes labeled $1, 2, 3, \\ldots, 8$. Compute the number of ways for Alice to place exactly $1$ ball in every box such that exactly $1$ ball is labeled with a strictly higher number than its box.",
+  "answer": "247",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "proof": false,
+  "note": ""
+ },
+ {
+  "round": "team",
+  "number": 8,
+  "problem": "Let $ABC$ be a triangle with $AB = 13$, $BC = 14$, and $CA = 15$. Point $D$ is chosen on segment $BC$. Points $P$ and $Q$ are such that $\\angle PBC = 90^\\circ$, $\\angle QCB = 90^\\circ$, and $APDQ$ is a kite with axis of symmetry $PQ$. Suppose that $D$ is chosen such that $\\angle PAQ$ is maximized. Compute $AD$.",
+  "answer": "4\\sqrt{10}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "proof": false,
+  "note": "The answer box in the PDF contains a trailing period ('4\\sqrt{10}.'), dropped."
+ },
+ {
+  "round": "team",
+  "number": 9,
+  "problem": "Let $x$, $y$, and $z$ be real numbers satisfying $$\\begin{aligned} x+y-\\sqrt{z^2+1} &= -5, \\\\ y+z-\\sqrt{x^2+1} &= 0, \\\\ z+x-\\sqrt{y^2+1} &= 5. \\end{aligned}$$ Compute $x+y+z$.",
+  "answer": "\\frac{\\sqrt{38}+3\\sqrt{2}}{2}",
+  "figure": false,
+  "estimation": false,
+  "multi": false,
+  "proof": false,
+  "note": "The answer box in the PDF contains a trailing period, dropped."
+ },
+ {
+  "round": "team",
+  "number": 10,
+  "problem": "Let $N$ denote the number of ways to tile a $2 \\times 199$ grid with O-tetrominoes, T-tetrominoes, and L-trominoes, as shown below. Compute the remainder when $N$ is divided by $128$. (The tiles can be rotated, and tilings that differ by rotation or reflection are considered distinct.)",
+  "answer": "44",
+  "figure": true,
+  "estimation": false,
+  "multi": false,
+  "proof": false,
+  "note": "Figure shows the three tiles: a 2x2 square (O), a T of four cells, an L of three cells."
+ }
+]

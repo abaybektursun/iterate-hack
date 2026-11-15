@@ -1,0 +1,31 @@
+{
+ "commit": "69f32d3a8392b1a6976128a6148910ea1ed5b367",
+ "command": "python -m studies.rlneurons.analysis.derived score --work /home/abay/Projects/iterate-hack/runs/derived --out studies/rlneurons/results/derived/hard328-01",
+ "job_id": null,
+ "gpu": "none (laptop)",
+ "spec": "studies/rlneurons/specs/SPEC_derived.md",
+ "judges": {
+  "A": {
+   "model": "claude-sonnet-5-5",
+   "effort": "low"
+  },
+  "B": {
+   "model": "claude-haiku-5-5",
+   "effort": null
+  },
+  "F": {
+   "model": "claude-sonnet-5-5",
+   "effort": "low"
+  }
+ },
+ "inputs": {
+  "think": "thinkvote/hard328_sft1_cue_s4-01",
+  "rl": "day1_3/hard328_rl_plain_s4r2-01",
+  "base": "day1_3/hard328_base_cue_s4r2-01"
+ },
+ "raw": {
+  "think": "thinkvote_hard328_sft1_cue_s4",
+  "rl": "abaybektursun-1114-200505-5ff2",
+  "base": "abaybektursun-1114-200457-e8e6"
+ }
+}
