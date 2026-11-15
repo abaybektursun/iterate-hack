@@ -1,0 +1,2 @@
+{"groups": {"Z (base 0/4)": 33, "kept": 497}}
+{"measured": 5, "n": 33, "interval": [2, 9], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": 0.15151515151515152, "not_computable": null, "example_row": {"problem_index": 18, "unique_id": "test/geometry/434.json", "R": 1, "base_cue_s0": 0, "base_cue_s1": 0, "base_cue_s2": 0, "base_cue_s3": 0, "base_sum": 0}}

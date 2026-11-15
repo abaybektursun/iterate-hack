@@ -1,0 +1,238 @@
+{
+ "theory": "r6-account-rival",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "MATH-500, claimed cell: RL's solve rate on the cued base's T1 cap-hit problems minus the solve rate expected for problems of the same base difficulty, using RL's rate on T1 finished-wrong problems with the same 4-sample base count",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. From per_problem.json keep the problems where t1_right and t2_right are both non-null. A problem is T1-right iff t1_right is true and t1_cap_hit is not true; keep only the problems that are not T1-right. Group C = kept problems with t1_cap_hit true. Group F = all other kept problems. RL right = t2_right true and t2_cap_hit not true. k4 for each kept problem: for each sample s in {0,1,2,3}, take the first row in file order of rows.jsonl with that problem_index, attempt == 0 and sample == s. Count the rows with score_v3 == 1 that are not a cap hit (cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'). A missing row counts as not right. Strata: k4 = 0, k4 = 1, k4 = 2, k4 in {3,4}. r_F(stratum) = (F problems in the stratum with RL right) / (F problems in the stratum). Drop any C problem whose stratum holds no F problem. Statistic = (fraction of the remaining C problems with RL right) minus (mean over the same C problems of r_F of each one's stratum).",
+   "unit": "difference of fractions of problems",
+   "value": 0.02,
+   "low": -0.15,
+   "high": 0.19,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": -0.010905349794238739,
+   "n": 90,
+   "interval": [
+    -0.18325791855203621,
+    0.17742410845859136
+   ],
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 1,
+   "turn": 1
+  },
+  {
+   "k": 2,
+   "experiment": "hard328: RL plain's solve rate on the cued base's cap-hit problems minus the solve rate expected for problems of the same base difficulty, using RL's rate on the base's finished-wrong problems with the same count of right answers in three base-like cued resamples",
+   "recipe": "Files (S3, profile iterate-ecr): s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151534-e72c/answers.jsonl (B, base cue), s3://pg-lineage-769063704696/results/rlneurons/r5/day1_hard328-01/abaybektursun-1114-151540-86ef/answers.jsonl (RL plain), and the three cue arms s3://pg-lineage-769063704696/results/rlneurons/r5/selfdistill-01/abaybektursun-1114-201021-095e/answers.jsonl, .../abaybektursun-1114-201035-c6c0/answers.jsonl and .../abaybektursun-1114-201132-3c04/answers.jsonl. In every file keep one row per problem_index: the row with the smallest attempt value, or the first in file order if there is no attempt field. Right = score_v3 == 1 and cap_hit not true; a null or missing score_v3 counts as not right. Keep the problem_index values present in both e72c and 86ef. Keep only the problems where B (e72c) is not right. Group C = kept problems whose e72c row has cap_hit true. Group F = all other kept problems. RL right = the 86ef row is right. k3 = the number of the three selfdistill cue rows (095e, c6c0, 3c04) that are right; a missing row counts as not right. Strata: k3 = 0, k3 = 1, k3 in {2,3}. r_F(stratum) = (F problems in the stratum with RL right) / (F problems in the stratum). Drop any C problem whose stratum holds no F problem. Statistic = (fraction of the remaining C problems with RL right) minus (mean over the same C problems of r_F of each one's stratum).",
+   "unit": "difference of fractions of problems",
+   "value": -0.06,
+   "low": -0.18,
+   "high": 0.06,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": -0.05976305529211637,
+   "n": 167,
+   "interval": [
+    -0.1660273622298939,
+    0.04597701149425287
+   ],
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 2,
+   "turn": 1
+  },
+  {
+   "k": 3,
+   "experiment": "Budget share of the gap when the other side is the reward-free Think-SFT model with the cue: among problems Think-SFT cue gets right and the cued base's T1 gets wrong, the fraction where T1 is a cap hit",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json and studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json (if a problem_index repeats, use the first row in file order). Join on problem_index. Keep the problems where t1_right is non-null and the sft1_cue score_v3 is non-null. B right = t1_right true and t1_cap_hit not true. Other right = sft1_cue score_v3 == 1 and cap_hit not true. Gap = problems with other right and B not right. Statistic = (gap problems with t1_cap_hit true) / (gap problems).",
+   "unit": "fraction of gap problems",
+   "value": 0.2,
+   "low": 0.12,
+   "high": 0.28,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": 0.24615384615384617,
+   "n": 65,
+   "interval": [
+    0.15942028985507245,
+    0.3387096774193548
+   ],
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 3,
+   "turn": 1
+  },
+  {
+   "k": 4,
+   "experiment": "MATH-500, T 1.0: on the cued base's T1 cap-hit problems, Think-SFT cue's right count minus Math-RL's (T2) right count",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json and studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json. If a problem_index repeats in either file, use its first row in file order. Set C = the per_problem.json problems with t1_cap_hit true. RL right = t2_right true and t2_cap_hit not true; a null t2_right counts as not right. Think-SFT right = the sft1_cue row has score_v3 == 1 and cap_hit not true; a missing row or a null score_v3 counts as not right. Statistic = (number of C problems with Think-SFT right) minus (number of C problems with RL right), as a signed integer.",
+   "unit": "problems (signed count)",
+   "value": -1,
+   "low": -5.5,
+   "high": 3.5,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": 0,
+   "n": 27,
+   "interval": [
+    -3,
+    3
+   ],
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 4,
+   "turn": 2
+  },
+  {
+   "k": 5,
+   "experiment": "MATH-500, T 1.0: Think-SFT cue's solve rate on the cued base's T1 cap-hit problems minus its solve rate on T1 finished-wrong problems of the same 4-sample base count (the matched excess, now for the reward-free arm)",
+   "recipe": "Files: studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json, studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json and studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl. If a problem_index repeats in either per_problem file, use its first row in file order. From t1_t2_items per_problem.json keep the problems where t1_right is non-null. A problem is T1-right iff t1_right is true and t1_cap_hit is not true; keep only the problems that are not T1-right. Group C = kept problems with t1_cap_hit true. Group F = all other kept problems. Think-SFT right = the sft1_cue row has score_v3 == 1 and cap_hit not true; a missing row or a null score_v3 counts as not right. k4 for each kept problem: for each sample s in {0,1,2,3}, take the first row in file order of rows.jsonl with that problem_index, attempt == 0 and sample == s, and count the rows with score_v3 == 1 that are not a cap hit (cap hit = cap_hit true, or cap_hit missing and finish_reason == 'length'). A missing row counts as not right. Strata: k4 = 0, k4 = 1, k4 = 2, k4 in {3,4}. r_F(stratum) = (F problems in the stratum with Think-SFT right) / (F problems in the stratum). Drop any C problem whose stratum holds no F problem. Statistic = (fraction of the remaining C problems with Think-SFT right) minus (mean over the same C problems of r_F for each one's stratum).",
+   "unit": "difference of fractions of problems",
+   "value": -0.07,
+   "low": -0.21,
+   "high": 0.07,
+   "refuted_by": "none: a duel test",
+   "gpu_minutes": 0,
+   "measured": -0.03438418577307478,
+   "n": 90,
+   "interval": [
+    -0.20161290322580644,
+    0.13710575139146564
+   ],
+   "inside": true,
+   "refuted_by_met": false,
+   "not_computable": null,
+   "duel_k": 5,
+   "turn": 2
+  }
+ ],
+ "carried_from": "round-06",
+ "rows": [
+  {
+   "id": "r6-account-rival:p1",
+   "k": 1,
+   "measured": -0.010905349794238739,
+   "value": 0.02,
+   "low": -0.15,
+   "high": 0.19,
+   "nulls": [
+    {
+     "value": -0.05,
+     "low": -0.21,
+     "high": 0.11
+    }
+   ],
+   "gain": -0.0246,
+   "inside": true,
+   "n": 90,
+   "interval": [
+    -0.18325791855203621,
+    0.17742410845859136
+   ],
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  },
+  {
+   "id": "r6-account-rival:p2",
+   "k": 2,
+   "measured": -0.05976305529211637,
+   "value": -0.06,
+   "low": -0.18,
+   "high": 0.06,
+   "nulls": [
+    {
+     "value": -0.06,
+     "low": -0.2,
+     "high": 0.08
+    }
+   ],
+   "gain": 0.1541,
+   "inside": true,
+   "n": 167,
+   "interval": [
+    -0.1660273622298939,
+    0.04597701149425287
+   ],
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  },
+  {
+   "id": "r6-account-rival:p3",
+   "k": 3,
+   "measured": 0.24615384615384617,
+   "value": 0.2,
+   "low": 0.12,
+   "high": 0.28,
+   "nulls": [
+    {
+     "value": 0.13,
+     "low": 0.05,
+     "high": 0.22
+    }
+   ],
+   "gain": 2.1369,
+   "inside": true,
+   "n": 65,
+   "interval": [
+    0.15942028985507245,
+    0.3387096774193548
+   ],
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  },
+  {
+   "id": "r6-account-rival:p4",
+   "k": 4,
+   "measured": 0,
+   "value": -1,
+   "low": -5.5,
+   "high": 3.5,
+   "nulls": [
+    {
+     "value": -2,
+     "low": -7,
+     "high": 3
+    }
+   ],
+   "gain": 0.255,
+   "inside": true,
+   "n": 27,
+   "interval": [
+    -3,
+    3
+   ],
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  },
+  {
+   "id": "r6-account-rival:p5",
+   "k": 5,
+   "measured": -0.03438418577307478,
+   "value": -0.07,
+   "low": -0.21,
+   "high": 0.07,
+   "nulls": [
+    {
+     "value": -0.1,
+     "low": -0.35,
+     "high": 0.15
+    }
+   ],
+   "gain": 0.5855,
+   "inside": true,
+   "n": 90,
+   "interval": [
+    -0.20161290322580644,
+    0.13710575139146564
+   ],
+   "refuted_by": "none: a duel test",
+   "refuted_by_met": false
+  }
+ ]
+}

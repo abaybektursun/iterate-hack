@@ -1,0 +1,172 @@
+{
+ "run": "math500-01",
+ "arms": {
+  "sft1_rl10": {
+   "jobs": [
+    "abaybektursun-1115-004808-bb28"
+   ],
+   "alpha": 1.0,
+   "random": false,
+   "effective_a": 0.9999961190139954,
+   "written_norm_over_intended": 1.048677516545826,
+   "samples": {
+    "abaybektursun-1115-004808-bb28": {
+     "n": 500,
+     "right": 467,
+     "cap_hits": 17,
+     "loop_A": 4,
+     "finished": 483,
+     "right_of_finished": 465,
+     "tokens_per_problem": 4771.16
+    }
+   },
+   "n": 500,
+   "right": 467,
+   "cap_hits": 17,
+   "loop_A": 4,
+   "finished": 483,
+   "right_of_finished": 465,
+   "tokens_per_problem": 4771.16,
+   "minus": {
+    "rl score_v3": {
+     "n_problems": 500,
+     "arm": 467.0,
+     "reference": 460.0,
+     "diff_points": 1.4,
+     "ci95": [
+      -0.649999999999995,
+      3.3012499999999845
+     ]
+    },
+    "rl cap_hit": {
+     "n_problems": 500,
+     "arm": 17.0,
+     "reference": 8.0,
+     "diff_points": 1.8,
+     "ci95": [
+      0.45000000000000007,
+      3.3000000000000003
+     ]
+    },
+    "base score_v3": {
+     "n_problems": 500,
+     "arm": 467.0,
+     "reference": 410.5,
+     "diff_points": 11.3,
+     "ci95": [
+      8.700000000000008,
+      13.849999999999996
+     ]
+    },
+    "base cap_hit": {
+     "n_problems": 500,
+     "arm": 17.0,
+     "reference": 22.5,
+     "diff_points": -1.1,
+     "ci95": [
+      -2.7499999999999996,
+      0.5999999999999999
+     ]
+    }
+   }
+  }
+ },
+ "references": {
+  "rl": {
+   "rows": "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl",
+   "samples": {
+    "sample 0": {
+     "n": 500,
+     "right": 456,
+     "cap_hits": 6,
+     "loop_A": 0,
+     "finished": 494,
+     "right_of_finished": 456,
+     "tokens_per_problem": 4675.104
+    },
+    "sample 1": {
+     "n": 500,
+     "right": 462,
+     "cap_hits": 10,
+     "loop_A": 1,
+     "finished": 490,
+     "right_of_finished": 461,
+     "tokens_per_problem": 4587.922
+    },
+    "sample 2": {
+     "n": 500,
+     "right": 464,
+     "cap_hits": 5,
+     "loop_A": 0,
+     "finished": 495,
+     "right_of_finished": 464,
+     "tokens_per_problem": 4741.206
+    },
+    "sample 3": {
+     "n": 500,
+     "right": 458,
+     "cap_hits": 11,
+     "loop_A": 0,
+     "finished": 489,
+     "right_of_finished": 456,
+     "tokens_per_problem": 4742.928
+    }
+   },
+   "n": 2000,
+   "right": 1840,
+   "cap_hits": 32,
+   "loop_A": 1,
+   "finished": 1968,
+   "right_of_finished": 1837,
+   "tokens_per_problem": 4686.79
+  },
+  "base": {
+   "rows": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl",
+   "samples": {
+    "sample 0": {
+     "n": 500,
+     "right": 405,
+     "cap_hits": 25,
+     "loop_A": 0,
+     "finished": 475,
+     "right_of_finished": 405,
+     "tokens_per_problem": 3808.138
+    },
+    "sample 1": {
+     "n": 500,
+     "right": 409,
+     "cap_hits": 23,
+     "loop_A": 0,
+     "finished": 477,
+     "right_of_finished": 408,
+     "tokens_per_problem": 4143.972
+    },
+    "sample 2": {
+     "n": 500,
+     "right": 410,
+     "cap_hits": 22,
+     "loop_A": 0,
+     "finished": 478,
+     "right_of_finished": 410,
+     "tokens_per_problem": 3925.682
+    },
+    "sample 3": {
+     "n": 500,
+     "right": 418,
+     "cap_hits": 20,
+     "loop_A": 0,
+     "finished": 480,
+     "right_of_finished": 418,
+     "tokens_per_problem": 4155.758
+    }
+   },
+   "n": 2000,
+   "right": 1642,
+   "cap_hits": 90,
+   "loop_A": 0,
+   "finished": 1910,
+   "right_of_finished": 1641,
+   "tokens_per_problem": 4008.3875
+  }
+ }
+}

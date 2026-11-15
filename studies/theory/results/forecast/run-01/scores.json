@@ -1,0 +1,458 @@
+{
+ "scored_utc": "2026-11-15T14:50:25",
+ "measured": [
+  {
+   "id": "t01",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t02",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t03",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t04",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t05",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t06",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t07",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t09",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t10",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t11",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t12",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t13",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t14",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t15",
+   "value": 60.0,
+   "item": "result-5251c9",
+   "quote": "one sample 60.0 vs 50.5 vs 29.5",
+   "note": "Think-SFT + cue on the 136 fresh2026 problems (AIME 2026, HMMT Feb+Nov), 4 samples, T 1.0, v3; 60.0 is the mean count right per sample of 136 (not a percent: the stated +7.0-point gap equals (60.0-50.5)/136)."
+  },
+  {
+   "id": "t16",
+   "value": 75,
+   "item": "result-5251c9",
+   "quote": "vote over 4 = 75 of 136",
+   "note": "Think-SFT + cue, majority vote over 4 samples on the same 136 fresh2026 problems, T 1.0, v3."
+  },
+  {
+   "id": "t17",
+   "value": 50.5,
+   "item": "result-5251c9",
+   "quote": "one sample 60.0 vs 50.5 vs 29.5",
+   "note": "RL-Zero-Math plain on the 136 fresh2026 problems, 4 samples, T 1.0, v3; 50.5 is the mean count right per sample of 136 (the +7.0-point gap equals (60.0-50.5)/136, so these are counts)."
+  },
+  {
+   "id": "t18",
+   "value": 57,
+   "item": "result-5251c9",
+   "quote": "vs RL 57",
+   "note": "RL-Zero-Math plain, majority vote over 4 samples on the 136 fresh2026 problems, T 1.0, v3 (score line: RL plain, vote over 4)."
+  },
+  {
+   "id": "t19",
+   "value": 29.5,
+   "item": "result-5251c9",
+   "quote": "one sample 60.0 vs 50.5 vs 29.5",
+   "note": "Untrained base + cue on the 136 fresh2026 problems, 4 samples, T 1.0, v3; 29.5 is the mean count right per sample of 136 (same count scale as the other two one-sample figures)."
+  },
+  {
+   "id": "t20",
+   "value": 38,
+   "item": "result-5251c9",
+   "quote": "vs base + cue 38",
+   "note": "Untrained base + cue, majority vote over 4 samples on the 136 fresh2026 problems, T 1.0, v3."
+  }
+ ],
+ "forecasters": {
+  "reader-1": {
+   "scored": 6,
+   "inside": 4,
+   "total_gain": -4.601,
+   "mean_gain": -0.767,
+   "rows": [
+    {
+     "id": "t15",
+     "measured": 60.0,
+     "value": 46,
+     "low": 33,
+     "high": 60,
+     "nulls": [
+      {
+       "value": 46,
+       "low": 33,
+       "high": 60
+      },
+      {
+       "value": 54,
+       "low": 39,
+       "high": 69
+      }
+     ],
+     "gain": -0.7192,
+     "inside": true
+    },
+    {
+     "id": "t16",
+     "measured": 75,
+     "value": 52,
+     "low": 38,
+     "high": 66,
+     "nulls": [
+      {
+       "value": 52,
+       "low": 38,
+       "high": 66
+      },
+      {
+       "value": 64,
+       "low": 48,
+       "high": 80
+      }
+     ],
+     "gain": -2.2402,
+     "inside": false
+    },
+    {
+     "id": "t17",
+     "measured": 50.5,
+     "value": 39,
+     "low": 28,
+     "high": 51,
+     "nulls": [
+      {
+       "value": 39,
+       "low": 28,
+       "high": 51
+      },
+      {
+       "value": 47,
+       "low": 33,
+       "high": 61
+      }
+     ],
+     "gain": -0.6731,
+     "inside": true
+    },
+    {
+     "id": "t18",
+     "measured": 57,
+     "value": 43,
+     "low": 31,
+     "high": 55,
+     "nulls": [
+      {
+       "value": 43,
+       "low": 31,
+       "high": 55
+      },
+      {
+       "value": 54,
+       "low": 39,
+       "high": 69
+      }
+     ],
+     "gain": -1.0612,
+     "inside": false
+    },
+    {
+     "id": "t19",
+     "measured": 29.5,
+     "value": 27,
+     "low": 18,
+     "high": 37,
+     "nulls": [
+      {
+       "value": 27,
+       "low": 18,
+       "high": 37
+      },
+      {
+       "value": 34,
+       "low": 22,
+       "high": 47
+      }
+     ],
+     "gain": 0.1623,
+     "inside": true
+    },
+    {
+     "id": "t20",
+     "measured": 38,
+     "value": 32,
+     "low": 21,
+     "high": 43,
+     "nulls": [
+      {
+       "value": 32,
+       "low": 21,
+       "high": 43
+      },
+      {
+       "value": 40,
+       "low": 26,
+       "high": 54
+      }
+     ],
+     "gain": -0.0691,
+     "inside": true
+    }
+   ]
+  },
+  "reader-2": {
+   "scored": 6,
+   "inside": 6,
+   "total_gain": 1.825,
+   "mean_gain": 0.304,
+   "rows": [
+    {
+     "id": "t15",
+     "measured": 60.0,
+     "value": 54,
+     "low": 39,
+     "high": 69,
+     "nulls": [
+      {
+       "value": 46,
+       "low": 33,
+       "high": 60
+      },
+      {
+       "value": 54,
+       "low": 39,
+       "high": 69
+      }
+     ],
+     "gain": 0.414,
+     "inside": true
+    },
+    {
+     "id": "t16",
+     "measured": 75,
+     "value": 64,
+     "low": 48,
+     "high": 80,
+     "nulls": [
+      {
+       "value": 52,
+       "low": 38,
+       "high": 66
+      },
+      {
+       "value": 64,
+       "low": 48,
+       "high": 80
+      }
+     ],
+     "gain": 0.6385,
+     "inside": true
+    },
+    {
+     "id": "t17",
+     "measured": 50.5,
+     "value": 47,
+     "low": 33,
+     "high": 61,
+     "nulls": [
+      {
+       "value": 39,
+       "low": 28,
+       "high": 51
+      },
+      {
+       "value": 47,
+       "low": 33,
+       "high": 61
+      }
+     ],
+     "gain": 0.3987,
+     "inside": true
+    },
+    {
+     "id": "t18",
+     "measured": 57,
+     "value": 54,
+     "low": 39,
+     "high": 69,
+     "nulls": [
+      {
+       "value": 43,
+       "low": 31,
+       "high": 55
+      },
+      {
+       "value": 54,
+       "low": 39,
+       "high": 69
+      }
+     ],
+     "gain": 0.5032,
+     "inside": true
+    },
+    {
+     "id": "t19",
+     "measured": 29.5,
+     "value": 34,
+     "low": 22,
+     "high": 47,
+     "nulls": [
+      {
+       "value": 27,
+       "low": 18,
+       "high": 37
+      },
+      {
+       "value": 34,
+       "low": 22,
+       "high": 47
+      }
+     ],
+     "gain": -0.1938,
+     "inside": true
+    },
+    {
+     "id": "t20",
+     "measured": 38,
+     "value": 40,
+     "low": 26,
+     "high": 54,
+     "nulls": [
+      {
+       "value": 32,
+       "low": 21,
+       "high": 43
+      },
+      {
+       "value": 40,
+       "low": 26,
+       "high": 54
+      }
+     ],
+     "gain": 0.0647,
+     "inside": true
+    }
+   ]
+  },
+  "r5-m03-rival": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "rows": []
+  },
+  "r6-account-rival": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "rows": []
+  },
+  "r6-m06": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "rows": []
+  },
+  "r7-m05": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "rows": []
+  },
+  "r7-m08": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "rows": []
+  },
+  "r7-m11": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "rows": []
+  }
+ },
+ "outside_every_interval": []
+}
