@@ -1380,6 +1380,26 @@ code text at about 0.54 of its drive on math text.
 | `analysis/direct_input.py` | Readout from trace-01's per-position drive (`runs/abaybektursun-1115-005830-2145/trace_00*.npz`) and 7 hard328 cells' `answers.jsonl` (Modal Volume `iterate-runs`). |
 | `results/direct/input-01/` | `readout.json`, `examples.json` (a high-drive and a low-drive problem that the edit shortens as much), `run.json`. |
 
+### drive-01: run-05/f2-m03 across domains (board work-c51f89, refuted)
+
+Claim tested: Math 3.1's top-8 directions moved code accuracy about half as far as Code's own (368 against 399 of 538,
+random 331: transfer 0.54) because code text drives their input subspace about half as much as math text. Readout: trace-01's
+per-answer drive D (r = ||diag(s) V^T x|| / ||W_base x||, mean over the first 6,000 answer tokens, 3 matrices, 4 bands) on the
+538 base Code-cue answers (new job) over the same on the 328 hard328 math answers (trace-01). Result:
+R_math = 0.869 [0.861, 0.877] (90 % bootstrap over texts); random rank-8 control 0.990 [0.988, 0.991]; R_math / R_rand 0.878
+[0.870, 0.887]. Frozen rule: above 0.85 refutes. Every band (0.85 to 0.88) and matrix (0.86 to 0.88) agrees. Reverse
+(secondary): Code 3.1's directions on math text over code text 0.686 [0.679, 0.693], against a predicted 0.45 to 0.47. So the
+Math subspace is driven by code text at 87 % of its math level, while its accuracy transfer is 54 %: input drive does not
+explain the half transfer. Check: 16 re-traced math answers match trace-01 within 0.07 %.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_drive.md` | Claim, verdict rule, control (pushed first, 12f9227). |
+| `prep/drive_inputs.py` | Builds `data/drive/code_cue_answers_v1.jsonl.gz` (job abaybektursun-1114-170304-c03c) and `math_check_v1.jsonl.gz`. |
+| `jobs/drive_trace.py` | The trace on code text (imports `studies/rlneurons/jobs/xreward_trace.py`); raw output `runs/ih-1115-214816-0563/`. |
+| `analysis/direct_drive.py` | Readout, bootstrap, re-trace check. |
+| `results/direct/drive-01/` | `metrics.json`, `rows.json` (per code text D of every condition), `examples.json` (highest and lowest drive code text), `run.json`. |
+
 ## Paper: Theories on Trial (`paper/`, board work-184476)
 
 A short paper on the engine's rounds 1 to 7: the theories' own predictions against the two no-theory readers
