@@ -41,24 +41,35 @@ def main():
     rk = {m: rankdata(v) for m, v in r.items()}
     rng = np.random.default_rng(0)
     starts = np.array([x["offset"] for x in index])
-    lens = np.array([x["length"] for x in index])
-    boots = [np.concatenate([np.arange(starts[a], starts[a] + lens[a]) for a in rng.integers(0, len(index), len(index))]) for _ in range(1000)]
+    picks = rng.integers(0, len(index), (1000, len(index)))          # the answers of each resample
+    counts = np.stack([np.bincount(p, minlength=len(index)) for p in picks]).astype(np.float64)
 
-    def stat(f):
-        v = [f(b) for b in boots]
-        return {"value": round(float(f(np.arange(n))), 4), "ci95": [round(float(np.percentile(v, 2.5)), 4), round(float(np.percentile(v, 97.5)), 4)]}
+    def per_answer(v):
+        return np.bincount(ans, weights=v, minlength=len(index))
 
-    res = {}
+    def ci(f, sums):
+        """f maps the list of weighted totals to the statistic; sums are per-answer totals (ranks are those of the full sample)."""
+        v = [f([c @ s for s in sums]) for c in counts]
+        return {"value": round(float(f([s.sum() for s in sums])), 4), "ci95": [round(float(np.percentile(v, 2.5)), 4), round(float(np.percentile(v, 97.5)), 4)]}
+
+    def corr(x, y):
+        sums = [per_answer(np.ones(n)), per_answer(x), per_answer(y), per_answer(x * x), per_answer(y * y), per_answer(x * y)]
+        return ci(lambda t: (t[5] - t[1] * t[2] / t[0]) / np.sqrt((t[3] - t[1] ** 2 / t[0]) * (t[4] - t[2] ** 2 / t[0])), sums)
+
+    def share(hit, where):
+        return ci(lambda t: t[0] / t[1], [per_answer((hit & where).astype(np.float64)), per_answer(where.astype(np.float64))])
+
+    res, everywhere = {}, np.ones(n, dtype=bool)
     for m in r:
         if m == REF:
             continue
         res[m] = {
-            "pearson_r": stat(lambda b: np.corrcoef(r[m][b], r[REF][b])[0, 1]),
-            "spearman_r": stat(lambda b: np.corrcoef(rk[m][b], rk[REF][b])[0, 1]),
-            "share_r_below_-0.5_in_D": stat(lambda b: (r[m][b][low[b]] < -0.5).mean()),
-            "share_r_below_-0.5_all": stat(lambda b: (r[m][b] < -0.5).mean()),
-            "top_equals_math31_where_math31_differs_from_base": stat(lambda b: (data[m]["top"][b][moved[b]] == data[REF]["top"][b][moved[b]]).mean()),
-            "top_equals_base_where_math31_differs_from_base": stat(lambda b: (data[m]["top"][b][moved[b]] == data[BASE]["top"][b][moved[b]]).mean()),
+            "pearson_r": corr(r[m].astype(np.float64), r[REF].astype(np.float64)),
+            "spearman_r": corr(rk[m], rk[REF]),
+            "share_r_below_-0.5_in_D": share(r[m] < -0.5, low),
+            "share_r_below_-0.5_all": share(r[m] < -0.5, everywhere),
+            "top_equals_math31_where_math31_differs_from_base": share(data[m]["top"] == data[REF]["top"], moved),
+            "top_equals_base_where_math31_differs_from_base": share(data[m]["top"] == data[BASE]["top"], moved),
             "mean_abs_r": round(float(np.abs(r[m]).mean()), 4),
         }
     summary = {"spec": "studies/rlneurons/specs/SPEC_reward5_tokens.md", "jobs": jobs, "answers": len(index), "positions": int(n),
