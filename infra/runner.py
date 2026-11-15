@@ -27,6 +27,10 @@ image = (
     modal.Image.debian_slim(python_version="3.12")
     .pip_install_from_requirements(str(Path(__file__).resolve().parent.parent / "requirements.txt"))
     .env({"HF_HOME": "/hf", "PYTHONUNBUFFERED": "1"})
+    # The rlneurons engine (vLLM in /opt/rln-vllm) is built once here, by the study's own script. A job that runs
+    # the script again finds everything installed and takes about a second.
+    .add_local_file(str(Path(__file__).resolve().parent.parent / "studies/rlneurons/jobs/setup_vllm.sh"), "/setup_vllm.sh", copy=True)
+    .run_commands("bash /setup_vllm.sh")
 )
 runs = modal.Volume.from_name("iterate-runs", create_if_missing=True)
 code = modal.Volume.from_name("iterate-code", create_if_missing=True)
@@ -52,9 +56,12 @@ def run(job_id):
     jobs[f"start:{job_id}"] = {"at": int(time.time()), "gpu": gpu}
 
     code.reload()  # a container that started before this commit was uploaded does not see the file otherwise
+    runs.reload()  # the same for inputs put on the Volume iterate-runs (modal volume put) after the container started
     with tarfile.open(f"/code/{job['sha']}.tar") as tar:
         tar.extractall("/repo", filter="data")
     out = Path("/runs") / job_id
+    if out.exists():  # Modal restarted the container: keep the interrupted run's output beside the new one
+        out.rename(f"{out}.interrupted-{int(time.time())}")
     out.mkdir(parents=True)
     deadline = time.time() + job["hours"] * 3600
     with open(out / "log", "w") as log:
@@ -76,7 +83,7 @@ def run(job_id):
 
 
 # One function per GPU class. max_containers is how many of your jobs of that class run at once.
-@app.function(gpu="H100", max_containers=4, **common)
+@app.function(gpu="H100", max_containers=20, **common)
 def h100(job_id: str):
     run(job_id)
 

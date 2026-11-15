@@ -1,0 +1,133 @@
+{
+ "name": "r3-across-1",
+ "statement": "The RL-minus-base weight change acts in two parts. The first is a general reliability part that is not specific to math. Code-RL shares it even though the two deltas are nearly orthogonal, and it is already saturated at a = 0.25. It turns problems the cued base solves only some of the time (moderate per-problem p, many of them long or cap-hit) into problems it solves almost every time. The second is a math-specific part that scales with dose and is needed only where the base's p is near 0; those problems are concentrated on hard328 and MATH Level 5.",
+ "scope": "Olmo-3-1025-7B base with the 3-token cue vs Olmo-3.1-7B-RL-Zero-Math, the merges base + a(RL - base), and Olmo-3.1-7B-RL-Zero-Code. Single-sample accuracy on MATH-500 and the clean hard328 at T 1.0 / top-p 1.0 (and T 0.6 / top-p 0.95 for the merges), cap 16,384, grader v3. It does not cover the Code benchmarks, RL 3.0 vs 3.1 differences, or the format of the answer line. It does not say which weights carry each part: both parts are spread over almost every neuron.",
+ "parent": null,
+ "imports": [
+  {
+   "source": "2506.14965",
+   "finding": "Cross-domain RL transfer depends on difficulty: easier benchmarks (MATH500, AMC) readily gain from another domain's RL, while the hardest (AIME24) gain considerably less.",
+   "how": "This is what separates the two parts. The general part that Code-RL shares raises accuracy on problems the base already solves some of the time (easy and moderate ones). The math-specific part, which Code-RL lacks, is what solves problems where the base's p is near 0 (hard328, Level 5)."
+  },
+  {
+   "source": "2507.14843",
+   "finding": "RLVR mainly reweights within the base model's support: pass@1 rises and answer-level entropy falls, few new correct completions appear, and support shrinks more than it grows.",
+   "how": "This explains why the general part works by cutting losses. Moving answer mass toward the base's own correct mode raises per-problem p wherever p is moderate. It does almost nothing where p is near 0, which leaves those problems to the math-specific part."
+  }
+ ],
+ "explains": [
+  {
+   "item": "result-9b6af3",
+   "quote": "most of the RL direction's gain is 24 fewer lost problems",
+   "how": "Reweighting toward the base's correct mode shows up first as fewer right-to-wrong losses on problems the base solves only sometimes."
+  },
+  {
+   "item": "result-9b6af3",
+   "quote": "gets 42 of the cued base's 90 wrong problems right",
+   "how": "About half of the base's misses are draws from a moderate p, which are the problems the general part fixes."
+  },
+  {
+   "item": "result-4b0d5f",
+   "quote": "the direction is RL-specific but not math-specific",
+   "how": "On MATH-500, an easy set, almost all of the gain comes from the general part, so Code-RL ties Math-RL."
+  },
+  {
+   "item": "result-4b0d5f",
+   "quote": "a=0.25 is +6.2 pts over base cue",
+   "how": "The general part saturates at low dose, and MATH-500 holds few problems with p near 0 for the math-specific part to add."
+  },
+  {
+   "item": "result-c9b27e",
+   "quote": "Math-RL and Code-RL weight differences from the same Olmo-3-1025-7B base are nearly orthogonal",
+   "how": "The shared part is behavioural (it raises reliability), not one shared weight direction. Different directions can push the same reliability features."
+  },
+  {
+   "item": "result-e2482e",
+   "quote": "cue token in top 15 for 13 of 96 late readouts",
+   "how": "Both RL deltas load on generic deliberation and opening tokens. This is the general part's signature, and Code-RL has it (15 of 96)."
+  },
+  {
+   "item": "result-5d032f",
+   "quote": "a 4-sample vote adds 8.2 points to base+cue",
+   "how": "Voting recovers the base's moderate-p problems, which RL has already made near-certain, so the vote helps the base more (+8.2 vs +3.6)."
+  },
+  {
+   "item": "result-5de032",
+   "quote": "By RL-length quartile (82 each) base/RL right: 78/82, 52/67, 30/45, 4/12",
+   "how": "The gap grows as the base's p approaches 0. Those long, hard problems need the math-specific part."
+  },
+  {
+   "item": "result-82b4dc",
+   "quote": "RL minus base 12.8 points",
+   "how": "hard328 holds more problems with p near 0 than MATH-500 does, so the math-specific part's share of the gap is larger there."
+  },
+  {
+   "item": "result-2c2cae",
+   "quote": "Base vote@4 minus RL single: -4.1 [-8.5, 0.4]",
+   "how": "On hard328 the vote cannot reach problems where the base's p is near 0, so the vote leaves a gap that RL's math-specific part closes."
+  }
+ ],
+ "conflicts": [
+  {
+   "item": "result-5d032f",
+   "quote": "pass@4 (oracle): base 467, RL 482",
+   "how": "If reweighting were all of it on MATH-500, base pass@4 should match or beat RL pass@4. A 15-problem RL lead means the math-specific part also adds coverage on easy problems, not only on hard328."
+  },
+  {
+   "item": "result-2c2cae",
+   "quote": "pass@4: base 157, RL 175",
+   "how": "RL extends coverage on hard problems, which pure within-support reweighting (2507.14843) does not allow. Here the math-specific part has to create new correct completions."
+  }
+ ],
+ "rival": "The rival: one diffuse RL direction with a single dose-response, and hard problems simply need more of it. Code-RL's tie on MATH-500 is then a ceiling effect, and the a = 0.25 merge and Code-RL should each recover the same fraction of the gap on hard328 as on MATH-500 (about 0.66 for a = 0.25, about 0.85 for Code-RL). Under this theory both recover a clearly smaller fraction on hard328 (about 0.40 and 0.30), and on MATH-500 Code-RL's shortfall to RL-cue sits entirely in Level 5.",
+ "predictions": [
+  {
+   "experiment": "allenai/Olmo-3.1-7B-RL-Zero-Code (1ca3bb30, RL-Math tokenizer) with the 3-token cue on the clean hard328, T 1.0 / top-p 1.0, cap 16,384, 1 sample, seed base 3,000,000, grader v3, run_cell.py on one H100.",
+   "unit": "right of 328",
+   "value": 176,
+   "low": 166,
+   "high": 188,
+   "refuted_by": "Code-RL cue scores 192 or more of 328 (closing at least two thirds of the 164 -> 205 gap, as on MATH-500), or 162 or less.",
+   "gpu_minutes": 50
+  },
+  {
+   "experiment": "Merged model theta(0.25) = base + 0.25(RL - base) (bf16 stochastic rounding, as in work-d36669) with the cue on the clean hard328, T 1.0 / top-p 1.0, cap 16,384, 1 sample, seed base 3,000,000, grader v3, one H100.",
+   "unit": "right of 328",
+   "value": 180,
+   "low": 170,
+   "high": 191,
+   "refuted_by": "theta(0.25) cue scores 192 or more (recovering at least the 0.66 of the gap it recovers on MATH-500), or below 168.",
+   "gpu_minutes": 50
+  },
+  {
+   "experiment": "Offline: Level-5 split of Code-RL's shortfall to RL with the cue on MATH-500 at T 1.0.",
+   "recipe": "Files: iterate-runs abaybektursun-1114-162452-0203/answers.jsonl (code_cue), abaybektursun-1114-153110-e985/answers.jsonl (rl_cue), studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json (field level5). Keep one row per problem_index in each answers file (if duplicates exist, keep the row with the highest attempt). A problem counts as right if score_v3 is true or 1; cap hits count as whatever score_v3 says (in practice wrong). Join on problem_index. Restrict to problems with level5 true. Statistic: (number right in code_cue) minus (number right in rl_cue) on that subset, a signed integer.",
+   "unit": "problems (code_cue right minus rl_cue right, Level 5 only)",
+   "value": -8,
+   "low": -15,
+   "high": -3,
+   "refuted_by": "The Level-5 difference is -2 or higher (Code-RL's shortfall not concentrated on Level 5), or below -16.",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Offline: accuracy of theta(0.25) with the cue on the MATH-500 problems that both the cued base T1 and a fresh base sample (random_cue) missed, where the base's p is near 0.",
+   "recipe": "Files: per_problem.json (t1_right, grader v3), iterate-runs abaybektursun-1114-153047-6429/answers.jsonl (random_cue), abaybektursun-1114-153102-b029/answers.jsonl (theta0.25_cue). One row per problem_index (highest attempt if duplicated). Right = score_v3 true or 1; cap hits as scored by score_v3. Set B = problems with t1_right false AND random_cue score_v3 false (about 48 problems). Statistic: (number of B where theta0.25_cue score_v3 is right) / |B|.",
+   "unit": "fraction of problems in B",
+   "value": 0.31,
+   "low": 0.19,
+   "high": 0.44,
+   "refuted_by": "The fraction is 0.48 or higher, at or above RL plain's rate on the same set (about 25 of 48), which would mean the a = 0.25 dose already carries the hard-problem part.",
+   "gpu_minutes": 0
+  },
+  {
+   "experiment": "Offline: RL plain accuracy on MATH-500 problems that the cued base T1 solved but a fresh base sample (random_cue) missed, where the base's p is moderate.",
+   "recipe": "Files: per_problem.json (t1_right, t2_right; grader v3), iterate-runs abaybektursun-1114-153047-6429/answers.jsonl (random_cue, score_v3). One row per problem_index (highest attempt if duplicated). Set M = problems with t1_right true AND random_cue score_v3 false (about 35). Statistic: (number of M with t2_right true) / |M|. Cap hits count as wrong if t2_right is false.",
+   "unit": "fraction of problems in M",
+   "value": 0.88,
+   "low": 0.76,
+   "high": 0.97,
+   "refuted_by": "The fraction is below 0.74 (RL loses these moderate-p problems often, so it does not sharpen toward the base's correct mode).",
+   "gpu_minutes": 0
+  }
+ ]
+}

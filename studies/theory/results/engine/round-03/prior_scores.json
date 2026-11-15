@@ -1,0 +1,2212 @@
+{
+ "r1-across-1": {
+  "statement": "The base's long-answer failures (low-temperature loops, cap hits, inability to continue its own long prefix) come from early-to-mid-layer self-copying of its own earlier reasoning by induction-driven repeat circuitry (attention heads from layer 7 and repeat-reading MLP neurons in layers 10-15), and the cap-hit part of RL's gain is a diffuse, task-general weakening of that self-copy pathway in layers 0-15, which temperature, restarts and an RL-written prefix each partly substitute for.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t36",
+    "measured": 450,
+    "value": 418,
+    "low": 410,
+    "high": 426,
+    "nulls": [
+     420,
+     415
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t37",
+    "measured": 417,
+    "value": 407,
+    "low": 399,
+    "high": 415,
+    "nulls": [
+     408,
+     408
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base Olmo-3-1025-7B plus a random difference of matched norm to the RL-minus-base difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t47",
+    "measured": 3944,
+    "value": 3950,
+    "low": 3750,
+    "high": 4150,
+    "nulls": [
+     3950,
+     3950
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random matched-norm difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3: mean generated tokens per problem"
+   },
+   {
+    "id": "t46",
+    "measured": 4036,
+    "value": 3700,
+    "low": 3450,
+    "high": 3930,
+    "nulls": [
+     4000,
+     4050
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the opening cue: weights base + 0.25*(RL-Zero-Math minus base): mean generated tokens per problem"
+   },
+   {
+    "id": "t55",
+    "measured": 34,
+    "value": 40,
+    "low": 25,
+    "high": 60,
+    "nulls": [
+     10,
+     12
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1: number of answers flagged as rule-A loops (an 8,000-character window starting at a line start with zlib compression ratio below 0.10)"
+   },
+   {
+    "id": "t56",
+    "measured": 58,
+    "value": 62,
+    "low": 45,
+    "high": 80,
+    "nulls": [
+     40,
+     45
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1 (v3): number of answers that hit the token cap"
+   },
+   {
+    "id": "t51",
+    "measured": 404,
+    "value": 392,
+    "low": 378,
+    "high": 404,
+    "nulls": [
+     415,
+     412
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t52",
+    "measured": 412,
+    "value": 404,
+    "low": 394,
+    "high": 414,
+    "nulls": [
+     400,
+     395
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.5 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t53",
+    "measured": 409,
+    "value": 402,
+    "low": 394,
+    "high": 410,
+    "nulls": [
+     395,
+     398
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / top-p 0.95 (no min-p, v3, one sample): number right"
+   },
+   {
+    "id": "t54",
+    "measured": 460,
+    "value": 462,
+    "low": 455,
+    "high": 469,
+    "nulls": [
+     462,
+     463
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3.1-7B-RL-Zero-Math with cue, MATH-500 n=500, T 1.0 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t57",
+    "measured": 23.4,
+    "value": 8,
+    "low": 2,
+    "high": 14,
+    "nulls": [
+     15,
+     12
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "cleanneurons Part T3, Olmo-3-1025-7B base vs RL-Zero-Math, teacher-forced on held-out 2,672 decisive positions after the cue, on stored cue-base (T1) text: percent of KL(RL||base) closed by adding one constant vector per layer to the base (mean of RL-layer minus base-layer output, 32 vectors, no weight change)"
+   },
+   {
+    "id": "t58",
+    "measured": 31.2,
+    "value": 9,
+    "low": 3,
+    "high": 16,
+    "nulls": [
+     20,
+     18
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "Same constant-vector-per-layer arm (32 vectors, mean of RL-layer minus base-layer output), held-out 2,672 decisive positions, but on stored RL-model (T2) text: percent of KL(RL||base) closed"
+   },
+   {
+    "id": "t59",
+    "measured": 14.0,
+    "value": 5,
+    "low": 0,
+    "high": 11,
+    "nulls": [
+     10,
+     7
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3 base, T1 (cued-base) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by adding a constant vector on the MLP output only (mean of RL minus base MLP output per layer)"
+   }
+  ]
+ },
+ "r1-across-2": {
+  "statement": "The 10-13 points that Olmo-3.1 RL holds over the cued base are mostly a learned token-budget controller, trained by 3.1's scoring of truncated rollouts as failures, that keeps self-checking ('Wait') on answers that are short for the budget and forces convergence before the 16k cap on long ones, written into the weights as a low-rank late-layer stop/deliberation readout; it is not new mathematical skill, so the gap sits in cap hits and long problems, every recovering transplant takes RL's length, and Olmo-3.0 RL (truncation masked) is close to the cued base.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t32",
+    "measured": 441,
+    "value": 428,
+    "low": 420,
+    "high": 436,
+    "nulls": [
+     425,
+     422
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, grader v3, one sample, with the opening cue: weights base Olmo-3-1025-7B + a*(Olmo-3.1-7B-RL-Zero-Math minus base) with a = 0.25 (called theta0.25), number right"
+   },
+   {
+    "id": "t33",
+    "measured": 452,
+    "value": 447,
+    "low": 438,
+    "high": 456,
+    "nulls": [
+     440,
+     440
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample, with the opening cue: weights base + a*(RL-Zero-Math minus base) with a = 0.5 (theta0.5), number right"
+   },
+   {
+    "id": "t43",
+    "measured": 451,
+    "value": 457,
+    "low": 450,
+    "high": 464,
+    "nulls": [
+     455,
+     453
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the opening cue, one sample: weights base + 0.75*(RL-Zero-Math minus base), number right"
+   },
+   {
+    "id": "t34",
+    "measured": 453,
+    "value": 450,
+    "low": 438,
+    "high": 460,
+    "nulls": [
+     400,
+     380
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample, with the opening cue: weights base + a*(RL-Zero-Math minus base) with a = 1.5 (theta1.5, extrapolation past RL), number right"
+   },
+   {
+    "id": "t45",
+    "measured": 34,
+    "value": 8,
+    "low": 0,
+    "high": 20,
+    "nulls": [
+     30,
+     40
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the cue: weights base + 1.5*(RL-Zero-Math minus base): number of the 500 answers that end in a word-salad tail"
+   },
+   {
+    "id": "t46",
+    "measured": 4036,
+    "value": 4150,
+    "low": 3980,
+    "high": 4350,
+    "nulls": [
+     4000,
+     4050
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the opening cue: weights base + 0.25*(RL-Zero-Math minus base): mean generated tokens per problem"
+   },
+   {
+    "id": "t39",
+    "measured": 53,
+    "value": 50,
+    "low": 42,
+    "high": 58,
+    "nulls": [
+     42,
+     40
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Weights base + 0.5*(RL-Zero-Math minus base) with the cue (MATH-500, T 1.0, v3): among the problems the cued base got wrong in its 410/500 cell, the number this cell gets right (fixes)"
+   },
+   {
+    "id": "t36",
+    "measured": 450,
+    "value": 428,
+    "low": 418,
+    "high": 438,
+    "nulls": [
+     420,
+     415
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t37",
+    "measured": 417,
+    "value": 407,
+    "low": 399,
+    "high": 415,
+    "nulls": [
+     408,
+     408
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base Olmo-3-1025-7B plus a random difference of matched norm to the RL-minus-base difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t47",
+    "measured": 3944,
+    "value": 3950,
+    "low": 3750,
+    "high": 4150,
+    "nulls": [
+     3950,
+     3950
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random matched-norm difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3: mean generated tokens per problem"
+   },
+   {
+    "id": "t19",
+    "measured": 0.831,
+    "value": 0.81,
+    "low": 0.77,
+    "high": 0.86,
+    "nulls": [
+     0.8,
+     0.8
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "MATH-500 n=500, cued base Olmo-3-1025-7B at T 1.0: AUROC of answer length in tokens as a predictor that the base answer is wrong"
+   },
+   {
+    "id": "t22",
+    "measured": 10,
+    "value": 10,
+    "low": 3,
+    "high": 20,
+    "nulls": [
+     8,
+     6
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "J-lens difference between base Olmo-3-1025-7B and RL-Zero-Math (layer 24, same text, n=500 MATH-500 problems): in a reader's check of 90 peaks of the difference, the number of peaks located at the first wrong step of the solution"
+   },
+   {
+    "id": "t57",
+    "measured": 23.4,
+    "value": 25,
+    "low": 15,
+    "high": 35,
+    "nulls": [
+     15,
+     12
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "cleanneurons Part T3, Olmo-3-1025-7B base vs RL-Zero-Math, teacher-forced on held-out 2,672 decisive positions after the cue, on stored cue-base (T1) text: percent of KL(RL||base) closed by adding one constant vector per layer to the base (mean of RL-layer minus base-layer output, 32 vectors, no weight change)"
+   },
+   {
+    "id": "t58",
+    "measured": 31.2,
+    "value": 30,
+    "low": 20,
+    "high": 42,
+    "nulls": [
+     20,
+     18
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Same constant-vector-per-layer arm (32 vectors, mean of RL-layer minus base-layer output), held-out 2,672 decisive positions, but on stored RL-model (T2) text: percent of KL(RL||base) closed"
+   },
+   {
+    "id": "t15",
+    "measured": 5.64,
+    "value": 3.0,
+    "low": 1.5,
+    "high": 5.0,
+    "nulls": [
+     4,
+     3.0
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Jacobian lens (J-lens) at layer 24 read on the same stored MATH-500 answer text for 500 problems: share of positions at which the Olmo-3.1-7B-RL-Zero-Math model's readout holds the words Wait or Hmm"
+   },
+   {
+    "id": "t16",
+    "measured": 4.56,
+    "value": 1.2,
+    "low": 0.5,
+    "high": 2.0,
+    "nulls": [
+     3,
+     1.5
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Jacobian lens (J-lens) at layer 24 read on the same stored MATH-500 answer text for 500 problems: share of positions at which the base Olmo-3-1025-7B model's readout holds the words Wait or Hmm"
+   }
+  ]
+ },
+ "r1-all-1": {
+  "statement": "The cued base and Olmo-3.1 RL-Zero-Math have nearly the same per-step math skill; the residual gap is a long-horizon self-conditioning deficit, in which the base's next-token distribution degrades as its own generated solution grows (loops at T 0.6, unfinished drift at T 1.0). Olmo-3.1's RL, which trained truncated rollouts as negatives at 16k, repaired this with a diffuse weight direction that changes activations only deep inside long math contexts, so the gap scales with solution length and token budget, not with problem knowledge.",
+  "state": "passes",
+  "claims": [
+   {
+    "id": "t19",
+    "measured": 0.831,
+    "value": 0.85,
+    "low": 0.8,
+    "high": 0.91,
+    "nulls": [
+     0.8,
+     0.8
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "MATH-500 n=500, cued base Olmo-3-1025-7B at T 1.0: AUROC of answer length in tokens as a predictor that the base answer is wrong"
+   },
+   {
+    "id": "t25",
+    "measured": 169,
+    "value": 167,
+    "low": 160,
+    "high": 173,
+    "nulls": [
+     172,
+     167
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Same base+cue hard328 cell (T 1.0 / top-p 1.0, v3): number right under length rule R with cutoff L = 12,000 tokens, as defined in studies/rlneurons/specs/SPEC_day1_length_rules.md"
+   },
+   {
+    "id": "t27",
+    "measured": 179,
+    "value": 170,
+    "low": 163,
+    "high": 178,
+    "nulls": [
+     180,
+     177
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base+cue hard328, T 1.0 / top-p 1.0, v3: number right under a vote over 4 samples per problem (vote@4)"
+   },
+   {
+    "id": "t28",
+    "measured": 205,
+    "value": 205,
+    "low": 195,
+    "high": 214,
+    "nulls": [
+     225,
+     220
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "Base+cue hard328, T 1.0 / top-p 1.0, v3: number of problems with at least one right answer among 4 samples (pass@4, oracle)"
+   },
+   {
+    "id": "t51",
+    "measured": 404,
+    "value": 395,
+    "low": 382,
+    "high": 405,
+    "nulls": [
+     415,
+     412
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t53",
+    "measured": 409,
+    "value": 397,
+    "low": 385,
+    "high": 406,
+    "nulls": [
+     395,
+     398
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / top-p 0.95 (no min-p, v3, one sample): number right"
+   },
+   {
+    "id": "t55",
+    "measured": 34,
+    "value": 12,
+    "low": 4,
+    "high": 30,
+    "nulls": [
+     10,
+     12
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1: number of answers flagged as rule-A loops (an 8,000-character window starting at a line start with zlib compression ratio below 0.10)"
+   },
+   {
+    "id": "t56",
+    "measured": 58,
+    "value": 50,
+    "low": 35,
+    "high": 70,
+    "nulls": [
+     40,
+     45
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1 (v3): number of answers that hit the token cap"
+   },
+   {
+    "id": "t57",
+    "measured": 23.4,
+    "value": 8,
+    "low": 2,
+    "high": 15,
+    "nulls": [
+     15,
+     12
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "cleanneurons Part T3, Olmo-3-1025-7B base vs RL-Zero-Math, teacher-forced on held-out 2,672 decisive positions after the cue, on stored cue-base (T1) text: percent of KL(RL||base) closed by adding one constant vector per layer to the base (mean of RL-layer minus base-layer output, 32 vectors, no weight change)"
+   },
+   {
+    "id": "t58",
+    "measured": 31.2,
+    "value": 8,
+    "low": 2,
+    "high": 15,
+    "nulls": [
+     20,
+     18
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "Same constant-vector-per-layer arm (32 vectors, mean of RL-layer minus base-layer output), held-out 2,672 decisive positions, but on stored RL-model (T2) text: percent of KL(RL||base) closed"
+   },
+   {
+    "id": "t59",
+    "measured": 14.0,
+    "value": 6,
+    "low": 1,
+    "high": 12,
+    "nulls": [
+     10,
+     7
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3 base, T1 (cued-base) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by adding a constant vector on the MLP output only (mean of RL minus base MLP output per layer)"
+   },
+   {
+    "id": "t60",
+    "measured": 15.1,
+    "value": 6,
+    "low": 1,
+    "high": 12,
+    "nulls": [
+     14,
+     11
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3 base, T2 (RL-model) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by adding a constant vector on the MLP output only (mean of RL minus base MLP output per layer)"
+   }
+  ]
+ },
+ "r1-all-2": {
+  "statement": "Most of the RL-Zero-Math gain is a saturating answer-mode switch: deliberate, then box the answer and stop, never the base's 'Answer:' line. The switch is encoded redundantly along one diffuse direction spread over every layer and matrix, so any unbiased fraction of the delta (half the matrices, a DARE 1 % sample, or a small multiple a of the whole delta) flips it. Accuracy is therefore a sharply concave function of delta scale; the cue flips the same switch from the prompt, and other RL runs (Code-RL) share part of it.",
+  "state": "passes",
+  "claims": [
+   {
+    "id": "t06",
+    "measured": 168,
+    "value": 3,
+    "low": 0,
+    "high": 10,
+    "nulls": [
+     2,
+     2
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base Olmo-3-1025-7B, plain prompt, MATH-500 n=500, T 0.6: number of the 500 answers that open on their own with the cue string '.', blank line, 'Okay'"
+   },
+   {
+    "id": "t32",
+    "measured": 441,
+    "value": 415,
+    "low": 405,
+    "high": 428,
+    "nulls": [
+     425,
+     422
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, grader v3, one sample, with the opening cue: weights base Olmo-3-1025-7B + a*(Olmo-3.1-7B-RL-Zero-Math minus base) with a = 0.25 (called theta0.25), number right"
+   },
+   {
+    "id": "t33",
+    "measured": 452,
+    "value": 435,
+    "low": 422,
+    "high": 448,
+    "nulls": [
+     440,
+     440
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample, with the opening cue: weights base + a*(RL-Zero-Math minus base) with a = 0.5 (theta0.5), number right"
+   },
+   {
+    "id": "t35",
+    "measured": 457,
+    "value": 463,
+    "low": 455,
+    "high": 470,
+    "nulls": [
+     462,
+     461
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3.1-7B-RL-Zero-Math with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t36",
+    "measured": 450,
+    "value": 408,
+    "low": 395,
+    "high": 420,
+    "nulls": [
+     420,
+     415
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t37",
+    "measured": 417,
+    "value": 405,
+    "low": 390,
+    "high": 418,
+    "nulls": [
+     408,
+     408
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random difference of matched norm to the RL-minus-base difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t40",
+    "measured": 405,
+    "value": 370,
+    "low": 340,
+    "high": 400,
+    "nulls": [
+     300,
+     290
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, plain prompt (no cue), one sample: weights base Olmo-3-1025-7B + 0.25*(RL-Zero-Math minus base), number right"
+   },
+   {
+    "id": "t41",
+    "measured": 443,
+    "value": 432,
+    "low": 415,
+    "high": 450,
+    "nulls": [
+     400,
+     380
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, plain prompt (no cue), one sample: weights base + 0.5*(RL-Zero-Math minus base), number right"
+   },
+   {
+    "id": "t42",
+    "measured": 390,
+    "value": 315,
+    "low": 275,
+    "high": 355,
+    "nulls": [
+     280,
+     290
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the plain prompt (no cue), MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t57",
+    "measured": 23.4,
+    "value": 25,
+    "low": 15,
+    "high": 35,
+    "nulls": [
+     15,
+     12
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "cleanneurons Part T3, Olmo-3-1025-7B base vs RL-Zero-Math, teacher-forced on held-out 2,672 decisive positions after the cue, on stored cue-base (T1) text: percent of KL(RL||base) closed by adding one constant vector per layer to the base (mean of RL-layer minus base-layer output, 32 vectors, no weight change)"
+   },
+   {
+    "id": "t58",
+    "measured": 31.2,
+    "value": 35,
+    "low": 25,
+    "high": 45,
+    "nulls": [
+     20,
+     18
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "Same constant-vector-per-layer arm (32 vectors, mean of RL-layer minus base-layer output), held-out 2,672 decisive positions, but on stored RL-model (T2) text: percent of KL(RL||base) closed"
+   },
+   {
+    "id": "t59",
+    "measured": 14.0,
+    "value": 20,
+    "low": 12,
+    "high": 30,
+    "nulls": [
+     10,
+     7
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "Olmo-3 base, T1 (cued-base) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by adding a constant vector on the MLP output only (mean of RL minus base MLP output per layer)"
+   },
+   {
+    "id": "t60",
+    "measured": 15.1,
+    "value": 28,
+    "low": 18,
+    "high": 38,
+    "nulls": [
+     14,
+     11
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "Olmo-3 base, T2 (RL-model) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by adding a constant vector on the MLP output only (mean of RL minus base MLP output per layer)"
+   }
+  ]
+ },
+ "r1-surprises-1": {
+  "statement": "The Olmo-3.1 RL-Zero-Math gain is two separable components: a domain-general 'enter deliberative mode' shift that the opening cue reproduces exactly and that Code-RL and the 3.0 RL release also learned, plus a termination-calibration component that only 3.1 learned from training truncated rollouts as negatives (stop when the answer is checked, keep checking when it is not, finish before the cap); the ~11-point cued-base gap is the second component alone.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t05",
+    "measured": 494,
+    "value": 485,
+    "low": 455,
+    "high": 500,
+    "nulls": [
+     470,
+     465
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3.1-7B-RL-Zero-Math, MATH-500 n=500, T 0.6: number of the 500 answers that begin with one of four opening tokens (' line', '!' plus blank line, 'Okay', ',')"
+   },
+   {
+    "id": "t22",
+    "measured": 10,
+    "value": 8,
+    "low": 0,
+    "high": 15,
+    "nulls": [
+     8,
+     6
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "J-lens difference between base Olmo-3-1025-7B and RL-Zero-Math (layer 24, same text, n=500 MATH-500 problems): in a reader's check of 90 peaks of the difference, the number of peaks located at the first wrong step of the solution"
+   },
+   {
+    "id": "t27",
+    "measured": 179,
+    "value": 186,
+    "low": 176,
+    "high": 198,
+    "nulls": [
+     180,
+     177
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base+cue hard328, T 1.0 / top-p 1.0, v3: number right under a vote over 4 samples per problem (vote@4)"
+   },
+   {
+    "id": "t28",
+    "measured": 205,
+    "value": 218,
+    "low": 206,
+    "high": 235,
+    "nulls": [
+     225,
+     220
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base+cue hard328, T 1.0 / top-p 1.0, v3: number of problems with at least one right answer among 4 samples (pass@4, oracle)"
+   },
+   {
+    "id": "t35",
+    "measured": 457,
+    "value": 463,
+    "low": 454,
+    "high": 471,
+    "nulls": [
+     462,
+     461
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3.1-7B-RL-Zero-Math with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t36",
+    "measured": 450,
+    "value": 410,
+    "low": 395,
+    "high": 428,
+    "nulls": [
+     420,
+     415
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t42",
+    "measured": 390,
+    "value": 340,
+    "low": 285,
+    "high": 400,
+    "nulls": [
+     280,
+     290
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the plain prompt (no cue), MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t54",
+    "measured": 460,
+    "value": 462,
+    "low": 453,
+    "high": 471,
+    "nulls": [
+     462,
+     463
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3.1-7B-RL-Zero-Math with cue, MATH-500 n=500, T 1.0 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   }
+  ]
+ },
+ "r1-surprises-2": {
+  "statement": "The functional part of the RL-Zero-Math weight change is a low-rank, near-linear shift (a few coherent singular directions per matrix, dense across neurons, that write a deliberation/answer-format readout into the residual stream), while the high-rank remainder that holds most of the change energy is optimizer noise that does almost nothing; so neuron subsets fail (each holds only its proportional share of the dense low-rank part), DARE works (it preserves the low-rank part in expectation and adds only high-rank noise), and RL leaves neuron features unchanged on general text.",
+  "state": "passes",
+  "claims": [
+   {
+    "id": "t22",
+    "measured": 10,
+    "value": 6,
+    "low": 0,
+    "high": 14,
+    "nulls": [
+     8,
+     6
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "J-lens difference between base Olmo-3-1025-7B and RL-Zero-Math (layer 24, same text, n=500 MATH-500 problems): in a reader's check of 90 peaks of the difference, the number of peaks located at the first wrong step of the solution"
+   },
+   {
+    "id": "t32",
+    "measured": 441,
+    "value": 430,
+    "low": 419,
+    "high": 442,
+    "nulls": [
+     425,
+     422
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, grader v3, one sample, with the opening cue: weights base Olmo-3-1025-7B + a*(Olmo-3.1-7B-RL-Zero-Math minus base) with a = 0.25 (called theta0.25), number right"
+   },
+   {
+    "id": "t33",
+    "measured": 452,
+    "value": 446,
+    "low": 436,
+    "high": 456,
+    "nulls": [
+     440,
+     440
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample, with the opening cue: weights base + a*(RL-Zero-Math minus base) with a = 0.5 (theta0.5), number right"
+   },
+   {
+    "id": "t43",
+    "measured": 451,
+    "value": 456,
+    "low": 447,
+    "high": 466,
+    "nulls": [
+     455,
+     453
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the opening cue, one sample: weights base + 0.75*(RL-Zero-Math minus base), number right"
+   },
+   {
+    "id": "t34",
+    "measured": 453,
+    "value": 450,
+    "low": 432,
+    "high": 466,
+    "nulls": [
+     400,
+     380
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample, with the opening cue: weights base + a*(RL-Zero-Math minus base) with a = 1.5 (theta1.5, extrapolation past RL), number right"
+   },
+   {
+    "id": "t45",
+    "measured": 34,
+    "value": 4,
+    "low": 0,
+    "high": 15,
+    "nulls": [
+     30,
+     40
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the cue: weights base + 1.5*(RL-Zero-Math minus base): number of the 500 answers that end in a word-salad tail"
+   },
+   {
+    "id": "t40",
+    "measured": 405,
+    "value": 310,
+    "low": 270,
+    "high": 350,
+    "nulls": [
+     300,
+     290
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, plain prompt (no cue), one sample: weights base Olmo-3-1025-7B + 0.25*(RL-Zero-Math minus base), number right"
+   },
+   {
+    "id": "t41",
+    "measured": 443,
+    "value": 398,
+    "low": 370,
+    "high": 425,
+    "nulls": [
+     400,
+     380
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, plain prompt (no cue), one sample: weights base + 0.5*(RL-Zero-Math minus base), number right"
+   },
+   {
+    "id": "t46",
+    "measured": 4036,
+    "value": 4120,
+    "low": 3950,
+    "high": 4350,
+    "nulls": [
+     4000,
+     4050
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the opening cue: weights base + 0.25*(RL-Zero-Math minus base): mean generated tokens per problem"
+   },
+   {
+    "id": "t37",
+    "measured": 417,
+    "value": 410,
+    "low": 398,
+    "high": 422,
+    "nulls": [
+     408,
+     408
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random difference of matched norm to the RL-minus-base difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t38",
+    "measured": 42,
+    "value": 25,
+    "low": 16,
+    "high": 34,
+    "nulls": [
+     28,
+     30
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base plus a random matched-norm difference with the cue (MATH-500, T 1.0, v3): among the problems the cued base Olmo-3-1025-7B got wrong in its 410/500 cell, the number this random-difference cell gets right"
+   },
+   {
+    "id": "t39",
+    "measured": 53,
+    "value": 50,
+    "low": 40,
+    "high": 61,
+    "nulls": [
+     42,
+     40
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Weights base + 0.5*(RL-Zero-Math minus base) with the cue (MATH-500, T 1.0, v3): among the problems the cued base got wrong in its 410/500 cell, the number this cell gets right (fixes)"
+   },
+   {
+    "id": "t47",
+    "measured": 3944,
+    "value": 3930,
+    "low": 3700,
+    "high": 4180,
+    "nulls": [
+     3950,
+     3950
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random matched-norm difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3: mean generated tokens per problem"
+   },
+   {
+    "id": "t57",
+    "measured": 23.4,
+    "value": 30,
+    "low": 18,
+    "high": 45,
+    "nulls": [
+     15,
+     12
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "cleanneurons Part T3, Olmo-3-1025-7B base vs RL-Zero-Math, teacher-forced on held-out 2,672 decisive positions after the cue, on stored cue-base (T1) text: percent of KL(RL||base) closed by adding one constant vector per layer to the base (mean of RL-layer minus base-layer output, 32 vectors, no weight change)"
+   },
+   {
+    "id": "t58",
+    "measured": 31.2,
+    "value": 40,
+    "low": 26,
+    "high": 55,
+    "nulls": [
+     20,
+     18
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "Same constant-vector-per-layer arm (32 vectors, mean of RL-layer minus base-layer output), held-out 2,672 decisive positions, but on stored RL-model (T2) text: percent of KL(RL||base) closed"
+   },
+   {
+    "id": "t59",
+    "measured": 14.0,
+    "value": 20,
+    "low": 10,
+    "high": 32,
+    "nulls": [
+     10,
+     7
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3 base, T1 (cued-base) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by adding a constant vector on the MLP output only (mean of RL minus base MLP output per layer)"
+   },
+   {
+    "id": "t60",
+    "measured": 15.1,
+    "value": 28,
+    "low": 16,
+    "high": 40,
+    "nulls": [
+     14,
+     11
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "Olmo-3 base, T2 (RL-model) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by adding a constant vector on the MLP output only (mean of RL minus base MLP output per layer)"
+   },
+   {
+    "id": "t61",
+    "measured": 2.6,
+    "value": 3,
+    "low": 0.5,
+    "high": 7,
+    "nulls": [
+     2.5,
+     4
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3 base, T1 (cued-base) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by copying the 472 always-on neurons (0.13 % of 352,256 MLP neurons) from RL-Zero-Math into the base"
+   },
+   {
+    "id": "t62",
+    "measured": 3.4,
+    "value": 4,
+    "low": 0.5,
+    "high": 9,
+    "nulls": [
+     3.5,
+     5
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3 base, T2 (RL-model) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by copying the 472 always-on neurons (0.13 % of 352,256 MLP neurons) from RL-Zero-Math into the base"
+   }
+  ]
+ },
+ "r2-across-1": {
+  "statement": "The RL-Zero-Math weight change acts, to first order, as a logit shift that collapses next-token entropy only at the base's own high-entropy fork positions and leaves low-entropy positions alone, so the RL model carries a fork-local low temperature: global temperature barely moves RL because its forks are already near one-hot, whereas for the base, cooling to T 0.6 also sharpens the easy restatement step at diffuse forks and starts loops, and heating to T 1.0 removes loops but samples wrong branches at the forks; any partial delta (attention-only, MLP-only, a times the delta) collapses fork entropy partly and stays temperature-sensitive in proportion to the fork entropy it leaves.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t51",
+    "measured": 404,
+    "value": 398,
+    "low": 383,
+    "high": 410,
+    "nulls": [
+     415,
+     412
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t52",
+    "measured": 412,
+    "value": 370,
+    "low": 340,
+    "high": 392,
+    "nulls": [
+     400,
+     395
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.5 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t53",
+    "measured": 409,
+    "value": 400,
+    "low": 389,
+    "high": 409,
+    "nulls": [
+     395,
+     398
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / top-p 0.95 (no min-p, v3, one sample): number right"
+   },
+   {
+    "id": "t54",
+    "measured": 460,
+    "value": 463,
+    "low": 454,
+    "high": 471,
+    "nulls": [
+     462,
+     463
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3.1-7B-RL-Zero-Math with cue, MATH-500 n=500, T 1.0 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t55",
+    "measured": 34,
+    "value": 20,
+    "low": 8,
+    "high": 45,
+    "nulls": [
+     10,
+     12
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1: number of answers flagged as rule-A loops (an 8,000-character window starting at a line start with zlib compression ratio below 0.10)"
+   },
+   {
+    "id": "t56",
+    "measured": 58,
+    "value": 50,
+    "low": 35,
+    "high": 75,
+    "nulls": [
+     40,
+     45
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1 (v3): number of answers that hit the token cap"
+   }
+  ]
+ },
+ "r2-across-2": {
+  "statement": "The RL-Zero-Math delta is small (0.24 % of weight norm) and sign-coherent: its function lies in the joint sign pattern of many coordinates, whose Fisher curvature on the base's own math samples is hundreds to thousands of times that of a random direction of the same norm, not in its large entries. So the effect of any edit is its energy divided by that leverage. Random resampling (DARE), random-sign or random-direction edits of the same norm, and magnitude-ranked subsets add almost nothing beyond their unbiased share of the sign pattern. The model's activations on general text barely move. The dose curve stays near-linear past a = 1. DARE fails only when its noise energy (1-q)/q exceeds the leverage, which puts the cliff at q of about 0.01-0.05 %. A large, low-coherence SFT delta (bytegraft, Think-SFT) fails all of these tests.",
+  "state": "passes",
+  "claims": [
+   {
+    "id": "t37",
+    "measured": 417,
+    "value": 409,
+    "low": 397,
+    "high": 421,
+    "nulls": [
+     408,
+     408
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random difference of matched norm to the RL-minus-base difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t38",
+    "measured": 42,
+    "value": 25,
+    "low": 16,
+    "high": 34,
+    "nulls": [
+     28,
+     30
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base plus a random matched-norm difference with the cue (MATH-500, T 1.0, v3): among the problems the cued base Olmo-3-1025-7B got wrong in its 410/500 cell, the number this random-difference cell gets right"
+   },
+   {
+    "id": "t47",
+    "measured": 3944,
+    "value": 3950,
+    "low": 3650,
+    "high": 4250,
+    "nulls": [
+     3950,
+     3950
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random matched-norm difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3: mean generated tokens per problem"
+   },
+   {
+    "id": "t32",
+    "measured": 441,
+    "value": 440,
+    "low": 428,
+    "high": 452,
+    "nulls": [
+     425,
+     422
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, grader v3, one sample, with the opening cue: weights base Olmo-3-1025-7B + a*(Olmo-3.1-7B-RL-Zero-Math minus base) with a = 0.25 (called theta0.25), number right"
+   },
+   {
+    "id": "t33",
+    "measured": 452,
+    "value": 452,
+    "low": 443,
+    "high": 461,
+    "nulls": [
+     440,
+     440
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample, with the opening cue: weights base + a*(RL-Zero-Math minus base) with a = 0.5 (theta0.5), number right"
+   },
+   {
+    "id": "t43",
+    "measured": 451,
+    "value": 460,
+    "low": 452,
+    "high": 468,
+    "nulls": [
+     455,
+     453
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the opening cue, one sample: weights base + 0.75*(RL-Zero-Math minus base), number right"
+   },
+   {
+    "id": "t34",
+    "measured": 453,
+    "value": 458,
+    "low": 444,
+    "high": 470,
+    "nulls": [
+     400,
+     380
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample, with the opening cue: weights base + a*(RL-Zero-Math minus base) with a = 1.5 (theta1.5, extrapolation past RL), number right"
+   },
+   {
+    "id": "t45",
+    "measured": 34,
+    "value": 4,
+    "low": 0,
+    "high": 15,
+    "nulls": [
+     30,
+     40
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the cue: weights base + 1.5*(RL-Zero-Math minus base): number of the 500 answers that end in a word-salad tail"
+   },
+   {
+    "id": "t40",
+    "measured": 405,
+    "value": 360,
+    "low": 330,
+    "high": 390,
+    "nulls": [
+     300,
+     290
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, plain prompt (no cue), one sample: weights base Olmo-3-1025-7B + 0.25*(RL-Zero-Math minus base), number right"
+   },
+   {
+    "id": "t41",
+    "measured": 443,
+    "value": 415,
+    "low": 395,
+    "high": 435,
+    "nulls": [
+     400,
+     380
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, plain prompt (no cue), one sample: weights base + 0.5*(RL-Zero-Math minus base), number right"
+   },
+   {
+    "id": "t39",
+    "measured": 53,
+    "value": 52,
+    "low": 42,
+    "high": 62,
+    "nulls": [
+     42,
+     40
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Weights base + 0.5*(RL-Zero-Math minus base) with the cue (MATH-500, T 1.0, v3): among the problems the cued base got wrong in its 410/500 cell, the number this cell gets right (fixes)"
+   },
+   {
+    "id": "t36",
+    "measured": 450,
+    "value": 412,
+    "low": 393,
+    "high": 428,
+    "nulls": [
+     420,
+     415
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t42",
+    "measured": 390,
+    "value": 245,
+    "low": 200,
+    "high": 295,
+    "nulls": [
+     280,
+     290
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the plain prompt (no cue), MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t61",
+    "measured": 2.6,
+    "value": 1.0,
+    "low": 0.2,
+    "high": 4.0,
+    "nulls": [
+     2.5,
+     4
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3 base, T1 (cued-base) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by copying the 472 always-on neurons (0.13 % of 352,256 MLP neurons) from RL-Zero-Math into the base"
+   },
+   {
+    "id": "t62",
+    "measured": 3.4,
+    "value": 1.2,
+    "low": 0.2,
+    "high": 4.0,
+    "nulls": [
+     3.5,
+     5
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3 base, T2 (RL-model) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by copying the 472 always-on neurons (0.13 % of 352,256 MLP neurons) from RL-Zero-Math into the base"
+   }
+  ]
+ },
+ "r2-all-1": {
+  "statement": "The RL-Zero-Math delta acts through the coherent sign pattern of its entries along high-curvature (high on-policy Fisher) directions, roughly 700 times more consequential per unit norm than a random direction, and not through which entries are large; so any unbiased resampling of it (DARE, either half of the tensors) keeps the gain until the injected noise's KL, about (1-q)/(q*rho) times the delta's own, outgrows it, magnitude-ranked neurons do no better than random ones, the same magnitudes with random signs do nothing, and a low-leverage imitation (SFT) delta breaks under the same sparse copy.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t37",
+    "measured": 417,
+    "value": 409,
+    "low": 399,
+    "high": 419,
+    "nulls": [
+     408,
+     408
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random difference of matched norm to the RL-minus-base difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t38",
+    "measured": 42,
+    "value": 30,
+    "low": 21,
+    "high": 40,
+    "nulls": [
+     28,
+     30
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base plus a random matched-norm difference with the cue (MATH-500, T 1.0, v3): among the problems the cued base Olmo-3-1025-7B got wrong in its 410/500 cell, the number this random-difference cell gets right"
+   },
+   {
+    "id": "t47",
+    "measured": 3944,
+    "value": 3950,
+    "low": 3700,
+    "high": 4200,
+    "nulls": [
+     3950,
+     3950
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random matched-norm difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3: mean generated tokens per problem"
+   },
+   {
+    "id": "t42",
+    "measured": 390,
+    "value": 230,
+    "low": 205,
+    "high": 255,
+    "nulls": [
+     280,
+     290
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the plain prompt (no cue), MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t36",
+    "measured": 450,
+    "value": 408,
+    "low": 394,
+    "high": 420,
+    "nulls": [
+     420,
+     415
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   }
+  ]
+ },
+ "r2-all-2": {
+  "statement": "The base's accuracy at a sampling setting is set by the per-token surprise of the text it generates relative to one optimum: below it, a restatement that holds its probability in one sequence beats a progress step whose mass is split over many paraphrases and then self-reinforces into a loop (boredom trap), above it the text drifts (confusion trap); the opening cue moves the base into a lower-entropy deliberative mode, which is why the cue loops more than the plain prompt at T 0.6, is worth far more at T 1.0, and why any mode-sharpening truncation (top-p < 1) costs the cued base but helps the plain base at T 1.0.",
+  "state": "passes",
+  "claims": [
+   {
+    "id": "t53",
+    "measured": 409,
+    "value": 398,
+    "low": 386,
+    "high": 408,
+    "nulls": [
+     395,
+     398
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / top-p 0.95 (no min-p, v3, one sample): number right"
+   },
+   {
+    "id": "t51",
+    "measured": 404,
+    "value": 390,
+    "low": 372,
+    "high": 404,
+    "nulls": [
+     415,
+     412
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t55",
+    "measured": 34,
+    "value": 22,
+    "low": 10,
+    "high": 40,
+    "nulls": [
+     10,
+     12
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1: number of answers flagged as rule-A loops (an 8,000-character window starting at a line start with zlib compression ratio below 0.10)"
+   },
+   {
+    "id": "t56",
+    "measured": 58,
+    "value": 55,
+    "low": 40,
+    "high": 80,
+    "nulls": [
+     40,
+     45
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1 (v3): number of answers that hit the token cap"
+   },
+   {
+    "id": "t52",
+    "measured": 412,
+    "value": 400,
+    "low": 385,
+    "high": 415,
+    "nulls": [
+     400,
+     395
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.5 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t54",
+    "measured": 460,
+    "value": 462,
+    "low": 453,
+    "high": 471,
+    "nulls": [
+     462,
+     463
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3.1-7B-RL-Zero-Math with cue, MATH-500 n=500, T 1.0 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t09",
+    "measured": 166,
+    "value": 130,
+    "low": 95,
+    "high": 170,
+    "nulls": [
+     45,
+     60
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "Grader v1/v2 applied to plain-prompt base Olmo-3-1025-7B answers on MATH-500 n=500 at T 1.0: number of the 500 answers in which the grader found no extractable answer"
+   },
+   {
+    "id": "t10",
+    "measured": 127,
+    "value": 75,
+    "low": 58,
+    "high": 95,
+    "nulls": [
+     70,
+     85
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Grader v1/v2 applied to plain-prompt base Olmo-3-1025-7B answers on MATH-500 n=500 at T 0.6: number of the 500 answers in which the grader found no extractable answer"
+   }
+  ]
+ },
+ "r2-external-1": {
+  "statement": "On Olmo-3 the RL-Zero-Math delta moves the output about 700 times more per unit of weight energy than a random direction does, because its signs are coherent, so DARE's rescaling noise costs at most about the delta's own KL down to q = 0.1 % and the plateau must end in a sharp cliff near q = 0.01 %; within that range the noise acts on generation as a small fixed random logit distortion that raises the surprise of generated text and so weakens self-reinforcing repetition: random-sign weight noise reduces loops and adds accuracy on a looping model at T 0.6 and costs a little at T 1.0, where there are no loops to break.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t37",
+    "measured": 417,
+    "value": 410,
+    "low": 397,
+    "high": 422,
+    "nulls": [
+     408,
+     408
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random difference of matched norm to the RL-minus-base difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t38",
+    "measured": 42,
+    "value": 31,
+    "low": 21,
+    "high": 42,
+    "nulls": [
+     28,
+     30
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base plus a random matched-norm difference with the cue (MATH-500, T 1.0, v3): among the problems the cued base Olmo-3-1025-7B got wrong in its 410/500 cell, the number this random-difference cell gets right"
+   },
+   {
+    "id": "t47",
+    "measured": 3944,
+    "value": 3930,
+    "low": 3650,
+    "high": 4250,
+    "nulls": [
+     3950,
+     3950
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random matched-norm difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3: mean generated tokens per problem"
+   },
+   {
+    "id": "t34",
+    "measured": 453,
+    "value": 445,
+    "low": 425,
+    "high": 465,
+    "nulls": [
+     400,
+     380
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample, with the opening cue: weights base + a*(RL-Zero-Math minus base) with a = 1.5 (theta1.5, extrapolation past RL), number right"
+   },
+   {
+    "id": "t45",
+    "measured": 34,
+    "value": 8,
+    "low": 0,
+    "high": 25,
+    "nulls": [
+     30,
+     40
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the cue: weights base + 1.5*(RL-Zero-Math minus base): number of the 500 answers that end in a word-salad tail"
+   }
+  ]
+ },
+ "r2-external-2": {
+  "statement": "The cued base's two temperature failure modes come from one global temperature acting on two kinds of positions: at its rare high-entropy fork tokens the progress continuations split their mass while one restatement of an earlier step keeps its own, so T 0.6 or top-p 0.95 hands the fork to the restatement and starts a self-reinforcing loop, while at its many near-deterministic tokens T 1.0 samples tail tokens that become slips; RL sharpens the fork tokens onto one progress continuation and lowers entropy elsewhere, which is why it is temperature-insensitive, and a per-position temperature (1.0 at forks, 0.6 elsewhere) gives the base the loop-free finishing of T 1.0 and the finished-answer accuracy of T 0.6.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t51",
+    "measured": 404,
+    "value": 424,
+    "low": 414,
+    "high": 438,
+    "nulls": [
+     415,
+     412
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t52",
+    "measured": 412,
+    "value": 412,
+    "low": 398,
+    "high": 428,
+    "nulls": [
+     400,
+     395
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.5 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t53",
+    "measured": 409,
+    "value": 418,
+    "low": 409,
+    "high": 430,
+    "nulls": [
+     395,
+     398
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / top-p 0.95 (no min-p, v3, one sample): number right"
+   },
+   {
+    "id": "t54",
+    "measured": 460,
+    "value": 463,
+    "low": 455,
+    "high": 471,
+    "nulls": [
+     462,
+     463
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3.1-7B-RL-Zero-Math with cue, MATH-500 n=500, T 1.0 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t55",
+    "measured": 34,
+    "value": 2,
+    "low": 0,
+    "high": 8,
+    "nulls": [
+     10,
+     12
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1: number of answers flagged as rule-A loops (an 8,000-character window starting at a line start with zlib compression ratio below 0.10)"
+   },
+   {
+    "id": "t56",
+    "measured": 58,
+    "value": 21,
+    "low": 12,
+    "high": 30,
+    "nulls": [
+     40,
+     45
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1 (v3): number of answers that hit the token cap"
+   }
+  ]
+ },
+ "r2-revise-1": {
+  "statement": "The accuracy-carrying part of the Olmo-3.1 RL-Zero-Math delta is its dense sign pattern over many small entries, which moves logits to first order as a coherent sum with high Fisher leverage per unit norm; magnitudes, the most-changed entries and the low-rank head (top singular directions) carry only their proportional share of it, so an arm recovers accuracy in proportion to how much of the coherent sign pattern it keeps in expectation (per-problem log-odds roughly linear in that share), DARE survives until its scaled noise breaks the network, sign randomization gives nothing, and the Code-RL pattern, which agrees with Math-RL in sign at chance, gives no math gain.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t32",
+    "measured": 441,
+    "value": 427,
+    "low": 420,
+    "high": 434,
+    "nulls": [
+     425,
+     422
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, grader v3, one sample, with the opening cue: weights base Olmo-3-1025-7B + a*(Olmo-3.1-7B-RL-Zero-Math minus base) with a = 0.25 (called theta0.25), number right"
+   },
+   {
+    "id": "t33",
+    "measured": 452,
+    "value": 442,
+    "low": 435,
+    "high": 449,
+    "nulls": [
+     440,
+     440
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample, with the opening cue: weights base + a*(RL-Zero-Math minus base) with a = 0.5 (theta0.5), number right"
+   },
+   {
+    "id": "t43",
+    "measured": 451,
+    "value": 453,
+    "low": 446,
+    "high": 460,
+    "nulls": [
+     455,
+     453
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, with the opening cue, one sample: weights base + 0.75*(RL-Zero-Math minus base), number right"
+   },
+   {
+    "id": "t34",
+    "measured": 453,
+    "value": 466,
+    "low": 452,
+    "high": 478,
+    "nulls": [
+     400,
+     380
+    ],
+    "divergent": true,
+    "inside": true,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample, with the opening cue: weights base + a*(RL-Zero-Math minus base) with a = 1.5 (theta1.5, extrapolation past RL), number right"
+   },
+   {
+    "id": "t40",
+    "measured": 405,
+    "value": 308,
+    "low": 278,
+    "high": 340,
+    "nulls": [
+     300,
+     290
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, plain prompt (no cue), one sample: weights base Olmo-3-1025-7B + 0.25*(RL-Zero-Math minus base), number right"
+   },
+   {
+    "id": "t41",
+    "measured": 443,
+    "value": 380,
+    "low": 358,
+    "high": 402,
+    "nulls": [
+     400,
+     380
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "MATH-500 n=500, T 1.0 / top-p 1.0, v3, plain prompt (no cue), one sample: weights base + 0.5*(RL-Zero-Math minus base), number right"
+   },
+   {
+    "id": "t36",
+    "measured": 450,
+    "value": 406,
+    "low": 392,
+    "high": 420,
+    "nulls": [
+     420,
+     415
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t42",
+    "measured": 390,
+    "value": 245,
+    "low": 212,
+    "high": 285,
+    "nulls": [
+     280,
+     290
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the plain prompt (no cue), MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t37",
+    "measured": 417,
+    "value": 408,
+    "low": 394,
+    "high": 422,
+    "nulls": [
+     408,
+     408
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random difference of matched norm to the RL-minus-base difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t47",
+    "measured": 3944,
+    "value": 3930,
+    "low": 3680,
+    "high": 4180,
+    "nulls": [
+     3950,
+     3950
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random matched-norm difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3: mean generated tokens per problem"
+   }
+  ]
+ },
+ "r2-revise-2": {
+  "statement": "The cued base's remaining gap to RL-Zero-Math is a weak error detector, not weaker per-step math: both models make slips and misreads in a first candidate solution at similar rates, but RL notices an error and re-derives far more often (signal-detection d' about 1.1 vs 0.6), so the cued base's residual errors are sample-specific commitment errors that independent samples rarely repeat while RL's residual errors are problem-specific; hence a 4-sample majority vote closes about half of the cued base's gap but lifts RL by only about 1 point, an injected error in a shared prefix is caught far more often by RL, and any RL-Zero-Math release (3.0 included) gives finished answers far more accurate than the cued base's, whatever its cap-hit rate.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t27",
+    "measured": 179,
+    "value": 189,
+    "low": 180,
+    "high": 198,
+    "nulls": [
+     180,
+     177
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base+cue hard328, T 1.0 / top-p 1.0, v3: number right under a vote over 4 samples per problem (vote@4)"
+   },
+   {
+    "id": "t28",
+    "measured": 205,
+    "value": 222,
+    "low": 210,
+    "high": 235,
+    "nulls": [
+     225,
+     220
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base+cue hard328, T 1.0 / top-p 1.0, v3: number of problems with at least one right answer among 4 samples (pass@4, oracle)"
+   }
+  ]
+ },
+ "r2-surprises-1": {
+  "statement": "For the Olmo-3 base, loops and slips are the two ends of one axis, the per-token surprise of the text it samples (low surprise: the boredom trap of self-reinforcing repetition; high surprise: the confusion trap of compounding slips and early wrong stops); the opening cue lowers the base's native per-token entropy by selecting its reasoning-trace register, which pushes it toward loops at T 0.6 (more cap hits than the plain base) and keeps it out of confusion at T 1.0 (where the plain base loses 28 points on short problems), while the entropy-collapsed RL policy sits far from both traps and so ignores temperature, and any change that raises the base's surprise, including a random weight perturbation, cuts its loops.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t09",
+    "measured": 166,
+    "value": 95,
+    "low": 65,
+    "high": 140,
+    "nulls": [
+     45,
+     60
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "Grader v1/v2 applied to plain-prompt base Olmo-3-1025-7B answers on MATH-500 n=500 at T 1.0: number of the 500 answers in which the grader found no extractable answer"
+   },
+   {
+    "id": "t52",
+    "measured": 412,
+    "value": 388,
+    "low": 365,
+    "high": 404,
+    "nulls": [
+     400,
+     395
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.5 / top-p 1.0 / min-p 0.1 (v3, one sample): number right"
+   },
+   {
+    "id": "t55",
+    "measured": 34,
+    "value": 10,
+    "low": 3,
+    "high": 30,
+    "nulls": [
+     10,
+     12
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1: number of answers flagged as rule-A loops (an 8,000-character window starting at a line start with zlib compression ratio below 0.10)"
+   },
+   {
+    "id": "t56",
+    "measured": 58,
+    "value": 42,
+    "low": 31,
+    "high": 65,
+    "nulls": [
+     40,
+     45
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B with cue, MATH-500 n=500, T 1.0 / min-p 0.1 (v3): number of answers that hit the token cap"
+   }
+  ]
+ },
+ "r2-surprises-2": {
+  "statement": "Which entries the RL-Zero update moves, and by how much each, is set by the base and the optimizer rather than by the task (Adam gives every consistently signed coordinate a near-equal step, and bf16 storage registers a step only where it exceeds half an ulp of |w|), so the changed-entry mask and entry magnitudes carry almost no task information; the task is written only in the signs, and their effect is gated by which input directions the processed text excites, so RL changes the computation on any math-solution text whoever wrote it and leaves general text untouched.",
+  "state": "fails",
+  "claims": [
+   {
+    "id": "t57",
+    "measured": 23.4,
+    "value": 8,
+    "low": 2,
+    "high": 16,
+    "nulls": [
+     15,
+     12
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "cleanneurons Part T3, Olmo-3-1025-7B base vs RL-Zero-Math, teacher-forced on held-out 2,672 decisive positions after the cue, on stored cue-base (T1) text: percent of KL(RL||base) closed by adding one constant vector per layer to the base (mean of RL-layer minus base-layer output, 32 vectors, no weight change)"
+   },
+   {
+    "id": "t58",
+    "measured": 31.2,
+    "value": 10,
+    "low": 3,
+    "high": 19,
+    "nulls": [
+     20,
+     18
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Same constant-vector-per-layer arm (32 vectors, mean of RL-layer minus base-layer output), held-out 2,672 decisive positions, but on stored RL-model (T2) text: percent of KL(RL||base) closed"
+   },
+   {
+    "id": "t59",
+    "measured": 14.0,
+    "value": 6,
+    "low": 1,
+    "high": 14,
+    "nulls": [
+     10,
+     7
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3 base, T1 (cued-base) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by adding a constant vector on the MLP output only (mean of RL minus base MLP output per layer)"
+   },
+   {
+    "id": "t60",
+    "measured": 15.1,
+    "value": 8,
+    "low": 2,
+    "high": 16,
+    "nulls": [
+     14,
+     11
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Olmo-3 base, T2 (RL-model) text, held-out 2,672 decisive positions: percent of KL(RL||base) closed by adding a constant vector on the MLP output only (mean of RL minus base MLP output per layer)"
+   },
+   {
+    "id": "t42",
+    "measured": 390,
+    "value": 235,
+    "low": 205,
+    "high": 265,
+    "nulls": [
+     280,
+     290
+    ],
+    "divergent": true,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the plain prompt (no cue), MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t36",
+    "measured": 450,
+    "value": 405,
+    "low": 390,
+    "high": 422,
+    "nulls": [
+     420,
+     415
+    ],
+    "divergent": false,
+    "inside": false,
+    "what": "Olmo-3.1-7B-RL-Zero-Code (Code-RL) with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t37",
+    "measured": 417,
+    "value": 408,
+    "low": 396,
+    "high": 420,
+    "nulls": [
+     408,
+     408
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random difference of matched norm to the RL-minus-base difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3, one sample: number right"
+   },
+   {
+    "id": "t47",
+    "measured": 3944,
+    "value": 3950,
+    "low": 3750,
+    "high": 4150,
+    "nulls": [
+     3950,
+     3950
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "Base Olmo-3-1025-7B plus a random matched-norm difference, with the opening cue, MATH-500 n=500, T 1.0 / top-p 1.0, v3: mean generated tokens per problem"
+   },
+   {
+    "id": "t22",
+    "measured": 10,
+    "value": 6,
+    "low": 1,
+    "high": 14,
+    "nulls": [
+     8,
+     6
+    ],
+    "divergent": false,
+    "inside": true,
+    "what": "J-lens difference between base Olmo-3-1025-7B and RL-Zero-Math (layer 24, same text, n=500 MATH-500 problems): in a reader's check of 90 peaks of the difference, the number of peaks located at the first wrong step of the solution"
+   }
+  ]
+ }
+}

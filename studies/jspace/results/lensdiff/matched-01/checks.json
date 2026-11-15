@@ -1,0 +1,1598 @@
+{
+ "plumbing": {
+  "base": 0.0,
+  "rl": 0.0,
+  "pass": true
+ },
+ "demo": {
+  "prompt": "Fact: The currency used in the country shaped like a boot is",
+  "tokens": [
+   "Fact",
+   ":",
+   " The",
+   " currency",
+   " used",
+   " in",
+   " the",
+   " country",
+   " shaped",
+   " like",
+   " a",
+   " boot",
+   " is"
+  ],
+  "readout": {
+   "base_L10_jlens": {
+    "position_-2": [
+     " and",
+     "ing",
+     " heel",
+     " s",
+     " toe",
+     "\u2014and",
+     " or",
+     " kicking",
+     " ankle",
+     "a"
+    ],
+    "position_-1": [
+     " The",
+     " is",
+     " today",
+     " and",
+     " that",
+     " because",
+     " in",
+     " now",
+     " This",
+     " the"
+    ]
+   },
+   "base_L10_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     " shape",
+     "iling",
+     " sco",
+     " shapes",
+     "ipel",
+     " upside",
+     " territorial",
+     " deform"
+    ],
+    "position_-1": [
+     " called",
+     "adas",
+     " inconsist",
+     " Crosby",
+     " commonplace",
+     "ault",
+     " catching",
+     " quite",
+     " pur",
+     " ens"
+    ]
+   },
+   "base_L12_jlens": {
+    "position_-2": [
+     " and",
+     " aka",
+     " or",
+     " America",
+     " symbol",
+     " famous",
+     " heel",
+     " toe",
+     " so",
+     " s"
+    ],
+    "position_-1": [
+     " in",
+     " the",
+     " and",
+     " that",
+     " a",
+     " of",
+     " is",
+     " as",
+     " which",
+     " one"
+    ]
+   },
+   "base_L12_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     "ardo",
+     " mobil",
+     " rampant",
+     " heel",
+     "ipel",
+     " moot",
+     " sco",
+     " territorial"
+    ],
+    "position_-1": [
+     "nex",
+     "nect",
+     " ironic",
+     " collectors",
+     ".That",
+     "/framework",
+     " likely",
+     "obel",
+     "acad",
+     " Rounds"
+    ]
+   },
+   "base_L14_jlens": {
+    "position_-2": [
+     " famously",
+     " aka",
+     " famous",
+     " called",
+     " and",
+     " America",
+     " is",
+     " isn",
+     " or",
+     " symbol"
+    ],
+    "position_-1": [
+     " called",
+     " known",
+     " in",
+     " the",
+     " which",
+     " that",
+     " The",
+     " named",
+     " is",
+     " and"
+    ]
+   },
+   "base_L14_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     " moot",
+     " heel",
+     " pr",
+     "ipel",
+     "neh",
+     " Luigi",
+     " historical",
+     " Named"
+    ],
+    "position_-1": [
+     " called",
+     "obel",
+     "nex",
+     "amus",
+     "neh",
+     "uze",
+     "comic",
+     "abella",
+     " collectors",
+     " ironically"
+    ]
+   },
+   "base_L16_jlens": {
+    "position_-2": [
+     " famously",
+     " heel",
+     "-shaped",
+     " shaped",
+     " fart",
+     " kicked",
+     " moo",
+     " kicking",
+     " famous",
+     " ankle"
+    ],
+    "position_-1": [
+     " called",
+     " named",
+     " known",
+     " is",
+     " which",
+     " that",
+     " one",
+     " the",
+     " in",
+     " The"
+    ]
+   },
+   "base_L16_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     " heel",
+     " Luigi",
+     "pur",
+     " shape",
+     " Named",
+     " pur",
+     " hug",
+     "face"
+    ],
+    "position_-1": [
+     " called",
+     "abella",
+     " not",
+     " known",
+     " named",
+     " still",
+     "osh",
+     " actually",
+     " worth",
+     "obel"
+    ]
+   },
+   "base_L18_jlens": {
+    "position_-2": [
+     " heel",
+     "-shaped",
+     " shaped",
+     " boots",
+     " famously",
+     " boot",
+     " moo",
+     " famous",
+     " shoe",
+     " heels"
+    ],
+    "position_-1": [
+     " called",
+     " known",
+     " named",
+     " currency",
+     " is",
+     " which",
+     " one",
+     " commonly",
+     " famous",
+     " internationally"
+    ]
+   },
+   "base_L18_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     " shape",
+     " peninsula",
+     " heel",
+     " republic",
+     "iful",
+     "ipel",
+     "str",
+     "/ar"
+    ],
+    "position_-1": [
+     " called",
+     " currency",
+     " currencies",
+     "called",
+     " widely",
+     " actually",
+     " indeed",
+     " not",
+     " monetary",
+     " commonly"
+    ]
+   },
+   "base_L20_jlens": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     " heel",
+     " Italy",
+     " is",
+     " Luigi",
+     " toe",
+     " shape",
+     " Bayern",
+     " peninsula"
+    ],
+    "position_-1": [
+     " currency",
+     " called",
+     " Currency",
+     " known",
+     " currencies",
+     " dollar",
+     " dollars",
+     " Euros",
+     " Dollar",
+     " Dollars"
+    ]
+   },
+   "base_L20_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     "camp",
+     " shape",
+     "ipel",
+     " peninsula",
+     "iful",
+     " heel",
+     " republic",
+     "str"
+    ],
+    "position_-1": [
+     " called",
+     " currency",
+     " currencies",
+     "called",
+     " dollars",
+     " dollar",
+     " monetary",
+     " actually",
+     " Currency",
+     " money"
+    ]
+   },
+   "base_L22_jlens": {
+    "position_-2": [
+     " heel",
+     "-shaped",
+     " toe",
+     " Italy",
+     " shaped",
+     " footwear",
+     " sandals",
+     " heels",
+     " Boot",
+     " Luigi"
+    ],
+    "position_-1": [
+     " Euros",
+     " called",
+     " currency",
+     " euro",
+     " euros",
+     " known",
+     " Currency",
+     " Euro",
+     " currencies",
+     " dollar"
+    ]
+   },
+   "base_L22_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     " heel",
+     "camp",
+     " peninsula",
+     " shape",
+     "iful",
+     "ipel",
+     " Peninsula",
+     "leg"
+    ],
+    "position_-1": [
+     " called",
+     "called",
+     " currency",
+     " euros",
+     " euro",
+     " currencies",
+     " Euros",
+     " known",
+     " monetary",
+     " Pound"
+    ]
+   },
+   "base_L24_jlens": {
+    "position_-2": [
+     " is",
+     " was",
+     " heel",
+     "-shaped",
+     " Italy",
+     " toe",
+     " has",
+     " footwear",
+     " shaped",
+     " consists"
+    ],
+    "position_-1": [
+     " Euros",
+     " euro",
+     " currency",
+     " euros",
+     " dollar",
+     " Euro",
+     " currencies",
+     " EUR",
+     " called",
+     " Dollar"
+    ]
+   },
+   "base_L24_logit": {
+    "position_-2": [
+     "-shaped",
+     " heel",
+     " peninsula",
+     "camp",
+     " is",
+     "str",
+     " known",
+     "iful",
+     "Known",
+     " Peninsula"
+    ],
+    "position_-1": [
+     " called",
+     " euros",
+     " euro",
+     " currency",
+     "called",
+     " Euros",
+     " Euro",
+     " currencies",
+     " Pound",
+     " dollar"
+    ]
+   },
+   "base_L26_jlens": {
+    "position_-2": [
+     " is",
+     " was",
+     " has",
+     "-shaped",
+     " known",
+     " isn",
+     " are",
+     " peninsula",
+     " cannot",
+     " toe"
+    ],
+    "position_-1": [
+     " Euros",
+     " euro",
+     " euros",
+     " Euro",
+     " dollar",
+     " currency",
+     " EUR",
+     " called",
+     " Dollar",
+     " EURO"
+    ]
+   },
+   "base_L26_logit": {
+    "position_-2": [
+     " is",
+     "-shaped",
+     " peninsula",
+     "iful",
+     " heel",
+     "camp",
+     "str",
+     " Peninsula",
+     " are",
+     " toe"
+    ],
+    "position_-1": [
+     " euros",
+     " called",
+     " euro",
+     " Euros",
+     " Euro",
+     " currency",
+     " Pound",
+     " dollar",
+     " known",
+     " dollars"
+    ]
+   },
+   "base_L28_jlens": {
+    "position_-2": [
+     " is",
+     " was",
+     "-shaped",
+     " known",
+     " has",
+     " are",
+     " isn",
+     " called",
+     " consists",
+     " dipped"
+    ],
+    "position_-1": [
+     " Euros",
+     " Euro",
+     " euros",
+     " euro",
+     " called",
+     " known",
+     " EUR",
+     " Pound",
+     " EURO",
+     " currency"
+    ]
+   },
+   "base_L28_logit": {
+    "position_-2": [
+     " is",
+     " known",
+     " are",
+     "-shaped",
+     " was",
+     "str",
+     " typically",
+     "iful",
+     " called",
+     " peninsula"
+    ],
+    "position_-1": [
+     " called",
+     " euros",
+     " known",
+     " Euro",
+     " euro",
+     " Euros",
+     " actually",
+     " Pound",
+     " referred",
+     "called"
+    ]
+   },
+   "base_L30_jlens": {
+    "position_-2": [
+     " is",
+     " was",
+     " known",
+     " has",
+     " and",
+     " called",
+     " isn",
+     " does",
+     " are",
+     " in"
+    ],
+    "position_-1": [
+     " called",
+     " known",
+     " the",
+     " Euros",
+     " Euro",
+     " euros",
+     " euro",
+     " not",
+     " actually",
+     " Pound"
+    ]
+   },
+   "base_L30_logit": {
+    "position_-2": [
+     " is",
+     " and",
+     " was",
+     " are",
+     " known",
+     " has",
+     " with",
+     " in",
+     " that",
+     " called"
+    ],
+    "position_-1": [
+     " the",
+     " called",
+     " known",
+     " not",
+     " actually",
+     " Euro",
+     " euros",
+     " named",
+     " referred",
+     " typically"
+    ]
+   },
+   "rl_L10_jlens": {
+    "position_-2": [
+     " and",
+     "ing",
+     " heel",
+     " s",
+     "\u2014and",
+     " or",
+     " in",
+     " symbol",
+     " o",
+     "a"
+    ],
+    "position_-1": [
+     " The",
+     " today",
+     " and",
+     " is",
+     " in",
+     " that",
+     " because",
+     " now",
+     " the",
+     " which"
+    ]
+   },
+   "rl_L10_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     " shape",
+     "iling",
+     " sco",
+     " shapes",
+     "ipel",
+     " deform",
+     " territorial",
+     " upside"
+    ],
+    "position_-1": [
+     " called",
+     "adas",
+     " inconsist",
+     " Crosby",
+     "ault",
+     " commonplace",
+     " catching",
+     "atin",
+     " ens",
+     " pur"
+    ]
+   },
+   "rl_L12_jlens": {
+    "position_-2": [
+     " and",
+     " or",
+     " aka",
+     " America",
+     " symbol",
+     " even",
+     " so",
+     " famous",
+     " in",
+     " s"
+    ],
+    "position_-1": [
+     " in",
+     " the",
+     " and",
+     " that",
+     " a",
+     " of",
+     " is",
+     " as",
+     " which",
+     " one"
+    ]
+   },
+   "rl_L12_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     "ardo",
+     " mobil",
+     " rampant",
+     " heel",
+     "ipel",
+     " moot",
+     " coax",
+     " sco"
+    ],
+    "position_-1": [
+     "nex",
+     "nect",
+     " collectors",
+     " ironic",
+     ".That",
+     "/framework",
+     "obel",
+     " likely",
+     "acad",
+     " firstly"
+    ]
+   },
+   "rl_L14_jlens": {
+    "position_-2": [
+     " famously",
+     " aka",
+     " famous",
+     " and",
+     " called",
+     " America",
+     " is",
+     " or",
+     " in",
+     " isn"
+    ],
+    "position_-1": [
+     " called",
+     " in",
+     " the",
+     " which",
+     " known",
+     " that",
+     " The",
+     " is",
+     " named",
+     " and"
+    ]
+   },
+   "rl_L14_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     " moot",
+     " heel",
+     " pr",
+     "neh",
+     "ipel",
+     " Luigi",
+     " historical",
+     " Named"
+    ],
+    "position_-1": [
+     " called",
+     "obel",
+     "nex",
+     "amus",
+     "neh",
+     "uze",
+     "comic",
+     " collectors",
+     "abella",
+     " ironically"
+    ]
+   },
+   "rl_L16_jlens": {
+    "position_-2": [
+     " famously",
+     " heel",
+     "-shaped",
+     " fart",
+     " shaped",
+     " moo",
+     " kicked",
+     " ankle",
+     " kicking",
+     " famous"
+    ],
+    "position_-1": [
+     " called",
+     " named",
+     " known",
+     " which",
+     " is",
+     " that",
+     " one",
+     " in",
+     " the",
+     " The"
+    ]
+   },
+   "rl_L16_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     " heel",
+     " Luigi",
+     "pur",
+     " shape",
+     " Named",
+     " pur",
+     " hug",
+     "face"
+    ],
+    "position_-1": [
+     " called",
+     "abella",
+     " not",
+     " named",
+     " known",
+     " still",
+     "osh",
+     " ironically",
+     "obel",
+     " actually"
+    ]
+   },
+   "rl_L18_jlens": {
+    "position_-2": [
+     " heel",
+     "-shaped",
+     " shaped",
+     " famously",
+     " boots",
+     " boot",
+     " moo",
+     " famous",
+     " heels",
+     " kicks"
+    ],
+    "position_-1": [
+     " called",
+     " known",
+     " named",
+     " currency",
+     " which",
+     " is",
+     " one",
+     " commonly",
+     " whose",
+     " internationally"
+    ]
+   },
+   "rl_L18_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     " shape",
+     " peninsula",
+     " heel",
+     " republic",
+     "iful",
+     "ipel",
+     "str",
+     "/ar"
+    ],
+    "position_-1": [
+     " called",
+     " currency",
+     " currencies",
+     " widely",
+     "called",
+     " actually",
+     " indeed",
+     " not",
+     " monetary",
+     " commonly"
+    ]
+   },
+   "rl_L20_jlens": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     " heel",
+     " Italy",
+     " is",
+     " Luigi",
+     " toe",
+     " shape",
+     " Bayern",
+     " Slovenia"
+    ],
+    "position_-1": [
+     " currency",
+     " called",
+     " Currency",
+     " known",
+     " dollar",
+     " currencies",
+     " dollars",
+     " Euros",
+     " Dollar",
+     " Dollars"
+    ]
+   },
+   "rl_L20_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     "camp",
+     "ipel",
+     " shape",
+     " peninsula",
+     "iful",
+     " heel",
+     " republic",
+     "str"
+    ],
+    "position_-1": [
+     " called",
+     " currency",
+     " currencies",
+     "called",
+     " dollars",
+     " dollar",
+     " monetary",
+     " actually",
+     " Currency",
+     " money"
+    ]
+   },
+   "rl_L22_jlens": {
+    "position_-2": [
+     " heel",
+     "-shaped",
+     " Italy",
+     " toe",
+     " sandals",
+     " shaped",
+     " footwear",
+     " heels",
+     " Luigi",
+     " shoe"
+    ],
+    "position_-1": [
+     " Euros",
+     " called",
+     " currency",
+     " euro",
+     " euros",
+     " known",
+     " Currency",
+     " Euro",
+     " dollar",
+     " currencies"
+    ]
+   },
+   "rl_L22_logit": {
+    "position_-2": [
+     "-shaped",
+     " shaped",
+     " heel",
+     "camp",
+     " peninsula",
+     " shape",
+     "iful",
+     "ipel",
+     " Peninsula",
+     "leg"
+    ],
+    "position_-1": [
+     " called",
+     " euros",
+     " currency",
+     "called",
+     " euro",
+     " currencies",
+     " Euros",
+     " known",
+     " monetary",
+     " Pound"
+    ]
+   },
+   "rl_L24_jlens": {
+    "position_-2": [
+     " is",
+     " was",
+     "-shaped",
+     " heel",
+     " Italy",
+     " toe",
+     " has",
+     " consists",
+     " footwear",
+     " shaped"
+    ],
+    "position_-1": [
+     " Euros",
+     " euro",
+     " euros",
+     " currency",
+     " dollar",
+     " Euro",
+     " EUR",
+     " called",
+     " currencies",
+     " Dollar"
+    ]
+   },
+   "rl_L24_logit": {
+    "position_-2": [
+     "-shaped",
+     " heel",
+     " peninsula",
+     "camp",
+     " is",
+     "str",
+     " known",
+     "iful",
+     " Peninsula",
+     "Known"
+    ],
+    "position_-1": [
+     " called",
+     " euros",
+     " euro",
+     " currency",
+     " Euros",
+     " Euro",
+     "called",
+     " currencies",
+     " Pound",
+     " dollar"
+    ]
+   },
+   "rl_L26_jlens": {
+    "position_-2": [
+     " is",
+     " was",
+     " has",
+     "-shaped",
+     " known",
+     " isn",
+     " are",
+     " peninsula",
+     " contains",
+     " consists"
+    ],
+    "position_-1": [
+     " Euros",
+     " euro",
+     " euros",
+     " Euro",
+     " dollar",
+     " EUR",
+     " currency",
+     " called",
+     " Dollar",
+     " EURO"
+    ]
+   },
+   "rl_L26_logit": {
+    "position_-2": [
+     " is",
+     "-shaped",
+     " peninsula",
+     "iful",
+     "camp",
+     " heel",
+     " Peninsula",
+     "str",
+     "trap",
+     " are"
+    ],
+    "position_-1": [
+     " euros",
+     " called",
+     " euro",
+     " Euros",
+     " Euro",
+     " Pound",
+     " dollar",
+     " currency",
+     " known",
+     " dollars"
+    ]
+   },
+   "rl_L28_jlens": {
+    "position_-2": [
+     " is",
+     " was",
+     "-shaped",
+     " known",
+     " has",
+     " are",
+     " isn",
+     " consists",
+     " plunged",
+     " dipped"
+    ],
+    "position_-1": [
+     " Euros",
+     " Euro",
+     " euros",
+     " euro",
+     " called",
+     " known",
+     " EUR",
+     " Pound",
+     " EURO",
+     " Dollar"
+    ]
+   },
+   "rl_L28_logit": {
+    "position_-2": [
+     " is",
+     " known",
+     " are",
+     "-shaped",
+     "str",
+     " was",
+     " typically",
+     "iful",
+     " called",
+     " primarily"
+    ],
+    "position_-1": [
+     " called",
+     " euros",
+     " known",
+     " Euro",
+     " euro",
+     " Euros",
+     " actually",
+     " Pound",
+     "called",
+     " referred"
+    ]
+   },
+   "rl_L30_jlens": {
+    "position_-2": [
+     " is",
+     " was",
+     " has",
+     " known",
+     " and",
+     " called",
+     " isn",
+     " are",
+     " does",
+     " in"
+    ],
+    "position_-1": [
+     " called",
+     " known",
+     " Euros",
+     " the",
+     " Euro",
+     " euros",
+     " euro",
+     " not",
+     " actually",
+     " Pound"
+    ]
+   },
+   "rl_L30_logit": {
+    "position_-2": [
+     " is",
+     " and",
+     " was",
+     " are",
+     " known",
+     " has",
+     " with",
+     " in",
+     " that",
+     " called"
+    ],
+    "position_-1": [
+     " the",
+     " called",
+     " known",
+     " not",
+     " actually",
+     " Euro",
+     " euros",
+     " named",
+     " referred",
+     " euro"
+    ]
+   }
+  }
+ },
+ "hit": {
+  "k": 8,
+  "window": [
+   2,
+   32
+  ],
+  "by_layer": {
+   "10": {
+    "base_T1": {
+     "jlens": 0.3837939899512497,
+     "logit": 0.0471128510928816,
+     "wrong_layer": 0.20104967837598542,
+     "shifted_window": 0.353738412468131,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.03250174569923189,
+     "works": true
+    },
+    "base_T2": {
+     "jlens": 0.41484849829200127,
+     "logit": 0.0439998225455836,
+     "wrong_layer": 0.2329887760081629,
+     "shifted_window": 0.38252073998491637,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.026114733873810362,
+     "works": true
+    },
+    "rl_T1": {
+     "jlens": 0.3858261416852458,
+     "logit": 0.04102172962247848,
+     "wrong_layer": 0.20946630681757572,
+     "shifted_window": 0.3558825725654182,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.032364205759749465,
+     "works": true
+    },
+    "rl_T2": {
+     "jlens": 0.4198083492302915,
+     "logit": 0.03833902666252607,
+     "wrong_layer": 0.24958963666208242,
+     "shifted_window": 0.3879597178474779,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.02645400070497004,
+     "works": true
+    }
+   },
+   "12": {
+    "base_T1": {
+     "jlens": 0.41643109352164964,
+     "logit": 0.05565215536093362,
+     "wrong_layer": 0.18609922874241278,
+     "shifted_window": 0.37455063311393916,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.035612264330603695,
+     "works": true
+    },
+    "base_T2": {
+     "jlens": 0.43761589991570915,
+     "logit": 0.054988687280954705,
+     "wrong_layer": 0.21510580719577657,
+     "shifted_window": 0.39456545849784835,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.028079837856891082,
+     "works": true
+    },
+    "rl_T1": {
+     "jlens": 0.42451169687336654,
+     "logit": 0.04738487140373148,
+     "wrong_layer": 0.1992522108317421,
+     "shifted_window": 0.3811644602797009,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.034940434626208765,
+     "works": true
+    },
+    "rl_T2": {
+     "jlens": 0.43957677121689365,
+     "logit": 0.04598731200922763,
+     "wrong_layer": 0.2312097954837851,
+     "shifted_window": 0.3967525841799388,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.027956468100105745,
+     "works": true
+    }
+   },
+   "14": {
+    "base_T1": {
+     "jlens": 0.29607010656795707,
+     "logit": 0.06989855242524776,
+     "wrong_layer": 0.21490137930298794,
+     "shifted_window": 0.22975048803644005,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.04416619056687615,
+     "works": true
+    },
+    "base_T2": {
+     "jlens": 0.3097599929018233,
+     "logit": 0.07321325584490485,
+     "wrong_layer": 0.24378687724590745,
+     "shifted_window": 0.2411871700456945,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.04013923158265774,
+     "works": true
+    },
+    "rl_T1": {
+     "jlens": 0.28554665415017655,
+     "logit": 0.059188419401982016,
+     "wrong_layer": 0.22242194083824926,
+     "shifted_window": 0.22022977715669437,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.04119850187265917,
+     "works": true
+    },
+    "rl_T2": {
+     "jlens": 0.29007586176300965,
+     "logit": 0.06242402732798012,
+     "wrong_layer": 0.25123552637416263,
+     "shifted_window": 0.2234195466039661,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.03727969686288333,
+     "works": true
+    }
+   },
+   "16": {
+    "base_T1": {
+     "jlens": 0.21376529447532083,
+     "logit": 0.12592940272873707,
+     "wrong_layer": 0.32274943195758615,
+     "shifted_window": 0.12300651781999723,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.06276582238303816,
+     "works": false
+    },
+    "base_T2": {
+     "jlens": 0.24237167827514308,
+     "logit": 0.13272703074397765,
+     "wrong_layer": 0.3511379264451444,
+     "shifted_window": 0.14072135220265294,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.06123105393020797,
+     "works": false
+    },
+    "rl_T1": {
+     "jlens": 0.20210042349828788,
+     "logit": 0.11692606381276469,
+     "wrong_layer": 0.3247709162284117,
+     "shifted_window": 0.1150539240263273,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.056428405171501723,
+     "works": false
+    },
+    "rl_T2": {
+     "jlens": 0.2218845659021339,
+     "logit": 0.12428907324431036,
+     "wrong_layer": 0.34831640122443547,
+     "shifted_window": 0.12361031010159265,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.054573493126542125,
+     "works": false
+    }
+   },
+   "18": {
+    "base_T1": {
+     "jlens": 0.2603661073360144,
+     "logit": 0.18896344260371442,
+     "wrong_layer": 0.4123347876641456,
+     "shifted_window": 0.12511334179618744,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.09679637740959394,
+     "works": false
+    },
+    "base_T2": {
+     "jlens": 0.29009360720464933,
+     "logit": 0.2007896721529657,
+     "wrong_layer": 0.4384721174748237,
+     "shifted_window": 0.14323676855507742,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.09666461050405357,
+     "works": false
+    },
+    "rl_T1": {
+     "jlens": 0.24954929968104286,
+     "logit": 0.18361904355525213,
+     "wrong_layer": 0.4040835049016993,
+     "shifted_window": 0.11847284597249928,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.08808904124082186,
+     "works": false
+    },
+    "rl_T2": {
+     "jlens": 0.2719400204072579,
+     "logit": 0.19738698371855729,
+     "wrong_layer": 0.42385874628454817,
+     "shifted_window": 0.12750543454150215,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.08898484314416637,
+     "works": false
+    }
+   },
+   "20": {
+    "base_T1": {
+     "jlens": 0.3895917561844618,
+     "logit": 0.36082160801339835,
+     "wrong_layer": 0.5574282879788357,
+     "shifted_window": 0.17813063375398697,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.2557872574536067,
+     "works": false
+    },
+    "base_T2": {
+     "jlens": 0.41217337296481965,
+     "logit": 0.3788252517634533,
+     "wrong_layer": 0.5825739763098354,
+     "shifted_window": 0.19444124040637062,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.2391434614028904,
+     "works": false
+    },
+    "rl_T1": {
+     "jlens": 0.3754893698729505,
+     "logit": 0.3493434176418506,
+     "wrong_layer": 0.5506757837918564,
+     "shifted_window": 0.17007669906019648,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.22422184134238982,
+     "works": false
+    },
+    "rl_T2": {
+     "jlens": 0.3929062597045384,
+     "logit": 0.36757907812430685,
+     "wrong_layer": 0.5719666385697174,
+     "shifted_window": 0.18063972317111043,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.21284367289390202,
+     "works": false
+    }
+   },
+   "22": {
+    "base_T1": {
+     "jlens": 0.4667175149077798,
+     "logit": 0.4253757613901838,
+     "wrong_layer": 0.5461741143338703,
+     "shifted_window": 0.20836755811100563,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.3724105461393597,
+     "works": false
+    },
+    "base_T2": {
+     "jlens": 0.4907634976265472,
+     "logit": 0.44892418260059447,
+     "wrong_layer": 0.5686171864602281,
+     "shifted_window": 0.22607249012909808,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.35477617201268946,
+     "works": false
+    },
+    "rl_T1": {
+     "jlens": 0.45678610669596664,
+     "logit": 0.4204260584790331,
+     "wrong_layer": 0.5418964616024663,
+     "shifted_window": 0.2036738743159489,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.34059650013753995,
+     "works": false
+    },
+    "rl_T2": {
+     "jlens": 0.4788296881238632,
+     "logit": 0.4467060023956346,
+     "wrong_layer": 0.5662126791180515,
+     "shifted_window": 0.2162370791003061,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.3274409587592527,
+     "works": false
+    }
+   },
+   "24": {
+    "base_T1": {
+     "jlens": 0.545235377574859,
+     "logit": 0.4897859040141664,
+     "wrong_layer": 0.48706570090566764,
+     "shifted_window": 0.24596503205572684,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.5280528576567426,
+     "works": true
+    },
+    "base_T2": {
+     "jlens": 0.5588438844771749,
+     "logit": 0.5045339603389379,
+     "wrong_layer": 0.5038596335566301,
+     "shifted_window": 0.2687547136329355,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.5097550229115263,
+     "works": true
+    },
+    "rl_T1": {
+     "jlens": 0.5388829032567765,
+     "logit": 0.48844713738625817,
+     "wrong_layer": 0.4664881644496122,
+     "shifted_window": 0.2430314796838164,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.5008146596415498,
+     "works": true
+    },
+    "rl_T2": {
+     "jlens": 0.5525886162991881,
+     "logit": 0.5042234151102436,
+     "wrong_layer": 0.47589281753249635,
+     "shifted_window": 0.26182511867264097,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.48842527317589,
+     "works": true
+    }
+   },
+   "26": {
+    "base_T1": {
+     "jlens": 0.5837929232049326,
+     "logit": 0.5174466360154891,
+     "wrong_layer": 0.5374854655814301,
+     "shifted_window": 0.2671132777914084,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.6220190863116021,
+     "works": true
+    },
+    "base_T2": {
+     "jlens": 0.5972538929062597,
+     "logit": 0.5345548112328645,
+     "wrong_layer": 0.552703961669846,
+     "shifted_window": 0.29505345814293954,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.6087592527317589,
+     "works": true
+    },
+    "rl_T1": {
+     "jlens": 0.57798448950855,
+     "logit": 0.5160705332664839,
+     "wrong_layer": 0.5283434496442401,
+     "shifted_window": 0.26510246098375345,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.5962991176283883,
+     "works": true
+    },
+    "rl_T2": {
+     "jlens": 0.5926977507652722,
+     "logit": 0.5345148839891752,
+     "wrong_layer": 0.5419147331529214,
+     "shifted_window": 0.28996495275276163,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.588385618611209,
+     "works": true
+    }
+   },
+   "28": {
+    "base_T1": {
+     "jlens": 0.622910510651462,
+     "logit": 0.5695945297248861,
+     "wrong_layer": 0.5473475352826345,
+     "shifted_window": 0.3125780058244349,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.7253644808396285,
+     "works": true
+    },
+    "base_T2": {
+     "jlens": 0.6371190275497981,
+     "logit": 0.5918282241249279,
+     "wrong_layer": 0.5601304289960516,
+     "shifted_window": 0.344310367774278,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.7109578780401833,
+     "works": true
+    },
+    "rl_T1": {
+     "jlens": 0.6157153067429034,
+     "logit": 0.5645488196452002,
+     "wrong_layer": 0.5392455970045763,
+     "shifted_window": 0.3101938278058095,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.7051037897543325,
+     "works": true
+    },
+    "rl_T2": {
+     "jlens": 0.631214231844195,
+     "logit": 0.5878842997205093,
+     "wrong_layer": 0.5511423628055543,
+     "shifted_window": 0.33664433698593677,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.6954000704970039,
+     "works": true
+    }
+   },
+   "30": {
+    "base_T1": {
+     "jlens": 0.7117971475203482,
+     "logit": 0.7375270686877954,
+     "wrong_layer": 0.539330936709941,
+     "shifted_window": 0.43972883308620375,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.8655970291373072,
+     "works": false
+    },
+    "base_T2": {
+     "jlens": 0.7188101681380595,
+     "logit": 0.7432722594383567,
+     "wrong_layer": 0.5533561066501043,
+     "shifted_window": 0.46229537287609246,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.8513835037010927,
+     "works": false
+    },
+    "rl_T1": {
+     "jlens": 0.710751736129631,
+     "logit": 0.7352548990324611,
+     "wrong_layer": 0.5251272094983092,
+     "shifted_window": 0.45014561087227845,
+     "positions": 187486,
+     "top1_agrees_with_model": 0.854197084153283,
+     "works": false
+    },
+    "rl_T2": {
+     "jlens": 0.7212546027239253,
+     "logit": 0.7445410585155938,
+     "wrong_layer": 0.5388758262721264,
+     "shifted_window": 0.47029413069517767,
+     "positions": 225410,
+     "top1_agrees_with_model": 0.8483829749735636,
+     "works": false
+    }
+   }
+  }
+ }
+}

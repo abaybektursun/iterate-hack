@@ -1,0 +1,3 @@
+{"id": "t17", "value": 457, "low": 452, "high": 462, "why": "RL's probability is concentrated on its own rollouts, so one self-review pass mostly re-samples the same conclusion and leaves the 457 pre-review score nearly unchanged."}
+{"id": "t24", "value": 474, "low": 470, "high": 478, "why": "RL's concentrated distribution makes its 4 samples agree, so ties are rare and the shortest-finished tie-break leaves the vote at about the 474 already measured."}
+{"id": "t25", "value": 472, "low": 467, "high": 477, "why": "With RL's samples concentrated there are few tied problems, so even breaking ties toward the longest sample (cap hits more often wrong) costs only a point or two below 474."}

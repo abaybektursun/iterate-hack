@@ -1,0 +1,8 @@
+{
+ "job_id": "sameraslan-1114-193945-bc28",
+ "commit": "67caf2886bac2b60cba743c48fb943bb081fc41e",
+ "status": "crashed",
+ "note": "job exited 1: IndexError in lib/rln4_lib.py onset_lines (line 49) while recording a degenerate answer; the rows finished before the crash are kept",
+ "command": "wsp_edit --recipe top8 --other think_sft --k 8 --dir /tmp/theta; run_cell --model-path /tmp/theta --model-label sfttop8 --prompt plain --set math500 --temperature 1.0 --top-p 1.0 --seed 80000000 --n 100",
+ "gpu": null
+}

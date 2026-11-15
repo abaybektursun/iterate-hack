@@ -1,0 +1,19 @@
+{"id": "t22", "value": 45, "low": 35, "high": 55, "why": "If RL changes how each step is computed rather than writing a format readout, the base-RL lens difference peaks where the computation goes wrong, so about half of 90 peaks sit at the first wrong step."}
+{"id": "t32", "value": 423, "low": 412, "high": 434, "why": "Accuracy rises in proportion to dose with no plateau, so a=0.25 adds a quarter of the 410 -> ~462 cued gap: 410 + 13."}
+{"id": "t33", "value": 436, "low": 425, "high": 447, "why": "Proportional dose response: a=0.5 adds half the ~52-point cued gap to 410."}
+{"id": "t43", "value": 449, "low": 439, "high": 459, "why": "Proportional dose response: a=0.75 adds three quarters of the ~52-point cued gap to 410."}
+{"id": "t34", "value": 478, "low": 466, "high": 490, "why": "With no saturation or collapse along the full-rank change, extrapolating to a=1.5 continues the linear rise past RL's ~462, held below 500 by the hardest problems."}
+{"id": "t45", "value": 3, "low": 0, "high": 8, "why": "The theory puts no saturation point at or just past a=1, so a=1.5 produces almost no degenerate word-salad endings."}
+{"id": "t40", "value": 284, "low": 262, "high": 306, "why": "Proportional dose response on the plain prompt: 224 + 0.25 x (463 - 224)."}
+{"id": "t41", "value": 344, "low": 322, "high": 366, "why": "Proportional dose response on the plain prompt: 224 + 0.5 x (463 - 224)."}
+{"id": "t46", "value": 4120, "low": 3950, "high": 4300, "why": "Length moves with the size of the full-rank change, so a=0.25 moves a quarter of the way from the cued base's 3,933 to RL's ~4,690 mean tokens."}
+{"id": "t37", "value": 432, "low": 418, "high": 446, "why": "Magnitude of the full-rank change carries much of the effect, so a random difference of matched norm gives most of the cued gap, as the random edit did in the Qwen check."}
+{"id": "t38", "value": 40, "low": 32, "high": 48, "why": "A 432-right cell that loses about 18 of the base's right answers to resampling must fix about 40 of the 90 problems the cued base got wrong."}
+{"id": "t39", "value": 41, "low": 33, "high": 49, "why": "The a=0.5 cell at ~436 right, losing about 15 base-right problems to resampling, fixes about 41 of the base's 90 wrong problems."}
+{"id": "t47", "value": 3950, "low": 3750, "high": 4150, "why": "Format and length are a side effect separate from accuracy and come only with RL's own full-rank pattern, so a random matched-norm difference keeps the cued base's ~3,933 mean tokens."}
+{"id": "t57", "value": 5, "low": 2, "high": 9, "why": "The change is high-rank and depends on the input, so one constant vector per layer, which can only carry a fixed readout shift, closes little of KL on cued-base text."}
+{"id": "t58", "value": 7, "low": 3, "high": 11, "why": "Same input-dependent, high-rank change on RL text: a constant per-layer vector closes only a small share."}
+{"id": "t59", "value": 3, "low": 1, "high": 6, "why": "A constant on the MLP output alone captures even less of an input-dependent change than the full-layer constant on cued-base text."}
+{"id": "t60", "value": 5, "low": 2, "high": 8, "why": "A constant MLP-output vector on RL text captures only a small fixed part of the input-dependent MLP change."}
+{"id": "t61", "value": 25, "low": 17, "high": 33, "why": "The function is concentrated in a small neuron set acting through Olmo's outlier channels, missed by first-order rankings, so the 472 always-on neurons close far more than their 0.13 % share."}
+{"id": "t62", "value": 32, "low": 23, "high": 41, "why": "The same concentrated always-on set closes a larger share on RL text, where KL closure runs about 1.3x higher than on cued-base text in every earlier arm."}

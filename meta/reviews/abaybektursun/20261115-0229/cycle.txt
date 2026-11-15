@@ -1,0 +1,33 @@
+Jobs of abaybektursun, last 0.5 h:  id  state  gpu  wait  run  command
+  abaybektursun-1114-200439-7bc9  done  NVIDIA H100   0.0  8.1  bash studies/gpuprice/jobs/llm_job.sh --model w4a16 --context studies/
+  abaybektursun-1114-201126-a38b  done  cpu  0.1  3.5  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins 2026-10-25,2026-1
+  abaybektursun-1114-201131-4739  done  cpu  0.1  4.2  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins 2026-10-28,2026-1
+  abaybektursun-1114-181216-a619  running  NVIDIA H100   0.1  17.3  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-181222-a5f4  running  NVIDIA H100   0.6  16.7  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-181228-34ad  running  NVIDIA H100   3.7  13.5  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-201359-2fcd  queued  h100  -  -  bash studies/gpuprice/jobs/llm_job.sh --model w4a16 --context studies/
+  abaybektursun-1114-181417-0e08  done  cpu  0.9  0.1  echo first run > $OUT_DIR/out.txt; echo hi
+  abaybektursun-1114-181617-a044  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-181625-014a  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-181631-cc2b  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1114-202025-ee44  queued  h100  -  -  bash studies/gpuprice/jobs/fm2_chronos2.sh --origins locked
+  abaybektursun-1114-182707-731c  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182712-3556  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182718-612b  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182724-87aa  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182730-9523  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182735-bcca  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182742-9129  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182748-3300  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182754-7238  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1114-182800-3331  queued  h100  -  -  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  22 jobs, 0 failed or cancelled; median wait 0.1; 63.4 container minutes, 0.0 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 0.5 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-b1086f  main  -  -  -  2  0  0  Theory engine as a skill (.claude/skills/theory + studies/th
+  work-43d4a1  main  2  3  -  20 (open)  4  0  328 harder at T 1.0/top-p 1.0, cue, one sample: Code-RL, the
+  work-be7af1  main  0  1  -  16 (open)  4  0  RL gain as context idea-607778: base + cue on MATH-500, T 1.
+  work-6d6308  theory  -  -  -  7  0  0  Theory round 01 (theory skill): theories proposed from board
+  work-069eca  main  1  -  -  4 (open)  10  0  Reward content test idea-46b68c step 1: Olmo-3-7B-RL-Zero-IF
+
+Median minutes per stage over work items with jobs: to-job 1, jobs 2. Slowest stage: jobs.
