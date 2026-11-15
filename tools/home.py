@@ -8,14 +8,15 @@ a click on the body or Enter opens it (Enter while the focus is on the page itse
 live MATH-500 scores of the Board (the first and the best untrained-base score and the best RL score among the `scores`
 rows of /data, computed as `benches` in view.py does, with the method words taken from the best base row's
 configuration; no numbers before the first read), one line that says who the team is with the live number of people,
-the button, and a numbered table of contents of the three sections below (01 Results, 02 How we work, 03 Tools and
-extras). Each group has a muted hue (TH) used only for small marks, and each page an abstract object (ART: glass planes
-and hairlines at the isometric angle in a 120 x 90 box, with one mark in its group's hue). The body shows the selected
-page's object above its name, with one slow motion; the ring is tinted by group. Below the dial, each section has its
-number, name, sentence, then one row per page: object, name, line, live count, arrow. A bead's name is drawn outside
-the ring: beside the bead at the sides, below it at the front, above it at the back. On a phone the list comes before the picture. What moves
-is real data: about every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's
-color, and the line under the picture says who posted it, when and what. A post that arrived since the last read of
+and the button. Above the sentence the two scores stand alone in the page's largest type, each with a small label,
+filled from the same read. Each page has an abstract object (ART: glass planes and hairlines at the isometric angle in
+a 120 x 90 box, with one small mark). Blue is the one accent: the selected bead, the index mark and the selected page's
+object in the body; everything else is ink or mute. The body shows the selected page's object above its name, with one
+slow motion. Below the dial, each section has its number, name, sentence, then one row per page: object, name, line,
+live count, arrow. A bead's name is drawn outside the ring: beside the bead at the sides, below it at the front, above
+it at the back. Under 500 px the dial is not shown: the sections list the same pages. What moves
+is real data: about every 2.5 s one of the newest 40 board posts runs from the back of the ring to the Board bead as a
+pulse in its author's color, clipped to the picture's box, and the line under the picture says who posted it, when and what. A post that arrived since the last read of
 /data plays next, larger and with a halo. The numbers of findings, proofs and lab pictures are written into the page
 by view.py (`__COUNTS__`); the board's numbers come from /data every 10 s. Nothing here writes to the board.
 """
@@ -68,8 +69,8 @@ a { color: inherit; }
 .hue { --c: oklch(var(--pl) var(--pc) var(--h)); }
 
 .page {
-  display: grid; grid-template-columns: minmax(320px, 27vw) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto;
-  column-gap: 48px; height: calc(100vh - 56px); min-height: 600px; max-width: 1840px; margin: 0 auto; padding: 20px 40px 22px;
+  display: grid; grid-template-columns: minmax(360px, min(32%, 560px)) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr);
+  column-gap: 48px; height: 100vh; min-height: 600px; max-height: 960px; max-width: 1840px; margin: 0 auto; padding: 20px 40px 22px;
 }
 .top { grid-column: 1 / -1; display: flex; align-items: center; gap: 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
@@ -82,18 +83,17 @@ a { color: inherit; }
 @keyframes heart { from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--blue) 70%, transparent); } }
 .status.read::before { animation: heart 1.1s ease-out; }
 
-/* The words: the sentence, the pages, one button */
-.words { grid-column: 1; grid-row: 2 / 4; min-height: 0; overflow: hidden auto; scrollbar-width: none; padding: clamp(32px, 7vh, 64px) 0 0; }
+/* The words: the two scores, the sentence, one button */
+.words { grid-column: 1; grid-row: 2; min-height: 0; overflow: hidden auto; scrollbar-width: none; display: flex; flex-direction: column; justify-content: safe center; align-items: flex-start; padding: 12px 0 0; }
+.lead[hidden], .fig[hidden] { display: none; }
+.bench, .fig .l { margin: 0; font-size: 13px; font-weight: 600; color: var(--mute); }
+.nums { display: flex; gap: clamp(20px, 2.6vw, 44px); margin: 8px 0 clamp(18px, 3.2vh, 30px); }
+.fig { margin: 0; display: flex; flex-direction: column; }
+.fig .v { font-size: clamp(56px, 6vw, 88px); line-height: .96; font-weight: 300; letter-spacing: -.03em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fig .v small { font-size: .34em; font-weight: 400; letter-spacing: 0; color: var(--mute); margin-left: .16em; }
 .cap b { font-weight: 500; }
-.cap { margin: 0; font-size: clamp(22px, 1.6vw, 28px); line-height: 1.24; font-weight: 320; font-stretch: 102%; letter-spacing: -.012em; text-wrap: balance; }
-.who { margin: 16px 0 0; font-size: 14.5px; line-height: 1.45; color: var(--mute); max-width: 36ch; }
-/* The three sections, numbered, as the hero's table of contents */
-.toc { list-style: none; margin: clamp(24px, 5vh, 40px) 0 0; padding: 0; border-bottom: 1px solid var(--rule); }
-.toc a { display: grid; grid-template-columns: 2.4em minmax(0, 1fr); grid-template-areas: "n b" ". em"; row-gap: 1px; align-items: baseline; padding: clamp(8px, 1.5vh, 12px) 0; border-top: 1px solid var(--rule); text-decoration: none; }
-.toc .n { grid-area: n; color: var(--t); font-size: 12.5px; font-weight: 600; }
-.toc b { grid-area: b; font-weight: 500; font-size: 16px; font-stretch: 104%; transition: color .2s ease; }
-.toc em { grid-area: em; font-style: normal; color: var(--mute); font-size: 13px; }
-.toc a:hover b { color: var(--t); }
+.cap { margin: 0; max-width: 520px; font-size: clamp(19px, 1.45vw, 23px); line-height: 1.28; font-weight: 320; font-stretch: 102%; letter-spacing: -.012em; text-wrap: pretty; }
+.who { margin: 16px 0 0; max-width: 520px; font-size: 14.5px; line-height: 1.45; color: var(--mute); }
 .go {
   display: inline-block; margin: 28px 0 0; padding: 10px 20px; border-radius: 999px; background: var(--btn); color: var(--btn-ink);
   font-weight: 560; font-size: 14.5px; font-stretch: 104%; text-decoration: none;
@@ -102,12 +102,14 @@ a { color: inherit; }
 .go:hover { transform: translateY(-1px); opacity: .9; }
 
 /* The picture */
-.stage { grid-column: 2; grid-row: 2; min-height: 0; min-width: 0; display: flex; padding: 6px 0 0; }
-.foot { grid-column: 2; grid-row: 3; display: flex; align-items: baseline; gap: 24px; font-size: 13px; color: var(--mute); min-height: 21px; }
-.said { display: block; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity .3s ease; }
+.pic { grid-column: 2; grid-row: 2; min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+.stage { flex: 0 1 auto; min-height: 0; aspect-ratio: 1060 / 660; }
+.foot { flex: 0 0 auto; display: flex; align-items: baseline; gap: 24px; margin-top: 10px; font-size: 13px; color: var(--mute); min-height: 21px; }
+.said { display: block; flex: 1 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: opacity .3s ease; }
 .said b { color: var(--c); font-weight: 600; }
 .said .now { color: var(--blue); }
-.key { margin-left: auto; white-space: nowrap; }
+.key { flex: 0 0 auto; white-space: nowrap; }
+@media (max-width: 1599px) { .key { display: none; } }
 svg { width: 100%; height: 100%; display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-stretch: 110%; letter-spacing: .012em; }
 .atmo, .shade, .spec, .ring, .ticks, .mark, #fx, .read { pointer-events: none; }
@@ -126,11 +128,11 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 .ticks.back { stroke-width: .6; opacity: .26; }
 .ticks.front { stroke-width: .8; opacity: .4; }
 #in-f, #in-b { display: none; }
-.mark { fill: none; stroke: var(--t); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.mark { fill: none; stroke: var(--blue); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
 .bead { cursor: pointer; }
 .bead:focus { outline: none; }
 .bead circle.b { fill: url(#body) var(--sheet); stroke: var(--t); stroke-width: 1.5; }
-.bead.on circle.b { stroke: var(--t); stroke-width: 2; }
+.bead.on circle.b { stroke: var(--blue); stroke-width: 2; }
 .bead:focus-visible circle.b { stroke: var(--blue); stroke-width: 3.2; }
 .bead circle.pad { fill: transparent; }
 .bead text { font-weight: 560; paint-order: stroke fill; stroke: var(--paper); stroke-width: 6px; stroke-linejoin: round; }
@@ -151,19 +153,13 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 .enter .bead circle.b { animation: pop .45s cubic-bezier(.3, 1.5, .5, 1) both; animation-delay: calc(.45s + var(--i) * 45ms); }
 .enter .bead text { animation: fade .6s both; animation-delay: calc(.6s + var(--i) * 45ms); }
 
-/* Themes: one hue per group of pages (TH in the script), muted, used only for small marks. The dial takes the hue of
-   the selected page's group and eases to the next one. */
-@property --th { syntax: "<number>"; inherits: true; initial-value: 255; }
-.th, #svg { --t: oklch(var(--pl) calc(var(--pc) * .78) var(--th)); }
-#svg { --tg: oklch(var(--pl) .06 var(--th)); transition: --th .9s ease; }
-.garc { fill: none; stroke: var(--t); stroke-linecap: round; pointer-events: none; }
-.garc.front { stroke-width: 1.6; opacity: .9; }
-.garc.back { stroke-width: 1.1; opacity: .35; }
-#art { pointer-events: none; }
+/* One accent: marks are mute; blue is the selected page (its bead, the index mark, its object in the body). */
+:root { --t: var(--mute); --tg: oklch(var(--pl) .06 255); }
+#art { pointer-events: none; --t: var(--blue); }
 @keyframes artin { from { opacity: 0; transform: translateY(6px); } }
 #art.swap { animation: artin .6s cubic-bezier(.2, .7, .2, 1) both; transform-box: fill-box; transform-origin: center; }
 
-/* The objects: glass planes lit from the upper left, hairlines, one small mark in the group's hue */
+/* The objects: glass planes lit from the upper left, hairlines, one small mark */
 .gb { fill: url(#gg) var(--glass); stroke: var(--ink); stroke-width: .8; stroke-opacity: .45; stroke-linejoin: round; }
 .gb.f1 { fill: var(--glass-hi); } .gb.f2 { fill: var(--glass); } .gb.f3 { fill: var(--glass-lo); }
 .gb.thin { fill-opacity: .35; }
@@ -188,10 +184,10 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 
 /* The sections below the dial: one per group, numbered, an object for the group and a row for each page */
 .sec { border-top: 1px solid var(--rule); }
-.sec-in { max-width: 1840px; margin: 0 auto; padding: clamp(56px, 9vh, 96px) 40px clamp(48px, 8vh, 80px); display: grid; grid-template-columns: minmax(320px, 27vw) minmax(0, 1fr); column-gap: 48px; }
-.sec-n { margin: 0 0 14px; font-size: 13px; font-weight: 600; color: var(--t); }
-.sec-head h2 { margin: 0; font-size: clamp(30px, 2.3vw, 40px); line-height: 1.06; font-weight: 300; letter-spacing: -.02em; }
-.sec-head p { margin: 14px 0 0; text-wrap: pretty; color: var(--mute); font-size: 15.5px; line-height: 1.5; max-width: 30ch; }
+.sec-in { max-width: 1840px; margin: 0 auto; padding: clamp(56px, 9vh, 96px) 40px clamp(48px, 8vh, 80px); display: grid; grid-template-columns: minmax(360px, min(32%, 560px)) minmax(0, 1fr); column-gap: 48px; }
+.sec-n { margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--mute); }
+.sec-head h2 { margin: 0; font-size: 22px; line-height: 1.15; font-weight: 400; letter-spacing: -.012em; }
+.sec-head p { margin: 10px 0 0; text-wrap: pretty; color: var(--mute); font-size: 15.5px; line-height: 1.5; max-width: 30ch; }
 .sec-head { position: sticky; top: 32px; align-self: start; }
 .rows { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--rule); align-self: start; }
 .row {
@@ -204,41 +200,42 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 .row span { grid-area: line; color: var(--mute); font-size: 15px; line-height: 1.4; }
 .row em { grid-area: ct; font-style: normal; color: var(--mute); font-size: 13.5px; white-space: nowrap; }
 .row i { grid-area: go; font-style: normal; color: var(--faint); justify-self: end; transition: transform .3s cubic-bezier(.3, 0, .2, 1), color .3s ease; }
-.row:hover { background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--t) 7%, transparent) 40%, transparent); }
-.row:hover i { transform: translateX(4px); color: var(--t); }
+.row:hover { background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--ink) 6%, transparent) 40%, transparent); }
+.row:hover i { transform: translateX(4px); color: var(--ink); }
 .row:focus-visible { outline-offset: -2px; }
 
 @media (max-width: 900px) {
-  .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 6px 16px 36px; }
+  .page { display: flex; flex-direction: column; height: auto; min-height: 0; max-height: none; padding: 6px 16px 36px; }
   .top { gap: 0 13px; padding-bottom: 2px; flex-wrap: wrap; }
   .top a { display: inline-flex; align-items: center; min-height: 40px; }  /* a finger's height */
   .name { font-stretch: 112%; margin-right: 0; }
-  .words { display: contents; }  /* on a phone: the sentence, the button, the pages, then the picture and what is arriving */
-  .cap { order: 1; margin-top: 20px; font-size: 22px; max-width: none; }
-  .who { order: 1; }
+  .words { display: contents; }  /* on a phone: the scores, the sentence, the button, then the picture and what is arriving */
+  .lead { margin-top: 22px; }
+  .cap { order: 1; font-size: 19px; max-width: none; }
+  .who { order: 1; max-width: none; }
   .go { order: 2; align-self: flex-start; margin-top: 18px; }
   .status { display: none; }
-  .toc { order: 3; }
-  .toc a { padding: 12px 0; }
   .sec-in { display: block; padding: 52px 16px 36px; }
   .sec-head { margin-bottom: 22px; }
-  .sec-head h2 { font-size: 30px; }
   .sec-head { position: static; }
   .row { grid-template-columns: 72px minmax(0, 1fr); grid-template-areas: "art name" "art line" "art ct"; column-gap: 16px; row-gap: 2px; padding: 14px 0; }
   .row svg.mini { width: 72px; height: 54px; }
   .row b { font-size: 17px; }
   .row span { font-size: 14px; }
   .row i { display: none; }
-  .stage { order: 4; margin-top: 22px; padding: 0; display: block; }
+  .pic { order: 4; display: block; margin-top: 22px; }
+  .stage { aspect-ratio: auto; }
   svg { height: auto; }
-  .foot { order: 5; display: block; margin-top: 2px; min-height: 39px; }
+  #svg { aspect-ratio: 720 / 548; }  /* its height is reserved before the picture is built */
+  .foot { display: block; margin-top: 2px; min-height: 39px; }
   .said { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }  /* two lines */
   .key { display: none; }
 }
+@media (max-width: 500px) { .pic, .top a[href^="#"] { display: none; } }  /* the dial is too small to read there, and the sections just below list the same pages */
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
   .status.read::before { animation: none; }
-  .go, .said, .toc b, .row, .row i, #svg { transition: none; }
+  .go, .said, .row, .row i { transition: none; }
   .an, #art.swap { animation: none !important; }
 }
 </style>
@@ -252,16 +249,20 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
     <a href="https://monitor.invariant.team/papers">Papers</a>
     <a href="https://monitor.invariant.team/">Board</a>
     <a href="https://monitor.invariant.team/proof">Proof</a>
+    <a href="#s-results">All pages</a>
     <span class="status" id="status">Loading live data</span>
   </header>
   <div class="words">
+    <div class="lead" id="lead">
+      <p class="bench">MATH-500 score</p>
+      <div class="nums"><p class="fig"><span class="v" id="n-base">&nbsp;</span><span class="l">no training</span></p><p class="fig"><span class="v" id="n-rl">&nbsp;</span><span class="l">RL-trained</span></p></div>
+    </div>
     <p class="cap" id="cap">With no training, how close does the Olmo 3 base model get on MATH-500, a standard set of 500 math problems, to the same model after reinforcement learning (RL)?</p>
     <p class="who" id="who">Several people and their coding agents, at the SF AI Research Hackathon.</p>
     <a class="go" id="go" href="https://monitor.invariant.team/findings">Read the findings</a>
-    <ol class="toc" id="index" aria-label="Sections of this page"></ol>
   </div>
-  <div class="stage"><svg id="svg" aria-hidden="true"></svg></div>
-  <div class="foot"><span class="said hue" id="said"></span><span class="key">Each pulse is a new post on the team's board of work and results. ← → turn the dial.</span></div>
+  <div class="pic"><div class="stage"><svg id="svg" aria-hidden="true"></svg></div>
+  <div class="foot"><span class="said hue" id="said"></span><span class="key">Each pulse is a new post on the team's board of work and results. ← → turn the dial.</span></div></div>
 </div>
 <main id="sections"></main>
 <script>
@@ -298,10 +299,9 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "
 const f = n => n.toFixed(1);
 const ago = ns => { const m = Math.max(0, Math.floor((Date.now() * 1e6 - Number(ns)) / 60e9)); return m < 1 ? "now" : m < 60 ? m + " min ago" : m < 2880 ? Math.floor(m / 60) + " h ago" : Math.floor(m / 1440) + " d ago"; };
 
-/* Themes and pictures. Each group of pages has a hue (TH) and each page an abstract object in a 120 x 90 box: glass
-   planes and hairlines in the site's light, seen from above at the isometric angle, with one small mark in the group's
-   hue. The objects hold still in the list; in the dial's body each has one slow motion. */
-const TH = [255, 172, 74];
+/* Pictures. Each page has an abstract object in a 120 x 90 box: glass planes and hairlines in the site's light, seen
+   from above at the isometric angle, with one small mark. The objects hold still in the list; in the dial's body each
+   has one slow motion. */
 const pt2 = p => f(p[0]) + " " + f(p[1]);
 const Q = ps => "M" + ps.map(pt2).join("L") + "Z", Ln = ps => "M" + ps.map(pt2).join("L");
 const iso = (x, y, z, s = 1, cx = 60, cy = 56) => [cx + (x - y) * .866 * s, cy + ((x + y) * .5 - z) * s];
@@ -366,7 +366,7 @@ const art = id => ART[id];
 function geo() {
   return narrow.matches
     ? { w: 720, h: 548, cx: 360, cy: 262, R: 272, rt: 214, rb: 108, D: 1700, pitch: 36, bead: 12, fs: 27, min: 26, fn: 28, fc: 21, far: .86, art: 1.3, at: .76, ny: .6 }
-    : { w: 1060, h: 660, cx: 530, cy: 290, R: 400, rt: 334, rb: 150, D: 2300, pitch: 36, bead: 8, fs: 17, min: 0, fn: 29, fc: 14.5, far: 0, art: 1.55, at: .8, ny: .5 };
+    : { w: 1060, h: 660, cx: 530, cy: 290, R: 400, rt: 334, rb: 150, D: 2300, pitch: 36, bead: 8, fs: 17, min: 0, fn: 29, fc: 16, far: 0, art: 1.55, at: .8, ny: .5 };
 }
 let G = geo();
 const FAR = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--far")) || .6;  // read once
@@ -397,25 +397,24 @@ function build() {
     `<radialGradient id="atmo">${stop(.48, "var(--tg)", .15)}${stop(.68, "var(--tg)", .045)}${stop(1, "var(--tg)", 0)}</radialGradient>` +
     `<radialGradient id="shade">${stop(.3, "var(--ink)", .14)}${stop(1, "var(--ink)", 0)}</radialGradient>` +
     `<radialGradient id="spec">${stop(0, "#fff", .2)}${stop(1, "#fff", 0)}</radialGradient>` +
+    `<clipPath id="box"><rect width="${G.w}" height="${G.h}"/></clipPath>` +
     "</defs>" +
     `<circle class="atmo" cx="${G.cx}" cy="${G.cy}" r="${G.rb * 2.1}" fill="url(#atmo)"/>` +
     `<ellipse class="shade" cx="${G.cx}" cy="${G.cy + G.rb * 1.04}" rx="${G.rb * .9}" ry="${G.rb * .16}" fill="url(#shade)"/>` +
-    `<g id="back"><path class="ring back" id="ring-b"/><path class="ring back" id="in-b"/><path class="ticks back" id="ticks-b"/>${GROUPS.map((_, g) => `<path class="garc back th" id="arc-b${g}" style="--th:${TH[g]}"/>`).join("")}</g>` +
+    `<g id="back"><path class="ring back" id="ring-b"/><path class="ring back" id="in-b"/><path class="ticks back" id="ticks-b"/></g>` +
     `<circle class="body" id="body-c" cx="${G.cx}" cy="${G.cy}" r="${G.rb}" tabindex="-1"/>` +
     `<ellipse class="spec" cx="${G.cx - G.rb * .34}" cy="${G.cy - G.rb * .44}" rx="${G.rb * .44}" ry="${G.rb * .26}" transform="rotate(-32 ${G.cx - G.rb * .34} ${G.cy - G.rb * .44})" fill="url(#spec)"/>` +
     `<g id="art"></g>` +
     `<g class="read"><text class="n" id="read-n" x="${G.cx}" font-size="${G.fn}"></text><text class="c" id="read-c" x="${G.cx}" y="${G.cy + G.fn * .92}" font-size="${G.fc}"></text></g>` +
-    `<g id="front"><path class="ring front" id="ring-f"/><path class="ring front thin" id="in-f"/><path class="ticks front" id="ticks-f"/>${GROUPS.map((_, g) => `<path class="garc front th" id="arc-f${g}" style="--th:${TH[g]}"/>`).join("")}<path class="mark" id="mark"/></g>` +
-    `<g id="fx"></g>`;
+    `<g id="front"><path class="ring front" id="ring-f"/><path class="ring front thin" id="in-f"/><path class="ticks front" id="ticks-f"/><path class="mark" id="mark"/></g>` +
+    `<g id="fx" clip-path="url(#box)"></g>`;  // a pulse never leaves the picture's box
   PAGES.forEach((p, k) => {
     const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
     g.setAttribute("class", "bead"); g.setAttribute("tabindex", "-1");  // a click or a script can focus it; Tab goes through the list, which holds the same pages. The picture is aria-hidden, so its parts carry no role and no label
-    g.dataset.k = k; g.style.setProperty("--i", k); g.style.setProperty("--th", TH[p.g]); g.classList.add("th");
+    g.dataset.k = k; g.style.setProperty("--i", k);
     g.innerHTML = `<circle class="pad"/><circle class="b"/><text>${esc(narrow.matches && p.short ? p.short : p.name)}</text>`;  // a phone has room only for the short name
     p.el = g; p.front = null;
   });
-  $("index").innerHTML = GROUPS.map((name, g) => `<li class="th" style="--th:${TH[g]}"><a href="#${SEC[g][0]}"><span class="n">0${g + 1}</span><b>${name}</b>` +
-    `<em>${PAGES.filter(p => p.g === g).map(p => esc(p.short || p.name)).join(" \u00b7 ")}</em></a></li>`).join("");
   fit();
   readout();
 }
@@ -423,14 +422,13 @@ function build() {
 /* The body's two lines, the button and the list's marker follow the selection. */
 function readout() {
   const p = PAGES[S.sel], c = p.count ? p.count(S.m) : "", A = $("art"), sc = G.art;
-  if (A.dataset.id !== p.id) {  // the selected page's picture fills the upper body, and comes in once
+  if (A.dataset.id !== p.id && $("svg").getClientRects().length) {  // the selected page's picture fills the upper body, and comes in once
     A.dataset.id = p.id;
     A.innerHTML = `<g transform="translate(${f(G.cx - 60 * sc)} ${f(G.cy - G.rb * G.at)}) scale(${sc})">${ART[p.id]}</g>`;
     const g0 = A.firstChild, bb = g0.getBBox();  // centre the drawing itself, not its box
     g0.setAttribute("transform", `translate(${f(G.cx - (bb.x + bb.width / 2) * sc)} ${f(G.cy - G.rb * G.at)}) scale(${sc})`);
     A.classList.remove("swap"); void A.getBBox(); A.classList.add("swap");
   }
-  $("svg").style.setProperty("--th", TH[p.g]);
   const rn = $("read-n"), wmax = 2 * G.rb * Math.sqrt(1 - G.ny * G.ny) * .84;  // a long name shrinks to the body's width
   rn.textContent = p.name; rn.setAttribute("font-size", G.fn); rn.setAttribute("y", f(G.cy + G.rb * (c ? G.ny : G.ny + .08)));
   const wn = rn.getComputedTextLength(); if (wn > wmax) rn.setAttribute("font-size", f(G.fn * wmax / wn));
@@ -460,16 +458,6 @@ function draw() {
     if (Math.sin((a - y) * RAD) >= 0) tf += s; else tb += s;
   }
   $("ticks-f").setAttribute("d", tf); $("ticks-b").setAttribute("d", tb);
-  GROUPS.forEach((_, g) => {  // each group's stretch of the ring, in its hue, split where it passes behind
-    const ks = PAGES.map((p, k) => p.g === g ? k : -1).filter(k => k >= 0), a0 = beadAt(ks[0]) - STEP * .42, a1 = beadAt(ks[ks.length - 1]) + STEP * .42;
-    let df = "", db = "", was = null;
-    for (let a = a0; a <= a1 + .01; a += 3) {
-      const p = onRing(G.R, Math.min(a, a1)), fr = Math.sin((a - y) * RAD) >= 0, s2 = f(p[0]) + " " + f(p[1]);
-      if (fr) df += (was === true ? "L" : "M") + s2; else db += (was === false ? "L" : "M") + s2;
-      was = fr;
-    }
-    $("arc-f" + g).setAttribute("d", df); $("arc-b" + g).setAttribute("d", db);
-  });
   const m0 = onRing(G.rt - 9, 90), m1 = onRing(G.R - 26, 90);  // the index mark, fixed at the front
   $("mark").setAttribute("d", `M${f(m0[0])} ${f(m0[1])}L${f(m1[0])} ${f(m1[1])}`);
   PAGES.forEach((p, k) => {
@@ -501,7 +489,7 @@ function draw() {
   pulse();
 }
 
-/* One post in flight: from far behind the dial to the Board bead, in its author's color. */
+/* One post in flight: from the back of the ring to the Board bead, in its author's color. */
 const BOARD = PAGES.findIndex(p => p.id === "board");
 function pulse() {
   const fx = $("fx"), F = S.fly;
@@ -509,7 +497,7 @@ function pulse() {
   const u = (S.t - F.t0) / F.dur;
   if (u >= 1.45) { S.fly = null; fx.innerHTML = ""; return; }
   const b = beadAt(BOARD), end = [G.R * Math.cos(b * RAD), 0, G.R * Math.sin(b * RAD)];
-  const at = v => { const e = v * v * (3 - 2 * v); return proj(F.from[0] + (end[0] - F.from[0]) * e, F.from[1] + (end[1] - F.from[1]) * e - 90 * Math.sin(Math.PI * e), F.from[2] + (end[2] - F.from[2]) * e); };
+  const at = v => { const e = v * v * (3 - 2 * v); return proj(F.from[0] + (end[0] - F.from[0]) * e, F.from[1] + (end[1] - F.from[1]) * e - 60 * Math.sin(Math.PI * e), F.from[2] + (end[2] - F.from[2]) * e); };
   let out = "";
   if (u < 1) {
     const h = at(u), big = F.live ? 1.6 : 1, r = 4.2 * h[2] * big, pts = [];
@@ -532,8 +520,9 @@ function pulse() {
 function launch() {
   const m = S.m; if (!m || !m.posts.length) return;
   const live = S.queue.shift(), it = live || m.posts[S.loop++ % m.posts.length], i = Math.max(0, m.people.indexOf(it.who));
-  const side = m.people.length > 1 ? i / (m.people.length - 1) * 2 - 1 : 0;  // each person's posts come from their own direction
-  S.fly = { t0: S.t, dur: 1.9, live: !!live, back: null, from: [side * 1.1 * G.R, -.15 * G.R, -1.55 * G.R] };
+  const side = m.people.length > 1 ? i / (m.people.length - 1) * 2 - 1 : 0;  // each person's posts start at their own place on the back of the ring
+  const a0 = (270 + side * 50) * RAD;
+  S.fly = { t0: S.t, dur: 1.9, live: !!live, back: null, from: [G.R * Math.cos(a0), 0, G.R * Math.sin(a0)] };
   $("fx").setAttribute("class", "hue"); $("fx").style.setProperty("--h", HUES[i % HUES.length]);
   say(it, !!live);
 }
@@ -580,6 +569,11 @@ function model(d) {
 function headline() {
   const m = S.m; if (!m) return;
   const who = `${m.people.length} people and their coding agents, at the SF AI Research Hackathon.`;
+  [["n-base", m.base], ["n-rl", m.rl]].forEach(([id, v]) => {  // the two scores, alone, from the same values as the sentence
+    $(id).parentNode.hidden = !isFinite(v);
+    if (isFinite(v)) $(id).innerHTML = f(v) + "<small>%</small>";
+  });
+  $("lead").hidden = !isFinite(m.base);
   if (!isFinite(m.base)) { $("who").textContent = who; return; }
   const n = (m.how.match(/vote over (\d+)/) || [])[1];
   const how = [/\bcue\b/.test(m.how) && "the opening cue (three fixed tokens at the start of the answer)", n && `a majority vote over ${n} samples`].filter(Boolean);
@@ -613,11 +607,11 @@ const SEC = [
   ["s-how", "One board, one set of rules, many agents working in parallel."],
   ["s-also", "The tools the agents used, measured, and two pages made for fun."],
 ];
-$("sections").innerHTML = GROUPS.map((name, g) => `<section class="sec th" id="${SEC[g][0]}" style="--th:${TH[g]}" aria-labelledby="${SEC[g][0]}-h"><div class="sec-in">` +
+$("sections").innerHTML = GROUPS.map((name, g) => `<section class="sec" id="${SEC[g][0]}" aria-labelledby="${SEC[g][0]}-h"><div class="sec-in">` +
   `<header class="sec-head"><p class="sec-n">0${g + 1}</p><h2 id="${SEC[g][0]}-h">${name}</h2><p>${SEC[g][1]}</p>` +
   `</header><ol class="rows">` +
   PAGES.map((p, k) => p.g !== g ? "" : `<li><a class="row" href="${p.href}" data-k="${k}"><svg class="mini" viewBox="0 0 120 90" aria-hidden="true">${art(p.id)}</svg>` +
-    `<b>${esc(p.name)}${p.out ? " \u2197" : ""}</b><span>${esc(p.line)}</span><em></em><i aria-hidden="true">\u2192</i></a></li>`).join("") + "</ol></div></section>").join("");
+    `<b>${esc(p.name)}</b><span>${esc(p.line)}</span><em></em><i aria-hidden="true">${p.out ? "\u2197" : "\u2192"}</i></a></li>`).join("") + "</ol></div></section>").join("");
 if (still.matches) document.querySelectorAll("svg").forEach(v => v.pauseAnimations && v.pauseAnimations());
 
 build();
@@ -640,6 +634,7 @@ addEventListener("keydown", e => {
 addEventListener("hashchange", () => { const k = PAGES.findIndex(p => "#" + p.id === location.hash); if (k >= 0 && k !== S.sel) select(k, false); });
 addEventListener("pointermove", e => { if (e.pointerType === "mouse") { S.mx = e.clientX / innerWidth * 2 - 1; S.my = e.clientY / innerHeight * 2 - 1; } });
 narrow.addEventListener("change", () => { build(); draw(); });
+matchMedia("(max-width: 500px)").addEventListener("change", () => { build(); draw(); });  // the dial is not shown under 500 px
 addEventListener("resize", () => { G.min = geo().min; fit(); });
 $("svg").classList.add("enter");
 draw();
