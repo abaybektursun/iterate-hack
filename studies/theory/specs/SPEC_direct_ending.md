@@ -63,4 +63,4 @@ bootstrap interval over the 538 problems (10,000 resamples, seed 0) for every nu
 
 `studies/theory/results/direct/ending-01/`: `readout.json`, `examples.json` (one Math-edit answer counted as FNB, one
 finished with a block and failed), `run.json`. Read every Math-edit FNB answer and random-edit FNB answers to make 10
-in all; notes in `readout.json` `reading`.
+in all; notes in `reading.md` (amended after the run: a separate file instead of a `reading` key in `readout.json`).
