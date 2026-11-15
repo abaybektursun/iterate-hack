@@ -2982,26 +2982,31 @@ per problem against the mean of the reference's 4 samples, 95 % bootstrap over p
 467 of 500, 17 cap hits, 4,771 tokens per problem. Think-SFT cue 454 (25 cap hits, `results/wsp1/full500/sft1_cue-01/`), RL cue
 456 to 464 over 4 samples: M(1) minus RL +1.4 points [-0.6, 3.3]. The filed prediction was 467, with 460 or less refuting it.
 
-### fresh2026, n = 136, M(2) with the coefficient fixed: the gain transfers (`results/transplant/fresh2026-01/`, board work-8b4030)
+### fresh2026, n = 136, M(2) with the coefficient fixed: the gain transfers (`results/transplant/fresh2026-02/`, board work-8b4030)
 
 Amendment 2 of the spec, written before the runs. 136 competition problems published in 2026 (`specs/SPEC_fresh.md`), cue,
-T 1.0, cap 16,384, `jobs/run_fresh.py`, seeds 7,000,000 + 10,000 s. Three of the four samples (s = 0, 2, 3) are in; the
-references are the same three samples of Think-SFT cue and RL plain of work-7c069c (jobs -024256-58c8, -024432-d87b,
--024621-af01 and -024606-5843, -024700-b8c3, -024804-390f, rows in the team store under handoff/fresh/).
+T 1.0, cap 16,384, `jobs/run_fresh.py`, seeds 7,000,000 + 10,000 s, 4 samples. References: the 4 Think-SFT cue and 4 RL plain
+samples of work-7c069c at the same seeds (jobs -024256-58c8, -024347-94e1, -024432-d87b, -024621-af01 and -024606-5843,
+-024132-1f6e, -024700-b8c3, -024804-390f; rows in the team store under handoff/fresh/). Vote: `day1_vote.vote` over the 4
+samples; it reproduces the posted 75 and 57 of result-5251c9.
 
-| Model | Right of 136, per sample | Mean | Minus Think-SFT, points | Cap hits per sample | Right of finished | Vote over 3 |
+| Model | Right of 136, per sample | Mean | Minus Think-SFT, points | Cap hits per sample | Right of finished | Vote over 4 |
 |---|---|---|---|---|---|---|
-| RL-Math plain | 49, 53, 50 | 50.7 | | 21.0 | 42.9 % (148 of 345) | 54 |
-| Think-SFT | 65, 56, 60 | 60.3 | | 63.0 | 81.7 % (179 of 219) | 74 |
-| M(2) | 69, 70, 75 | 71.3 | +8.1 [4.4, 11.8] | 46.7 | 78.7 % (211 of 268) | 78 |
+| RL-Math plain | 49, 50, 53, 50 | 50.5 | | 21.0 | 42.8 % (197 of 460) | 57 |
+| Think-SFT | 65, 59, 56, 60 | 60.0 | | 62.0 | 80.4 % (238 of 296) | 75 |
+| M(2) | 69, 75, 70, 75 | 72.25 | +9.0 [5.3, 12.7] | 45.75 | 78.9 % (285 of 361) | 83 |
 
-- The prediction of amendment 2 holds on three samples: M(2) minus Think-SFT is +8.1 points with the interval above 0, on a
-  set the coefficient was not chosen on (the 328 gave +6.9). Against RL plain it is +15.2 [10.0, 20.6]. Cap hits fall by
-  12.0 points [-16.9, -7.6].
-- Under the vote the lead is not resolved: 78 against 74 of 136, +2.9 points [-1.5, 7.4].
-- Missing: sample 1 (its first box slowed to 5 requests in 15 minutes, its second failed with an NVML error, its third was
-  stopped with all boxes of the account at 16:15 UTC), MATH-500 for M(2) and hard328 samples 3 and 4 of M(2) (running on
-  boxes that were stopped at the same time; their disks are kept).
+- The prediction of amendment 2 holds: M(2) minus Think-SFT is +9.0 points per sample with the interval above 0, on a set
+  the coefficient was not chosen on (the 328 gave +6.9). Against RL plain it is +16.0 [11.2, 21.0]. Every M(2) sample is
+  above every Think-SFT sample.
+- Under the vote over 4 it is 83 against 75 of 136: +5.9 points [1.5, 11.0]; against RL's 57, +19.1 [12.5, 25.7]. 83 is the
+  highest count on this set so far.
+- As on the 328, the gain is finished answers: cap hits fall by 11.9 points [-16.4, -7.7] while the share of finished
+  answers that are right stays near Think-SFT's (78.9 against 80.4 %).
+- `results/transplant/fresh2026-01/` is the interim readout on samples 0, 2 and 3 (+8.1 [4.4, 11.8]; vote over 3: 78
+  against 74). Sample 1 needed three boxes (one slowed down, one failed with an NVML error, one was stopped with the account
+  at 16:15 UTC); its rows are job -082840-a8f8, folder `fresh_s1`.
+- Not run: MATH-500 for M(2) (its job was stopped with the account) and the vote over 4 on the 328 (samples 3 and 4).
 
 Run folders hold `readout.json`, `metrics.json` and `delta_sum.json` (per arm), `rows.jsonl` (arms and references, per answer)
 and `examples.json` (one right and one wrong finished answer per arm, with the prompt). Jobs: hard328 a = 1 -000934-51f9,
