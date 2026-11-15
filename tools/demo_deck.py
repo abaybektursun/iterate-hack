@@ -293,11 +293,13 @@ p, h1, h2, figure { margin: 0; }
 .fig .gl { font-size: 20px; font-weight: 600; fill: var(--ink); }
 .fig .base { stroke: var(--faint); stroke-width: 1; }
 
-.pair { position: absolute; left: 0; right: 0; top: 170px; display: flex; justify-content: center; gap: 90px; }
+.pair { position: absolute; left: 0; right: 0; top: 205px; display: flex; justify-content: center; gap: 90px; }
 .pair figcaption { font-size: 26px; font-weight: 560; margin: 0 0 18px 20px; }
 
 .sheets { display: flex; gap: 80px; margin-top: 30px; }
-.sheet { width: 330px; height: 427px; background: var(--sheet); border: 1px solid var(--rule); padding: 118px 34px 0; text-align: left; display: flex; flex-direction: column; gap: 10px; }
+/* a paper is white in both themes: the sheet carries the light values of these four tokens */
+.sheet { --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --rule: #d3d9de; color: var(--ink);
+  width: 330px; height: 427px; background: var(--sheet); border: 1px solid var(--rule); padding: 118px 34px 0; text-align: left; display: flex; flex-direction: column; gap: 10px; }
 .sheet b { font-size: 26px; font-weight: 560; line-height: 1.2; }
 .sheet span { font-size: 16px; font-weight: 500; color: var(--mute); }
 .sheet .lines { margin-top: 26px; display: flex; flex-direction: column; gap: 13px; }
