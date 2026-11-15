@@ -53,7 +53,7 @@ AFTER_RESTART = "T 1.0 / top-p 1.0, vote over 4 samples after restart"
 TABLE = {
     "opening-cue": {
         "group": GAIN,
-        "figure": lambda m: [points(m.PLAIN, m.CUE, m.N), "points on MATH-500, T 1.0"],
+        "figure": lambda m: [points(m.PLAIN, m.CUE, m.N), "points over the plain prompt, MATH-500, T 1.0"],
         "steps": lambda m: [step("Plain prompt", "base", m.PLAIN, m.N, m.DATA["artifact"]),
                             step("Opening cue", "base", m.CUE, m.N, m.DATA["artifact"]),
                             step("RL, one sample", "rl", m.RL, m.N, m.DATA["artifact"])]},
@@ -79,9 +79,15 @@ TABLE = {
     "equal-token-frontier": {
         "group": GAIN,
         "figure": lambda m: [f"{m._best['gap'][0]:+.1f}", f"points below one RL sample at {m._best['multiple']:.1f} times the tokens"]},
+    "one-difficulty-axis": {
+        "group": BEHAVIOUR,
+        "figure": lambda m: [f"{m.DATA['diff']['excess_mean']:+.2f}", "problems beyond one difficulty order, mean of 618 pairs of methods"]},
     "rl-edge-comes-early": {
         "group": BEHAVIOUR,
         "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap closed when the base model finishes RL's half-written answers"]},
+    "a-quarter-of-rl": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.Q_M} %", "of RL's gain on MATH-500 from the RL weight change scaled to a quarter"]},
     "eight-directions": {
         "group": WEIGHTS,
         "figure": lambda m: [points(*(next(s["right"] for s in m.DATA["states"] if s["key"] == k) for k in ("untrained", "rl-directions")), m.DATA["edit"]["n"]),
