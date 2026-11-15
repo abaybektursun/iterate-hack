@@ -1,0 +1,7 @@
+{
+ "job_id": "abaybektursun-1115-090252-65bf",
+ "commit": "b703ef1bce4bccc5a46b9b41cdbf1476d8fe80f4",
+ "command": "wsp_edit --recipe top8 --scale 0.02 --other think_sft --rounding stochastic --seed 0, then run_cell --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000",
+ "runner": "uv run tools/gpu.py submit h100 --hours 2",
+ "raw_answers": "runs/abaybektursun-1115-090252-65bf/answers.jsonl (uv run tools/gpu.py get abaybektursun-1115-090252-65bf)"
+}

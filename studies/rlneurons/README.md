@@ -4006,6 +4006,18 @@ RL on both sets; under the vote over four it is 7 problems behind RL. The edit i
 RL difference (8 directions per matrix, 0.11 % of the weight norm as intended; the written BF16 change is 0.19 % because of
 rounding noise), it does not reach RL without RL. No random-edit cell exists at size 1.5 (sizes 1 and 2: 158 and 167).
 
+Two controls (amendment 6, work-e1b23a), one sample each:
+
+| Cell | Right of 328 | Cap hits | On 251 | No box | Minus base cue, points [95 %] | Run folder, job |
+|---|---|---|---|---|---|---|
+| random rank-8 at size 1.5 (0.111 % of the weight norm) | 159 | 74 | 152 | 24 | -1.5 [-5.8, 2.7] | `edits/rand8x1.5_math31-01/`, `abaybektursun-1115-090241-0229` |
+| Think-SFT's 8 directions at Math's edit norm (`--scale 0.02`, 0.074 %) | 156 | 75 | 149 | 23 | -2.4 [-6.4, 1.5] | `edits/top8x0.02_think_sft-01/`, `abaybektursun-1115-090252-65bf` |
+
+Both predictions held. The random edit is flat at all five sizes (-1, 1, 1.5, 2, 3: 67 to 79 cap hits, 158 to 167 right). The
+largest 8 directions of Think-SFT's difference, at the size at which Math's give 192 right and 46 cap hits, change nothing (-11.0
+points against Math's [-15.6, -6.4]): fine-tuning on reasoning traces does not write the finishing directions into its largest
+directions. Limit: these are the top 8 of a difference 50 times larger than Math's, 2 % of its squared norm.
+
 Which reward writes the finishing directions (8 directions of each model added to the base):
 
 | Donor | Right of 328 | Cap hits | No box | Edit, % of weight norm | Run folder, job |
