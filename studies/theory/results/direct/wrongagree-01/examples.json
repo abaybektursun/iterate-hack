@@ -1,0 +1,188 @@
+[
+ {
+  "problem_index": 4,
+  "counts_for_statistic": true,
+  "why": "contested: right and wrong answer-bearing samples; its wrong pairs enter the pooled ratio",
+  "gold": "\\text{Evelyn}",
+  "samples": [
+   {
+    "sample": 0,
+    "extracted_v3": "Angela",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "Evelyn",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "Evelyn",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "Evelyn",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 4,
+    "extracted_v3": "Carla",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 5,
+    "extracted_v3": "Evelyn",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 6,
+    "extracted_v3": "Evelyn",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 7,
+    "extracted_v3": "Evelyn",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 8,
+    "extracted_v3": "Evelyn",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 9,
+    "extracted_v3": "Evelyn",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 10,
+    "extracted_v3": "Evelyn",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 11,
+    "extracted_v3": "Angela",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   }
+  ],
+  "agree_pairs": 1,
+  "pairs": 3
+ },
+ {
+  "problem_index": 12,
+  "counts_for_statistic": false,
+  "why": "only 1 wrong answer-bearing sample: no wrong pair, not contested",
+  "gold": "284",
+  "samples": [
+   {
+    "sample": 0,
+    "extracted_v3": "$284$",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "284",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "284",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "284",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 4,
+    "extracted_v3": "284",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 5,
+    "extracted_v3": "284",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 6,
+    "extracted_v3": "284",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 7,
+    "extracted_v3": "284",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 8,
+    "extracted_v3": "90",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 9,
+    "extracted_v3": "284",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 10,
+    "extracted_v3": "284",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   },
+   {
+    "sample": 11,
+    "extracted_v3": "284",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop"
+   }
+  ]
+ }
+]

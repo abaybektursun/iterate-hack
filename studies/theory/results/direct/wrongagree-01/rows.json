@@ -1,0 +1,18 @@
+[
+ {
+  "mechanism": "round-14/s5-a",
+  "claim": "The cued base's wrong finished answers at T 1.0 on contested MATH-500 problems are mostly one-off slips, so their pooled same-problem pairwise agreement is low but above chance (range 0.07-0.30).",
+  "result": "PENDING",
+  "verdict": "undecided",
+  "measured": "pooled wrong-pair agreement 0.262 [0.202, 0.324], n 142 problems (1,271 pairs, 570 wrong answers), null 0.005; interval crosses 0.30, about 380 problems would decide",
+  "added": "2026-11-15T22:50:24Z"
+ },
+ {
+  "mechanism": "round-14/s5-b",
+  "claim": "The cued base's wrong answers on contested MATH-500 problems concentrate on one recurring attractor value per problem, so their pooled same-problem pairwise agreement is high (range 0.42-1.0).",
+  "result": "PENDING",
+  "verdict": "refuted",
+  "measured": "pooled wrong-pair agreement 0.262 [0.202, 0.324], n 142 problems (1,271 pairs, 570 wrong answers), null 0.005; interval wholly below 0.42",
+  "added": "2026-11-15T22:50:24Z"
+ }
+]
