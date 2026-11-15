@@ -1,0 +1,419 @@
+{
+ "utc": "2026-11-15T16:32:52",
+ "work_items": [
+  "work-644fec",
+  "work-df5e0a",
+  "work-184476",
+  "work-16773f",
+  "work-f8ecb6",
+  "work-8b2ec9",
+  "work-60f040",
+  "work-a0d758",
+  "work-88e8d5",
+  "work-8b4030",
+  "work-502f19",
+  "work-dc9359"
+ ],
+ "targets": [
+  {
+   "id": "t01",
+   "item": "work-df5e0a",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + top-8 directions per matrix of Olmo-3.1 RL-Zero-Code delta at 1x",
+    "prompt": "Code cue",
+    "set": "HumanEval+ and MBPP+",
+    "n": 538,
+    "sampling": "T 1.0; top-p and token cap not stated",
+    "samples": "not stated",
+    "grader": "not stated"
+   },
+   "unit": "problems passed of 538",
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems does the Olmo 3 base pass with Code-RL 3.1's top 8 weight directions per matrix added at 1x size, using the Code cue at T 1.0?",
+   "quote": "base + Code 3.1's 8 directions at 1x, 1.5x, 2x"
+  },
+  {
+   "id": "t02",
+   "item": "work-df5e0a",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + top-8 directions per matrix of Olmo-3.1 RL-Zero-Code delta at 1.5x",
+    "prompt": "Code cue",
+    "set": "HumanEval+ and MBPP+",
+    "n": 538,
+    "sampling": "T 1.0; top-p and token cap not stated",
+    "samples": "not stated",
+    "grader": "not stated"
+   },
+   "unit": "problems passed of 538",
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems does the Olmo 3 base pass with Code-RL 3.1's top 8 weight directions per matrix added at 1.5x size, using the Code cue at T 1.0?",
+   "quote": "base + Code 3.1's 8 directions at 1x, 1.5x, 2x"
+  },
+  {
+   "id": "t03",
+   "item": "work-df5e0a",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + top-8 directions per matrix of Olmo-3.1 RL-Zero-Code delta at 2x",
+    "prompt": "Code cue",
+    "set": "HumanEval+ and MBPP+",
+    "n": 538,
+    "sampling": "T 1.0; top-p and token cap not stated",
+    "samples": "not stated",
+    "grader": "not stated"
+   },
+   "unit": "problems passed of 538",
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems does the Olmo 3 base pass with Code-RL 3.1's top 8 weight directions per matrix added at 2x size, using the Code cue at T 1.0?",
+   "quote": "base + Code 3.1's 8 directions at 1x, 1.5x, 2x"
+  },
+  {
+   "id": "t04",
+   "item": "work-df5e0a",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + random (rank-8) edit at 1.5x, size-matched control",
+    "prompt": "Code cue",
+    "set": "HumanEval+ and MBPP+",
+    "n": 538,
+    "sampling": "T 1.0; top-p and token cap not stated",
+    "samples": "not stated",
+    "grader": "not stated"
+   },
+   "unit": "problems passed of 538",
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems does the Olmo 3 base pass with a random weight edit at 1.5x size (control for the Code-RL directions), using the Code cue at T 1.0?",
+   "quote": "random at 1.5x"
+  },
+  {
+   "id": "t05",
+   "item": "work-df5e0a",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + top-8 directions per matrix of Olmo-3.1 RL-Zero-Math delta at 1.5x",
+    "prompt": "Code cue",
+    "set": "HumanEval+ and MBPP+",
+    "n": 538,
+    "sampling": "T 1.0; top-p and token cap not stated",
+    "samples": "not stated",
+    "grader": "not stated"
+   },
+   "unit": "problems passed of 538",
+   "what": "How many of the 538 HumanEval+ and MBPP+ problems does the Olmo 3 base pass with Math-RL 3.1's top 8 weight directions per matrix added at 1.5x size, using the Code cue at T 1.0?",
+   "quote": "and Math 3.1's at 1.5x, on HumanEval+ and MBPP+"
+  },
+  {
+   "id": "t06",
+   "item": "work-16773f",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 directions of (RL-Math 3.1 - base)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": 136,
+    "sampling": "not stated (seeds of SPEC_fresh)",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 136 (vote over 4)",
+   "what": "On the 136 fresh2026 contest problems, how many does the base plus 1.5x the top 8 RL-Math directions (with the cue) get right under a majority vote over 4 samples?",
+   "quote": "is it level with RL (57 vote, 50.5 single)"
+  },
+  {
+   "id": "t07",
+   "item": "work-16773f",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + 1.5 x top-8 directions of (RL-Math 3.1 - base)",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": 136,
+    "sampling": "not stated (seeds of SPEC_fresh)",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "mean right answers of 136 per single sample",
+   "what": "On the 136 fresh2026 contest problems, how many does the base plus 1.5x the top 8 RL-Math directions (with the cue) get right per single sample, averaged over 4 samples?",
+   "quote": "is it level with RL (57 vote, 50.5 single)"
+  },
+  {
+   "id": "t08",
+   "item": "work-f8ecb6",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math step 100",
+    "prompt": "plain",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and token cap not stated",
+    "samples": 4,
+    "grader": "v3"
+   },
+   "unit": "mean right answers of 500 over 4 samples",
+   "what": "Averaged over 4 samples (posted sample 0 plus 3 new), how many of the 500 MATH-500 problems does the RL-Zero-Math step-100 checkpoint get right with the plain prompt at T 1.0, grader v3?",
+   "quote": "ckptcue3: 3 more samples of step-100 plain, step-100 cue, step-400 plain (MATH-500, T 1.0, v3)"
+  },
+  {
+   "id": "t09",
+   "item": "work-f8ecb6",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math step 100",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and token cap not stated",
+    "samples": 4,
+    "grader": "v3"
+   },
+   "unit": "mean right answers of 500 over 4 samples",
+   "what": "Averaged over 4 samples (posted sample 0 plus 3 new), how many of the 500 MATH-500 problems does the RL-Zero-Math step-100 checkpoint get right with the opening cue at T 1.0, grader v3?",
+   "quote": "ckptcue3: 3 more samples of step-100 plain, step-100 cue, step-400 plain (MATH-500, T 1.0, v3)"
+  },
+  {
+   "id": "t10",
+   "item": "work-f8ecb6",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math step 400",
+    "prompt": "plain",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and token cap not stated",
+    "samples": 4,
+    "grader": "v3"
+   },
+   "unit": "mean right answers of 500 over 4 samples",
+   "what": "Averaged over 4 samples (posted sample 0 plus 3 new), how many of the 500 MATH-500 problems does the RL-Zero-Math step-400 checkpoint get right with the plain prompt at T 1.0, grader v3?",
+   "quote": "ckptcue3: 3 more samples of step-100 plain, step-100 cue, step-400 plain (MATH-500, T 1.0, v3)"
+  },
+  {
+   "id": "t11",
+   "item": "work-f8ecb6",
+   "cell": {
+    "model": "Olmo-3.1-7B-RL-Zero-Math step 100 (plain) vs Olmo-3-1025-7B base (cue)",
+    "prompt": "plain vs cue",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and token cap not stated",
+    "samples": 4,
+    "grader": "v3"
+   },
+   "unit": "difference in points (step-100 plain minus cued base), 4 samples",
+   "what": "On MATH-500 at T 1.0 with grader v3, by how many points does the RL step-100 checkpoint with the plain prompt beat the untrained base with the opening cue, averaged over 4 samples each?",
+   "quote": "so the step-100 vs cued-base difference has a 4-sample interval"
+  },
+  {
+   "id": "t12",
+   "item": "work-8b2ec9",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "Think-SFT's own ChatML chat template with <think>",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "T 1.0, token cap 32,768; top-p not stated",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "right answers of 328",
+   "what": "How many of the 328 harder problems does Think-SFT get right in its own ChatML <think> chat format (no base cue) at T 1.0 with a 32,768-token cap, one sample, grader v3?",
+   "quote": "hard328 and MATH-500, T 1.0, v3, 1 sample, cap 32,768 scored also at 16,384, paired with cue 230/207"
+  },
+  {
+   "id": "t13",
+   "item": "work-8b2ec9",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "Think-SFT's own ChatML chat template with <think>",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "T 1.0, same answers scored at token cap 16,384; top-p not stated",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "right answers of 328",
+   "what": "How many of the 328 harder problems does Think-SFT get right in its own ChatML <think> chat format at T 1.0 when the same answers are scored at a 16,384-token cap, one sample, grader v3?",
+   "quote": "hard328 and MATH-500, T 1.0, v3, 1 sample, cap 32,768 scored also at 16,384, paired with cue 230/207"
+  },
+  {
+   "id": "t14",
+   "item": "work-8b2ec9",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "Think-SFT's own ChatML chat template with <think>",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0, token cap 32,768; top-p not stated",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "right answers of 500",
+   "what": "How many of the 500 MATH-500 problems does Think-SFT get right in its own ChatML <think> chat format (no base cue) at T 1.0 with a 32,768-token cap, one sample, grader v3?",
+   "quote": "hard328 and MATH-500, T 1.0, v3, 1 sample, cap 32,768 scored also at 16,384, paired with cue 230/207"
+  },
+  {
+   "id": "t15",
+   "item": "work-8b2ec9",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "Think-SFT's own ChatML chat template with <think>",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0, same answers scored at token cap 16,384; top-p not stated",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "right answers of 500",
+   "what": "How many of the 500 MATH-500 problems does Think-SFT get right in its own ChatML <think> chat format at T 1.0 when the same answers are scored at a 16,384-token cap, one sample, grader v3?",
+   "quote": "hard328 and MATH-500, T 1.0, v3, 1 sample, cap 32,768 scored also at 16,384, paired with cue 230/207"
+  },
+  {
+   "id": "t16",
+   "item": "work-8b2ec9",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "own ChatML template with <think> vs raw template + base cue (230)",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "T 1.0, token cap 32,768; top-p not stated",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "difference in points (native format minus raw template + cue), paired",
+   "what": "On the 328 harder problems at T 1.0 with a 32,768-token cap, by how many points does Think-SFT in its own ChatML <think> format beat Think-SFT with the raw template and the base's cue (230 of 328)?",
+   "quote": "hard328 and MATH-500, T 1.0, v3, 1 sample, cap 32,768 scored also at 16,384, paired with cue 230/207"
+  },
+  {
+   "id": "t17",
+   "item": "work-8b2ec9",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "own ChatML template with <think> vs raw template + base cue (207)",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "T 1.0, scored at token cap 16,384; top-p not stated",
+    "samples": 1,
+    "grader": "v3"
+   },
+   "unit": "difference in points (native format minus raw template + cue), paired",
+   "what": "On the 328 harder problems at T 1.0 scored at a 16,384-token cap, by how many points does Think-SFT in its own ChatML <think> format beat Think-SFT with the raw template and the base's cue (207 of 328)?",
+   "quote": "hard328 and MATH-500, T 1.0, v3, 1 sample, cap 32,768 scored also at 16,384, paired with cue 230/207"
+  },
+  {
+   "id": "t18",
+   "item": "work-60f040",
+   "cell": {
+    "model": "Olmo-3-1025-7B base",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and token cap not stated",
+    "samples": 9,
+    "grader": "v3"
+   },
+   "unit": "right answers of 500 (vote over 9)",
+   "what": "How many of the 500 MATH-500 problems does the untrained Olmo 3 base with the opening cue get right under a majority vote over 9 samples at T 1.0, grader v3?",
+   "quote": "vote over 9 = 456 [449, 462] of 500 (result-c637b2)"
+  },
+  {
+   "id": "t19",
+   "item": "work-60f040",
+   "cell": {
+    "model": "Olmo-3-1025-7B base",
+    "prompt": "cue",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "T 1.0; top-p and token cap not stated",
+    "samples": 12,
+    "grader": "v3"
+   },
+   "unit": "right answers of 500 (vote over 12)",
+   "what": "How many of the 500 MATH-500 problems does the untrained Olmo 3 base with the opening cue get right under a majority vote over 12 samples at T 1.0, grader v3?",
+   "quote": "Vote over k = 1..12 samples of the untrained cued base on MATH-500"
+  },
+  {
+   "id": "t20",
+   "item": "work-8b4030",
+   "cell": {
+    "model": "Think-SFT + 2 x (RL-Math - base)",
+    "prompt": "not stated",
+    "set": "fresh2026",
+    "n": 136,
+    "sampling": "not stated (seeds of SPEC_fresh)",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "mean right answers of 136 per single sample",
+   "what": "On the 136 fresh2026 contest problems, how many does Think-SFT plus twice the RL-Math weight change get right per single sample, averaged over all 4 samples?",
+   "quote": "Think-SFT + 2 x (RL-Math - base) on fresh2026 (136 problems, 4 samples, seeds of SPEC_fresh)"
+  },
+  {
+   "id": "t21",
+   "item": "work-8b4030",
+   "cell": {
+    "model": "Think-SFT + 2 x (RL-Math - base)",
+    "prompt": "not stated",
+    "set": "fresh2026",
+    "n": 136,
+    "sampling": "not stated (seeds of SPEC_fresh)",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 136 (vote over 4)",
+   "what": "On the 136 fresh2026 contest problems, how many does Think-SFT plus twice the RL-Math weight change get right under a majority vote over 4 samples?",
+   "quote": "Think-SFT + 2 x (RL-Math - base) on fresh2026 (136 problems, 4 samples, seeds of SPEC_fresh)"
+  },
+  {
+   "id": "t22",
+   "item": "work-8b4030",
+   "cell": {
+    "model": "Think-SFT + 2 x (RL-Math - base)",
+    "prompt": "not stated",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "not stated",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328 (vote over 4)",
+   "what": "On the 328 harder problems, how many does Think-SFT plus twice the RL-Math weight change get right under a majority vote over 4 samples (two posted, two new)?",
+   "quote": "hard328 samples 3-4 for the vote over 4"
+  },
+  {
+   "id": "t23",
+   "item": "work-8b4030",
+   "cell": {
+    "model": "Think-SFT + 2 x (RL-Math - base)",
+    "prompt": "not stated",
+    "set": "MATH-500",
+    "n": 500,
+    "sampling": "not stated",
+    "samples": 1,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 500",
+   "what": "How many of the 500 MATH-500 problems does Think-SFT plus twice the RL-Math weight change get right in one sample?",
+   "quote": "MATH-500 1 sample"
+  },
+  {
+   "id": "t24",
+   "item": "work-dc9359",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "token cap 32,768; temperature and top-p not stated",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328 (vote over 4)",
+   "what": "On the 328 harder problems, how many does Think-SFT with the cue get right under a majority vote over 4 samples when the token cap is 32,768?",
+   "quote": "Think-SFT + cue vote over 4 at token cap 32,768 on hard328 (samples 1-3 new, sample 0 = the cap32 run)"
+  },
+  {
+   "id": "t25",
+   "item": "work-dc9359",
+   "cell": {
+    "model": "allenai/Olmo-3-7B-Think-SFT",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": 136,
+    "sampling": "token cap 32,768; temperature and top-p not stated",
+    "samples": 4,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 136 (vote over 4)",
+   "what": "On the 136 fresh2026 contest problems, how many does Think-SFT with the cue get right under a majority vote over 4 samples when the token cap is 32,768?",
+   "quote": "and fresh2026 (4 samples), each answer scored at 16,384 and 32,768"
+  }
+ ]
+}

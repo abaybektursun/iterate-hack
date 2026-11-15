@@ -531,7 +531,7 @@ G4 refuted (no change to the base predicted above the best known count). G5 refu
 Every unrefuted theory of the newest round (at most 6, survivors first, then by total gain) and two readers with no
 theory forecast the numbers the open `work` items will report, before they post. Code `lib/forecast.py` (imports the
 job runner and the log density from `lib/round.py`), prompts `lib/prompts/forecast_targets.md`, `forecast.md`,
-`forecast_score.md`.
+`forecast_score.md`, `forecast_propose.md` (`--propose N [--lens "<family of causes>"]`).
 
 ```
 uv run studies/theory/lib/forecast.py make studies/theory/results/forecast/run-<nn>   # fails if the folder exists
@@ -571,6 +571,31 @@ adds 2 targets to run-01 and 3 to run-02. run-01, 11 of 20 measured: reader-2 10
 f2-m01 (autobench buys votes by shortening samples) was outside both readers on t14 (338 against 362 and 356) and t15
 (139 against 190 and 197) and right on both, +3.25 nats over 4 targets. f2-m02 -8.62 over 4, f2-m03 -7.07 over 3, f2-m05
 -5.89 over 3. P3 so far: 2 of 7 disagreements right (needs 8 to decide).
+
+Fourth score (16:33 UTC, `scores-2026-11-15T163347.*`, `scores-2026-11-15T163337.*`). run-01, 15 of 20 measured:
+reader-2 14 of 15 inside, +3.00 nats; reader-1 11 of 15, -8.40; r5-m03-rival +1.83 over 3; r6-account-rival +0.91
+over 2. run-02, 9 of 17 measured: f2-m01 4 of 6 inside, +5.38 nats (mean +0.90 over 6 targets, so P2 holds for f2-m01);
+f2-m04 +1.44 over 3; reader-1 +0.96 over 9; reader-2 -4.12 over 9; f2-m06 -0.19 over 4; f2-m03 -5.45 over 5; f2-m05
+-5.89 over 3; f2-m02 -8.62 over 4. P3 so far: 3 of 8 disagreements right (more than 1 in 4: P3 holds at this count).
+
+**run-03 to run-08** (plan `specs/SPEC_forecast03.md`; `make ... --propose 6 --lens "<lens>"`, six processes at once,
+commit 2a88c41; snapshot 2026-11-15 16:32:52 UTC; `results/forecast/run-03/` ... `run-08/`). `--lens` gives the
+proposing job the family its mechanisms come from; the rule that a mechanism lies outside both readers on 3 targets is
+gone; every forecast carries `vs_readers` ("agree ..." or "disagree ..." and why); `forecasts.md` lists every mechanism
+forecast beside both readers' values and intervals. Lenses: run-03 stopping (cap, loops, end-of-text, answer markers);
+run-04 sampling (temperature, top-p, next-token entropy, votes); run-05 weight space (the RL change, top directions,
+scaling, transplants); run-06 training data and objective (Think-SFT imitation, RL reward, pretraining, exposure);
+run-07 problem structure (difficulty, domain, answer type, derivation length); run-08 the grader and the measurement
+(extraction, equivalence, seeds, set composition). Each run rebuilt its own targets (23, 31, 25, 31, 24, 23 from 12 open
+work items) and readers. All 36 mechanisms passed the checks (L1 holds); runs 04 and 06 needed one send-back each (a
+statement over 80 words). Mechanisms forecast 12 to 19 targets each and say "disagree" on 0 to 5 of them; without the
+forced rule they stay near the readers: the largest gap on any target is 0.8 of the readers' mean 90 % half-width
+(run-05/f2-m03, Code-RL top-8 at 1.5x on HumanEval+ and MBPP+, 385 against 357 and 362), and no centre lies outside
+both readers' intervals. No two mechanisms from different lenses have disjoint intervals on the same open target; the
+nearest split is the same code cell (Code-RL top-8 at 1.5x and 2x, work-df5e0a): run-05/f2-m03 385 [360, 408] and
+run-05/f2-m06 378 [350, 402] (weight space) against run-08/f2-m03 342 [322, 362] and 330 [308, 352] (the edit adds only
+by converting cap hits). First score (16:45 UTC, `scores.*`): 0 targets measured in any of the six. L2 and L3 not
+decided.
 
 ## Engine version 8 (forecasts inside the round)
 
