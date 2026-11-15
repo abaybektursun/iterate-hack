@@ -566,6 +566,33 @@ round-09/problems-m03 (395 [365, 420]), round-09/weights-m06 (365 [330, 400], th
   committed): `runs/<job-id>/` in the worktree `iterate-hack-cells-r9b`; the two finished jobs also as `jobs/<job-id>.tar` in the
   team store.
 
+**cell-r9-m11-01** (round-09 entry m11, readout `m11-r1`; plan `specs/SPEC_cells_r9a.md`; board work-739554). Base - 1.0 x the top 8
+singular directions per matrix of (RL-Math 3.1 - base) (`rlneurons/jobs/wsp_edit.py --recipe top8 --other rl_math --scale -1.0`,
+stochastic BF16 rounding seed 0), cue, MATH-500, T 1.0 / top-p 1.0, seed 41,000,000 + index (the seeds of the stored cued base), cap
+16,384, grader v3. Stopped by the coordinator before the end: only the odd-index half is complete. **20 cap hits of 250** (90 %
+bootstrap [13, 27]); the cued base at the same seeds (sample 0 of `rlneurons/results/day1_3/math500_base_cue-01`) has 10 on the same
+250, +10 [3, 18]. Right v3 188 of 250 [177, 199] against the base's 209, -21 [-33, -9]. 4,187 generated tokens per problem (median
+1,569; base 3,559).
+- Forecasts are cap hits of all 500; nothing is scaled. The rows bound that count to [30, 176]: 20 found in the odd half, 10 among the
+  104 even-index rows that finished before the stop, 146 even-index problems with no row. round-09/stopping-m03 (16 [8, 26], sign
+  does not matter, -1 cuts cap hits like +1) is refuted by the lower bound; every other forecast (25 to 60) is not decided. On the
+  same 250 the edit doubles the base's cap hits (15 problems the base finishes now hit the cap, 5 the other way): the sign matters.
+- Raw answers (10 read): 141 of 250 answers carry no `\boxed` and end with a plain "Answer: X" line (103 of them right), as the
+  size -1 edit did on hard328 (61 unboxed against 23). Cap hits stop mid-derivation (problems 9, 11, 43); finished wrong answers
+  include a binary-to-octal answer that degenerates into one repeated digit string for 16,238 tokens (problem 71), a numeric
+  approximation boxed as 13596 for gold 13535 (problem 21), and a box of -1 after the text names 3 (problem 19). Right answers are
+  short "Okay, let's see" derivations (problem 3, 654 tokens).
+- Caveat: n 250 (odd indices), not 500. The 104 finished even-index rows are summarised apart in `metrics.json` `partial_shard`
+  (10 cap hits, 76 right; base 10 and 81 on the same problems) and are not in the readout: they are the answers that finished first,
+  so biased toward short ones. Missing problems: the 146 listed in `partial_shard.missing`. Round-09 entry m13 was dropped before it
+  generated (its separation came from the same refuted forecaster).
+- Files: `analysis/cells_r9a.py` (readout); outputs `results/experiments/cell-r9-m11-01/` (`run.json`, `metrics.json`,
+  `per_problem.json` with the base's row per problem, `examples.json`); the count is in `results/wide/round-09/measured.json`.
+- Jobs (commit `4a524a2`, command in `run.json`; each ran a 2-problem 256-token smoke run first, in `smoke/`): shard 1/2
+  `ih-1115-184625-e391` (complete); shard 0/2 `ih-1115-195318-e122` (stopped at 104 of 250 rows). An earlier shard 0/2 run was cut
+  off at about 216 rows when its machine stopped and left no rows. Raw answers (not committed): `runs/<job-id>/` in the worktree
+  `iterate-hack-cells-r9a`.
+
 ## Round 06 (2026-11-15, cutoff 11-15 06:51:23 UTC, coordinator frustea)
 
 Plan `specs/SPEC_round06.md` (before the run), engine version 6.3 with `--account-from results/account/run-03`, work-a9a6dd, launched with
