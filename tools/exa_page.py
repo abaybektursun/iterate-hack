@@ -59,14 +59,17 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; 
 html { scroll-behavior: smooth; }
 .wrap { max-width: 1840px; margin: 0 auto; padding: 20px 40px 56px; }
 mark { background: none; color: var(--blue); }
+p a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--faint); }
 .first h1, h2, .thesis { margin: 0; text-wrap: balance; font-weight: 300; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-stretch: 102%; letter-spacing: -.016em; }
 p { margin: 0; }
 code { font: inherit; font-weight: 600; }
 .soft { color: var(--soft); }
 
-nav { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 26px; padding-top: 14px; font-size: 13px; color: var(--mute); }
+/* The section links: a plain row under the lead, each link tall enough to tap. */
+nav { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-bottom: 10px; font-size: 13px; color: var(--mute); }
+nav div { display: contents; }
+nav b, nav a { padding: 12px 0; }
 nav b { font-weight: 600; color: var(--ink); }
-nav div { display: flex; flex-wrap: wrap; gap: 6px 26px; }
 nav a { text-decoration: none; }
 nav a:hover { color: var(--ink); }
 
@@ -86,8 +89,8 @@ h2 { margin-bottom: 28px; max-width: 32ch; }
 .note { margin-top: 22px; max-width: 76ch; font-size: 13.5px; color: var(--soft); }
 
 /* The first screen: the claim, five numbers on fine top rules, then the scene. Paddings stay tight so all of it fits 860px. */
-.first { padding-block: 22px 24px; }
-.first h1 { margin-bottom: 18px; }
+.first { padding-block: clamp(28px, 7vh, 76px) 24px; }
+.first h1 { margin-bottom: 4px; }
 .nums { list-style: none; margin: 0 0 22px; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0 28px; }
 .nums li { border-top: 1px solid var(--rule); padding-top: 9px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .nums b { font-weight: 300; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-stretch: 102%; letter-spacing: -.016em; line-height: 1; }
@@ -111,9 +114,9 @@ h2 { margin-bottom: 28px; max-width: 32ch; }
 .blk { border-top: 1px solid var(--rule); padding-block: 10px 12px; overflow-wrap: anywhere; line-height: 1.45; }
 .blk .cap { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
 .blk .asked { font-size: 17px; line-height: 1.3; font-weight: 380; }
-.pick { display: flex; gap: 6px; }
+.pick { display: flex; gap: 8px; }
 .pick button { appearance: none; min-width: 44px; height: 44px; padding: 0 12px; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: none; color: var(--mute); font: inherit; font-weight: 600; cursor: pointer; }
-.pick button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--blue); }
+.pick button[aria-pressed="true"] { color: var(--ink); border-bottom: 2px solid var(--blue); }
 #sc text { font-weight: 600; fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round; }
 #sc .tube { fill: url(#sc-porc); stroke: var(--porc-rim); stroke-width: .7; }
 #sc .hi { fill: var(--porc-hi); opacity: .9; }
@@ -156,7 +159,9 @@ footer { border-top: 1px solid var(--rule); padding-top: 18px; font-size: 13px; 
   .name { font-stretch: 112%; margin-right: 0; }
   .hero { grid-template-columns: 1fr; gap: 32px; padding-block: 28px 32px; }
   .first { padding-block: 20px 28px; }
-  .nums { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px 20px; }
+  .nums { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px 20px; }  /* three, then two: no cell alone in a row */
+  .nums li { grid-column: span 2; }
+  .nums li:nth-child(n+4) { grid-column: span 3; }
   section { padding-block: 40px; }
   .replay { grid-template-columns: 1fr; gap: 18px; }
   .scene { height: 320px; }
@@ -164,6 +169,10 @@ footer { border-top: 1px solid var(--rule); padding-top: 18px; font-size: 13px; 
   td, td:first-child, td:last-child { display: block; width: auto; border: 0; padding: 2px 0; overflow-wrap: anywhere; }
   .asks { columns: 1; }
   .limits { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {  /* two, two, and the fifth across the row */
+  .nums li, .nums li:nth-child(n+4) { grid-column: span 3; }
+  .nums li:last-child { grid-column: 1 / -1; }
 }
 </style>
 </head>
@@ -178,13 +187,12 @@ footer { border-top: 1px solid var(--rule); padding-top: 18px; font-size: 13px; 
     <a href="/findings">Findings</a>
   </header>
 
-<nav>
-  <b>Exa in the Swarm</b>
-  <div><a href="#searches">Four searches</a><a href="#story">One search</a><a href="#asked">How agents asked</a><a href="#wiring">Wiring</a><a href="#limits">Limits</a></div>
-</nav>
-
 <div class="first" id="searches">
   <h1>Our agents ask Exa before they run an experiment.</h1>
+  <nav>
+    <b>Exa in the Swarm</b>
+    <div><a href="#searches">Four searches</a><a href="#story">One search</a><a href="#asked">How agents asked</a><a href="#wiring">Wiring</a><a href="#limits">Limits</a></div>
+  </nav>
   <ul class="nums">
     <li><b>61</b><span>agents and subagents searched</span></li>
     <li><b>261</b><span>arXiv papers surfaced</span></li>
@@ -539,7 +547,7 @@ function size() {
   svg.setAttribute("viewBox", `0 0 ${f1(w)} ${f1(h)}`);
   cvs.width = Math.round(w * dpr); cvs.height = Math.round(h * dpr);
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  put(floorEl, "cx", f1(G.cx)); put(floorEl, "cy", f1(G.cy - 10 * s)); put(floorEl, "rx", f1(420 * s)); put(floorEl, "ry", f1(130 * s));
+  put(floorEl, "cx", f1(G.cx)); put(floorEl, "cy", f1(G.cy - 10 * s)); put(floorEl, "rx", f1(Math.min(420 * s, G.cx, w - G.cx))); put(floorEl, "ry", f1(Math.min(130 * s, G.cy - 10 * s, h - G.cy + 10 * s)));  // the shade fades out inside the box, so its edge never shows
   stations.forEach(st => put(st.e, "font-size", f1(fs)));
   put(cloudLbl, "font-size", f1(fs * .92));
   dotLabels.forEach(e => put(e, "font-size", f1(fs * .92)));

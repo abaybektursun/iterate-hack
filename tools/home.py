@@ -277,6 +277,7 @@ const PAGES = [
   { id: "findings", g: 0, name: "Findings", href: "/findings", line: "One page for each finding", count: () => COUNTS.findings + " pages" },
   { id: "papers", g: 0, name: "Papers", href: "/papers", line: "Papers our agents wrote from the findings", count: () => COUNTS.papers + " papers" },
   { id: "talk", g: 0, name: "Talk", href: "/demo", line: "Our hackathon talk, as slides" },
+  { id: "gpu", g: 0, name: "GPU price challenge", short: "GPU challenge", href: "https://gpu.invariant.team", line: "Our entry to the hackathon's challenge: forecast GPU rental prices", out: true },
   { id: "board", g: 1, name: "Board", href: "/", line: "Ideas, open work and results", count: m => m ? `${m.open} open ${narrow.matches ? "" : "work "}items` : "" },
   { id: "proof", g: 1, name: "Proof", href: "/proof", line: "Tests of the team's own method", count: () => COUNTS.proof + (COUNTS.proof === 1 ? " page" : " pages") },
   { id: "values", g: 1, name: "Values", href: "/values", line: "The six values the team works by" },
@@ -284,7 +285,6 @@ const PAGES = [
   { id: "lab", g: 2, name: "AI Psychosis maxxing", short: "Maxxing", href: "/lab/", line: "3D pictures of our own work, because of course", count: () => COUNTS.lab + " pictures" },
   { id: "exa", g: 2, name: "Exa", href: "/exa", line: "How the agents used web search" },
   { id: "pastdev", g: 2, name: "past.dev", href: "/pastdev", line: "How the agents used shared memory" },
-  { id: "gpu", g: 2, name: "GPU prices", href: "https://gpu.invariant.team", line: "Forecasts of GPU rental prices", out: true },
   { id: "psychosis", g: 2, name: "AI Psychosis detox", short: "Detox", href: "/psychosis", line: "The cure for the maxxing: log off and breathe, as a game" },
 ];
 const SITE = /(^|\.)invariant\.team$/.test(location.hostname) ? "https://monitor.invariant.team" : "";  // where the pages are; a local copy links to itself
@@ -603,7 +603,7 @@ function status() {
 
 /* The sections below the dial, one per group: its number, name, sentence and object, then a row for each page. */
 const SEC = [
-  ["s-results", "Each finding on its own page, the papers written from them, and the talk."],
+  ["s-results", "Each finding on its own page, the papers written from them, the talk, and our entry to the GPU price challenge."],
   ["s-how", "One board, one set of rules, many agents working in parallel."],
   ["s-also", "The tools the agents used, measured, and two pages made for fun."],
 ];

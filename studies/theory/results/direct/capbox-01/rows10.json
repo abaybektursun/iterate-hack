@@ -1,0 +1,112 @@
+[
+ {
+  "problem_index": 79,
+  "sample": 0,
+  "score_v3": 1,
+  "gold": "321",
+  "mode": "boxed",
+  "extracted": "321",
+  "start_share": 0.9763,
+  "around_answer": "ore, the original product is equal to 8321. \n\nTherefore, the value is 8321, which is the product. Now we need to find this modulo 1000. \n\n8321 divided by 1000 is 8*1000 + 321, so the remainder is 321. \n\nTherefore, the answer is 321. Therefore, I put the final answer in the boxed. \n\n**Final Answer**\n\\boxed{321}\n\nTo solve the problem, we start by recognizing that \\(\\omega\\) is a primitive 13th root of unity, meaning \\(\\omega^{13} = 1\\) and \\(\\omega \\neq 1\\). The given product is:\n\n\\[\n\\prod_{k=0}^{",
+  "tail": "it into two separate products:\n\n\\[\n\\left[ \\prod_{k=0}^{12} (\\omega^k - (1 + i)) \\right] \\left[ \\prod_{k=0}^{12} (\\omega^k - (1 - i)) \\right]\n\\]\n\nEach of these products is a polynomial evaluated at specific points. Since \\(\\omega^k\\) are the 13th roots of unity, we evaluate the polynomials \\(x^{13} -"
+ },
+ {
+  "problem_index": 79,
+  "sample": 2,
+  "score_v3": 1,
+  "gold": "321",
+  "mode": "boxed",
+  "extracted": "321",
+  "start_share": 0.9598,
+  "around_answer": " -64i=65 -64i. Correct.\n\nThen, multiplying (65+64i)(65-64i):\n\n=65^2 - (64i)^2\n\n= 65\u00b2 -64\u00b2 (i\u00b2)\n\n= 4225 - 4096*(-1)\n\n= 4225 +4096= 8321. Correct. 4225+4096 is indeed 8321. So remainder when divided by1000 is 8321 mod1000 is 321. Thus, the answer is 321. So I think this is correct. \n\n**Final Answer**\n\\boxed{321}\n\nTo solve the problem, we need to find the remainder when the product \\(\\prod_{k=0}^{12} (2 - 2\\omega^k + \\omega^{2k})\\) is divided by 1000, where \\(\\omega\\) is a primitive 13th root of un",
+  "tail": "= -64 - 64i\n   \\]\n   Similarly:\n   \\[\n   (1 - i)^2 = -2i \\implies (1 - i)^{13} = (-2i)^6 (1 - i) = (-64)(1 - i) = -64 + 64i\n   \\]\n   Therefore:\n   \\[\n   F(1 + i) = -64 - 64i - 1 = -65 - 64i\n   \\]\n   \\[\n   F(1 - i) = -64 + 64i - 1 = -65 + 64i\n   \\]\n\n6. **Evaluate the Resultant:**\n   Substituting back"
+ },
+ {
+  "problem_index": 133,
+  "sample": 0,
+  "score_v3": 1,
+  "gold": "1",
+  "mode": "boxed",
+  "extracted": "1",
+  "start_share": 0.9828,
+  "around_answer": "ne a.\n\n Thus, total number of ordered pairs is the number of such b's that contribute one or more a's, but since each valid b gives at least one a, and since there is one such b, the total number of ordered pairs is 1. Hence, the answer is 1.\n\n Thus, the answer should be \\boxed{1}\n\n**Final Answer**\n\\boxed{1}\n\nTo solve the equation \\((1 + 2a)(2 + 2b)(2a + b) = 32ab\\) for ordered pairs of positive real numbers \\((a, b)\\), we start by making substitutions to simplify the equation. Let \\(x = 2a\\) an",
+  "tail": "+ x)(2 + y)(2x + y)}{2} = 8xy \\implies (1 + x)(2 + y)(2x + y) = 16xy\n\\]\n\nExpanding \\((1 + x)(2 + y)\\):\n\n\\[\n(1 + x)(2 + y) = 2 + y + 2x + xy = 2 + 2x + y + xy\n\\]\n\nNow, multiply this result by \\((2x + y)\\):\n\n\\[\n(2 + 2x + y + xy)(2x + y)\n\\]\n\nExpanding this product:\n\n\\[\n= 2(2x + y) + 2x(2x + y) + y(2x +"
+ },
+ {
+  "problem_index": 187,
+  "sample": 2,
+  "score_v3": 1,
+  "gold": "\\sqrt{6}",
+  "mode": "boxed",
+  "extracted": "\\sqrt{6}",
+  "start_share": 0.927,
+  "around_answer": "sqrt(1/4 +23/4)=sqrt(24/4)=sqrt(6). So the value of MD is \\sqrt{6}. \n\nThus, boxed answer is \\boxed{\\sqrt{6}} \n\nTherefore, I think the answer is sqrt(6). Thus, it\u2019s correct. Perhaps c=10 is the value that cancels the terms, giving this nice result. So I\u2019ll go with \\boxed{\\sqrt{6}}.\n\n**Final Answer**\n\\boxed{\\sqrt{6}}\n\nTo solve the problem, we will use a coordinate-based approach and the properties of the isosceles trapezoid and the circle.\n\n1. **Coordinate Setup:**\n   - Place \\(D\\) at \\((0, 0)\\) a",
+  "tail": "  - Substituting \\(c = 10\\) into the equation for \\(h^2\\):\n     \\[\n     h^2 = \\frac{-10^2 + 16 \\cdot 10 + 32}{4} = \\frac{-100 + 160 + 32}{4} = \\frac{92}{4} = 23\n     \\]\n     So, \\(h = \\sqrt{23}\\).\n\n6. **Finding MD:**\n   - The coordinates of \\(M\\) are \\(\\left(\\frac{10-8}{4}, \\frac{\\sqrt{23}}{2}\\right"
+ },
+ {
+  "problem_index": 300,
+  "sample": 2,
+  "score_v3": 1,
+  "gold": "2302",
+  "mode": "boxed",
+  "extracted": "2302",
+  "start_share": 0.9945,
+  "around_answer": "n a box. \n\nBut before finalizing, I should check once more if there any numbers missed or misordered. For example, after a=2 numbers end at 2320 (position 9), the next a=3 numbers start at 3022 which is position10. So 2302 is indeed the eighth number. Thus, correct. \n\nTherefore, the final answer is \\boxed{2302}.\n\nTo solve the problem, we need to determine the median of the set \\( S \\) of four-digit positive integers where the sum of the squares of their digits is 17. The set \\( S \\) consists of ",
+  "tail": "rrect. \n\nTherefore, the final answer is \\boxed{2302}.\n\nTo solve the problem, we need to determine the median of the set \\( S \\) of four-digit positive integers where the sum of the squares of their digits is 17. The set \\( S \\) consists of numbers of the form \\( 1000a + 100b + 10c + d \\) where \\( a,"
+ },
+ {
+  "problem_index": 333,
+  "sample": 3,
+  "score_v3": 1,
+  "gold": "5",
+  "mode": "boxed",
+  "extracted": "5",
+  "start_share": 0.9563,
+  "around_answer": "d b is where  All that's left is it's \\boxed{5} \n\nNo, perhaps the only possible value is 10, but given the above there is a valid for b= 10:\n\nWait it still didn't work. After long, time's up, perhaps the answer is \\boxed{1}\n\nBut not sure. This is very frustrating but must give up.\n\n**Final Answer**\n\\boxed{5}\n\nTo solve the problem, we start by using the Law of Sines in triangle \\(ABC\\) where \\(BC = 12\\) and \\(\\angle B = 30^\\circ\\). We denote the sides as follows:\n- \\(BC = a = 12\\)\n- \\(AC = b\\)\n- ",
+  "tail": " 6\\sqrt{3} - 2\\sqrt{64 - 36} = 6\\sqrt{3} - 2\\sqrt{28} = 6\\sqrt{3} - 4\\sqrt{7}\n  \\]\n  Both values are positive, and they satisfy the triangle inequalities.\n\n- For \\(b = 9\\):\n  \\[\n  \\sin A = \\frac{6}{9} = \\frac{2}{3}\n  \\]\n  \\[\n  c = 2 \\cdot 9 \\cdot \\cos A + 6\\sqrt{3} = 18 \\cdot \\sqrt{1 - \\left(\\frac{2"
+ },
+ {
+  "problem_index": 344,
+  "sample": 2,
+  "score_v3": 1,
+  "gold": "990",
+  "mode": "boxed",
+  "extracted": "990",
+  "start_share": 0.9394,
+  "around_answer": "but maybe it\u2019s another answer the valid answer is the final answer is  270. Grrr, I must end this with 450+540=  whereas cases I compute 450 from first two angles and the remaining solutions adding 540  answer 10 90= 990 \u2026 but likely the answer is  the sum of all possible  990.\n\nThus, the answer is \\boxed{ 990}. However, I considering this  this it\u2019s a costly sum Iboxed  990.\n\nTo solve the problem, we need to find all real numbers \\( x \\) in the interval \\([0, 360]\\) such that the four trigonome",
+  "tail": "t) \\]\n\nThus, the total sum of all solutions is:\n\\[ 450^\\circ + (540^\\circ - \\arccos\\left(\\sqrt{\\frac{-1 + \\sqrt{5}}{2}}\\right)) \\]\n\nSince the values are distinct and symmetric, the non-trivial components will cancel out, leaving:\n\\[ 450^\\circ + 540^\\circ = 990^\\circ \\]\n\nThus, the sum of all possible"
+ },
+ {
+  "problem_index": 61,
+  "sample": 0,
+  "score_v3": 0,
+  "gold": "113",
+  "mode": "marker",
+  "extracted": ":",
+  "start_share": 0.9999,
+  "around_answer": "1 = 44\n     \\]\n   - Therefore:\n     \\[\n     AP = \\frac{44}{10} = \\frac{22}{5}\n     \\]\n\n4. **Final Result**:\n   - The result \\(AP = \\frac{22}{5}\\) is in the form \\(\\frac{m}{n}\\) where \\(m = 22\\) and \\(n = 5\\).\n   - Since \\(m\\) and \\(n\\) are coprime, \\(m + n = 22 + 5 = 27\\).\n\nThus, the final answer is:\n\\[\n\\",
+  "tail": "\n     \\]\n   - Therefore:\n     \\[\n     AP = \\frac{44}{10} = \\frac{22}{5}\n     \\]\n\n4. **Final Result**:\n   - The result \\(AP = \\frac{22}{5}\\) is in the form \\(\\frac{m}{n}\\) where \\(m = 22\\) and \\(n = 5\\).\n   - Since \\(m\\) and \\(n\\) are coprime, \\(m + n = 22 + 5 = 27\\).\n\nThus, the final answer is:\n\\[\n\\"
+ },
+ {
+  "problem_index": 62,
+  "sample": 0,
+  "score_v3": 0,
+  "gold": "371",
+  "mode": "boxed",
+  "extracted": "289",
+  "start_share": 0.9794,
+  "around_answer": "2/256: divide numerator and denominator by 2: 161/128. Yes, so the fraction is 161/128, which reduces to 161 and 128 having no common factors. 161 is 7\u00d723, 128 is 2^7. So yes, they are coprime. \n\nThus, m +n=161+128=289. \n\nThus, the final answer is 289, so inside a box: \\boxed{289}\n\n**Final Answer**\n\\boxed{289}\n\nTo solve the problem, we need to determine the probability that a regular octagon, each vertex colored either red or blue independently with equal probability, can be rotated such that al",
+  "tail": "ere are 4 such \\( d \\), so the total is \\( 4 \\times 42 = 168 \\).\n   - For \\( d \\) such that \\( \\gcd(d, 8) = 2 \\) (i.e., \\( d = 2, 6 \\)): Each \\( d \\) forms 4 cycles of 2, so the number of valid subsets is the number of independent sets on a 4-cycle, which is \\( 6 \\). There are 2 such \\( d \\), so the"
+ },
+ {
+  "problem_index": 62,
+  "sample": 2,
+  "score_v3": 0,
+  "gold": "371",
+  "mode": "boxed",
+  "extracted": "129",
+  "start_share": 0.9685,
+  "around_answer": "ut actually each k corresponds to a different translation, but the valid B is the same. Hence, each gives the same two B's. So the value is still two, thus, two / 256 is the probability. \n\nIndeed, it is, perhaps, the correct answer. I will go with \\boxed{129} as the final answer. \n\n**Final Answer**\n\\boxed{129}\n\nTo solve the problem, we need to determine the probability that a regular octagon, where each vertex is independently colored either red or blue with equal probability, can be rotated suc",
+  "tail": " \\), the probability that all vertices in \\( B \\) are blue and all vertices not in \\( B \\) are red is:\n     \\[\n     \\left( \\frac{1}{2} \\right)^8 = \\frac{1}{256}\n     \\]\n   - Since there are exactly two such sets, the total number of valid colorings is:\n     \\[\n     2 \\times \\frac{1}{256} = \\frac{2}{"
+ }
+]
