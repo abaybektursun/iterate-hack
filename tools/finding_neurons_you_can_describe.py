@@ -130,7 +130,9 @@ DATA = {
 
 _S, _R, _T, _A = DATA["sets"]["selected"], DATA["sets"]["reference"], DATA["test"], DATA["always_on"]
 _p = lambda v: f"{100 * v:.1f}"  # a share as a percentage with one decimal
-LINE = f"From a one-sentence description alone, a blind reader finds a neuron's firings {_p(_S['mean_accuracy'])} % of the time."
+LINE = (f"Given only a one-sentence description, a second model sorts {_p(_S['mean_accuracy'])} % of new text snippets right "
+        f"(the neuron fires there or not) for the neurons that matter most to what reinforcement learning (RL) changed, against "
+        f"{_p(_R['mean_accuracy'])} % for random neurons and {_p(DATA['chance'])} % by chance.")
 
 
 def _clean(s):
@@ -165,42 +167,43 @@ QUIZ = [{**{k: u[k] for k in ("key", "set", "layer", "neuron", "pole", "blind_ac
 # predict the extreme top activations (r 0.26) and not the 1 to 10 % band (r 0.02).
 PANELS = [
     ["new", "What is new",
-     "Scoring a neuron's description by whether a reader can find its firings is an established test: Goodfire's judge picks the "
-     "firing snippet of a pair 94.6 % of the time against random text, on 496 neuron poles of a 35B mixture-of-experts model.",
-     ["Our test follows the same idea, detection scoring (Paulo et al., arXiv 2410.13928): the reader sees only the sentence and "
+     f"New here: the neurons that matter most for what RL changed in Olmo 3 7B are easier to describe than random neurons of the "
+     f"same layers, {_p(_S['mean_accuracy'])} % against {_p(_R['mean_accuracy'])} %.",
+     ["The test itself is established: in a study by the company Goodfire, an AI judge given a neuron's description picks the "
+      "snippet where the neuron fires, out of a pair with one random snippet, 94.6 % of the time, on 496 descriptions (each of "
+      "one sign of a neuron's activation) in a 35B mixture-of-experts model.",
+      "Our test follows the same idea, detection scoring (Paulo et al., arXiv 2410.13928): the reader sees only the sentence and "
       f"picks {_T['fire']} firing snippets of {_T['snippets']}.",
-      f"New here: the neurons that matter most for what RL changed in Olmo 3 7B are easier to describe than random neurons of the "
-      f"same layers, {_p(_S['mean_accuracy'])} % against {_p(_R['mean_accuracy'])} %.",
       "A study of Qwen3-0.6B and 1.7B (Batutin, 19 October 2026) found that neuron labels predict only the strongest "
       "activations. This test also uses only the strongest."]],
     ["why", "Why it matters",
-     "The neurons that matter most for RL's change can be read: one sentence says where each one fires.",
-     ["Many describe how the model reasons rather than math: “Hmm” or “Wait” starting a sentence (layer 10, neuron 7275, 100.0 %), "
+     f"One sentence is enough for another model to find where the neurons that matter most for RL's change fire: {_p(_S['mean_accuracy'])} % of snippets sorted right on average.",
+     ["Many of the sentences describe how the model reasons rather than math: “Hmm” or “Wait” starting a sentence (layer 10, neuron 7275, sorted 100.0 % right), "
       "or the period before “Then”, “Wait” or “So” (layer 29, neuron 2637, 100.0 %).",
       f"{_A['selected']} of the 100 neurons that matter most are active almost everywhere, against {_A['reference']} of 100 random neurons "
       "of the same layers.",
-      "They name only part of what RL changed: copying the best 1 % of neurons from RL recovers 16.1 % of its effect "
-      "(the page RL's change is spread out)."]],
+      "These neurons carry only part of what RL changed: copying the 1 % of neurons with the largest effect from the RL model "
+      "into the base model recovers 16.1 % of RL's effect (see the finding “RL's change is spread out”)."]],
     ["how", "How we know",
-     f"One reader wrote a sentence from the {_T['described_from']} snippets where a neuron fires most. A second reader, given only "
+     f"One reader wrote a sentence from the {_T['described_from']} snippets where a neuron fires most. A second reader, the blind reader, given only "
      f"that sentence, picked which {_T['fire']} of {_T['snippets']} new snippets fire; the other {_T['snippets'] - _T['fire']} are "
      "random places in the same texts.",
-     [f"Neurons of allenai/Olmo-3-1025-7B: {_S['units']} of the 100 with the largest effect toward its RL version scored "
+     [f"Neurons of allenai/Olmo-3-1025-7B: {_S['units']} of the 100 that matter most for RL's change (the 100 that, copied from the RL model into the base model, move its outputs most toward the RL model) scored "
       f"{_p(_S['mean_accuracy'])} % (95 % interval {_p(_S['ci95'][0])} to {_p(_S['ci95'][1])}); {_R['units']} random neurons of the "
       f"same layers scored {_p(_R['mean_accuracy'])} % ({_p(_R['ci95'][0])} to {_p(_R['ci95'][1])}). Picking at random scores "
       f"{_p(DATA['chance'])} %.",
-      "Both readers were Claude subagents. The second never saw which snippets fire or which neurons were random.",
+      "Both readers were instances of the language model Claude. The second never saw which snippets fire or which neurons were random.",
       "A score counts every snippet sorted right: a firing snippet picked, or a random one left out."]],
     ["limits", "What it does not show",
      "The test uses only each neuron's strongest firings. A sentence can pass it while the neuron's weaker firings follow no "
      "describable rule.",
      ["The reader that wrote the sentences and the reader that was tested are the same kind of model, so a person might score lower.",
-      f"Each sentence describes one pole: where the activation is most positive, or for some neurons most negative. "
-      f"{_S['units'] + _R['units']} of the model's 352,256 neurons were tested.",
-      "It says nothing about changing the model's behaviour with these neurons."]],
+      f"Each sentence describes one side of a neuron: where its activation is most positive or, for some neurons, most negative. "
+      f"In all, {_S['units'] + _R['units']} of the model's 352,256 neurons were tested.",
+      "The test says nothing about changing the model's behavior with these neurons."]],
     ["run", "How to reproduce it",
-     "Run studies/cleanneurons/analysis/describe_test.py with prep on the output of the GPU job, let two readers write "
-     "descriptions.json and predictions.json, then run it with score.",
+     "Run studies/cleanneurons/analysis/describe_test.py prep on the output of the GPU job, have two readers write "
+     "descriptions.json and predictions.json, then run describe_test.py score.",
      [f"The GPU job was {DATA['job']} at commit {DATA['commit'][:7]}: {DATA['command'].replace(DATA['commit'], DATA['commit'][:7])}.",
       f"The scores and all {_S['units'] + _R['units']} sentences are in {DATA['artifact']}.",
       f"The snippets on this page are in {DATA['examples']}: 8 of each neuron's {_T['snippets']}, drawn with seed {DATA['seed']}. "
@@ -546,7 +549,7 @@ function counting(now) {
 function strip() {
   const svg = $("strip"), w = svg.clientWidth || 300, small = w < 340, u = unit(), k = S.u, shown = S.shown[k];
   const x0 = 4, x1 = w - 8, X = v => x0 + (x1 - x0) * v, pitch = small ? 8 : 8.6, r = small ? 3.2 : 3.6;
-  const rows = [["s", `Neurons that matter for RL, ${D.sets.selected.units}`, D.sets.selected.mean_accuracy], ["r", `Random neurons, ${D.sets.reference.units}`, D.sets.reference.mean_accuracy]];
+  const rows = [["s", `Neurons that matter most for RL, ${D.sets.selected.units}`, D.sets.selected.mean_accuracy], ["r", `Random neurons, ${D.sets.reference.units}`, D.sets.reference.mean_accuracy]];
   let y = 18, out = "";
   const sel = S.open && S.open.startsWith("n-") ? S.open.slice(2) : null;
   rows.forEach(([set, name, m]) => {
@@ -692,7 +695,7 @@ function frame(now) {
 $("problem").textContent = C.problem;
 $("say").innerHTML = esc(C.line).replace(/(?<![\w-])(\d+(?:[.,]\d+)*(?: ?%)?)/g, "<b>$1</b>");
 $("big").innerHTML = `${(100 * D.sets.selected.mean_accuracy).toFixed(1)}<small>%</small>`;
-$("blab").textContent = `of test snippets sorted right, firing or not, by a blind reader, on ${D.sets.selected.units} of the 100 neurons that move the base most toward RL. Random neurons ${pct(D.sets.reference.mean_accuracy)}, chance ${pct(D.chance)}.`;
+$("blab").textContent = `of test snippets sorted right (the neuron fires there or not) by a blind reader, on ${D.sets.selected.units} of the 100 neurons that matter most for RL's change. Random neurons score ${pct(D.sets.reference.mean_accuracy)}; chance is ${pct(D.chance)}.`;
 fromHash();
 $("body").style.transform = "rotateX(1.5deg)";
 if (!still.matches) { document.body.classList.add("enter"); setTimeout(() => document.body.classList.remove("enter"), 2000); }

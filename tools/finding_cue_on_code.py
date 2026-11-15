@@ -167,8 +167,9 @@ def flip(key):
 
 TITLE = "The cue beyond math"
 PROBLEM = "Does a three-token cue found on math help on other tasks?"
-LINE = (f"The same three tokens lift the base on math, code and general questions: +{GAINS['math']}, +{GAINS['code']} "
-        f"and +{GAINS['general']} points.")  # also the sentence on its tile
+LINE = (f"Three tokens placed at the start of the answer, chosen on math, raise the base model by {GAINS['math']} "
+        f"percentage points on math, {GAINS['code']} on code and {GAINS['general']} on general questions; there, an "
+        f"estimate that corrects for answers with no letter gives about {num(IMPUTED['gain'])}.")  # also the sentence on its tile
 
 # What the picture draws: per set, its groups (rows of marks) with the right count under each state
 # [Base, Base + cue, RL, Think-SFT + cue]; None where a state was not run on that set.
@@ -178,12 +179,12 @@ _word = lambda s: s.replace("_", " ").replace("qa", "QA")
 SETS = [
     {"key": "math", "name": "MATH-500", "unit": "problems", "n": M["n"], "chosen": "the cue was chosen here", "rl": "RL",
      "share": SHARES["math"], "groups": [{"name": "MATH-500", "bench": "math500", "n": M["n"], "right": [M["base"], M["cue"], M["rl"], None]}]},
-    {"key": "code", "name": "Code", "unit": "problems", "n": N, "chosen": "nothing chosen here", "rl": "RL on code",
+    {"key": "code", "name": "Code", "unit": "problems", "n": N, "chosen": "no setting chosen here", "rl": "RL on code",
      "share": SHARES["code"],
      "groups": [{"name": "HumanEval+", "bench": "humanevalplus", "n": _HE["n"], "right": [_HE["base_plain"], _HE["base_mathcue"], _HE["rl_plain"], None]},
                 {"name": "MBPP+", "bench": "mbppplus", "n": _MB["n"], "right": [_MB["base_plain"], _MB["base_mathcue"], _MB["rl_plain"], None]}]},
-    {"key": "general", "name": "General questions", "unit": "questions", "n": G["n"], "chosen": "nothing chosen here", "rl": "RL",
-     "share": SHARES["general"], "foot": f"Grader v2, added after two runs; v1: +{num(G['diff']['cue_v1'][0])}",
+    {"key": "general", "name": "General questions", "unit": "questions", "n": G["n"], "chosen": "no setting chosen here", "rl": "RL",
+     "share": SHARES["general"], "foot": f"Grader rewritten after two runs; the original gave +{num(G['diff']['cue_v1'][0])}",
      "groups": [{"name": f"{_SUBJ[g[0].split('/')[0]]}, {_word(g[0].split('/')[1])}", "bench": g[0].split("/")[0], "n": g[1],
                  "right": g[2:]} for g in G["groups"]]},
 ]
@@ -209,42 +210,46 @@ STATES = [
 _M, _GD = M, G["diff"]
 PANELS = [
     ["new", "What is new",
-     f"Wang et al. (arXiv 2610.06851, Table 6) test a short cue on math sets and on HumanEval, where it takes this base model "
-     f"from {CD['wang']['base']} % to {CD['wang']['cue']} %. New here: the cue on {G['n']} questions that are neither math nor "
-     "code, with RL as the reference on every set.",
+     f"New here: the cue on {G['n']} questions that are neither math nor code, with the model trained by reinforcement "
+     "learning (RL) as the reference on every set. Wang et al. (arXiv 2610.06851, Table 6) tested a short cue on math "
+     f"sets and on HumanEval, where it takes this base model from {CD['wang']['base']} % to {CD['wang']['cue']} %.",
      [f"General questions: {G['n_mmlupro']} from MMLU-Pro (the 9 categories outside math, physics, chemistry, engineering and "
-      f"computer science) and {G['n_bbh']} from 10 BBH tasks with a one-letter answer. Base {_GC['base_plain']['right']} of "
-      f"{G['n']}, Base + cue {_GC['base_cue']['right']}, RL {_GC['rl_plain']['right']}: {ci(_GD['cue'])}, "
-      f"{SHARES['general']} % of RL's gain. MMLU-Pro {ci(_GD['cue_mmlupro'])}, BBH {ci(_GD['cue_bbh'])}.",
-      f"Code: Base {ST[0]['passed']} of {N}, Base + cue {ST[2]['passed']}, RL on code {REF['passed']}: "
-      f"{ci(flip('base_plain - base_mathcue'))}, {SHARES['code']} % of the gain of RL on code. A cue taken from the code "
-      f"model's own opening does no better: {ST[1]['passed']} of {N}, {ci(flip('base_cue - base_mathcue'))}.",
-      "The fetched paper holds no test of the cue outside math and code; the plan of the general run found no team or "
-      "published number either (its search of 2026-11-15)."]],
+      f"computer science) and {G['n_bbh']} from 10 BBH tasks with a one-letter answer. Base gets {_GC['base_plain']['right']} "
+      f"of {G['n']} right, Base + cue {_GC['base_cue']['right']} and RL {_GC['rl_plain']['right']}. The cue adds "
+      f"{ci(_GD['cue'])}, {SHARES['general']} % of RL's gain: {ci(_GD['cue_mmlupro'])} on MMLU-Pro and "
+      f"{ci(_GD['cue_bbh'])} on BBH.",
+      f"Code: Base passes {ST[0]['passed']} of {N}, Base + cue {ST[2]['passed']} and RL on code {REF['passed']}. The cue "
+      f"adds {ci(flip('base_plain - base_mathcue'))}, {SHARES['code']} % of the gain of RL on code. A cue taken from the "
+      f"code model's own opening does no better: it passes {ST[1]['passed']} of {N}, and the math cue minus this code cue "
+      f"is {ci(flip('base_cue - base_mathcue'))}.",
+      "We found no published test of the cue outside math and code: the paper of Wang et al. has none, and a search of the "
+      "literature and of the team's results on 2026-11-15 found no other number."]],
     ["why", "Why it matters",
-     f"Every setting of the team's climb was chosen on MATH-500, so its gains could be fitted to that one benchmark. Nothing "
-     f"was chosen on code or on the general questions, and there the cue still gives {SHARES['code']} % and "
-     f"{SHARES['general']} % of RL's gain, against {SHARES['math']} % on MATH-500.",
-     [f"On code the gain is not about writing an answer at all: Base gives no code block in {CD['no_block']['base_plain']} of "
-      f"{N} answers and Base + cue in {CD['no_block']['base_mathcue']}, yet Base + cue passes "
-      f"{ST[2]['passed'] - ST[0]['passed']} more problems.",
-      f"RL stays ahead on every set: {num(_M['gap'][0])} points on MATH-500 (95 % interval {num(_M['gap'][1])} to "
-      f"{num(_M['gap'][2])}), {num(CD['diff']['rl_plain - base_mathcue'][0])} on code "
+     f"Every setting the team improved, the cue among them, was chosen by its MATH-500 score, so its gains could be fitted "
+     f"to that one benchmark. Nothing was chosen on code or on the general questions, and there the cue still gives "
+     f"{SHARES['code']} % and {SHARES['general']} % of RL's gain, against {SHARES['math']} % on MATH-500.",
+     [f"On code the gain does not come from writing an answer more often: Base gives no code block in "
+      f"{CD['no_block']['base_plain']} of {N} answers and Base + cue in {CD['no_block']['base_mathcue']}, yet Base + cue "
+      f"passes {ST[2]['passed'] - ST[0]['passed']} more problems.",
+      f"The RL model stays ahead of Base + cue on every set: by {num(_M['gap'][0])} points on MATH-500 (95 % interval "
+      f"{num(_M['gap'][1])} to {num(_M['gap'][2])}), {num(CD['diff']['rl_plain - base_mathcue'][0])} points on code "
       f"({num(CD['diff']['rl_plain - base_mathcue'][1])} to {num(CD['diff']['rl_plain - base_mathcue'][2])}) and "
-      f"{num(_GD['rl_minus_cue'][0])} on the general questions ({num(_GD['rl_minus_cue'][1])} to {num(_GD['rl_minus_cue'][2])}).",
-      f"Think-SFT + cue gets {_GC['sft_cue']['right']} of {G['n']} general questions, {ci(_GD['sft_minus_rl'])} above RL."]],
+      f"{num(_GD['rl_minus_cue'][0])} points on the general questions ({num(_GD['rl_minus_cue'][1])} to "
+      f"{num(_GD['rl_minus_cue'][2])}).",
+      f"Think-SFT (the base model fine-tuned to imitate worked solutions) with the cue gets {_GC['sft_cue']['right']} of "
+      f"{G['n']} general questions, {ci(_GD['sft_minus_rl'])} above RL; the interval includes zero."]],
     ["how", "How we know",
-     "On every set each setting answered every item once at T 1.0 and top-p 1.0, with the same seeds in every setting and a "
-     "cut-off at 16,384 tokens; the cue is the same three tokens everywhere.",
-     [f"MATH-500, grader v3: Base {_M['base']}, Base + cue {_M['cue']}, RL {_M['rl']} of {_M['n']}. The cue turns "
-      f"{_M['flips']['up']} problems from wrong to right and {_M['flips']['down']} from right to wrong. Every mark of this set "
-      "is one problem's row.",
+     "On every set each model answered every item once at temperature 1.0 and top-p 1.0, with the same random seeds for "
+     "every model and prompt and a limit of 16,384 tokens; the cue is the same three tokens everywhere.",
+     [f"MATH-500, scored by the grader (version 3): Base {_M['base']}, Base + cue {_M['cue']}, RL {_M['rl']} of {_M['n']}. "
+      f"The cue turns {_M['flips']['up']} problems from wrong to right and {_M['flips']['down']} from right to wrong. In "
+      "the picture each mark of this set is one problem.",
       "Code: scored by running each benchmark's tests. Before sampling, every reference solution had to pass and a planted "
       f"wrong program had to fail; {CD['n_excluded']} of {CD['n_all']} problems failed that check and are left out.",
-      "General questions: an answer is right when the first option letter after its last answer marker is the gold letter. "
-      "This grader, v2, was written after reading the first two settings, because the grader of the plan (v1) cannot read "
-      f"RL's \\boxed answers: RL scores {_GC['rl_plain']['right_v1']} of {G['n']} under v1. Under v1 the cue's gain is "
-      f"{ci(_GD['cue_v1'])}."]],
+      "General questions: an answer is right when the first option letter after its last answer marker is the correct "
+      "letter. We wrote this grader (version 2) after reading the answers of the first two runs, because the grader of "
+      "the plan (version 1) cannot read the answers the RL model writes in \\boxed: the RL model scores "
+      f"{_GC['rl_plain']['right_v1']} of {G['n']} under version 1. Under version 1 the cue's gain is {ci(_GD['cue_v1'])}."]],
     ["limits", "What it does not show",
      f"It does not show that the cue adds knowledge. On the general questions much of the gain is that Base + cue writes an "
      f"answer letter at all: Base gives none in {_GC['base_plain']['no_letter']} of {G['n']} answers, Base + cue in "
@@ -255,18 +260,19 @@ PANELS = [
       f"questions where both give a letter: Base + cue {G['answered']['cue']} right against {G['answered']['base']}, "
       f"{ci(G['answered']['diff'])}. On MATH-500, Base gives no final answer "
       f"in {_M['no_answer']} of {_M['n']}.",
-      "Each set is one sample at one seed, with no vote. The general set is a sample of MMLU-Pro and BBH, so its counts do "
-      "not compare with published scores. The code and general runs committed counts per benchmark and subject, not per "
-      "item: their marks fill each row in order and do not name an item.",
+      "Each set has one answer per item from one random seed, with no vote over several samples. The general set is a "
+      "sample of MMLU-Pro and BBH, so its counts do not compare with published scores. The code and general runs saved "
+      "counts per benchmark and subject, not per item: their marks fill each row in order and do not name an item.",
       "Think-SFT + cue was run only on the general questions in this comparison. On code, RL means the model trained with "
       "RL on code; on the other sets, RL on math."]],
     ["run", "How to reproduce it",
-     "Each setting of each set is one job on an H100 GPU in the study studies/rlneurons, and each readout runs on a laptop.",
+     "Each model on each set ran as one job on an H100 GPU; the code is in the study folder studies/rlneurons, and each "
+     "analysis script runs on a laptop.",
      [f"MATH-500: the rows {_M['rows']} and {_M['rl_rows']}, the counts {_M['readout']} (commit {_M['commit']}).",
-      f"Code: studies/rlneurons/jobs/run_code_cell.py (commit {CD['run_commit']}); readout {CD['artifact']} (commit "
+      f"Code: studies/rlneurons/jobs/run_code_cell.py (commit {CD['run_commit']}); analysis output {CD['artifact']} (commit "
       f"{CD['commit']}); plan {CD['spec']}.",
-      f"General questions: studies/rlneurons/jobs/run_mcq_cell.py; readout {G['artifact']}, plan {G['spec']}, on branch "
-      f"{G['branch']} (commit {G['commit']}), not on main when this page was written."]],
+      f"General questions: studies/rlneurons/jobs/run_mcq_cell.py; analysis output {G['artifact']}, plan {G['spec']} "
+      f"(commit {G['commit']})."]],
 ]
 
 # The icon of this finding's tile on /findings (tools/findings.py says how it is called): the page's own picture,
@@ -600,7 +606,7 @@ function draw(now) {
     else { text("bg" + si, "Not run here"); big.setAttribute("class", "big off"); big.setAttribute("font-size", F.cnt); }
     at(big, proj(g, b.x0 - 3, b.y0 + (narrow.matches ? 96 : 92), 14));
     big.setAttribute("opacity", f(Math.abs(1 - 2 * e9) * (had === has ? 0 : 1) + (had === has ? 1 : 0)));
-    text("bl" + si, on ? "points over Base, T 1.0" : ""); at(E["bl" + si], proj(g, b.x0, b.y0 + (narrow.matches ? 120 : 116), 12));
+    text("bl" + si, on ? "percentage points over Base" : ""); at(E["bl" + si], proj(g, b.x0, b.y0 + (narrow.matches ? 120 : 116), 12));
     const rx = v => b.x0 + g.bw * v / s.n, ry = b.rail, seg = (x0, x1, y0, y1) => { const p = proj(g, x0, y0, 6), q = proj(g, x1, y1, 6); return `M${f(p[0])} ${f(p[1])}L${f(q[0])} ${f(q[1])}`; };
     E["tr" + si].setAttribute("d", seg(b.x0, x1, ry, ry));
     E["fl" + si].setAttribute("d", on || had ? seg(b.x0, rx(count), ry, ry) : "");
@@ -628,7 +634,7 @@ function draw(now) {
   E.kd0.setAttribute("cx", f(k0[0])); E.kd0.setAttribute("cy", f(k0[1])); text("kt0", "Right"); at(E.kt0, [k0[0] + 11, k0[1]], F.small * .35);
   E.kd1.setAttribute("cx", f(k1[0])); E.kd1.setAttribute("cy", f(k1[1])); text("kt1", "Wrong"); at(E.kt1, [k1[0] + 11, k1[1]], F.small * .35);
   const k2 = narrow.matches ? proj(g, g.key[0] + 160, g.key[1], 8) : proj(g, g.key[0] + 160, g.key[1], 8);
-  text("kt2", narrow.matches ? "One answer per item, T 1.0" : "One answer per item, T 1.0. Code and general: marks fill each row by count, not by item.");
+  text("kt2", narrow.matches ? "One answer per item, T 1.0" : "One answer per item, T 1.0. On code and general questions the marks show how many, not which items.");
   at(E.kt2, k2, F.small * .35);
 }
 
@@ -668,7 +674,7 @@ function mathPane(i) {
     `<ul class="facts"><li>Reference answer: <span class="on" data-math>${esc(gold)}</span>. One answer per setting, T 1.0.</li>` +
     row(0, m.o[0], e0) + row(1, m.o[1], e1) + row(2, m.o[2], null) + "</ul>" +
     startOf("Base", s0) + startOf("Base + cue", C.cue + s1) +
-    `<p class="note">RL's answer texts are not committed per problem, only whether each is right.</p>` +
+    `<p class="note">The RL model's answer texts were not saved per problem, only whether each is right.</p>` +
     `<div class="steps"><button data-step="-1">‹ Previous problem</button><button data-step="1">Next problem ›</button></div>`;
 }
 function groupPane(si, k) {

@@ -31,7 +31,7 @@ DATA = {
     "n": 500,
     # What the reader switches between. The first is shown on load: start from the problem, not from the answer.
     "states": [
-        {"key": "unedited", "name": "Base + cue", "arm": "baseline", "job": "sameraslan-1114-184603-9d69",
+        {"key": "unedited", "name": "Unedited (Base + cue)", "arm": "baseline", "job": "sameraslan-1114-184603-9d69",
          "right": 378, "loops": 71, "tokens": 4689.678,
          "grid": "rrrrrrrrrlrwrrwrrllrrlrrrwwrrrwrwrrrrrrrrwrlrrrrrrwrrrrrrrrrrrrrlrrrrlrlrrwrrrrrwrlrrrrrrrlrrrwrlrrl"
                  "lwrwwrrrrllrrrrrrrrlrrrrrrlrwrrrrrrrrllrrrrrrlrlrrllrrlrlrrrrrlrrrlrlrrrrrrrlrrrrwrlrrrrrrwrrrrrrlrr"
@@ -98,9 +98,10 @@ _vote, _t10s = _r2["vote"], _r2["t10_single"]
 _m = lambda v: str(v).replace("-", "\u2212")  # a negative number with the minus sign U+2212
 
 TITLE = "Loop neurons"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "Why does a language model get stuck repeating the same text?"
-LINE = (f"Switching off {DATA['off']:,} of a model's {DATA['neurons']:,} neurons cuts its repetition loops on MATH-500 "
-        f"from {_U['loops']} to {_L['loops']}.")
+PROBLEM = "Can switching off a few neurons stop a language model from repeating the same text?"
+LINE = (f"Switching off {DATA['off']:,} of the base model's {DATA['neurons']:,} neurons cuts its answers stuck in a repetition "
+        f"loop on MATH-500 from {_U['loops']} to {_L['loops']} of {DATA['n']} at temperature 0.6, with right answers about "
+        f"level ({_L['right']} against {_U['right']}).")
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 # Not from our runs: the two papers. Hiraoka and Inui, "Repetition Neurons: How Do Language Models Produce Repetitions?"
@@ -109,32 +110,43 @@ LINE = (f"Switching off {DATA['off']:,} of a model's {DATA['neurons']:,} neurons
 # default sampler, Qwen3-4B 83.2 against 83.0 and Llama-3.1-8B 49.2 against 50.2. Rule A is studies/rlneurons/README.md.
 PANELS = [
     ["new", "What is new",
-     "Neurons that drive repetition were already reported in smaller models (Hiraoka and Inui, arXiv 2410.13497). New here is their effect on a math benchmark.",
-     ["Switching them off removes most loops and about a fifth of the tokens.",
-      f"Right answers rise by about {_vote['rounded']} points at the setting where the model loops.",
-      f"In a small test, doubling their activity raised loops from {_dose['selected'][2][1]} to {_dose['selected'][3][1]} of {_dose['n']} runs, "
-      f"and switching them off lowered it to {_dose['selected'][0][1]}."]],
+     "New here is the effect of such neurons on a math benchmark. Neurons that drive repetition were already reported in "
+     "smaller models (Hiraoka and Inui, arXiv 2410.13497).",
+     [f"Switching off these {DATA['off']:,} neurons removes most loops and about a fifth of the generated tokens.",
+      f"With a second set of {DATA['off']:,} neurons, right answers rise by about {_vote['rounded']} percentage points at "
+      "temperature 0.6, where the model loops (four samples per problem).",
+      f"In a small test, doubling their activity raised the runs that loop from {_dose['selected'][2][1]} to "
+      f"{_dose['selected'][3][1]} of {_dose['n']}, and switching them off lowered that to {_dose['selected'][0][1]} of "
+      f"{_dose['n']}."]],
     ["why", "Why it matters",
-     "It removes loops with no training of any kind.",
-     [f"With a second set of {DATA['off']:,} neurons, loops fall from {_s1['base'][1]} to {_s1['edit'][1]} on one random seed and from "
-      f"{_s2['base'][1]} to {_s2['edit'][1]} on another.",
+     f"The edit removes loops with no training of any kind: it only sets the output weights of {DATA['off']:,} neurons to zero.",
+     [f"With a second set of {DATA['off']:,} neurons, chosen on {_second['ranked_on']} other loops, loops fall from "
+      f"{_s1['base'][1]} to {_s1['edit'][1]} of {DATA['n']} on one random seed and from {_s2['base'][1]} to "
+      f"{_s2['edit'][1]} of {DATA['n']} on another.",
       f"Tokens per problem fall by {_cut(_s1)} % and {_cut(_s2)} %.",
-      "Loops do not explain why this model trails RL."]],
+      "Loops do not explain why the base model trails the model trained with reinforcement learning (RL): with its loops "
+      "removed, it only reaches the score of its own best setting, temperature 1.0 with no edit."]],
     ["how", "How we know",
      f"We set the output weights of {DATA['off']:,} neurons to zero and let the model answer all {DATA['n']} problems again with the same random seeds.",
-     ["The neurons are the ones that most raise the probability of looping text.",
+     ["The neurons are the ones that most raise the probability of looping text. An answer counts as a loop when an "
+      "8,000-character window of it compresses to under a tenth of its size.",
       f"Control: with {DATA['off']:,} random neurons off, {_R['loops']} answers loop and {_R['right']} are right.",
-      f"On {_second['n']} loops kept out of the choice, 100 neurons are enough: {_second['attr100']} loops again, against {_second['none']} unedited."]],
+      f"On {_second['n']} looping texts that were not used to choose the neurons, switching off 100 neurons is enough: "
+      f"{_second['attr100']} of {_second['n']} loops again, against {_second['none']} of {_second['n']} with no neurons off."]],
     ["limits", "What it does not show",
-     f"The edit does not make the model better than its own best setting. The picture's set gives {_L['right']} right against {_U['right']} "
+     f"The edit does not make the model better than its own best setting, temperature 1.0 with no edit ({_t10['unedited']} "
+     f"of {_t10['n']} right). The {DATA['off']:,} neurons in the picture give {_L['right']} right against {_U['right']} "
      f"({_m(_L['points'])} points, 95 % interval {_m(_L['ci95'][0])} to {_m(_L['ci95'][1])}). The numbers below are for the "
      f"second set of neurons, ranked on {_second['ranked_on']} other loops.",
-     [f"With the second set, over four runs per problem, right answers rise from {_vote['unedited']} to {_vote['edited']} of {DATA['n']} where the "
-      f"model loops, which only matches Base + cue at T 1.0, where it does not loop ({_t10s['right']} to {_t10['unedited']}).",
-      f"At T 1.0, where the model does not loop, the second set costs right answers: {_t10['off'][100][1]} and "
+     [f"With the second set, over four runs per problem, right answers rise from {_vote['unedited']} to {_vote['edited']} of "
+      f"{DATA['n']} at temperature 0.6, where the model loops. That only matches Base + cue at temperature 1.0, where it does "
+      f"not loop: {_t10s['right']} and {_t10['unedited']} of {DATA['n']} in two separate measurements.",
+      f"At temperature 1.0, where the model does not loop, the second set costs right answers: {_t10['off'][100][1]} and "
       f"{_t10['off'][1000][1]} of {_t10['n']} with 100 and {DATA['off']:,} neurons off, against {_t10['unedited']}.",
-      f"On the {_hard['n']} harder problems at T 1.0 it turns answers cut off at 16,384 tokens into finished wrong answers: "
-      f"{_hard['off'][100][1]} and {_hard['off'][1000][1]} of {_hard['n']} right against {_hard['unedited'][0]}."]],
+      f"On the {_hard['n']} harder problems at temperature 1.0 it turns answers cut off at 16,384 tokens into finished wrong "
+      f"answers: answers cut off fall from {_hard['unedited'][1]} to {_hard['off'][100][2]} and {_hard['off'][1000][2]} of "
+      f"{_hard['n']} with 100 and {DATA['off']:,} neurons off, and right answers fall from {_hard['unedited'][0]} to "
+      f"{_hard['off'][100][1]} and {_hard['off'][1000][1]}."]],
     ["run", "How to reproduce it",
      "The command, the jobs and every number are listed in studies/cleanneurons/README.md, sections Part L and Part G.",
      [f"The edited model ran as job {_L['job']} at commit {DATA['run_commit'][:7]}, the unedited one as job {_U['job']}, the random control as job {_R['job']}.",
@@ -875,7 +887,7 @@ function build() {
     `<ellipse class="spec" cx="${f(ax0 + aw * .32)}" cy="${f(ay0 + ah * .28)}" rx="${f(aw * .3)}" ry="${f(ah * .22)}" transform="rotate(-16 ${f(ax0 + aw * .32)} ${f(ay0 + ah * .28)})" fill="url(#spec)"/>` +
     `<g class="dots">${dots(1, "c1", g.d[1])}${dots(0, "c0", g.d[0])}${dots(2, "halo", g.d[3])}${dots(2, "c2", g.d[2])}<circle class="sel" id="sel" r="0"/></g>` +
     `<g class="key">${KEY.map((name, k) => `<circle class="k${k}" id="kd${k}" r="${g.kr[k]}"/><text class="klab" id="kt${k}" font-size="${g.fs}">${name}</text>`).join("")}</g>` +
-    `<g class="read"><text class="big" id="big" font-size="${g.fb}"></text><text class="lab" id="biglab" font-size="${g.fs}">loops in ${N} answers, T 0.6</text>` +
+    `<g class="read"><text class="big" id="big" font-size="${g.fb}"></text><text class="lab" id="biglab" font-size="${g.fs}">loops in ${N} answers, temperature 0.6</text>` +
     `<text class="num" id="n-right" font-size="${g.fn}"></text><text class="lab" id="l-right" font-size="${g.fs}">right</text>` +
     `<text class="num" id="n-tok" font-size="${g.fn}"></text><text class="lab" id="l-tok" font-size="${g.fs}">tokens per problem</text></g>`;
   S.el = {};
@@ -960,7 +972,7 @@ const SAID = { r: "right", w: "wrong", l: "stuck in a loop", b: "right, but ends
 function problemPane(i) {
   return `<div class="dhead"><h2>MATH-500, problem ${i}</h2><button class="close" data-open="">Close</button></div>` +
     `<p class="lead q" data-math>${esc(C.texts[i])}</p>` +
-    `<ul class="facts">${ST.map(s => `<li><b>${esc(s.name)}</b>, T 0.6: ${SAID[s.grid[i]]}.</li>`).join("")}` +
+    `<ul class="facts">${ST.map(s => `<li><b>${esc(s.name)}</b>, temperature 0.6: ${SAID[s.grid[i]]}.</li>`).join("")}` +
     `<li>The runs store the outcome of each problem, not the answer text, so no answer can be shown here.</li></ul>` +
     `<div class="steps"><button data-step="-1">‹ Previous problem</button><button data-step="1">Next problem ›</button></div>`;
 }
