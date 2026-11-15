@@ -1586,6 +1586,34 @@ Files in `results/wide/round-15/`: `standing.md` / `standing.json` / `standing/`
 `direct_facts.json`, `synthesis_facts.json` (F01-F42), `account-1.json` to `account-3.json` (and `jobs/`),
 `disagreements.json`, `synthesis_tests.md` / `.json`, `synthesis.md`, `run.json`, `round15.log`.
 
+## Engine 16 (accounts tested against an adversary's alternative)
+
+Skill version 16, branch `theory` only (main is frozen). Why: round 15's best account had 6 of 9 consequences hold,
+but an audit (knowledge-ab9881, `results/direct/audit15-01/audit.md` on branch `audit15`) found the numbers reproduce
+while 3 of 4 designs were faulty: a null that fails by construction (merge328: "all wrong answers one value" gives 0);
+a null that ignores accuracy (s100vote: final RL's vote gain per right-count applied to step 100 predicts +6.24,
+inside the account's range [5, 10]); one measurement credited twice (edit0of4 and d1 on the same rows). The accounts
+wrote their own nulls and marked their own facts, and the three accounts barely differed. Same command
+(`forecast.py synthesis <round folder> [--from ...]`, run with `PYTHONUNBUFFERED=1`); changes:
+
+1. Accounts in sequence: account 2 sees account 1, account 3 sees both (`earlier.json`, `prompts/synthesis_denials.md`).
+   Each later account denies at least 2 earlier consequences with its own range on the same statistic and rows,
+   disjoint from the denied range (`account_errors`). Denied consequences come first in `synthesis_tests.md`. The judge
+   stage is gone: the denials are the disagreements.
+2. Adversary (`prompts/synthesis_adversary.md`): one blind job per consequence sees only the statistic, files, rows,
+   computation and claimed range (plus the facts, the board results and `data.md`), and writes the strongest
+   alternative that predicts that range without the account, with a computation of its value from stored rows
+   (`adversary/<account>-<c>.json`). The test runner computes that value first. `verdict16` (in `add-rows`, which
+   rejects a row whose verdict disagrees): holds only if the 90 % interval is inside the range, n >= 50 and the
+   interval excludes the adversary's value; inside the range but containing it is `not separated`; wholly outside is
+   refuted; else undecided. Rows carry `interval`, `range`, `adversary`, `n`.
+3. One measurement, one credit: two consequences of one account on the same set of files are sent back (and a denial
+   on the files of the denier's own consequence); a consequence whose number the adversary finds in a board result
+   (`already_shown`, id checked) is rejected with no test.
+4. Fact marks for the score come from one blind marker per account (`prompts/synthesis_marks.md`, sees the sentences
+   and the facts, not the account's marks): `marks-<account>.json`. The account's own count is shown beside it.
+5. Score = consequences and denials that hold minus the marker's contradictions.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in

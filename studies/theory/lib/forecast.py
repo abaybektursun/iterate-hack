@@ -14,12 +14,16 @@
       experiments. Rerun the same command after the direct tests.
       --propose-wide: the version-10 round (six lens jobs of --propose N mechanisms, every family designs cells).
   uv run studies/theory/lib/forecast.py synthesis <round folder> [--from <folders for standing>]
-      version 15: standing (with --from), direct facts, then three blind jobs each write one account (at most 6 sentences)
-      of every direct fact and the last 24 hours of board results, a mark per fact (explained, not addressed,
-      contradicts), its 3 worst facts, three new consequences (one statistic on stored files, a range apart from the
-      null's, n >= 50) and one GPU cell; a judge lists where the accounts disagree; synthesis_tests.md (disagreements
-      first); a gate until every test has rows (add-rows); then synthesis.md ranks the accounts by new consequences held
-      minus contradictions. Rerun the same command after the tests.
+      version 16: standing (with --from), direct facts, then three accounts written in sequence (account k sees the
+      earlier ones and denies at least two of their consequences with the range it predicts instead), each of every
+      direct fact and the last 24 hours of board results: at most 6 sentences, a mark per fact, its 3 worst facts, three
+      new consequences (one statistic on stored files, no two on the same files, n >= 50) and one GPU cell; one blind
+      marker per account marks the facts (the score uses these marks); one blind adversary per consequence writes the
+      strongest alternative that predicts the claimed range without the account and how to compute its value (or names
+      a board result that already shows the number: the consequence is rejected); synthesis_tests.md (denied
+      consequences first); a gate until every test has rows (add-rows recomputes the verdict: holds only if the 90 %
+      interval is inside the range and excludes the adversary's value, else not separated); then synthesis.md ranks
+      the accounts. Rerun the same command after the tests.
   uv run studies/theory/lib/forecast.py make <folder>
       reads the open work items with their comments and every result and knowledge item (the board snapshot); one
       headless job turns the open items into targets (numbers they will report); two readers with no theory and one
@@ -90,7 +94,7 @@ THEORY = ("- theory.json: a theory of the team's results. Derive each forecast f
 NOTHING = (' For a target the theory says nothing about, write {"id": "t02", "value": null, "low": null, "high": null, '
            '"reason": "theory says nothing"}.')
 engine.args = engine.args or argparse.Namespace(model_all=None, workers=8)  # round.py sets its own
-for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast", "routes_propose", "duplicates", "surprise_propose", "cells_check", "direct_test_plan", "synthesis", "synthesis_judge"):
+for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast", "routes_propose", "duplicates", "surprise_propose", "cells_check", "direct_test_plan", "synthesis", "synthesis_marks", "synthesis_adversary"):
     engine.MODELS[stage] = engine.MODELS["cross_predict"]
 
 
@@ -792,7 +796,9 @@ def add_rows(path):
     refuted ones to refuted.json, each stamped with `added` in UTC (ISO, ending in Z)."""
     rows = json.loads(Path(path).read_text())
     for r in rows:
-        assert r["verdict"] in ("holds", "refuted", "undecided") and all(r.get(k) for k in ("mechanism", "claim", "result", "measured")), r
+        assert r["verdict"] in ("holds", "refuted", "undecided", "not separated") and all(r.get(k) for k in ("mechanism", "claim", "result", "measured")), r
+        if "adversary" in r or r["verdict"] == "not separated":  # version 16 rows: the verdict is recomputed here
+            assert r["verdict"] == verdict16(r), f"{r['mechanism']}: verdict {r['verdict']}, rule gives {verdict16(r)}"
         r["added"] = now() + "Z"
     for f, keep in ((TESTED, rows), (REFUTED, [r for r in rows if r["verdict"] == "refuted"])):
         f.write_text(json.dumps(json.loads(f.read_text()) + keep, indent=1, ensure_ascii=False) + "\n")
@@ -1016,6 +1022,8 @@ def round11(folder, sources, n_top, wait_none=False):
 ACCOUNTS = 3
 MARKS = ("explained", "not addressed", "contradicts")
 TEST_KEYS = ("claim", "statistic", "rows", "computation", "null")
+MIN_DENIALS = 2  # version 16: each later account denies at least this many consequences of the earlier ones
+ADVERSARY_KINDS = ("covariate", "regression to the mean", "construction artifact", "other")
 
 
 def numbered_facts(folder):
@@ -1058,21 +1066,80 @@ def stat_errors(t, keys):
     return e + range_errors(t.get("ranges") or {}, keys)
 
 
-def account_errors(j, fact_ids):
+def marks_errors(j, fact_ids):
+    """A mark for every fact (explained, not addressed, contradicts), a contradiction with its why."""
+    marks = {m.get("fact"): m for m in j.get("marks") or []}
+    e = [f"marks: no mark for {f}" for f in fact_ids if f not in marks]
+    e += [f"marks: {f}: fact must be a fact id and mark one of {', '.join(MARKS)}" for f, m in marks.items() if f not in fact_ids or m.get("mark") not in MARKS]
+    return e + [f"marks: {f}: a contradiction needs why (what in the account the fact contradicts)" for f, m in marks.items()
+                if m.get("mark") == "contradicts" and not str(m.get("why", "")).strip()]
+
+
+def same_rows(a, b):
+    """One measurement (version 16): two tests on the same set of stored files count as the same rows."""
+    return sorted(a["files"]) == sorted(b["files"])
+
+
+def account_errors(j, fact_ids, earlier=None):
     """An account-<k>.json: at most 6 sentences, a mark for every fact (a contradiction named), the 3 worst facts, three
-    new consequences each a test on stored rows with its range apart from the null's."""
+    new consequences each a test on stored rows with its range apart from the null's, no two on the same files
+    (version 16: one measurement, one credit). With earlier accounts {name: account} (version 16): at least two
+    denials of their consequences, each with the range this account predicts instead, disjoint from the denied range,
+    and none on the files of one of this account's own consequences."""
     s, e = j.get("account"), []
     e += [] if isinstance(s, list) and 1 <= len(s) <= 6 and all(isinstance(x, str) and x.strip() for x in s) else ["account: a list of 1 to 6 sentences"]
-    marks = {m.get("fact"): m for m in j.get("marks") or []}
-    e += [f"marks: no mark for {f}" for f in fact_ids if f not in marks]
-    e += [f"marks: {f}: fact must be a fact id and mark one of {', '.join(MARKS)}" for f, m in marks.items() if f not in fact_ids or m.get("mark") not in MARKS]
-    e += [f"marks: {f}: a contradiction needs why (what in the account the fact contradicts)" for f, m in marks.items()
-          if m.get("mark") == "contradicts" and not str(m.get("why", "")).strip()]
+    e += marks_errors(j, fact_ids)
     w = j.get("worst") or []
     e += [] if len(set(w)) == 3 and set(w) <= set(fact_ids) else ["worst: 3 distinct fact ids"]
     cs = j.get("consequences") or []
     e += [] if [c.get("id") for c in cs] == ["c1", "c2", "c3"] else ["consequences: exactly three, ids c1, c2, c3"]
-    return e + [f"{c.get('id')}: {x}" for c in cs for x in stat_errors(c, ["account"]) + ([] if str(c.get("why_new", "")).strip() else ["missing why_new"])]
+    e += [f"{c.get('id')}: {x}" for c in cs for x in stat_errors(c, ["account"]) + ([] if str(c.get("why_new", "")).strip() else ["missing why_new"])]
+    if e:
+        return e
+    e += [f"{a['id']} and {b['id']} use the same files {sorted(a['files'])}: one measurement earns one credit; use other stored files"
+          for i, a in enumerate(cs) for b in cs[i + 1:] if same_rows(a, b)]
+    if not earlier:
+        return e
+    theirs = {f"{n}/{c['id']}": c for n, acc in earlier.items() for c in acc["consequences"]}
+    ds = j.get("denials") or []
+    e += [] if len({d.get("denies") for d in ds}) >= MIN_DENIALS else [f"denials: at least {MIN_DENIALS}, each of a different earlier consequence"]
+    for d in ds:
+        c = theirs.get(d.get("denies"))
+        if not c:
+            e.append(f"denial {d.get('denies')}: denies must be one of {', '.join(theirs)}")
+            continue
+        r, x = d.get("range"), []
+        x += [] if str(d.get("instead", "")).strip() and str(d.get("why", "")).strip() else ["needs why (the earlier claim's error) and instead (what this account predicts)"]
+        x += [] if isinstance(r, list) and len(r) == 2 and all(engine.number(v) for v in r) and r[0] <= r[1] else ["range: [low, high] with low <= high"]
+        x += [] if x or r[1] < c["ranges"]["account"][0] or c["ranges"]["account"][1] < r[0] else [f"range {r} must be disjoint from the denied range {c['ranges']['account']}"]
+        x += [f"the denied test uses the same files as this account's {o['id']}: one measurement earns one credit" for o in cs if same_rows(o, c)]
+        e += [f"denial {d['denies']}: {y}" for y in x]
+    return e
+
+
+def adversary_errors(j, board_ids):
+    """adversary.json (version 16): the strongest alternative that predicts the claimed range without the account, how
+    to compute its predicted value from stored files that exist, and a board result that already shows the number, if any."""
+    e = [f"missing {k}" for k in ("alternative", "computation") if not str(j.get(k, "")).strip()]
+    e += [] if j.get("kind") in ADVERSARY_KINDS else [f"kind: one of {', '.join(ADVERSARY_KINDS)}"]
+    e += [] if j.get("files") else ["files: the stored paths the alternative's value is computed from"]
+    e += [f"{f} does not exist in the repository" for f in j.get("files") or [] if not (ROOT / f).exists()]
+    s = j.get("already_shown")
+    return e + ([] if s is None or (s.get("result") in board_ids and str(s.get("number", "")).strip())
+                else ["already_shown: null, or {result: a board result id, number: the number it shows}"])
+
+
+def verdict16(row):
+    """Version 16: holds only if the 90 % interval lies wholly inside the range, n >= MIN_N and the interval excludes the
+    adversary's value; inside the range with the adversary's value in the interval: not separated; wholly outside:
+    refuted; else undecided."""
+    (lo, hi), (a, b), adv = row["interval"], row["range"], row["adversary"]
+    assert lo <= hi and a <= b and engine.number(adv) and engine.number(row["n"]), row
+    if hi < a or b < lo:
+        return "refuted"
+    if row["n"] < MIN_N or not (a <= lo and hi <= b):
+        return "undecided"
+    return "not separated" if lo <= adv <= hi else "holds"
 
 
 def cell_errors(c, flags):
@@ -1097,23 +1164,6 @@ def first_check(check):
     return valid
 
 
-def judge_errors(j, names):
-    """disagreements.json: one or more, each with a test on stored rows giving each account it separates a range apart
-    from the null's, two of those ranges disjoint."""
-    ds, e = j.get("disagreements") or [], []
-    e += [] if ds else ["disagreements: at least one"]
-    for d in ds:
-        t = d.get("test") or {}
-        keys = [k for k in (t.get("ranges") or {}) if k != "null"]
-        x = [] if str(d.get("about", "")).strip() and isinstance(d.get("positions"), dict) else ["needs about and positions {account: its position}"]
-        x += [] if len(keys) >= 2 and set(keys) <= set(names) else [f"test ranges: 2 or more of {names}, plus null"]
-        x += stat_errors(t, keys) if len(keys) >= 2 else []
-        r = t.get("ranges") or {}
-        x += [] if x or any(r[a][1] < r[b][0] or r[b][1] < r[a][0] for a in keys for b in keys if a < b) else ["two accounts' ranges must be disjoint"]
-        e += [f"{d.get('id')}: {y}" for y in x]
-    return e
-
-
 def test_md(t, keys):
     return (f"- Claim: {t['claim']}\n- Statistic: {t['statistic']}\n- Files: {', '.join('`' + f + '`' for f in t['files'])}\n- Rows: {t['rows']} (n {t['n']})\n"
             f"- Computation: {t['computation']}\n- Null: {t['null']}\n- Ranges fixed in advance: "
@@ -1121,10 +1171,15 @@ def test_md(t, keys):
 
 
 def synthesis(folder, sources):
-    """forecast.py synthesis (version 15): standing (when --from is given), direct facts, three blind accounts of every
-    direct fact (each its own reading order), checks with one send-back (an account still failing is dropped; a cell
-    whose command fails the cell checker is dropped alone), a judge of where the accounts disagree, the test plans
-    (synthesis_tests.md, disagreements first), a gate until every plan has rows (forecast.py add-rows), then synthesis.md.
+    """forecast.py synthesis (version 16): standing (when --from is given), direct facts, three accounts of every direct
+    fact written in sequence (account k sees accounts 1 .. k-1 and denies at least two of their consequences, each with
+    the range it predicts instead), checks with one send-back (an account still failing is dropped; a cell whose command
+    fails the cell checker is dropped alone); then, in parallel, one blind marker per account (marks every fact from the
+    account's sentences alone; the score uses these marks) and one blind adversary per consequence (sees only the
+    statistic, files, rows, computation and claimed range; writes the strongest alternative that predicts that range
+    without the account and how to compute its value from stored rows; a board result it names as already showing the
+    number rejects the consequence); the test plans (synthesis_tests.md, denied consequences first); a gate until every
+    plan has rows (forecast.py add-rows recomputes each verdict with verdict16); then synthesis.md.
     A stage whose output exists is skipped, so the same command resumes."""
     start, out, stages = time.time(), folder / "jobs", {}
     folder.mkdir(parents=True, exist_ok=True)
@@ -1133,67 +1188,97 @@ def synthesis(folder, sources):
         standing(folder, sources)
         stages["standing"] = round((time.time() - start) / 60, 1)
     print("== direct facts")
-    facts_d = direct_facts()
-    (folder / "direct_facts.json").write_text(json.dumps(facts_d, indent=1))
-    facts, ids = numbered_facts(folder), [f["id"] for f in numbered_facts(folder)]
+    (folder / "direct_facts.json").write_text(json.dumps(direct_facts(), indent=1))
+    facts = numbered_facts(folder)
+    ids, facts_text = [f["id"] for f in facts], json.dumps(facts, indent=1, ensure_ascii=False)
     print(f"  {len(facts)} direct facts ({sum(f['verdict'] == 'holds' for f in facts)} hold)")
-    print("== synthesis: three blind accounts")
-    t0, items = time.time(), board("board", "9999")[0]
+    items = board("board", "9999")[0]
+    board_ids = {i["id"] for i in items}
     common = {"DIRECTION.md": ROOT / "DIRECTION.md", "results.md": recent_md(items), "data.md": data_md(), "jobs.md": C.jobs_md()}
     shuffled = facts[:]
     random.Random(15).shuffle(shuffled)
-    orders = {1: facts, 2: facts[::-1], 3: shuffled}  # a different reading order per job, so they do not converge by position
+    orders = {1: facts, 2: facts[::-1], 3: shuffled}  # a different reading order per job
     flags = C.job_flags()
-    engine.run([engine.job("synthesis", f"account-{k}", {**common, "facts.json": json.dumps(orders[k], indent=1, ensure_ascii=False)},
-                           {"account.json": out / f"account-{k}.json"},
-                           first_check(lambda d: "; ".join(account_errors(json.loads((d / "account.json").read_text()), ids)
-                                                           + cell_errors(json.loads((d / "account.json").read_text()).get("cell") or {}, flags)) or None))
-                for k in range(1, ACCOUNTS + 1)], folder, ACCOUNTS)
     accounts, dropped = {}, []
-    for k in range(1, ACCOUNTS + 1):
-        j = json.loads((out / f"account-{k}.json").read_text())
-        if e := account_errors(j, ids):
-            dropped.append({"account": f"account-{k}", "reason": "; ".join(e)})
-            continue
-        if e := cell_errors(j.get("cell") or {}, flags):
-            dropped.append({"account": f"account-{k}", "cell_only": True, "reason": "; ".join(e)})
-            j["cell_dropped"] = "; ".join(e)
-        accounts[f"account-{k}"] = j
-        (folder / f"account-{k}.json").write_text(json.dumps(j, indent=1, ensure_ascii=False))
+    for k in range(1, ACCOUNTS + 1):  # in sequence: account k sees the kept accounts before it and denies their consequences
+        t0, name, earlier = time.time(), f"account-{k}", dict(accounts)
+        print(f"== synthesis: {name}" + (f", sees {', '.join(earlier)}" if earlier else ""))
+        inputs = {**common, "facts.json": json.dumps(orders[k], indent=1, ensure_ascii=False)}
+        if earlier:
+            inputs["earlier.json"] = json.dumps({n: {x: a[x] for x in ("account", "consequences", "denials") if x in a} for n, a in earlier.items()},
+                                                indent=1, ensure_ascii=False)
+
+        def check(d, earlier=earlier):
+            j = json.loads((d / "account.json").read_text())
+            return "; ".join(account_errors(j, ids, earlier) + cell_errors(j.get("cell") or {}, flags)) or None
+        engine.run([engine.job("synthesis", name, inputs, {"account.json": out / f"{name}.json"}, first_check(check),
+                               earlier=engine.prompt("synthesis_denials", n=MIN_DENIALS) if earlier else "")], folder, 1)
+        j = json.loads((out / f"{name}.json").read_text())
+        if e := account_errors(j, ids, earlier):
+            dropped.append({"account": name, "reason": "; ".join(e)})
+        else:
+            if e := cell_errors(j.get("cell") or {}, flags):
+                dropped.append({"account": name, "cell_only": True, "reason": "; ".join(e)})
+                j["cell_dropped"] = "; ".join(e)
+            accounts[name] = j
+            (folder / f"{name}.json").write_text(json.dumps(j, indent=1, ensure_ascii=False))
+        stages[name] = round((time.time() - t0) / 60, 1)
     for x in dropped:
         print(f"  dropped {'the cell of ' if x.get('cell_only') else ''}{x['account']}: {x['reason']}")
-    stages["accounts"] = round((time.time() - t0) / 60, 1)
-    print("== judge: where the accounts disagree")
-    t0, names = time.time(), list(accounts)
-    if len(names) >= 2:
-        shown = {n: {k: a[k] for k in ("account", "marks", "worst", "consequences")} for n, a in accounts.items()}
-        engine.run([engine.job("synthesis_judge", "judge", {"accounts.json": json.dumps(shown, indent=1, ensure_ascii=False),
-                                                            "facts.json": json.dumps(facts, indent=1, ensure_ascii=False), "data.md": common["data.md"]},
-                               {"disagreements.json": folder / "disagreements.json"},
-                               lambda d: "; ".join(judge_errors(json.loads((d / "disagreements.json").read_text()), names)) or None, names=", ".join(names))], folder)
-    stages["judge"] = round((time.time() - t0) / 60, 1)
-    ds = json.loads((folder / "disagreements.json").read_text())["disagreements"] if len(names) >= 2 else []
-    plans = [{"name": f"{folder.name}/{d['id']}", "kind": "disagreement", "about": d["about"], "positions": d["positions"],
-              "mechanisms": {n: f"{folder.name}/{n}/{d['id']}" for n in d["test"]["ranges"] if n != "null"}, **d["test"]} for d in ds]
-    plans += [{"name": f"{folder.name}/{n}/{c['id']}", "kind": "consequence", "why_new": c["why_new"], "mechanisms": {n: f"{folder.name}/{n}/{c['id']}"},
-               **{k: c[k] for k in (*TEST_KEYS, "files", "n")}, "ranges": {n: c["ranges"]["account"], "null": c["ranges"]["null"]}}
-              for n, a in accounts.items() for c in a["consequences"]]
+    print("== blind markers and adversaries")
+    t0 = time.time()
+    jobs = [engine.job("synthesis_marks", n, {"account.json": json.dumps({"account": a["account"]}, indent=1, ensure_ascii=False), "facts.json": facts_text},
+                       {"marks.json": folder / f"marks-{n}.json"}, lambda d: "; ".join(marks_errors(json.loads((d / "marks.json").read_text()), ids)) or None)
+            for n, a in accounts.items()]
+    shown = {"facts.json": facts_text, "data.md": common["data.md"], "results.md": common["results.md"], "all_results.md": results_md(items)}
+    jobs += [engine.job("synthesis_adversary", f"{n}-{c['id']}",
+                        {**shown, "consequence.json": json.dumps({**{x: c[x] for x in ("statistic", "files", "rows", "n", "computation")}, "range": c["ranges"]["account"]},
+                                                                 indent=1, ensure_ascii=False)},
+                        {"adversary.json": folder / "adversary" / f"{n}-{c['id']}.json"},
+                        lambda d: "; ".join(adversary_errors(json.loads((d / "adversary.json").read_text()), board_ids)) or None)
+             for n, a in accounts.items() for c in a["consequences"]]
+    engine.run(jobs, folder, len(jobs))
+    stages["markers and adversaries"] = round((time.time() - t0) / 60, 1)
+    deniers = {}  # "account-1/c2": [(denying account, denial)]
+    for n, a in accounts.items():
+        for d in a.get("denials") or []:
+            deniers.setdefault(d["denies"], []).append((n, d))
+    plans = []
+    for n, a in accounts.items():
+        for c in a["consequences"]:
+            key, den = f"{n}/{c['id']}", deniers.get(f"{n}/{c['id']}", [])
+            adv = json.loads((folder / "adversary" / f"{n}-{c['id']}.json").read_text())
+            p = {"name": f"{folder.name}/{key}", "owner": n, "why_new": c["why_new"], **{x: c[x] for x in (*TEST_KEYS, "files", "n")},
+                 "ranges": {n: c["ranges"]["account"], **{m: d["range"] for m, d in den}, "null": c["ranges"]["null"]},
+                 "mechanisms": {n: f"{folder.name}/{key}", **{m: f"{folder.name}/{m}/deny-{n}-{c['id']}" for m, d in den}},
+                 "denials": [{"by": m, **d} for m, d in den], "adversary": adv}
+            if adv.get("already_shown"):  # version 16: a number a board result already shows earns no credit
+                p["rejected"], p["mechanisms"] = f"{adv['already_shown']['result']} already shows it: {adv['already_shown']['number']}", {}
+            plans.append(p)
+    plans.sort(key=lambda p: not p["denials"])  # denied consequences first
     (folder / "synthesis_tests.json").write_text(json.dumps(plans, indent=1, ensure_ascii=False))
     rows = {r["mechanism"]: r for r in json.loads(TESTED.read_text())}
-    md = [f"# Synthesis tests, {folder.name}\n\nDisagreements between the accounts first (the judge's), then each account's three new consequences. "
-          "Run each with one subagent: spec committed first, offline on stored rows only, script under `studies/theory/analysis/`, outputs under "
-          f"`studies/theory/results/direct/<name>-01/`, n and the 90 % bootstrap interval, then one row per mechanism named here through "
-          f"`forecast.py add-rows`. {VERDICT_RULE} A value in no account's range refutes every account the test names.\n"]
+    md = [f"# Synthesis tests, {folder.name} (version 16)\n\nDenied consequences first. Run each with one subagent: spec committed first, offline on "
+          "stored rows only, script under `studies/theory/analysis/`, outputs under `studies/theory/results/direct/<name>-01/`. Compute the "
+          "adversary's value FIRST, from the adversary's computation on stored rows; then the statistic, its n and 90 % bootstrap interval; "
+          "then one row per mechanism named here, with `interval`, `range` (that mechanism's), `adversary` (the value) and `n`, through "
+          "`forecast.py add-rows`, which recomputes the verdict: holds only if the interval lies wholly inside the range, n >= 50 and the "
+          "interval excludes the adversary's value; inside the range but containing it: `not separated`; wholly outside: refuted; else "
+          "undecided. Read no other test's output of this round.\n"]
     for p in plans:
-        keys = list(p["mechanisms"])
-        md.append(f"\n## {p['name']} ({p['kind']})\n\n" + (f"- About: {p['about']}\n" + "".join(f"- {n}: {s}\n" for n, s in p["positions"].items())
-                                                          if p["kind"] == "disagreement" else f"- Why no fact covers it: {p['why_new']}\n")
-                  + test_md(p, keys) + "".join(f"- Mechanism {m}: " + (f"{rows[m]['verdict']} ({rows[m]['result']}: {rows[m]['measured']})" if m in rows else "not run yet") + "\n"
-                                               for m in p["mechanisms"].values()))
+        md.append(f"\n## {p['name']}" + (" (rejected)" if p.get("rejected") else "") + "\n\n"
+                  + (f"- Rejected (one measurement, one credit): {p['rejected']}\n" if p.get("rejected") else "")
+                  + f"- Why no fact covers it: {p['why_new']}\n"
+                  + "".join(f"- Denied by {d['by']}: {d['why']} Instead: {d['instead']} Range {d['range']}\n" for d in p["denials"])
+                  + test_md(p, [k for k in p["ranges"] if k != "null"])
+                  + f"- Adversary ({p['adversary']['kind']}): {p['adversary']['alternative']}\n- Adversary's value, computed first: {p['adversary']['computation']} "
+                  f"(files: {', '.join('`' + f + '`' for f in p['adversary']['files'])})\n"
+                  + "".join(f"- Mechanism {m}: " + (f"{rows[m]['verdict']} ({rows[m]['result']}: {rows[m]['measured']})" if m in rows else "not run yet") + "\n"
+                            for m in p["mechanisms"].values()))
     (folder / "synthesis_tests.md").write_text("\n".join(md) + "\n")
     pending = [m for p in plans for m in p["mechanisms"].values() if m not in rows]
-    info = {"commit": sh("git", "rev-parse", "--short", "HEAD").strip(), "command": " ".join(sys.argv), "utc": now(), "version": 15, "facts": len(facts),
-            "accounts": names, "dropped": dropped, "disagreements": len(ds), "plans": len(plans), "job_dirs": str(engine.tmp())}
+    info = {"commit": sh("git", "rev-parse", "--short", "HEAD").strip(), "command": " ".join(sys.argv), "utc": now(), "version": 16, "facts": len(facts),
+            "accounts": list(accounts), "dropped": dropped, "plans": len(plans), "rejected": sum("rejected" in p for p in plans), "job_dirs": str(engine.tmp())}
     prior = json.loads((folder / "run.json").read_text()).get("minutes_per_stage", {}) if (folder / "run.json").exists() else {}
     info["minutes_per_stage"] = {**prior, **{k: v for k, v in stages.items() if v >= 0.1 or k not in prior}}
     if pending:
@@ -1201,37 +1286,48 @@ def synthesis(folder, sources):
         (folder / "run.json").write_text(json.dumps({**info, "state": "waiting for synthesis tests", "pending": pending}, indent=1))
         return
     print("== synthesis.md")
-    score = {}
+    verdicts, score, names = ("holds", "not separated", "refuted", "undecided"), {}, list(accounts)
     for n, a in accounts.items():
-        m = [x["mark"] for x in a["marks"]]
-        own = [rows[f"{folder.name}/{n}/{c['id']}"]["verdict"] for c in a["consequences"]]
-        dis = [rows[p["mechanisms"][n]]["verdict"] for p in plans if p["kind"] == "disagreement" and n in p["mechanisms"]]
-        score[n] = {"explained": m.count("explained"), "not addressed": m.count("not addressed"), "contradicts": m.count("contradicts"),
-                    **{f"new {v}": own.count(v) for v in ("holds", "refuted", "undecided")}, "disagreements held": dis.count("holds"),
-                    "disagreements refuted": dis.count("refuted"), "score": own.count("holds") - m.count("contradicts")}
-    ranked = sorted(score, key=lambda n: (-score[n]["score"], -score[n]["disagreements held"]))
+        mk = [x["mark"] for x in json.loads((folder / f"marks-{n}.json").read_text())["marks"]]
+        own = [rows[p["mechanisms"][n]]["verdict"] for p in plans if p["owner"] == n and n in p["mechanisms"]]
+        den = [rows[p["mechanisms"][n]]["verdict"] for p in plans if p["owner"] != n and n in p["mechanisms"]]
+        score[n] = {"explained": mk.count("explained"), "not addressed": mk.count("not addressed"), "contradicts": mk.count("contradicts"),
+                    "self-marked contradicts": [x["mark"] for x in a["marks"]].count("contradicts"), **{f"new {v}": own.count(v) for v in verdicts},
+                    "new rejected": sum(p["owner"] == n and "rejected" in p for p in plans), "denials held": den.count("holds"),
+                    "denials refuted": den.count("refuted"), "score": own.count("holds") + den.count("holds") - mk.count("contradicts")}
+    ranked = sorted(score, key=lambda n: (-score[n]["score"], score[n]["contradicts"]))
     cols = list(score[ranked[0]]) if ranked else []
-    md = [f"# Synthesis, {folder.name}\n\nWritten {now()} UTC. {len(facts)} direct facts; {len(names)} accounts kept of {ACCOUNTS}"
+    md = [f"# Synthesis, {folder.name} (version 16)\n\nWritten {now()} UTC. {len(facts)} direct facts; {len(names)} accounts kept of {ACCOUNTS}"
           f"{' (dropped: ' + ', '.join(x['account'] for x in dropped if not x.get('cell_only')) + ')' if any(not x.get('cell_only') for x in dropped) else ''}. "
-          "Score = new consequences that hold minus facts the account marks as contradicting it. Fact marks are the account's own.\n",
+          "Score = consequences and denials that hold against the adversary's value minus facts the blind marker marks as contradicting the account. "
+          "Fact marks are the blind marker's (`marks-<account>.json`); the account's own count of contradictions is shown beside them.\n",
           "| account | " + " | ".join(cols) + " |\n|---|" + "---|" * len(cols)]
     md += [f"| {n} | " + " | ".join(str(score[n][c]) for c in cols) + " |" for n in ranked]
+
+    def row_md(m):
+        r = rows[m]
+        return f"measured {r['measured']}; adversary {r.get('adversary')}; {r['verdict']} ({r['result']})"
     for n in ranked:
-        a = accounts[n]
-        md.append(f"\n## {n}\n\n" + " ".join(a["account"]) + "\n\nContradicts: " + ("; ".join(f"{x['fact']} ({x['why']})" for x in a["marks"] if x["mark"] == "contradicts") or "none")
+        a, marks = accounts[n], json.loads((folder / f"marks-{n}.json").read_text())["marks"]
+        md.append(f"\n## {n}\n\n" + " ".join(a["account"]) + "\n\nContradicts (blind marker): "
+                  + ("; ".join(f"{x['fact']} ({x['why']})" for x in marks if x["mark"] == "contradicts") or "none")
+                  + "\n\nContradicts (own marks): " + ("; ".join(f"{x['fact']} ({x['why']})" for x in a["marks"] if x["mark"] == "contradicts") or "none")
                   + f"\n\nExplains worst: {', '.join(a['worst'])}\n")
-        for c in a["consequences"]:
-            r = rows[f"{folder.name}/{n}/{c['id']}"]
-            md.append(f"- {c['id']}: {c['statistic']}; range {c['ranges']['account']}, null {c['ranges']['null']}; measured {r['measured']}; {r['verdict']} ({r['result']})")
+        for p in plans:
+            if p["owner"] == n:
+                md.append(f"- {p['name']}: {p['statistic']}; range {p['ranges'][n]}; " + (f"rejected: {p['rejected']}" if p.get("rejected") else row_md(p["mechanisms"][n])))
+        for d in a.get("denials") or []:
+            m = f"{folder.name}/{n}/deny-{d['denies'].replace('/', '-')}"
+            md.append(f"- denies {d['denies']}: range {d['range']}; " + (row_md(m) if m in rows else "consequence rejected"))
         cell = a.get("cell") or {}
         md.append(f"- GPU cell{' (dropped: ' + a['cell_dropped'] + ')' if a.get('cell_dropped') else ''}: {cell.get('readout')}, predicted {cell.get('value')} "
                   f"[{cell.get('low')}, {cell.get('high')}] {cell.get('unit')}, {cell.get('gpu_minutes')} GPU minutes. `{cell.get('command')}`")
-    md.append("\n## Disagreements\n")
-    md += [f"- {p['name']}: {p['about']} " + "; ".join(f"{n} {p['ranges'][n]}: {rows[m]['verdict']}" for n, m in p["mechanisms"].items())
-           + f"; measured {rows[next(iter(p['mechanisms'].values()))]['measured']}" for p in plans if p["kind"] == "disagreement"] or ["none"]
+    md.append("\n## Denials\n")
+    md += [f"- {p['name']}: " + "; ".join(f"{who} {p['ranges'][who]}: {rows[m]['verdict']}" for who, m in p["mechanisms"].items())
+           + f"; measured {rows[p['mechanisms'][p['owner']]]['measured']}" for p in plans if p["denials"] and not p.get("rejected")] or ["none"]
     (folder / "synthesis.md").write_text("\n".join(md) + "\n")
     (folder / "run.json").write_text(json.dumps({**info, "state": "done", "score": score}, indent=1))
-    print("\n".join(md[:2 + len(ranked)]))
+    print("\n".join(md[:2 + len(names)]))
 
 
 def wide_round_v10(folder, sources, n):

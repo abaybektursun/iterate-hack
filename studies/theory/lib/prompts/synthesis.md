@@ -9,7 +9,7 @@ Files here:
 - DIRECTION.md: the team's research direction.
 - data.md: the team's stored data (README rows naming results/ and data/ paths, and the files and folders under them).
 - jobs.md: the GPU job files, their flags (no others exist) and how to run them.
-
+$earlier
 Rival mechanisms written about one surprise at a time have lost to the null. Write instead ONE account of all the
 facts together.
 
@@ -29,9 +29,16 @@ facts together.
    with the 90 % bootstrap interval>", "null": "<the strongest null that exists for this statistic: the base's own
    resample, a random edit of the same norm, another model's directions; random only when nothing stronger exists>",
    "ranges": {"account": [low, high], "null": [low, high]}}. The two ranges must not overlap or touch: the account
-   holds only by beating the null. Verdict, applied by the test runner: the consequence holds only if the
-   statistic's 90 % interval lies wholly inside the account's range and n is at least 50; inside the null's range or
-   between, it is refuted or undecided. Pick statistics where a false account would most likely fail.
+   holds only by beating the null. Before any test, an adversary who never sees your account, only the statistic,
+   files, rows, computation and your range, writes the strongest alternative that predicts your range without your
+   account (a covariate such as accuracy, length or problem difficulty; regression to the mean on a selected subset;
+   a construction artifact) and the test runner computes that alternative's value first. Verdict: the consequence
+   holds only if the statistic's 90 % interval lies wholly inside the account's range, n is at least 50 and the
+   interval excludes the adversary's value; inside the range but containing it is "not separated"; wholly outside is
+   refuted. So pick statistics that accuracy, length or difficulty alone cannot put in your range, and a null that
+   could come out in your range (a null that fails by construction, such as "all wrong answers are one value", proves
+   nothing). One measurement earns one credit: no two consequences may use the same set of files, and a number a
+   board result already shows is rejected.
 5. "cell": one consequence that needs a GPU run: {"readout": "...", "unit": "...", "command": "<command line of a job
    file of jobs.md with its flags only>", "value": <predicted>, "low": <90 % low>, "high": <90 % high>,
    "gpu_minutes": <at most 120 on one L40S>, "why": "<which sentence of the account gives the number>"}. Never put
