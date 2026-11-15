@@ -58,9 +58,9 @@ The board changes about once a minute and every open tab reads `/data` every 10 
   gets 304 with no body while the board has not changed. The time of the read is in the header `X-Snapshot-Ns`, not
   in the body. API Gateway and the Web Adapter pass the 304 and the headers through. The server speaks HTTP/1.1,
   because Chrome sends `If-None-Match` only for HTTP/1.1 responses.
-- builds one snapshot per 5 s per Lambda instance, shared by every reader: 8 DynamoDB queries at the same time (6
-  lists, the messages, the scores). The finding line of a scored result and the last comment of open work idle over
-  an hour are kept in memory, keyed so that a change misses the cache.
+- builds one snapshot per 5 s per Lambda instance, shared by every reader: 9 DynamoDB queries at the same time (6
+  lists, the messages, the scores, the plain rows). The finding line of a scored result and the last comment of open
+  work idle over an hour are kept in memory, keyed so that a change misses the cache.
 - sends only the fields the pages read (`ITEM`, `MESSAGE`, `SCORE` in `view.py`). Item text stays whole, because
   the filter searches it.
 - stops reading in a hidden tab and reads at once when the tab is shown again.
@@ -73,7 +73,7 @@ Measured with `infra/monitor/bench.py` (branch `bench`) on 2026-11-15, before an
 | /data on the wire, board changed | 88.9 KB | 84.3 KB |
 | an open tab, one minute without board changes | 448 KB | 0.8 KB |
 | a hidden tab, 30 s | 3 reads | 0 |
-| DynamoDB calls per snapshot | 37 (19 Query, 18 GetItem) | 8 (20 on a process's first) |
+| DynamoDB calls per snapshot | 37 (19 Query, 18 GetItem) | 8 (20 on a process's first); 9 since the plain rows were added |
 | DynamoDB calls per minute, 3 visible tabs | 666 | at most 96 (12 snapshots) |
 | Lambda duration of a snapshot | 159 ms | 72 ms; a shared or 304 read 4.5 ms (median) |
 | cold start (Init + first /data) | 376 + 1,055 ms | 426 + 200 ms |
@@ -89,7 +89,7 @@ titles).
 ## Cost per month
 
 Nothing runs between requests, so idle costs nothing beyond a few cents of logs. A read that the 5 s snapshot
-answers takes about 4.5 ms of Lambda; a new snapshot takes about 72 ms and 8 DynamoDB queries of up to 60 items (about
+answers takes about 4.5 ms of Lambda; a new snapshot takes about 72 ms and 9 DynamoDB queries of up to 60 items (about
 30 read units; $0.125 per million on demand); each request is $1.00 per million at API Gateway. Ten viewers with
 the page visible 10 hours a day make about 1.1 million requests a month: about $1-2 in requests, a few dollars of
 Lambda and DynamoDB at most. The throttle (3 requests/s) caps the worst case at about 7.8 million requests a month.
