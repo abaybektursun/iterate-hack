@@ -1,0 +1,202 @@
+{
+ "test": "per problem the mean of score_v3 over 4 samples; paired bootstrap over the 500 problems, 5,000 resamples",
+ "cells": {
+  "base_cue": {
+   "source": "results/day1_3/math500_base_cue-01/rows.jsonl (attempt 0)",
+   "samples": [
+    {
+     "right": 405,
+     "cap_hits": 25,
+     "okay_in_first_30": null,
+     "tokens_per_problem": 3808.138
+    },
+    {
+     "right": 409,
+     "cap_hits": 23,
+     "okay_in_first_30": null,
+     "tokens_per_problem": 4143.972
+    },
+    {
+     "right": 410,
+     "cap_hits": 22,
+     "okay_in_first_30": null,
+     "tokens_per_problem": 3925.682
+    },
+    {
+     "right": 418,
+     "cap_hits": 20,
+     "okay_in_first_30": null,
+     "tokens_per_problem": 4155.758
+    }
+   ],
+   "mean_right": 410.5,
+   "mean_cap_hits": 22.5,
+   "mean_tokens_per_problem": 4008.3875
+  },
+  "rl_final": {
+   "source": "results/day1_3/math500_rl-01/rows.jsonl (attempt 0)",
+   "samples": [
+    {
+     "right": 456,
+     "cap_hits": 6,
+     "okay_in_first_30": null,
+     "tokens_per_problem": 4675.104
+    },
+    {
+     "right": 462,
+     "cap_hits": 10,
+     "okay_in_first_30": null,
+     "tokens_per_problem": 4587.922
+    },
+    {
+     "right": 464,
+     "cap_hits": 5,
+     "okay_in_first_30": null,
+     "tokens_per_problem": 4741.206
+    },
+    {
+     "right": 458,
+     "cap_hits": 11,
+     "okay_in_first_30": null,
+     "tokens_per_problem": 4742.928
+    }
+   ],
+   "mean_right": 460.0,
+   "mean_cap_hits": 8.0,
+   "mean_tokens_per_problem": 4686.79
+  },
+  "s0100_plain": {
+   "source": "results/ckptcue/s0100_plain-01 (sample 0), results/ckptcue/s0100_plain_s123-01 (samples 1 to 3, job abaybektursun-1115-102945-9b20)",
+   "samples": [
+    {
+     "right": 418,
+     "cap_hits": 24,
+     "okay_in_first_30": 383,
+     "tokens_per_problem": 4120.18
+    },
+    {
+     "right": 411,
+     "cap_hits": 21,
+     "okay_in_first_30": 375,
+     "tokens_per_problem": 4057.956
+    },
+    {
+     "right": 422,
+     "cap_hits": 21,
+     "okay_in_first_30": 386,
+     "tokens_per_problem": 4084.762
+    },
+    {
+     "right": 419,
+     "cap_hits": 19,
+     "okay_in_first_30": 373,
+     "tokens_per_problem": 3932.084
+    }
+   ],
+   "mean_right": 417.5,
+   "mean_cap_hits": 21.25,
+   "mean_tokens_per_problem": 4048.7455
+  },
+  "s0100_cue": {
+   "source": "results/ckptcue/s0100_cue-01 (sample 0), results/ckptcue/s0100_cue_s123-01 (samples 1 to 3, job abaybektursun-1115-102956-6e9a)",
+   "samples": [
+    {
+     "right": 427,
+     "cap_hits": 24,
+     "okay_in_first_30": 500,
+     "tokens_per_problem": 4117.804
+    },
+    {
+     "right": 423,
+     "cap_hits": 24,
+     "okay_in_first_30": 500,
+     "tokens_per_problem": 4146.014
+    },
+    {
+     "right": 423,
+     "cap_hits": 25,
+     "okay_in_first_30": 500,
+     "tokens_per_problem": 4321.328
+    },
+    {
+     "right": 431,
+     "cap_hits": 23,
+     "okay_in_first_30": 500,
+     "tokens_per_problem": 4098.046
+    }
+   ],
+   "mean_right": 426.0,
+   "mean_cap_hits": 24.0,
+   "mean_tokens_per_problem": 4170.798000000001
+  },
+  "s0400_plain": {
+   "source": "results/ckptcue/s0400_plain-01 (sample 0), results/ckptcue/s0400_plain_s123-01 (samples 1 to 3, job abaybektursun-1115-103006-7462)",
+   "samples": [
+    {
+     "right": 436,
+     "cap_hits": 7,
+     "okay_in_first_30": 358,
+     "tokens_per_problem": 4080.25
+    },
+    {
+     "right": 447,
+     "cap_hits": 16,
+     "okay_in_first_30": 356,
+     "tokens_per_problem": 4283.396
+    },
+    {
+     "right": 435,
+     "cap_hits": 12,
+     "okay_in_first_30": 369,
+     "tokens_per_problem": 4197.228
+    },
+    {
+     "right": 433,
+     "cap_hits": 12,
+     "okay_in_first_30": 349,
+     "tokens_per_problem": 4140.796
+    }
+   ],
+   "mean_right": 437.75,
+   "mean_cap_hits": 11.75,
+   "mean_tokens_per_problem": 4175.4175
+  }
+ },
+ "differences": {
+  "s0100_plain minus base_cue": {
+   "points": 1.4000000000000001,
+   "ci95": [
+    -0.5000000000000004,
+    3.2499999999999973
+   ]
+  },
+  "s0100_cue minus s0100_plain": {
+   "points": 1.7000000000000002,
+   "ci95": [
+    0.0,
+    3.3499999999999974
+   ]
+  },
+  "s0100_cue minus base_cue": {
+   "points": 3.1,
+   "ci95": [
+    1.4500000000000068,
+    4.699999999999993
+   ]
+  },
+  "s0400_plain minus s0100_plain": {
+   "points": 4.05,
+   "ci95": [
+    2.400000000000002,
+    5.700000000000005
+   ]
+  },
+  "rl_final minus s0400_plain": {
+   "points": 4.45,
+   "ci95": [
+    3.0500000000000083,
+    5.949999999999999
+   ]
+  }
+ }
+}

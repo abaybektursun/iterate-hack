@@ -1,0 +1,86 @@
+{
+ "status": "done",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/s0100",
+  "model_label": "s0100",
+  "prompt": "cue",
+  "set": "math500",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 41010000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 3,
+  "restarts": 0,
+  "out": "/runs/abaybektursun-1115-102956-6e9a",
+  "dry_run": false,
+  "commit": "11d2e6d205732f6f0578c837599f7e82988844a4",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 500,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "commit": "11d2e6d205732f6f0578c837599f7e82988844a4",
+ "job_id": "abaybektursun-1115-102956-6e9a",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T16:30:54Z",
+ "updated_utc": "2026-11-15T17:52:11Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 28749,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 18432,
+  "load_s": 65.3843126296997,
+  "model_dir": "/tmp/s0100",
+  "tok_dir": "/__modal/volumes/vo-rul9XKaAuhEZE7QxFIdPN3/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 1500,
+  "tok_p_lt_1e2": 72908,
+  "tok_p_lt_1e3": 21823,
+  "correct_v3": 1277,
+  "correct_v1": 1250,
+  "cap_hits": 72,
+  "loop_A": 0,
+  "generated_tokens": 6281266,
+  "restarts": 0,
+  "n_planned": 1500,
+  "mean_generated_tokens": 4187.510666666667,
+  "generation_s": 4805.691818714142,
+  "tokens_per_s": 1307.0471925685565
+ },
+ "memory": {
+  "gpu_memory_used_mib": 73533,
+  "gpu_memory_total_mib": 81559,
+  "gpu": "NVIDIA H100 80GB HBM3"
+ },
+ "wall_s": 4876.805714130402
+}

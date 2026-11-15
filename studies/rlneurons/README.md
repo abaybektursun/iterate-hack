@@ -3434,6 +3434,55 @@ between the base's and the final model's. Three step 100 plain answers are empty
 The first step 100 plain job (AWS `ih-1115-092337-b35c`) was cut by its 2-hour limit at 478 answers (405 right) and is not
 used; a second run was lost with its box.
 
+### Four samples per cell (ckptcue3, board work-f8ecb6)
+
+Spec and predictions, written before any job: `specs/SPEC_ckptcue3.md`. Readout: `analysis/ckptcue3.py`, output
+`results/ckptcue/readout3.json`. Three more samples of step 100 plain, step 100 cue and step 400 plain, one Modal H100 job
+per cell (`run_cell.py --seed <S + 10000> --samples 3`, so the seeds are those of samples 1 to 3 of the cell's seed S):
+`results/ckptcue/<cell>_s123-01/` (`run.json`, `metrics.json`, `rows.jsonl` in the shape of the Day-1 #3 rows with sample
+= 1 to 3, `examples.json` with one right and one wrong answer). Sample 0 is the cell's `-01` folder above. The references
+are now four samples each: attempt 0 of `results/day1_3/math500_base_cue-01/rows.jsonl` and
+`results/day1_3/math500_rl-01/rows.jsonl`. Raw answers: `runs/<job id>/answers.jsonl` in the worktree
+`iterate-hack-ckptcue3` on abaybektursun's laptop and in his Modal Volume.
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.ckptcue3 --runs runs s0100_plain=abaybektursun-1115-102945-9b20 s0100_cue=abaybektursun-1115-102956-6e9a s0400_plain=abaybektursun-1115-103006-7462
+```
+
+| Cell | Right of 500, samples 0 to 3 | Mean | Cap hits per sample | 'Okay' in first 30 characters | Tokens per problem | Job of samples 1 to 3 |
+|---|---|---|---|---|---|---|
+| base, cue (Day-1 #3) | 405, 409, 410, 418 | 410.5 | 25, 23, 22, 20 | not stored | 4,008 | |
+| RL step 100, plain | 418, 411, 422, 419 | 417.5 | 24, 21, 21, 19 | 383, 375, 386, 373 | 4,049 | `abaybektursun-1115-102945-9b20` |
+| RL step 100, cue | 427, 423, 423, 431 | 426.0 | 24, 24, 25, 23 | 500 each | 4,171 | `abaybektursun-1115-102956-6e9a` |
+| RL step 400, plain | 436, 447, 435, 433 | 437.75 | 7, 16, 12, 12 | 358, 356, 369, 349 | 4,175 | `abaybektursun-1115-103006-7462` |
+| RL final, plain (Day-1 #3) | 456, 462, 464, 458 | 460.0 | 6, 10, 5, 11 | not stored | 4,687 | |
+
+| Difference of four-sample means (per problem the mean over 4 samples; paired bootstrap over problems, 5,000 resamples) | Points | 95 % interval | One sample, above |
+|---|---|---|---|
+| step 100 plain minus base cue | +1.40 | [-0.50, +3.25] | +1.6 [-2.0, +5.2] |
+| step 100 cue minus step 100 plain | +1.70 | [0.00, +3.35] | +1.8 [-1.2, +4.8] |
+| step 100 cue minus base cue | +3.10 | [+1.45, +4.70] | +3.4 [+0.2, +6.6] |
+| step 400 plain minus step 100 plain | +4.05 | [+2.40, +5.70] | +3.6 [+0.2, +7.0] |
+| final plain minus step 400 plain | +4.45 | [+3.05, +5.95] | +5.4 [+2.8, +8.0] |
+
+Reading. With four samples the step 100 lead over the cued base is +1.4 points and its interval still includes 0, but its
+upper end (+3.25) is outside the [-3, +3] band: by the spec's rule H-open is undecided, not supported, so "equals" is not
+earned; the supported statement is "step 100 plain is within 3.3 points of the cued base, and not shown to differ". H-more
+is not supported. The cue on top of step 100 adds +1.7 points with an interval whose lower end is exactly 0.00, so it is
+borderline, and step 100 with the cue is above the cued base by +3.1 [+1.45, +4.70]: the one-sample lead was real. The
+100 RL steps and the cue are therefore not interchangeable: together they give more than the cue alone. Step 400 leads
+step 100 by +4.05 and the final model leads step 400 by +4.45, both intervals clear of 0. Of the 49.5 problems between the
+cued base and the final model (four-sample means), 7 come by step 100, 20 more by step 400 and 22 after.
+
+All filed predictions hold: means 417.5, 426.0, 437.75 (filed 418 [411, 425], 423 [416, 430], 437 [430, 444]); the five
+differences lie inside their filed ranges; cap hits per new sample 21, 21, 19 (filed 24 [12, 36]). Identity check: each
+new sample is within 15 of its cell's sample 0 (largest gap 11, step 400 sample 1). Smoke: job
+`abaybektursun-1115-102326-6e86`, 30 rows read before the full jobs.
+
+Limits. The interval is over problems; four samples leave a quarter of the sample variance in each mean (per-sample
+counts spread over 11 to 14 problems within a cell). The plain and cue cells use different seeds. One benchmark, one
+model family. Four of the 1,500 new step 100 plain answers and one step 400 answer are empty.
+
 ## Mixed-model vote on the 328: do two models' samples vote better together? (hard328, n = 328, laptop, board work-0d465a)
 
 Question: the vote's remaining errors are problems where a model never writes the right answer ("The 328 with four samples
