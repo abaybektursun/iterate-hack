@@ -1,0 +1,2 @@
+{"info": {"deliberation_part_problems": 15, "counted": 14, "gap_problems": 57}}
+{"measured": 0.9333333333333333, "n": 15, "interval": [0.8, 1.0], "interval_kind": "bootstrap", "refuted_by_met": false, "alt_measured": 0.9333333333333333, "not_computable": null, "example_row": {"problem_index": 36, "subject": "intermediate_algebra", "level5": false, "cell": "rl_only", "t1_right": 0, "t2_right": 1, "t1_cap_hit": false, "t2_cap_hit": false, "t1_generated_tokens": 1592, "t2_generated_tokens": 5675, "failure_type": "slip_arithmetic_algebra", "label_from_tail_only": false}}
