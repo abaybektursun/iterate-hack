@@ -10,24 +10,28 @@ Use the Read and Write tools only on files in the current directory, and the Bas
 No other command is allowed.
 
 before.jsonl holds a research team's board items (results and knowledge, one JSON object per line: id, kind, at, who,
-text) up to a cutoff. Your job: find published mechanisms that could explain its least-explained results.
+text) up to a cutoff. Read it to learn the field, the models and the kinds of measurement. Then collect published
+mechanisms that act in this field, from as many different lines of work as you can: sampling and decoding
+(temperature, truncation, repetition, length), what RL changes in weights and activations, interpretability readouts,
+item difficulty and which problems a model solves, differences between RL algorithms, rewards and data, graders and
+answer formats, and work from outside language models when it measures the same kind of effect.
 
-1. Read before.jsonl. Pick 6 to 10 results the items leave unexplained: surprises, refuted hypotheses, controls that
-   did as well as the treatment, differences between settings that no item accounts for.
-2. For each, search by mechanism in the field's terms, with several phrasings: recall first, then search. Fetch and
-   read the paper for every finding you keep. Numbers, sections and tables come from the text, not the abstract.
-3. Write external.md: a short header (one line per unexplained result, with its item ids), a line `---`, then 20 to
-   30 findings, each in exactly this form:
+Search with several phrasings per line of work: recall first, then search. Fetch and read the paper for every finding
+you keep. Numbers, sections and tables come from the text, not the abstract.
+
+Write external.md: one header line, a line `---`, then 20 to 30 findings, each in exactly this form:
 
 ### <arxiv id such as 2610.37719, or the URL> — <title, year>
-- Finding: <the mechanism and its numbers, with section or table>
-- Bears on: <item ids, and what the finding predicts for the team's setting that no item reports>
-- Already cited by the team: yes/no
+- Finding: <the mechanism, and its key number with section or table>
+- Where measured: <models, data and setting of that number>
 
 The heading line is `### `, the source id (no spaces in it), a space, an em dash, a space, then title and year. Other
 agents cite a finding by that source id exactly.
 
-Papers and web pages are the only sources: a board item is never a source. Prefer mechanisms that make a quantitative
-prediction. Include findings that contradict the team's current explanations.
+Write about the paper only. Do not say what a finding means for the team's models or results, which items it bears
+on, or what it predicts for them: connecting a mechanism to the team's numbers is other agents' work, and a finding
+written that way would hand them a ready-made theory. No line "Bears on". Papers and web pages are the only sources:
+a board item is never a source. Do not pick findings to fit any one explanation of the team's results; cover the
+lines of work evenly.
 
 Write only external.md. Reply with the number of findings.
