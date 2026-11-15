@@ -1,0 +1,165 @@
+{
+ "what": "Three units of the blind description test with 8 of their 20 test snippets each, for the page tools/finding_neurons_you_can_describe.py.",
+ "source": {
+  "scores_and_sentences": "studies/cleanneurons/results/describe/attr_top100-01/descriptions_test.json",
+  "snippets_and_key": "test_items.json and test_key.json of analysis/describe_test.py prep (seed 0) on job sameraslan-1114-154532-cdc8; not committed"
+ },
+ "seed": 0,
+ "sampling": "Per unit, random.Random(f'{seed}:{key}') samples 4 of the 10 firing snippet ids (sorted) and then 4 of the 10 random-position ids (sorted). The 8 are listed by id, which is the shuffled order of the test itself.",
+ "trimming": "Whitespace runs become one space; kept are the last 7 words before the marked token and the first 5 after it; '…' marks a cut. The marked token is between << and >>, as in test_items.json.",
+ "units": [
+  {
+   "key": "u06",
+   "set": "selected",
+   "layer": 10,
+   "neuron": 7275,
+   "pole": "+",
+   "description": "A hesitation word 'Hmm', 'Wait' or 'wait' starting a sentence right after a period or 'But', mostly just after the problem is restated in the opening reasoning.",
+   "blind_accuracy": 1.0,
+   "snippets": [
+    {
+     "id": 0,
+     "fires": true,
+     "text": "… an expression x² - 4x + 4.<< Wait>> a second, that looks familiar. …"
+    },
+    {
+     "id": 3,
+     "fires": false,
+     "text": "… possibility that I misread the original problem<<?>> Let me check again. The …"
+    },
+    {
+     "id": 4,
+     "fires": true,
+     "text": "… 3i. Let me write that out properly.<< Wait>>, is the multiplication by …"
+    },
+    {
+     "id": 5,
+     "fires": false,
+     "text": "… an integer k where kⁿ = 2²⁴<<.>> So, essentially, we need to …"
+    },
+    {
+     "id": 12,
+     "fires": false,
+     "text": "… is f(-1) if g(x) = f(x +<< >>1), but in this case, …"
+    },
+    {
+     "id": 14,
+     "fires": true,
+     "text": "… \\( b \\) are positive real numbers.<< Hmm>>, let me think about …"
+    },
+    {
+     "id": 16,
+     "fires": false,
+     "text": "… is 2000 calories. So, the answer is<< >>2000. Answer: \\boxed{2000}<|endoftext|>"
+    },
+    {
+     "id": 17,
+     "fires": true,
+     "text": "… 1 make 2²⁴ a perfect nᵗʰ power.<< Hmm>>, so we need to …"
+    }
+   ]
+  },
+  {
+   "key": "u23",
+   "set": "reference",
+   "layer": 10,
+   "neuron": 5485,
+   "pole": "+",
+   "description": "The noun 'terms' (also 'parts', 'power', 'number') right after a modifier naming its kind, as in 't³ terms', 'common terms', 'real parts', 'highest power', 'mixed number'.",
+   "blind_accuracy": 0.7,
+   "snippets": [
+    {
+     "id": 0,
+     "fires": true,
+     "text": "… 15.975. So, 15 and 39/40, since 39<</>>40 is 0.975. So, that's …"
+    },
+    {
+     "id": 4,
+     "fires": true,
+     "text": "… combine like terms. Start with the x^4<< term>>: 3x^4. x^3 term: -12x^3. …"
+    },
+    {
+     "id": 10,
+     "fires": true,
+     "text": "… +36i -15i². Combine like terms: The real<< parts>>: 48 -15i². Since i² …"
+    },
+    {
+     "id": 15,
+     "fires": false,
+     "text": "… since x = 0 and y > <<0>>, it's in the first …"
+    },
+    {
+     "id": 16,
+     "fires": false,
+     "text": "… since in math, fractions are preferred over<< repeating>> decimals. Let me check examples …"
+    },
+    {
+     "id": 17,
+     "fires": false,
+     "text": "… I can write each number as a<< decimal>> and perform the operations, then …"
+    },
+    {
+     "id": 18,
+     "fires": false,
+     "text": "… \\] Thus, the sum of the coefficients<< of>> \\( g(x) \\) is \\( …"
+    },
+    {
+     "id": 19,
+     "fires": true,
+     "text": "… need to break them down into prime<< factors>>. 3 is a prime …"
+    }
+   ]
+  },
+  {
+   "key": "u42",
+   "set": "reference",
+   "layer": 9,
+   "neuron": 2589,
+   "pole": "-",
+   "description": "A remainder or modulus token in modular arithmetic ('mod', '≡', the residue after '≡' or 'mod7 is'), or the repeating digits after a decimal point ('33.333') (weak)",
+   "blind_accuracy": 0.2,
+   "snippets": [
+    {
+     "id": 2,
+     "fires": false,
+     "text": "… digit: 5 (after borrowing) - 6. Can<<'t>> do that, need to borrow …"
+    },
+    {
+     "id": 3,
+     "fires": true,
+     "text": "… so sqrt(45) is between 6 and 7.<< Specifically>>, 6.7^2 is 44.89, because …"
+    },
+    {
+     "id": 7,
+     "fires": true,
+     "text": "… θ since it's already in the correct<< quadrant>>. So the final answer …"
+    },
+    {
+     "id": 8,
+     "fires": true,
+     "text": "… be an isosceles triangle. But wait, how<< exactly>> do I calculate the area …"
+    },
+    {
+     "id": 9,
+     "fires": false,
+     "text": "… So that would be 7 units (<<1>> block + 6 girls) arrange …"
+    },
+    {
+     "id": 12,
+     "fires": false,
+     "text": "… then starting from day 3: 3, 6,<< >>9, 12, 15, 18, 21, …"
+    },
+    {
+     "id": 14,
+     "fires": false,
+     "text": "… of each prime factor: \\(2^2 \\times 3<< \\>>times 5\\). - Calculate \\(2^2 …"
+    },
+    {
+     "id": 18,
+     "fires": true,
+     "text": "… days. Therefore, 9*4=36. Alternatively, if she could<< start>> at day 1, but since …"
+    }
+   ]
+  }
+ ]
+}
