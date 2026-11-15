@@ -53,6 +53,10 @@ ARMS = ("top8xm1_math31", "top8x0.5_math31", "top8_math31", "top8x1.5_math31", "
         "top8_code31", "top8_code30", "top8_math30", "top8_if30", "top8_general30", "top8x0.02_think_sft",
         "proj_math31_code30", "projc_math31_code30",
         "rinx1.5_math31", "routx1.5_math31", "permx1.5_math31")                  # SPEC_xshift amendment 1
+WRITE, INNER = "o,down", "q,k,v,gate,up"                                          # matrices that write to the residual stream; the others
+SHIFT_ONLY = {f"{r}x1.5_{name}_math31": (None, f"--recipe {r} --scale 1.5 --mods {mods} --other math31")     # amendment 3: no scored cell
+              for r in ("top8", "rin", "perm", "rand8") for name, mods in (("write", WRITE), ("inner", INNER))}
+ARMS += tuple(SHIFT_ONLY)
 GROUPS = ("all", "cap_hit", "finished", "third0", "third1", "third2")
 STEP, LENS_TOP, PLANT_LAYER = 16, 20, 12
 RANDOM = ("rand8", "rin", "rout")                                                 # recipes that use rand8's random directions
@@ -66,7 +70,7 @@ def parse(arm):
         ap.add_argument("--" + f)
     ap.add_argument("--scale", type=float, default=1.0)
     ap.add_argument("--k", type=int, default=8)
-    a = ap.parse_args(NEW[arm][1].split())
+    a = ap.parse_args({**NEW, **SHIFT_ONLY}[arm][1].split())
     assert a.recipe in ("top8", "rand8", "proj", "projc", "rin", "rout", "perm") and (a.recipe not in RANDOM or a.k == 8), (arm, a)
     canon = lambda key: key and next(k for k in E.ALL if E.ALL[k] == E.ALL[key])
     a.other, a.donor = canon(a.other), canon(a.donor)

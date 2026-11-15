@@ -111,3 +111,17 @@ full edit's mean shift at a layer would equal the sum of the band edits' mean sh
   shifts. Refuted if the ratio is below 1.2: the bands add, and compounding does not explain the 12-fold gap between the paired
   edit and the input-only edit of amendment 1.
 - Also reported: the same ratio at layers 16, 21, 24; the cosine between the full shift and the sum; RMS shifts of the bands.
+
+## Amendment 3 (2026-11-15, before the run): where the pairing matters, by matrix family
+
+Amendments 1 and 2: the paired edit shifts the residual 12 times more than RL's inputs with random outputs, the gap is already
+there at layer 8 (0.67 against 0.09), and layer bands nearly add. For a matrix that writes to the residual stream (attention `o`,
+MLP `down`), the addition's output for one input has the same norm whether its output directions are RL's or random, so there the
+pairing can matter only through what later layers do with the direction. For the inner matrices (`q`, `k`, `v`, `gate`, `up`)
+the output lands in attention or neuron space, where a random direction may do little. One run, eight arms at 1.5, no scored
+cells: `top8`, `rin`, `perm`, `rand8`, each restricted to `--mods o,down` (write) and to `--mods q,k,v,gate,up` (inner). Read:
+RMS shift at layer 24, group all.
+
+- S1. Write matrices: `rin` reaches at least 0.5 of `top8`'s shift. Refuted if below 0.25.
+- S2. Inner matrices: `rin` reaches at most 0.2 of `top8`'s shift. Refuted if at or above 0.5.
+- Reported: the same for `perm`; the two families' shares of the full edit's shift; layers 8, 16, 31.
