@@ -66,6 +66,24 @@
   "log": "/private/tmp/claude-501/-Users-abaybektursun-projects-iterate-hack/85298391-4ffe-41a3-927a-6370d6b6a4e7/scratchpad/round04duel.log",
   "temp_folder": "/var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-w857ijtq",
   "outputs": "rivals/<theory>.json, <theory>.defend.json, <theory>/p<k>.py and .out.txt, <theory>.tests.json; metrics_v5.json; duel.md",
-  "row_files": "fetched by the duel scripts to runs/theory-tests/ (not committed)"
+  "row_files": "fetched by the duel scripts to runs/theory-tests/ (not committed)",
+  "turn2": {
+   "spec": "none: the second turn was added after D2 was refuted; SPEC_round04_duel.md states no hypothesis for it",
+   "code_commit": "74ceb42",
+   "commands": ["uv run studies/theory/lib/round.py studies/theory/results/engine/round-04 rival2 defend duel_test ...", "uv run studies/theory/lib/round.py studies/theory/results/engine/round-04 score_duel ..."],
+   "duel_tests": 7,
+   "duel_tests_computed": 7,
+   "same_prediction": 5,
+   "states_both_turns": {"loses to rival": ["r4-m10", "r4-m08"], "not separated from rival": ["r4-m01"]},
+   "total_gain_both_turns": {"r4-m10": -7.809, "r4-m01": 1.111, "r4-m08": -2.652},
+   "jobs": {"rival2 (opus)": 3, "defend (opus)": 3, "duel_test (opus)": 3},
+   "jobs_total": 9,
+   "longest_job_s": {"test/duel-r4-m10.turn2": 744, "test/duel-r4-m01.turn2": 330},
+   "wall_time": "about 21 minutes, 2026-11-15T05:58:39Z (job folder created) to 06:19:13Z (log last written)",
+   "log": "/private/tmp/claude-501/-Users-abaybektursun-projects-iterate-hack/85298391-4ffe-41a3-927a-6370d6b6a4e7/scratchpad/round04duel2.log",
+   "temp_folder": "/var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-2eupiwmv",
+   "outputs": "rivals/<theory>.turn2.json, .turn2.defend.json, .turn2/ (scripts, .out.txt), .turn2.tests.json; metrics_v5.json rewritten with both turns",
+   "replication": "replication/replication_turn2.json: r4-m10 turn-2 tests 4-6 recomputed from the recipes alone, 3 of 3 equal"
+  }
  }
 }

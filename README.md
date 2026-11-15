@@ -205,7 +205,10 @@ Put the command in single quotes, so `$OUT_DIR` is expanded on the job's machine
 with its own quotes, put it in a script in the repository and run that. A job over its class's limit waits in Modal's queue. A job is killed at `--hours` (default 2). The command is one
 shell string, so `&&` and pipes work. Install extra packages in the command
 (`'pip install -q einops && python exp/train.py'`), or add them to `requirements.txt` and run
-`uv run tools/gpu.py deploy` again. The limits are the `max_containers` values in `infra/runner.py`. `submit` refuses
+`uv run tools/gpu.py deploy` again. The limits are the `max_containers` values in `infra/runner.py`. The class
+`short` is an H100 lane kept free for jobs of `--hours 0.5` at most, so a smoke run starts at once instead of waiting
+behind long jobs (p90 wait 20 min, max 39 min for short jobs in the shared queue, 2026-11-15); it reserves GPUs only
+when `ITERATE_MAX_H100` plus `ITERATE_MAX_SHORT` (default 2) is at most your workspace's GPU limit. `submit` refuses
 to run while the runner deployed in your workspace is not the `infra/runner.py` of the commit; `gpu.py deploy` fixes that.
 
 ### vast.ai
