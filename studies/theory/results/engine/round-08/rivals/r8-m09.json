@@ -1,0 +1,35 @@
+{
+ "statement": "Think-SFT's off-line 'Answer:' ending (value on the next line, which grader v3 reads as blank) is a terse teacher template it uses mainly on short, quick answers to easy problems, not a fixed habit on every finished answer, so the miss rate per finished answer falls steeply with answer length (about 1 % below 3,000 tokens, near 0 above 8,000); the RL delta's boxed ending still removes it, but the grading part of the hybrid's gain is about 3-4 per 500 on MATH-500 and under 1 per 328 on hard328, not about 2.",
+ "why_strongest": "It keeps the parts of the theory the board supports (the miss is a layout v3 reads as blank: 0.70 blank in test 3; the RL difference boxes the ending: result-284db5, test 4 at -0.004) and changes only how the miss is spread, which the measured values favour. Test 1 came in at 0.036, the bottom edge of the theory's interval, because hard328 answers are long. Test 2 came in at -0.009, the theory's lower bound: the miss rate is about 0.9 points higher on problems the base always solves than on problems it rarely solves, which is what a short-answer template gives and a fixed per-answer rate does not. result-bf6124 puts Think-SFT's excess errors at MATH levels 1-2, where answers are shortest. result-818c20 has the misses on MATH-500 (16 of 74 finished wrong answers), against about 1 per sample on hard328 (test 1). r7-m09 found no excess of non-integer golds (facts: 0.33, n 6), so answer length, not answer type, carries the effect. This is a length mechanism, simpler than a per-answer habit that must hold equally on 1,500- and 12,000-token answers, and it fits every number in tests.json at least as well.",
+ "tests": [
+  {
+   "experiment": "Length dependence of the layout miss: among finished Think-SFT cue answers (MATH-500 and hard328 pooled), the layout-miss rate in short answers (under 3,000 generated tokens) minus the rate in long answers (8,000 tokens or more).",
+   "recipe": "Files: iterate-runs:abaybektursun-1115-000503-1e5f/answers.jsonl, -000525-ea4e, -014823-ef56, -014833-1daa (hard328) and iterate-runs:abaybektursun-1115-000512-ee03/answers.jsonl, -014843-85d9, -000607-0e92, -000621-1d7e (MATH-500), fetched with modal volume get as in inventory.md; agreement function rln4_lib.agree from studies/rlneurons/lib/rln4_lib.py. In each file keep the first row per problem_index in file order. Finished = cap_hit not true and finish_reason != 'length'. Wrong = score_v3 != 1 (null or missing counts as wrong). Candidate C per row: if text contains the case-sensitive substring 'Answer:', let s = text after its last occurrence and C = the first element of s.split('\\n') whose strip() is non-empty; if 'Answer:' is absent, C = the last element of text.split('\\n') whose strip() is non-empty; if there is no such element, C = ''. Clean C: strip whitespace; remove every '$' and '*'; remove a leading '\\[' or '\\(' and a trailing '\\]' or '\\)'; strip a trailing '.'; if C contains '\\boxed{', replace C by the brace-balanced content of its last \\boxed{...}. Layout row = finished, wrong, C non-empty and rln4_lib.agree(C, gold) true. Drop finished rows with missing or null n_new. Short = finished rows with n_new < 3000; Long = finished rows with n_new >= 8000; other rows are not used. Pool all 8 files. Statistic = (layout rows in Short / finished rows in Short) - (layout rows in Long / finished rows in Long). Cap hits are excluded from numerators and denominators; missing rows add nothing. If either group has fewer than 150 finished rows, report the statistic anyway with the counts.",
+   "unit": "difference of fractions of finished answers",
+   "value": 0.008,
+   "low": 0.002,
+   "high": 0.015,
+   "theory_should_say": "About 0.000 (within about +-0.006): a fixed miss rate per finished answer, whatever the problem, gives the same rate in short and long answers, while the rival puts the template on short answers."
+  },
+  {
+   "experiment": "Where the layout misses sit in length: median generated tokens of Think-SFT layout-miss rows divided by the median generated tokens of all finished Think-SFT rows (8 files pooled).",
+   "recipe": "Files, first-row rule, finished, wrong, candidate C, cleaning and layout row exactly as in the first recipe of this file (the 8 Think-SFT full-text files: 4 hard328, 4 MATH-500). Drop finished rows with missing or null n_new. M_L = median of n_new over all layout rows pooled over the 8 files; M_F = median of n_new over all finished rows pooled over the 8 files (layout rows included). With an even count the median is the mean of the two middle values. Statistic = M_L / M_F. Cap hits are excluded (they are not finished). If there are fewer than 5 layout rows, report the statistic anyway with the count.",
+   "unit": "ratio of median generated tokens",
+   "value": 0.55,
+   "low": 0.32,
+   "high": 0.85,
+   "theory_should_say": "About 1.0 (roughly 0.75 to 1.35 with about 20 rows): if the miss happens at a fixed rate on every finished answer, its rows are a random draw of finished answers and have their median length, while the rival puts them on the short, easy answers."
+  },
+  {
+   "experiment": "Length dependence within one set, separating length from the MATH-500/hard328 mix: among finished Think-SFT MATH-500 answers, the layout-miss rate below the median length minus the rate above it.",
+   "recipe": "Files: the 4 Think-SFT MATH-500 full-text files iterate-runs:abaybektursun-1115-000512-ee03/answers.jsonl, -014843-85d9, -000607-0e92, -000621-1d7e, with rln4_lib.agree from studies/rlneurons/lib/rln4_lib.py. First row per problem_index per file. Finished, wrong, candidate C, cleaning and layout row exactly as in the first recipe of this file. Drop finished rows with missing or null n_new. Pool the finished rows of the 4 files and compute m = the median of their n_new (with an even count, the mean of the two middle values). Low = pooled finished rows with n_new <= m; High = pooled finished rows with n_new > m. Statistic = (layout rows in Low / finished rows in Low) - (layout rows in High / finished rows in High). Cap hits are excluded; missing rows add nothing.",
+   "unit": "difference of fractions of finished answers",
+   "value": 0.007,
+   "low": 0.0,
+   "high": 0.014,
+   "theory_should_say": "About 0.000 (within about +-0.007): a fixed per-answer layout rate gives equal rates in the shorter and longer halves of the same set's finished answers, while the rival puts most misses in the shorter half."
+  }
+ ],
+ "intervention": null,
+ "no_intervention": "The mechanism is about where Think-SFT's teacher-copied answer layout appears and how grader v3 reads it. The untrained base writes its value on the 'Answer:' line or in a box, which v3 reads (result-fdc8da: 121 of 132 'Answer:' answers right; result-0018d3), so no prompt, sampling, decoding or selection change to the base follows from it."
+}

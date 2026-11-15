@@ -338,9 +338,19 @@ are underlined with dots in the sentence, in an opened step and in the side pane
 `tools/glossary.py`, where a term is added with its source. The page reads every 10 s while its tab is visible (an
 unchanged board answers 304 with no body) and only rewrites what changed, so it does not move the text you are reading.
 A click on an item opens its title, what, why and caveat, its full text, scores, comments and thread in a side panel
-(`/#<item id>` is its link); filters are in the address too (`/?who=<name>&q=<text>`). Keys: `/` filter, `j` `k` move,
+(`/board#<item id>` is its link); filters are in the address too (`/board?who=<name>&q=<text>`). Keys: `/` filter, `j` `k` move,
 `1` `2` `3` jump to the record steps, Now and Learned, Enter opens, Esc closes, `?` lists them. The same page is public at https://monitor.invariant.team (`infra/monitor/`). The header of every page of
-the site has four tabs: Board (this page, `/`), Design (`/architecture`), Proof (`/proof`) and Findings (`/findings`).
+the site has four tabs: Board (this page, `/board`), Design (`/architecture`), Proof (`/proof`) and Findings (`/findings`),
+and the name "Invariant" in it leads to the home page.
+
+The home page `/` (`tools/home.py`) leads to every page of the site: Findings, Board, Proof, Design, Talk (`/demo`), Paper,
+Lab, Exa, past.dev, GPU prices (gpu.invariant.team) and Psychosis. Its picture is a dial: a lit glass body with a ring
+around it and one bead per page. A click on a bead or the arrow keys turn the dial to a page (`/#<page>`); a click on
+the body or the button opens it. Beside the picture the same pages are a plain list of links. About every 2.5 s one of
+the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the line under the picture.
+A new page of the site is one entry in `PAGES` of `home.py`. The board was at `/` before 2026-11-15: the page modules
+still link to it there, and `view.py` rewrites those links to `/board` as it sends a page (`HOME_LINK`, `NAME_LINK`);
+an old address of a board item or filter (`/#result-8b1c48`, `/?who=<name>`) forwards to `/board`.
 Every page has the same tab icon, `/favicon.svg`: `view.py` holds the SVG and writes the link to it into each page as
 it is sent, so a page module holds no icon.
 
@@ -388,6 +398,13 @@ The tab Proof is the page `/proof`: the same page as one list of rows with no pi
 not the research question. Each is a module `tools/proof_<slug>.py`, made like a finding page and served at
 `/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
 skill, `studies/metaharness/`).
+
+The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game.
+Hold Space, or press and hold, to breathe in and let go to breathe out, so that the white ring follows the blue one. A
+breath that follows it lights one of 10 petals and releases every thought on screen; 10 petals win. The thoughts are
+written jokes and, marked with a blue dot, real messages and result titles of the board. A thought that reaches the
+head is believed and moves the diagnosis up; the fifth ends the session. A click on a thought brings it back as 3
+subagents. A guide speaks one line per breath (M mutes). The end screen counts what the agents posted meanwhile.
 
 The page `/demo` is the talk: one stepped story over the Design page's picture, with a sentence and a fact line per
 step in the words column (arrow keys step, Esc closes; `/demo#<step>` links to a step). It is not a header tab. The 12
@@ -553,6 +570,14 @@ Counts and limits: 172 of 199 HTTP calls to Exa returned results, from 59 main a
 session transcripts up to 05:25 UTC; the Exa dashboards hold the authoritative count). 98 calls through the Exa MCP failed
 with a 401 error, which is why the agents call the HTTP API. Early on, one person's agents had no Exa key and used another
 search tool. No count of GPU jobs avoided by a search exists.
+
+The page `/exa` (`tools/exa_page.py`; not a header tab, and its look is its own: white paper and one cyan marker) shows
+four searches that changed a decision, and what the agents got from Exa up to Nov 15 15:29 UTC, without the number of
+calls. Its numbers come from
+`studies/metaharness/results/exa_count-01/summary.json`, written by `studies/metaharness/analysis/exa_count.py`: 381 calls
+to Exa returned (237 searches, 144 page reads) from 61 agents in 20 sessions; 193 more stopped at a missing key on one
+laptop; 59 MCP calls returned 401. This count expands shell loops and reads other transcripts than the count above, so
+the two do not reconcile. The theory engine's external stage has now written 163 published findings (rounds 02 to 07).
 
 ## past.dev challenge
 

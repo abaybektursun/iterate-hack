@@ -1,0 +1,6 @@
+cap32 cells, minutes from submit to rows on the laptop (job logs, runs/<job>/metrics.json generation_s):
+Think-SFT 309b vast RTX PRO 6000: generation 129 min, 499 tok/s
+RL 8ac9 vast RTX PRO 6000: generation 87 min, 594 tok/s
+base a9f4 vast RTX PRO 6000: lost, box ended at its 4 h limit while the laptop was off, rows not copied
+base rerun, 4 shards on AWS L40S (ih): 85 min from submit to joined rows
+first attempt on 3 boxes with 48 GB GPUs: 240 tok/s, destroyed after 35 min

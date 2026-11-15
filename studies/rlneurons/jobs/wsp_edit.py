@@ -19,6 +19,7 @@ loads. d = other - base in float32, one tensor at a time; d_k = U_k diag(s_k) V_
              interp every tensor = (1 - alpha) base + alpha other (merge_weights.point); alpha 0 and 1 give the endpoints bit for bit (asserted).
   --other    rl_math (default), rl_code or think_sft: a key of wsp_delta_anatomy.MODELS. The base is MODELS["base"].
   --other, --donor also take the keys of xreward_overlap.MODELS (math31, code31, math30, code30, if30, general30, mix30).
+  --layers   lo-hi: edit only the layer matrices of layers lo to hi inclusive (with the recipes of --mods); default all layers.
   --mods     comma list of q,k,v,o,gate,up,down: edit only these layer matrices (top8, rand8, bulk, proj, projc); default all seven.
   --scale    multiplies the addition of top8, rand8, proj, projc (default 1.0).
   --alpha    interp only (default 1.0).
@@ -74,7 +75,7 @@ def read(d, wmap, name):
         return f.get_tensor(name)
 
 
-def selected(recipe, names, late=LATE, mods=None):
+def selected(recipe, names, late=LATE, mods=None, layers=None):
     """the tensor names a recipe edits"""
     kinds = {n: kind(n) for n in names}
     n_layers = 1 + max(layer for _, layer in kinds.values() if layer is not None)
@@ -89,6 +90,10 @@ def selected(recipe, names, late=LATE, mods=None):
     if mods is not None:
         assert mods and set(mods) <= set(MATS), f"--mods {mods}: not all in {MATS}"
         sel = {n for n in sel if kinds[n][0] in mods}
+    if layers is not None:
+        lo, hi = layers
+        assert 0 <= lo <= hi < n_layers, f"--layers {lo}-{hi}: the model has layers 0 to {n_layers - 1}"
+        sel = {n for n in sel if lo <= kinds[n][1] <= hi}
     return sel
 
 
@@ -128,7 +133,7 @@ def ratios(a):
 
 
 def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, rounding="stochastic", seed=0, device="cpu", late=LATE, scale=1.0, mods=None,
-         donor_dir=None):
+         donor_dir=None, layers=None):
     """Writes the model of the recipe to out_dir, with the json files of json_dir; returns the statistics. Shards as merge_weights.merge:
     one output file per shard of the base, names sorted within a shard; the other model is read by its own index."""
     base_dir, other_dir, json_dir, out_dir = (pathlib.Path(d) for d in (base_dir, other_dir, json_dir, out_dir))
@@ -142,7 +147,8 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
     assert mods is None or recipe in ("top8", "rand8", "bulk", "proj", "projc"), f"--mods is not for {recipe}"
     assert (donor_dir is not None) == (recipe in ("proj", "projc")), f"{recipe}: donor {donor_dir}"
     wd = weight_map(donor_dir) if donor_dir else None
-    sel = selected(recipe, wb, late, mods)
+    assert layers is None or recipe in ("top8", "rand8", "bulk", "proj", "projc"), f"--layers is not for {recipe}"
+    sel = selected(recipe, wb, late, mods, layers)
     noise = {}
     if recipe in ("rand8", "rbulk"):
         shape = {n: v[1] for shard in set(wb.values()) for n, v in header(base_dir / shard).items()}
@@ -182,7 +188,7 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
         assert kept[src] == len(wb), f"alpha = {alpha}: {len(wb) - kept[src]} tensors are not the stored tensors of {src}"
     for p in json_dir.glob("*.json"):
         shutil.copy(p, out_dir / p.name)
-    return {"recipe": recipe, "k": k, "alpha": alpha if recipe == "interp" else None, "scale": scale, "mods": None if mods is None else list(mods),
+    return {"recipe": recipe, "k": k, "alpha": alpha if recipe == "interp" else None, "scale": scale, "mods": None if mods is None else list(mods), "layers": None if layers is None else list(layers),
             "rounding": rounding, "seed": seed,
             "late_layers": list(late) if recipe == "late3" else None, "reference": ref, "n_tensors": len(wb), "n_edited": len(per),
             "n_unchanged": sum(kept.values()), "unchanged_from": kept, "n_zero_delta": len(zero), "zero_delta": zero,
@@ -319,6 +325,7 @@ def main():
     ap.add_argument("--other", default="rl_math", choices=sorted(set(ALL) - {"base"}))
     ap.add_argument("--donor", choices=sorted(set(ALL) - {"base"}))
     ap.add_argument("--mods")
+    ap.add_argument("--layers")
     ap.add_argument("--scale", type=float, default=1.0)
     ap.add_argument("--alpha", type=float, default=1.0)
     ap.add_argument("--k", type=int)
@@ -341,7 +348,8 @@ def main():
     snap = lambda key: snapshot_download(ALL[key][0], revision=ALL[key][1], allow_patterns=["*.json", "*.safetensors"])
     base, other, donor = snap("base"), snap(a.other), snap(a.donor) if a.donor else None
     json_dir = snapshot_download(MODELS[JSON_KEY][0], revision=MODELS[JSON_KEY][1], allow_patterns=["*.json"])
-    res = edit(base, other, json_dir, a.dir, a.recipe, a.k, a.alpha, a.rounding, a.seed, device, scale=a.scale, mods=a.mods.split(",") if a.mods else None, donor_dir=donor)
+    res = edit(base, other, json_dir, a.dir, a.recipe, a.k, a.alpha, a.rounding, a.seed, device, scale=a.scale, mods=a.mods.split(",") if a.mods else None, donor_dir=donor,
+               layers=tuple(int(x) for x in a.layers.split("-")) if a.layers else None)
     res = {"args": vars(a), "models": {key: {"repo": ALL[key][0], "revision": ALL[key][1]} for key in ("base", a.other, a.donor) if key},
            "json_from": {"repo": MODELS[JSON_KEY][0], "revision": MODELS[JSON_KEY][1]}, "device": device, "torch": torch.__version__,
            "seconds": time.time() - t0, **res}

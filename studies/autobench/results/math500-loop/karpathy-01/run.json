@@ -1,0 +1,6 @@
+{
+ "commit": "1b44b4cdcee2ad1d837904d83252f2828944d1d2",
+ "command": "studies/autobench/analysis/readout.py 01 karpathy karpathy swarm-cue swarm-vote4",
+ "modal_app": "autobench",
+ "volume": "autobench-runs:/karpathy/ and /final/"
+}

@@ -1,0 +1,159 @@
+{
+ "dataset": "allenai/Dolci-Think-SFT-7B",
+ "revision": "83f618e2fe0aed29ee3440a3658a0326c175d09d",
+ "prompt_field": "messages[first role == user].content",
+ "rule": "rln3_overlap.norm/grams: exact = normalised text equals a training prompt; near = at least half of the word 8-grams occur in one training prompt",
+ "rows_scanned": 1788391,
+ "rows_total": 2268178,
+ "shards_scanned": 123,
+ "shards_total": 156,
+ "complete": false,
+ "shards_not_scanned": [
+  123,
+  124,
+  125,
+  126,
+  127,
+  128,
+  129,
+  130,
+  131,
+  132,
+  133,
+  134,
+  135,
+  136,
+  137,
+  138,
+  139,
+  140,
+  141,
+  142,
+  143,
+  144,
+  145,
+  146,
+  147,
+  148,
+  149,
+  150,
+  151,
+  152,
+  153,
+  154,
+  155
+ ],
+ "bytes_scanned": 32213209285,
+ "bytes_total": 36139346939,
+ "rows_without_user_message": 0,
+ "rows_by_dataset_source": {
+  "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered": 104569,
+  "allenai/aya-100k-r1-format-filtered-keyword-filtered-filter-datecutoff-ngram-filtered": 98597,
+  "allenai/coconot-r1-format-domain-filtered-keyword-filtered-filter-datecutoff-chinese-filtered": 10227,
+  "allenai/nemotron-post-training-dataset-subset-ngram-filtered-no-tool-calls": 100667,
+  "allenai/oasst1-r1-format-filtered-keyword-filtered-filter-datecutoff-chinese-filtered": 6800,
+  "allenai/persona-precise-if-r1-final-content-filtered-chinese-filtered": 223123,
+  "allenai/tablegpt_r1-format-filtered-keyword-filtered-filter-datecutoff": 4981,
+  "allenai/tulu_v3.9_wildchat_100k_english-r1-final-content-filtered": 46312,
+  "allenai/wildchat-r1-p2-repetition-filter": 36742,
+  "allenai/wildguardmix-r1-v2-all-filtered-ngram-filtered-chinese-filtered": 38315,
+  "allenai/wildjailbreak-r1-v2-format-filtered-keyword-filtered-filter-datecutoff-final-content-filtered": 41100,
+  "saumyamalik/OpenThoughts3-full-filtered-code-subsampled-decontam-v2": 88900,
+  "saumyamalik/OpenThoughts3-full-filtered-math-decontam-v2": 752997,
+  "saumyamalik/OpenThoughts3-full-filtered-science-decontam-v2": 99269,
+  "saumyamalik/if_qwq_reasoning_verified_filtered_decontam_v2": 135792
+ },
+ "sets": {
+  "hard400": {
+   "n": 400,
+   "exact": 8,
+   "near": 3,
+   "none": 389,
+   "by_source": {
+    "aime2022/exact": 6,
+    "aime2022/none": 24,
+    "aime2023/exact": 2,
+    "aime2023/none": 28,
+    "aime2024/none": 30,
+    "aime2025/none": 30,
+    "amc23/none": 40,
+    "hmmt_feb2025/none": 30,
+    "olympiadbench/near": 3,
+    "olympiadbench/none": 207
+   },
+   "match_dataset_source": {
+    "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered": 10,
+    "saumyamalik/OpenThoughts3-full-filtered-math-decontam-v2": 1
+   },
+   "problems_under_8_words": 0,
+   "short_contained": 0
+  },
+  "hard328": {
+   "n": 328,
+   "exact": 4,
+   "near": 2,
+   "none": 322,
+   "by_source": {
+    "aime2022/exact": 4,
+    "aime2022/none": 2,
+    "aime2023/none": 3,
+    "aime2024/none": 29,
+    "aime2025/none": 30,
+    "amc23/none": 28,
+    "hmmt_feb2025/none": 30,
+    "olympiadbench/near": 2,
+    "olympiadbench/none": 200
+   },
+   "match_dataset_source": {
+    "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered": 5,
+    "saumyamalik/OpenThoughts3-full-filtered-math-decontam-v2": 1
+   },
+   "problems_under_8_words": 0,
+   "short_contained": 0,
+   "think_sft_cue_accuracy": {
+    "overlap": {
+     "n": 6,
+     "correct": 5,
+     "accuracy": 0.8333
+    },
+    "no_overlap": {
+     "n": 322,
+     "correct": 214,
+     "accuracy": 0.6646
+    }
+   },
+   "scores_from": "runs/sameraslan-1114-204845-1055/answers.jsonl"
+  },
+  "math500": {
+   "n": 500,
+   "exact": 3,
+   "near": 22,
+   "none": 475,
+   "by_source": {
+    "math500/exact": 3,
+    "math500/near": 22,
+    "math500/none": 475
+   },
+   "match_dataset_source": {
+    "allenai/SYNTHETIC-2-SFT-cn-fltrd-final-ngram-filtered-chinese-filtered": 23,
+    "allenai/wildchat-r1-p2-repetition-filter": 1,
+    "allenai/wildguardmix-r1-v2-all-filtered-ngram-filtered-chinese-filtered": 1
+   },
+   "problems_under_8_words": 13,
+   "short_contained": 0,
+   "think_sft_cue_accuracy": {
+    "overlap": {
+     "n": 25,
+     "correct": 24,
+     "accuracy": 0.96
+    },
+    "no_overlap": {
+     "n": 475,
+     "correct": 430,
+     "accuracy": 0.9053
+    }
+   },
+   "scores_from": "studies/rlneurons/results/wsp1/full500/sft1_cue-01/per_problem.json"
+  }
+ }
+}

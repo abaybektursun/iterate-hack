@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2448,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "t from the second: \\( 4b = -289 \\) gives \\( b = -\\frac{289}{4} \\).\n2. Substituting \\( b \\) back into the first equation: \\( 16 \\left( -\\frac{289}{4} \\right) + c = -458 \\) simplifies to \\( -1156 + c = -458 \\), so \\( c = 698 \\).\n\nFor \\( Q(x) = -2x^2 + dx + e \\):\n- When \\( x = 16 \\), \\( -512 + 16d + e = 54 \\) which simplifies to \\( 16d + e = 566 \\).\n- When \\( x = 20 \\), \\( -800 + 20d + e = 53 \\) which simplifies to \\( 20d + e = 853 \\).\n\nSolving these equations:\n1. Subtracting the first from the second: \\( 4d = 287 \\) gives \\( d = \\frac{287}{4} \\).\n2. Substituting \\( d \\) back into the first equation: \\( 16 \\left( \\frac{287}{4} \\right) + e = 566 \\) simplifies to \\( 1148 + e = 566 \\), so \\( e = -582 \\).\n\nThus, \\( P(0) + Q(0) = c + e = 698 + (-582) = 116 \\).\n\nThe final answer is \\(\\boxed{116}\\)."
+ },
+ "wrong": {
+  "problem_index": 57,
+  "gold": "928",
+  "extracted_v3": "2654",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 9584,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "quares:** Each square can be monochromatic in 2 ways (all red or all blue). There are 3 squares, so initially, this might seem like \\(3 \\times 2 \\times 2^8 = 3 \\times 2^9 = 1536\\).\n   - **Intersections of two squares:** Each pair of distinct squares is disjoint. The number of colorings where both squares are monochromatic is \\(2^4 \\times 2 = 32\\). There are 3 such pairs, so this gives \\(3 \\times 32 = 96\\).\n   - **Intersections of three squares:** All three squares being monochromatic results in only 1 valid coloring (all vertices the same color). This adds back 1.\n\nUsing inclusion-exclusion:\n\\[\n\\text{Total number of valid colorings} = 2^{12} - (3 \\times 2^9 - 3 \\times 2^5 + 2^1)\n\\]\n\\[\n= 4096 - (1536 - 96 + 2) = 4096 - 1442 = 2654\n\\]\n\nThus, the number of valid colorings is \\(\\boxed{2654}\\)."
+ }
+}

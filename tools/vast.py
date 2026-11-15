@@ -41,6 +41,7 @@ import team
 
 IMAGE = "pytorch/pytorch:2.15.0-cuda13.2-cudnn9-runtime"  # the same torch as on Modal
 ECR = "769063704696.dkr.ecr.us-east-1.amazonaws.com"
+MIN_CUDA = 13.2  # the CUDA of IMAGE; a box whose driver supports less is destroyed at once
 FILTER = "num_gpus=1 verified=true reliability>0.98 rentable=true inet_down>=500 cuda_vers>=13.2 disk_space>=100"
 ROOT = Path(__file__).resolve().parent.parent
 RECORDS = ROOT / "runs" / "vast"
@@ -156,7 +157,20 @@ def wait_for_box(pending, t0):
             sys.exit(f"not reachable after {BOOT_MINUTES} min; destroyed. Try other offers.")
         time.sleep(10)
         for instance_id in [i for i in pending if reachable(i)]:
-            speed = subprocess.run([*ssh_args(sh("vastai", "ssh-url", instance_id).decode()), SPEED], capture_output=True, text=True)
+            ssh_cmd = ssh_args(sh("vastai", "ssh-url", instance_id).decode())
+            # The driver's CUDA version, as nvidia-smi reports it: an offer's listed cuda_vers can be wrong, and vLLM stops
+            # at engine start on an older driver ('NVIDIA driver too old (found version 12080)', offer 30752240, 2026-11-15)
+            smi = subprocess.run([*ssh_cmd, "nvidia-smi | grep -o 'CUDA Version: [0-9.]*'"], capture_output=True, text=True)
+            if smi.returncode != 0 or not smi.stdout.split():   # ssh or nvidia-smi not ready yet on a fresh box: ask again next round
+                print(f"{instance_id} driver check not answered yet ({smi.stderr.strip()[-120:]}); retrying", flush=True)
+                continue
+            cuda = float(smi.stdout.split()[-1])
+            if cuda < MIN_CUDA:
+                print(f"{instance_id} driver supports CUDA {cuda}, under {MIN_CUDA} (the image's); destroying it", flush=True)
+                down([instance_id])
+                del pending[instance_id]
+                continue
+            speed = subprocess.run([*ssh_cmd, SPEED], capture_output=True, text=True)
             mb_s = float(speed.stdout) if speed.returncode == 0 else 0.0
             if mb_s >= MIN_MB_S:
                 winner = instance_id
@@ -165,7 +179,7 @@ def wait_for_box(pending, t0):
             down([instance_id])
             del pending[instance_id]
     if not winner:
-        sys.exit("no box passed the download check. Try other offers.")
+        sys.exit("no box passed the driver and download checks. Try other offers.")
     for instance_id in [i for i in pending if i != winner]:
         down([instance_id])
         del pending[instance_id]
@@ -246,9 +260,10 @@ def down(args):
     # Jobs run on this box from this checkout whose outputs were not copied out in full: destroying deletes them
     # (an n=500 cell was lost when its box was destroyed 14 s after the job ended, during the copy, 2026-11-15)
     jobs = [f.stem for f in RECORDS.glob("*.json") if json.loads(f.read_text()).get("instance") == instance_id]
-    left = [j for j in jobs if not (RECORDS.parent / j / ".copied").exists()]
-    assert not left or "--force" in args, (f"{instance_id} holds jobs not copied out yet: {' '.join(left)}. "
-                                           f"Run get for each (it waits for the copy to finish), or down {instance_id} --force")
+    in_store = lambda j: subprocess.run(["aws", "s3", "ls", stored(j), "--profile", team.PROFILE], capture_output=True).returncode == 0
+    left = [j for j in jobs if not (RECORDS.parent / j / ".copied").exists() and not in_store(j)]
+    assert not left or "--force" in args, (f"{instance_id} holds jobs whose outputs are neither copied out nor in the team store: "
+                                           f"{' '.join(left)}. Run get for each, or down {instance_id} --force")
     sh("vastai", "destroy", "instance", instance_id, "-y")
     print(f"destroyed {instance_id}")
 

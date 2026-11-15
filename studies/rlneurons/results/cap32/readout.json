@@ -47,6 +47,28 @@
    "cap_hits_at_32768": 0,
    "tokens_per_problem_at_32768": 9421.2,
    "tokens_per_problem_at_16384": 9293.0
+  },
+  "base_cue": {
+   "job_id": "cap32_base_cue_joined",
+   "right_at_32768": 156,
+   "right_at_16384_same_answers": 152,
+   "stored_right_at_16384": [
+    164
+   ],
+   "gain": {
+    "problems": 4,
+    "points": 1.22,
+    "ci95": [
+     0.3,
+     2.44
+    ]
+   },
+   "answers_longer_than_16384": 64,
+   "of_them_finished": 63,
+   "of_them_right": 4,
+   "cap_hits_at_32768": 1,
+   "tokens_per_problem_at_32768": 9995.0,
+   "tokens_per_problem_at_16384": 9144.8
   }
  }
 }

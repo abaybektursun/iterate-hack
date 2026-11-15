@@ -1,0 +1,17 @@
+{
+ "job_id": "abaybektursun-1115-101434-4511",
+ "commit": "64defd52635443fe2b33cee065c6910c179dc1d1",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "code_top8x1.5_code31",
+  "prefix_ids": "[439,6982,304,279,10137,13,358,3987,420,8779,2268,33413]",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "seed": 51000000,
+  "n": null,
+  "grader_check_only": false,
+  "out": "/runs/abaybektursun-1115-101434-4511",
+  "commit": "64defd52635443fe2b33cee065c6910c179dc1d1"
+ }
+}

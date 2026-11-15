@@ -1,0 +1,153 @@
+{
+ "theory": "r8-m10",
+ "predictions": [
+  {
+   "k": 1,
+   "experiment": "Mechanism test, within-problem length contrast on hard328. For each model, the mean over problems of (precision of the model's finished answers of 12,000+ tokens) minus (precision of its finished answers under 8,000 tokens), taking only problems that have both kinds. Statistic = Think-SFT's mean minus RL's. The one-axis/abstention rival (difficulty alone, no length effect within a problem) predicts about 0.00. This mechanism predicts clearly positive.",
+   "recipe": "Files: T = studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl (Think-SFT cue) and R = studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl (RL plain). In each file keep rows with attempt == 0 (a missing attempt field counts as 0), then for each (problem_index, sample) the first row in file order. Finished = cap_hit not true and finish_reason != 'length'. Cap hits are excluded entirely. Right = score_v3 == 1; a finished row with null or missing score_v3 counts as wrong. Per model and problem: S = finished rows with n_new < 8000, L = finished rows with n_new >= 12000. Keep problems with at least one S row and at least one L row. d = (right rows in L / rows in L) - (right rows in S / rows in S). M_model = arithmetic mean of d over that model's kept problems (each model has its own problem set). Statistic = M_T - M_R. If either model has fewer than 5 kept problems, the prediction counts as refuted.",
+   "unit": "difference of fractions",
+   "value": 0.2,
+   "low": 0.03,
+   "high": 0.4,
+   "refuted_by": "statistic below 0.02, or fewer than 5 kept problems for either model",
+   "gpu_minutes": 0,
+   "script": "tests/r8-m10/p1.py",
+   "measured": 0.3594771241830065,
+   "n": 17,
+   "interval": [
+    0.15734265734265732,
+    0.5625
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.0,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl (T, 1312 rows, all attempt 0) and studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl (R, 1466 rows, attempts 0-2; attempt>0 restarts dropped), both in git. score_v3 as stored (int 0/1); no regrading. Main: each model's mean d over its own kept problems (>=1 finished S row n_new<8000 and >=1 finished L row n_new>=12000), statistic M_T - M_R. Alt reading: the same means restricted to problems kept for both models (paired). Bootstrap resamples the union of problem indices, each entry the pair (T rows, R rows), and recomputes both kept sets; a resample with an empty kept set would contribute 0 (unlikely). n = the smaller kept-problem count. refuted_by_met = statistic < 0.02 or either kept count < 5. Kept sets are likely small (problems need both a short and a long finished sample out of 4), so the interval may be wide; d is unweighted by row count.",
+   "example_row": {
+    "problem_index": 95,
+    "sample": 2,
+    "attempt": 0,
+    "seed": 3020095,
+    "n_new": 13458,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_A": true,
+    "extracted_v3": "504",
+    "score_v3": 1,
+    "gold": "504"
+   }
+  },
+  {
+   "k": 2,
+   "experiment": "The same lead on short problems: on MATH-500, precision of finished answers of 8,000+ tokens, Think-SFT cue minus RL plain (4 samples each, attempt 0). The board saw no lead at any coverage on MATH-500. This mechanism puts the lead wherever an answer runs long, even on MATH-500.",
+   "recipe": "Files: studies/rlneurons/results/thinkvote/math500_sft1_cue_s4-01/rows.jsonl (Think-SFT cue) and studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (RL plain). In each file keep rows with attempt == 0 (a missing attempt counts as 0), then the first row per (problem_index, sample) in file order. Keep finished rows (cap_hit not true and finish_reason != 'length') with n_new >= 8000. Right = score_v3 == 1 (null or missing counts as wrong). Precision per model = right kept rows / kept rows. Statistic = precision(Think-SFT) - precision(RL). If either model has fewer than 20 kept rows, the prediction counts as refuted.",
+   "unit": "difference of fractions of samples",
+   "value": 0.14,
+   "low": 0.02,
+   "high": 0.27,
+   "refuted_by": "statistic below 0.0, or fewer than 20 kept rows for either model",
+   "gpu_minutes": 0,
+   "script": "tests/r8-m10/p2.py",
+   "measured": 0.19437413650179614,
+   "n": 275,
+   "interval": [
+    0.13106997101792162,
+    0.2562911725955205
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.19556491017063826,
+   "not_computable": null,
+   "note": "Files: studies/rlneurons/results/thinkvote/math500_sft1_cue_s4-01/rows.jsonl (2000 rows, attempt 0) and studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl (2041 rows, attempt>0 restarts dropped). Pooled sample-level precision of finished rows with n_new >= 8000 per model, Think-SFT minus RL. Alt reading: same pooled precisions restricted to problems where both models have at least one kept row. Bootstrap over the union of problem indices (pairs of row lists). n = the smaller kept-row count. refuted_by_met = statistic < 0 or either kept count < 20; an empty group prints refuted_without_number. On MATH-500 few answers reach 8k, so the kept rows may be few and concentrated on a handful of problems; long rows are a selected hard subset.",
+   "example_row": {
+    "problem_index": 4,
+    "sample": 0,
+    "attempt": 0,
+    "seed": 181000004,
+    "n_new": 8027,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_A": false,
+    "extracted_v3": "Evelyn",
+    "score_v3": 1,
+    "gold": "\\text{Evelyn}"
+   }
+  },
+  {
+   "k": 3,
+   "experiment": "Where the effect should not appear: on hard328, precision of finished answers under 4,000 tokens, Think-SFT cue minus RL plain. Both models are before their drop points here, so the mechanism predicts about 0.",
+   "recipe": "Files T and R as in the first recipe (thinkvote/hard328_sft1_cue_s4-01/rows.jsonl and day1_3/hard328_rl_plain_s4r2-01/rows.jsonl). attempt == 0 (missing counts as 0), first row per (problem_index, sample). Keep finished rows (cap_hit not true and finish_reason != 'length') with n_new < 4000. Right = score_v3 == 1 (null or missing = wrong). Statistic = (right / kept) for T minus (right / kept) for R.",
+   "unit": "difference of fractions of samples",
+   "value": 0.0,
+   "low": -0.045,
+   "high": 0.045,
+   "refuted_by": "statistic below -0.06 or above 0.06",
+   "gpu_minutes": 0,
+   "script": "tests/r8-m10/p3.py",
+   "measured": -0.019918367346938748,
+   "n": 245,
+   "interval": [
+    -0.04245283018867929,
+    -0.0028091473743647732
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": -0.0042291199496440335,
+   "not_computable": null,
+   "note": "Files as in k=1 (hard328 Think-SFT cue and RL plain; attempt 0, first row per (problem_index, sample)). Pooled precision of finished rows with n_new < 4000, Think-SFT minus RL. Alt reading: restricted to problems where both models have a kept row (controls for different problem mixes among short answers). Bootstrap over problem pairs. n = smaller kept-row count. refuted_by_met = statistic < -0.06 or > 0.06. The two models' short-answer pools cover different problems (RL finishes short more often), so the main number mixes difficulty with model; the alt reduces that.",
+   "example_row": {
+    "problem_index": 7,
+    "sample": 1,
+    "attempt": 0,
+    "seed": 3010007,
+    "n_new": 3420,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_A": false,
+    "extracted_v3": "227",
+    "score_v3": 1,
+    "gold": "227"
+   }
+  },
+  {
+   "k": 4,
+   "experiment": "Think-SFT holds precision up to the cap: on hard328, the precision of Think-SFT cue's finished answers of 14,000 to 16,383 tokens. An error-accumulation reading (precision keeps falling with length) puts it well under its 68 % for 12k+ answers. This mechanism keeps it near that level.",
+   "recipe": "File: studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl. Rows with attempt == 0 (missing counts as 0), first row per (problem_index, sample) in file order. Keep finished rows (cap_hit not true and finish_reason != 'length') with 14000 <= n_new <= 16383. Statistic = (rows with score_v3 == 1) / (kept rows); null or missing score_v3 counts as wrong. If fewer than 20 rows are kept, the prediction counts as refuted.",
+   "unit": "fraction of samples",
+   "value": 0.6,
+   "low": 0.45,
+   "high": 0.75,
+   "refuted_by": "statistic below 0.42, or fewer than 20 kept rows",
+   "gpu_minutes": 0,
+   "script": "tests/r8-m10/p4.py",
+   "measured": 0.5607476635514018,
+   "n": 107,
+   "interval": [
+    0.46464646464646464,
+    0.6571428571428571
+   ],
+   "interval_kind": "bootstrap",
+   "inside": true,
+   "refuted_by_met": false,
+   "alt_measured": 0.5607476635514018,
+   "not_computable": null,
+   "note": "File: studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl (attempt 0, first row per (problem_index, sample)). Pooled precision of finished rows (cap_hit not true, finish_reason != 'length') with 14000 <= n_new <= 16383. Alt reading: upper bound 16384 inclusive (would only add finished rows at exactly the cap; probably identical). Bootstrap over problems that contribute kept rows. n = kept rows. refuted_by_met = statistic < 0.42 or fewer than 20 kept rows; zero kept rows prints refuted_without_number. Rows near the cap are a narrow band; whether n_new counts the final stop token could shift a few rows across 16383/16384.",
+   "example_row": {
+    "problem_index": 63,
+    "sample": 0,
+    "attempt": 0,
+    "seed": 3000063,
+    "n_new": 16199,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "loop_A": false,
+    "extracted_v3": "16",
+    "score_v3": 0,
+    "gold": "385"
+   }
+  }
+ ]
+}

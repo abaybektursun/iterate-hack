@@ -1,0 +1,31 @@
+Installed 36 packages in 45ms
+Jobs of abaybektursun, last 1 h:  id  state  gpu  wait  run  command
+  abaybektursun-1115-100930-eee0  done  NVIDIA H100   0.1  4.2  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-101423-4a7d  done  NVIDIA H100   0.1  27.3  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-101434-4511  done  NVIDIA H100   0.1  26.9  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-101445-e35e  done  NVIDIA H100   0.1  30.6  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-101457-ef2c  done  NVIDIA H100   0.1  32.3  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-101508-33f0  done  NVIDIA H100   0.1  27.1  bash studies/rlneurons/jobs/setup_vllm.sh && uv pip install -q --pytho
+  abaybektursun-1115-102326-6e86  done  NVIDIA H100   0.1  5.4  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-102945-9b20  running  NVIDIA H100   0.1  24.0  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-102956-6e9a  running  NVIDIA H100   0.1  23.8  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-103006-7462  running  NVIDIA H100   0.1  23.6  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python 
+  abaybektursun-1115-105247-1603  running  NVIDIA H100   0.1  1.0  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-105259-789c  running  NVIDIA H100   0.1  0.8  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-105312-7e19  running  NVIDIA H100   0.1  0.6  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-105324-5f61  running  NVIDIA H100   0.1  0.4  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  abaybektursun-1115-105335-a886  running  NVIDIA H100   0.1  0.2  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt
+  15 jobs, 0 failed or cancelled; median wait 0.1; 228.1 container minutes, 0.0 of them in failed or cancelled jobs
+
+Work of abaybektursun, last 1 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
+  work-746eaa  main  -  -  -  3  0  0  Exa showcase page on the site at /exa (tools/exa_page.py, on
+  work-1a2d68  main  -  -  -  3  0  0  Site page /pastdev: one page on how the team used past.dev a
+  work-df5e0a  main  -  -  -  39  0  0  Second model pair for the finish dial: base + Code 3.1's 8 d
+  work-8b2ec9  main  -  -  -  41 (open)  0  0  Think-SFT in its own chat format (ChatML template with <thin
+  work-184476  main  -  -  -  39 (open)  0  0  Paper loop: tier list of the project's novel findings (paral
+  work-31a75c  main  -  -  -  14  0  0  New home page at / (tools/home.py): one lit glass dial that 
+  work-f8ecb6  main  -  -  -  32 (open)  0  0  ckptcue3: 3 more samples of step-100 plain, step-100 cue, st
+  work-22359d  top8x4  -  -  -  18 (open)  0  0  top8x4: base + 1x top-8 RL-Math directions, plain, MATH-500,
+  work-d80b27  main  -  -  -  1 (open)  0  0  Smallest edit that reaches RL: one direction per matrix of R
+
+Team, last 1 h: claim to close median 33 min, upper quartile 54 min, over 10 work items closed by 1 people; 12 results, 12.0 per hour.

@@ -1,0 +1,74 @@
+16:20:48 spawn  Facts and data for theory paper
+16:21:00 spawn  Literature for theory paper
+16:21:14 spawn  GPU samples for step-100 cells
+16:22:32 notice Agent "Literature for theory paper" finished
+16:24:10 notice Agent "GPU samples for step-100 cells" is waiting on its own background work
+16:28:54 notice Agent "Facts and data for theory paper" finished
+16:29:52 spawn  Figures for theory paper
+16:32:11 notice Agent "Figures for theory paper" finished
+16:32:52 spawn  Review: number audit
+16:33:03 spawn  Review: hostile skeptic
+16:33:15 spawn  Review: description and citations
+16:33:25 spawn  Review: visuals and prose
+16:34:14 notice Agent "Review: hostile skeptic" finished
+16:34:25 notice Agent "Review: visuals and prose" finished
+16:37:19 notice Agent "Review: description and citations" finished
+16:38:31 notice Agent "Review: number audit" finished
+16:39:12 spawn  Figure fixes round 2
+16:42:27 spawn  Final check of draft 2
+16:46:09 notice Agent "Final check of draft 2" finished
+16:51:44 spawn  Facts and data for first-steps paper
+16:51:58 spawn  Literature for first-steps paper
+16:52:07 spawn  Team meta review after result
+16:55:03 notice Agent "Literature for first-steps paper" finished
+16:56:23 notice Agent "Team meta review after result" finished
+16:59:55 notice Agent "Facts and data for first-steps paper" finished
+17:01:17 spawn  Figures for first-steps paper
+17:04:13 notice Agent "Figures for first-steps paper" finished
+17:04:58 spawn  Paper 3 review: numbers
+17:05:12 spawn  Paper 3 review: skeptic
+17:05:26 spawn  Paper 3 review: citations and visuals
+17:07:35 notice Agent "Paper 3 review: numbers" finished
+17:07:56 notice Agent "Paper 3 review: citations and visuals" finished
+17:08:20 notice Agent "Paper 3 review: skeptic" finished
+17:08:49 spawn  Paper 3 figure fixes
+17:09:04 spawn  Scout for loop 3
+17:10:27 notice Agent "Scout for loop 3" finished
+17:11:47 notice Agent "Paper 3 figure fixes" finished
+17:52:12 notice Goal check-in: background work still running
+17:55:06 notice Agent "GPU samples for step-100 cells" finished
+17:55:35 spawn  Paper 3 data layer update
+18:01:39 notice Agent "Paper 3 data layer update" finished
+18:02:25 spawn  Paper 3 figure redesign
+18:04:46 notice Agent "Paper 3 figure redesign" finished
+18:05:14 spawn  Paper 3 figure zoom
+18:05:36 spawn  Paper 3 final check
+18:13:09 spawn  Meta review after paper 3
+18:13:20 spawn  Scout: delta transplant
+18:13:28 spawn  Scout: rank/depth split, new results
+18:13:38 spawn  Scout: imitation vs reward state
+18:13:48 spawn  Scout: wildcard outside rlneurons
+
+Lines above: python3 meta/reviews/abaybektursun/20261115-1655-paper2/stages.py <transcript of session a55ee22f>, from 16:20 UTC.
+Board (uv run tools/board.py show work-184476, result-6832a8, result-53ce14): paper 2 live 16:50:42Z; result-6832a8 (four samples)
+17:54:56Z; result-53ce14 (paper 3 live) 18:12:54Z. Paper commit 544b24c 18:10:04Z, main 7139863.
+
+Stages of paper 3 (min): data layer and literature 16:51:44-16:59:55 8.2 | figures 17:01:17-17:04:13 2.9 | three reviews
+17:04:58-17:08:20 3.4 | figure fixes to 17:11:47 3.5 | no paper work, waiting for the GPU samples 17:11:47-17:55:06 43.3 |
+data layer on four samples 17:55:35-18:01:39 6.1 | figure redesign to 18:04:46 3.1 | final check, fixes, build, deploy to
+18:12:54 8.1. Start to live 81.2 min (paper 2: 35.4). First review to live 67.9 min (paper 2: 17.8); without the wait 24.6.
+Four-sample data to live 17.8 min.
+
+The GPU samples (studies/rlneurons/results/ckptcue/<cell>_s123-01/metrics.json; spec commit 11d2e6d 16:23:18Z; one job per
+cell, `run_cell --samples 3`, 1,500 requests each, max_num_seqs 128, memory.gpu NVIDIA H100 80GB HBM3):
+  job                              started   ended     wall min  generation min  load s  tokens     tok/s
+  abaybektursun-1115-102945-9b20   16:30:44  17:47:41  77.0      75.7            71      6,035,962  1,330
+  abaybektursun-1115-102956-6e9a   16:30:54  17:52:11  81.3      80.1            65      6,281,266  1,307
+  abaybektursun-1115-103006-7462   16:31:58  17:50:14  78.3      76.8            81      6,309,250  1,370
+Submit of the first job (16:29:45, its id) to the end of the last: 82.4 min. Generation is 98 % of wall; setup and load
+are 1.3 to 1.5 min per job. `run_cell --shard k/N` and analysis/shard_join.py are on main (result-77ca14) and were not used.
+Estimate, not measured: 9 jobs of 500 requests at the same tokens per second would each hold about 2.0 to 2.1 M tokens,
+about 27 min.
+
+The number a change is meant to move: minutes from submit to the last job's end for a 3-sample MATH-500 cell (82.4, one
+run of 3 jobs). Must not change: the rows (seeds are per problem and sample, so shards give the same requests).

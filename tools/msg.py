@@ -31,6 +31,7 @@ position and skips the messages it has already shown. The first read of a channe
 """
 import json
 import re
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -85,6 +86,29 @@ def send(channel, text, who, me):
                                 "at": team.now(), "text": text})
 
 
+def tools_behind():
+    """For the hook: one line when origin/main changed tools/, infra/ or .claude/ since this checkout last merged it,
+    so a session learns that its copy of the tools is old. One fetch per 10 minutes for all checkouts, one line per
+    10 minutes per checkout."""
+    def due(name):
+        stamp = team.CACHE / "hook" / name
+        if stamp.exists() and time.time() - stamp.stat().st_mtime < 600:
+            return False
+        stamp.touch()
+        return True
+    top = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True, check=True).stdout.strip()
+    if not due(f"behind-{Path(top).name}"):
+        return ""
+    if due("fetch"):
+        subprocess.run(["git", "fetch", "-q", "origin", "main"], check=True)
+    files = subprocess.run(["git", "diff", "--name-only", "HEAD...origin/main", "--", "tools", "infra", ".claude"],
+                           capture_output=True, text=True, check=True).stdout.split()
+    if not files:
+        return ""
+    return (f"Your checkout's tools are older than main: {len(files)} changed files in tools/, infra/ or .claude/ "
+            f"({', '.join(files[:4])}). Run `git pull origin main` before your next job.")
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 2 or sys.argv[1] not in ("send", "read", "wait"):
         sys.exit(__doc__)
@@ -121,8 +145,9 @@ if __name__ == "__main__":
         time.sleep(0.5)
     state_file.parent.mkdir(parents=True, exist_ok=True)
     state_file.write_text(json.dumps(state))
-    if hook and messages:
-        text = "Team messages (tools/msg.py; times UTC):\n" + "\n".join(map(show, messages))
+    notice = tools_behind() if hook else ""
+    if hook and (messages or notice):
+        text = "Team messages (tools/msg.py; times UTC):\n" + "\n".join([*map(show, messages), *([notice] if notice else [])])
         print(json.dumps({"hookSpecificOutput": {"hookEventName": "PostToolUse", "additionalContext": text}}))
     elif not hook:
         print("\n".join(map(show, messages)), end="\n" if messages else "")

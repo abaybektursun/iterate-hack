@@ -33,6 +33,8 @@ click on a person shows only that person. The look is that of the Design tab (.c
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
   GET /proof           the Proof tab: one tile per experiment that tests the team's method itself (the page of findings.py)
   GET /proof/<slug>    the page of one such experiment (proof_<slug>.py, made like a finding page)
+  GET /lab/            the site lab: twelve interactive 3D pictures of the team's work (studies/sitelab/index.html), each at
+                       /lab/prototypes/<slug>/ with its data.json; static files, fed by the same /data
   GET /favicon.svg     the tab icon of every page; send() writes the link to it into the head of each HTML page
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
                        (board.py score), which the hill-climbing chart draws, the plain rows of those results
@@ -54,12 +56,14 @@ import hashlib
 import importlib
 import json
 import os
+import re
 import sys
 import threading
 import time
 import traceback
 import webbrowser
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from boto3.dynamodb.conditions import Key
@@ -68,8 +72,12 @@ import architecture
 import board
 import climb
 import demo
+import exa_page
 import findings
 import glossary
+import home
+import pastdev
+import psychosis
 import sitekit
 import team
 
@@ -210,20 +218,39 @@ def detail(item_id):
             "thread": board.rows(KeyConditionExpression=Key("pk").eq(f"chan#{item_id}"))}
 
 
+# The papers (studies/<study>/paper/<name>.pdf), served at /paper/<name>.pdf: beside this file on AWS (infra/monitor/deploy.sh), in their study here.
+# The site lab's static files: beside the code in the Lambda zip (infra/monitor/deploy.sh), in the study in the repository.
+LAB = (Path(__file__).with_name("sitelab"), Path(__file__).parent.parent / "studies/sitelab")
+LAB_FILE = re.compile(r"(prototypes/[a-z-]+/)?(index\.html|data\.json)?")
+PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / folder / name)
+          for name, folder in (("the-finish-dial.pdf", "rlneurons/paper"), ("theories-on-trial.pdf", "theory/paper"),
+                               ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"))}
+
+
+# The home page (home.py) is at / and the board at /board. The page modules were written when the board was at /, so
+# their links to it are rewritten as a page is sent: a link to / goes to /board, unless it is the name "Invariant",
+# and the address of a board item (/#result-8b1c48) goes to /board#result-8b1c48. The name in each header leads home.
+HOME_LINK = re.compile(r'href="/"(?=[^>]*>(?!Invariant))')
+NAME_LINK = ('<h1 class="name">Invariant</h1>', '<h1 class="name"><a href="/" style="color:inherit;font-weight:inherit">Invariant</a></h1>')
+HOME_PAGE = home.PAGE.replace("__COUNTS__", json.dumps({
+    "findings": len(FINDINGS), "proof": len(PROOFS),
+    "lab": max(len(list((d / "prototypes").glob("*/index.html"))) for d in LAB)}))
+
+
 class Handler(BaseHTTPRequestHandler):
     protocol_version = "HTTP/1.1"  # Chrome revalidates with If-None-Match only for HTTP/1.1 responses
 
     def send(self, status, kind, body, headers=()):
         if kind == "text/html":  # every page gets the tab icon here, so no page module holds it
-            body = body.replace("<title>", ICON_LINK + "<title>", 1)
-        data = body.encode()
+            body = HOME_LINK.sub('href="/board"', body.replace("<title>", ICON_LINK + "<title>", 1)).replace('"/#', '"/board#').replace(*NAME_LINK)
+        data = body if isinstance(body, bytes) else body.encode()
         tag = f'"{hashlib.blake2b(data, digest_size=16).hexdigest()}"'  # from the content, so an unchanged board answers 304
         if status == 200 and self.headers.get("If-None-Match") == tag:
             self.send_response(304)
             data = b""
         else:
             self.send_response(status)
-            self.send_header("Content-Type", f"{kind}; charset=utf-8")
+            self.send_header("Content-Type", kind if isinstance(body, bytes) else f"{kind}; charset=utf-8")
             self.send_header("Content-Length", str(len(data)))
         if status == 200:
             self.send_header("ETag", tag)
@@ -238,6 +265,8 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split("?")[0]
         if path == "/":
+            return self.send(200, "text/html", HOME_PAGE)
+        if path == "/board":
             return self.send(200, "text/html", PAGE)
         if path == "/demo":
             return self.send(200, "text/html", demo.PAGE)
@@ -251,8 +280,27 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", PROOF_PAGE)
         if path.startswith("/proof/") and path[len("/proof/"):] in PROOFS:
             return self.send(200, "text/html", PROOFS[path[len("/proof/"):]].PAGE)
+        if path == "/exa":
+            return self.send(200, "text/html", exa_page.PAGE)
+        if path == "/pastdev":
+            return self.send(200, "text/html", pastdev.PAGE)
+        if path == "/psychosis":
+            return self.send(200, "text/html", psychosis.PAGE)
         if path == "/favicon.svg":
             return self.send(200, "image/svg+xml", FAVICON)
+        if path == "/lab":  # the pages link to their files relative to the folder
+            return self.send(302, "text/plain", "", [("Location", "/lab/")])
+        if path.startswith("/lab/") and LAB_FILE.fullmatch(path[len("/lab/"):]):
+            name = path[len("/lab/"):] + ("index.html" if path.endswith("/") else "")
+            found = [d / name for d in LAB if (d / name).is_file()]
+            if not found:  # a deploy without the folder answers 404 and the other pages stay up
+                return self.send(404, "text/plain", f"no page {path}")
+            if name.endswith(".html"):
+                return self.send(200, "text/html", found[0].read_text())
+            return self.send(200, "application/json", found[0].read_bytes())
+        if path.startswith("/paper/") and path[7:] in PAPERS:
+            found = [p for p in PAPERS[path[7:]] if p.exists()]  # a deploy without the file answers 404 and the other pages stay up
+            return self.send(200, "application/pdf", found[0].read_bytes()) if found else self.send(404, "text/plain", f"no page {path}")
         if path != "/data" and not path.startswith("/data/"):
             return self.send(404, "text/plain", f"no page {path}")
         try:  # the page shows the error text; the traceback goes to this terminal
