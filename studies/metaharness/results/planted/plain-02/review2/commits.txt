@@ -1,0 +1,1 @@
+73e149f Dana 2026-11-14 20:09:38 -0800 gapmap: submit_batch.py checks every cell, launches a batch in parallel, writes results/<batch>-NN/

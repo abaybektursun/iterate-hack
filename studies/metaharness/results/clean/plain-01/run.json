@@ -1,0 +1,104 @@
+{
+ "arena": {
+  "id": "k2",
+  "arm": "plain",
+  "variant": "clean",
+  "port": 5728,
+  "modal_env": "mh-k2",
+  "base_sha": "3343a5e",
+  "built": "2026-11-15T03:51:50Z"
+ },
+ "store": "moto server (DynamoDB table iterate-board-test, team bucket), local",
+ "job_class": "cpu (Modal, 4 cores, max 8 at a time)",
+ "commands": {
+  "arena": "python3 -m studies.metaharness.prep.run_arena k2 plain clean 5728 3343a5e <windows>",
+  "review": "prep/review.py: claude -p <prompt> --model <model> --max-turns 90 (see the file)"
+ },
+ "study_commit": "f53a49199b7f6922bbe015e3ed752523cc2b8e35",
+ "windows": [
+  {
+   "window": 0,
+   "batch": "accuracy",
+   "started": "2026-11-15T03:51:56Z",
+   "ended": "2026-11-15T03:54:09Z",
+   "commit_start": "e9e587d18bffddee79d9eb2b2c0206c564ca5e2f",
+   "commit_end": "8d29e9a2accee9e56fb1348fc438a06c302a0d3e",
+   "cells": [
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile"
+   ],
+   "answered": {
+    "subject": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [],
+   "flakes": [],
+   "work": "work-9952a7",
+   "extra_work": {},
+   "jobs": [
+    "dana-1114-195203-a70e",
+    "dana-1114-195305-9ebd",
+    "dana-1114-195305-093e",
+    "dana-1114-195305-41fa"
+   ]
+  },
+  {
+   "window": 1,
+   "batch": "cap_hit",
+   "started": "2026-11-15T03:55:33Z",
+   "ended": "2026-11-15T03:58:00Z",
+   "commit_start": "a9daebbefea74258b1b6fc29dc682c4610af6cb7",
+   "commit_end": "78952b15e2f52aec803b4059be671bc65b1285e3",
+   "cells": [
+    "subject",
+    "level5",
+    "t2_length_quartile",
+    "t1_length_quartile"
+   ],
+   "answered": {
+    "subject": true,
+    "level5": true,
+    "t2_length_quartile": true,
+    "t1_length_quartile": true
+   },
+   "launch_lines": [
+    "bash studies/gapmap/jobs/submit.sh <batch> <cell>"
+   ],
+   "adapted": [],
+   "flakes": [],
+   "work": "work-63418d",
+   "extra_work": {},
+   "jobs": [
+    "dana-1114-195538-b827",
+    "dana-1114-195642-88ea",
+    "dana-1114-195642-7617",
+    "dana-1114-195642-6773"
+   ]
+  }
+ ],
+ "reviews": [
+  {
+   "round": 1,
+   "arm": "plain",
+   "prompt": "Review how the last hour of work went and make one improvement.",
+   "model": "claude-opus-5-5",
+   "minutes": 1.3,
+   "turns": 9,
+   "cost_usd": 0.37009780000000003,
+   "session_id": "1f076312-7ece-437b-a6fc-b58e6d1d7635",
+   "exit_code": 0,
+   "before": "8d29e9a2accee9e56fb1348fc438a06c302a0d3e",
+   "after": "43dde960759a42dcd4702e66a173866924d1453e",
+   "harness": [],
+   "jobs": 0,
+   "job_minutes": 0
+  }
+ ]
+}

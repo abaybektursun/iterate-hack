@@ -21,7 +21,11 @@ closes, ? lists the keys. A click on a person shows only that person.
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
                        (board.py score), which the hill-climbing charts draw, the first line of each scored result's
-                       finding (climb.finding) and the newest comment of each open work item (JSON)
+                       finding (climb.finding) and the newest comment of each open work item idle over an hour (JSON),
+                       with only the fields the pages read. One snapshot serves every reader for 5 s. Its ETag comes from
+                       the content and its time is in the header X-Snapshot-Ns, so a browser that asks again with
+                       If-None-Match gets 304 and no body while the board has not changed. The page stops reading while
+                       its tab is hidden.
   GET /data/<item id>  one item with its votes, comments and thread (JSON); 404 for an unknown id
 
 It reads the same DynamoDB table as board.py and msg.py, with Query and GetItem only, and never writes to it or moves an
@@ -29,10 +33,12 @@ agent's message position. A failed read answers 500 with the error text; the pag
 status and logs the error to the browser console.
 """
 import glob
+import hashlib
 import importlib
 import json
 import os
 import sys
+import threading
 import time
 import traceback
 import webbrowser
@@ -61,6 +67,19 @@ def newest(listed, n=60):
     return team.table().query(IndexName="new", KeyConditionExpression=Key("listed").eq(listed), ScanIndexForward=False, Limit=n)["Items"]
 
 
+# What the pages read of each row (grep tools/view.py and tools/architecture.py before dropping one); the rest stays out of /data.
+ITEM = ("id", "listed", "kind", "who", "branch", "text", "at_ns", "active_ns", "closed_at", "closed_by", "ups", "downs", "n_comments", "agent", "session")
+MESSAGE = ("sk", "who", "branch", "text", "agent", "session")
+SCORE = ("sk", "result", "model", "benchmark", "right", "n", "config", "tokens", "who")
+LATE_NS = 59 * 60 * 10**9  # the board shows the last comment of open work idle over an hour; a minute early, so it is there in time
+COMMENTS = {}  # (work id, n_comments) -> its newest comment; a new comment changes n_comments
+FOUND = {}  # result id -> the first line of its finding; board.py never changes an item's text after posting
+
+
+def cols(rows, keys):
+    return [{k: r[k] for k in keys if k in r} for r in rows]
+
+
 def last_comment(item_id):
     found = team.table().query(KeyConditionExpression=Key("pk").eq(f"item#{item_id}") & Key("sk").begins_with("comment#"),
                                ScanIndexForward=False, Limit=1)["Items"]
@@ -72,21 +91,36 @@ def finding(item_id):  # not BatchGetItem: the team key and the Lambda role (inf
 
 
 def snapshot():
-    with ThreadPoolExecutor(len(LISTS)) as pool:  # one query per list, at the same time
-        items = [item for page in pool.map(newest, LISTS) for item in page]
     start = f"{time.time_ns() - int(HOURS * 3600 * 10**9):020d}"
-    messages = board.rows(KeyConditionExpression=Key("pk").eq("chan#all") & Key("sk").gt(start))
-    scores = board.rows(KeyConditionExpression=Key("pk").eq("scores"))  # every score, in the order its result was posted
-    commented = [i["id"] for i in items if i["listed"] == "work" and i.get("n_comments")]
-    with ThreadPoolExecutor(max(1, len(commented))) as pool:  # the newest comment of each open work item, one query each
-        last = dict(zip(commented, pool.map(last_comment, commented)))
-    scored = list(dict.fromkeys(s["result"] for s in scores))
-    assert len(scored) < 100, f"{len(scored)} scored results: one GetItem each on every read of /data is too many"
-    with ThreadPoolExecutor(max(1, len(scored))) as pool:  # the first line of each scored result's finding, one GetItem each
-        found = dict(zip(scored, pool.map(finding, scored)))
-    return {"now_ns": time.time_ns(), "hours": HOURS, "test": team.TEST, "items": items, "messages": messages, "scores": scores,
-            "last_comments": last, "finding": found,
+    with ThreadPoolExecutor(len(LISTS) + 2) as pool:  # every list, the messages and the scores at the same time
+        messages = pool.submit(board.rows, KeyConditionExpression=Key("pk").eq("chan#all") & Key("sk").gt(start))
+        scores = pool.submit(board.rows, KeyConditionExpression=Key("pk").eq("scores"))  # every score, in the order its result was posted
+        items = [item for page in pool.map(newest, LISTS) for item in page]
+        messages, scores = messages.result(), scores.result()
+        late = [(i["id"], i["n_comments"]) for i in items if i["listed"] == "work" and i.get("n_comments")
+                and time.time_ns() - int(i.get("active_ns", i["at_ns"])) >= LATE_NS]
+        new = [k for k in late if k not in COMMENTS]
+        COMMENTS.update(zip(new, pool.map(lambda k: last_comment(k[0]), new)))
+        texts = {i["id"]: i["text"] for i in items}
+        scored = [r for r in dict.fromkeys(s["result"] for s in scores) if r not in FOUND]
+        # one GetItem per scored result that is not among the newest 60 results, once per process
+        FOUND.update(zip(scored, pool.map(lambda r: climb.finding(texts[r]) if r in texts else finding(r), scored)))
+    return {"hours": HOURS, "test": team.TEST, "items": cols(items, ITEM), "messages": cols(messages, MESSAGE), "scores": cols(scores, SCORE),
+            "last_comments": {k[0]: COMMENTS[k] for k in late}, "finding": {r: FOUND[r] for r in dict.fromkeys(s["result"] for s in scores)},
             "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items()]}
+
+
+SNAPSHOT = {"at": 0.0, "ns": 0, "body": ""}
+SNAPSHOT_LOCK = threading.Lock()
+FRESH_S = 5  # readers within 5 s of each other share one set of queries; wall time, because a frozen Lambda stops the monotonic clock
+
+
+def snapshot_json():
+    with SNAPSHOT_LOCK:  # a reader that arrives while the queries run waits for them instead of starting its own
+        if time.time() - SNAPSHOT["at"] >= FRESH_S:
+            body = json.dumps(snapshot(), default=int, separators=(",", ":"))  # DynamoDB numbers are Decimal; all are integers
+            SNAPSHOT.update(at=time.time(), ns=time.time_ns(), body=body)
+        return SNAPSHOT["body"], SNAPSHOT["ns"]
 
 
 def detail(item_id):
@@ -100,12 +134,25 @@ def detail(item_id):
 
 
 class Handler(BaseHTTPRequestHandler):
-    def send(self, status, kind, body):
+    protocol_version = "HTTP/1.1"  # Chrome revalidates with If-None-Match only for HTTP/1.1 responses
+
+    def send(self, status, kind, body, headers=()):
         data = body.encode()
-        self.send_response(status)
-        self.send_header("Content-Type", f"{kind}; charset=utf-8")
-        self.send_header("Content-Length", str(len(data)))
-        self.send_header("Cache-Control", "no-store")
+        tag = f'"{hashlib.blake2b(data, digest_size=16).hexdigest()}"'  # from the content, so an unchanged board answers 304
+        if status == 200 and self.headers.get("If-None-Match") == tag:
+            self.send_response(304)
+            data = b""
+        else:
+            self.send_response(status)
+            self.send_header("Content-Type", f"{kind}; charset=utf-8")
+            self.send_header("Content-Length", str(len(data)))
+        if status == 200:
+            self.send_header("ETag", tag)
+            self.send_header("Cache-Control", "no-cache")  # the browser keeps the body and asks again with If-None-Match
+        else:
+            self.send_header("Cache-Control", "no-store")
+        for header in headers:
+            self.send_header(*header)
         self.end_headers()
         self.wfile.write(data)
 
@@ -122,7 +169,10 @@ class Handler(BaseHTTPRequestHandler):
         if path != "/data" and not path.startswith("/data/"):
             return self.send(404, "text/plain", f"no page {path}")
         try:  # the page shows the error text; the traceback goes to this terminal
-            found = snapshot() if path == "/data" else detail(path[len("/data/"):])
+            if path == "/data":  # the time of the read goes in a header, so the body and its ETag change only with the board
+                body, ns = snapshot_json()
+                return self.send(200, "application/json", body, [("X-Snapshot-Ns", str(ns))])
+            found = detail(path[len("/data/"):])
         except (Exception, SystemExit) as error:
             traceback.print_exc()
             return self.send(500, "text/plain", f"{type(error).__name__}: {error}")
@@ -140,9 +190,10 @@ PAGE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Team board</title>
+<link rel="preload" href="/data" as="fetch" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" media="print" onload="this.media='all'">
 <style>
 :root {
   color-scheme: light dark;
@@ -538,8 +589,9 @@ function diffCI(a, b, z = 1.96) {  // a minus b, in points, for two independent 
 
 /* Writes that do not disturb reading: skip an unchanged string, skip while the reader has text selected in it. */
 const selecting = el => {  // a selection younger than 60 s pauses writes to the region that holds it
+  if (!S.selAt || Date.now() - S.selAt >= 60000) return false;  // no selection (selectionchange keeps S.selAt): skip getSelection
   const s = getSelection();
-  return s && !s.isCollapsed && el.contains(s.anchorNode) && Date.now() - S.selAt < 60000;
+  return s && !s.isCollapsed && el.contains(s.anchorNode);
 };
 document.addEventListener("selectionchange", () => { S.selAt = getSelection().isCollapsed ? 0 : Date.now(); });
 function put(el, html) {
@@ -920,11 +972,24 @@ function failed(e) {
       "that the key has not expired, and that the network is up. The terminal running view.py has the full traceback.", e.text ?? e);
 }
 
-function poll() {
-  get("/data")
-    .then(data => { S.data = data; S.readAt = Date.now(); S.error = null; return S.open && loadDetail(); })
+async function read() {  // an unchanged board comes back as a 304 with the same ETag: nothing to parse
+  const r = await fetch("/data").catch(() => { throw { server: true }; });
+  if (!r.ok) throw { text: `${r.status}: ${await r.text()}` };
+  const tag = r.headers.get("ETag");
+  if (!S.data || tag !== S.etag) { S.data = await r.json(); S.etag = tag; }
+  S.data.now_ns = Number(r.headers.get("X-Snapshot-Ns"));  // the time of the read, kept out of the body so the ETag holds
+  S.readAt = Date.now(); S.error = null;
+}
+
+let timer = 0, reading = false;
+function poll() {  // every 10 s while the tab is visible; a hidden tab stops, and reads at once when it is shown again
+  clearTimeout(timer);
+  if (reading) return;
+  reading = true;
+  read()
+    .then(() => S.open && loadDetail())
     .catch(failed)
-    .finally(() => { render(); renderPanel(); setTimeout(poll, 10000); });
+    .finally(() => { reading = false; render(); renderPanel(); if (!document.hidden) timer = setTimeout(poll, 10000); });
 }
 
 async function loadDetail() {  // a failed read of one item is logged; the rest of the page stays live
@@ -1079,7 +1144,7 @@ document.fonts.ready.then(() => S.benches && charts());
 const keepSeen = () => S.lookedAt && store.set(SEEN_KEY, String(S.lookedAt));
 const back = () => { S.since = Number(store.get(SEEN_KEY)) || S.since; S.acked = false; if (S.data) render(); };
 const ack = () => { if (!S.acked && document.hasFocus()) { S.acked = true; render(); } };
-document.addEventListener("visibilitychange", () => document.hidden ? keepSeen() : back());
+document.addEventListener("visibilitychange", () => { if (document.hidden) { keepSeen(); clearTimeout(timer); } else { back(); poll(); } });
 addEventListener("blur", keepSeen);
 addEventListener("focus", back);
 addEventListener("pagehide", keepSeen);
@@ -1104,6 +1169,7 @@ poll();
 if __name__ == "__main__":
     if {"--help", "-h"} & set(sys.argv):
         sys.exit(__doc__)
+    team.table()  # once, before the threads of the first /data: each would build its own boto3 resource (0.84 s instead of 0.05 s)
     server = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
     print(f"board at http://127.0.0.1:{PORT}  (Ctrl-C stops it)")
     if sys.stdout.isatty():

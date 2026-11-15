@@ -1,0 +1,20 @@
+{
+ "note": "One row per meta-review entry of 2026-11-14, read from meta/abaybektursun.md and meta/sameraslan.md at main 56c614e. 'made' is true only when the entry's change is a commit; a change that was recommended or carried is false. Frozen: a later reading is interventions_v2.json.",
+ "interventions": [
+  {"id": "S1", "who": "sameraslan", "entry_utc": "2026-11-14T20:55:00Z", "entry_time_is": "approximate, the entry gives no clock time (its last timestamp is 20:55 UTC)",
+   "slowest": "no verified GPU entry point", "target_stage": "to_answer",
+   "change": "grader writes results/rln4/grader_v3/per_problem.json, so item-level questions do not wait for the bucket owner", "made": false, "commit": null},
+  {"id": "A1", "who": "abaybektursun", "entry_utc": "2026-11-14T21:10:00Z",
+   "slowest": "decision to first job: Day-1 #1 and #2 runnable since 20:43, unclaimed at 21:10", "target_stage": "wait_for_claim",
+   "change": "claim and run Day-1 #1 and #2 now (work-d8aa69 claimed 21:10); skill renamed to team-meta-review", "made": true, "commit": "9067fd7"},
+  {"id": "A2", "who": "abaybektursun", "entry_utc": "2026-11-14T21:21:00Z",
+   "slowest": "jobs: generation limited by KV memory, 965 tok/s at 26 answers running", "target_stage": "generation",
+   "change": "run_cell.py --shard k/N over 4 GPUs, predicted about 4x", "made": false, "commit": null},
+  {"id": "A3", "who": "abaybektursun", "entry_utc": "2026-11-14T21:55:00Z",
+   "slowest": "jobs; queue wait 8.0 and 12.9 min with 4 H100 busy", "target_stage": "none (failure class: Exa 401 found after planning)",
+   "change": "SessionStart hook warns when EXA_API_KEY is unset", "made": true, "commit": "6e03a4c"},
+  {"id": "A4", "who": "abaybektursun", "entry_utc": "2026-11-14T22:13:00Z",
+   "slowest": "jobs: 328 cells ran 51.6-51.8 min, last three jobs waited 27-29 min in the queue", "target_stage": "generation and queue",
+   "change": "submit KV-bound cells to the b200 class (2 free slots, larger KV cache); also gpu.py submit takes the work id", "made": false, "commit": null}
+ ]
+}

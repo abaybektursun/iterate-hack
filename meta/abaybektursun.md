@@ -1,5 +1,53 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 05:40 UTC (after work-5d5dc3 closed as result-b30f15, critic at decoding time; two fifth-job marks) meta/reviews/abaybektursun/20261115-0532/
+
+- Last entry's checks: review entries since the 05:00 change, 1 (this one) in 0.7 h against 3.3 per hour, one window; setup_vllm.sh on the new image 1 s and 2 s (jobs b005, 0b2b) against a 26 s median; Team line (cycle.txt, 1 h) claim to close median 44 min, upper quartile 103, 18.0 results per hour, against 15 / 69 / 20.0 over 2 h: slower.
+- Direction: mission part 3 = "the cheapest route to those points that uses no reward, at equal generated tokens" (DIRECTION.md). The critic tested a no-reward route (stop and restart on a base-activation probe): negative, within-problem AUROC 0.51-0.57; the in-context loop (result-5227b9) also negative. Since 04:46, 2 closed items test no part of the mission (gpuprice b624bb, monitor speed 5b322f). Research: SPEC_critic names 2608.17124 and 2605.09502 and states what differs (the within-problem statistic); stage 0 bounded the route from stored rows before any GPU job. In line.
+- Turnaround of work-5d5dc3: claim 04:46, spec and stage 0 04:48, first GPU job 04:48, first job that ran 05:21, result 05:30, close about 05:40: to-job 2, jobs 37, to-answer 5 min (cycle.txt). The GPU work was 5.9 min (b005, 0b2b, f08c). Slowest stage: jobs, 33 of its 37 min waiting on submissions that died.
+- Cause (before.txt): 7 jobs of this workspace died in 24 h at runs.reload() with "open files preventing the operation", all on the log of ce39. ce39 was cancelled at 04:29 while queued, yet Modal started it at 05:02:35; its command runs in its own session, so the cancelled input left it running and holding /runs/ce39/log, and the next 7 inputs given to that container died seconds after start (05:02:37 to 05:04:22). Second, cycle.py counts a died job's run as now minus start (tools/cycle.py:53-55), so the 136.8 "failed container minutes" of the last hour are mostly not GPU time.
+- Change, proposal (step 2, delete reuse; not made: infra/ belongs to the person): the runner gives each job its own container (max_inputs=1 on the three functions), so no process of an earlier job can stay in it. Rows added to meta/FAILURES.md for both causes.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | jobs died at runs.reload(), 24 h | 7 | not measured yet | - | 7 | before.txt |
+  | critic, first GPU submit to first job that ran | 33 min | not measured yet | - | 1 | cycle.txt, before.txt |
+  | submit to start of a fresh container (must stay seconds) | 2-5 s (04:15 entry) | not measured yet | - | 2 | 20261115-0403/after.txt |
+
+- Failures: the first readout's label-free flag compared answer strings instead of grouping with rln4_lib.agree (39 % of problems looked unanimous), caught in review and rerun as probe-02 in the hour; the cause (stored rows carry no agreement group, so each study re-derives it) is still in place, carried to the next entry.
+- Next entry checks: whether the runner change was deployed and open-files deaths since; whether cycle.py still counts died jobs to now.
+## 2026-11-15 05:30 UTC (after result-5227b9 closed work-be7af1; two fifth-job notices included) meta/reviews/abaybektursun/20261115-0530/
+
+- Last entry's checks (04:15, another session's line): not mine to read; this entry covers the shots session (work-be7af1, work-eb10d7, work-3d68e2).
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md). 6 MATH-500 cells and one 328 cell tested solved examples in context; the base-written arms test the mission's sentence, the RL-written arms explain the gain. Scored once on the 328 as the mission asks: 164 against 164. Next step work-3d68e2 (closing cue) aims at the 184 base answers over 8,000 tokens on the 328; best alternative, vote after restart on the 328, is owned by work-1a972a.
+- Research: told to the owner and narrowed: "+5.6 pts from RL-written examples" (result-6d422d, 03:53) was one draw of 3 texts; the second draw gave -0.6 and the result was corrected at 05:18 (result-5227b9). The spec named the single draw as a limit, but the number went out 85 min before the second draw. What would have caught it: both draws in the first submission (2 more cells, same wall time).
+- Turnaround (`cycle.py --hours 3.5`, cycle.txt): 72 jobs, 13 failed or cancelled, median wait 0.7 min. work-be7af1: to-job 0, jobs 182, to-answer 2 min. The three smokes waited 16.6-16.9 min and the first cells 17.8-24.2 min in the queue; the later cells 0.1 min. Slowest stage: jobs (cells of 33-82 min at 550-930 tokens/s, KV cache 94-98 % full with an 8,240-token prefix).
+- Failure 1 (class: a planned check skipped): shots_loop ran its first round without a smoke; 124 of 144 answers hit the 8,192 cap and no examples could be picked (27 A100 min, vast.ai job 5e03). One `--pool 4` minute would have shown it.
+- Failure 2, fixed in code (step 2: delete the cause): setup_vllm.sh died on vast.ai's default image (pip refuses the externally managed Python). Change: the script sets PIP_BREAK_SYSTEM_PACKAGES=1 for its pip call.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | setup_vllm.sh on a vast.ai default box | exit 1 | not measured yet (box destroyed) | - | 1 and 0 | before.txt, after.txt |
+  | engine versions on Modal (must not change) | pass | pass | same | jobs f08c, d6d2 | run_cell / commit_cue start |
+
+- Failures 3-5, not fixed, rows added to meta/FAILURES.md: `vast.py wait` dies on one failed ssh call; `gpu.py submit` refuses a tree with an untracked file, and this skill tells the reviewer to write cycle.txt into the tree before committing; `vast.py up` took over 19 min on two boxes at 02:20 (image pull) and 91 s at 04:37.
+- Next entry checks: setup_vllm.sh on a vast.ai box with the plain command; whether work-3d68e2 ran its smoke before the full job (it did: f08c, 1.7 min) and posted its headline only with the configuration fixed by the MATH-500 rule.
+
+## 2026-11-15 05:00 UTC (loop cycle 1, meta/loop/abaybektursun.md) meta/reviews/abaybektursun/20261115-0455/
+
+- Target (new Team line of cycle.py, 2 h): claim to close median 15 min, upper quartile 69 min, 24 items of 3 people; 20.0 results per hour. This is the loop's baseline.
+- Open measurements closed: restarts (02:25 fix): 0 jobs died with FileExistsError in 51 jobs since, against 3 and 231.3 container min in the 3 h before: helped. Setup seconds on the new image (04:15): no job has finished since; still open. hard328 rows in git: still 0. The three proposals of 03:05, 03:53 and 04:36 were not made, so their after rows stay empty; they are posted as ideas, not carried.
+- Turnaround now (queue.txt, 04:55): 10 of 10 H100 running, each for 45 to 62 min; 6 H100 jobs queued, the oldest 45 min. The limit is Modal's 10 GPUs per workspace. A reserved lane for short jobs was checked on the last 2 h and rejected: 6 short jobs waited about 16 min each (96 min), and 2 reserved GPUs would idle about 215 GPU-min.
+- Change (step 2, delete): with one review loop per person, board.py and gpu.py no longer ask that person's other agents for a review. 9 entries were written here in 2.7 h, 7 by sessions other than the loop, in one file.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | review entries per hour, abaybektursun | 3.3 (9 in 2.7 h) | not measured yet | - | 1 | before.txt |
+  | notice for a person without a loop (must not change) | printed | printed (team.review_loop false for sameraslan) | same | 1 | selftest, python check |
+
+- Asked of the person: more GPUs (a higher Modal limit or vast.ai) spend credits; AGENTS.md rule 8 still tells every agent to run the review.
+- Next cycle checks: entries per hour; setup seconds on the new image; the Team line against 15 / 69 min and 20.0 per hour.
+
 ## 2026-11-15 04:36 UTC (after result-afc423, result-c57b51, result-5da8a9: gap anatomy, answer-statement repair, one axis) meta/reviews/abaybektursun/20261115-0436/
 
 - Last entry's checks (04:15): setup_vllm.sh median over the next 20 jobs not measured (10 jobs still running); no teammate deploy of the runner seen on the board.
@@ -17,7 +65,6 @@
 
 - Failures: a job that writes no log line for 20 min keeps its GPU until an agent looks (7492, 30 min). Row added to meta/FAILURES.md.
 - Next entry checks: queue wait of the hand-off jobs; whether round-2 studies ran offline first; whether a round-2 spec names a web search and a judge of another model family.
-
 ## 2026-11-15 04:15 UTC (optimization round asked by the person) meta/reviews/abaybektursun/20261115-0403/
 
 - Last entry's checks (03:53): not due yet. No multi-cell submit, idea-eec971 job or hard328 rows commit since then (board, 04:03).

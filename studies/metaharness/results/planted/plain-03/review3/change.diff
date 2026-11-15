@@ -1,0 +1,36 @@
+diff --git a/studies/gapmap/README.md b/studies/gapmap/README.md
+index 675c61d..092060e 100644
+--- a/studies/gapmap/README.md
++++ b/studies/gapmap/README.md
+@@ -18,7 +18,7 @@ Requirements). Plan: `specs/SPEC.md`.
+ | `jobs/submit.sh` | Launches one cell on the runner, waits, copies the output to `runs/<job id>/`. |
+ | `jobs/run_cell.sh` | What the job runs: environment, then `cell.py`. |
+ | `jobs/cell.py` | The cell: metric, split, paired bootstrap, interval, table. |
+-| `jobs/bench_rng.py` | Speed of numpy's bit generators on the resampler's draw. |
++| `jobs/bench_rng.py` | Speed of numpy's bit generators on the resampler's draw. Ran as an extra cell in batches accuracy, cap_hit and tokens; removed from `queue.json` after that (see Numbers). |
+ | `results/overall-01/` | The overall difference of all four metrics with 95% intervals (`metrics.json`, `run.json`). |
+ | `results/<batch>-NN/` | One batch: one file per cell and `run.json` with the job ids. |
+ 
+@@ -46,3 +46,8 @@ with the numbers.
+   - `tokens`: 760.948 [495.14, 1019.8781]
+   - `tokens_both_right`: 1035.0854 [808.505, 1257.191]
+ - Batches: see `results/<batch>-NN/`.
++- Bit generators, draws per second on the CPU class, 3 runs (`results/{accuracy,cap_hit,tokens}-01/bench-rng.json`):
++  PCG64, MT19937, Philox and SFC64 are within 4% of each other in every run. The same generator varies by 15%
++  between runs (PCG64: 36,979 to 42,428). The choice of generator does not change the cell's time, and the bootstrap
++  keeps `default_rng` (PCG64). The bench is no longer an extra cell of each batch, because each new run repeated
++  this answer and added a job, a work item and a board result.
+diff --git a/studies/gapmap/queue.json b/studies/gapmap/queue.json
+index b5566ed..ea5ebf4 100644
+--- a/studies/gapmap/queue.json
++++ b/studies/gapmap/queue.json
+@@ -1,8 +1,6 @@
+ {
+  "batches": ["accuracy", "cap_hit", "tokens", "tokens_both_right"],
+  "splits": ["overall", "subject", "level5", "t2_length_quartile", "t1_length_quartile"],
+- "extras": [
+-  {"id": "bench-rng", "kind": "bench", "seconds_per_generator": 10}
+- ],
++ "extras": [],
+  "defaults": {"n_boot": 1500000, "seed": 0, "ci": 0.95, "fmt": "json", "digits": 4}
+ }
