@@ -1,0 +1,7 @@
+{
+ "job_id": "frustea-1114-180900-b614",
+ "commit": "1994279858d7c47ce0f16c080867bf2273c072a4",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --prompt cue --set math500 --model base --temperature 1.0 --top-p 0.95 --min-p 0 --seed 41000000 --commit 1994279858d7c47ce0f16c080867bf2273c072a4",
+ "runner": "uv run tools/gpu.py submit h100 --hours 2",
+ "raw_answers": "runs/frustea-1114-180900-b614/answers.jsonl (uv run tools/gpu.py get frustea-1114-180900-b614)"
+}
