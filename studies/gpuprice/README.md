@@ -25,9 +25,14 @@ read in full 2026-11-14) fixes:
 ## Submission
 
 - Forecast: `results/submission/forecast_2026-11-06.csv` (111 rows: 37 series, horizons 1, 3, 7, origin 2026-11-06).
+  It is candidate 2 (`specs/SPEC3.md`). Candidate 1 (`specs/SPEC2.md`) is kept beside it as
+  `results/submission/forecast_2026-11-06_candidate1.csv`.
 - Reproduce: `bash studies/gpuprice/jobs/reproduce.sh` from the repository root (pack download, one Chronos-2
-  inference job, post-processing, simulator, average). With the stored inference output
-  (`CHRONOS_CSV=runs/abaybektursun-1114-201131-4739/fm2_chronos2.csv`) it rewrites the same file.
+  inference job, post-processing, simulator, average, then candidate 2: the daily-maximum member and the replay of
+  the 37 stored `claude-fable-5-2` responses in `results/llm2/event_fable_adj.jsonl`, each checked against the
+  prompt rebuilt from the pack). With the stored inference output
+  (`CHRONOS_CSV=runs/abaybektursun-1114-201131-4739/fm2_chronos2.csv`) it rewrites both files unchanged. No API
+  key is needed; without `--replay` the model is called again and its answers may differ.
 - Findings: `FINDINGS.md`.
 
 ## Layout
@@ -50,6 +55,9 @@ read in full 2026-11-14) fixes:
 | `jobs/ft_*`, `jobs/pfn_*`, `jobs/tab_*`, `jobs/llm_*` | Fine-tuning, synthetic-prior network, TabPFN and LLM arms (not in the candidate). |
 | `prep/ext_history.py`, `prep/ext_scaleway_fx.py`, `data/ext_ecb_eurusd_v1.csv` | 30 extra days per collector from pinned upstream commits; ECB EUR/USD to 2026-11-06 and the Scaleway test. |
 | `specs/SPEC2.md`, `results/spec2/locked-01/` | The candidate, fixed before its run on the locked origins, and that run. |
+| `prep/intraday.py`, `data/fm2_intraday_v2.csv.gz` | The day's maximum price and snapshot share of each `fastgpu_daily` listing, from the pack (`v1`: maximum only, used by `fm2-19`). Read by `fm2_post.py --intraday --exit-frac`. |
+| `jobs/llm2_context.py`, `llm2_run.py`, `llm2_score.py` | LLM adjuster: one plain completion per series and origin (hosted API, no tools) that adjusts a base forecast; context cut at the origin (`llm2_context.py test` plants later rows); cache, cost cap, replay. Raw responses: `runs/gpuprice/llm2/` (not committed), event origin: `results/llm2/event_fable_adj.jsonl`. `results/llm2/base_cells_*.csv.gz`: candidate 1's scored cells shown to the model (target day on or before the origin only). |
+| `specs/SPEC3.md`, `results/spec3/locked-01/` | Candidate 2, fixed before its run on the locked origins (their second use), and that run. |
 | `ATTRIBUTION.md` | The pack's attribution file. It must stay with any work that uses the pack. |
 
 The pack: `runs/gpuprice/pack/gpu-price-pack-v0.1.1-handover/` (v0.1.1-handover, data to 2026-11-06 23:59:59 UTC,
@@ -118,7 +126,17 @@ included. Main entries, pooled skill against last value (1 / 3 / 7 days):
 | `pfn-02` | 4.8M-parameter network trained only on simulated listings (`jobs/pfn_sim.py`, `pfn_train.py`) | +0.267 | +0.173 / +0.240 / +0.307 |
 | `tab-01` | TabPFN v2 regressor per listing | +0.192 | |
 | `llm-01` to `llm-04` | 80B open-weights LLM (`RedHatAI/Qwen3-Next-80B-A3B-Instruct-quantized.w4a16`) reading the listing table, 92 cells (10 series, 5 origins, 3 and 7 days): one number +0.015, stated quantiles +0.074, probabilities +0.058, reason-then-answer +0.128; same cells: `it00-lve` +0.106, `it01-sim` +0.180, `ens-04` +0.264. `results/llm/`. | | |
-| `ens-05` | **candidate**: quantile average of `fm2-17` and `sim2-15` | **+0.298** | +0.185 / +0.264 / +0.347 |
+| `ens-05` | candidate 1: quantile average of `fm2-17` and `sim2-15` | +0.298 | +0.185 / +0.264 / +0.347 |
+| `fm2-19` | `fm2-17` + the day's maximum price of each `fastgpu_daily` listing (`--intraday`) | +0.305 | +0.201 / +0.256 / +0.360 |
+| `fm2-20` | `fm2-19` + exit signal from the snapshot share (`--exit-frac 0.25`), 8,000 draws | +0.306 | +0.213 / +0.252 / +0.360 |
+| `llm2-01` | `claude-fable-5-2` (no tools, training data to June 2026) adjusts `ens-05`, 1,110 calls | +0.309 | |
+| `llm2-03` | the same with the band never narrower than `ens-05`'s (rule chosen on 6 pilot origins; the other 24: +0.015, +0.007 to +0.025) | +0.313 | +0.209 / +0.278 / +0.360 |
+| `ens-06` | **candidate 2**: quantile average of `fm2-20` and `llm2-03` | **+0.316** | +0.217 / +0.272 / +0.367 |
+
+`fm2-20` against `fm2-17`: +0.015, 95 % interval +0.008 to +0.024 (bootstrap over origins). `llm2-03` against
+`ens-05`: +0.015, +0.008 to +0.024 (series-origin blocks). Other adjuster models on the 6 pilot origins (627
+cells, `ens-05` +0.251): `claude-haiku-5-5` +0.255, `claude-sonnet-5-5` +0.248, `claude-fable-5-2` +0.265; an
+echo control returned `ens-05` unchanged on 627 of 627 cells. Whole LLM arm: $33.79.
 
 Seed and checkpoint noise is about +-0.01 pooled (`ft-08` step curve, `pfn-02` checkpoints), so the averages
 between +0.292 and +0.299 are not separated.
@@ -130,6 +148,16 @@ difference +0.164, 95 % interval +0.079 to +0.249 (bootstrap over 37 series); be
 better on 6 of 6 origins. 1 day: +0.184 against +0.123 (difference +0.061, +0.018 to +0.118). 3 days: +0.305
 against +0.063 (difference +0.243, +0.108 to +0.354). Inside [q10, q90]: 0.85 and 0.80 (target 0.80). Members
 alone: `fm2-17` +0.270, `sim2-15` +0.215. The 7-day horizon has no truth on these origins.
+
+**Locked origins, second look (`specs/SPEC3.md`, `results/spec3/locked-01/`).** Candidate 2 was fixed in SPEC3
+before this run; it is the second use of these origins and one scoring run. Candidate 2 **+0.283** against
+candidate 1 +0.252: difference +0.030, 95 % interval +0.016 to +0.052 (bootstrap over 37 series); better on 27
+series, worse on 8, better on 5 of 6 origins. 1 day +0.217 against +0.184; 3 days +0.333 against +0.305. Inside
+[q10, q90]: 0.85. By the rule written in SPEC3, candidate 2 replaced candidate 1 in the submission. Members:
+A (`fm2-20`) alone +0.298 against `fm2-17` +0.270 (difference +0.028, +0.008 to +0.068; H2 held); B (the LLM
+adjustment of candidate 1) alone +0.256 against +0.252 (difference +0.004, -0.024 to +0.027, better on 8 series
+and worse on 24: H3 not confirmed). A alone scored above candidate 2 on these origins; the submission stays the
+average fixed in SPEC3, because choosing the member after seeing this run would be a choice made on the test set.
 
 The starter rows match the pack's own README (+0.20 and +0.17). The number to beat is **+0.126 pooled** on the
 event set (strongest starter baseline). Its intervals are too narrow: 55 to 69 % of truths fall inside

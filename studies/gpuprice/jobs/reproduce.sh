@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One command for the submitted forecast (origin 2026-11-06, horizons 1, 3, 7, 37 series; specs/SPEC2.md).
+# One command for the submitted forecast (origin 2026-11-06, horizons 1, 3, 7, 37 series; specs/SPEC3.md).
 # Run from the repository root: bash studies/gpuprice/jobs/reproduce.sh
 # Inputs: the pack (downloaded and checked by prep/get_pack.sh), the committed listing panel built from it
 # (data/fm2_panel_v2.csv.gz, jobs/fm2_panel.py) and the ECB EUR/USD rates to 2026-11-06 (data/ext_ecb_eurusd_v1.csv).
@@ -20,4 +20,16 @@ $PY studies/gpuprice/jobs/fm2_post.py --quantiles "$CHRONOS_CSV" --origins event
     --hurdle --hurdle-h 1 --scaleway --turnover own --enter abs
 $PY studies/gpuprice/jobs/sim2_own.py --pack $P --series studies/gpuprice/data/event_series_v1.csv \
     --origin-start 2026-11-06 --origin-end 2026-11-06 --out $O/sim2-15.csv --tau 14 --shrink 0.2 --abs-enter 2 --afh
-$PY studies/gpuprice/jobs/average.py studies/gpuprice/results/submission/forecast_2026-11-06.csv $O/fm2-17.csv $O/sim2-15.csv
+G=studies/gpuprice/results; C1=$G/submission/forecast_2026-11-06_candidate1.csv
+$PY studies/gpuprice/jobs/average.py $C1 $O/fm2-17.csv $O/sim2-15.csv                # candidate 1 (specs/SPEC2.md)
+# Candidate 2 (specs/SPEC3.md) = average of A and B.
+# A: the same Chronos-2 quantiles with the day's maximum price and snapshot share of each fastgpu_daily listing.
+$PY studies/gpuprice/jobs/fm2_post.py --quantiles "$CHRONOS_CSV" --origins event --out $O/A.csv \
+    --hurdle --hurdle-h 1 --scaleway --turnover own --enter abs \
+    --intraday studies/gpuprice/data/fm2_intraday_v2.csv.gz --exit-frac 0.25 --draws 8000
+# B: candidate 1 adjusted by claude-fable-5-2 (no tools). The 37 stored responses are replayed, each checked against
+# the prompt rebuilt here; drop --replay (and set ANTHROPIC_API_KEY) to call the model again.
+$PY studies/gpuprice/jobs/llm2_run.py --model claude-fable-5-2 --variant adj --origins event --base $C1 \
+    --cells $G/llm2/base_cells_dev.csv.gz,$G/llm2/base_cells_locked.csv.gz --replay $G/llm2/event_fable_adj.jsonl
+$PY studies/gpuprice/jobs/llm2_score.py write adj claude-fable-5-2 $O/B.csv --wide --base $C1
+$PY studies/gpuprice/jobs/average.py $G/submission/forecast_2026-11-06.csv $O/A.csv $O/B.csv

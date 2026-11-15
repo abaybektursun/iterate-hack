@@ -37,9 +37,14 @@ November Scaleway forecasts use the 6 November rate).
 |---|---|---|
 | `last_value_empirical` (strongest starter baseline) | +0.126 | +0.089 |
 | `drift` (the brief's baseline) | +0.114 | |
-| Submitted candidate | +0.298 | **+0.252** |
+| Candidate 1 (average of Chronos-2 per listing and the own-history simulator) | +0.298 | +0.252 |
+| **Submitted: candidate 2** (daily-maximum member averaged with the LLM-adjusted candidate 1) | **+0.316** | **+0.283** |
 
-Locked origins: difference to the baseline +0.164, 95 % interval +0.079 to +0.249 (bootstrap over the 37 series);
+Candidate 2 on the locked origins (their second use, declared in `specs/SPEC3.md` before the run): +0.030 over
+candidate 1, 95 % interval +0.016 to +0.052; better on 27 series, worse on 8; +0.194 over the baseline (+0.106 to
++0.285). 1 day +0.217, 3 days +0.333; 0.85 of truths inside [q10, q90].
+
+Candidate 1 on the locked origins (first use): difference to the baseline +0.164, 95 % interval +0.079 to +0.249 (bootstrap over the 37 series);
 better on 26 series, worse on 11; better on 6 of 6 origins. 1 day +0.184 against +0.123; 3 days +0.305 against
 +0.063. Share of truths inside [q10, q90]: 0.85 and 0.80 (target 0.80). The 7-day horizon has no truth on the
 locked origins; its development number is +0.347 against +0.127.
@@ -71,7 +76,28 @@ that turn over daily is forecast poorly by every listing-level method.
    conformal-style widening, longer context (+30 days), cross-collector covariates and a third ensemble member
    each gave nothing or lost.
 
+6. **The data held an unused next-day price.** One collector publishes the day's minimum, average and maximum
+   price per listing; the series is built from the minimum. When the maximum is above the minimum the listing has
+   a new price the next day in 76 % of cases, against 1.2 % otherwise. Verda reprices once a day, about a third into the UTC
+   day (read from the day's average price), so its maximum today is its minimum tomorrow in 98 % of cases. A listing seen in at most a quarter of
+   the day's snapshots is gone the next day in 25 % of cases, against 0.2 % otherwise. Using both: +0.291 to
+   +0.306 in development and +0.270 to +0.298 on the locked origins.
+7. **A frontier LLM helps as an adjuster, not as a forecaster.** `claude-fable-5-2` through the API with no
+   tools, shown candidate 1's quantiles, the listing table and candidate 1's past errors (all dated on or before
+   the origin; its training data ends in June 2026): +0.313 against +0.298 in development. It sorts the
+   listings, finds the middle one and moves the median along a repricing listing up to the neighbouring price.
+   Its losses come from narrowing a band before a listing enters or leaves, so the band is never allowed to be
+   narrower than the base. On the locked origins this member alone is not separated from candidate 1 (+0.004,
+   -0.024 to +0.027), and the daily-maximum member alone scored above the average; the gain of candidate 2 there
+   comes from finding 6.
+8. **Where the error is.** With tomorrow's set of listings known and prices frozen, the 1-day absolute error of
+   the median falls by 59 % (fastgpu_daily) and 68 % (gpurentalprices); with every continuing listing's price
+   known and the set frozen, by 39 % and 31 %. At 7 days: 48 % and 54 % against 39 % and 37 %. Most entrants (46
+   of 56) were never listed before, so no history predicts them.
+
 ## For someone pricing GPU capacity
+- A provider with dynamic pricing is a daily demand gauge: Verda's prices rose about 1 % on two days in three
+  from 20 September to 6 November, on every GPU model at once. Its intraday maximum is tomorrow's price.
 
 - A change in a posted median over a week is mostly a change in which providers are listed and which of the
   middle two or three reprice, not a market-wide move. Read the listing table, not the median.
