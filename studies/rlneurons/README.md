@@ -1398,6 +1398,12 @@ Against the predictions of amendments 3 and 4:
 - Shared input subspace: the part of the edit that reads Code 3.0's input subspace 171, the rest 176, difference -1.5
   [-6.1, 3.4]. "The shared input directions carry the gain" is refuted; neither part reaches the whole edit (192).
 - Code 3.0's 8 directions: 173 right, 23 cap hits, right per finished 0.57. They also make the model finish, with fewer right answers.
+- Correction after review (comment on result-51a0e7): "finish, not be right" overstates it. Split by the base's own outcome, half
+  of the gain is on problems the base finishes. On those 251 (base 161 right): random rank-8 149, one direction 166, eight 175
+  (+5.6 points against base [0.8, 10.8], +10.4 against random [4.8, 15.9]), 64 directions 182, twice the size 176, RL 187. On the
+  77 the base leaves at the cap (3 right): 9, 15, 17, 18, 14, 19. Conditioning on the base's finished sample favours the base, so
+  the +5.6 is a lower bound. The directions make the model finish and also raise right answers where it already finished; only
+  the step from size 1 to 2 adds finishing without right answers (175 to 176, 17 to 14).
 - One sample per cell: contrasts under about 5 points are not resolved.
 
 #### Lengths, token budgets and a restart cascade from the stored rows (work-e02ba4, laptop)
