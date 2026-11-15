@@ -71,7 +71,7 @@ a { color: inherit; text-decoration: none; }
 
 .lab { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 clamp(40px, 5.5vw, 104px); align-items: start; }
 .say { margin: clamp(28px, 7vh, 76px) 0 0; max-width: 21ch; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; }
-.eyebrow { margin: clamp(28px, 7vh, 76px) 0 0; color: var(--blue); font-size: 13px; font-weight: 640; font-stretch: 112%; letter-spacing: .06em; text-transform: uppercase; }
+.eyebrow { margin: clamp(28px, 7vh, 76px) 0 0; color: var(--blue); font-size: 13px; font-weight: 640; font-stretch: 112%; letter-spacing: .01em; }
 .eyebrow + .say { margin-top: 12px; }
 .note { margin: 18px 0 0; max-width: 46ch; color: var(--mute); font-size: 14.5px; line-height: 1.42; }
 
