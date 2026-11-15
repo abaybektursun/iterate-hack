@@ -79,6 +79,7 @@ LISTS = ("work", "result", "idea", "knowledge", "skill", "work-closed")
 # on /findings. Its ICON, the JavaScript source of the tile's icon, is written into that page here (findings.py).
 FINDINGS = {os.path.basename(f)[len("finding_"):-3].replace("_", "-"): importlib.import_module(os.path.basename(f)[:-3])
             for f in sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "finding_*.py")))}
+FINDING_ROWS = [findings.entry(slug, m) for slug, m in FINDINGS.items()]  # read once, so a module that changed fails here, not in /data
 
 
 def tiles_page(modules, differences=()):
@@ -171,7 +172,7 @@ def snapshot():
     return {"hours": HOURS, "test": team.TEST, "items": cols(items, ITEM), "messages": cols(messages, MESSAGE), "scores": cols(scores, SCORE),
             "last_comments": {k[0]: COMMENTS[k] for k in late}, "finding": {r: FOUND[r] for r in old},
             "plain": plain_words([r for r in plain if r["item"] in scored or r["item"] in texts], lambda r: r["item"] in scored),
-            "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items()],
+            "findings": FINDING_ROWS,
             "proofs": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in PROOFS.items()]}
 
 

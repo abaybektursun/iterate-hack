@@ -1,0 +1,201 @@
+{
+ "job": "abaybektursun-1115-014547-2c8c",
+ "answers": 2000,
+ "right": 1642,
+ "mean_d_nats_per_token": 0.08727066218852997,
+ "features": {
+  "mean_d_250": {
+   "value": 0.5042,
+   "ci95": [
+    0.4473,
+    0.5599
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "share_negative_250": {
+   "value": 0.5178,
+   "ci95": [
+    0.4613,
+    0.5767
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "low_decile_mean_250": {
+   "value": 0.5146,
+   "ci95": [
+    0.4588,
+    0.5714
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "mean_lp_base_250": {
+   "value": 0.5167,
+   "ci95": [
+    0.4585,
+    0.5735
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "mean_lp_noprob_250": {
+   "value": 0.5021,
+   "ci95": [
+    0.4454,
+    0.5597
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "mean_d_500": {
+   "value": 0.5146,
+   "ci95": [
+    0.4589,
+    0.569
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "share_negative_500": {
+   "value": 0.5429,
+   "ci95": [
+    0.4852,
+    0.6013
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "low_decile_mean_500": {
+   "value": 0.5586,
+   "ci95": [
+    0.501,
+    0.6148
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "mean_lp_base_500": {
+   "value": 0.5439,
+   "ci95": [
+    0.4865,
+    0.6038
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "mean_lp_noprob_500": {
+   "value": 0.523,
+   "ci95": [
+    0.4625,
+    0.5771
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "mean_d_1000": {
+   "value": 0.5314,
+   "ci95": [
+    0.4676,
+    0.589
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "share_negative_1000": {
+   "value": 0.5356,
+   "ci95": [
+    0.4802,
+    0.5943
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "low_decile_mean_1000": {
+   "value": 0.5753,
+   "ci95": [
+    0.5157,
+    0.6368
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "mean_lp_base_1000": {
+   "value": 0.5188,
+   "ci95": [
+    0.4632,
+    0.576
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "mean_lp_noprob_1000": {
+   "value": 0.4979,
+   "ci95": [
+    0.4381,
+    0.5553
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "shorter_answer": {
+   "value": 0.6799,
+   "ci95": [
+    0.621,
+    0.7382
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "mean_d_1000_shuffled_within_problem": {
+   "value": 0.4833,
+   "ci95": [
+    0.4295,
+    0.5396
+   ],
+   "problems": 150,
+   "pairs": 478
+  },
+  "mean_d_1000_both_longer_than_1000": {
+   "value": 0.5523,
+   "ci95": [
+    0.4875,
+    0.6156
+   ],
+   "problems": 125,
+   "pairs": 373
+  },
+  "shorter_answer_both_longer_than_1000": {
+   "value": 0.7346,
+   "ci95": [
+    0.6728,
+    0.7912
+   ],
+   "problems": 125,
+   "pairs": 373
+  }
+ },
+ "judged_wrong_mean_d_1000": {
+  "slip": {
+   "n": 21,
+   "mean": 0.09366789513400622
+  },
+  "misread": {
+   "n": 14,
+   "mean": 0.13239456181015288
+  },
+  "wrong_plan": {
+   "n": 17,
+   "mean": 0.1539464334354681
+  },
+  "format": {
+   "n": 8,
+   "mean": 0.086303167976439
+  }
+ },
+ "mean_d_1000": {
+  "right": 0.08601833134889603,
+  "wrong": 0.1095842570066452
+ }
+}

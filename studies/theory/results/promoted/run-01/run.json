@@ -1,0 +1,37 @@
+{
+ "commit": "537adb7",
+ "code_note": "split, standing, score_tests, rival, defend, rival2, duel_test and score_duel ran at 537adb7; replicate crashed there (FileNotFoundError on tests/r4-m06.json, a carried untested theory); replicate and review ran again at 28db85f, which skips a theory with no tests file.",
+ "spec": "studies/theory/specs/SPEC_promoted01.md (written before the run)",
+ "cutoff": "2026-11-15T04:29:33",
+ "commands": [
+  "uv run studies/theory/lib/round.py studies/theory/results/promoted/run-01 split --cutoff 2026-11-15T04:29:33 --skip gpuprice --skip \"theory round\" --skip \"theory skill\" --skip \"Theory engine\" --from studies/theory/results/engine/round-04",
+  "cp studies/theory/results/account/run-02/external.md studies/theory/results/account/run-02/inventory.md studies/theory/results/promoted/run-01/",
+  "uv run studies/theory/lib/round.py studies/theory/results/promoted/run-01 standing score_tests --cutoff 2026-11-15T04:29:33 --skip gpuprice --skip \"theory round\" --skip \"theory skill\" --skip \"Theory engine\" --from studies/theory/results/engine/round-04",
+  "uv run studies/theory/lib/round.py studies/theory/results/promoted/run-01 rival defend rival2 defend duel_test score_duel replicate review --cutoff 2026-11-15T04:29:33 --skip gpuprice --skip \"theory round\" --skip \"theory skill\" --skip \"Theory engine\" --from studies/theory/results/engine/round-04  (crashed in replicate at 537adb7)",
+  "uv run studies/theory/lib/round.py studies/theory/results/promoted/run-01 replicate review --cutoff 2026-11-15T04:29:33 --skip gpuprice --skip \"theory round\" --skip \"theory skill\" --skip \"Theory engine\" --from studies/theory/results/engine/round-04  (at 28db85f)"
+ ],
+ "copied": {
+  "external.md": "from account/run-02 (sha256 8b2473aaeed8..., equal)",
+  "inventory.md": "from account/run-02 (sha256 0a7019647b03..., equal)"
+ },
+ "items_before": 114,
+ "items_after": 49,
+ "theories_carried": {"r4-m10-rival": "promoted from r4-m10, 6 computed tests, 5 inside, 1 outside, +7.809 nats, survives", "r4-m08-rival": "promoted from r4-m08, 5 computed tests, +2.652 nats, no gain", "r4-m06": "untested", "r4-m11": "untested", "r4-m12": "untested"},
+ "graveyard": 42,
+ "facts": 45,
+ "incumbent_accounts": 0,
+ "duel": {"theory": "r4-m10-rival", "rival": "truncation-negative reward prunes the T 0.6 loop hazard from the first steps; cap hits fall steadily in log steps", "tests": 3, "computed": 3, "separating": 2, "gains_nats": [0.3887, 0.8118, 0.2854], "total_gain_nats": 1.486, "state": "not separated from rival", "second_turn": "not needed"},
+ "tests_in_facts": {"p1": "0.196 = facts.json[25] (step 400 minus plain base, 0.066) + plain base 65 / 500", "p2": "0.010 = facts.json[24] (0.076) - facts.json[25] (0.066)", "p3": "not in facts.json"},
+ "replication": "nothing to recompute: no duel test has a gain of 1 nat or more in size; carried tests are not replicated",
+ "review": "weak: not separated from rival; 6.0 of 7.81 offline nats rest on one measurement implied by 2610.06851; the cap-hit claim was fitted to counts the theory had seen",
+ "jobs": {"rival (opus)": 1, "defend (opus)": 1, "duel_test (opus)": 1, "review (opus)": 1},
+ "jobs_total": 4,
+ "job_s": {"rival/r4-m10-rival": 191, "defend/r4-m10-rival.turn1": 33, "duel_test/r4-m10-rival": 133, "review/r4-m10-rival (after one send-back)": 174},
+ "send_backs": {"review": "verdict did not name the duel state"},
+ "stages_skipped": "rival2 (2 of 3 first-turn tests separate); split, standing and score_tests start no job",
+ "wall_time": "about 9 minutes, before.jsonl written 23:46 (local, 2026-11-14) to reviews/r4-m10-rival.json 23:55",
+ "logs": ["/private/tmp/claude-501/-Users-abaybektursun-projects-iterate-hack/85298391-4ffe-41a3-927a-6370d6b6a4e7/scratchpad/promoted01.log (rival to the replicate crash)", "/private/tmp/claude-501/-Users-abaybektursun-projects-iterate-hack/85298391-4ffe-41a3-927a-6370d6b6a4e7/scratchpad/promoted01b.log (replicate, review)", "split, standing and score_tests: no log kept"],
+ "temp_folders": ["/var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-drssrxea (rival to duel_test)", "/var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-90ev2vcm (review)"],
+ "row_files": "fetched by the duel scripts to runs/theory-tests/r3/ (not committed)",
+ "readout": "studies/theory/results/promoted/run-01/readout.md"
+}

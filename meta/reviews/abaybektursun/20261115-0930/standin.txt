@@ -1,0 +1,4 @@
+engine init (model_dir, max_model_len, VLLM_USE_FLASHINFER_SAMPLER): ('/nonexistent-model', 2082, '0')
+metrics: done 6 {'n': 6, 'correct_v3': 0, 'cap_hits': 3, 'generated_tokens': 150}
+rows: 6 [('4:0', 0, 'stop', False, 10, 0), ('4:0', 1, 'length', True, 40, 0), ('1:1', 0, 'stop', False, 10, 0), ('1:1', 1, 'length', True, 40, 0), ('17:2', 0, 'stop', False, 10, 0), ('17:2', 1, 'length', True, 40, 0)]
+row keys equal to job a2de's: True []
