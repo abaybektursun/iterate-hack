@@ -1,0 +1,52 @@
+{
+ "analysis_commit": "a5e02fdaeb357f6fb9892746eb31433540e53ebd",
+ "command": [
+  "/Users/saslan.19/Desktop/Tengs/codingMiscellaneous/iterate-hack/.claude/worktrees/past-dev-shared-memory-94c3d2/studies/rlneurons/analysis/day1_length_rules.py",
+  "--base",
+  "runs/hard328_base_cue_s4_join-01",
+  "--out",
+  "studies/rlneurons/results/day1_length_rules/hard328_base-01",
+  "--fixed",
+  "studies/rlneurons/specs/day1_length_rules_chosen_prereg.json"
+ ],
+ "runs": {
+  "base": {
+   "source": "runs/hard328_base_cue_s4_join-01",
+   "job_id": "join:sameraslan-1114-145237-d124+sameraslan-1114-145241-fee9+sameraslan-1114-145246-73ad+sameraslan-1114-145251-9228",
+   "commit": "34a8ccdfac152b85d0fd717682d5b9b62157db3a",
+   "config": {
+    "model": "base",
+    "prompt": "cue",
+    "set": "hard328",
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "n": null,
+    "samples": 4,
+    "restarts": 0,
+    "dry_run": false,
+    "commit": "34a8ccdfac152b85d0fd717682d5b9b62157db3a",
+    "model_repo": "allenai/Olmo-3-1025-7B",
+    "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+    "tokenizer": [
+     "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    ],
+    "prefix_ids": [
+     1584,
+     2268,
+     33413
+    ],
+    "sampling": {
+     "temperature": 1.0,
+     "top_p": 1.0,
+     "repetition_penalty": 1.0
+    },
+    "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+    "n_problems": 328,
+    "out": "runs/hard328_base_cue_s4_join-01"
+   }
+  }
+ }
+}

@@ -1,0 +1,158 @@
+{
+ "status": "done",
+ "config": {
+  "model": "base",
+  "prompt": "cue",
+  "set": "hard328",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "max_tokens": 16384,
+  "seed": 3000000,
+  "n": null,
+  "samples": 4,
+  "restarts": 0,
+  "dry_run": false,
+  "commit": "34a8ccdfac152b85d0fd717682d5b9b62157db3a",
+  "model_repo": "allenai/Olmo-3-1025-7B",
+  "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 328,
+  "out": "runs/hard328_base_cue_s4_join-01"
+ },
+ "commit": "34a8ccdfac152b85d0fd717682d5b9b62157db3a",
+ "job_id": "join:sameraslan-1114-145237-d124+sameraslan-1114-145241-fee9+sameraslan-1114-145246-73ad+sameraslan-1114-145251-9228",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-14T22:54:30Z",
+ "updated_utc": "2026-11-14T23:45:02Z",
+ "counts": {
+  "n": 1312,
+  "correct_v3": 638,
+  "correct_v1": 631,
+  "cap_hits": 263,
+  "loop_A": 5,
+  "generated_tokens": 12044518,
+  "restarts": 0,
+  "n_planned": 1312,
+  "generation_s": 9521.255510091782,
+  "mean_generated_tokens": 9180.272865853658,
+  "tokens_per_s": 1265.0136305273772
+ },
+ "joined_from": {
+  "script": "studies/rlneurons/analysis/day1_join_shards.py",
+  "entry_point": "studies/metaharness/jobs/shard_cell.py",
+  "counts_are": "sums over the shards; generation_s is GPU seconds summed; tokens_per_s is per GPU",
+  "shards": [
+   {
+    "shard": "0/4",
+    "job_id": "sameraslan-1114-145237-d124",
+    "source": "runs/sameraslan-1114-145237-d124",
+    "n_problems": 82,
+    "counts": {
+     "n": 328,
+     "correct_v3": 169,
+     "correct_v1": 168,
+     "cap_hits": 62,
+     "loop_A": 1,
+     "generated_tokens": 2991167,
+     "restarts": 0,
+     "n_planned": 328,
+     "mean_generated_tokens": 9119.411585365853,
+     "generation_s": 2135.494477033615,
+     "tokens_per_s": 1400.690581113086
+    },
+    "gpu": "NVIDIA H200",
+    "wall_s": 2240.475105047226,
+    "started_utc": "2026-11-14T22:54:30Z",
+    "updated_utc": "2026-11-14T23:31:50Z"
+   },
+   {
+    "shard": "1/4",
+    "job_id": "sameraslan-1114-145241-fee9",
+    "source": "runs/sameraslan-1114-145241-fee9",
+    "n_problems": 82,
+    "counts": {
+     "n": 328,
+     "correct_v3": 159,
+     "correct_v1": 158,
+     "cap_hits": 57,
+     "loop_A": 1,
+     "generated_tokens": 2953552,
+     "restarts": 0,
+     "n_planned": 328,
+     "mean_generated_tokens": 9004.731707317073,
+     "generation_s": 2150.285893678665,
+     "tokens_per_s": 1373.5624684525665
+    },
+    "gpu": "NVIDIA H200",
+    "wall_s": 2271.6901535987854,
+    "started_utc": "2026-11-14T22:54:38Z",
+    "updated_utc": "2026-11-14T23:32:29Z"
+   },
+   {
+    "shard": "2/4",
+    "job_id": "sameraslan-1114-145246-73ad",
+    "source": "runs/sameraslan-1114-145246-73ad",
+    "n_problems": 82,
+    "counts": {
+     "n": 328,
+     "correct_v3": 153,
+     "correct_v1": 151,
+     "cap_hits": 84,
+     "loop_A": 1,
+     "generated_tokens": 3070975,
+     "restarts": 0,
+     "n_planned": 328,
+     "mean_generated_tokens": 9362.728658536585,
+     "generation_s": 2320.3988604545593,
+     "tokens_per_s": 1323.4685865163738
+    },
+    "gpu": "NVIDIA H200",
+    "wall_s": 2446.636628627777,
+    "started_utc": "2026-11-14T22:54:34Z",
+    "updated_utc": "2026-11-14T23:35:21Z"
+   },
+   {
+    "shard": "3/4",
+    "job_id": "sameraslan-1114-145251-9228",
+    "source": "runs/sameraslan-1114-145251-9228",
+    "n_problems": 82,
+    "counts": {
+     "n": 328,
+     "correct_v3": 157,
+     "correct_v1": 154,
+     "cap_hits": 60,
+     "loop_A": 2,
+     "generated_tokens": 3028824,
+     "restarts": 0,
+     "n_planned": 328,
+     "mean_generated_tokens": 9234.219512195123,
+     "generation_s": 2915.076278924942,
+     "tokens_per_s": 1039.020495586142
+    },
+    "gpu": "NVIDIA H100 80GB HBM3",
+    "wall_s": 3027.3924872875214,
+    "started_utc": "2026-11-14T22:54:35Z",
+    "updated_utc": "2026-11-14T23:45:02Z"
+   }
+  ]
+ }
+}

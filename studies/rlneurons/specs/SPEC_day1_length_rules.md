@@ -169,8 +169,9 @@ One model alone (`--base` or `--rl` only) prints that model's rows without the R
 ## Note, 2026-11-14 23:55 UTC: the thresholds used on the 328 (added before any hard328 rule was scored)
 
 The MATH-500 four-sample rows that `--choose` reads are in a teammate's workspace and were not shared when the hard328
-four-sample rows finished (eight shard jobs, `studies/metaharness/jobs/shard_cell.py`, `--samples 4`, no restarts, joined by
-`analysis/day1_join_shards.py`). So no `--choose` run exists. The 328 is scored once with `--fixed
+four-sample rows were scored (eight shard jobs, `studies/metaharness/jobs/shard_cell.py`, `--samples 4`, no restarts, joined by
+`analysis/day1_join_shards.py`). So no `--choose` run exists. Each model of the 328 is scored once, alone (`--base`; `--rl`
+when its last shard job is done; `analysis/day1_length_rules_headline.py` then gives RL minus base and the equal-tokens line), with `--fixed
 specs/day1_length_rules_chosen_prereg.json`: S = 2,000 (board idea-ecc123) and L = 12,000 (board idea-3f3378), both posted
 2026-11-14 21:17 UTC from the MATH-500 single samples T1 and T2, before the hard328 jobs started (22:54 UTC). idea-3f3378
 gives its counts at 12,000 tokens and says the cutoff is chosen on MATH-500; 12,000 is the only cutoff it names. The headline

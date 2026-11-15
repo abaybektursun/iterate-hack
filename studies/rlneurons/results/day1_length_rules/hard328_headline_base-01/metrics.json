@@ -1,0 +1,132 @@
+{
+ "set": "hard328",
+ "n": 328,
+ "samples": 4,
+ "restarts": 0,
+ "fixed_from": "studies/rlneurons/specs/day1_length_rules_chosen_prereg.json",
+ "bootstrap_resamples": 5000,
+ "sources": {
+  "rules_base": "studies/rlneurons/results/day1_length_rules/hard328_base-01",
+  "vote_base": "studies/rlneurons/results/day1_3/hard328_base_cue_s4r0-01",
+  "rules_rl": null,
+  "vote_rl": null
+ },
+ "rows": {
+  "base": {
+   "single": {
+    "right": 160,
+    "n": 328,
+    "percent": 48.78048780487805,
+    "wilson95": [
+     43.416552362010144,
+     54.17265785091213
+    ],
+    "tokens_per_problem": 9168.219512195123,
+    "minus_single": {
+     "points": 0.0,
+     "interval95": [
+      0.0,
+      0.0
+     ]
+    },
+    "fixed": 0,
+    "broke": 0
+   },
+   "D2000": {
+    "right": 163,
+    "n": 328,
+    "percent": 49.69512195121951,
+    "wilson95": [
+     44.319115545008586,
+     55.07818700822198
+    ],
+    "tokens_per_problem": 9674.503048780487,
+    "minus_single": {
+     "points": 0.9146341463414634,
+     "interval95": [
+      0.0,
+      2.1341463414634165
+     ]
+    },
+    "fixed": 3,
+    "broke": 0
+   },
+   "R12000": {
+    "right": 169,
+    "n": 328,
+    "percent": 51.52439024390244,
+    "wilson95": [
+     46.12958086108524,
+     56.88390637276193
+    ],
+    "tokens_per_problem": 20090.914634146342,
+    "minus_single": {
+     "points": 2.7439024390243905,
+     "interval95": [
+      -0.3048780487804881,
+      5.792682926829274
+     ]
+    },
+    "fixed": 17,
+    "broke": 8
+   },
+   "D2000+R12000": {
+    "right": 172,
+    "n": 328,
+    "percent": 52.4390243902439,
+    "wilson95": [
+     47.03748535196702,
+     57.78409422218843
+    ],
+    "tokens_per_problem": 20597.198170731706,
+    "minus_single": {
+     "points": 3.658536585365854,
+     "interval95": [
+      0.6097560975609762,
+      7.012195121951215
+     ]
+    },
+    "fixed": 20,
+    "broke": 8
+   },
+   "vote": {
+    "right": 179,
+    "n": 328,
+    "percent": 54.573170731707314,
+    "wilson95": [
+     49.16288376827833,
+     59.87757793326315
+    ],
+    "tokens_per_problem": 36721.09146341463,
+    "minus_single": {
+     "points": 5.7926829268292686,
+     "interval95": [
+      3.0487804878048808,
+      8.841463414634143
+     ]
+    },
+    "fixed": 21,
+    "broke": 2
+   },
+   "pass_at_k": {
+    "right": 205,
+    "n": 328,
+    "percent": 62.5,
+    "wilson95": [
+     57.14447932116467,
+     67.56611599638198
+    ],
+    "tokens_per_problem": 36721.09146341463,
+    "minus_single": {
+     "points": 13.71951219512195,
+     "interval95": [
+      10.060975609756095,
+      17.682926829268293
+     ]
+    },
+    "fixed": 45,
+    "broke": 0
+   }
+  }
+ }
+}

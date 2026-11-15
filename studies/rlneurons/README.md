@@ -40,6 +40,9 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/rln5_map_analyze.py` | RLN-5 map readout: reads `runs/<job-id>/`, writes `metrics.json` and `examples.json` (analysis a-e of SPEC5_map.md §6, the test of H). |
 | `specs/SPEC_day1_length_rules.md` | Day-1 length rules spec: double-check short answers D(S), stop at a length cutoff and restart R(L), their combination; token accounting; the choice on MATH-500 and its fixed use on the 328; hypotheses. |
 | `analysis/day1_length_rules.py`, `analysis/day1_length_rules_test.py` | Offline readout of the length rules from the rows of two `run_cell --samples 4` runs (base, RL), and its planted cases. Imports `day1_vote` (`chains`, `vote`, `row`, `tail`). See "Day-1 length rules". |
+| `analysis/day1_join_shards.py` | Joins the shard runs of one cell (`studies/metaharness/jobs/shard_cell.py --shard k/N`) into one run folder under `runs/` that `day1_vote.py` and `day1_length_rules.py` load: rows unchanged, counts summed, shard job ids recorded. Refuses a shard that is not `done`, a missing or swapped shard, a shard of another cell, a missing row. See "Joining shard runs". |
+| `analysis/day1_length_rules_headline.py` | One table from the `day1_length_rules.py --fixed` run folders (one per model, each scored alone) and the `day1_vote.py` run folders of the same joined runs: single, the fixed rules, vote, pass@4; with the RL folders also RL minus base and the equal-tokens line over the fixed rules. Scores nothing itself. |
+| `specs/day1_length_rules_chosen_prereg.json` | The `--fixed` file used on the 328: S = 2,000 and L = 12,000 from board idea-ecc123 and idea-3f3378 (posted before the hard328 four-sample jobs). Not written by `--choose`; its `source` and `caveats` fields say so. |
 | `analysis/day1_hard328.py` | Day-1 #1 readout: the 328 at T 1.0 (four cells) beside the three T 0.6 cells, grader v3, per source, paired bootstrap, identical-text counts, the 50-problem check against T1. |
 | `specs/DAY1_hard328_2026-11-14.md` | Day-1 #1 plan, written before launch: prediction, check rule, seeds, cost. |
 | `grader/rln4_grader_v3.py` | Rescores every saved MATH-500 cell with v1, v2, v3; writes `results/rln4/grader_v3/readout.json`. `CELLS` lists the S3 key of each cell. |
@@ -52,6 +55,8 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `results/rln3/` | `rln3_overlap.json` (per-problem overlap flags), `offline/` (prep checks and offline gate). |
 | `results/day1/` | Day-1 rows from `jobs/run_cell.py`: `readout.json` and one folder per job (`check_t1_n10-01/`, `hard328_base_cue_t10-01/`, `hard328_rl_plain_t10-01/`, `math500_base_cue_t06_p10-01/`). |
 | `results/rln4/` | `grader_v3/readout.json` (the final table), `modal_k-01/`, `modal_t2-01/`, `modal_t3-01/` (readouts, metrics, run records), `t1_t2_items-01/` (per-problem T1 against T2, hand labels of the base failures), `offline/`. |
+| `results/day1_length_rules/` | Length rules on the 328, four samples per problem: `hard328_base-01/` (`day1_length_rules.py --fixed`, base alone: `run.json`, `metrics.json`, `per_problem.tsv`, `examples.json`), `hard328_headline_base-01/` (`day1_length_rules_headline.py`: the base table with vote and pass@4). RL folders do not exist yet. |
+| `results/day1_3/` | `day1_vote.py` readouts of joined four-sample runs: `hard328_base_cue_s4r0-01/` (`readout.json`, `examples.json`, `run.json`, `metrics.json` of the joined run with the shard job ids). |
 | `results/day1_hard328/` | `readout.json` (seven-cell table, per source, differences, check) and per T 1.0 cell `<arm>-01/` (`run.json`, `metrics.json` from the job, `examples.json`: one right, one wrong). |
 
 Old paths: `infra/pg/*.py` and `infra/aws_pg/jobs/n13_*.py` are in `lib/`; `infra/aws_pg/jobs/rln*_gen.py` and
@@ -194,6 +199,54 @@ of 78. Frozen label: "the base can finish from a sound prefix" (both counts at t
 
 Grader v1 to v3 moved 113 answers from wrong to right and 1 from right to wrong over the 9 cells (`flips_v1_to_v3`,
 `flip_review`). The v1 numbers 57.2 (base) and 92.0 (RL) quoted in older notes are the n13 cells under v1 (286 and 460).
+
+### Harder 328: length rules and four-sample vote (board work-a992bd, sampling work-140e13)
+
+Base + cue only so far; the RL rows are not scored (RL shard 2 was still running, see "Joining shard runs"). Four samples per
+problem, T 1.0 / top-p 1.0, seed 3000000, cap 16,384, no restarts, grader v3, n = 328. Rows: `runs/hard328_base_cue_s4_join-01`
+(four shard jobs, "Raw answers"). Thresholds S = 2,000 and L = 12,000 were fixed before any hard328 four-sample row existed
+(`specs/day1_length_rules_chosen_prereg.json`, commit a5e02fd, from board idea-ecc123 and idea-3f3378; not a `--choose` run;
+idea-3f3378 gives its counts at 12,000 and says the cutoff is chosen on MATH-500). `--fixed` scores only the single row and
+these three rules, once; no other setting of the grid was scored on the 328.
+
+Instrument check: sample 0 of the joined base run gives 160 right, 67 cap hits, 9,168 tokens per problem, against 164, 77 and
+9,345 in the single-sample cell with the same seeds (`results/day1/hard328_base_cue_t10-01/`): inside 164 +- 12. The cap hits
+are 10 lower; samples 1 to 3 give 158, 160, 160 right and 65, 67, 64 cap hits (`results/day1_3/hard328_base_cue_s4r0-01/readout.json`,
+`each_sample`). The cause of 77 against 64 to 67 is not checked.
+
+| Base + cue, row | Right of 328 | % [Wilson 95 %] | Tokens per problem | Minus single, points [paired bootstrap 95 %] | Fixed | Broke |
+|---|---|---|---|---|---|---|
+| single (sample 0) | 160 | 48.8 [43.4, 54.2] | 9,168 | | | |
+| D(2000) | 163 | 49.7 [44.3, 55.1] | 9,675 | +0.9 [0.0, +2.1] | 3 | 0 |
+| R(12000) | 169 | 51.5 [46.1, 56.9] | 20,091 | +2.7 [-0.3, +5.8] | 17 | 8 |
+| D(2000)+R(12000) | 172 | 52.4 [47.0, 57.8] | 20,597 | +3.7 [+0.6, +7.0] | 20 | 8 |
+| vote@4 | 179 | 54.6 [49.2, 59.9] | 36,721 | +5.8 [+3.0, +8.8] | 21 | 2 |
+| pass@4 (any of four right; upper bound of the vote) | 205 | 62.5 [57.1, 67.6] | 36,721 | +13.7 [+10.1, +17.7] | 45 | 0 |
+
+Artifacts: rule rows `results/day1_length_rules/hard328_base-01/metrics.json` (`per_problem.tsv`, `examples.json`: one
+problem each rule fixed and one it broke; D(2000) broke none); vote and pass@4 `results/day1_3/hard328_base_cue_s4r0-01/readout.json`
+(its restart row equals its single row because the jobs ran with no restarts); the whole table
+`results/day1_length_rules/hard328_headline_base-01/metrics.json`.
+
+- Why D(2000) does little: 47 of the 328 first answers finish within 2,000 tokens and 6 of them are wrong (263 of 500 and 13
+  on MATH-500). The rule fixed 3 of the 6.
+- Why R(12000) costs 2.2 times the single row: 140 of the 328 first answers are longer than 12,000 tokens (11 right, 129
+  wrong; 67 are cap hits). Each stop costs 12,000 tokens and the next sample is often long again.
+- Raw answers read (13 problems: 3 D(2000) fixed, 4 R(12000) fixed, 6 R(12000) broke). D(2000) fixed: the first answer is
+  short and wrong (one off-topic text with no answer, one unboxed `x = 8` for gold 1000, one boxed 7 for gold 6) and the next
+  two samples agree on the gold. R(12000) fixed: a finished wrong answer of 12,000 to 15,000 tokens is replaced by a right
+  one; in 2 of the 4 the right answer came only from sample 3 after three stops (51,000 tokens). R(12000) broke: 7 of the 8
+  are finished right answers of 12,000 to 16,384 tokens that the rule discards for a shorter wrong sample; 1 is a cap hit
+  that had extracted the right answer.
+- Equal tokens (provisional): the budget is RL's single row. The RL four-sample rows are not scored, so the single-sample RL
+  cell of the same seeds stands in: 9,316 tokens per problem, 206 right (`results/day1/hard328_rl_plain_t10-01/`). No fixed
+  rule of the base is within it (D(2000) is 359 tokens above). At equal tokens the base is its single row: 160 against 206,
+  -14.0 points, unpaired normal interval [-21.5, -6.5] (formula of `day1_rows.unpaired`, by hand). The paired number needs
+  the RL lines of "Joining shard runs".
+- Hypotheses of `specs/SPEC_day1_length_rules.md` on the 328, base part: H1 refuted (D(2000) +0.9 points, interval includes
+  0, fixed minus broke 3 < 8, and 9,675 tokens is above the stand-in RL single row); H2 refuted (R(12000) interval includes
+  0, and 20,091 tokens against 9,168 single); H3 not refuted so far (no base rule within the budget; even vote@4 at 36,721
+  tokens, 179, is below RL's 206). The RL parts of H1 and H2 and the paired interval of H3 are not checked.
 
 ## RLN-5 map: where RL still disagrees once the cue is given
 
@@ -387,8 +440,8 @@ tokens is checked against the next sample, and against a third when the two diff
 stopped at L and the next sample is taken. Grid: S in {off, 1000, 2000, 4000}, L in {off, 8000, 10000, 12000}. Per model and
 setting it gives right of n, the Wilson interval, generated tokens per problem and the paired difference against the single
 row; with both runs also RL minus base and the base's best setting at no more tokens per problem than one RL sample. The rules,
-the token accounting and the hypotheses are in `specs/SPEC_day1_length_rules.md`. No number exists yet: the Day-1 #3 rows do
-not exist yet.
+the token accounting and the hypotheses are in `specs/SPEC_day1_length_rules.md`. Numbers: the base on the 328, under
+"Harder 328: length rules and four-sample vote"; no MATH-500 number and no RL number exists yet.
 
 Test (planted rows, no network):
 
@@ -413,6 +466,38 @@ problem: the four `n_new`, and per setting `right tokens samples`; `x` after a s
 answered with), `examples.json` (one problem a rule fixed and one it broke) and, with `--choose`, `chosen.json`. An unfinished
 run is refused.
 
+### Joining shard runs (laptop, no GPU)
+
+A cell sampled in N shards (`studies/metaharness/jobs/shard_cell.py --shard k/N`, one job per shard) is joined into one run
+folder under `runs/` (not committed) before any readout. Shard folders are given in shard order:
+
+```
+uv run tools/gpu.py get <job-id>          # once per shard job, gives runs/<job-id>/
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_join_shards --out runs/<name> runs/<job of shard 0> runs/<job of shard 1> ... runs/<job of shard N-1>
+```
+
+It prints sample 0's right count and cap hits (the instrument check against the single-sample cell with the same seeds). The
+joined `metrics.json` has `job_id` = `join:` + the shard job ids, and `joined_from.shards` with each shard's job id, counts,
+GPU and times. Only hard328 is supported (the order of its problem indices is written in the script).
+
+The 328 as run on 2026-11-14 (`--samples 4`, no restarts; job ids under "Raw answers"):
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_join_shards --out runs/hard328_base_cue_s4_join-01 runs/sameraslan-1114-145237-d124 runs/sameraslan-1114-145241-fee9 runs/sameraslan-1114-145246-73ad runs/sameraslan-1114-145251-9228
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_join_shards --out runs/hard328_rl_plain_s4_join-01 runs/sameraslan-1114-145256-f5ac runs/sameraslan-1114-145301-e465 runs/sameraslan-1114-145306-26e0 runs/sameraslan-1114-145311-d31f
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_vote --run runs/hard328_base_cue_s4_join-01 --out studies/rlneurons/results/day1_3/hard328_base_cue_s4r0-01
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_vote --run runs/hard328_rl_plain_s4_join-01 --out studies/rlneurons/results/day1_3/hard328_rl_plain_s4r0-01 --minus studies/rlneurons/results/day1_3/hard328_base_cue_s4r0-01/readout.json
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_length_rules --base runs/hard328_base_cue_s4_join-01 --out studies/rlneurons/results/day1_length_rules/hard328_base-01 --fixed studies/rlneurons/specs/day1_length_rules_chosen_prereg.json
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_length_rules --rl runs/hard328_rl_plain_s4_join-01 --out studies/rlneurons/results/day1_length_rules/hard328_rl-01 --fixed studies/rlneurons/specs/day1_length_rules_chosen_prereg.json
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_length_rules_headline --rules-base studies/rlneurons/results/day1_length_rules/hard328_base-01 --vote-base studies/rlneurons/results/day1_3/hard328_base_cue_s4r0-01 --out studies/rlneurons/results/day1_length_rules/hard328_headline_base-01
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_length_rules_headline --rules-base studies/rlneurons/results/day1_length_rules/hard328_base-01 --vote-base studies/rlneurons/results/day1_3/hard328_base_cue_s4r0-01 --rules-rl studies/rlneurons/results/day1_length_rules/hard328_rl-01 --vote-rl studies/rlneurons/results/day1_3/hard328_rl_plain_s4r0-01 --out studies/rlneurons/results/day1_length_rules/hard328_headline-01
+```
+
+State on 2026-11-15 00:12 UTC: the base lines (1, 3, 5, 7) have run. The RL lines (2, 4, 6, 8) have not: RL shard 2
+(`sameraslan-1114-145306-26e0`) was still `running` in `gpu.py ls`, restarted at 23:32 UTC, with 164 of 328 rows and no
+output since 23:52:32 UTC. Each model is scored once, alone; `day1_length_rules_headline.py` then adds RL minus base and the
+equal-tokens line from the two folders. Run the RL lines only when that job is `done`.
+
 ## Raw answers
 
 One JSONL row per answer (for RLN-4 cells: prompt index, seed, text, token counts, cap hit, loop flags, extracted answer, v1
@@ -420,6 +505,14 @@ and v2 scores) in the owner's bucket, `s3://pg-lineage-769063704696/results/rlne
 `s0400_s0100-01/`, `inputs/`) and `.../r4/` (RLN-4: `base_rl-02/`, `modal_k-01/`, `modal_t2-01/`, `modal_t3-01/`,
 `inputs/`), plus the n13 cells under `s3://pg-lineage-769063704696/results/next_n13/s3gate-03/`. Not copied here.
 `results/rln4/grader_v3/readout.json` `files` gives the sha256 of each cell file used for the table.
+
+The 328 with four samples per problem (`--samples 4`, no restarts, T 1.0 / top-p 1.0, seed 3000000, commit 34a8ccd; board
+work-140e13): eight shard jobs on sameraslan's Modal workspace, `answers.jsonl` in each job's `$OUT_DIR` (`uv run
+tools/gpu.py get <job-id>` by that workspace's owner; teammates cannot read it). Base + cue, shards 0 to 3:
+`sameraslan-1114-145237-d124`, `sameraslan-1114-145241-fee9`, `sameraslan-1114-145246-73ad`, `sameraslan-1114-145251-9228`.
+RL, plain prompt, shards 0 to 3: `sameraslan-1114-145256-f5ac`, `sameraslan-1114-145301-e465`,
+`sameraslan-1114-145306-26e0`, `sameraslan-1114-145311-d31f`. The joined folders `runs/hard328_base_cue_s4_join-01/` and
+`runs/hard328_rl_plain_s4_join-01/` are rebuilt from them with `analysis/day1_join_shards.py` ("Joining shard runs").
 
 ## Needs porting
 

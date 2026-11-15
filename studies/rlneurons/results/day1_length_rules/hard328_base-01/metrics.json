@@ -1,0 +1,154 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_day1_length_rules.md",
+ "mode": "fixed",
+ "grader": "v3 (score_v3 and extracted_v3 as written by run_cell)",
+ "samples_per_problem_allowed": 4,
+ "bootstrap_resamples": 5000,
+ "set": "hard328",
+ "n": 328,
+ "runs": {
+  "base": {
+   "job_id": "join:sameraslan-1114-145237-d124+sameraslan-1114-145241-fee9+sameraslan-1114-145246-73ad+sameraslan-1114-145251-9228",
+   "commit": "34a8ccdfac152b85d0fd717682d5b9b62157db3a",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3000000,
+   "samples": 4,
+   "restarts": 0
+  }
+ },
+ "fixed_from": "studies/rlneurons/specs/day1_length_rules_chosen_prereg.json",
+ "models": {
+  "base": {
+   "rows": {
+    "single": {
+     "S": null,
+     "L": null,
+     "right": 160,
+     "n": 328,
+     "percent": 48.78048780487805,
+     "wilson95": [
+      43.416552362010144,
+      54.17265785091213
+     ],
+     "tokens_per_problem": 9168.219512195123,
+     "minus_single": {
+      "points": 0.0,
+      "interval95": [
+       0.0,
+       0.0
+      ]
+     },
+     "fixed": 0,
+     "broke": 0,
+     "problems_with_a_check": 0,
+     "samples_stopped": 0
+    },
+    "D2000": {
+     "S": 2000,
+     "L": null,
+     "right": 163,
+     "n": 328,
+     "percent": 49.69512195121951,
+     "wilson95": [
+      44.319115545008586,
+      55.07818700822198
+     ],
+     "tokens_per_problem": 9674.503048780487,
+     "minus_single": {
+      "points": 0.9146341463414634,
+      "interval95": [
+       0.0,
+       2.1341463414634165
+      ]
+     },
+     "fixed": 3,
+     "broke": 0,
+     "problems_with_a_check": 47,
+     "samples_stopped": 0
+    },
+    "R12000": {
+     "S": null,
+     "L": 12000,
+     "right": 169,
+     "n": 328,
+     "percent": 51.52439024390244,
+     "wilson95": [
+      46.12958086108524,
+      56.88390637276193
+     ],
+     "tokens_per_problem": 20090.914634146342,
+     "minus_single": {
+      "points": 2.7439024390243905,
+      "interval95": [
+       -0.3048780487804881,
+       5.792682926829274
+      ]
+     },
+     "fixed": 17,
+     "broke": 8,
+     "problems_with_a_check": 0,
+     "samples_stopped": 333
+    },
+    "D2000+R12000": {
+     "S": 2000,
+     "L": 12000,
+     "right": 172,
+     "n": 328,
+     "percent": 52.4390243902439,
+     "wilson95": [
+      47.03748535196702,
+      57.78409422218843
+     ],
+     "tokens_per_problem": 20597.198170731706,
+     "minus_single": {
+      "points": 3.658536585365854,
+      "interval95": [
+       0.6097560975609762,
+       7.012195121951215
+      ]
+     },
+     "fixed": 20,
+     "broke": 8,
+     "problems_with_a_check": 47,
+     "samples_stopped": 333
+    }
+   },
+   "sample_0": {
+    "cap_hits": 67,
+    "finished_with_at_most": {
+     "1000": {
+      "n": 12,
+      "wrong": 2
+     },
+     "2000": {
+      "n": 47,
+      "wrong": 6
+     },
+     "4000": {
+      "n": 94,
+      "wrong": 6
+     }
+    },
+    "longer_than": {
+     "8000": {
+      "right": 27,
+      "wrong": 149
+     },
+     "10000": {
+      "right": 17,
+      "wrong": 136
+     },
+     "12000": {
+      "right": 11,
+      "wrong": 129
+     }
+    }
+   }
+  }
+ }
+}
