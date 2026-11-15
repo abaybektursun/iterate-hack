@@ -45,8 +45,10 @@ def program(p: dict, code: str) -> str:
 def run(src: str, timeout_s: float) -> dict:
     """Run one program in its own interpreter and empty directory. passed = exit code 0 within the time limit."""
     with tempfile.TemporaryDirectory() as d:
+        with open(d + "/prog.py", "w") as f:        # a file, not -c: the tests reach 790,000 characters
+            f.write(src)
         try:
-            r = subprocess.run([sys.executable, "-c", src], cwd=d, capture_output=True, text=True, timeout=timeout_s, stdin=subprocess.DEVNULL)
+            r = subprocess.run([sys.executable, "prog.py"], cwd=d, capture_output=True, text=True, timeout=timeout_s, stdin=subprocess.DEVNULL)
         except subprocess.TimeoutExpired:       # a time-out is a graded outcome (wrong), not an error of the grader
             return {"passed": False, "exit": "timeout", "stderr_tail": ""}
     return {"passed": r.returncode == 0, "exit": r.returncode, "stderr_tail": r.stderr[-400:]}
