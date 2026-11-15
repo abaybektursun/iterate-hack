@@ -37,6 +37,9 @@ Rules:
   now, the filters, the statistic, and how cap hits, ties and missing rows count, precise enough that two people
   would compute the same number. The quantity must be one no board item reports. The recipe states only the
   computation, never the expected result or the theory.
+- The offline predictions are about different quantities. Two predictions that one fact makes both right or both
+  wrong (the same contrast on another file or another checkpoint) count as one: state the contrast once, and spend
+  the others on the mechanism's cause and on a case where the mechanism says the effect should not appear.
 - At least 1 offline prediction tests the mechanism, not only the phenomenon: a quantity for which the nearest other
   explanation of the same phenomenon gives a different number. Name that explanation and its number in the
   prediction's "experiment" (for example: a theory that says cap hits rise because entropy drops predicts how far
