@@ -21,7 +21,12 @@ from studies.rlneurons.analysis.shard_join import join
 OUT = STUDY / "results" / "xreward" / "normband"
 D3 = STUDY / "results" / "xreward" / "depth3"
 # cell -> {sample: (job of shard 0/2, job of shard 1/2)}; wsp_edit arguments in EDIT. Sample s has seed SEED0 + 10000 s + problem.
-NEW = {}
+NEW = {"top8x4.5_L22-31_math31": {1: ("abaybektursun-1115-145625-c6dc", "abaybektursun-1115-145638-c016")},
+       "top8x0.2_L0-10_math31": {1: ("abaybektursun-1115-145652-dc10", "abaybektursun-1115-145706-0b28")},
+       "top8x3_L22-31_math31": {1: ("abaybektursun-1115-145720-8ceb", "abaybektursun-1115-145733-af00")},
+       "top1x1.5_math31": {1: ("abaybektursun-1115-145845-f70e", "abaybektursun-1115-145859-a234"),
+                           0: ("abaybektursun-1115-145913-fed1", "abaybektursun-1115-145926-720e")},
+       "top8x1.5_d2-8_math31": {0: ("abaybektursun-1115-145941-c2cc", "abaybektursun-1115-145956-7546")}}
 EDIT = {"top8x4.5_L22-31_math31": "--recipe top8 --layers 22-31 --scale 4.5", "top8x0.2_L0-10_math31": "--recipe top8 --layers 0-10 --scale 0.2",
         "top8x3_L22-31_math31": "--recipe top8 --layers 22-31 --scale 3.0", "top1x1.5_math31": "--recipe top8 --k 1 --scale 1.5",
         "top8x1.5_d2-8_math31": "--recipe top8 --skip 1 --scale 1.5"}
