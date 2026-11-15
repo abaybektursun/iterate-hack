@@ -7,9 +7,9 @@ in one of them) and writes metrics.json and examples.json to the result folder.
 Per arm: right of n (grader v3), cap hits, rule-A loops, answers that end without a final answer, tails flagged as unrelated
 words (day1_wdiff.word_salad, a crude flag), generated tokens, written hold-on words per 1,000 tokens. Against
 `none`, paired over problems: difference in points with a 95 % percentile interval (bootstrap over problems, 2,000 resamples),
-answers gained and lost in total and by subject, identical answers. --partial: runs listed here may be unfinished (a job that ran out of time; the
+answers gained and lost in total and by subject, identical answers. `pairs`: the same difference for every pair of arms. --partial: runs listed here may be unfinished (a job that ran out of time; the
 rest of its arm comes from a second job started with --pick). --t1: the stored T1 rows, for the count of answers
-identical to them. --stored: rows of earlier unsteered cells at the same setting (studies/rlneurons/results/day1_3/
+identical to them. --alias: read a run under another arm name (a second seed of `none`). --stored: rows of earlier unsteered cells at the same setting (studies/rlneurons/results/day1_3/
 math500_base_cue-01/rows.jsonl: four samples per problem, attempt 0 used); each arm is also compared with the per-problem mean of
 those samples, which carries less sampling noise than the one `none` sample. --items: studies/rlneurons/results/rln4/
 t1_t2_items-01/per_problem.json, for gained and lost answers by group (both models right in T1 and T2, RL only, ...). --target: the hold-on rate ratio against `none` that the strength rule of the spec interpolates to
@@ -76,13 +76,15 @@ def main():
     ap.add_argument("--out", required=True)
     ap.add_argument("--t1")
     ap.add_argument("--partial", nargs="*", default=[], help="run folders of jobs that ran out of time: their finished rows are used")
+    ap.add_argument("--alias", nargs="*", default=[], help="<run folder>=<name>: the rows of that run are read as the arm <name> "
+                    "(a second sample of an arm, e.g. none with another seed, read beside the first)")
     ap.add_argument("--stored")
     ap.add_argument("--items")
     ap.add_argument("--target", type=float, default=1.41)
     a = ap.parse_args()
     out = pathlib.Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
-    rows, jobs = collections.defaultdict(dict), []
+    rows, jobs, alias = collections.defaultdict(dict), [], dict(x.split("=") for x in a.alias)
     for run in a.runs:
         jm = json.loads((pathlib.Path(run) / "metrics.json").read_text())
         ck = json.loads((pathlib.Path(run) / "checks.json").read_text())
@@ -93,9 +95,9 @@ def main():
                      "generation_s": {k: v.get("generation_s") for k, v in jm["arms"].items()}, "pick": jm["config"].get("pick"), "checks": ck})
         for line in open(pathlib.Path(run) / "answers.jsonl"):
             r = json.loads(line)
-            key = (r["problem_index"], r["sample"])
-            assert key not in rows[r["arm"]], ("an arm is in two runs", r["arm"], key)
-            rows[r["arm"]][key] = r
+            key, name = r["problem_index"], alias.get(run, r["arm"])
+            assert key not in rows[name], ("an arm is in two runs", name, key)
+            rows[name][key] = r
     assert "none" in rows, "no run holds the arm none"
     keys = sorted(rows["none"])
     assert all(sorted(v) == keys for v in rows.values()), {k: len(v) for k, v in rows.items()}
@@ -108,12 +110,12 @@ def main():
             r = json.loads(line)
             if r["attempt"] == 0:
                 by[r["problem_index"]].append(r)
-        assert all(len(by[k[0]]) == len(by[keys[0][0]]) for k in keys), "stored samples per problem differ"
-        stored_mean = [float(np.mean([r["score_v3"] for r in by[k[0]]])) for k in keys]
-        flat = [r for k in keys for r in by[k[0]]]
-        stored = {"file": a.stored, "samples_per_problem": len(by[keys[0][0]]), "right_per_sample_mean": float(np.sum(stored_mean)),
+        assert all(len(by[k]) == len(by[keys[0]]) for k in keys), "stored samples per problem differ"
+        stored_mean = [float(np.mean([r["score_v3"] for r in by[k]])) for k in keys]
+        flat = [r for k in keys for r in by[k]]
+        stored = {"file": a.stored, "samples_per_problem": len(by[keys[0]]), "right_per_sample_mean": float(np.sum(stored_mean)),
                   "percent": 100 * float(np.mean(stored_mean)), "tokens_mean": float(np.mean([r["n_new"] for r in flat])),
-                  "cap_hits_per_sample_mean": sum(r["cap_hit"] for r in flat) / len(by[keys[0][0]])}
+                  "cap_hits_per_sample_mean": sum(r["cap_hit"] for r in flat) / len(by[keys[0]])}
     group = {int(r["problem_index"]): r["cell"] for r in json.load(open(a.items))} if a.items else None
     rate = lambda rs: 1000 * sum(r["hold_words"] for r in rs) / sum(r["n_new"] for r in rs)
 
@@ -125,7 +127,7 @@ def main():
         gained = [r for r, n in zip(rs, none) if r["score_v3"] and not n["score_v3"]]
         lost = [r for r, n in zip(rs, none) if n["score_v3"] and not r["score_v3"]]
         both = [(r, n) for r, n in zip(rs, none) if not r["cap_hit"] and not n["cap_hit"]]
-        e = {**ST.parse_arm(name), "n": len(rs), "right_v3": int(sum(sc)), "percent_v3": 100 * float(np.mean(sc)), "cap_hits": sum(r["cap_hit"] for r in rs),
+        e = {**(ST.parse_arm(name) if name not in alias.values() else {"arm": name, "kind": "none"}), "n": len(rs), "seed0": rs[0]["seed"] - rs[0]["problem_index"], "right_v3": int(sum(sc)), "percent_v3": 100 * float(np.mean(sc)), "cap_hits": sum(r["cap_hit"] for r in rs),
              "loop_A": sum(r["loop_A"] for r in rs), "no_answer_found": sum(r["mode_v3"] == "none" for r in rs),
              "finished_without_answer": sum(r["mode_v3"] == "none" and not r["cap_hit"] for r in rs),
              "word_salad_tails": sum(word_salad(r["text"]) for r in rs), "mean_token_logprob": float(np.mean([r["mean_logprob"] for r in rs])),
@@ -150,12 +152,17 @@ def main():
             e["right_by_group"] = {g: [int(sum(r["score_v3"] for r in rs if group[r["problem_index"]] == g)), sum(group[r["problem_index"]] == g for r in rs)]
                                    for g in sorted(set(group.values()))}
         if t1 is not None:
-            e["identical_to_stored_T1"] = sum(r["sample"] == 0 and r["text"] == t1[r["problem_index"]]["text"] for r in rs)
+            e["identical_to_stored_T1"] = sum(r["text"] == t1[r["problem_index"]]["text"] for r in rs)
         arms[name] = e
         pick = lambda cand: min(cand, key=lambda r: r["n_new"]) if cand else None
         keep = lambda r: None if r is None else {k: r[k] for k in ("arm", "problem_index", "unique_id", "seed", "prompt_n_tokens", "text", "gold", "extracted_v3",
                                                                     "mode_v3", "score_v3", "n_new", "cap_hit", "hold_words")}
         examples[name] = {"right": keep(pick([r for r in rs if r["score_v3"]])), "wrong": keep(pick([r for r in fin if not r["score_v3"]]))}
+
+    # every pair of arms, paired over problems (S2 of the spec is steer:hold minus bias:hold)
+    names = list(arms)
+    pairs = {f"{x} minus {y}": boot_diff([rows[x][k]["score_v3"] for k in keys], [rows[y][k]["score_v3"] for k in keys])
+             for i, x in enumerate(names) for y in names[i + 1:]}
 
     # the strength rule of the spec: where the hold-on rate ratio crosses the target, per steering site and for the bias arms
     series = collections.defaultdict(list)
@@ -165,7 +172,7 @@ def main():
         elif e["kind"] == "bias":
             series[f"bias:{e['family']}"].append((e["nats"], e["hold_rate_ratio_to_none"]))
     dose = {k: {"points": sorted(v), "strength_at_target": interpolate(sorted(v), a.target)} for k, v in series.items()}
-    json.dump({"jobs": jobs, "n_problems": len({k[0] for k in keys}), "n_rows_per_arm": len(keys), "target_ratio": a.target, "arms": arms, "dose": dose,
+    json.dump({"jobs": jobs, "n_problems": len(keys), "aliases": alias, "n_rows_per_arm": len(keys), "target_ratio": a.target, "arms": arms, "pairs": pairs, "dose": dose,
                "stored_unsteered": stored}, open(out / "metrics.json", "w"), indent=1)
     json.dump(examples, open(out / "examples.json", "w"), indent=1)
     for name, e in arms.items():

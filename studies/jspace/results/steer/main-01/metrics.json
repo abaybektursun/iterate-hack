@@ -1,0 +1,1080 @@
+{
+ "jobs": [
+  {
+   "run": "runs/sameraslan-1114-214944-eb61",
+   "job_id": "sameraslan-1114-214944-eb61",
+   "commit": "7f269e9a27d7fb275a40d8f4c4a4fe88518438cb",
+   "arms": [
+    "none"
+   ],
+   "status": "done",
+   "wall_s": 1848.41246509552,
+   "max_tokens": 16384,
+   "n_problems": 500,
+   "seed": 41000000,
+   "block_norm_median": {},
+   "applied_vector_norm": {
+    "none": {}
+   },
+   "generation_s": {
+    "none": 1800.7648751735687
+   },
+   "pick": null,
+   "checks": {
+    "n": 8,
+    "tokens": 96,
+    "repeat": {
+     "identical": 8,
+     "pass": true
+    },
+    "hold_token_share_none": 0.0078125,
+    "steer_acts": {},
+    "block_norm_median": {},
+    "block_norm_positions": {},
+    "hook_calls": {},
+    "hook_hidden_shape": null,
+    "bias_acts": {
+     "nats": 20.0,
+     "hold_token_share": 1.0,
+     "pass": true,
+     "example": " Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait"
+    },
+    "pass": true
+   }
+  },
+  {
+   "run": "runs/sameraslan-1114-214251-10c3",
+   "job_id": "sameraslan-1114-214251-10c3",
+   "commit": "2d6f378cea6250db244339bf6ff6f3d219f21a2e",
+   "arms": [
+    "bias:hold:0.64"
+   ],
+   "status": "done",
+   "wall_s": 2070.8134841918945,
+   "max_tokens": 16384,
+   "n_problems": 500,
+   "seed": 41000000,
+   "block_norm_median": {},
+   "applied_vector_norm": {
+    "bias:hold:0.64": {}
+   },
+   "generation_s": {
+    "bias:hold:0.64": 2041.5549321174622
+   },
+   "pick": null,
+   "checks": {
+    "n": 8,
+    "tokens": 96,
+    "repeat": {
+     "identical": 8,
+     "pass": true
+    },
+    "hold_token_share_none": 0.0078125,
+    "steer_acts": {},
+    "block_norm_median": {},
+    "block_norm_positions": {},
+    "hook_calls": {},
+    "hook_hidden_shape": null,
+    "bias_acts": {
+     "nats": 20.0,
+     "hold_token_share": 1.0,
+     "pass": true,
+     "example": " Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait"
+    },
+    "pass": true
+   }
+  },
+  {
+   "run": "runs/sameraslan-1114-205156-86f8",
+   "job_id": "sameraslan-1114-205156-86f8",
+   "commit": "1534ce986e996a7a77f19a561cda77e89304fd5d",
+   "arms": [
+    "steer:hold:L24:0.068"
+   ],
+   "status": "done",
+   "wall_s": 2012.2129604816437,
+   "max_tokens": 16384,
+   "n_problems": 500,
+   "seed": 41000000,
+   "block_norm_median": {
+    "24": 39.54429244995117
+   },
+   "applied_vector_norm": {
+    "steer:hold:L24:0.068": {
+     "24": 2.689002752304077
+    }
+   },
+   "generation_s": {
+    "steer:hold:L24:0.068": 1954.7148265838623
+   },
+   "pick": null,
+   "checks": {
+    "n": 8,
+    "tokens": 96,
+    "repeat": {
+     "identical": 8,
+     "pass": true
+    },
+    "hold_token_share_none": 0.0078125,
+    "steer_acts": {
+     "24": {
+      "alpha": 8.0,
+      "identical_to_none": 0,
+      "hold_token_share": 1.0,
+      "pass": true,
+      "example": " wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait"
+     }
+    },
+    "block_norm_median": {
+     "24": 39.54429244995117
+    },
+    "block_norm_positions": {
+     "24": 1894
+    },
+    "hook_calls": {
+     "24": 192
+    },
+    "hook_hidden_shape": [
+     1,
+     8,
+     4096
+    ],
+    "bias_acts": {
+     "nats": 20.0,
+     "hold_token_share": 1.0,
+     "pass": true,
+     "example": " Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait"
+    },
+    "pass": true
+   }
+  },
+  {
+   "run": "runs/sameraslan-1114-205203-840e",
+   "job_id": "sameraslan-1114-205203-840e",
+   "commit": "1534ce986e996a7a77f19a561cda77e89304fd5d",
+   "arms": [
+    "steer:hold:L20:0.128"
+   ],
+   "status": "done",
+   "wall_s": 2185.788983106613,
+   "max_tokens": 16384,
+   "n_problems": 500,
+   "seed": 41000000,
+   "block_norm_median": {
+    "20": 28.583463668823242
+   },
+   "applied_vector_norm": {
+    "steer:hold:L20:0.128": {
+     "20": 3.658883810043335
+    }
+   },
+   "generation_s": {
+    "steer:hold:L20:0.128": 2128.7501740455627
+   },
+   "pick": null,
+   "checks": {
+    "n": 8,
+    "tokens": 96,
+    "repeat": {
+     "identical": 8,
+     "pass": true
+    },
+    "hold_token_share_none": 0.0078125,
+    "steer_acts": {
+     "20": {
+      "alpha": 8.0,
+      "identical_to_none": 0,
+      "hold_token_share": 1.0,
+      "pass": true,
+      "example": " wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait"
+     }
+    },
+    "block_norm_median": {
+     "20": 28.583463668823242
+    },
+    "block_norm_positions": {
+     "20": 1894
+    },
+    "hook_calls": {
+     "20": 192
+    },
+    "hook_hidden_shape": [
+     1,
+     8,
+     4096
+    ],
+    "bias_acts": {
+     "nats": 20.0,
+     "hold_token_share": 1.0,
+     "pass": true,
+     "example": " Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait"
+    },
+    "pass": true
+   }
+  },
+  {
+   "run": "runs/sameraslan-1114-205210-8d88",
+   "job_id": "sameraslan-1114-205210-8d88",
+   "commit": "1534ce986e996a7a77f19a561cda77e89304fd5d",
+   "arms": [
+    "steer:rand:L24:0.068"
+   ],
+   "status": "done",
+   "wall_s": 1916.465307712555,
+   "max_tokens": 16384,
+   "n_problems": 500,
+   "seed": 41000000,
+   "block_norm_median": {
+    "24": 39.54429244995117
+   },
+   "applied_vector_norm": {
+    "steer:rand:L24:0.068": {
+     "24": 2.689000368118286
+    }
+   },
+   "generation_s": {
+    "steer:rand:L24:0.068": 1862.8290646076202
+   },
+   "pick": null,
+   "checks": {
+    "n": 8,
+    "tokens": 96,
+    "repeat": {
+     "identical": 8,
+     "pass": true
+    },
+    "hold_token_share_none": 0.0078125,
+    "steer_acts": {
+     "24": {
+      "alpha": 8.0,
+      "identical_to_none": 0,
+      "hold_token_share": 1.0,
+      "pass": true,
+      "example": " wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait"
+     }
+    },
+    "block_norm_median": {
+     "24": 39.54429244995117
+    },
+    "block_norm_positions": {
+     "24": 1894
+    },
+    "hook_calls": {
+     "24": 192
+    },
+    "hook_hidden_shape": [
+     1,
+     8,
+     4096
+    ],
+    "bias_acts": {
+     "nats": 20.0,
+     "hold_token_share": 1.0,
+     "pass": true,
+     "example": " Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait"
+    },
+    "pass": true
+   }
+  },
+  {
+   "run": "runs/sameraslan-1114-205216-17de",
+   "job_id": "sameraslan-1114-205216-17de",
+   "commit": "1534ce986e996a7a77f19a561cda77e89304fd5d",
+   "arms": [
+    "steer:hold:L24:0.1"
+   ],
+   "status": "done",
+   "wall_s": 2038.185688495636,
+   "max_tokens": 16384,
+   "n_problems": 500,
+   "seed": 41000000,
+   "block_norm_median": {
+    "24": 39.54429244995117
+   },
+   "applied_vector_norm": {
+    "steer:hold:L24:0.1": {
+     "24": 3.9540653228759766
+    }
+   },
+   "generation_s": {
+    "steer:hold:L24:0.1": 1984.0817081928253
+   },
+   "pick": null,
+   "checks": {
+    "n": 8,
+    "tokens": 96,
+    "repeat": {
+     "identical": 8,
+     "pass": true
+    },
+    "hold_token_share_none": 0.0078125,
+    "steer_acts": {
+     "24": {
+      "alpha": 8.0,
+      "identical_to_none": 0,
+      "hold_token_share": 1.0,
+      "pass": true,
+      "example": " wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait wait"
+     }
+    },
+    "block_norm_median": {
+     "24": 39.54429244995117
+    },
+    "block_norm_positions": {
+     "24": 1894
+    },
+    "hook_calls": {
+     "24": 192
+    },
+    "hook_hidden_shape": [
+     1,
+     8,
+     4096
+    ],
+    "bias_acts": {
+     "nats": 20.0,
+     "hold_token_share": 1.0,
+     "pass": true,
+     "example": " Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait Wait"
+    },
+    "pass": true
+   }
+  }
+ ],
+ "n_problems": 500,
+ "aliases": {},
+ "n_rows_per_arm": 500,
+ "target_ratio": 1.41,
+ "arms": {
+  "none": {
+   "arm": "none",
+   "kind": "none",
+   "n": 500,
+   "seed0": 41000000,
+   "right_v3": 430,
+   "percent_v3": 86.0,
+   "cap_hits": 21,
+   "loop_A": 0,
+   "no_answer_found": 22,
+   "finished_without_answer": 5,
+   "word_salad_tails": 0,
+   "mean_token_logprob": -0.3963228479654922,
+   "tokens_mean": 3911.274,
+   "tokens_median": 1937.5,
+   "hold_words_per_1k_tokens": 6.275704540259772,
+   "hold_words_per_answer_mean": 24.546,
+   "hold_rate_ratio_to_none": 1.0,
+   "hold_words_per_1k_tokens_right": 6.235161321725474,
+   "hold_words_per_1k_tokens_wrong": 6.346413427512257,
+   "minus_none": {
+    "points": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   },
+   "gained": 0,
+   "lost": 0,
+   "gained_by_subject": {},
+   "lost_by_subject": {},
+   "lost_that_hit_cap": 0,
+   "identical_to_none": 500,
+   "tokens_mean_both_finished": [
+    3364.453027139875,
+    3364.453027139875
+   ],
+   "n_both_finished": 479,
+   "first_divergence": {
+    "n": 0,
+    "median_char": null,
+    "first_word_is_hold_on": 0
+   },
+   "minus_stored_mean": {
+    "points": 3.9,
+    "ci95": [
+     1.25,
+     6.551249999999993
+    ]
+   },
+   "gained_by_group": {},
+   "lost_by_group": {},
+   "right_by_group": {
+    "base_only": [
+     10,
+     12
+    ],
+    "both": [
+     373,
+     398
+    ],
+    "neither": [
+     5,
+     25
+    ],
+    "rl_only": [
+     42,
+     65
+    ]
+   },
+   "identical_to_stored_T1": 48
+  },
+  "bias:hold:0.64": {
+   "arm": "bias:hold:0.64",
+   "kind": "bias",
+   "family": "hold",
+   "nats": 0.64,
+   "n": 500,
+   "seed0": 41000000,
+   "right_v3": 421,
+   "percent_v3": 84.2,
+   "cap_hits": 28,
+   "loop_A": 2,
+   "no_answer_found": 30,
+   "finished_without_answer": 4,
+   "word_salad_tails": 1,
+   "mean_token_logprob": -0.40838600596503866,
+   "tokens_mean": 4470.682,
+   "tokens_median": 2174.0,
+   "hold_words_per_1k_tokens": 9.72379605617219,
+   "hold_words_per_answer_mean": 43.472,
+   "hold_rate_ratio_to_none": 1.5494349668299856,
+   "hold_words_per_1k_tokens_right": 8.71607938436614,
+   "hold_words_per_1k_tokens_wrong": 11.28345287334837,
+   "minus_none": {
+    "points": -1.7999999999999998,
+    "ci95": [
+     -5.2,
+     1.6
+    ]
+   },
+   "gained": 31,
+   "lost": 40,
+   "gained_by_subject": {
+    "intermediate_algebra": 10,
+    "algebra": 4,
+    "counting_and_probability": 5,
+    "precalculus": 3,
+    "geometry": 4,
+    "prealgebra": 3,
+    "number_theory": 2
+   },
+   "lost_by_subject": {
+    "geometry": 6,
+    "counting_and_probability": 3,
+    "number_theory": 6,
+    "intermediate_algebra": 10,
+    "precalculus": 4,
+    "prealgebra": 7,
+    "algebra": 4
+   },
+   "lost_that_hit_cap": 10,
+   "identical_to_none": 35,
+   "tokens_mean_both_finished": [
+    3652.6802575107295,
+    3171.6502145922746
+   ],
+   "n_both_finished": 466,
+   "first_divergence": {
+    "n": 465,
+    "median_char": 756.0,
+    "first_word_is_hold_on": 262
+   },
+   "minus_stored_mean": {
+    "points": 2.1,
+    "ci95": [
+     -0.7000000000000001,
+     4.65
+    ]
+   },
+   "gained_by_group": {
+    "both": 20,
+    "rl_only": 9,
+    "neither": 1,
+    "base_only": 1
+   },
+   "lost_by_group": {
+    "neither": 5,
+    "rl_only": 13,
+    "both": 17,
+    "base_only": 5
+   },
+   "right_by_group": {
+    "base_only": [
+     6,
+     12
+    ],
+    "both": [
+     376,
+     398
+    ],
+    "neither": [
+     1,
+     25
+    ],
+    "rl_only": [
+     38,
+     65
+    ]
+   },
+   "identical_to_stored_T1": 15
+  },
+  "steer:hold:L20:0.128": {
+   "arm": "steer:hold:L20:0.128",
+   "kind": "steer",
+   "dir": "hold",
+   "layer": 20,
+   "alpha": 0.128,
+   "n": 500,
+   "seed0": 41000000,
+   "right_v3": 398,
+   "percent_v3": 79.60000000000001,
+   "cap_hits": 31,
+   "loop_A": 0,
+   "no_answer_found": 48,
+   "finished_without_answer": 27,
+   "word_salad_tails": 0,
+   "mean_token_logprob": -0.6871633037460281,
+   "tokens_mean": 4618.688,
+   "tokens_median": 2368.5,
+   "hold_words_per_1k_tokens": 9.089594274391342,
+   "hold_words_per_answer_mean": 41.982,
+   "hold_rate_ratio_to_none": 1.448378300170118,
+   "hold_words_per_1k_tokens_right": 9.1417393236748,
+   "hold_words_per_1k_tokens_wrong": 9.01680418563972,
+   "minus_none": {
+    "points": -6.4,
+    "ci95": [
+     -10.2,
+     -2.6
+    ]
+   },
+   "gained": 29,
+   "lost": 61,
+   "gained_by_subject": {
+    "algebra": 4,
+    "precalculus": 5,
+    "intermediate_algebra": 8,
+    "number_theory": 3,
+    "prealgebra": 3,
+    "counting_and_probability": 5,
+    "geometry": 1
+   },
+   "lost_by_subject": {
+    "algebra": 8,
+    "geometry": 8,
+    "intermediate_algebra": 15,
+    "counting_and_probability": 6,
+    "number_theory": 7,
+    "precalculus": 6,
+    "prealgebra": 11
+   },
+   "lost_that_hit_cap": 13,
+   "identical_to_none": 0,
+   "tokens_mean_both_finished": [
+    3726.1525054466233,
+    3113.3943355119827
+   ],
+   "n_both_finished": 459,
+   "first_divergence": {
+    "n": 500,
+    "median_char": 106.0,
+    "first_word_is_hold_on": 68
+   },
+   "minus_stored_mean": {
+    "points": -2.5,
+    "ci95": [
+     -5.800000000000001,
+     0.5499999999999999
+    ]
+   },
+   "gained_by_group": {
+    "rl_only": 10,
+    "both": 17,
+    "neither": 1,
+    "base_only": 1
+   },
+   "lost_by_group": {
+    "both": 36,
+    "neither": 2,
+    "rl_only": 17,
+    "base_only": 6
+   },
+   "right_by_group": {
+    "base_only": [
+     5,
+     12
+    ],
+    "both": [
+     354,
+     398
+    ],
+    "neither": [
+     4,
+     25
+    ],
+    "rl_only": [
+     35,
+     65
+    ]
+   },
+   "identical_to_stored_T1": 0
+  },
+  "steer:hold:L24:0.068": {
+   "arm": "steer:hold:L24:0.068",
+   "kind": "steer",
+   "dir": "hold",
+   "layer": 24,
+   "alpha": 0.068,
+   "n": 500,
+   "seed0": 41000000,
+   "right_v3": 413,
+   "percent_v3": 82.6,
+   "cap_hits": 22,
+   "loop_A": 0,
+   "no_answer_found": 29,
+   "finished_without_answer": 13,
+   "word_salad_tails": 3,
+   "mean_token_logprob": -0.4738364720172522,
+   "tokens_mean": 4157.958,
+   "tokens_median": 2139.5,
+   "hold_words_per_1k_tokens": 8.323316397135324,
+   "hold_words_per_answer_mean": 34.608,
+   "hold_rate_ratio_to_none": 1.3262760131137077,
+   "hold_words_per_1k_tokens_right": 8.008924787232488,
+   "hold_words_per_1k_tokens_wrong": 8.780284013864351,
+   "minus_none": {
+    "points": -3.4000000000000004,
+    "ci95": [
+     -6.6000000000000005,
+     -0.2
+    ]
+   },
+   "gained": 28,
+   "lost": 45,
+   "gained_by_subject": {
+    "algebra": 4,
+    "precalculus": 6,
+    "intermediate_algebra": 10,
+    "number_theory": 2,
+    "prealgebra": 1,
+    "geometry": 2,
+    "counting_and_probability": 3
+   },
+   "lost_by_subject": {
+    "precalculus": 5,
+    "geometry": 5,
+    "intermediate_algebra": 11,
+    "algebra": 6,
+    "counting_and_probability": 5,
+    "prealgebra": 10,
+    "number_theory": 3
+   },
+   "lost_that_hit_cap": 9,
+   "identical_to_none": 0,
+   "tokens_mean_both_finished": [
+    3397.1094420600857,
+    3173.0236051502147
+   ],
+   "n_both_finished": 466,
+   "first_divergence": {
+    "n": 500,
+    "median_char": 229.0,
+    "first_word_is_hold_on": 87
+   },
+   "minus_stored_mean": {
+    "points": 0.5,
+    "ci95": [
+     -2.1512499999999997,
+     3.1
+    ]
+   },
+   "gained_by_group": {
+    "rl_only": 9,
+    "both": 18,
+    "base_only": 1
+   },
+   "lost_by_group": {
+    "both": 21,
+    "neither": 4,
+    "rl_only": 16,
+    "base_only": 4
+   },
+   "right_by_group": {
+    "base_only": [
+     7,
+     12
+    ],
+    "both": [
+     370,
+     398
+    ],
+    "neither": [
+     1,
+     25
+    ],
+    "rl_only": [
+     35,
+     65
+    ]
+   },
+   "identical_to_stored_T1": 0
+  },
+  "steer:hold:L24:0.1": {
+   "arm": "steer:hold:L24:0.1",
+   "kind": "steer",
+   "dir": "hold",
+   "layer": 24,
+   "alpha": 0.1,
+   "n": 500,
+   "seed0": 41000000,
+   "right_v3": 381,
+   "percent_v3": 76.2,
+   "cap_hits": 22,
+   "loop_A": 0,
+   "no_answer_found": 56,
+   "finished_without_answer": 39,
+   "word_salad_tails": 2,
+   "mean_token_logprob": -0.7278852219648914,
+   "tokens_mean": 4491.136,
+   "tokens_median": 2647.0,
+   "hold_words_per_1k_tokens": 11.205628152877134,
+   "hold_words_per_answer_mean": 50.326,
+   "hold_rate_ratio_to_none": 1.7855569969859186,
+   "hold_words_per_1k_tokens_right": 9.99632353552779,
+   "hold_words_per_1k_tokens_wrong": 12.59913008973226,
+   "minus_none": {
+    "points": -9.8,
+    "ci95": [
+     -13.600000000000001,
+     -6.195000000000028
+    ]
+   },
+   "gained": 25,
+   "lost": 74,
+   "gained_by_subject": {
+    "algebra": 5,
+    "precalculus": 5,
+    "intermediate_algebra": 6,
+    "prealgebra": 3,
+    "geometry": 2,
+    "counting_and_probability": 2,
+    "number_theory": 2
+   },
+   "lost_by_subject": {
+    "algebra": 8,
+    "intermediate_algebra": 21,
+    "geometry": 7,
+    "counting_and_probability": 6,
+    "prealgebra": 13,
+    "precalculus": 12,
+    "number_theory": 7
+   },
+   "lost_that_hit_cap": 8,
+   "identical_to_none": 0,
+   "tokens_mean_both_finished": [
+    3826.824786324786,
+    3222.803418803419
+   ],
+   "n_both_finished": 468,
+   "first_divergence": {
+    "n": 500,
+    "median_char": 137.0,
+    "first_word_is_hold_on": 93
+   },
+   "minus_stored_mean": {
+    "points": -5.8999999999999995,
+    "ci95": [
+     -9.049999999999999,
+     -2.9000000000000004
+    ]
+   },
+   "gained_by_group": {
+    "rl_only": 8,
+    "both": 17
+   },
+   "lost_by_group": {
+    "both": 45,
+    "neither": 5,
+    "rl_only": 19,
+    "base_only": 5
+   },
+   "right_by_group": {
+    "base_only": [
+     5,
+     12
+    ],
+    "both": [
+     345,
+     398
+    ],
+    "neither": [
+     0,
+     25
+    ],
+    "rl_only": [
+     31,
+     65
+    ]
+   },
+   "identical_to_stored_T1": 0
+  },
+  "steer:rand:L24:0.068": {
+   "arm": "steer:rand:L24:0.068",
+   "kind": "steer",
+   "dir": "rand",
+   "layer": 24,
+   "alpha": 0.068,
+   "n": 500,
+   "seed0": 41000000,
+   "right_v3": 409,
+   "percent_v3": 81.8,
+   "cap_hits": 23,
+   "loop_A": 0,
+   "no_answer_found": 23,
+   "finished_without_answer": 3,
+   "word_salad_tails": 1,
+   "mean_token_logprob": -0.3958143576964046,
+   "tokens_mean": 4028.538,
+   "tokens_median": 1969.0,
+   "hold_words_per_1k_tokens": 6.051326808882031,
+   "hold_words_per_answer_mean": 24.378,
+   "hold_rate_ratio_to_none": 0.96424660690472,
+   "hold_words_per_1k_tokens_right": 5.921141284689963,
+   "hold_words_per_1k_tokens_wrong": 6.217017930060241,
+   "minus_none": {
+    "points": -4.2,
+    "ci95": [
+     -8.0,
+     -0.6
+    ]
+   },
+   "gained": 32,
+   "lost": 53,
+   "gained_by_subject": {
+    "algebra": 3,
+    "precalculus": 6,
+    "intermediate_algebra": 11,
+    "number_theory": 2,
+    "prealgebra": 4,
+    "counting_and_probability": 5,
+    "geometry": 1
+   },
+   "lost_by_subject": {
+    "geometry": 9,
+    "intermediate_algebra": 12,
+    "counting_and_probability": 4,
+    "number_theory": 9,
+    "prealgebra": 10,
+    "precalculus": 5,
+    "algebra": 4
+   },
+   "lost_that_hit_cap": 9,
+   "identical_to_none": 6,
+   "tokens_mean_both_finished": [
+    3228.824034334764,
+    3194.2596566523607
+   ],
+   "n_both_finished": 466,
+   "first_divergence": {
+    "n": 494,
+    "median_char": 412.5,
+    "first_word_is_hold_on": 9
+   },
+   "minus_stored_mean": {
+    "points": -0.3,
+    "ci95": [
+     -2.9000000000000004,
+     2.3012499999999934
+    ]
+   },
+   "gained_by_group": {
+    "rl_only": 12,
+    "both": 18,
+    "neither": 1,
+    "base_only": 1
+   },
+   "lost_by_group": {
+    "neither": 5,
+    "rl_only": 19,
+    "both": 25,
+    "base_only": 4
+   },
+   "right_by_group": {
+    "base_only": [
+     7,
+     12
+    ],
+    "both": [
+     366,
+     398
+    ],
+    "neither": [
+     1,
+     25
+    ],
+    "rl_only": [
+     35,
+     65
+    ]
+   },
+   "identical_to_stored_T1": 3
+  }
+ },
+ "pairs": {
+  "none minus bias:hold:0.64": {
+   "points": 1.7999999999999998,
+   "ci95": [
+    -1.4000000000000001,
+    5.004999999999972
+   ]
+  },
+  "none minus steer:hold:L20:0.128": {
+   "points": 6.4,
+   "ci95": [
+    2.8000000000000003,
+    10.0
+   ]
+  },
+  "none minus steer:hold:L24:0.068": {
+   "points": 3.4000000000000004,
+   "ci95": [
+    0.0,
+    6.800000000000001
+   ]
+  },
+  "none minus steer:hold:L24:0.1": {
+   "points": 9.8,
+   "ci95": [
+    6.0,
+    13.4
+   ]
+  },
+  "none minus steer:rand:L24:0.068": {
+   "points": 4.2,
+   "ci95": [
+    0.8,
+    7.8
+   ]
+  },
+  "bias:hold:0.64 minus steer:hold:L20:0.128": {
+   "points": 4.6,
+   "ci95": [
+    0.8,
+    8.200000000000001
+   ]
+  },
+  "bias:hold:0.64 minus steer:hold:L24:0.068": {
+   "points": 1.6,
+   "ci95": [
+    -1.7999999999999998,
+    5.0
+   ]
+  },
+  "bias:hold:0.64 minus steer:hold:L24:0.1": {
+   "points": 8.0,
+   "ci95": [
+    4.2,
+    11.799999999999999
+   ]
+  },
+  "bias:hold:0.64 minus steer:rand:L24:0.068": {
+   "points": 2.4,
+   "ci95": [
+    -0.6,
+    5.800000000000001
+   ]
+  },
+  "steer:hold:L20:0.128 minus steer:hold:L24:0.068": {
+   "points": -3.0,
+   "ci95": [
+    -6.6000000000000005,
+    0.4
+   ]
+  },
+  "steer:hold:L20:0.128 minus steer:hold:L24:0.1": {
+   "points": 3.4000000000000004,
+   "ci95": [
+    0.0,
+    7.000000000000001
+   ]
+  },
+  "steer:hold:L20:0.128 minus steer:rand:L24:0.068": {
+   "points": -2.1999999999999997,
+   "ci95": [
+    -5.6000000000000005,
+    1.2
+   ]
+  },
+  "steer:hold:L24:0.068 minus steer:hold:L24:0.1": {
+   "points": 6.4,
+   "ci95": [
+    2.8000000000000003,
+    9.8
+   ]
+  },
+  "steer:hold:L24:0.068 minus steer:rand:L24:0.068": {
+   "points": 0.8,
+   "ci95": [
+    -2.6,
+    4.2
+   ]
+  },
+  "steer:hold:L24:0.1 minus steer:rand:L24:0.068": {
+   "points": -5.6000000000000005,
+   "ci95": [
+    -9.0,
+    -2.0
+   ]
+  }
+ },
+ "dose": {
+  "bias:hold": {
+   "points": [
+    [
+     0.64,
+     1.5494349668299856
+    ]
+   ],
+   "strength_at_target": null
+  },
+  "steer:hold:L20": {
+   "points": [
+    [
+     0.128,
+     1.448378300170118
+    ]
+   ],
+   "strength_at_target": null
+  },
+  "steer:hold:L24": {
+   "points": [
+    [
+     0.068,
+     1.3262760131137077
+    ],
+    [
+     0.1,
+     1.7855569969859186
+    ]
+   ],
+   "strength_at_target": 0.07361888704216195
+  },
+  "steer:rand:L24": {
+   "points": [
+    [
+     0.068,
+     0.96424660690472
+    ]
+   ],
+   "strength_at_target": null
+  }
+ },
+ "stored_unsteered": {
+  "file": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl",
+  "samples_per_problem": 4,
+  "right_per_sample_mean": 410.5,
+  "percent": 82.1,
+  "tokens_mean": 4008.3875,
+  "cap_hits_per_sample_mean": 22.5
+ }
+}

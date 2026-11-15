@@ -1,0 +1,64 @@
+{
+ "jobs": [
+  {
+   "job_id": "sameraslan-1114-214944-eb61",
+   "commit": "7f269e9a27d7fb275a40d8f4c4a4fe88518438cb",
+   "arms": [
+    "none"
+   ],
+   "wall_s": 1848.41246509552
+  },
+  {
+   "job_id": "sameraslan-1114-214251-10c3",
+   "commit": "2d6f378cea6250db244339bf6ff6f3d219f21a2e",
+   "arms": [
+    "bias:hold:0.64"
+   ],
+   "wall_s": 2070.8134841918945
+  },
+  {
+   "job_id": "sameraslan-1114-205156-86f8",
+   "commit": "1534ce986e996a7a77f19a561cda77e89304fd5d",
+   "arms": [
+    "steer:hold:L24:0.068"
+   ],
+   "wall_s": 2012.2129604816437
+  },
+  {
+   "job_id": "sameraslan-1114-205203-840e",
+   "commit": "1534ce986e996a7a77f19a561cda77e89304fd5d",
+   "arms": [
+    "steer:hold:L20:0.128"
+   ],
+   "wall_s": 2185.788983106613
+  },
+  {
+   "job_id": "sameraslan-1114-205210-8d88",
+   "commit": "1534ce986e996a7a77f19a561cda77e89304fd5d",
+   "arms": [
+    "steer:rand:L24:0.068"
+   ],
+   "wall_s": 1916.465307712555
+  },
+  {
+   "job_id": "sameraslan-1114-205216-17de",
+   "commit": "1534ce986e996a7a77f19a561cda77e89304fd5d",
+   "arms": [
+    "steer:hold:L24:0.1"
+   ],
+   "wall_s": 2038.185688495636
+  }
+ ],
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.jspace.jobs.steer_gen --commit <commit> --arms <arm>   (one job per arm)",
+ "readout": "PYTHONPATH=. python3 -m studies.jspace.analysis.steer_analyze --runs runs/<the six job ids> --out studies/jspace/results/steer/main-01 --t1 runs/diag_t1t2/T1.jsonl --stored studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl --items studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json",
+ "stopped_job": {
+  "job_id": "sameraslan-1114-205149-0570",
+  "note": "none and bias:hold:0.64 in one engine; cancelled after 51 minutes because 1,000 answers would not finish within its limit. Its none arm had finished (426 of 500, 436 texts identical to eb61); its 260 bias rows are not used."
+ },
+ "failed_job": {
+  "job_id": "sameraslan-1114-214244-11de",
+  "note": "none; exit 1 at engine start, the GPU still held the memory of the cancelled job"
+ },
+ "reading": "PYTHONPATH=. python3 studies/jspace/analysis/steer_reading.py runs/sameraslan-1114-214944-eb61 runs/sameraslan-1114-205156-86f8 runs/sameraslan-1114-214251-10c3 <out dir>; one subagent labelled reading_excerpts.md without the key",
+ "raw_rows": "Volume iterate-runs, /runs/<job id>/answers.jsonl (not committed)"
+}
