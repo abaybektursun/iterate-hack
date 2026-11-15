@@ -1,0 +1,1150 @@
+{
+ "set": "math500",
+ "n": 500,
+ "rows": [
+  {
+   "configuration": "one sample",
+   "rule": "single",
+   "model": "think_sft_cue",
+   "right": 461,
+   "n": 500,
+   "percent": 92.2,
+   "wilson95": [
+    89.51464498877954,
+    94.24186066619129
+   ],
+   "tokens_per_problem": 4899.99,
+   "right_24": 460.25,
+   "tokens_per_problem_24": 4875.707,
+   "samples_drawn": 1.0,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "one sample, sampled again after a cap hit (up to 2 times)",
+   "rule": "restart",
+   "model": "think_sft_cue",
+   "right": 461,
+   "n": 500,
+   "percent": 92.2,
+   "wilson95": [
+    89.51464498877954,
+    94.24186066619129
+   ],
+   "tokens_per_problem": 4899.99,
+   "right_24": 460.25,
+   "tokens_per_problem_24": 4875.707,
+   "samples_drawn": 1.0,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "one sample, abandoned at 8,000 tokens and drawn again",
+   "rule": "R8000",
+   "model": "think_sft_cue",
+   "right": 466,
+   "n": 500,
+   "percent": 93.2,
+   "wilson95": [
+    90.6479077036752,
+    95.09334927013379
+   ],
+   "tokens_per_problem": 7945.266,
+   "right_24": 465.4166666666667,
+   "tokens_per_problem_24": 7930.256666666667,
+   "samples_drawn": 1.442,
+   "ran_out": 50,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "one sample, abandoned at 12,000 tokens and drawn again",
+   "rule": "R12000",
+   "model": "think_sft_cue",
+   "right": 469,
+   "n": 500,
+   "percent": 93.8,
+   "wilson95": [
+    91.33402866750973,
+    95.59807909760214
+   ],
+   "tokens_per_problem": 6874.014,
+   "right_24": 469.5,
+   "tokens_per_problem_24": 6885.278333333333,
+   "samples_drawn": 1.192,
+   "ran_out": 20,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "vote over 2",
+   "rule": "vote2",
+   "model": "think_sft_cue",
+   "right": 470,
+   "n": 500,
+   "percent": 94.0,
+   "wilson95": [
+    91.56389366536348,
+    95.765164363516
+   ],
+   "tokens_per_problem": 9821.386,
+   "right_24": 469.4166666666667,
+   "tokens_per_problem_24": 9751.414,
+   "samples_drawn": 2.0,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "vote over 3",
+   "rule": "vote3",
+   "model": "think_sft_cue",
+   "right": 479,
+   "n": 500,
+   "percent": 95.8,
+   "wilson95": [
+    93.6648414045857,
+    97.23676899820252
+   ],
+   "tokens_per_problem": 14774.156,
+   "right_24": 478.5,
+   "tokens_per_problem_24": 14627.121,
+   "samples_drawn": 3.0,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "vote over 4",
+   "rule": "vote4",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 19502.828,
+   "right_24": 480.75,
+   "tokens_per_problem_24": 19502.828,
+   "samples_drawn": 4.0,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "vote over 2, ties to the shortest finished sample",
+   "rule": "vote2_short",
+   "model": "think_sft_cue",
+   "right": 473,
+   "n": 500,
+   "percent": 94.6,
+   "wilson95": [
+    92.25734382748384,
+    96.26256499269856
+   ],
+   "tokens_per_problem": 9821.386,
+   "right_24": 474.0833333333333,
+   "tokens_per_problem_24": 9751.414,
+   "samples_drawn": 2.0,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "vote over 3, ties to the shortest finished sample",
+   "rule": "vote3_short",
+   "model": "think_sft_cue",
+   "right": 479,
+   "n": 500,
+   "percent": 95.8,
+   "wilson95": [
+    93.6648414045857,
+    97.23676899820252
+   ],
+   "tokens_per_problem": 14774.156,
+   "right_24": 479.125,
+   "tokens_per_problem_24": 14627.121,
+   "samples_drawn": 3.0,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "vote over 4, ties to the shortest finished sample",
+   "rule": "vote4_short",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 19502.828,
+   "right_24": 481.0,
+   "tokens_per_problem_24": 19502.828,
+   "samples_drawn": 4.0,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "vote over 4 after restart",
+   "rule": "vote4_restart",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 19502.828,
+   "right_24": 480.75,
+   "tokens_per_problem_24": 19502.828,
+   "samples_drawn": 4.0,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "vote over 4 after restart, ties to the shortest",
+   "rule": "vote4_restart_short",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 19502.828,
+   "right_24": 481.0,
+   "tokens_per_problem_24": 19502.828,
+   "samples_drawn": 4.0,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "sequential vote: stop when two agree, at most 3 samples",
+   "rule": "seq3",
+   "model": "think_sft_cue",
+   "right": 479,
+   "n": 500,
+   "percent": 95.8,
+   "wilson95": [
+    93.6648414045857,
+    97.23676899820252
+   ],
+   "tokens_per_problem": 10936.832,
+   "right_24": 478.5,
+   "tokens_per_problem_24": 10837.3375,
+   "samples_drawn": 2.12,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "sequential vote: stop when two agree, at most 4 samples",
+   "rule": "seq4",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 11521.144,
+   "right_24": 480.75,
+   "tokens_per_problem_24": 11420.188,
+   "samples_drawn": 2.164,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "sequential vote, at most 4, ties to the shortest finished sample",
+   "rule": "seq4_short",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 11521.144,
+   "right_24": 480.5,
+   "tokens_per_problem_24": 11420.188,
+   "samples_drawn": 2.164,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "draw 2; if they differ draw 2 more; vote",
+   "rule": "seq_2then4",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 12026.436,
+   "right_24": 480.75,
+   "tokens_per_problem_24": 11923.261,
+   "samples_drawn": 2.24,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "draw 2; if they differ draw 2 more; vote, ties to the shortest",
+   "rule": "seq_2then4_short",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 12026.436,
+   "right_24": 480.8333333333333,
+   "tokens_per_problem_24": 11923.261,
+   "samples_drawn": 2.24,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "sequential vote, at most 4, each sample restarted after a cap hit",
+   "rule": "seq4_restart",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 11521.144,
+   "right_24": 480.75,
+   "tokens_per_problem_24": 11420.188,
+   "samples_drawn": 2.164,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "sequential vote, at most 4, restarts, ties to the shortest",
+   "rule": "seq4_restart_short",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 11521.144,
+   "right_24": 480.5,
+   "tokens_per_problem_24": 11420.188,
+   "samples_drawn": 2.164,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "sequential vote, at most 4; a finished answer of at most 1,000 tokens is accepted at once",
+   "rule": "seq4_stop1000",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 11416.892,
+   "right_24": 480.0,
+   "tokens_per_problem_24": 11289.443333333335,
+   "samples_drawn": 2.078,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "sequential vote, at most 4; a finished answer of at most 2,000 tokens is accepted at once",
+   "rule": "seq4_stop2000",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 10908.48,
+   "right_24": 479.75,
+   "tokens_per_problem_24": 10853.178833333333,
+   "samples_drawn": 1.854,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "sequential vote, at most 4, samples abandoned at 8,000 tokens",
+   "rule": "seq4_L8000",
+   "model": "think_sft_cue",
+   "right": 470,
+   "n": 500,
+   "percent": 94.0,
+   "wilson95": [
+    91.56389366536348,
+    95.765164363516
+   ],
+   "tokens_per_problem": 12047.916,
+   "right_24": 470.5,
+   "tokens_per_problem_24": 11948.6845,
+   "samples_drawn": 2.462,
+   "ran_out": 71,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "sequential vote, at most 4, samples abandoned at 12,000 tokens",
+   "rule": "seq4_L12000",
+   "model": "think_sft_cue",
+   "right": 475,
+   "n": 500,
+   "percent": 95.0,
+   "wilson95": [
+    92.72318386186078,
+    96.59062548585689
+   ],
+   "tokens_per_problem": 11741.388,
+   "right_24": 476.0,
+   "tokens_per_problem_24": 11774.531833333334,
+   "samples_drawn": 2.25,
+   "ran_out": 28,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "4 in parallel, all stop when two finished answers agree",
+   "rule": "par4_m2",
+   "model": "think_sft_cue",
+   "right": 481,
+   "n": 500,
+   "percent": 96.2,
+   "wilson95": [
+    94.1415227274959,
+    97.55398820282757
+   ],
+   "tokens_per_problem": 16553.246,
+   "right_24": 481.25,
+   "tokens_per_problem_24": 16553.246,
+   "samples_drawn": 4.0,
+   "ran_out": 0,
+   "signal": "SFT data (no reward)"
+  },
+  {
+   "configuration": "one sample",
+   "rule": "single",
+   "model": "rl",
+   "right": 456,
+   "n": 500,
+   "percent": 91.2,
+   "wilson95": [
+    88.39235276871487,
+    93.37940156741777
+   ],
+   "tokens_per_problem": 4675.104,
+   "right_24": 460.0,
+   "tokens_per_problem_24": 4686.79,
+   "samples_drawn": 1.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "one sample, sampled again after a cap hit (up to 2 times)",
+   "rule": "restart",
+   "model": "rl",
+   "right": 458,
+   "n": 500,
+   "percent": 91.6,
+   "wilson95": [
+    88.84006852957278,
+    93.72558633409511
+   ],
+   "tokens_per_problem": 4898.614,
+   "right_24": 463.0,
+   "tokens_per_problem_24": 4965.9475,
+   "samples_drawn": 1.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "one sample, abandoned at 8,000 tokens and drawn again",
+   "rule": "R8000",
+   "model": "rl",
+   "right": 462,
+   "n": 500,
+   "percent": 92.4,
+   "wilson95": [
+    89.74035860890358,
+    94.41309730983485
+   ],
+   "tokens_per_problem": 7542.058,
+   "right_24": 464.1666666666667,
+   "tokens_per_problem_24": 7681.68,
+   "samples_drawn": 1.394,
+   "ran_out": 50,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "one sample, abandoned at 12,000 tokens and drawn again",
+   "rule": "R12000",
+   "model": "rl",
+   "right": 464,
+   "n": 500,
+   "percent": 92.8,
+   "wilson95": [
+    90.19315957497824,
+    94.75419687129548
+   ],
+   "tokens_per_problem": 6154.78,
+   "right_24": 466.1666666666667,
+   "tokens_per_problem_24": 6224.895666666667,
+   "samples_drawn": 1.142,
+   "ran_out": 12,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "vote over 2",
+   "rule": "vote2",
+   "model": "rl",
+   "right": 456,
+   "n": 500,
+   "percent": 91.2,
+   "wilson95": [
+    88.39235276871487,
+    93.37940156741777
+   ],
+   "tokens_per_problem": 9263.026,
+   "right_24": 461.0833333333333,
+   "tokens_per_problem_24": 9373.58,
+   "samples_drawn": 2.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "vote over 3",
+   "rule": "vote3",
+   "model": "rl",
+   "right": 468,
+   "n": 500,
+   "percent": 93.6,
+   "wilson95": [
+    91.10475909369747,
+    95.43039840764676
+   ],
+   "tokens_per_problem": 14004.232,
+   "right_24": 470.4166666666667,
+   "tokens_per_problem_24": 14060.37,
+   "samples_drawn": 3.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "vote over 4",
+   "rule": "vote4",
+   "model": "rl",
+   "right": 474,
+   "n": 500,
+   "percent": 94.8,
+   "wilson95": [
+    92.48988558499484,
+    96.4269734989552
+   ],
+   "tokens_per_problem": 18747.16,
+   "right_24": 474.3333333333333,
+   "tokens_per_problem_24": 18747.16,
+   "samples_drawn": 4.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "vote over 2, ties to the shortest finished sample",
+   "rule": "vote2_short",
+   "model": "rl",
+   "right": 463,
+   "n": 500,
+   "percent": 92.6,
+   "wilson95": [
+    89.9665246442627,
+    94.58388153824336
+   ],
+   "tokens_per_problem": 9263.026,
+   "right_24": 468.0,
+   "tokens_per_problem_24": 9373.58,
+   "samples_drawn": 2.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "vote over 3, ties to the shortest finished sample",
+   "rule": "vote3_short",
+   "model": "rl",
+   "right": 472,
+   "n": 500,
+   "percent": 94.4,
+   "wilson95": [
+    92.02552061365208,
+    96.09743794276268
+   ],
+   "tokens_per_problem": 14004.232,
+   "right_24": 472.6666666666667,
+   "tokens_per_problem_24": 14060.37,
+   "samples_drawn": 3.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "vote over 4, ties to the shortest finished sample",
+   "rule": "vote4_short",
+   "model": "rl",
+   "right": 475,
+   "n": 500,
+   "percent": 95.0,
+   "wilson95": [
+    92.72318386186078,
+    96.59062548585689
+   ],
+   "tokens_per_problem": 18747.16,
+   "right_24": 475.0,
+   "tokens_per_problem_24": 18747.16,
+   "samples_drawn": 4.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "vote over 4 after restart",
+   "rule": "vote4_restart",
+   "model": "rl",
+   "right": 475,
+   "n": 500,
+   "percent": 95.0,
+   "wilson95": [
+    92.72318386186078,
+    96.59062548585689
+   ],
+   "tokens_per_problem": 19863.79,
+   "right_24": 476.0833333333333,
+   "tokens_per_problem_24": 19863.79,
+   "samples_drawn": 4.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "vote over 4 after restart, ties to the shortest",
+   "rule": "vote4_restart_short",
+   "model": "rl",
+   "right": 475,
+   "n": 500,
+   "percent": 95.0,
+   "wilson95": [
+    92.72318386186078,
+    96.59062548585689
+   ],
+   "tokens_per_problem": 19863.79,
+   "right_24": 475.0,
+   "tokens_per_problem_24": 19863.79,
+   "samples_drawn": 4.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "sequential vote: stop when two agree, at most 3 samples",
+   "rule": "seq3",
+   "model": "rl",
+   "right": 468,
+   "n": 500,
+   "percent": 93.6,
+   "wilson95": [
+    91.10475909369747,
+    95.43039840764676
+   ],
+   "tokens_per_problem": 10543.48,
+   "right_24": 470.4166666666667,
+   "tokens_per_problem_24": 10495.383666666667,
+   "samples_drawn": 2.112,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "sequential vote: stop when two agree, at most 4 samples",
+   "rule": "seq4",
+   "model": "rl",
+   "right": 474,
+   "n": 500,
+   "percent": 94.8,
+   "wilson95": [
+    92.48988558499484,
+    96.4269734989552
+   ],
+   "tokens_per_problem": 11097.654,
+   "right_24": 474.3333333333333,
+   "tokens_per_problem_24": 11079.546666666665,
+   "samples_drawn": 2.156,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "sequential vote, at most 4, ties to the shortest finished sample",
+   "rule": "seq4_short",
+   "model": "rl",
+   "right": 475,
+   "n": 500,
+   "percent": 95.0,
+   "wilson95": [
+    92.72318386186078,
+    96.59062548585689
+   ],
+   "tokens_per_problem": 11097.654,
+   "right_24": 474.5,
+   "tokens_per_problem_24": 11079.546666666665,
+   "samples_drawn": 2.156,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "draw 2; if they differ draw 2 more; vote",
+   "rule": "seq_2then4",
+   "model": "rl",
+   "right": 474,
+   "n": 500,
+   "percent": 94.8,
+   "wilson95": [
+    92.48988558499484,
+    96.4269734989552
+   ],
+   "tokens_per_problem": 11751.45,
+   "right_24": 474.3333333333333,
+   "tokens_per_problem_24": 11617.187333333333,
+   "samples_drawn": 2.224,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "draw 2; if they differ draw 2 more; vote, ties to the shortest",
+   "rule": "seq_2then4_short",
+   "model": "rl",
+   "right": 475,
+   "n": 500,
+   "percent": 95.0,
+   "wilson95": [
+    92.72318386186078,
+    96.59062548585689
+   ],
+   "tokens_per_problem": 11751.45,
+   "right_24": 474.8333333333333,
+   "tokens_per_problem_24": 11617.187333333333,
+   "samples_drawn": 2.224,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "sequential vote, at most 4, each sample restarted after a cap hit",
+   "rule": "seq4_restart",
+   "model": "rl",
+   "right": 475,
+   "n": 500,
+   "percent": 95.0,
+   "wilson95": [
+    92.72318386186078,
+    96.59062548585689
+   ],
+   "tokens_per_problem": 11802.574,
+   "right_24": 476.0833333333333,
+   "tokens_per_problem_24": 11770.929,
+   "samples_drawn": 2.148,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "sequential vote, at most 4, restarts, ties to the shortest",
+   "rule": "seq4_restart_short",
+   "model": "rl",
+   "right": 475,
+   "n": 500,
+   "percent": 95.0,
+   "wilson95": [
+    92.72318386186078,
+    96.59062548585689
+   ],
+   "tokens_per_problem": 11802.574,
+   "right_24": 475.0,
+   "tokens_per_problem_24": 11770.929,
+   "samples_drawn": 2.148,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "sequential vote, at most 4; a finished answer of at most 1,000 tokens is accepted at once",
+   "rule": "seq4_stop1000",
+   "model": "rl",
+   "right": 474,
+   "n": 500,
+   "percent": 94.8,
+   "wilson95": [
+    92.48988558499484,
+    96.4269734989552
+   ],
+   "tokens_per_problem": 11035.986,
+   "right_24": 474.0,
+   "tokens_per_problem_24": 11018.1085,
+   "samples_drawn": 2.098,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "sequential vote, at most 4; a finished answer of at most 2,000 tokens is accepted at once",
+   "rule": "seq4_stop2000",
+   "model": "rl",
+   "right": 474,
+   "n": 500,
+   "percent": 94.8,
+   "wilson95": [
+    92.48988558499484,
+    96.4269734989552
+   ],
+   "tokens_per_problem": 10661.364,
+   "right_24": 474.0833333333333,
+   "tokens_per_problem_24": 10620.402166666667,
+   "samples_drawn": 1.874,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "sequential vote, at most 4, samples abandoned at 8,000 tokens",
+   "rule": "seq4_L8000",
+   "model": "rl",
+   "right": 466,
+   "n": 500,
+   "percent": 93.2,
+   "wilson95": [
+    90.6479077036752,
+    95.09334927013379
+   ],
+   "tokens_per_problem": 11613.184,
+   "right_24": 467.0,
+   "tokens_per_problem_24": 11646.833333333334,
+   "samples_drawn": 2.414,
+   "ran_out": 67,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "sequential vote, at most 4, samples abandoned at 12,000 tokens",
+   "rule": "seq4_L12000",
+   "model": "rl",
+   "right": 471,
+   "n": 500,
+   "percent": 94.2,
+   "wilson95": [
+    91.79438119247631,
+    95.93162710017081
+   ],
+   "tokens_per_problem": 11261.416,
+   "right_24": 472.75,
+   "tokens_per_problem_24": 11426.751166666667,
+   "samples_drawn": 2.214,
+   "ran_out": 26,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "4 in parallel, all stop when two finished answers agree",
+   "rule": "par4_m2",
+   "model": "rl",
+   "right": 473,
+   "n": 500,
+   "percent": 94.6,
+   "wilson95": [
+    92.25734382748384,
+    96.26256499269856
+   ],
+   "tokens_per_problem": 16552.826,
+   "right_24": 473.8333333333333,
+   "tokens_per_problem_24": 16552.826,
+   "samples_drawn": 4.0,
+   "ran_out": 0,
+   "signal": "RL reward (weights)"
+  },
+  {
+   "configuration": "RL-Zero-Math 3.1, cue",
+   "model": "other arm, one sample",
+   "right": 457.0,
+   "n": 500,
+   "percent": 91.4,
+   "tokens_per_problem": 4696,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "Olmo-3-7B-Think-SFT, cue",
+   "model": "other arm, one sample",
+   "right": 454.0,
+   "n": 500,
+   "percent": 90.8,
+   "tokens_per_problem": 4888,
+   "signal": "SFT data",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + 1.5 (RL - base), cue",
+   "model": "other arm, one sample",
+   "right": 453.0,
+   "n": 500,
+   "percent": 90.6,
+   "tokens_per_problem": 4862,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + 0.5 (RL - base), cue",
+   "model": "other arm, one sample",
+   "right": 452.0,
+   "n": 500,
+   "percent": 90.4,
+   "tokens_per_problem": 4626,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + 0.75 (RL - base), cue",
+   "model": "other arm, one sample",
+   "right": 451.0,
+   "n": 500,
+   "percent": 90.2,
+   "tokens_per_problem": 4654,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + 1.25 (RL - base), cue",
+   "model": "other arm, one sample",
+   "right": 450.0,
+   "n": 500,
+   "percent": 90.0,
+   "tokens_per_problem": 4852,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "RL-Zero-Code 3.1, cue",
+   "model": "other arm, one sample",
+   "right": 450.0,
+   "n": 500,
+   "percent": 90.0,
+   "tokens_per_problem": 3336,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "Olmo-3-7B-RL-Zero-Math (3.0), cue",
+   "model": "other arm, one sample",
+   "right": 448.0,
+   "n": 500,
+   "percent": 89.6,
+   "tokens_per_problem": 4527,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + 0.5 (RL - base), plain",
+   "model": "other arm, one sample",
+   "right": 443.0,
+   "n": 500,
+   "percent": 88.6,
+   "tokens_per_problem": 4536,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "Olmo-3-7B-RL-Zero-Math (3.0), plain",
+   "model": "other arm, one sample",
+   "right": 443.0,
+   "n": 500,
+   "percent": 88.6,
+   "tokens_per_problem": 4506,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + 0.25 (RL - base), cue",
+   "model": "other arm, one sample",
+   "right": 441.0,
+   "n": 500,
+   "percent": 88.2,
+   "tokens_per_problem": 4036,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "Olmo-3-7B-RL-Zero-Mix (3.0), cue",
+   "model": "other arm, one sample",
+   "right": 440.0,
+   "n": 500,
+   "percent": 88.0,
+   "tokens_per_problem": 5203,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "Olmo-3-7B-Think-SFT, plain",
+   "model": "other arm, one sample",
+   "right": 440.0,
+   "n": 500,
+   "percent": 88.0,
+   "tokens_per_problem": 4492,
+   "signal": "SFT data",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + cue + 3 solved problems written by Math-RL in context (n 497)",
+   "model": "other arm, one sample",
+   "right": 435.0,
+   "n": 497,
+   "percent": 87.5251509054326,
+   "tokens_per_problem": 4379,
+   "signal": "RL reward (RL text in context)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "Olmo-3-7B-RL-Zero-General (3.0), cue",
+   "model": "other arm, one sample",
+   "right": 429.0,
+   "n": 500,
+   "percent": 85.8,
+   "tokens_per_problem": 3839,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + top 8 singular directions per matrix of the RL delta, plain",
+   "model": "other arm, one sample",
+   "right": 427.0,
+   "n": 500,
+   "percent": 85.4,
+   "tokens_per_problem": 3962,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + random difference of the RL norm, cue (control)",
+   "model": "other arm, one sample",
+   "right": 417.0,
+   "n": 500,
+   "percent": 83.4,
+   "tokens_per_problem": 3944,
+   "signal": "none (control)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + cue + 3 solved problems written by the cued base in context (n 497)",
+   "model": "other arm, one sample",
+   "right": 414.0,
+   "n": 497,
+   "percent": 83.29979879275653,
+   "tokens_per_problem": 3365,
+   "signal": "own samples (in context)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + cue + 3 solved problems written by Code-RL in context (n 497)",
+   "model": "other arm, one sample",
+   "right": 412.0,
+   "n": 497,
+   "percent": 82.897384305835,
+   "tokens_per_problem": 3815,
+   "signal": "RL reward (RL text in context)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "Olmo-3-7B-RL-Zero-Code (3.0), cue",
+   "model": "other arm, one sample",
+   "right": 411.0,
+   "n": 500,
+   "percent": 82.2,
+   "tokens_per_problem": 3069,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + 0.25 (RL - base), plain",
+   "model": "other arm, one sample",
+   "right": 405.0,
+   "n": 500,
+   "percent": 81.0,
+   "tokens_per_problem": 3653,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "RL-Zero-Code 3.1, plain",
+   "model": "other arm, one sample",
+   "right": 390.0,
+   "n": 500,
+   "percent": 78.0,
+   "tokens_per_problem": 3066,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "Olmo-3-7B-RL-Zero-If (3.0), cue",
+   "model": "other arm, one sample",
+   "right": 377.0,
+   "n": 500,
+   "percent": 75.4,
+   "tokens_per_problem": 2667,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "Olmo-3-7B-RL-Zero-Mix (3.0), plain",
+   "model": "other arm, one sample",
+   "right": 372.0,
+   "n": 500,
+   "percent": 74.4,
+   "tokens_per_problem": 4228,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "Olmo-3-7B-RL-Zero-Code (3.0), plain",
+   "model": "other arm, one sample",
+   "right": 360.0,
+   "n": 500,
+   "percent": 72.0,
+   "tokens_per_problem": 2630,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "Olmo-3-7B-RL-Zero-General (3.0), plain",
+   "model": "other arm, one sample",
+   "right": 323.0,
+   "n": 500,
+   "percent": 64.6,
+   "tokens_per_problem": 2303,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "base + random rank-8 directions, plain (control)",
+   "model": "other arm, one sample",
+   "right": 197.0,
+   "n": 500,
+   "percent": 39.4,
+   "tokens_per_problem": 1968,
+   "signal": "none (control)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  },
+  {
+   "configuration": "Olmo-3-7B-RL-Zero-If (3.0), plain",
+   "model": "other arm, one sample",
+   "right": 55.0,
+   "n": 500,
+   "percent": 11.0,
+   "tokens_per_problem": 39,
+   "signal": "RL reward (weights)",
+   "source": "studies/rlneurons/results/rate/math500-01/table.json"
+  }
+ ]
+}

@@ -53,6 +53,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `tools/finding_cue_on_code.py` | The public page of "Code pair", served at `/finding/cue-on-code`: three columns with a switch through no cue, the code cue and the math cue, and the Code-RL model as the reference. Its numbers are read from `results/code1/readout.json`. |
 | `tools/finding_rl_edge_comes_early.py` | The public page of "Prefix hand-off", served at `/finding/rl-edge-comes-early`: one answer as a bar of text cut at 25, 50 or 75 %, the 183 problems as dots, a switch for who writes the start and a draggable cut. Its numbers and dots are read from `results/handoff/base-01/rows.jsonl`, `rl-01/rows.jsonl` and `readout-01/readout.json` (run the file to check them). |
 | `tools/finding_a_quarter_of_rl.py` | The public page of "Weight-difference line" (MATH-500 and the 328), served at `/finding/a-quarter-of-rl`: right answers against a for base + a (RL - base) with the cue, each point with its paired 95 % interval, the random change and Code-RL as reference marks, a slider on a that snaps to the measured values, a switch between MATH-500 and the 328, and one dot per problem. Its numbers are read from `results/day1_wdiff/readout.json`, `results/day1_wdiff328/readout.json`, `results/axis/math500-01/vectors.json`, `results/axis/hard328-01/vectors.json` and `results/rln4/t1_t2_items-01/per_problem.json` (run the file to check them). |
+| `tools/finding_one_difficulty_axis.py` | The public page of "One axis or several?", served at `/finding/one-difficulty-axis`: the 36 single-sample arms as rows against the 500 problems in one difficulty order, two arms the reader picks (or "Any pair" through the 618 pairs of different arms), their union against the difficulty-matched prediction, and all pairs' excess as a dot histogram with the 12 same-arm pairs. Its marks and pair excesses are copied from `results/axis/math500-01/` (vectors.json, readout.json); `PYTHONPATH=. uv run --no-project --with numpy python tools/finding_one_difficulty_axis.py` recomputes the pair table with `analysis/axis.py` and checks the copy against `pair_z_matrix`. |
 | `grader/repair_v4.py`, `grader/repair_v4_test.py` | Grader v4 / v4a: grader v3 plus five label-free answer-statement rules (placeholder, lower-case marker, last-line math, trailing brace, form), and its planted tests. A grader version for both models, not a method. See "Answer-statement repair". |
 | `analysis/repair.py`, `prep/repair_plan.py`, `data/repair/plan_v1.json` | Answer-statement repair: the gold-aware upper bound, the rule table and the vote under v4 (laptop); the plan of the forced-suffix job (not run). |
 | `data/anatomy/math500_meta.json` | Subject, level and reference solution of the 500 problems (HuggingFaceH4/MATH-500 `test.jsonl`, revision `6e4ed1a`), same order and `unique_id` as `data/rln4/math500.json`. |
@@ -923,6 +924,231 @@ cannot read, e.g. 135, 165, 447); one is a math fix (372, 75 -> 90). Every break
 156; RL 71, 193, 236). RL fixes none of its 35 wrong finished drafts. Raw rows in frustea's Modal Volume
 `iterate-runs/<job>/answers.jsonl`; drafts in `iterate-runs/inputs/critique/` (`prep/critique_drafts.py`).
 
+## Reward content test: the five Olmo 3 RL-Zero rewards on MATH-500 (board idea-46b68c, work-069eca)
+
+Spec `specs/SPEC_reward5.md` (predictions R1-R5, written before the jobs). Does the MATH-500 gain over the cued base depend on
+what the RL reward graded? AI2's five Olmo 3 RL-Zero models share the base `allenai/Olmo-3-1025-7B` (names and revisions in
+`jobs/merge_weights.py` `OTHERS`). Cells: `run_cell` on `merge_weights --other <key> --alpha 1 --rounding nearest` (all 355
+tensors identical to the named model in every job), T 1.0 / top-p 1.0, one sample, cap 16,384, grader v3, n = 500, the 3.1
+tokenizer. Readout `results/reward5/readout.json`, written by `analysis/reward5.py`; one run folder
+`results/reward5/<arm>-01/` per cell (`run.json`, `metrics.json`, `merge.json`, `examples.json`). Jobs at commit `3b4ab2a`.
+
+| Model | Cue: right of 500 | Cue minus base cue, points [95 %] | Plain: right of 500 | Tokens per problem (cue) | Relative norm of the weight difference |
+|---|---|---|---|---|---|
+| base (T1, T3) | 410 | | 224 | 3,932 | |
+| Math 3.0 | 448 | +7.6 [4.2, 11.0] | 443 | 4,527 | 0.127 % |
+| Mix 3.0 | 440 | +6.0 [2.6, 9.4] | 372 | 5,203 | 0.090 % |
+| General 3.0 | 429 | +3.8 [0.4, 7.0] | 323 | 3,839 | 0.064 % |
+| Code 3.0 | 411 | +0.2 [-3.4, 3.8] | 360 | 3,069 | 0.151 % |
+| IF 3.0 | 377 | -6.6 [-10.6, -2.6] | 55 | 2,667 | 0.138 % |
+| Math 3.1 (day1_wdiff) | 457 | +9.4 [6.2, 12.6] | 463 | 4,696 | 0.13 % |
+| Code 3.1 (day1_wdiff) | 450 | +8.0 [4.6, 11.2] | 390 | 3,336 | 0.109 % |
+
+Paired bootstrap over problems, 5,000 resamples, seed 0. Other paired differences: Code 3.0 cue minus Math 3.0 cue -7.4
+[-10.8, -4.0]; IF 3.0 cue minus Math 3.0 cue -14.2 [-17.8, -10.8]; Code 3.1 cue minus Code 3.0 cue +7.8 [4.4, 11.2]; Math 3.1
+cue minus Math 3.0 cue +1.8 [-0.4, 4.2].
+
+- R1 held: Math 3.0 with the cue is above the cued base.
+- R2 refuted: the IF model gains nothing. Of its 123 wrong cue answers, 34 have a broken answer line (`Answer: Answer`, or an
+  empty `Answer:`: 24 placeholder, 10 nothing extracted; counted from the rows, 6 read by hand and all 6 had the right value in
+  the text); with all 34 counted right it is 411, level with the base. Plain, the IF model answers at once (median 5 tokens, 55 right).
+- R3 refuted: Code 3.0 with the cue equals the cued base (411), 37 problems below Math 3.0. The 450 of Code 3.1 does not hold for
+  the earlier Code release, although Code 3.0 moved the weights further (0.151 % against 0.109 %).
+- R4: Mix held (-1.6 [-4.4, 1.2]); General refuted at the stated bound (-3.8 [-6.8, -0.8]).
+- R5 held: Math 3.0 plain 443 (+219 over base plain); IF plain 55.
+
+Reading: in the Olmo 3 models the gain follows the share of math in the reward (Math > Mix > General > Code = base > IF). The
+earlier finding that the Code-RL difference gives the math gain (above, `day1_wdiff`) is a property of the 3.1 Code release. The
+model cards do not state what changed between the 3.0 and 3.1 Code runs. No answer of any cell contains an `extra_id` token
+text (the 3.0 tokenizer's `<think>`/`<answer>` ids print that way under the 3.1 tokenizer).
+
+### Step 2: do the models change the same tokens? (`specs/SPEC_reward5_tokens.md`, predictions S1-S3)
+
+`jobs/score_tokens.py` scores the 500 first answers of the cued base (job `abaybektursun-1114-153825-208b`, 405 right; 1,904,493
+answer positions; 465 of 500 answers tokenize to the stored token count) under every model. r_m = log p_m(stored token) - log
+p_base. Readout `results/reward5/tokens-01/metrics.json` (with `examples.json`: two positions with every model's numbers), written by
+`analysis/reward5_tokens.py` from jobs `abaybektursun-1114-191457-f9da` and `abaybektursun-1114-193153-3c4c`. Intervals: bootstrap
+over answers. The Mix model is loaded through `merge_weights --alpha 1` (its own `config.json` names a model type transformers
+does not load; job `abaybektursun-1114-191504-5599` failed on it).
+
+| Model | Pearson r of r_m with r_Math 3.1 [95 %] | Where Math 3.1's top token differs from the base's: share with Math 3.1's token / the base's | Mean abs r_m | Cue gain, points |
+|---|---|---|---|---|
+| theta(0.25) | 0.820 [0.811, 0.827] | 0.178 / 0.802 | 0.030 | +6.2 |
+| Code 3.1 | 0.405 [0.400, 0.411] | 0.270 / 0.667 | 0.081 | +8.0 |
+| Math 3.0 | 0.271 [0.259, 0.286] | 0.326 / 0.526 | 0.238 | +7.6 |
+| Code 3.0 | 0.240 [0.229, 0.252] | 0.272 / 0.617 | 0.129 | +0.2 |
+| Mix 3.0 | 0.168 [0.159, 0.179] | 0.221 / 0.703 | 0.103 | +6.0 |
+| General 3.0 | 0.162 [0.153, 0.172] | 0.074 / 0.906 | 0.028 | +3.8 |
+| IF 3.0 | 0.039 [0.030, 0.048] | 0.086 / 0.881 | 0.045 | -6.6 |
+| random difference | -0.001 [-0.004, 0.003] | 0.013 / 0.983 | 0.004 | +1.4 |
+
+Math 3.1 itself: mean abs r 0.159; its top token differs from the base's at 151,701 positions (8.0 %).
+
+- Instrument checks passed: theta(0.25) highest, the random difference at 0.
+- S1 held: Code 3.1 changes the same tokens as Math 3.1 (0.405), more than the earlier Math release does (0.271).
+- S2 refuted: where Math 3.1's top token differs from the base's, Code 3.1 keeps the base's token (0.667) more often than it
+  takes Math 3.1's (0.270).
+- S3 held: the IF model is near the random difference.
+- The agreement does not order the models by gain: Code 3.0 (no gain) agrees as much as Math 3.0 and more than Mix and General,
+  which gain.
+- Not a critic: the summed r_m over an answer separates right from wrong base answers at AUROC 0.853 for Math 3.1, the same as
+  the answer's length alone (0.855); computed from the same files, not in `metrics.json`.
+
+## Critic at decoding time: can the base's activations tell early which sample will fail? (board idea-eec971, work-5d5dc3)
+
+Spec `specs/SPEC_critic.md` (predictions C1-C3, written before the activation job). Thesis tested: the rest of the RL gain is
+reliability (result-afc423), so a critic that stops a failing sample early and starts again could replace the weight change.
+Data: the 2,000 stored samples of the cued base on MATH-500 (4 per problem, T 1.0 / top-p 1.0, job
+`abaybektursun-1114-153825-208b`, 1,642 right). No weights changed, no new samples.
+
+**Stage 0, the ceiling** (`analysis/critic_ceiling.py`, `results/critic/ceiling-02/metrics.json`): stop-and-restart with a perfect
+critic that looks once after 1,000 tokens, at most 4 samples, the last kept.
+
+| Critic | Right of 500 | Tokens per problem |
+|---|---|---|
+| none: one sample | 405 | 3,808 |
+| perfect, label-free flag (the sample is in the largest group of agreeing answers, group of 2 or more) | 438.7 | 4,125 |
+| perfect, answer key | 459.2 | 4,013 |
+| RL, one sample (plain) | 456 | 4,675 |
+
+The label-free flag equals correctness on 96.5 % of base samples. `ceiling-01` compared answer strings instead of grouping
+equal answers (the flag then matched correctness on 85.3 %); its numbers are superseded.
+
+**Stage 1, the probe** (`jobs/critic_acts.py`, job `abaybektursun-1114-212139-0b2b`; `analysis/critic_probe.py`,
+`results/critic/probe-02/`): logistic regression on the residual stream of layer 12, 20 or 28 at the position after 250, 500,
+1,000 or 2,000 answer tokens, 5 folds by problem, trained on the label-free flag. The deciding number is the within-problem
+AUROC: over problems with both outcomes among their samples, the share of (good, bad) pairs ordered correctly (0.5 = chance;
+a probe that only knows how hard the problem is scores 0.5).
+
+| After tokens (samples that long) | Best probe, within-problem AUROC [95 %] | Same probe trained on the answer key | Mean log-prob so far | Mean entropy so far |
+|---|---|---|---|---|
+| 250 (1,993) | 0.510 [0.448, 0.572] (L28) | 0.554 [0.498, 0.612] (L12) | 0.555 | 0.566 |
+| 500 (1,854) | 0.542 [0.481, 0.600] (L12) | 0.551 [0.492, 0.610] (L12) | 0.551 | 0.565 |
+| 1,000 (1,441) | 0.571 [0.509, 0.634] (L12) | 0.525 [0.460, 0.592] (L12) | 0.521 | 0.535 |
+| 2,000 (977) | 0.509 [0.430, 0.589] (L20) | 0.510 [0.436, 0.586] (L20) | 0.498 | 0.491 |
+
+110 to 137 problems have both outcomes at a checkpoint. Checks: at the last prompt token (same activations for all samples of
+a problem) the within-problem AUROC is exactly 0.500; probes trained on flags shuffled within problems give 0.49 to 0.50 at 1,000
+tokens; on synthetic activations with a planted signal the script finds it. Positive control on the real activations: across
+problems the probe at the last prompt token predicts the flag at AUROC 0.73 to 0.77 (layers 12 to 28), so the probe can read what is there.
+
+**Offline policy** (stop a sample at 1,000 tokens when its held-out probe score is below a threshold chosen on the training
+folds, at most 4 samples): 414.1 of 500 at 4,345 tokens per problem, against 410.5 for one sample (mean of the 4) at 4,008 and 410.1
+for the same stop rate with scores given to random samples; probe minus random +0.8 points [-0.7, 2.4].
+
+- C1 refuted: 0.571 at 1,000 tokens, below 0.60, and the probe trained on the answer key does no better (0.525).
+- C2 refuted: no rise with the checkpoint (0.51, 0.54, 0.57, 0.51).
+- C3 refuted: 414 of 500, not 420, and not above the random score.
+
+Reading: the base's residual stream encodes how hard the problem is before it writes anything, but not which of its own samples
+of that problem will go wrong, at least not linearly at one position within the first 2,000 tokens. The 34 to 54 problems that a
+perfect critic would add are not reachable by this critic. Limits: linear probe, one position per checkpoint, 2,000 samples, 3
+layers; an interval upper end of 0.63 is not excluded; a critic that reads the finished answer was not tested. `probe-01` (string
+flag, larger C values) gave the same reading: best 0.574 at 1,000 tokens, policy 416.8.
+
+## Wrong steps: do the RL models make the base's own mistakes less likely? (board work-40ec05)
+
+Spec `specs/SPEC_wrongstep.md` (predictions W1-W4). Items: the judged finished-wrong samples of the cued base on MATH-500 with a
+located first wrong step (`results/anatomy/judge-01/labels.json`; 51 of 60 located by `jobs/score_tokens.py --labels`: 21 slip, 16
+wrong plan, 14 misread; the 8 `format` items and 1 other have no quote in the text). Each whole answer is scored under 10
+models (job `abaybektursun-1114-213223-4179`). D_m = [log p_m - log p_base] summed over the wrong step's tokens (median 29
+tokens, median position 0.20 of the answer) minus the same sum over 200 control spans of equal length in the same answer. Readout
+`results/wrongstep/math500-01/metrics.json`, per item `items.json`, written by `analysis/wrongstep.py`. Intervals: bootstrap over items.
+
+| Model | Mean D, nats [95 %] | exp(mean D) | Median D | First 5 tokens of the step [95 %] | Cue gain on MATH-500, points |
+|---|---|---|---|---|---|
+| Mix 3.0 | -0.80 [-1.34, -0.28] | 0.45 | -0.39 | -0.40 [-0.65, -0.17] | +6.0 |
+| Math 3.1 | -0.71 [-1.48, 0.01] | 0.49 | -0.26 | -0.35 [-0.69, -0.03] | +9.4 |
+| Math 3.0 | -0.58 [-1.51, 0.35] | 0.56 | -0.17 | -0.66 [-1.10, -0.24] | +7.6 |
+| Code 3.1 | -0.45 [-0.79, -0.12] | 0.64 | -0.42 | -0.21 [-0.38, -0.06] | +8.0 |
+| Code 3.0 | -0.32 [-0.95, 0.27] | 0.72 | -0.05 | -0.29 [-0.56, -0.02] | +0.2 |
+| General 3.0 | -0.14 [-0.31, 0.00] | 0.87 | -0.01 | -0.07 [-0.16, 0.01] | +3.8 |
+| theta(0.25) | -0.10 [-0.22, 0.03] | 0.91 | -0.12 | -0.03 [-0.09, 0.04] | +6.2 |
+| random difference | 0.00 [-0.02, 0.02] | 1.00 | 0.01 | 0.00 [-0.01, 0.01] | +1.4 |
+| IF 3.0 | +0.17 [-0.07, 0.40] | 1.18 | 0.04 | +0.12 [0.02, 0.23] | -6.6 |
+
+- W1 not met as written: Math 3.1's interval touches 0 (-0.71 [-1.48, 0.01]); on the first 5 tokens of the step it is below 0.
+  The effect sits in a minority of items: the median is -0.26 and 57 % of items are below 0.
+- W2 held: Code 3.0 (-0.32) and IF (+0.17) are above the mean of the four gaining models (-0.63). The order of the 9 models by D
+  follows their cue gain (Spearman -0.67, n 9); Code 3.0 and theta(0.25) are the exceptions in opposite directions.
+- W3 held at the point estimate: relative to other text of the same answer, Math 3.1 is 0.49 times as likely as the base to write
+  the base's wrong step; the measured ratio of first wrong steps per 1,000 tokens is 0.39 (0.015 / 0.038, 'Checks or per-step error').
+- W4 refuted: the base's wrong step is not an unlikely sample. Its log-probability per token under the base is -0.53 against
+  -0.63 for control spans (span minus control +4.1 nats [-0.4, 9.9]). A rule that removes unlikely tokens cannot remove these
+  steps, in line with the truncation results ('Truncation rules at T 1.0').
+- By the judge's label, Math 3.1: misread -1.52 (n 14), slip -0.72 (n 21), wrong plan +0.03 (n 16). RL lowers the base's
+  misreadings and slips, not its wrong plans; RL's own remaining errors are mostly wrong plans ('Slip against wrong plan').
+- Instrument checks passed: the random difference is at 0; theta(0.25) has Math 3.1's sign and a seventh of its size.
+- Two items read: problem 217 sample 1, slip '450 factors into 2 x 3^2 x 5^3' (it is 5^2): Math 3.1 D = -7.1. Problem 21 sample
+  3, slip '1136 sqrt 7 - 88 sqrt 7 = 1148 sqrt 7': D = +5.2, RL does not mark it.
+
+Limits: 51 items, wide intervals; the quote marks where a judge saw the error, and the judges are the team's subagents.
+
+### Screening decoding rules on the same wrong steps (board work-d10ae6, `specs/SPEC_rulescreen.md`)
+
+The same statistic D for rules that need only the base model (`jobs/rule_screen.py`, job `abaybektursun-1114-214538-9e63`;
+`results/wrongstep/rules-01/`, written by `analysis/wrongstep.py <job> rules-01`). 51 items.
+
+| Rule | Mean D, nats [95 %] | exp(mean D) | Median D | misread (14) | slip (21) | wrong plan (16) |
+|---|---|---|---|---|---|---|
+| temperature 0.6 | +0.77 [-0.21, 1.91] | 2.17 | +0.53 | +0.34 | +0.68 | +1.27 |
+| problem contrast, a = 0.5: softmax(1.5 logits - 0.5 logits without the problem) | -0.58 [-1.01, -0.19] | 0.56 | +0.02 | -1.71 | 0.00 | -0.34 |
+| problem contrast, a = 1 | -1.69 [-3.06, -0.53] | 0.18 | +0.08 | -4.62 | +0.07 | -1.44 |
+| the problem stated twice | -0.07 [-0.24, 0.08] | 0.93 | -0.02 | -0.22 | -0.05 | +0.02 |
+
+S1 not refuted (temperature 0.6 raises the wrong steps), S2 held (contrast lowers them, most on misreadings), S3 held weakly.
+The contrast acts on a minority of items: its median D is at 0 and 41 % of items are below 0; slips are untouched. Both
+contrast strengths pass the spec's bar for a generation test.
+
+### Generation test from the prefix before each wrong step (board work-d10ae6, `specs/SPEC_prefixtest.md`)
+
+Predictions G0-G2 were written before the run; the cap was lowered from 6,000 to 4,000 new tokens before the full run. Does a
+rule that lowers the probability of the base's wrong steps (the screen above) produce more right answers when the text continues
+from the token before the wrong step? 51 located wrong steps of the cued base, 6 continuations per prefix (306 per arm),
+T 1.0 / top-p 1.0, grader v3 on prefix + continuation. Job `jobs/prefix_cell.py`, input
+`data/wrongstep/base_cue_judged_rows_v1.jsonl` (the 60 judged rows of job `abaybektursun-1114-153825-208b`), readout
+`analysis/prefixtest.py`, results `results/wrongstep/prefix-01/` (`metrics.json`, `per_prefix.json`, `examples.json`, `run.json`
+with the job ids). Ran on vast.ai (RTX PRO 6000, 96 GB); raw rows are in `runs/<job id>/` on Abay's laptop, not in git. Jobs that
+ran out of GPU memory on the longest prefixes kept their finished batches; the rest ran with `--start` at a smaller batch.
+
+| Arm | Right of 306 | Percent [95 %] | Minus base, points [95 %] | Hit the cap | Right and ended before the cap |
+|---|---|---|---|---|---|
+| base, plain sampling (control) | 99 | 32.4 [23.2, 41.5] | | 170 | 90 |
+| base, problem contrast a = 1 | 104 | 34.0 [24.2, 44.1] | +1.6 [-4.2, 7.8] | 177 | 96 |
+| Math-RL 3.1 continues the base prefix | 132 | 43.1 [32.7, 53.6] | +10.8 [5.6, 16.3] | 167 | 90 |
+
+By the judge's label (difference to base in points, interval over prefixes): contrast: misread (14 prefixes) +10.7 [-1.2, 22.6],
+slip (21) -2.4 [-12.7, 9.5], wrong plan (16) -1.0 [-4.2, 2.1]; RL: misread +20.2 [8.3, 33.3], slip +7.1 [0.0, 13.5], wrong plan
++7.3 [1.0, 14.6].
+
+- G0 held: the base continues to a right answer in 32.4 % of continuations (wrong plans 10.4 %, slips 49.2 %).
+- G1 held by the registered statistic, with a caveat that changes its reading: all of RL's gain is in continuations that hit the
+  cap. RL has 42 capped rows scored right against 9 for the base: it writes a boxed answer, then keeps checking until the cap, and
+  grader v3 scores the last box. Counting only continuations that ended, RL and the base both have 90 right.
+- G2 refuted: contrast minus base is +1.6 points [-4.2, 7.8]. The direction on misreadings matches the screen (27 to 36 right of
+  84) but its interval includes 0, and slips and wrong plans do not move. Cap hits are equal (177 against 170), so the rule does
+  not break the text. Decision of the spec: no MATH-500 cell with this rule.
+- Limit of the test: 55 % of continuations in every arm hit the 4,000-token cap, so more than half of each arm's rows are
+  unfinished text.
+
+### Is the answer already lost before the judged wrong step? (laptop, `analysis/prefix_vs_scratch.py`)
+
+Right rate of the base's continuations from the prefix (table above) against the base's right rate from the start of the same
+problem, in its other three stored samples, counting a from-scratch sample right only if it is right within the same token budget
+(prefix tokens + 4,000). Results `results/wrongstep/prefix_vs_scratch-01/metrics.json`.
+
+| Judge's label | Prefixes | From the start, within budget | From the prefix | Difference, points [95 %] |
+|---|---|---|---|---|
+| all | 51 | 42.5 % | 32.4 % | -10.1 [-19.6, -1.6] |
+| slip | 21 | 47.6 % | 49.2 % | +1.6 [-11.9, 14.3] |
+| misread | 14 | 64.3 % | 32.1 % | -32.1 [-50.0, -16.7] |
+| wrong plan | 16 | 16.7 % | 10.4 % | -6.2 [-19.8, 5.2] |
+
+Before a slip the text is as good as a fresh start: the slip is a chance event at that step. Before a judged misreading half of
+the chance is already gone, so the misreading starts earlier than the sentence the judge quoted. The same numbers for RL
+continuing the base prefix are in the file; they are not comparable in the same way, because 42 of RL's right rows are capped rows
+scored on a box inside the reasoning.
+
 ## Solved examples in context: no gain that survives a second draw or the 328 (shots1, board work-be7af1)
 
 **Correction (2026-11-15 05:20 UTC).** The first draw below gave +5.6 points for RL-written examples (result-6d422d). A second
@@ -1041,76 +1267,6 @@ an H100). Smoke: job abaybektursun-1114-212215-f08c. The RL model was not run: t
 uv run tools/gpu.py submit h100 --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.commit_cue --model base --commit $(git rev-parse HEAD)"
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.commit1 base <job>
 ```
-
-## Reward content test: the five Olmo 3 RL-Zero rewards on MATH-500 (board idea-46b68c, work-069eca)
-
-Spec `specs/SPEC_reward5.md` (predictions R1-R5, written before the jobs). Does the MATH-500 gain over the cued base depend on
-what the RL reward graded? AI2's five Olmo 3 RL-Zero models share the base `allenai/Olmo-3-1025-7B` (names and revisions in
-`jobs/merge_weights.py` `OTHERS`). Cells: `run_cell` on `merge_weights --other <key> --alpha 1 --rounding nearest` (all 355
-tensors identical to the named model in every job), T 1.0 / top-p 1.0, one sample, cap 16,384, grader v3, n = 500, the 3.1
-tokenizer. Readout `results/reward5/readout.json`, written by `analysis/reward5.py`; one run folder
-`results/reward5/<arm>-01/` per cell (`run.json`, `metrics.json`, `merge.json`, `examples.json`). Jobs at commit `3b4ab2a`.
-
-| Model | Cue: right of 500 | Cue minus base cue, points [95 %] | Plain: right of 500 | Tokens per problem (cue) | Relative norm of the weight difference |
-|---|---|---|---|---|---|
-| base (T1, T3) | 410 | | 224 | 3,932 | |
-| Math 3.0 | 448 | +7.6 [4.2, 11.0] | 443 | 4,527 | 0.127 % |
-| Mix 3.0 | 440 | +6.0 [2.6, 9.4] | 372 | 5,203 | 0.090 % |
-| General 3.0 | 429 | +3.8 [0.4, 7.0] | 323 | 3,839 | 0.064 % |
-| Code 3.0 | 411 | +0.2 [-3.4, 3.8] | 360 | 3,069 | 0.151 % |
-| IF 3.0 | 377 | -6.6 [-10.6, -2.6] | 55 | 2,667 | 0.138 % |
-| Math 3.1 (day1_wdiff) | 457 | +9.4 [6.2, 12.6] | 463 | 4,696 | 0.13 % |
-| Code 3.1 (day1_wdiff) | 450 | +8.0 [4.6, 11.2] | 390 | 3,336 | 0.109 % |
-
-Paired bootstrap over problems, 5,000 resamples, seed 0. Other paired differences: Code 3.0 cue minus Math 3.0 cue -7.4
-[-10.8, -4.0]; IF 3.0 cue minus Math 3.0 cue -14.2 [-17.8, -10.8]; Code 3.1 cue minus Code 3.0 cue +7.8 [4.4, 11.2]; Math 3.1
-cue minus Math 3.0 cue +1.8 [-0.4, 4.2].
-
-- R1 held: Math 3.0 with the cue is above the cued base.
-- R2 refuted: the IF model gains nothing. Of its 123 wrong cue answers, 34 have a broken answer line (`Answer: Answer`, or an
-  empty `Answer:`: 24 placeholder, 10 nothing extracted; counted from the rows, 6 read by hand and all 6 had the right value in
-  the text); with all 34 counted right it is 411, level with the base. Plain, the IF model answers at once (median 5 tokens, 55 right).
-- R3 refuted: Code 3.0 with the cue equals the cued base (411), 37 problems below Math 3.0. The 450 of Code 3.1 does not hold for
-  the earlier Code release, although Code 3.0 moved the weights further (0.151 % against 0.109 %).
-- R4: Mix held (-1.6 [-4.4, 1.2]); General refuted at the stated bound (-3.8 [-6.8, -0.8]).
-- R5 held: Math 3.0 plain 443 (+219 over base plain); IF plain 55.
-
-Reading: in the Olmo 3 models the gain follows the share of math in the reward (Math > Mix > General > Code = base > IF). The
-earlier finding that the Code-RL difference gives the math gain (above, `day1_wdiff`) is a property of the 3.1 Code release. The
-model cards do not state what changed between the 3.0 and 3.1 Code runs. No answer of any cell contains an `extra_id` token
-text (the 3.0 tokenizer's `<think>`/`<answer>` ids print that way under the 3.1 tokenizer).
-
-### Step 2: do the models change the same tokens? (`specs/SPEC_reward5_tokens.md`, predictions S1-S3)
-
-`jobs/score_tokens.py` scores the 500 first answers of the cued base (job `abaybektursun-1114-153825-208b`, 405 right; 1,904,493
-answer positions; 465 of 500 answers tokenize to the stored token count) under every model. r_m = log p_m(stored token) - log
-p_base. Readout `results/reward5/tokens-01/metrics.json` (with `examples.json`: two positions with every model's numbers), written by
-`analysis/reward5_tokens.py` from jobs `abaybektursun-1114-191457-f9da` and `abaybektursun-1114-193153-3c4c`. Intervals: bootstrap
-over answers. The Mix model is loaded through `merge_weights --alpha 1` (its own `config.json` names a model type transformers
-does not load; job `abaybektursun-1114-191504-5599` failed on it).
-
-| Model | Pearson r of r_m with r_Math 3.1 [95 %] | Where Math 3.1's top token differs from the base's: share with Math 3.1's token / the base's | Mean abs r_m | Cue gain, points |
-|---|---|---|---|---|
-| theta(0.25) | 0.820 [0.811, 0.827] | 0.178 / 0.802 | 0.030 | +6.2 |
-| Code 3.1 | 0.405 [0.400, 0.411] | 0.270 / 0.667 | 0.081 | +8.0 |
-| Math 3.0 | 0.271 [0.259, 0.286] | 0.326 / 0.526 | 0.238 | +7.6 |
-| Code 3.0 | 0.240 [0.229, 0.252] | 0.272 / 0.617 | 0.129 | +0.2 |
-| Mix 3.0 | 0.168 [0.159, 0.179] | 0.221 / 0.703 | 0.103 | +6.0 |
-| General 3.0 | 0.162 [0.153, 0.172] | 0.074 / 0.906 | 0.028 | +3.8 |
-| IF 3.0 | 0.039 [0.030, 0.048] | 0.086 / 0.881 | 0.045 | -6.6 |
-| random difference | -0.001 [-0.004, 0.003] | 0.013 / 0.983 | 0.004 | +1.4 |
-
-Math 3.1 itself: mean abs r 0.159; its top token differs from the base's at 151,701 positions (8.0 %).
-
-- Instrument checks passed: theta(0.25) highest, the random difference at 0.
-- S1 held: Code 3.1 changes the same tokens as Math 3.1 (0.405), more than the earlier Math release does (0.271).
-- S2 refuted: where Math 3.1's top token differs from the base's, Code 3.1 keeps the base's token (0.667) more often than it
-  takes Math 3.1's (0.270).
-- S3 held: the IF model is near the random difference.
-- The agreement does not order the models by gain: Code 3.0 (no gain) agrees as much as Math 3.0 and more than Mix and General,
-  which gain.
-- Not a critic: the summed r_m over an answer separates right from wrong base answers at AUROC 0.853 for Math 3.1, the same as
-  the answer's length alone (0.855); computed from the same files, not in `metrics.json`.
 
 ## RLN-5 map: where RL still disagrees once the cue is given
 
@@ -2364,6 +2520,101 @@ uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rln
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.seen_test
 ```
 
+## Think-SFT with the cue under the vote rules: 241 of 328, above RL under every rule (hard328 n = 328, MATH-500 n = 500, 4 samples, board work-0a00c2, idea-1d9f26)
+
+Question: Think-SFT (`allenai/Olmo-3-7B-Think-SFT` at `6ff8575`, imitation of reasoning traces: no reward, but training) with
+the opening cue had 219 of 328 in one sample (result-d9d6f3). What does it score under the rules chosen on MATH-500, and is it
+ahead of RL under the same rule? Answer: yes on the 328. Vote over 4: Think-SFT 241 of 328 (73.5 % [68.4, 78.0]) at 40,410
+tokens per problem, RL plain 221 (224 after restart), base + cue 192 (195): Think-SFT minus RL +6.1 points [3.0, 9.5], paired.
+One sample: 212, 212, 211, 201 (mean 209.0) against RL 207, 190, 209, 194 (mean 200.0): +2.7 points [0.4, 5.2] on the
+24-order means. On MATH-500 the vote is 481 of 500 against RL 474: +1.4 points [-0.4, 3.2], not separated; singles 461, 457,
+462, 461 against RL 456 to 464. Spec and predictions, filed before any job finished: `specs/SPEC_thinkvote.md` (commit
+`a1822c8`). T 1.0 / top-p 1.0, cap 16,384, grader v3, no restarts for Think-SFT (its `restart` rows equal the plain rows).
+
+Caveats. (1) Think-SFT is trained on 2.27 M traces: the route uses no reward, not no training. (2) Overlap with its training
+prompts (result-f6a8bc, sameraslan; prompts only, 33 code shards unscanned): 6 of the 328 and 25 of MATH-500 match. Without
+them: hard328 n = 322 vote 235 against RL 215 (+6.2 points), single 207 against 201; MATH-500 n = 475 vote 456 against 450.
+(3) RL and base rows have up to two restarts per sample, Think-SFT none; the comparison above uses the no-restart vote of all
+three, and RL's vote after restart (224) is still 17 below.
+
+| Rule (chosen on MATH-500) | Set | Think-SFT + cue: right, right (24), tokens | RL plain: right, right (24), tokens | base + cue: right, right (24), tokens |
+|---|---|---|---|---|
+| one sample | hard328 | 212, 209.0, 10,137 | 207, 200.0, 9,437 | 161, 158.5, 9,074 |
+| vote over 4 (no restart) | hard328 | 241, , 40,410 | 221, , 37,299 | 192, , 36,902 |
+| sequential vote, at most 3 (`seq3`) | hard328 | 241, 233.2, 26,269 | 216, 212.7, 23,613 | 183, 178.8, 25,601 |
+| sequential vote, at most 4 (`seq4_restart`) | hard328 | 241, 238.9, 30,904 | 224, 218.2, 31,326 | 194, 190.8, 46,317 |
+| sequential vote, at most 4, ties to the shortest (`seq4_restart_short`) | hard328 | 240, 239.5, 30,904 | 222, 220.5, 31,326 | 198, 198.5, 46,317 |
+| vote over 4 after restart, ties to the shortest | hard328 | 239, 239.0, 40,410 | 220, 220.0, 44,108 | 199, 199.0, 55,306 |
+| one sample | MATH-500 | 461, 460.2, 4,900 | 456, 460.0, 4,675 | 405, 410.5, 3,808 |
+| vote over 4 | MATH-500 | 481, 480.8, 19,503 | 474, 474.3, 18,747 | 446, 448.2, 16,034 |
+| sequential vote, at most 4 (`seq4`) | MATH-500 | 481, 480.8, 11,521 | 474, 474.3, 11,098 | 446, 448.2, 11,369 |
+| sequential vote, at most 4, ties to the shortest (`seq4_short`) | MATH-500 | 481, 480.5, 11,521 | 475, 474.5, 11,098 | 451, 452.0, 11,369 |
+
+Right = stored draw order, right (24) = mean over the 24 draw orders, tokens = generated tokens per problem. RL and base rows
+on the 328 are those of `results/day1_3/hard328_*_s4r2-01/` and `results/frontier/hard328-01/` (board work-1a972a), not
+recomputed; MATH-500 rows of `results/frontier/math500-01/`. These are the Think-SFT rows for the deliverable table of "Token
+frontier": the best reward-free configuration on the 328 is Think-SFT + cue with the sequential vote, 241 (238.9 over the
+orders) at 30,904 tokens, against RL's best 224 at 31,326 under the same rule (-6.3 points [-9.5, -3.3] for RL).
+
+Instrument checks. hard328 sample 0 repeats sameraslan's cell on its seeds: 212 right and 89 cap hits against 219 and 89
+(other GPU; inside the 12 allowed). MATH-500 sample 0: 461 against the stored 454. The join of four one-sample jobs was
+tested against one `--samples 4` dry run: the same (problem, sample, attempt, seed) for all 40 rows, and a run with the
+wrong seed offset is refused. Smoke (10 problems): cue ids in the prompt, 355 tensors bit-identical to Think-SFT, 9 of 10.
+
+Predictions scored (`results/thinkvote/scored-01/readout.json`):
+
+- H1, MATH-500 vote over 4, filed blind by the rate and hazard studies: 473.1 [466, 480] and 472.1 [464, 480]. Observed 481:
+  outside both intervals by one problem, and above the 479 that result-bf6124 named as refuting the one-axis claim. Part of
+  the miss is the input: both rules started from the stored single cell (454), and the four singles here have 457 to 462.
+- H2, hard328 vote over 4: observed 241. Rasch with RL's vote shift 238.6 (miss 2.4), Rasch with the base's vote shift 243.8
+  (2.8), mine 238 [228, 250] (3.0, held), point rule from MATH-500 245.9 (4.9), point rule from the 328 234 (7.0). The Rasch
+  rule wins, all five inside sampling noise (binomial sd 8). They were anchored at 219; from the measured single (212) the
+  vote gained 29 problems, more than any rule's gain (15 to 27).
+- hard328 single, the profile study's rules against the mean of four samples (209.0): `profile_corrected` 209.2, profile
+  217.6, L1 201.1, Lc 196.3, P 190.5. The profile rule still wins; the one-axis rules miss low by 8 to 18.
+- H3 (Think-SFT ahead of RL under the vote on the 328 by at least 2 points): held, +6.1 [3.0, 9.5].
+- H4 (RL stays ahead on MATH-500 under the vote): refuted, 481 against 474, not separated.
+- H5 (sequential vote within 1.5 points of the vote at 25 % fewer tokens): held on MATH-500 (480.8 against 480.8, 41 % fewer);
+  refuted on the 328 by the token bar (238.9 against 241, 24 % fewer).
+- H6 (cap hits are unfinished reasoning, not loops): held. Rule A flags 6 of 378 cap hits on the 328.
+
+What the raw rows show (`analysis/thinkvote_read.py`, counts in `scored-01/readout.json`):
+
+- Think-SFT abstains where RL answers wrong. On the 328 it hits the cap on 378 of 1,312 samples (29 %; RL 114, 9 %), and
+  its finished answers are right 88.0 % of the time (RL 66.2 %). A cap hit casts no vote, so the vote is almost pass@4: 241
+  against 244 (RL 221 against 240, base 192 against 207). This is why its vote gains 29 problems and RL's 14.
+- The cap hits are long reasoning that keeps trying cases: median share of distinct lines in the last 6,000 characters 0.99
+  (sample 0), and 86 of the 378 contain more than 20 Chinese characters (RL: 1 of 114). 61 problems hit the
+  cap in both of the first two samples. A higher cap is the untested lever.
+- 13 of the 328 have the Think-SFT vote right and no RL sample right in any attempt (75, 98, 109, 112, 116, 162, 168, 169,
+  199, 232, 289, 369, 392: olympiad, AIME and HMMT problems; on them RL mostly finishes with a wrong answer, e.g. problem 75: Think-SFT 73 in all four samples, RL 234 three times). The reverse set has 5 problems, and
+  Think-SFT hits the cap on 19 of its 20 samples there. Vote right for one model only: Think-SFT 26, RL 6.
+- Its errors on easy MATH-500 problems are mostly the answer line, not the mathematics. Levels 1-2, three samples read by
+  hand: 16 errors = 8 with the right answer in a form grader v3 does not take (`Answer:` then the answer on the next line,
+  `Answer: $Answer`, `137 1/2` for `137 \frac{1}{2}`), 3 cap hits, 5 wrong (problem 18 three times, an Asymptote figure).
+  Over all four samples 16 of its 74 finished wrong answers on MATH-500 end in a line that equals the gold (RL: 0 of 131); on
+  the 328, 4 of 112. Grader v3 is unchanged, so Think-SFT's MATH-500 singles are about 4 problems low per sample; this is the
+  "easy-side" deficit of "Difficulty profiles" in part.
+
+Part B (the stack Think-SFT + RL difference) was not run here: work-3d1e3b claimed it. `jobs/thinkvote_stack.py` (stochastic
+BF16 rounding of sft + scale (rl - base), effective-scale check, selftest on synthetic weights) is in the repository for it.
+
+Jobs (abaybektursun's Modal, H100/H200, one per sample, 5.6 GPU-hours of job time, about 22 USD at Modal's H100 price): hard328 `abaybektursun-1115-000503-1e5f`,
+`-000525-ea4e`, `-014823-ef56`, `-014833-1daa` (seeds 3000000 + 10000 s); MATH-500 `-000512-ee03`, `-014843-85d9`,
+`-000607-0e92`, `-000621-1d7e` (181000000 + 10000 s); smoke `-000018-b6b5`. Three jobs died twice at start under the old
+runner (no rows) and were resubmitted. Raw answers: `runs/<job>/answers.jsonl` in that workspace. Run folders
+`results/thinkvote/{hard328,math500}_sft1_cue_s4-01/` (`run.json`, `metrics.json`, `readout.json`, `rows.jsonl`,
+`examples.json`: one vote right, one wrong), `frontier_{hard328,math500}-01/` (the `--base` slot holds Think-SFT; labels in
+`frontier.md` edited, numbers untouched), `scored-01/`. Commands:
+
+```
+uv run tools/gpu.py submit h100 --hours 2.5 -- "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed <3000000 + 10000 s> --commit $(git rev-parse HEAD)"
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.thinkvote_join --runs runs/<s0> runs/<s1> runs/<s2> runs/<s3> --out runs/thinkvote_hard328_sft1_cue_s4
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_vote --run runs/thinkvote_hard328_sft1_cue_s4 --out studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01 --minus studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/readout.json
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.frontier --base studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01 --rl studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01 --fixed studies/rlneurons/results/frontier/math500-01/chosen.json --out studies/rlneurons/results/thinkvote/frontier_hard328-01
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.thinkvote_read --out studies/rlneurons/results/thinkvote/scored-01
+```
+
 ## How to run
 
 Laptop checks (no GPU, no weights):
@@ -2590,3 +2841,38 @@ bootstrap, 5,000 resamples, seed 0). Tokens = generated tokens per problem, rest
   sample (207 at 9,437; mean of the four samples 200.0). The nine rules chosen on MATH-500, scored once here:
   `results/frontier/hard328-01/frontier.md` (the command at the end of "Token frontier").
 - The base loses 39 % of its single-sample accuracy from MATH-500 to the 328 (81.0 to 49.1 %), RL 31 % (91.2 to 63.1 %).
+
+## Mixed-model vote on the 328: do two models' samples vote better together? (hard328, n = 328, laptop, board work-0d465a)
+
+Question: the vote's remaining errors are problems where a model never writes the right answer ("The 328 with four samples
+and restarts"). Do RL and Think-SFT fail on different problems, so that a vote over two samples of each beats four of
+either? Answer: no. Four Think-SFT samples alone are the best row: 241 of 328 (73.5 %) at 40,410 tokens per problem; two RL
+plus two Think-SFT have 228.1, 3.9 points [1.8, 6.2] below it, and all eight samples have 239.0 (-0.6 [-2.7, +1.7]).
+
+`analysis/mixvote.py` (plurality vote of `analysis/day1_vote.py`, grader v3 as stored, attempt 0 of each sample, T 1.0 /
+top-p 1.0, cap 16,384). Every way of taking the stated samples from each model is scored, in both interleaved orders; the
+table has the mean and the range. Rows: RL plain `abaybektursun-1114-200505-5ff2`, base + cue `-200457-e8e6` (work-1a972a),
+Think-SFT + cue `abaybektursun-1115-000503-1e5f`, `-000525-ea4e`, `-014823-ef56`, `-014833-1daa` (one sample each, work-0a00c2;
+single right 212, 212, 211, 201). Readout `results/mixvote/hard328-01/readout.json`. Paired bootstrap, 5,000 resamples, seed 0.
+
+| Samples | Right of 328 (mean) | Range over combinations | Tokens per problem |
+|---|---|---|---|
+| 1 base + cue | 158.5 | 152 to 161 | 9,225 |
+| 1 RL | 200.0 | 190 to 209 | 9,325 |
+| 1 Think-SFT + cue | 209.0 | 201 to 212 | 10,103 |
+| 4 base + cue | 192 | | 36,902 |
+| 4 RL | 221 | | 37,299 |
+| 4 Think-SFT + cue | 241 | | 40,410 |
+| 2 RL + 2 Think-SFT | 228.1 | 214 to 237 | 38,855 |
+| 2 RL + 2 base | 207.6 | 193 to 221 | 37,101 |
+| 2 Think-SFT + 2 base | 220.8 | 210 to 233 | 38,656 |
+| 4 RL + 4 Think-SFT | 239.0 | 238 to 240 | 77,710 |
+| 4 Think-SFT + 4 base | 238.0 | 237 to 239 | 77,312 |
+
+- Think-SFT (no reward) minus RL: +2.7 points [0.4, 5.2] on one sample (mean of four each), +6.1 [3.0, 9.5] under the vote
+  over 4. The vote helps Think-SFT more (+32 problems) than RL (+21). Under the vote Think-SFT alone is right on 26 problems
+  where RL is wrong, RL alone on 6; both 215, neither 81.
+- A mixed vote lands between its two models every time (2 RL + 2 Think-SFT: +2.2 [0.3, 4.2] over 4 RL, -3.9 [-6.2, -1.8]
+  under 4 Think-SFT). RL adds almost no problems that Think-SFT misses, so mixing dilutes the better model.
+- Caveats: Think-SFT's training prompts match 6 of the 328 (board result-f6a8bc; the lead holds without them); its samples
+  have no restart rows; the vote's tie rule prefers the earlier sample, hence both orders.
