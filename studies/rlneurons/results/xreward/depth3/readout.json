@@ -1,0 +1,652 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_depth3.md",
+ "set": "hard328, n 328",
+ "settings": "cue, T 1.0 / top-p 1.0, cap 16,384, grader v3 (score_v3 of run_cell)",
+ "seed_rule": "3000000 + 10000 * sample + problem index",
+ "differences": "per problem, mean over the cell's samples minus mean over the reference's samples; points of 328; 95 % interval from 10000 resamples of the problems (numpy seed 0); 'problems' = points * 3.28",
+ "sources": {
+  "base_cue": "/home/abay/Projects/iterate-hack-depth3/studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl",
+  "top8x1.5_math31": "/home/abay/Projects/iterate-hack-depth3/studies/rlneurons/results/xreward/dial15_s4_vs_base_cue-01/rows.jsonl",
+  "top8x1.5_L0-10_math31 sample 0": "runs/abaybektursun-1115-105312-7e19",
+  "top8x1.5_L11-21_math31 sample 0": "runs/abaybektursun-1115-105324-5f61",
+  "top8x1.5_L22-31_math31 sample 0": "runs/abaybektursun-1115-105335-a886",
+  "rand8x1.5_math31 sample 0": "runs/abaybektursun-1115-090241-0229",
+  "top8x1.5_L0-10_math31 sample 1": [
+   "runs/abaybektursun-1115-122708-c6c1",
+   "runs/abaybektursun-1115-122720-ad28"
+  ],
+  "top8x1.5_L0-10_math31 sample 2": [
+   "runs/abaybektursun-1115-122733-bc4c",
+   "runs/abaybektursun-1115-122746-2593"
+  ],
+  "top8x1.5_L0-10_math31 sample 3": [
+   "runs/abaybektursun-1115-122759-39f3",
+   "runs/abaybektursun-1115-122810-7b2d"
+  ],
+  "rand8x1.5_L0-10_math31 sample 1": [
+   "runs/abaybektursun-1115-122822-c211",
+   "runs/abaybektursun-1115-122835-f7eb"
+  ],
+  "top8x1.5_d2-8_math31 sample 1": [
+   "runs/abaybektursun-1115-122847-824c",
+   "runs/abaybektursun-1115-122859-b197"
+  ],
+  "top8x1.5_L11-21_math31 sample 1": [
+   "runs/abaybektursun-1115-122912-8aec",
+   "runs/abaybektursun-1115-122924-d28b"
+  ],
+  "top8x1.5_L22-31_math31 sample 1": [
+   "runs/abaybektursun-1115-122936-1b30",
+   "runs/abaybektursun-1115-122949-e563"
+  ]
+ },
+ "cells": {
+  "base_cue": {
+   "samples": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "right": [
+    161,
+    161,
+    152,
+    160
+   ],
+   "right_mean": 158.5,
+   "cap_hits": [
+    71,
+    66,
+    81,
+    68
+   ],
+   "cap_hits_mean": 71.5,
+   "right_per_finished": 0.618,
+   "cap_hits_right": 4
+  },
+  "top8x1.5_math31": {
+   "samples": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "right": [
+    207,
+    198,
+    199,
+    197
+   ],
+   "right_mean": 200.25,
+   "cap_hits": [
+    20,
+    14,
+    20,
+    22
+   ],
+   "cap_hits_mean": 19.0,
+   "right_per_finished": 0.648,
+   "cap_hits_right": 9,
+   "minus_base_cue": {
+    "reference": "base_cue",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": 12.73,
+     "interval95": [
+      10.21,
+      15.4
+     ],
+     "problems": 41.75
+    },
+    "cap": {
+     "points": -16.01,
+     "interval95": [
+      -19.13,
+      -13.03
+     ],
+     "problems": -52.5
+    }
+   },
+   "minus_random": {
+    "reference": "rand8x1.5_math31",
+    "reference_samples": [
+     0
+    ],
+    "right": {
+     "points": 12.58,
+     "interval95": [
+      8.92,
+      16.39
+     ],
+     "problems": 41.25
+    },
+    "cap": {
+     "points": -16.77,
+     "interval95": [
+      -21.19,
+      -12.58
+     ],
+     "problems": -55.0
+    }
+   }
+  },
+  "top8x1.5_L0-10_math31": {
+   "samples": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "right": [
+    184,
+    186,
+    180,
+    184
+   ],
+   "right_mean": 183.5,
+   "cap_hits": [
+    98,
+    89,
+    95,
+    86
+   ],
+   "cap_hits_mean": 92.0,
+   "right_per_finished": 0.778,
+   "cap_hits_right": 14,
+   "minus_base_cue": {
+    "reference": "base_cue",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": 7.62,
+     "interval95": [
+      5.34,
+      9.98
+     ],
+     "problems": 25.0
+    },
+    "cap": {
+     "points": 6.25,
+     "interval95": [
+      3.58,
+      9.07
+     ],
+     "problems": 20.5
+    }
+   },
+   "minus_random": {
+    "reference": "rand8x1.5_L0-10_math31",
+    "reference_samples": [
+     1
+    ],
+    "right": {
+     "points": 6.55,
+     "interval95": [
+      2.82,
+      10.29
+     ],
+     "problems": 21.5
+    },
+    "cap": {
+     "points": 6.71,
+     "interval95": [
+      2.74,
+      10.75
+     ],
+     "problems": 22.0
+    }
+   },
+   "minus_top8x1.5_math31": {
+    "reference": "top8x1.5_math31",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": -5.11,
+     "interval95": [
+      -7.24,
+      -3.05
+     ],
+     "problems": -16.75
+    },
+    "cap": {
+     "points": 22.26,
+     "interval95": [
+      18.98,
+      25.53
+     ],
+     "problems": 73.0
+    }
+   },
+   "minus_random_sample_1": {
+    "reference": "rand8x1.5_L0-10_math31",
+    "right": {
+     "points": 7.32,
+     "interval95": [
+      3.35,
+      11.28
+     ],
+     "problems": 24.0
+    },
+    "cap": {
+     "points": 5.79,
+     "interval95": [
+      0.91,
+      10.67
+     ],
+     "problems": 19.0
+    }
+   }
+  },
+  "top8x1.5_L11-21_math31": {
+   "samples": [
+    0,
+    1
+   ],
+   "right": [
+    183,
+    179
+   ],
+   "right_mean": 181.0,
+   "cap_hits": [
+    49,
+    41
+   ],
+   "cap_hits_mean": 45.0,
+   "right_per_finished": 0.64,
+   "cap_hits_right": 3,
+   "minus_base_cue": {
+    "reference": "base_cue",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": 6.86,
+     "interval95": [
+      3.96,
+      9.83
+     ],
+     "problems": 22.5
+    },
+    "cap": {
+     "points": -8.08,
+     "interval95": [
+      -11.28,
+      -4.95
+     ],
+     "problems": -26.5
+    }
+   },
+   "minus_random": {
+    "reference": "rand8x1.5_math31",
+    "reference_samples": [
+     0
+    ],
+    "right": {
+     "points": 6.71,
+     "interval95": [
+      2.59,
+      10.98
+     ],
+     "problems": 22.0
+    },
+    "cap": {
+     "points": -8.84,
+     "interval95": [
+      -13.41,
+      -4.27
+     ],
+     "problems": -29.0
+    }
+   },
+   "minus_top8x1.5_math31": {
+    "reference": "top8x1.5_math31",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": -5.87,
+     "interval95": [
+      -8.77,
+      -3.12
+     ],
+     "problems": -19.25
+    },
+    "cap": {
+     "points": 7.93,
+     "interval95": [
+      5.34,
+      10.67
+     ],
+     "problems": 26.0
+    }
+   }
+  },
+  "top8x1.5_L22-31_math31": {
+   "samples": [
+    0,
+    1
+   ],
+   "right": [
+    166,
+    161
+   ],
+   "right_mean": 163.5,
+   "cap_hits": [
+    57,
+    55
+   ],
+   "cap_hits_mean": 56.0,
+   "right_per_finished": 0.601,
+   "cap_hits_right": 1,
+   "minus_base_cue": {
+    "reference": "base_cue",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": 1.52,
+     "interval95": [
+      -1.07,
+      4.12
+     ],
+     "problems": 5.0
+    },
+    "cap": {
+     "points": -4.73,
+     "interval95": [
+      -7.24,
+      -2.13
+     ],
+     "problems": -15.5
+    }
+   },
+   "minus_random": {
+    "reference": "rand8x1.5_math31",
+    "reference_samples": [
+     0
+    ],
+    "right": {
+     "points": 1.37,
+     "interval95": [
+      -2.44,
+      5.19
+     ],
+     "problems": 4.5
+    },
+    "cap": {
+     "points": -5.49,
+     "interval95": [
+      -9.45,
+      -1.52
+     ],
+     "problems": -18.0
+    }
+   },
+   "minus_top8x1.5_math31": {
+    "reference": "top8x1.5_math31",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": -11.2,
+     "interval95": [
+      -14.25,
+      -8.23
+     ],
+     "problems": -36.75
+    },
+    "cap": {
+     "points": 11.28,
+     "interval95": [
+      8.31,
+      14.33
+     ],
+     "problems": 37.0
+    }
+   }
+  },
+  "rand8x1.5_math31": {
+   "samples": [
+    0
+   ],
+   "right": [
+    159
+   ],
+   "right_mean": 159.0,
+   "cap_hits": [
+    74
+   ],
+   "cap_hits_mean": 74.0,
+   "right_per_finished": 0.626,
+   "cap_hits_right": 2,
+   "minus_base_cue": {
+    "reference": "base_cue",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": 0.15,
+     "interval95": [
+      -3.2,
+      3.43
+     ],
+     "problems": 0.5
+    },
+    "cap": {
+     "points": 0.76,
+     "interval95": [
+      -3.05,
+      4.57
+     ],
+     "problems": 2.5
+    }
+   },
+   "minus_top8x1.5_math31": {
+    "reference": "top8x1.5_math31",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": -12.58,
+     "interval95": [
+      -16.39,
+      -9.07
+     ],
+     "problems": -41.25
+    },
+    "cap": {
+     "points": 16.77,
+     "interval95": [
+      12.58,
+      21.19
+     ],
+     "problems": 55.0
+    }
+   }
+  },
+  "rand8x1.5_L0-10_math31": {
+   "samples": [
+    1
+   ],
+   "right": [
+    162
+   ],
+   "right_mean": 162.0,
+   "cap_hits": [
+    70
+   ],
+   "cap_hits_mean": 70.0,
+   "right_per_finished": 0.628,
+   "cap_hits_right": 0,
+   "minus_base_cue": {
+    "reference": "base_cue",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": 1.07,
+     "interval95": [
+      -2.36,
+      4.5
+     ],
+     "problems": 3.5
+    },
+    "cap": {
+     "points": -0.46,
+     "interval95": [
+      -4.34,
+      3.51
+     ],
+     "problems": -1.5
+    }
+   },
+   "minus_top8x1.5_math31": {
+    "reference": "top8x1.5_math31",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": -11.66,
+     "interval95": [
+      -15.47,
+      -8.0
+     ],
+     "problems": -38.25
+    },
+    "cap": {
+     "points": 15.55,
+     "interval95": [
+      11.59,
+      19.82
+     ],
+     "problems": 51.0
+    }
+   }
+  },
+  "top8x1.5_d2-8_math31": {
+   "samples": [
+    1
+   ],
+   "right": [
+    183
+   ],
+   "right_mean": 183.0,
+   "cap_hits": [
+    69
+   ],
+   "cap_hits_mean": 69.0,
+   "right_per_finished": 0.707,
+   "cap_hits_right": 1,
+   "minus_base_cue": {
+    "reference": "base_cue",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": 7.47,
+     "interval95": [
+      4.42,
+      10.67
+     ],
+     "problems": 24.5
+    },
+    "cap": {
+     "points": -0.76,
+     "interval95": [
+      -4.65,
+      3.12
+     ],
+     "problems": -2.5
+    }
+   },
+   "minus_random": {
+    "reference": "rand8x1.5_math31",
+    "reference_samples": [
+     0
+    ],
+    "right": {
+     "points": 7.32,
+     "interval95": [
+      3.05,
+      11.59
+     ],
+     "problems": 24.0
+    },
+    "cap": {
+     "points": -1.52,
+     "interval95": [
+      -6.1,
+      3.35
+     ],
+     "problems": -5.0
+    }
+   },
+   "minus_top8x1.5_math31": {
+    "reference": "top8x1.5_math31",
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": -5.26,
+     "interval95": [
+      -8.31,
+      -2.36
+     ],
+     "problems": -17.25
+    },
+    "cap": {
+     "points": 15.24,
+     "interval95": [
+      11.2,
+      19.51
+     ],
+     "problems": 50.0
+    }
+   }
+  }
+ }
+}

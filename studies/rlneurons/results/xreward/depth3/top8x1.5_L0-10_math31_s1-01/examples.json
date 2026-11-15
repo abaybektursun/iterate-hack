@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 3969,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " approach by considering the equations for \\( Q(x) \\):\n\nFor \\( x = 16 \\):\n\\[\n-2(16)^2 + 16c + d = 54 \\implies -512 + 16c + d = 54 \\implies 16c + d = 566 \\quad \\text{(3)}\n\\]\n\nFor \\( x = 20 \\):\n\\[\n-2(20)^2 + 20c + d = 53 \\implies -800 + 20c + d = 53 \\implies 20c + d = 853 \\quad \\text{(4)}\n\\]\n\nSubtracting equation (3) from equation (4):\n\\[\n4c = 287 \\implies c = \\frac{287}{4}\n\\]\n\nSubstituting \\( c = \\frac{287}{4} \\) back into equation (3):\n\\[\n16\\left(\\frac{287}{4}\\right) + d = 566 \\implies 1148 + d = 566 \\implies d = -582\n\\]\n\nNow, we need to find \\( P(0) + Q(0) \\):\n\\[\nP(0) = b \\quad \\text{and} \\quad Q(0) = d\n\\]\n\\[\nP(0) + Q(0) = b + d\n\\]\n\nFrom the equations, we find:\n\\[\nb = 1358 \\quad \\text{and} \\quad d = -582\n\\]\n\\[\nP(0) + Q(0) = 1358 - 582 = 116\n\\]\n\nThus, the final answer is:\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 29,
+  "seed": 3010029,
+  "gold": "244",
+  "extracted_v3": "22",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 14486,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "is 2.\n\n### Step 2: Generalize the Formula\nFrom the smaller cases, we observe that the number of bounded regions can be generalized as:\n\n\\[\n\\text{Number of bounded regions} = 2(m + n) - 2\n\\]\n\nThis formula can be derived from the observation that each pair of segments can intersect in at most one point, and these intersections contribute to the bounded regions between the parallel lines.\n\n### Step 3: Apply the Formula to \\( m = 7 \\) and \\( n = 5 \\)\nUsing the formula \\( 2(m + n) - 2 \\):\n\n\\[\n\\text{Number of bounded regions} = 2(7 + 5) - 2\n\\]\n\n\\[\n\\text{Number of bounded regions} = 2 \\times 12 - 2\n\\]\n\n\\[\n\\text{Number of bounded regions} = 24 - 2 = 22\n\\]\n\n### Final Answer\nThe number of bounded regions formed by connecting 7 points on \\( \\ell_A \\) and 5 points on \\( \\ell_B \\) is:\n\n\\[\n\\boxed{22}\n\\]"
+ }
+}
