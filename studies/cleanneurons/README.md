@@ -30,6 +30,7 @@ All code runs from the repository root (`python -m studies.cleanneurons.<folder>
 | `results/gen/readout_t06_real02.json`, `readout_t06_seed2.json`, `results/gen/*r2_*-01/`, `base_t06s2-01/` | Part G with the run-2 neuron sets: seed 1, seed 2 and T 1.0 cells. |
 | `analysis/gen_readout.py` | Part G: an edited run against the unedited run, problem by problem (points, interval, loops, tokens, examples). |
 | `tools/finding_rl_every_neuron.py`, `tools/finding_neurons_you_can_describe.py` | The site pages of Part T2 and Part I (`/finding/rl-every-neuron`, `/finding/neurons-you-can-describe`, tiles on `/findings`). |
+| `tools/finding_loop_neurons.py` | The site page of Parts L and G (`/finding/loop-neurons`): one dot per MATH-500 problem, a switch that turns the loop neurons off. `python3 tools/finding_loop_neurons.py` checks its numbers against the artifacts. |
 | `results/transplant/curve-01/` | Part T full run: `metrics.json`, `profile.json`, `examples.json`, `readout_after_cue.json`, `run.json`, edit files of four arms. |
 
 ## How to run
