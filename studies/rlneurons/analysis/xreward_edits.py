@@ -27,13 +27,13 @@ NEW = {
     "bulk_math31": ("abaybektursun-1114-221100-1e31", "--recipe bulk --other rl_math"),
     "top1_math31": ("abaybektursun-1115-000358-d11a", "--recipe top8 --k 1 --other math31"),                 # amendment 3
     "top64_math31": ("abaybektursun-1115-003755-b90d", "--recipe top8 --k 64 --other math31"),
-    "top8attn_math31": ("abaybektursun-1115-003804-5998", "--recipe top8 --mods q,k,v,o --other math31"),
-    "top8mlp_math31": ("abaybektursun-1115-003813-ce44", "--recipe top8 --mods gate,up,down --other math31"),
-    "top8x2_math31": ("abaybektursun-1115-003822-f8fa", "--recipe top8 --scale 2 --other math31"),
-    "proj_math31_code30": ("abaybektursun-1115-003833-bdc1", "--recipe proj --donor code30 --other math31"),
-    "projc_math31_code30": ("abaybektursun-1115-003842-958e", "--recipe projc --donor code30 --other math31"),
-    "top8_code30": ("abaybektursun-1115-003851-aaf4", "--recipe top8 --other code30"),
-    "rbulk_math31": ("abaybektursun-1115-003900-7ad7", "--recipe rbulk --other math31"),                      # amendment 4
+    "top8attn_math31": ("abaybektursun-1115-012835-a431", "--recipe top8 --mods q,k,v,o --other math31"),
+    "top8mlp_math31": ("abaybektursun-1115-012846-905e", "--recipe top8 --mods gate,up,down --other math31"),
+    "top8x2_math31": ("abaybektursun-1115-012855-d7ed", "--recipe top8 --scale 2 --other math31"),
+    "proj_math31_code30": ("abaybektursun-1115-012905-8f73", "--recipe proj --donor code30 --other math31"),
+    "projc_math31_code30": ("abaybektursun-1115-012915-6618", "--recipe projc --donor code30 --other math31"),
+    "top8_code30": ("abaybektursun-1115-012925-b15d", "--recipe top8 --other code30"),
+    "rbulk_math31": ("abaybektursun-1115-012935-2836", "--recipe rbulk --other math31"),                      # amendment 4
 }
 REFS = {"base_cue_T1": OLD["base_cue_T1"][0], "rl_plain_T1": OLD["rl_plain_T1"][0], "rl_cue_T1": OLD["rl_cue_T1"][0],
         "theta0.25_cue": WDIFF["theta0.25_cue"][0], "theta0.5_cue": WDIFF["theta0.5_cue"][0], "code1_cue": WDIFF["code1_cue"][0]}
@@ -56,7 +56,7 @@ def main():
             c, e = m["config"], json.loads((RUNS / job / "edit.json").read_text())
             assert c["set"] == "hard328" and c["prompt"] == "cue" and c["temperature"] == c["top_p"] == 1.0 and c["seed"] == 3000000, (arm, c)
             ea = e["args"]
-            want = f"--recipe {ea['recipe']}" + "".join(f" --{f} {ea[f]}" for f, dflt in (("k", 8), ("mods", None), ("scale", 1.0), ("donor", None)) if ea.get(f) != dflt) + f" --other {ea['other']}"
+            want = f"--recipe {ea['recipe']}" + "".join(f" --{f} {ea[f]}" for f, dflt in (("k", 8), ("mods", None), ("scale", 1.0), ("donor", None)) if ea.get(f) not in (None, dflt)) + f" --other {ea['other']}"
             assert c["model_label"] == arm and want == NEW[arm][1], (arm, c["model_label"], want)
             cells[arm]["edit"] = {"recipe": e["recipe"], "other": ea["other"], "donor": ea.get("donor"), "mods": ea.get("mods"), "scale": ea.get("scale", 1.0), "k": e["k"],
                                   "rounding": e["rounding"], "n_edited": e["n_edited"], **e["totals"]}
