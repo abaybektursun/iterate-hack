@@ -83,7 +83,7 @@ def main():
     data["hold_words"], data["wrap_words"] = list(HOLD), list(WRAP)
     html = (STUDY / "analysis" / "page_template.html").read_text()
     assert html.count("/*DATA*/") == 1
-    payload = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
+    payload = json.dumps(data, ensure_ascii=True).replace("</", "<\\/")   # ASCII only: tokens that are half a character decode to U+FFFD
     (res / "workspace-diff.html").write_text(html.replace("/*DATA*/", payload))
     print(f"wrote {res}/workspace-diff.html ({len(payload) // 1024} KB of data, {len(data['examples'])} examples)")
 

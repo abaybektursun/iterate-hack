@@ -211,7 +211,8 @@ footer code { font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere
   function get(path) { return path.split(".").reduce(function (o, k) { return o[k]; }, D); }
   function f2(x) { return x.toFixed(2); }
   var HOLD = new Set(D.hold_words), WRAP = new Set(D.wrap_words);
-  function show(t) { return t.replace(/\n/g, "↵").replace(/^ /, "·"); }
+  function clean(t) { return t.replace(/�/g, "▯"); }
+  function show(t) { return clean(t).replace(/\n/g, "↵").replace(/^ /, "·"); }
 
   document.querySelectorAll("[data-f]").forEach(function (e) { e.textContent = f2(get(e.getAttribute("data-f"))); });
   var near = D.lead.rl.slice(2, 9).reduce(function (a, b) { return a + b; }, 0) / 7;
@@ -330,7 +331,7 @@ footer code { font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere
     var box = $("text"); box.textContent = ""; spans = [];
     ex.tokens.forEach(function (t, i) {
       var hb = has(t.b, HOLD), hr = has(t.r, HOLD);
-      var sp = el("span", "tok" + (hb && hr ? " h-both" : hr ? " h-rl" : hb ? " h-base" : ""), t.t.replace(/\n+/g, "↵\n"));
+      var sp = el("span", "tok" + (hb && hr ? " h-both" : hr ? " h-rl" : hb ? " h-base" : ""), clean(t.t).replace(/\n+/g, "↵\n"));
       sp.addEventListener("click", function () { select(i, false); });
       sp.addEventListener("mouseenter", function () { select(i, false); });
       box.appendChild(sp); spans.push(sp);
