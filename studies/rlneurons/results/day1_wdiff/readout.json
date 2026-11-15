@@ -1,0 +1,704 @@
+{
+ "spec": "studies/rlneurons/specs/DAY1_wdiff_2026-11-14.md",
+ "grader": "rln4_lib.grade_v3",
+ "n": 500,
+ "check": {
+  "job": "abaybektursun-1114-152849-c7c6",
+  "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.merge_weights --other rl --alpha 1 --rounding nearest --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label theta1 --prompt plain --set math500 --temperature 1.0 --top-p 1.0 --seed 45000000 --n 50",
+  "ours": {
+   "n": 50,
+   "right_v3": 47,
+   "cap_hits": 1,
+   "loops_A": 0,
+   "mean_generated_tokens": 4401.9
+  },
+  "T2_first50": {
+   "n": 50,
+   "right_v3": 47,
+   "cap_hits": 0,
+   "loops_A": 0,
+   "mean_generated_tokens": 4018.4
+  },
+  "rule": "right within 6 and cap hits within 4",
+  "pass": true,
+  "merge_identity": {
+   "exact": 355,
+   "tensors": 355
+  },
+  "identical_texts_vs_T2": 1,
+  "run_folder": "studies/rlneurons/results/day1_wdiff/check_theta1_plain_n50-01"
+ },
+ "cells": {
+  "T1_base_cue": {
+   "n": 500,
+   "right_v3": 410,
+   "cap_hits": 27,
+   "loops_A": 0,
+   "mean_generated_tokens": 3932.0,
+   "seed_base": 41000000,
+   "job_id": null,
+   "a": 0.0,
+   "answers": "s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl",
+   "word_salad_tails": 0,
+   "word_salad_tails_right_v3": 0
+  },
+  "T2_rl_plain": {
+   "n": 500,
+   "right_v3": 463,
+   "cap_hits": 6,
+   "loops_A": 0,
+   "mean_generated_tokens": 4692.9,
+   "seed_base": 45000000,
+   "job_id": null,
+   "a": 1.0,
+   "answers": "s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t2-01/t2/T2.jsonl",
+   "word_salad_tails": 2,
+   "word_salad_tails_right_v3": 1
+  },
+  "T3_base_plain": {
+   "n": 500,
+   "right_v3": 224,
+   "cap_hits": 8,
+   "loops_A": 0,
+   "mean_generated_tokens": 2106.9,
+   "seed_base": 47000000,
+   "job_id": null,
+   "a": 0.0,
+   "answers": "s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t3-01/t3/T3.jsonl",
+   "word_salad_tails": 3,
+   "word_salad_tails_right_v3": 0
+  },
+  "theta0.5_cue": {
+   "n": 500,
+   "right_v3": 452,
+   "cap_hits": 22,
+   "loops_A": 0,
+   "mean_generated_tokens": 4625.9,
+   "seed_base": 61000000,
+   "job_id": "abaybektursun-1114-152855-683b",
+   "a": 0.5,
+   "effective_a": 0.5000255781511275,
+   "norm_ratio_after_rounding": 0.6207591698550871,
+   "rounding": "stochastic",
+   "answers": "runs/abaybektursun-1114-152855-683b/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_wdiff/theta0.5_cue-01",
+   "hand_read_right_of_20": [],
+   "right_corrected": 452,
+   "word_salad_tails": 1,
+   "word_salad_tails_right_v3": 1
+  },
+  "random_cue": {
+   "n": 500,
+   "right_v3": 417,
+   "cap_hits": 23,
+   "loops_A": 0,
+   "mean_generated_tokens": 3943.7,
+   "seed_base": 69000000,
+   "job_id": "abaybektursun-1114-153047-6429",
+   "a": null,
+   "effective_a": 0.00017463582046154625,
+   "norm_ratio_after_rounding": 1.017789889041236,
+   "rounding": "nearest",
+   "answers": "runs/abaybektursun-1114-153047-6429/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_wdiff/random_cue-01",
+   "hand_read_right_of_20": [
+    [
+     48,
+     "\\frac{3}{2}",
+     "'So the answer is 3/2.' then 'Answer: $Answer (without quotes)' (broken marker, v3 reads '$Answer')"
+    ],
+    [
+     384,
+     "15x - 80",
+     "'Answer: $Answer 15x - 80 15x - 80' (v3 keeps the placeholder text)"
+    ],
+    [
+     456,
+     "-2,1",
+     "'\\boxed{-2} \\text{ and } \\boxed{1}' (v3 reads only the last box)"
+    ]
+   ],
+   "right_corrected": 420,
+   "word_salad_tails": 0,
+   "word_salad_tails_right_v3": 0
+  },
+  "code_plain": {
+   "n": 500,
+   "right_v3": 390,
+   "cap_hits": 4,
+   "loops_A": 0,
+   "mean_generated_tokens": 3065.9,
+   "seed_base": 67000000,
+   "job_id": "abaybektursun-1114-153052-5013",
+   "a": null,
+   "effective_a": 1.0,
+   "norm_ratio_after_rounding": 1.0,
+   "rounding": "nearest",
+   "answers": "runs/abaybektursun-1114-153052-5013/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_wdiff/code_plain-01",
+   "hand_read_right_of_20": [
+    [
+     75,
+     "\\frac{11}{36}",
+     "'Thus, the probability that the product is a multiple of 5 is 11/36.' (prose, no marker)"
+    ],
+    [
+     284,
+     "3 \\pm 2 \\sqrt{2}",
+     "'The final answer is 3 + 2\\sqrt{2},\\ 3 - 2\\sqrt{2}.' (both roots listed)"
+    ]
+   ],
+   "right_corrected": 392,
+   "word_salad_tails": 0,
+   "word_salad_tails_right_v3": 0
+  },
+  "theta1.5_cue": {
+   "n": 500,
+   "right_v3": 453,
+   "cap_hits": 4,
+   "loops_A": 0,
+   "mean_generated_tokens": 4862.2,
+   "seed_base": 63000000,
+   "job_id": "abaybektursun-1114-153057-45e7",
+   "a": 1.5,
+   "effective_a": 1.5000231322303914,
+   "norm_ratio_after_rounding": 1.5445934198720217,
+   "rounding": "stochastic",
+   "answers": "runs/abaybektursun-1114-153057-45e7/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_wdiff/theta1.5_cue-01",
+   "hand_read_right_of_20": [],
+   "right_corrected": 453,
+   "word_salad_tails": 34,
+   "word_salad_tails_right_v3": 12
+  },
+  "theta0.25_cue": {
+   "n": 500,
+   "right_v3": 441,
+   "cap_hits": 13,
+   "loops_A": 1,
+   "mean_generated_tokens": 4036.3,
+   "seed_base": 60000000,
+   "job_id": "abaybektursun-1114-153102-b029",
+   "a": 0.25,
+   "effective_a": 0.2500192231198832,
+   "norm_ratio_after_rounding": 0.4206232551139476,
+   "rounding": "stochastic",
+   "answers": "runs/abaybektursun-1114-153102-b029/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_wdiff/theta0.25_cue-01",
+   "hand_read_right_of_20": [
+    [
+     121,
+     "6",
+     "'The answer is x = 6' (prose, no marker)"
+    ],
+    [
+     284,
+     "3 \\pm 2 \\sqrt{2}",
+     "'\\boxed{3 + 2\\sqrt{2}} \\text{ and } \\boxed{3 - 2\\sqrt{2}}' (v3 reads only the last box)"
+    ]
+   ],
+   "right_corrected": 443,
+   "word_salad_tails": 2,
+   "word_salad_tails_right_v3": 0
+  },
+  "theta0.75_cue": {
+   "n": 500,
+   "right_v3": 451,
+   "cap_hits": 12,
+   "loops_A": 1,
+   "mean_generated_tokens": 4653.7,
+   "seed_base": 62000000,
+   "job_id": "abaybektursun-1114-153106-af79",
+   "a": 0.75,
+   "effective_a": 0.7500073382370998,
+   "norm_ratio_after_rounding": 0.8227181343353784,
+   "rounding": "stochastic",
+   "answers": "runs/abaybektursun-1114-153106-af79/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_wdiff/theta0.75_cue-01",
+   "hand_read_right_of_20": [
+    [
+     97,
+     "\\text{east}",
+     "'\\boxed{E}' after '90 degrees clockwise from north is east'"
+    ]
+   ],
+   "right_corrected": 452,
+   "word_salad_tails": 2,
+   "word_salad_tails_right_v3": 1
+  },
+  "rl_cue": {
+   "n": 500,
+   "right_v3": 457,
+   "cap_hits": 8,
+   "loops_A": 0,
+   "mean_generated_tokens": 4695.5,
+   "seed_base": 66000000,
+   "job_id": "abaybektursun-1114-153110-e985",
+   "a": 1.0,
+   "effective_a": null,
+   "norm_ratio_after_rounding": null,
+   "rounding": null,
+   "answers": "runs/abaybektursun-1114-153110-e985/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_wdiff/rl_cue-01",
+   "hand_read_right_of_20": [],
+   "right_corrected": 457,
+   "word_salad_tails": 0,
+   "word_salad_tails_right_v3": 0
+  },
+  "theta0.5_plain": {
+   "n": 500,
+   "right_v3": 443,
+   "cap_hits": 21,
+   "loops_A": 0,
+   "mean_generated_tokens": 4536.2,
+   "seed_base": 65000000,
+   "job_id": "abaybektursun-1114-163658-8118",
+   "a": 0.5,
+   "effective_a": 0.5000255781511275,
+   "norm_ratio_after_rounding": 0.6207591698550871,
+   "rounding": "stochastic",
+   "answers": "runs/abaybektursun-1114-163658-8118/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_wdiff/theta0.5_plain-01",
+   "hand_read_right_of_20": [],
+   "right_corrected": 443,
+   "word_salad_tails": 2,
+   "word_salad_tails_right_v3": 0
+  },
+  "theta0.25_plain": {
+   "n": 500,
+   "right_v3": 405,
+   "cap_hits": 19,
+   "loops_A": 0,
+   "mean_generated_tokens": 3653.4,
+   "seed_base": 64000000,
+   "job_id": "abaybektursun-1114-163704-ffca",
+   "a": 0.25,
+   "effective_a": 0.2500192231198832,
+   "norm_ratio_after_rounding": 0.4206232551139476,
+   "rounding": "stochastic",
+   "answers": "runs/abaybektursun-1114-163704-ffca/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_wdiff/theta0.25_plain-01",
+   "hand_read_right_of_20": [
+    [
+     190,
+     "\\frac{13}{18}",
+     "'Therefore, the final answer is 13/18.' (v3 keeps the period)"
+    ]
+   ],
+   "right_corrected": 406,
+   "word_salad_tails": 0,
+   "word_salad_tails_right_v3": 0
+  },
+  "code_cue": {
+   "n": 500,
+   "right_v3": 450,
+   "cap_hits": 7,
+   "loops_A": 0,
+   "mean_generated_tokens": 3336.2,
+   "seed_base": 68000000,
+   "job_id": "abaybektursun-1114-162452-0203",
+   "a": null,
+   "effective_a": 1.0,
+   "norm_ratio_after_rounding": 1.0,
+   "rounding": "nearest",
+   "answers": "runs/abaybektursun-1114-162452-0203/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_wdiff/code_cue-01",
+   "hand_read_right_of_20": [
+    [
+     313,
+     "12\\pi",
+     "'Final Answer: 12\u03c0 inches per second.' (v3 keeps the unit)"
+    ],
+    [
+     384,
+     "15x - 80",
+     "'**Answer**: \\(15x - 80\\).' (v3 keeps the period)"
+    ]
+   ],
+   "right_corrected": 452,
+   "word_salad_tails": 1,
+   "word_salad_tails_right_v3": 1
+  },
+  "theta1.25_cue": {
+   "n": 500,
+   "right_v3": 450,
+   "cap_hits": 2,
+   "loops_A": 0,
+   "mean_generated_tokens": 4851.8,
+   "seed_base": 70000000,
+   "job_id": "abaybektursun-1114-163851-0cec",
+   "a": 1.25,
+   "effective_a": 1.2500192890400852,
+   "norm_ratio_after_rounding": 1.295033252068243,
+   "rounding": "stochastic",
+   "answers": "runs/abaybektursun-1114-163851-0cec/answers.jsonl",
+   "run_folder": "studies/rlneurons/results/day1_wdiff/theta1.25_cue-01",
+   "hand_read_right_of_20": [
+    [
+     312,
+     "(5,\\infty)",
+     "'The final answer is (5, \u221e).' (Unicode infinity, period)"
+    ]
+   ],
+   "right_corrected": 451,
+   "word_salad_tails": 14,
+   "word_salad_tails_right_v3": 0
+  }
+ },
+ "differences": {
+  "theta0.25_cue minus T1_base_cue": {
+   "points": 6.2,
+   "ci95": [
+    3.0,
+    9.6
+   ]
+  },
+  "theta0.25_cue minus T2_rl_plain": {
+   "points": -4.4,
+   "ci95": [
+    -7.0,
+    -1.8
+   ]
+  },
+  "theta0.5_cue minus T1_base_cue": {
+   "points": 8.4,
+   "ci95": [
+    5.4,
+    11.6
+   ]
+  },
+  "theta0.5_cue minus T2_rl_plain": {
+   "points": -2.2,
+   "ci95": [
+    -4.6,
+    0.2
+   ]
+  },
+  "theta0.75_cue minus T1_base_cue": {
+   "points": 8.2,
+   "ci95": [
+    5.2,
+    11.2
+   ]
+  },
+  "theta0.75_cue minus T2_rl_plain": {
+   "points": -2.4,
+   "ci95": [
+    -4.6,
+    -0.4
+   ]
+  },
+  "theta1.25_cue minus T1_base_cue": {
+   "points": 8.0,
+   "ci95": [
+    5.0,
+    11.0
+   ]
+  },
+  "theta1.25_cue minus T2_rl_plain": {
+   "points": -2.6,
+   "ci95": [
+    -5.0,
+    -0.2
+   ]
+  },
+  "theta1.5_cue minus T1_base_cue": {
+   "points": 8.6,
+   "ci95": [
+    5.6,
+    11.8
+   ]
+  },
+  "theta1.5_cue minus T2_rl_plain": {
+   "points": -2.0,
+   "ci95": [
+    -4.2,
+    0.2
+   ]
+  },
+  "theta0.5_cue minus theta0.25_cue": {
+   "points": 2.2,
+   "ci95": [
+    -0.2,
+    4.6
+   ]
+  },
+  "theta0.75_cue minus theta0.5_cue": {
+   "points": -0.2,
+   "ci95": [
+    -2.8,
+    2.4
+   ]
+  },
+  "rl_cue minus theta0.75_cue": {
+   "points": 1.2,
+   "ci95": [
+    -1.2,
+    3.6
+   ]
+  },
+  "theta1.25_cue minus rl_cue": {
+   "points": -1.4,
+   "ci95": [
+    -4.0,
+    1.0
+   ]
+  },
+  "theta1.5_cue minus theta1.25_cue": {
+   "points": 0.6,
+   "ci95": [
+    -1.8,
+    3.0
+   ]
+  },
+  "random_cue minus T1_base_cue": {
+   "points": 1.4,
+   "ci95": [
+    -2.0,
+    4.8
+   ]
+  },
+  "code_plain minus T2_rl_plain": {
+   "points": -14.6,
+   "ci95": [
+    -18.01,
+    -11.0
+   ]
+  },
+  "code_plain minus T1_base_cue": {
+   "points": -4.0,
+   "ci95": [
+    -8.2,
+    0.2
+   ]
+  },
+  "code_plain minus T3_base_plain": {
+   "points": 33.2,
+   "ci95": [
+    27.4,
+    38.6
+   ]
+  },
+  "code_cue minus T1_base_cue": {
+   "points": 8.0,
+   "ci95": [
+    4.6,
+    11.2
+   ]
+  },
+  "rl_cue minus T2_rl_plain": {
+   "points": -1.2,
+   "ci95": [
+    -3.6,
+    1.2
+   ]
+  },
+  "theta0.25_plain minus T3_base_plain": {
+   "points": 36.2,
+   "ci95": [
+    30.8,
+    41.4
+   ]
+  },
+  "theta0.5_plain minus T3_base_plain": {
+   "points": 43.8,
+   "ci95": [
+    38.8,
+    48.6
+   ]
+  },
+  "code_cue minus rl_cue": {
+   "points": -1.4,
+   "ci95": [
+    -4.0,
+    1.0
+   ]
+  },
+  "code_cue minus code_plain": {
+   "points": 12.0,
+   "ci95": [
+    8.2,
+    15.8
+   ]
+  },
+  "theta0.5_plain minus T2_rl_plain": {
+   "points": -4.0,
+   "ci95": [
+    -6.6,
+    -1.4
+   ]
+  }
+ },
+ "bootstrap": "paired, 5,000 resamples, seed 0, 95 % percentile",
+ "identical_texts": {
+  "T1_base_cue | T2_rl_plain": 0,
+  "T1_base_cue | T3_base_plain": 0,
+  "T1_base_cue | code_cue": 0,
+  "T1_base_cue | code_plain": 0,
+  "T1_base_cue | random_cue": 0,
+  "T1_base_cue | rl_cue": 0,
+  "T1_base_cue | theta0.25_cue": 0,
+  "T1_base_cue | theta0.25_plain": 0,
+  "T1_base_cue | theta0.5_cue": 0,
+  "T1_base_cue | theta0.5_plain": 0,
+  "T1_base_cue | theta0.75_cue": 0,
+  "T1_base_cue | theta1.25_cue": 0,
+  "T1_base_cue | theta1.5_cue": 0,
+  "T2_rl_plain | T3_base_plain": 0,
+  "T2_rl_plain | code_cue": 0,
+  "T2_rl_plain | code_plain": 0,
+  "T2_rl_plain | random_cue": 0,
+  "T2_rl_plain | rl_cue": 0,
+  "T2_rl_plain | theta0.25_cue": 0,
+  "T2_rl_plain | theta0.25_plain": 0,
+  "T2_rl_plain | theta0.5_cue": 0,
+  "T2_rl_plain | theta0.5_plain": 0,
+  "T2_rl_plain | theta0.75_cue": 0,
+  "T2_rl_plain | theta1.25_cue": 0,
+  "T2_rl_plain | theta1.5_cue": 0,
+  "T3_base_plain | code_cue": 0,
+  "T3_base_plain | code_plain": 0,
+  "T3_base_plain | random_cue": 0,
+  "T3_base_plain | rl_cue": 0,
+  "T3_base_plain | theta0.25_cue": 0,
+  "T3_base_plain | theta0.25_plain": 0,
+  "T3_base_plain | theta0.5_cue": 0,
+  "T3_base_plain | theta0.5_plain": 0,
+  "T3_base_plain | theta0.75_cue": 0,
+  "T3_base_plain | theta1.25_cue": 0,
+  "T3_base_plain | theta1.5_cue": 0,
+  "code_cue | code_plain": 0,
+  "code_cue | random_cue": 0,
+  "code_cue | rl_cue": 0,
+  "code_cue | theta0.25_cue": 0,
+  "code_cue | theta0.25_plain": 0,
+  "code_cue | theta0.5_cue": 0,
+  "code_cue | theta0.5_plain": 0,
+  "code_cue | theta0.75_cue": 0,
+  "code_cue | theta1.25_cue": 0,
+  "code_cue | theta1.5_cue": 0,
+  "code_plain | random_cue": 0,
+  "code_plain | rl_cue": 0,
+  "code_plain | theta0.25_cue": 0,
+  "code_plain | theta0.25_plain": 0,
+  "code_plain | theta0.5_cue": 0,
+  "code_plain | theta0.5_plain": 0,
+  "code_plain | theta0.75_cue": 0,
+  "code_plain | theta1.25_cue": 0,
+  "code_plain | theta1.5_cue": 0,
+  "random_cue | rl_cue": 0,
+  "random_cue | theta0.25_cue": 0,
+  "random_cue | theta0.25_plain": 0,
+  "random_cue | theta0.5_cue": 0,
+  "random_cue | theta0.5_plain": 0,
+  "random_cue | theta0.75_cue": 0,
+  "random_cue | theta1.25_cue": 0,
+  "random_cue | theta1.5_cue": 0,
+  "rl_cue | theta0.25_cue": 0,
+  "rl_cue | theta0.25_plain": 0,
+  "rl_cue | theta0.5_cue": 0,
+  "rl_cue | theta0.5_plain": 0,
+  "rl_cue | theta0.75_cue": 0,
+  "rl_cue | theta1.25_cue": 0,
+  "rl_cue | theta1.5_cue": 0,
+  "theta0.25_cue | theta0.25_plain": 0,
+  "theta0.25_cue | theta0.5_cue": 0,
+  "theta0.25_cue | theta0.5_plain": 0,
+  "theta0.25_cue | theta0.75_cue": 0,
+  "theta0.25_cue | theta1.25_cue": 0,
+  "theta0.25_cue | theta1.5_cue": 0,
+  "theta0.25_plain | theta0.5_cue": 0,
+  "theta0.25_plain | theta0.5_plain": 0,
+  "theta0.25_plain | theta0.75_cue": 0,
+  "theta0.25_plain | theta1.25_cue": 0,
+  "theta0.25_plain | theta1.5_cue": 0,
+  "theta0.5_cue | theta0.5_plain": 0,
+  "theta0.5_cue | theta0.75_cue": 0,
+  "theta0.5_cue | theta1.25_cue": 0,
+  "theta0.5_cue | theta1.5_cue": 0,
+  "theta0.5_plain | theta0.75_cue": 0,
+  "theta0.5_plain | theta1.25_cue": 0,
+  "theta0.5_plain | theta1.5_cue": 0,
+  "theta0.75_cue | theta1.25_cue": 0,
+  "theta0.75_cue | theta1.5_cue": 0,
+  "theta1.25_cue | theta1.5_cue": 0
+ },
+ "identical_empty_texts": {
+  "T3_base_plain | code_plain": 1,
+  "T3_base_plain | theta0.25_plain": 1
+ },
+ "predictions": {
+  "P1": {
+   "text": "cue row monotone from T1 to RL cue: no adjacent step with its 95 % interval entirely below 0",
+   "steps": [
+    {
+     "points": 6.2,
+     "ci95": [
+      3.0,
+      9.6
+     ]
+    },
+    {
+     "points": 2.2,
+     "ci95": [
+      -0.2,
+      4.6
+     ]
+    },
+    {
+     "points": -0.2,
+     "ci95": [
+      -2.8,
+      2.4
+     ]
+    },
+    {
+     "points": 1.2,
+     "ci95": [
+      -1.2,
+      3.6
+     ]
+    }
+   ],
+   "status": "held"
+  },
+  "P2": {
+   "text": "acc(0.5, cue) >= 437",
+   "right": 452,
+   "status": "held"
+  },
+  "P3": {
+   "text": "acc(1.5, cue) minus T2: interval includes 0 or lies below it",
+   "diff": {
+    "points": -2.0,
+    "ci95": [
+     -4.2,
+     0.2
+    ]
+   },
+   "status": "held"
+  },
+  "P4": {
+   "text": "random cue minus T1: interval includes 0 or lies below it",
+   "diff": {
+    "points": 1.4,
+    "ci95": [
+     -2.0,
+     4.8
+    ]
+   },
+   "status": "held"
+  },
+  "P5": {
+   "text": "acc(Code, plain) >= 437",
+   "right": 390,
+   "status": "refuted"
+  },
+  "P6": {
+   "text": "acc(0.5, plain) >= 400",
+   "right": 443,
+   "status": "held"
+  }
+ },
+ "merge_stats": "studies/rlneurons/results/day1_wdiff/merge_stats.json"
+}
