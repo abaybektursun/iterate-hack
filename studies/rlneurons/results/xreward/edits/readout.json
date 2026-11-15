@@ -425,6 +425,314 @@
     "share": null
    },
    "run_folder": "studies/rlneurons/results/xreward/edits/rbulk_math31-01"
+  },
+  "top8xm1_math31": {
+   "n": 328,
+   "right_v3": 118,
+   "cap_hits": 96,
+   "loops_A": 3,
+   "mean_generated_tokens": 9967.5,
+   "job_id": "abaybektursun-1115-031209-1273",
+   "seed_base": 3000000,
+   "answers": "runs/abaybektursun-1115-031209-1273/answers.jsonl",
+   "edit": {
+    "recipe": "top8",
+    "other": "math31",
+    "donor": null,
+    "mods": null,
+    "scale": -1.0,
+    "k": 8,
+    "rounding": "stochastic",
+    "n_edited": 224,
+    "add_norm": 1.269214040907,
+    "written_norm": 2.596333268666593,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.0007405910897278379,
+    "effective_scale": 1.0000390762816076,
+    "cos_written_add": 0.4888677630064582,
+    "share": 0.09821802434428129
+   },
+   "run_folder": "studies/rlneurons/results/xreward/edits/top8xm1_math31-01"
+  },
+  "top8x0.5_math31": {
+   "n": 328,
+   "right_v3": 170,
+   "cap_hits": 50,
+   "loops_A": 0,
+   "mean_generated_tokens": 8731.3,
+   "job_id": "abaybektursun-1115-031219-19af",
+   "seed_base": 3000000,
+   "answers": "runs/abaybektursun-1115-031219-19af/answers.jsonl",
+   "edit": {
+    "recipe": "top8",
+    "other": "math31",
+    "donor": null,
+    "mods": null,
+    "scale": 0.5,
+    "k": 8,
+    "rounding": "stochastic",
+    "n_edited": 224,
+    "add_norm": 0.6346070204535,
+    "written_norm": 1.805374585566733,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.00037029554486391893,
+    "effective_scale": 0.9999832189419862,
+    "cos_written_add": 0.35150399044587466,
+    "share": 0.09821802434428129
+   },
+   "run_folder": "studies/rlneurons/results/xreward/edits/top8x0.5_math31-01"
+  },
+  "top8x1.5_math31": {
+   "n": 328,
+   "right_v3": 203,
+   "cap_hits": 25,
+   "loops_A": 0,
+   "mean_generated_tokens": 8916.4,
+   "job_id": "abaybektursun-1115-031229-5991",
+   "seed_base": 3000000,
+   "answers": "runs/abaybektursun-1115-031229-5991/answers.jsonl",
+   "edit": {
+    "recipe": "top8",
+    "other": "math31",
+    "donor": null,
+    "mods": null,
+    "scale": 1.5,
+    "k": 8,
+    "rounding": "stochastic",
+    "n_edited": 224,
+    "add_norm": 1.9038210613611153,
+    "written_norm": 3.253840737179924,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.0011108866345921156,
+    "effective_scale": 0.9999832798986936,
+    "cos_written_add": 0.5850898624282692,
+    "share": 0.09821802434428129
+   },
+   "run_folder": "studies/rlneurons/results/xreward/edits/top8x1.5_math31-01"
+  },
+  "top8x3_math31": {
+   "n": 328,
+   "right_v3": 117,
+   "cap_hits": 9,
+   "loops_A": 1,
+   "mean_generated_tokens": 8256.6,
+   "job_id": "abaybektursun-1115-031240-1106",
+   "seed_base": 3000000,
+   "answers": "runs/abaybektursun-1115-031240-1106/answers.jsonl",
+   "edit": {
+    "recipe": "top8",
+    "other": "math31",
+    "donor": null,
+    "mods": null,
+    "scale": 3.0,
+    "k": 8,
+    "rounding": "stochastic",
+    "n_edited": 224,
+    "add_norm": 3.8076421227222306,
+    "written_norm": 5.017871026912978,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.002221773269184231,
+    "effective_scale": 1.0000126419500075,
+    "cos_written_add": 0.7588258523029644,
+    "share": 0.09821802434428129
+   },
+   "run_folder": "studies/rlneurons/results/xreward/edits/top8x3_math31-01"
+  },
+  "rand8xm1_math31": {
+   "n": 328,
+   "right_v3": 159,
+   "cap_hits": 71,
+   "loops_A": 1,
+   "mean_generated_tokens": 9117.5,
+   "job_id": "abaybektursun-1115-031249-1dcd",
+   "seed_base": 3000000,
+   "answers": "runs/abaybektursun-1115-031249-1dcd/answers.jsonl",
+   "edit": {
+    "recipe": "rand8",
+    "other": "math31",
+    "donor": null,
+    "mods": null,
+    "scale": -1.0,
+    "k": 8,
+    "rounding": "stochastic",
+    "n_edited": 224,
+    "add_norm": 1.269214040908555,
+    "written_norm": 2.6696720423767673,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.0007405910897287451,
+    "effective_scale": 0.9999905410125339,
+    "cos_written_add": 0.4754149630674859,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/xreward/edits/rand8xm1_math31-01"
+  },
+  "rand8x2_math31": {
+   "n": 328,
+   "right_v3": 167,
+   "cap_hits": 70,
+   "loops_A": 0,
+   "mean_generated_tokens": 9243.0,
+   "job_id": "abaybektursun-1115-031304-cf34",
+   "seed_base": 3000000,
+   "answers": "runs/abaybektursun-1115-031304-cf34/answers.jsonl",
+   "edit": {
+    "recipe": "rand8",
+    "other": "math31",
+    "donor": null,
+    "mods": null,
+    "scale": 2.0,
+    "k": 8,
+    "rounding": "stochastic",
+    "n_edited": 224,
+    "add_norm": 2.53842808181711,
+    "written_norm": 3.9349422507348044,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.0014811821794574903,
+    "effective_scale": 1.0000046954341344,
+    "cos_written_add": 0.645102224909387,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/xreward/edits/rand8x2_math31-01"
+  },
+  "rand8x3_math31": {
+   "n": 328,
+   "right_v3": 163,
+   "cap_hits": 79,
+   "loops_A": 0,
+   "mean_generated_tokens": 9375.6,
+   "job_id": "abaybektursun-1115-031315-b328",
+   "seed_base": 3000000,
+   "answers": "runs/abaybektursun-1115-031315-b328/answers.jsonl",
+   "edit": {
+    "recipe": "rand8",
+    "other": "math31",
+    "donor": null,
+    "mods": null,
+    "scale": 3.0,
+    "k": 8,
+    "rounding": "stochastic",
+    "n_edited": 224,
+    "add_norm": 3.8076421227225716,
+    "written_norm": 5.081313846122643,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.00222177326918443,
+    "effective_scale": 0.9999985986209767,
+    "cos_written_add": 0.7493409976394659,
+    "share": null
+   },
+   "run_folder": "studies/rlneurons/results/xreward/edits/rand8x3_math31-01"
+  },
+  "top8_math30": {
+   "n": 328,
+   "right_v3": 182,
+   "cap_hits": 43,
+   "loops_A": 1,
+   "mean_generated_tokens": 8688.6,
+   "job_id": "abaybektursun-1115-031326-369f",
+   "seed_base": 3000000,
+   "answers": "runs/abaybektursun-1115-031326-369f/answers.jsonl",
+   "edit": {
+    "recipe": "top8",
+    "other": "math30",
+    "donor": null,
+    "mods": null,
+    "scale": 1.0,
+    "k": 8,
+    "rounding": "stochastic",
+    "n_edited": 224,
+    "add_norm": 1.3433431302149794,
+    "written_norm": 2.662704586873498,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.0007838456876614509,
+    "effective_scale": 0.9999353579864079,
+    "cos_written_add": 0.5044706425309184,
+    "share": 0.1169482943477639
+   },
+   "run_folder": "studies/rlneurons/results/xreward/edits/top8_math30-01"
+  },
+  "top8_if30": {
+   "n": 328,
+   "right_v3": 155,
+   "cap_hits": 41,
+   "loops_A": 0,
+   "mean_generated_tokens": 7857.7,
+   "job_id": "abaybektursun-1115-031336-56ff",
+   "seed_base": 3000000,
+   "answers": "runs/abaybektursun-1115-031336-56ff/answers.jsonl",
+   "edit": {
+    "recipe": "top8",
+    "other": "if30",
+    "donor": null,
+    "mods": null,
+    "scale": 1.0,
+    "k": 8,
+    "rounding": "stochastic",
+    "n_edited": 224,
+    "add_norm": 1.8379695158238325,
+    "written_norm": 3.241796551481519,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.001072462014080616,
+    "effective_scale": 1.0000373023500464,
+    "cos_written_add": 0.566981316445072,
+    "share": 0.18430475873918986
+   },
+   "run_folder": "studies/rlneurons/results/xreward/edits/top8_if30-01"
+  },
+  "top8_general30": {
+   "n": 328,
+   "right_v3": 164,
+   "cap_hits": 88,
+   "loops_A": 1,
+   "mean_generated_tokens": 9394.9,
+   "job_id": "abaybektursun-1115-031346-5113",
+   "seed_base": 3000000,
+   "answers": "runs/abaybektursun-1115-031346-5113/answers.jsonl",
+   "edit": {
+    "recipe": "top8",
+    "other": "general30",
+    "donor": null,
+    "mods": null,
+    "scale": 1.0,
+    "k": 8,
+    "rounding": "stochastic",
+    "n_edited": 224,
+    "add_norm": 0.646593044430423,
+    "written_norm": 1.7353755782815745,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.00037728943420998215,
+    "effective_scale": 0.9999116756836295,
+    "cos_written_add": 0.3725625407164164,
+    "share": 0.11018277856742524
+   },
+   "run_folder": "studies/rlneurons/results/xreward/edits/top8_general30-01"
+  },
+  "top8_think_sft": {
+   "n": 328,
+   "right_v3": 0,
+   "cap_hits": 327,
+   "loops_A": 327,
+   "mean_generated_tokens": 16334.2,
+   "job_id": "abaybektursun-1115-031356-77f0",
+   "seed_base": 3000000,
+   "answers": "runs/abaybektursun-1115-031356-77f0/answers.jsonl",
+   "edit": {
+    "recipe": "top8",
+    "other": "think_sft",
+    "donor": null,
+    "mods": null,
+    "scale": 1.0,
+    "k": 8,
+    "rounding": "stochastic",
+    "n_edited": 224,
+    "add_norm": 63.10622005998433,
+    "written_norm": 63.23418631569712,
+    "ref_norm": 1713.7851893052448,
+    "add_rel": 0.03682271293613355,
+    "effective_scale": 1.0000011205673622,
+    "cos_written_add": 0.997977430431322,
+    "share": 0.021966636702025553
+   },
+   "run_folder": "studies/rlneurons/results/xreward/edits/top8_think_sft-01"
   }
  },
  "paired_differences_points": {
@@ -778,6 +1086,314 @@
     4.88
    ]
   },
+  "top8xm1_math31 minus base_cue_T1": {
+   "points": -14.02,
+   "ci95": [
+    -18.9,
+    -9.15
+   ]
+  },
+  "top8xm1_math31 minus rl_plain_T1": {
+   "points": -26.83,
+   "ci95": [
+    -32.01,
+    -21.65
+   ]
+  },
+  "top8xm1_math31 minus rand8_math31": {
+   "points": -12.2,
+   "ci95": [
+    -17.07,
+    -7.32
+   ]
+  },
+  "top8xm1_math31 minus top8_math31": {
+   "points": -22.56,
+   "ci95": [
+    -27.44,
+    -17.68
+   ]
+  },
+  "top8x0.5_math31 minus base_cue_T1": {
+   "points": 1.83,
+   "ci95": [
+    -2.13,
+    5.79
+   ]
+  },
+  "top8x0.5_math31 minus rl_plain_T1": {
+   "points": -10.98,
+   "ci95": [
+    -15.85,
+    -6.71
+   ]
+  },
+  "top8x0.5_math31 minus rand8_math31": {
+   "points": 3.66,
+   "ci95": [
+    -0.91,
+    7.93
+   ]
+  },
+  "top8x0.5_math31 minus top8_math31": {
+   "points": -6.71,
+   "ci95": [
+    -10.98,
+    -2.74
+   ]
+  },
+  "top8x1.5_math31 minus base_cue_T1": {
+   "points": 11.89,
+   "ci95": [
+    7.62,
+    16.16
+   ]
+  },
+  "top8x1.5_math31 minus rl_plain_T1": {
+   "points": -0.91,
+   "ci95": [
+    -4.88,
+    2.74
+   ]
+  },
+  "top8x1.5_math31 minus rand8_math31": {
+   "points": 13.72,
+   "ci95": [
+    9.15,
+    18.29
+   ]
+  },
+  "top8x1.5_math31 minus top8_math31": {
+   "points": 3.35,
+   "ci95": [
+    -0.91,
+    7.62
+   ]
+  },
+  "top8x3_math31 minus base_cue_T1": {
+   "points": -14.33,
+   "ci95": [
+    -19.51,
+    -9.45
+   ]
+  },
+  "top8x3_math31 minus rl_plain_T1": {
+   "points": -27.13,
+   "ci95": [
+    -32.01,
+    -22.26
+   ]
+  },
+  "top8x3_math31 minus rand8_math31": {
+   "points": -12.5,
+   "ci95": [
+    -17.38,
+    -7.93
+   ]
+  },
+  "top8x3_math31 minus top8_math31": {
+   "points": -22.87,
+   "ci95": [
+    -27.74,
+    -17.99
+   ]
+  },
+  "rand8xm1_math31 minus base_cue_T1": {
+   "points": -1.52,
+   "ci95": [
+    -5.49,
+    2.44
+   ]
+  },
+  "rand8xm1_math31 minus rl_plain_T1": {
+   "points": -14.33,
+   "ci95": [
+    -18.9,
+    -9.76
+   ]
+  },
+  "rand8xm1_math31 minus rand8_math31": {
+   "points": 0.3,
+   "ci95": [
+    -3.96,
+    4.57
+   ]
+  },
+  "rand8xm1_math31 minus top8_math31": {
+   "points": -10.06,
+   "ci95": [
+    -14.63,
+    -5.49
+   ]
+  },
+  "rand8x2_math31 minus base_cue_T1": {
+   "points": 0.91,
+   "ci95": [
+    -3.66,
+    5.18
+   ]
+  },
+  "rand8x2_math31 minus rl_plain_T1": {
+   "points": -11.89,
+   "ci95": [
+    -16.46,
+    -7.62
+   ]
+  },
+  "rand8x2_math31 minus rand8_math31": {
+   "points": 2.74,
+   "ci95": [
+    -1.52,
+    6.71
+   ]
+  },
+  "rand8x2_math31 minus top8_math31": {
+   "points": -7.62,
+   "ci95": [
+    -12.5,
+    -3.05
+   ]
+  },
+  "rand8x3_math31 minus base_cue_T1": {
+   "points": -0.3,
+   "ci95": [
+    -4.27,
+    3.66
+   ]
+  },
+  "rand8x3_math31 minus rl_plain_T1": {
+   "points": -13.11,
+   "ci95": [
+    -17.38,
+    -9.15
+   ]
+  },
+  "rand8x3_math31 minus rand8_math31": {
+   "points": 1.52,
+   "ci95": [
+    -2.74,
+    5.79
+   ]
+  },
+  "rand8x3_math31 minus top8_math31": {
+   "points": -8.84,
+   "ci95": [
+    -13.41,
+    -4.57
+   ]
+  },
+  "top8_math30 minus base_cue_T1": {
+   "points": 5.49,
+   "ci95": [
+    1.22,
+    9.76
+   ]
+  },
+  "top8_math30 minus rl_plain_T1": {
+   "points": -7.32,
+   "ci95": [
+    -11.89,
+    -3.35
+   ]
+  },
+  "top8_math30 minus rand8_math31": {
+   "points": 7.32,
+   "ci95": [
+    2.74,
+    11.59
+   ]
+  },
+  "top8_math30 minus top8_math31": {
+   "points": -3.05,
+   "ci95": [
+    -7.62,
+    1.52
+   ]
+  },
+  "top8_if30 minus base_cue_T1": {
+   "points": -2.74,
+   "ci95": [
+    -7.32,
+    1.52
+   ]
+  },
+  "top8_if30 minus rl_plain_T1": {
+   "points": -15.55,
+   "ci95": [
+    -20.43,
+    -10.98
+   ]
+  },
+  "top8_if30 minus rand8_math31": {
+   "points": -0.91,
+   "ci95": [
+    -5.18,
+    3.35
+   ]
+  },
+  "top8_if30 minus top8_math31": {
+   "points": -11.28,
+   "ci95": [
+    -16.16,
+    -6.71
+   ]
+  },
+  "top8_general30 minus base_cue_T1": {
+   "points": 0.0,
+   "ci95": [
+    -4.28,
+    4.27
+   ]
+  },
+  "top8_general30 minus rl_plain_T1": {
+   "points": -12.8,
+   "ci95": [
+    -17.38,
+    -8.54
+   ]
+  },
+  "top8_general30 minus rand8_math31": {
+   "points": 1.83,
+   "ci95": [
+    -2.44,
+    6.1
+   ]
+  },
+  "top8_general30 minus top8_math31": {
+   "points": -8.54,
+   "ci95": [
+    -13.11,
+    -4.27
+   ]
+  },
+  "top8_think_sft minus base_cue_T1": {
+   "points": -50.0,
+   "ci95": [
+    -55.49,
+    -44.51
+   ]
+  },
+  "top8_think_sft minus rl_plain_T1": {
+   "points": -62.8,
+   "ci95": [
+    -67.99,
+    -57.32
+   ]
+  },
+  "top8_think_sft minus rand8_math31": {
+   "points": -48.17,
+   "ci95": [
+    -53.66,
+    -42.68
+   ]
+  },
+  "top8_think_sft minus top8_math31": {
+   "points": -58.54,
+   "ci95": [
+    -64.02,
+    -53.05
+   ]
+  },
   "top8_math31 minus theta0.5_cue": {
    "points": 0.61,
    "ci95": [
@@ -932,6 +1548,61 @@
    "fixed_of_base_cue_wrong": 42,
    "lost_of_base_cue_right": 11,
    "right_of_rl_only": 30
+  },
+  "top8xm1_math31": {
+   "fixed_of_base_cue_wrong": 15,
+   "lost_of_base_cue_right": 61,
+   "right_of_rl_only": 10
+  },
+  "top8x0.5_math31": {
+   "fixed_of_base_cue_wrong": 26,
+   "lost_of_base_cue_right": 20,
+   "right_of_rl_only": 20
+  },
+  "top8x1.5_math31": {
+   "fixed_of_base_cue_wrong": 48,
+   "lost_of_base_cue_right": 9,
+   "right_of_rl_only": 35
+  },
+  "top8x3_math31": {
+   "fixed_of_base_cue_wrong": 14,
+   "lost_of_base_cue_right": 61,
+   "right_of_rl_only": 13
+  },
+  "rand8xm1_math31": {
+   "fixed_of_base_cue_wrong": 21,
+   "lost_of_base_cue_right": 26,
+   "right_of_rl_only": 14
+  },
+  "rand8x2_math31": {
+   "fixed_of_base_cue_wrong": 29,
+   "lost_of_base_cue_right": 26,
+   "right_of_rl_only": 21
+  },
+  "rand8x3_math31": {
+   "fixed_of_base_cue_wrong": 22,
+   "lost_of_base_cue_right": 23,
+   "right_of_rl_only": 19
+  },
+  "top8_math30": {
+   "fixed_of_base_cue_wrong": 34,
+   "lost_of_base_cue_right": 16,
+   "right_of_rl_only": 25
+  },
+  "top8_if30": {
+   "fixed_of_base_cue_wrong": 24,
+   "lost_of_base_cue_right": 33,
+   "right_of_rl_only": 17
+  },
+  "top8_general30": {
+   "fixed_of_base_cue_wrong": 26,
+   "lost_of_base_cue_right": 26,
+   "right_of_rl_only": 22
+  },
+  "top8_think_sft": {
+   "fixed_of_base_cue_wrong": 0,
+   "lost_of_base_cue_right": 164,
+   "right_of_rl_only": 0
   },
   "rl_only": 49
  }

@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 6843,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "(Q(20) =  this\\):\n1. \\(Q(16) = -2(16^2) + 16d + e = 54\\)\n   \\[\n   -2(256) + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 54 + 512 = 566 \\quad \\text{(Equation 3)}\n   \\]\n\n2. \\(Q(20) = -2(20^2) + 20d + e = 53\\)\n   \\[\n   -2(400) + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 53 + 800 = 853 \\quad \\text{(Equation 4)}\n   \\]\n\nSubtract Equation 3 from Equation 4:\n\\[\n(20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n\\]\n\nSubstitute \\(d = \\frac{287}{4}\\) into Equation 3:\n\\[\n16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 4 \\cdot 287 + e = 566 \\implies 1148 + e = 566 \\implies e = 566 - 1148 = -582\n\\]\nThus, \\(Q(0) = e = -582\\).\n\n### Step 5: Calculate \\(P(0) + Q(0)\\)\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\nThe final answer is:\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 7,
+  "gold": "227",
+  "extracted_v3": null,
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 14452,
+  "prompt_tail": "roblem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nFind the three-digit positive integer $\\underline{a}\\,\\underline{b}\\,\\underline{c}$ whose representation in base nine is $\\underline{b}\\,\\underline{c}\\,\\underline{a}_{\\,\\text{nine}},$ where $a,$ $b,$ and $c$ are (not necessarily distinct) digits.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ch show this this x is x. the answer between. been the, X these variables including. valid this one true did not, make: of, other just it which it this. it overall every will this. it's such another, was non mark \n\n a words it last This by blank mind it a it, many of obtain have, way: i after. every it, and in, x. in fact H has classified its under: this one is r it is doing: the x  x worked value two mathematic'  of separate a _ sign, a. m shows it this two it value that. by, your and - is. which against) it. both differentiates its, x enough take, Unfortunately p variable. have of and x. Solutions its Else the, . adding. This x which: which the the this which this where this part have each, this this just take. this this- This of this sent one one variable. by deterministic written left,"
+ }
+}

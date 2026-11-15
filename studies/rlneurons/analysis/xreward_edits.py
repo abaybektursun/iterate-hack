@@ -80,7 +80,10 @@ def main():
                 shutil.copy(RUNS / job / "metrics.json", d / "metrics.json")
                 e.pop("tensors")
                 (d / "edit.json").write_text(json.dumps(e, indent=1) + "\n")
-                (d / "examples.json").write_text(json.dumps(examples(rows[arm], sc[arm]), indent=1) + "\n")
+                i0 = min(rows[arm])                                                 # a cell with no right answer (a broken model) saves its first row
+                ex = examples(rows[arm], sc[arm]) if any(s["v3"] for s in sc[arm].values()) else {"right": None, "wrong": {
+                    "problem_index": i0, "gold": rows[arm][i0]["gold"], "cap_hit": bool(rows[arm][i0]["cap_hit"]), "answer_head": rows[arm][i0]["text"][:800]}}
+                (d / "examples.json").write_text(json.dumps(ex, indent=1) + "\n")
             cells[arm]["run_folder"] = f"studies/rlneurons/results/xreward/edits/{d.name}"
     new = [a for a in NEW if a in sc]
     more = [("top8_math31", "theta0.5_cue"), ("top8_math31", "top8_code31"), ("bulk_math31", "rl_cue_T1"), ("top8_code31", "code1_cue"), ("top8mlp_math31", "top8attn_math31"),

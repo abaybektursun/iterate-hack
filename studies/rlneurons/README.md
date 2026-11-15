@@ -1406,6 +1406,53 @@ Against the predictions of amendments 3 and 4:
   the step from size 1 to 2 adds finishing without right answers (175 to 176, 17 to 14).
 - One sample per cell: contrasts under about 5 points are not resolved.
 
+#### The finish dial (amendment 5, work-e02ba4): the 8 directions at seven sizes, a random edit at four
+
+Same settings. "On 251" = right on the 251 problems the cued base finishes (base 161). "No box" = finished answers without `\boxed`.
+
+| Size | Math 3.1's 8 directions: right of 328 | cap hits | on 251 | no box | Random rank-8: right | cap hits | Run folders (`edits/`) |
+|---|---|---|---|---|---|---|---|
+| -1 | 118 | 96 | 113 | 61 | 159 | 71 | `top8xm1_math31-01/` (`abaybektursun-1115-031209-1273`), `rand8xm1_math31-01/` (`...031249-1dcd`) |
+| 0 (base) | 164 | 77 | 161 | 23 | | | |
+| 0.5 | 170 | 50 | 156 | 7 | | | `top8x0.5_math31-01/` (`...031219-19af`) |
+| 1 | 192 | 46 | 175 | 2 | 158 | 67 | first batch |
+| 1.5 | 203 | 25 | 184 | 2 | | | `top8x1.5_math31-01/` (`...031229-5991`) |
+| 2 | 190 | 5 | 176 | 4 | 167 | 70 | `top8x2_math31-01/`, `rand8x2_math31-01/` (`...031304-cf34`) |
+| 3 | 117 | 9 | 115 | 113 | 163 | 79 | `top8x3_math31-01/` (`...031240-1106`), `rand8x3_math31-01/` (`...031315-b328`) |
+| RL | 206 | 20 | 187 | 0 | | | |
+
+- D1 (cap hits fall with size) held in order: 96, 77, 50, 46, 25, 5, 9. The predicted values at the ends were missed (above 100 at
+  -1: 96; at most 2 at 3: 9).
+- D2 (the directions, not the size of a perturbation) held: the random edit has 67 to 79 cap hits and 158 to 167 right at every
+  size, including 3 times the size (0.22 % of the weight norm).
+- D3 (right answers peak between 1 and 1.5, below the base at -1 and 3) held: 203 at 1.5, which is -0.9 points from RL [-4.6, 2.7]
+  and +13.7 points above the random edit [9.5, 18.3]; 118 at -1 and 117 at 3.
+- Raw answers. At -1 the model stops boxing its answer (61 finished answers without a box, base 23; they end "Answer: 27") and is
+  wrong more often when it finishes (0.51 right per finished, base 0.65). At 3 it finishes but 113 answers decay into strings of
+  function words. So the 8 directions carry three things that move together: finishing, the boxed answer format, and right
+  answers on problems the base already finishes (113, 161, 175, 184 at -1, 0, 1, 1.5).
+- One sample per cell; 1.5 against 1 is +3.4 points [-0.3, 7.0].
+
+Which reward writes the finishing directions (8 directions of each model added to the base):
+
+| Donor | Right of 328 | Cap hits | No box | Edit, % of weight norm | Run folder, job |
+|---|---|---|---|---|---|
+| Math 3.0 | 182 | 43 | 1 | 0.078 | `top8_math30-01/`, `abaybektursun-1115-031326-369f` |
+| Math 3.1 | 192 | 46 | 2 | 0.074 | first batch |
+| Code 3.1 | 178 | 41 | 12 | 0.064 | first batch |
+| Code 3.0 | 173 | 23 | 7 | 0.107 | second batch |
+| IF | 155 | 41 | 158 | 0.107 | `top8_if30-01/`, `abaybektursun-1115-031336-56ff` |
+| General | 164 | 88 | 14 | 0.038 | `top8_general30-01/`, `abaybektursun-1115-031346-5113` |
+| Think-SFT | 0 | 327 | | 3.68 | `top8_think_sft-01/`, `abaybektursun-1115-031356-77f0` |
+
+- R1 is refuted for IF: its 8 directions cut cap hits as far as Math's (41), by ending early with an unboxed "Answer: 27" (158 of
+  287 finished answers have no box, median 2,140 tokens; 108 of the 152 with an answer marker are right). Math 3.0 behaves as
+  Math 3.1 (43 cap hits, 182 right, +7.3 points above the random edit [2.7, 11.9]). General's edit changes nothing in right answers.
+- Finishing is therefore written by the Math, Code and IF rewards alike; what the reasoning rewards add is the boxed format and
+  right answers.
+- The Think-SFT cell is not a test: its top-8 edit is 3.7 % of the weight norm (50 times Math's) and the model writes commas
+  until the cap. A norm-matched Think-SFT edit is open.
+
 #### Lengths, token budgets and a restart cascade from the stored rows (work-e02ba4, laptop)
 
 `analysis/xreward_lengths.py` -> `results/xreward/lengths-01/readout.json` (prediction in the module docstring, written first).
