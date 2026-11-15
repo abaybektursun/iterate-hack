@@ -27,7 +27,7 @@ a side panel whose address is /#<item id>; the filters are in the address too (/
 / filter, j and k move, 1 2 3 jump to the record steps, Now and Learned, Enter opens, Esc closes, ? lists the keys. A
 click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
 
-  GET /demo            the talk as a deck of twelve 16:9 slides (demo_deck.py): keys step, p prints one slide per page
+  GET /demo            the talk as a deck of thirteen 16:9 slides (demo_deck.py): keys step, p prints one slide per page
   GET /demo/fig/<name> the pictures the deck embeds (climb, harness, beyond, efficiency, basins), with their
                        header, words column and key hidden (demo_deck.FIGS)
   GET /demo/story      the stepped story of the talk over the Design page's picture (demo.py), fed by the same /data
@@ -252,26 +252,37 @@ HOME_PAGE = home.PAGE.replace("__COUNTS__", json.dumps({
 
 
 # What every page gets as it is sent, so that no page module has to hold it (site review, work-acad69): the name
-# "Invariant" leads to the home page and the header gets the link "More" to it; a page with no header gets a small
-# link to the home page at its lower left; the header's links are tall enough to tap on a phone; pinch zoom is
-# never switched off. The home page has its own links and is left as it is.
+# "Invariant" leads to the home page and the header gets the link "All pages" to it; a page with no header gets a
+# small link to the home page at the middle of its right edge, written downward (no corner is free on every such
+# page: the deck, /exa, /pastdev and the lab prototypes each keep a control in one); the header's links are tall
+# enough to tap on a phone; pinch zoom is never switched off. The home page has its own links and is left as it is.
 SITE_HOME = "https://invariant.team/"
+HEADER = '<header class="top">'  # the site's header; /exa has a <header class="top" id=...> that is its own first section
 NAME = '<h1 class="name">Invariant</h1>'
 NAME_LINKED = f'<h1 class="name"><a href="{SITE_HOME}" style="color:inherit;font-weight:inherit;text-decoration:none">Invariant</a></h1>'
+NAME_LINK = re.compile(r'<h1 class="name"><a href="[^"]*">Invariant</a></h1>')  # a header whose name already is a link (/values)
 FINDINGS_TAB = re.compile(r'<a (?:class="tab" )?href="/findings"[^>]*>Findings</a>')
 NO_ZOOM = re.compile(r',\s*(?:maximum-scale=[\d.]+|user-scalable=(?:no|0))')
 TAP = "<style>@media (max-width: 900px) { .top a { padding-block: 10px; } }</style>\n</head>"
-HOME_CORNER = ('<style>.inv-home { position: fixed; left: 10px; bottom: 6px; z-index: 2147483000; padding: 10px 6px; font: 600 12px/1 Archivo, system-ui, sans-serif; '
-               'letter-spacing: .02em; color: #8a96a3; text-decoration: none; } .inv-home:hover { color: #1f43d6; } @media print { .inv-home { display: none; } }</style>'
-               f'<a class="inv-home" href="{SITE_HOME}">Invariant</a>\n</body>')
+# The corner link carries its own color scheme: a page that declares none gets it from the lightness of its
+# background, so the link is readable on an always-dark and on an always-light page.
+HOME_CORNER = ('<style>.inv-home { position: fixed; right: 0; left: auto; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; z-index: 2147483000; padding: 10px 3px; font: 600 12px/1 Archivo, system-ui, sans-serif; '
+               'letter-spacing: .02em; color: light-dark(#56636d, #93a1ad); text-decoration: none; border-radius: 4px; text-shadow: 0 0 2px light-dark(#fff, #000), 0 0 4px light-dark(#fff, #000), 0 0 6px light-dark(#fff, #000); } .inv-home:hover { color: light-dark(#1f43d6, #8fb1ff); } '
+               '.inv-home:focus-visible { outline: 2px solid light-dark(#1f43d6, #8fb1ff); outline-offset: -2px; } @media print { .inv-home { display: none; } }</style>'
+               f'<a class="inv-home" href="{SITE_HOME}">Invariant</a>'
+               '<script>(() => { const a = document.querySelector(".inv-home"); let c = [];'
+               ' for (const e of [document.body, document.documentElement]) { c = getComputedStyle(e).backgroundColor.match(/[\\d.]+/g).map(Number); if (c[3] !== 0) break; }'
+               ' if (c[3] !== 0) a.style.colorScheme = .299 * c[0] + .587 * c[1] + .114 * c[2] < 128 ? "dark" : "light"; })()</script>\n</body>')
 
 
 def chrome(body, path):
     if 'id="go"' in body and "const PAGES" in body:  # the home page
         return body
     body = NO_ZOOM.sub("", body)
-    if NAME in body:
-        body = FINDINGS_TAB.sub(lambda m: m.group(0) + f'\n    <a href="{SITE_HOME}">More</a>', body.replace(NAME, NAME_LINKED, 1), count=1)
+    if NAME in body or HEADER in body:
+        body = NAME_LINK.sub(NAME_LINKED, body.replace(NAME, NAME_LINKED, 1), count=1)
+        if f'<a href="{SITE_HOME}">All pages</a>' not in body:
+            body = FINDINGS_TAB.sub(lambda m: m.group(0) + f'\n    <a href="{SITE_HOME}">All pages</a>', body, count=1)
         return body.replace("</head>", TAP, 1)
     if '<a class="name" href="/">Invariant</a>' in body:  # /psychosis: its name led to the board
         return body.replace('<a class="name" href="/">Invariant</a>', f'<a class="name" href="{SITE_HOME}">Invariant</a>', 1)
@@ -280,13 +291,35 @@ def chrome(body, path):
     return body.replace("</body>", HOME_CORNER, 1)
 
 
-# An address that is no page: a short page with the ways on, in the site's colors.
+# An address that is no page: the site's header, one sentence and the ways on.
 NOT_FOUND = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Invariant: no such page</title><style>:root { color-scheme: light dark; } body { margin: 0; padding: 12vh 40px; background: light-dark(#eceef0, #080c11);
-color: light-dark(#101820, #e9eff3); font: 400 15px/1.5 Archivo, system-ui, sans-serif; } h1 { font-weight: 300; font-size: 30px; margin: 0 0 18px; }
-a { color: light-dark(#1f43d6, #8fb1ff); margin-right: 22px; }</style></head><body><h1>There is no page __PATH__.</h1>
-<a href="https://invariant.team/">Home</a><a href="/">Board</a><a href="/findings">Findings</a>
-</body></html>"""
+<title>Invariant: no such page</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" media="print" onload="this.media='all'">
+<style>
+:root { color-scheme: light dark; --paper: light-dark(#eceef0, #080c11); --ink: light-dark(#101820, #e9eff3); --mute: light-dark(#56636d, #93a1ad);
+  --rule: light-dark(#d3d9de, #1c2630); --blue: light-dark(#1f43d6, #8fb1ff); }
+body { margin: 0; color: var(--ink); background: var(--paper); font: 400 15px/1.5 "Archivo", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
+.wrap { max-width: 1840px; margin: 0 auto; padding: 20px 40px 56px; }
+.top { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+.name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
+.top a, .ways a { color: var(--mute); white-space: nowrap; }
+.top a:hover, .ways a:hover { color: var(--ink); }
+.say { font-weight: 300; font-size: clamp(26px, 3.4vw, 44px); line-height: 1.15; margin: 14vh 0 24px; overflow-wrap: anywhere; }
+.ways { display: flex; gap: 26px; margin: 0; }
+@media (max-width: 900px) { .wrap { padding: 14px 16px 40px; } .top { gap: 6px 13px; padding-bottom: 2px; } .name { font-stretch: 112%; margin-right: 0; } }
+</style></head><body><div class="wrap">
+  <header class="top">
+    <h1 class="name">Invariant</h1>
+    <a href="/">Board</a>
+    <a href="/architecture">Design</a>
+    <a href="/proof">Proof</a>
+    <a href="/findings">Findings</a>
+  </header>
+  <p class="say">There is no page __PATH__.</p>
+  <p class="ways"><a href="https://invariant.team/">Home</a><a href="/">Board</a><a href="/findings">Findings</a></p>
+</div></body></html>"""
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -1345,8 +1378,13 @@ function chart(b, W, H, narrow) {
     const spots = [0, -14, 14, -28, 28].flatMap(dy => [[xr + 8, mid + dy, "start"], [xr - 8, mid + dy, "end"]]);
     label(text, "gain", [...spots, [xr + 8, y(q.p) - 10, "start"], [xr - 8, y(q.p) - 10, "end"], [xr + 8, y(q.p) + 18, "start"]], true);
   });
-  pts.filter(q => q.p < lo).forEach(q =>  // below the floor: say its value
-    label(`↓ ${f1(q.p)}`, "quiet", [[x(q.i), y(q.p) + 20, "middle"], [x(q.i) - 5, y(q.p) + 20, "start"], [x(q.i) + 12, y(q.p) + 4, "start"]], true));
+  let edge = -Infinity;  // the right end of the last value drawn under the floor
+  pts.filter(q => q.p < lo).forEach(q => {  // below the floor: say its value, unless it would touch the one before or another label
+    const text = `↓ ${f1(q.p)}`, w = textWidth(text), x0 = Math.max(x(q.i) - w / 2, L), n = out.length;
+    if (x0 < edge + 8) return;
+    label(text, "quiet", [[x0, y(q.p) + 20, "start"]]);
+    if (out.length > n) edge = x0 + w;
+  });
 
   return `<svg class="${sel ? "has-sel" : ""}" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="group" aria-label="${esc(b.name)}: best base ${f1(lead.p)} %, RL ${rl ? f1(rlP) + " %" : "not measured"}">` +
     svg.join("") + marks.map(m => m.ci).join("") + marks.map(m => m.a).join("") + out.join("") + `</svg>`;
