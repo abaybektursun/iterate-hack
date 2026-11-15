@@ -1,0 +1,234 @@
+{
+ "utc": "2026-11-15T20:20:30",
+ "proposals": [
+  {
+   "id": "c01",
+   "family": "s1",
+   "mechanism": "run-02/f2-m01",
+   "against": "round-09/training-m04",
+   "cell": {
+    "model": "base Olmo-3-1025-7B (untrained)",
+    "prompt": "plain",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "T 0.6, top-p 1.0, seed 3000000",
+    "samples": 1,
+    "grader": "v3",
+    "cap": 4096
+   },
+   "job": "jobs/run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt plain --set hard328 --temperature 0.6 --top-p 1.0 --max-tokens 4096 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "right answers of 328 under grader v3 (cap hits counted wrong), one sample of the autobench method's own sampling (plain, T 0.6, cap 4,096); compare with the plain T 0.6 single sample at 16,384 (107, result-099916)",
+   "unit": "right answers of 328",
+   "why": "Mechanism a says the 4,096 cap removes about half of the base's right hard328 answers whatever the register, so the score falls well below 107. Mechanism b says plain-register answers are short and the cap rarely binds, so the score stays near 107. This separates cap against register as the cause of the vote's 139.",
+   "gpu_minutes": 45,
+   "value": 66,
+   "low": 52,
+   "high": 82,
+   "against_value": 98,
+   "base_only": false,
+   "best_base": null
+  },
+  {
+   "id": "c02",
+   "family": "s5",
+   "mechanism": "run-02/f2-m01",
+   "against": "round-09/training-m04",
+   "cell": {
+    "model": "base Olmo-3-1025-7B (untrained)",
+    "prompt": "plain (no cue, no opening text)",
+    "set": "math500",
+    "n": 100,
+    "sampling": "T 0.6 / top-p 1.0, seed 71000000",
+    "samples": 6,
+    "grader": "v3, plurality vote over 6",
+    "cap": "8,192 generated tokens; the same answers also scored with every answer longer than 4,096 tokens counted as no answer"
+   },
+   "job": "studies/theory/jobs/free_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model base --set math500 --n 100 --temperature 0.6 --top-p 1.0 --samples 6 --max-tokens 8192 --seed 71000000 --commit $(git rev-parse HEAD)\"",
+   "readout": "From answers.jsonl: vote-over-6 right answers at cap 8,192 minus vote-over-6 right answers when every sample with more than 4,096 generated tokens is treated as giving no answer (same text, paired by problem).",
+   "unit": "right answers of 100 (difference, 8,192 view minus 4,096 view)",
+   "why": "Mechanism a says the 4,096 cap removes complete long solutions, so raising it lifts the vote. Mechanism b says long plain T 0.6 samples are loops or repeated wrong values, so the vote barely moves.",
+   "gpu_minutes": 110,
+   "value": 4,
+   "low": 2.5,
+   "high": 8,
+   "against_value": 0.5,
+   "base_only": false,
+   "best_base": null
+  }
+ ],
+ "dropped": [],
+ "left_out": [],
+ "cells": [
+  {
+   "id": "r11-m01",
+   "cell": {
+    "model": "base Olmo-3-1025-7B (untrained)",
+    "prompt": "plain",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "T 0.6, top-p 1.0, seed 3000000",
+    "samples": 1,
+    "grader": "v3",
+    "cap": 4096
+   },
+   "job": "jobs/run_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model base --prompt plain --set hard328 --temperature 0.6 --top-p 1.0 --max-tokens 4096 --seed 3000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r11-m01-r1",
+     "readout": "right answers of 328 under grader v3 (cap hits counted wrong), one sample of the autobench method's own sampling (plain, T 0.6, cap 4,096); compare with the plain T 0.6 single sample at 16,384 (107, result-099916)",
+     "unit": "right answers of 328",
+     "from": [
+      "c01"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 45,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  },
+  {
+   "id": "r11-m02",
+   "cell": {
+    "model": "base Olmo-3-1025-7B (untrained)",
+    "prompt": "plain (no cue, no opening text)",
+    "set": "math500",
+    "n": 100,
+    "sampling": "T 0.6 / top-p 1.0, seed 71000000",
+    "samples": 6,
+    "grader": "v3, plurality vote over 6",
+    "cap": "8,192 generated tokens; the same answers also scored with every answer longer than 4,096 tokens counted as no answer"
+   },
+   "job": "studies/theory/jobs/free_cell.py",
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model base --set math500 --n 100 --temperature 0.6 --top-p 1.0 --samples 6 --max-tokens 8192 --seed 71000000 --commit $(git rev-parse HEAD)\"",
+   "readouts": [
+    {
+     "id": "r11-m02-r1",
+     "readout": "From answers.jsonl: vote-over-6 right answers at cap 8,192 minus vote-over-6 right answers when every sample with more than 4,096 generated tokens is treated as giving no answer (same text, paired by problem).",
+     "unit": "right answers of 100 (difference, 8,192 view minus 4,096 view)",
+     "from": [
+      "c02"
+     ],
+     "best_base": null
+    }
+   ],
+   "base_only": false,
+   "gpu_minutes": 110,
+   "splits": [],
+   "separation": 0,
+   "per_minute": 0.0
+  }
+ ],
+ "routes": [
+  {
+   "id": "r11-n01",
+   "family": "s1",
+   "mechanism": "round-09/training-m04",
+   "model": "think_sft",
+   "change": "Think-SFT with the cue at T 1.0 and the full 16,384 cap, sequential vote of up to 5 samples: stop when the first two answers agree, else keep drawing until a value has 3 votes or 5 samples are used; answer = plurality (ties to the earliest), tokens counted for the drawn samples only.",
+   "tokens": 31000,
+   "gpu_minutes": 200,
+   "command": "uv run tools/gpu.py submit l40s --hours 4 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --samples 5 --seed 71000000 --commit $(git rev-parse HEAD)\"",
+   "rl_command": "uv run tools/gpu.py submit l40s --hours 4 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/8 --temperature 1.0 --top-p 1.0 --samples 5 --seed 71000000 --commit $(git rev-parse HEAD)\"",
+   "gap_parts": "Reliability: hard328 share about .43 of the ~42-problem base-to-RL gap (about 18 right answers; .63-.67 on MATH-500), the problems where the model's modal value is right but single samples miss it; the vote recovers most of these, and the extra draws go only to problems whose first two answers split (the 2-2 ties of vote-over-4). Budget (about .27, ~11): kept rather than won, because the full 16,384 cap stays on every sample and no sample is shortened. Answer statement (~.03, ~1): partly, since a malformed final line rarely becomes the mode. Capability (about .27, ~11): not reachable, because the vote cannot exceed problems whose mode is right.",
+   "why": "Pretraining fixes each problem's distribution over final values and a vote converges to its mode, so the vote's ceiling is the set of modal-right problems and extra samples only resolve near-ties. Spending samples where the first two disagree, and stopping at a 3-vote majority, should give about vote-over-5 accuracy at roughly 3 samples' tokens.",
+   "readouts": [
+    {
+     "id": "r11-n01-r1",
+     "arm": "route",
+     "set": "hard328",
+     "subset": "0/8",
+     "n": 41,
+     "readout": "right answers of 41 (grader v3) after the sequential up-to-5 vote, Think-SFT + cue; compare with think|seq4_restart (238.9/328 at 30,837 tokens, about 29.9 of 41)",
+     "value": 30.5,
+     "low": 27,
+     "high": 34,
+     "unit": "right answers of 41",
+     "best_base": {
+      "value": 34.0,
+      "sd": 2.41,
+      "row": "Think-SFT + cue, sequential vote, at most 4, restarts, ties to the shortest (mean of 24 orders) (no restart rows: restart = none)",
+      "tokens": 30837,
+      "source": "studies/rlneurons/results/table/hard328-02/table.json think|seq4_restart_short (thinkvote/hard328_sft1_cue_s4-01)",
+      "n": 41
+     },
+     "median": 33.5,
+     "gain": -0.21
+    },
+    {
+     "id": "r11-n01-r2",
+     "arm": "rl",
+     "set": "hard328",
+     "subset": "0/8",
+     "n": 41,
+     "readout": "right answers of 41 (grader v3) after the same sequential up-to-5 vote, RL-Zero-Math + cue",
+     "value": 28,
+     "low": 24,
+     "high": 31,
+     "unit": "right answers of 41",
+     "best_base": null,
+     "median": 30.25
+    }
+   ],
+   "score": -0.21
+  },
+  {
+   "id": "r11-n02",
+   "family": "s5",
+   "mechanism": "round-09/training-m04",
+   "model": "think_sft",
+   "change": "Think-SFT with the cue sampled at T 1.0 / top-p 1.0 with min-p 0.05 (tail tokens cut), 3 samples per problem at cap 16,384, majority vote over the 3 (ties to the first sample).",
+   "tokens": 28800,
+   "gpu_minutes": 190,
+   "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/5 --temperature 1.0 --top-p 1.0 --min-p 0.05 --max-tokens 16384 --samples 3 --seed 3400000 --commit $(git rev-parse HEAD)\"",
+   "rl_command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/5 --temperature 1.0 --top-p 1.0 --min-p 0.05 --max-tokens 16384 --samples 3 --seed 3400000 --commit $(git rev-parse HEAD)\"",
+   "gap_parts": "Reliability (about 0.43-0.63 of the gap; on hard328 about 15-20 of the 42-problem one-sample gap are problems the model solves in some samples): min-p plus the vote converts sometimes-solved problems to their right modal value with 3 samples instead of 4-8. Answer statement (about 0.03 of the gap, 1-2 problems): tail draws that garble the final line or drift into another script are cut. Budget (about 0.25, up to about 10 problems) is only partly touched: fewer drifting samples run to the cap. Capability (about 0.27 on hard328) is not won back: the vote cannot move a wrong mode.",
+   "why": "Pretraining (and SFT on top of it) fixes each problem's distribution over final values and a vote converges to its mode, with samples beyond about eight only resolving ties; cutting the low-probability tail with min-p moves each sample's draw toward that mode, so a 3-sample vote should reach nearly the 4-sample vote's ceiling at three quarters of its tokens.",
+   "readouts": [
+    {
+     "id": "r11-n02-r1",
+     "arm": "route",
+     "set": "hard328",
+     "subset": "0/5",
+     "n": 66,
+     "readout": "right answers of 66 with grader v3 after the majority vote over 3 samples (ties to the first sample); best known at nearest tokens: Think-SFT + cue sequential vote at most 4, 238.9 of 328 at 30,837 tokens, about 48.1 of 66",
+     "value": 49,
+     "low": 44,
+     "high": 53,
+     "unit": "right answers of 66",
+     "best_base": {
+      "value": 49.0,
+      "sd": 3.55,
+      "row": "Think-SFT + cue, sequential vote, at most 4, restarts, ties to the shortest (mean of 24 orders) (no restart rows: restart = none)",
+      "tokens": 30837,
+      "source": "studies/rlneurons/results/table/hard328-02/table.json think|seq4_restart_short (thinkvote/hard328_sft1_cue_s4-01)",
+      "n": 66
+     },
+     "median": 48,
+     "gain": -0.28
+    },
+    {
+     "id": "r11-n02-r2",
+     "arm": "rl",
+     "set": "hard328",
+     "subset": "0/5",
+     "n": 66,
+     "readout": "right answers of 66 with grader v3 after the same majority vote over 3 samples, RL-Zero-Math with the same cue, min-p 0.05, cap and seeds",
+     "value": 43,
+     "low": 38,
+     "high": 48,
+     "unit": "right answers of 66",
+     "best_base": null,
+     "median": 44.0
+    }
+   ],
+   "score": -0.28
+  }
+ ],
+ "converted": []
+}

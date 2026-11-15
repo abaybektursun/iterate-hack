@@ -1,0 +1,11 @@
+{"pairs": [
+  {"new": "round-11/s1-a", "earlier": "run-02/f2-m01", "reason": "Short per-sample token budgets under the time limit cannot reach hard328's long solutions (roughly 4k-14k tokens), so votes over short samples never get those problems"},
+  {"new": "round-11/s1-b", "earlier": "round-09/training-m04", "reason": "The vote converges to the plain terse register's per-problem modal value, so its ceiling is the set of problems whose modal answer is right"},
+  {"new": "round-11/s2-a", "earlier": "round-10/weights-m05", "reason": "RL deltas share a reward-general check-and-finish readout; stacking two rewards' directions doubles that dose and overshoots"},
+  {"new": "round-11/s3-a", "earlier": "round-09/stopping-m06", "reason": "The terse plain register fails problems that need long deliberative derivations, so plain-prompt scores are capped by that register's reach"},
+  {"new": "round-11/s3-b", "earlier": "round-11/s1-b", "reason": "At a fixed register and T 0.6 the wrong answers repeat one problem-specific value, so the vote plateaus at the share of problems whose modal answer is right"},
+  {"new": "round-11/s4-a", "earlier": "round-10/problems-m03", "reason": "The code deficit is mostly unfinished answers or answers with no code block, which any finishing edit recovers"},
+  {"new": "round-11/s5-a", "earlier": "round-11/s1-a", "reason": "The 4,096-token per-sample cap leaves long-solution problems with no complete sample, so no vote can get them right"},
+  {"new": "round-11/s5-b", "earlier": "round-11/s1-b", "reason": "Wrong answers repeat at T 0.6 in the plain register, so the vote saturates at the modal-right share and the cap is not what binds"},
+  {"new": "round-11/s6-a", "earlier": "run-07/f2-m05", "reason": "An overdosed finishing edit cuts long derivations short, so the cost scales with the solution length a problem needs and short code tasks escape it"}
+]}
