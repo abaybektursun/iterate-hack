@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2311,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "\\) back into \\( 16b + c = -458 \\):\n\\[ 16 \\left( -\\frac{289}{4} \\right) + c = -458 \\]\n\\[ -1156 + c = -458 \\]\n\\[ c = 698 \\]\n\nThus, \\( P(0) = 698 \\).\n\nFor \\( Q(x) \\):\n- The general form is \\( -2x^2 + dx + e \\).\n- Substituting \\( x = 16 \\): \\( -2(16)^2 + 16d + e = 54 \\) gives \\( -512 + 16d + e = 54 \\) or \\( 16d + e = 566 \\).\n- Substituting \\( x = 20 \\): \\( -2(20)^2 + 20d + e = 53 \\) gives \\( -800 + 20d + e = 53 \\) or \\( 20d + e = 853 \\).\n\nSubtracting these equations: \n\\[ (20d + e) - (16d + e) = 853 - 566 \\]\n\\[ 4d = 287 \\]\n\\[ d = \\frac{287}{4} \\]\n\nSubstituting \\( d \\) back into \\( 16d + e = 566 \\):\n\\[ 16 \\left( \\frac{287}{4} \\right) + e = 566 \\]\n\\[ 1148 + e = 566 \\]\n\\[ e = -582 \\]\n\nThus, \\( Q(0) = -582 \\).\n\nTherefore, \\( P(0) + Q(0) = 698 + (-582) = 116 \\).\n\nThe final answer is \\(\\boxed{116}\\)."
+ },
+ "wrong": {
+  "problem_index": 57,
+  "gold": "928",
+  "extracted_v3": "2560",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 14001,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "the total number of bad colorings due to one rectangle is:\n     \\[\n     3 \\times 2 \\times 2^8 = 3 \\times 2 \\times 256 = 1536\n     \\]\n\n3. **Inclusion-Exclusion Principle**:  \n   To refine the count, we need to consider intersections of bad colorings. However, the higher-order terms (involving intersections of two or more rectangles) result in more complex calculations, but a simpler approximation is often used in such combinatorial problems when the exact intersections are non-trivial.\n\n4. **Valid Colorings**:  \n   The number of valid colorings is the total number of colorings minus the number of bad colorings:\n   \\[\n   2^{12} - 3 \\times 2 \\times 2^8 = 4096 - 1536 = 2560\n   \\]\n\nThus, the number of valid colorings where no four vertices of the same color form a rectangle is \\(\\boxed{2560}\\)."
+ }
+}

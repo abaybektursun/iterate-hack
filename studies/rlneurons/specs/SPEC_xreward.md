@@ -143,3 +143,31 @@ Cells: `wsp_edit --recipe top8 --other code31 --scale S` for S = 1, 1.5, 2; `ran
   within 317 +- 15. Refuted if the best of the three sizes is below 340 or the random edit is within 15 of it.
 - C2. Cap hits and answers with no code block fall with size (27 and 34 for the base; at most 15 and 15 at 1.5).
 - C3. Math's directions at 1.5 on code pass at least 335 (the Math cue works on code: 326). Refuted if within 317 +- 15.
+
+## Amendment 8 (2026-11-15, before the cells; work-d80b27): the smallest edit that reaches RL
+
+Considered and not run: scaling the step-100 checkpoint's directions (board knowledge-df956c: published for other models, and the
+step-100 change has cosine 0.10 with the final one). Instead: how small can the edit be? Same settings as the dial (hard328, cue,
+seed 3000000, one sample; 8 directions in all layers: 192 at 1, 203 at 1.5, 190 at 2; one direction at 1: 181, 51 cap hits; random
+158 to 167; RL 206). `wsp_edit` gains `--layers lo-hi`.
+
+1. `top8 --k 1 --scale 2` and 2. `top8 --k 1 --scale 3`, `--other math31`: one direction per matrix, larger.
+   M1. One direction is enough if it is larger: the better of the two is at least 195 with at most 30 cap hits. Refuted if both are
+   below 187: then the gain needs several directions per matrix, not a larger first one.
+3. to 5. `top8 --scale 1.5 --layers 0-10`, `11-21`, `22-31`.
+   M2. One band of layers carries the dial: one band is at least 190 and the other two are within 164 +- 12. Refuted if the best
+   band is below 185 or two bands are above 180 (then it is spread over depth, as it is over module types: attention 178, MLP 181).
+
+## Amendment 9 (2026-11-15, before the cells; work-b5f51c): the depth split, tested on the Code pair
+
+Amendment 8 refuted both of its predictions and left a reading made after the run: on math, the 8 directions in layers 0 to 10 add
+right answers without finishing (184 right, 98 cap hits), in layers 22 to 31 they finish without right answers (166, 57), in
+layers 11 to 21 both (183, 49). Tested here where it was not read: Code 3.1's directions at 1.5 on HumanEval+ and MBPP+ (cued base
+317 passed, 27 cap hits, 34 answers with no code block; random 331, 27, 45; all layers 399, 4, 5), cells
+`top8 --other code31 --scale 1.5 --layers 0-10`, `11-21`, `22-31`.
+
+- L1. Layers 0 to 10: at least 350 passed and at least 20 cap hits (right answers without finishing). Refuted if cap hits are 12
+  or fewer, or passed is below 340.
+- L2. Layers 22 to 31: at most 14 cap hits and at most 345 passed (finishing without right answers). Refuted if passed is 360 or
+  more, or cap hits are 22 or more.
+- L3. Layers 11 to 21: at least 350 passed and at most 18 cap hits.

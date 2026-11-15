@@ -1,5 +1,25 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 18:20 UTC (paper loop, after result-53ce14 of work-184476) meta/reviews/abaybektursun/20261115-1813-paper3/
+
+- Previous paper entry asked for paper 3's minutes from first review to live PDF against 17.8, and whether its reviews change the central claim. Measured: 67.9 min (before.txt), of which 43.3 with no paper work, waiting for GPU samples; 24.6 without the wait. The claim changed from "equals" to "within +1.4 points [-0.45, 3.30]", by the four-sample data (result-6832a8), not by a review; NOTES.md lists facts the reviewers asked to add. The carried change (the data-layer brief delivers each arm's prompts up front) was applied; the final check still found 2 wrong statements in one hand-written paragraph (numbers of the 183 pool quoted for the 155 pool; one interval set against the wrong cell), against 6 in paper 2.
+- Direction: DIRECTION.md's deliverable is "the best configuration of either model on the 328". Paper 3 tests no part of it: it checks a published claim (Wang et al., cue = about 100 RL steps) on released checkpoints with intervals. Asked for by the person (paper loop). The three GPU jobs test none either. Best alternative, the 328 vote at cap 32,768 (work-dc9359), is another session's.
+- Turnaround (cycle.txt, 1.2 h): Team claim to close median 80 min, upper quartile 93 (5 items, 1 person), 5.0 results per hour (17:05 entry, 1 h: 33 / 54 min, 12.0). Modal: 3 jobs in the window, 0 failed, wait 0.1 min. Paper 3 start to live 81.2 min (paper 2: 35.4); four-sample data to live 17.8 min.
+- Slowest stage: generation of the 3 extra samples. 3 jobs (9b20, 6e9a, 7462), one per cell with `--samples 3`, 1,500 requests each on an H100: 77.0, 81.3, 78.3 min wall, 98 % of it generation at 1,307 to 1,370 tokens per second; setup and load 1.3 to 1.5 min. First submit to last end 82.4 min. Usual causes checked: 0 failed jobs, no fix loop, wait 0.1 min, jobs ran at the same time and began 9.4 min after the tier round, while paper 2 was written.
+- Cause: each job held three samples. `run_cell --shard k/N` with `analysis/shard_join.py` is on main and gives the same rows; SPEC_ckptcue3.md (11d2e6d) chose one job per cell. 9 jobs of 500 requests: about 27 min each (estimate from the same tokens per second, not measured).
+- Change: none made (step 4; steps 1 and 2: all three cells are read by the paper, nothing to delete). The cut needs no new code, only 9 submits and 3 joins in the spec; its one-command form is with the person since cycle 9 (about 20 to 30 % more credits). No code written here would move the 82.4 min, and it cannot be measured again without a GPU run, so there is no before and after table and no after.txt.
+- Failures: none in code or infrastructure (3 jobs, 0 failed). The 2 wrong statements are prose taken from the wrong pool, caught by the final check before publication. meta/FAILURES.md: 5 rows, 0 landed (checked run_cell.py, gen_readout.py, .claude/settings.json, finding-page/template.py).
+- Next entry checks: the next multi-sample cell a paper waits for is submitted as shards (one job per sample), and its minutes from first submit to last end against 82.4.
+
+## 2026-11-15 18:00 UTC (loop cycle 12, step-back 3; no tool change, no skill edit) meta/reviews/abaybektursun/20261115-1755/
+
+- Target (Team line, 4 h): claim to close median 54 min (48 at 16:53), upper quartile 184 min (274), 21 items by 3 people (20); 6.5 results per hour (6.2). Over 8 h: 54 / 163 min, 35 items, 5.4 per hour. Modal 81 jobs, 0 failed, wait 0.1 min.
+- Open measurements closed: upload at job end: 6 ended jobs ran with it, 6 of 6 are in the team store (stored_tars.txt). First measured sharded cell (MATH-500, 3 samples, 3 shards): answer after 62.6 min against about 166 min of summed generation.
+- Step-back (stepback.md): the upload helped by its own measure; the hook line helped weakly; no loop change is shown to move the team median itself. The cause of cycle 9's change came from three read-only subagents on records and transcripts, not from the skill's sections.
+- Never fixed: sharding as one command (credits; the person); worktree cap32run still submits with the old vast.py after two messages (29 of 35 vast.ai jobs since 15:05 ran without the upload); reviews by other sessions (2 more).
+- Skill: no edit. Section 1 (Direction) made 0 changes since the loop began; its deletion is asked of the person. The cycle 8 deletion does not pass the four-cycle comparison (medians 92.5 against 82.5 min) and is kept, with the reason in stepback.md.
+- Next cycle checks: vast.ai jobs run without the upload against 29 of 35; the Team line against 54 / 184 min and 6.5 per hour.
+
 ## 2026-11-15 17:05 UTC (paper loop, after result-526568 of work-184476) meta/reviews/abaybektursun/20261115-1655-paper2/
 
 - Previous entry asked for a vast.ai cell fetched with `get` after its box is gone: checked by loop cycle 11 (entry below: 1 of 1 on a real box), not by this review.

@@ -139,7 +139,7 @@ TABLE = {
     "rl-learns-the-opening-first": {
         "group": ANSWERS,
         "figure": lambda m: [signed(m.DATA["t10"]["s100_vs_cue"][0]), "points",
-                             f"MATH-500, T 1.0, RL step 100 ({m.DATA['t10']['right'][2]} of 500) over Base + cue ({m.DATA['t10']['right'][1]}); the interval includes 0"]},
+                             f"MATH-500, T 1.0, mean of 4 samples, RL step 100 ({m.DATA['t10']['right'][2]} of 500) over Base + cue ({m.DATA['t10']['right'][1]}); the interval includes 0"]},
     "rl-avoids-the-slip": {
         "group": ANSWERS,
         "figure": lambda m: [f"{m.DATA['D']['math31']['factor']:.2f}", "times as likely",
@@ -190,7 +190,7 @@ TABLE = {
     "forecasts-before-results": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.COUNTS['theory'][1]} of {m.COUNTS['theory'][0]}", "forecasts",
-                             f"theory nearer the reported number than both readers with no theory; {m.COUNTS['landed']} of {m.COUNTS['targets']} targets reported"]},
+                             f"theory nearer the reported number than both readers with no theory, most of them on one code experiment; {m.COUNTS['landed']} of {m.COUNTS['targets']} targets reported"]},
 }
 
 
@@ -419,7 +419,7 @@ ul.src li { padding: 5px 0; border-top: 1px solid var(--rule); break-inside: avo
     <div class="remain">
       <p class="gap wait" id="gapbox"><b id="gap"></b><span id="gapunit"></span></p>
       <div class="acts"><button id="replay" type="button">Replay</button><details class="src" id="srcbox"><summary>Where each number comes from</summary></details></div>
-      <p class="paper">Papers (PDF): <a href="/paper/the-finish-dial.pdf">The finish dial</a> · <a href="/paper/theories-on-trial.pdf">Theories on trial</a></p>
+      <p class="paper">Papers (PDF): <a href="/paper/the-finish-dial.pdf">The finish dial</a> · <a href="/paper/theories-on-trial.pdf">Theories on trial</a> · <a href="/paper/the-first-hundred-steps.pdf">The first hundred steps</a></p>
       <p class="rest wait" id="rest"></p>
     </div>
     <ul class="src" id="src" hidden></ul>

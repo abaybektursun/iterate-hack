@@ -161,7 +161,10 @@ def wait_for_box(pending, t0):
             # The driver's CUDA version, as nvidia-smi reports it: an offer's listed cuda_vers can be wrong, and vLLM stops
             # at engine start on an older driver ('NVIDIA driver too old (found version 12080)', offer 30752240, 2026-11-15)
             smi = subprocess.run([*ssh_cmd, "nvidia-smi | grep -o 'CUDA Version: [0-9.]*'"], capture_output=True, text=True)
-            cuda = float(smi.stdout.split()[-1]) if smi.returncode == 0 and smi.stdout.split() else 0.0
+            if smi.returncode != 0 or not smi.stdout.split():   # ssh or nvidia-smi not ready yet on a fresh box: ask again next round
+                print(f"{instance_id} driver check not answered yet ({smi.stderr.strip()[-120:]}); retrying", flush=True)
+                continue
+            cuda = float(smi.stdout.split()[-1])
             if cuda < MIN_CUDA:
                 print(f"{instance_id} driver supports CUDA {cuda}, under {MIN_CUDA} (the image's); destroying it", flush=True)
                 down([instance_id])

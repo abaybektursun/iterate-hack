@@ -28,6 +28,8 @@ a side panel whose address is /#<item id>; the filters are in the address too (/
 click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
 
   GET /demo            the talk: one stepped story page over the Design page's picture (demo.py), fed by the same /data
+  GET /demo/ali/<name> Ali's slides of the talk, slide1 to slide3: the idea map, the idea tree and the accuracy climb
+                       (demo_ali.py, with its data in demo_ali_data.py); /demo/ali leads to the first
   GET /architecture    the Design tab, how the harness works: one interactive picture (architecture.py), fed by the same /data
   GET /findings        the Findings tab: one tile per finding (findings.py), each a link to the page of that finding
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
@@ -72,6 +74,7 @@ import architecture
 import board
 import climb
 import demo
+import demo_ali
 import exa_page
 import findings
 import glossary
@@ -222,15 +225,14 @@ def detail(item_id):
 # The site lab's static files: beside the code in the Lambda zip (infra/monitor/deploy.sh), in the study in the repository.
 LAB = (Path(__file__).with_name("sitelab"), Path(__file__).parent.parent / "studies/sitelab")
 LAB_FILE = re.compile(r"(prototypes/[a-z-]+/)?(index\.html|data\.json)?")
-PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / study / "paper" / name)
-          for name, study in (("the-finish-dial.pdf", "rlneurons"), ("theories-on-trial.pdf", "theory"))}
+PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / folder / name)
+          for name, folder in (("the-finish-dial.pdf", "rlneurons/paper"), ("theories-on-trial.pdf", "theory/paper"),
+                               ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"))}
 
 
-# The home page (home.py) is at / and the board at /board. The page modules were written when the board was at /, so
-# their links to it are rewritten as a page is sent: a link to / goes to /board, unless it is the name "Invariant",
-# and the address of a board item (/#result-8b1c48) goes to /board#result-8b1c48. The name in each header leads home.
-HOME_LINK = re.compile(r'href="/"(?=[^>]*>(?!Invariant))')
-NAME_LINK = ('<h1 class="name">Invariant</h1>', '<h1 class="name"><a href="/" style="color:inherit;font-weight:inherit">Invariant</a></h1>')
+# The home page (home.py) is the page / of invariant.team; on any other host / is the board and the home page is /home.
+# API Gateway passes the name the browser asked for in the Host header.
+HOME_HOSTS = ("invariant.team", "www.invariant.team")
 HOME_PAGE = home.PAGE.replace("__COUNTS__", json.dumps({
     "findings": len(FINDINGS), "proof": len(PROOFS),
     "lab": max(len(list((d / "prototypes").glob("*/index.html"))) for d in LAB)}))
@@ -241,7 +243,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def send(self, status, kind, body, headers=()):
         if kind == "text/html":  # every page gets the tab icon here, so no page module holds it
-            body = HOME_LINK.sub('href="/board"', body.replace("<title>", ICON_LINK + "<title>", 1)).replace('"/#', '"/board#').replace(*NAME_LINK)
+            body = body.replace("<title>", ICON_LINK + "<title>", 1)
         data = body if isinstance(body, bytes) else body.encode()
         tag = f'"{hashlib.blake2b(data, digest_size=16).hexdigest()}"'  # from the content, so an unchanged board answers 304
         if status == 200 and self.headers.get("If-None-Match") == tag:
@@ -263,12 +265,19 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         path = self.path.split("?")[0]
-        if path == "/":
+        host = (self.headers.get("X-Forwarded-Host") or self.headers.get("Host") or "").split(":")[0].lower()
+        if path == "/home" or (path == "/" and host in HOME_HOSTS):
             return self.send(200, "text/html", HOME_PAGE)
-        if path == "/board":
+        if path == "/board":  # the board was here for two hours on 2026-11-15
+            return self.send(302, "text/plain", "", [("Location", "/")])
+        if path == "/":
             return self.send(200, "text/html", PAGE)
         if path == "/demo":
             return self.send(200, "text/html", demo.PAGE)
+        if path in ("/demo/ali", "/demo/ali/"):
+            return self.send(302, "text/plain", "", [("Location", "/demo/ali/slide1")])
+        if path.startswith("/demo/ali/") and path[len("/demo/ali/"):] in demo_ali.PAGES:
+            return self.send(200, "text/html", demo_ali.PAGES[path[len("/demo/ali/"):]])
         if path == "/architecture":
             return self.send(200, "text/html", architecture.PAGE)
         if path == "/findings":
