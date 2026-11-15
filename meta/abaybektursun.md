@@ -1,5 +1,22 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 05:40 UTC (after work-5d5dc3 closed as result-b30f15, critic at decoding time; two fifth-job marks) meta/reviews/abaybektursun/20261115-0532/
+
+- Last entry's checks: review entries since the 05:00 change, 1 (this one) in 0.7 h against 3.3 per hour, one window; setup_vllm.sh on the new image 1 s and 2 s (jobs b005, 0b2b) against a 26 s median; Team line (cycle.txt, 1 h) claim to close median 44 min, upper quartile 103, 18.0 results per hour, against 15 / 69 / 20.0 over 2 h: slower.
+- Direction: mission part 3 = "the cheapest route to those points that uses no reward, at equal generated tokens" (DIRECTION.md). The critic tested a no-reward route (stop and restart on a base-activation probe): negative, within-problem AUROC 0.51-0.57; the in-context loop (result-5227b9) also negative. Since 04:46, 2 closed items test no part of the mission (gpuprice b624bb, monitor speed 5b322f). Research: SPEC_critic names 2608.17124 and 2605.09502 and states what differs (the within-problem statistic); stage 0 bounded the route from stored rows before any GPU job. In line.
+- Turnaround of work-5d5dc3: claim 04:46, spec and stage 0 04:48, first GPU job 04:48, first job that ran 05:21, result 05:30, close about 05:40: to-job 2, jobs 37, to-answer 5 min (cycle.txt). The GPU work was 5.9 min (b005, 0b2b, f08c). Slowest stage: jobs, 33 of its 37 min waiting on submissions that died.
+- Cause (before.txt): 7 jobs of this workspace died in 24 h at runs.reload() with "open files preventing the operation", all on the log of ce39. ce39 was cancelled at 04:29 while queued, yet Modal started it at 05:02:35; its command runs in its own session, so the cancelled input left it running and holding /runs/ce39/log, and the next 7 inputs given to that container died seconds after start (05:02:37 to 05:04:22). Second, cycle.py counts a died job's run as now minus start (tools/cycle.py:53-55), so the 136.8 "failed container minutes" of the last hour are mostly not GPU time.
+- Change, proposal (step 2, delete reuse; not made: infra/ belongs to the person): the runner gives each job its own container (max_inputs=1 on the three functions), so no process of an earlier job can stay in it. Rows added to meta/FAILURES.md for both causes.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | jobs died at runs.reload(), 24 h | 7 | not measured yet | - | 7 | before.txt |
+  | critic, first GPU submit to first job that ran | 33 min | not measured yet | - | 1 | cycle.txt, before.txt |
+  | submit to start of a fresh container (must stay seconds) | 2-5 s (04:15 entry) | not measured yet | - | 2 | 20261115-0403/after.txt |
+
+- Failures: the first readout's label-free flag compared answer strings instead of grouping with rln4_lib.agree (39 % of problems looked unanimous), caught in review and rerun as probe-02 in the hour; the cause (stored rows carry no agreement group, so each study re-derives it) is still in place, carried to the next entry.
+- Next entry checks: whether the runner change was deployed and open-files deaths since; whether cycle.py still counts died jobs to now.
+
 ## 2026-11-15 05:00 UTC (loop cycle 1, meta/loop/abaybektursun.md) meta/reviews/abaybektursun/20261115-0455/
 
 - Target (new Team line of cycle.py, 2 h): claim to close median 15 min, upper quartile 69 min, 24 items of 3 people; 20.0 results per hour. This is the loop's baseline.
