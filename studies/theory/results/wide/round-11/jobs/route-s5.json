@@ -1,0 +1,13 @@
+{"route": {"mechanism": "round-09/training-m04",
+  "change": "Think-SFT with the cue sampled at T 1.0 / top-p 1.0 with min-p 0.05 (tail tokens cut), 3 samples per problem at cap 16,384, majority vote over the 3 (ties to the first sample).",
+  "model": "think_sft",
+  "gap_parts": "Reliability (about 0.43-0.63 of the gap; on hard328 about 15-20 of the 42-problem one-sample gap are problems the model solves in some samples): min-p plus the vote converts sometimes-solved problems to their right modal value with 3 samples instead of 4-8. Answer statement (about 0.03 of the gap, 1-2 problems): tail draws that garble the final line or drift into another script are cut. Budget (about 0.25, up to about 10 problems) is only partly touched: fewer drifting samples run to the cap. Capability (about 0.27 on hard328) is not won back: the vote cannot move a wrong mode.",
+  "why": "Pretraining (and SFT on top of it) fixes each problem's distribution over final values and a vote converges to its mode, with samples beyond about eight only resolving ties; cutting the low-probability tail with min-p moves each sample's draw toward that mode, so a 3-sample vote should reach nearly the 4-sample vote's ceiling at three quarters of its tokens.",
+  "command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model think_sft --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/5 --temperature 1.0 --top-p 1.0 --min-p 0.05 --max-tokens 16384 --samples 3 --seed 3400000 --commit $(git rev-parse HEAD)\"",
+  "rl_command": "uv run tools/gpu.py submit l40s --hours 2 -- \"bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.theory.jobs.free_cell --model rl --opening-text $' line!\\n\\nOkay' --set hard328 --shard 0/5 --temperature 1.0 --top-p 1.0 --min-p 0.05 --max-tokens 16384 --samples 3 --seed 3400000 --commit $(git rev-parse HEAD)\"",
+  "tokens": 28800,
+  "gpu_minutes": 190,
+  "readouts": [
+    {"arm": "route", "set": "hard328", "subset": "0/5", "n": 66, "readout": "right answers of 66 with grader v3 after the majority vote over 3 samples (ties to the first sample); best known at nearest tokens: Think-SFT + cue sequential vote at most 4, 238.9 of 328 at 30,837 tokens, about 48.1 of 66", "value": 49, "low": 44, "high": 53},
+    {"arm": "rl", "set": "hard328", "subset": "0/5", "n": 66, "readout": "right answers of 66 with grader v3 after the same majority vote over 3 samples, RL-Zero-Math with the same cue, min-p 0.05, cap and seeds", "value": 43, "low": 38, "high": 48}
+  ]}}

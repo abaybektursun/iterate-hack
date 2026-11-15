@@ -1,0 +1,14 @@
+== 1. no --resume
+{'n': 504, 'n_planned': 504, 'correct_v3': 168, 'cap_hits': 168, 'restarts': 0, 'generated_tokens': 2757912}
+rows equal to before (utc left out): True 504 504
+== 2. --resume runs/ih-1115-161910-44ea
+{'n': 504, 'n_planned': 504, 'correct_v3': 390, 'cap_hits': 32, 'restarts': 0, 'generated_tokens': 2502218}
+old rows copied unchanged: True 493
+requests sent: 11
+keys equal to a full run's: True duplicates: 0
+== 3. --restarts 2, cut after 25 rows, resumed
+{'n': 86, 'n_planned': 86, 'correct_v3': 30, 'cap_hits': 28, 'restarts': 26, 'generated_tokens': 459651}
+chains: 60 of 60; every chain complete: True ; rows: 86 ; first 25 rows kept: True
+== 4. inputs that must fail
+another seed refused: AssertionError: --resume runs/ih-1115-161910-44ea is another cell: {'seed': (41040000, 41040001)}
+duplicate row refused: AssertionError: /private/tmp/claude-501/-Users-abaybektursun-projects-iterate-hack/3efccc36-6eba-4628-90b3-92f6872302f7/scratchpad/t/dup: two rows of one request

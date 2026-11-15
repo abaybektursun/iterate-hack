@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 231, "low": 217, "high": 245, "reason": "Theory's last clause: in its native <think> format Think-SFT thinks longer and its right answers move past 16,384, so a 32,768 cap captures them; anchored on the native-format T 1.0 cap-32,768 cell (232; 204 at 16,384), theory silent on temperature so the T 1.0 anchor is kept."},
+{"id": "t02", "value": 473, "low": 463, "high": 482, "reason": "Same native-format clause: at cap 32,768 the long native answers finish (native T 1.0: 464 at 16,384 -> 474 at 32,768), so the forecast stays at the cap-32,768 native level."},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t10", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t11", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": 246, "low": 236, "high": 256, "reason": "Think-SFT-derived capped answers are unfinished derivations that finish right about a quarter of the time: M(2) at 16,384 on this seed is ~234 with ~54 cap hits, +1/4 of those gives ~247 (the 3,010,000 seed went 232 -> 245 with 56 cap hits)."},
+{"id": "t19", "value": 81, "low": 73, "high": 89, "reason": "Quarter-of-capped-answers-finish-right rule raises each fresh2026 sample from ~60 by ~15 (about 62 cap hits per sample at 16,384); the vote, already near pass@4 through abstention at 75, gains less, as on hard328 (238 -> 244), giving ~81."},
+{"id": "t20", "value": 75, "low": 68, "high": 82, "reason": "Think-SFT keeps deriving, so about a quarter of its ~62 cap hits per sample at 16,384 finish right at 32,768: 60.0 + ~15 = ~75 per sample mean."}
+]}

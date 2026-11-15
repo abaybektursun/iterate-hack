@@ -1,0 +1,35 @@
+[
+ {
+  "readout": "m21-r1",
+  "measured": 60,
+  "n": 250,
+  "interval": [
+   49,
+   71
+  ],
+  "artifact": "studies/theory/results/experiments/cell-r9-m21-01/metrics.json",
+  "item": "result-ac7104"
+ },
+ {
+  "readout": "m18-r1",
+  "measured": 316,
+  "n": 500,
+  "interval": [
+   298,
+   334
+  ],
+  "artifact": "studies/theory/results/experiments/cell-r9-m18-01/metrics.json",
+  "item": "result-ac7104"
+ },
+ {
+  "readout": "m11-r1",
+  "measured": 20,
+  "n": 250,
+  "interval": [
+   13,
+   27
+  ],
+  "artifact": "studies/theory/results/experiments/cell-r9-m11-01/metrics.json",
+  "item": "result-f8e596"
+ }
+]

@@ -12,7 +12,6 @@ ROOT = engine.ROOT
 JOBS = ROOT / "studies/rlneurons/jobs"
 JOB_FILES = {p.stem: p for d in (JOBS, ROOT / "studies/theory/jobs") for p in sorted(d.glob("*.py"))}  # the job files a cell may run
 SETS = {"hard328": 328, "MATH-500": 500}  # the two sets of the no-reward track, as the board's score: lines name them
-ROUTE_ARMS = [("route", "hard328"), ("route", "MATH-500"), ("rl", "hard328"), ("rl", "MATH-500")]
 CELL_KEYS = ("model", "prompt", "set", "n", "sampling", "samples", "grader", "cap")
 NUMS = ("value", "low", "high", "against_value", "gpu_minutes")
 THEORY_FILES = "\n- theories/: the full file of each theory (statement, scope, what it explains, predictions)."
@@ -220,60 +219,85 @@ def rank(merged, F, fam_of, left_out=()):
             r["top"] = {"forecaster": top, "value": F[top][r["id"]]["value"], "gain": round(F[top][r["id"]]["value"] - r["best_base"]["value"], 3)}
 
 
-# ---- the no-reward track (version 10) ----
+# ---- the no-reward track (version 11 baselines) ----
 
-def base_table(items):
-    """The board's best known counts without reward, from its `score: <kind> <set> <count>/<n> tokens <t> | <what>`
-    lines on hard328 or MATH-500 at the full set size whose setting names no RL model or delta: model "base" for kind
-    base, "think_sft" for kind other when the setting starts with Think-SFT; [{model, set, count, n, tokens, what, item}]."""
-    line = re.compile(r"^score: (base|other) (\S+) (\d+)/(\d+) tokens (\d+) \| (.*)$")
-    rows = [{"model": "base" if m[1] == "base" else "think_sft", "set": m[2], "count": int(m[3]), "n": int(m[4]), "tokens": int(m[5]), "what": m[6],
-             "item": i["id"]} for i in items for x in i["text"].splitlines() if (m := line.match(x.strip()))]
-    return [r for r in rows if SETS.get(r["set"]) == r["n"] and "RL" not in r["what"] and (r["model"] == "base" or r["what"].startswith("Think-SFT"))]
+TABLE = ROOT / "studies/rlneurons/results/table/hard328-02/table.json"  # hard328 configurations with per-problem vectors
+TABLE_MODEL = {"base": "base", "think_sft": "think", "rl": "rl"}  # route model -> key prefix of table.json rows
 
 
-def best_at(table, model, set_name, tokens, n):
-    """The best count of the table for model on set_name at tokens per problem or fewer, scaled to n problems; the
-    cheapest row when none is that cheap."""
-    rows = [r for r in table if r["model"] == model and r["set"] == set_name]
-    fit = [r for r in rows if r["tokens"] <= tokens]
-    b = max(fit, key=lambda r: r["count"]) if fit else min(rows, key=lambda r: r["tokens"])
-    note = f"{b['count']} of {b['n']} at {b['tokens']} tokens per problem ({b['what']})" + ("" if fit else "; no row at or below these tokens: the cheapest row")
-    return {"value": round(b["count"] * n / b["n"], 1), "item": b["item"], "note": note + (f", scaled to {n} problems" if n != b["n"] else "")}
+def table_rows():
+    """The rows of table.json for the base, Think-SFT and RL (key, name, samples, tokens, right of 328, MATH-500 right),
+    each with its per-problem vector of right answers on hard328 (fractions for means over samples)."""
+    t = json.loads(TABLE.read_text())
+    return [{"key": r["key"], "name": r["name"], "samples": r["n_samples"], "tokens": round(r["tokens"]), "right": r["right"],
+             "math500": r.get("math500", {}).get("right"), "source": r["source"], "vector": t["per_problem_right"][r["key"]]}
+            for r in t["rows"] if r["key"].split("|")[0] in TABLE_MODEL.values()]
 
 
-def check_routes(d, mids, flags=None):
+def high_on_math500(model, rows):
+    """A model whose one-sample MATH-500 count in table.json is above 90 %: MATH-500 is no readout for it."""
+    return next(r["math500"] for r in rows if r["key"] == f"{TABLE_MODEL[model]}|single") > 450
+
+
+def route_arms(model, rows):
+    return [("route", "hard328"), ("rl", "hard328")] + ([] if high_on_math500(model, rows) else [("route", "MATH-500")])
+
+
+def subset(text, n_set):
+    """Positions of a subset of a set: "all" or a shard "k/N" (positions k, k+N, ...)."""
+    if text == "all":
+        return list(range(n_set))
+    k, n = (int(x) for x in text.split("/"))
+    return list(range(n_set))[k::n]
+
+
+def baseline(rows, model, tokens, positions):
+    """The table row of the model at the nearest token count, its right answers on the positions (measured from its
+    per-problem vector) and the binomial sd of that subset count; None when the model has no row."""
+    mine = [r for r in rows if r["key"].startswith(TABLE_MODEL[model] + "|")]
+    if not mine:
+        return None
+    b = min(mine, key=lambda r: (abs(r["tokens"] - tokens), -r["right"]))
+    n, c = len(positions), sum(b["vector"][i] for i in positions)
+    return {"value": round(c, 2), "sd": round(max((n * (c / n) * (1 - c / n)) ** 0.5, 0.5), 2), "row": b["name"], "tokens": b["tokens"],
+            "source": f"{TABLE.relative_to(ROOT)} {b['key']} ({b['source']})", "n": n}
+
+
+def check_routes(d, mids, rows, flags=None):
     """A route job's route.json: one no-reward route from one of the family's mechanisms; model base or think_sft;
-    readouts for the route and the RL arm on hard328 and MATH-500 with ordered numbers; tokens and minutes; with flags,
-    both commands pass the flag check."""
+    readouts route and RL on hard328 (a subset "all" or "k/N"), and route on MATH-500 when the model is at or below
+    90 % there; ordered numbers; tokens and minutes; with flags, both commands pass the flag check."""
     r = json.loads((d / "route.json").read_text())["route"]
     e = [] if r.get("mechanism") in mids else [f"mechanism must be one of {mids}"]
     e += [f"missing {k}" for k in ("change", "command", "rl_command", "gap_parts", "why") if not str(r.get(k, "")).strip()]
-    e += [] if r.get("model") in ("base", "think_sft") else ["model must be base or think_sft"]
+    if r.get("model") not in ("base", "think_sft"):
+        return "; ".join(e + ["model must be base or think_sft"])
     e += [] if engine.number(r.get("tokens")) and r["tokens"] > 0 and engine.number(r.get("gpu_minutes")) and 0 < r["gpu_minutes"] <= 240 else [
         "tokens (generated tokens per problem, all samples) > 0 and 0 < gpu_minutes <= 240"]
-    rs = r.get("readouts", [])
-    if sorted((x.get("arm"), x.get("set")) for x in rs) != sorted(ROUTE_ARMS):
-        e.append(f"readouts must be exactly one per (arm, set) of {ROUTE_ARMS}")
+    rs, arms = r.get("readouts", []), route_arms(r["model"], rows)
+    if sorted((x.get("arm"), x.get("set")) for x in rs) != sorted(arms):
+        e.append(f"readouts must be exactly one per (arm, set) of {arms}")
     e += [f"readout {x.get('arm')} {x.get('set')}: numbers value, low, high with low <= value <= high, n in 1..{SETS.get(x.get('set'))}, and readout text"
           for x in rs if not (all(engine.number(x.get(k)) for k in ("value", "low", "high", "n")) and x["low"] <= x["value"] <= x["high"]
                               and 0 < x["n"] <= SETS.get(x.get("set"), 0) and str(x.get("readout", "")).strip())]
+    e += [f"readout {x['arm']} hard328: \"subset\" must be \"all\" or a shard \"k/N\" of the 328 with n equal to its size"
+          for x in rs if x.get("set") == "hard328" and not (re.fullmatch(r"all|\d+/\d+", str(x.get("subset"))) and len(subset(x["subset"], 328)) == x.get("n"))]
     e += [f"command: {x}" for x in command_errors(r["command"], flags)] + [f"rl_command: {x}" for x in command_errors(r["rl_command"], flags)] if flags else []
     return "; ".join(e) or None
 
 
-def route_cells(routes, table, prefix):
-    """Routes as cells for the blind forecast: id <prefix>-n01, readouts -r1 ... -r4 (route hard328, route MATH-500, RL
-    hard328, RL MATH-500), each route readout with the best known count at its tokens per problem."""
+def route_cells(routes, rows, prefix):
+    """Routes as cells for the blind forecast: id <prefix>-n01, readouts -r1 ... (route hard328, RL hard328, route
+    MATH-500 when there is one); the route's hard328 readout carries its baseline (best_base: the stored subset count)."""
     out = []
     for k, r in enumerate(routes, 1):
-        cid = f"{prefix}-n{k:02d}"
-        rs = sorted(r["readouts"], key=lambda x: ROUTE_ARMS.index((x["arm"], x["set"])))
+        cid, arms = f"{prefix}-n{k:02d}", route_arms(r["model"], rows)
+        rs = sorted(r["readouts"], key=lambda x: arms.index((x["arm"], x["set"])))
         out.append({"id": cid, "family": r["family"], "mechanism": r["mechanism"], "model": r["model"], "change": r["change"], "tokens": r["tokens"],
                     "gpu_minutes": r["gpu_minutes"], "command": r["command"], "rl_command": r["rl_command"], "gap_parts": r["gap_parts"], "why": r["why"],
                     "readouts": [{"id": f"{cid}-r{j}", **x, "unit": f"right answers of {x['n']}",
-                                  "best_base": best_at(table, r["model"], x["set"], r["tokens"], x["n"]) if x["arm"] == "route" else None}
-                                 for j, x in enumerate(rs, 1)]})
+                                  "best_base": baseline(rows, r["model"], r["tokens"], subset(x["subset"], 328))
+                                  if (x["arm"], x["set"]) == ("route", "hard328") else None} for j, x in enumerate(rs, 1)]})
     return out
 
 
@@ -285,25 +309,31 @@ def blind_routes(routes):
 
 
 def rank_routes(routes, F, left_out=()):
-    """Per route readout the median forecast (forecasters not left out) and its gain over the best known count at equal
-    tokens; a route's score is the larger of its two route readouts' gains."""
+    """Per readout the median forecast (forecasters not left out); a route's score is the margin of its hard328 readout,
+    (median - stored subset count) / sd of that count; None ("no baseline") when the model has no stored rows."""
     for c in routes:
         for x in c["readouts"]:
             vals = [f["value"] for f in said(F, x["id"], left_out).values()]
             x["median"] = statistics.median(vals) if vals else None
             if x["best_base"]:
-                x["gain"] = None if x["median"] is None else round(x["median"] - x["best_base"]["value"], 2)
-        c["score"] = max((x["gain"] for x in c["readouts"] if x.get("gain") is not None), default=None)
+                x["gain"] = None if x["median"] is None else round((x["median"] - x["best_base"]["value"]) / x["best_base"]["sd"], 2)
+        c["score"] = next((x["gain"] for x in c["readouts"] if x["best_base"]), None)
+
+
+def margin_text(x):
+    return "no baseline" if x is None else f"{x:+g} sd"
 
 
 def route_md(c, F, fam_of, left_out=()):
     md = [f"\n### {c['id']} ({c['family']}, {c['mechanism']}): {c['change']}\n\nModel {c['model']}, {c['tokens']:g} tokens per problem, "
-          f"{c['gpu_minutes']:g} GPU minutes (proposer's guess). Score {g(c['score'])}.\n\nWhy, by the gap's parts: {c['gap_parts']} {c['why']}\n\n"
-          f"Command: `{c['command']}`\n\nRL arm: `{c['rl_command']}`\n"]
+          f"{c['gpu_minutes']:g} GPU minutes (proposer's guess). Margin {margin_text(c['score'])}."
+          f"\n\nWhy, by the gap's parts: {c['gap_parts']} {c['why']}\n\nCommand: `{c['command']}`\n\nRL arm: `{c['rl_command']}`\n"]
     for x in c["readouts"]:
         b = x["best_base"]
-        md.append(f"\n#### {x['id']}: {x['arm']} on {x['set']}, {x['readout']} (of {x['n']})\n\nProposer {x['value']:g} [{x['low']:g}, {x['high']:g}]. "
-                  f"Median forecast {g(x['median'])}" + (f"; best known {b['value']:g} ({b['item']}: {b['note']}); gain {g(x['gain'])}." if b else ".") + "\n")
+        md.append(f"\n#### {x['id']}: {x['arm']} on {x['set']} ({x.get('subset', 'subset as stated')}), {x['readout']} (of {x['n']})\n\nProposer {x['value']:g} "
+                  f"[{x['low']:g}, {x['high']:g}]. Median forecast {g(x['median'])}" + (
+                      f"; stored {b['value']:g} of {b['n']} (sd {b['sd']:g}; {b['row']}, {b['tokens']} tokens; {b['source']}); margin {g(x['gain'])} sd." if b
+                      else "; no baseline.") + "\n")
         md += ["| forecaster | family | value | 90 % interval |\n|---|---|---|---|"] + [
             f"| {n}{' (left out)' if n in left_out else ''} | {fam_of[n]} | {f['value']:g} | [{f['low']:g}, {f['high']:g}] |" for n, f in said(F, x["id"]).items()]
     return md
@@ -342,19 +372,18 @@ def cell_md(c, by_id, F, fam_of):
 
 
 def cells_md(title, head, props, merged, F, fam_of, routes=(), left_out=()):
-    """cells.md: head, W1 and W3 of specs/SPEC_engine_v10.md, every merged cell in one table, list A (top 10 by
+    """cells.md: head, counts of splitting cells and routes above their baseline, every merged cell in one table, list A (top 10 by
     separation per GPU minute), list B (base-only cells by the highest forecast minus the best known base count) and
-    list C (no-reward routes by the median forecast minus the best known count at equal tokens)."""
+    list C (no-reward routes by the margin of the median forecast over the stored subset count, in its sd)."""
     by_id = {p["id"]: p for p in props}
     by_sep = sorted(merged, key=lambda c: -c["per_minute"])
     base = sorted((c for c in merged if c["base_only"]), key=lambda c: -max(r["top"]["gain"] for r in c["readouts"]))
     by_score = sorted(routes, key=lambda c: -(c["score"] if c["score"] is not None else -1e9))
     w1, w3 = [c["id"] for c in routes if (c["score"] or 0) > 0], [c["id"] for c in merged if c["separation"]]
     md = [f"# {title}\n\n{head}\n", f"Left out of the ranking (record at or below -2 nats): {', '.join(sorted(left_out)) or 'none'}.\n",
-          f"- W1: {len(w1)} of {len(routes)} no-reward routes have a median forecast above the best known count at equal tokens ({', '.join(w1) or 'none'}; "
-          f"needs 4): {'holds' if len(w1) >= 4 else 'refuted'}.",
-          f"- W3: {len(w3)} of {len(merged)} cells have a readout that splits with 2 or more families on each side ({', '.join(w3) or 'none'}; needs 5): "
-          f"{'holds' if len(w3) >= 5 else 'refuted'}.\n",
+          f"- Routes: {len(w1)} of {len(routes)} have a median forecast above the stored subset count of the row at the nearest tokens "
+          f"({', '.join(w1) or 'none'}); {sum(c['score'] is None for c in routes)} have no baseline.",
+          f"- Cells: {len(w3)} of {len(merged)} have a readout that splits with 2 or more families on each side ({', '.join(w3) or 'none'}).\n",
           "## Every merged cell\n\n| cell | model | prompt | set | n | base only | GPU minutes | separation | per minute |\n|---|---|---|---|---|---|---|---|---|"]
     md += [f"| {c['id']} | {c['cell']['model']} | {c['cell']['prompt']} | {c['cell']['set']} | {c['cell']['n']} | {'yes' if c['base_only'] else ''} | "
            f"{c['gpu_minutes']:g} | {c['separation']} | {c['per_minute']:g} |" for c in by_sep]
@@ -362,6 +391,6 @@ def cells_md(title, head, props, merged, F, fam_of, routes=(), left_out=()):
     md += [line for c in by_sep[:10] for line in cell_md(c, by_id, F, fam_of)]
     md.append("\n## List B: base-only cells, top 10 by the highest forecast of right answers minus the best known base count")
     md += [line for c in base[:10] for line in cell_md(c, by_id, F, fam_of)]
-    md.append("\n## List C: no-reward routes by the median forecast minus the best known count at equal tokens per problem")
+    md.append("\n## List C: no-reward routes by the margin of the median forecast over the stored subset count of the row at the nearest tokens, in sd")
     md += [line for c in by_score for line in route_md(c, F, fam_of, left_out)]
     return "\n".join(md) + "\n"

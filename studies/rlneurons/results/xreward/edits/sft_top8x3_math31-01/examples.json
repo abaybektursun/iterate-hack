@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 3558,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "1) from (2):\n\\[\n4b = -747 + 458 \\implies 4b = -289 \\implies b = -\\frac{289}{4}\n\\]\n\nSubstituting \\( b \\) back into (1):\n\\[\n16\\left(-\\frac{289}{4}\\right) + c = -458 \\implies -1156 + c = -458 \\implies c = 698\n\\]\n\n### For \\( Q(x) \\):\n1. Using the point \\((16, 54)\\):\n\\[\n-2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566 \\quad \\text{(3)}\n\\]\n2. Using the point \\((20, 53)\\):\n\\[\n-2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853 \\quad \\text{(4)}\n\\]\n\nSubtracting (3) from (4):\n\\[\n4d = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n\\]\n\nSubstituting \\( d \\) back into (3):\n\\[\n16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n\\]\n\n### Final Calculation:\n\\[\nP(0) + Q(0) = c + e = 698 + (-582) = 116\n\\]\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 29,
+  "gold": "244",
+  "extracted_v3": "22",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 13189,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "en configuration with \\( m = 7 \\) and \\( n = 5 \\), we start by analyzing the given example where \\( m = 3 \\) and \\( n = 2 \\), which results in 8 regions. \n\nWe hypothesize that the number of bounded regions can be determined by a formula that fits this example and generalizes for the given values. Through detailed analysis and considering non-crossing segments, we derive that the number of bounded regions follows the formula:\n\n\\[\n2 \\times (m + n - 1)\n\\]\n\nThis formula is derived from the observation that the number of regions formed by such a configuration is twice the sum of the points minus 1. \n\nSubstituting the given values \\( m = 7 \\) and \\( n = 5 \\):\n\n\\[\n2 \\times (7 + 5 - 1) = 2 \\times 11 = 22\n\\]\n\nThus, the number of bounded regions when \\( m = 7 \\) and \\( n = 5 \\) is:\n\n\\[\n\\boxed{22}\n\\]"
+ }
+}

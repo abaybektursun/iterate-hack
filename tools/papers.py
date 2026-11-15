@@ -2,8 +2,9 @@
 
 view.py serves page(PAPERS) at /papers; the home dial leads to it. The words column states what the loop is and its
 six steps in order. The picture is the papers themselves: one lit sheet per paper of view.PAPERS, in the order they
-were written, each with its title, its claim, its length, why the loop picked it and how it was checked. A click on a
-sheet opens its PDF. The status at the top right says whether the loop's work item (LOOP_ITEM) is open on the board
+were written, each with its title, its claim, its length, why the loop picked it and how it was checked. Only the first
+sheet carries the glow or the cast shadow, so the row reads as one lit object. A click on a sheet opens its PDF in a
+new tab. The status at the top right says whether the loop's work item (LOOP_ITEM) is open on the board
 and when it last moved, from /data, read every 10 s. Nothing here writes to the board.
 
 Where the words come from. The steps: the comments of board item work-184476, meta/tierlist/ (TIERLIST.md, ROUND3.md,
@@ -42,6 +43,12 @@ ROWS = {
         "picked": "Tier round 4: first of 6 candidates, and it needed no GPU run.",
         "checked": "64 checks of its numbers against stored readouts pass.",
     },
+    "two-token-limits.pdf": {
+        "claim": "Three gains between fine-tunes of one 7B model, scored at 16,384 and at 32,768 tokens: one holds, one grows by 6 points and one shrinks.",
+        "pages": 4,
+        "picked": "Tier round 5: the cap test of a scout on stored rows; it waited for one run at the larger limit.",
+        "checked": "153 checks of its numbers against stored readouts pass; 4 review passes.",
+    },
 }
 STEPS = [
     ("Tier", "Scout agents collect the project's findings, re-read the best at their files, search the literature and score novelty and evidence. Judges rank them."),
@@ -62,7 +69,7 @@ def page(papers):
         foot = "".join(f"<p>{esc(row[k])}</p>" for k in ("picked", "checked") if k in row)
         pages = f'{row["pages"]} pages' if "pages" in row else "PDF"
         sheets.append(
-            f'<a class="sheet" style="--i:{i}" href="/paper/{esc(name)}"><span class="no">Paper {i + 1}</span>'
+            f'<a class="sheet" style="--i:{i}" href="/paper/{esc(name)}" target="_blank" rel="noopener"><span class="no">Paper {i + 1}</span>'
             f'<h2>{esc(demo_deck.paper_title(name))}</h2><p class="claim">{esc(row.get("claim", ""))}</p>'
             f'<div class="how">{foot}</div><span class="open"><b>{pages}</b><i>Open the PDF</i></span></a>')
     steps = "".join(f'<li><b>{esc(n)}</b><span>{esc(t)}</span></li>' for n, t in STEPS)
@@ -83,10 +90,10 @@ PAGE = r"""<!doctype html>
 /* The tokens, the light and the type of the Design page (architecture.py). */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #cbd2d8;
   --blue: #1f43d6; --red: #c41e34;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
-  --rim-a: rgba(16, 24, 32, .28); --rim-c: rgba(16, 24, 32, .5);
+  --rim-a: rgba(16, 24, 32, .28);
   --lit: 0 30px 50px -28px rgba(16, 24, 32, .5);
 }
 @media (prefers-color-scheme: dark) {
@@ -94,7 +101,7 @@ PAGE = r"""<!doctype html>
     --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
     --blue: #8fb1ff; --red: #ff6b7c;
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
-    --rim-a: rgba(255, 255, 255, .5); --rim-c: rgba(143, 177, 255, .22);
+    --rim-a: rgba(255, 255, 255, .5);
     --lit: 0 0 90px -20px rgba(143, 177, 255, .22);
   }
 }
@@ -123,8 +130,8 @@ a { color: inherit; }
 .status.bad::before { background: var(--red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--red) 20%, transparent); }
 
 /* The words: the sentence and the six steps, which are a sequence */
-.words { grid-column: 1; grid-row: 2; min-height: 0; overflow: hidden auto; scrollbar-width: none; padding: clamp(18px, 4.5vh, 52px) 0 0; }
-.cap { margin: 0; font-size: clamp(20px, 1.56vw, 27px); line-height: 1.22; font-weight: 300; font-stretch: 102%; letter-spacing: -.012em; max-width: 24ch; text-wrap: balance; }
+.words { grid-column: 1; grid-row: 2; min-height: 0; overflow: hidden auto; scrollbar-width: none; padding: 30px 0 0; }
+.cap { margin: 0; font-size: clamp(20px, 1.56vw, 27px); line-height: 1.22; font-weight: 300; font-stretch: 102%; letter-spacing: -.012em; max-width: 24ch; text-wrap: pretty; }
 .steps { list-style: none; counter-reset: step; margin: clamp(18px, 3.4vh, 34px) 0 0; padding: 0; border-bottom: 1px solid var(--rule); }
 .steps li { counter-increment: step; display: grid; grid-template-columns: 1.5em 5.2em minmax(0, 1fr); column-gap: 8px; padding: 9px 0; border-top: 1px solid var(--rule); align-items: baseline; }
 .steps li::before { content: counter(step); color: var(--mute); font-size: 13px; }
@@ -139,32 +146,35 @@ a { color: inherit; }
   flex: 1 1 0; min-width: 0; aspect-ratio: 1 / 1.52; max-height: 74vh; display: flex; flex-direction: column;
   padding: clamp(14px, 1.5vw, 26px); text-decoration: none; border-radius: 3px;
   background: linear-gradient(150deg, var(--glass-hi), var(--glass) 46%, var(--glass-lo));
-  border: 1px solid var(--rim-c); border-top-color: var(--rim-a); border-left-color: var(--rim-a); box-shadow: var(--lit);
-  transform: translateZ(calc(var(--i) * -34px)) translateY(calc(var(--i) * 10px)); transition: transform .25s cubic-bezier(.3, 0, .2, 1), border-color .2s ease;
+  border: 0 solid var(--rim-a); border-width: 1px 0 0 1px; box-shadow: var(--lit);  /* the light catches the top and left edges */
+  transform: translateZ(calc(var(--i) * -34px)); transition: transform .25s cubic-bezier(.3, 0, .2, 1), border-color .2s ease;
   animation: rise .7s cubic-bezier(.2, .7, .2, 1) both; animation-delay: calc(.1s + var(--i) * 90ms);
 }
-@keyframes rise { from { opacity: 0; transform: translateZ(calc(var(--i) * -34px)) translateY(calc(var(--i) * 10px + 26px)); } }
-.sheet:hover, .sheet:focus-visible { transform: translateZ(calc(var(--i) * -34px + 30px)) translateY(calc(var(--i) * 10px - 4px)); border-color: var(--blue); }
+.sheet:not(:first-child) { box-shadow: none; }
+@keyframes rise { from { opacity: 0; transform: translateZ(calc(var(--i) * -34px)) translateY(26px); } }
+.sheet:hover, .sheet:focus-visible { transform: translateZ(calc(var(--i) * -34px + 30px)) translateY(-4px); border-color: var(--blue); }
 .no { font-size: 12.5px; font-weight: 600; color: var(--mute); }
 .sheet h2 { margin: .5em 0 0; font-size: clamp(19px, 1.75vw, 31px); line-height: 1.08; font-weight: 300; font-stretch: 100%; letter-spacing: -.014em; text-wrap: balance; }
 .claim { margin: .9em 0 0; font-size: clamp(12.5px, .95vw, 15px); line-height: 1.4; text-wrap: pretty; }
-.how { margin-top: auto; padding-top: 12px; font-size: clamp(11.5px, .82vw, 13px); line-height: 1.38; color: var(--mute); }
+.how { margin-top: auto; padding-top: 12px; font-size: clamp(12.5px, .82vw, 13px); line-height: 1.38; color: var(--mute); }
 .how p { margin: 0; padding: 6px 0; border-top: 1px solid var(--rule); }
-.open { display: flex; justify-content: space-between; align-items: baseline; padding-top: 8px; border-top: 1px solid var(--ink); font-size: 13px; }
-.open b { font-weight: 600; }
-.open i { font-style: normal; color: var(--blue); font-weight: 600; }
+.open { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 10px; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 13px; }
+.open b { font-weight: 600; white-space: nowrap; }
+.open i { white-space: nowrap; font-style: normal; color: var(--blue); font-weight: 600; }
 
-@media (max-width: 1100px) {
-  .page { display: block; height: auto; min-height: 0; padding: 16px 16px 40px; }
+@media (max-width: 1240px) {  /* below this the four sheets beside the words are too narrow for their text */
+  .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
+  .words { display: contents; }  /* one column: the sentence, then the papers, then the steps that made them */
+  .stage { order: 1; } .steps { order: 2; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
-  .words { overflow: visible; padding-top: 20px; }
-  .cap { font-size: 22px; max-width: none; }
+  .cap { font-size: 22px; max-width: none; margin-top: 20px; }
   .stage { display: block; perspective: none; margin-top: 26px; }
   .row { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; animation: none; }
   .sheet, .sheet:hover, .sheet:focus-visible { transform: none; aspect-ratio: auto; max-height: none; min-height: 300px; animation-name: fade; }
   .sheet h2 { font-size: 25px; } .claim { font-size: 14.5px; } .how { font-size: 13px; }
 }
+@media (min-width: 810px) and (max-width: 1073px) { .row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }  /* where three would fit: two and two, never three and one */
 @keyframes fade { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
   .row, .sheet { animation: none; }

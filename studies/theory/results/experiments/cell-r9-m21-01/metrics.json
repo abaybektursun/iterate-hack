@@ -1,0 +1,160 @@
+{
+ "cell": "m21",
+ "readout": "m21-r1",
+ "measured": 60,
+ "n": 250,
+ "interval_90": [
+  49,
+  71
+ ],
+ "right_v3": 157,
+ "cap_hits": 4,
+ "mean_generated_tokens": 2673.504,
+ "median_generated_tokens": 1088,
+ "quick_wrong": 60,
+ "quick_right": 61,
+ "no_extracted_answer_finished": 36,
+ "opens_okay": 103,
+ "forecasts": {
+  "reader-1": {
+   "value": 25,
+   "interval": [
+    10,
+    45
+   ],
+   "inside": false
+  },
+  "reader-2": {
+   "value": 18,
+   "interval": [
+    8,
+    32
+   ],
+   "inside": false
+  },
+  "run-06/f2-m03": {
+   "value": 25,
+   "interval": [
+    10,
+    45
+   ],
+   "inside": false
+  },
+  "run-05/f2-m03": {
+   "value": 40,
+   "interval": [
+    24,
+    58
+   ],
+   "inside": false
+  },
+  "run-05/f2-m06": {
+   "value": 45,
+   "interval": [
+    28,
+    64
+   ],
+   "inside": true
+  },
+  "run-07/f2-m02": {
+   "value": 27,
+   "interval": [
+    14,
+    40
+   ],
+   "inside": false
+  },
+  "round-09/problems-m03": {
+   "value": 20,
+   "interval": [
+    10,
+    32
+   ],
+   "inside": false
+  },
+  "run-03/f2-m02": {
+   "value": 14,
+   "interval": [
+    7,
+    23
+   ],
+   "inside": false
+  },
+  "round-09/stopping-m06": {
+   "value": 15,
+   "interval": [
+    8,
+    24
+   ],
+   "inside": false
+  },
+  "run-04/f2-m03": {
+   "value": 18,
+   "interval": [
+    7,
+    32
+   ],
+   "inside": false
+  },
+  "round-09/sampling-m03": {
+   "value": 20,
+   "interval": [
+    8,
+    35
+   ],
+   "inside": false
+  }
+ },
+ "job_counts": {
+  "n": 250,
+  "tok_p_lt_1e2": 9327,
+  "tok_p_lt_1e3": 3004,
+  "correct_v3": 157,
+  "correct_v1": 144,
+  "cap_hits": 4,
+  "loop_A": 0,
+  "generated_tokens": 668376,
+  "restarts": 0,
+  "n_planned": 250,
+  "mean_generated_tokens": 2673.504,
+  "generation_s": 1031.8489758968353,
+  "tokens_per_s": 647.7459547014412
+ },
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "top8x1_code31_plain",
+  "prompt": "plain",
+  "set": "math500",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 64000000,
+  "shots": null,
+  "n": 250,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/root/abaybektursun-1115-103050-eae1/out",
+  "dry_run": false,
+  "commit": "cd2f8d0a9ccc612eb30062a9cf6eff4894695af5",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 250,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ }
+}

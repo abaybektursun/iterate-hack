@@ -5,8 +5,8 @@ usage numbers read from the past.dev usage API on 2026-11-15 15:40 UTC, and the 
 quoted from the team's Claude Code transcripts, replayed, and the recall pilot
 (studies/metaharness/results/recall_pilot/recall_vs_grep-01); the caption of the selected recall runs under both.
 One recall quoted in full follows (the query, the entry past.dev returned, the agent's next sentence), then how the
-setup works and what the page does not show. Its look is its own (white paper, black ink, one blue for what past.dev
-returned), at the person's request.
+setup works and what the page does not show. It uses the site's tokens, header and type (architecture.py), in both
+themes; the one accent, --blue, is what past.dev returned.
 
 The four recalls are replayed in a 3D scene of the memory: a porcelain disc holding 854 source dots in three sectors
 (616 paper findings, 227 board posts, 11 sessions), the writers behind it and the readers in front. Each replay shows
@@ -21,133 +21,173 @@ PAGE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>past.dev: the memory our agents asked first</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap">
 <style>
-:root { --paper: #FFFFFF; --ink: #0B0B0C; --grey: #5E6166; --rule: #0B0B0C; --hair: #D4D5D8; --blue: #1D3BF2; --u: 8px; }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--paper); color: var(--ink); font: 400 17px/1.5 Archivo, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-.page { max-width: 1320px; margin: 0 auto; padding: 0 calc(var(--u) * 5); }
-.cond { font-stretch: 62%; font-weight: 800; letter-spacing: -0.01em; line-height: 0.92; }
-.mono { font: 400 15px/1.55 'JetBrains Mono', 'Courier New', monospace; }
+/* The tokens, the header and the type of the Design page (architecture.py). The one accent is --blue: what past.dev
+   returned. The towers and the cubes take four shades between ink and paper, lit from the upper left in both themes. */
+:root {
+  color-scheme: light dark;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
+  --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
+  --pl: .56; --pc: .15; --dim: .16;
+  --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
+  --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
+  --glow: 0; --shadow: 1; --spec: 0; --bloom: .4; --core: var(--blue); --lift: 38%;
+  --btn: linear-gradient(#27323e, #0d141b); --btn-ink: #f5f8fa; --btn-edge: rgba(255, 255, 255, .18); --btn-drop: rgba(16, 24, 32, .42);
+  --grey: var(--mute); --u: 8px;
+  --tw-top: color-mix(in srgb, var(--ink) 50%, var(--paper)); --tw-left: color-mix(in srgb, var(--ink) 68%, var(--paper));
+  --tw-front: color-mix(in srgb, var(--ink) 92%, var(--paper)); --tw-right: var(--ink);
+  --bl-top: color-mix(in srgb, var(--blue) 55%, #fff); --bl-left: color-mix(in srgb, var(--blue) 80%, #fff); --bl-right: color-mix(in srgb, var(--blue) 86%, #000);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
+    --blue: #8fb1ff; --red: #ff6b7c; --on-blue: #080c11;
+    --pl: .78; --pc: .13; --dim: .24;
+    --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
+    --rim-a: rgba(255, 255, 255, .92); --rim-b: rgba(255, 255, 255, .1); --rim-c: rgba(143, 177, 255, .45);
+    --glow: 1; --shadow: 0; --spec: 1; --bloom: 1; --core: #f6f9ff; --lift: 55%;
+    --btn: linear-gradient(#f7fafc, #cbd5de); --btn-ink: #080c11; --btn-edge: rgba(255, 255, 255, .7); --btn-drop: rgba(0, 0, 0, .6);
+    --tw-top: color-mix(in srgb, var(--ink) 80%, var(--paper)); --tw-left: color-mix(in srgb, var(--ink) 58%, var(--paper));
+    --tw-front: color-mix(in srgb, var(--ink) 40%, var(--paper)); --tw-right: color-mix(in srgb, var(--ink) 26%, var(--paper));
+  }
+}
+* { box-sizing: border-box; }
+html { background: var(--paper); }
+body {
+  margin: 0; color: var(--ink); background: var(--paper);
+  font: 400 15px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
+.top { display: flex; align-items: center; gap: 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+.name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
+.top a { color: var(--mute); text-decoration: none; white-space: nowrap; transition: color .15s ease; }
+.top a:hover { color: var(--ink); }
+p, h2, article, section { margin: 0; }
+.page { max-width: 1840px; margin: 0 auto; padding: 20px 40px 0; }
+.cond { margin: 0; text-wrap: balance; font-weight: 300; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-stretch: 102%; letter-spacing: -.016em; }
+.mono { font-variant-numeric: tabular-nums; }
 .blue { color: var(--blue); }
 .grey { color: var(--grey); }
 
 /* masthead */
-.mast { display: flex; justify-content: space-between; gap: 24px; padding: calc(var(--u) * 3) 0; border-bottom: 2px solid var(--rule); font-size: 14px; font-weight: 600; }
+.mast { display: flex; justify-content: space-between; gap: 24px; padding-top: 14px; font-size: 13px; color: var(--mute); }
 
 /* first screen: title, four usage numbers, both scenes, the caption of the selected recall */
-.top { padding: calc(var(--u) * 3) 0 calc(var(--u) * 5); border-bottom: 2px solid var(--rule); }
+.first { padding: 22px 0 40px; border-bottom: 1px solid var(--rule); }
 .lede { display: flex; align-items: center; gap: calc(var(--u) * 5); }
-h1.cond { font-size: clamp(44px, 5.6vw, 88px); line-height: 1; white-space: nowrap; }
-.lede .sub { font-size: 17px; line-height: 1.45; max-width: 520px; }
-.nums { display: grid; grid-template-columns: repeat(4, 1fr); margin-top: calc(var(--u) * 3); border-top: 2px solid var(--rule); }
-.nums > div { padding: calc(var(--u) * 1.5) calc(var(--u) * 2.5) calc(var(--u) * 1.5); border-left: 1px solid var(--hair); }
-.nums > div:first-child { border-left: 0; padding-left: 0; }
-.nums .n { display: block; font-stretch: 62%; font-weight: 800; font-size: clamp(36px, 4vw, 60px); line-height: 1; font-variant-numeric: tabular-nums; }
-.nums .w { display: block; margin-top: 6px; font-size: 17px; font-weight: 600; line-height: 1.3; }
-.nums .d { display: block; font-size: 14px; line-height: 1.4; color: var(--grey); }
-.src-line { padding-top: calc(var(--u) * 1); border-top: 1px solid var(--hair); font-size: 13px; color: var(--grey); }
+h1.cond { white-space: nowrap; }
+.lede .sub { font-size: 16px; line-height: 1.45; max-width: 560px; }
+.nums { display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 28px; margin-top: calc(var(--u) * 3); border-top: 1px solid var(--rule); }
+.nums > div { padding: calc(var(--u) * 1.5) 0; }
+.nums .n { display: block; font-weight: 300; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-stretch: 102%; letter-spacing: -.016em; line-height: 1; }
+.nums .w { display: block; margin-top: 6px; font-weight: 600; line-height: 1.3; }
+.nums .d { display: block; font-size: 13.5px; line-height: 1.4; color: var(--grey); }
+.src-line { padding-top: calc(var(--u) * 1); border-top: 1px solid var(--rule); font-size: 13px; color: var(--grey); }
 .figs { display: grid; grid-template-columns: 7fr 5fr; grid-template-areas: "mem tw" "strip strip"; column-gap: calc(var(--u) * 6); margin-top: calc(var(--u) * 3); }
 .fig-mem { grid-area: mem; } .fig-tw { grid-area: tw; }
-.figlab { font-size: 15px; font-weight: 600; padding-bottom: calc(var(--u) * 1); }
-.figsay { margin-top: calc(var(--u) * 1); font-size: 14px; max-width: 600px; }
+.figlab { font-size: 13px; font-weight: 600; padding-bottom: calc(var(--u) * 1); }
+.figsay { margin-top: calc(var(--u) * 1); font-size: 13.5px; max-width: 70ch; }
 .ex { align-self: start; }
-.ex .row { display: grid; grid-template-columns: 96px 1fr; gap: calc(var(--u) * 3); padding: calc(var(--u) * 3) 0; border-top: 1px solid var(--hair); }
-.ex .row:first-child { border-top: 2px solid var(--rule); }
+.ex .row { display: grid; grid-template-columns: 96px 1fr; gap: calc(var(--u) * 3); padding: calc(var(--u) * 3) 0; border-top: 1px solid var(--rule); }
 .ex .k { font-size: 13px; font-weight: 600; line-height: 1.9; }
 .ex .k span { display: block; font-weight: 400; color: var(--grey); }
-.ex .asked { font: 500 clamp(15px, 1.35vw, 19px)/1.5 'JetBrains Mono', monospace; }
-.ex .got { color: var(--blue); font-size: clamp(19px, 1.9vw, 27px); line-height: 1.32; font-weight: 500; }
-.ex .got small { display: block; margin-top: 12px; font: 400 13px/1.5 'JetBrains Mono', monospace; }
-.ex .then { font-size: clamp(19px, 1.9vw, 27px); line-height: 1.32; font-weight: 500; }
-.ex .cap { padding-top: calc(var(--u) * 2); border-top: 1px solid var(--hair); font-size: 13px; color: var(--grey); }
+.ex .asked { font-size: 17px; line-height: 1.45; font-weight: 380; }
+.ex .got, .ex .then { font-size: clamp(20px, 1.56vw, 27px); line-height: 1.26; font-weight: 300; font-stretch: 102%; letter-spacing: -.012em; }
+.ex .got { color: var(--blue); }
+.ex .got small { display: block; margin-top: 12px; font-size: 13px; line-height: 1.5; font-weight: 400; font-stretch: 100%; letter-spacing: 0; }
+.ex .cap { padding-top: calc(var(--u) * 2); border-top: 1px solid var(--rule); font-size: 13px; color: var(--grey); }
 .ex .row:nth-child(2) { position: relative; }
-.ex .row:nth-child(2)::before { content: ""; position: absolute; left: -20px; top: 24px; bottom: 24px; width: 4px; background: var(--blue); transform-origin: top; }
+.ex .row:nth-child(2)::before { content: ""; position: absolute; left: -20px; top: 24px; bottom: 24px; width: 2px; background: var(--blue); transform-origin: top; }
 @keyframes draw { from { transform: scaleY(0); } to { transform: scaleY(1); } }
 @media (prefers-reduced-motion: no-preference) { .ex .row:nth-child(2)::before { animation: draw 0.9s 0.4s cubic-bezier(.2,.7,.2,1) backwards; } }
 
 /* sections */
-section { display: grid; grid-template-columns: 5fr 7fr; gap: calc(var(--u) * 8); padding: calc(var(--u) * 10) 0; border-bottom: 2px solid var(--rule); }
-h2 { font-size: clamp(40px, 4.6vw, 68px); text-wrap: balance; }
+section { display: grid; grid-template-columns: 5fr 7fr; gap: calc(var(--u) * 8); padding: 56px 0; border-bottom: 1px solid var(--rule); }
 section > div:first-child { align-self: start; position: sticky; top: 40px; }
-section .say { margin-top: calc(var(--u) * 3); font-size: 18px; max-width: 420px; }
+section .say { margin-top: calc(var(--u) * 3); font-size: 16px; max-width: 420px; }
 
 /* the two scenes: one SVG under, an optional canvas for the many small dots, one SVG over */
 .scene { position: relative; width: 100%; overflow: hidden; touch-action: pan-y; }
 .scene svg, .scene canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
-.scene text { font: 600 13px/1 Archivo, Arial, sans-serif; fill: var(--ink); }
+.scene text { font-weight: 600; font-size: 13px; fill: var(--ink); }
 .scene text.g { font-weight: 400; fill: var(--grey); }
 .scene text.b, .scene tspan.b { fill: var(--blue); }
-.scene tspan.n, .scene text.n { font-stretch: 62%; font-weight: 800; font-size: 15px; font-variant-numeric: tabular-nums; }
+.scene tspan.n, .scene text.n { font-weight: 400; }
 .scene text.tag { font-size: 13px; font-weight: 600; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round; paint-order: stroke; }
 .scene text.ml { font-size: 13px; font-weight: 500; fill: var(--grey); }
 .scene text.ml.on { font-weight: 600; fill: var(--ink); }
-.key { margin-top: calc(var(--u) * 1.5); font-size: 14px; color: var(--grey); max-width: 600px; }
+.key { margin-top: calc(var(--u) * 1.5); font-size: 13.5px; color: var(--grey); max-width: 70ch; }
 #mem, #tw { height: clamp(340px, 46vh, 500px); }
 
 /* the caption of the selected recall: a strip of four columns under both scenes; every case sits in the same cell,
    so the strip keeps the height of the longest one and nothing moves between cases */
-.strip { --cols: 1fr 1.25fr 1.6fr 1.6fr; grid-area: strip; display: grid; grid-template-columns: var(--cols); column-gap: calc(var(--u) * 4); margin-top: calc(var(--u) * 4); padding-top: calc(var(--u) * 2.5); border-top: 1px solid var(--hair); }
+.strip { --cols: 1fr 1.25fr 1.6fr 1.6fr; grid-area: strip; display: grid; grid-template-columns: var(--cols); column-gap: calc(var(--u) * 4); margin-top: calc(var(--u) * 4); padding-top: calc(var(--u) * 2.5); border-top: 1px solid var(--rule); }
 .cases { display: grid; grid-column: 1 / -1; grid-row: 1; }
 .case { grid-area: 1 / 1; visibility: hidden; display: grid; grid-template-columns: var(--cols); column-gap: calc(var(--u) * 4); }
 .case.on { visibility: visible; }
-.case .when { font-size: 15px; font-weight: 600; padding-bottom: 76px; }  /* room for the buttons below it */
+.case .when { font-weight: 600; padding-bottom: 76px; }  /* room for the buttons below it */
 .case .when span { display: block; font-weight: 400; color: var(--grey); }
 .case .lab { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-.case .ret { color: var(--blue); font-size: 17px; line-height: 1.42; font-weight: 500; }
-.case .then { font-size: 17px; line-height: 1.42; font-weight: 500; }
-.case b { font-weight: 700; }
-.picks { grid-column: 1; grid-row: 1; align-self: end; position: relative; z-index: 1; display: flex; gap: calc(var(--u) * 1.5); }
-.picks button { width: 48px; height: 48px; padding: 0; border-radius: 50%; border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink); font: 800 22px/1 Archivo, Arial, sans-serif; font-stretch: 62%; font-variant-numeric: tabular-nums; cursor: pointer; }
-.picks button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
-.picks button:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+.case .ret { color: var(--blue); line-height: 1.45; }
+.case .then { line-height: 1.45; }
+.case b { font-weight: 600; }
+.picks { grid-column: 1; grid-row: 1; align-self: end; position: relative; z-index: 1; }
+.picks { display: flex; gap: 6px; }
+.picks button { appearance: none; min-width: 44px; height: 44px; padding: 0 12px; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; background: none; color: var(--mute); font: inherit; font-weight: 600; cursor: pointer; }
+.picks button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--blue); }
 
 /* recall against grep, as towers */
-#tw text.cnt { font-stretch: 62%; font-weight: 800; font-size: 30px; font-variant-numeric: tabular-nums; }
+#tw text.cnt, #tw tspan.tn { font-weight: 300; font-size: 26px; font-stretch: 102%; letter-spacing: -.016em; }
 #tw text.lane { font-size: 14px; }
-#tw tspan.tn { font-stretch: 62%; font-weight: 800; font-size: 30px; font-variant-numeric: tabular-nums; }
-#tw tspan.tw { font-size: 13px; font-weight: 600; }
+#tw tspan.tw { font-size: 13px; font-weight: 600; letter-spacing: 0; }
 
 /* limits */
-.lim p { padding: calc(var(--u) * 2.5) 0; border-top: 1px solid var(--hair); font-size: 17px; }
-.lim p:first-child { border-top: 2px solid var(--rule); }
+.lim p { padding: calc(var(--u) * 2) 0; border-top: 1px solid var(--rule); }
 .lim b { font-weight: 600; }
 
 /* close */
-.end { background: var(--ink); color: #fff; margin-top: -2px; }
-.end .page { padding-top: calc(var(--u) * 12); padding-bottom: calc(var(--u) * 8); }
-.end h2 { font-size: clamp(72px, 12vw, 190px); }
-.end p { margin-top: calc(var(--u) * 4); font-size: 22px; max-width: 620px; }
-.end .src { margin-top: calc(var(--u) * 10); padding-top: calc(var(--u) * 2); border-top: 1px solid #ffffff66; font-size: 13px; max-width: none; }
+.end .page { padding-top: 56px; padding-bottom: 56px; }
+.end p { margin-top: calc(var(--u) * 3); font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; max-width: 620px; }
+.end .src { margin-top: 56px; padding-top: calc(var(--u) * 2); border-top: 1px solid var(--rule); font-size: 13px; line-height: 1.5; font-weight: 400; color: var(--grey); max-width: none; }
 
+@media (max-width: 500px) {  /* no room: of the writers only the one that wrote is named, and the note "papers only" goes */
+  #mem [data-k="writers"] .lab:not(.on), #mem [data-k="only"] { display: none; }
+}
 @media (max-width: 900px) {
-  .page { padding: 0 20px; }
-  section { grid-template-columns: 1fr; gap: calc(var(--u) * 5); padding: calc(var(--u) * 6) 0; }
+  .page { padding: 14px 16px 0; }
+  .end .page { padding-top: 40px; padding-bottom: 40px; }
+  .top { gap: 0 13px; padding-bottom: 2px; flex-wrap: wrap; }
+  .name { font-stretch: 112%; margin-right: 0; }
+  section { grid-template-columns: 1fr; gap: calc(var(--u) * 4); padding: 40px 0; }
   .mast span:last-child { text-align: right; }
   .ex .row { grid-template-columns: 1fr; gap: 6px; }
+  .ex .row:nth-child(2)::before { left: -9px; }
   .ex .k span { display: inline; margin-left: 8px; }
-  .top { padding: calc(var(--u) * 4) 0 calc(var(--u) * 5); }
+  .first { padding: 20px 0 40px; }
   .lede { display: block; }
   h1.cond { white-space: normal; }
   .lede .sub { margin-top: calc(var(--u) * 2); }
   .nums { grid-template-columns: 1fr 1fr; }
-  .nums > div:nth-child(odd) { border-left: 0; padding-left: 0; }
-  .nums > div:nth-child(n+3) { border-top: 1px solid var(--hair); }
+  .nums > div:nth-child(n+3) { border-top: 1px solid var(--rule); }
   .figs { grid-template-columns: minmax(0, 1fr); grid-template-areas: "mem" "strip" "tw"; }
   .fig-tw { margin-top: calc(var(--u) * 5); }
   .strip { display: block; margin-top: calc(var(--u) * 3); }
   .case { display: block; }
   .case .when { padding-bottom: calc(var(--u) * 2); }
-  .case .blk { padding: calc(var(--u) * 2) 0; border-top: 1px solid var(--hair); }
-  .picks { padding-top: calc(var(--u) * 2.5); border-top: 1px solid var(--hair); }
+  .case .blk { padding: calc(var(--u) * 2) 0; border-top: 1px solid var(--rule); }
+  .picks { padding-top: calc(var(--u) * 2.5); border-top: 1px solid var(--rule); }
   #mem { height: 340px; }
   #tw { height: 400px; }
   section > div:first-child { position: static; }  /* in one column a sticky heading would slide over its own figure */
-  #tw text.cnt { font-size: 22px; }
+  #tw text.cnt, #tw tspan.tn { font-size: 20px; }
   #tw text.lane { font-size: 12px; }
-  #tw tspan.tn { font-size: 22px; }
-  #tw tspan.tw { font-size: 11px; }
-  .scene text { font-size: 10px; }
+  #tw tspan.tw { font-size: 12px; }
+  .scene text, .scene text.ml { font-size: 12px; font-stretch: 82%; }  /* narrower labels leave the disc more room */
   .scene text.tag { display: none; }  /* the caption below names the source */
 }
 </style>
@@ -155,9 +195,17 @@ section .say { margin-top: calc(var(--u) * 3); font-size: 18px; max-width: 420px
 <body>
 <div class="page">
 
+  <header class="top">
+    <h1 class="name">Invariant</h1>
+    <a href="/">Board</a>
+    <a href="/architecture">Design</a>
+    <a href="/proof">Proof</a>
+    <a href="/findings">Findings</a>
+  </header>
+
   <div class="mast"><span>past.dev, used by iterate-hack</span><span>SF AI Research Hackathon · Nov 14–15, 2026</span></div>
 
-  <div class="top">
+  <div class="first">
     <div class="lede">
       <h1 class="cond">Our agents asked first.</h1>
       <p class="sub">Three people ran dozens of Claude Code agents on one research question. Before an agent started an idea, it asked past.dev what the team had already read and found.</p>
@@ -464,7 +512,20 @@ function leaning(el) {  // a few degrees toward the pointer, eased; it settles b
   L.step = dt => { const a = Math.min(1, dt / 500); L.x += (L.tx - L.x) * a; L.y += (L.ty - L.y) * a; };
   return L;
 }
-const stop = (at, color, alpha) => `<stop offset="${at}" stop-color="${color}"${alpha == null ? "" : ` stop-opacity="${alpha}"`}/>`;
+const stop = (at, color, alpha) => `<stop offset="${at}" style="stop-color:${color}${alpha == null ? "" : `;stop-opacity:${alpha}`}"/>`;
+const SH = a => `calc(${a} * var(--shadow))`;  // a cast shadow: there in light, gone in dark, as on the Design page
+/* The canvases cannot read a token, so K holds each one as the browser resolved it; it is read again when the theme changes. */
+const K = {}, repaint = [], probe = document.body.appendChild(document.createElement("i"));
+probe.style.display = "none";
+function tint() {
+  const names = { ink: "--ink", paper: "--paper", mute: "--mute", blue: "--blue", core: "--core",
+    twleft: "--tw-left", twfront: "--tw-front", twright: "--tw-right", twback: "--tw-right", twtop: "--tw-top",
+    blleft: "--bl-left", blfront: "--blue", blright: "--bl-right", blback: "--bl-right", bltop: "--bl-top" };
+  for (const k in names) { probe.style.color = `var(${names[k]})`; K[k] = getComputedStyle(probe).color; }
+}
+tint();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { tint(); repaint.forEach(f => f()); });
+const alpha = (c, a) => c.replace("rgb(", "rgba(").replace(")", `, ${a})`);
 
 /* Figure 1: the memory, with four real recalls replayed. */
 function memory() {
@@ -488,36 +549,36 @@ function memory() {
     { sec: 2, r: 0.42, a: 160, tag: "arXiv 2603.22117", wrote: "a paper reader wrote", reader: "an agent read, 21:31" },
   ].map(c => ({ ...c, dot: pickDot(L, c.sec, c.r * R, c.a) }));
   const RING = Array.from({ length: 96 }, (_, i) => i * 360 / 96);
-  const TONE = ["#6c6f75", "#36383c", "#9c9fa5"], BAND = [0.5, 0.72, 0.95];
+  const TONE = [0.62, 0.9, 0.42], BAND = [0.5, 0.72, 0.95];
 
   back.innerHTML = "<defs>" +
-    `<radialGradient id="m-sh">${stop(0, "#0B0B0C", 0.17)}${stop(0.55, "#0B0B0C", 0.09)}${stop(1, "#0B0B0C", 0)}</radialGradient>` +
-    `<linearGradient id="m-side" x1="0" y1="0" x2="1" y2="0">${stop(0, "#f7f8f9")}${stop(0.5, "#dcdee1")}${stop(1, "#b5b8bd")}</linearGradient>` +
-    `<radialGradient id="m-top" cx=".32" cy=".26" r=".95">${stop(0, "#ffffff")}${stop(0.6, "#f3f4f5")}${stop(1, "#e2e4e7")}</radialGradient>` +
+    `<radialGradient id="m-sh">${stop(0, "var(--ink)", SH(0.17))}${stop(0.55, "var(--ink)", SH(0.09))}${stop(1, "var(--ink)", 0)}</radialGradient>` +
+    `<linearGradient id="m-side" x1="0" y1="0" x2="1" y2="0">${stop(0, "var(--glass-hi)")}${stop(0.5, "var(--glass)")}${stop(1, "var(--glass-lo)")}</linearGradient>` +
+    `<radialGradient id="m-top" cx=".32" cy=".26" r=".95">${stop(0, "var(--glass-hi)")}${stop(0.6, "var(--glass)")}${stop(1, "var(--glass-lo)")}</radialGradient>` +
     "</defs>" +
     '<path data-k="shadow" fill="url(#m-sh)"/><path data-k="wall" fill="url(#m-side)"/>' +
-    '<path data-k="low" fill="none" stroke="#0B0B0C" stroke-opacity=".3" stroke-width=".8"/>' +
+    '<path data-k="low" fill="none" style="stroke:var(--ink)" stroke-opacity=".3" stroke-width=".8"/>' +
     '<path data-k="face" fill="url(#m-top)"/>' +
-    '<path data-k="rimb" fill="none" stroke="#0B0B0C" stroke-opacity=".16" stroke-width=".6"/>' +
-    '<path data-k="rimf" fill="none" stroke="#0B0B0C" stroke-opacity=".55" stroke-width="1.1"/>';
+    '<path data-k="rimb" fill="none" style="stroke:var(--ink)" stroke-opacity=".16" stroke-width=".6"/>' +
+    '<path data-k="rimf" fill="none" style="stroke:var(--ink)" stroke-opacity=".55" stroke-width="1.1"/>';
   const mark = cls => `<g class="${cls}"><path class="wire" fill="none"/><ellipse class="foot" fill="url(#m-ft)"/>` +
-    '<line class="stem" stroke="#0B0B0C" stroke-opacity=".7" stroke-width="1.2"/><circle class="head" fill="url(#m-mk)"/><text class="lab ml" text-anchor="middle"></text></g>';
+    '<line class="stem" style="stroke:var(--ink)" stroke-opacity=".7" stroke-width="1.2"/><circle class="head" fill="url(#m-mk)"/><text class="lab ml" text-anchor="middle"></text></g>';
   front.innerHTML = "<defs>" +
-    `<radialGradient id="m-hk" cx=".36" cy=".3" r=".7">${stop(0, "#a9acb1")}${stop(0.55, "#0B0B0C")}</radialGradient>` +
-    `<radialGradient id="m-gk">${stop(0, "#0B0B0C", 0.22)}${stop(1, "#0B0B0C", 0)}</radialGradient>` +
-    `<radialGradient id="m-hb" cx=".36" cy=".3" r=".7">${stop(0, "#ffffff")}${stop(0.5, "#1D3BF2")}</radialGradient>` +
-    `<radialGradient id="m-gb">${stop(0, "#1D3BF2", 0.32)}${stop(1, "#1D3BF2", 0)}</radialGradient>` +
-    `<radialGradient id="m-mk" cx=".36" cy=".3" r=".75">${stop(0, "#8d9095")}${stop(0.6, "#1c1d1f")}${stop(1, "#0B0B0C")}</radialGradient>` +
-    `<radialGradient id="m-ft">${stop(0, "#0B0B0C", 0.22)}${stop(1, "#0B0B0C", 0)}</radialGradient>` +
+    `<radialGradient id="m-hk" cx=".36" cy=".3" r=".7">${stop(0, "var(--mute)")}${stop(0.55, "var(--ink)")}</radialGradient>` +
+    `<radialGradient id="m-gk">${stop(0, "var(--ink)", 0.22)}${stop(1, "var(--ink)", 0)}</radialGradient>` +
+    `<radialGradient id="m-hb" cx=".36" cy=".3" r=".7">${stop(0, "var(--core)")}${stop(0.5, "var(--blue)")}</radialGradient>` +
+    `<radialGradient id="m-gb">${stop(0, "var(--blue)", 0.32)}${stop(1, "var(--blue)", 0)}</radialGradient>` +
+    `<radialGradient id="m-mk" cx=".36" cy=".3" r=".75">${stop(0, "var(--mute)")}${stop(0.6, "var(--ink)")}${stop(1, "var(--ink)")}</radialGradient>` +
+    `<radialGradient id="m-ft">${stop(0, "var(--ink)", SH(0.22))}${stop(1, "var(--ink)", 0)}</radialGradient>` +
     "</defs>" +
-    '<path data-k="hair" fill="none" stroke="#0B0B0C" stroke-opacity=".35" stroke-width=".8"/>' +
+    '<path data-k="hair" fill="none" style="stroke:var(--ink)" stroke-opacity=".35" stroke-width=".8"/>' +
     `<g data-k="writers">${WR.map(() => mark("wr")).join("")}</g>` +
     '<text data-k="wrote" class="on" text-anchor="middle"></text>' +
-    '<path data-k="tw" fill="none" stroke="#0B0B0C" stroke-opacity=".4" stroke-width="1"/>' +
+    '<path data-k="tw" fill="none" style="stroke:var(--ink)" stroke-opacity=".4" stroke-width="1"/>' +
     `<g data-k="secl">${SL.map(() => '<text><tspan class="sn"></tspan><tspan class="n" dx="5"></tspan></text>').join("")}</g>` +
     `<g data-k="readers">${RD.map(() => mark("rd")).join("")}<text data-k="who" text-anchor="middle"></text>` +
     '<text data-k="only" class="ml" text-anchor="end">papers only</text></g>' +
-    '<path data-k="tb" fill="none" stroke="#1D3BF2" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+    '<path data-k="tb" fill="none" style="stroke:var(--blue)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>' +
     '<g data-k="pulse" opacity="0"><circle class="bloom"/><path class="tail"/><circle class="head"/></g>' +
     '<text data-k="tag" class="tag" text-anchor="start"></text>';
   const $ = (root, k) => root.querySelector(`[data-k="${k}"]`);
@@ -525,8 +586,8 @@ function memory() {
   const F = {}; ["hair", "tw", "tb", "who", "wrote", "only", "tag", "pulse"].forEach(k => { F[k] = $(front, k); });
   const nodes = g => ({ g, wire: g.querySelector(".wire"), foot: g.querySelector(".foot"), stem: g.querySelector(".stem"), head: g.querySelector(".head"), lab: g.querySelector(".lab") });
   const wEl = [...$(front, "writers").children].map(nodes), rEl = [...$(front, "readers").querySelectorAll("g")].map(nodes);
-  wEl.forEach((m, i) => { m.lab.textContent = WR[i].name; set(m.wire, "stroke", "#8b8e93"); set(m.wire, "stroke-width", ".8"); });
-  rEl.forEach((m, i) => { m.lab.textContent = RD[i].name; set(m.wire, "stroke", "#0B0B0C"); set(m.wire, "stroke-opacity", ".55"); set(m.wire, "stroke-width", "1"); });
+  wEl.forEach((m, i) => { m.lab.textContent = WR[i].name; m.wire.style.stroke = "var(--mute)"; set(m.wire, "stroke-width", ".8"); });
+  rEl.forEach((m, i) => { m.lab.textContent = RD[i].name; m.wire.style.stroke = "var(--ink)"; set(m.wire, "stroke-opacity", ".55"); set(m.wire, "stroke-width", "1"); });
   rEl[0].lab.classList.add("on");
   [rEl[1].head, rEl[1].stem, rEl[1].wire].forEach(n => set(n, "opacity", ".5"));  // the theory generator: no traced read of its own to replay, so it stays quiet
   const sEl = [...$(front, "secl").children];
@@ -563,7 +624,7 @@ function memory() {
     const h = q[N - 1], hr = Math.max(2.4, 3.4 * h[2] * G.s);
     set(F.pulse, "opacity", f1(Math.min(1, f * 10, (1 - f) * 8 + 0.25)));
     set(P0.tail, "d", ribbon(q, (_, i) => 2 * hr * Math.pow(i / (N - 1), 1.4)));
-    set(P0.tail, "fill", blue ? "#1D3BF2" : "#0B0B0C");
+    P0.tail.style.fill = blue ? "var(--blue)" : "var(--ink)";
     set(P0.tail, "fill-opacity", ".55");
     set(P0.head, "cx", f1(h[0])); set(P0.head, "cy", f1(h[1])); set(P0.head, "r", f1(hr));
     set(P0.head, "fill", blue ? "url(#m-hb)" : "url(#m-hk)");
@@ -607,12 +668,13 @@ function memory() {
       paths[j].moveTo(q[0] + r, q[1]); paths[j].arc(q[0], q[1], r, 0, 2 * Math.PI);
       if (rr > 0) { const e = Math.hypot(d.x - ox, d.z - oz) - rr, k = Math.exp(-(e * e) / 500); if (k > 0.06) hot.push([q, r, k]); }
     }
-    paths.forEach((p, j) => { ctx.globalAlpha = BAND[j % 3]; ctx.fillStyle = TONE[(j / 3) | 0]; ctx.fill(p); });
+    ctx.fillStyle = K.ink;
+    paths.forEach((p, j) => { ctx.globalAlpha = BAND[j % 3] * TONE[(j / 3) | 0]; ctx.fill(p); });
     if (rr > 0) {
-      ctx.fillStyle = "#0B0B0C";
+      ctx.fillStyle = K.ink;
       for (const [q, r, k] of hot) { ctx.globalAlpha = 0.7 * k; ctx.beginPath(); ctx.arc(q[0], q[1], r * (1 + 0.8 * k), 0, 2 * Math.PI); ctx.fill(); }
       const ring = Array.from({ length: 120 }, (_, i) => [ox + rr * Math.cos(i * 3 * RAD), YT + 0.3, oz + rr * Math.sin(i * 3 * RAD)]);
-      ctx.globalAlpha = 0.24 * (1 - tl.ripple); ctx.strokeStyle = "#0B0B0C"; ctx.lineWidth = 1; ctx.beginPath();
+      ctx.globalAlpha = 0.24 * (1 - tl.ripple); ctx.strokeStyle = K.ink; ctx.lineWidth = 1; ctx.beginPath();
       let on = false;
       for (const p of ring) { if (Math.hypot(p[0], p[2]) < 0.98 * R) { const q = Pr(p); if (on) ctx.lineTo(q[0], q[1]); else ctx.moveTo(q[0], q[1]); on = true; } else on = false; }
       ctx.stroke();
@@ -620,17 +682,17 @@ function memory() {
     const dFace = [d0.x, YT + 0.3, d0.z], dLift = [d0.x, YT + 0.3 + 24 * tl.lift, d0.z];
     const qf = Pr(dFace), ql = Pr(dLift), dr = Math.max(1, 2.1 * qf[2] * s);
     if (tl.written && !tl.blue) {
-      ctx.globalAlpha = 1; ctx.fillStyle = "#0B0B0C"; ctx.beginPath(); ctx.arc(qf[0], qf[1], dr * 1.8, 0, 2 * Math.PI); ctx.fill();
+      ctx.globalAlpha = 1; ctx.fillStyle = K.ink; ctx.beginPath(); ctx.arc(qf[0], qf[1], dr * 1.8, 0, 2 * Math.PI); ctx.fill();
     } else if (tl.blue) {
-      ctx.globalAlpha = 0.16 * tl.lift; ctx.fillStyle = "#0B0B0C"; ctx.beginPath(); ctx.ellipse(qf[0], qf[1], dr * 2.4, dr * 1.1, 0, 0, 2 * Math.PI); ctx.fill();
+      ctx.globalAlpha = 0.16 * tl.lift; ctx.fillStyle = K.ink; ctx.beginPath(); ctx.ellipse(qf[0], qf[1], dr * 2.4, dr * 1.1, 0, 0, 2 * Math.PI); ctx.fill();
       const br = Math.max(4.5, dr * 2.6) * (0.75 + 0.25 * tl.lift), hr = br * 3.4;
-      ctx.globalAlpha = 0.9; ctx.strokeStyle = "#1D3BF2"; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(qf[0], qf[1]); ctx.lineTo(ql[0], ql[1]); ctx.stroke();
-      ctx.globalAlpha = 1; ctx.fillStyle = "#1D3BF2"; ctx.beginPath(); ctx.arc(qf[0], qf[1], Math.max(1, dr * 0.9), 0, 2 * Math.PI); ctx.fill();
+      ctx.globalAlpha = 0.9; ctx.strokeStyle = K.blue; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(qf[0], qf[1]); ctx.lineTo(ql[0], ql[1]); ctx.stroke();
+      ctx.globalAlpha = 1; ctx.fillStyle = K.blue; ctx.beginPath(); ctx.arc(qf[0], qf[1], Math.max(1, dr * 0.9), 0, 2 * Math.PI); ctx.fill();
       const gl = ctx.createRadialGradient(ql[0], ql[1], br * 0.6, ql[0], ql[1], hr);
-      gl.addColorStop(0, "rgba(29,59,242,0.3)"); gl.addColorStop(1, "rgba(29,59,242,0)");
+      gl.addColorStop(0, alpha(K.blue, 0.3)); gl.addColorStop(1, alpha(K.blue, 0));
       ctx.fillStyle = gl; ctx.beginPath(); ctx.arc(ql[0], ql[1], hr, 0, 2 * Math.PI); ctx.fill();
-      ctx.fillStyle = "#1D3BF2"; ctx.beginPath(); ctx.arc(ql[0], ql[1], br, 0, 2 * Math.PI); ctx.fill();
-      ctx.fillStyle = "rgba(255,255,255,0.55)"; ctx.beginPath(); ctx.arc(ql[0] - br * 0.35, ql[1] - br * 0.35, br * 0.3, 0, 2 * Math.PI); ctx.fill();
+      ctx.fillStyle = K.blue; ctx.beginPath(); ctx.arc(ql[0], ql[1], br, 0, 2 * Math.PI); ctx.fill();
+      ctx.globalAlpha = 0.55; ctx.fillStyle = K.core; ctx.beginPath(); ctx.arc(ql[0] - br * 0.35, ql[1] - br * 0.35, br * 0.3, 0, 2 * Math.PI); ctx.fill();
     }
     ctx.globalAlpha = 1;
 
@@ -641,7 +703,7 @@ function memory() {
     const rp = rEl.map((m, i) => placeMark(m, RD[i], Pr, false));
     set(F.who, "x", f1(rp[0].f[0])); set(F.who, "y", f1(rp[0].f[1] + 34));
     set(F.only, "x", f1((rp[1].h[0] + rp[1].t[0]) / 2 - 8)); set(F.only, "y", f1((rp[1].h[1] + rp[1].t[1]) / 2 + 4));
-    sEl.forEach((tx, i) => { const q = Pr(face(SL[i][2] * R, SL[i][1])); set(tx, "x", f1(q[0])); set(tx, "y", f1(q[1] + 4)); });
+    sEl.forEach((tx, i) => { const q = Pr(face(SL[i][2] * R, SL[i][1])); set(tx, "x", f1(q[0])); set(tx, "y", f1(q[1] + 4 - (!i && innerWidth <= 500 ? 7 : 0))); });  // on a phone "Board" stands clear of the back rim
 
     /* the replay */
     const wr = WR.find(w => w.sec === C.sec), wPath = pathOf([wr.head, wr.to, dFace]);
@@ -669,7 +731,7 @@ function memory() {
     wEl.forEach((m, i) => {
       const on = WR[i].sec === C.sec;
       m.lab.classList.toggle("on", on);
-      set(m.wire, "stroke", on ? "#0B0B0C" : "#8b8e93"); set(m.wire, "stroke-width", on ? "1.1" : ".8");
+      m.wire.style.stroke = on ? "var(--ink)" : "var(--mute)"; set(m.wire, "stroke-width", on ? "1.1" : ".8");
       [m.head, m.stem, m.foot].forEach(n => set(n, "opacity", on ? "1" : ".4"));
     });
     if (reduce) paintStill();
@@ -691,6 +753,7 @@ function memory() {
   const h0 = fromHash();
   select(h0 >= 0 ? h0 : 0, h0 >= 0);
   paintStill();
+  repaint.push(paintStill);
   new ResizeObserver(() => { layout(); paintStill(); }).observe(el);
   if (document.fonts) document.fonts.ready.then(() => { layout(); paintStill(); });
   loop(el, dt => {
@@ -719,23 +782,18 @@ function towers() {
     const row = i < 10 ? 1 : 0, x0 = ln.x - 68.5 + (i % 10) * (CUBE + GAP);
     cubes.push({ on, blue: ln.blue, x0, x1: x0 + CUBE, z0: CZ[row], z1: CZ[row] + CUBE });
   }));
-  const CB = { left: "#4A62F5", front: "#1D3BF2", right: "#1A33D0", back: "#1A33D0", top: "#8393F8" };
-  const CK = { left: "#3a3c40", front: "#1c1d20", right: "#0B0B0C", back: "#0B0B0C", top: "#6b6e73" };
   const FILL = [
-    { left: "#4A62F5", front: "#1D3BF2", right: "#1A33D0", back: "#1A33D0", top: "#8393F8" },
-    { left: "url(#t-dl)", front: "url(#t-df)", right: "#121315", back: "#121315", top: "url(#t-dt)" },
+    { left: "var(--bl-left)", front: "var(--blue)", right: "var(--bl-right)", back: "var(--bl-right)", top: "var(--bl-top)" },
+    { left: "var(--tw-left)", front: "var(--tw-front)", right: "var(--tw-right)", back: "var(--tw-right)", top: "var(--tw-top)" },
   ];
-  const facesG = i => `<g data-k="box${i}">${["left", "front", "right", "back", "top"].map(n => `<path data-f="${n}" fill="${FILL[i][n]}"/>`).join("")}` +
-    `<path data-f="strata" fill="none" stroke="#ffffff" stroke-opacity="${i ? ".2" : ".35"}" stroke-width=".7"/>` +
-    `<path data-f="rim" fill="none" stroke="#ffffff" stroke-opacity="${i ? ".3" : ".55"}" stroke-width=".8"/></g>`;
+  const facesG = i => `<g data-k="box${i}">${["left", "front", "right", "back", "top"].map(n => `<path data-f="${n}" style="fill:${FILL[i][n]}"/>`).join("")}` +
+    `<path data-f="strata" fill="none" style="stroke:var(--paper)" stroke-opacity="${i ? ".2" : ".35"}" stroke-width=".7"/>` +
+    `<path data-f="rim" fill="none" style="stroke:var(--paper)" stroke-opacity="${i ? ".3" : ".55"}" stroke-width=".8"/></g>`;
   back.innerHTML = "<defs>" +
-    `<radialGradient id="t-sh">${stop(0, "#0B0B0C", 0.2)}${stop(0.55, "#0B0B0C", 0.1)}${stop(1, "#0B0B0C", 0)}</radialGradient>` +
-    `<linearGradient id="t-dl" x1="0" y1="0" x2="0" y2="1">${stop(0, "#7d8085")}${stop(1, "#4d5054")}</linearGradient>` +
-    `<linearGradient id="t-df" x1="0" y1="0" x2="0" y2="1">${stop(0, "#2a2c2f")}${stop(1, "#141517")}</linearGradient>` +
-    `<linearGradient id="t-cast" x1="0" y1="0" x2="1" y2=".6">${stop(0, "#0B0B0C", 0.2)}${stop(0.45, "#0B0B0C", 0.08)}${stop(1, "#0B0B0C", 0)}</linearGradient>` +
-    `<linearGradient id="t-dt" x1="0" y1="0" x2="1" y2="1">${stop(0, "#8c8f94")}${stop(1, "#66696e")}</linearGradient>` +
+    `<radialGradient id="t-sh">${stop(0, "var(--ink)", SH(0.2))}${stop(0.55, "var(--ink)", SH(0.1))}${stop(1, "var(--ink)", 0)}</radialGradient>` +
+    `<linearGradient id="t-cast" x1="0" y1="0" x2="1" y2=".6">${stop(0, "var(--ink)", SH(0.2))}${stop(0.45, "var(--ink)", SH(0.08))}${stop(1, "var(--ink)", 0)}</linearGradient>` +
     "</defs>" +
-    '<path data-k="lanes" fill="none" stroke="#D4D5D8" stroke-width="1"/>' +
+    '<path data-k="lanes" fill="none" style="stroke:var(--rule)" stroke-width="1"/>' +
     '<path data-k="ca0" fill="url(#t-cast)"/><path data-k="ca1" fill="url(#t-cast)"/><path data-k="sh0" fill="url(#t-sh)"/><path data-k="sh1" fill="url(#t-sh)"/><path data-k="cs0" fill="url(#t-sh)" opacity=".6"/><path data-k="cs1" fill="url(#t-sh)" opacity=".6"/>' +
     facesG(1) + facesG(0);
   front.innerHTML = LANES.map((ln, i) =>
@@ -813,16 +871,17 @@ function towers() {
         if (!facing(q)) continue;
         ctx.beginPath(); q.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]))); ctx.closePath();
         if (c.on) {
-          const col = (c.blue ? CB : CK)[fc.n];
+          const col = K[(c.blue ? "bl" : "tw") + fc.n];
           ctx.fillStyle = col; ctx.fill(); ctx.strokeStyle = col; ctx.lineWidth = 0.5; ctx.stroke();
-          if (fc.n === "top") { ctx.strokeStyle = "rgba(255,255,255,0.45)"; ctx.lineWidth = 0.6; ctx.stroke(); }
-        } else { ctx.strokeStyle = "rgba(94,97,102,0.42)"; ctx.lineWidth = Math.max(0.6, 0.8 * s); ctx.stroke(); }
+          if (fc.n === "top") { ctx.globalAlpha = 0.45; ctx.strokeStyle = K.paper; ctx.lineWidth = 0.6; ctx.stroke(); ctx.globalAlpha = 1; }
+        } else { ctx.globalAlpha = 0.42; ctx.strokeStyle = K.mute; ctx.lineWidth = Math.max(0.6, 0.8 * s); ctx.stroke(); ctx.globalAlpha = 1; }
       }
     }
   }
 
   const still = () => draw(YAW, PITCH, reduce ? 1 : e0 < 0 ? -1 : Math.min(1, (performance.now() - e0) / ENTER));
   layout(); still();
+  repaint.push(still);
   new ResizeObserver(() => { layout(); still(); }).observe(el);
   if (document.fonts) document.fonts.ready.then(() => { layout(); still(); });
   loop(el, (dt, now) => {

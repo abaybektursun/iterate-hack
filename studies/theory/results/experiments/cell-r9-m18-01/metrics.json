@@ -1,0 +1,136 @@
+{
+ "cell": "m18",
+ "readout": "m18-r1",
+ "measured": 316,
+ "n": 500,
+ "interval_90": [
+  298,
+  334
+ ],
+ "right_v3": 316,
+ "cap_hits": 15,
+ "mean_generated_tokens": 3075.682,
+ "median_generated_tokens": 1432,
+ "quick_wrong": 108,
+ "quick_right": 95,
+ "no_extracted_answer_finished": 62,
+ "opens_okay": 221,
+ "forecasts": {
+  "reader-1": {
+   "value": 355,
+   "interval": [
+    315,
+    392
+   ],
+   "inside": true
+  },
+  "reader-2": {
+   "value": 362,
+   "interval": [
+    320,
+    400
+   ],
+   "inside": false
+  },
+  "run-05/f2-m06": {
+   "value": 300,
+   "interval": [
+    260,
+    340
+   ],
+   "inside": true
+  },
+  "round-09/weights-m06": {
+   "value": 365,
+   "interval": [
+    330,
+    400
+   ],
+   "inside": false
+  },
+  "round-09/problems-m03": {
+   "value": 395,
+   "interval": [
+    365,
+    420
+   ],
+   "inside": false
+  },
+  "run-03/f2-m02": {
+   "value": 330,
+   "interval": [
+    280,
+    375
+   ],
+   "inside": true
+  },
+  "round-09/stopping-m06": {
+   "value": 345,
+   "interval": [
+    295,
+    390
+   ],
+   "inside": true
+  },
+  "round-09/sampling-m03": {
+   "value": 308,
+   "interval": [
+    272,
+    342
+   ],
+   "inside": true
+  }
+ },
+ "job_counts": {
+  "n": 500,
+  "correct_v3": 316,
+  "correct_v1": 293,
+  "cap_hits": 15,
+  "loop_A": 1,
+  "generated_tokens": 1537841,
+  "restarts": 0,
+  "n_planned": 500,
+  "tok_p_lt_1e2": 32229,
+  "tok_p_lt_1e3": 12788,
+  "mean_generated_tokens": 3075.682,
+  "generation_s": 1277.7736897468567,
+  "tokens_per_s": 1252.2943527492491
+ },
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "theta0.125",
+  "prompt": "plain",
+  "set": "math500",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 61000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/root/abaybektursun-1115-103513-3558/out",
+  "dry_run": false,
+  "commit": "cd2f8d0a9ccc612eb30062a9cf6eff4894695af5",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 500,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ }
+}

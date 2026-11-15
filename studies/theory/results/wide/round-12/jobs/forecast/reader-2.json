@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 228, "low": 213, "high": 242, "reason": "Think-SFT own format at T 1.0 cap 32,768 scored 232 (cue singles 230-235); T 0.6 is its released setting, but it may loop or cut off a little more, so slightly lower and wider."},
+{"id": "t02", "value": 472, "low": 462, "high": 481, "reason": "Own format at T 1.0 cap 32,768 scored 474 on MATH-500; RL barely moves between T 0.6 and T 1.0, so the forecast is near 474 with a small loop risk."},
+{"id": "t03", "value": 403, "low": 388, "high": 418, "reason": "411 at the first seed regresses toward the Code-direction family (386-399) and RL-Code 401; seed noise is about 7-10 of 538."},
+{"id": "t04", "value": 403, "low": 388, "high": 418, "reason": "Same cell at another seed: 411 so far, shrunk toward about 400."},
+{"id": "t05", "value": 400, "low": 387, "high": 413, "reason": "RL-Code scored 401 of 538 at seed 51000000; a new seed should land near that with about 7-8 points of noise."},
+{"id": "t06", "value": 400, "low": 387, "high": 413, "reason": "RL-Code 401 baseline, new seed."},
+{"id": "t07", "value": 389, "low": 375, "high": 403, "reason": "Code top-8 at 1x scored 386; 1.5x scored 399 and 2x scored 394, which puts the true 1x level near 388-390."},
+{"id": "t08", "value": 389, "low": 375, "high": 403, "reason": "Same as t07, at the second seed."},
+{"id": "t09", "value": 223, "low": 210, "high": 237, "reason": "232 at the first seed sits above the Think-SFT + Math 1.5x (220) and random 3x (213) cells, so it regresses toward about 222 on a new seed."},
+{"id": "t10", "value": 40, "low": 29, "high": 52, "reason": "The odd-problem shard had 20 cap hits of 250, so doubling gives about 40, plus binomial noise."},
+{"id": "t11", "value": 376, "low": 363, "high": 389, "reason": "The odd shard had 188/250 right under v3; the even shard should match, giving about 376 of 500."},
+{"id": "t12", "value": 392, "low": 345, "high": 430, "reason": "No Think-SFT code row exists yet; imitation was level with RL on math (and on MMLU-Pro+BBH), so near RL-Code 401, but cap hits and code-block format risk widen the low side."},
+{"id": "t13", "value": 385, "low": 335, "high": 425, "reason": "The Math cue matched the Code cue on the base (326 vs 317), so similar to t12, a bit lower and wider because of format risk."},
+{"id": "t14", "value": 197, "low": 188, "high": 207, "reason": "The cued base's vote over 4 is 192 (pass@4 207); on MATH-500, going from 4 to 6 samples added about 1.5 points, so about +4-5 here."},
+{"id": "t15", "value": 468, "low": 458, "high": 477, "reason": "Think-SFT cue singles score 457-462 and a=1 scored 467; a=2 adds finishing, which matters less on MATH-500, so about 468."},
+{"id": "t16", "value": 233, "low": 221, "high": 245, "reason": "M(2) hard328 samples so far are 234, 229 and 237 (mean 233.3), with single-sample seed noise of about 7."},
+{"id": "t17", "value": 247, "low": 239, "high": 255, "reason": "M(2)'s vote over 3 is 246; Think-SFT's vote over 4 (241) sits at or above its votes over 3 (231-241), so a fourth sample adds about 0-3."},
+{"id": "t18", "value": 244, "low": 234, "high": 254, "reason": "M(2) at cap 32,768 scored 245 at seed 3,010,000 (232 at 16k); seed 3,000,000 scored 234 at 16k, and the larger cap adds about 10-13."},
+{"id": "t19", "value": 81, "low": 73, "high": 89, "reason": "Think-SFT's fresh2026 vote at 16k is 75 with 46% cap hits; the larger cap lifted the hard328 vote by 6 (238 to 244), and fresh has more cut answers left to finish."},
+{"id": "t20", "value": 70, "low": 63, "high": 77, "reason": "Singles average 60 of 136 at 16k with about 62 cap hits; if about 20% of the cut answers finish right at 32,768 (hard328: 23 of 93), that adds about 10."}
+]}

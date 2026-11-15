@@ -1591,7 +1591,7 @@ svg * { pointer-events: none; }
 .pt { stroke: none; transition: opacity .4s ease; }
 .pt.top.p0 { fill: var(--blue); } .pt.top.p1 { fill: var(--red); } .pt.rand { fill: var(--base-tone); }
 .pt.off { opacity: var(--ghost); }
-.val { font-weight: 560; fill: var(--mute) !important; }
+.val { font-weight: 560; fill: var(--mute) !important; paint-order: stroke; stroke: color-mix(in srgb, var(--glass) 55%, var(--glass-lo)); stroke-width: 3.5; stroke-linejoin: round; }
 .val.on { font-weight: 700; fill: var(--ink) !important; }
 .now { stroke: var(--blue); stroke-width: 1; opacity: .4; }
 .ring { fill: none; stroke: var(--ink); stroke-width: 1.3; opacity: .7; }
@@ -1601,7 +1601,7 @@ svg * { pointer-events: none; }
 .axis.on { fill: var(--ink) !important; font-weight: 700; }
 .cap { fill: var(--faint) !important; font-weight: 500; }
 
-/* The set switch at the top of the plate, as on /finding/rl-change-on-imitation */
+/* The two switches, the set at the top of the plate and the directions beside the slider, as on /finding/rl-change-on-imitation */
 .setrow { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 16px; padding: 0 0 6px 2.4%; min-height: 38px; }
 .switch { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; padding: 3px; }
 .switch button { padding: 5px 13px; border-radius: 999px; font-weight: 560; font-size: 13px; color: var(--mute); white-space: nowrap; transition: background .15s ease, color .15s ease; }
@@ -1612,13 +1612,9 @@ svg * { pointer-events: none; }
 
 /* The control: one slider, the size of the edit, and a quiet switch for the control */
 .control { align-self: center; width: min(100%, 760px); margin-top: 14px; }
-.dtop { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.dtop { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
 .dlab { font-size: 15px; font-weight: 640; }
 .dlab span { color: var(--mute); font-weight: 500; }
-.others { display: flex; align-items: baseline; gap: 2px 4px; font-size: 13.5px; color: var(--mute); }
-.others button { padding: 3px 10px; border-radius: 999px; font-weight: 560; white-space: nowrap; transition: background .15s ease, color .15s ease; }
-.others button:hover { color: var(--blue); }
-.others button[aria-pressed="true"] { background: var(--mute); color: var(--paper); }
 .others button:disabled { cursor: default; color: var(--faint); background: none; }
 .others button:disabled:hover { color: var(--faint); }
 .others .nr { display: none; font-weight: 500; }
@@ -1705,8 +1701,8 @@ svg * { pointer-events: none; }
   svg { max-height: none; }
   .control { width: 100%; margin-top: 16px; }
   .dtop { flex-direction: column; align-items: stretch; gap: 8px; }
-  .others { justify-content: center; }
-  .others button:disabled { white-space: normal; }
+  .others { display: grid; grid-template-columns: 1fr 1fr; border-radius: 22px; }
+  .others button { text-align: center; white-space: normal; line-height: 1.2; padding: 8px 6px; }
   .ticks { font-size: 13px; height: 54px; }
   .ticks span small { white-space: normal; width: 4em; margin: 0 auto; line-height: 1.15; }
   .ticks span.na small { width: 2.2em; }
@@ -1739,7 +1735,7 @@ svg * { pointer-events: none; }
     <div class="control">
       <div class="dtop">
         <span class="dlab" id="dlab">Size of the edit</span>
-        <div class="others" role="group" aria-label="Directions added to Base + cue">
+        <div class="switch others" role="group" aria-label="Directions added to Base + cue">
           <button data-m="top" aria-pressed="false">8 RL directions</button>
           <button data-m="rand" aria-pressed="false">8 random directions<span class="nr"> · not run on this set</span></button>
         </div>
@@ -1839,11 +1835,11 @@ function geo() {
   const ph = narrow.matches;
   const g = ph
     ? { w: 480, cx: 240, D: 2400, r: 22, deep: 30, blur: 12, gap: 26, gx: 36, fs: 18, fb: 104, fc: 40, fv: 17,
-        fsm: 17, bigX: 34, bigY: 118, cutY: 176, stateY: [212, 236], rlY: [260, 284, 308], colTop: 342, cx0: 96, cx1: 396, rowH: 104, phone: true,
+        fsm: 17, bigX: 34, bigY: 118, cutY: 176, stateY: [211, 234], rlY: [257, 280, 303, 326, 349], colTop: 379, cx0: 96, cx1: 396, rowH: 104, phone: true,
         L: { math: { cols: 8, pitch: 17, d: [10.5, 7.4, 3], half: 5.4 }, code: { cols: 11, pitch: 12, d: [7.6, 5.4, 2.2], half: 3.9 },
           fresh: { cols: 5, pitch: 26, d: [15, 10.6, 4.4], half: 8 } } }
     : { w: 1000, cx: 500, D: 2200, r: 30, deep: 40, blur: 16, gap: 30, gx: 70, fs: 15, fb: 112, fc: 38, fv: 13.5,
-        fsm: 12.4, bigX: 548, bigY: 126, cutY: 178, stateY: [208, 228], rlY: [248, 268, 288], colTop: 92, cx0: 612, cx1: 900, rowH: 82,
+        fsm: 12.4, bigX: 548, bigY: 126, cutY: 178, stateY: [205, 224], rlY: [243, 262, 281, 300, 319], colTop: 92, cx0: 612, cx1: 900, rowH: 82,
         L: { math: { cols: 9, pitch: 14, d: [9.2, 6.4, 2.6], half: 4.4 }, code: { cols: 13, pitch: 10.2, d: [6.8, 4.8, 2], half: 3.3 },
           fresh: { cols: 5, pitch: 24, d: [14, 10, 4], half: 7.4 } } };
   /* The three bands stand as columns of marks on one floor, filled from the floor up: a column is as tall as its count.
@@ -1855,7 +1851,7 @@ function geo() {
     L.colX = BANDS.map((_, j) => g.gx + j * ((L.cols - 1) * L.pitch + g.gap + L.d[0]));
     L.span = (L.cols - 1) * L.pitch;
   });
-  const top = ph ? Math.max(g.L.math.floor, g.L.code.floor, g.L.fresh.floor) + 130 : 322;  // the curve: two rows, then the axis
+  const top = ph ? Math.max(g.L.math.floor, g.L.code.floor, g.L.fresh.floor) + 130 : 336;  // the curve: two rows, then the axis
   g.rows = [{ lab: top, y0: top + 22 }, { lab: top + g.rowH + 50, y0: top + g.rowH + 72 }];
   g.axisY = g.rows[1].y0 + g.rowH + g.fv * 1.9;
   g.h = g.axisY + (ph ? 40 : 46); g.cy = g.h / 2;
@@ -1903,7 +1899,7 @@ function build() {
     `<g class="read"><text class="big" id="big" font-size="${g.fb}"></text>` +
     `<text class="lab em" id="u1" font-size="${g.fs * 1.06}"></text><text class="lab" id="u2" font-size="${g.fs}"></text>` +
     `<text class="cutn" id="cutn" font-size="${g.fc}"></text><text class="lab em" id="cutl" font-size="${g.fs * 1.06}"></text>` +
-    `<text class="lab" id="state" font-size="${g.fs}"></text><text class="lab" id="norm" font-size="${g.fs}"></text><text class="lab" id="rl" font-size="${g.fs}"></text><text class="lab" id="bc" font-size="${g.fs}"></text><text class="lab em" id="rep" font-size="${g.fs}"></text></g>` +
+    `<text class="lab" id="state" font-size="${g.fs}"></text><text class="lab" id="norm" font-size="${g.fs}"></text><text class="lab" id="rl" font-size="${g.fs}"></text><text class="lab" id="bc" font-size="${g.fs}"></text><text class="lab" id="gap" font-size="${g.fs}"></text><text class="lab" id="gap2" font-size="${g.fs}"></text><text class="lab em" id="rep" font-size="${g.fs}"></text></g>` +
     `<g class="curve"><path class="now" id="now"/>` +
     g.rows.map((R, j) => `<text class="rowlab" id="rowl${j}" font-size="${g.fs}"></text><path class="ref" id="ref${j}"/>` +
       `<text class="reft" id="reft${j}" font-size="${g.fsm}" text-anchor="end"></text>` +
@@ -1912,8 +1908,9 @@ function build() {
       (j === 0 ? `<circle class="mref" id="mref" r="${f(g.fv * .3)}"/><text class="mreft" id="mreft" font-size="${g.fsm}"></text>` : "")).join("") +
     SIZES.map((v, i) => `<text class="axis" id="ax${i}" font-size="${g.fv}" text-anchor="middle">${num(v)}</text>`).join("") +
     `<text class="cap" id="axc" font-size="${g.fsm}" text-anchor="end">size of the edit</text>` +
-    `<text class="cap" id="axb" font-size="${g.fsm}" text-anchor="middle">Base + cue</text></g>`;
-  S.el = {}; S.shown = {};
+    `<text class="cap" id="axb" font-size="${g.fsm}" text-anchor="middle">Base + cue</text></g>` +
+    `<text class="val" id="meas" visibility="hidden"></text>`;
+  S.el = {}; S.shown = {}; S.spots = {};
   svg.querySelectorAll("[id]").forEach(e => { S.el[e.id] = e; });
 }
 
@@ -1929,6 +1926,72 @@ function markAt(k, now) {
   const p = clamp((now - S.t0 - .6 * S.rank[k]) / 680, 0, 1), e = ease(p), a = S.from[k], b = S.to[k];
   const moved = a[0] !== b[0] || a[1] !== b[1], far = bandOf(S.fromLook[k]) !== bandOf(S.toLook[k]);
   return { x: mix(a[0], b[0], e), y: mix(a[1], b[1], e), z: moved ? (far ? 34 : 6) * Math.sin(Math.PI * p) : 0, look: p < .5 ? S.fromLook[k] : S.toLook[k] };
+}
+/* Where each count of row j sits beside its point: above, below, right or left, whichever crosses the fewest lines, points
+   and words of the row. Worked out once per set, switch position and row, in the plate's own plane (the sway moves
+   everything together). */
+function measure(str, size, weight) {
+  const m = S.el.meas;
+  m.setAttribute("font-size", size); m.style.fontWeight = weight; m.textContent = str;
+  return m.getComputedTextLength();
+}
+function spots(W, m, j) {
+  const key = [W.key, m, j].join();
+  if (S.spots[key]) return S.spots[key];
+  const g = S.g, Y = v => g.Y(W, j, v), stat = (c, jj) => W.stat[c][jj ? "cut" : "right"];
+  const pts = s => allowed(s, W).map(k => [g.X(SIZES[k]), Y(stat(W.cols[s][k], j)), k]);
+  const segs = [], dots = [], boxes = [], cap = g.fsm * .74, pad = 2;
+  const other = m === "top" ? "rand" : "top", mine = pts(m), theirs = pts(other);
+  [mine, theirs].forEach((ps, z) => ps.forEach((p, n) => {
+    if (z || p[2] === 1) dots.push([p[0], p[1], g.fv * (p[2] === 1 ? .62 : .4)]);  // the other series' points; the ring of Base + cue
+    if (n) segs.push([ps[n - 1][0], ps[n - 1][1], p[0], p[1]]);
+  }));
+  const yr = Y(stat(W.rl, j)), reft = `${W.rlName} ${stat(W.rl, j)}`, rw = measure(reft, g.fsm, 600);
+  segs.push([g.cx0 - 10, yr, g.cx1 + 14, yr]);
+  boxes.push(g.phone ? [g.a[0] + 14, yr - g.fv * .45 - cap, g.a[0] + 14 + rw, yr - g.fv * .45] : [g.cx0 - 16 - rw, yr + g.fv * .32 - cap, g.cx0 - 16, yr + g.fv * .32]);
+  g.rows.forEach((R, jj) => boxes.push([g.cx0 - 70, R.lab - g.fs * .74, g.cx0 - 70 + measure(W.rowName[jj], g.fs, 600), R.lab]));
+  if (j === 1) boxes.push([g.cx0 - 20, g.axisY - g.fv * 1.05, g.cx1 + 20, g.axisY + g.fv * 1.6]);
+  const out = [];
+  if (j === 0) {
+    const last = theirs[theirs.length - 1];
+    out.lg = g.fsm * .35;  // the name of the faint line, beside its last point, moved off RL's level when that is near
+    if (last) {
+      const lg = other === "rand" ? (W.ref != null ? `8 random ${stat(W.cols.rand[last[2]], 0)}` : "8 random") : W.dirs, d = last[1] - yr;
+      if (Math.abs(d) < g.fsm) out.lg = -d - g.fsm * .45;
+      boxes.push([last[0] + g.fsm * .6, last[1] + out.lg - cap, last[0] + g.fsm * .6 + measure(lg, g.fsm, 500), last[1] + out.lg]);
+    }
+    if (W.ref != null) {
+      const x = g.X(1.5), y = Y(W.stat[W.ref].right);
+      dots.push([x, y, g.fv * .3]);
+      boxes.push([x + g.fsm * .75, y + g.fsm * .35 - cap, x + g.fsm * .75 + measure(`${W.stat[W.ref].right} RL-Math's 8`, g.fsm, 600), y + g.fsm * .35]);
+    }
+  }
+  // a word or a point in the way costs most, a line of the curve less, RL's dashed level least (the counts are edged in
+  // the plate's colour, so the dashes stop short of the digits)
+  const hits = b => {
+    const [x0, y0, x1, y1] = [b[0] - pad, b[1] - pad, b[2] + pad, b[3] + pad];
+    let n = 0;
+    segs.forEach(([ax, ay, bx, by], z) => {
+      const steps = Math.ceil(Math.hypot(bx - ax, by - ay) / 1.5);
+      for (let u = 0; u <= steps; u++) {
+        const x = mix(ax, bx, u / steps), y = mix(ay, by, u / steps);
+        if (x > x0 && x < x1 && y > y0 && y < y1) { n += z === segs.length - 1 ? .5 : 2; break; }
+      }
+    });
+    dots.forEach(([cx, cy, r]) => { if (Math.hypot(clamp(cx, x0, x1) - cx, clamp(cy, y0, y1) - cy) < r) n += 3; });
+    boxes.forEach(o => { if (o[0] < x1 && o[2] > x0 && o[1] < y1 && o[3] > y0) n += 3; });
+    return n;
+  };
+  mine.forEach(([x, y, k]) => {
+    const w = measure(String(stat(W.cols[m][k], j)), g.fsm, 700), up = g.fv * .7, side = g.fv * .5 + w / 2, diag = g.fv * .3 + w / 2;
+    const cand = [[0, -up], [0, up + cap], [side, cap / 2], [-side, cap / 2], [diag, -up * .7], [-diag, -up * .7], [diag, up * .7 + cap], [-diag, up * .7 + cap]];
+    let best = cand[0], bn = Infinity;
+    const pref = [0, .05, .3, .3, .6, .6, .65, .65];  // above, then below, then beside, then on a diagonal
+    cand.forEach((c, z) => { const n = hits([x + c[0] - w / 2, y + c[1] - cap, x + c[0] + w / 2, y + c[1]]) + pref[z]; if (n < bn) { bn = n; best = c; } });
+    boxes.push([x + best[0] - w / 2, y + best[1] - cap, x + best[0] + w / 2, y + best[1]]);
+    out[k] = best;
+  });
+  return (S.spots[key] = out);
 }
 function place(t, now) {
   const g = S.g, E = S.el, at = (el, q, dy) => { el.setAttribute("x", f(q[0])); el.setAttribute("y", f(q[1] + (dy || 0))); };
@@ -1988,7 +2051,12 @@ function place(t, now) {
   text("bc", `Base + cue: ${base.right} ${W.right}, ${base.cut} ${W.gone}.`);
   text("rl", `${W.rlName}: ${rl.right} ${W.right}, ${rl.cut} ${W.gone}.`);
   text("rep", fr ? `The 4 samples: ${and(st.each)} right.` : W === SETS.math ? (m === "top" && i === FIRST ? C.rep : "") : `RL-Math's 8 directions at size 1.5: ${W.stat[W.ref].right} passed.`);
-  at(E.rep, proj(g, g.bigX + 4, g.rlY[2], 10));
+  // on 2026, size 1.5 minus RL in points with its interval, under RL's counts; on two lines where one does not fit
+  const gd = DF.diff.vs_rl, gl = [`Size 1.5 minus RL: ${num(gd[0])} points,`, `95 % interval ${num(gd[1])} to ${num(gd[2])}.`];
+  if (S.spots.gapOne == null) S.spots.gapOne = measure(gl.join(" "), g.fs, 520) < g.a[2] - 18 - g.bigX;
+  const gon = fr && m === "top" && i === FIRST;
+  text("gap", gon ? (S.spots.gapOne ? gl.join(" ") : gl[0]) : ""); text("gap2", gon && !S.spots.gapOne ? gl[1] : "");
+  ["gap", "gap2", "rep"].filter(id => S.shown[id] || id === "rep").forEach((id, n) => at(E[id], proj(g, g.bigX + 4, g.rlY[2 + n], 10)));
   at(E.state, proj(g, g.bigX + 4, g.stateY[0], 10)); at(E.norm, proj(g, g.bigX + 4, g.stateY[1], 10)); at(E.bc, proj(g, g.bigX + 4, g.rlY[0], 10)); at(E.rl, proj(g, g.bigX + 4, g.rlY[1], 10));
 
   /* The curve: right answers and cut-offs against the size, the chosen series in colour, the other one faint; RL is a
@@ -2034,8 +2102,8 @@ function place(t, now) {
         pt.setAttribute("cx", f(q[0])); pt.setAttribute("cy", f(q[1])); pt.setAttribute("fill-opacity", f(raw[n].w));
         pt.setAttribute("r", f(g.fv * (here ? .4 : .28))); pt.classList.toggle("off", !on);
         text(`v${j}${s}${k}`, on && has(W, s, k) && raw[n].w >= 1 ? String(val(W, s, k, j)) : "");
-        // on code the random series sits under RL-Math's point at 1.5, so its counts go under their points
-        at(vl, q, W.ref != null && s === "rand" && j === 0 ? g.fv * 1.25 : -g.fv * .7); vl.setAttribute("class", "val" + (here ? " on" : ""));
+        const o = on && has(W, s, k) ? spots(W, s, j)[k] : [0, -g.fv * .7];
+        at(vl, [q[0] + o[0], q[1]], o[1]); vl.setAttribute("class", "val" + (here ? " on" : ""));
       });
     });
     if (j === 0) {
@@ -2043,7 +2111,7 @@ function place(t, now) {
       const other = S.m === "top" ? "rand" : "top", last = allowed(other, W).slice(-1)[0], end = at2[other][last];  // the faint line is named at its end
       // on code the random directions have one point, so its count is named with it
       text("lg", other === "rand" ? (last == null ? "" : W.ref != null ? `8 random ${val(W, "rand", last, 0)}` : "8 random") : W.dirs);
-      if (end) at(E.lg, [end[0] + g.fsm * .6, end[1]], g.fsm * .35);
+      if (end) at(E.lg, [end[0] + g.fsm * .6, end[1]], spots(W, S.m, 0).lg);
       // RL-Math's directions on code: a hollow point at size 1.5 with its count, named
       const ra = A.ref != null, rb = B.ref != null, w = ra && rb ? 1 : rb ? es : ra ? 1 - es : 0;
       const T = rb ? B : A, yr = !ra && !rb ? g.rows[0].y0 : ra && rb ? mix(YA(A.stat[A.ref].right), YB(B.stat[B.ref].right), es) : rb ? YB(B.stat[B.ref].right) : YA(A.stat[A.ref].right);
@@ -2237,7 +2305,8 @@ function toward(T, m, k) {  // the stop of set T and switch position m nearest t
 function fromHash(first) {
   const parts = decodeURIComponent(location.hash.slice(1)).split("/"), set = ["code", "fresh"].find(x => parts.includes(x)) || "math", T = SETS[set];
   const m = parts.includes("random") && allowed("rand", T).length ? "rand" : "top", sz = parts.find(x => /^s-?[\d.]+$/.test(x));
-  const k = sz ? SIZES.indexOf(Number(sz.slice(1))) : -1, i = toward(T, m, k >= 0 ? k : FIRST);
+  const v = sz ? Number(sz.slice(1)) : NaN;  // a size between the stops goes to the nearest one (a tie to the larger)
+  const k = isFinite(v) ? SIZES.reduce((b, x, n) => Math.abs(x - v) <= Math.abs(SIZES[b] - v) ? n : b, 0) : FIRST, i = toward(T, m, k);
   S.open = parts.find(x => C.panels.some(p => p[0] === x) || T.pr.some(p => p.id === x)) || null;
   if (first === true) {
     // With an empty address the page opens on Base + cue and turns the dial to 1.5 by itself, one stop at a time.
@@ -2321,7 +2390,7 @@ addEventListener("hashchange", fromHash);
 addEventListener("popstate", fromHash);
 narrow.addEventListener("change", () => { build(); setState(S.set, S.m, S.i, { instant: true }); place(S.t, performance.now()); });
 still.addEventListener("change", () => { if (still.matches) { setState(S.set, S.m, S.i, { instant: true }); aim(0, 0); place(0, performance.now()); } });
-document.fonts.ready.then(() => { S.shown = { set: S.shown.set }; place(S.t, performance.now()); });  // measure the counts again in the loaded typeface
+document.fonts.ready.then(() => { S.shown = { set: S.shown.set }; S.spots = {}; place(S.t, performance.now()); });  // measure the counts again in the loaded typeface
 const stage = $("stage");
 stage.addEventListener("pointermove", e => {
   if (e.pointerType !== "mouse" || still.matches) return;
@@ -2368,7 +2437,7 @@ PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
     "problem": PROBLEM, "line": LINE, "rep": REPLINE, "panels": PANELS, "problems": PROBLEMS, "cells": CELLS,
     "data": {k: DATA[k] for k in ("n", "cap", "cells", "examples", "folders")},
     "code": {"problems": CODE_PROBLEMS, "cells": CODE_CELLS, "data": {k: DATA["code"][k] for k in ("n", "examples")}},
-    "fresh": {"problems": FRESH_PROBLEMS, "data": {k: DATA["fresh"][k] for k in ("n", "samples", "upload", "dates")}}},
+    "fresh": {"problems": FRESH_PROBLEMS, "data": {k: DATA["fresh"][k] for k in ("n", "samples", "upload", "dates", "diff")}}},
     ensure_ascii=False))
 
 

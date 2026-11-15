@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": 405, "low": 391, "high": 418, "reason": "Theory: Math+Code directions write closed code blocks, so the score sits at the under-specified-MBPP+ ceiling of about 405 of 538 (first seed measured 411, reseeding noise about 8)."},
+{"id": "t04", "value": 405, "low": 391, "high": 418, "reason": "Theory: closed blocks recover the format gap and the ceiling is about 405 of 538; a new seed regresses from 411 toward that ceiling."},
+{"id": "t05", "value": 401, "low": 389, "high": 413, "reason": "Theory: RL-Code already writes closed blocks and nears the ~405 ceiling, so a new seed stays at its measured 401 within sampling noise."},
+{"id": "t06", "value": 401, "low": 389, "high": 413, "reason": "Theory: RL-Code sits just under the ~405 test-set ceiling; second seed repeats 401 within sampling noise."},
+{"id": "t07", "value": 389, "low": 375, "high": 403, "reason": "Theory: Code 1x still leaves about 17 cut-off or no-block answers (9 cap hits, 8 no block), so it stays a little below the ~405 ceiling, near its measured 386."},
+{"id": "t08", "value": 389, "low": 375, "high": 403, "reason": "Theory: the remaining format misses at 1x keep Code-alone a few points under the ~405 ceiling; second seed near 386-392."},
+{"id": "t09", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t10", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t11", "value": 376, "low": 360, "high": 392, "reason": "Theory: on math the lever is a terminal answer statement; m11 keeps one (141 of 250 plain 'Answer: X') so it stays near the cued-base level, and the odd shard's 188/250 doubles to about 376."},
+{"id": "t12", "value": 390, "low": 366, "high": 410, "reason": "Theory: Think-SFT writes closed final code blocks, so it recovers most of the base's format gap (317) and lands just under the ~405 MBPP+ ceiling, minus a few long answers cut off at T 1.0."},
+{"id": "t13", "value": 382, "low": 354, "high": 406, "reason": "Theory: the score depends on writing a closed block, not on the cue's domain; Think-SFT mostly still writes one under the Math cue, but a few more answers lose the block, so it lands a little below the Code-cue cell and under the ~405 ceiling."},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

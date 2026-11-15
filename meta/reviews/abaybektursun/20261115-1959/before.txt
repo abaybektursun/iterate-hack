@@ -1,0 +1,8 @@
+Baseline 2026-11-15 20:00 UTC.
+vast.ai account: balance reached 0 at about 19:50 UTC (message on `all`, 19:53); every box but two went to "exited" and their jobs were cut.
+Second stop of the day (first 16:15 UTC). Cycle 13's spend line was read (the 19:31 message quotes 14 boxes, 19.40 USD/h) and the rental was made anyway.
+vast.ai jobs submitted since 15:05 UTC with the upload-at-end tool, from the job records of all worktrees and the team store:
+  outputs stored at the job's end: 15.
+  not stored, not copied, box gone: 9 (39cf at 16:01; 8e32 at 18:29; 2eec at 18:40; six jobs of critic at 19:29 to 19:31, cut about 20 min in).
+  Nothing of those 9 jobs exists outside their boxes: the upload ran only at a job's end.
+The AWS tool writes outputs to its store every 30 s and lost nothing in the same day (entry of 16:15 UTC).
