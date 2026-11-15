@@ -14,6 +14,11 @@ loads. d = other - base in float32, one tensor at a time; d_k = U_k diag(s_k) V_
              proj   layer matrices = base + d_k Vd Vd^T: the part of d_k that reads from the top-k input (right) subspace Vd of the --donor
                     model's difference from the base; every other tensor = base.
              projc  layer matrices = base + d_k (1 - Vd Vd^T): the rest of d_k. proj addition + projc addition = top8 addition.
+             rin    layer matrices = base + P diag(s_k) V_k^T: the other model's k input directions V_k and singular values, written to
+                    random output directions P (rand8's P): reads what the difference reads, writes elsewhere.
+             rout   layer matrices = base + U_k diag(s_k) Q^T: the other model's output directions, read from random input directions Q.
+             perm   layer matrices = base + sum_i s_i u_(i+1) v_i^T: the same two subspaces and values, each input direction paired with
+                    the next output direction (a cyclic shift).
              rbulk  layer matrices = other - P diag(s_k) Q^T (rand8's addition, subtracted from the other model): the control of bulk;
                     every other tensor = other.
              interp every tensor = (1 - alpha) base + alpha other (merge_weights.point); alpha 0 and 1 give the endpoints bit for bit (asserted).
@@ -62,7 +67,7 @@ from studies.rlneurons.jobs.xreward_overlap import MODELS as XMODELS
 ALL = {**MODELS, **XMODELS}                                                       # every model key of --other and --donor
 assert MODELS["base"] == XMODELS["base"]
 
-RECIPES = {"top8": 8, "bulk": 8, "rand8": 8, "late3": 3, "interp": None, "proj": 8, "projc": 8, "rbulk": 8}          # recipe -> default k
+RECIPES = {"top8": 8, "bulk": 8, "rand8": 8, "late3": 3, "interp": None, "proj": 8, "projc": 8, "rbulk": 8, "rin": 8, "rout": 8, "perm": 8}          # recipe -> default k
 LATE = range(24, 32)                                                              # late3's layers; the selftest passes its own
 JSON_KEY = "rl_math"                                                              # config and tokenizer for every model, as merge_weights
 SUMS = ("dot", "add_sq", "written_sq", "ref_sq", "top_sq", "d_sq")
@@ -114,6 +119,12 @@ def target(recipe, b, o, k=None, alpha=1.0, noise=None, scale=1.0, donor=None, s
     if recipe in ("rand8", "rbulk"):
         U, V = (torch.linalg.qr(g.double()).Q.to(d.device) for g in noise)
         sq = None
+    if recipe == "rin":
+        U, sq = torch.linalg.qr(noise[0].double()).Q.to(d.device), None
+    if recipe == "rout":
+        V, sq = torch.linalg.qr(noise[1].double()).Q.to(d.device), None
+    if recipe == "perm":
+        U, sq = torch.roll(U[:, :k], 1, dims=1), None
     add = (U[:, skip:] * s[skip:k]) @ V[:, skip:].T
     if recipe in ("proj", "projc"):
         dd = donor - b
@@ -146,7 +157,7 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
     assert recipe in RECIPES and rounding in ("nearest", "stochastic"), (recipe, rounding)
     k = RECIPES[recipe] if k is None else k
     assert (k is None) == (recipe == "interp") and (recipe == "interp" or alpha == 1.0), f"{recipe}: k {k}, alpha {alpha}"
-    assert scale == 1.0 or recipe in ("top8", "rand8", "proj", "projc"), f"--scale is not for {recipe}"
+    assert scale == 1.0 or recipe in ("top8", "rand8", "proj", "projc", "rin", "rout", "perm"), f"--scale is not for {recipe}"
     assert skip == 0 or (recipe in ("top8", "rand8") and 0 < skip < k), f"--skip {skip} is not for {recipe} with k {k}"
     assert mods is None or recipe in ("top8", "rand8", "bulk", "proj", "projc"), f"--mods is not for {recipe}"
     assert (donor_dir is not None) == (recipe in ("proj", "projc")), f"{recipe}: donor {donor_dir}"
@@ -157,7 +168,7 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
     assert won is None or set(won) == set(wb), "onto and base hold different tensor names"
     sel = selected(recipe, wb, late, mods, layers)
     noise = {}
-    if recipe in ("rand8", "rbulk"):
+    if recipe in ("rand8", "rbulk", "rin", "rout"):
         shape = {n: v[1] for shard in set(wb.values()) for n, v in header(base_dir / shard).items()}
         g = torch.Generator().manual_seed(seed)
         noise = {n: tuple(torch.randn(side, k, generator=g) for side in shape[n]) for n in sorted(sel)}

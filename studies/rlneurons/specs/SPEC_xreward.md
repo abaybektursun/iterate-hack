@@ -198,3 +198,20 @@ One sample each so far: base + Math at 1 + Code at 1 passes 411 of 538 (RL-Code 
   at least the mean of Code alone + 10. Refuted if its mean is below 392 or within 5 of Code alone.
 - Think-SFT + Math's 8 directions at 3, hard328, cue, seed 3100000 (the second seed of the transplant, which scored 229 there).
   E2: at least 222. Refuted below 215.
+
+## Amendment 12 (2026-11-15, before the cells; work-a822b1): input side, output side, or the pairing
+
+xshift found that at equal weight norm Math 3.1's 8 directions move the residual stream 95 times more than random ones, and the
+trace that base activations drive their input directions 8 to 11 times a random subspace. Three edits of the base at 1.5, each with
+the same singular values as the top-8 edit (so the same norm, checked in `edit.json`: 0.111 % of the weight norm), hard328, cue,
+seed 3000000, one sample; references at 1.5: all of RL's directions 203 right and 25 cap hits, all random 159 and 74; base 164, 77.
+
+1. `rin --other math31 --scale 1.5`: RL's input directions, random output directions.
+2. `rout --other math31 --scale 1.5`: RL's output directions, random input directions.
+3. `perm --other math31 --scale 1.5`: RL's input and output subspaces, each input direction paired with the next output direction.
+
+- H1. The input side sets how much an edit acts, the output side what it does: cell 2 is as the random edit (155 to 172 right,
+  60 to 85 cap hits); cell 1 differs from the base by more than the random edit does, and not for the better (at most 160 right).
+  Refuted if cell 2 is at least 185, or cell 1 is at least 185.
+- H2. The pairing matters, not only the two subspaces: cell 3 is at most 178 right. Refuted if it is at least 190: then any map
+  from RL's input subspace to its output subspace gives the dial.
