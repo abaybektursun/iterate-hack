@@ -18,6 +18,10 @@ data/rln4/frozen4.json.
   --restarts an answer that hits the cap is sampled again, up to this many times (default 0), in the same job; attempt a of sample
             s has seed + 10000 * s + 1000 * a + i. Each attempt is its own row (fields sample, attempt). specs/SPEC_day1_3.md;
             analysis/day1_vote.py makes the vote and restart rows from the rows. metrics.json counts are over all rows (attempts).
+  --shots   a JSON file with a "text" field (data/shots1/, built by prep/shots1_build.py): solved examples, each the prompt + the
+            answer + "\n\n", put in front of every prompt. Generation then also stops at the string SHOT_STOP (the start of a
+            further example); the answer is cut there and scored as a finished answer. The examples' own problems are in the set:
+            leave them out of any count (analysis does it).
   --n       the first n problems of the set (smoke runs); default all.
   --dry-run a stand-in engine serves canned completions (right, wrong, cap hit in turn): no vLLM, no weights, no GPU.
 
@@ -44,6 +48,7 @@ from studies.rlneurons.lib import rln4_lib as R
 STUDY = pathlib.Path(__file__).resolve().parents[1]
 D3, D4 = STUDY / "data" / "rln3", STUDY / "data" / "rln4"
 MODELS = {"base": "base", "rl": "s2800"}                      # keys of frozen4.json "models"
+SHOT_STOP = "\n\nSolve the following problem step by step"     # with --shots: the model starts a further example
 PINS = {"vllm": "0.32.0", "math-verify": "0.9.0", **J.TOKENIZER_PINS}
 
 
@@ -108,6 +113,7 @@ def main():
     ap.add_argument("--top-p", type=float, required=True)
     ap.add_argument("--max-tokens", type=int, default=None, help="default: frozen4.json cap (16,384)")
     ap.add_argument("--seed", type=int, required=True)
+    ap.add_argument("--shots")
     ap.add_argument("--n", type=int, default=None)
     ap.add_argument("--samples", type=int, default=1)
     ap.add_argument("--restarts", type=int, default=0)
@@ -155,10 +161,15 @@ def main():
     if a.set == "math500":
         n13 = json.loads((D4 / "prompt_ids.json").read_text())
         assert n13["pair"] == "pair1" and pids == n13["ids"][: len(pids)], "G-TEMPLATE: MATH-500 prompt ids differ from n13's"
-    max_len = 2048 + cap
-    assert max(len(p) for p in pids) + len(pre) <= 2048, "a prompt is longer than 2,048 tokens"
+    shots = json.loads(pathlib.Path(a.shots).read_text()) if a.shots else None
+    shot_ids = [int(i) for i in tok(shots["text"], add_special_tokens=False)["input_ids"]] if shots else []
+    assert not shots or (shots["text"].endswith("\n\n") and SHOT_STOP.startswith("\n\n" + S.TEMPLATE[fz["template"]][:20]))
+    m["config"].update(shots_arm=shots and shots["arm"], shots_sha256=a.shots and sha(pathlib.Path(a.shots)), shots_tokens=len(shot_ids))
+    pids = [shot_ids + p for p in pids]
+    max_len = 2048 + len(shot_ids) + cap
+    assert max(len(p) for p in pids) + len(pre) <= 2048 + len(shot_ids), "a prompt is longer than 2,048 tokens"
 
-    cell = f"{model}_{a.prompt}_{a.set}_T{a.temperature:g}_p{a.top_p:g}"
+    cell = f"{model}_{a.prompt}{'_shots-' + shots['arm'] if shots else ''}_{a.set}_T{a.temperature:g}_p{a.top_p:g}"
     assert 1 <= a.samples and 0 <= a.restarts < 10 and max(int(p["index"]) for p in probs) < 1000, "seeds of two requests would collide"
     reqs = [{"rid": f"{cell}|{p['index']}|{s}|0", "cell": cell, "bench": a.set, "idx": int(p["index"]), "sample": s, "attempt": 0,
              "uid": p["unique_id"], "ids": ids + pre, "n_prompt": len(ids), "prefix_ids": pre, "prefix_kind": "opening" if pre else "none",
@@ -178,23 +189,38 @@ def main():
     m["status"] = "running"
     write()
 
+    def add(r):
+        if shots and not a.dry_run:             # engine.add refuses stop strings (the study's neutral-sampling check), so add directly
+            engine.engine.add_request(r["rid"], {"prompt_token_ids": r["ids"]}, engine.SP(
+                **J.BASE_SAMPLING, **r["sampling"], max_tokens=r["max_tokens"], seed=r["seed"], stop=[SHOT_STOP]))
+        else:
+            engine.add(r["rid"], r["ids"], r["sampling"], r["seed"], r["max_tokens"])
+
     for r in reqs:
-        engine.add(r["rid"], r["ids"], r["sampling"], r["seed"], r["max_tokens"])
+        add(r)
     t_gen = time.time()
     c = {"n": 0, "correct_v3": 0, "correct_v1": 0, "cap_hits": 0, "loop_A": 0, "generated_tokens": 0, "restarts": 0}
     with open(rows_path, "a") as f:
         while engine.has_unfinished():
             for rid, out_ids, lps, fr in engine.step():
                 req = live.pop(rid)
+                shot_stop = bool(shots) and fr == "stop" and S.STOP_ID not in out_ids
+                if shot_stop:                    # stopped at SHOT_STOP: drop the tokens after it, end the answer with the stop id
+                    full = tok.decode(out_ids, skip_special_tokens=False)
+                    pos = full.rfind(SHOT_STOP) if SHOT_STOP in full else len(full)
+                    k = len(out_ids)
+                    while k > 0 and len(tok.decode(out_ids[: k - 1], skip_special_tokens=False)) >= pos:
+                        k -= 1
+                    out_ids, lps = list(out_ids[:k]) + [S.STOP_ID], list(lps[:k]) + [0.0]
                 rec = J.record(tok, req, out_ids, lps, fr)
                 rec.update(R.grade_v3(req["gold"], rec["text"]))
                 rec.update(prompt=tok.decode(req["ids"][: req["n_prompt"]], skip_special_tokens=False), model=model, prompt_arm=a.prompt,
-                           attempt=req["attempt"])
+                           attempt=req["attempt"], shots_arm=shots and shots["arm"], shot_stop=shot_stop)
                 if rec["cap_hit"] and req["attempt"] < a.restarts:          # restart: the same request with the next attempt's seed
                     nxt = {**req, "attempt": req["attempt"] + 1, "seed": req["seed"] + 1000,
                            "rid": f"{cell}|{req['idx']}|{req['sample']}|{req['attempt'] + 1}"}
                     live[nxt["rid"]] = nxt
-                    engine.add(nxt["rid"], nxt["ids"], nxt["sampling"], nxt["seed"], nxt["max_tokens"])
+                    add(nxt)
                     c["restarts"] += 1
                 f.write(json.dumps(rec) + "\n")
                 f.flush()
