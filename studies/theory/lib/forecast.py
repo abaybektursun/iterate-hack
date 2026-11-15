@@ -736,7 +736,9 @@ def round11(folder, sources, n_top):
     print("== cells")
     counts = {}
     same = {x["new"]: x["earlier"] for x in json.loads((folder / "duplicates.json").read_text())["pairs"]} if drop else {}
-    stand_in = {i: same[i] for i in drop if same[i] in {m["id"] for m in carried}}  # a rival that restates a carried mechanism: that one takes its place
+    def resolve(i):  # follow restatements back to the first mechanism (a rival may restate an earlier rival of this round)
+        return resolve(same[i]) if i in same else i
+    stand_in = {i: resolve(i) for i in drop if resolve(i) in {m["id"] for m in carried}}  # a rival that restates a carried mechanism: that one takes its place
     whole = [{**p, "a": stand_in.get(p["a"], p["a"]), "b": stand_in.get(p["b"], p["b"])} for p in pairs
              if all(p[x] not in drop or p[x] in stand_in for x in ("a", "b")) and stand_in.get(p["a"], p["a"]) != stand_in.get(p["b"], p["b"])]
     if whole and not (folder / "cells.json").exists():
@@ -749,8 +751,11 @@ def round11(folder, sources, n_top):
                  for k, p in enumerate((p for p in whole if p["cell"]), 1)]
         merged = [{"id": f"{pre}-m{p['id'][1:]}", "cell": p["cell"], "job": p["job"], "command": p["command"],
                    "readouts": [{"id": f"{pre}-m{p['id'][1:]}-r1", "readout": p["readout"], "unit": p["unit"], "from": [p["id"]]}]} for p in props]
-        routes, dropped = route_jobs(folder, {p["family"]: fams[p["family"]] for p in whole}, items, known)
+        by_mid = {m["id"]: {k: m[k] for k in ("id", "statement", "rests_on")} for m in mechs}
+        routes, dropped = route_jobs(folder, {p["family"]: {"lens": f"the rival pair about surprise {p['surprise']['source']} {p['surprise']['id']}",
+                                                            "mechanisms": [by_mid[p["a"]], by_mid[p["b"]]]} for p in whole}, items, known)
         routes = C.route_cells(routes, C.table_rows(), pre)
+        C.attach(merged, {p["id"]: p for p in props})
         cands = C.blind(merged) + C.blind_routes(routes)
         work = {sec.split("\n", 1)[0].strip(): sec for sec in ("\n" + (folder / "work.md").read_text()).split("\n## ")[1:]} if (folder / "work.md").exists() else {}
         texts = {**{i["id"]: i["text"] for i in items}, **work}
