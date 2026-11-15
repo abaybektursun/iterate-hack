@@ -30,7 +30,8 @@ or a text editor, never into an agent chat, and never commit one.
 | 6 | AWS (DynamoDB, S3 and ECR) | shared, until Sunday 23:59 PST | the board, events and traces; prebuilt images with model weights, on vast.ai |
 | 7 | past.dev | shared team project | `tools/paper.py`, `tools/recall.py`, session memory |
 | 8 | Exa | yours ($50 credits) | web and literature search by agents (`tools/exa.py`) |
-| 9 | Tinker, Devin, OpenAI | yours | optional; no tool here uses them |
+| 9 | Devin | yours (credits; the default model is free) | side work handed off by agents (`tools/devin.py`) |
+| 10 | Tinker, OpenAI | yours | optional; no tool here uses them |
 
 ### 1. GitHub and the team store
 
@@ -147,7 +148,17 @@ The tool takes `EXA_API_KEY` from its environment and, when the agent started be
 shell profile, so a running session needs no restart. Check: `python3 tools/exa.py search "test" --n 1` prints
 one result.
 
-### 9. Tinker, Devin, OpenAI (optional)
+### 9. Devin (your own login)
+
+```
+curl -fsSL https://cli.devin.ai/install.sh | bash     # or: brew install --cask devin-cli
+devin auth login                                      # opens the browser
+```
+
+Check: `devin auth status` prints "Logged in", and `python3 tools/devin.py ask "Which file holds the rules for
+agents?"` answers `AGENTS.md`. Agents hand side work to Devin with `tools/devin.py`: see "Devin" below.
+
+### 10. Tinker, OpenAI (optional)
 
 Claim each on the hackathon platform. Keep the keys in your shell profile (`TINKER_API_KEY`, `OPENAI_API_KEY`).
 No tool here uses them.
@@ -331,6 +342,32 @@ A message reaches a waiting agent in under a second (measured: 0.2 s after the s
 session keeps its own read position, and never receives its own messages. Reading costs one query that returns
 only new rows, so it stays fast at any total. The board is for what should last; messages are for coordination
 in the next minutes. Messages stay in the table as part of the record.
+
+## Devin
+
+`tools/devin.py` hands side work to the Devin CLI (https://docs.devin.ai/cli), a second coding agent, so the
+research does not wait for it: code fixes named in `meta/FAILURES.md`, chores, the analysis script for a running
+job, and an independent review before a number is posted. When to use it and how to write a task:
+`.claude/skills/devin/SKILL.md` (Codex: read that file).
+
+```
+python3 tools/devin.py ask "<question>"        read-only, in your checkout; waits and prints the answer
+python3 tools/devin.py run <name> "<task>"     a change, in the background, in the worktree ../iterate-hack-devin-<name>
+                                               on branch devin/<name>, cut from your HEAD; returns at once
+python3 tools/devin.py ls                      every run: state, minutes, commits
+python3 tools/devin.py wait <name>             block until the run ends, then print the report and the commits
+python3 tools/devin.py show <name>             the same, without waiting
+python3 tools/devin.py rm <name>               delete the worktree, the branch and the run record; refuses while
+                                               the branch has work you did not merge (--force drops it)
+```
+
+- Devin runs on your laptop under your login with the model `swe-2-high`, free in the CLI until 2026-11-30.
+  `--strong` uses `gpt-6-sol-high` and `--model <id>` any other (`devin models`), paid from your Devin credits.
+- `ask` lets Devin read files and git history and change nothing. `run` lets it edit, run checks and commit in its
+  own worktree. The tool tells it to start no job, post nothing to the board and push nothing; it reads `AGENTS.md`
+  and skips the files written for Claude Code (`CLAUDE.md`, `.claude/`).
+- Its report is a claim: read `git diff HEAD...devin/<name>`, run the check, then `git merge devin/<name>` and `rm`.
+- Each run keeps `prompt.md`, `out.txt` and `meta.json` in `~/.cache/iterate-hack/devin/<name>/`.
 
 ## Findings from papers and posts
 

@@ -53,7 +53,7 @@ for r in jobs:
     end = r["end"]["at"] if "end" in r else r["cancel"]["at"] if "cancel" in r else None
     r["finished"] = end
     wait = minutes(r["job"]["at"], start) if start else None
-    run = minutes(start, end or now) if start else None
+    run = minutes(start, end or now) if start and (end is None or end >= start) else None
     if wait is not None:
         waits.append(wait)
     if run is not None:
