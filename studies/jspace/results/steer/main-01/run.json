@@ -9,6 +9,14 @@
    "wall_s": 1848.41246509552
   },
   {
+   "job_id": "sameraslan-1114-223704-bee0",
+   "commit": "2f21e845b169426eff0227c6802e407befa48305",
+   "arms": [
+    "none"
+   ],
+   "wall_s": 1873.556432723999
+  },
+  {
    "job_id": "sameraslan-1114-214251-10c3",
    "commit": "2d6f378cea6250db244339bf6ff6f3d219f21a2e",
    "arms": [
@@ -50,7 +58,7 @@
   }
  ],
  "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.jspace.jobs.steer_gen --commit <commit> --arms <arm>   (one job per arm)",
- "readout": "PYTHONPATH=. python3 -m studies.jspace.analysis.steer_analyze --runs runs/<the six job ids> --out studies/jspace/results/steer/main-01 --t1 runs/diag_t1t2/T1.jsonl --stored studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl --items studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json",
+ "readout": "PYTHONPATH=. python3 -m studies.jspace.analysis.steer_analyze --runs runs/<the seven job ids> --alias 'runs/sameraslan-1114-223704-bee0=none, second seed' --out studies/jspace/results/steer/main-01 --t1 runs/diag_t1t2/T1.jsonl --stored studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl --items studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json",
  "stopped_job": {
   "job_id": "sameraslan-1114-205149-0570",
   "note": "none and bias:hold:0.64 in one engine; cancelled after 51 minutes because 1,000 answers would not finish within its limit. Its none arm had finished (426 of 500, 436 texts identical to eb61); its 260 bias rows are not used."

@@ -227,7 +227,7 @@ by the 1,024-token cap.
 ### Run `steer/main-01`: the score with the push at the RL model's written Wait rate
 
 One job per arm on one H100 each (31 to 36 minutes), commit `1534ce9` for the steering arms, `7f269e9` for `none` and `2d6f378` for the bias arm: all 500 MATH-500 problems, cue, T 1.0, top-p 1.0, cap 16,384, grader v3, seed 41,000,000 + index in every arm. Jobs: `none`
-`sameraslan-1114-214944-eb61`, `bias:hold:0.64`
+`sameraslan-1114-214944-eb61`, `none` with a second seed `sameraslan-1114-223704-bee0` (commit `1cc3ac8`), `bias:hold:0.64`
 `sameraslan-1114-214251-10c3`, `steer:hold:L24:0.068` `sameraslan-1114-205156-86f8`, `steer:hold:L20:0.128` `sameraslan-1114-205203-840e`,
 `steer:rand:L24:0.068` `sameraslan-1114-205210-8d88`, `steer:hold:L24:0.1` `sameraslan-1114-205216-17de`. Numbers are keys of
 `results/steer/main-01/metrics.json` (`arms.<arm>`, `pairs`); intervals are 95 % bootstrap intervals over the 500 problems. Raw rows:
@@ -239,22 +239,28 @@ raise its score, and a stronger push lowers it. S1 is refuted.
 | Arm | Right of 500 | Minus `none`, points | Minus four stored unsteered samples (mean 410.5), points | Hold-on words per 1,000 tokens | Tokens, mean / median | Cap hits | Ends without an answer |
 |---|---|---|---|---|---|---|---|
 | `none` | 430 |  | +3.9 [+1.2, +6.6] | 6.28 | 3,911 / 1,938 | 21 | 5 |
-| `steer:rand:L24:0.068`, random direction | 409 | -4.2 [-8.0, -0.6] | -0.3 [-2.9, +2.3] | 6.05 | 4,029 / 1,969 | 23 | 3 |
-| `steer:hold:L24:0.068`, the RL model's written rate | 413 | -3.4 [-6.6, -0.2] | +0.5 [-2.2, +3.1] | 8.32 | 4,158 / 2,140 | 22 | 13 |
-| `steer:hold:L24:0.1`, stronger | 381 | -9.8 [-13.6, -6.2] | -5.9 [-9.0, -2.9] | 11.21 | 4,491 / 2,647 | 22 | 39 |
-| `steer:hold:L20:0.128`, layer 20 | 398 | -6.4 [-10.2, -2.6] | -2.5 [-5.8, +0.5] | 9.09 | 4,619 / 2,368 | 31 | 27 |
+| `none`, second seed (41,010,000 + index) | 411 | -3.8 [-7.2, -0.2] | +0.1 [-2.6, +2.9] | 6.34 | 4,040 / 1,915 | 23 | 5 |
+| `steer:rand:L24:0.068`, random direction | 409 | -4.2 [-7.8, -0.6] | -0.3 [-3.1, +2.5] | 6.05 | 4,029 / 1,969 | 23 | 3 |
+| `steer:hold:L24:0.068`, the RL model's written rate | 413 | -3.4 [-6.6, +0.0] | +0.5 [-2.2, +3.0] | 8.32 | 4,158 / 2,140 | 22 | 13 |
+| `steer:hold:L24:0.1`, stronger | 381 | -9.8 [-13.6, -6.2] | -5.9 [-8.8, -2.8] | 11.21 | 4,491 / 2,647 | 22 | 39 |
+| `steer:hold:L20:0.128`, layer 20 | 398 | -6.4 [-10.0, -2.6] | -2.5 [-5.7, +0.7] | 9.09 | 4,619 / 2,368 | 31 | 27 |
 | `bias:hold:0.64`, logit bias | 421 | -1.8 [-5.2, +1.6] | +2.1 [-0.7, +4.7] | 9.72 | 4,471 / 2,174 | 28 | 4 |
 
 Reference: the RL model with the same cue scores 457 (`rlneurons` `day1_wdiff/rl_cue-01`) and writes 8.81 hold-on words per 1,000
 tokens (stored T2).
 
 Verdicts against the spec:
-- S0, the instrument. `none` scores 430, above the range 404 to 418, so S0 fails by its letter. The score repeats (the `none` arm of a job stopped for time, `sameraslan-1114-205149-0570`, same seeds: 426, with 436 of 500 texts identical), and 48 of its texts are identical to stored T1, which has the same seeds, so the sampling path is that of the stored cells. The random-direction arm, whose output distribution is 0.0004 nats per position away from `none` (`steer/readout-01`), scores 409. One arm's score has a standard deviation of about 7 problems, so 430 is read as a high draw. Every arm is therefore shown against `none` and against the stored samples. A second seed of `none` is queued (`sameraslan-1114-223704-bee0`) and will be added here.
+- S0, the instrument, holds on the second seed. `none` scores 430 with the seeds of every other arm, above the range 404 to 418,
+  and 411 with a second seed. The 430 repeats with its seeds (the `none` arm of a job stopped for time, `sameraslan-1114-205149-0570`:
+  426, with 436 of 500 texts identical) and 48 of its texts are identical to stored T1, which has the same seeds, so the sampling
+  path is that of the stored cells. The two seeds differ by 3.8 points [+0.2, +7.6], the size of the difference between `none` and
+  the random direction, so 430 is a high draw and one arm's score moves by several points between draws. The unsteered mean of
+  this engine is 420.5 (stored cells 410.5). Every arm is shown against `none` and against the stored samples.
 - S1 is refuted. `steer:hold:L24:0.068` writes 8.32 hold-on words per 1,000 tokens (1.33 times `none`; the RL model 8.81) and
-  scores 413: -3.4 [-6.6, -0.2] points against `none`, +0.5 [-2.2, +3.1] against the stored unsteered samples, +0.8 [-2.6, +4.2] against the random direction of the same norm. Against the stored samples the interval excludes a gain of more than 3.1 points; the gap to the RL model is 9.3.
-- S2 is refuted: the logit bias does not do worse than the push. `steer:hold:L24:0.068` minus `bias:hold:0.64`: -1.6 points [-5.0, +1.8]
+  scores 413: -3.4 [-6.6, +0.0] points against `none`, +0.4 [-3.2, +3.8] against the second seed of `none`, +0.5 [-2.2, +3.0] against the stored unsteered samples, +0.8 [-2.6, +4.2] against the random direction of the same norm. Against the stored samples the interval excludes a gain of more than 3.0 points; the gap to the RL model is 9.3.
+- S2 is refuted: the logit bias does not do worse than the push. `steer:hold:L24:0.068` minus `bias:hold:0.64`: -1.6 [-5.0, +1.8] points
   (`pairs`). The bias reached a higher written rate (9.72, 1.55 times `none`) than the dose run predicted.
-- S3: the random direction leaves the written rate unchanged (6.05, 0.96 times `none`). Its score is 409: -4.2 [-8.0, -0.6] points against `none`, -0.3 [-2.9, +2.3] against the stored samples. By its letter S3 fails against `none`; the random arm's written rate, length, cap hits and endings without an answer equal those of `none` and of the stored cells, so this is read as the high draw of `none` (S0).
+- S3: the random direction leaves the written rate unchanged (6.05, 0.96 times `none`). Its score is 409: -4.2 [-7.8, -0.6] points against `none`, -0.3 [-3.1, +2.5] against the stored samples. Against the second seed of `none` it is -0.4 [-4.0, +3.0]. S3 holds: the difference against the first `none` is the high draw of that run (S0).
 - Dose: at layer 24, alpha 0.068 -> 0.1 takes the written rate from 8.32 to 11.21, the median answer from 2,140 to 2,647 tokens,
   the answers that end without stating an answer from 13 to 39 (`none` 5, random direction 3), and the score from 413 to 381.
   Cap hits stay at 22. The same written rate reached from layer 20 costs more (398, 27 answers without an answer, 31 cap hits).
@@ -269,7 +275,7 @@ Why it does not help (evidence, each in `metrics.json` unless a file is named):
   hold-on words the unsteered model wrote by itself 3, 7 and 7. The kinds differ in where they sit in the answer (median
   offset 252, 1,011 and 6,202 characters), so this is a description and no matched comparison.
 - No selective gain where the RL model gains. On the 65 problems that stored T1 got wrong and stored T2 got right, the arms
-  score: `none` 42, random direction 35, push 35, bias 38, stronger push 31 (`arms.*.right_by_group.rl_only`). A fresh sample of
+  score: `none` 42 and 37 (second seed), random direction 35, push 35, bias 38, stronger push 31 (`arms.*.right_by_group.rl_only`). A fresh sample of
   the unsteered model recovers these problems as well as any push.
 - The loss at higher strength is derailment rather than too much checking: the answers lost end without an answer or in unrelated
   words (39 of 500 at alpha 0.1), and the mean log-probability of the sampled tokens falls from -0.40 (`none`, random) to -0.47
@@ -282,8 +288,8 @@ Why it does not help (evidence, each in `metrics.json` unless a file is named):
 - It agrees with result-855858 (checking markers do not separate right from wrong samples) and with result-96e819 (a
   self-review pass fixes nothing); a teammate predicted 0 points [-2, +1] before the run.
 
-Limits. One sample per problem and arm: one arm's score has a standard deviation of about 7 problems (`none` and the random direction, both
-unsteered in effect, differ by 21). The push is a constant vector at every position; a push applied only at chosen positions was
+Limits. One sample per problem and arm: one arm's score has a standard deviation of about 7 problems (the two seeds of `none` differ by 19
+problems). The push is a constant vector at every position; a push applied only at chosen positions was
 not tested. Strengths were matched on the written rate, which the bias arm overshot. One reader for the excerpts. The push
 at the strength that matches the RL model's readout (alpha about 0.011) was not scored.
 
@@ -310,3 +316,6 @@ published lens the vectors come from. Keys of `results/steer/readout-01/readout.
 
 The readout moves far more than the output: at alpha 0.068 the hold-on words are 6.5 times as often in the readout and 1.17
 times as often the top output token, which matches the published observation that lens vectors write weakly (knowledge-16c252).
+
+Page: `tools/finding_wait_push.py` (repository root), `/finding/wait-push` on the team site, unlisted (`UNLISTED = True`): a switch
+No push / RL's Wait rate / Harder push over the written Wait rate and the problems solved, with the RL model's values as dashed lines.

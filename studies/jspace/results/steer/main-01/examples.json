@@ -63,6 +63,38 @@
    "hold_words": 0
   }
  },
+ "none, second seed": {
+  "right": {
+   "arm": "none",
+   "problem_index": 329,
+   "unique_id": "test/prealgebra/1973.json",
+   "seed": 41010329,
+   "prompt_n_tokens": 78,
+   "text": " line!\n\nOkay answer:\nFirst, convert the speed from feet per minute to inches per minute by multiplying by 12 since there are 12 inches in a foot. \n\n20 feet/minute \u00d7 12 inches/foot = 240 inches/minute.\n\nNext, convert the speed from inches per minute to inches per second by dividing by 60 since there are 60 seconds in a minute. \n\n240 inches/minute \u00f7 60 seconds/minute = 4 inches/second.\n\nTherefore, the bicycle's speed is 4 inches per second.\n\nAnswer: 4",
+   "gold": "4",
+   "extracted_v3": "4",
+   "mode_v3": "marker",
+   "score_v3": 1,
+   "n_new": 112,
+   "cap_hit": false,
+   "hold_words": 0
+  },
+  "wrong": {
+   "arm": "none",
+   "problem_index": 115,
+   "unique_id": "test/counting_and_probability/1060.json",
+   "seed": 41010115,
+   "prompt_n_tokens": 73,
+   "text": " line!\n\nOkay, let's see. I need to find the number of ways to arrange the letters of the word \"ELLIPSE\". Hmm, permutations, right? But wait, some letters might repeat, so I can't just use the basic permutation formula. The word is E, L, L, I, P, S, E. Let me count the letters first.\n\nE appears twice, and the rest are L, I, P, S each once. So total letters are 7. Normally, without repetition, it would be 7 factorial. But since there are two E's and the others are unique, I have to divide by the factorial of the number of repeats for each duplicate. Wait, in this case, the only duplicate is E, which appears twice. So the formula should be 7! divided by 2! to account for the two E's being identical.\n\nLet me calculate that. 7! is 7 \u00d7 6 \u00d7 5 \u00d7 4 \u00d7 3 \u00d7 2 \u00d7 1 = 5040. Then divide by 2! which is 2. So 5040 / 2 = 2520. Is that right? Let me double-check. The letters are E, L, L, I, P, S, E. So two E's, and five other distinct letters. The formula for permutations of multiset is n! divided by the product of (k_i!) where k_i is the number of repetitions for each distinct element. Here, it's 7! / (2! * 1! * 1! * 1! * 1!). Since 1! is 1, we can ignore those. So yes, 7! / 2! = 5040 / 2 = 2520. That seems correct. I don't think I made a mistake here.\n\nThe number of ways to arrange the letters of the word **ELLIPSE** is calculated by accounting for repeated letters. The word has 7 letters with two E's and the remaining letters (L, I, P, S) being unique. \n\nUsing the formula for permutations of a multiset:  \n\\[\n\\frac{7!}{2!} = \\frac{5040}{2} = \\boxed{2520}\n\\]",
+   "gold": "1260",
+   "extracted_v3": "2520",
+   "mode_v3": "boxed",
+   "score_v3": 0,
+   "n_new": 472,
+   "cap_hit": false,
+   "hold_words": 3
+  }
+ },
  "steer:hold:L20:0.128": {
   "right": {
    "arm": "steer:hold:L20:0.128",
