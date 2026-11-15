@@ -1356,6 +1356,12 @@ speedBtn.onclick = () => {
   speedBtn.textContent = speed + "×"; speedBtn.setAttribute("aria-label", `Replay speed: ${speed} times. Press to change.`);
 };
 if (reduce) speedBtn.hidden = true;
+/* For a page that shows this one in a frame (the talk deck): move the board time and go on playing, set the speed, read the time. */
+window.replay = {
+  seek(p) { setT(p * SPAN); if (T < SPAN) setPlaying(true); },
+  speed(x) { speed = x; speedBtn.textContent = x + "×"; },
+  at: () => T / SPAN,
+};
 const at = ev => { const r = map.getBoundingClientRect(); return [(ev.clientX - r.left) / r.width * 1000, (ev.clientY - r.top) / r.height * VH]; };
 function ringT(ev) {  // the board time under the pointer: the nearest point of the ring
   const [x, y] = at(ev); let bestK = 0, bd = 1e9;

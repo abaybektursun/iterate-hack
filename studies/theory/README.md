@@ -520,6 +520,52 @@ of all samples.**
 - Raw generations (not committed): `runs/abaybektursun-1115-085111-e8c2`, `runs/abaybektursun-1115-085127-c0c4`,
   `runs/abaybektursun-1115-085134-75f7` in the worktree `iterate-hack-top8x4` of the run, and `jobs/<job-id>.tar` in the team store.
 
+**cell-r9-m21-01** (round-09 entry m21, readout `m21-r1`; plan `specs/SPEC_cells_r9b.md`; board work-ef61c7, result-ac7104). Base + 1.0 x
+the top 8 singular directions per matrix of (Olmo-3.1-7B-RL-Zero-Code - base) (`rlneurons/jobs/wsp_edit.py --recipe top8 --other
+rl_code --scale 1.0 --rounding stochastic --seed 0`), plain prompt, MATH-500 first 250 problems, T 1.0 / top-p 1.0, seed 64,000,000 +
+index, cap 16,384, grader v3. **Quick wrong answers (1,000 generated tokens or fewer, finished, v3 wrong): 60 of 250** (90 % bootstrap
+[49, 71]). Only run-05/f2-m06 (45 [28, 64]) holds; the other ten forecasts are refuted, all from below: both readers (25 [10, 45],
+18 [8, 32]), run-05/f2-m03 (40 [24, 58]), and the stopping forecasts run-03/f2-m02 (14 [7, 23]) and round-09/stopping-m06 (15 [8, 24]).
+- Right 157 of 250, 4 cap hits, 2,674 generated tokens per problem (median 1,088). On the same 250 problems: plain base (T3) 107 right
+  and 105 quick wrong; base + the Math 3.1 top-8 directions, plain (`rlneurons/results/wsp1/full500/top8_plain-01/`), 217 right and
+  9 quick wrong; matched random rank-8, plain, 100 and 104. The Code directions move both numbers about halfway from the plain base
+  to the Math directions.
+- Raw answers: 103 of 250 open with "Okay" in their first 60 characters. Short answers (121, at most 1,000 tokens) are right 61 times;
+  long ones (129) 96 times. Of the 60 quick wrong answers 35 have no extracted answer and 14 are 5 tokens or fewer (10 empty); the
+  rest are the plain base's formats (instructions to the reader, a multiple-choice template, Python with no output, `Answer: $Answer$`)
+  or short worked solutions with a slip. One (problem 0, `$(3, \frac{\pi}{2})$` followed by a note) is right and scored wrong by v3;
+  it is the stored wrong example.
+- Files: `analysis/cells_r9b.py` (readout); outputs `results/experiments/cell-r9-m21-01/` (`run.json` with job and commit,
+  `metrics.json`, `per_problem.json`, `examples.json`); the count is in `results/wide/round-09/measured.json`.
+- Job `abaybektursun-1115-103050-eae1` (commit `cd2f8d0`, command in `run.json`; a 4-problem 256-token smoke run first, in `smoke/`).
+  Raw answers (not committed): `runs/abaybektursun-1115-103050-eae1/` in the worktree `iterate-hack-cells-r9b` and
+  `jobs/<job-id>.tar` in the team store.
+
+**cell-r9-m18-01** (round-09 entry m18, readout `m18-r1`; plan `specs/SPEC_cells_r9b.md`; board work-ef61c7, result-ac7104). Base +
+0.125 x (RL-Math 3.1 - base), whole difference, stochastic BF16 rounding (`rlneurons/jobs/merge_weights.py --other rl --alpha 0.125
+--rounding stochastic`; effective alpha 0.12502), plain prompt, MATH-500 all 500, T 1.0 / top-p 1.0, seed 61,000,000 + index, cap
+16,384, grader v3. **316 of 500 right** (90 % bootstrap [298, 334]). Held: run-05/f2-m06 (300 [260, 340]), round-09/sampling-m03
+(308 [272, 342]), run-03/f2-m02 (330 [280, 375]), round-09/stopping-m06 (345 [295, 390]), reader-1 (355 [315, 392]). Refuted:
+round-09/problems-m03 (395 [365, 420]), round-09/weights-m06 (365 [330, 400], the saturating plain curve), reader-2 (362 [320, 400]).
+- 15 cap hits, 3,076 generated tokens per problem (median 1,432). References with the plain prompt on the same 500: base (T3) 224,
+  theta 0.25 405, theta 0.5 443, RL 463 (`rlneurons/results/day1_wdiff/`). The step from alpha 0 to 0.125 (+92) is about half the
+  step from 0 to 0.25 (+181).
+- Even-index half 153 of 250 (plain base 113 on the same problems), odd-index half 163.
+- Raw answers: 221 of 500 open with "Okay" in their first 60 characters. Of the 184 wrong answers 108 are quick wrong (1,000 tokens
+  or fewer, finished) and 62 finished answers have no extracted answer, against 199 quick wrong for the plain base. Read by hand
+  (10): wrong ones are empty answers, instructions to the reader, a "Cues & Strategy Menu" template, Python with no output, a
+  conclusion "no such number exists" after 142 tokens, and long "Okay, let's ..." derivations that end on a wrong value (8,392 and
+  15,866 tokens); right ones are either short step lists (problem 3, 485 tokens) or "Okay" derivations (problem 1, 2,190 tokens).
+- Caveat: shard 1/2 was cut off at 247 of 250 rows when its machine stopped; the shard was rerun whole at the same commit and the
+  rerun is the stored half. The two runs share seeds but not generations (52 of 247 texts identical, scores agree on 222): 155 right
+  in the cut-off run against 162 in the rerun on the same 247.
+- Files: `analysis/cells_r9b.py` (readout; joins the shards with `rlneurons/analysis/shard_join.py`); outputs
+  `results/experiments/cell-r9-m18-01/`; the count is in `results/wide/round-09/measured.json`.
+- Jobs `abaybektursun-1115-103513-3558` (shard 0/2, with a 4-problem 256-token smoke run first) and
+  `abaybektursun-1115-115102-884c` (shard 1/2), commit `cd2f8d0`; the cut-off run `abaybektursun-1115-103543-61f9`. Raw answers (not
+  committed): `runs/<job-id>/` in the worktree `iterate-hack-cells-r9b`; the two finished jobs also as `jobs/<job-id>.tar` in the
+  team store.
+
 ## Round 06 (2026-11-15, cutoff 11-15 06:51:23 UTC, coordinator frustea)
 
 Plan `specs/SPEC_round06.md` (before the run), engine version 6.3 with `--account-from results/account/run-03`, work-a9a6dd, launched with
