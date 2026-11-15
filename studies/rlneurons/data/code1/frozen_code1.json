@@ -1,0 +1,17 @@
+{
+ "models": {
+  "base": ["allenai/Olmo-3-1025-7B", "a81bae42db3975be1671e27b9c9a56da1a9f980f"],
+  "rl_code": ["allenai/Olmo-3.1-7B-RL-Zero-Code", "1ca3bb30f0e51b7ef05f7d0fefcf0e6b14eefc90"]
+ },
+ "tokenizer": ["allenai/Olmo-3.1-7B-RL-Zero-Code", "1ca3bb30f0e51b7ef05f7d0fefcf0e6b14eefc90"],
+ "cap": 16384,
+ "sets": {
+  "humanevalplus": {"repo": "evalplus/humanevalplus", "revision": "d32357cf319e50e9c8d8dab5ea876c72b0fd321b",
+                    "file": "data/test-00000-of-00001-5973903632b82d40.parquet", "n": 164,
+                    "sha256": "4436f5c03d77c17e0cbc57543b90665b5c1266f55a43992a5ed7922cd34a7558"},
+  "mbppplus": {"repo": "evalplus/mbppplus", "revision": "b2d74c91837c3f2a20c1299ae98133cbe7cfa077",
+               "file": "data/test-00000-of-00001-d5781c9c51e02795.parquet", "n": 378,
+               "sha256": "dc20030b3788fccf617444edcb34138ef13d7e4fafd17bfcb8c1279dbb12399b"}
+ },
+ "test_timeout_s": 60
+}
