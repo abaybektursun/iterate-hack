@@ -1,0 +1,122 @@
+{
+ "test": "editvote-01",
+ "mechanism": "round-15/account-3/c2",
+ "n": 328,
+ "bootstrap": {
+  "resamples": 10000,
+  "seed": 0,
+  "paired": true
+ },
+ "statistic": "100 * (edit vote right - RL plain vote right) / 328, vote over 4 attempt-0 samples, v3",
+ "primary_rule": "order_averaged",
+ "cap_hits_with_answer_attempt0": {
+  "edit": 42,
+  "rl": 79,
+  "base": 49
+ },
+ "ranges": {
+  "account-3": [
+   -5.0,
+   5.0
+  ],
+  "null": [
+   -14.0,
+   -6.0
+  ]
+ },
+ "runs": {
+  "edit": "studies/rlneurons/results/day1_3/hard328_top8x1.5_cue_s4-01",
+  "rl": "studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01",
+  "base": "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01"
+ },
+ "posted": {
+  "plain": "result-95a4dc: edit 214, RL 221, base 192, -2.1 [-5.2, 0.6] (95 %)",
+  "order_averaged": "result-f941b8: RL 215.9, base 184.6, edit minus RL +0.1 [-2.3, 2.4] (95 %)"
+ },
+ "posted_reproduced": true,
+ "order_averaged": {
+  "votes_right": {
+   "edit": 216.25,
+   "rl": 215.92,
+   "base": 184.58
+  },
+  "statistic_points": 0.1,
+  "interval90": [
+   -1.8,
+   1.96
+  ],
+  "null_points": -9.55,
+  "null_interval90": [
+   -12.5,
+   -6.78
+  ],
+  "edit_minus_base_points": 9.65,
+  "edit_minus_base_interval90": [
+   6.94,
+   12.53
+  ],
+  "verdict": "holds",
+  "inside_null_range": false,
+  "interval_overlaps_null_range": false,
+  "problems_edit_better": 16,
+  "problems_rl_better": 18,
+  "n_to_decide": null
+ },
+ "plain_stored_order": {
+  "votes_right": {
+   "edit": 214.0,
+   "rl": 221.0,
+   "base": 192.0
+  },
+  "statistic_points": -2.13,
+  "interval90": [
+   -4.57,
+   0.3
+  ],
+  "null_points": -8.84,
+  "null_interval90": [
+   -12.2,
+   -5.79
+  ],
+  "edit_minus_base_points": 6.71,
+  "edit_minus_base_interval90": [
+   3.66,
+   9.76
+  ],
+  "verdict": "holds",
+  "inside_null_range": false,
+  "interval_overlaps_null_range": false,
+  "problems_edit_better": 8,
+  "problems_rl_better": 15,
+  "n_to_decide": null
+ },
+ "order_averaged_cap_hits_abstain": {
+  "votes_right": {
+   "edit": 215.67,
+   "rl": 216.42,
+   "base": 184.08
+  },
+  "statistic_points": -0.23,
+  "interval90": [
+   -2.16,
+   1.68
+  ],
+  "null_points": -9.86,
+  "null_interval90": [
+   -12.83,
+   -7.04
+  ],
+  "edit_minus_base_points": 9.63,
+  "edit_minus_base_interval90": [
+   6.89,
+   12.48
+  ],
+  "verdict": "holds",
+  "inside_null_range": false,
+  "interval_overlaps_null_range": false,
+  "problems_edit_better": 17,
+  "problems_rl_better": 19,
+  "n_to_decide": null
+ },
+ "commit": "ead98accd321c90fa7556132f12433a58f3cb085"
+}
