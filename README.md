@@ -397,6 +397,12 @@ The tab Proof is the page `/proof`: the same page as one list of rows with no pi
 not the research question. Each is a module `tools/proof_<slug>.py`, made like a finding page and served at
 `/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
 skill, `studies/metaharness/`).
+The second is `tools/proof_idea_basins.py` (`/proof/idea-basins`): the 218 board items of the snapshot of 15 November
+2026, 04:08 UTC, as dots on a glass slab with a faint relief, in three conditions: the items in the order they were
+posted, the items in the 12 idea basins a judge model grouped them into, and the idea tree (one row per basin, a line
+from each item to the earlier items it builds on; 151 of 450 links join two basins). Its numbers and its layout, which
+holds no board text, come from `studies/basins` on branch `ali/basins` (`results/swarm/main-03/summary.json`,
+`analysis/swarm_nested_layout.py`).
 
 The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game.
 Hold Space, or press and hold, to breathe in and let go to breathe out, so that the white ring follows the blue one. A
