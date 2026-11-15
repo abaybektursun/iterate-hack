@@ -937,6 +937,64 @@ first ranking, against the base table, put all 6 above and was fixed). A route's
 estimate: one base route claimed 5,000 tokens per problem with the cue, which runs about 9,300, and so met the plain
 76-of-328 row.
 
+## Round 10 (engine 10, two tracks)
+
+Board snapshot 2026-11-15T18:58:29 UTC (board work-744158), code commit ca281af, 46.8 minutes in one run (standing
+18:58:29, forecasts 19:20:30, `cells.md` and `experiments.md` 19:44:35 UTC), 44 forecasters. Targets, mechanisms and
+forecasts were committed at 19:20 UTC, before any scoring. Command:
+
+```
+uv run studies/theory/lib/forecast.py round studies/theory/results/wide/round-10 --from studies/theory/results/wide/round-09 studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
+```
+
+**Standing.** 78 mechanisms, 77 scored: 30 carried, 9 in the graveyard. The 30 carried rest on 11 distinct board
+items, but result-a1bf75 (the code dial) still supplies 23.3 of their 47.9 nats of total gain (49 %). Top: run-06/f2-m03
++6.20 (16 numbers, 5 items), run-05/f2-m03 +6.02 (19, 5), run-05/f2-m01 +5.76 (16, 4), run-02/f2-m01 +5.64 (7, 5).
+
+**Proposals.** 36 new mechanisms; the duplicate judge dropped 24 (`duplicates.json`; 13 restate a round-09
+mechanism, 10 a forecast-run mechanism, 1 another round-10 mechanism), leaving 12 new. 39 merged
+cells, 7 routes, 0 dropped by the flag check.
+
+**SPEC_engine_v10 hypotheses.**
+
+- W1 (at least 4 routes with a median forecast above the best known count at equal tokens): holds as computed, 6 of
+  7. It carries no information: the 6 margins are 0.4 to 2.7 problems on subsets of 41 to 164 problems, inside one
+  binomial SD of the subset (about 3 to 4 problems), and every MATH-500 margin is between -0.1 and -0.8.
+- W2 (at most 10 of 36 new mechanisms dropped as duplicates): refuted, 24 of 36.
+- W3 (at least 5 cells with a readout split by 2 or more families on each side): refuted, 0 of 39 cells. Even with 1
+  family per side only 3 of 69 cell readouts have any two forecasters with disjoint 90 % intervals.
+- W4 (under 45 minutes): refuted, 46.8 minutes.
+
+**List C, no-reward routes** (`experiments.md` section C). Units: right answers (grader v3, cap hits wrong) on the
+route's own subset of hard328 (n problems, a `--shard`) and of MATH-500. "Best known" is the best board `score:` row of
+the same model at equal or fewer tokens per problem, a full-set count multiplied by n / 328 or n / 500 (not a measured
+subset count). The last column restates the hard328 median per 328 problems for comparison across routes.
+
+| route | family | change | tokens per problem (proposer) | hard328 n | median / best known | MATH-500 n | median / best known | hard328 per 328 |
+|---|---|---|---|---|---|---|---|---|
+| r10-n01 | training | Think-SFT, cue, cap 32,768, sequential vote over up to 3 | 26,500 | 66 | 49 / 46.3 | 50 | 48 / 48.1 | 243.5 |
+| r10-n07 | grader | Think-SFT, cue, cap 32,768, 2 samples, agree-or-finished-or-shorter rule | 23,600 | 82 | 59 / 57.5 | 50 | 47.5 / 48.1 | 236 |
+| r10-n06 | sampling | Think-SFT, cue, cap 32,768, 2 samples, agree-or-finished rule | 23,600 | 55 | 40 / 38.6 | 50 | 47.5 / 48.1 | 238.5 |
+| r10-n05 | stopping | Think-SFT, opening ` line!\n\n<think>\nOkay` + a `</think>` instruction, cap 16,384, 1 sample | 9,000 | 164 | 104 / 103.5 | 100 | 92 / 92.2 | 208 |
+| r10-n02 | weights | Think-SFT, cue, cap 32,768, majority of 3 | 35,400 | 41 | 30.5 / 30.1 | 50 | 48 / 48.1 | 244 |
+| r10-n04 | problems | Think-SFT, cue, cap 32,768, sequential vote over up to 3 | 35,400 | 41 | 30.5 / 30.1 | 100 | 96 / 96.2 | 244 |
+| r10-n03 | run-02 | Think-SFT, cue, cap 12,288, 3 samples, capped samples abstain | 25,500 | 41 | 28 / 28.8 | 84 | 80 / 80.8 | 224 |
+
+Best known rows used: hard328 230/328 at 11,795 tokens (result-c8b994, one sample at cap 32,768) for n01, n03, n06,
+n07; 241/328 at 30,904 (result-818c20, sequential vote up to 4 at cap 16,384) for n02, n04; for n05 no row is at or
+below 9,000 tokens, so the code fell back to the cheapest row, 207/328 at 10,048 (result-c8b994 at 16,384), and not
+the 212/328 at 10,137 of result-818c20 (against 212 the median is 2 below). MATH-500: 481/500 at 19,503 tokens
+(result-818c20) for all but n05 (461/500 at 4,900). Measured since (work-dc9359, 19:39 UTC): Think-SFT + cue at cap
+32,768 on hard328, singles 230, 234, 235, 232 and vote over 4 244/328; its four samples' rows can score the hard328
+route readouts of n01, n02, n04, n06, n07 (and n03 rescored at 12,288) without a GPU run. No route changes the base
+alone; no route was run.
+
+Files in `results/wide/round-10/`: `standing.md` / `standing.json` / `standing/`, `graveyard.json`, `targets.json` and
+`work.md` (33 targets from 19 open work items), `mechanisms.json` (30 carried + 12 new), `duplicates.json`,
+`forecasts.json` / `forecasts.md`, `cells.json` (cells, routes, best-known table) / `cell_forecasts.json` / `cells.md`,
+`experiments.md`, `run.json`, `round10.log` (the console log), `jobs/` (each job's JSON output, 1.0 MB). Job prompts
+and raw outputs stay in the temp folder named in `run.json`.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in

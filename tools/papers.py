@@ -148,18 +148,19 @@ a { color: inherit; }
 .no { font-size: 12.5px; font-weight: 600; color: var(--mute); }
 .sheet h2 { margin: .5em 0 0; font-size: clamp(19px, 1.75vw, 31px); line-height: 1.08; font-weight: 300; font-stretch: 100%; letter-spacing: -.014em; text-wrap: balance; }
 .claim { margin: .9em 0 0; font-size: clamp(12.5px, .95vw, 15px); line-height: 1.4; text-wrap: pretty; }
-.how { margin-top: auto; padding-top: 12px; font-size: clamp(11.5px, .82vw, 13px); line-height: 1.38; color: var(--mute); }
+.how { margin-top: auto; padding-top: 12px; font-size: clamp(12.5px, .82vw, 13px); line-height: 1.38; color: var(--mute); }
 .how p { margin: 0; padding: 6px 0; border-top: 1px solid var(--rule); }
 .open { display: flex; justify-content: space-between; align-items: baseline; padding-top: 8px; border-top: 1px solid var(--ink); font-size: 13px; }
-.open b { font-weight: 600; }
-.open i { font-style: normal; color: var(--blue); font-weight: 600; }
+.open b { font-weight: 600; white-space: nowrap; }
+.open i { white-space: nowrap; font-style: normal; color: var(--blue); font-weight: 600; }
 
-@media (max-width: 1100px) {
-  .page { display: block; height: auto; min-height: 0; padding: 16px 16px 40px; }
+@media (max-width: 1240px) {  /* below this the four sheets beside the words are too narrow for their text */
+  .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
+  .words { display: contents; }  /* one column: the sentence, then the papers, then the steps that made them */
+  .stage { order: 1; } .steps { order: 2; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
-  .words { overflow: visible; padding-top: 20px; }
-  .cap { font-size: 22px; max-width: none; }
+  .cap { font-size: 22px; max-width: none; margin-top: 20px; }
   .stage { display: block; perspective: none; margin-top: 26px; }
   .row { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; animation: none; }
   .sheet, .sheet:hover, .sheet:focus-visible { transform: none; aspect-ratio: auto; max-height: none; min-height: 300px; animation-name: fade; }
@@ -175,7 +176,7 @@ a { color: inherit; }
 <body>
 <div class="page">
   <header class="top">
-    <h1 class="name"><a href="https://invariant.team/">Invariant</a></h1>
+    <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
     <a href="/architecture">Design</a>
     <a href="/proof">Proof</a>

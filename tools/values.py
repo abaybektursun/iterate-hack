@@ -4,7 +4,8 @@ view.py serves PAGE at /values; it is not a header tab and is reached from the h
 glass prism seen from slightly above, one face per value. One beam of light enters the top of the prism and leaves
 it as six rays, one through each face, to a bead on a ring around it; each bead names a value. The selected value's
 face turns to the front and shows its number and name, and the column beside the picture holds the value: its
-sentence, its quotes with their sources, and the line of AGENTS.md that states it for the agents. A click on a bead,
+sentence, its quotes with their sources, and the line of AGENTS.md that states it for the agents; above it, one
+sentence says what the six values are and what AGENTS.md is. A click on a bead,
 a name or a face, the arrow keys or the buttons at the bottom of the column select a value (address /values#speed).
 The prism sways a few degrees and leans toward the mouse; the tick ring drifts at its own slow rate. Nothing on the
 page is data and nothing replays. The text of each value is the person's own (2026-11-15), with typing errors fixed.
@@ -58,14 +59,13 @@ a { color: inherit; }
 }
 .top { grid-column: 1 / -1; display: flex; align-items: center; gap: 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
-.name a { color: var(--ink); }
+.top .name a, .top .name a:hover { color: var(--ink); }
 .top a { color: var(--mute); text-decoration: none; white-space: nowrap; transition: color .15s ease; }
 .top a:hover { color: var(--ink); }
 .here { margin-left: auto; color: var(--ink); font-weight: 600; white-space: nowrap; }
 
 /* The picture */
 .stage { grid-column: 1; grid-row: 2; min-height: 0; min-width: 0; display: flex; padding: 8px 24px 0 0; }
-.foot { grid-column: 1; grid-row: 3; font-size: 13px; color: var(--mute); padding: 6px 24px 0 0; }
 svg { width: 100%; height: 100%; display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-stretch: 110%; letter-spacing: .012em; }
 .atmo, .shade, .bloom, .refl, .ring, .ticks, .inner, .beam, .sheen, .spec, .edge, .facetext, .ray { pointer-events: none; }
@@ -123,6 +123,7 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
   grid-column: 2; grid-row: 2 / 4; min-width: 0; min-height: 0; overflow: hidden auto; scrollbar-width: thin;
   padding: clamp(20px, 5vh, 64px) 4px 24px 40px; border-left: 1px solid var(--rule);
 }
+.about { margin: 0 0 22px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); font-size: 13.5px; line-height: 1.45; color: var(--mute); max-width: 46ch; text-wrap: pretty; }
 .card { animation: rise .5s cubic-bezier(.2, .7, .2, 1) both; }
 .kick { margin: 0; font-size: 13px; color: var(--mute); font-weight: 500; }
 .kick b { color: var(--blue); font-weight: 650; }
@@ -152,7 +153,6 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
   .name { font-stretch: 112%; margin-right: 0; }
   .stage { padding: 4px 0 0; display: block; }
   svg { height: auto; }
-  .foot { padding: 4px 0 0; }
   .side { border-left: 0; padding: 18px 0 0; overflow: visible; }
   .title { font-size: 42px; }
   .lead { font-size: 18px; }
@@ -166,7 +166,7 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 <body>
 <div class="page" id="page">
   <header class="top">
-    <h1 class="name"><a href="/home">Invariant</a></h1>
+    <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
     <a href="/architecture">Design</a>
     <a href="/proof">Proof</a>
@@ -174,8 +174,10 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
     <span class="here">Values</span>
   </header>
   <div class="stage"><svg id="svg" role="group" aria-label="A glass prism with one face for each of the six values; one beam enters it and leaves as six rays, one to each value"></svg></div>
-  <p class="foot">Six values the team works by. AGENTS.md opens with them, so every agent reads them at the start of a session.</p>
-  <aside class="side" id="side" aria-live="polite"></aside>
+  <aside class="side" id="side">
+    <p class="about">These are the six values the team works by. They open AGENTS.md, the rules file that every agent of the team reads at the start of a session.</p>
+    <div id="card" aria-live="polite"></div>
+  </aside>
 </div>
 <script>
 const $ = id => document.getElementById(id);
@@ -229,8 +231,8 @@ const S = { sel: 0, rot: 0, to: 0, t: 30, last: 0, mx: 0, my: 0, lx: 0, ly: 0 };
    above and below the prism, so no name and no line ever crosses it. */
 function geo() {
   return narrow.matches
-    ? { w: 720, h: 486, cx: 360, cy: 258, a: 78, hh: 80, R: 222, D: 1700, pitch: 40, bead: 13, fs: 25, fn: 88 }
-    : { w: 1000, h: 700, cx: 500, cy: 340, a: 106, hh: 108, R: 336, D: 2300, pitch: 37, bead: 8.5, fs: 16, fn: 84 };
+    ? { w: 720, h: 486, cx: 360, cy: 258, a: 78, hh: 80, R: 222, D: 1700, pitch: 40, bead: 13, fs: 25, fn: 88, edge: 24 }
+    : { w: 1000, h: 700, cx: 500, cy: 340, a: 106, hh: 108, R: 336, D: 2300, pitch: 37, bead: 8.5, fs: 16, fn: 84, edge: 1e4 };
 }
 let G = geo();
 const V = { cy: 1, sy: 0, cp: 1, sp: 0, yaw: 0 };
@@ -425,8 +427,10 @@ function draw() {
     let ux = p[0] - centre[0], uy = p[1] - centre[1];
     const ul = Math.hypot(ux, uy) || 1; ux /= ul; uy /= ul;
     const fs = G.fs * p[2], gap = r + 9, w = b.w * p[2];
-    b.text.setAttribute("x", f(p[0] + ux * (gap + w / 2)));
-    b.text.setAttribute("y", f(p[1] + uy * (gap + fs * .55) + fs * .34));
+    const tx = p[0] + ux * (gap + w / 2), cx = Math.max(w / 2 - G.edge, Math.min(G.w + G.edge - w / 2, tx));  // a name stays inside the page's edge
+    const clear = Math.sign(uy || 1) * Math.min(1, Math.abs(cx - tx) / gap) * (r + fs * .8);  // and, pushed in over its bead, moves above or below it
+    b.text.setAttribute("x", f(cx));
+    b.text.setAttribute("y", f(p[1] + uy * (gap + fs * .55) + fs * .34 + clear));
     b.text.setAttribute("font-size", f(fs));
     b.g.style.opacity = f(.5 + .5 * depth);
   });
@@ -459,12 +463,12 @@ function quote(x) {
 }
 function show() {
   const v = VALUES[S.sel], prev = VALUES[(S.sel + N - 1) % N], next = VALUES[(S.sel + 1) % N];
-  $("side").innerHTML = `<div class="card">
+  $("card").innerHTML = `<div class="card">
     <p class="kick"><b>${S.sel + 1}</b> of ${N}</p>
     <h2 class="title">${esc(v.title)}</h2>
     ${v.lead.map(s => `<p class="lead">${esc(s)}</p>`).join("")}
     ${v.quotes.length ? `<ul class="quotes">${v.quotes.map(quote).join("")}</ul>` : ""}
-    <div class="rule"${v.quotes.length ? "" : ' style="margin-top:26px"'}><h3>In AGENTS.md</h3><p>${esc(v.rule)}</p></div>
+    <div class="rule"${v.quotes.length ? "" : ' style="margin-top:26px"'}><h3>In AGENTS.md, the agents’ rules file</h3><p>${esc(v.rule)}</p></div>
     <div class="nav"><button data-k="${(S.sel + N - 1) % N}">← ${esc(prev.short)}</button><button class="next" data-k="${(S.sel + 1) % N}">${esc(next.short)} →</button></div>
   </div>`;
   $("side").scrollTop = 0;
@@ -479,7 +483,7 @@ function select(k, push = true) {
   k = ((k % N) + N) % N;
   S.to = k + N * Math.round((S.rot - k) / N);  // the shorter way round
   if (still.matches) S.rot = S.to;
-  if (k === S.sel && $("side").firstChild) { draw(); return; }
+  if (k === S.sel && $("card").firstChild) { draw(); return; }
   S.sel = k;
   mark(); show();
   if (push) history.pushState(null, "", "#" + VALUES[k].id);
