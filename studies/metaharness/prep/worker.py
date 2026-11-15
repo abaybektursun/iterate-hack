@@ -69,9 +69,11 @@ class Window:
     def launch_lines(self):
         readme = (self.repo / "studies/gapmap/README.md").read_text() if (self.repo / "studies/gapmap/README.md").exists() else ""
         block = re.search(r"## How to run.*?```[a-z]*\n(.*?)```", readme, flags=re.S)
-        lines = [line.strip() for line in block.group(1).splitlines() if "<cell>" in line] if block else []
+        # the worker makes the cells and commits them itself, so it skips the block's make_cells and git lines
+        lines = [line.strip() for line in block.group(1).splitlines() if "<cell>" in line and not line.strip().startswith("git ")] if block else []
         if not lines:
-            whole = [line.strip() for line in block.group(1).splitlines() if "<batch>" in line and "make_cells" not in line] if block else []
+            whole = [line.strip() for line in block.group(1).splitlines()
+                     if "<batch>" in line and "make_cells" not in line and not line.strip().startswith("git ")] if block else []
             if whole:  # the README launches a whole batch with one command: run it once, as the subject cell's launch
                 self.adapted.append(f"README launches a whole batch at once: {whole}")
                 self.whole_batch = True
@@ -138,14 +140,23 @@ class Window:
         custom = CUSTOM[self.index]
         self.note(f"batch {self.batch}, arena {self.arena['variant']}/{self.arena['arm']}")
 
-        made = self.run(f"python3 studies/gapmap/prep/make_cells.py {self.batch}")
-        path = self.repo / f"studies/gapmap/cells/{self.batch}.json"
-        cells = json.loads(path.read_text())
-        ids = [c["id"] for c in cells]
-        if "subject" in ids:
-            next(c for c in cells if c["id"] == "subject").update(custom["typed"] if planted else custom["final"])
-            path.write_text(json.dumps(cells, indent=1) + "\n")
-        self.commit(f"gapmap: cells of batch {self.batch} (subject split: {custom['note']})", f"studies/gapmap/cells/{self.batch}.json")
+        maker = self.repo / "studies/gapmap/prep/make_cells.py"
+        if maker.exists():
+            made = self.run(f"python3 studies/gapmap/prep/make_cells.py {self.batch}").stdout.strip()
+            path = self.repo / f"studies/gapmap/cells/{self.batch}.json"
+            cells = json.loads(path.read_text())
+            ids = [c["id"] for c in cells]
+            if "subject" in ids:
+                next(c for c in cells if c["id"] == "subject").update(custom["typed"] if planted else custom["final"])
+                path.write_text(json.dumps(cells, indent=1) + "\n")
+            self.commit(f"gapmap: cells of batch {self.batch} (subject split: {custom['note']})", f"studies/gapmap/cells/{self.batch}.json")
+        else:  # a review removed the cells file and its hand edits: the cells are the queue's, with the queue's settings
+            queue = json.loads((self.repo / "studies/gapmap/queue.json").read_text())
+            cells = [{"id": split, "kind": "split"} for split in queue["splits"]] + [{"id": e["id"], "kind": e.get("kind", "bench")} for e in queue.get("extras", [])]
+            ids = [c["id"] for c in cells]
+            made = "no make_cells.py"
+            planted = False
+            self.adapted.append("the repository has no prep/make_cells.py: cells and settings taken from queue.json, no setting typed by hand")
         splits = [c["id"] for c in cells if c["kind"] == "split"]
         extras = [c["id"] for c in cells if c["kind"] != "split"]
 
@@ -169,6 +180,12 @@ class Window:
                 answered[cell] = ok
 
         jobs = A.dump_jobs(self.arena, t0 - 5, time.time() + 5)
+        if A.git(self.id, "status", "--porcelain"):  # the launcher wrote files itself (a results folder, a record): commit them
+            written = A.git(self.id, "status", "--porcelain")
+            A.sh(["git", "add", "-A"], self.repo, self.env)
+            A.sh(["git", "commit", "-q", "-m", f"gapmap {self.batch}: files written by the launcher"], self.repo, self.env)
+            A.sh(["git", "push", "-q", "origin", A.BRANCH], self.repo, self.env)
+            self.adapted.append(f"committed files the launcher left uncommitted: {written[:300]}")
         number = 1
         while (self.repo / f"studies/gapmap/results/{self.batch}-{number:02d}").exists():
             number += 1
@@ -206,7 +223,7 @@ class Window:
                   "started": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(t0)), "ended": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(t1)),
                   "commit_start": run_record["commit"], "commit_end": A.git(self.id, "rev-parse", "HEAD"),
                   "cells": ids, "answered": answered, "launch_lines": lines, "adapted": self.adapted, "flakes": self.flakes, "work": self.work,
-                  "extra_work": extra_work, "make_cells": made.stdout.strip(), "log": self.log}
+                  "extra_work": extra_work, "make_cells": made, "log": self.log}
         (self.out / "window.json").write_text(json.dumps(window, indent=1))
         self.note(f"window done in {(t1 - t0) / 60:.1f} min, {len(jobs)} jobs")
         return window

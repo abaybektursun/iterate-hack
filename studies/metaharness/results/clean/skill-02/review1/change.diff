@@ -1,0 +1,140 @@
+diff --git a/meta/dana.md b/meta/dana.md
+new file mode 100644
+index 0000000..29c224b
+--- /dev/null
++++ b/meta/dana.md
+@@ -0,0 +1,19 @@
++# Meta review: dana
++
++## 2026-11-15 04:00 UTC (after work-f7b2b7 closed as result-783a1d, gapmap tokens) meta/reviews/dana/20261115-0400/
++
++- Last entry: none (first entry in `meta/dana.md`), so no checks carried.
++- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training"; point 3 = "the cheapest route to those points that uses no reward, at equal generated tokens" (DIRECTION.md). gapmap maps point 2, which DIRECTION already states ("spread over problems of all lengths"). Its 4 jobs since the study began (tokens batch) test no part of point 3: 0 of 4. The plan is the 3 batches still queued (`queue.json`: accuracy, cap_hit, tokens_both_right). `cap_hit` split by T1 length quartile follows from its own definition (all 27 T1 cap hits are at 16,384 tokens, the top quartile). Best alternative: run only the `accuracy` batch, the one that decides the SPEC prediction, then a no-reward route on the 16 "cap hit, no loop" problems of the 65 (`rlneurons/results/rln4/t1_t2_items-01/notes.md` §2) at equal tokens with RL given the same procedure.
++- Research: no replication, no published table needed for a bootstrap over stored rows. The "where" question is already partly answered by hand labels in notes.md §2 (16 cap hits, 14 misreads, 14 slips, 8 form or grader of 65). The SPEC does not cite them.
++- Turnaround (cycle.txt, 1 h): 4 jobs, 0 failed or cancelled, 3.3 container min, median queue wait 0.1 min; medians to-job 0, jobs 2, to-answer 0. Slowest stage: jobs. Of a 0.9 min job, 46.1 s was the bootstrap (before.txt, job 796d).
++- Cause: SPEC requirement 2 set 1,500,000 resamples so that "a rerun gives the same table to the last digit". The fixed seed gives that at any count, so the count had no reason behind it. Change (step 2; step 1 found the reason did not hold): `queue.json` n_boot 1,500,000 -> 10,000, and SPEC requirement 2 cut to "one fixed seed and count". The posted tokens-01 and overall-01 numbers keep their 1,500,000.
++
++  | measure | before | after | change | runs | source |
++  |---|---|---|---|---|---|
++  | bootstrap seconds, tokens/subject cell | 46.1 | 0.3 | 150x faster | 1 and 1 | jobs 796d, f0d2 logs |
++  | job run minutes | 0.9 | 0.1 | 9x faster | 1 and 1 | cycle.txt, after.txt |
++  | point estimates, 7 groups (must not change) | e.g. 1116.95 | identical | none | 1 and 1 | logs |
++  | interval ends (Monte Carlo noise) | e.g. precalc low 36.81 | 17.28; max shift 19.5 tokens, at most 1.9% of width | same verdicts vs 0 and vs overall 760.9 | 1 and 1 | logs |
++
++- Failures: none in jobs. Latent: `jobs/cell.py` imports `studies.gapmap.jobs.bench_rng` for kind "bench", and that module does not exist. It is not used yet. The next entry deletes the branch if no cell uses it.
++- Next entry checks: the accuracy batch runs at n_boot 10,000 and decides the SPEC prediction; whether cap_hit and tokens_both_right were deleted from the queue; a work item exists on point 3 (a route on the 16 cap-hit problems); the bench_rng branch is gone.
+diff --git a/meta/reviews/dana/20261115-0400/after.txt b/meta/reviews/dana/20261115-0400/after.txt
+new file mode 100644
+index 0000000..8140403
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0400/after.txt
+@@ -0,0 +1,14 @@
++# command: uv run tools/gpu.py logs dana-1114-195614-f0d2 ; uv run tools/cycle.py --hours 0.3 (row of the job)
++[cell] 03:56:19 bootstrap done in 0.3 s
++[cell] 03:56:19 bootstrap start: metric tokens, split subject, 500 problems, 10000 resamples
++[cell] 03:56:19 cell subject from meta/reviews/dana/20261115-0400/cells.json
++[cell] 03:56:19 loaded 500 rows from studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json
++[cell] 03:56:19 result {"group": "algebra", "n": 124, "t2_minus_t1": 1116.95, "low": 713.46, "high": 1488.36}
++[cell] 03:56:19 result {"group": "counting_and_probability", "n": 38, "t2_minus_t1": 297.76, "low": -947.08, "high": 1481.37}
++[cell] 03:56:19 result {"group": "geometry", "n": 41, "t2_minus_t1": 1022.73, "low": -22.49, "high": 2042.22}
++[cell] 03:56:19 result {"group": "intermediate_algebra", "n": 97, "t2_minus_t1": 63.68, "low": -753.64, "high": 840.81}
++[cell] 03:56:19 result {"group": "number_theory", "n": 62, "t2_minus_t1": 883.77, "low": 300.67, "high": 1425.39}
++[cell] 03:56:19 result {"group": "prealgebra", "n": 82, "t2_minus_t1": 920.5, "low": 450.03, "high": 1374.19}
++[cell] 03:56:19 result {"group": "precalculus", "n": 56, "t2_minus_t1": 933.45, "low": 17.28, "high": 1770.85}
++[cell] 03:56:19 wrote /runs/dana-1114-195614-f0d2/metrics.json
++  dana-1114-195614-f0d2  done  cpu  0.1  0.1  python studies/gapmap/jobs/cell.py --cells meta/reviews/dana/20261115-
+diff --git a/meta/reviews/dana/20261115-0400/before.txt b/meta/reviews/dana/20261115-0400/before.txt
+new file mode 100644
+index 0000000..bd398bc
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0400/before.txt
+@@ -0,0 +1,16 @@
++# command: uv run tools/gpu.py logs dana-1114-195223-796d ; uv run tools/gpu.py ls (row of the job)
++[run_cell] 03:52:27 start: batch tokens, cell subject
++[cell] 03:52:27 cell subject from studies/gapmap/cells/tokens.json
++[cell] 03:52:27 loaded 500 rows from studies/rlneurons/results/rln4/t1_t2_items-01/per_problem.json
++[cell] 03:52:27 bootstrap start: metric tokens, split subject, 500 problems, 1500000 resamples
++[cell] 03:53:14 bootstrap done in 46.1 s
++[cell] 03:53:14 result {"group": "algebra", "n": 124, "t2_minus_t1": 1116.95, "low": 720.59, "high": 1492.96}
++[cell] 03:53:14 result {"group": "counting_and_probability", "n": 38, "t2_minus_t1": 297.76, "low": -949.71, "high": 1477.73}
++[cell] 03:53:14 result {"group": "geometry", "n": 41, "t2_minus_t1": 1022.73, "low": -14.97, "high": 2060.84}
++[cell] 03:53:14 result {"group": "intermediate_algebra", "n": 97, "t2_minus_t1": 63.68, "low": -752.86, "high": 840.18}
++[cell] 03:53:14 result {"group": "number_theory", "n": 62, "t2_minus_t1": 883.77, "low": 306.76, "high": 1422.56}
++[cell] 03:53:14 result {"group": "prealgebra", "n": 82, "t2_minus_t1": 920.5, "low": 439.63, "high": 1376.83}
++[cell] 03:53:14 result {"group": "precalculus", "n": 56, "t2_minus_t1": 933.45, "low": 36.81, "high": 1749.64}
++[cell] 03:53:14 wrote /runs/dana-1114-195223-796d/metrics.json
++[run_cell] 03:53:14 done
++  dana-1114-195223-796d  done  cpu  0.1  0.9  bash studies/gapmap/jobs/run_cell.sh tokens subject 
+diff --git a/meta/reviews/dana/20261115-0400/cells.json b/meta/reviews/dana/20261115-0400/cells.json
+new file mode 100644
+index 0000000..83c47ed
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0400/cells.json
+@@ -0,0 +1,13 @@
++[
++ {
++  "id": "subject",
++  "kind": "split",
++  "metric": "tokens",
++  "split": "subject",
++  "n_boot": 10000,
++  "seed": 0,
++  "ci": 0.95,
++  "fmt": "csv",
++  "digits": 2
++ }
++]
+\ No newline at end of file
+diff --git a/meta/reviews/dana/20261115-0400/cycle.txt b/meta/reviews/dana/20261115-0400/cycle.txt
+new file mode 100644
+index 0000000..0ea32e4
+--- /dev/null
++++ b/meta/reviews/dana/20261115-0400/cycle.txt
+@@ -0,0 +1,12 @@
++Installed 36 packages in 130ms
++Jobs of dana, last 1 h:  id  state  gpu  wait  run  command
++  dana-1114-195223-796d  done  cpu  0.1  0.9  bash studies/gapmap/jobs/run_cell.sh tokens subject 
++  dana-1114-195335-421c  done  cpu  0.0  0.9  bash studies/gapmap/jobs/run_cell.sh tokens t1_length_quartile 
++  dana-1114-195335-c65a  done  cpu  0.1  0.8  bash studies/gapmap/jobs/run_cell.sh tokens level5 
++  dana-1114-195335-a02b  done  cpu  0.1  0.8  bash studies/gapmap/jobs/run_cell.sh tokens t2_length_quartile 
++  4 jobs, 0 failed or cancelled; median wait 0.1; 3.3 container minutes, 0.0 of them in failed or cancelled jobs
++
++Work of dana, last 1 h:  id  branch  to-job  jobs  to-answer  total  n-jobs  n-failed  text
++  work-f7b2b7  dana/gapmap  0  2  0  2  4  0  gapmap batch tokens: T2 (RL) minus T1 (cued base) on MATH-50
++
++Median minutes per stage over work items with jobs: to-job 0, jobs 2, to-answer 0. Slowest stage: jobs.
+diff --git a/studies/gapmap/queue.json b/studies/gapmap/queue.json
+index 257df85..1df0aae 100644
+--- a/studies/gapmap/queue.json
++++ b/studies/gapmap/queue.json
+@@ -2,5 +2,5 @@
+  "batches": ["accuracy", "cap_hit", "tokens", "tokens_both_right"],
+  "splits": ["subject", "level5", "t2_length_quartile", "t1_length_quartile"],
+  "extras": [],
+- "defaults": {"n_boot": 1500000, "seed": 0, "ci": 0.95, "fmt": "json", "digits": 4}
++ "defaults": {"n_boot": 10000, "seed": 0, "ci": 0.95, "fmt": "json", "digits": 4}
+ }
+diff --git a/studies/gapmap/specs/SPEC.md b/studies/gapmap/specs/SPEC.md
+index beb74fc..3ab576a 100644
+--- a/studies/gapmap/specs/SPEC.md
++++ b/studies/gapmap/specs/SPEC.md
+@@ -11,7 +11,7 @@ models solve).
+ Splits of every batch: by subject (7), by level 5 against levels 1 to 4, by quartile of the RL answer's length, by
+ quartile of the cued base answer's length.
+ 
+-Method: paired bootstrap over problems, 1,500,000 resamples, seed 0, percentile interval. A group is reported as
++Method: paired bootstrap over problems, 10,000 resamples (the overall cells and batch tokens-01 used 1,500,000), seed 0, percentile interval. A group is reported as
+ different from the overall value only when its interval excludes the overall point estimate.
+ 
+ Prediction: the accuracy gap is concentrated in the longest quartile of the cued base's answers (cap hits), and is
+@@ -23,9 +23,8 @@ excludes it.
+ 1. Every cell runs as a job on the CPU class of the team runner, from a pushed commit. Nothing is computed on a
+    laptop. Reason: the team checks a number at its job's `$OUT_DIR`, log and commit (`AGENTS.md`, Results 7), and
+    laptops differ in numpy build and CPU, so a table computed on one cannot be checked by a teammate.
+-2. 1,500,000 resamples and seed 0 in every cell of every batch. Reason: the interval ends are reported to four digits
+-   and compared between batches; with the same seed and count a rerun gives the same table to the last digit, which
+-   is how a table is checked.
++2. One fixed seed (0) and resample count in every cell of every batch, so a rerun gives the same table to the last
++   digit, which is how a table is checked.
+ 3. The four splits above are the deliverable of every batch. The `subject` split has small groups (38 to 124
+    problems), so its interval level, digits and table format are set by hand per batch.

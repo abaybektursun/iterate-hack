@@ -56,7 +56,21 @@ def read(job, batch):
             "compute_s": compute,
             "stale_path": "per_problem.json" in log and ("FileNotFoundError" in log or "No such file" in log),
             "after_bootstrap": "bootstrap done" in log,
-            "table": metrics["table"] if metrics else None}
+            "table": metrics["table"] if metrics else None,
+            "n_boot": metrics.get("cell", {}).get("n_boot") if metrics else None}
+
+
+def compare(table, reference):
+    """How far a delivered table is from the reference table of the same cell: the same groups, the same point
+    estimates, and the largest move of an interval end in units of the reference interval's width. Added after the
+    clean-window reviews, where a review cut the resample count: the tables then differ in the interval ends only."""
+    mine, theirs = {row["group"]: row for row in table}, {row["group"]: row for row in reference}
+    if set(mine) != set(theirs) or any("t2_minus_t1" not in row for row in table):
+        return {"same_groups": False, "points_equal": False, "max_end_shift_in_widths": None}
+    digits = min(max(len(str(row["t2_minus_t1"]).partition(".")[2]) for row in rows) for rows in (table, reference))  # the coarser rounding
+    shift = max(abs(mine[g][end] - theirs[g][end]) / max(theirs[g]["high"] - theirs[g]["low"], 1e-12) for g in mine for end in ("low", "high"))
+    return {"same_groups": True, "points_equal": all(abs(mine[g]["t2_minus_t1"] - theirs[g]["t2_minus_t1"]) <= 0.5 * 10 ** -digits + 1e-12 for g in mine),
+            "max_end_shift_in_widths": round(shift, 4)}
 
 
 def score(window, jobs, reference):
@@ -66,7 +80,7 @@ def score(window, jobs, reference):
     rows = [r for r in rows if r["run_s"] is not None]
     lines = dict.fromkeys(["answer", "overhead", "P1_setup_in_answer_jobs", "P2_fix_loop", "P3_repeat", "P4_stored_answer",
                            "P5_off_mission", "P6_stale_path"], 0.0)
-    answered, answers_kept, seen = {}, {}, set()
+    answered, answers_kept, seen, detail = {}, {}, set(), {}
     for r in rows:
         if not r["ok"]:
             r["line"] = "P6_stale_path" if r["stale_path"] else "P2_fix_loop"
@@ -90,6 +104,8 @@ def score(window, jobs, reference):
             lines["overhead"] += r["run_s"] - useful - setup
             answered[r["cell"]] = r["id"]
             answers_kept[r["cell"]] = r["table"] == reference[batch][r["cell"]] if reference else None
+            if reference:
+                detail[r["cell"]] = compare(r["table"], reference[batch][r["cell"]]) | {"n_boot": r["n_boot"]}
     total = sum(r["run_s"] for r in rows)
     setups = [r["setup_s"] for r in rows if r["setup_s"] is not None]
     answer_overheads = [r["run_s"] - (r["compute_s"] or 0) for r in rows if r["line"] == "answer"]
@@ -125,6 +141,9 @@ def score(window, jobs, reference):
         "failed_before_bootstrap": sum(not r["ok"] and not r["stale_path"] and not r["after_bootstrap"] for r in rows),
         "answers": {"required": len(REQUIRED), "delivered": len(answered), "equal_to_reference": sum(v is True for v in answers_kept.values())},
         "answers_kept": answers_kept,
+        "answers_detail": detail,
+        "resamples": sorted({d["n_boot"] for d in detail.values() if d["n_boot"]}),
+        "reference_answer_minutes": round(sum(reference["bootstrap_seconds"][batch]) / 60, 2) if reference else None,
         "turnaround_minutes": round((window["t1"] - window["t0"]) / 60, 2),
         "median_wait_s": statistics.median(waits) if waits else None,
         "flakes": len(window.get("flakes", [])), "adapted": window.get("adapted", []),

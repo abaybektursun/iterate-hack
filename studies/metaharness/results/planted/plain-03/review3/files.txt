@@ -1,0 +1,3 @@
+studies/gapmap/README.md  | 7 ++++++-
+ studies/gapmap/queue.json | 4 +---
+ 2 files changed, 7 insertions(+), 4 deletions(-)

@@ -1,0 +1,8 @@
+meta/FAILURES.md                           |  2 ++
+ meta/dana.md                               | 18 ++++++++++++++++++
+ meta/reviews/dana/20261115-0400/after.txt  |  8 ++++++++
+ meta/reviews/dana/20261115-0400/before.txt |  8 ++++++++
+ meta/reviews/dana/20261115-0400/cycle.txt  | 24 ++++++++++++++++++++++++
+ studies/gapmap/README.md                   |  2 +-
+ studies/gapmap/jobs/submit.sh              | 10 ----------
+ 7 files changed, 61 insertions(+), 11 deletions(-)

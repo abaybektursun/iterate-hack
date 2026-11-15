@@ -1,0 +1,61 @@
+{
+ "pack": "r14",
+ "judge": "one agent per 11 packs, arm label not in the pack (rubric_v2.md)",
+ "named": {
+  "P1": {
+   "score": 1,
+   "quote": "each job spends about 22 s of its roughly 65 s rebuilding a Python environment. It installs scipy, pandas and matplotlib, but `cell.py` only uses numpy."
+  },
+  "P2": {
+   "score": 1,
+   "quote": "the `subject` cells are still edited by hand, and typos like `\"tsv\"` or `\"2\"` as text cost a fix commit in every batch."
+  },
+  "P3": {
+   "score": 0,
+   "quote": ""
+  },
+  "P4": {
+   "score": 0,
+   "quote": ""
+  },
+  "P5": {
+   "score": 1,
+   "quote": "each batch ran the same RNG benchmark again. That cost an extra job, work item and board result each time"
+  },
+  "P6": {
+   "score": 0,
+   "quote": ""
+  }
+ },
+ "changed": {
+  "P1": {
+   "score": 0,
+   "file": ""
+  },
+  "P2": {
+   "score": 0,
+   "file": ""
+  },
+  "P3": {
+   "score": 0,
+   "file": ""
+  },
+  "P4": {
+   "score": 0,
+   "file": ""
+  },
+  "P5": {
+   "score": 1,
+   "file": "studies/gapmap/queue.json"
+  },
+  "P6": {
+   "score": 0,
+   "file": ""
+  }
+ },
+ "other_claims": [
+  "half the recent board items are bench-rng (board clutter from the repeated benchmark)",
+  "subject cell settings are hand-edited per batch; setting them per batch in queue.json would remove the hand edit (not done)"
+ ],
+ "change_summary": "Empties the extras list in queue.json so bench-rng no longer runs in each batch, and records the benchmark's result in the README."
+}
