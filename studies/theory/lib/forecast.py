@@ -62,6 +62,7 @@ import round as engine  # noqa: E402
 ROOT = engine.ROOT
 ROUND = ROOT / "studies/theory/results/engine/round-07"  # the newest round: its unrefuted theories forecast
 ENGINE = ROOT / "studies/theory/results/engine"
+REFUTED = ROOT / "studies/theory/results/refuted.json"  # mechanisms whose stated cause a direct test refuted (version 11.2)
 READERS = ["reader-1", "reader-2"]
 LENSES = {  # the six families of causes of specs/SPEC_forecast03.md (forecast runs 03-08)
     "stopping": "when and how the model stops: token cap, loops, end-of-text, answer markers",
@@ -563,9 +564,14 @@ def standing(folder, sources):
         m["forecast"] = f = {"scored": len(m["rows"]), "items": len({r["item"] for r in m["rows"]}), "inside": sum(r["inside"] for r in m["rows"]),
                              "total_gain": round(sum(r["gain"] for r in m["rows"]), 3)}
         m["state"] = ("carried" if f["items"] >= 3 and f["total_gain"] > 0 else "graveyard" if f["items"] >= 2 and f["total_gain"] <= -2 else "not carried")
+    refuted = {r["mechanism"]: r for r in json.loads(REFUTED.read_text())}
+    for i in refuted.keys() & records.keys():  # a direct test refuted the stated cause: buried whatever the forecast gain
+        records[i]["state"] = "cause refuted"
     graveyard |= {i: {"name": i, "round": folder.name, "statement": m["statement"], "state": "refuted by forecasts", "verdict": "", "forecast": m["forecast"],
                       "reason": f"total forecast gain {m['forecast']['total_gain']:+.2f} nats on {m['forecast']['scored']} numbers from "
                                 f"{m['forecast']['items']} board items"} for i, m in records.items() if m["state"] == "graveyard"}
+    graveyard |= {i: {"name": i, "round": folder.name, "statement": m["statement"], "state": "refuted by a direct test", "verdict": "", "forecast": m["forecast"],
+                      "reason": f"{refuted[i]['result']}: {refuted[i]['measured']} ({refuted[i]['claim']})"} for i, m in records.items() if m["state"] == "cause refuted"}
     ranked = sorted(records.values(), key=lambda m: -m["forecast"]["total_gain"])
     (folder / "standing.json").write_text(json.dumps({"utc": now(), "from": [str(s) for s in sources], "carried": [m for m in ranked if m["state"] == "carried"],
                                                       "records": {m["id"]: {k: m[k] for k in ("family", "state", "forecast", "statement")} for m in ranked},
@@ -579,6 +585,10 @@ def standing(folder, sources):
           "| mechanism | family | scored | items | inside | total gain | state | statement |\n|---|---|---|---|---|---|---|---|"]
     md += [f"| {m['id']} | {m['family']} | {m['forecast']['scored']} | {m['forecast']['items']} | {m['forecast']['inside']} | {m['forecast']['total_gain']:+.2f} | "
            f"{m['state']} | {flat(m['statement'])[:160]} |" for m in ranked if m["forecast"]["scored"]]
+    md += ["\n## Forecast well, cause refuted\n\nForecast gain is not evidence for the stated cause (`studies/theory/results/refuted.json`).\n",
+           "| mechanism | scored | items | total gain | refuted claim | result | measured |\n|---|---|---|---|---|---|---|"]
+    md += [f"| {m['id']} | {m['forecast']['scored']} | {m['forecast']['items']} | {m['forecast']['total_gain']:+.2f} | {refuted[m['id']]['claim']} | "
+           f"{refuted[m['id']]['result']} | {refuted[m['id']]['measured']} |" for m in ranked if m["state"] == "cause refuted"]
     md += [f"\n## Written after the result, not scored ({len(late)} forecasts)\n", "| source | target | result | written | posted | mechanisms |\n|---|---|---|---|---|---|"]
     groups = {}
     for x in late:
@@ -755,7 +765,8 @@ def round11(folder, sources, n_top):
         engine.run([engine.job("surprise_propose", f"s{k}", {**common, "targets.json": folder / "targets.json", "facts.json": json.dumps(facts, indent=1),
                                                              "graveyard.json": json.dumps(dead, indent=1), "jobs.md": C.jobs_md(),
                                                              "surprise.json": json.dumps({x: e[x] for x in e if x != "forecasts"} | {"forecasts": e["forecasts"]}, indent=1),
-                                                             "right.json": json.dumps([{"id": i, "statement": statements[i]} for i in e["inside"] if i in statements], indent=1)},
+                                                             "right.json": json.dumps([{"id": i, "statement": statements[i]} for i in e["inside"] if i in statements], indent=1),
+                                                             "refuted.json": REFUTED},
                                {"rivals.json": out / f"rivals-s{k}.json"}, C.flags_once(lambda d, fl: check_rivals(d, tids, board_ids, len(facts), fl)))
                     for k, e in enumerate(top, 1)], folder, len(top))
         for k, e in enumerate(top, 1):

@@ -3,7 +3,7 @@ name: theory
 description: Score the team's fixed forecasts against the results posted since, find the numbers both no-theory readers got wrong, and write theories only about those. One round runs studies/theory/lib/forecast.py round - it scores every outstanding forecast, cell and route of earlier rounds, carries mechanisms with a positive gain on numbers from 3 or more results and buries the losers, lists the surprises (numbers outside both readers' intervals) in surprises.md, has the readers and carried mechanisms forecast the open work, and for each of the top surprises one blind headless job writes two rival mechanisms that must disagree on an open target or a new cell; their cells and one no-reward route per pair are checked against open work (an open item's answer becomes a free target), forecast by everyone and ranked. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 11.1, score first)
+# Theory round (version 11.2, score first)
 
 What ten rounds showed: the engine's value is forecasts fixed before results, the score, refutations (run-08/f2-m03 at
 -12.27 nats; both readers refuted on result-9ce8ed) and surprises (run-01 t14: a number nobody forecast). Mechanisms
@@ -68,6 +68,10 @@ result was posted (written time: the earlier of the time `forecasts.md` or `cell
 `forecasts.json` or `cell_forecasts.json`), others are listed in `standing.md` as written after the result; every row
 of every `measured.json` is scored or listed with its reason. A target matches a result on its cell, not its seed,
 unless the target names a seed.
+
+Forecast gain does not confirm a cause: twice the top mechanism forecast well while a direct check refuted its cause. Give
+each top carried mechanism's distinctive claim one direct test (offline on stored rows first). When one fails, append
+`{mechanism, claim, result, measured, added}` to `studies/theory/results/refuted.json`; `standing` then buries it.
 
 ## Cells, routes and the flag check
 

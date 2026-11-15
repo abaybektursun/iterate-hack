@@ -1,0 +1,16 @@
+[
+ {
+  "mechanism": "r5-m03-rival",
+  "claim": "the top-8 edit is an incomplete switch per sample: short answers are the unswitched base and about 50 % right",
+  "result": "result-d02d46",
+  "measured": "short answers 82.9 % right (predicted about 50 %), share 17.8 % (predicted 10-15 %)",
+  "added": "2026-11-15T17:56:01"
+ },
+ {
+  "mechanism": "run-05/f2-m06",
+  "claim": "weight edits merged in bf16 are under-applied: small changes below half a unit in the last place are lost, so 1x lands smaller than intended",
+  "result": "result-c2edfb",
+  "measured": "projection of the written 1x change on the intended addition 0.99996 (1.5x: 0.99998)",
+  "added": "2026-11-15T20:57:44"
+ }
+]

@@ -12,6 +12,9 @@ Files here:
 - targets.json: numbers the open jobs will report. Nobody has seen them yet.
 - facts.json: numbers computed from stored per-problem rows. graveyard.json: theories that failed and why.
 - jobs.md: the GPU job files, their flags (no others exist) and how to run them.
+- refuted.json: mechanisms whose forecasts scored well but whose stated cause a direct test refuted (claim, result,
+  measured number). Where one bears on this surprise, explain why its forecasts were right although its cause is false:
+  what correlate of the true cause it captured. That is where a better mechanism is.
 
 Write two rival mechanisms, a and b, that each explain why the readers were wrong on this number: what the model does
 that the readers' reading of the board missed. The two must give different causes, so that they forecast different
