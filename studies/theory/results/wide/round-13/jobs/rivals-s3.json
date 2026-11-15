@@ -1,0 +1,61 @@
+{"rivals": [
+ {"id": "a",
+  "statement": "On MATH-500 at T 1.0, the cued base's wrong answers to a problem spread over many values, while its right answers agree on one. So the plurality vote is right whenever the right answer is the mode, even below half the samples. The ceiling for votes over many samples is the number of problems where the right answer is the mode (about 470-475), not the number where it is a majority.",
+  "readers_wrong": "The readers treated the vote over 4 (446, or 449.2 averaged over subsets) as near saturation, as if every problem's wrong answers sat on one shared attractor. In fact many problems where the base is right in only 25-50 % of samples still turn right as k grows, because their wrong answers do not agree. None of the direct_facts rows is about voting: the refuted termination-dial and short-answer claims concern edits, not the base's answer spread, so they leave this mechanism untouched.",
+  "rests_on": ["result-1c9e40", "result-3605ba", "result-e61b47"],
+  "holds_against": [
+   {"fact": 28, "value": 0.4286, "why": "43 % of the k=4 vote failures that had a right sample were lost to a wrong group of two or more. But 57 % were ties of singletons, which is exactly where more samples let a dispersed-wrong problem's right answer become the mode. Two agreeing wrong answers out of 4 also need not stay the mode out of 12."},
+   {"fact": 26, "value": 0.1346, "why": "Wrong answers to the same problem under the cue do agree with each other more than with plain-prompt wrong answers. Still, the agreement is a fraction of pairs well under one half, so most wrong pairs disagree and the wrong mass splits across values."}
+  ],
+  "forecasts": [
+   {"id": "t17", "value": 203, "low": 198, "high": 210, "reason": "hard328 has more problems with a per-sample right rate of 0.2-0.5 and spread-out wrong answers than MATH-500 does. Going from 4 to 6 samples gained +7.4 on MATH-500 (449.2 to 456.6), so expect about +9 to +11 over 192 here."},
+   {"id": "t19", "value": 250, "low": 246, "high": 256, "reason": "The M(2) vote over 3 is 246. A fourth sample (about 233 right) only adds plurality wins when wrong answers are spread out, so the vote over 4 should be at or above the vote over 3."},
+   {"id": "t24", "value": 82, "low": 76, "high": 88, "reason": "At 32k, cap hits turn into answers. The late wrong ones are scattered drift (Chinese text), so they rarely form a wrong plurality, while the right ones add up. Expect +6 to +8 over 75, more than hard328's +6 because fresh2026 has about 46 % cap hits."},
+   {"id": "t25", "value": 68, "low": 62, "high": 74, "reason": "About 63 cap hits per sample at 16k. Roughly 40 of them finish under 32k, and about 20-25 % end right, as Think-SFT's late answers did on hard328 (23 of 93). That gives 60 + about 8-9."},
+   {"id": "t01", "value": 236, "low": 224, "high": 248, "reason": "232 at T 1.0 in its own format. At T 0.6 / top-p 0.95 a reasoning SFT model is about level or a little better, with the same paired seeds."},
+   {"id": "t02", "value": 476, "low": 466, "high": 485, "reason": "474 at T 1.0 in its own format with cap 32,768. T 0.6 is near level; the ceiling is close."},
+   {"id": "t09", "value": 240, "low": 236, "high": 244, "reason": "result-2a5195 already posts 240 (42 cap hits) for this cell at seed 3,100,000."},
+   {"id": "t18", "value": 233, "low": 224, "high": 242, "reason": "Single samples of M(2) were 234, 229 and 237; their mean, with seed scatter."},
+   {"id": "t20", "value": 462, "low": 452, "high": 471, "reason": "Think-SFT gets 454 with one cue sample. The RL delta mostly helps answers finish under 16k (+5 to +10 on long problems)."},
+   {"id": "t21", "value": 243, "low": 234, "high": 252, "reason": "Seed 3,010,000 gave 245 at cap 32,768, with 0 cap hits. A new seed adds about ±8 of scatter."}
+  ],
+  "direct_test": {
+   "claim": "Most of the problems that the vote over 12 gains over the vote over samples 0-3 have the right answer in under half of the 12 samples, and win only because the wrong answers split.",
+   "files": ["studies/rlneurons/results/votek/math500_base_cue-01"],
+   "computation": "1) From rows.jsonl in the folder, keep one row per (problem_index, sample) for samples 0-11 (first in file order). 2) A row is answer-bearing if cap_hit is not true, finish_reason != 'length', and extracted_v3 is non-empty after strip(). Normalise each extracted answer by removing whitespace, '$' and a wrapping \\boxed{}. 3) For k in {4 (samples 0-3), 12}, group the answer-bearing rows by normalised answer. The winner is the largest group, with ties going to the group whose first member has the lowest sample index. The vote is right if the winner's first member has score_v3 == 1. 4) G = problems right at k=12 and wrong at k=4. 5) For each problem in G, p = (rows with score_v3 == 1) / 12, counting cap hits as not right. 6) S_a = fraction of G with p < 0.5. 7) Null: recompute the k=12 vote after merging all wrong answers of each problem into one label (a single-attractor world). G_null = problems right in that null at k=12 and wrong at k=4; S_null = fraction of G_null with p < 0.5, which is 0 by construction. Also report |G| and |G_null|, and how many problems the merge removes from G.",
+   "refuted_if": "S_a < 0.50, or the merged-wrong null keeps at least 80 % of G (meaning splitting is not needed for the gain).",
+   "threshold": "0.50",
+   "null": "Single-attractor null: each problem's wrong answers merged into one value. Under it, a plurality win needs p > 0.5, so any gain that sits on p < 0.5 is due to splitting."
+  }
+ },
+ {"id": "b",
+  "statement": "The vote over 4 is pulled down by its even size, not by the base's ceiling. Many MATH-500 problems split 2-2 or 1-1-1-1 at k=4, and the frozen rule breaks those ties by sample order or length, so k=4 scores close to a single sample on them. As k grows, ties get rarer, and problems where the right answer is a near-majority (p around 0.4-0.6) resolve right. The gain sits on near-majority problems that were tied at k=4.",
+  "readers_wrong": "The readers drew a concave curve through 410 at k=1 and 446 at k=4. That k=4 point is low because of ties, so the curve's ceiling came out too low; with ties resolved, the counts run higher at every k. No direct_facts row bears on vote tie-breaking. In result-3605ba, nine 1-1 ties decided by the frozen rule are exactly this effect.",
+  "rests_on": ["result-1c9e40", "result-3605ba"],
+  "holds_against": [
+   {"fact": 28, "value": 0.4286, "why": "43 % of k=4 vote failures with a right sample had a winning group of two or more. A 2-2 tie lost by the tie rule counts as such a winner, so this share includes tie losses rather than ruling them out."},
+   {"item": "result-1c9e40", "value": 466, "why": "The rise from 6 to 12 (456.6 to 466) is the part a pure tie artifact explains least. At k=6, 3-3 and 2-2-2 splits are still common on problems with p around 0.4-0.5, and k=12 resolves most of them. It is still a near-majority effect, not a mode-under-a-third effect."}
+  ],
+  "forecasts": [
+   {"id": "t17", "value": 194, "low": 188, "high": 197, "reason": "k=6 is still even. Resolving ties from 4 to 6 adds only a few problems on hard328, where problems the base solves rarely (p under 0.3) do not resolve, so the result is 192 + about 2."},
+   {"id": "t19", "value": 242, "low": 236, "high": 245, "reason": "Adding a fourth sample to the M(2) vote over 3 (246) brings back 2-2 ties broken by the frozen rule. So the vote over 4 is at or a little below the vote over 3, as Think-SFT's 241 sits at the top of its 231-241 votes over 3."},
+   {"id": "t24", "value": 77, "low": 71, "high": 82, "reason": "Converted cap hits add answer-bearing rows but also new 2-2 and 1-1 ties at k=4, which the frozen rule resolves. That gives a small gain, like hard328's +6 at 32k, scaled to n 136: 75 + 2."},
+   {"id": "t25", "value": 68, "low": 62, "high": 74, "reason": "Single samples are unaffected by ties. 63 cap hits at 16k, about 40 finish under 32k, about 20-25 % of those right."},
+   {"id": "t01", "value": 236, "low": 224, "high": 248, "reason": "232 at T 1.0 in its own format. T 0.6 / top-p 0.95 is about level, with paired seeds."},
+   {"id": "t02", "value": 476, "low": 466, "high": 485, "reason": "474 at T 1.0 in its own format with cap 32,768; near the ceiling."},
+   {"id": "t09", "value": 240, "low": 236, "high": 244, "reason": "result-2a5195 already posts 240 for this cell at seed 3,100,000."},
+   {"id": "t18", "value": 233, "low": 224, "high": 242, "reason": "Mean of the M(2) single samples 234, 229 and 237, with seed scatter."},
+   {"id": "t20", "value": 462, "low": 452, "high": 471, "reason": "Think-SFT 454 with one sample. The RL delta helps long answers finish under 16k."},
+   {"id": "t21", "value": 243, "low": 234, "high": 252, "reason": "245 at seed 3,010,000 and cap 32,768; a new seed adds about ±8."}
+  ],
+  "direct_test": {
+   "claim": "Most problems that the vote over 12 gains over the vote over samples 0-3 were ties at k=4 with the right answer in a tied top group, and the right answer is at least half of the 12 samples.",
+   "files": ["studies/rlneurons/results/votek/math500_base_cue-01"],
+   "computation": "1) From rows.jsonl in the folder, keep one row per (problem_index, sample) for samples 0-11 (first in file order). 2) Answer-bearing and normalisation as in a: cap_hit not true, finish_reason != 'length', and non-empty extracted_v3 with whitespace, '$' and \\boxed{} removed. 3) Votes at k=4 (samples 0-3) and k=12 by largest group, ties to the lowest first sample index; the vote is right if the winner's first member has score_v3 == 1. 4) G = problems right at k=12 and wrong at k=4. 5) For each problem in G: T = 1 if, at k=4, two or more groups share the top size and one of them is the right group; p = right rows / 12, counting cap hits as wrong. 6) S_b = fraction of G with T = 1 and p >= 0.5. 7) Null: F = problems wrong at k=4 with at least one right sample in 0-3 that are NOT in G. S_null = fraction of F with T = 1 and p >= 0.5. 8) Report S_b, S_null, and S_b - S_null.",
+   "refuted_if": "S_b < 0.60, or S_b - S_null < 0.20.",
+   "threshold": "0.60",
+   "null": "The same tie-and-near-majority share among k=4 failures with a right sample that the vote over 12 does not fix. This is stronger than random because it shares the difficulty band and the same rows."
+  }
+ }
+],
+ "cell": null}

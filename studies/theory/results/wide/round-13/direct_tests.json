@@ -104,5 +104,178 @@
   "refuted_if": "The native template drifts clearly less than the raw template with the cue: D is at most -2.0 points (about 7 of 328 rows fewer drifted), the upper end of its paired 95 % interval is below 0, and |D| is larger than S_max, the largest drift-share difference between two raw-cue samples.",
   "threshold": "D <= -2.0 percentage points of 328, with paired-bootstrap 95 % upper bound < 0 and |D| > S_max. If any of these fails, the claim holds. If D comes out positive, that also counts against f2-m05.",
   "null": "Seed scatter within one template. The drift-share differences between the four stored raw-cue samples (thinkvote hard328_sft1_cue_s4-01) set how large a template difference has to be to count. This is stronger than a random baseline: it is the same model, prompt and grader on a second base sample, so any native-minus-raw difference inside S_max is indistinguishable from re-sampling."
+ },
+ {
+  "mechanism": "round-13/s1-a",
+  "kind": "rival for surprise s1",
+  "statement": "The kept method caps every sample at 4,096 tokens. On hard328 the cued base's right answers have a median length of about 3,900 tokens, so the cap cuts roughly half of the right-answer length mass. A cut sample casts no vote. On problems whose only right routes are long, the vote sees only short finished answers, mostly wrong on hard problems. The score is bounded by problems solvable in under 4,096 tokens, not by vote size.",
+  "claim": "On hard328, the problems the kept Karpathy method loses even though the cued base can solve them are lost to 4,096-token cap hits, not to agreeing finished wrong answers.",
+  "files": [
+   "studies/autobench/results/math500-loop/finals-01",
+   "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01"
+  ],
+  "computation": "1) From finals-01 take the Karpathy-method hard328 rows (plain prompt, T 0.6, 12 samples per problem, cap 4,096). A sample is a cap hit if finish_reason == 'length' or its generated tokens are >= 4,096. Compute the plurality vote per problem as the run did (score_v3 of the winning group). 2) From the day1_3 rows keep attempt 0 of samples 0-3; k = the number of samples with score_v3 == 1 and no cap hit. 3) Lost set: problems where the Karpathy vote is wrong and k >= 2. Matched null set: problems where the vote is right and k >= 2. 4) L = mean over the lost problems of the share of the 12 samples that are cap hits; N = the same mean over the null set. 5) Also report, for the lost set, the share of problems where no right cued-base sample is <= 4,096 tokens.",
+  "refuted_if": "L < 0.45, or L - N < 0.20",
+  "threshold": "L >= 0.45 and L - N >= 0.20",
+  "null": "The cap-hit share on difficulty-matched problems the same method gets right (cued base k >= 2). That null holds the problem's difficulty fixed, so this is stronger than an overall or random share."
+ },
+ {
+  "mechanism": "round-13/s1-b",
+  "kind": "rival for surprise s1",
+  "statement": "The kept method samples the base with the plain prompt and no cue, at T 0.6. Without the cue the base stays in its short, 'Answer:'-line mode, which on hard problems produces quick finished wrong answers. Those wrong answers come from shared attractor values, so they agree across samples. A 12-sample plurality then locks onto a wrong value. The 4,096 cap rarely binds, because plain-mode answers are short and its long answers are loops.",
+  "claim": "On hard328, the problems the kept Karpathy method loses even though the cued base can solve them are lost to a plurality of agreeing short finished wrong answers, with few cap hits.",
+  "files": [
+   "studies/autobench/results/math500-loop/finals-01",
+   "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01"
+  ],
+  "computation": "1) From finals-01 take the Karpathy-method hard328 rows (12 samples per problem). Cap hit = finish_reason == 'length' or generated tokens >= 4,096. 2) From the day1_3 rows keep attempt 0 of samples 0-3; k = right samples (score_v3 == 1, no cap hit). 3) Lost set = Karpathy vote wrong and k >= 2. 4) C = mean share of cap hits among the 12 samples over the lost set. 5) A_K = over the lost set, the share of unordered pairs of finished wrong Karpathy answers of the same problem that agree under rln4_lib.agree (pooled). A_B = the same pooled agreement among the cued base's finished wrong answers (day1_3 attempt 0) on the same problems. Report C and A_K - A_B.",
+  "refuted_if": "C > 0.35, or A_K - A_B < 0.10",
+  "threshold": "C <= 0.35 and A_K - A_B >= 0.10",
+  "null": "Wrong-answer agreement of the cued base's own samples on the same problems. This null controls for each problem's shared attractor values, so it is stronger than chance agreement."
+ },
+ {
+  "mechanism": "round-13/s2-a",
+  "kind": "rival for surprise s2",
+  "statement": "Partial opening switch. Under the plain prompt each sample settles in its first tokens into either the base's answer-first mode (a short 'Answer:'-style reply, wrong about 40 % of the time) or the deliberative 'Okay' mode (cued-base-like). RL-Code's top-8 directions write the deliberation opening, but their input side is tuned to code text, so on math prompts at 1x they flip only about half of the samples. The other half stay plain-base answer-first and produce the quick wrong answers.",
+  "claim": "m21's quick wrong answers are plain-base answer-first replies: their opening composition matches the plain base's own quick wrong answers on the same 250 problems.",
+  "files": [
+   "studies/theory/results/experiments/cell-r9-m21-01",
+   "studies/rlneurons/results/rln4/t1_t3_items-01"
+  ],
+  "computation": "1) From cell-r9-m21-01/answers.jsonl take Q = rows with n_generated <= 1000, cap hit false and score_v3 != 1 (expect 60). 2) From t1_t3_items-01/per_problem.json, problems 0-249, take N = T3 rows with T3 tokens <= 1000, not cut off and T3 not right. 3) Per row take the first 240 characters of the answer (m21: completion[:240]; T3: the stored start). Call it answer-first (AF) if it contains 'Answer:' or '\\boxed', or if, after stripping whitespace and '$', it starts with a digit, '-', '\\frac' or '('. Otherwise call it deliberative. 4) s_Q = AF share in Q, s_N = AF share in N. Report s_Q - s_N with a 90 % bootstrap over rows.",
+  "refuted_if": "s_Q < s_N - 0.15, or s_Q < 0.40",
+  "threshold": "0.15 (gap) and 0.40 (floor)",
+  "null": "The plain base's own quick wrong rows on the same 250 problems (N), a base-model baseline rather than a random one. Rival b predicts s_Q far below s_N, because its quick wrongs are deliberative attempts."
+ },
+ {
+  "mechanism": "round-13/s2-b",
+  "kind": "rival for surprise s2",
+  "statement": "Code-commit policy. RL-Code's top-8 directions do switch nearly every plain-prompt sample into deliberation, removing the base's answer-first failures as Math's directions do. They also carry Code-RL's terse habit: sketch briefly, commit early and stop (the code reward pays for any final block). On math this cuts reasoning short, so many answers end under 1,000 tokens with a committed wrong value on medium-difficulty problems: the quick wrong answers are new deliberative failures, not leftover format failures.",
+  "claim": "m21's quick wrong answers sit on harder problems than the plain base's quick wrong answers, because they are short deliberative attempts, not format failures on easy problems.",
+  "files": [
+   "studies/theory/results/experiments/cell-r9-m21-01",
+   "studies/rlneurons/results/rln4/t1_t3_items-01",
+   "studies/rlneurons/results/day1_3/math500_base_cue-01"
+  ],
+  "computation": "1) Q = m21 answers.jsonl rows with n_generated <= 1000, cap hit false and score_v3 != 1. N = t1_t3_items-01/per_problem.json problems 0-249 with T3 tokens <= 1000, not cut off and T3 wrong. 2) For each problem, k/4 = the cued base's solve rate over samples 0-3 of rows.jsonl (attempt == 0, first row per sample; right = score_v3 == 1 and not a cap hit). 3) r_Q = mean k/4 over Q's problems, r_N = mean over N's problems. Statistic = r_N - r_Q, with a 90 % bootstrap over problems.",
+  "refuted_if": "r_N - r_Q < 0.10 (Q's problems about as easy as the plain base's quick-wrong problems)",
+  "threshold": "0.10",
+  "null": "The plain base's own quick wrong problems on the same 250 (N), whose cued-base solve rate is expected near 0.8, like fact 1's 0.818 for Math top-8 plain. Rival a predicts r_Q about equal to r_N."
+ },
+ {
+  "mechanism": "round-13/s3-a",
+  "kind": "rival for surprise s3",
+  "statement": "On MATH-500 at T 1.0, the cued base's wrong answers to a problem spread over many values, while its right answers agree on one. So the plurality vote is right whenever the right answer is the mode, even below half the samples. The ceiling for votes over many samples is the number of problems where the right answer is the mode (about 470-475), not the number where it is a majority.",
+  "claim": "Most of the problems that the vote over 12 gains over the vote over samples 0-3 have the right answer in under half of the 12 samples, and win only because the wrong answers split.",
+  "files": [
+   "studies/rlneurons/results/votek/math500_base_cue-01"
+  ],
+  "computation": "1) From rows.jsonl in the folder, keep one row per (problem_index, sample) for samples 0-11 (first in file order). 2) A row is answer-bearing if cap_hit is not true, finish_reason != 'length', and extracted_v3 is non-empty after strip(). Normalise each extracted answer by removing whitespace, '$' and a wrapping \\boxed{}. 3) For k in {4 (samples 0-3), 12}, group the answer-bearing rows by normalised answer. The winner is the largest group, with ties going to the group whose first member has the lowest sample index. The vote is right if the winner's first member has score_v3 == 1. 4) G = problems right at k=12 and wrong at k=4. 5) For each problem in G, p = (rows with score_v3 == 1) / 12, counting cap hits as not right. 6) S_a = fraction of G with p < 0.5. 7) Null: recompute the k=12 vote after merging all wrong answers of each problem into one label (a single-attractor world). G_null = problems right in that null at k=12 and wrong at k=4; S_null = fraction of G_null with p < 0.5, which is 0 by construction. Also report |G| and |G_null|, and how many problems the merge removes from G.",
+  "refuted_if": "S_a < 0.50, or the merged-wrong null keeps at least 80 % of G (meaning splitting is not needed for the gain).",
+  "threshold": "0.50",
+  "null": "Single-attractor null: each problem's wrong answers merged into one value. Under it, a plurality win needs p > 0.5, so any gain that sits on p < 0.5 is due to splitting."
+ },
+ {
+  "mechanism": "round-13/s3-b",
+  "kind": "rival for surprise s3",
+  "statement": "The vote over 4 is pulled down by its even size, not by the base's ceiling. Many MATH-500 problems split 2-2 or 1-1-1-1 at k=4, and the frozen rule breaks those ties by sample order or length, so k=4 scores close to a single sample on them. As k grows, ties get rarer, and problems where the right answer is a near-majority (p around 0.4-0.6) resolve right. The gain sits on near-majority problems that were tied at k=4.",
+  "claim": "Most problems that the vote over 12 gains over the vote over samples 0-3 were ties at k=4 with the right answer in a tied top group, and the right answer is at least half of the 12 samples.",
+  "files": [
+   "studies/rlneurons/results/votek/math500_base_cue-01"
+  ],
+  "computation": "1) From rows.jsonl in the folder, keep one row per (problem_index, sample) for samples 0-11 (first in file order). 2) Answer-bearing and normalisation as in a: cap_hit not true, finish_reason != 'length', and non-empty extracted_v3 with whitespace, '$' and \\boxed{} removed. 3) Votes at k=4 (samples 0-3) and k=12 by largest group, ties to the lowest first sample index; the vote is right if the winner's first member has score_v3 == 1. 4) G = problems right at k=12 and wrong at k=4. 5) For each problem in G: T = 1 if, at k=4, two or more groups share the top size and one of them is the right group; p = right rows / 12, counting cap hits as wrong. 6) S_b = fraction of G with T = 1 and p >= 0.5. 7) Null: F = problems wrong at k=4 with at least one right sample in 0-3 that are NOT in G. S_null = fraction of F with T = 1 and p >= 0.5. 8) Report S_b, S_null, and S_b - S_null.",
+  "refuted_if": "S_b < 0.60, or S_b - S_null < 0.20.",
+  "threshold": "0.60",
+  "null": "The same tie-and-near-majority share among k=4 failures with a right sample that the vote over 12 does not fix. This is stronger than random because it shares the difficulty band and the same rows."
+ },
+ {
+  "mechanism": "round-13/s4-a",
+  "kind": "rival for surprise s4",
+  "statement": "RL-Code's code gain sits almost entirely in its own top-8 directions, and in early/middle layers it raises the pass rate of finished programs, not just how often a program finishes. At 1.5x it matches RL-Code. Math's directions help code only through the shared finishing channel (fewer cap hits and missing code blocks), passing those recovered answers at the base rate. With Code's directions already finishing nearly everything, adding Math's gives little.",
+  "claim": "Code's 1.5x directions raise the pass rate among finished answers that contain a code block above the random edit's rate, and Math's 1.5x directions do not: Math's gain on code goes through finishing alone.",
+  "files": [
+   "studies/rlneurons/results/xreward/code_dial",
+   "studies/rlneurons/results/code1/base_cue-01"
+  ],
+  "computation": "From code_dial/readout.json (or each run folder's metrics.json) take passed, cap hits and no-code-block for the cells random rank-8 1.5x, Code top-8 1.5x and Math top-8 1.5x. For each cell, F = 538 - cap hits - no-block, and r = passed / F. Compute dC = r(Code 1.5x) - r(random 1.5x) and dM = r(Math 1.5x) - r(random 1.5x) in points. Then bootstrap over the 538 problems with per-problem rows if they are stored, else use Wilson intervals on the two rates.",
+  "refuted_if": "dC < 3.0 points, or dM >= 0.5 * dC",
+  "threshold": "dC >= 3.0 points and dM < 0.5 * dC",
+  "null": "The random rank-8 1.5x edit's own pass rate among its finished-with-block answers (331/466 = 71.0 %). The rival b says Math's share of dC is about its share of the total gain over random (37/68 = 0.54)."
+ },
+ {
+  "mechanism": "round-13/s4-b",
+  "kind": "rival for surprise s4",
+  "statement": "Any reasoning reward's top-8 directions share a generic commit-to-a-complete-answer component, whose input side is excited by code and math text alike. It sharpens the base onto its own most likely complete program, which on code is usually a passing one. The gain is limited by what the base can already write (its pass@k), not by RL-Code's level, so Math's and Code's directions add until that ceiling.",
+  "claim": "The Code 1.5x edit's passes over the cued base fall on problems the untrained base already passes under another prompt, as often as a random edit's extra passes do: the edit sharpens existing base solutions and adds no new ones.",
+  "files": [
+   "studies/rlneurons/results/code1/base_cue-01",
+   "studies/rlneurons/results/code1/base_plain-01",
+   "studies/rlneurons/results/code1/base_mathcue-01",
+   "studies/rlneurons/results/xreward/code_dial"
+  ],
+  "computation": "Join per-problem pass/fail rows of base cue, base plain, base Math cue, Code top-8 1.5x and random rank-8 1.5x on the 538 problem ids. U = problems passed by base plain or base Math cue. G_E = problems Code 1.5x passes and base cue fails; G_R = problems random 1.5x passes and base cue fails. f_E = |G_E within U| / |G_E|, f_R = |G_R within U| / |G_R|. D = f_E - f_R, with a 90 % bootstrap over problems.",
+  "refuted_if": "D < -0.10 (the edit's extra passes land outside the base's own solved set clearly more often than a random edit's)",
+  "threshold": "-0.10",
+  "null": "The random rank-8 1.5x edit's extra passes over the cued base (f_R), which measure how often any extra base-like draw lands in U. The rival a predicts new solutions from code-specific directions, so D clearly below 0."
+ },
+ {
+  "mechanism": "round-13/s5-a",
+  "kind": "rival for surprise s5",
+  "statement": "Autobench gives each experiment a fixed generation budget (360 s, 3.6 s per dev problem). Within it, the agent's best affordable method was a vote over 12 plain-prompt T 0.6 samples capped at 4,096 tokens. The cap and the budget set the ceiling, not the vote. On the harder dev problems the plain base's right answers run past 4,096 tokens, or the samples are never run, so those problems stay lost however many short samples vote.",
+  "claim": "In the kept method's dev100 runs, the problems the vote loses are those whose samples were cut at 4,096 tokens or left unrun by the time budget, more than their difficulty explains.",
+  "files": [
+   "studies/autobench/results/math500-loop/finals-01",
+   "studies/autobench/results/math500-loop/karpathy-01"
+  ],
+  "computation": "1) Take the kept method's dev100 per-sample rows (7 seeds; finals-01 if it holds them, else the kept experiment's rows in karpathy-01). Per (seed, problem) there are up to 12 samples. 2) A sample is cut if finish_reason == 'length' or n_generated >= 4096. It is unrun if it is absent or marked skipped by the time budget. 3) Per (seed, problem): c = (cut + unrun) / 12; r = right samples (score_v3 == 1) / answer-bearing samples; the vote is a plurality with rln4_lib.agree grouping, and cut samples cast no vote. 4) W = vote-wrong (seed, problem) pairs. M = vote-right pairs with r <= 0.75 (difficulty-matched). 5) D = mean c over W minus mean c over M, with a 90 % interval from 2,000 bootstraps over problems.",
+  "refuted_if": "D is below the threshold, or fewer than half of the W pairs have c >= 0.25",
+  "threshold": "0.15",
+  "null": "Difficulty-matched vote-right problems of the same runs (per-sample right rate <= 0.75), not random problems."
+ },
+ {
+  "mechanism": "round-13/s5-b",
+  "kind": "rival for surprise s5",
+  "statement": "At T 0.6 with the plain prompt, the base's wrong answers to a problem do not scatter. They repeat one problem-specific value, the problem's modal answer in that register. By about 8-10 samples a plurality vote has converged to each problem's modal plain answer. The score then saturates at the share of dev problems whose mode is right (about 84), whatever the cap and however many more samples are added.",
+  "claim": "The kept method's vote-wrong dev problems are lost to one shared wrong value: its largest wrong-answer group is far more concentrated than the cued base's at the same sample count.",
+  "files": [
+   "studies/autobench/results/math500-loop/finals-01",
+   "studies/autobench/results/math500-loop/karpathy-01",
+   "studies/rlneurons/results/votek/math500_base_cue-01"
+  ],
+  "computation": "1) Take the kept method's dev100 per-sample rows (finals-01, else the kept experiment's rows in karpathy-01), per (seed, problem). 2) Answer-bearing samples are finished ones with a non-empty extracted_v3. Group them with rln4_lib.agree (first-member rule, in sample order). 3) For each vote-wrong (seed, problem): g = size of the largest group whose answer is wrong / number of answer-bearing samples. G_plain = mean g. 4) Compute the same from votek/math500_base_cue-01 rows.jsonl (cued base, T 1.0, 12 samples) on its vote-wrong problems among the dev100 indices (on all 500 problems if fewer than 10 are vote-wrong): G_cue. 5) R = G_plain / G_cue, with a 90 % interval from 2,000 bootstraps over problems.",
+  "refuted_if": "G_plain < 0.40, or R is below the threshold",
+  "threshold": "1.3",
+  "null": "The cued base's own 12-sample votes on the same problems (votek rows), a stronger null than uniform scatter of wrong answers."
+ },
+ {
+  "mechanism": "round-13/s6-a",
+  "kind": "rival for surprise s6",
+  "statement": "On HumanEval+/MBPP+ most of the gap between the cued base and RL-Code is broken answer contracts, not wrong logic: cap hits, no final python block, or a block that does not parse or lacks what the tests call. Code-RL's top-8 directions write that contract, which is low-rank, so at 1x they close most of the gap (cap hits 27->9, no block 34->8). Math's directions write only the generic part (finishing, a closing block), so they fix less.",
+  "claim": "The base failures that Code-top8-1x fixes are enriched for answer-contract failures (cap hit, no final python block, a final block that fails to parse or lacks the entry point the tests call) well beyond what a resample fixes.",
+  "files": [
+   "studies/rlneurons/results/code1/base_cue-01",
+   "studies/rlneurons/results/xreward/code_dial",
+   "studies/theory/results/direct/ending-01"
+  ],
+  "computation": "1. Load per-problem rows of base + Code cue (code1/base_cue-01, seed 51000000) and of the code_dial cells 'Code directions 1x' and 'random rank-8 1.5x' (same seed); join on problem id (538). 2. For each problem the base fails, classify the base answer as a contract failure if: cap_hit; or no ```python (or ```) block after the last reasoning; or the last block fails ast.parse; or, for function tasks, the test's entry-point name is not defined by a def in the block; or, for stdio tasks, the block never reads stdin. Otherwise it is a logic failure. Use the ending-01 block parser for the no-block test. 3. F_top8 = base failed and top8-1x passed; F_rand = base failed and random passed. 4. S_top8 = contract share of F_top8; S_rand = contract share of F_rand. r_c = |F_top8 among contract failures| / |contract failures|; r_l = the same for logic failures. 5. 90 % bootstrap over problems (10,000 draws) for S_top8, S_top8 - S_rand and r_c / r_l.",
+  "refuted_if": "S_top8 < 0.50, or the 90 % lower bound of S_top8 - S_rand is <= 0, or r_c / r_l < 2.0",
+  "threshold": "S_top8 >= 0.50 and r_c / r_l >= 2.0",
+  "null": "The random rank-8 1.5x edit at the same seed (in effect a fresh base sample), whose fixes give the contract share expected from resampling. Also the contract share among all base failures (about 61 of 221 from cap hits and no-block alone)."
+ },
+ {
+  "mechanism": "round-13/s6-b",
+  "kind": "rival for surprise s6",
+  "statement": "HumanEval+/MBPP+ are easy for the cued base: most problems it fails in one sample it passes in others, so the code gap is almost all per-sample reliability. Code-RL's top-8 directions lower the per-step error rate on reasoning text everywhere, as Math's dial does on finished-wrong math (result-124593). On a set whose gap is reliability, that recovers nearly all of RL's gain. On hard328, where a third of the gap needs answers the base never writes, it recovers less.",
+  "claim": "The base failures that Code-top8-1x fixes are mostly problems the base passes in its other stored base-like samples, clearly more than base failures in general.",
+  "files": [
+   "studies/rlneurons/results/code1/base_cue-01",
+   "studies/rlneurons/results/code1/base_mathcue-01",
+   "studies/rlneurons/results/code1/rl_plain-01",
+   "studies/rlneurons/results/xreward/code_dial"
+  ],
+  "computation": "1. Load per-problem pass/fail of base + Code cue (code1/base_cue-01), base + Math cue (code1/base_mathcue-01), the code_dial cells 'random rank-8 1.5x' and 'Code directions 1x', and RL-Code plain (code1/rl_plain-01); join on problem id (538). 2. k2 = passes in the two base-like cells (Math cue, random 1.5x), from 0 to 2. 3. Among problems the Code-cue base fails: F_top8 = passed by top8-1x; Q_top8 = share of F_top8 with k2 >= 1; Q_base = share of all Code-cue base failures with k2 >= 1; Q_RL = share of RL-Code's fixes with k2 >= 1. 4. Fix rate of top8-1x within k2 = 0 and within k2 >= 1. 5. 90 % bootstrap over problems (10,000 draws) for Q_top8 and Q_top8 - Q_base.",
+  "refuted_if": "Q_top8 < 0.60, or the 90 % lower bound of Q_top8 - Q_base is <= 0.10",
+  "threshold": "Q_top8 >= 0.60 and Q_top8 - Q_base lower bound > 0.10",
+  "null": "The share of base-solvable problems among all base failures (Q_base, which is what fixes drawn without regard to base solvability would give). Also RL-Code's own fixes (Q_RL) as the reference for a full reliability-plus-capability change."
  }
 ]
