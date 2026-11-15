@@ -1,0 +1,21 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_rank1.md",
+ "commit_of_spec": "f5a401b",
+ "command": "uv run --no-project --with numpy python studies/theory/analysis/direct_rank1.py",
+ "where": "laptop, no GPU, no forward pass",
+ "inputs": [
+  "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl (attempt 0, samples 0-3; job abaybektursun-1114-200457-e8e6)",
+  "studies/rlneurons/results/xreward/depth3/top8x1.5_d2-8_math31_s1-01/rows.jsonl (D28)",
+  "runs/abaybektursun-1115-122847-824c/answers.jsonl, runs/abaybektursun-1115-122859-b197/answers.jsonl (D28 text)",
+  "runs/abaybektursun-1115-000358-d11a/answers.jsonl (TOP1, xreward/edits/top1_math31-01)",
+  "runs/abaybektursun-1114-151534-e72c/answers.jsonl (plan's selector, day1/hard328_base_cue_t10-01)",
+  "runs/abaybektursun-1115-031229-5991/answers.jsonl (top-8 1.5x)",
+  "runs/abaybektursun-1114-221040-5f1e/answers.jsonl (random rank-8 1x)",
+  "runs/abaybektursun-1115-090241-0229/answers.jsonl (random rank-8 1.5x)",
+  "runs/abaybektursun-1115-105247-1603/answers.jsonl (TOP1 2x)"
+ ],
+ "fetch": "uv run tools/gpu.py get <job id> (Modal volume iterate-runs, into runs/, not committed)",
+ "grader": "score_v3 as stored; right = score_v3 1 and no cap hit",
+ "bootstrap": "10,000 resamples of the 328 problems, cluster by problem, numpy default_rng(seed=0), percentile; 95 % decides, 90 % reported",
+ "board": "work-2843ca"
+}

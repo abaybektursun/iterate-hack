@@ -163,8 +163,8 @@ TABLE = {
                              f"328 harder problems, over Base + cue; 8 random directions {signed(m.DATA['random_vs_cue_hard']['points'])}"]},
     "the-finish-dial": {
         "group": WEIGHTS,
-        "figure": lambda m: [f"{m.DATA['cells']['0']['cut']} → {m.DATA['cells']['1.5']['cut']}", "cut off",
-                             f"of 328 harder problems, 8 RL directions at size 1.5; right {m.DATA['cells']['0']['right']} → {m.DATA['cells']['1.5']['right']}, RL {m.DATA['cells']['rl']['right']}"],
+        "figure": lambda m: [f"{m.DATA['cells']['0']['right']} → {m.DATA['cells']['1.5']['right']}", "right of 328",
+                             f"harder problems, 8 RL directions at size 1.5, RL {m.DATA['cells']['rl']['right']}; cut off {m.DATA['cells']['0']['cut']} → {m.DATA['cells']['1.5']['cut']}; most of the gain is where Base + cue already finished"],
         "steps": lambda m: [step("Base + 8 RL directions, size\u00a01.5", "weights", m.DATA["cells"]["1.5"]["right"], m.DATA["n"],
                                  f"{m.DATA['readout']}, cell {m.DATA['cells']['1.5']['cell']}", "hard328")]},
     "rl-change-on-imitation": {

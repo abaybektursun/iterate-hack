@@ -29,7 +29,7 @@ click on a person shows only that person. The look is that of architecture.py (.
 
   GET /demo            the talk as a deck of thirteen 16:9 slides (demo_deck.py): keys step, p prints one slide per page
   GET /demo/fig/<name> the pictures the deck embeds (gap, climb, harness, exa, pastdev, fixes, beyond,
-                       efficiency, basins), with their
+                       efficiency, review, basins), with their
                        header, words column and key hidden (demo_deck.FIGS)
   GET /demo/story      the stepped story of the talk over the picture of architecture.py (demo.py), fed by the same /data
   GET /demo/ali/<name> Ali's slides of the talk, slide1 to slide3: the idea map, the idea tree and the accuracy climb
@@ -267,13 +267,33 @@ FINDINGS_TAB = re.compile(r'<a (?:class="tab" )?href="/findings"[^>]*>Findings</
 # as the page is sent. The deck's pictures (/demo/fig/) keep it: their header is hidden and their bytes stay as they were.
 DESIGN_TAB = re.compile(r'\n *<a (?:class="tab" )?href="/architecture"[^>]*>Design</a>')
 NO_ZOOM = re.compile(r',\s*(?:maximum-scale=[\d.]+|user-scalable=(?:no|0))')
-# The current tab is heavier and set tighter, so the links after it stay where they are on every page. On a phone the
-# five items of the header fit one row of 343 px; the name of a page that is no tab (HERE) has no room there.
+# The current tab is heavier and set tighter, so the links after it stay where they are on every page. On a phone
+# (520 px and under) the header is the same box on every page: 16 px under the top of the page, one row, 12 px above
+# its line. A status there is its dot alone; a status that reports a problem (.bad) keeps its words, cut with an
+# ellipsis where the row ends. At 400 px and under a page that is no tab shows its name (HERE) in place of the link
+# "All pages": the name "Invariant" leads to the same place.
 TAP = ("<style>@media (max-width: 900px) { .top a { padding-block: 10px; } } .top a[aria-current], .top .here { letter-spacing: -.022em; } "
        ".top .here { margin-left: 0; color: var(--ink, inherit); font-weight: 600; white-space: nowrap; } "
-       "@media (max-width: 400px) { .top { column-gap: 9px !important; } .top .name { font-size: 14px !important; } .top .here { display: none; } }</style>\n</head>")
-ALL_PAGES = f'<a href="{SITE_HOME}">All pages</a>'
+       "@media (max-width: 520px) { :has(> header.top:not([id])) { padding-top: 16px !important; } "
+       "header.top:not([id]) { flex-wrap: nowrap !important; gap: 0 9px !important; margin-top: 0 !important; padding: 0 0 12px !important; } "
+       ".top .name { font-size: 14px !important; } .top .here { min-width: 0; overflow: hidden; text-overflow: ellipsis; } "
+       ".top .status:not(.bad) { font-size: 0 !important; gap: 0 !important; min-width: 0 !important; } "
+       ".top .status.bad { display: block; flex: 0 1 auto; min-width: 0 !important; overflow: hidden; text-overflow: ellipsis; } "
+       ".top .status.bad::before { display: inline-block; margin: 0 8px 2px 4px; vertical-align: middle; } } "
+       f'@media (max-width: 400px) {{ .top:has(.here) > a[href="{SITE_HOME}#s-results"] {{ display: none; }} }}</style>\n</head>')
+ALL_PAGES = f'<a href="{SITE_HOME}#s-results">All pages</a>'
+# One header for every page: the same tabs in the order of the home page's sections (Results: Findings, Papers; How we
+# work: Board, Proof), then All pages (the home page's list of every page), then the name of a page that is none of the
+# tabs. Each page module still holds its own copy of the old header; chrome() replaces its links as the page is sent.
+NAV_TABS = (("Findings", "/findings"), ("Papers", "/papers"), ("Board", "/"), ("Proof", "/proof"))
+TAB_LINK = re.compile(r'\n? *<a (?:class="tab" )?href="(?:/|/proof|/findings|/papers|https://invariant\.team/(?:#s-results)?)"[^>]*>(?:Board|Proof|Findings|Papers|All pages)</a>')
+
+
+def nav(path):
+    now = next((n for n, h in NAV_TABS if path == h or (h != "/" and path.startswith(h)) or (h == "/findings" and path.startswith("/finding/"))), None)
+    return "".join(f'\n    <a href="{h}"' + (' aria-current="page"' if n == now else "") + f">{n}</a>" for n, h in NAV_TABS) + "\n    " + ALL_PAGES
 HERE = re.compile(r"<title>Invariant: ([A-Z][^<]*)</title>")  # the 404 page's title starts in lower case: it is no place
+HERE_BY_PATH = {"/exa": "Exa", "/pastdev": "past.dev"}  # pages whose title does not start with "Invariant: "
 # The corner link carries its own color scheme: a page that declares none gets it from the lightness of its
 # background, so the link is readable on an always-dark and on an always-light page.
 HOME_CORNER = ('<style>.inv-home { position: fixed; right: 0; left: auto; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; z-index: 2147483000; padding: 10px 3px; font: 600 12px/1 Archivo, system-ui, sans-serif; '
@@ -294,11 +314,14 @@ def chrome(body, path):
     body = body.replace('<span class="name">Invariant</span>', f'<a class="name" href="{SITE_HOME}" style="color:inherit;text-decoration:none">Invariant</a>', 1)  # lab pictures
     if NAME in body or HEADER in body:
         body = NAME_LINK.sub(NAME_LINKED, body.replace(NAME, NAME_LINKED, 1), count=1)
-        if ALL_PAGES not in body:
-            body = FINDINGS_TAB.sub(lambda m: m.group(0) + "\n    " + ALL_PAGES, body, count=1)
-        head, here = body.split("</header>", 1)[0], HERE.search(body)
+        head, rest = body.split("</header>", 1)
+        if not path.startswith("/demo"):  # the deck and its pictures keep their own header (hidden or without tabs)
+            head = TAB_LINK.sub("", head).replace(NAME_LINKED, NAME_LINKED + nav(path.split("?")[0]), 1)
+        body = head + "</header>" + rest
+        here = HERE.search(body)
+        here = HERE_BY_PATH.get(path) or (here and here.group(1))
         if here and "aria-current" not in head and 'class="here"' not in head:  # a page that is none of the four tabs: its name, as the current item
-            body = body.replace(ALL_PAGES, ALL_PAGES + f'\n    <span class="here" aria-current="page">{here.group(1)}</span>', 1)
+            body = body.replace(ALL_PAGES, ALL_PAGES + f'\n    <span class="here" aria-current="page">{here}</span>', 1)
         return body.replace("</head>", TAP, 1)
     if '<a class="name" href="/">Invariant</a>' in body:  # /psychosis: its name led to the board
         return body.replace('<a class="name" href="/">Invariant</a>', f'<a class="name" href="{SITE_HOME}">Invariant</a>', 1)
@@ -320,11 +343,13 @@ a { color: inherit; text-decoration: none; }
 .wrap { max-width: 1840px; margin: 0 auto; padding: 20px 40px 56px; }
 .top { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
-.top a, .ways a { color: var(--mute); white-space: nowrap; }
-.top a:hover, .ways a:hover { color: var(--ink); }
+.top a { color: var(--mute); white-space: nowrap; }
+.top a:hover { color: var(--ink); }
+.ways a { padding: 12px 0; white-space: nowrap; }
+.ways a:hover { text-decoration: underline 1px; text-underline-offset: 4px; }
 .say { font-weight: 300; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-stretch: 102%; letter-spacing: -.016em; margin: clamp(28px, 7vh, 76px) 0 24px; overflow-wrap: anywhere; }
 .ways { display: flex; gap: 26px; margin: 0; }
-@media (max-width: 900px) { .wrap { padding: 14px 16px 40px; } .top { gap: 6px 13px; padding-bottom: 2px; } .name { font-stretch: 112%; margin-right: 0; } }
+@media (max-width: 900px) { .wrap { padding: 16px 16px 40px; } .top { gap: 6px 13px; padding-bottom: 12px; } .name { font-stretch: 112%; margin-right: 0; } }
 </style></head><body><div class="wrap">
   <header class="top">
     <h1 class="name">Invariant</h1>
@@ -566,7 +591,7 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 .chart { height: 320px; min-width: 0; }
 .chart svg { display: block; overflow: visible; }
 .chart svg text {
-  font: 400 11.5px "Archivo", ui-sans-serif, system-ui, sans-serif; fill: var(--mute);
+  font: 400 12px "Archivo", ui-sans-serif, system-ui, sans-serif; fill: var(--mute);
   paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round;
 }
 .chart .brk { stroke: var(--paper); stroke-width: 5px; }
@@ -801,7 +826,9 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .top { padding-bottom: 2px; }
   .top a { padding: 11px 0; }
   .benches { flex-wrap: nowrap; gap: 4px 12px; margin-top: 2px; font-size: 12.5px; overflow-x: auto; scrollbar-width: none; }
+  .benches.more { mask-image: linear-gradient(90deg, #000 85%, transparent); }  /* more tabs to the right: the strip scrolls */
   .benches button { padding: 10px 0; white-space: nowrap; flex: none; }
+  .reach button.piece { pointer-events: none; }  /* segments 8 px high; the step list opens the same steps */
   .reach { height: 82px; }
   .reach .ends { height: 36px; gap: 8px; }
   .reach .rl-end { gap: 8px; }
@@ -812,9 +839,6 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .phead .actions button { position: relative; }
   .phead .actions button::after { content: ""; position: absolute; inset: -11px -8px; }  /* a 40 px hit area */
   .chart a.mark:not([data-step]) { pointer-events: none; }  /* 45 overlapping marks; the record steps open from their list */
-}
-@media (max-width: 400px) {
-  .status.live { font-size: 0; gap: 0; }  /* the blue dot alone, so the header stays one row */
 }
 @media (prefers-reduced-motion: reduce) {
   .arrived, .panel, .scrim, .sd, .reach .fill.grow { animation: none; }
@@ -1230,6 +1254,7 @@ function hero() {
   put($("benches"), S.benches.length > 1 ? S.benches.map(x =>
     `<button data-bench="${esc(x.name)}" data-fkey="bench-${esc(x.name)}" aria-pressed="${x === b}">${esc(x.name)} <b>${f1(x.lead.p)}</b></button>`).join("") : "");
   put($("n-steps"), `${esc(b.name)}, newest first`);
+  moreBenches();
   drawReach();
   ladder(b);
   drawChart();
@@ -1318,7 +1343,7 @@ function detail(q, b) {
 let measure;
 function textWidth(t) {
   measure ??= document.createElement("canvas").getContext("2d");
-  measure.font = '400 11.5px "Archivo", ui-sans-serif, system-ui, sans-serif';
+  measure.font = '400 12px "Archivo", ui-sans-serif, system-ui, sans-serif';
   return measure.measureText(t).width;
 }
 function drawChart() {
@@ -1659,6 +1684,9 @@ addEventListener("scroll", hideDef, { passive: true, capture: true });
 addEventListener("pointermove", e => { S.pointer = { x: e.clientX, y: e.clientY }; }, { passive: true });
 new ResizeObserver(() => { hideDef(); drawChart(); }).observe($("chart"));
 new ResizeObserver(() => drawReach()).observe($("reach"));
+function moreBenches() { const e = $("benches"); e.classList.toggle("more", e.scrollWidth - e.clientWidth - e.scrollLeft > 2); }  // tabs hidden to the right
+$("benches").addEventListener("scroll", moreBenches, { passive: true });
+new ResizeObserver(moreBenches).observe($("benches"));
 small.addEventListener("change", () => S.data && render());
 document.fonts.ready.then(() => { drawChart(); drawReach(); });
 

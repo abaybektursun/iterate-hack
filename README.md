@@ -344,32 +344,31 @@ the site has three tabs: Board (this page, `/`), Proof (`/proof`) and Findings (
 
 The home page is https://invariant.team (`tools/home.py`; the same Lambda, which answers `/` with it when the host is
 `invariant.team`, and `/home` on any host). It leads to every page of the monitor: Findings, Board, Proof, Talk
-(`/demo`), Papers, Lab, Exa, past.dev, GPU prices (gpu.invariant.team) and Psychosis. Its picture is a dial: a lit glass
+(`/demo`), Papers, the GPU price challenge (gpu.invariant.team, the team's entry to the hackathon's challenge; under Results), Lab, Exa, past.dev and Psychosis. Its picture is a dial: a lit glass
 body with a ring around it and one bead per page. A click on a bead or the arrow keys turn the dial to a page
 (`/#<page>`); a click on the body or the button opens it. Beside the picture are one sentence with the Board's live
 MATH-500 scores (the first and the best untrained-base score and the best RL score in the `scores` rows of `/data`; the
 words "a prompt cue and a vote" only when the best base row's configuration names them; no numbers before the first
-read), one line with the live number of people, the button, and the same pages as links in three groups
-("Results": Findings, Papers, Talk; "How we work": Board, Proof, Values, Team; the rest under "Also"); on a phone
-the links come before the picture. Each group has a theme, a hue at the lightness and chroma of a person's color (`TH`:
-Results blue, How we work teal, Also amber), and each page a small lit picture in a 120 x 90 box with one slow motion
-(`ART`): the body of the dial shows the selected page's picture, the ring is tinted by group and the glow takes the
-selected group's hue. Below the dial are three sections, one per group in its theme, with one tile per page: its
-picture, its name, its line and its live count.
+read), one line with the live number of people, the button, and a numbered table of contents of the three sections
+below. Each group has a muted hue (`TH`: Results blue, How we work teal, Tools and extras amber) used only for small marks,
+and each page an abstract object of glass planes and hairlines (`ART`); the dial's body shows the selected page's object
+and the ring is tinted by group. Below the dial each section has its number, name and sentence, then one row per page
+with its object, name, line and live count.
 About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
-line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and adds the
-link "All pages" to it after the three tabs (and takes out the tab Design, retired, that older page modules still
-carry, except on the deck's pictures at `/demo/fig/`), followed on a page that is none of the three tabs by that page's name (hidden at 400 px and below); a page with no header gets a small link "Invariant" at the middle of its right edge; pinch
+line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and replaces
+the header's links with one set, the same on every page (`NAV_TABS`): Findings, Papers, Board, Proof, in the order of the
+home page's sections, then "All pages" (the home page's list of every page), with the current tab marked; the deck
+(`/demo`) keeps its own header. A page that is none of the four tabs adds its name (at 400 px and below the name stays and "All pages" goes); at 520 px and below every page's header is one row of the same size, and a status in it is its dot alone unless it reports a problem; a page with no header gets a small link "Invariant" at the middle of its right edge; pinch
 zoom is never switched off. An unknown address answers a short page with the header and links, and every address of invariant.team
 other than `/` and `/data` redirects to the monitor. The page `/team` (`tools/people.py`) lists the team: its three
 names are placeholders, each with the one line "Details to be added" until the people fill `PEOPLE` in; a filled field
 shows as its own row.
 
-The page `/papers` (`tools/papers.py`) is the paper loop: its six steps in the words column (below the sheets
-where the page is one column) and the papers of `view.PAPERS` as one stack of sheets. The sheet in front is large and
-lit and shows the paper's claim, why the loop picked it, how it was checked, its length and the button that opens the
-PDF. The other sheets stand behind it and show their number and title; a click on one, or the left and right arrow
-keys, brings it to the front, and the address names it (`/papers#no-early-warning`). Below 1240 px every sheet is shown
+The page `/papers` (`tools/papers.py`) is the paper loop: the names of its six steps in the words column (below the sheets
+where the page is one column; a click on a step opens its sentence) and the papers of `view.PAPERS` as one flat row of sheets in the order written. One sheet is open, wide and
+lit, and shows the paper's claim, why the loop picked it, how it was checked, its length and the button that opens the
+PDF. The other sheets are closed to a strip with their number and title; a click on one, or the left and right arrow
+keys, opens it (one width transition and a fade of the text, nothing in depth), and the address names it (`/papers#no-early-warning`). Below 1240 px every sheet is shown
 in full, one after the other. A new paper gets its row in `ROWS` of `papers.py` (without one it still gets a sheet with its title). The domain is the stack parameter
 `HomeDomainName` (`infra/monitor/deploy.sh monitor.invariant.team <zone id> invariant.team`).
 Every page has the same tab icon, `/favicon.svg`: `view.py` holds the SVG and writes the link to it into each page as
@@ -445,8 +444,8 @@ that stay (keys 1 to 3); after level 5 the retreat can go on without end. Three 
 that follows the breath (M mutes). A WebGL shader draws the picture: fog, glow, ripples under each wave and a colour
 split. The end screen gives score, rank, achievements and what the agents posted meanwhile.
 
-The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): fifteen 16:9 slides, each one
-figure with a few words, `#hook`, `#question`, `#gap`, `#powered`, `#climb`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
+The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): sixteen 16:9 slides, each one
+figure with a few words, `#hook`, `#question`, `#built`, `#gap`, `#powered`, `#climb`, `#harness`, `#sponsors`, `#finding`, `#beyond`, `#efficiency`,
 `#proof`, `#ideas`, `#papers`, `#summary` and `#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
 PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` or the button at the top right changes the theme
 (`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
@@ -463,10 +462,14 @@ empty frame. Slides 4 and 7 show the picture of `tools/architecture.py` and the 
 inverted), each replaying its real cases, with two numbers under each read from the pages' own number rows. The slide `#finding` shows `/demo/fig/fixes` (`tools/demo_fixes.py`): one MATH-500 problem
 answered four ways, each answer a glass sheet on a step as high as its configuration's score (base model, 3 opening
 tokens, sampling at T 1.0, 8 directions in the weights), with every quoted word checked against its run by
-`PYTHONPATH=.:tools python3 tools/demo_fixes.py`. Every number is read when the page is built: the staircase's scores from
+`PYTHONPATH=.:tools python3 tools/demo_fixes.py`. The slide `#proof` shows `/demo/fig/review` (`tools/demo_review.py`): four glass
+columns on a glass slab, one per review round of the team-meta-review skill, each as high as the container minutes one
+batch costs after that round, with the part that produced an answer lit and the rest, the waste, plain glass (the row under
+the slab gives the formula: waste = total container min − answer min); on load each round cuts the columns to its
+right, and a hollow dotted column at the end is the same model after three rounds with a plain instruction. Every number is read when the page is built: the staircase's scores from
 `tools/demo_fixes.py`, the comparison with Karpathy's autoresearch loop from
 `FACTS['auto_research_comparison']` in `tools/demo_facts.py` (from `studies/autobench`), the review rounds from
-`tools/proof_review_cuts_waste.py`, the links of the idea tree from `tools/demo_ali_data.py` (counted as
+`tools/proof_review_cuts_waste.py` (through `tools/demo_review.py`), the links of the idea tree from `tools/demo_ali_data.py` (counted as
 `tools/demo_ali.py` counts them), the number of people from `FACTS['people']`, and the papers from `tools/view.py`.
 
 The stepped story of the talk is at `/demo/story`: one story over the picture of `tools/architecture.py`, with a sentence and a fact
