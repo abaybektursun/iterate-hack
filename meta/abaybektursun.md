@@ -1,5 +1,24 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 02:25 UTC (asked by the person; the first review stored as a run folder) meta/reviews/abaybektursun/20261115-0215/
+
+- Last entry's checks (the entry below; its heading says 02:35, written before 02:13 by the clock): work-43d4a1 now shows its 3 jobs in cycle.py (cycle.txt); their queue wait is 0.1 and 0.6 min, the third still queued, against a 10.8 min median; the runner restart class is removed by this entry.
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md). Since the last entry: work-43d4a1 (Code-RL and theta on the 328) uses RL weights, so it explains the gain; work-180a48 (min-p, frustea) and the cued-base arm of work-be7af1 are no-reward routes; result-2c2cae (length rules on the 328) is negative, 163 against 160 of 328. The deliverable, a best no-reward configuration scored once on the 328, does not exist yet.
+- Research: no replication seen in the claims since the last entry; not checked against published tables in this review.
+- Turnaround (`cycle.txt`, 3 h; previous entry, 4 h, in brackets): 78 jobs (73), 21 failed or cancelled (21), 248.9 of 1,305.9 container min in them (242.4 of 1,288.8), median queue wait 5.3 min (10.8). Median to-job 10, jobs 120, to-answer 10 min. Slowest stage: jobs.
+- Cause of the failed minutes: 231.3 of the 248.9 are 3 cpu jobs (c51a 139.7, 277d 53.9, 74c7 37.7 min) that Modal restarted and that then died at `out.mkdir` in infra/runner.py.
+- Change (step 3; step 1: the refusal to write into an existing folder protects a finished run's output and stays; step 2: nothing to delete): a restarted run renames the interrupted folder to `<job>.interrupted-<time>` and starts in a fresh one. Deployed to abaybektursun's Modal with the default rolling deploy; the 4 running H100 jobs kept running (`gpu.py ls`).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | second run of job 0e08 through the runner | FileExistsError | finished | fixed | 1 and 1 | before.txt, after.txt (rerun.py) |
+  | first run's output (must not change) | kept | kept, in `.interrupted-1794708911` | same | 1 and 1 | after.txt, folder list |
+  | container min lost to restarts | 231.3 in 3 h, 3 jobs | not measured yet | - | - | cycle.txt |
+
+  The first second-run after the deploy still failed: an old container took it. It passed on the next try.
+- Failures: the restart class is removed in code; its row is deleted from meta/FAILURES.md. Teammates' workspaces still run the old runner until they deploy.
+- Next entry checks: jobs with state "died: FileExistsError" in `gpu.py ls` (expected 0), and container min in failed or cancelled jobs against 248.9.
+
 ## 2026-11-15 02:35 UTC (after work-d36669 closed, Day-1 #4; work-a50d39's skipped entry included)
 
 - Last entry's checks (23:30 entry, the same line of work): merged-model cells ran at 900-1,000 tok/s (work-d36669 comments); the cells cost 20.9 of 22 USD (results/day1_wdiff/readout.json, 317.5 H100 min); b200 job 2298 was never seen running, and a b200 job at 19:36 local was cancelled while queued (`gpu.py ls`).

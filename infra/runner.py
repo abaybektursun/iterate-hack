@@ -55,6 +55,8 @@ def run(job_id):
     with tarfile.open(f"/code/{job['sha']}.tar") as tar:
         tar.extractall("/repo", filter="data")
     out = Path("/runs") / job_id
+    if out.exists():  # Modal restarted the container: keep the interrupted run's output beside the new one
+        out.rename(f"{out}.interrupted-{int(time.time())}")
     out.mkdir(parents=True)
     deadline = time.time() + job["hours"] * 3600
     with open(out / "log", "w") as log:
