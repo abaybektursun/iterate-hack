@@ -1,0 +1,15 @@
+{
+ "commit": "22b7e53a052d9e5bceb80f42d43c29af6a616de4",
+ "command": "python -m studies.rlneurons.analysis.derived score --per-sample --out studies/rlneurons/results/derived/hard328_persample-01",
+ "job_id": null,
+ "gpu": "none (laptop)",
+ "spec": "studies/rlneurons/specs/SPEC_derived.md, addendum 1",
+ "judge_calls": 0,
+ "labels": "studies/rlneurons/results/derived/hard328-01/labels.jsonl",
+ "examples": "results/derived/hard328-01/examples.json",
+ "inputs": {
+  "think": "thinkvote/hard328_sft1_cue_s4-01",
+  "rl": "day1_3/hard328_rl_plain_s4r2-01",
+  "base": "day1_3/hard328_base_cue_s4r2-01"
+ }
+}

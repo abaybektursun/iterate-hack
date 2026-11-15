@@ -3330,7 +3330,7 @@ Wall time 57 min on 10 processes, bound by download speed.
   detected. About 14 of the first 25 MATH-500 flags are template siblings with other numbers (board result-f6a8bc comments).
   A problem of fewer than 8 words (13 in MATH-500, none in hard328) is flagged only when a whole message equals it.
 
-## Derived or asserted: a long wrong answer that boxes a number without deriving it is the base's habit too, not RL's (hard328, laptop, board work-dd4773, idea-6f4b9e)
+## Derived or asserted: when it finishes long and wrong, RL boxes an underived number as often as the base; it finishes more often, so per sample it emits more of them (hard328, laptop, board work-dd4773, idea-6f4b9e)
 
 Question: the hand read of result-b006f5 found 6 of 10 long wrong RL answers that box a number their text never derives. Did
 reward training add this, and does the label help? Answer: no, and little. A blind judge labels 72.5 % [63.1, 81.3] of RL's
@@ -3340,6 +3340,12 @@ Think-SFT +30.0 [14.7, 45.6]. So the untrained base does it as often as RL; the 
 carries information about correctness (RL: asserted answers are right 17.0 % of the time, derived ones 66.1 %), but as an
 abstention signal it does no better than length alone (+0.5 points [-1.4, +2.6]). Spec, rubric and predictions, pushed
 before any judging: `specs/SPEC_derived.md` (commit `a9b65ed`).
+
+Reworded after a review of result-02da9f (addendum 1, "Per generated sample" below). The first headline, "RL did not add the
+habit", holds only among long finished wrong answers. Per generated sample RL emits an asserted wrong answer in 21.1 %
+[16.9, 25.1] of 1,312 samples, the base in 14.2 % [11.1, 17.4], Think-SFT in 2.7 % [1.6, 3.8]: RL minus base +6.9 points
+[3.1, 10.6]. RL does not assert more often when it finishes long and wrong, but it finishes long and wrong more often (381
+samples against 281), on the problems where the base hits the cap (286 cap hits against RL's 114).
 
 `analysis/derived.py`. Rows: attempt 0 of the three stored 4-sample hard328 runs (T 1.0 / top-p 1.0, cap 16,384, grader v3);
 per model 80 finished wrong and 60 finished right answers over 8,000 tokens, drawn by the seeded rule of the spec, at most 2
@@ -3427,7 +3433,75 @@ hand agreement is at the bar; Think-SFT's long finished wrong answers are a smal
 the hand labels come from a model, not a person; the literature was searched with WebSearch only (no Exa key), no paper
 was read in full.
 
-Run folder `results/derived/hard328-01/`: `readout.json` (every number above), `table.md`, `labels.jsonl` (952 items with
+### Per generated sample (addendum 1 of the spec, after a review of result-02da9f)
+
+The tables above condition on a long finished answer; a sample that hits the cap is in none of them. Here the unit is the
+generated sample: attempt 0 of the 4 samples, 1,312 per model, each with exactly one outcome. Finished answers of at most
+8,000 tokens were not judged and are given as right or wrong only. The judged strata are weighted back to their pools (pool
+rows x label share of the judged sample / 1,312; the code of H2). No new judge call: the labels are those of
+`results/derived/hard328-01/labels.jsonl`. Addendum written and pushed before the numbers (commit `05739a6`), after the
+reviewer's two numbers (about 21 % and 14 %; cap hits 286 and 114), which reproduce: 381 x 58 / 80 / 1,312 = 21.1 %,
+281 x 53 / 80 / 1,312 = 14.2 %, cap hits 286 (base), 114 (RL), 378 (Think-SFT).
+
+% of the model's 1,312 samples [95 %, bootstrap over problems, 2,000 resamples, seed 0], judge A:
+
+| Outcome | Think-SFT + cue | RL plain | base + cue |
+|---|---|---|---|
+| long right, derived | 20.6 [17.3, 24.1] | 15.6 [12.2, 19.1] | 7.9 [6.0, 9.7] |
+| long right, asserted | 1.9 [0.4, 3.7] | 4.3 [2.1, 6.9] | 2.0 [1.0, 3.1] |
+| long wrong, derived | 4.7 [3.2, 6.3] | 8.0 [5.3, 10.9] | 7.2 [4.8, 9.9] |
+| long wrong, asserted | 2.7 [1.6, 3.8] | 21.1 [16.9, 25.1] | 14.2 [11.1, 17.4] |
+| short right (at most 8,000 tokens, not judged) | 40.2 [35.1, 45.2], 527 | 40.5 [35.6, 45.8], 532 | 38.2 [33.4, 42.9], 501 |
+| short wrong (not judged) | 1.0 [0.4, 1.8], 13 | 1.8 [0.9, 2.7], 23 | 6.7 [5.3, 8.2], 88 |
+| cap hit | 28.8 [24.6, 33.2], 378 | 8.7 [6.6, 10.8], 114 | 21.8 [18.4, 25.2], 286 |
+| no answer, no cap hit | 0.2 [0.0, 0.5], 3 | 0.1 [0.0, 0.2], 1 | 2.1 [1.4, 2.8], 27 |
+
+Judge B, weighted the same way: long wrong asserted 3.1 / 21.1 / 14.2 % (Think-SFT / RL / base). Judge B labelled the whole
+pool only for RL (all 642 long finished answers); for the base and Think-SFT only the 140 sampled rows exist. RL counted on
+its whole pool: long wrong asserted 265 of 1,312 samples, 20.2 % [17.0, 23.5]; long wrong derived 116, 8.8 %; long right
+asserted 54, 4.1 %; long right derived 207, 15.8 %. A cap hit counts as a cap hit also when the text holds a boxed value
+(55 / 79 / 49 samples, Think-SFT / RL / base; 14 / 7 / 4 of them graded right).
+
+Asserted wrong answers per sample, paired differences in points. The difference splits exactly into a pool term (how often
+the model finishes long and wrong, at the other model's asserted share) and a share term (how often such an answer is
+asserted, at the model's own pool):
+
+| Judge | Pair | Difference | Pool term | Share term |
+|---|---|---|---|---|
+| A | RL - base | +6.9 [3.1, 10.6] | +5.0 [2.9, 7.6] | +1.8 [-2.0, 5.6] |
+| A | RL - Think-SFT | +18.4 [14.6, 22.3] | +7.9 [5.0, 11.0] | +10.5 [6.5, 14.8] |
+| B | RL - base | +6.9 [3.1, 10.8] | +5.0 [2.9, 7.6] | +1.8 [-2.3, 5.7] |
+| B | RL - Think-SFT | +17.9 [14.0, 21.8] | +9.2 [6.1, 12.5] | +8.7 [4.2, 13.3] |
+| B, RL counted on its whole pool | RL - base | +6.0 [2.8, 9.4] | | |
+| B, RL counted on its whole pool | RL - Think-SFT | +17.1 [14.0, 20.2] | | |
+
+Cap-hit rate: RL minus base -13.1 points [-16.3, -10.2], RL minus Think-SFT -20.1 [-24.0, -16.5].
+
+- H4 (per sample, RL emits more asserted wrong answers than the base): held, +6.9 points [3.1, 10.6].
+- H5 (the difference comes from how often RL finishes long and wrong, not from the asserted share): held. The pool term is
+  5.0 of the 6.9 points [2.9, 7.6]; the share term is 1.8 [-2.0, 5.6], which is H1's +6.2 points of share, not different
+  from 0.
+- Where RL's extra long wrong answers are. Samples on the 137 problems where the base hits the cap at least once, base
+  against RL: cap hits 286 against 103, long finished wrong 176 against 291, long finished right 32 against 117. On the 191
+  problems where the base never hits the cap: cap hits 0 against 11, long wrong 105 against 90, long right 97 against 144.
+  So all of RL's 100 extra long wrong answers (381 against 281) are on the problems where the base hits the cap: there RL
+  has 183 fewer cap hits, 115 more long wrong answers and 85 more long right ones. Of RL's 265 long wrong answers that judge
+  B labels asserted, 224 are on these 137 problems. Think-SFT there: 338 cap hits, 49 long wrong, 132 long right.
+
+What survives. (a) Among long finished wrong answers RL and the base assert equally often (72.5 % against 66.2 %, +6.2
+[-6.7, +19.1]): unchanged. (b) Per generated sample RL emits more asserted wrong answers than the base (21.1 % against
+14.2 %), and about three quarters of that difference is RL finishing where the base hits the cap. The headline "RL did not
+add the habit" is too strong and is reworded: RL does not assert more often when it finishes long and wrong, but it finishes
+more often, so per sample it emits more asserted wrong answers. What RL changed is the stopping, not the share: on the
+problems where the base runs out of tokens, RL stops and answers, and the answer is right in 117 samples and long and wrong
+in 291. Against Think-SFT both terms count: RL finishes long and wrong four times as often (381 against 96) and asserts
+twice as often when it does. Limits: the split by the base's cap hits is descriptive (samples of different models are not
+paired; only problems are); the base's and Think-SFT's rates rest on 80 judged rows per stratum; short answers are not
+judged, so asserted answers under 8,000 tokens are not counted for any model.
+
+Run folder `results/derived/hard328_persample-01/`: `readout.json`, `table.md` (both judges, every count), `run.json`.
+
+Run folder `results/derived/hard328-01/`: `readout.json` (every number of the first part), `table.md`, `labels.jsonl` (952 items with
 both judges' label, quote and reason, no answer text), `hand.json`, `examples.json` (per model one DERIVED and one ASSERTED
 wrong answer with the quote, the reason and the last 1,500 characters; one planted control of each kind), `rubric.md`,
 `run.json`. Prompts, raw replies and token usage: `runs/derived/` (not committed).
@@ -3437,4 +3511,5 @@ P="uv run --no-project --with numpy --with math-verify==0.9.0 --with anthropic -
 $P prep --runs runs --work runs/derived-02
 $P judge --work runs/derived-02 --judge A    # also B and F; the hand labels go to runs/derived-02/hand.json first
 $P score --work runs/derived-02 --out studies/rlneurons/results/derived/hard328-02
+$P score --per-sample --out studies/rlneurons/results/derived/hard328_persample-02   # addendum 1; reads hard328-01/labels.jsonl, no judge call
 ```
