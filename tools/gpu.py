@@ -8,7 +8,7 @@
   uv run tools/gpu.py ls [--all]          jobs of the last 3 hours, any state; --all: every job
   uv run tools/gpu.py wait <job-id>       block until the job ends, then print its state and last 20 log lines
   uv run tools/gpu.py logs <job-id> [n]   last n lines of the job's log (default 30)
-  uv run tools/gpu.py kill <job-id>
+  uv run tools/gpu.py kill <job-id>       a queued job never starts; a running one is ended within about 30 s
   uv run tools/gpu.py get <job-id>        copy the job's $OUT_DIR (outputs and log) to runs/<job-id>/
 
 The command is a shell string: one quoted argument, e.g.
@@ -18,6 +18,8 @@ Several arguments are quoted one by one and joined.
 A job runs the current commit: the tree must be clean and the commit pushed. The command runs from the
 repository root and writes its outputs to $OUT_DIR. The log is updated every 30 seconds. Jobs, outputs and the
 model cache are in your own workspace: teammates cannot read them, so commit small result files to share them.
+The runner ends a job whose log gets no new line for 15 minutes (it holds a GPU and is most likely hung), so a
+long silent step should print a line now and then; ls then shows "stopped: no new log line for 15 min".
 """
 import io
 import secrets
@@ -48,6 +50,8 @@ def load():
 
 
 def state(r):
+    if "end" in r and r["end"].get("stopped"):  # the runner ended it: cancelled, silent too long, or over its hours
+        return f"stopped: {r['end']['stopped']}"
     if "end" in r:
         return "done" if r["end"]["exit_code"] == 0 else ("timeout" if r["end"]["timed_out"] else f"exit {r['end']['exit_code']}")
     if "cancel" in r:

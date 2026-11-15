@@ -47,8 +47,14 @@ common = dict(
 )
 
 
+SILENT = 15 * 60  # seconds without a new log line after which a job is ended: it holds a GPU and is most likely hung
+
+
 def run(job_id):
     job = jobs[f"job:{job_id}"]
+    if f"cancel:{job_id}" in jobs:  # gpu.py kill on a queued job does not always stop Modal from starting it
+        print(f"{job_id} was cancelled before it started; not running it")
+        return
     gpu = "cpu"
     if shutil.which("nvidia-smi"):
         query = ["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"]
@@ -67,17 +73,28 @@ def run(job_id):
     with open(out / "log", "w") as log:
         proc = subprocess.Popen(job["cmd"], shell=True, cwd="/repo", stdout=log, stderr=subprocess.STDOUT,
                                 env={**os.environ, "OUT_DIR": str(out), "JOB_ID": job_id, "PYTHONPATH": "/repo"}, start_new_session=True)
-        last_commit = time.time()
+        last_commit = last_output = time.time()
+        size = 0
+        stop = None
         while proc.poll() is None:
             time.sleep(5)
             if time.time() - last_commit > 30:
                 runs.commit()  # makes the log readable by tools/gpu.py logs while the job runs
                 last_commit = time.time()
+                if f"cancel:{job_id}" in jobs:
+                    stop = "cancelled by gpu.py kill"
+            if (out / "log").stat().st_size != size:
+                size, last_output = (out / "log").stat().st_size, time.time()
+            if time.time() - last_output > SILENT:
+                stop = f"no new log line for {SILENT // 60} min"
             if time.time() > deadline:
+                stop = f"time limit of {job['hours']} h"
+            if stop:
                 os.killpg(proc.pid, signal.SIGKILL)  # the shell and every process it started
                 proc.wait()
+                log.write(f"\nrunner: job ended: {stop}\n")
     runs.commit()
-    jobs[f"end:{job_id}"] = {"at": int(time.time()), "exit_code": proc.returncode, "timed_out": time.time() > deadline}
+    jobs[f"end:{job_id}"] = {"at": int(time.time()), "exit_code": proc.returncode, "timed_out": time.time() > deadline, "stopped": stop}
     if proc.returncode != 0:
         raise RuntimeError(f"{job_id} exited with code {proc.returncode}")
 
