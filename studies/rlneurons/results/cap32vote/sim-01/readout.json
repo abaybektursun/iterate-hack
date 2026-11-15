@@ -1,0 +1,774 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_cap32vote.md",
+ "inputs": {
+  "cap32": {
+   "job_id": "abaybektursun-1115-005756-309b",
+   "right_at_32768": 230,
+   "right_at_16384_same_answers": 207,
+   "stored_right_at_16384": [
+    212,
+    219
+   ],
+   "gain": {
+    "problems": 23,
+    "points": 7.01,
+    "ci95": [
+     4.27,
+     9.76
+    ]
+   },
+   "answers_longer_than_16384": 93,
+   "of_them_finished": 91,
+   "of_them_right": 23,
+   "cap_hits_at_32768": 2,
+   "tokens_per_problem_at_32768": 11794.9,
+   "tokens_per_problem_at_16384": 10048.1
+  },
+  "hard328": "studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01",
+  "fresh2026": "studies/rlneurons/results/fresh/sft1_cue_s4-01"
+ },
+ "rates": {
+  "stays_cut": 0.021505376344086023,
+  "finishes_right": 0.24731182795698925,
+  "tokens_of_a_finished_late_answer": 22320
+ },
+ "draws": 400,
+ "sets": {
+  "hard328": {
+   "n": 328,
+   "samples_cut_at_16384": 378,
+   "wrong_pairs_stored": 69,
+   "wrong_pairs_agree_share": 0.6376811594202898,
+   "p_problem_scale": 0.48043102852801,
+   "p_problem_mean": 0.24731182795698928,
+   "stored_16384": {
+    "single_each": [
+     212,
+     212,
+     211,
+     201
+    ],
+    "vote4": 241,
+    "rules": {
+     "single": {
+      "right": 212,
+      "right_24": 209.0,
+      "tokens": 10137.0
+     },
+     "vote2": {
+      "right": 227,
+      "right_24": 221.8,
+      "tokens": 20301.0
+     },
+     "seq3": {
+      "right": 241,
+      "right_24": 233.2,
+      "tokens": 26269.0
+     },
+     "seq4": {
+      "right": 241,
+      "right_24": 238.9,
+      "tokens": 30904.0
+     },
+     "vote4": {
+      "right": 241,
+      "right_24": 238.9,
+      "tokens": 40410.0
+     },
+     "restart1": {
+      "right": 230,
+      "right_24": 222.0,
+      "tokens": 14330.0
+     }
+    },
+    "rl_vote4": 221
+   },
+   "models": {
+    "p uniform, wrong distinct": {
+     "single_mean_of_4": {
+      "mean": 228.9,
+      "interval95": [
+       225.2,
+       233.0
+      ]
+     },
+     "vote4": {
+      "mean": 256.2,
+      "interval95": [
+       248.0,
+       265.0
+      ]
+     },
+     "vote4_minus_16384_problems": {
+      "mean": 15.2,
+      "interval95": [
+       7.0,
+       24.0
+      ]
+     },
+     "rules": {
+      "single": {
+       "right": 230.5,
+       "right_24": 228.7,
+       "tokens": 11822.4
+      },
+      "vote2": {
+       "right": 231.2,
+       "right_24": 230.1,
+       "tokens": 23776.7
+      },
+      "seq3": {
+       "right": 248.9,
+       "right_24": 244.5,
+       "tokens": 30885.2
+      },
+      "seq4": {
+       "right": 256.6,
+       "right_24": 254.8,
+       "tokens": 35938.0
+      },
+      "vote4": {
+       "right": 256.7,
+       "right_24": 254.8,
+       "tokens": 47527.2
+      }
+     }
+    },
+    "p uniform, wrong agree": {
+     "single_mean_of_4": {
+      "mean": 228.9,
+      "interval95": [
+       225.0,
+       233.8
+      ]
+     },
+     "vote4": {
+      "mean": 232.6,
+      "interval95": [
+       226.0,
+       240.0
+      ]
+     },
+     "vote4_minus_16384_problems": {
+      "mean": -8.4,
+      "interval95": [
+       -15.0,
+       -1.0
+      ]
+     },
+     "rules": {
+      "single": {
+       "right": 229.6,
+       "right_24": 227.8,
+       "tokens": 11803.9
+      },
+      "vote2": {
+       "right": 230.3,
+       "right_24": 229.1,
+       "tokens": 23750.1
+      },
+      "seq3": {
+       "right": 233.8,
+       "right_24": 230.5,
+       "tokens": 27800.5
+      },
+      "seq4": {
+       "right": 232.8,
+       "right_24": 230.4,
+       "tokens": 28054.2
+      },
+      "vote4": {
+       "right": 232.9,
+       "right_24": 230.4,
+       "tokens": 47487.3
+      }
+     }
+    },
+    "p uniform, wrong measured": {
+     "single_mean_of_4": {
+      "mean": 228.9,
+      "interval95": [
+       224.2,
+       233.2
+      ]
+     },
+     "vote4": {
+      "mean": 238.9,
+      "interval95": [
+       232.0,
+       247.0
+      ]
+     },
+     "vote4_minus_16384_problems": {
+      "mean": -2.1,
+      "interval95": [
+       -9.0,
+       6.0
+      ]
+     },
+     "rules": {
+      "single": {
+       "right": 230.9,
+       "right_24": 228.4,
+       "tokens": 11817.2
+      },
+      "vote2": {
+       "right": 231.5,
+       "right_24": 229.6,
+       "tokens": 23752.7
+      },
+      "seq3": {
+       "right": 238.6,
+       "right_24": 235.5,
+       "tokens": 29051.4
+      },
+      "seq4": {
+       "right": 238.2,
+       "right_24": 236.5,
+       "tokens": 30652.3
+      },
+      "vote4": {
+       "right": 237.8,
+       "right_24": 236.5,
+       "tokens": 47490.1
+      }
+     }
+    },
+    "p problem, wrong distinct": {
+     "single_mean_of_4": {
+      "mean": 228.8,
+      "interval95": [
+       225.0,
+       232.5
+      ]
+     },
+     "vote4": {
+      "mean": 254.2,
+      "interval95": [
+       246.0,
+       262.0
+      ]
+     },
+     "vote4_minus_16384_problems": {
+      "mean": 13.2,
+      "interval95": [
+       5.0,
+       21.0
+      ]
+     },
+     "rules": {
+      "single": {
+       "right": 232.6,
+       "right_24": 229.4,
+       "tokens": 11806.6
+      },
+      "vote2": {
+       "right": 233.2,
+       "right_24": 230.6,
+       "tokens": 23755.6
+      },
+      "seq3": {
+       "right": 249.2,
+       "right_24": 244.4,
+       "tokens": 30596.8
+      },
+      "seq4": {
+       "right": 255.6,
+       "right_24": 253.3,
+       "tokens": 35525.3
+      },
+      "vote4": {
+       "right": 255.6,
+       "right_24": 253.3,
+       "tokens": 47495.4
+      }
+     }
+    },
+    "p problem, wrong agree": {
+     "single_mean_of_4": {
+      "mean": 228.9,
+      "interval95": [
+       225.2,
+       233.0
+      ]
+     },
+     "vote4": {
+      "mean": 234.3,
+      "interval95": [
+       228.0,
+       241.0
+      ]
+     },
+     "vote4_minus_16384_problems": {
+      "mean": -6.7,
+      "interval95": [
+       -13.0,
+       0.0
+      ]
+     },
+     "rules": {
+      "single": {
+       "right": 231.7,
+       "right_24": 229.5,
+       "tokens": 11811.8
+      },
+      "vote2": {
+       "right": 232.1,
+       "right_24": 230.8,
+       "tokens": 23744.8
+      },
+      "seq3": {
+       "right": 233.6,
+       "right_24": 232.6,
+       "tokens": 27473.2
+      },
+      "seq4": {
+       "right": 233.7,
+       "right_24": 232.9,
+       "tokens": 27684.2
+      },
+      "vote4": {
+       "right": 234.9,
+       "right_24": 232.9,
+       "tokens": 47503.4
+      }
+     }
+    },
+    "p problem, wrong measured": {
+     "single_mean_of_4": {
+      "mean": 229.1,
+      "interval95": [
+       225.2,
+       233.2
+      ]
+     },
+     "vote4": {
+      "mean": 240.1,
+      "interval95": [
+       233.0,
+       248.0
+      ]
+     },
+     "vote4_minus_16384_problems": {
+      "mean": -0.9,
+      "interval95": [
+       -8.0,
+       7.0
+      ]
+     },
+     "rules": {
+      "single": {
+       "right": 234.2,
+       "right_24": 229.3,
+       "tokens": 11814.7
+      },
+      "vote2": {
+       "right": 234.8,
+       "right_24": 230.6,
+       "tokens": 23758.1
+      },
+      "seq3": {
+       "right": 241.2,
+       "right_24": 236.7,
+       "tokens": 28700.1
+      },
+      "seq4": {
+       "right": 240.8,
+       "right_24": 238.2,
+       "tokens": 30260.2
+      },
+      "vote4": {
+       "right": 241.2,
+       "right_24": 238.2,
+       "tokens": 47508.7
+      }
+     }
+    }
+   },
+   "prediction": {
+    "single": {
+     "mean": 229.0,
+     "interval95": [
+      224.5,
+      233.25
+     ]
+    },
+    "vote4": {
+     "mean": 239.5,
+     "interval95": [
+      232.0,
+      248.0
+     ]
+    }
+   }
+  },
+  "fresh2026": {
+   "n": 136,
+   "samples_cut_at_16384": 248,
+   "wrong_pairs_stored": 36,
+   "wrong_pairs_agree_share": 0.75,
+   "p_problem_scale": 0.48043102852801,
+   "p_problem_mean": 0.23803613963862588,
+   "stored_16384": {
+    "single_each": [
+     65,
+     59,
+     56,
+     60
+    ],
+    "vote4": 75,
+    "rules": {
+     "single": {
+      "right": 65,
+      "right_24": 60.0,
+      "tokens": 12876.0
+     },
+     "vote2": {
+      "right": 69,
+      "right_24": 68.1,
+      "tokens": 25999.0
+     },
+     "seq3": {
+      "right": 71,
+      "right_24": 72.5,
+      "tokens": 34718.0
+     },
+     "seq4": {
+      "right": 75,
+      "right_24": 75.5,
+      "tokens": 42251.0
+     },
+     "vote4": {
+      "right": 75,
+      "right_24": 75.5,
+      "tokens": 52170.0
+     },
+     "restart1": {
+      "right": 69,
+      "right_24": 68.0,
+      "tokens": 19944.0
+     }
+    },
+    "rl_vote4": 57
+   },
+   "models": {
+    "p uniform, wrong distinct": {
+     "single_mean_of_4": {
+      "mean": 74.8,
+      "interval95": [
+       71.5,
+       78.8
+      ]
+     },
+     "vote4": {
+      "mean": 90.1,
+      "interval95": [
+       84.0,
+       96.0
+      ]
+     },
+     "vote4_minus_16384_problems": {
+      "mean": 15.1,
+      "interval95": [
+       9.0,
+       21.0
+      ]
+     },
+     "rules": {
+      "single": {
+       "right": 78.4,
+       "right_24": 74.3,
+       "tokens": 15641.2
+      },
+      "vote2": {
+       "right": 78.9,
+       "right_24": 74.8,
+       "tokens": 31460.6
+      },
+      "seq3": {
+       "right": 82.9,
+       "right_24": 81.4,
+       "tokens": 42323.9
+      },
+      "seq4": {
+       "right": 87.9,
+       "right_24": 88.0,
+       "tokens": 50861.8
+      },
+      "vote4": {
+       "right": 87.9,
+       "right_24": 88.0,
+       "tokens": 63461.7
+      }
+     }
+    },
+    "p uniform, wrong agree": {
+     "single_mean_of_4": {
+      "mean": 74.8,
+      "interval95": [
+       71.5,
+       78.0
+      ]
+     },
+     "vote4": {
+      "mean": 74.4,
+      "interval95": [
+       69.0,
+       80.0
+      ]
+     },
+     "vote4_minus_16384_problems": {
+      "mean": -0.6,
+      "interval95": [
+       -6.0,
+       5.0
+      ]
+     },
+     "rules": {
+      "single": {
+       "right": 79.7,
+       "right_24": 75.7,
+       "tokens": 15654.1
+      },
+      "vote2": {
+       "right": 80.1,
+       "right_24": 76.1,
+       "tokens": 31415.5
+      },
+      "seq3": {
+       "right": 76.1,
+       "right_24": 74.5,
+       "tokens": 36920.8
+      },
+      "seq4": {
+       "right": 74.5,
+       "right_24": 74.1,
+       "tokens": 37381.8
+      },
+      "vote4": {
+       "right": 75.6,
+       "right_24": 74.1,
+       "tokens": 63385.2
+      }
+     }
+    },
+    "p uniform, wrong measured": {
+     "single_mean_of_4": {
+      "mean": 74.9,
+      "interval95": [
+       71.5,
+       78.2
+      ]
+     },
+     "vote4": {
+      "mean": 77.2,
+      "interval95": [
+       72.0,
+       83.0
+      ]
+     },
+     "vote4_minus_16384_problems": {
+      "mean": 2.2,
+      "interval95": [
+       -3.0,
+       8.0
+      ]
+     },
+     "rules": {
+      "single": {
+       "right": 79.7,
+       "right_24": 74.9,
+       "tokens": 15609.3
+      },
+      "vote2": {
+       "right": 79.8,
+       "right_24": 75.3,
+       "tokens": 31390.0
+      },
+      "seq3": {
+       "right": 78.1,
+       "right_24": 75.7,
+       "tokens": 38279.3
+      },
+      "seq4": {
+       "right": 77.0,
+       "right_24": 75.5,
+       "tokens": 40239.0
+      },
+      "vote4": {
+       "right": 77.3,
+       "right_24": 75.5,
+       "tokens": 63314.7
+      }
+     }
+    },
+    "p problem, wrong distinct": {
+     "single_mean_of_4": {
+      "mean": 74.2,
+      "interval95": [
+       71.2,
+       77.5
+      ]
+     },
+     "vote4": {
+      "mean": 87.4,
+      "interval95": [
+       81.0,
+       93.0
+      ]
+     },
+     "vote4_minus_16384_problems": {
+      "mean": 12.4,
+      "interval95": [
+       6.0,
+       18.0
+      ]
+     },
+     "rules": {
+      "single": {
+       "right": 78.0,
+       "right_24": 74.1,
+       "tokens": 15660.3
+      },
+      "vote2": {
+       "right": 78.2,
+       "right_24": 74.5,
+       "tokens": 31441.1
+      },
+      "seq3": {
+       "right": 82.4,
+       "right_24": 81.1,
+       "tokens": 41873.2
+      },
+      "seq4": {
+       "right": 87.6,
+       "right_24": 86.9,
+       "tokens": 50330.2
+      },
+      "vote4": {
+       "right": 87.6,
+       "right_24": 86.9,
+       "tokens": 63410.6
+      }
+     }
+    },
+    "p problem, wrong agree": {
+     "single_mean_of_4": {
+      "mean": 74.3,
+      "interval95": [
+       71.2,
+       77.8
+      ]
+     },
+     "vote4": {
+      "mean": 74.7,
+      "interval95": [
+       70.0,
+       80.0
+      ]
+     },
+     "vote4_minus_16384_problems": {
+      "mean": -0.3,
+      "interval95": [
+       -5.0,
+       5.0
+      ]
+     },
+     "rules": {
+      "single": {
+       "right": 77.3,
+       "right_24": 74.7,
+       "tokens": 15673.2
+      },
+      "vote2": {
+       "right": 77.6,
+       "right_24": 75.0,
+       "tokens": 31460.4
+      },
+      "seq3": {
+       "right": 73.4,
+       "right_24": 74.0,
+       "tokens": 36116.6
+      },
+      "seq4": {
+       "right": 73.1,
+       "right_24": 73.5,
+       "tokens": 36413.2
+      },
+      "vote4": {
+       "right": 74.3,
+       "right_24": 73.5,
+       "tokens": 63410.8
+      }
+     }
+    },
+    "p problem, wrong measured": {
+     "single_mean_of_4": {
+      "mean": 74.1,
+      "interval95": [
+       71.0,
+       77.2
+      ]
+     },
+     "vote4": {
+      "mean": 76.8,
+      "interval95": [
+       71.0,
+       83.0
+      ]
+     },
+     "vote4_minus_16384_problems": {
+      "mean": 1.8,
+      "interval95": [
+       -4.0,
+       8.0
+      ]
+     },
+     "rules": {
+      "single": {
+       "right": 78.5,
+       "right_24": 74.1,
+       "tokens": 15634.8
+      },
+      "vote2": {
+       "right": 78.8,
+       "right_24": 74.6,
+       "tokens": 31492.4
+      },
+      "seq3": {
+       "right": 75.9,
+       "right_24": 76.0,
+       "tokens": 38217.2
+      },
+      "seq4": {
+       "right": 76.6,
+       "right_24": 76.2,
+       "tokens": 39733.8
+      },
+      "vote4": {
+       "right": 77.2,
+       "right_24": 76.2,
+       "tokens": 63385.0
+      }
+     }
+    }
+   },
+   "prediction": {
+    "single": {
+     "mean": 74.5,
+     "interval95": [
+      71.25,
+      78.0
+     ]
+    },
+    "vote4": {
+     "mean": 77.0,
+     "interval95": [
+      71.0,
+      83.0
+     ]
+    }
+   }
+  }
+ }
+}
