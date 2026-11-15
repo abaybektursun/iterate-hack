@@ -1,5 +1,43 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 04:15 UTC (optimization round asked by the person) meta/reviews/abaybektursun/20261115-0403/
+
+- Last entry's checks (03:53): not due yet. No multi-cell submit, idea-eec971 job or hard328 rows commit since then (board, 04:03).
+- Direction: mission = "the cheapest route to those points that uses no reward, at equal generated tokens" (DIRECTION.md). Claimed since 03:53: work-1a972a scores the configuration chosen on MATH-500 (vote over 4 after restart) on the 328, which is the deliverable; work-9763ed (vote distillation) is a no-reward route. In line.
+- Research: not reviewed in this round; it changed infrastructure only.
+- Turnaround (cycle.txt, 2 h; 03:53 entry in brackets): 39 jobs, 2 failed or cancelled, 11.5 of 655.7 container min in them; median wait 4.2 min (0.1 over 0.6 h); medians to-job 2, jobs 69, to-answer 5 min (2, 79, 4). Slowest stage: jobs. 0 jobs died with FileExistsError since the 02:25 fix (cycle.txt; 3 in the 3 h before it).
+- Inside the jobs stage, the part that is not the work: setup_vllm.sh ran in 31 of the 39 jobs, median 26 s, 18 of them 19 to 196 s (fresh containers), 812 s in total = 2.1 % of the container minutes (fleet_setup.txt). It is the oldest row of meta/FAILURES.md (21:10).
+- Change (step 3; step 1: the separate venv is needed because vLLM pins other versions than requirements.txt; step 2: the script stays, it is the one place that names the versions): the runner image runs the study's setup_vllm.sh once at build time, so a job that calls it finds everything installed. Deployed to abaybektursun's Modal (rolling; image build 71 s); 8 jobs running at deploy, 9 running after.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | setup_vllm.sh in a fresh job | 18 s (fleet median 26 s, n 31) | 2 s cpu, 1 s h100 | about 17-25 s per job | 1 and 2 | before.txt, after.txt |
+  | whole job, same command | 39 s | 23 s cpu, 12 s h100 | shorter | 1 and 2 | same |
+  | submit to start | 3 s | 5 s, 2 s | same within seconds | 1 and 2 | same |
+  | vllm, transformers, tokenizers, math-verify (must not change) | 0.32.0 5.19.0 0.23.3 0.9.0 | the same four | same | 1 and 2 | same |
+
+  This is a 2 % change of container time, measured; the jobs stage is still generation. A change of the versions in setup_vllm.sh still works in a job (the script installs the difference) and needs a redeploy to be fast again.
+- Failures: gpu.py submit prints its fifth-job notice after the job id, so `tail -1` of a script took the notice as the id (one measuring run lost here). Not changed in this entry (one change per entry): the notice belongs on stderr. Row added to meta/FAILURES.md; the vLLM row is deleted.
+- Next entry checks: median setup_vllm.sh seconds over the next 20 jobs against 26 s; whether teammates deployed the runner.
+
+## 2026-11-15 03:53 UTC (after work-069eca closed as result-edceef and result-eb9211, reward content test; fifth GPU job) meta/reviews/abaybektursun/20261115-0349/
+
+- Last entry's checks: hard328 rows.jsonl still in 0 of 3 folders on any origin branch (03:50), so `tie_short` on the 328 is unscored. Shots cells: base answers in context 417, Code-RL answers 415 of 500 vs base cue 410, no gain (work-be7af1, 03:45); fd89 (RL answers) still running at 71 min (`gpu.py ls`, 03:50).
+- Direction: mission = "the cheapest route to those points that uses no reward, at equal generated tokens" (DIRECTION.md:25). work-069eca tests no route; it shows what a route must replace: the MATH-500 gain follows the math share of the reward (cue: Math 448, Mix 440, General 429, Code 3.0 411, IF 377 vs base 410; result-edceef). The deliverable (best configuration on the 328) has no new cell since result-2c2cae. Next, idea-eec971 (critic from base activations, stop and restart) is a no-reward route at up to 1.3x tokens scored on the 328: in line. Best alternative: the hard328 rows commit (no GPU), still waiting on sameraslan.
+- Research: no published table scores the Olmo 3 RL-Zero IF/General/Mix/Code releases on MATH-500 with our cue at T 1.0, so not a replication; EXA_API_KEY still unset in this shell (third entry), so this is not checked by search here.
+- Turnaround (cycle.txt, 0.6 h): 7 jobs, 1 failed, 11.5 of 60.3 container min in it, median wait 0.1 min (20.8 at 03:11). work-069eca (24 h table): to-job 1, jobs 80, to-answer 2, total 83 min, 15 jobs, 2 failed or cancelled; team medians to-job 2, jobs 79, to-answer 4 (03:05: 2, 54, 4). Slowest stage: jobs. Step 1: the 10 H100 cells waited 6.1-27.2 min (median 13.1), so submit to last cell took 55.7 min against 36.5 with no wait (before.txt). Cause: 13 H100 jobs of one person at once (10 reward5, 3 shots) against Modal's 10-GPU workspace limit; the cap of 20 (955e3a5) cannot raise it. Step 2: b200 6ea1 queued 28 min and was cancelled (fourth b200 job today with no start, 03:05 entry); 5599 died after 4 of 5 models on Mix's model type `olmo2-retrofit` (job log), Mix rerun 3c4c ran 15.0 min: about 20 min added to the step-2 answer.
+- Change, proposal (step 2, then 4; not made: it is study code with another writer and needs a GPU run to measure). Step 1 found the plain arm has no requirement behind the answer: 5 of 10 GPUs, and none of the 5 score lines or the headline uses it. Delete it from the next multi-model cell; with 8 jobs under the limit of 10 no cell waits. If an arm must stay, run cue and plain of one model in one job (one load, 1,000 prompts in one vLLM batch): 5 GPUs per question.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | H100 queue wait, 10 cells | median 13.1, max 27.2 min | not measured yet | - | 10 | before.txt |
+  | submit to last cell end | 55.7 min | not measured yet | - | 10 | before.txt |
+  | cue right of 500 (must not change) | 448 440 429 411 377 | - | - | 5 | result-edceef |
+
+- Failures: (1) a model the job cannot load is found only when its turn comes (5599); the same check, one config load per model at job start, would also have caught the subagent's wrong claim that Mix's config differs from 3.1 only in `use_cache`. Row added to meta/FAILURES.md. (2) b200 requests: 4 of 4 today never started; send h100 only.
+- For idea-eec971: stage 0 on stored rows before any GPU; stage 1 as one base-only job after a 13-sample smoke that loads the exact checkpoint and writes activations; check free slots in `gpu.py ls` before submitting (4 of 10 busy at 03:50); h100, not b200.
+- Next entry checks: GPUs per question and queue wait of the next multi-cell submit; whether stage 0 of idea-eec971 ran before its first GPU job; hard328 rows in git.
+
 ## 2026-11-15 03:15 UTC (after work-3095f1 closed as result-cbe0bc, label-free selector, idea-664670) meta/reviews/abaybektursun/20261115-0311/
 
 - Last entry's checks: idea-664670 was claimed and closed (work-3095f1). No k-sample cell since, so 341 and 137 min are not re-measured. Carried with the 02:37 checks.

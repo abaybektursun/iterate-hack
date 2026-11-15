@@ -23,6 +23,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `lib/hf_helpers.py` | `hf_setup`, `hf_online_setup`, `retry_transport`, copied verbatim from three large unrelated modules. |
 | `jobs/rln4_gen.py` | RLN-4 generation job. Child (`--inner --phase ...`): one vLLM engine, every request with its own seed, one JSONL row per finished request. Parent: AWS `pg` setup. |
 | `jobs/modal_rln4_k.py` | The Modal app that ran K, T2 and T3 (`modal run ... --step download|check|k|t2|t3`). Runs the `rln4_gen` child on an H100. |
+| `analysis/axis.py`, `analysis/axis_test.py`, `specs/SPEC_axis.md` | One axis or several: per-problem vectors of every arm, pair overlap and oracle union against the rest-score null, Rasch against Rasch plus one bilinear term, the floor; planted checks. See "One axis or several?". |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
 | `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
 | `jobs/rln3_gen.py` | RLN-3 generation job (arms P, F, C on MATH-500 and the harder set), AWS `pg` only. |
@@ -35,6 +36,11 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/day1_rows.py` | Day-1 readout from `run_cell` outputs: one run folder per job (`run.json`, `metrics.json`, `examples.json`) and `results/day1/readout.json` (Wilson intervals, paired bootstrap, cap hits, loops, tokens per problem). |
 | `analysis/rln4_temp.py` | T2/T3 readout: temperature differences, accuracy and cap hits by RL-solution-length quartile, examples. |
 | `analysis/rln4_t1_t2_items.py` | Per-problem T1 against T2 under grader v3; wrote `results/rln4/t1_t2_items-01/` (from commit `8b6a836`, unchanged). |
+| `analysis/anatomy.py` | Gap anatomy from the Day-1 #3 four-sample runs (laptop): joint k-of-4 table, held-out-sample decomposition, subject and level, error types, tokens, divergence proxy, `pool_k_le3.json`. See "Gap anatomy". |
+| `analysis/anatomy_judge.py` | Slip against wrong plan: `prep` draws the items and the two controls and writes blind batches; `score` reads the judges' labels (agreement, controls, first wrong step). |
+| `grader/repair_v4.py`, `grader/repair_v4_test.py` | Grader v4 / v4a: grader v3 plus five label-free answer-statement rules (placeholder, lower-case marker, last-line math, trailing brace, form), and its planted tests. A grader version for both models, not a method. See "Answer-statement repair". |
+| `analysis/repair.py`, `prep/repair_plan.py`, `data/repair/plan_v1.json` | Answer-statement repair: the gold-aware upper bound, the rule table and the vote under v4 (laptop); the plan of the forced-suffix job (not run). |
+| `data/anatomy/math500_meta.json` | Subject, level and reference solution of the 500 problems (HuggingFaceH4/MATH-500 `test.jsonl`, revision `6e4ed1a`), same order and `unique_id` as `data/rln4/math500.json`. |
 | `specs/SPEC5_map.md` | RLN-5 map spec: where the RL model still disagrees with the cued base; hypothesis H and its refutation rules; controls. |
 | `jobs/rln5_map.py` | RLN-5 map job (inference only, team runner): both models over the stored T1 and T2 answers with teacher forcing; per-position shards and `checks.json` in `$OUT_DIR`. See "RLN-5 map". |
 | `analysis/rln5_map_analyze.py` | RLN-5 map readout: reads `runs/<job-id>/`, writes `metrics.json` and `examples.json` (analysis a-e of SPEC5_map.md §6, the test of H). |
@@ -311,6 +317,244 @@ problem the best rule gets right against the vote, one it gets wrong although a 
 ```
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.selector_test
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.selector --run runs/abaybektursun-1114-153825-208b --out studies/rlneurons/results/selector/math500_base_cue-01
+```
+
+## Gap anatomy: reliability shift or new problems (MATH-500, n = 500, 4 samples, laptop, board work-5b7270, idea-9e3dff)
+
+Question: is RL's gain over the cued base problems the base already solves in some samples, or problems it does not solve?
+Answer: mostly the first. Of the 198-sample gap (base 1,642 right of 2,000, RL 1,840), 81 % sits in problems the base solves
+at least once in 4 and 19 % [11, 27] in problems it solves 0 of 4; the cell "base 3 of 4, RL 4 of 4" alone holds 86 samples
+(43 %). Scored on a held-out sample, so that noise in "0 of 4" cannot inflate it, the class "base wrong on the other three
+samples" holds 14 % [5, 23] of the gap. Spec, hypotheses and nulls, written before the script: `specs/SPEC_anatomy.md`.
+Inputs: attempt 0 of samples 0 to 3 of the two Day-1 #3 jobs, grader v3. Intervals: bootstrap over problems, 5,000
+resamples, seed 0. The planner's counts (86; 250 / 89 / 19 base errors) are confirmed.
+
+Problems by right samples of 4 (rows: base with cue; columns: RL plain); the share of the gap is n (r - b) / 198:
+
+| base k, RL k in columns | 0 | 1 | 2 | 3 | 4 | problems | share of the gap [95 %] | homogeneous null, problems |
+|---|---|---|---|---|---|---|---|---|
+| 0 | 16 | 4 | 8 | 3 | 2 | 33 | 18.7 % [10.5, 27.4] | 0.5 |
+| 1 | 2 | 2 | 3 | 7 | 10 | 24 | 22.7 % [13.4, 32.2] | 9.4 |
+| 2 | 0 | 1 | 6 | 4 | 17 | 28 | 18.7 % [11.2, 26.7] | 64.8 |
+| 3 | 0 | 0 | 0 | 12 | 86 | 98 | 43.4 % [34.8, 53.2] | 198.1 |
+| 4 | 0 | 0 | 0 | 7 | 310 | 317 | -3.5 % [-6.8, -1.0] | 227.2 |
+| RL problems | 18 | 7 | 17 | 33 | 425 | 500 | | |
+
+Gross: RL gains 208 samples and loses 10. The homogeneous null (every problem has the model's mean solve probability, 0.821
+and 0.920) predicts 0.5 problems at 0 of 4 and 142 in the (3, 4) cell; the data have 33 and 86: solve probability differs
+between problems (H3 holds).
+
+Held-out sample: class a problem by three of its base samples, score the fourth, over the 4 choices of the fourth.
+
+| base right in the other 3 | problems per choice | base, held-out sample right | RL, same sample | share of the held-out gap [95 %] |
+|---|---|---|---|---|
+| 0 | 39.0 | 15.4 % (24 of 156) | 33.3 % (52) | 14.1 % [5.0, 23.2] |
+| 1 | 32.0 | 43.8 % (56 of 128) | 78.1 % (100) | 22.2 % [10.9, 33.2] |
+| 2 | 87.5 | 84.0 % (294 of 350) | 95.4 % (334) | 20.2 % [11.6, 29.8] |
+| 3 | 341.5 | 92.8 % (1,268 of 1,366) | 99.1 % (1,354) | 43.4 % [34.5, 53.4] |
+
+- The largest part of the gap is in problems where the base's other three samples are all right: there the base still fails
+  7.2 % of the time and RL 0.9 %. Halves (class by base k of 2, score the other two samples, 6 splits): k = 0 holds 21.5 %
+  [13.1, 29.7] of the gap, k = 1 28.3 %, k = 2 50.2 %. Half-to-half correlation of k of 2: base 0.63, RL 0.73.
+- H1 (reliability shift; refuted under 30 % of the gap in base k >= 2): 58.6 %, not refuted. H2 (new problems; refuted
+  under 30 % in base k = 0): 18.7 %, refuted. The "0 of 3" class is not "never": the base solves 15 % of held-out samples
+  there. Of the 33 problems with base 0 of 4, RL has 0 of 4 on 16 and 4 of 4 on 2 (problems 170 and 279).
+- Prior: Yue et al. (arXiv 2504.13837, Table 2) find the same from coverage: pass@128 of the base is above the RL model's.
+  Here pass@4 is 467 against 482.
+
+By level and subject (H4: level 5 holds more of the gap than of the problems; holds):
+
+| Level | Problems | Base right samples | RL | Gap, samples per problem [95 %] | Share of the gap [95 %] | Share of problems |
+|---|---|---|---|---|---|---|
+| 1 | 43 | 93.6 % | 98.8 % | 0.21 [0.07, 0.37] | 5 % [1, 8] | 9 % |
+| 2 | 90 | 93.6 % | 98.3 % | 0.19 [0.11, 0.28] | 9 % [5, 13] | 18 % |
+| 3 | 105 | 87.1 % | 96.9 % | 0.39 [0.27, 0.52] | 21 % [14, 28] | 21 % |
+| 4 | 128 | 84.4 % | 92.8 % | 0.34 [0.22, 0.47] | 22 % [14, 30] | 26 % |
+| 5 | 134 | 64.6 % | 81.0 % | 0.66 [0.49, 0.84] | 44 % [35, 54] | 27 % |
+
+| Subject | Problems | Base | RL | Gap, samples per problem [95 %] | Share of the gap [95 %] | Share of problems |
+|---|---|---|---|---|---|---|
+| Algebra | 124 | 94.8 % | 98.6 % | 0.15 [0.06, 0.26] | 10 % [4, 16] | 25 % |
+| Counting & Probability | 38 | 75.0 % | 88.2 % | 0.53 [0.29, 0.79] | 10 % [5, 16] | 8 % |
+| Geometry | 41 | 71.3 % | 78.7 % | 0.29 [0.12, 0.49] | 6 % [2, 11] | 8 % |
+| Intermediate Algebra | 97 | 73.2 % | 88.7 % | 0.62 [0.44, 0.80] | 30 % [22, 39] | 19 % |
+| Number Theory | 62 | 88.7 % | 97.6 % | 0.35 [0.18, 0.55] | 11 % [5, 17] | 12 % |
+| Prealgebra | 82 | 80.2 % | 91.8 % | 0.46 [0.28, 0.67] | 19 % [12, 28] | 16 % |
+| Precalculus | 56 | 77.7 % | 89.7 % | 0.48 [0.29, 0.68] | 14 % [8, 21] | 11 % |
+
+Wrong samples by type, and the other model's four samples on the same problems:
+
+| Model, error type | Samples | Problems | Other model right on those problems [95 %] | Own k of 4 on those problems (0, 1, 2, 3) |
+|---|---|---|---|---|
+| base, finished-wrong | 250 | 152 | RL 68.4 % [65.5, 71.2] | 28, 22, 25, 77 |
+| base, cap hit | 89 | 50 | RL 48.9 % [43.7, 54.1]; RL hits the cap in 69 of 356 samples | 19, 11, 12, 8 |
+| base, no answer | 19 | 19 | RL 82.9 % [72.9, 89.7] | 3, 1, 2, 13 |
+| RL, finished-wrong | 131 | 68 | base 21.2 % [17.9, 24.9] | 18, 6, 15, 29 |
+| RL, cap hit | 29 | 18 | base 15.5 % [10.0, 23.2] | 6, 2, 6, 4 |
+
+- H5 (RL does as well on the base's cap-hit problems as on its finished-wrong problems) is refuted: 48.9 % against 68.4 %.
+  A base cap hit marks a problem that is hard for both models. In the (3, 4) cell the one wrong base sample is finished-wrong
+  66 times, no answer 13 times, a cap hit 7 times.
+- Tokens: base right samples have mean 2,746 (median 1,561), wrong 9,800; RL right 3,984 (2,843), wrong 12,774. Within a
+  problem that has both, wrong samples are longer: base +2,324 tokens [1,701, 2,972] (150 problems; finished only +1,359
+  [817, 1,939], 137), RL +2,443 [1,624, 3,292] (57 problems).
+
+### Slip against wrong plan (`results/anatomy/judge-01/`)
+
+60 base and 30 RL finished-wrong samples (random, at most one per problem per model), labeled by a judge that sees the
+problem, the gold answer, the reference solution, the answer and the shortest right sample of the same model when one exists,
+and not the model's name. Judge: Claude Code subagents (the agent's own model) with the fixed rubric `rubric.md`, one subagent
+per batch file. No hosted provider was used: the `OPENAI_API_KEY` on this machine is rejected by the API, and the repo has no
+other provider code. Pass A covers all 120 items; pass B a random half of the real items and all controls, in other batches.
+
+| Pass A label | Base, 60 | RL, 30 |
+|---|---|---|
+| computation slip (right method) | 21, 35 % [24, 48] | 5, 17 % [7, 34] |
+| wrong plan | 17, 28 % [19, 41] | 20, 67 % [49, 81] |
+| misread problem | 14, 23 % [14, 35] | 5, 17 % [7, 34] |
+| format (work reaches the gold value, final line differs) | 8, 13 % [7, 24] | 0 |
+
+- Agreement of the two passes: 44 of 45 real items with the same label, Cohen's kappa 0.97 (base 29 of 30, RL 15 of 15).
+  Both passes are the same model, so this is its consistency, not a second opinion.
+- Controls. Shuffled problem and answer: `mismatch` 15 of 15 in both passes (pass at 13). Planted slip: `slip` 11 of 15 in
+  pass A and 13 of 15 in pass B (pass at 12: pass A fails by one). All 6 misses are `format`: the planted wrong value sits
+  in the last step after the answer has stated the right value earlier, which fits the rubric's `format`. So the boundary
+  between slip and format is not reliable for an error in the final restatement; slip or format: 15 of 15. The judge's quote
+  is within 5 % of the planted step in 12 of 15.
+- H6 (over half of the base's finished-wrong answers are slips; refuted under a third): 35 % [24, 48], neither.
+- With a right sibling (base, 48 items): 18 slip, 9 wrong plan, 13 misread, 8 format. Without one (the base has 0 of 4, 12
+  items): 3 slip, 8 wrong plan, 1 misread. Problems the base solves sometimes fail by slip, misreading or form (39 of 48);
+  problems it never solves fail by plan. RL's remaining errors are mostly wrong plans (20 of 30).
+- The 8 base `format` items: 3 leave the prompt's placeholder as the answer (`$Answer$`; problems 45, 266, 484), 1 puts two
+  solutions in two boxes (25), 4 state the gold value in another form that grader v3 rejects (`12th grade` for 12, `(C)
+  Plane`, `-I` for the matrix, the decimal of 12 pi; problems 379, 227, 248, 313). With the 19 no-answer samples, about
+  52 of the base's 358 wrong samples (8 / 60 x 250 + 19; 36 to 79 by the interval) fail in the statement of the answer, not
+  in the mathematics; RL has 0 of 30 and no no-answer sample. Not tested: a rerun of the base with these forms accepted.
+- First wrong step (the judge's verbatim quote, located in the answer; 82 of 82 quotes found): median position 0.20 of the
+  answer's characters for the base (quartiles 0.05, 0.55), 0.29 for RL; a misreading sits at 0.06, a slip at 0.25, a wrong
+  plan at 0.26. 65 % of first wrong steps are in the first third of the answer. The two passes quote steps within 0.15 of
+  each other in 37 of 41.
+- The spec's proxy for the divergence point (first number absent from the right siblings) is rejected: it is within 0.15
+  of the judge's step in 18 of 38 (the spec asked for 10 of 15), and its position in right samples scored the same way is
+  about the same (median 0.30 against 0.26 for wrong samples).
+- 15 pairs read at both positions (the first 15 base rows of `labels.json` with a proxy position). The judge's quotes are
+  single checkable steps: `1136 - 88 = 1148` (problem 21), `150 + 130 + 150 + 130 = 580` (189), 450 factored with 5 cubed
+  (217), day 27 left out of a count (128), graph axes swapped (4), subscripts read as digits (137), a draw without
+  replacement assumed (190). The proxy lands on decimal approximations and side computations. Three answers reach the gold
+  value and then leave it (52: computes 12, then redoes the denominator; 136: derives 64, then discards the bound; 60: has
+  p and q right, a sign error on r fails its own check and it abandons the method).
+
+Limits: 4 samples per problem; one judge model of the agent's own family; cap hits and no-answer samples are counted, not
+labeled; the MATH-500 problems only.
+
+Run folders: `results/anatomy/math500-01/` (`readout.json`: every table above; `examples.json`: a (3, 4) problem with its
+right and wrong base samples, a (0, 4) problem in both models, an RL loss, a cap hit; `pairs.json`: the 168 wrong and right
+sibling pairs with the proxy position; `pool_k_le3.json`: the 183 problems with base k <= 3, with base and RL k, subject,
+level and the type of each base sample, for the prefix hand-off study; `run.json`, whose commit is the parent of `9df9b40`, which
+added the script unchanged together with the folder) and `results/anatomy/judge-01/` (`readout.json`, `labels.json`: both passes' label,
+quote and reason per item, `rubric.md`, `examples.json`: one item per label and one control scored right and one scored
+wrong, `run.json`). The batch files and raw labels are in `runs/anatomy_judge/` (not committed).
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.anatomy --base runs/abaybektursun-1114-153825-208b --rl runs/abaybektursun-1114-183640-e828 --out studies/rlneurons/results/anatomy/math500-02
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.anatomy_judge prep --base runs/abaybektursun-1114-153825-208b --rl runs/abaybektursun-1114-183640-e828 --work runs/anatomy_judge-02
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.anatomy_judge score --work runs/anatomy_judge-02 --pairs studies/rlneurons/results/anatomy/math500-01/pairs.json --out studies/rlneurons/results/anatomy/judge-02
+```
+
+## Answer-statement repair: how much of the gap is a failure to state the answer (MATH-500, n = 500, 4 samples, laptop, board work-655434, idea-ae6eba)
+
+Question: how many of the 9.9 points between the cued base and RL (mean of the 4 samples, grader v3) come back when the base's
+answer is only read better, with RL read the same way? Answer: 0.5 point. Label-free extraction rules turn 10 of the base's
+2,000 samples from wrong to right and 0 of RL's 2,000: base 1,642 to 1,652, RL 1,840, gap 9.9 to 9.4 points (change -0.5
+[-0.8, -0.2]). With the gold in hand the ceiling is 31 base samples (1.55 points) against 5 for RL. The whole gain is a grader
+correction; no generation step was run. Spec with hypotheses, written before any count: `specs/SPEC_repair.md`. Inputs: attempt
+0 of samples 0 to 3 of the two Day-1 #3 jobs. Intervals: paired bootstrap over problems, 5,000 resamples, seed 0.
+
+Kept apart: a rule that changes extraction or normalization is a grader version (`grader/repair_v4.py`; `grade_v3` is
+unchanged), applies to both models and corrects the measured gap; it is not a route to RL. A step that changes generation
+(Part B) is a method; it was not run.
+
+Rules (never read the gold): R1 a placeholder answer (`$Answer$`) falls back to the candidate before it within 5 non-empty
+lines; R2 with nothing extracted, the rest of the last line after `answer:` / `answer is` in any case; R3 with nothing
+extracted and the answer finished, the last math span of the last line, or that line itself when it has at most 30 characters
+and a digit; R4 a trailing unmatched `}` is removed; R5 `(C) Plane` becomes `C` and `12th grade` becomes `12` (written from two
+judged items, so optimistic). v4 = the rules as written before scoring. v4a = after reading v4's 16 flips: R2 only on answers
+that ended with the stop token, and R3 before R2.
+
+| Rule set (grader) | Base with cue: right of 2,000 (per sample) | minus v3, points [95 %] | wrong to right / right to wrong | accepted, judged wrong by hand | RL: right of 2,000 | changed |
+|---|---|---|---|---|---|---|
+| v3 (baseline) | 1,642 (405, 409, 410, 418) | | | | 1,840 (456, 462, 464, 458) | |
+| R1 placeholder | 1,642 | 0 | 0 / 0 (fires on 2) | 0 | 1,840 | 0 |
+| R2 lower-case marker | 1,653 | +0.55 [0.25, 0.95] | 11 / 0 (fires on 53, 44 of them cap hits) | 6 | 1,840 | 0 (fires on 2 cap hits) |
+| R3 last-line math | 1,648 | +0.30 [0.10, 0.55] | 6 / 0 (fires on 10) | 0 | 1,840 | 0 |
+| R4 trailing brace | 1,642 | 0 | 0 / 0 (fires on 0) | 0 | 1,840 | 0 |
+| R5 form | 1,644 | +0.10 [0.00, 0.25] | 2 / 0 | 0 | 1,840 | 0 |
+| v4, as written before scoring | 1,658 (409, 413, 415, 421) | +0.80 [0.40, 1.25] | 16 / 0 | 6 | 1,840 | 0 |
+| R2 on finished answers only | 1,648 | +0.30 [0.10, 0.55] | 6 / 0 (fires on 9) | 1 | 1,840 | 0 |
+| v4a, amended | 1,652 (407, 412, 413, 420) | +0.50 [0.20, 0.80] | 10 / 0 | 0 | 1,840 | 0 |
+
+| RL minus base, points [95 %] | mean of 4 samples | sample 0 |
+|---|---|---|
+| v3 | 9.9 [8.25, 11.6] | 10.2 [7.2, 13.2] |
+| v4 | 9.1 [7.5, 10.75] | 9.4 [6.4, 12.4] |
+| v4a | 9.4 [7.75, 11.1] | 9.8 [6.8, 12.8] |
+
+Vote over 4 (the rule of `analysis/day1_vote.py`): base 446 under v3, 446 under v4a (0 fixed, 0 broken), 447 under v4 (170 and
+189 fixed by wrongly accepted cap-hit samples, 481 broken); RL 474 under all three.
+
+- H3 (the rules accept no wrong answer) is refuted for v4 as written: 6 of its 16 accepted samples are wrong on reading. 5 are
+  cap hits where a lower-case "the answer is X" sits in unfinished reasoning (26, 170, 189 twice, 317: "the answer is 0. But
+  how?"), 1 is a finished answer whose reasoning says 326.5 and whose final line says 315.5 (399). v4a removes these 6 and
+  keeps the 10 whose final statement is the gold (22, 45, 81, 114, 122, 141, 227, 237, 379, 430). The amendment was made on the
+  same 2,000 samples, so the v4a numbers are optimistic; planted cases of both failures are in the test.
+- H1 (at least 2 points of the gap are answer-statement failures a label-free rule recovers) is refuted: +0.5 point on the
+  base (under the 1 point set in the spec). H2 (RL has none) holds: 0 of RL's 2,000 samples change, and RL has 0 samples with
+  no extracted answer.
+- Upper bound with the gold (a value the grader accepts as equal to the gold: boxes, marker rests, one-line math spans, the
+  part after a span's last `=`, each of the last 5 lines as plain text). Wrong samples with such a value:
+
+| Model, sample type | Samples | in the last line | in the last 5 non-empty lines | anywhere |
+|---|---|---|---|---|
+| base, finished-wrong | 250 | 6 | 23 | 46 |
+| base, no answer | 19 | 6 | 8 | 8 |
+| base, cap hit | 89 | 2 | 7 | 10 |
+| RL, finished-wrong | 131 | 0 | 5 | 18 |
+| RL, cap hit | 29 | 1 | 2 | 5 |
+
+- 20 of the base's 31 finished or no-answer samples with the gold in the last 5 lines, read by hand
+  (`upper_bound_read.json`): 14 state the gold as their answer and 6 do not (the gold is an intermediate value or a list
+  number: 458, 403 twice, 136, 214, 399). Of the 14, v4a reads 5; the other 9 are two roots in two boxes joined by
+  `\text{ and }` (25, 284 twice), the prompt's template around the value (`$Answer: 83$ where $Answer is ...`, `\(Answer:
+  23\)Where ...`, `$Answer (without quotes)`: 49, 39, 484), an unmatched `$` after the value (331), `137 1/2` for a mixed
+  number (472) and `-I` for the matrix (248). Scaled, about 22 of the base's 2,000 samples (1.1 points) are answer-statement
+  failures, against at most 5 of RL's (0.25): at most about 1 point of the 9.9.
+- H4 (the judge's extrapolation of 52, range 36 to 79, overstates what extraction can recover) holds: 31 by the upper bound,
+  about 22 after reading. The prompt's own words appear in 12 extracted base answers (`$Answer`, "the answer to the
+  problem"), 3 of them right, and in 0 of RL's.
+- Read by R2 and still scored wrong: `east.` for gold `east` (97, sample 1: the final period).
+
+Part B, forced suffix (a method), was not run. The prefix-file input for `jobs/run_cell.py` had not landed on `main` or
+`origin/handoff` when Part A ended (`jobs/handoff_gen.py` on `origin/handoff` continues sample 0 from a cut and takes no
+suffix). Eligible samples (finished, v3 extraction unusable; the gold is not read): 21 of the base's 2,000 (19 no answer, 2
+placeholders; 8 already right under v4a) and 0 of RL's. So the step can add at most 13 base samples (0.65 point) over v4a and
+nothing to RL. The exact job is in `specs/SPEC_repair.md` ("Part B job, not run"); its plan, with 100 control samples per
+model, is `data/repair/plan_v1.json` (suffix `\n\nThus, the final answer is \(\boxed{`, RL's most frequent non-empty answer-line
+opening, in 46 of its right answers and 19 of the base's; RL boxes 1,838 of its 1,840 right answers, the base 1,176 of
+1,642).
+
+Limits: 4 samples per problem; the rules and the amendment were fixed on MATH-500 and not scored on the 328; one reader for
+the flips and the 20 upper-bound samples; the upper bound reads one-line math spans only, so a gold-equal value in a
+multi-line display is missed.
+
+Run folder `results/repair/offline-01/`: `readout.json` (every table above), `rows.jsonl` (per sample: type, v3 and v4a
+extraction and score, the v4 score, upper-bound flags, Part B eligibility), `flips.json` (every sample whose score changes
+under v4 or v4a, with its last 700 characters and the hand judgement), `upper_bound_read.json` (the 20 samples read),
+`examples.json` (one sample v4a turns right, one that v4 accepts wrongly, one with the gold in the last 5 lines that stays
+wrong), `run.json`.
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.grader.repair_v4_test
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.repair --base runs/abaybektursun-1114-153825-208b --rl runs/abaybektursun-1114-183640-e828 --out studies/rlneurons/results/repair/offline-02
 ```
 
 ## Weight-difference line: base + a (RL - base), Code-RL and a random control (Day-1 #4, board work-d36669)
@@ -677,6 +921,95 @@ The 65 problems that RL solved and the base with cue did not, by hand label (`pe
 Generated tokens (`metrics.json`): base answers of at most 2,000 tokens: 263, of which 13 wrong. RL answers of at most 4,000
 tokens: 286, of which 0 wrong. Median and 90th percentile: T1 right 1,431.5 and 7,054 (n = 410), T1 wrong 10,547.5 and 16,384
 (n = 90); T2 right 3,014 and 8,430 (n = 463), T2 wrong 13,455 and 16,384 (n = 37).
+
+## One axis or several? Item-level structure of every arm (MATH-500 n = 500, hard328 n = 328, laptop, board work-1aa34c, idea-1c8b73)
+
+Question: do the partial routes toward the RL model fix the same problems or different ones? Answer: the same. On MATH-500 two
+different arms are no more different from each other than two samples of one arm: the 618 pairs of different arms have a
+mean excess union of -0.05 problems (z mean -0.04, sd 0.97) against +0.29 (z mean 0.17) for the 12 same-config pairs, and one
+bilinear term added to the Rasch model gains nothing held out. Stacking two arms is predicted to add less than 1.0 point
+(5.1 problems, the largest upper bound among the 7 pairs named in the spec) beyond what a second sample of an equally able arm
+adds. No cross-arm stack is worth a GPU run as a complementarity bet. Spec, hypotheses and the amendments made after the
+planted checks: `specs/SPEC_axis.md`. Code: `analysis/axis.py`; planted checks: `analysis/axis_test.py`.
+
+Data. One 0/1 vector per arm, grader v3 (`score_v3` of `run_cell`), T 1.0 / top-p 1.0, attempt 0. MATH-500: 36 single-sample
+arms (4 samples of base + cue, 4 of RL plain, 11 weight-difference cells, 10 Reward-content cells, 3 solved-examples cells with
+n = 497, 4 WSP-1 cells) and 3 derived arms (base vote, base `tie_short`, RL vote). hard328: 7 single-sample arms.
+`results/axis/<set>-01/manifest.json` gives each arm's job id, run folder, source path, commit and sha256; every right count
+equals the committed `metrics.json` of its run folder. `vectors.json` holds the vectors. Raw rows of the cells that have no
+committed per-problem file were read from `runs/<job id>/answers.jsonl`. Excluded (reason in the manifest): min-p and
+self-review cells and the hard328 4-sample rows (raw rows in a teammate's Modal workspace, only totals committed), metaharness
+reruns (no per-problem scores), T 0.6 cells, the n = 100 screens, RLN-4 T1/T2/T3 (S3).
+
+Method. Excess union of a pair = problems right under A or B, minus the same count when B is permuted among problems of equal
+rest score (the share of the other independent arms that are right: the Mantel-Haenszel test with the rest score as
+difficulty). Bias and sd of the excess come from 200 matrices drawn from the fitted Rasch model. Positive = the arms fail on
+different problems more than difficulty explains. "Fixed" = base + cue sample 0 wrong, arm right. A union is an oracle: it needs
+the answer key, so it is the upper bound of any selector over the two answers, not a method.
+
+| Pair (MATH-500) | Right A, B | Union (over best) | Excess, problems (sd), z | Fixed A, B, both (one-axis expectation) | Jaccard of fixed sets (expected) |
+|---|---|---|---|---|---|
+| base + cue, two samples (6 pairs; noise floor) | 405 to 418 | 445 to 454 (+34 to +39) | -3.0 to +3.0, z -1.21 to 1.18 | s1, s2: 40, 44, 30 (30.1) | 0.556 (0.558) |
+| RL plain, two samples (6 pairs; noise floor) | 456 to 464 | 472 to 479 (+9 to +16) | -1.1 to +1.1, z -0.77 to 0.81 | s1, s2: 68, 67, 60 (59.6) | 0.800 (0.790) |
+| theta 0.5 cue + Think-SFT cue | 452, 454 | 478 (+24) | +1.34 (1.58), 0.85 | 59, 65, 50 (50.7) | 0.676 (0.692) |
+| theta 0.5 cue + Code-RL 3.1 cue | 452, 450 | 473 (+21) | +1.86 (1.62), 1.15 | 59, 60, 49 (49.7) | 0.700 (0.716) |
+| theta 0.5 cue + RL-written examples (n 497) | 449, 435 | 464 (+15) | -1.45 (1.54), -0.94 | 59, 51, 45 (42.8) | 0.692 (0.637) |
+| Think-SFT cue + RL-written examples (n 497) | 452, 435 | 474 (+22) | +0.28 (1.67), 0.17 | 65, 51, 44 (43.1) | 0.611 (0.590) |
+| theta 0.25 cue + Think-SFT cue | 441, 454 | 476 (+22) | +0.58 (1.64), 0.35 | 51, 65, 44 (44.4) | 0.611 (0.621) |
+| Code-RL 3.1 cue + Think-SFT cue | 450, 454 | 478 (+24) | -0.27 (1.52), -0.18 | 60, 65, 50 (50.2) | 0.667 (0.670) |
+| Math 3.0 cue + Think-SFT cue | 448, 454 | 478 (+24) | -0.70 (1.62), -0.43 | 59, 65, 50 (49.9) | 0.676 (0.673) |
+| Think-SFT cue + base vote over 4 (null not bias-corrected) | 454, 446 | 474 (+20) | -1.05 (1.16), -0.90 | 65, 43, 39 (39.0) | 0.565 (0.565) |
+| theta 0.5 cue + base vote over 4 (null not bias-corrected) | 452, 446 | 467 (+15) | +0.23 (1.84), 0.13 | 59, 43, 40 (38.1) | 0.645 (0.597) |
+| RL plain sample 0 + Think-SFT cue | 456, 454 | 476 (+20) | -0.76 (1.59), -0.48 | 58, 65, 52 (51.3) | 0.732 (0.715) |
+
+- All 618 pairs of different arms: z mean -0.04, sd 0.97, range -3.80 to 2.83, 3 pairs (0.5 %) beyond |z| = 3 (0.3 % expected);
+  the three are "alike" pairs (IF 3.0 cue with Math 3.0 cue -3.80, Math 3.0 cue with top-8 plain -3.70, RL sample 0 with
+  theta 1.5 cue -3.04). No group of arms stands out: mean z is between -0.52 and 0.44 for every pair of groups (base samples,
+  RL 3.1, theta blends, 3.0 checkpoints, examples in context, Think-SFT, controls), -0.00 for same-prompt pairs and -0.06
+  for plain-with-cue pairs. The prediction in the spec that the prompt format is a second axis was wrong.
+- Item model, held-out log-likelihood per cell (5 folds over 17,991 cells, nats): constant -0.4735, Rasch -0.2790, Rasch on
+  data with arm labels shuffled within each problem -0.3689, Rasch plus one bilinear term -0.2790 (gain -3e-07 at ridge 10 on the bilinear
+  term, where the term is shrunk to zero; -0.0142, -0.0357, -0.0565 at ridge 3, 1, 0.3, where it is free to fit; 95th
+  percentile of the gain on 20 Rasch-simulated data sets 0). The 21 cue arms alone: -0.2409 for both. Arm ability explains 0.09 nats per
+  cell, a second axis nothing.
+- Same seed is not the same answers: the first 50 MATH-500 problems of base + cue sample 0, rerun with the same seed in another
+  job, are scored differently on 6 problems (37 and 43 right). A same-seed rerun is a new sample.
+- Unions (oracles): two different arms near 452 reach 473 to 478, inside the 472 to 479 of two RL samples; RL pass@4 is 482,
+  base pass@4 467, any of the 29 non-RL single-sample arms 494. The largest union of two non-RL arms is Math 3.0 cue with
+  Think-SFT plain, 482 (excess +1.0, z 0.62).
+- Floor: 6 of 500 problems are solved by none of the 39 arms, RL's vote included (indices 103, 154, 264, 308, 340, 422:
+  four geometry/precalculus, two intermediate algebra; the four stored RL answers to each are wrong maths, not grader misses). 0 problems are solved only by RL 3.1 arms. 13 problems are solved by
+  no arm that is free of RL weights and RL output (base samples and votes, base-written examples, random controls, Think-SFT).
+- One-axis prediction of a vote over 4 samples of an arm that has one sample (`one_axis_vote_prediction`: share of problems the
+  stored vote gets right as a function of the Rasch per-sample probability): Think-SFT cue 471.5, theta 0.5 cue 469.9, RL cue
+  473.5, theta 0.25 cue 464.3, against the stored RL vote 474 and base vote 446. Predicting each stored vote from the other
+  family's curve misses by -6.5 (base) and +3.2 (RL) problems, so read these as +/- 7.
+
+hard328 (7 arms, one sample each, no second sample of any arm): 21 pairs, z mean 0.30, sd 1.08, range -1.80 to 2.11; no
+second axis in the item model (Rasch -0.3115 for both). The same-seed rerun of base + cue by a second person (164 and 160 right)
+is scored differently on 42 of 328 problems and its union is 183 (+19), against +14 to +15 for base + cue with a theta blend
+and +23 for theta 0.25 with theta 0.5. Floor: 90 of 328 solved by no arm; 13 solved only by the two RL arms, 7 of them by
+one RL arm only. With two RL arms among seven and one sample each, no null for this count was computed.
+
+Verdict. One axis: do not run a cross-arm stack (weight blend + vote of the base, Think-SFT + shots, and so on) to gain
+complementary problems. If a vote is run, run it inside the most able reward-free arm. The job that tests the prediction above
+(for the lead to decide; not submitted): the `sft1_cue` cell of WSP-1 with four samples,
+`bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1 --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 182000000 --samples 4 --restarts 0 --commit <commit>`
+(`wsp_edit` is on branch `claude/weight-space-programming-research-ddd44e`), then `analysis/day1_vote.py`. One axis predicts a
+vote of 471.5 +/- 7 of 500; a vote above 479, or a vote over two Think-SFT and two theta 0.5 samples that beats the
+four-sample Think-SFT vote by 5 problems or more, refutes it.
+
+Limits. One sample per arm except base + cue and RL plain. The pair test has little power for one pair: a planted second axis
+of 1.5 logits on 30 % of the problems gives a mean excess of 1.8 problems (z 0.64), 4 logits 4.8 problems (z 1.94); the item
+model detects both (gain 0.0032 and 0.0271 nats per cell). So the claim is "no second axis as large as 1.5 logits on 30 % of
+the problems shared by a group of arms", and per pair "excess below 5.1 problems", not "no difference at all". Votes cannot be
+simulated from 0/1 data: pairs with a vote keep the uncorrected null, which is about 1.5 problems low. Planted checks
+(`analysis/axis_test.py`, all pass): one axis gives pair z mean 0.09, sd 0.94, 0.2 % beyond 3 and no detection; two identical
+arms give z -10.1. Grader v3 errors (hand reads in the weight-difference section) are shared across arms and count as difficulty.
+
+Run folders `results/axis/math500-01/` and `results/axis/hard328-01/`: `run.json`, `manifest.json`, `vectors.json`,
+`readout.json` (every pair's z in `pair_z_matrix`), `examples.json` (one floor problem and one problem both theta 0.5 cue and
+Think-SFT cue fix, with the stored answers of the Day-1 #3 samples).
 
 ## How to run
 

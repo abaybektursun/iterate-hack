@@ -1,0 +1,924 @@
+{
+ "base_cue": {
+  "n_problems": 500,
+  "samples": 2000,
+  "right_v3_samples": 1642,
+  "right_v3_per_sample": [
+   405,
+   409,
+   410,
+   418
+  ],
+  "kinds": {
+   "right": 1642,
+   "finished_wrong": 250,
+   "cap_hit": 89,
+   "no_answer": 19
+  },
+  "upper_bound_wrong_samples": {
+   "finished_wrong": {
+    "samples": 250,
+    "last_line": 6,
+    "last5": 23,
+    "anywhere": 46
+   },
+   "no_answer": {
+    "samples": 19,
+    "last_line": 6,
+    "last5": 8,
+    "anywhere": 8
+   },
+   "cap_hit": {
+    "samples": 89,
+    "last_line": 2,
+    "last5": 7,
+    "anywhere": 10
+   }
+  },
+  "rules": {
+   "R1": {
+    "right_samples": 1642,
+    "right_per_sample": [
+     405,
+     409,
+     410,
+     418
+    ],
+    "fired_samples": 2,
+    "wrong_to_right": 0,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "R2": {
+    "right_samples": 1653,
+    "right_per_sample": [
+     409,
+     410,
+     414,
+     420
+    ],
+    "fired_samples": 53,
+    "wrong_to_right": 11,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 6,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.550000000000006,
+     "ci95": [
+      0.24999999999999467,
+      0.9499999999999953
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.7999999999999896,
+     "ci95": [
+      0.20000000000000018,
+      1.6000000000000014
+     ]
+    }
+   },
+   "R3": {
+    "right_samples": 1648,
+    "right_per_sample": [
+     407,
+     409,
+     412,
+     420
+    ],
+    "fired_samples": 10,
+    "wrong_to_right": 6,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.30000000000000027,
+     "ci95": [
+      0.10000000000000009,
+      0.550000000000006
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.39999999999998925,
+     "ci95": [
+      0.0,
+      1.0000000000000009
+     ]
+    }
+   },
+   "R4": {
+    "right_samples": 1642,
+    "right_per_sample": [
+     405,
+     409,
+     410,
+     418
+    ],
+    "fired_samples": 0,
+    "wrong_to_right": 0,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "R5": {
+    "right_samples": 1644,
+    "right_per_sample": [
+     405,
+     411,
+     410,
+     418
+    ],
+    "fired_samples": 2,
+    "wrong_to_right": 2,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.10000000000000009,
+     "ci95": [
+      0.0,
+      0.2500000000000058
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "v4": {
+    "right_samples": 1658,
+    "right_per_sample": [
+     409,
+     413,
+     415,
+     421
+    ],
+    "fired_samples": 62,
+    "wrong_to_right": 16,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 6,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.8000000000000007,
+     "ci95": [
+      0.40000000000000036,
+      1.2499999999999956
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.7999999999999896,
+     "ci95": [
+      0.20000000000000018,
+      1.6000000000000014
+     ]
+    }
+   },
+   "R2_finished": {
+    "right_samples": 1648,
+    "right_per_sample": [
+     408,
+     409,
+     412,
+     419
+    ],
+    "fired_samples": 9,
+    "wrong_to_right": 6,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 1,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.30000000000000027,
+     "ci95": [
+      0.10000000000000009,
+      0.550000000000006
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.5999999999999894,
+     "ci95": [
+      0.0,
+      1.4000000000000012
+     ]
+    }
+   },
+   "v4a": {
+    "right_samples": 1652,
+    "right_per_sample": [
+     407,
+     412,
+     413,
+     420
+    ],
+    "fired_samples": 18,
+    "wrong_to_right": 10,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.5000000000000004,
+     "ci95": [
+      0.20000000000000018,
+      0.8000000000000007
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.39999999999998925,
+     "ci95": [
+      0.0,
+      1.0000000000000009
+     ]
+    }
+   }
+  },
+  "vote": {
+   "v3": 446,
+   "v4": {
+    "right": 447,
+    "minus_v3": {
+     "diff_points": 0.20000000000000018,
+     "ci95": [
+      -0.40000000000000036,
+      1.0000000000000009
+     ]
+    },
+    "fixed_problems": [
+     170,
+     189
+    ],
+    "broken_problems": [
+     481
+    ]
+   },
+   "v4a": {
+    "right": 446,
+    "minus_v3": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "fixed_problems": [],
+    "broken_problems": []
+   }
+  },
+  "template_echo_in_v3_answer": {
+   "samples": 12,
+   "right_v3": 3,
+   "items": [
+    [
+     30,
+     1,
+     1,
+     "$Answer$ is $52_8$."
+    ],
+    [
+     39,
+     1,
+     0,
+     "the answer to the problem."
+    ],
+    [
+     45,
+     1,
+     0,
+     "$Answer$"
+    ],
+    [
+     48,
+     1,
+     0,
+     "the answer to the problem."
+    ],
+    [
+     79,
+     0,
+     1,
+     "$Answer = 2$"
+    ],
+    [
+     274,
+     2,
+     0,
+     "$Answer = 18 + 7\\pi$"
+    ],
+    [
+     367,
+     0,
+     1,
+     "$Answer (without quotes) 1."
+    ],
+    [
+     385,
+     2,
+     0,
+     "$Answer (48)$"
+    ],
+    [
+     411,
+     3,
+     0,
+     "the answer to the problem."
+    ],
+    [
+     473,
+     3,
+     0,
+     "the answer to the problem.\" So the problem is to find n such that all rows, colu"
+    ],
+    [
+     484,
+     3,
+     0,
+     "$Answer (without quotes)"
+    ],
+    [
+     491,
+     2,
+     0,
+     "$Answer (144)$"
+    ]
+   ]
+  },
+  "right_answer_modes_v3": {
+   "marker": 466,
+   "boxed": 1176
+  },
+  "right_answer_endings_top12": [
+   [
+    "",
+    343
+   ],
+   [
+    "Answer:",
+    256
+   ],
+   [
+    "**Answer:",
+    204
+   ],
+   [
+    "**Answer:**",
+    40
+   ],
+   [
+    "**Answer:** $",
+    40
+   ],
+   [
+    "**Answer:** \\(",
+    34
+   ],
+   [
+    "Thus, the final answer is \\(",
+    19
+   ],
+   [
+    "**Answer**:",
+    18
+   ],
+   [
+    "Answer: $",
+    17
+   ],
+   [
+    "The final answer is \\(",
+    14
+   ],
+   [
+    "Thus, the answer is \\(",
+    12
+   ],
+   [
+    "**Answer**: \\(",
+    12
+   ]
+  ],
+  "eligible_part_b": {
+   "samples": 21,
+   "placeholder": 2,
+   "no_answer": 19,
+   "right_under_v4a": 8,
+   "items": [
+    [
+     22,
+     0
+    ],
+    [
+     45,
+     1
+    ],
+    [
+     81,
+     0
+    ],
+    [
+     90,
+     2
+    ],
+    [
+     97,
+     1
+    ],
+    [
+     110,
+     3
+    ],
+    [
+     114,
+     3
+    ],
+    [
+     122,
+     2
+    ],
+    [
+     141,
+     2
+    ],
+    [
+     164,
+     3
+    ],
+    [
+     237,
+     3
+    ],
+    [
+     239,
+     2
+    ],
+    [
+     266,
+     2
+    ],
+    [
+     333,
+     2
+    ],
+    [
+     334,
+     0
+    ],
+    [
+     339,
+     2
+    ],
+    [
+     358,
+     0
+    ],
+    [
+     381,
+     1
+    ],
+    [
+     399,
+     0
+    ],
+    [
+     422,
+     3
+    ],
+    [
+     430,
+     2
+    ]
+   ]
+  }
+ },
+ "rl": {
+  "n_problems": 500,
+  "samples": 2000,
+  "right_v3_samples": 1840,
+  "right_v3_per_sample": [
+   456,
+   462,
+   464,
+   458
+  ],
+  "kinds": {
+   "right": 1840,
+   "finished_wrong": 131,
+   "cap_hit": 29
+  },
+  "upper_bound_wrong_samples": {
+   "finished_wrong": {
+    "samples": 131,
+    "last_line": 0,
+    "last5": 5,
+    "anywhere": 18
+   },
+   "no_answer": {
+    "samples": 0,
+    "last_line": 0,
+    "last5": 0,
+    "anywhere": 0
+   },
+   "cap_hit": {
+    "samples": 29,
+    "last_line": 1,
+    "last5": 2,
+    "anywhere": 5
+   }
+  },
+  "rules": {
+   "R1": {
+    "right_samples": 1840,
+    "right_per_sample": [
+     456,
+     462,
+     464,
+     458
+    ],
+    "fired_samples": 0,
+    "wrong_to_right": 0,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "R2": {
+    "right_samples": 1840,
+    "right_per_sample": [
+     456,
+     462,
+     464,
+     458
+    ],
+    "fired_samples": 2,
+    "wrong_to_right": 0,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "R3": {
+    "right_samples": 1840,
+    "right_per_sample": [
+     456,
+     462,
+     464,
+     458
+    ],
+    "fired_samples": 0,
+    "wrong_to_right": 0,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "R4": {
+    "right_samples": 1840,
+    "right_per_sample": [
+     456,
+     462,
+     464,
+     458
+    ],
+    "fired_samples": 0,
+    "wrong_to_right": 0,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "R5": {
+    "right_samples": 1840,
+    "right_per_sample": [
+     456,
+     462,
+     464,
+     458
+    ],
+    "fired_samples": 0,
+    "wrong_to_right": 0,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "v4": {
+    "right_samples": 1840,
+    "right_per_sample": [
+     456,
+     462,
+     464,
+     458
+    ],
+    "fired_samples": 2,
+    "wrong_to_right": 0,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "R2_finished": {
+    "right_samples": 1840,
+    "right_per_sample": [
+     456,
+     462,
+     464,
+     458
+    ],
+    "fired_samples": 0,
+    "wrong_to_right": 0,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   },
+   "v4a": {
+    "right_samples": 1840,
+    "right_per_sample": [
+     456,
+     462,
+     464,
+     458
+    ],
+    "fired_samples": 0,
+    "wrong_to_right": 0,
+    "right_to_wrong": 0,
+    "wrong_to_right_judged_wrong": 0,
+    "minus_v3_mean_of_4": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "minus_v3_sample0": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    }
+   }
+  },
+  "vote": {
+   "v3": 474,
+   "v4": {
+    "right": 474,
+    "minus_v3": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "fixed_problems": [],
+    "broken_problems": []
+   },
+   "v4a": {
+    "right": 474,
+    "minus_v3": {
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "fixed_problems": [],
+    "broken_problems": []
+   }
+  },
+  "template_echo_in_v3_answer": {
+   "samples": 0,
+   "right_v3": 0,
+   "items": []
+  },
+  "right_answer_modes_v3": {
+   "boxed": 1838,
+   "marker": 2
+  },
+  "right_answer_endings_top12": [
+   [
+    "",
+    771
+   ],
+   [
+    "Thus, the final answer is \\(",
+    46
+   ],
+   [
+    "The final answer is \\(",
+    17
+   ],
+   [
+    "\\[",
+    13
+   ],
+   [
+    "Therefore, the final answer is \\(",
+    10
+   ],
+   [
+    "Thus, the value of \\(x\\) is \\(",
+    8
+   ],
+   [
+    "Thus, the answer is \\(",
+    7
+   ],
+   [
+    "e smallest possible value of \\(a\\) is \\(",
+    6
+   ],
+   [
+    "Therefore, the value of \\(x\\) is \\(",
+    6
+   ],
+   [
+    "Thus, the value of \\( k \\) is \\(",
+    5
+   ],
+   [
+    "Therefore, the answer is \\(",
+    5
+   ],
+   [
+    "Thus, the value of \\( b \\) is \\(",
+    5
+   ]
+  ],
+  "eligible_part_b": {
+   "samples": 0,
+   "placeholder": 0,
+   "no_answer": 0,
+   "right_under_v4a": 0,
+   "items": []
+  }
+ },
+ "rl_minus_base": {
+  "v3": {
+   "mean_of_4": {
+    "diff_points": 9.90000000000001,
+    "ci95": [
+     8.250000000000002,
+     11.6
+    ]
+   },
+   "sample0": {
+    "diff_points": 10.199999999999998,
+    "ci95": [
+     7.200000000000006,
+     13.200000000000001
+    ]
+   }
+  },
+  "v4": {
+   "mean_of_4": {
+    "diff_points": 9.100000000000009,
+    "ci95": [
+     7.499999999999996,
+     10.750000000000004
+    ]
+   },
+   "sample0": {
+    "diff_points": 9.40000000000001,
+    "ci95": [
+     6.400000000000006,
+     12.4
+    ]
+   },
+   "gap_change_mean_of_4": {
+    "diff_points": -0.8000000000000007,
+    "ci95": [
+     -1.2499999999999998,
+     -0.40000000000000036
+    ]
+   }
+  },
+  "v4a": {
+   "mean_of_4": {
+    "diff_points": 9.40000000000001,
+    "ci95": [
+     7.750000000000002,
+     11.099999999999998
+    ]
+   },
+   "sample0": {
+    "diff_points": 9.800000000000008,
+    "ci95": [
+     6.800000000000006,
+     12.8
+    ]
+   },
+   "gap_change_mean_of_4": {
+    "diff_points": -0.5000000000000004,
+    "ci95": [
+     -0.8000000000000007,
+     -0.20000000000000018
+    ]
+   }
+  }
+ }
+}
