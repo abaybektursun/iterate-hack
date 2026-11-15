@@ -1,6 +1,7 @@
 """One sentence says what a single neuron does: from the sentence alone, a blind reader finds its firings 91 % of the time.
 
-The page of one finding, served at /finding/neurons-you-can-describe (view.py serves every tools/finding_<slug>.py).
+The page of one finding, served at /finding/neurons-you-can-describe (view.py serves every tools/finding_<slug>.py)
+and reached from its tile on /findings, which ICON draws.
 The picture is the blind description test itself, on three of its 45 neurons: the reader sees the sentence written
 for a neuron and 8 real snippets, picks the 4 where they expect the neuron to fire at the marked token, and reveals
 the answer and their score next to the scores of the test. The dots around the sheet are the 45 tested neurons in
@@ -11,7 +12,7 @@ tools/architecture.py (.claude/skills/site-ui/SKILL.md).
 """
 import json
 
-TITLE = "Neurons you can describe"  # the link text in the site header and the browser tab
+TITLE = "Neurons you can describe"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Can one sentence say what a neuron does?"
 
 # Every number is copied from the two artifacts named here. None is typed from memory. The deployed site ships only
@@ -108,6 +109,22 @@ PANELS = [
       f"The scores and all {_S['units'] + _R['units']} sentences are in {DATA['artifact']}.",
       f"The snippets on this page are in {DATA['examples']}: 8 of each neuron's {_T['snippets']}, drawn with seed {DATA['seed']}."]],
 ]
+
+# The icon of this finding's tile on /findings (tools/findings.py says how it is called): the page's own picture,
+# reduced. A glass slab seen from slightly above with five snippets as lines of words, one of them bright: the
+# snippet where the neuron fires.
+ICON = r"""(kit, t, tilt) => {
+  const a = 44, b = 38, th = 5, pick = 2;
+  const rows = [[[-.8, -.36], [-.24, .1], [.22, .62]], [[-.8, -.12], [0, .42]], [[-.8, -.46], [-.34, .24], [.36, .7]],
+    [[-.8, -.2], [-.08, .3], [.42, .8]], [[-.8, -.5], [-.38, .06]]];  // each row: its words, from and to, in half widths
+  let out = kit.slab(a, b, th);
+  rows.forEach((words, i) => {
+    const v = b * .68 * (2 * i / (rows.length - 1) - 1), lit = i === pick;
+    for (const [from, to] of words)
+      out += kit.line(kit.at(a * from, v, th / 2), kit.at(a * to, v, th / 2), lit ? 1.4 + .16 * Math.sin(t * .6) : .9, lit ? "lit" : "plain", lit ? 1 : .7);
+  });
+  return out;
+}"""
 
 PAGE = r"""<!doctype html>
 <html lang="en">
@@ -279,8 +296,9 @@ a { color: inherit; }
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
-    <a href="/architecture">How it works</a>
-    <a href="" aria-current="page">__TITLE__</a>
+    <a href="/architecture">Design</a>
+    <a href="/proof">Proof</a>
+    <a href="/findings" aria-current="page">Findings</a>
   </header>
   <div class="stage" id="stage">
     <div class="object" id="object" role="group" aria-label="The blind test on one neuron">

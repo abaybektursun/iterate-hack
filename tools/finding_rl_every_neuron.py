@@ -1,11 +1,12 @@
 """RL training changed almost every neuron a little: the best 1 % of neurons carry only 16 % of the change.
 
-The page of one finding, served at /finding/rl-every-neuron: view.py serves every tools/finding_<slug>.py and links
-it in the header of the site. The picture is a trend on one lit plate: the share of the difference between the base
-model and its RL version that closes when a share of RL's neurons is copied into the base, for the best, the most
-changed and random neurons. The reader drags one slider along the share of neurons and the curves are drawn up to
-it. The rules are in .claude/skills/finding-page/SKILL.md; the looks are those of tools/architecture.py
-(.claude/skills/site-ui/SKILL.md). The numbers are those of studies/cleanneurons/README.md, Parts T2 and T3.
+The page of one finding, served at /finding/rl-every-neuron: view.py serves every tools/finding_<slug>.py and gives
+it a tile on /findings (its ICON, TITLE and LINE). The picture is a trend on one lit plate: the share of the
+difference between the base model and its RL version that closes when a share of RL's neurons is copied into the
+base, for the best, the most changed and random neurons. The reader drags one slider along the share of neurons and
+the curves are drawn up to it. The rules are in .claude/skills/finding-page/SKILL.md; the looks are those of
+tools/architecture.py (.claude/skills/site-ui/SKILL.md). The numbers are those of studies/cleanneurons/README.md,
+Parts T2 and T3.
 """
 import json
 
@@ -61,7 +62,7 @@ STOPS.append({"share": 100, "neurons": DATA["all"]["neurons"], **{k: round(mean(
 ONE = DATA["points"][2]  # the best, most changed and random 1 %
 VEC = DATA["vector"]
 
-TITLE = "RL changed most neurons"  # the link text in the site header and the browser tab
+TITLE = "RL changed most neurons"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Which neurons did RL training change?"
 LINE = f"Almost all, a little each: the best 1 % carry only {pct(mean(ONE['best']))} of the change."
 
@@ -95,6 +96,21 @@ PANELS = [
       "The fixed-vector run added --bias at commit " + VEC["commit"][:7] + "; its numbers are in " + VEC["artifact"] + ". The models are "
       + DATA["models"]["base"] + " (base) and " + DATA["models"]["rl"] + " (RL)."]],
 ]
+
+# The icon of this finding's tile on /findings (tools/findings.py says how it is called): the page's own picture,
+# reduced. A glass slab seen from slightly above, covered by one small mark per neuron: all of them faint, each
+# changing a little, and a few bright ones for the best 1 %.
+ICON = r"""(kit, t, tilt) => {
+  const a = 44, b = 38, th = 5, cols = 9, rows = 6, half = 2.3, bright = [12, 31, 43];
+  let out = kit.slab(a, b, th), lit = "";
+  for (let i = 0; i < cols * rows; i++) {
+    const u = a * .78 * (2 * (i % cols) / (cols - 1) - 1), v = b * .74 * (2 * Math.floor(i / cols) / (rows - 1) - 1);
+    const p = kit.at(u - half, v, th / 2), q = kit.at(u + half, v, th / 2);
+    if (bright.includes(i)) lit += kit.line(p, q, 1.2 + .14 * Math.sin(t * .6 + i * 1.7), "lit");
+    else out += kit.line(p, q, .8, "plain", .62 + .22 * Math.sin(t * .5 + i * 2.1));
+  }
+  return out + lit;
+}"""
 
 PAGE = r"""<!doctype html>
 <html lang="en">
@@ -228,8 +244,9 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; pointer-e
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
-    <a href="/architecture">How it works</a>
-    <a href="" aria-current="page">__TITLE__</a>
+    <a href="/architecture">Design</a>
+    <a href="/proof">Proof</a>
+    <a href="/findings" aria-current="page">Findings</a>
   </header>
   <div class="stage"><svg id="svg" role="group" aria-label="Share of the RL change carried by a share of the neurons"></svg></div>
   <div class="side">
