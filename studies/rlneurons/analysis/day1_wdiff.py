@@ -39,7 +39,7 @@ def merged(other, a, prompt, seed, rounding):
 
 # arm -> (job id, commit, command without --commit, a on the RL line or None, hours); submitted as
 # uv run tools/gpu.py submit h100 --hours <hours> -- "<command> --commit <commit>"
-A, B = "6cc0fd79cdda7ff1347b71ac546cf148ba362d64", "f16189ab350d89a1e1debb9799817a9d47292a14"
+A, B, C = "6cc0fd79cdda7ff1347b71ac546cf148ba362d64", "f16189ab350d89a1e1debb9799817a9d47292a14", "cf1d944535483446c2047b4097d4af0f2b9f22d2"
 CELLS = {
     "theta0.5_cue": ("abaybektursun-1114-152855-683b", A, merged("rl", 0.5, "cue", 61000000, "stochastic"), 0.5, 2.5),
     "random_cue": ("abaybektursun-1114-153047-6429", B, merged("rl", "random", "cue", 69000000, "nearest"), None, 2.5),
@@ -48,6 +48,8 @@ CELLS = {
     "theta0.25_cue": ("abaybektursun-1114-153102-b029", B, merged("rl", 0.25, "cue", 60000000, "stochastic"), 0.25, 2.5),
     "theta0.75_cue": ("abaybektursun-1114-153106-af79", B, merged("rl", 0.75, "cue", 62000000, "stochastic"), 0.75, 2.5),
     "rl_cue": ("abaybektursun-1114-153110-e985", B, f"{SETUP}{PY}run_cell --model rl --prompt cue {CELL} --seed 66000000", 1.0, 2.5),
+    "theta0.5_plain": ("abaybektursun-1114-160454-c6cf", C, merged("rl", 0.5, "plain", 65000000, "stochastic"), 0.5, 2.5),
+    "theta0.25_plain": ("abaybektursun-1114-160500-fa08", C, merged("rl", 0.25, "plain", 64000000, "stochastic"), 0.25, 2.5),
 }
 CHECK = ("abaybektursun-1114-152849-c7c6", A, merged("rl", 1, "plain", 45000000, "nearest") + " --n 50", 0.5)
 STATS = "abaybektursun-1114-152416-de10"                 # merge_weights --other rl / --other code, statistics only
@@ -57,7 +59,14 @@ OLD = {"T1_base_cue": ("r4/base_rl-02/out/T1.jsonl", 410, 27, 41000000, 0.0),
        "T3_base_plain": ("r4/modal_t3-01/t3/T3.jsonl", 224, 8, 47000000, 0.0)}
 CUE_ROW = ["T1_base_cue", "theta0.25_cue", "theta0.5_cue", "theta0.75_cue", "rl_cue", "theta1.25_cue", "theta1.5_cue"]
 # hand read: arm -> [(problem index, gold, what the model wrote)] of the 20 drawn answers that are in fact right
-HAND = {}
+HAND = {
+    "theta0.5_cue": [],
+    "random_cue": [(48, "\\frac{3}{2}", "'So the answer is 3/2.' then 'Answer: $Answer (without quotes)' (broken marker, v3 reads '$Answer')"),
+                   (384, "15x - 80", "'Answer: $Answer 15x - 80 15x - 80' (v3 keeps the placeholder text)"),
+                   (456, "-2,1", "'\\boxed{-2} \\text{ and } \\boxed{1}' (v3 reads only the last box)")],
+    "code_plain": [(75, "\\frac{11}{36}", "'Thus, the probability that the product is a multiple of 5 is 11/36.' (prose, no marker)"),
+                   (284, "3 \\pm 2 \\sqrt{2}", "'The final answer is 3 + 2\\sqrt{2},\\ 3 - 2\\sqrt{2}.' (both roots listed)")],
+}
 
 
 def gold():
@@ -172,7 +181,7 @@ def main():
     pairs = [(f"theta{x}_cue", y) for x in ("0.25", "0.5", "0.75", "1.25", "1.5") for y in ("T1_base_cue", "T2_rl_plain")]
     row = [c for c in CUE_ROW if c in sc]
     pairs += [(y, x) for x, y in zip(row, row[1:])]
-    pairs += [("random_cue", "T1_base_cue"), ("code_plain", "T2_rl_plain"), ("code_plain", "T1_base_cue"), ("code_cue", "T1_base_cue"),
+    pairs += [("random_cue", "T1_base_cue"), ("code_plain", "T2_rl_plain"), ("code_plain", "T1_base_cue"), ("code_plain", "T3_base_plain"), ("code_cue", "T1_base_cue"),
               ("rl_cue", "T2_rl_plain"), ("theta0.25_plain", "T3_base_plain"), ("theta0.5_plain", "T3_base_plain"), ("code0.5_cue", "T1_base_cue")]
     diffs = {f"{x} minus {y}": diff(sc, x, y, idx) for x, y in dict.fromkeys(pairs) if x in sc and y in sc}
 
