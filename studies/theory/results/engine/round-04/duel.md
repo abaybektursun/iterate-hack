@@ -1,5 +1,6 @@
 # Round 04, rival stages (version 5)
 
+Final, after the second turn (last section): r4-m10 and r4-m08 lose to their rivals, r4-m01 is not separated (+1.11). First turn, below:
 r4-m01 beats its rival by +4.43 nats, almost all from one test (within a problem, the capped sample's opening compresses better in 37 of 46).
 r4-m10 (-1.30) and r4-m08 (-1.57) "lose", but none of their tests reaches 1 nat, and on all 9 tests the defender's centre lies inside the rival's
 interval. Spec ea73cfc, code 1f1ea4e, 9 jobs, 05:44:53Z to 05:51:53Z (`round04duel.log`); numbers from `metrics_v5.json` and `rivals/`.
@@ -58,3 +59,31 @@ too (0.77; base 0.84), so that signature needs no recall. p2 has the theory's si
    board numbers (168 of 500; the cue's 65 to 119) and wrote the rival's opening switch into its reading, so its centres fell in the rival's intervals.
 3. The rival's tests confirm its own mechanism: no r4-m10 test reads mean_logprob or T 1.0 cap hits, the two measurements the review named.
 4. `theory_should_say` numbers are asserted, not computed (0.34 is 0.386 under the rival's recipe). r4-m08 p1 changes T, samples and grader at once.
+
+## Second turn (version 5.1, code 74ceb42)
+
+Not in `SPEC_round04_duel.md`: added after D2 was refuted, with no hypothesis stated before the run. Each rival saw the defender's turn-1 numbers and
+wrote replacement tests; a fresh defender and new scripts followed (`rivals/<theory>.turn2*`, 9 jobs, 05:58:39Z to 06:19:13Z, `round04duel2.log`).
+`metrics_v5.json` now scores both turns: a total of 2 nats or more in size decides; `same` = defender's centre inside the rival's interval.
+
+| Theory | Turn-2 tests: measured; theory [90 %]; rival [90 %]; gain | Total, both turns | Computed, separating | State |
+|---|---|---|---|---|
+| r4-m10 | p4 step-100 share above cued-base median 0.554; 0.63 [0.49, 0.78]; 0.53; -0.50. p5 step 400 0.480; 0.76 [0.62, 0.89]; 0.58 [0.45, 0.71]; -3.00. p6 position of step 400 0.067; 0.75 [0.42, 1.08]; 0.25 [-0.15, 0.65]; -3.00 | -7.81 | 6 of 6, 2 | loses to rival |
+| r4-m01 | p4 RL-prefix finish advantage where RL's opening is as compressible 0.375 (24 problems); 0.12 [-0.07, 0.31]; 0.25; -1.85. p5 rank correlation of opening compressibility with loop onset -0.074 (62 loops); 0.2; 0.06; -1.47 | +1.11 | 5 of 5, 0 | not separated from rival |
+| r4-m08 | p4 base/RL length variability, short problems 0.518 (214); 0.05 [-0.35, 0.45]; 0.2; -0.87. p5 short minus long -0.020 (214, 95); -0.15; 0.1; -0.21 | -2.65 | 5 of 5, 0 | loses to rival |
+
+Check of r4-m10's tests 4-6 (`replication/replication_turn2.json`, recomputed from the recipes before opening the scripts): 0.554 [0.489, 0.617],
+0.480 [0.413, 0.547], 0.067 [-0.143, 0.234], equal to the round's. Medians of mean_logprob over finished answers, n = 500 problems: cued base
+-0.161 (381 finished), step 100 -0.155 (397), step 400 -0.163 (402), step 2,800 -0.192 (481); plain base -0.175 (428). Same order on the 307 problems
+all five finished. mean_logprob is the mean raw log-probability (before temperature and top-p, vLLM raw_logprobs) of the tokens sampled at T 0.6 /
+top-p 0.95 (`studies/rlneurons/jobs/rln3_gen.py` line 135). Reading: steps 100 and 400 are as sharp per sampled token as the cued base, and sharper
+than the plain base by about what the cue gives; so r4-m10's claim that early RL is sharper than the cued base fails. But step 2,800 is less sharp
+than the cued base (test 6's denominator is negative): there is no per-token sharpening between step 400 and step 2,800 on this measure; both the
+theory and the rival assumed step 2,800 was sharper. Caveat: a whole-answer mean mixes text kinds (finished medians 648, 981, 1,432, 1,653 and 2,839
+tokens for plain base, cued base, steps 100, 400, 2,800); equal medians may mean the same kind of text, not equal entropy at matched positions.
+
+What the second turn showed: the rival attacked the theory as defended on 2 of 7 tests (`same` false: r4-m10 p5, p6, both -3.00); on the other 5 the
+defender again sat inside the rival's interval. r4-m01 went from +4.43 to +1.11: both new tests went against it. Mechanism pairs now: r4-m10, the
+rival (step 100 installs the cue's opening; cap hits 103 and 98 against the cued base's 119) fits every computed number and the entropy step does not;
+r4-m01, self-similarity marks the sample that will loop (37 of 46) but does not explain RL's prefix advantage (0.375) or onset timing (-0.074);
+r4-m08, every test sits at or past the rival, including base answers varying more in length than RL's on short problems (0.518).
