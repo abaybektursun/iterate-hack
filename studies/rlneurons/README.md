@@ -5045,3 +5045,168 @@ closing fence, with no opening fence, which `code_lib.BLOCK` does not accept (Ma
 no such answer: their 34, 33 and 8 are cap hits or answers with no program. Among answers that have a fenced block the pass
 rates are Think-SFT 301 of 432 (69.7 %), base 317 of 504 (62.9 %), RL-Code 401 of 530 (75.7 %); these are different problem
 subsets, so they are not a comparison. A regrade that also accepts the unopened block, applied to every cell, is the next step.
+
+## Vote headlines averaged over the tie-break (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-1621ff, idea-49a7af)
+
+Question: the plain vote over 4 (`analysis/day1_vote.py` `vote`) gives a tie to the answer group seen first in sample
+order, and every posted vote uses the one stored order. result-3e4a54 (branch `tieshort`) found that order lucky for RL and
+the cued base on hard328. Do the headline contrasts under the vote hold when each vote is the expectation over the
+tie-break? Answer: yes, all of them. No model contrast moves by more than its posted interval's half-width and none changes
+side: on hard328 Think-SFT minus RL is +7.0 points [+3.9, +10.2] (posted +6.1 [3.0, 9.5]) and RL minus base +9.6
+[+6.3, +13.0] (posted 8.8 [5.2, 12.8]). What changes is the level of the votes (RL 221 to 215.9, base 192 to 184.6,
+Think-SFT 241 to 238.9) and, through the lower zero of the scale, the gap shares of the untrained base: its best rule closes
+46 % [24, 73] of the base-to-RL gap under the vote, not 24 % [0, 50]. Spec, written and pushed before any contrast:
+`specs/SPEC_ordervote.md` (commit `39f458c`). Branch `ordervote` (main is frozen); no score line: the chart keeps the posted
+stored-order values.
+
+Method. A problem's score is its probability of being right when the vote picks uniformly at random among the largest
+groups: `analysis/selector.py` `tie_random`, already on main, reused unchanged (nothing cherry-picked from `tieshort`, no
+copy). Beside it: the mean, minimum and maximum over the 24 orders of the 4 samples under `day1_vote.vote`. The two are
+identical in principle (tied groups have the same size, so each is equally likely to hold the earliest sample of a random
+order) provided the grouping does not depend on the order and a group's members share one score; on these rows they are
+identical on every problem of every cell (largest per-problem difference 0). Mixed votes: the expectation on every
+combination (a mix of 8 has 40,320 orders). T 1.0 / top-p 1.0, grader v3, attempt 0 of 4 samples (after restart: the last
+attempt). Contrasts: paired bootstrap over problems on the expected scores, 5,000 resamples, the resamples of the posted
+intervals.
+
+| Set | Vote over 4 | posted (stored order) | order mean = expected | min to max over the 24 orders | ties | ties right: stored, expected, min to max |
+|---|---|---|---|---|---|---|
+| hard328 | Think-SFT + cue | 241 | 238.9 | 237 to 241 | 16 | 5, 2.9, 1 to 5 |
+| hard328 | RL plain | 221 | 215.9 | 211 to 222 | 64 | 12, 6.9, 2 to 13 |
+| hard328 | base + cue | 192 | 184.6 | 180 to 192 | 85 | 17, 9.6, 5 to 17 |
+| hard328 | RL plain, after restart | 224 | 218.2 | 215 to 224 | 54 | 11, 5.2, 2 to 11 |
+| hard328 | base + cue, after restart | 195 | 190.8 | 185 to 195 | 90 | 14, 9.8, 4 to 14 |
+| hard328 | base + 1.5 x top-8 RL directions + cue | 214 | 216.2 | 214 to 218 | 55 | 3, 5.2, 3 to 7 |
+| hard328 | Think-SFT + cue, cap 32,768 | 244 | 245.2 | 244 to 248 | 34 | 4, 5.2, 4 to 8 |
+| hard328 | Think-SFT + cue, same answers cut at 16,384 | 238 | 239.8 | 237 to 243 | 22 | 4, 5.8, 3 to 9 |
+| hard328 | mixed, 2 RL + 2 Think-SFT | 228.1 | 227.4 | | 66.4 per combination | |
+| hard328 | mixed, 2 RL + 2 base | 207.6 | 206.6 | | 82.6 | |
+| hard328 | mixed, 2 Think-SFT + 2 base | 220.8 | 220.6 | | 53.3 | |
+| hard328 | mixed, 4 RL + 4 Think-SFT | 239.0 | 237.8 | | 35 | |
+| hard328 | mixed, 4 Think-SFT + 4 base | 238.0 | 235.4 | | 53 | |
+| fresh2026 | Think-SFT + cue | 75 | 75.5 | 74 to 77 | 6 | 1, 1.5, 0 to 3 |
+| fresh2026 | RL plain | 57 | 55.8 | 55 to 57 | 42 | 4, 2.8, 2 to 4 |
+| fresh2026 | base + cue | 38 | 38.8 | 35 to 43 | 46 | 3, 3.8, 0 to 8 |
+| fresh2026 | Think-SFT + cue, cap 32,768 | 75 | 75.8 | 73 to 78 | 36 | 2, 2.8, 0 to 5 |
+| fresh2026 | Think-SFT + cue, same answers cut at 16,384 | 73 | 72.2 | 70 to 74 | 16 | 3, 2.2, 0 to 4 |
+| MATH-500 | Think-SFT + cue | 481 | 480.8 | 480 to 482 | 6 | 2, 1.8, 1 to 3 |
+| MATH-500 | RL plain | 474 | 474.3 | 474 to 475 | 16 | 3, 3.3, 3 to 4 |
+| MATH-500 | base + cue | 446 | 448.2 | 446 to 450 | 36 | 5, 7.2, 5 to 9 |
+| MATH-500 | RL plain, after restart | 475 | 476.1 | 475 to 477 | 14 | 2, 3.1, 2 to 4 |
+| MATH-500 | base + cue, after restart | 450 | 452.1 | 450 to 456 | 37 | 6, 8.1, 6 to 12 |
+
+On hard328 the stored order is the best of the 24 for the base (plain and after restart) and for RL after restart, one
+problem below the best for RL's plain vote, and the worst for the 1.5x edit (214) and for Think-SFT at 32,768 (244).
+
+Contrasts, points [95 %]; "posted" is reproduced by the script in the stored order before anything is written.
+
+| Set | Contrast under the vote over 4 | posted (stored order) | order-averaged | change (posted half-width) |
+|---|---|---|---|---|
+| hard328 | Think-SFT minus RL (result-818c20) | +6.1 [+3.0, +9.5] | +7.0 [+3.9, +10.2] | +0.9 (3.2) |
+| hard328 | RL minus base (result-5c961a) | +8.8 [+5.2, +12.8] | +9.6 [+6.3, +13.0] | +0.7 (3.8) |
+| hard328 | Think-SFT minus base (not posted) | +14.9 [+10.7, +19.5] | +16.6 [+12.5, +20.8] | +1.6 (4.4) |
+| hard328 | RL minus base, votes after restart | +8.8 [+5.5, +12.5] | +8.4 [+5.2, +11.6] | -0.5 (3.5) |
+| hard328 | 2 RL + 2 Think-SFT minus 4 RL (result-0033d7) | +2.2 [+0.3, +4.2] | +3.5 [+1.9, +5.2] | +1.3 (1.9) |
+| hard328 | 2 RL + 2 Think-SFT minus 4 Think-SFT | -3.9 [-6.2, -1.8] | -3.5 [-5.5, -1.5] | +0.4 (2.2) |
+| hard328 | 1.5x edit minus RL (result-95a4dc) | -2.1 [-5.2, +0.6] | +0.1 [-2.3, +2.4] | +2.2 (2.9) |
+| hard328 | 1.5x edit minus base | +6.7 [+3.4, +10.4] | +9.7 [+6.5, +13.1] | +2.9 (3.5) |
+| hard328 | Think-SFT at 32,768 minus the same answers cut at 16,384 (result-dd26fe) | +1.8 [-0.9, +4.9] | +1.7 [-0.6, +4.1] | -0.2 (2.9) |
+| hard328 | Think-SFT cut at 16,384 minus RL at 16,384: the same cap (audit of result-dd26fe) | +5.2 [+1.8, +8.5] | +7.3 [+4.3, +10.2] | +2.1 (3.4) |
+| hard328 | Think-SFT at 32,768 minus RL at 16,384: unequal caps | +7.0 [+3.7, +10.4] | +8.9 [+5.9, +12.1] | +1.9 (3.4) |
+| fresh2026 | Think-SFT minus RL (result-5251c9) | +13.2 [+7.4, +19.1] | +14.5 [+8.5, +20.6] | +1.3 (5.9) |
+| fresh2026 | Think-SFT minus base | +27.2 [+19.9, +35.3] | +27.0 [+20.0, +34.4] | -0.2 (7.7) |
+| fresh2026 | RL minus base | +14.0 [+8.1, +19.9] | +12.4 [+7.5, +17.9] | -1.5 (5.9) |
+| fresh2026 | Think-SFT at 32,768 minus the same answers cut at 16,384 | +1.5 [-2.9, +5.9] | +2.6 [-1.3, +6.6] | +1.2 (4.4) |
+| fresh2026 | Think-SFT cut at 16,384 minus RL at 16,384: the same cap | +11.8 [+5.1, +18.4] | +12.1 [+5.7, +18.4] | +0.3 (6.6) |
+| fresh2026 | Think-SFT at 32,768 minus RL at 16,384: unequal caps | +13.2 [+6.6, +19.9] | +14.7 [+8.8, +21.0] | +1.5 (6.6) |
+| MATH-500 | Think-SFT minus RL (result-818c20) | +1.4 [-0.4, +3.2] | +1.3 [-0.3, +2.9] | -0.1 (1.8) |
+| MATH-500 | RL minus base (Day-1 #3) | +5.6 [+3.6, +7.8] | +5.2 [+3.4, +7.2] | -0.4 (2.1) |
+| MATH-500 | Think-SFT minus base (not posted) | +7.0 [+4.8, +9.4] | +6.5 [+4.4, +8.8] | -0.5 (2.3) |
+| MATH-500 | RL minus base, votes after restart (not posted) | +5.0 [+3.0, +7.0] | +4.8 [+3.1, +6.6] | -0.2 (2.0) |
+
+Same cap at 32,768: no vote contrast exists. RL and the base have one sample each at 32,768 (`results/cap32/rows-0{1,2}/`),
+not four; the same-cap rows above compare Think-SFT's cap-32,768 answers cut at 16,384 with RL's stored 16,384 vote.
+
+Share of the base-to-RL gap closed under the vote on hard328, every vote row of `results/table/hard328-02/table.json`
+(posted shares reproduced first; denominator 221 - 192 = 29 problems as posted, 215.9 - 184.6 = 31.3 order-averaged; the
+interval is that of the ratio; Think-SFT's row "after restart, ties to the shortest" equals its row without restart and is
+left out here):
+
+| Row | right: posted, order-averaged | share, posted | share, order-averaged | change (posted half-width) |
+|---|---|---|---|---|
+| Think-SFT + cue, vote over 4 | 241, 238.9 | 169 [128, 250] | 173 [137, 238] | +4 (61) |
+| Think-SFT + cue, vote over 4, ties to the shortest | 239, 239 | 162 [122, 242] | 174 [137, 240] | +12 (60) |
+| Think-SFT + cue, sequential vote, at most 3 | 233.2, 233.2 | 142 [107, 208] | 155 [122, 210] | +13 (51) |
+| Think-SFT + cue, sequential vote, at most 4 | 238.9, 238.9 | 162 [122, 239] | 173 [137, 238] | +11 (58) |
+| Think-SFT + cue, sequential vote, at most 4, ties to the shortest | 239.5, 239.5 | 164 [124, 244] | 175 [139, 241] | +11 (60) |
+| base + cue, vote over 4 after restart | 195, 190.8 | 10 [-8, 29] | 20 [6, 36] | +9 (19) |
+| base + cue, vote over 4, ties to the shortest | 191, 190.5 | -3 [-29, 17] | 19 [3, 38] | +22 (23) |
+| base + cue, vote over 4 after restart, ties to the shortest (the best rule on the untrained base) | 199, 199 | 24 [0, 50] | 46 [24, 73] | +22 (25) |
+| base + cue, sequential vote, at most 3 | 178.8, 178.8 | -46 [-98, -21] | -19 [-37, -8] | +27 (38) |
+| base + cue, sequential vote, at most 4, restarts | 190.8, 190.8 | -4 [-33, 14] | 20 [6, 36] | +24 (23): more than the half-width |
+| base + cue, sequential vote, at most 4, restarts, ties to the shortest | 198.5, 198.5 | 22 [-2, 47] | 44 [24, 71] | +22 (24) |
+| RL plain, vote over 4 after restart | 224, 218.2 | 110 [92, 140] | 107 [94, 127] | -3 (24) |
+| RL plain, vote over 4, ties to the shortest | 222, 222 | 103 [82, 132] | 119 [103, 143] | +16 (25) |
+| RL plain, vote over 4 after restart, ties to the shortest | 220, 220 | 97 [74, 126] | 113 [94, 140] | +16 (26) |
+| RL plain, sequential vote, at most 3 | 212.7, 212.7 | 71 [52, 88] | 90 [82, 97] | +18 (18): more than the half-width |
+| RL plain, sequential vote, at most 4, restarts | 218.2, 218.2 | 91 [69, 118] | 107 [94, 127] | +17 (25) |
+| RL plain, sequential vote, at most 4, restarts, ties to the shortest | 220.5, 220.5 | 98 [77, 126] | 115 [98, 140] | +17 (24) |
+| mixed, 2 RL + 2 Think-SFT | 228.1, 227.4 | 124 [103, 167] | 137 [117, 172] | +13 (32) |
+| mixed, 2 RL + 2 base | 207.6, 206.6 | 54 [37, 68] | 70 [61, 81] | +16 (15): more than the half-width |
+| mixed, 2 Think-SFT + 2 base | 220.8, 220.6 | 99 [75, 143] | 115 [91, 155] | +15 (34) |
+| mixed, 4 RL + 4 Think-SFT | 239.0, 237.8 | 162 [131, 230] | 170 [141, 222] | +8 (50) |
+| mixed, 4 Think-SFT + 4 base | 238.0, 235.4 | 159 [120, 237] | 162 [128, 225] | +4 (59) |
+| base + 1.5 x top-8 RL directions + cue, vote over 4 | 214, 216.2 | 76 [45, 110] | 101 [78, 130] | +25 (33) |
+
+What changes and what does not.
+
+- Do not change (inside the posted half-width, same side of 0): every model contrast on the three sets, the cap contrasts
+  of result-dd26fe, the mixed-vote contrasts, and Think-SFT's share (169 to 173 %, interval narrower). No conclusion flips.
+- Change by more than the posted half-width: three shares, all because the zero and the 100 of the scale were stored-order
+  votes while the row itself was already an order mean: base sequential vote with restarts (-4 to 20 %), RL sequential vote
+  at most 3 (71 to 90 %), 2 RL + 2 base (54 to 70 %).
+- Statements that need rewording although they stay inside the half-width: (1) the untrained base's best rule closes 46 %
+  [24, 73] of the gap under the vote, not 24 % [0, 50]; five base rows whose posted interval covered 0 now exclude it. The
+  rule's count (199) did not move; the plain vote it is measured from did. (2) The 1.5x edit's vote is level with RL's
+  (+0.1 points [-2.3, +2.4], share 101 % [78, 130]), not 2.1 points below with a share of 76 %: 214 is the worst of its 24
+  orders and RL's 221 is one below the best of its own. (3) At the same cap Think-SFT's vote leads RL's on hard328 by 7.3 points
+  [+4.3, +10.2], not 5.2. (4) RL's vote with ties to the shortest is above its plain vote (119 % [103, 143]), as
+  result-3e4a54 found.
+
+Predictions (spec). Think-SFT minus RL about +7.0 and RL minus base about +9.5 on hard328, refuted outside 1 point: hold
+(+7.0, +9.6). P1 (no flip): holds. P2 (Think-SFT's share 165 to 180 %, narrower interval): holds, 173 % [137, 238]. P3 (the
+base's best rule 35 to 55 %): holds, 46 %. P4 (nothing moves by more than its half-width): holds for the 21 contrasts,
+refuted for 3 of the 24 shares (the two reference rows, 0 and 100 %, aside). P5 (fresh2026 and MATH-500 move by less than 1.5 points): refuted by one contrast, RL minus
+base on fresh2026, -1.53 points; the others are within 1.5.
+
+Recommendation: report every vote as its expectation under a uniformly random tie-break (`selector.tie_random`, equal to the
+mean over all sample orders), never as the vote in one stored order. In `day1_vote.vote` that is one line, not applied
+here because the posted numbers and the chart depend on the current behaviour (a changed instrument is a new version):
+
+```diff
+-    return {"winner": tied[0][0], "score": rows[tied[0][0]]["score_v3"], "votes": top, "tie": len(tied) > 1, "groups": groups}
++    return {"winner": tied[0][0], "score": sum(rows[g[0]]["score_v3"] for g in tied) / len(tied), "votes": top, "tie": len(tied) > 1, "groups": groups}
+```
+
+Checks. The script stops unless the stored order reproduces every posted vote (241 / 221 / 192; 481 / 474 / 446; 75 / 57 /
+38; after restart 224 / 195 and 475 / 450; 244 / 238 and 75 / 73; the edit 214; the mixes 228.1, 207.6, 220.8, 239.0,
+238.0), the order means of result-3e4a54 (238.9 / 215.9 / 184.6; 75.5 / 55.8 / 38.8; 480.8 / 474.3 / 448.2), the 18 posted
+contrasts with their intervals and the 26 posted shares of `table.json`; all reproduced. Planted
+(`analysis/ordervote_test.py`): a set with no ties gives the same number in the stored order, in every order and in
+expectation; 40 two-way ties with one right group give exactly 20 in the order mean and in expectation while the stored
+order gives 40 or 0; four different answers with one right give 0.25; a contrast between the lucky and the unlucky stored
+order of the same ties is 100 points stored and 0 order-averaged.
+
+Caveats. The chart and the posted results keep the stored-order values. Not restated: the 1.5x edit's vote on fresh2026 (53
+of 136; its rows are not committed), votes over other numbers of samples (M(2) over 3, 246; `votek`), and anything at 32,768
+for RL or the base (one sample each). The rows carry no text, so the examples hold answers, lengths and scores.
+
+Run folders `results/ordervote/{hard328,fresh2026,math500}-01/`: `run.json`, `readout.json` (votes, contrasts, shares,
+per-problem expected and stored scores), `table.md`, `examples.json` (per model one tied problem the stored order gets right
+and another order wrong, and the reverse: hard328 RL `65`, answers 104 (right), 46 and two unparsed expressions, four groups
+of one, right in 6 of 24 orders; base `69`, 116 (right) against 196 with two cap hits, right in 12 of 24).
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.ordervote_test
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.ordervote --nn 01   # 45 seconds
+```

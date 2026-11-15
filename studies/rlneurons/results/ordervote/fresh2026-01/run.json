@@ -1,0 +1,13 @@
+{
+ "commit": "598f6136238dfa3ee426edc9c0fc1f733c814c63",
+ "command": "python -m studies.rlneurons.analysis.ordervote --nn 01",
+ "job_id": null,
+ "where": "laptop, no GPU",
+ "spec": "studies/rlneurons/specs/SPEC_ordervote.md",
+ "inputs": {
+  "think": "fresh/sft1_cue_s4-01",
+  "rl": "fresh/rl_plain_s4-01",
+  "base": "fresh/base_cue_s4-01",
+  "cap32, cap16": "cap32vote/fresh2026_sft1_cue_s4-01"
+ }
+}

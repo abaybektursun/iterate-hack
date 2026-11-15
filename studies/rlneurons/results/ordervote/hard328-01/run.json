@@ -1,0 +1,15 @@
+{
+ "commit": "598f6136238dfa3ee426edc9c0fc1f733c814c63",
+ "command": "python -m studies.rlneurons.analysis.ordervote --nn 01",
+ "job_id": null,
+ "where": "laptop, no GPU",
+ "spec": "studies/rlneurons/specs/SPEC_ordervote.md",
+ "inputs": {
+  "base": "day1_3/hard328_base_cue_s4r2-01",
+  "rl": "day1_3/hard328_rl_plain_s4r2-01",
+  "think": "thinkvote/hard328_sft1_cue_s4-01",
+  "edit": "day1_3/hard328_top8x1.5_cue_s4-01",
+  "cap32, cap16": "cap32vote/hard328_sft1_cue_s4-01",
+  "shares": "table/hard328-02/table.json"
+ }
+}

@@ -1,0 +1,12 @@
+{
+ "commit": "598f6136238dfa3ee426edc9c0fc1f733c814c63",
+ "command": "python -m studies.rlneurons.analysis.ordervote --nn 01",
+ "job_id": null,
+ "where": "laptop, no GPU",
+ "spec": "studies/rlneurons/specs/SPEC_ordervote.md",
+ "inputs": {
+  "base": "day1_3/math500_base_cue-01",
+  "rl": "day1_3/math500_rl-01",
+  "think": "thinkvote/math500_sft1_cue_s4-01"
+ }
+}
