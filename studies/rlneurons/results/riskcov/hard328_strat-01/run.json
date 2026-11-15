@@ -1,0 +1,11 @@
+{
+ "commit": "dad0044e82f121aac8fa8e3255c8d45d59cf3cc9",
+ "command": "python -m studies.rlneurons.analysis.riskcov_strat --out studies/rlneurons/results/riskcov/hard328_strat-01 --think-run /home/abay/Projects/iterate-hack/runs/thinkvote_hard328_sft1_cue_s4 --rl-run /home/abay/Projects/iterate-hack/runs/abaybektursun-1114-200505-5ff2",
+ "job_id": null,
+ "gpu": "none (laptop)",
+ "spec": "studies/rlneurons/specs/SPEC_riskcov.md, addendum 1",
+ "bootstrap": {
+  "resamples": 2000,
+  "seed": 0
+ }
+}
