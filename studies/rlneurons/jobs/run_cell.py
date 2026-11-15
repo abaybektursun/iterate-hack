@@ -27,6 +27,9 @@ data/rln4/frozen4.json.
             further example); the answer is cut there and scored as a finished answer. The examples' own problems are in the set:
             leave them out of any count (analysis does it).
   --n       the first n problems of the set (smoke runs); default all.
+  --shard   k/N: only problems k, k+N, k+2N, ... of the set (after --n), so one cell runs as N jobs at once. A request's seed
+            depends on its problem index, not on its place in the job, so the N jobs have the requests of the one job;
+            analysis/shard_join.py joins their folders into the folder the one job would have written.
   --dry-run a stand-in engine serves canned completions (right, wrong, cap hit in turn): no vLLM, no weights, no GPU.
 
 Writes to --out (default $OUT_DIR): answers.jsonl, one row per finished problem, appended with flush + fsync (the real prompt,
@@ -141,6 +144,8 @@ def main():
     ap.add_argument("--seed", type=int, required=True)
     ap.add_argument("--shots")
     ap.add_argument("--n", type=int, default=None)
+    ap.add_argument("--shard", help="k/N: problems k, k+N, k+2N, ... of the set (after --n). Seeds depend on the problem index only, "
+                                    "so the N jobs give the rows of one job; join them with analysis/shard_join.py")
     ap.add_argument("--samples", type=int, default=1)
     ap.add_argument("--restarts", type=int, default=0)
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
@@ -188,6 +193,11 @@ def main():
     if a.set == "math500":
         n13 = json.loads((D4 / "prompt_ids.json").read_text())
         assert n13["pair"] == "pair1" and pids == n13["ids"][: len(pids)], "G-TEMPLATE: MATH-500 prompt ids differ from n13's"
+    if a.shard:
+        k, n_shards = (int(x) for x in a.shard.split("/"))
+        assert 0 <= k < n_shards, f"--shard {a.shard}: k must be in 0..N-1"
+        probs, pids = probs[k::n_shards], pids[k::n_shards]
+        m["config"]["n_problems"] = len(probs)
     shots = json.loads(pathlib.Path(a.shots).read_text()) if a.shots else None
     shot_ids = [int(i) for i in tok(shots["text"], add_special_tokens=False)["input_ids"]] if shots else []
     assert not shots or (shots["text"].endswith("\n\n") and SHOT_STOP.startswith("\n\n" + S.TEMPLATE[fz["template"]][:20]))

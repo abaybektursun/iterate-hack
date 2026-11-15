@@ -1,0 +1,36 @@
+{
+ "predictions": [
+  {
+   "id": "r5-m10:theory:g4",
+   "value": 398,
+   "low": 378,
+   "high": 416,
+   "why": "In the mechanism, '.\\n\\nOkay' is the most common way into the self-checking register, and self-opened plain answers are as robust at T 1.0 as cued ones (D = 0.00); so prefilling it gives close to the cue's 410, a little lower because the register runs about 1.2x longer without the cue's push and has a few more cap hits at 16,384."
+  }
+ ],
+ "intervention": {
+  "change": "Plain prompt at T 1.0 with restart-on-terse decoding: a finished answer is rejected and resampled when its first 60 characters lack '\\nOkay' AND its full text contains neither 'Wait' nor 'Hmm' (case-sensitive). There are up to 2 restarts, and the last attempt is kept if all are rejected. Cap-hit answers are kept as they are, with no restart. Attempt 0 reuses the stored T3 row for each problem, so only restarts are generated.",
+  "model": "allenai/Olmo-3-1025-7B",
+  "cell": {
+   "set": "MATH-500",
+   "prompt": "plain (the prompt alone, no prefilled tokens)",
+   "sampling": "T 1.0 / top-p 1.0",
+   "cap": 16384,
+   "grader": "v3",
+   "samples": 1,
+   "seeds": "seed base 47,000,000 + problem index + 1,000 x attempt; attempt 0 = the stored S3 T3.jsonl row"
+  },
+  "count": "Right answers over all 500 MATH-500 problems by grader v3, scored on the final kept attempt of each problem. A cap hit keeps whatever v3 gives it, and an empty extraction counts as 0.",
+  "unit": "right of 500",
+  "value": 280,
+  "low": 245,
+  "high": 318,
+  "best_known": {
+   "value": 453,
+   "item": "result-cbe0bc",
+   "setting": "base + cue, T 1.0 / top-p 1.0, vote over 4 samples, ties to the shortest finished sample (rule chosen on this set; held-out 451)"
+  },
+  "gpu_minutes": 28,
+  "why": "The mechanism says T 1.0 robustness comes from self-checking, however it is entered: answers that self-open or later say 'Wait'/'Hmm' score about 0.5-0.8 against about 0.26 for terse ones (rival test gap +0.24). So resampling terse answers until a self-checking one appears should lift the plain T 1.0 cell from 224 to about 280."
+ }
+}

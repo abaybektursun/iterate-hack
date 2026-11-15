@@ -1,0 +1,63 @@
+{
+ "pair": "r5-m08",
+ "theory_state": "refuted refuted: duel state beats rival and its offline quartile predictions hold, but its stated mechanism (Code 3.0's longest",
+ "duel_state": "beats rival",
+ "statements": {
+  "r5-m08": "Because Olmo-3 RL-Zero-Code 3.0 was trained with truncated rollouts masked rather than punished, it learned a runaway long-generation mode (the looping seen on LiveCodeBench) that at T 1.0 on MATH-500 drives its longest problems to the 16,384 cap, so Code 3.0 carries Code 3.1's math gain on short problems but loses it, and falls below the cued base, on the longest quartile.",
+  "r5-m08-rival": "Code 3.0's RL taught it only a commit-and-stop habit (short answers, about 3,069 tokens a problem, ending in a clean final answer) and not the math reasoning Code 3.1 gained. So its long-quartile deficit against the base sits almost entirely on problems the base itself finds hard, where it stops early with a finished wrong answer. On long problems the base finds easy it does as well as the base, which rules out a runaway generation that hits the 16,384 cap whatever the difficulty."
+ },
+ "no_intervention": {
+  "r5-m08": "The mechanism is about a runaway long-generation mode that Olmo-3 RL-Zero-Code 3.0 learned because truncated rollouts were masked during its RL training; it says nothing about how the untrained base generates, so it implies no prompt, sampling, decoding or selection change that should raise the base's right answers in any cell.",
+  "r5-m08-rival": null
+ },
+ "experiments": [
+  {
+   "id": "r5-m08:theory:g5",
+   "kind": "gpu",
+   "experiment": "GPU: regenerate allenai/Olmo-3-7B-RL-Zero-Code (3.0 release, main revision, 3.1 tokenizer and prompt as in the reward5 cells) with the opening cue, T 1.0 / top-p 1.0, cap 16,384 new tokens, one sample, seed base 90,000,000, on the 125 MATH-500 problems of Q4 (top quartile by t2_generated_tokens in t1_t2_items-01/per_problem.json), one H100 via run_cell.py; count cap hits (finish_reason length).",
+   "unit": "cap hits of 125",
+   "gpu_minutes": 40,
+   "pair": "r5-m08",
+   "proposer": "r5-m08",
+   "other": "r5-m08-rival",
+   "proposer_prediction": {
+    "value": 30,
+    "low": 17,
+    "high": 48
+   },
+   "other_prediction": {
+    "value": 8,
+    "low": 3,
+    "high": 15,
+    "why": "In this mechanism Code 3.0 learned only to commit and stop (3,069 tokens a problem against the base's 3,933 with 27 cap hits over 500) and has no runaway mode, so its Q4 failures are finished wrong answers. That leaves a few cap hits, below the base's roughly 20 in Q4 and far below the other theory's roughly 30."
+   }
+  },
+  {
+   "id": "r5-m08:rival:intervention",
+   "kind": "intervention",
+   "unit": "right of 500",
+   "gpu_minutes": 1,
+   "experiment": "Selection over the 4 stored attempt-0 samples, with no new generation. Drop cap hits (finish_reason length), sort the finished samples by n_new from shortest to longest, and keep up to the 3 shortest (short-3@4). Take the majority of their extracted_v3 answers, counting two answers as equal when grader v3 judges them equal. Break ties in favour of the shorter sample. If no sample finished, use sample 0. The usual 4-sample vote keeps all 4 samples, cap hits included. Model allenai/Olmo-3-1025-7B; set MATH-500; prompt 3.1 prompt + opening cue ids [1584, 2268, 33413] (' line!\\n\\nOkay'); sampling T 1.0 / top-p 1.0; cap 16384; grader v3; samples 4; seeds Day-1 #3 base job abaybektursun-1114-153825-208b: seed 41,000,000 + problem_index + 10,000*sample, samples 0-3, attempt 0 only (studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl). Count: Right answers over all 500 MATH-500 problems by grader v3 (score_v3 of the selected sample). Cap hits are never selected. A problem where all 4 samples hit the cap counts with sample 0's score, which is wrong.",
+   "best_known": {
+    "value": 453,
+    "item": "result-cbe0bc",
+    "setting": "base + cue, T 1.0 / top-p 1.0, vote over 4 samples, ties to the shortest finished sample (the rule was chosen on this set; result-e78dfe gives 450 as the honest best)"
+   },
+   "why": "The mechanism says a commit-and-stop policy wins by avoiding drift and answer-statement errors on problems the base finds easy. Within one problem, the base's longest sample is usually the one that drifted, so dropping it before the vote should keep the vote's 446 and add a few points, near the 450-453 tie-break results.",
+   "pair": "r5-m08",
+   "proposer": "r5-m08-rival",
+   "other": "r5-m08",
+   "proposer_prediction": {
+    "value": 450,
+    "low": 443,
+    "high": 457
+   },
+   "other_prediction": {
+    "value": 451,
+    "low": 445,
+    "high": 457,
+    "why": "The mechanism is about Code 3.0's truncation-masked runaway generation and says nothing about selecting among cued-base samples, so this uses the base rates for the same 4 stored samples (vote 446, ties to the shortest sample 453, pass@4 467): short answers from the cued base are rarely wrong and cap hits are dropped, so short-3@4 should land close to the shortest-tie vote."
+   }
+  }
+ ]
+}

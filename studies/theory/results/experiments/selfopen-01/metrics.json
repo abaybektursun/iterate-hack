@@ -1,0 +1,295 @@
+{
+ "experiment": "selfopen-01",
+ "spec": "studies/theory/specs/SPEC_selfopen01.md",
+ "entry": "studies/theory/results/engine/round-05/experiments.md r5-m10:theory:intervention",
+ "jobs": [
+  {
+   "commit": "4ca34e9e013410b148f4e61356135b6873b09fde",
+   "job_id": "abaybektursun-1115-021039-24f7",
+   "started_utc": "2026-11-15T10:10:50Z",
+   "updated_utc": "2026-11-15T10:24:52Z",
+   "wall_s": 842.1906507015228,
+   "shard": "0/4",
+   "n_problems": 102,
+   "openings": {
+    "n": 3264,
+    "seconds": 14.654818534851074,
+    "self_open": 594,
+    "finished_within_open_tokens": 303
+   },
+   "counts": {
+    "n": 203,
+    "cap_hits": 6,
+    "generated_tokens": 529837,
+    "correct_v3": {
+     "main": 87,
+     "control": 38
+    },
+    "n_planned": 203,
+    "generation_s": 786.0673141479492,
+    "tokens_per_s": 674.0351499976973
+   },
+   "engine_load_s": 36.46263599395752,
+   "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition"
+  },
+  {
+   "commit": "4ca34e9e013410b148f4e61356135b6873b09fde",
+   "job_id": "ih-1115-095450-2b5a",
+   "started_utc": "2026-11-15T09:58:49Z",
+   "updated_utc": "2026-11-15T10:35:59Z",
+   "wall_s": 2229.1948676109314,
+   "shard": "1/4",
+   "n_problems": 102,
+   "openings": {
+    "n": 3264,
+    "seconds": 20.04595112800598,
+    "self_open": 609,
+    "finished_within_open_tokens": 345
+   },
+   "counts": {
+    "n": 203,
+    "cap_hits": 4,
+    "generated_tokens": 557208,
+    "correct_v3": {
+     "main": 78,
+     "control": 31
+    },
+    "n_planned": 203,
+    "generation_s": 1962.7290539741516,
+    "tokens_per_s": 283.89450845075135
+   },
+   "engine_load_s": 237.4788281917572,
+   "gpu": "NVIDIA L40S"
+  },
+  {
+   "commit": "4ca34e9e013410b148f4e61356135b6873b09fde",
+   "job_id": "abaybektursun-1115-021039-24f7",
+   "started_utc": "2026-11-15T10:24:56Z",
+   "updated_utc": "2026-11-15T10:39:12Z",
+   "wall_s": 855.5880875587463,
+   "shard": "2/4",
+   "n_problems": 101,
+   "openings": {
+    "n": 3232,
+    "seconds": 14.955781698226929,
+    "self_open": 564,
+    "finished_within_open_tokens": 361
+   },
+   "counts": {
+    "n": 202,
+    "cap_hits": 3,
+    "generated_tokens": 553404,
+    "correct_v3": {
+     "main": 80,
+     "control": 28
+    },
+    "n_planned": 202,
+    "generation_s": 799.2583634853363,
+    "tokens_per_s": 692.396883514317
+   },
+   "engine_load_s": 36.36367750167847,
+   "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition"
+  },
+  {
+   "commit": "4ca34e9e013410b148f4e61356135b6873b09fde",
+   "job_id": "abaybektursun-1115-015601-2e73",
+   "started_utc": "2026-11-15T09:56:28Z",
+   "updated_utc": "2026-11-15T10:10:10Z",
+   "wall_s": 821.9711306095123,
+   "shard": "3/4",
+   "n_problems": 101,
+   "openings": {
+    "n": 3232,
+    "seconds": 14.355721712112427,
+    "self_open": 569,
+    "finished_within_open_tokens": 384
+   },
+   "counts": {
+    "n": 201,
+    "cap_hits": 3,
+    "generated_tokens": 407086,
+    "correct_v3": {
+     "main": 88,
+     "control": 41
+    },
+    "n_planned": 201,
+    "generation_s": 550.5597863197327,
+    "tokens_per_s": 739.4038033929133
+   },
+   "engine_load_s": 245.06079530715942,
+   "gpu": "NVIDIA RTX PRO 6000 Blackwell Max-Q Workstation Edition"
+  }
+ ],
+ "job_config": {
+  "draws": 32,
+  "open_tokens": 24,
+  "max_tokens": 16384,
+  "n": null,
+  "dry_run": false,
+  "commit": "4ca34e9e013410b148f4e61356135b6873b09fde",
+  "model_repo": "allenai/Olmo-3-1025-7B",
+  "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "47,000,000 + index + 10,000 * draw",
+  "self_open_test": "'\\nOkay' in text[:60]",
+  "t3_sha256": "65a519baf11dd31d9544ee59e57adbaf7fad991cb3bb3d0e96a90efc6183e87a"
+ },
+ "main": {
+  "right_of_500": 411,
+  "n": 500,
+  "cap_hits": 20,
+  "no_answer": 25,
+  "mean_generated_tokens": 3794.7
+ },
+ "subsets": {
+  "a_stored_self_opened": {
+   "right": 78,
+   "n": 94,
+   "accuracy": 0.8298,
+   "cap_hits": 7,
+   "mean_tokens": 4602.5
+  },
+  "b_regenerated_self_opened": {
+   "right": 332,
+   "n": 403,
+   "accuracy": 0.8238,
+   "cap_hits": 13,
+   "mean_tokens": 3633.2
+  },
+  "c_never_self_opened_fallback": {
+   "right": 1,
+   "n": 3,
+   "accuracy": 0.3333,
+   "cap_hits": 0,
+   "mean_tokens": 183.7
+  }
+ },
+ "draws": {
+  "n_regenerated": 406,
+  "n_self_opened_within_draws": 403,
+  "never_self_open": 3,
+  "draws_per_problem": 32,
+  "median_draws_needed_self_opened": 4,
+  "mean_draws_needed_self_opened": 5.87,
+  "draws_needed_le_1": 73,
+  "draws_needed_le_4": 220,
+  "self_open_rate_all_draws": 0.1798
+ },
+ "control": {
+  "rule": "first draw that does not self-open (draw 1 if every draw self-opens), continued like the main arm",
+  "regenerated": {
+   "right": 138,
+   "n": 406,
+   "accuracy": 0.3399,
+   "cap_hits": 3,
+   "mean_tokens": 1436.9
+  },
+  "right_of_500_with_stored_self_opened": 216,
+  "on_b_problems": {
+   "main": {
+    "right": 332,
+    "n": 403,
+    "accuracy": 0.8238
+   },
+   "control": {
+    "right": 137,
+    "n": 403,
+    "accuracy": 0.34
+   },
+   "main_minus_control_points": 48.39,
+   "bootstrap_95_points": [
+    42.93,
+    53.6
+   ],
+   "bootstrap": "n13_score.paired_bootstrap, 5,000, seed 0",
+   "same_draw_both_arms": 0
+  },
+  "never_self_opened_same_answer_both_arms": 3,
+  "all_draws_self_opened": 0
+ },
+ "references_stored": {
+  "plain_T3": {
+   "right_of_500": 224,
+   "on_a": {
+    "right": 78,
+    "n": 94,
+    "accuracy": 0.8298
+   },
+   "on_b": {
+    "right": 145,
+    "n": 403,
+    "accuracy": 0.3598
+   },
+   "on_c": {
+    "right": 1,
+    "n": 3,
+    "accuracy": 0.3333
+   },
+   "on_regenerated": {
+    "right": 146,
+    "n": 406,
+    "accuracy": 0.3596
+   },
+   "cap_hits": 8,
+   "mean_tokens": 2106.9
+  },
+  "cue_T1": {
+   "right_of_500": 410,
+   "on_a": {
+    "right": 78,
+    "n": 94,
+    "accuracy": 0.8298
+   },
+   "on_b": {
+    "right": 329,
+    "n": 403,
+    "accuracy": 0.8164
+   },
+   "on_c": {
+    "right": 3,
+    "n": 3,
+    "accuracy": 1.0
+   },
+   "on_regenerated": {
+    "right": 332,
+    "n": 406,
+    "accuracy": 0.8177
+   },
+   "cap_hits": 27,
+   "mean_tokens": 3935.0
+  }
+ },
+ "checks": {
+  "b_final_text_self_opens": 403,
+  "control_final_text_self_opens": 0,
+  "openings_finished_inside_open_tokens_main": 2
+ },
+ "predictions": {
+  "r5-m10": {
+   "value": 375,
+   "interval": [
+    348,
+    400
+   ],
+   "count_inside": false,
+   "abs_error": 36
+  },
+  "r5-m10-rival": {
+   "value": 405,
+   "interval": [
+    386,
+    422
+   ],
+   "count_inside": true,
+   "abs_error": 6
+  }
+ }
+}
