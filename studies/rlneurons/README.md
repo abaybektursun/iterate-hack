@@ -3017,7 +3017,7 @@ single right 212, 212, 211, 201). Readout `results/mixvote/hard328-01/readout.js
 - Caveats: Think-SFT's training prompts match 6 of the 328 (board result-f6a8bc; the lead holds without them); its samples
   have no restart rows; the vote's tie rule prefers the earlier sample, hence both orders.
 
-## Risk-coverage: Think-SFT's lead over RL on the 328 is in long answers (hard328 n = 328, MATH-500 n = 500, laptop, board work-4ecc65, idea-ce2272)
+## Risk-coverage: Think-SFT's lead over RL on the 328 is in long answers to hard problems (hard328 n = 328, MATH-500 n = 500, laptop, board work-4ecc65, work-55ae25, idea-ce2272)
 
 Question: on the 328 Think-SFT + cue has vote 241 against RL 221 (result-818c20), hits the cap on 29 % of samples (RL 9 %),
 and its finished answers are right 88 % of the time (RL 66 %). Is it more precise than RL at the same coverage, and on which
@@ -3028,6 +3028,44 @@ is +8.8 [6.4, 12.5] at 0.75, the largest coverage all three models reach. Finish
 tokens all three are at 88 to 100 %. Of Think-SFT's 53 right samples on the 26 problems where its vote is right and RL's is
 not, 49 are over 8,000 tokens and 35 over 12,000. On MATH-500 there is no lead in precision at any matched coverage (area
 -0.8 [-1.7, +0.1]). Spec, written before the script: `specs/SPEC_riskcov.md` (commit `7a779d0`).
+
+Correction (work-55ae25, after a reviewer's comment on result-b006f5; `specs/SPEC_riskcov.md` addendum 1, commit `fc4bf28`,
+written before `analysis/riskcov_strat.py`; run folder `results/riskcov/hard328_strat-01/`). "Only on the long ones" and
+"equally precise up to coverage 0.50" above confound length with difficulty; the numbers stand, the reading changes. Both
+length and difficulty matter, and neither reading alone survives:
+
+- The reviewer's numbers reproduce. Of the samples kept at coverage 0.50, 81.1 % (Think-SFT) and 80.6 % (RL) come from the
+  149 problems the cued base solves 3 or 4 times of 4, where both are right 98.5 % of the time: the equal precision is this
+  mix. On the 179 problems the base solves at most twice Think-SFT leads at coverage 0.30 by +15.8 points [7.4, 25.6]
+  (78.6 % against 62.8 %).
+- That point is not a short answer: the last sample kept there has 12,715 tokens (Think-SFT) and 11,161 (RL). On hard
+  problems nearly every answer is long. On the 121 problems the base never solves, Think-SFT has 11 finished answers of at
+  most 8,000 tokens and RL 18 (lead +14.1 [-17.2, +73.3]): short answers to the hardest problems cannot be tested here.
+- Difficulty held, length matters. Lead in finished answers over 8,000 tokens against at most 8,000, by the base's right
+  count: 1-2: +29.1 [19.1, 39.4] (113 of 126 against 89 of 147) against +4.4 [-3.8, +14.1] (47 of 48, 58 of 62), long minus
+  short +24.8 [10.5, 38.4]; 3-4: +6.8 [-0.6, +13.4] (96 of 102, 103 of 118) against 0.0 [-1.2, +1.1], and +22.7 [3.4, 37.9]
+  over 12,000 tokens (32 of 35, 22 of 32). No stratum with enough samples has a lead in short answers.
+- Length held, difficulty matters. Lead in answers over 8,000 tokens: +34.5 [24.9, 43.7] where the base is never right
+  (86 of 163 against 69 of 377), +29.1 at 1-2, +6.8 at 3-4; never right minus 3-4: +27.6 [15.8, 39.9].
+- Problem held (problem x model fixed effects, finished answers). An RL answer over 8,000 tokens is right 12.5 points less
+  often than its shorter answers to the same problem [-20.8, -4.8] (57 problems carry it); Think-SFT's +1.2 [-4.0, +7.0] (53);
+  difference +13.7 [3.9, 23.8]. Per 1,000 tokens: RL -4.0 points [-5.4, -2.6], Think-SFT -0.4 [-1.4, +0.6], difference +3.6
+  [1.9, 5.4], and excluding 0 in each base stratum (+4.1 [0.3, 7.9], +5.4 [1.5, 8.9], +2.6 [0.1, 4.9]). On the 155 problems
+  where both models have a finished answer over 8,000 tokens Think-SFT leads by +20.6 [15.6, 25.5]; on the 149 with one of at
+  most 8,000 each, +0.7 [-0.3, +1.8]. The 28 problems with both give long minus short +10.3 [-3.7, +25.0]: same sign, covers 0.
+- Second stratifier, without the base and without the sample's own rows: per sample s, the right samples among the other
+  three of Think-SFT and the other three of RL (0 to 6). Same conclusion on length: at 4-6, lead +18.2 [12.8, 23.7] over 8,000
+  tokens (216 of 227 against 190 of 247) against +0.4 [-1.0, +1.8] below, long minus short +17.9 [12.3, 23.5]. Difficulty is
+  not monotone: +39.4 [25.6, 52.2] at 1-3 (71 of 91, 61 of 158), +6.7 [-0.2, +15.9] at 0 (8 of 73, 10 of 237: both near zero
+  where no other sample of either model is right).
+
+Reading that survives: the lead is in long answers, and its size there grows with difficulty until both models fail; "hard
+problems, not long answers" and "long answers, not hard problems" are both refuted by the criteria of the addendum. Caveats:
+the base's count is 4 samples; Think-SFT's finished long answers are a selected set (it hits the cap on 29 % of samples, RL on
+9 %); long = over 8,000 tokens was fixed by the first spec. Instrument check (`analysis/riskcov_test.py`): with right planted
+from problem and model only, the raw lead is larger in long answers and the within-problem slope difference covers 0; planted
+from model and length only, it excludes 0. `table.md` has every stratum, bin and coverage step; `examples.json` one right
+Think-SFT and one wrong RL answer of at most 8,000 tokens on problems the base never solves.
 
 `analysis/riskcov.py` on the stored rows (T 1.0 / top-p 1.0, cap 16,384, grader v3 as stored, 4 samples per problem; attempt
 0 of each sample for all three models, since the RL and base runs have restarts and Think-SFT has none). A sample is
@@ -3093,7 +3131,9 @@ Where a Think-SFT sample gives no answer, RL's sample is wrong 248 times, right 
 wrong samples, 248 (52 %) face a Think-SFT sample without an answer, 121 a wrong one, 107 a right one.
 
 - H1 (the lead is in the long answers): held. Difference by length inside +-2 points with intervals covering 0 up to
-  coverage 0.50, excluding 0 from 0.55; bins above. Not uniform across length, and not absent.
+  coverage 0.50, excluding 0 from 0.55; bins above. Not uniform across length, and not absent. Corrected above: this test
+  alone does not separate length from difficulty; with difficulty held the lead is still in long answers, and its size
+  depends on difficulty.
 - H2 (RL is wrong where Think-SFT abstains, beyond difficulty): mostly difficulty. On the 141 problems with at least one
   Think-SFT cap hit, RL's finished answers are right 31.2 % of the time (144 of 461; 66.2 % on all problems), and it finishes
   82 % of its samples there. The control: RL's precision per stratum of the base's number of right samples (0 to 4), weighted
