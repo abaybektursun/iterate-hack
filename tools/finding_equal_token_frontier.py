@@ -180,7 +180,7 @@ _save = lambda a, b: round(100 * (1 - a["tokens"] / b["tokens"]))  # per cent of
 
 TITLE = "More samples against RL"  # the name on its tile on /findings and in the browser tab
 PROBLEM = "Can more samples make a base model match its RL-trained version?"
-LINE = f"No rule over base-model samples reaches one RL sample, even at {_best['multiple']:.1f} times the tokens."
+LINE = f"With {_best['multiple']:.1f} times the tokens, the best base rule stays {abs(_best['gap'][0]):.1f} points below one RL sample."
 
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences, no bold lead-ins.
 # Not from our runs: Aggarwal et al., Adaptive-Consistency (arXiv 2305.11860), abstract: up to 7.9 times fewer samples at
