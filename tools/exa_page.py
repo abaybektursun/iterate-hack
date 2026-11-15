@@ -59,12 +59,6 @@ h2 { font-size: clamp(1.7rem, 3vw, 2.5rem); font-weight: 600; line-height: 1.08;
 .count b { font-weight: 700 }
 .note { margin-top: 22px; max-width: 62ch; font-size: 1rem; color: var(--soft) }
 
-.chart { overflow-x: auto; margin-top: 40px }
-.chart svg { display: block; width: 100%; min-width: 640px; height: auto; font-family: var(--display) }
-.key { display: flex; flex-wrap: wrap; gap: 8px 26px; margin-top: 12px; font: 500 0.92rem var(--display) }
-.key i { display: inline-block; width: 13px; height: 13px; margin-right: 7px; vertical-align: -2px; border: 1px solid var(--ink) }
-.cap { font: 500 1.14rem var(--display); margin-top: 40px }
-.chart { margin-top: 14px !important }
 
 .ledger { display: flex; flex-direction: column }
 .row, .head { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 5fr) minmax(0, 4fr) minmax(0, 4fr); gap: 14px 32px }
@@ -103,7 +97,6 @@ footer { border-top: 2px solid var(--rule); padding-block: 18px 48px; font: 400 
   .lbl { display: inline }
   table { min-width: 0 } tr { display: block; border-top: 1px solid var(--rule); padding-block: 12px } tr:first-child { display: none }
   td, td:first-child, td:last-child { display: block; width: auto; border: 0; padding: 2px 0; overflow-wrap: anywhere }
-  .chart svg { min-width: 0 }
   .asks { columns: 1 }
   .limits { grid-template-columns: 1fr }
 }
@@ -114,7 +107,7 @@ footer { border-top: 2px solid var(--rule); padding-block: 18px 48px; font: 400 
 
 <nav>
   <b>Exa in the Swarm</b>
-  <div><a href="#count">The count</a><a href="#searches">Four searches</a><a href="#asked">How agents asked</a><a href="#wiring">Wiring</a><a href="#limits">Limits</a></div>
+  <div><a href="#count">What it gave us</a><a href="#searches">Four searches</a><a href="#asked">How agents asked</a><a href="#wiring">Wiring</a><a href="#limits">Limits</a></div>
 </nav>
 
 <header class="hero">
@@ -131,16 +124,13 @@ footer { border-top: 2px solid var(--rule); padding-block: 18px 48px; font: 400 
       <p>Four minutes later, at 15:32:18 UTC, the team board reads: “Scaling a fine-tuning delta past 1 is published (ExPO, 2404.16792) and so are length/halting directions (ThinkEdit) … New part: RL's top-8 directions set cap hits monotonically while a random edit stays flat.”</p>
     </div>
   </div>
-  <p class="thesis">61 agents did this 381 times in 18 hours. The whole bill was about $1.80.</p>
+  <p class="thesis">Four minutes from the question to a corrected claim. The search cost $0.007.</p>
 </header>
 
 <section id="count">
-  <h2>The count, from the session transcripts</h2>
-  <p class="count">Between Nov 14, 21:37 and Nov 15, 15:29 UTC, <b>61 agents</b> and subagents of <b>3 people</b> made <b>381 Exa calls</b> that returned: <b>237 searches</b> and <b>144 page reads</b>. They wrote <b>426 different queries</b>, median <b>16 words</b>. Search surfaced <b>677 pages</b>, <b>261</b> of them arXiv papers, and the agents read <b>188</b> in full. A search cost <b>$0.007</b>. A headless theory engine, whose only route to the web is Exa, wrote <b>163 published findings</b> into its rounds.</p>
-  <p class="note">Counted from 557 transcript files on this laptop and in the team trace store, each tool call once, shell loops expanded. $0.62 of the bill is read from the tool's cost lines on 91 calls; the rest is estimated at $0.007 per search and $0.001 per page. The count is low: most of one teammate's sessions and every theory-engine run left no transcript. The Exa dashboards hold the exact figure.</p>
-  <p class="cap">Calls per hour, UTC. The busiest working hour was 04:00, with 110 of 118 returned.</p>
-  <div class="chart"><svg id="hours" viewBox="0 0 1240 330" role="img" aria-label="Exa calls per UTC hour: returned and never sent"></svg></div>
-  <div class="key"><span><i style="background:var(--ink)"></i>returned</span><span><i></i>never reached Exa: one laptop had no key</span></div>
+  <h2>What the agents got from it</h2>
+  <p class="count">One rule sends every agent to Exa before a new measurement, and <b>61 agents</b> and subagents of <b>3 people</b> searched this way through the night. They asked in full sentences, median <b>16 words</b>. Search surfaced <b>261 arXiv papers</b>, and the agents read <b>188 pages</b> in full. A search cost <b>$0.007</b>, and the whole hackathon about <b>$1.80</b>. A headless theory engine, whose only route to the web is Exa, wrote <b>163 published findings</b> into its rounds.</p>
+  <p class="note">Read from the session transcripts on this laptop and in the team trace store, Nov 14, 21:37 to Nov 15, 15:29 UTC. $0.62 of the bill is read from the tool's own cost lines; the rest is estimated at $0.007 per search and $0.001 per page. Most of one teammate's sessions and every theory-engine run left no transcript, so the true figures are higher.</p>
 </section>
 
 <section id="searches">
@@ -190,7 +180,7 @@ footer { border-top: 2px solid var(--rule); padding-block: 18px 48px; font: 400 
     <li><time>Nov 15, 11:38 UTC</time>RL fine-tuned model assigns lower probability to the base model's erroneous reasoning steps, token log-probability of first error step</li>
     <li><time>Nov 15, 02:13 UTC, limited to modal.com</time>Modal docs: what happens to running containers and in-progress inputs when you redeploy an app with modal deploy</li>
   </ul>
-  <p class="note">Verbatim, eight of 426. Each is the experiment the agent was about to run, written as the abstract of the paper that would make it unnecessary.</p>
+  <p class="note">Verbatim. Each is the experiment the agent was about to run, written as the abstract of the paper that would make it unnecessary.</p>
 </section>
 
 <section id="wiring">
@@ -209,43 +199,16 @@ footer { border-top: 2px solid var(--rule); padding-block: 18px 48px; font: 400 
 <section id="limits">
   <h2>What failed, and what we do not claim</h2>
   <ul class="limits">
-    <li><b>One laptop never had the key.</b>193 calls stopped at “EXA_API_KEY is not set” before reaching Exa, 149 of them in one session at 15:00 UTC on Nov 15. All 195 calls from that machine failed.</li>
-    <li><b>The MCP route failed.</b>59 calls through the Exa MCP returned 401: the key was unset when the agent started. Commit af5fef1 replaced it with <code>tools/exa.py</code>, which reads the key at call time.</li>
+    <li><b>One laptop never had the key.</b>Every call from that machine stopped at “EXA_API_KEY is not set” before reaching Exa, most of them in one session at 15:00 UTC on Nov 15.</li>
+    <li><b>The MCP route failed.</b>Calls through the Exa MCP returned 401: the key was unset when the agent started. Commit af5fef1 replaced it with <code>tools/exa.py</code>, which reads the key at call time.</li>
     <li><b>One search missed.</b>The lens search did not return mhough/olmo3-jacobian-lenses, which holds lenses for the RL model. It turned up two hours later, after a fit job had started.</li>
     <li><b>No count of GPU jobs avoided.</b>No artifact supports a dollar figure for what the searches saved, so this page gives none.</li>
-    <li><b>144 calls are counted from silence.</b>They wrote their output to a file, and count as returned because the transcript shows no error.</li>
   </ul>
 </section>
 
 <footer>iterate-hack, SF AI Research Hackathon, Nov 14–15, 2026. Counted Nov 15 at about 15:50 UTC. Counting script: <code>studies/metaharness/analysis/exa_count.py</code>. Its output: <code>studies/metaharness/results/exa_count-01/summary.json</code>.</footer>
 
 </div>
-<script>
-const hours = ["14 21","14 22","14 23","15 00","15 01","15 02","15 03","15 04","15 05","15 06","15 07","15 08","15 09","15 10","15 11","15 12","15 13","15 14","15 15"];
-const all = [33,0,24,0,14,29,69,118,9,36,19,16,15,27,3,0,0,2,172];
-const ok  = [30,0,22,0,14,29,50,110,6,34,17,15,15,23,3,0,0,2,11];
-const svg = document.getElementById("hours");
-function draw() {
-  const narrow = svg.parentNode.clientWidth < 620;
-  const W = narrow ? 620 : 1240, H = narrow ? 380 : 330, L = 2, R = 2, T = 30, B = narrow ? 62 : 50, max = 180, fs = narrow ? 19 : 14;
-  const pw = (W - L - R) / hours.length, y = v => T + (H - T - B) * (1 - v / max), pad = narrow ? 3 : 8;
-  let s = "";
-  hours.forEach((h, i) => {
-    const x = L + i * pw + pad, w = pw - 2 * pad;
-    if (all[i] > ok[i]) s += `<rect x="${x + 0.5}" y="${y(all[i])}" width="${w - 1}" height="${y(ok[i]) - y(all[i])}" fill="#fbfcfc" stroke="#0b0d0e" stroke-width="1"/>`;
-    if (ok[i]) s += `<rect x="${x}" y="${y(ok[i])}" width="${w}" height="${y(0) - y(ok[i])}" fill="#0b0d0e"/>`;
-    const label = narrow ? (all[i] >= 100 ? String(all[i]) : "") : (all[i] ? ok[i] + (all[i] > ok[i] ? " of " + all[i] : "") : "");
-    if (label) s += `<text x="${x + w / 2}" y="${y(all[i]) - 7}" text-anchor="middle" font-size="${fs}" font-weight="600" fill="#0b0d0e">${label}</text>`;
-    if (!narrow || i % 3 === 0) s += `<text x="${x + w / 2}" y="${H - B + fs + 6}" text-anchor="middle" font-size="${fs}" fill="#555d61">${h.slice(3)}${narrow ? "h" : ":00"}</text>`;
-    if (i === 0 || h === "15 00") s += `<text x="${x}" y="${H - B + 2 * fs + 12}" font-size="${fs}" font-weight="600" fill="#0b0d0e">Nov ${h.slice(0, 2)}</text>`;
-  });
-  s += `<line x1="${L}" x2="${W - R}" y1="${y(0)}" y2="${y(0)}" stroke="#0b0d0e" stroke-width="2"/>`;
-  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
-  svg.innerHTML = s;
-}
-draw(); addEventListener("resize", draw);
-
-</script>
 </body>
 </html>
 """

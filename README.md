@@ -561,7 +561,8 @@ with a 401 error, which is why the agents call the HTTP API. Early on, one perso
 search tool. No count of GPU jobs avoided by a search exists.
 
 The page `/exa` (`tools/exa_page.py`; not a header tab, and its look is its own: white paper and one cyan marker) shows
-the count up to Nov 15 15:29 UTC and four searches that changed a decision. Its numbers come from
+four searches that changed a decision, and what the agents got from Exa up to Nov 15 15:29 UTC, without the number of
+calls. Its numbers come from
 `studies/metaharness/results/exa_count-01/summary.json`, written by `studies/metaharness/analysis/exa_count.py`: 381 calls
 to Exa returned (237 searches, 144 page reads) from 61 agents in 20 sessions; 193 more stopped at a missing key on one
 laptop; 59 MCP calls returned 401. This count expands shell loops and reads other transcripts than the count above, so
