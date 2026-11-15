@@ -1,0 +1,21 @@
+{
+ "note": "flagged rows (T3 opens deliberatively); right and wrong refer to T3 under grader v3",
+ "right": {
+  "problem_index": 0,
+  "t3_right": 1,
+  "t1_right": 1,
+  "t3_extracted_v3": "(3, π/2)",
+  "t1_extracted_v3": "(3, π/2)",
+  "t3_start": ".\n\nOkay, so I need to convert the point (0, 3) from rectangular coordinates to polar coordinates. The goal is to express it as (r, θ) where r is positive and θ is between 0 and 2π. Let me recall how to do this conversion.\n\nFirst, polar coor",
+  "t1_start": " line!\n\nOkay, so I need to convert the rectangular coordinates (0, 3) to polar coordinates. Let me remember how to do that. Polar coordinates are in the form (r, θ) where r is the distance from the origin and θ is the angle from the positiv"
+ },
+ "wrong": {
+  "problem_index": 6,
+  "t3_right": 0,
+  "t1_right": 1,
+  "t3_extracted_v3": null,
+  "t1_extracted_v3": "27",
+  "t3_start": " and to \"Answer\" it.\n\nOkay, so I need to find the smallest positive perfect cube that can be written as the sum of three consecutive integers. Hmm, let's start by recalling what a perfect cube is. A perfect cube is a number that results fro",
+  "t1_start": " line!\n\nOkay, so I need to find the smallest positive perfect cube that can be written as the sum of three consecutive integers. Let me break this down step by step.\n\nFirst, let's recall what a perfect cube is. A perfect cube is a number li"
+ }
+}
