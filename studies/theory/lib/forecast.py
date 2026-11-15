@@ -18,6 +18,13 @@
       one headless job finds each target's measured value in the board items posted after the snapshot; each forecast
       is scored by the engine's log density against the equal mixture of the two readers, clipped to [-3, 3] nats.
       Writes scores.json and scores.md.
+  uv run studies/theory/lib/forecast.py cells <folder> --from <forecast run folders...>
+      the theories design the cells that tell them apart. Families: each run's mechanisms, and the newest round's
+      theories not refuted. One job per family proposes one new GPU cell per mechanism that it gets right and a named
+      other mechanism gets wrong; one job merges cells that are the same run; one fresh job per family (a forecast per
+      mechanism) and the two readers forecast every merged cell blind. Ranked in code: pairs of forecasters from
+      different families whose intervals do not overlap, per GPU minute; base-only cells by the highest forecast of
+      right answers minus the best known base count. Writes cells.json, cell_forecasts.json, cells.md, run.json.
 
 Every job is round.py's blind job: claude -p in an empty directory with Read and Write only, the model round.py gives
 cross_predict.
@@ -30,6 +37,7 @@ from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+import cells as C  # noqa: E402
 import round as engine  # noqa: E402
 
 ROOT = engine.ROOT
@@ -42,7 +50,7 @@ THEORY = ("- theory.json: a theory of the team's results. Derive each forecast f
 NOTHING = (' For a target the theory says nothing about, write {"id": "t02", "value": null, "low": null, "high": null, '
            '"reason": "theory says nothing"}.')
 engine.args = engine.args or argparse.Namespace(model_all=None, workers=8)  # round.py sets its own
-for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score"):
+for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast"):
     engine.MODELS[stage] = engine.MODELS["cross_predict"]
 
 
@@ -260,12 +268,63 @@ def score(folder):
     print(scores_md(s, f"{folder / name}.md"))
 
 
+def cells(folder, runs):
+    """Families propose cells, one job merges them, families and readers forecast them blind; ranked by lib/cells.py.
+    Job outputs are kept in folder/jobs/, so the same command resumes a stopped run."""
+    folder.mkdir(parents=True, exist_ok=True)
+    out, utc, fams = folder / "jobs", now(), C.families(runs, ROUND)
+    items, _ = board("board", "9999")
+    known = {"targets": [{"run": r.name, **t} for r in runs for t in json.loads((r / "targets.json").read_text())["targets"]],
+             "facts": json.loads((ROUND / "facts.json").read_text())}
+    common = {"DIRECTION.md": ROOT / "DIRECTION.md", "board.jsonl": "".join(json.dumps(i) + "\n" for i in items), "known.json": json.dumps(known, indent=1)}
+    every = [{"id": m["id"], "family": n, "statement": m["statement"]} for n, f in fams.items() for m in f["mechanisms"]]
+    all_ids, board_ids = {m["id"] for m in every}, {i["id"] for i in items}
+    engine.run([engine.job("cells_propose", n, {**common, **C.family_inputs(n, f, ROUND), "all_mechanisms.json": json.dumps(every, indent=1),
+                                                "jobs.md": C.jobs_md()}, {"cells.json": out / f"propose-{n}.json"},
+                           lambda d, f=f: C.check_proposals(d, [m["id"] for m in f["mechanisms"]], all_ids, board_ids),
+                           theories=C.THEORY_FILES if n == ROUND.name else "") for n, f in fams.items()], folder, len(fams))
+    props = [{"family": n, **p} for n in fams for p in json.loads((out / f"propose-{n}.json").read_text())["cells"]]
+    props = [{"id": f"c{k:02d}", **p} for k, p in enumerate(props, 1)]
+    by_id = {p["id"]: p for p in props}
+    shown = [{k: p[k] for k in ("id", "cell", "job", "command", "readout", "unit")} for p in props]  # no numbers
+    engine.run([engine.job("cells_merge", "merge", {"proposals.json": json.dumps(shown, indent=1)}, {"merged.json": out / "merged.json"},
+                           lambda d: C.check_merged(d, list(by_id)))], folder)
+    merged = json.loads((out / "merged.json").read_text())["cells"]
+    C.attach(merged, by_id)
+    rids, fc = [r["id"] for c in merged for r in c["readouts"]], {**common, "cells.json": json.dumps(C.blind(merged), indent=1)}
+    jobs = [engine.job("cells_forecast", r, fc, {"forecasts.json": out / f"forecast-{r}.json"}, lambda d: C.check_forecasts(d, rids, [None]),
+                       theory="", key="", every="every readout id of cells.json exactly once", nothing="") for r in READERS]
+    jobs += [engine.job("cells_forecast", n, {**fc, **C.family_inputs(n, f, ROUND)}, {"forecasts.json": out / f"forecast-{n}.json"},
+                        lambda d, f=f: C.check_forecasts(d, rids, [m["id"] for m in f["mechanisms"]]),
+                        theory=C.FAMILY.format(files=C.THEORY_FILES if n == ROUND.name else ""), key='"mechanism": "<id>", ',
+                        every="one forecast per mechanism of mechanisms.json and readout id of cells.json, each pair exactly once",
+                        nothing=C.NOTHING) for n, f in fams.items()]
+    engine.run(jobs, folder, len(jobs))
+    F, fam_of = {}, {}  # forecaster (a mechanism or a reader) -> {readout id: forecast}; each reader is its own family
+    for n in READERS + list(fams):
+        for f in json.loads((out / f"forecast-{n}.json").read_text())["forecasts"]:
+            F.setdefault(f.get("mechanism", n), {})[f["readout"]] = f
+            fam_of[f.get("mechanism", n)] = n
+    C.rank(merged, F, fam_of)
+    (folder / "cells.json").write_text(json.dumps({"utc": utc, "proposals": props, "cells": merged}, indent=1))
+    (folder / "cell_forecasts.json").write_text(json.dumps({n: {"family": fam_of[n], "forecasts": list(F[n].values())} for n in F}, indent=1))
+    head = (f"Written {now()} UTC (board read {utc} UTC). Plan `specs/SPEC_cells01.md`. Families: "
+            f"{', '.join(n + ' (' + str(len(f['mechanisms'])) + ')' for n, f in fams.items())}; {len(F)} forecasters (each reader is its own "
+            "family). Separation = pairs of forecasters from different families whose 90 % intervals do not overlap, summed over the cell's readouts.")
+    (folder / "cells.md").write_text(md := C.cells_md(f"Cells designed by the theories, {folder.name}", head, props, merged, F, fam_of))
+    (folder / "run.json").write_text(json.dumps({"commit": sh("git", "rev-parse", "--short", "HEAD").strip(), "command": " ".join(sys.argv), "utc": utc,
+                                                 "from": [str(r) for r in runs], "round": str(ROUND.relative_to(ROOT)), "proposed": len(props),
+                                                 "merged": len(merged), "forecasters": len(F), "job_dirs": str(engine.tmp())}, indent=1))
+    print("\n".join(md.splitlines()[4:7]) + f"\n{folder / 'cells.md'}")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("command", choices=["make", "score"])
+    parser.add_argument("command", choices=["make", "score", "cells"])
     parser.add_argument("folder", type=Path)
     parser.add_argument("--propose", type=int, default=0, help="make: also write this many mechanisms about the targets "
                         "(forecasters f2-m01 ...)")
     parser.add_argument("--lens", help="make: the family of causes the --propose mechanisms must come from")
+    parser.add_argument("--from", dest="runs", type=Path, nargs="+", help="cells: the forecast run folders whose mechanisms design cells")
     a = parser.parse_args()
-    make(a.folder, a.propose, a.lens) if a.command == "make" else score(a.folder)
+    {"make": lambda: make(a.folder, a.propose, a.lens), "score": lambda: score(a.folder), "cells": lambda: cells(a.folder, a.runs)}[a.command]()
