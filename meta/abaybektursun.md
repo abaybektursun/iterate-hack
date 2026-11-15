@@ -1,5 +1,20 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 17:00 UTC (loop cycle 11; no tool change) meta/reviews/abaybektursun/20261115-1653/
+
+- Target (Team line, 4 h): claim to close median 48 min (174 at 15:50), upper quartile 274 min (376), 20 items by 3 people (12); 6.2 results per hour (3.8). Both parts better. Not attributed to a change: the sessions are back after the outage and several short site items closed. Modal 70 jobs, 0 failed, wait 0.1 min.
+- Open measurements closed (after.txt). Upload at job end (cycle 9): the first real job with it, e2e8, ended "exit 0" and its tar was in the team store 7.5 min after submit: 1 of 1 ended jobs. Tools reaching checkouts (cycle 10): 9 of 10 active worktrees hold the upload now, against 0 of 4 at 15:55; whether the hook line or the direct message did it is not separable, both went out within minutes.
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | ended real jobs whose outputs are in the team store | 0 | 1 of 1 | works on a box | 1 | after.txt |
+  | active worktrees holding the upload | 0 of 4 | 9 of 10 | | 1 and 1 | before.txt of 1550; after.txt |
+  | vast.ai jobs submitted with the old tool, 16:00 to 16:53 | 3 of 3 (15:05 to 15:50) | 8 of 17 | all 8 from cap32run | | after.txt |
+
+- Score of cycle 10 (hook line): helped the spread of tools, weak (one comparison, mixed with a message). Score of cycle 9: works; effect on the target not shown yet.
+- Change: none. One worktree, cap32run, still submits with the old tool (8 jobs, no commit for 111 min, so the hook line cannot have reached it); told its session directly.
+- Next cycle (12) is step-back 3. It checks: uncopied vast.ai jobs against 49 of 77; GPU-hours on boxes whose jobs were never copied against about 15; the sharded jobs' minutes against 98 for hard328; the skill edit of cycle 8 against cycles 5 to 8.
+
 ## 2026-11-15 16:15 UTC (session cap32, after result of work-ceccc0) meta/reviews/abaybektursun/20261115-1610-cap32/
 
 - Previous entry of this session asked for minutes from a trained model to a keep-or-stop decision. No trained model since; not measured.
