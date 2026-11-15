@@ -27,8 +27,8 @@ a side panel whose address is /#<item id>; the filters are in the address too (/
 / filter, j and k move, 1 2 3 jump to the record steps, Now and Learned, Enter opens, Esc closes, ? lists the keys. A
 click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
 
-  GET /demo            the talk as a deck of nine 16:9 slides (demo_deck.py): keys step, p prints one slide per page
-  GET /demo/fig/<name> the pictures the deck embeds, harness (the Design page) and tree (Ali's slide 2), with their
+  GET /demo            the talk as a deck of thirteen 16:9 slides (demo_deck.py): keys step, p prints one slide per page
+  GET /demo/fig/<name> the pictures the deck embeds (climb, harness, beyond, efficiency, basins), with their
                        header, words column and key hidden (demo_deck.FIGS)
   GET /demo/story      the stepped story of the talk over the Design page's picture (demo.py), fed by the same /data
   GET /demo/ali/<name> Ali's slides of the talk, slide1 to slide3: the idea map, the idea tree and the accuracy climb
@@ -40,6 +40,7 @@ click on a person shows only that person. The look is that of the Design tab (.c
   GET /proof/<slug>    the page of one such experiment (proof_<slug>.py, made like a finding page)
   GET /lab/            the site lab: twelve interactive 3D pictures of the team's work (studies/sitelab/index.html), each at
                        /lab/prototypes/<slug>/ with its data.json; static files, fed by the same /data
+  GET /values         the six values the team works by, with their quotes: a glass prism, one face per value (values.py)
   GET /favicon.svg     the tab icon of every page; send() writes the link to it into the head of each HTML page
   GET /data            the newest 60 items of each kind and list, the messages on `all` of the last --hours, every score
                        (board.py score), which the hill-climbing chart draws, the plain rows of those results
@@ -58,6 +59,7 @@ status and logs the error to the browser console.
 """
 import glob
 import hashlib
+import html
 import importlib
 import json
 import os
@@ -83,10 +85,13 @@ import exa_page
 import findings
 import glossary
 import home
+import papers
+import people
 import pastdev
 import psychosis
 import sitekit
 import team
+import values
 
 PORT = int(sys.argv[sys.argv.index("--port") + 1]) if "--port" in sys.argv else 8765
 HOURS = float(sys.argv[sys.argv.index("--hours") + 1]) if "--hours" in sys.argv else 6.0
@@ -239,9 +244,49 @@ DECK_PAGE = demo_deck.page(len(FINDINGS), PAPERS)  # the talk deck at /demo, wit
 # The home page (home.py) is the page / of invariant.team; on any other host / is the board and the home page is /home.
 # API Gateway passes the name the browser asked for in the Host header.
 HOME_HOSTS = ("invariant.team", "www.invariant.team")
+TEAM_PAGE = people.page()
+PAPERS_PAGE = papers.page(PAPERS)  # the paper loop and its papers, at /papers
 HOME_PAGE = home.PAGE.replace("__COUNTS__", json.dumps({
-    "findings": len(FINDINGS), "proof": len(PROOFS),
+    "findings": len(FINDINGS), "proof": len(PROOFS), "papers": len(PAPERS),
     "lab": max(len(list((d / "prototypes").glob("*/index.html"))) for d in LAB)}))
+
+
+# What every page gets as it is sent, so that no page module has to hold it (site review, work-acad69): the name
+# "Invariant" leads to the home page and the header gets the link "More" to it; a page with no header gets a small
+# link to the home page at its lower left; the header's links are tall enough to tap on a phone; pinch zoom is
+# never switched off. The home page has its own links and is left as it is.
+SITE_HOME = "https://invariant.team/"
+NAME = '<h1 class="name">Invariant</h1>'
+NAME_LINKED = f'<h1 class="name"><a href="{SITE_HOME}" style="color:inherit;font-weight:inherit;text-decoration:none">Invariant</a></h1>'
+FINDINGS_TAB = re.compile(r'<a (?:class="tab" )?href="/findings"[^>]*>Findings</a>')
+NO_ZOOM = re.compile(r',\s*(?:maximum-scale=[\d.]+|user-scalable=(?:no|0))')
+TAP = "<style>@media (max-width: 900px) { .top a { padding-block: 10px; } }</style>\n</head>"
+HOME_CORNER = ('<style>.inv-home { position: fixed; left: 10px; bottom: 6px; z-index: 2147483000; padding: 10px 6px; font: 600 12px/1 Archivo, system-ui, sans-serif; '
+               'letter-spacing: .02em; color: #8a96a3; text-decoration: none; } .inv-home:hover { color: #1f43d6; } @media print { .inv-home { display: none; } }</style>'
+               f'<a class="inv-home" href="{SITE_HOME}">Invariant</a>\n</body>')
+
+
+def chrome(body, path):
+    if 'id="go"' in body and "const PAGES" in body:  # the home page
+        return body
+    body = NO_ZOOM.sub("", body)
+    if NAME in body:
+        body = FINDINGS_TAB.sub(lambda m: m.group(0) + f'\n    <a href="{SITE_HOME}">More</a>', body.replace(NAME, NAME_LINKED, 1), count=1)
+        return body.replace("</head>", TAP, 1)
+    if '<a class="name" href="/">Invariant</a>' in body:  # /psychosis: its name led to the board
+        return body.replace('<a class="name" href="/">Invariant</a>', f'<a class="name" href="{SITE_HOME}">Invariant</a>', 1)
+    if path.startswith(("/demo/fig/", "/demo/ali")):  # figures shown inside the deck
+        return body
+    return body.replace("</body>", HOME_CORNER, 1)
+
+
+# An address that is no page: a short page with the ways on, in the site's colors.
+NOT_FOUND = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: no such page</title><style>:root { color-scheme: light dark; } body { margin: 0; padding: 12vh 40px; background: light-dark(#eceef0, #080c11);
+color: light-dark(#101820, #e9eff3); font: 400 15px/1.5 Archivo, system-ui, sans-serif; } h1 { font-weight: 300; font-size: 30px; margin: 0 0 18px; }
+a { color: light-dark(#1f43d6, #8fb1ff); margin-right: 22px; }</style></head><body><h1>There is no page __PATH__.</h1>
+<a href="https://invariant.team/">Home</a><a href="/">Board</a><a href="/findings">Findings</a>
+</body></html>"""
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -249,7 +294,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def send(self, status, kind, body, headers=()):
         if kind == "text/html":  # every page gets the tab icon here, so no page module holds it
-            body = body.replace("<title>", ICON_LINK + "<title>", 1)
+            body = chrome(body.replace("<title>", ICON_LINK + "<title>", 1), self.path)
         data = body if isinstance(body, bytes) else body.encode()
         tag = f'"{hashlib.blake2b(data, digest_size=16).hexdigest()}"'  # from the content, so an unchanged board answers 304
         if status == 200 and self.headers.get("If-None-Match") == tag:
@@ -274,6 +319,10 @@ class Handler(BaseHTTPRequestHandler):
         host = (self.headers.get("X-Forwarded-Host") or self.headers.get("Host") or "").split(":")[0].lower()
         if path == "/home" or (path == "/" and host in HOME_HOSTS):
             return self.send(200, "text/html", HOME_PAGE)
+        if host in HOME_HOSTS and path not in ("/data", "/favicon.svg") and not path.startswith("/data/"):  # one address per page: the monitor's
+            return self.send(302, "text/plain", "", [("Location", "https://monitor.invariant.team" + self.path)])
+        if path == "/team":
+            return self.send(200, "text/html", TEAM_PAGE)
         if path == "/board":  # the board was here for two hours on 2026-11-15
             return self.send(302, "text/plain", "", [("Location", "/")])
         if path == "/":
@@ -298,10 +347,14 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(200, "text/html", PROOF_PAGE)
         if path.startswith("/proof/") and path[len("/proof/"):] in PROOFS:
             return self.send(200, "text/html", PROOFS[path[len("/proof/"):]].PAGE)
+        if path == "/papers":
+            return self.send(200, "text/html", PAPERS_PAGE)
         if path == "/exa":
             return self.send(200, "text/html", exa_page.PAGE)
         if path == "/pastdev":
             return self.send(200, "text/html", pastdev.PAGE)
+        if path == "/values":
+            return self.send(200, "text/html", values.PAGE)
         if path == "/psychosis":
             return self.send(200, "text/html", psychosis.PAGE)
         if path == "/favicon.svg":
@@ -320,7 +373,7 @@ class Handler(BaseHTTPRequestHandler):
             found = [p for p in PAPERS[path[7:]] if p.exists()]  # a deploy without the file answers 404 and the other pages stay up
             return self.send(200, "application/pdf", found[0].read_bytes()) if found else self.send(404, "text/plain", f"no page {path}")
         if path != "/data" and not path.startswith("/data/"):
-            return self.send(404, "text/plain", f"no page {path}")
+            return self.send(404, "text/html", NOT_FOUND.replace("__PATH__", html.escape(path)))
         try:  # the page shows the error text; the traceback goes to this terminal
             if path == "/data":  # the time of the read goes in a header, so the body and its ETag change only with the board
                 body, ns = snapshot_json()
