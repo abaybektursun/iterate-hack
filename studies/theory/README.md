@@ -583,6 +583,19 @@ round-09/problems-m03 (395 [365, 420]), round-09/weights-m06 (365 [330, 400], th
   committed): `runs/<job-id>/` in the worktree `iterate-hack-cells-r9b`; the two finished jobs also as `jobs/<job-id>.tar` in the
   team store.
 
+**exact1x-01** (idea-de5c0e, work-20e6ec; offline, no GPU cell). Question: is the dial's 1x (base + top-8 RL-Math directions, 192 of 328,
+46 cap hits) under-applied by BF16 rounding, so that an exact 1x merge would score like 1.5x (203, 25; run-05/f2-m06), or is 1.5x the
+dial's own optimum (run-05/f2-m01)? **The premise of the rounding account is false on the stored edits, so no cell was run.** Every dial cell
+was written by `rlneurons/jobs/wsp_edit.py --rounding stochastic` (unbiased rounding, `merge_weights.to_bf16`). The projection of the written
+change on the intended addition (`effective_scale` in `edit.json`) is 0.99996 at 1x and 0.99998 at 1.5x: the 1x edit is applied at full
+size. The written change is larger than the intended one (norm 2.596 against 1.269 at 1x, cosine 0.489; 3.254 against 1.904 at 1.5x, cosine
+0.585), the extra being a zero-mean residue orthogonal to the addition (norm 2.26 at 1x, 2.64 at 1.5x). The random rank-8 cells carry
+residues of 2.35 to 3.36 and score 158 to 163 against base cue 164. The 0.11 % / 0.19 % / cosine 0.585 quoted for "1x" are the 1.5x cell's
+figures. An exact merge would need a new float32 writer and a float32 dtype in `run_cell`'s vLLM engine (it has no dtype flag); it would
+remove only the residue, which neither mechanism names as the cause.
+- Files: `results/experiments/exact1x-01/offline.json` (the numbers of 7 stored edit cells and base cue, the code that read them, the
+  command). Inputs: `rlneurons/results/xreward/edits/<cell>/edit.json`, `readout.json`.
+
 ## Round 06 (2026-11-15, cutoff 11-15 06:51:23 UTC, coordinator frustea)
 
 Plan `specs/SPEC_round06.md` (before the run), engine version 6.3 with `--account-from results/account/run-03`, work-a9a6dd, launched with

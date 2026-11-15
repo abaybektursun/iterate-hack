@@ -155,6 +155,9 @@ section .say { margin-top: calc(var(--u) * 3); font-size: 16px; max-width: 420px
 .end p { margin-top: calc(var(--u) * 3); font-size: clamp(17px, 1.3vw, 21px); line-height: 1.36; font-weight: 380; max-width: 620px; }
 .end .src { margin-top: 56px; padding-top: calc(var(--u) * 2); border-top: 1px solid var(--rule); font-size: 13px; line-height: 1.5; font-weight: 400; color: var(--grey); max-width: none; }
 
+@media (max-width: 500px) {  /* no room: of the writers only the one that wrote is named, and the note "papers only" goes */
+  #mem [data-k="writers"] .lab:not(.on), #mem [data-k="only"] { display: none; }
+}
 @media (max-width: 900px) {
   .page { padding: 14px 16px 0; }
   .end .page { padding-top: 40px; padding-bottom: 40px; }

@@ -158,7 +158,7 @@ a { color: inherit; }
 .claim { margin: .9em 0 0; font-size: clamp(12.5px, .95vw, 15px); line-height: 1.4; text-wrap: pretty; }
 .how { margin-top: auto; padding-top: 12px; font-size: clamp(12.5px, .82vw, 13px); line-height: 1.38; color: var(--mute); }
 .how p { margin: 0; padding: 6px 0; border-top: 1px solid var(--rule); }
-.open { display: flex; justify-content: space-between; align-items: baseline; padding-top: 8px; border-top: 1px solid var(--ink); font-size: 13px; }
+.open { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2px 10px; padding-top: 8px; border-top: 1px solid var(--rule); font-size: 13px; }
 .open b { font-weight: 600; white-space: nowrap; }
 .open i { white-space: nowrap; font-style: normal; color: var(--blue); font-weight: 600; }
 
