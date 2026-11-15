@@ -864,6 +864,25 @@ the readers; ids without a run prefix are `round-09/`):
 The cell ids restart at m01 in every run: round-09 m06 and m29 are not the cells-01 m06 and m29 of work-844e38 and
 work-290625.
 
+**First score of round 09** (18:28 UTC, `forecast.py score results/wide/round-09`: `round-09/scores.md`). 12 of 27
+targets measured (result-6832a8, 306787, d02d46, a74ac3), none outside every interval; readers +0.04 and -0.19 nats.
+Best: training-m06 +1.65 on 7 (layers 0-10 carry the right answers), run-05/f2-m01 +1.18, run-05/f2-m03 +1.11,
+sampling-m03 +1.04. Worst: weights-m03 -6.31 on 9 (layers 22-31 at 1.5x forecast 189 [176, 202], measured 166; layers
+0-10 forecast 166 [154, 178], measured 184), stopping-m03 -4.47 on 8 (top-1 at 3x forecast 196 [183, 208], measured
+168), problems-m06 -1.99 on 6, weights-m02 -1.90 on 9. stopping-m03 is one side of every pair of cells m11 and m13.
+
+Forecast runs 02-08 scored again against the items posted since their snapshots (`forecast.py score`, files
+`results/forecast/run-0N/scores-2026-11-15T1828*.json/.md`): the new numbers are result-6832a8's four-sample step-100
+counts (t08-t11 of runs 03-08), where every forecaster sits within a few problems of the readers (-0.8 to +0.3 nats per
+number); run-02 is unchanged. run-06/f2-m03 +5.70 on 9, run-05/f2-m03 +4.86 on 9, run-08/f2-m04 -3.92 on 8; run-04/f2-m04
++0.57 on 5, run-08/f2-m01 +0.52 on 5, run-04/f2-m05 +0.42 on 4 and run-03/f2-m06 +0.19 on 5 now pass the carry rule by
+agreeing with the readers.
+
+cells-01 scored on its `measured.json` (rows already in SKILL.md's format) with `lib/forecast.py` `cell_scores`, the
+function `standing` uses (no stand-alone command exists for cells): `cells-01/scores.json/.md`. m20-r1 measured 10 of 136
+(result-a74ac3): readers 14 [7, 22] and 13 [6, 21]; run-06/f2-m02 3 [0, 8] and run-06/f2-m06 2 [0, 7] -3.00 each,
+run-07/f2-m06 16 [9, 23] -0.63, run-08/f2-m01 14 [8, 20] -0.08.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
