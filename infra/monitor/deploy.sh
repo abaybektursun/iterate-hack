@@ -18,7 +18,7 @@ build=$(mktemp -d)
 trap 'rm -rf "$build"' EXIT
 # all of tools/*.py (a few kB), so a new import in view.py needs no change here; boto3 comes with the Lambda runtime;
 # the paper PDFs that view.py serves at /paper/<name>.pdf lie beside the code
-zip -q -j "$build/code.zip" tools/*.py infra/monitor/run.sh studies/rlneurons/paper/the-finish-dial.pdf studies/theory/paper/theories-on-trial.pdf studies/rlneurons/paper-first-steps/the-first-hundred-steps.pdf
+zip -q -j "$build/code.zip" tools/*.py infra/monitor/run.sh studies/rlneurons/paper/the-finish-dial.pdf studies/theory/paper/theories-on-trial.pdf studies/rlneurons/paper-first-steps/the-first-hundred-steps.pdf studies/rlneurons/paper-no-warning/no-early-warning.pdf
 # the site lab's pages and data (view.py serves them at /lab/), with their folders kept
 (cd studies && zip -q -r "$build/code.zip" sitelab/index.html sitelab/prototypes -i '*/index.html' '*/data.json')
 "${aws[@]}" lambda update-function-code --function-name iterate-monitor --zip-file "fileb://$build/code.zip" \

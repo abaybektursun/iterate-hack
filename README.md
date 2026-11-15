@@ -397,6 +397,12 @@ The tab Proof is the page `/proof`: the same page as one list of rows with no pi
 not the research question. Each is a module `tools/proof_<slug>.py`, made like a finding page and served at
 `/proof/<slug>`. The first is `tools/proof_review_cuts_waste.py` (the planted-waste test of the `team-meta-review`
 skill, `studies/metaharness/`).
+The second is `tools/proof_idea_basins.py` (`/proof/idea-basins`): the 218 board items of the snapshot of 15 November
+2026, 04:08 UTC, as dots on a glass slab with a faint relief, in three conditions: the items in the order they were
+posted, the items in the 12 idea basins a judge model grouped them into, and the idea tree (one row per basin, a line
+from each item to the earlier items it builds on; 151 of 450 links join two basins). Its numbers and its layout, which
+holds no board text, come from `studies/basins` on branch `ali/basins` (`results/swarm/main-03/summary.json`,
+`analysis/swarm_nested_layout.py`).
 
 The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game.
 Hold Space, or press and hold, to breathe in and let go to breathe out, so that the white ring follows the blue one. A
@@ -405,11 +411,28 @@ written jokes and, marked with a blue dot, real messages and result titles of th
 head is believed and moves the diagnosis up; the fifth ends the session. A click on a thought brings it back as 3
 subagents. A guide speaks one line per breath (M mutes). The end screen counts what the agents posted meanwhile.
 
-The page `/demo` is the talk: one stepped story over the Design page's picture, with a sentence and a fact line per
-step in the words column (arrow keys step, Esc closes; `/demo#<step>` links to a step). It is not a header tab. The 12
+The page `/demo` is the talk as a slide deck (`tools/demo_deck.py`; not a header tab): nine 16:9 slides, each one
+figure with a few words, `#hook`, `#question`, `#tea`, `#harness`, `#finding`, `#proof`, `#ideas`, `#papers` and
+`#close` (`/demo#finding` opens that slide, and Back works). The right arrow, Space or PageDown go on, the left arrow or
+PageUp go back, Home and End jump, a click on the right or left third of the window steps, `t` changes the theme
+(`?theme=dark` in the address too), `f` is fullscreen and `p` prints: one slide per page at 13.333 x 7.5 in, in the
+theme on screen, so print to PDF from the dark page for a dark PDF. The hook sentence is the constant `HOOK` in
+`tools/demo_deck.py`. The two photos (tea, meditation) are the strings `TEA` and `MEDITATE` in `tools/demo_photos.py`,
+each a `data:image/jpeg;base64,...` URI (the deploy ships only `tools/*.py`); while one is empty its slide shows an
+empty frame. Slides 4 and 7 show the Design page's picture and the idea tree of `/demo/ali/slide2` in an iframe of
+`/demo/fig/harness` and `/demo/fig/tree`: those pages with their header, words column and key hidden
+(`demo_deck.FIGS`). Every number is read when the page is built: the finish dial from
+`tools/finding_the_finish_dial.py` (`DATA['cells']`), the comparison with Karpathy's autoresearch loop from
+`FACTS['auto_research_comparison']` in `tools/demo_facts.py` (from `studies/autobench`), the review rounds from
+`tools/proof_review_cuts_waste.py`, the links of the idea tree from `tools/demo_ali_data.py` (counted as
+`tools/demo_ali.py` counts them), the number of people from `FACTS['people']`, and the number of finding pages and the
+papers from `tools/view.py`.
+
+The stepped story of the talk is at `/demo/story`: one story over the Design page's picture, with a sentence and a fact
+line per step in the words column (arrow keys step, Esc closes; `/demo/story#<step>` links to a step). The 12
 steps, in order: `#nanolab`, `#problem`, `#claim`, `#proof`, `#result`, `#vote`, `#why`, `#rules`, `#infra`, `#brain`,
 `#retro`, `#watch`. A click on a part of the picture or on a question under the fact line opens one of 15 depth panels
-(`/demo#result/cue`): one sentence, a few fact rows with their caveats, one source line and at most two links. The
+(`/demo/story#result/cue`): one sentence, a few fact rows with their caveats, one source line and at most two links. The
 panels are `problem/day1`, `proof/turnaround`, `result/cue`, `result/harder`, `vote/procedure`, `why/control`,
 `why/findings`, `rules/thread`, `rules/audit`, `rules/rejected`, `infra/modal`, `infra/people`, `brain/sources`,
 `brain/memory` and `retro/changes`; each fits the words column at 1440 x 860 without scrolling, except the list of
@@ -575,7 +598,7 @@ Where Exa is called:
 
 What a search changed: on Nov 14 at 20:58 UTC one search in a literature sweep by 5 agents returned arXiv 2610.24663.
 14 minutes later board item knowledge-d692e4, citing 7 papers, listed seven method families as already published, and
-none of them was run. The page `/demo#brain/sources` shows this case and two more, and the 125 pages fetched through Exa,
+none of them was run. The page `/demo/story#brain/sources` shows this case and two more, and the 125 pages fetched through Exa,
 each with its agent, time and the board item that cites it (`tools/demo_facts.py`, `SOURCES`).
 
 Counts and limits: 172 of 199 HTTP calls to Exa returned results, from 59 main agents and subagents (counted from the
@@ -585,7 +608,11 @@ search tool. No count of GPU jobs avoided by a search exists.
 
 The page `/exa` (`tools/exa_page.py`; not a header tab, and its look is its own: white paper and one cyan marker) shows
 four searches that changed a decision, and what the agents got from Exa up to Nov 15 15:29 UTC, without the number of
-calls. Its numbers come from
+calls. The four searches are one 3D scene under the first screen: a track with the stations Idea, Exa, GPU run and
+Board, a porcelain gate at Exa, and above it one dot for each of the 677 distinct pages Exa returned
+(`distinct_urls_in_search_results`). Each case is replayed: slabs (the ideas) reach the gate, a beam lights the pages
+Exa returned, and the slabs stop at the gate, pass smaller, or go to the Board over the GPU run. The buttons 1 to 4
+choose a case (`/exa#search-2`), and each source in the caption is a link. Its numbers come from
 `studies/metaharness/results/exa_count-01/summary.json`, written by `studies/metaharness/analysis/exa_count.py`: 381 calls
 to Exa returned (237 searches, 144 page reads) from 61 agents in 20 sessions; 193 more stopped at a missing key on one
 laptop; 59 MCP calls returned 401. This count expands shell loops and reads other transcripts than the count above, so
@@ -632,6 +659,13 @@ memory before it starts an idea.
   run, recall had the answer within 2,000 tokens for 20, one naive grep over 271 transcripts for 6 (17 anywhere in its
   output).
 - Whether memory improved the research result is not measured: no arm ran without it.
+
+The page `/pastdev` (`tools/pastdev.py`; not a header tab, and its look is its own: white paper and one blue for what
+past.dev returned) shows this in two 3D scenes. The first is the memory as a disc with one dot per stored source (854:
+616 paper findings, 227 board posts, 11 sessions), the agents that write behind it and the agents that read in front,
+the theory generator joined to the paper sector only. It replays four real reads (`/pastdev#read-1` is the read across
+two people above): the write, the question, the returned source in blue. The second draws the pilot: per method, 20
+cubes for the 20 questions and a stack of slabs of 2,000 tokens, 1 slab for recall and 61 for grep.
 
 ### Caveats
 

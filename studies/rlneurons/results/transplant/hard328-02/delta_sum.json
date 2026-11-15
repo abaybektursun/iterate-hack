@@ -1,0 +1,106 @@
+{
+ "sft1_rl20": [
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 2.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-000954-b526/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 1.9999997397341798,
+   "written_norm_over_intended": 1.0017984565793947,
+   "seconds": 696.2661612033844
+  },
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 2.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-020508-879c/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 1.9999997397341798,
+   "written_norm_over_intended": 1.0017984565793947,
+   "seconds": 178.59492468833923
+  },
+  {
+   "args": {
+    "host": "think_sft",
+    "donor": "rl_math",
+    "alpha": 2.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-064729-a4fb/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "think_sft": {
+     "repo": "allenai/Olmo-3-7B-Think-SFT",
+     "revision": "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.4459617949564,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017657138798217403,
+   "effective_a": 1.9999997397341798,
+   "written_norm_over_intended": 1.0017984565793947,
+   "seconds": 406.92888379096985
+  }
+ ]
+}

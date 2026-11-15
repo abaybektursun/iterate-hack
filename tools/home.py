@@ -190,7 +190,7 @@ const PAGES = [
   { id: "board", name: "Board", href: "/", line: "Ideas, open work and results", count: m => m ? `${m.open} open work items` : "" },
   { id: "proof", name: "Proof", href: "/proof", line: "Tests of the team's own method", count: () => COUNTS.proof + (COUNTS.proof === 1 ? " page" : " pages") },
   { id: "design", name: "Design", href: "/architecture", line: "How the people and agents work together", count: m => m ? `${m.people} people, ${m.agents} agent sessions` : "" },
-  { id: "talk", name: "Talk", href: "/demo", line: "The project, told in steps" },
+  { id: "talk", name: "Talk", href: "/demo", line: "The talk, as slides" },
   { id: "paper", name: "Paper", href: "/paper/the-finish-dial.pdf", line: "The paper on the finish dial, a PDF" },
   { id: "lab", name: "Lab", href: "/lab/", line: "3D pictures of the team's work", count: () => COUNTS.lab + " pictures" },
   { id: "exa", name: "Exa", href: "/exa", line: "How the agents used web search" },
