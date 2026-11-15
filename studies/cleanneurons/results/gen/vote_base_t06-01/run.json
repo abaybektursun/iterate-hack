@@ -1,0 +1,10 @@
+{
+ "job_id": "sameraslan-1114-225555-5d2f",
+ "commit": "63a76e65743754b1894e2ad15e764a3c25c8295c",
+ "what": "run_cell, unedited, MATH-500, T 0.6 / top-p 1.0, seed 1000000, --samples 4 --restarts 2",
+ "exit": "stopped by the 4-hour limit of the job; attempt 0 of all 2,000 samples written, restarts incomplete",
+ "volume_only": [
+  "answers.jsonl (raw generations)"
+ ],
+ "volume_path": "iterate-runs:sameraslan-1114-225555-5d2f/"
+}
