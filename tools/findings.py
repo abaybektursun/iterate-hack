@@ -76,6 +76,9 @@ TABLE = {
     "rl-wait-habit": {
         "group": BEHAVIOUR,
         "figure": lambda m: [f"+{m.MORE} %", "more often after RL, Wait is among the next words"]},
+    "rl-edge-comes-early": {
+        "group": BEHAVIOUR,
+        "figure": lambda m: [f"{m.CLOSED_U} to {m.CLOSED} %", "of the gap closed when the base model finishes RL's half-written answers"]},
     "eight-directions": {
         "group": WEIGHTS,
         "figure": lambda m: [points(*(next(s["right"] for s in m.DATA["states"] if s["key"] == k) for k in ("untrained", "rl-directions")), m.DATA["edit"]["n"]),
