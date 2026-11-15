@@ -1,0 +1,542 @@
+[
+ {
+  "source": "run-02",
+  "kind": "forecasts",
+  "id": "t15",
+  "item": "result-6e7b64",
+  "quote": "score: base hard328 139/328",
+  "measured": 139,
+  "z": 3.73,
+  "readers": [
+   {
+    "value": 190,
+    "low": 165,
+    "high": 210
+   },
+   {
+    "value": 197,
+    "low": 180,
+    "high": 210
+   }
+  ],
+  "what": "How many of the 328 harder problems the autobench agent's final configuration answers right in the final run.",
+  "unit": "right answers of 328",
+  "cell": {
+   "model": "not stated",
+   "prompt": "the autobench agent's final configuration",
+   "set": "hard328",
+   "n": 328,
+   "sampling": "the agent's final configuration; not stated",
+   "samples": "not stated",
+   "grader": "not stated"
+  },
+  "forecasts": {
+   "reader-1": {
+    "value": 190,
+    "low": 165,
+    "high": 210,
+    "gain": 0.0
+   },
+   "reader-2": {
+    "value": 197,
+    "low": 180,
+    "high": 210,
+    "gain": -3.0
+   },
+   "run-02/f2-m01": {
+    "value": 120,
+    "low": 80,
+    "high": 160,
+    "gain": 3.0
+   },
+   "run-02/f2-m02": {
+    "value": 200,
+    "low": 182,
+    "high": 218,
+    "gain": -3.0
+   }
+  },
+  "inside": [
+   "run-02/f2-m01"
+  ],
+  "outside_every": false,
+  "also": [
+   "run-02 t15"
+  ]
+ },
+ {
+  "source": "run-04",
+  "kind": "forecasts",
+  "id": "t02",
+  "item": "result-a1bf75",
+  "quote": "1.5x 399",
+  "measured": 399,
+  "z": 2.38,
+  "readers": [
+   {
+    "value": 357,
+    "low": 330,
+    "high": 384
+   },
+   {
+    "value": 357,
+    "low": 328,
+    "high": 386
+   }
+  ],
+  "what": "How many of the 538 HumanEval+ and MBPP+ problems the base model plus Code-RL 3.1's 8 top weight directions at 1.5x size passes, with the Code cue at T 1.0.",
+  "unit": "problems passed of 538",
+  "cell": {
+   "model": "base + Code 3.1's 8 directions at 1.5x",
+   "prompt": "Code cue",
+   "set": "HumanEval+ and MBPP+",
+   "n": 538,
+   "sampling": "T 1.0; top-p not stated; token cap not stated",
+   "samples": "not stated",
+   "grader": "not stated"
+  },
+  "forecasts": {
+   "reader-1": {
+    "value": 357,
+    "low": 330,
+    "high": 384,
+    "gain": -0.1988
+   },
+   "reader-2": {
+    "value": 357,
+    "low": 328,
+    "high": 386,
+    "gain": 0.0
+   },
+   "run-04/f2-m03": {
+    "value": 368,
+    "low": 344,
+    "high": 392,
+    "gain": 0.0
+   },
+   "run-04/f2-m06": {
+    "value": 356,
+    "low": 333,
+    "high": 379,
+    "gain": -1.4936
+   }
+  },
+  "inside": [],
+  "outside_every": true,
+  "also": [
+   "run-03 t02",
+   "run-04 t02",
+   "run-05 t02",
+   "run-06 t02",
+   "run-07 t02",
+   "run-08 t02"
+  ]
+ },
+ {
+  "source": "run-02",
+  "kind": "forecasts",
+  "id": "t13",
+  "item": "result-6e7b64",
+  "quote": "Dev set of 100: start 61, kept method 84.0 (7 seeds, 80 to 86)",
+  "measured": 84,
+  "z": 2.35,
+  "readers": [
+   {
+    "value": 89,
+    "low": 86,
+    "high": 93
+   },
+   {
+    "value": 89,
+    "low": 86,
+    "high": 93
+   }
+  ],
+  "what": "The best dev100 score (right of 100) the single headless autobench agent reaches after all 40 experiments starting from the plain prompt.",
+  "unit": "right answers of 100",
+  "cell": {
+   "model": "not stated",
+   "prompt": "chosen by the agent, starting from the plain prompt",
+   "set": "dev100 (MATH-500 dev split)",
+   "n": 100,
+   "sampling": "chosen by the agent (best at 15 of 40: 10 samples + vote); not stated for the final",
+   "samples": "not stated",
+   "grader": "not stated"
+  },
+  "forecasts": {
+   "reader-1": {
+    "value": 89,
+    "low": 86,
+    "high": 93,
+    "gain": 0.0
+   },
+   "reader-2": {
+    "value": 89,
+    "low": 86,
+    "high": 93,
+    "gain": 0.0
+   },
+   "run-02/f2-m01": {
+    "value": 87,
+    "low": 86,
+    "high": 90,
+    "gain": 0.0
+   },
+   "run-02/f2-m02": {
+    "value": 94,
+    "low": 91,
+    "high": 97,
+    "gain": -3.0
+   }
+  },
+  "inside": [],
+  "outside_every": true,
+  "also": [
+   "run-02 t13"
+  ]
+ },
+ {
+  "source": "run-04",
+  "kind": "forecasts",
+  "id": "t01",
+  "item": "result-a1bf75",
+  "quote": "Code directions 1x 386",
+  "measured": 386,
+  "z": 2.32,
+  "readers": [
+   {
+    "value": 350,
+    "low": 325,
+    "high": 376
+   },
+   {
+    "value": 350,
+    "low": 325,
+    "high": 376
+   }
+  ],
+  "what": "How many of the 538 HumanEval+ and MBPP+ problems the base model plus Code-RL 3.1's 8 top weight directions at 1x size passes, with the Code cue at T 1.0.",
+  "unit": "problems passed of 538",
+  "cell": {
+   "model": "base + Code 3.1's 8 directions (top-8 singular directions per matrix of RL-Zero-Code 3.1 minus base) at 1x",
+   "prompt": "Code cue",
+   "set": "HumanEval+ and MBPP+",
+   "n": 538,
+   "sampling": "T 1.0; top-p not stated; token cap not stated",
+   "samples": "not stated",
+   "grader": "not stated"
+  },
+  "forecasts": {
+   "reader-1": {
+    "value": 350,
+    "low": 325,
+    "high": 376,
+    "gain": 0.0
+   },
+   "reader-2": {
+    "value": 350,
+    "low": 325,
+    "high": 376,
+    "gain": 0.0
+   },
+   "run-04/f2-m03": {
+    "value": 358,
+    "low": 335,
+    "high": 381,
+    "gain": 0.0
+   },
+   "run-04/f2-m06": {
+    "value": 345,
+    "low": 323,
+    "high": 367,
+    "gain": -1.8549
+   }
+  },
+  "inside": [],
+  "outside_every": true,
+  "also": [
+   "run-04 t01",
+   "run-05 t01",
+   "run-06 t01",
+   "run-07 t01",
+   "run-08 t01"
+  ]
+ },
+ {
+  "source": "run-02",
+  "kind": "forecasts",
+  "id": "t14",
+  "item": "result-6e7b64",
+  "quote": "On the 400 the two are equal, 338 each",
+  "measured": 338,
+  "z": 2.28,
+  "readers": [
+   {
+    "value": 362,
+    "low": 345,
+    "high": 375
+   },
+   {
+    "value": 356,
+    "low": 342,
+    "high": 368
+   }
+  ],
+  "what": "How many of the 400 math400 problems the autobench agent's final configuration answers right in the final run.",
+  "unit": "right answers of 400",
+  "cell": {
+   "model": "not stated",
+   "prompt": "the autobench agent's final configuration",
+   "set": "math400",
+   "n": 400,
+   "sampling": "the agent's final configuration; not stated",
+   "samples": "not stated",
+   "grader": "not stated"
+  },
+  "forecasts": {
+   "reader-1": {
+    "value": 362,
+    "low": 345,
+    "high": 375,
+    "gain": -0.6295
+   },
+   "reader-2": {
+    "value": 356,
+    "low": 342,
+    "high": 368,
+    "gain": 0.0
+   },
+   "run-02/f2-m01": {
+    "value": 338,
+    "low": 325,
+    "high": 351,
+    "gain": 2.9773
+   },
+   "run-02/f2-m02": {
+    "value": 372,
+    "low": 362,
+    "high": 382,
+    "gain": -3.0
+   },
+   "run-02/f2-m04": {
+    "value": 356,
+    "low": 344,
+    "high": 368,
+    "gain": 0.0
+   }
+  },
+  "inside": [
+   "run-02/f2-m01"
+  ],
+  "outside_every": false,
+  "also": [
+   "run-02 t14"
+  ]
+ },
+ {
+  "source": "run-07",
+  "kind": "forecasts",
+  "id": "t03",
+  "item": "result-a1bf75",
+  "quote": "score: other HumanEval+MBPP+ 394/538 tokens 4230 | base + 8 directions of RL-Code delta at 2x, Code cue, T 1.0",
+  "measured": 394,
+  "z": 2.26,
+  "readers": [
+   {
+    "value": 347,
+    "low": 312,
+    "high": 378
+   },
+   {
+    "value": 350,
+    "low": 316,
+    "high": 380
+   }
+  ],
+  "what": "How many of the 538 HumanEval+ and MBPP+ problems the base model with Code-RL 3.1's 8 top weight directions added at 2x size passes, with the Code cue at T 1.0.",
+  "unit": "problems passed of 538",
+  "cell": {
+   "model": "Olmo-3-1025-7B base + top 8 directions per matrix of (Olmo-3.1 RL-Zero-Code - base) at 2x",
+   "prompt": "Code cue",
+   "set": "HumanEval+ and MBPP+",
+   "n": 538,
+   "sampling": "T 1.0; top-p not stated; token cap not stated",
+   "samples": "not stated",
+   "grader": "not stated"
+  },
+  "forecasts": {
+   "reader-1": {
+    "value": 347,
+    "low": 312,
+    "high": 378,
+    "gain": -0.1145
+   },
+   "reader-2": {
+    "value": 350,
+    "low": 316,
+    "high": 380,
+    "gain": 0.0
+   },
+   "run-07/f2-m02": {
+    "value": 365,
+    "low": 338,
+    "high": 392,
+    "gain": 0.0
+   },
+   "run-07/f2-m05": {
+    "value": 355,
+    "low": 330,
+    "high": 380,
+    "gain": -0.385
+   }
+  },
+  "inside": [],
+  "outside_every": true,
+  "also": [
+   "run-03 t03",
+   "run-04 t03",
+   "run-05 t03",
+   "run-06 t03",
+   "run-07 t03",
+   "run-08 t03"
+  ]
+ },
+ {
+  "source": "run-07",
+  "kind": "forecasts",
+  "id": "t05",
+  "item": "result-a1bf75",
+  "quote": "score: other HumanEval+MBPP+ 368/538 tokens 3653 | base + 8 directions of RL-Math delta at 1.5x, Code cue, T 1.0",
+  "measured": 368,
+  "z": 2.06,
+  "readers": [
+   {
+    "value": 338,
+    "low": 314,
+    "high": 362
+   },
+   {
+    "value": 333,
+    "low": 310,
+    "high": 358
+   }
+  ],
+  "what": "How many of the 538 HumanEval+ and MBPP+ problems the base model with Math-RL 3.1's 8 top weight directions added at 1.5x size passes, with the Code cue at T 1.0.",
+  "unit": "problems passed of 538",
+  "cell": {
+   "model": "Olmo-3-1025-7B base + top 8 directions per matrix of (Olmo-3.1 RL-Zero-Math - base) at 1.5x",
+   "prompt": "Code cue",
+   "set": "HumanEval+ and MBPP+",
+   "n": 538,
+   "sampling": "T 1.0; top-p not stated; token cap not stated",
+   "samples": "not stated",
+   "grader": "not stated"
+  },
+  "forecasts": {
+   "reader-1": {
+    "value": 338,
+    "low": 314,
+    "high": 362,
+    "gain": 0.0
+   },
+   "reader-2": {
+    "value": 333,
+    "low": 310,
+    "high": 358,
+    "gain": -0.4529
+   },
+   "run-07/f2-m02": {
+    "value": 344,
+    "low": 324,
+    "high": 364,
+    "gain": 0.0
+   },
+   "run-07/f2-m05": {
+    "value": 335,
+    "low": 313,
+    "high": 357,
+    "gain": -0.5326
+   }
+  },
+  "inside": [],
+  "outside_every": true,
+  "also": [
+   "run-05 t05",
+   "run-06 t05",
+   "run-07 t05"
+  ]
+ },
+ {
+  "source": "cells-01",
+  "kind": "cells",
+  "id": "m06-r1",
+  "item": "result-9ce8ed",
+  "quote": "studies/theory/results/experiments/cell-m06-01/metrics.json",
+  "measured": 7,
+  "z": 1.71,
+  "readers": [
+   {
+    "value": 20,
+    "low": 9,
+    "high": 34
+   },
+   {
+    "value": 22,
+    "low": 10,
+    "high": 36
+   }
+  ],
+  "what": "quick finished-wrong answers: rows that are not cap hits, are graded wrong by v3 and have at most 2,000 generated tokens",
+  "unit": "problems of 164",
+  "cell": {
+   "model": "Olmo-3.1-7B-RL-Zero-Math checkpoint step 100 (revision step_0100 0a45720c)",
+   "prompt": "plain",
+   "set": "hard328",
+   "n": "164: the first 164 problems of hard328 (--n 164)",
+   "sampling": "T 1.0, top-p 1.0, min-p 0, seed 3000000 + problem index",
+   "samples": "1, no restarts",
+   "grader": "v3",
+   "cap": "16,384 generated tokens (default)"
+  },
+  "forecasts": {
+   "reader-1": {
+    "value": 20,
+    "low": 9,
+    "high": 34,
+    "gain": 0.0
+   },
+   "reader-2": {
+    "value": 22,
+    "low": 10,
+    "high": 36,
+    "gain": -0.2063
+   },
+   "run-03/f2-m06": {
+    "value": 26,
+    "low": 15,
+    "high": 38,
+    "gain": -1.9756
+   },
+   "run-05/f2-m04": {
+    "value": 8,
+    "low": 3,
+    "high": 16,
+    "gain": 2.2562
+   },
+   "run-06/f2-m02": {
+    "value": 6,
+    "low": 2,
+    "high": 12,
+    "gain": 2.4965
+   }
+  },
+  "inside": [
+   "run-05/f2-m04",
+   "run-06/f2-m02"
+  ],
+  "outside_every": false,
+  "also": [
+   "cells-01 m06-r1"
+  ]
+ }
+]

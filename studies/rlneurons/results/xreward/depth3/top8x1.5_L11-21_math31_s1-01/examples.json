@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2708,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ation:\n\\[ 16\\left(-\\frac{289}{4}\\right) + b = -458 \\]\n\\[ -1156 + b = -458 \\]\n\\[ b = 698 \\]\n\nSo, \\( P(0) = b = 698 \\).\n\nNext, for \\( Q(x) \\):\nUsing the same points \\((16, 54)\\) and \\((20, 53)\\), we set up the following equations:\n3. \\( -2(16)^2 + 16c + d = 54 \\)\n4. \\( -2(20)^2 + 20c + d = 53 \\)\n\nThese simplify to:\n3. \\( -512 + 16c + d = 54 \\) \u27f9 \\( 16c + d = 566 \\)\n4. \\( -800 + 20c + d = 53 \\) \u27f9 \\( 20c + d = 853 \\)\n\nSubtracting the third equation from the fourth:\n\\[ (20c + d) - (16c + d) = 853 - 566 \\]\n\\[ 4c = 287 \\]\n\\[ c = \\frac{287}{4} \\]\n\nSubstituting \\( c \\) back into the third equation:\n\\[ 16\\left(\\frac{287}{4}\\right) + d = 566 \\]\n\\[ 1148 + d = 566 \\]\n\\[ d = -582 \\]\n\nSo, \\( Q(0) = d = -582 \\).\n\nFinally, we find \\( P(0) + Q(0) \\):\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 57,
+  "seed": 3010057,
+  "gold": "928",
+  "extracted_v3": "2744",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 13680,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "i\\) be the number of colorings where the \\(i\\)-th rectangle is monochromatic (all four vertices the same color).\n   - Each \\(|A_i|\\) is \\(2 \\times 2^8 = 512\\).\n   - Since there are three rectangles, the total for single rectangles is \\(3 \\times 512 = 1536\\).\n   - For the intersection of two disjoint rectangles, each pair requires \\(2 \\times 2 \\times 2^4 = 64\\). There are three such intersections, so \\(3 \\times 64 = 192\\).\n   - The intersection of all three rectangles requires \\(2^3 = 8\\) colorings.\n\n4. **Applying Inclusion-Exclusion**:\n   - The number of invalid colorings is:\n     \\[\n     |A_1 \\cup A_2 \\cup A_3| = 1536 - 192 + 8 = 1352\n     \\]\n\n5. **Valid Colorings**:\n   - The number of valid colorings is:\n     \\[\n     4096 - 1352 = 2744\n     \\]\n\nThus, the final answer is \\(\\boxed{2744}\\)."
+ }
+}

@@ -154,7 +154,7 @@ svg [data-go]:focus-visible .logo { fill: var(--blue); }
 /* The words */
 .side {
   grid-column: 2; grid-row: 2 / 4; min-width: 0; min-height: 0; overflow: hidden auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: clamp(20px, 7vh, 96px) 0 0 40px; box-shadow: inset 1px 0 var(--rule);  /* a border would make the closed column 41px wide, 1px more than the page's padding hides */
   opacity: 0; visibility: hidden; transition: opacity .3s ease .12s, visibility 0s .42s;
 }
 .page.open .side { opacity: 1; visibility: visible; transition: opacity .3s ease .12s; }
@@ -196,13 +196,13 @@ svg [data-go]:focus-visible .logo { fill: var(--blue); }
 
 @media (max-width: 900px) {
   .page { display: block; height: auto; padding: 16px 16px 40px; }
-  .top { gap: 13px; padding-bottom: 12px; }
+  .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }  /* the status goes to a second line where the tabs fill the first */
   .name { font-stretch: 112%; margin-right: 0; }
   .stage { margin-top: 10px; padding: 0; }
   svg { height: auto; }
   .foot { padding-top: 14px; justify-content: center; }
   .page.open .foot { display: none; }
-  .side { padding: 12px 0 0; overflow: visible; border-left: 0; }
+  .side { padding: 12px 0 0; overflow: visible; box-shadow: none; }
   .pane { min-width: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -267,12 +267,12 @@ const TEXT = {
   },
   memory: {
     name: "Memory",
-    lead: `The team's memory is one <a href="https://past.dev">past.dev</a> project. An agent searches it before it starts an idea.`,
+    lead: `The team's memory is one <a href="/pastdev">past.dev</a> project. An agent searches it before it starts an idea.`,
     facts: ["Every result and every knowledge post on the board is stored there.", "A finding from a paper is stored with a quote from it, and only if the quote appears in the paper's text.", "When a Claude Code session ends, its typed prompts and the agent's replies are stored. Tool output and file contents are not sent."],
   },
   search: {
     name: "Search",
-    lead: `Agents search the web and the literature with <a href="https://exa.ai">Exa</a>, and read the pages they find.`,
+    lead: `Agents search the web and the literature with <a href="/exa">Exa</a>, and read the pages they find.`,
     facts: ["Before a new measurement, an agent searches for published work on the same question.", "If a published table already answers the question, the agent posts that finding and does not run the experiment."],
   },
 };
@@ -616,7 +616,8 @@ function say(i, k, text, ns, t, hold) {  // the first words of a real message or
   const [line, when] = o.said.children, age = g.age ? "\u2002" + ago(ns) : "";  // a phone has no room for the age
   line.textContent = cut; when.textContent = age;
   when.setAttribute("class", "when" + (mins(ns) < 1 ? " now" : ""));
-  S.play.say = { i, k, cut, age, t0: t, hold, wide: o.said.getComputedTextLength(), n: -1 };  // measured whole, so it does not move while it is typed
+  const box = $("svg").getBoundingClientRect(), spare = Math.max(0, box.width / Math.min(box.width / g.w, box.height / g.h) - g.w) / 2;  // the room beside the drawing, in its units
+  S.play.say = { i, k, cut, age, t0: t, hold, wide: o.said.getComputedTextLength(), spare, n: -1 };  // measured whole, so it does not move while it is typed
 }
 function said(t) {
   const Y = S.play.say, g = S.g;
@@ -625,9 +626,9 @@ function said(t) {
   if (!o || age >= Y.hold) { if (o) o.said.setAttribute("opacity", 0); S.play.say = null; return; }
   const n = Math.min(Y.cut.length, Math.ceil(age * 55)), [line, when] = o.said.children;  // 55 characters a second
   if (n !== Y.n) { Y.n = n; line.textContent = Y.cut.slice(0, n); when.textContent = n < Y.cut.length ? "" : Y.age; }
-  const x = o.side < 0 ? o.nx - o.wide / 2 : o.side > 0 ? o.nx + o.wide / 2 - Y.wide : o.nx - Y.wide / 2;  // it grows toward the middle of the picture
-  o.said.setAttribute("x", f(Math.max(8, Math.min(g.w - 8 - Y.wide, x))));
-  o.said.setAttribute("y", f(o.ny + (o.below ? g.fq * 1.45 : -g.fw * 1.08) * o.nk));
+  const x = o.side < 0 ? o.nx + o.wide / 2 - Y.wide : o.side > 0 ? o.nx - o.wide / 2 : o.nx - Y.wide / 2;  // on the line beyond the name, running away from the board and its labels
+  o.said.setAttribute("x", f(Math.max(8 - Y.spare, Math.min(g.w - 8 + Y.spare - Y.wide, x))));
+  o.said.setAttribute("y", f(o.ny + (o.below ? g.fq * 1.5 : -g.fw * 1.3) * o.nk));
   o.said.setAttribute("opacity", Math.max(0, Math.min(1, age / .15, (Y.hold - age) / .4)).toFixed(2));
 }
 function hush() {  // stop the replay where it is

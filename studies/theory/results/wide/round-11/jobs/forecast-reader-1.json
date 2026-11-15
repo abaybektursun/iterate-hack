@@ -1,0 +1,8 @@
+{"forecasts": [
+{"readout": "r11-m01-r1", "value": 90, "low": 76, "high": 104, "reason": "Plain base T 0.6 single sample is 107/328 at cap 16,384 (result-099916); cutting to 4,096 loses the long right answers on hard problems (roughly 15-20), with seed noise of about 9."},
+{"readout": "r11-m02-r1", "value": 1, "low": -1, "high": 3, "reason": "Plain base right answers on MATH-500 are mostly well under 4,096 tokens and a 6-sample plurality vote is robust, so dropping the 4k-8k samples flips at most a couple of votes, in either direction."},
+{"readout": "r11-n01-r1", "value": 34, "low": 30, "high": 38, "reason": "Think-SFT + cue sequential vote up to 4 gives 34.0/41 on this shard (best_base); one extra possible sample adds almost nothing, and fresh samples add noise of about 2.4."},
+{"readout": "r11-n01-r2", "value": 30, "low": 26, "high": 34, "reason": "RL's sequential vote is about 218/328 (27.3 of 41), scaled up because this shard is easier (Think-SFT 34 against 29.9 expected)."},
+{"readout": "r11-n02-r1", "value": 48, "low": 43, "high": 53, "reason": "A Think-SFT vote over 3 sits a little under the vote over 4 (241/328, about 49 of 66 on this shard); min-p 0.05 should change little for an SFT reasoning model."},
+{"readout": "r11-n02-r2", "value": 44, "low": 39, "high": 49, "reason": "RL's vote over 4 is 221/328, so a vote over 3 is about 217/328, or about 44 of 66 on this average-difficulty shard; min-p 0.05 probably causes few extra loops."}
+]}
