@@ -1,0 +1,50 @@
+{
+ "statistic": "S = share of m21 right rows (first row per problem 0-249, score_v3 1, not cap hit) with n_generated <= L",
+ "S": 0.414,
+ "ci90": [
+  0.3185,
+  0.5098
+ ],
+ "n": 157,
+ "n_counted": 65,
+ "L_tokens": 1069.0,
+ "n_t3_right_not_capped": 106,
+ "m21_right_median_tokens": 1326.0,
+ "null": 0.5,
+ "null_check_plain_base_self": {
+  "S": 0.5,
+  "ci90": [
+   0.5,
+   0.5243
+  ]
+ },
+ "ranges": {
+  "a": [
+   0.0,
+   0.12
+  ],
+  "b": [
+   0.15,
+   0.36
+  ],
+  "null": [
+   0.41,
+   0.6
+  ]
+ },
+ "placement": {
+  "a": "outside",
+  "b": "straddles"
+ },
+ "verdict": {
+  "round-14/s4-a": "refuted",
+  "round-14/s4-b": "undecided"
+ },
+ "bootstrap": "10,000 resamples of problems 0-249 with replacement, numpy default_rng(0), L and S recomputed per draw",
+ "inputs": {
+  "m21": "runs/abaybektursun-1115-103050-eae1/answers.jsonl (job abaybektursun-1115-103050-eae1)",
+  "t3": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json"
+ },
+ "checks": "m21 right 157 and quick wrong 60 (result-ac7104), T3 right 107; n_new and score_v3 equal the committed cell-r9-m21-01/per_problem.json on all 250 rows, n_generated = n_new + 1 (stop token; 0 for cap hits); plain base against its own median inside the null range",
+ "raw_rows_read": "Read 10 short right m21 rows (problems 3, 13, 29, 54, 90, 117, 162, 199, 229, 243): 5 are short 'Okay, let's see' deliberations, 4 are direct worked solutions in the plain base's style, 1 echoes the prompt then deliberates. Over all 65 short right rows 39 open with 'Okay' in the first 240 characters, against 14 of the plain base's 53 right rows at or below L."
+}

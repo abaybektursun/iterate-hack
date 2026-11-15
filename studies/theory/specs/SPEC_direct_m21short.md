@@ -59,6 +59,10 @@ required to hold.
 
 - T3 right and not cut off is 106 rows on problems 0-249, not "about 107": one T3 right row is a cap hit. Checked
   before computing L; L itself was printed during this check (1069 tokens), before any m21 statistic was computed.
+- The first run of the check "n_generated equals n_new of per_problem.json" failed on 246 of 250 rows: n_generated =
+  n_new + 1 (the stop token). The T3 lengths (`rln4_t1_t3_items.py`, field `tokens` = `n_generated`) use n_generated
+  too, so S uses n_generated on both sides as the plan says. The check is now: n_new equals the committed n_new, and
+  n_generated - n_new is 1, or 0 for a cap hit. Changed before S was computed.
 - Duplicate note: the round-14 duplicate judge called s4-b a restatement of r5-m03-rival (refuted, result-d02d46).
   That refutation measured Math's top-8 edit (short answers 82.9 % right, predicted 50 %), not Code's. It does not
   decide s4-b, which claims s about 0.47 for Code; the shared test is run regardless.
