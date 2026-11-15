@@ -11,7 +11,7 @@ better forecast as a series of its own, or as a function of the individual listi
 ## Method
 
 An agent swarm ran the work: each arm stated a hypothesis and the number that would refute it, ran it, and wrote
-one ledger entry per iteration (`results/ledger/`, 60 entries, failures included). Arms were scored on 30
+one ledger entry per iteration (`results/ledger/`, 84 entries, failures included). Arms were scored on 30
 development origins (2026-10-01 to 2026-10-30, 3,109 cells, 37 series, horizons 1, 3, 7 days). Six later origins
 (2026-10-31 to 2026-11-05) were locked: the candidate was written down in `specs/SPEC2.md` first and then run on
 them once.
@@ -75,7 +75,7 @@ that turn over daily is forecast poorly by every listing-level method.
 - A change in a posted median over a week is mostly a change in which providers are listed and which of the
   middle two or three reprice, not a market-wide move. Read the listing table, not the median.
 - One-week uncertainty of the median, as the width of [q10, q90] relative to the price in the submitted forecast:
-  median 5.9 %, a quarter of the series above 10 %.
+  median 5.9 %, a quarter of the series at 10 % or more.
 - Rate cards are not hedged against currency: a EUR-priced provider moves the USD median with the exchange rate.
 
 Not addressed: resale values and the 2 to 3 year view.
