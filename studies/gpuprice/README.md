@@ -117,7 +117,7 @@ included. Main entries, pooled skill against last value (1 / 3 / 7 days):
 | `ft-02`, `ft-03`, `ft-06` | LoRA or full fine-tune on the real listings (to 2026-09-30) | +0.241 to +0.265 | |
 | `pfn-02` | 4.8M-parameter network trained only on simulated listings (`jobs/pfn_sim.py`, `pfn_train.py`) | +0.267 | +0.173 / +0.240 / +0.307 |
 | `tab-01` | TabPFN v2 regressor per listing | +0.192 | |
-| `llm-01` | 80B open-weights LLM reading the listing table, 92 cells: +0.015 against +0.264 for `ens-04` on the same cells | | |
+| `llm-01` to `llm-04` | 80B open-weights LLM (`RedHatAI/Qwen3-Next-80B-A3B-Instruct-quantized.w4a16`) reading the listing table, 92 cells (10 series, 5 origins, 3 and 7 days): one number +0.015, stated quantiles +0.074, probabilities +0.058, reason-then-answer +0.128; same cells: `it00-lve` +0.106, `it01-sim` +0.180, `ens-04` +0.264. `results/llm/`. | | |
 | `ens-05` | **candidate**: quantile average of `fm2-17` and `sim2-15` | **+0.298** | +0.185 / +0.264 / +0.347 |
 
 Seed and checkpoint noise is about +-0.01 pooled (`ft-08` step curve, `pfn-02` checkpoints), so the averages

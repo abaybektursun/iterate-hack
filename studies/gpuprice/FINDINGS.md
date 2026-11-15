@@ -11,7 +11,7 @@ better forecast as a series of its own, or as a function of the individual listi
 ## Method
 
 An agent swarm ran the work: each arm stated a hypothesis and the number that would refute it, ran it, and wrote
-one ledger entry per iteration (`results/ledger/`, 84 entries, failures included). Arms were scored on 30
+one ledger entry per iteration (`results/ledger/`, 87 entries, failures included). Arms were scored on 30
 development origins (2026-10-01 to 2026-10-30, 3,109 cells, 37 series, horizons 1, 3, 7 days). Six later origins
 (2026-10-31 to 2026-11-05) were locked: the candidate was written down in `specs/SPEC2.md` first and then run on
 them once.
@@ -66,7 +66,8 @@ that turn over daily is forecast poorly by every listing-level method.
    listings only: +0.267, level with the 120M-parameter model. Neither is in the candidate: in the average the
    gain is +0.001.
 5. **Negative results.** An 80B open-weights LLM reading the whole provider table repeats the last value in 90 %
-   of its samples (+0.015 against +0.264 for the ensemble on the same 92 cells). Rolling calibration multipliers,
+   of its samples (+0.015 against +0.264 for the ensemble on the same 92 cells); asked to reason first it reads
+   the table correctly and reaches +0.128, level with the starter baseline (+0.106). Rolling calibration multipliers,
    conformal-style widening, longer context (+30 days), cross-collector covariates and a third ensemble member
    each gave nothing or lost.
 
