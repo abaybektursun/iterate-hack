@@ -97,7 +97,9 @@ TEMP, WIN = 0.6, 3000
 KS = {"zero": (10, 100, 1000), "rnd": (100, 1000), "mask": (3300, 1100, 860, 330), "rndmask": (860,)}
 KS_DRY = {"zero": (2, 4, 8), "rnd": (4, 8), "mask": (48, 24, 16, 8), "rndmask": (16,)}
 GRADE_FIELDS = ("score_v3", "score_v2", "score")
-PAD_KL_TOL, CACHE_TOL, EQ_TOL = 5e-3, 1e-3, 1e-4      # padding: 1.08e-3 measured in bf16 on the H200 smoke (base against RL is 0.06 to 0.09)
+PAD_KL_TOL, CACHE_TOL, EQ_TOL = 5e-3, 0.5, 1e-4       # padding: 1.08e-3 measured in bf16 (base against RL is 0.06 to 0.09). cache: largest logit
+# difference 0.25 measured on a 4,696-token row (job sameraslan-1114-184558-8a70), one to two bf16 steps at logit size 20 to 30; a wrong
+# window would differ by several logits
 REPRO_TOKENS = 20                                      # none_reproduces: bf16 rounding (one chunk against token by token) may flip a near-tie later
 
 
