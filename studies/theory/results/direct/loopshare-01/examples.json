@@ -1,0 +1,30 @@
+{
+ "cell": "plain_T0.6",
+ "file": "runs/s3/r3/base-01/out/P_hard.jsonl",
+ "counts": {
+  "why": "kept (n_new > 4,096) and a rule-A loop: in the numerator",
+  "problem_index": 0,
+  "gold": "116",
+  "n_new": 16384,
+  "cap_hit": true,
+  "loop_A": true,
+  "loop_onset_char": 8421,
+  "extracted_v3": null,
+  "score_v3": 0,
+  "text_chars": 64916,
+  "text_tail": "he same two points, which would make them the same quadratic, but since their leading coefficients are different, that's impossible. Therefore, the problem must mean that each polynomial passes through one of the points. For example, P(x) passes through (16,54) and (20,53), and Q(x) passes through (16,54) and (20,53). But that would mean both polynomials have the same two points, which would make them the same quadratic, but since their leading coefficients are different, that's impossible. Therefore, the problem must mean that each polynomial passes through one of the points. For example, P(x"
+ },
+ "does_not_count": {
+  "why": "kept (n_new > 4,096) but no rule-A loop: in the denominator only",
+  "problem_index": 61,
+  "gold": "113",
+  "n_new": 14631,
+  "cap_hit": false,
+  "loop_A": false,
+  "loop_onset_char": null,
+  "extracted_v3": "113",
+  "score_v3": 1,
+  "text_chars": 35115,
+  "text_tail": "left(\\frac{9}{2}, -\\frac{27\\sqrt{14}}{11}\\right)\\).\n\n6. **Line \\(AD\\) and Intersection \\(P\\)**:\n   - Equation of line \\(AD\\) is derived and solved with the circumcircle equation, leading to the coordinates of \\(P\\).\n\n7. **Power of a Point**:\n   - Using the power of point \\(D\\), \\(DA \\cdot DP = DB^2\\). Calculations show \\(DB = \\frac{225}{22}\\) and \\(DA = \\frac{325}{22}\\).\n   - Using the power of a point theorem, \\(AP = \\frac{DA^2 - DB^2}{DA} = \\frac{100}{13}\\).\n\n8. **Result**:\n   - The length \\(AP\\) is \\(\\frac{100}{13}\\), so \\(m = 100\\) and \\(n = 13\\), giving \\(m + n = 113\\).\n\n\\[\n\\boxed{113}\n\\]"
+ }
+}

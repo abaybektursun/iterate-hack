@@ -1,0 +1,118 @@
+{
+ "test": "loopshare-01",
+ "plan": "studies/theory/results/wide/round-14/jobs/rivals-s3.json",
+ "spec": "studies/theory/specs/SPEC_direct_loopshare.md",
+ "statistic": "loop share: rule-A loops / answers with more than 4,096 generated tokens (base, T 0.6 / top-p 0.95, hard328, cap 16,384, one answer per problem)",
+ "primary_cell": "plain_T0.6",
+ "value": 0.5185,
+ "ci90": [
+  0.4603,
+  0.5767
+ ],
+ "n": 189,
+ "null_value": 0.0042,
+ "null_ci90": [
+  0.0,
+  0.0127
+ ],
+ "ranges": {
+  "a": [
+   0.05,
+   0.4
+  ],
+  "b": [
+   0.45,
+   1.0
+  ],
+  "null": [
+   0.0,
+   0.03
+  ]
+ },
+ "verdict": {
+  "a": "refuted",
+  "b": "holds"
+ },
+ "cells": {
+  "plain_T0.6": {
+   "file": "runs/s3/r3/base-01/out/P_hard.jsonl",
+   "reproduced_right_cap_loops": [
+    107,
+    137,
+    98
+   ],
+   "n": 189,
+   "loops": 98,
+   "loop_share": 0.5185,
+   "ci90": [
+    0.4603,
+    0.5767
+   ],
+   "loops_at_or_below_4096": 0,
+   "kept_not_loop": {
+    "n": 91,
+    "cap_hits": 39,
+    "finished": 52,
+    "right_v3": 23
+   },
+   "kept_right_v3": 23
+  },
+  "cue_T0.6": {
+   "file": "runs/s3/r3/base-01/out/F_hard.jsonl",
+   "reproduced_right_cap_loops": [
+    119,
+    173,
+    132
+   ],
+   "n": 211,
+   "loops": 132,
+   "loop_share": 0.6256,
+   "ci90": [
+    0.5735,
+    0.6825
+   ],
+   "loops_at_or_below_4096": 0,
+   "kept_not_loop": {
+    "n": 79,
+    "cap_hits": 41,
+    "finished": 38,
+    "right_v3": 16
+   },
+   "kept_right_v3": 16
+  },
+  "cue_T1.0_null": {
+   "file": "runs/abaybektursun-1114-151534-e72c/answers.jsonl",
+   "reproduced_right_cap_loops": [
+    164,
+    77,
+    1
+   ],
+   "n": 236,
+   "loops": 1,
+   "loop_share": 0.0042,
+   "ci90": [
+    0.0,
+    0.0127
+   ],
+   "loops_at_or_below_4096": 0,
+   "kept_not_loop": {
+    "n": 235,
+    "cap_hits": 77,
+    "finished": 158,
+    "right_v3": 79
+   },
+   "kept_right_v3": 79
+  }
+ },
+ "plan_cell_bounds": {
+  "cell": "studies/cleanneurons/results/gen/hard328_base_t06-01 (cue, T 0.6 / top-p 1.0; rows only in iterate-runs:sameraslan-1114-220554-2e30/answers.jsonl)",
+  "loops_A": 94,
+  "cap_hits": 156,
+  "share_bounds_if_every_loop_is_past_4096": [
+   0.2866,
+   0.6026
+  ]
+ },
+ "bootstrap": "10,000 percentile resamples of the kept answers, numpy default_rng(0), 5th and 95th percentiles",
+ "raw_rows_read": "First 10 kept plain T 0.6 rows (indices 0, 15, 29, 57, 58, 61, 62, 66, 67, 68): 7 are rule-A loops, all cap hits, the same re-derivation cycling to 16,384 tokens (index 29 repeats one formula line, 'Wait, maybe the formula is (m-1)(n-1) + (m + n -1)... still not 8. Hmm.'; onsets at 6k-29k characters). The 3 non-loops all finish with a boxed answer: right at 9,825 and 14,631 tokens (66: 721, 61: 113), wrong at 4,384 (68: 405)."
+}
