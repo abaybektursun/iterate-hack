@@ -27,6 +27,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/axis.py`, `analysis/axis_test.py`, `specs/SPEC_axis.md` | One axis or several: per-problem vectors of every arm, pair overlap and oracle union against the rest-score null, Rasch against Rasch plus one bilinear term, the floor; planted checks. See "One axis or several?". |
 | `analysis/rate.py`, `analysis/rate_test.py`, `specs/SPEC_rate.md` | Exchange-rate table: each arm's ability shift in logits, tokens and training signal; leave-one-arm-out transfer to the 328; predictions filed before held-out cells were read. Outputs `results/rate/`. |
 | `analysis/hazard.py`, `analysis/hazard_test.py`, `specs/SPEC_hazard.md` | Slip-hazard law: hazard-link item model against the Rasch logit model held out, hazard ratio of every arm and its constancy over difficulty, transfer to the 328, chain length and independence of the 4 samples, filed predictions. Outputs `results/hazard/`. |
+| `analysis/profile.py`, `analysis/profile_test.py`, `specs/SPEC_profile.md` | Difficulty profiles of Think-SFT and RL: error reduction by difficulty bin with difficulty defined without the arms compared, profile contrast against same-arm and one-axis noise floors, 2PL against Rasch held out, unions, cap hits by level, filed predictions for Think-SFT on hard328. Outputs `results/profile/`; input `data/profile/math500_meta_v1.json`. |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
 | `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
 | `jobs/rln3_gen.py` | RLN-3 generation job (arms P, F, C on MATH-500 and the harder set), AWS `pg` only. |
@@ -72,6 +73,12 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `results/rln4/` | `grader_v3/readout.json` (the final table), `modal_k-01/`, `modal_t2-01/`, `modal_t3-01/` (readouts, metrics, run records), `t1_t2_items-01/` (per-problem T1 against T2, hand labels of the base failures), `offline/`. |
 | `results/day1_wdiff/` | `readout.json` (cells, differences, predictions, check), `merge_stats.json` (RL and Code-RL differences from the base by tensor group and layer; Code against RL cosine) and per cell `<arm>-01/` (`run.json`, `metrics.json`, `merge.json`, `examples.json`). |
 | `results/day1_hard328/` | `readout.json` (seven-cell table, per source, differences, check) and per T 1.0 cell `<arm>-01/` (`run.json`, `metrics.json` from the job, `examples.json`: one right, one wrong). |
+| `specs/SELFDISTILL_2026-11-15.md` | Self-distillation spec: data arms V (vote), U (random), S (shortest), LoRA hyperparameters, merge, cells, seeds, predictions D1-D5, cost. |
+| `jobs/distill_data.py`, `jobs/distill_data_test.py` | Builds the arms from the Day-1 #3 base cue rows on the laptop without reading any gold field; writes `data/selfdistill/arms-v1.json`. Planted cases. |
+| `jobs/distill_train.py` | `train`: LoRA fine-tune (GPU), adapter, `train.json` (loss, generation check, difference statistics against RL - base). `merge`: rebuilds the merged bf16 model from a saved adapter for `run_cell --model-path`, hash checked. |
+| `analysis/selfdistill.py` | Self-distillation readout: five 328 cells beside base cue, theta(0.5) cue, RL plain; sanity cell; training reports; predictions; `--hand`. |
+| `data/selfdistill/arms-v1.json` | Per arm: problem index, sample, tokens, extracted answer and text sha256 of each training example (texts on S3, `r5/selfdistill-01/data/arms-v1.jsonl`). |
+| `results/selfdistill/` | `readout.json`, per cell `<arm>-01/` (`run.json`, `metrics.json`, `examples.json`), `train_<arm>-01/` (`run.json`, `train.json`), `sanity_V_plain_math500_n100-01/`. |
 
 Old paths: `infra/pg/*.py` and `infra/aws_pg/jobs/n13_*.py` are in `lib/`; `infra/aws_pg/jobs/rln*_gen.py` and
 `infra/modal_rln4_k.py` are in `jobs/`; `studies/rlneurons/rln{3,4}/inputs/` is `data/rln{3,4}/`; `rln{3,4}/offline/`,
@@ -773,6 +780,94 @@ resamples, in points.
 - Without the 3 problems that overlap the RL training prompts: 399, 221, 315, 323 of 535.
 - Not run: the vote over four samples after restart (the configuration chosen on MATH-500), and RL-Code with a cue (the
   model writes the cue itself in 10 of 10 smoke answers).
+
+## Self-distillation of the base's own vote (board work-9763ed, spec specs/SELFDISTILL_2026-11-15.md)
+
+Question: does a short supervised fine-tune of the base on its own vote-selected cue samples from MATH-500 (no reward, no gold
+answer) raise it on the 328 harder problems it never saw? Answer: no. The fine-tuned model with the cue scores 167 of 328 against the
+base's 164 (+0.9 points, [-3.0, 4.9]), and the vote selection does no better than a random own sample (V cue - U cue -0.3,
+[-4.9, 4.3]). What it does learn is the format: with the plain prompt it now writes the cue in 328 of 328 answers and scores 161,
+level with the cued base (base plain: 76). All from `results/selfdistill/readout.json` (`analysis/selfdistill.py`); grader v3; T 1.0 /
+top-p 1.0, cap 16,384, one sample per problem; paired bootstrap, 5,000 resamples, seed 0, 95 % percentile interval, in points.
+
+Training data (`jobs/distill_data.py`, `data/selfdistill/arms-v1.json`): attempt 0 of the 4 samples per problem of Day-1 #3 base cue
+(job `abaybektursun-1114-153825-208b`). V: the shortest finished member of the plurality group (at least 2 votes, no tie); 455 of 500
+problems (45 without a plurality). U: one finished sample at random on the same 455. S: the shortest finished sample on the same 455
+(length control; V picks the same sample as S on 422 of 455). Each example: the plain prompt, target = the stored completion with
+its cue plus the stop token. Right under v3 (read after the build): V 439 of 455, U 407, S 416. LoRA rank 16, alpha 32, all q, k,
+v, o, gate, up, down; lr 1e-4 constant, 2 epochs, 16,384 target tokens per step; merged to bf16 with stochastic rounding.
+
+| Arm | Examples | Target tokens | Steps | Loss first / last step | Loss epoch 1 / 2 | ‖D‖ / ‖W‖ | Cosine with RL - base | Train job, folder |
+|---|---|---|---|---|---|---|---|---|
+| V | 455 | 898,064 | 96 | 0.366 / 0.258 | 0.394 / 0.381 | 0.46 % | 0.0025 | `abaybektursun-1114-194352-feef`, `train_V-01/` |
+| U | 455 | 1,353,449 | 140 | 0.387 / 0.290 | 0.441 / 0.429 | 0.58 % | 0.0022 | `abaybektursun-1114-194358-195f`, `train_U-01/` |
+| S | 455 | 839,231 | 91 | 0.372 / 0.286 | 0.388 / 0.375 | 0.44 % | 0.0025 | `abaybektursun-1114-194405-bbb6`, `train_S-01/` |
+
+‖D‖ / ‖W‖ is over the adapted matrices (float32 LoRA difference; RL - base is 0.24 % on the same matrices, so the fine-tune
+moved the weights twice as far as RL did, in a direction nearly orthogonal to it: 0.001 to 0.003 per tensor group). Effective scale
+of the merge 1.000 in every arm; the merge with the adapter scaled by 0 is tensor-identical to the base (asserted).
+
+| Cell (328 problems) | Right (v3) | Cap hits | Rule-A loops | Mean tokens | Starts with cue | Seed base | Job id, run folder |
+|---|---|---|---|---|---|---|---|
+| base, cue | 164 | 77 | 1 | 9,344 | 328 | 3,000,000 | `abaybektursun-1114-151534-e72c`, `day1/hard328_base_cue_t10-01/` |
+| V, plain | 161 | 74 | 0 | 9,075 | 328 | 81,000,000 | `abaybektursun-1114-201013-47c5`, `selfdistill/V_plain-01/` |
+| V, cue | 167 | 74 | 0 | 8,625 | 328 | 82,000,000 | `abaybektursun-1114-201021-095e`, `selfdistill/V_cue-01/` |
+| U, plain | 154 | 80 | 0 | 9,257 | 327 | 83,000,000 | `abaybektursun-1114-201028-1adf`, `selfdistill/U_plain-01/` |
+| U, cue | 168 | 76 | 2 | 9,103 | 328 | 84,000,000 | `abaybektursun-1114-201035-c6c0`, `selfdistill/U_cue-01/` |
+| S, cue | 171 | 65 | 1 | 8,535 | 328 | 85,000,000 | `abaybektursun-1114-201132-3c04`, `selfdistill/S_cue-01/` |
+| theta(0.5), cue | 190 | 73 | 0 | 9,656 | 328 | 73,000,000 | `abaybektursun-1114-181228-34ad`, `day1_wdiff328/theta0.5_cue-01/` |
+| RL, plain | 206 | 20 | 0 | 9,315 | 271 | 3,000,000 | `abaybektursun-1114-151540-86ef`, `day1/hard328_rl_plain_t10-01/` |
+
+| Difference (paired, 328) | Points | 95 % interval |
+|---|---|---|
+| V cue minus base cue | 0.9 | [-3.0, 4.9] |
+| V plain minus base cue | -0.9 | [-5.5, 3.7] |
+| V plain minus U plain | 2.1 | [-2.1, 6.4] |
+| V cue minus U cue | -0.3 | [-4.9, 4.3] |
+| V cue minus S cue | -1.2 | [-5.5, 3.0] |
+| S cue minus base cue | 2.1 | [-2.1, 6.7] |
+| U cue minus base cue | 1.2 | [-3.0, 5.8] |
+| V cue minus theta(0.5) cue | -7.0 | [-11.6, -2.7] |
+| V cue minus RL plain | -11.9 | [-16.2, -7.9] |
+
+Against base cue (164 right, 164 wrong), fixed / lost: V plain 29 / 32, V cue 25 / 22, U plain 22 / 32, U cue 30 / 26, S cue 31 / 24;
+theta(0.5) cue 40 / 14, RL plain 49 / 7. The fine-tuned cells change about as many problems as a fresh sample of the base does, in
+both directions; RL fixes many and loses few.
+
+- Predictions (spec): D1 held (V plain 161, interval of V plain - base cue [-5.5, 3.7] includes 0). D2, the main claim, refuted
+  (+0.9, [-3.0, 4.9]). D3 refuted at both prompt arms (plain +2.1 [-2.1, 6.4], cue -0.3 [-4.9, 4.3]): the vote selection adds
+  nothing over a random own finished sample, and the length control S is no different (V cue - S cue -1.2). D4 held (11.9 points
+  under RL plain). D5 held by its rule (74 and 74 cap hits under 77), but the difference is 3 problems.
+- Published prior confirmed: arXiv 2607.13643 Table 1 (LMSI, vote-filtered SFT on own text, Qwen3-4B-Instruct) moves held-out
+  AIME 2024 / 2025 by 0.0 / -0.8 points. Here on a pretrained base, 455 prompts, the same: the only effect is the format the
+  training texts share (the cue opening), which the plain prompt then reproduces. That gain (base plain 76 -> 161) is the cue's
+  own gain; the cue at inference gives it for free.
+- Sanity cell, in-distribution (the 100 problems were trained on; a check that training worked, not a result): V plain on
+  MATH-500 first 100 scores 90, all 100 answers start with the cue; base plain (T3) 49, base cue (T1) 82 on the same 100. Job
+  `abaybektursun-1114-200050-c260`, `results/selfdistill/sanity_V_plain_math500_n100-01/`.
+- Generation check (`train.json` `generations_before` / `_after`, greedy, 3 training prompts, plain prompt): before training the
+  base writes `.\n\nOkay, so I need to ...` or `.\n\nTo convert ...`; after training all three arms write ` line!\n\nOkay, ...`.
+- Hand read: per cell, 20 finished answers scored wrong (numpy seed 0, `--hand <arm>`): 0 of 20 right in each of the five cells.
+  Five of the 100 have no extracted answer although the finish reason is `stop`: the model emitted the stop token mid-sentence
+  (V plain 61, 179; U cue 91, 291) or after a repeated line (V cue 289: `2026 - 393 = 1633. Not a palindrome.` repeated). V plain,
+  10 answers read (numpy seed 0): worked solutions or long unfinished reasoning at the cap; no empty answers in any cell; no
+  copying of training solutions (largest share of an answer's 12-word sequences found in the V training texts: 1.7 %, mean
+  0.05 %). Two tails: problem 150 (right) `...So he can't afford $51 shoes. Therefore, $50 is the maximum.\n\nSo the answer should
+  be $50.\boxed{50}`; problem 109 (cap hit) `...sum to295.03°, which is roughly 295, but maybe it's 180° when weighted.
+  295.03°=180° +115.`
+- No two compared cells share a seed base; no two cells share an identical non-empty completion for any problem
+  (`identical_nonempty_texts`, all 0).
+- Not done: a second round of distillation (out of scope); more than one sample per cell (the five fine-tuned cells span 154 to
+  171, inside one another's intervals).
+- Cost at 3.95 USD per H100-hour (start to end record of each job, H100 80GB HBM3): smoke 4.4 min 0.29 USD
+  (`abaybektursun-1114-193821-520c`, 8 longest U examples), train V 13.3 min 0.87, U 17.2 min 1.13, S 9.8 min 0.65, sanity 8.6 min
+  0.56, V plain 51.5 min 3.39, V cue 48.2 min 3.17, U plain 52.1 min 3.43, U cue 51.1 min 3.36, S cue 46.0 min 3.03; 19.89 USD in
+  all (limit 25). Training throughput 2,760 to 3,540 target tokens/s; a merge takes 29 to 47 s.
+- Raw answers and adapters: `runs/<job-id>/` after `uv run tools/gpu.py get <job-id>`, and
+  `s3://pg-lineage-769063704696/results/rlneurons/r5/selfdistill-01/<job-id>/` (`answers.jsonl` of the six scored jobs;
+  `adapter.safetensors` and `train.json` of the three training jobs); training texts `.../selfdistill-01/data/arms-v1.jsonl`.
+  Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.selfdistill`; tests
+  `python -m studies.rlneurons.jobs.distill_data_test`; commands of every job in each run folder's `run.json`.
 
 ## Truncation rules at T 1.0: min-p and top-p (board work-180a48, spec specs/SPEC_minp.md)
 
@@ -1708,6 +1803,185 @@ different cost 4; two agreeing wrong answers must score 0) and the run:
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.frontier_test
 uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.frontier --base studies/rlneurons/results/day1_3/math500_base_cue-01 --rl studies/rlneurons/results/day1_3/math500_rl-01 --out studies/rlneurons/results/frontier/math500-01 --base-run runs/abaybektursun-1114-153825-208b --rl-run runs/abaybektursun-1114-183640-e828
 ```
+
+## Difficulty profiles: do supervised fine-tuning and RL help on different problems? (MATH-500 n = 500, laptop, board work-d13a7f, idea-095c0d)
+
+Question: RL removes most of the cued base's errors on easy problems and few on hard ones (hazard section). Does Think-SFT
+(imitation of reasoning traces, no reward; cue, one sample, 454 of 500) do the opposite, which would make it the
+complementary partner of RL? Answer: yes for the profile, with one caveat that is not controlled; no for a gain from
+pairing the two on MATH-500. The prediction filed blind from the MATH-500 profile held on the 328 harder problems:
+Think-SFT cue scored 219 of 328 (profile rule 217.6; the one-axis rules 190.5 to 201.1; RL 205 and 206) and plain 203
+(one-axis 181.4 to 186.2). Not controlled: overlap of the 328 with Think-SFT's training traces (the owner's check is
+running, result-d9d6f3). On MATH-500 the profile contrast of Think-SFT against the four RL samples is C = -1.54 by MATH
+level (one-axis range -0.89 to +0.83, largest same-arm value 0.61; -1.45 and -1.52 under the two other difficulty
+definitions). It comes mostly from the easy side: on levels 1-2 Think-SFT has 10 wrong against RL's 2.0 per sample and the
+base's 8.5 (z 3.7); on level 5 it has 23 against RL's 25.5 (samples 21 to 30; z -1.5, inside noise). The union of
+Think-SFT with one RL sample is 2.8 problems above the union of two RL samples; 4 problems are solved by Think-SFT and by
+none of the 4 RL samples. Spec, hypotheses and literature: `specs/SPEC_profile.md`. Code: `analysis/profile.py` (imports the fits of
+`axis.py`, `rate.py`, `hazard.py`); planted checks: `analysis/profile_test.py`. Run folder `results/profile/math500-01/`
+(`readout.json`, `table.md`, `examples.json`, `run.json`).
+
+Literature (subagent; WebSearch and WebFetch because `tools/exa.py` has no key and the Exa MCP returned 401): ReLIFT (arXiv
+2506.07527, Section 2.1, Fig. 1a; Qwen2.5-Math-7B, SFT on DeepSeek-R1 traces against RL, 1,000 questions binned by the base's
+accuracy over 8 samples) states "RL outperforms SFT on Easy and Medium questions" and "SFT achieves better results than RL on
+the Hardest questions", as a figure without per-bin numbers or a noise floor. No per-level table for this contrast, no 2PL
+fit by training method and nothing on the Olmo 3 pair was found.
+
+Difficulty is defined without the arms compared (a problem an arm fails looks hard if that arm helps define "hard"):
+D-level = MATH level, which uses no model output (`data/profile/math500_meta_v1.json`, from the Hugging Face dataset
+`HuggingFaceH4/MATH-500`); D-rest = `hazard.groups` on the 19 single-sample arms that are not base samples, RL 3.1, Think-SFT
+or a row of the table (mostly RL-weight arms: hard for RL-like models); D-base = right count among two base samples, the
+random-difference control and the base-written-examples cell, with the other two base samples as the reference, both halves
+(hard for the base). Reference: the 4 base + cue samples. Error reduction = 1 - wrong(arm) / wrong(reference), bootstrap over
+problems, 2,000 resamples, 95 %; wrong cells per sample in brackets. D-level (D-rest and D-base in `table.md`):
+
+| Arm | Level 5 (134 problems) | Level 4 (128) | Level 3 (105) | Level 1-2 (133) |
+|---|---|---|---|---|
+| base + cue (reference), wrong | 47.5 | 20 | 13.5 | 8.5 |
+| RL plain, 4 samples pooled | 46 % [36, 57] (25.5) | 54 % [38, 70] (9.25) | 76 % [60, 90] (3.25) | 76 % [56, 96] (2) |
+| RL plain, the 4 samples one by one | 37 to 56 % (21 to 30) | 50 to 60 % (8 to 10) | 63 to 85 % (2 to 5) | 65 to 88 % (1 to 3) |
+| RL, cue | 43 % [26, 59] (27) | 65 % [44, 85] (7) | 63 % [35, 91] (5) | 53 % [11, 89] (4) |
+| Think-SFT, cue | 52 % [36, 66] (23) | 75 % [53, 94] (5) | 41 % [-2, 75] (8) | -18 % [-93, 43] (10) |
+| Think-SFT, plain | 35 % [14, 53] (31) | 55 % [29, 78] (9) | 26 % [-33, 67] (10) | -18 % [-112, 47] (10) |
+| Code-RL 3.1, cue | 41 % [26, 57] (28) | 40 % [7, 67] (12) | 56 % [22, 84] (6) | 53 % [10, 88] (4) |
+| base + 0.25 (RL - base), cue | 24 % [7, 41] (36) | 50 % [22, 74] (10) | 48 % [13, 80] (7) | 29 % [-28, 76] (6) |
+| base + 0.5 (RL - base), cue | 41 % [25, 57] (28) | 50 % [26, 73] (10) | 63 % [37, 90] (5) | 41 % [-4, 81] (5) |
+| base + 0.75 (RL - base), cue | 43 % [29, 58] (27) | 40 % [14, 65] (12) | 41 % [-6, 74] (8) | 76 % [43, 100] (2) |
+| base + top 8 RL directions, plain | 35 % [16, 53] (31) | 30 % [-6, 60] (14) | -4 % [-70, 43] (14) | -65 % [-180, 12] (14) |
+| RL-Zero-Math 3.0, cue | 37 % [19, 54] (30) | 55 % [32, 80] (9) | 33 % [-8, 69] (9) | 53 % [9, 89] (4) |
+
+By MATH level RL's profile is flatter than in the hazard section (46 % on level 5, 76 % on levels 1-2, against 25 % and
+89 % on the model-defined groups): part of the hazard section's slope comes from defining "hard" with RL-weight arms.
+On D-rest RL plain has 26 %, 78 %, 87 % (hardest 48, middle 120, easiest 332 problems) and Think-SFT cue 40 %, 61 %, 47 %.
+
+1. Earlier readings (`readout.json` `earlier_readings`). All three are the same data. The planner's count is reproduced with
+a ranking that leaves the compared arms out: hardest 50 problems base 42.75, RL 31.25, Think-SFT 26; easiest 200: 7.25,
+0.5, 8 (with all 36 arms in the ranking: 43.5, 32, 28 and 4, 0, 6). The hazard section's 0.33, 0.32, 0.55 are hazard
+ratios, where smaller is better: they also say Think-SFT helps most on the hardest group. "Roughly flat" is right on the
+error-ratio scale (Think-SFT removes 40 %, 61 %, 47 % of the errors in the three D-rest groups, RL 26 %, 78 %, 87 %) and the
+hazard link's null is wide (-1.19 to +0.67), so it printed "constant"; on the logit scale the same counts are 1.95 against
+0.61 and outside the null. Dated note, 2026-11-15, on the hazard section's Think-SFT row: "constant" there means "inside
+the hazard-link null", not "the same profile as RL"; against RL the profile differs (this section). The planner's reading
+"helps more than RL on hard problems" overstates: see 2.
+
+2. H1 (Think-SFT's gain is concentrated in hard problems, RL's in easy ones): not refuted as a contrast, and it comes from
+the easy side. C = log(wrong Think-SFT / wrong RL) in the hardest bin minus the same in the easiest bin; negative =
+Think-SFT relatively better on hard problems (`H1_profile_contrast`):
+
+| Difficulty | C [95 % bootstrap] | One-axis range (200 Rasch simulations), z | Same arm, one sample against its other three | Think-SFT minus RL wrong, hardest bin (one-axis range), z | Easiest bin, z |
+|---|---|---|---|---|---|
+| D-level | -1.54 [-2.74, -0.69] | -0.89 to +0.83, -3.3 | RL -0.45 to +0.61, base -0.26 to +0.48 | -2.5 (-3.5 to +11.3), -1.5 | +8.0 (-2.8 to +4.5), +3.7 |
+| D-rest | -1.45 [-2.28, -0.47] | -0.78 to +0.80, -3.3 | RL -0.77 to +0.87, base -0.12 to +0.10 | -6.0 (-4.0 to +9.0), -2.7 | +6.75 (-3.5 to +6.0), +2.1 |
+| D-base | -1.52 [-2.29, -0.68] | -0.67 to +0.76, -3.7 | not computed (the bins use base samples) | -5.0 (-3.3 to +8.3), -2.5 | +7.75 (-3.8 to +7.0), +2.4 |
+
+On the two model-defined splits Think-SFT has 5 to 6 fewer errors than RL in the hardest group (below every RL sample: 25
+against 28 to 34); by MATH level the difference is 2.5 on level 5 (inside noise) and 4.25 on level 4 (z -2.2). Both
+model-defined splits share weights with RL (the RL change is 0.24 % of the weight norm, Think-SFT's 24.8 %), so "hard for
+the base" is also "hard for RL" by family; MATH level is the only split free of that. This contrast was tested because
+three readings had noticed it among about 30 arms, so its size is selected upward.
+
+3. What the stored rows show (`cap_hits_by_level`, `examples.json`). The raw text of the Think-SFT cells is in the Modal
+Volume of workspace sameraslan (jobs `sameraslan-1114-185940-514f`, `-185947-4681`) and could not be read; asked on
+`@sameraslan`, no answer when this was written. From `per_problem.json` (score, cap hit, tokens). Wrong cells per sample =
+cap hits (16,384 tokens, no answer) + finished wrong:
+
+| Arm | Level 5 | Level 4 | Level 3 | Level 1-2 |
+|---|---|---|---|---|
+| base + cue, 4 samples | 47.5 = 16.75 + 30.75 | 20 = 3.25 + 16.75 | 13.5 = 2 + 11.5 | 8.5 = 0.25 + 8.25 |
+| RL plain, 4 samples | 25.5 = 5.75 + 19.75 | 9.25 = 1 + 8.25 | 3.25 = 0.25 + 3 | 2 = 0.25 + 1.75 |
+| Think-SFT, cue | 23 = 15 + 8 | 5 = 1 + 4 | 8 = 4 + 4 | 10 = 4 + 6 |
+| Think-SFT, plain | 31 = 14 + 17 | 9 = 2 + 7 | 10 = 2 + 8 | 10 = 1 + 9 |
+| base + top 8 RL directions, plain | 31 = 5 + 26 | 14 = 1 + 13 | 14 = 3 + 11 | 14 = 0 + 14 |
+
+- 24 of Think-SFT cue's 46 errors are cap hits (base 25 % of its errors, RL 18 %). On level 5 it finishes with a wrong
+  answer 8 times against RL's 19.75: where it cannot solve a problem it mostly runs to the cap instead of committing.
+- On levels 1 to 3 it has 8 cap hits where the base has 2.25 and RL 0.5 per sample: half of its excess over RL there is
+  non-termination, the other half finished wrong answers (10 against RL's 4.75). Whether those 10 are wrong mathematics or
+  answer-format failures cannot be told without the text. The refutation clause of the spec (cap-hit share of the easy
+  errors above twice that of the others) is not met: 4 of 10 on levels 1-2 against 20 of 36.
+- 14 errors on easy problems (level 1-2 or the easiest D-rest group): all 4 RL samples are right on 12 of them, the base
+  on 7 (e.g. problem 182, `test/prealgebra/1922.json`, gold 1251, Think-SFT wrong after 924 tokens; problem 387,
+  `test/algebra/849.json`, gold 18, cap hit).
+- 4 problems are solved by Think-SFT cue and by none of the 4 RL samples (168 and 286, level 5; 460 and 352, level 4; the RL
+  answers to each are four different wrong values; RL with cue solves 352). 17 are solved by all 4 RL samples and missed
+  by Think-SFT cue.
+- Where they differ (`where_they_differ`): Think-SFT right and RL right at most once in 4: 6 problems, all level 4 or 5,
+  5 subjects. Think-SFT wrong and RL right at least 3 times in 4: 22 problems, levels 1 to 5 (4, 4, 6, 2, 6), 7 subjects.
+  No subject stands out.
+
+4. H2 (2PL against Rasch, held out): holds. Logit p = a_j + (1 + g_j) b_i, ridge 30 on g, the folds of `axis.heldout`:
+-0.27515 against -0.27900 nats per cell, gain 0.00386 (17,991 cells; 0.00384 with twice the steps); 20 Rasch-simulated
+matrices give -0.00026 on average, maximum -0.00007. The free bilinear term of `axis.py` did not find this (500 extra
+problem parameters, shrunk to zero); 36 arm parameters do. g by family: RL 3.1 (4 plain samples, cue) 0.36, base + cue
+(4 samples) 0.33, Think-SFT (cue, plain) -0.15; RL minus Think-SFT 0.50 (Rasch simulations -0.16 to +0.10). The nine
+lowest g: Think-SFT plain -0.26, Code-RL plain -0.17, random rank-8 plain -0.15, Mix 3.0 plain -0.14, top-8 plain -0.13,
+General 3.0 plain -0.07, Think-SFT cue -0.03, theta 0.25 plain 0.02, IF 3.0 cue 0.11; the other 27 arms lie between 0.20
+and 0.46. So the second parameter does not separate SFT from RL: the cued base and RL have the same discrimination, and
+low discrimination marks arms that fail easy problems at a rate unrelated to difficulty (seven plain-prompt arms and
+Think-SFT under either prompt). Dated note, 2026-11-15, on the axis section: its statement that the prompt format is no
+second axis holds for the pair test; under 2PL seven of the nine lowest-discrimination arms are plain-prompt arms.
+Planted checks (`profile_test.py`, all pass): a Rasch matrix gives gain -0.00035 and C inside the range on all three
+splits; a planted 2PL with g of sd 0.3 is detected (gain 0.0024, correlation of fitted and planted g 0.83); an arm of RL's
+ability that also fails 5 % of all problems whatever their difficulty gives C -0.71 to -0.89, outside on all three.
+
+5. H3 (the pair is complementary beyond noise): refuted by the rule of the spec. Unions of Think-SFT cue with one RL sample:
+476, 481, 479, 478; of two RL samples: 472 to 479 (mean 475.7): +2.8 problems, below the 5 named in the spec. Three RL
+samples plus Think-SFT: 484.75 on average against 482 for the four RL samples. Power (`H3_power`): the profile planted as
+Think-SFT's three logit shifts (2.07, 1.18, 0.67 by D-rest group) gives a mean C of -0.38 by level and -0.80 by D-rest, a
+quarter to a half of the observed -1.5 (a logit shift cannot produce an arm that removes none of the easy errors); it is
+detected in 19 % (level) and 37 % (D-rest) of 200 simulations with one sample, 33 % and 75 % with four, 42 % and 76 % with
+eight. Samples: one sample decides the contrast and the easy side (z -3.3 and +3.7); the level-5 difference of 2.5
+problems would need 3 Think-SFT samples to reach z 1.96 if it is real. No GPU job was run for this (step 6 of the plan
+skipped): the hard328 cells of work-9ecc56 test the hard side directly.
+
+6. Predictions for Think-SFT on hard328 (work-9ecc56), filed before its numbers were opened (`results/profile/predict-01/`,
+commit `fc4f971`, pushed 05:47 UTC; the item was read by its title only). Profile rule = the arm's logit shift per D-rest
+group, applied to each hard328 problem by its reference probability. On the 5 arms measured on both sets the profile rule
+is the worst (mean absolute error 8.4 problems, 4.9 to 16.7 too high on every arm; Lc 5.1, P 5.1), so a version with that
+mean error subtracted was filed beside it.
+
+| Cell (of 328) | Lc [80 %] | L1 | P | Profile [80 %] | Profile, corrected | Author's guess | Observed |
+|---|---|---|---|---|---|---|---|
+| Think-SFT cue, one sample | 196.3 [186, 206] | 201.1 | 190.5 | 217.6 [204, 231] | 209.2 | 200 | 219 |
+| Think-SFT plain, one sample | 183.2 [172, 194] | 186.2 | 181.4 | 218.3 [204, 234] | 209.9 | 195 | 203 |
+
+One axis (Lc, P) puts Think-SFT cue at 190 to 196, below RL's 205; a hard-problem-weighted arm should reach RL or pass
+it (209 to 218). Observed (board result-d9d6f3, posted 05:48:33 UTC, 92 s after the push; jobs
+`sameraslan-1114-204845-1055`, `-204852-d527`; its run folders were not committed when this was scored, so the two counts
+are read from the board, not from an artifact): cue 219, plain 203. Mean absolute error over the two cells
+(`results/profile/scored-01/readout.json`): profile 8.35, profile corrected 8.35, author's guess 13.5, L1 17.35, Lc 21.25,
+P 25.05. Both cells are above Lc's 80 % interval; cue is inside the profile interval, plain is 1 below it and inside the
+corrected one. The cue cell passes RL (205, 206) by 13 to 14 problems; the plain cell does not (203), and the profile rule
+is 15 too high on it. Think-SFT cue has 89 cap hits on the 328 (RL 20) and 10,123 tokens per problem, so most of its 109
+errors there are answers that did not finish.
+
+Verdict. Second axis: yes. A second parameter exists (2PL), Think-SFT's profile differs from RL's on MATH-500 (C outside
+both noise floors on all three splits), and the profile predicted the 328 where the one-axis rules missed by 17 to 29
+problems. Two parts have different support. "RL adds reliability on easy problems that Think-SFT lacks": 18 wrong on
+levels 1 to 3 against RL's 5.25, 8 of them cap hits. "Think-SFT solves hard problems RL does not": on MATH-500 28 wrong on
+levels 4 and 5 against 34.75 (RL samples 31 to 40), 4 problems no RL sample solves, oracle union +2.8; on the 328 the cue
+cell is 13 above RL in one sample, with the training-set overlap unchecked. Until that check is in, "SFT adds knowledge"
+may be "SFT has seen these problems". The stack to run, for the lead to decide (not submitted):
+Think-SFT + 1.0 (RL-Math - base) with cue, one sample, on MATH-500 and on hard328. `jobs/wsp_edit.py` (branch
+`claude/weight-space-programming-research-ddd44e`) builds base + alpha (other - base) only, so it needs an option that adds
+the RL-Math difference onto the Think-SFT weights (about 10 lines), then `run_cell --model-path /tmp/theta --model-label
+sft1_rl --prompt cue --set math500|hard328 --temperature 1.0 --top-p 1.0 --seed <new>` on h100: about 30 H100 minutes for
+MATH-500 (the Think-SFT cells started 03:01 and were posted 03:36 UTC) and about 1 H100 hour for the 328 (the RL cell took
+51 minutes), about 6 USD together. If the two changes add, on MATH-500 the stack has RL's errors on levels 1 to 3 (5.25)
+and Think-SFT's on levels 4 and 5 (28): 467 of 500, against RL 456 to 464 and Think-SFT 454; 460 or less refutes it. On
+the 328 it should keep Think-SFT's 219; below 206 means the RL change removes the hard-problem lead. The RL change was
+learned on the base and its cosine with the Think-SFT change is -0.00001 (WSP-1), so it may not act on Think-SFT at all.
+The cheaper no-reward test of the same weakness needs no new code: Think-SFT cue with `--samples 4 --restarts 2` (the job
+of the axis section plus restarts), since 24 of its 46 errors on MATH-500 and up to 89 of its 109 on the 328 are cap
+hits; it also gives the 3 further samples.
+
+Limits. One Think-SFT sample per prompt and per set. The hard328 counts are from a board post; overlap of the 328 with Think-SFT's training data is unchecked. No raw text of Think-SFT was read. MATH level is coarse (4 bins); the two
+model-defined splits are not family-free. The contrast was chosen after it had been noticed. The profile rule failed its
+own check on the 5 known arms.
+
+Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.profile fit --runs runs`
+(about 1 minute; `--runs` is the folder of `tools/gpu.py get` copies, used for the RL-cue answers in `examples.json`),
+`... profile score`, `... python -m studies.rlneurons.analysis.profile_test`; `predict` refuses to overwrite the filed file.
 
 ## How to run
 

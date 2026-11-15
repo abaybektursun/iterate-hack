@@ -153,3 +153,6 @@ Stop adding cells when the next would pass 25 USD.
   running total after the four main cells leaves room under 25 USD. Greedy generations of 3 training prompts with the plain prompt
   before training already begin `.\n\nOkay, so I need to ...` (the base's own plain opener), not the cue; the check after the real
   training reads whether they change to ` line!\n\nOkay`.
+- 2026-11-15, before the 328 cells: spend after training and the sanity cell was 3.50 USD, so S cue was submitted with the four
+  main cells (job `abaybektursun-1114-201132-3c04`). The readout's seed check was narrowed to compared pairs: the reference cells
+  base cue and RL plain share seed base 3,000,000 and are not compared with each other here.

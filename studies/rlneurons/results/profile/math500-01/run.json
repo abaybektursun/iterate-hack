@@ -1,0 +1,9 @@
+{
+ "commit": "fc4f971df6c49989d504161437fb78c655ed749a",
+ "commit_note": "HEAD when it ran; analysis/profile.py is committed in the commit that adds this file",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.profile fit",
+ "job_id": null,
+ "gpu": "none (laptop, numpy)",
+ "spec": "studies/rlneurons/specs/SPEC_profile.md",
+ "inputs": "results/axis/math500-01/vectors.json; data/profile/math500_meta_v1.json; results/wsp1/full500/sft1_cue-01/per_problem.json; results/day1_3/math500_rl-01/rows.jsonl; results/hazard/math500-01/readout.json; runs/abaybektursun-1114-153110-e985/answers.jsonl"
+}
