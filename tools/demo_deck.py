@@ -272,8 +272,8 @@ def slides(papers):
         ("beyond", '<div class="head"><h2>These findings are generalizable</h2>'
                    '<p class="sub">One <b class="team">Invariant</b> method: climbed on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
                    '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
-        ("efficiency", f'<div class="head"><h2>Same score as autoresearch, {demo_results.TOKEN_RATIO:.1f}× fewer tokens</h2>'
-                       f'<p class="sub">Against Karpathy\'s autoresearch (100k GitHub stars) · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
+        ("efficiency", f'<div class="head"><h2>Benchmarking against Karpathy\'s autoresearch (100k stars on GitHub)</h2>'
+                       f'<p class="sub">Same score with {demo_results.TOKEN_RATIO:.1f}× fewer tokens · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
                        '<iframe class="fig-frame wide" data-fig="efficiency" data-replay title="Our harness against autoresearch" tabindex="-1"></iframe>'),
         ("proof", '<h2 class="title top-title">Its own review cuts waste</h2>'
                   '<iframe class="fig-frame review" data-fig="review" data-replay title="Container minutes per batch over review rounds" tabindex="-1"></iframe>'),
