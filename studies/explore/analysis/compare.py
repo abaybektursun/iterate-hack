@@ -36,7 +36,7 @@ for run in sorted(p for p in d.iterdir() if p.is_dir()):
         missing.append(run.name)
         continue
     m = json.loads((run / "metrics.json").read_text())
-    pin, pout = PRICES[m["model"]]
+    pin, pout = PRICES.get(m["model"], (0.0, 0.0))  # devin: models are plan quota, priced 0
     rows = [json.loads(l) for l in open(run / "log.jsonl")]
     usd, curve, best = 0.0, [], None
     for r in rows:

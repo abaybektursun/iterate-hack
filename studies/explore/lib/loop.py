@@ -30,6 +30,10 @@ KEY_FILE = pathlib.Path.home() / ".config" / "openai" / "key"
 PROVIDERS = {"openai": ("https://api.openai.com/v1", "OPENAI_API_KEY", KEY_FILE),
              "cognition": ("https://api.cognition.ai/v1", "COGNITION_API_KEY",
                            pathlib.Path.home() / ".config" / "cognition" / "key")}
+# Interpreter that runs score.py and the submitted programs: a venv with the numpy and scipy the task specs allow
+# (create: uv venv -p 3.12 runs/explore/.venv && uv pip install --python runs/explore/.venv/bin/python
+# numpy==2.5.4 scipy==1.18.1). Checked at Task creation; the laptop's /usr/bin/python3 has neither.
+PY = pathlib.Path(__file__).resolve().parents[3] / "runs" / "explore" / ".venv" / "bin" / "python"
 SLOTS = 6  # programs scored at once across all runs on this machine (8 cores), so CPU contention is the same for every arm
 SLOT_DIR = pathlib.Path(tempfile.gettempdir()) / "explore-score-slots"
 PRICES = {"gpt-5.4-mini": (0.75, 4.5), "gpt-5.4-nano": (0.2, 1.25), "gpt-6.1-sol": (2.0, 10.0),  # $/1M in, out; unverified
@@ -48,9 +52,29 @@ def list_models(name):
     return [m["id"] for m in json.load(urllib.request.urlopen(req, timeout=60))["data"]]
 
 
+def devin_chat(messages, model):
+    """One single-turn Devin CLI call (`devin -p`, the person's Devin plan quota) on the whole chat, flattened to text.
+    Runs in an empty temp folder with permission mode auto (read-only tools only). The CLI reports no token counts:
+    usage is estimated as characters / 4 and cost as 0 (quota, not per-token money)."""
+    text = "\n\n".join(f"{m['role'].upper()}:\n{m['content']}" for m in messages)
+    text += "\n\nReply as the ASSISTANT to the last USER message, in text only. Do not use tools or files."
+    with tempfile.TemporaryDirectory() as d:
+        (pathlib.Path(d) / "prompt.txt").write_text(text)
+        for attempt in range(3):
+            r = subprocess.run(["devin", "-p", "--model", model, "--permission-mode", "auto", "--respect-workspace-trust", "false", "--prompt-file",
+                                "prompt.txt"], capture_output=True, text=True, cwd=d, timeout=900)
+            if r.returncode == 0 and r.stdout.strip():
+                return r.stdout, {"prompt_tokens": len(text) // 4, "completion_tokens": len(r.stdout) // 4,
+                                  "estimated": True}
+            time.sleep(15 * (attempt + 1))
+    raise RuntimeError(f"devin -p failed 3 times: exit {r.returncode}; {r.stderr[-400:]}")
+
+
 def chat(messages, model):
     """One chat completion (OpenAI-compatible API of the model's provider). Returns (text, usage). Retries only rate
     limits, server errors and network errors."""
+    if model.startswith("devin:"):
+        return devin_chat(messages, model.split(":", 1)[1])
     base, key = provider(model)
     req = urllib.request.Request(base + "/chat/completions",
                                  data=json.dumps({"model": model, "messages": messages}).encode(),
@@ -70,6 +94,8 @@ def chat(messages, model):
 
 
 def cost(usage, model):
+    if model.startswith("devin:"):
+        return 0.0  # Devin plan quota
     pin, pout = PRICES[model]
     return usage.get("prompt_tokens", 0) / 1e6 * pin + usage.get("completion_tokens", 0) / 1e6 * pout
 
@@ -108,12 +134,13 @@ class Task:
         self.spec = (self.path / "spec.md").read_text()
         self.starter = (self.path / "starter.py").read_text()
         self.starter_score = None  # set by Run from one scored evaluation of the starter
+        subprocess.run([str(PY), "-c", "import numpy, scipy"], check=True)  # fail loudly without the venv
 
     def evaluate(self, code, test=False, timeout=120):
         with score_slot(), tempfile.TemporaryDirectory() as d:
             prog = pathlib.Path(d) / "solution.py"
             prog.write_text(code)
-            cmd = [sys.executable, str(self.path / "score.py"), str(prog)] + (["--test"] if test else [])
+            cmd = [str(PY), str(self.path / "score.py"), str(prog)] + (["--test"] if test else [])
             try:
                 r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout, cwd=d,
                                    env={**os.environ, "OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1",

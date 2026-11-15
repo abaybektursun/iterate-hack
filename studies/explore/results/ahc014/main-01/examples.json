@@ -1,0 +1,14 @@
+{
+ "scored_right": {
+  "id": "s0022",
+  "idea": "Expand from only axis-aligned rectangles to both axis-aligned and 45-degree rectangles, using a faster candidate search and safer perimeter checks to increase the number of valid joins.",
+  "score": 0.438756,
+  "msg": "per-case V/V_best: 0.461, 0.215, 0.537, 0.557, 0.424"
+ },
+ "scored_wrong": {
+  "id": "s0000",
+  "idea": "Greedy axis/diagonal rectangle completion with early-time search, adding only valid new dots that maximize outer weight.",
+  "score": null,
+  "msg": "case 3: checker rejected: wrong answer Overlapped rectangles (turn: 4)"
+ }
+}

@@ -25,6 +25,33 @@ Raw logs and programs stay in `runs/explore/` (not committed).
 
 ## Results
 
+**Environment bug (found 2026-11-15 with SWE-2):** until commit after 892e7e1, submitted programs ran on the
+laptop's `/usr/bin/python3`, which has no numpy or scipy, although the circles26 spec allows both. Every result
+below is therefore a **pure-Python** run. Effect: 6 of 1,066 circles submissions (pilot-02, main-01) and 4 of 101
+(main-02) imported numpy/scipy, all invalid; those were the attempts at the optimizer approach. ahc014: 0 of 270
+imported them (unaffected). Programs now run in `runs/explore/.venv` (numpy 2.5.4, scipy 1.18.1), checked at start.
+
+### ahc014/main-01 (1 seed, 40 submissions, gpt-5.4-mini, pure Python, commit 892e7e1, about 4.6 USD)
+
+`results/ahc014/main-01/compare.json`; examples: best forget-s0 s0022 0.4388 (adds 45-degree rectangles), invalid
+forget-s0 (checker: overlapped rectangles). Starter (no operations) 0.2217.
+
+| single | parallel | fnf_keep (fork, no flush) | fnf | basin (ours) | forget | randflush |
+|---|---|---|---|---|---|---|
+| 0.240 (1.29 USD) | 0.295 | 0.259 | 0.296 | 0.362 | 0.439 | stopped at 30 |
+
+- Every arm with a flush beats every arm without one: forget 0.439, basin 0.362, fnf 0.296 vs fnf_keep 0.259,
+  single 0.240; fnf vs fnf_keep (+0.037) is the effect of the flush alone. One seed: a hint, not a result.
+- Weak point: the judge put all 40 basin-run submissions into one basin ("greedy rectangle completion", see
+  `basin-s0_basins.json`), so its 5 flushes were set by the window, not by a basin change. The judge is too coarse
+  for this task; the post-hoc labels must be checked against code before any basin claim.
+
+### circles26/main-02 (1 seed, new arms, pure Python)
+
+basin-s0 2.457 (3 flushes, 6 basins), fnf_keep-s0 2.420, randflush stopped at 21 of 40. Same-seed main-01 arms:
+single 2.514, parallel 2.474, forget 2.386, fnf 2.187. One seed of a task where no arm beats the starter: no
+conclusion. `results/circles26/main-02/compare.json`.
+
 ### circles26/main-01 (4 arms x 5 seeds x 40 submissions, gpt-5.4-mini, commit 58c7edf, 6.37 USD)
 
 `results/circles26/main-01/compare.json`; examples (`examples.json`): best fnf-s2 s0036 2.541415, invalid
