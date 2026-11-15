@@ -68,19 +68,20 @@ def now():
 
 
 gpu_job = dict(image=engine_image, gpu="H200", volumes={"/hf": weights.read_only()}, timeout=FINAL_SECONDS["hard328"] + LOAD_LIMIT + 300,
-               retries=0, block_network=True, single_use_containers=True, max_containers=4)
+               retries=0, single_use_containers=True, max_containers=4)
 
 
-@app.function(restrict_modal_access=True, **gpu_job)
+@app.function(restrict_modal_access=True, block_network=True, **gpu_job)
 def solve_job(source: str, problems: list, budget_s: int):
     return run_solve(source, problems, budget_s)
 
 
 @app.function(**gpu_job)
 def solve_job_final(source: str, problems: list, budget_s: int):
-    """solve_job for the finals, with Modal reachable from the container. A result above a few MB (full-length
-    answers to 328 or 400 problems) is returned through Modal's blob storage, which a container without Modal
-    access cannot write: those finals ended with AuthError 401. No agent runs during the finals."""
+    """solve_job for the finals, with Modal and the network reachable from the container. A result above a few MB
+    (full-length answers to 328 or 400 problems) is returned through Modal's blob storage, which a container
+    without Modal access (AuthError 401) or without network (name resolution fails) cannot write. Only files
+    that were audited and read run here, after the arm has ended; Hugging Face stays offline."""
     return run_solve(source, problems, budget_s)
 
 
