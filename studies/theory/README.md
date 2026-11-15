@@ -550,6 +550,19 @@ r7-m11. The theories forecast 1 to 3 targets each (r6-m06: none); the rest "theo
 First score (14:50:25 UTC, `scores.md`): 6 of 20 measured, all fresh2026 (result-5251c9). No theory forecast any of
 them, so F2 is not decided. reader-2 has all 6 inside its interval (mean gain +0.30 nats), reader-1 4 of 6 (-0.77).
 F3 is refuted at this score (every measured value inside some interval) and is checked again as the other 14 post.
+Second score (15:03:15 UTC): 9 of 20 measured (adds t10-t12, the 1.5x edit replication, result-95a4dc: 200.25, 214, 456).
+r5-m03-rival 3 of 3 inside, +1.83 nats (mean +0.61, only 3 targets); reader-2 9 of 9 inside, +2.14; reader-1 6 of 9,
+-5.12. No value outside every interval.
+
+**run-02** (plan `specs/SPEC_forecast02.md`; `make ... --propose 6`; snapshot 2026-11-15 14:53:16 UTC;
+`results/forecast/run-02/`; `run.json` names commit 46875c7, the `--propose` code was committed after the run in the
+same commit as the run folder): 17 targets from 8 open work items, the fresh2026 numbers of result-5251c9 left out.
+Forecasters as in run-01 plus 6 mechanisms written about the targets (`mechanisms.json`, one job, 595 s): all 6 passed
+the checks on the first draft (P1 holds). Each forecasts 9 or 10 targets and lies outside both readers' intervals on
+exactly 3 (`forecasts.md`). The engine's theories forecast 0 to 3 of 17. First score: 3 of 17 measured (t10-t12,
+result-95a4dc). f2-m03 (the 8 directions set only when the base stops) was outside both readers on all three and wrong
+on all three (-7.07 nats); f2-m05 wrong on its one (t10). P3 so far: 0 of 4 disagreements right (needs 8 to decide).
+P2 not decided.
 
 ## Theories
 
