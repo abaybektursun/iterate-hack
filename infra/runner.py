@@ -78,7 +78,7 @@ def run(job_id):
 
 
 # One function per GPU class. max_containers is how many of your jobs of that class run at once.
-@app.function(gpu="H100", max_containers=4, **common)
+@app.function(gpu="H100", max_containers=20, **common)
 def h100(job_id: str):
     run(job_id)
 

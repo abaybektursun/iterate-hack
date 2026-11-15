@@ -1,5 +1,23 @@
 # Meta review: abaybektursun
 
+## 2026-11-15 02:37 UTC (5th GPU job since the last review: reward5, 10 H100 jobs at 3b4ab2a, work-069eca) meta/reviews/abaybektursun/20261115-0229/
+
+- Last entry's checks: no new "died: FileExistsError" in `gpu.py ls` (the 3 listed, c51a 277d 74c7, predate the fix); 0.0 of 63.4 container min in failed or cancelled jobs in 0.5 h (cycle.txt), against 248.9 of 1,305.9 in 3 h.
+- Direction: mission = "how much of a published RL gain an untrained base model reaches with no training" (DIRECTION.md); deliverable, a best configuration scored on the 328, does not exist yet. Of 19 H100 jobs running or queued at 02:30, 4 test step 3, a no-reward route (work-be7af1 a044 014a cc2b: solved examples in context; e828: vote); 13 use RL weights and explain the gain (work-43d4a1 3, reward5 10); 2 are gpuprice. reward5's R1 is at risk from a published table the spec cites: 2610.06851 Table 6, 3.0 Math 75.0 below cued base 77.9 (T 0.6).
+- Research: the reward5 spec set itself beside 2610.06851, 2608.03573 and 2509.01363 before launch; no MATH-500 number for IF, General or Mix is published. Not a replication.
+- Turnaround (cycle.txt, 0.5 h; last entry's 3 h in brackets): 22 jobs (78), 0 failed or cancelled (21), median queue wait 0.1 min (5.3); median to-job 1, jobs 2 min (most still running). Slowest stage: jobs, here the queue: at 02:30, 4 H100 ran (max_containers=4) and 15 waited, reward5's 10 behind 5 others; projected about 2.4 h to the last reward5 end (19 jobs, 4 slots, about 30 min each).
+- Change (step 2, then 3): step 1, the cap of 4 came in a433503 with no reason written; spend is set by what is submitted, so the cap only spreads the same GPU minutes over more hours. Kept a cap against a runaway submit loop: infra/runner.py h100 max_containers 4 -> 20, deployed 02:31 UTC (rolling).
+
+  | measure | before | after | change | runs | source |
+  |---|---|---|---|---|---|
+  | H100 jobs running / queued | 4 / 15 | 10 / 8 | 2.5x running | 1 and 5 readings | before.txt, after.txt |
+  | reward5 jobs started | 0 of 10 | 2 of 10 (731c, 3556), within 7 min of submit | started | 1 and 1 | after.txt |
+  | jobs running at deploy (must not change) | 4 | the same 4 still running | same | 1 | after.txt |
+
+  Running stays at 10 with 8 queued under a cap of 20: likely a Modal workspace limit of 10 GPUs (inferred, not read from Modal). GPU min per job: not changed by design, not measured.
+- Failures: none since the last entry. Side effect: H100 jobs can now fill all 10 GPUs, so b200 job 6ea1 (queued) may wait behind them if the limit is shared. reward5 scoring risk: the 3.0 models run with the 3.1 tokenizer (merge_weights rl_json); ids 100268-100275 are <think> </think> <answer> </answer> in 3.0 and <|extra_id_N|> in 3.1 (tokenizer_config.json at the pinned revisions; config differs only in use_cache, generation_config identical).
+- Next entry checks: H100 running count while more than 10 are queued; whether b200 6ea1 starts; reward5 minutes from submit (02:27) to the last job's end, against 2.4 h projected; "extra_id" count in reward5 rows.
+
 ## 2026-11-15 02:25 UTC (asked by the person; the first review stored as a run folder) meta/reviews/abaybektursun/20261115-0215/
 
 - Last entry's checks (the entry below; its heading says 02:35, written before 02:13 by the clock): work-43d4a1 now shows its 3 jobs in cycle.py (cycle.txt); their queue wait is 0.1 and 0.6 min, the third still queued, against a 10.8 min median; the runner restart class is removed by this entry.
