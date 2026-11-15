@@ -95,6 +95,27 @@ fitted on the RL model was used. One sample per problem.
 Saved examples: `results/lensdiff/full-01/examples.json`, for each of 138 answers the 5 positions where the RL readout's
 hold-on log-prob exceeds the base's the most, with the text before and after and both top-8 lists.
 
+### Run `lensdiff/matched-01`: SPEC 1 again with a lens fitted per model
+
+Job `sameraslan-1114-193314-20a2` (H100, commit `abfcfc1`): the same 4,314,803 positions, each model read through its own fitted
+lens (the fits of `workspace/own-01`), its own final norm and its own `lm_head`. Numbers are keys of
+`results/lensdiff/matched-01/metrics.json`; `examples.json` of this run is not committed.
+
+The result of `full-01` holds and the hold-on difference is larger:
+
+| T1, layer 24 | `full-01` (one lens and head for both) | `matched-01` (own lens and head) | Key |
+|---|---|---|---|
+| Hold-on family, base -> RL | 4.56 % -> 5.64 % (+1.08 [1.01, 1.15]) | 4.63 % -> 6.29 % (+1.66 [1.57, 1.76]) | `b_presence.T1_L24.hold_on` |
+| Wrap-up family, base -> RL | 4.22 % -> 2.82 % (-1.40 [-1.50, -1.31]) | 4.20 % -> 2.85 % (-1.35 [-1.44, -1.26]) | `b_presence.T1_L24.wrap_up` |
+| ` Wait` alone | 3.43 % -> 4.17 % | 3.49 % -> 4.86 % | `b_presence.T1_L24.tokens` |
+| Neutral ` the`, ` so` | -0.10, -0.02 | +0.06, +0.12 | same |
+| H2: rl_only minus both | -0.37 [-0.52, -0.22] | -0.37 [-0.59, -0.13] | `c_by_group.T1_L24_hold_on` |
+| H3: hold-on 2 to 8 positions before RL's ` Wait`, against far from it | 9.4 % against 4.36 % | 10.7 % against 4.99 % | `d_lead.T1_L24` |
+
+So the difference does not come from reading the RL model through the base model's lens and head. The wrap-up tokens lie on the
+token-frequency direction that a last-block lens amplifies (SPEC 2, controls); the matched lenses share that property, so this
+run does not test that artifact. The logit-lens top-8 was not stored.
+
 ## Numbers, SPEC 2: workspace tests on both models (run `workspace/pub-01`)
 
 Job `sameraslan-1114-184704-836d` (H100, 368 s, commit `3208566`): `jobs/workspace_tests.py` on both models, each through its own
@@ -146,4 +167,26 @@ Verdicts against SPEC 2 (with `pub`; `own` still to run):
 
 Only 20 to 21 of the 93 multihop items are answered correctly (most prompts end in a space token, which forces the answer to
 come without its leading space); the no-trailing-space variant has 15 correct of 83 and gives the same picture (0.47 for both).
+
+### Run `workspace/own-01`: the same tests with a lens fitted per model
+
+Lens fits: jobs `sameraslan-1114-185927-7df1` (base) and `sameraslan-1114-185933-d625` (RL), `jobs/fit_lens.sh`, 100 WikiText
+prompts of 128 tokens (the same list), layers 10 to 30, 1,896 s and 1,905 s on one H100 each (19 s per prompt); the lens files
+stay in the Volume. Tests: job `sameraslan-1114-193308-0545` (385 s, commit `abfcfc1`), variants `pub`, `logit`, `own`. Numbers
+are keys of `results/workspace/own-01/metrics.json`.
+
+Every verdict of `pub-01` holds with `own`:
+
+| | Base | RL | Key |
+|---|---|---|---|
+| Multihop pass@10 (`own`) | 0.929 (n 21) | 0.950 (n 20) | `readout.multihop.own` |
+| Typo pass@10 (`own`, n 96) | 0.510 | 0.479; RL minus base -0.031 [-0.073, 0.010] | `readout.typo.own` |
+| Chains pass@10 (`own`) | 0.450 | 0.424; RL minus base on shared items -0.022 [-0.058, 0.011] | `readout.chains.own` |
+| Two-hop swap flips (`own`, 44 eligible, strength 1) | 0.364 [0.227, 0.500] | 0.364 [0.227, 0.500] | `swap.probe-swap.*.own.flip` |
+| the same, null replacement | 0.045 | 0.023 | `...null_flip` |
+| Twins, readout at L24 (`own`): hold-on gap, error minus correct | +0.128 [0.097, 0.158] | +0.154 [0.118, 0.191] | `twins.lens.own.L24.hold_lp` |
+| the same, RL minus base | +0.027 [0.018, 0.035]; neutral words -0.005 [-0.010, 0.001] | | same |
+
+The 100-prompt fit reads typos less well than the published 568-prompt lens (0.51 against 0.62 on the base); the two models
+stay equal under either.
 

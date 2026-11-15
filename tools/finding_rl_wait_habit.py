@@ -36,7 +36,7 @@ PANELS = [
     ["limits", "What it does not show", "It does not show that thinking Wait is why the RL model scores 11 points higher on MATH-500.",
      ["Nobody has yet pushed the base model toward Wait and measured its score.",
       "The extra Wait does not mark mistakes: it is no larger on the problems the base model gets wrong, and after a wrong line of arithmetic the pull toward writing Wait rises only a little more in the RL model (0.35 against 0.28 nats in its output).",
-      "The lens was fitted on the base model. A run with one lens fitted per model is not finished."]],
+      "The 24 % comes from reading both models with one lens. With a lens fitted to each model the gap is larger: 4.63 % against 6.29 %."]],
     ["run", "How to reproduce it", "Two GPU jobs of the study studies/jspace reproduce both numbers from a clean checkout.",
      ["Wait in mind: python -m studies.jspace.jobs.lensdiff, then analysis/lensdiff_analyze.py (commit 3af965d, 23 minutes on one H100).",
       "Hidden step: python -m studies.jspace.jobs.workspace_tests, then analysis/workspace_analyze.py (commit 3208566, 6 minutes).",
