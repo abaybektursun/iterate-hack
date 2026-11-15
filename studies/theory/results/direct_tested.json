@@ -46,5 +46,21 @@
   "verdict": "undecided",
   "measured": "undecided by the frozen rule (does not hold): RL C/H 0.061 (7/114), Wilson 95 % [0.030, 0.121]; Think-SFT 0.037 (14/378); RL - Think-SFT +2.4 pts 95 % [-2.4, 8.1]; with restart rows 9/171, Wilson upper 0.097",
   "added": "2026-11-15T21:44:54Z"
+ },
+ {
+  "mechanism": "round-13/s4-a",
+  "claim": "Code's 1.5x top-8 directions raise the pass rate among finished-with-block code answers above random 1.5x by at least 3 pts; Math's 1.5x directions raise it by less than half that",
+  "result": "result-d15c5e",
+  "verdict": "holds",
+  "measured": "dC +7.0 pts [3.7, 10.3], dM +1.5 [-2.2, 5.1], dM/dC 0.21 [-0.46, 0.62], 90 % bootstrap, n 538; null random 67.8 % (331/488), rival b ratio 0.54 not excluded (point-only hold)",
+  "added": "2026-11-15T21:56:18Z"
+ },
+ {
+  "mechanism": "round-13/s4-b",
+  "claim": "Code 1.5x extra passes over the cued base fall in the base's plain-or-Math-cue solved set as often as a random rank-8 1.5x edit's extra passes",
+  "result": "result-63cacd",
+  "verdict": "holds",
+  "measured": "D = f_E - f_R = +0.055, 90% [-0.029, 0.139] (refuted if < -0.10), n 538 (113 and 63 extra passes); null random f_R 0.635, f_E 0.690; base-failure floor 0.43; |U| 378",
+  "added": "2026-11-15T21:56:20Z"
  }
 ]
