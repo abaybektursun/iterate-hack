@@ -29,7 +29,7 @@ or a text editor, never into an agent chat, and never commit one.
 | 5 | vast.ai | yours (optional) | cheaper private GPUs with `tools/vast.py` |
 | 6 | AWS (DynamoDB, S3 and ECR) | shared, until Sunday 23:59 PST | the board, events and traces; prebuilt images with model weights, on vast.ai |
 | 7 | past.dev | shared team project | `tools/paper.py`, `tools/recall.py`, session memory |
-| 8 | Exa | yours ($50 credits) | web and literature search by agents (MCP tools) |
+| 8 | Exa | yours ($50 credits) | web and literature search by agents (`tools/exa.py`) |
 | 9 | Tinker, Devin, OpenAI | yours | optional; no tool here uses them |
 
 ### 1. GitHub and the team store
@@ -124,16 +124,28 @@ in your shell profile, not in the repository:
 echo 'export EXA_API_KEY=<key>' >> ~/.zshrc && source ~/.zshrc
 ```
 
-Agents use Exa as tools, through Exa's MCP server (`https://mcp.exa.ai/mcp`): `web_search_exa` (search, returns
-page text), `web_fetch_exa` (read a URL) and `web_search_advanced_exa` (date and domain filters).
+Agents use Exa through `tools/exa.py`, which calls Exa's HTTP API (`https://api.exa.ai`, docs:
+https://docs.exa.ai). Claude Code, Codex and their subagents all run the same two commands; there is nothing to
+install or approve. Do not use Exa's MCP server: it reads the key only when the agent starts, and returns 401 for
+the whole session if the key was missing then.
 
-- Claude Code: nothing to install. `.mcp.json` in this repository connects it with your `EXA_API_KEY`; approve
-  the `exa` server when Claude Code asks, and check with `/mcp`. Subagents get the tools too.
-- Codex: `codex mcp add exa --url https://mcp.exa.ai/mcp --bearer-token-env-var EXA_API_KEY`, once.
+```
+python3 tools/exa.py search "<description of the page you want>" [--n 5] [--since YYYY-MM-DD] [--domain arxiv.org]
+python3 tools/exa.py fetch <url> [<url> ...]
+```
 
-The key must be in the environment of the shell that starts the agent. With a key, searches count against your
-credits and show in your Exa dashboard, which the Exa challenge needs. Direct API calls from a script:
-`POST https://api.exa.ai/search` with the header `x-api-key` (docs: https://docs.exa.ai).
+- `search` prints each result's date, title, URL and highlights (the passages that match the query), then the
+  cost. Exa searches by meaning, so describe the page you want in a full phrase ("paper that measures restart
+  sampling on MATH-500"), not keywords. `--since` keeps pages published on or after a date; `--domain` keeps one
+  domain and can be repeated.
+- `fetch` prints the full text of each URL. Highlights only locate a page: read it with `fetch`, in a subagent
+  when it is long, before you cite it.
+- One search costs about 0.007 USD and one fetched page about 0.001 USD, from your own credits. The calls show in
+  your Exa dashboard, which the Exa challenge needs.
+
+The tool takes `EXA_API_KEY` from its environment and, when the agent started before you set the key, from your
+shell profile, so a running session needs no restart. Check: `python3 tools/exa.py search "test" --n 1` prints
+one result.
 
 ### 9. Tinker, Devin, OpenAI (optional)
 
@@ -265,6 +277,17 @@ a click on a person shows only that person. At the top, one hill-climbing chart 
 (`board.py score`) in the order found, the best so far as a step line, and the best RL score as the target, with the
 gap between them. The same page is public at https://monitor.invariant.team (`infra/monitor/`).
 
+The same server has a second page, `/architecture` (`tools/architecture.py`): one picture of the shared work setup for
+a first-time reader. The board is in the centre with one dot per live item, each person's agents are beside it with
+threads to the board (the Claude mark for a Claude Code session, the OpenAI mark for a Codex session), the "Chat"
+ring (messages) runs through every person's agents, and the "Retro" loop (self-review) goes around everything. What moves is real data, replayed: messages between people's agents, posts to the board. A click on a part
+explains it, with live rows from the board (`/architecture#board` is its link); "Follow one result" steps through the
+path of one result (arrow keys, Esc).
+
+A novel finding gets its own page: `tools/finding_<slug>.py`, copied from `.claude/skills/finding-page/template.py`, is
+served at `/finding/<slug>` and linked in the header of every page (`.claude/skills/finding-page/SKILL.md` says when
+and how). `.claude/skills/site-ui/SKILL.md` holds the rules for anything visible on the site.
+
 `ls` and `read` print nothing when there is nothing to show; exit code 0 means they worked. `show` prints the
 item's votes and comments. Claim an idea by posting a `work` item whose text contains its id, and close it with `done` when the work ends.
 `post` then prints any other open work item that names the same id. If one is older than yours, close
@@ -326,7 +349,9 @@ Someone will analyze how the team worked, so every action leaves a record in the
 | Agent transcripts (Claude Code with subagents, Codex) | `traces/<who>/` | `uv run tools/traces.py push`, by each person |
 | Every Modal job: submitter, commit, command, GPU, start and end times, exit code | `traces/<who>/jobs.json` | `gpu.py`, then `traces.py push` |
 
-Run `uv run tools/traces.py push` at the end of each working session. A transcript holds everything typed and
+Claude Code runs `traces.py push` by itself: a hook starts it in the background every 10 minutes and at the end of a
+session, and it uploads only changed transcripts (log: `~/.cache/iterate-hack/traces.log`). With Codex, run
+`uv run tools/traces.py push` at the end of each working session. A transcript holds everything typed and
 every tool output, including file contents and the instructions files the agent loaded. `push` replaces strings
 that look like keys with `[REDACTED]`, but it catches common formats only. vast.ai rentals are recorded only on
 your laptop, in `runs/vast/`. Read everything with `aws s3 sync s3://iterate-hack-team-769063704696/ team/`.

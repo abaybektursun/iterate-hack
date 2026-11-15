@@ -1,0 +1,22 @@
+# command: uv run tools/gpu.py ls | grep -E 'running|queued'   (at 02:32:34 UTC; infra/runner.py h100 max_containers=4)
+abaybektursun-1114-183640-e828  running  NVIDIA H100 80GB HBM3  116m  c36f562  bash studies/rlneurons/jobs/set
+abaybektursun-1114-181216-a619  running  NVIDIA H100 80GB HBM3  20m  e7b86c8  bash studies/rlneurons/jobs/setu
+abaybektursun-1114-181222-a5f4  running  NVIDIA H100 80GB HBM3  20m  e7b86c8  bash studies/rlneurons/jobs/setu
+abaybektursun-1114-181228-34ad  running  NVIDIA H100 80GB HBM3  20m  e7b86c8  bash studies/rlneurons/jobs/setu
+abaybektursun-1114-201359-2fcd  queued  h100  19m  35810bc  bash studies/gpuprice/jobs/llm_job.sh --model w4a1
+abaybektursun-1114-181617-a044  queued  h100  16m  17c4c70  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/
+abaybektursun-1114-181625-014a  queued  h100  16m  17c4c70  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/
+abaybektursun-1114-181631-cc2b  queued  h100  16m  17c4c70  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/
+abaybektursun-1114-202025-ee44  queued  h100  12m  a20340d  bash studies/gpuprice/jobs/fm2_chronos2.sh --origi
+abaybektursun-1114-182707-731c  queued  h100  6m  3b4ab2a  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf
+abaybektursun-1114-182712-3556  queued  h100  5m  3b4ab2a  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf
+abaybektursun-1114-182718-612b  queued  h100  5m  3b4ab2a  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf
+abaybektursun-1114-182724-87aa  queued  h100  5m  3b4ab2a  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf
+abaybektursun-1114-182730-9523  queued  h100  5m  3b4ab2a  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf
+abaybektursun-1114-182735-bcca  queued  h100  5m  3b4ab2a  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf
+abaybektursun-1114-182742-9129  queued  h100  5m  3b4ab2a  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf
+abaybektursun-1114-182748-3300  queued  h100  5m  3b4ab2a  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf
+abaybektursun-1114-182754-7238  queued  h100  5m  3b4ab2a  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf
+abaybektursun-1114-182800-3331  queued  h100  5m  3b4ab2a  bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf
+abaybektursun-1114-183108-6ea1  queued  b200  2m  7028433  bash studies/rlneurons/jobs/setup_vllm.sh && /opt/r
+h100 running: 4  h100 queued: 15

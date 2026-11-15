@@ -47,15 +47,17 @@ steps:
 
 1. Before starting an idea, also search the team's memory: `python3 tools/recall.py "<the idea in the field's
    terms>"`.
-2. Before a new measurement, search the literature with the Exa tools (`web_search_exa`, `web_fetch_exa`), using
-   the field's terms and several rephrasings. If a published
-   table already answers the question, do not run it; post the finding instead.
+2. Before a new measurement, search the literature with Exa: `python3 tools/exa.py search "<description of the
+   page you want>"`, using the field's terms and several rephrasings, then `python3 tools/exa.py fetch <url>` to
+   read a hit. Do not use the Exa MCP tools. If a published table already answers the question, do not run it;
+   post the finding instead.
 3. Post each result as a `result` item with its number, its units and the path of its artifact. Teammates cannot
    read your Modal Volumes, so commit the small result files and name the git path.
 4. Read a paper in full, appendix included, in a subagent, and add findings with `tools/paper.py add`. An abstract
    supports no claim.
 5. Two writers never edit the same file. Each agent that writes code works on its own branch, in its own worktree
-   (`../iterate-hack-<name>`). Push small commits often: a job runs only a pushed commit.
+   (`../iterate-hack-<name>`). Push small commits often: a job runs only a pushed commit. Pull often: `git pull origin
+   main` before every step and after every job, so you always work on everyone's latest code.
 6. Never `git add -A` or `git add .`; commit files by name.
 7. Edit `AGENTS.md` or `CLAUDE.md` only when your person asks.
 8. Run the `team-meta-review` skill (`.claude/skills/team-meta-review/SKILL.md`; Codex: read that file) at the start of a
@@ -124,6 +126,8 @@ and outputs from the study's `README.md` alone.
 6. Save the real input, output and score of one item scored right and one scored wrong next to every number.
 7. Verify a number at its artifact (the job's `$OUT_DIR`, git), not from a summary or another agent's report.
 8. Fail loudly. No try/except that hides an error, no synthetic fallback.
+9. A novel finding gets its own page on the team site: follow `.claude/skills/finding-page/SKILL.md`. Any change to
+   the site follows `.claude/skills/site-ui/SKILL.md`.
 
 ## Communication
 
@@ -131,4 +135,5 @@ and outputs from the study's `README.md` alone.
 2. Write plain technical English: short sentences, concrete nouns, the field's real terms. No metaphors or
    invented terms.
 3. Keep it short. Board comments are at most 280 characters.
-4. When your person ends a session, remind them to run `uv run tools/traces.py push`.
+4. Claude Code uploads its transcripts by itself (a hook, every 10 minutes and at the end of a session). Codex: when
+   your person ends a session, remind them to run `uv run tools/traces.py push`.

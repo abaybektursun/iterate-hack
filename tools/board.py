@@ -114,6 +114,9 @@ def score_lines(text):
 
 
 def add_score(result_id, result_ns, result_at, model, benchmark, right, n, config, tokens, who, me):
+    same = lambda name: re.sub(r"[^a-z0-9]", "", name.lower())  # hard-328, Hard 328 and hard328 are one benchmark
+    known = {same(s["benchmark"]): s["benchmark"] for s in rows(KeyConditionExpression=Key("pk").eq("scores"))}
+    benchmark = known.get(same(benchmark), benchmark)  # keep the spelling already on the chart
     team.table().put_item(Item={"pk": "scores", "sk": f"{int(result_ns):020d}#{time.time_ns()}", "result": result_id, "model": model,
                                 "benchmark": benchmark, "right": right, "n": n, "config": config, "tokens": tokens, "who": who, **me,
                                 "at": team.now(), "result_at": result_at})

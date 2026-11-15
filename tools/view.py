@@ -13,6 +13,8 @@ channel `all`. It reads /data every 10 s and updates in place. A click on an ite
 comments and message thread in a side panel whose address is /#<item id>. Keys: / filter, j and k (or arrows) move,
 Enter opens, Esc closes. A click on a person shows only that person.
 
+  GET /architecture    how the harness works: one interactive picture (architecture.py), fed by the same /data
+  GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
   GET /data            the newest 60 items of each kind and list, and the messages on `all` of the last --hours (JSON)
                        and every score (board.py score), which the hill-climbing chart at the top draws
   GET /data/<item id>  one item with its votes, comments and thread (JSON); 404 for an unknown id
@@ -20,7 +22,10 @@ Enter opens, Esc closes. A click on a person shows only that person.
 It reads the same DynamoDB table as board.py and msg.py, with Query only, and never writes to it or moves an agent's
 message position. A failed read answers 500 with the error text, which the page shows.
 """
+import glob
+import importlib
 import json
+import os
 import sys
 import time
 import traceback
@@ -30,12 +35,16 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from boto3.dynamodb.conditions import Key
 
+import architecture
 import board
 import team
 
 PORT = int(sys.argv[sys.argv.index("--port") + 1]) if "--port" in sys.argv else 8765
 HOURS = float(sys.argv[sys.argv.index("--hours") + 1]) if "--hours" in sys.argv else 6.0
 LISTS = ("work", "result", "idea", "knowledge", "skill", "work-closed")
+# One page per finding: every tools/finding_<slug>.py (TITLE, LINE, PAGE) is served at /finding/<slug>.
+FINDINGS = {os.path.basename(f)[len("finding_"):-3].replace("_", "-"): importlib.import_module(os.path.basename(f)[:-3])
+            for f in sorted(glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), "finding_*.py")))}
 
 
 def newest(listed, n=60):
@@ -48,7 +57,8 @@ def snapshot():
     start = f"{time.time_ns() - int(HOURS * 3600 * 10**9):020d}"
     messages = board.rows(KeyConditionExpression=Key("pk").eq("chan#all") & Key("sk").gt(start))
     scores = board.rows(KeyConditionExpression=Key("pk").eq("scores"))  # every score, in the order its result was posted
-    return {"now_ns": time.time_ns(), "hours": HOURS, "test": team.TEST, "items": items, "messages": messages, "scores": scores}
+    return {"now_ns": time.time_ns(), "hours": HOURS, "test": team.TEST, "items": items, "messages": messages, "scores": scores,
+            "findings": [{"slug": slug, "title": m.TITLE, "line": m.LINE} for slug, m in FINDINGS.items()]}
 
 
 def detail(item_id):
@@ -75,6 +85,10 @@ class Handler(BaseHTTPRequestHandler):
         path = self.path.split("?")[0]
         if path == "/":
             return self.send(200, "text/html", PAGE)
+        if path == "/architecture":
+            return self.send(200, "text/html", architecture.PAGE)
+        if path.startswith("/finding/") and path[len("/finding/"):] in FINDINGS:
+            return self.send(200, "text/html", FINDINGS[path[len("/finding/"):]].PAGE)
         if path != "/data" and not path.startswith("/data/"):
             return self.send(404, "text/plain", f"no page {path}")
         try:  # the page shows the error text; the traceback goes to this terminal
@@ -129,6 +143,9 @@ a { color: inherit; text-decoration: none; }
 /* Header: name, filter, status; then one sentence on the state of the board */
 .top { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
 .name { font-weight: 700; font-stretch: 112%; font-size: 15px; letter-spacing: .01em; margin: 0; }
+.how { font-size: 13px; color: var(--mute); }
+.how:hover { color: var(--ink); }
+#finds { display: contents; }
 .test { color: var(--red); font-weight: 600; font-size: 13px; }
 .search { margin-left: auto; position: relative; display: flex; align-items: center; }
 .search input {
@@ -330,6 +347,8 @@ a.ref:hover { text-decoration-color: var(--blue); }
   <header>
     <div class="top">
       <h1 class="name">Team board</h1>
+      <a class="how" href="/architecture">How it works</a>
+      <span id="finds"></span>
       <span class="test" id="test" hidden>test table</span>
       <label class="search"><input id="q" type="search" placeholder="Filter items and messages" aria-label="Filter items and messages" autocomplete="off"><kbd>/</kbd></label>
       <span class="status" id="status" role="status">Reading the board</span>
@@ -429,6 +448,7 @@ function render() {
   $("board").hidden = $("lanes").hidden = !d;
   if (!d) return;
   $("test").hidden = !d.test;
+  $("finds").innerHTML = (d.findings || []).map(f => `<a class="how" href="/finding/${esc(f.slug)}" title="${esc(f.line)}">${esc(f.title)}</a>`).join("");
 
   people = [...new Set([...d.items, ...d.messages].map(r => r.who))].sort();
   const items = d.items.map(i => ({ ...i, closed_ns: i.closed_at ? Date.parse(i.closed_at) * 1e6 : null }));
@@ -476,7 +496,9 @@ function hill(scores) {
   const pct = s => 100 * s.right / s.n, f1 = v => v.toFixed(1);
   const benches = [...new Set(scores.map(s => s.benchmark))].sort((a, b) => (b === "MATH-500") - (a === "MATH-500") || a.localeCompare(b));
   $("hill").innerHTML = benches.map(name => {
-    const base = scores.filter(s => s.benchmark === name && s.model === "base");
+    const seen = new Set();  // a run reported in two results is one attempt
+    const base = scores.filter(s => s.benchmark === name && s.model === "base")
+      .filter(s => { const k = `${s.right}/${s.n} ${s.config}`; return !seen.has(k) && seen.add(k); });
     const rl = scores.filter(s => s.benchmark === name && s.model === "rl").sort((a, b) => pct(b) - pct(a))[0];
     if (!base.length) return "";
     let top = -1;

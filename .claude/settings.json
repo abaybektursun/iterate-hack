@@ -18,6 +18,11 @@
             "type": "command",
             "command": "cd \"$CLAUDE_PROJECT_DIR\" && uv run --quiet tools/msg.py read --hook",
             "timeout": 20
+          },
+          {
+            "type": "command",
+            "command": "mkdir -p ~/.cache/iterate-hack && [ -z \"$(find ~/.cache/iterate-hack/traces.stamp -mmin -10 2>/dev/null)\" ] && touch ~/.cache/iterate-hack/traces.stamp && cd \"$CLAUDE_PROJECT_DIR\" && nohup uv run --quiet tools/traces.py push >> ~/.cache/iterate-hack/traces.log 2>&1 &",
+            "timeout": 5
           }
         ]
       }
@@ -28,8 +33,19 @@
         "hooks": [
           {
             "type": "command",
-            "command": "cd \"$CLAUDE_PROJECT_DIR\" && echo 'Open work (tools/board.py):' && uv run --quiet tools/board.py ls work && echo 'Newest board items:' && uv run --quiet tools/board.py ls idea skill knowledge result --new --n 10 && echo 'Team messages (tools/msg.py; times UTC):' && uv run --quiet tools/msg.py read && m=$(git log -1 --format=%cr -- meta/) && echo \"Newest team-meta-review entry (meta/): ${m:-none}\" && { [ -n \"$EXA_API_KEY\" ] || echo 'EXA_API_KEY is not set: the Exa MCP tools return 401 (README section 8).'; }",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && echo 'Open work (tools/board.py):' && uv run --quiet tools/board.py ls work && echo 'Newest board items:' && uv run --quiet tools/board.py ls idea skill knowledge result --new --n 10 && echo 'Team messages (tools/msg.py; times UTC):' && uv run --quiet tools/msg.py read && m=$(git log -1 --format=%cr -- meta/) && echo \"Newest team-meta-review entry (meta/): ${m:-none}\"",
             "timeout": 60
+          }
+        ]
+      }
+    ],
+    "SessionEnd": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "cd \"$CLAUDE_PROJECT_DIR\" && mkdir -p ~/.cache/iterate-hack && nohup uv run --quiet tools/traces.py push >> ~/.cache/iterate-hack/traces.log 2>&1 &",
+            "timeout": 5
           }
         ]
       }

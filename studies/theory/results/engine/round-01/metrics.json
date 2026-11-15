@@ -1,0 +1,97 @@
+{
+ "targets": 58,
+ "noise": 3,
+ "theories": {
+  "across-1": {
+   "vs_null_1": {
+    "closer": 21,
+    "farther": 14,
+    "net": 7
+   },
+   "vs_null_2": {
+    "closer": 19,
+    "farther": 17,
+    "net": 2
+   },
+   "beats_null": false
+  },
+  "across-2": {
+   "vs_null_1": {
+    "closer": 23,
+    "farther": 17,
+    "net": 6
+   },
+   "vs_null_2": {
+    "closer": 22,
+    "farther": 20,
+    "net": 2
+   },
+   "beats_null": false
+  },
+  "all-1": {
+   "vs_null_1": {
+    "closer": 24,
+    "farther": 17,
+    "net": 7
+   },
+   "vs_null_2": {
+    "closer": 18,
+    "farther": 15,
+    "net": 3
+   },
+   "beats_null": false
+  },
+  "all-2": {
+   "vs_null_1": {
+    "closer": 22,
+    "farther": 20,
+    "net": 2
+   },
+   "vs_null_2": {
+    "closer": 18,
+    "farther": 21,
+    "net": -3
+   },
+   "beats_null": false
+  },
+  "planted": {
+   "vs_null_1": {
+    "closer": 22,
+    "farther": 14,
+    "net": 8
+   },
+   "vs_null_2": {
+    "closer": 23,
+    "farther": 21,
+    "net": 2
+   },
+   "beats_null": false
+  },
+  "surprises-1": {
+   "vs_null_1": {
+    "closer": 21,
+    "farther": 21,
+    "net": 0
+   },
+   "vs_null_2": {
+    "closer": 16,
+    "farther": 24,
+    "net": -8
+   },
+   "beats_null": false
+  },
+  "surprises-2": {
+   "vs_null_1": {
+    "closer": 15,
+    "farther": 22,
+    "net": -7
+   },
+   "vs_null_2": {
+    "closer": 17,
+    "farther": 22,
+    "net": -5
+   },
+   "beats_null": false
+  }
+ }
+}
