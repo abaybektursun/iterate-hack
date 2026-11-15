@@ -22,6 +22,13 @@ For a series, origin t and horizon h, with panel rows dated on or before t only:
      --hurdle-h 1 applies it at horizon 1 only (1,3: at horizons 1 and 3).
   3c. --replay P  linear pool at the unit: with probability P the unit repeats its own price ratio of the drawn
      window (if it was present at both ends), otherwise its price is the model's (after 3 and 3b).
+  3d. --intraday FILE  (prep/intraday.py: the day's maximum price of each fastgpu_daily listing; the series is built
+     from the day's minimum.) State of a unit on a day: maximum above minimum, or not. From the unit's own past days
+     in today's state: the share on which the next day's price equalled the day's price (stay) and the share on
+     which it equalled the day's maximum (hit), each with half a pseudo-day. One day ahead the unit stays with the
+     stay share, replacing 3b. If today's maximum is above the minimum and the unit's hit share is 0.9 or more on
+     at least 5 days, the unit is, with the hit share, at today's maximum on the next day and moves from there as
+     in one of its own past windows of the remaining g - 1 days (weights exp(-age / tau)).
   4. --scaleway  Scaleway units: USD price = EUR price x ECB rate of the last business day before the target day.
      EUR price = last USD price / the rate that priced it. The rate is known when that business day is <= t, else a
      driftless random walk from the last rate dated <= t with the daily volatility of the rates dated <= t.
@@ -51,6 +58,7 @@ ap.add_argument("--dep", default="indep", choices=["indep", "prov", "copula"])
 ap.add_argument("--dep-h1", default="", help="dependence at horizon 1 if it differs from --dep")
 ap.add_argument("--hurdle", action="store_true"); ap.add_argument("--hurdle-h", default="1,3,7")
 ap.add_argument("--replay", type=float, default=0)
+ap.add_argument("--intraday", default="")
 ap.add_argument("--snap", type=float, default=0); ap.add_argument("--scaleway", action="store_true")
 ap.add_argument("--turnover", default="", choices=["", "own", "pool"]); ap.add_argument("--enter", default="ratio", choices=["ratio", "abs"])
 ap.add_argument("--turnover-only", default="", help="apply --turnover only to series whose id contains this text")
@@ -82,6 +90,11 @@ isafh = lst.series_id.str.startswith("afhubbard.")
 W = fm2_lib.wide(lst[~isafh], unit, long)
 if a.afh == "lst":
     W.update(fm2_lib.wide(lst[isafh], "listing", False))
+MX = {}
+if a.intraday:
+    assert unit == "listing"
+    m = pd.read_csv(a.intraday, keep_default_na=False, parse_dates=["d"])
+    MX = {s: g.pivot(index="d", columns="listing", values="pmax") for s, g in m[m.d <= max(ORIG)].groupby("series_id")}
 fx = pd.read_csv(a.fx, parse_dates=["date"]).set_index("date").usd_per_eur
 
 
@@ -141,6 +154,7 @@ def simulate(sid, w, o, h, setup, dep, turnover):
                 lo[ok[:, j], j] /= ww.sum(); hi[ok[:, j], j] /= ww.sum()
         U = lo[win].T + U * (hi[win].T - lo[win].T)                 # absent in the window: lo 0, hi 1, so U itself
     X = np.stack([np.interp(U[j], LV, qf[j]) for j in range(n)])   # units x simulations
+    X0 = X.copy()
 
     if hurdle and win is not None:
         wk = wt[:, None] * ok
@@ -160,6 +174,35 @@ def simulate(sid, w, o, h, setup, dep, turnover):
     if a.replay and win is not None:
         B = (rng.uniform(size=(n, D)) < a.replay) & ok[win].T
         X = np.where(B, now[:, None] * np.where(ok, R, 1)[win].T, X)
+    if sid in MX:
+        mx = MX[sid].reindex(index=days, columns=w.columns).values   # rows dated on or before t only (w is cut at t)
+        nxt = np.vstack([P[1:], np.full((1, P.shape[1]), np.nan)])
+        seq = np.append((days[1:] - days[:-1]).days == 1, False)
+        for j, c in enumerate(np.flatnonzero(cur)):
+            if np.isnan(mx[-1, c]):
+                continue
+            up = mx[:, c] > P[:, c] + 1e-9
+            ok1 = seq & ~np.isnan(nxt[:, c]) & ~np.isnan(mx[:, c])
+            same = ok1 & (up == up[-1])                              # past days in today's state
+            k = same.sum()
+            if g == 1 and k >= 5:
+                p_stay = ((nxt[same, c] == P[same, c]).sum() + 0.5) / (k + 1)
+                X[j] = np.where(rng.uniform(size=D) < p_stay, now[j], X0[j])
+            su = ok1 & up
+            if su.sum() < 5 or (np.abs(nxt[su, c] - mx[su, c]) < 1e-9).mean() < 0.9 or not up[-1]:
+                continue
+            p_hit = ((np.abs(nxt[same, c] - mx[same, c]) < 1e-9).sum() + 0.5) / (k + 1)
+            r = np.ones(D)
+            if g > 1:
+                x = P[:, c]; pos = {d: i for i, d in enumerate(days)}
+                pr = [(i, pos[d + pd.Timedelta(days=g - 1)]) for i, d in enumerate(days) if d + pd.Timedelta(days=g - 1) in pos]
+                pr = [(i, e) for i, e in pr if not np.isnan(x[i]) and not np.isnan(x[e])]
+                if len(pr) < 5:
+                    continue
+                i, e = np.array(pr).T
+                pw = np.exp(-(t - days[e]).days.values / a.tau)
+                r = (x[e] / x[i])[rng.choice(len(i), size=D, p=pw / pw.sum())]
+            X[j] = np.where(rng.uniform(size=D) < p_hit, mx[-1, c] * r, X0[j] if g == 1 else X[j])
     if a.scaleway:
         for j in np.flatnonzero(prov[cur] == "scaleway"):
             X[j] = scaleway(now[j], L, t, h)
