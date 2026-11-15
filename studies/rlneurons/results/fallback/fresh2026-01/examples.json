@@ -1,0 +1,66 @@
+{
+ "rule": "R2",
+ "the rule fixes (rule right, plain 32,768 vote wrong)": {
+  "problem_index": 49,
+  "gold": "5\\sqrt{5}",
+  "prompt": "Solve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nLet \\( ABCD \\) be a rectangle with \\( AB = 12 \\) and \\( BC = 16 \\). Points \\( W, X, Y, \\) and \\( Z \\) lie on sides \\( \\overline{AB}, \\overline{BC}, \\overline{CD}, \\) and \\( \\overline{DA} \\), respectively, such that \\( WXYZ \\) is a rhombus with area 120. Compute \\( XY \\).\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "rule_score": 1,
+  "plain_32768_vote_score": 0,
+  "vote_16384_score": 1,
+  "samples": [
+   {
+    "sample": 0,
+    "seed": 7000049,
+    "n_new": 19461,
+    "extracted_v3": "\\dfrac{\\sqrt{750 + 150\\sqrt{5}}}{2}",
+    "score_v3": 0,
+    "extracted_v3_16": null,
+    "score_v3_16": 0,
+    "switch_tok": 14295,
+    "late": true,
+    "switched_before_16384": true,
+    "text_last_600": "This solution results in an area of 150, which is incorrect.\n\n5. **Area Consideration:**\n   - Using the shoelace formula with variables and setting the area to 120:\n     - Derived equations: \\(wx - 6x - 8w + 36 = 0\\).\n     - Solving with \\(3w + 4x = 14\\) gives valid solutions \\(w = 2\\sqrt{5}\\) and \\(x = \\frac{7 - 3\\sqrt{5}}{2}\\).\n\n6. **Calculating \\(XY\\):**\n   - Coordinates:\n     - \\(X(12, \\frac{7 - 3\\sqrt{5}}{2})\\)\n     - \\(Y(12 - 2\\sqrt{5}, 16)\\)\n   - Distance \\(XY\\) calculates to \\(\\sqrt{\\frac{750 + 150\\sqrt{5}}{4}}\\).\n\nThe final answer is:\n\n\\[\n\\boxed{\\dfrac{\\sqrt{750 + 150\\sqrt{5}}}{2}}\n\\]"
+   },
+   {
+    "sample": 1,
+    "seed": 7010049,
+    "n_new": 9756,
+    "extracted_v3": "5\\sqrt{5}",
+    "score_v3": 1,
+    "extracted_v3_16": "5\\sqrt{5}",
+    "score_v3_16": 1,
+    "switch_tok": null,
+    "late": false,
+    "switched_before_16384": false,
+    "text_last_600": " 16)\\), \\(Z(0, d)\\).\n   - Area formula simplifies to: \\(|4ab + 384 - 24b - 32a| = 240\\).\n   - Two cases from absolute value:\n     - Case 1: \\(ab + 96 - 6b - 8a = 60\\)\n     - Case 2: \\(ab + 96 - 6b - 8a = -60\\) (discarded as no real solution).\n\n6. **Solving Case 1:**\n   - Substitute \\(a = \\frac{4b - 14}{3}\\) into the equations.\n   - Solutions for \\(b = 11\\) and \\(b = 5\\), leading to valid coordinates for \\(W, X, Y, Z\\).\n\n7. **Calculate \\(XY\\):**\n   - Using coordinates for both solutions, \\(XY\\) is calculated to be \\(\\sqrt{125} = 5\\sqrt{5}\\).\n\nThus, the length of \\(XY\\) is \\(\\boxed{5\\sqrt{5}}\\)."
+   },
+   {
+    "sample": 2,
+    "seed": 7020049,
+    "n_new": 21548,
+    "extracted_v3": "11",
+    "score_v3": 0,
+    "extracted_v3_16": null,
+    "score_v3_16": 0,
+    "switch_tok": null,
+    "late": true,
+    "switched_before_16384": false,
+    "text_last_600": "ontal diagonal \\(XZ\\) must be of length 15. The midpoint of both diagonals must coincide, leading to \\(X = (2a, 8)\\) and \\(Z = (0, 8)\\).\n\n5. **Calculating the Side Length**:\n   - The side length of the rhombus can be derived using the diagonals. The side length is the hypotenuse of a right triangle with half the diagonals as legs:\n     \\[\n     s = \\sqrt{\\left(\\frac{d_1}{2}\\right)^2 + \\left(\\frac{d_2}{2}\\right)^2} = \\sqrt{\\left(\\frac{15}{2}\\right)^2 + \\left(\\frac{16}{2}\\right)^2} = \\sqrt{7.5^2 + 8^2} = \\sqrt{56.25 + 64} = \\sqrt{120.25} = 11\n     \\]\n\nThus, the length of \\(XY\\) is \\(\\boxed{11}\\)."
+   },
+   {
+    "sample": 3,
+    "seed": 7030049,
+    "n_new": 21832,
+    "extracted_v3": "10",
+    "score_v3": 0,
+    "extracted_v3_16": null,
+    "score_v3_16": 0,
+    "switch_tok": 19974,
+    "late": true,
+    "switched_before_16384": false,
+    "text_last_600": " 10\n\\]\n\nVerifying the area using diagonals:\n- Diagonal \\(WY\\) (from \\(W(6,0)\\) to \\(Y(6,16)\\)) has length 16.\n- Diagonal \\(XZ\\) (from \\(X(12,8)\\) to \\(Z(0,8)\\)) has length 12.\n- Area = \\(\\frac{1}{2} \\times 16 \\times 12 = 96\\), which does not match the required area. \n\nHowever, considering another possible configuration where the product of diagonals must be 240, we find that the side length of the rhombus can be derived using the coordinates midpoint of the rectangle's diagonals, which might lead to a consistent solution where the side length is 10.\n\nThus, the correct answer is \\(\\boxed{10}\\)."
+   }
+  ]
+ },
+ "the rule breaks (rule wrong, plain 32,768 vote right)": null
+}

@@ -1,0 +1,259 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_fallback.md",
+ "set": "fresh2026",
+ "n": 136,
+ "rows": "studies/rlneurons/results/cap32vote/fresh2026_sft1_cue_s4-01",
+ "controls_reproduced_stored_order": {
+  "R4": 75,
+  "R5": 73,
+  "right_to_wrong": 4,
+  "wrong_to_right": 6,
+  "late": {
+   "right": 50,
+   "finished": 259,
+   "all": 260
+  },
+  "late_finished_right": 50
+ },
+ "rules": {
+  "R2": {
+   "what": "late answers count half a vote",
+   "right_24_orders": 77.75,
+   "right_stored_order": 77
+  },
+  "R4": {
+   "what": "control: plain vote at 32,768",
+   "right_24_orders": 75.75,
+   "right_stored_order": 75
+  },
+  "R5": {
+   "what": "control: vote over the answers cut at 16,384",
+   "right_24_orders": 72.17,
+   "right_stored_order": 73
+  },
+  "R6": {
+   "what": "planted control: fallback with the late flags permuted inside the problem",
+   "right_24_orders": 73.89,
+   "right_stored_order": null
+  }
+ },
+ "chosen": "R2",
+ "differences": {
+  "R2": {
+   "minus R4 (plain 32,768 vote), 24 orders": {
+    "problems": 2.0,
+    "points": 1.47,
+    "interval95": [
+     0.0,
+     3.37
+    ]
+   },
+   "minus R5 (16,384-cut vote), 24 orders": {
+    "problems": 5.58,
+    "points": 4.11,
+    "interval95": [
+     0.8,
+     7.78
+    ]
+   },
+   "minus R4, stored order": {
+    "problems": 2.0,
+    "points": 1.47,
+    "interval95": [
+     0.0,
+     3.68
+    ]
+   },
+   "minus R5, stored order": {
+    "problems": 4.0,
+    "points": 2.94,
+    "interval95": [
+     -0.74,
+     7.35
+    ]
+   },
+   "stored order, against R4: fixed / broken": [
+    2,
+    0
+   ],
+   "stored order, against R5: fixed / broken": [
+    6,
+    2
+   ]
+  },
+  "R6": {
+   "minus R4 (plain 32,768 vote), 24 orders": {
+    "problems": -1.86,
+    "points": -1.37,
+    "interval95": [
+     -3.05,
+     0.05
+    ]
+   }
+  }
+ },
+ "H1": {
+  "rule": "R2",
+  "held": false,
+  "power_stated_before_scoring": {
+   "n": 136,
+   "draws": 2000,
+   "minus_plain_32768": 0.428,
+   "minus_cut_16384": 0.546,
+   "both": 0.191
+  }
+ },
+ "pooled_with_the_development_set_descriptive_only": {
+  "n": 464,
+  "R2 minus R4, 24 orders": {
+   "problems": 6.5,
+   "points": 1.4,
+   "interval95": [
+    0.57,
+    2.33
+   ]
+  },
+  "R2 minus R5, 24 orders": {
+   "problems": 15.58,
+   "points": 3.36,
+   "interval95": [
+    1.65,
+    5.14
+   ]
+  }
+ },
+ "H2_switch": {
+  "late_answers": 260,
+  "switched": 82,
+  "switched_right": 12,
+  "not_switched": 178,
+  "not_switched_right": 38,
+  "problems_with_both_kinds": 39,
+  "within_problem_points": -0.4,
+  "interval95": [
+   -14.1,
+   12.8
+  ],
+  "flags_permuted_inside_problems_points": -0.8
+ },
+ "H2_switch_pooled_with_the_development_set": {
+  "late_answers": 628,
+  "switched": 201,
+  "switched_right": 32,
+  "not_switched": 427,
+  "not_switched_right": 117,
+  "problems_with_both_kinds": 99,
+  "within_problem_points": -7.6,
+  "interval95": [
+   -15.7,
+   0.5
+  ],
+  "flags_permuted_inside_problems_points": -0.1
+ },
+ "H3_mechanism": {
+  "early_finished": 284,
+  "early_finished_right": 231,
+  "late_finished": 259,
+  "late_finished_right": 50,
+  "problems_without_a_16384_ballot": 21,
+  "late_finished_ballots": {
+   "with an early ballot": 136,
+   "agrees": 45,
+   "agrees, right": 23,
+   "disagrees": 91,
+   "disagrees, late right": 4,
+   "disagrees, an early ballot right": 29,
+   "disagrees, none right": 58,
+   "no early ballot": 82,
+   "no early ballot, late right": 14
+  }
+ },
+ "sequential": {
+  "single_32": {
+   "right_24_orders": 70.2,
+   "tokens_per_problem_24_orders": 15900,
+   "right_stored_order": 69,
+   "tokens_per_problem_stored_order": 16210
+  },
+  "seq4_16": {
+   "right_24_orders": 72.2,
+   "tokens_per_problem_24_orders": 43509,
+   "right_stored_order": 73,
+   "tokens_per_problem_stored_order": 44221
+  },
+  "seq4_32": {
+   "right_24_orders": 75.8,
+   "tokens_per_problem_24_orders": 47519,
+   "right_stored_order": 75,
+   "tokens_per_problem_stored_order": 48359
+  },
+  "seqfb_resume": {
+   "right_24_orders": 76.7,
+   "tokens_per_problem_24_orders": 47017,
+   "right_stored_order": 78,
+   "tokens_per_problem_stored_order": 47674
+  },
+  "seqfb_online": {
+   "right_24_orders": 76.7,
+   "tokens_per_problem_24_orders": 50309,
+   "right_stored_order": 78,
+   "tokens_per_problem_stored_order": 51393
+  },
+  "seq4_half": {
+   "right_24_orders": 77.8,
+   "tokens_per_problem_24_orders": 53980,
+   "right_stored_order": 77,
+   "tokens_per_problem_stored_order": 54652
+  }
+ },
+ "sequential_differences_24_orders": {
+  "seqfb_resume minus seq4_32": {
+   "problems": 0.92,
+   "points": 0.67,
+   "interval95": [
+    -1.9,
+    3.56
+   ]
+  },
+  "seqfb_resume minus seq4_16": {
+   "problems": 4.5,
+   "points": 3.31,
+   "interval95": [
+    0.74,
+    6.62
+   ]
+  },
+  "seqfb_online minus seq4_32": {
+   "problems": 0.92,
+   "points": 0.67,
+   "interval95": [
+    -1.9,
+    3.56
+   ]
+  },
+  "seqfb_online minus seq4_16": {
+   "problems": 4.5,
+   "points": 3.31,
+   "interval95": [
+    0.74,
+    6.62
+   ]
+  },
+  "seq4_half minus seq4_32": {
+   "problems": 2.0,
+   "points": 1.47,
+   "interval95": [
+    0.0,
+    3.37
+   ]
+  },
+  "seq4_half minus seq4_16": {
+   "problems": 5.58,
+   "points": 4.11,
+   "interval95": [
+    0.8,
+    7.78
+   ]
+  }
+ }
+}

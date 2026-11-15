@@ -1,0 +1,12 @@
+{
+ "commit": "0ab114f40db95db3f6cbfab42788ec4014c82693",
+ "command": "/home/abay/Projects/iterate-hack-fallback/studies/rlneurons/analysis/fallback.py --set fresh2026 --texts /home/abay/Projects/iterate-hack/runs/cap32vote_fresh_s4/answers.jsonl --fixed studies/rlneurons/results/fallback/hard328-01/chosen.json --nn 01",
+ "job_id": null,
+ "spec": "studies/rlneurons/specs/SPEC_fallback.md",
+ "fixed": "studies/rlneurons/results/fallback/hard328-01/chosen.json",
+ "inputs": {
+  "rows": "studies/rlneurons/results/cap32vote/fresh2026_sft1_cue_s4-01/rows.jsonl",
+  "job_id": "abaybektursun-1115-090519-e734+abaybektursun-1115-151138-ecde+abaybektursun-1115-082027-20e4+abaybektursun-1115-094344-1848",
+  "texts": "/home/abay/Projects/iterate-hack/runs/cap32vote_fresh_s4/answers.jsonl"
+ }
+}

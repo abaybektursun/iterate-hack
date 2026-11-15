@@ -5045,3 +5045,111 @@ closing fence, with no opening fence, which `code_lib.BLOCK` does not accept (Ma
 no such answer: their 34, 33 and 8 are cap hits or answers with no program. Among answers that have a fenced block the pass
 rates are Think-SFT 301 of 432 (69.7 %), base 317 of 504 (62.9 %), RL-Code 401 of 530 (75.7 %); these are different problem
 subsets, so they are not a comparison. A regrade that also accepts the unopened block, applied to every cell, is the next step.
+
+## Late answers at half weight: +1.5 points over the plain 32,768 vote on fresh2026, interval touches 0; the strict fallback does not beat the plain vote (hard328 n = 328 development, fresh2026 n = 136 held out, laptop, board work-32dfa8, idea-016ff5)
+
+Question: at cap 32,768 the vote over 4 of Think-SFT + cue gains little over the same answers cut at 16,384 (section "Vote
+at a cap of 32,768"), because answers that finish after token 16,384 are mostly wrong and tie or outvote one early right
+answer. Does a label-free rule that trusts late answers less beat both the plain 32,768 vote and the 16,384-cut vote?
+Answer: on the held-out set not separably against the plain vote. The rule chosen on hard328, "a late answer counts half a
+vote" (R2), scores 77.8 of 136 on fresh2026 (24-order mean; 77 in the stored order): +2.0 problems, +1.5 points [0.0, +3.4]
+over the plain 32,768 vote (75.8) and +5.6 problems, +4.1 points [+0.8, +7.8] over the 16,384-cut vote (72.2). H1 needed both
+intervals above 0: refuted on the plain-vote leg, as predicted from the power stated before scoring (19 % for both legs,
+43 % and 55 % for each), so this null is uninformative. Pooled with hard328, descriptive only because hard328 chose the
+rule (n = 464): +1.4 points [+0.6, +2.3] and +3.4 [+1.7, +5.1]. No score line. The proposed strict fallback (R1: late
+answers only when no early answer exists) equals the plain vote on hard328 (244.8 against 245.2). Spec, pushed before the
+script: `specs/SPEC_fallback.md` (commit `c7c20b3`); Amendment 1 with the chosen rule, the power and the fresh2026
+prediction, pushed before fresh2026 was scored: commit `0ab114f`. Stored rows of result-dd26fe; no GPU.
+
+Rules (`analysis/fallback.py`; none reads a score). A sample is late when `n_new` > 16,384 (boundary fixed, not tuned). R4
+plain vote over the 32,768 ballots; R5 vote over the ballots of the same answers cut at 16,384; R1 R5's answer when the
+16,384 view has a ballot, else R4's; R2 32,768 ballots, early 1, late 0.5; R3 as R1 without the late ballots whose text
+switched script before token 16,384 (`drift.one`, unchanged); R6 R1 with the late flags permuted inside each problem.
+Votes are `day1_vote.vote`, ties to the group seen first. Every number is the mean over the 24 draw orders; differences
+are problems (points [95 %]), paired bootstrap over problems, 5,000 resamples.
+
+| rule | hard328 (development): right, 24 orders (stored) | minus R4 | minus R5 | fresh2026 (held out, R2 only): right (stored) | minus R4 | minus R5 |
+|---|---|---|---|---|---|---|
+| R1 fallback | 244.8 (243) | -0.5 (-0.1 [-2.3, +1.9]) | +5.0 (+1.5 [+0.5, +2.8]) | not scored | | |
+| R2 half weight (chosen) | 249.8 (249) | +4.5 (+1.4 [+0.4, +2.5]) | +10.0 (+3.0 [+1.1, +5.1]) | 77.8 (77) | +2.0 (+1.5 [0.0, +3.4]) | +5.6 (+4.1 [+0.8, +7.8]) |
+| R3 fallback + script | 245.2 (244) | 0.0 (0.0 [-2.1, +2.1]) | +5.5 (+1.7 [+0.5, +3.0]) | not scored | | |
+| R4 plain 32,768 vote | 245.2 (244) | | | 75.8 (75) | | |
+| R5 16,384-cut vote | 239.8 (238) | | | 72.2 (73) | | |
+| R6 late flags permuted | 241.0 | -4.2 (-1.3 [-2.3, -0.3]) | | 73.9 | -1.9 (-1.4 [-3.0, +0.1]) | |
+
+- H1 (R2 beats both votes on fresh2026): refuted, the interval against the plain vote starts at 0.0. Stored order: R2 fixes
+  2 problems against the plain vote and breaks 0 (hard328: 6 and 1); against the cut vote 6 and 2. Predicted before
+  scoring: 77.5 [75, 80], +2 problems with an interval covering 0, +4 with a lower bound near 0; observed 77.8, +2.0, +5.6.
+- Dev predictions for R1 were wrong (248 and +4 over the plain vote; observed 244.8 and -0.5). In the stored order R1 fixes
+  9 problems against the plain vote and breaks 10: a late answer that sides with one of two disagreeing early answers, or
+  two late answers that outvote one early wrong answer, are votes the strict fallback throws away (hard328 `77`, gold 601:
+  early 7, late 1201, 601, 601).
+- R6 (the fallback R1 with the late flags permuted) is below the plain vote on both sets (the fresh2026 interval covers 0):
+  a rule that cannot read the real lengths gains nothing. It was run on R1's form only, not on R2's.
+- The stored order flatters nothing here, but the 24-order means of the two controls differ from the posted stored-order
+  votes: hard328 245.2 and 239.8 against 244 and 238; fresh2026 75.8 and 72.2 against 75 and 73.
+
+H2 (a script switch before token 16,384 marks the wrong late answers, within problem): refuted by its own criterion, the
+pooled interval covers 0.
+
+| set | late answers | switched before 16,384: right | not switched: right | problems with both kinds | within problem, points [95 %] | flags permuted inside problems |
+|---|---|---|---|---|---|---|
+| hard328 | 368 | 20 of 119 (17 %) | 79 of 249 (32 %) | 60 | -12.2 [-22.2, -3.1] | +0.6 |
+| fresh2026 | 260 | 12 of 82 (15 %) | 38 of 178 (21 %) | 39 | -0.4 [-14.1, +12.8] | -0.8 |
+| pooled | 628 | 32 of 201 | 117 of 427 | 99 | -7.6 [-15.7, +0.5] | -0.1 |
+
+The drift study's one-sample lead (1 of 24 against 22 of 69; reproduced here on sample 0 as a check) is 20 of 119 against
+79 of 249 over four samples, holds within problem on hard328 and is absent on fresh2026. Predicted: at most 10 % right
+among switched, -15 points pooled with an interval below 0: wrong on both.
+
+H3 (mechanism; counts of answers, right in brackets):
+
+| | hard328 | fresh2026 |
+|---|---|---|
+| early finished answers | 944 (832 right, 88.1 %) | 284 (231, 81.3 %) |
+| late finished answers | 362 (96, 26.5 %) | 259 (50, 19.3 %) |
+| late finished ballots on problems with a 16,384 ballot | 192 | 136 |
+| of those, agree with a 16,384 ballot | 87 (51 right) | 45 (23 right) |
+| of those, disagree with every 16,384 ballot | 105: late right 13, a 16,384 ballot right 46, none right 46 | 91: late right 4, a 16,384 ballot right 29, none right 58 |
+| late finished ballots on problems with no 16,384 ballot | 118 on 30 problems (17 right) | 82 on 21 problems (14 right) |
+
+A late answer that disagrees with every early ballot is right 13 times of 105 and 4 of 91, an early ballot it opposes 46
+and 29 times: this is why late answers should weigh less. But 45 % and 33 % of them agree with an early ballot (predicted
+25 %), and those agreements are right only 59 % and 51 % of the time (predicted 85 %): they are not redundant, they decide
+between early ballots, which is why half weight beats the strict fallback. Correction to "99 right of 362" (result-dd26fe
+and this task): 99 is the right count of all 368 late answers on hard328; 96 of the 362 finished ones are right.
+
+Token accounting (24 draw orders, generated tokens per problem; `seq4` = draw 2, then 1, then 1, stop when two agree):
+
+| rule | hard328: right, tokens | fresh2026: right, tokens |
+|---|---|---|
+| one 32,768 sample | 232.8, 11,650 | 70.2, 15,900 |
+| `seq4` at 16,384 | 239.8, 30,807 | 72.2, 43,509 |
+| `seq4` at 32,768 | 245.2, 31,732 | 75.8, 47,519 |
+| `seqfb_resume`: `seq4` at 16,384; with no ballot, resume the stopped samples | 244.8, 33,118 | 76.7, 47,017 |
+| `seqfb_online`: no resuming; a sample stops at 16,384 once an early ballot exists | 244.8, 34,863 | 76.7, 50,309 |
+| `seq4_half`: R2 in `seq4`'s plan, stop when a group weighs 2 (added in Amendment 1) | 249.8, 36,659 | 77.8, 53,980 |
+
+The sequential fallback is not a better frontier point: on hard328 it is 0.5 problems below `seq4` at 32,768 at 4 % more
+tokens (predicted 247), on fresh2026 +0.9 problems (+0.7 points [-1.9, +3.6]) at 1 % fewer. `seq4_half` buys R2's gain with
+16 % and 14 % more tokens than `seq4` at 32,768, because two agreeing late answers no longer stop the draw.
+
+Checks (`analysis/fallback_test.py`, and asserts in `fallback.py`): the posted 244 / 238 and 75 / 73, the flips 9 / 15 and
+4 / 6, the late counts, `seq4` 245.2 at 31,732 and 239.8 at 30,807, one sample 232.8 at 11,650 are reproduced from the rows.
+Planted late answers always wrong: R1 equals R5 on every problem and order. Planted late answers always right: R1 scores 1
+on every problem with no 16,384 ballot, and still loses to the plain vote elsewhere (the plant bites). Hand-built problems
+where R1, R2 and the sequential rules must fail do fail. Switch detector: 24 switched of 93, 1 and 22 right on sample 0.
+
+Caveats. hard328 is the development set: its R2 numbers are not a test. fresh2026 was scored once, but its plain and cut
+votes and flip counts were posted before, and n = 136 gives 19 % power. One model, one sampling setting, 4 samples.
+
+Run folders `results/fallback/hard328-01/` (also `chosen.json`, `per_problem.json`) and `results/fallback/fresh2026-01/`:
+`run.json`, `readout.json`, `table.md`, `rows.jsonl` (lengths, early / late, switch token), `examples.json` (hard328 `76`
+fixed and `77` broken by R2; fresh2026 `49` fixed, none broken). Texts: `runs/cap32vote_{hard328,fresh}_s4/answers.jsonl`
+(not in git; `s3://iterate-hack-team-769063704696/handoff/cap32vote/`).
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 --with tokenizers python -m studies.rlneurons.analysis.fallback_test
+uv run --no-project --with numpy --with math-verify==0.9.0 --with tokenizers python -m studies.rlneurons.analysis.fallback --set hard328 --texts runs/cap32vote_hard328_s4/answers.jsonl --nn 01
+uv run --no-project --with numpy --with math-verify==0.9.0 --with tokenizers python -m studies.rlneurons.analysis.fallback --set fresh2026 --texts runs/cap32vote_fresh_s4/answers.jsonl --fixed studies/rlneurons/results/fallback/hard328-01/chosen.json --nn 01
+```
