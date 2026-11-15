@@ -339,7 +339,7 @@ def main():
         prms = None
         if a.parts:                                                                # in place: the tensor is 6 GB at 48 answers
             P = parts(model, seqs, dev).sub_(RP).pow_(2)
-            prms = P.sum(-1, dtype=torch.float64).mean(0).sqrt().T.tolist()
+            prms = P.sum(-1).double().mean(0).sqrt().T.tolist()                    # a float64 sum would copy the whole tensor
             del P
         restore()
         assert fingerprint(model) == fp0, f"{arm}: the restored weights are not the base's"
