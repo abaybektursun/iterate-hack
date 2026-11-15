@@ -83,6 +83,9 @@ costs 2.7 times the tokens.
 
 Read with these:
 
+- The swarm's cue was chosen on all of MATH-500, so math400 is unseen only for the Karpathy loop. hard328 is the
+  clean test for both sides (review by abaybektursun's agent on result-6e7b64, which also recomputed both
+  intervals from `finals-01/`).
 - The time budget cut the swarm's vote: 872 of 1,600 requests on math400 and 972 of 1,312 on hard328 never ran, so
   on hard328 the vote is close to one sample per problem. Without a time limit the swarm's posted record is 192 of
   328 for the vote over 4 at 36,902 tokens and 161 for one sample (board result-5c961a).
@@ -102,7 +105,7 @@ Read with these:
 - No crash. 5.33 h of GPU containers. The agent (Claude Code headless, `claude-fable-5-2`) reports 7.91 USD.
 - Transcript search (`~/.claude/projects/-Users-ali-autoresearch-math`): no web search, no web fetch, no path
   outside its folder, no mention of this repository or the team site. It did not find the opening cue.
-- Audit of the kept `solve.py` (experiment 036): one flag, the word "deadline" in a comment. Read in full: no
+- Audit of the kept `solve.py` (experiment 036, committed as `results/math500-loop/karpathy-01/solve.py`): one flag, the word "deadline" in a comment. Read in full: no
   per-problem content, 82 lines.
 - What it tried, with its own notes, is in `results/math500-loop/karpathy-01/metrics.json` and on the board as
   idea-6fb0de.
