@@ -271,7 +271,7 @@ def slides(papers):
                     + (f'<p class="who">{esc(demo_photos.COOK_NAME)}</p>' if demo_photos.COOK_NAME else "") + '</div></div>'),
         ("harness", '<div class="head"><h2>Invariant</h2><p class="sub">Symbiotic research swarm</p></div>'
                     '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
-                    + '<ul class="wins">' + "".join(f'<li class="step">{esc(w)}</li>' for w in WINS) + '</ul>'
+                    + '<ul class="wins">' + "".join(f'<li>{esc(w)}</li>' for w in WINS) + '</ul>'
                     f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span>'
                     '<span>Agents <b class="word">OpenAI</b><b class="word">Devin</b><b class="word">Anthropic</b></span></div>'),
         ("gap", '<iframe class="fig-frame gapfig" data-fig="gap" data-replay title="Base model and RL-trained model" tabindex="-1"></iframe>'),
