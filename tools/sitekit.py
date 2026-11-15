@@ -64,6 +64,7 @@ function arg(s, i) {  // the next argument at i: a {group}, a \command or one ch
 }
 const atom = t => /^[^\s+\-−*/·×÷=<>≤≥,±:;]*$/.test(t.replace(/\([^()]*\)/g, "X").replace(/\([^()]*\)/g, "X"));
 const wrap = t => (t = t.trim(), atom(t) ? t : "(" + t + ")");
+const under = t => (t = t.trim(), /^(?:[\d.]+|√?\p{L}|√?\d+|\([^()]*\))[⁰-⁹¹²³⁺⁻ⁿⁱ₀-₉ₐ-ₜ]*$/u.test(t) ? t : "(" + t + ")");  // a denominator
 function script(t, c) {
   const u = t.trim(), map = c === "^" ? SUP : SUB, v = u.replace(/\s+/g, "");
   if (c === "^" && /^[∘°]$/.test(v)) return "°";
@@ -80,7 +81,7 @@ function tex(s) {
       i += m[0].length;
       if (/^[dtc]?frac$/.test(name)) {
         [a, i] = arg(s, i); [b, i] = arg(s, i);
-        out += (/[\w)]$/.test(out) ? " " : "") + wrap(tex(a)) + "/" + wrap(tex(b));
+        out += (/[\w)]$/.test(out) ? " " : "") + wrap(tex(a)) + "/" + under(tex(b));
       } else if (/^[dt]?binom$/.test(name)) { [a, i] = arg(s, i); [b, i] = arg(s, i); out += `C(${tex(a).trim()}, ${tex(b).trim()})`; }
       else if (name === "sqrt") {
         let n = "";
@@ -103,7 +104,7 @@ function tex(s) {
       else if (DROP.has(name)) { if (s[i] === ".") i++; }
       else if (BIN[name]) out += " " + BIN[name] + " ";
       else if (name in SYM) out += SYM[name];
-      else out += name;
+      else out += (/^[a-z]{2,}$/.test(name) && /[\p{L}\p{N}]$/u.test(out) ? " " : "") + name;
     } else if (c === "^" || c === "_") { [a, i] = arg(s, i + 1); out += script(tex(a), c); }
     else if (c === "{") { [a, i] = arg(s, i); out += tex(a); }
     else if (c === "}" || c === "$") i++;
