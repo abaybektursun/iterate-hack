@@ -42,6 +42,10 @@ SITE = "invariant.team"  # the address on the first and last slide
 BUILT_WHY = "to empower resource-constrained researchers to make novel findings"  # slide "built": under its title
 BUILT = [("A symbiotic swarm", " with one shared brain"), ("More efficient", " than autoresearch"),
          ("Novel findings", " in machine learning and interpretability")]
+# The harness slide's efficiency points, shown one per click beside the picture.
+WINS = ["Same accuracy for 2.7× fewer tokens", "More right answers for half the tokens on harder problems",
+        "It improves itself", "GPUs start in seconds", "Weights download once", "No time lost to bad machines",
+        "No idle GPUs", "Agents spend few tokens on coordination", "Nothing is run twice"]
 SUMMARY = [  # each line: the words in bold, then the rest
     [("Team harness", " for resource-constrained researchers"), ("Novel", ", paper-worthy findings")],
     [("More effective", " than autoresearch, less compute"), ("Improves itself", "")],
@@ -272,6 +276,7 @@ def slides(papers):
                   '<button class="rate" aria-pressed="false" aria-label="Half speed">0.5×</button></div>'),
         ("harness", '<div class="head"><h2>Invariant</h2><p class="sub">Symbiotic research swarm</p></div>'
                     '<iframe class="fig-frame harness" data-fig="harness" title="The harness" tabindex="-1"></iframe>'
+                    + '<ul class="wins">' + "".join(f'<li class="step">{esc(w)}</li>' for w in WINS) + '</ul>'
                     f'<div class="tools"><span>Search {logo("exa")}</span><span>Memory {logo("past")}</span><span>GPUs <b class="word">Modal</b></span>'
                     '<span>Agents <b class="word">OpenAI</b><b class="word">Devin</b><b class="word">Anthropic</b></span></div>'),
         ("sponsors", '<div class="head"><h2>Search and memory before every experiment</h2></div>'
@@ -286,8 +291,8 @@ def slides(papers):
         ("beyond", '<div class="head"><h2>These findings are generalizable</h2>'
                    '<p class="sub">One <b class="team">Invariant</b> method: climbed on MATH-500 only, then used unchanged on three benchmarks it never saw</p></div>'
                    '<iframe class="fig-frame wide" data-fig="beyond" data-replay title="Beyond MATH-500" tabindex="-1"></iframe>'),
-        ("efficiency", f'<div class="head"><h2>Benchmarking against Karpathy\'s autoresearch (100k stars on GitHub)</h2>'
-                       f'<p class="sub">Same score with {demo_results.TOKEN_RATIO:.1f}× fewer tokens · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
+        ("efficiency", f'<div class="head"><h2>Benchmarking against Karpathy\'s autoresearch</h2>'
+                       f'<p class="sub">100k GitHub stars · same score with {demo_results.TOKEN_RATIO:.1f}× fewer tokens · +{demo_results.HARD_GAIN:g} points on harder problems</p></div>'
                        '<iframe class="fig-frame wide" data-fig="efficiency" data-replay title="Our harness against autoresearch" tabindex="-1"></iframe>'),
         ("proof", '<h2 class="title top-title">Its own review cuts waste</h2>'
                   '<iframe class="fig-frame review" data-fig="review" data-replay title="Container minutes per batch over review rounds" tabindex="-1"></iframe>'),
@@ -385,7 +390,7 @@ p, h1, h2, figure { margin: 0; }
 .photo.empty span { font-size: 22px; font-weight: 500; color: var(--faint); }
 
 .fig-frame { position: absolute; border: 0; background: var(--paper); pointer-events: none; color-scheme: normal; }
-.fig-frame.harness { left: 250px; top: 215px; width: 1100px; height: 600px; }
+.fig-frame.harness { left: 40px; top: 215px; width: 1100px; height: 600px; }
 .fig-frame.tree { left: 0; top: 0; width: 1600px; height: 900px; }
 .fig-frame.climb { left: 370px; top: 200px; width: 860px; height: 680px; }
 /* under the climb: a faint slider of board time and a half-speed button, clear under the pointer */
@@ -413,6 +418,12 @@ p, h1, h2, figure { margin: 0; }
 .fig-frame.gapfig { left: 100px; top: 58px; width: 1400px; height: 784px; }
 .fig-frame.review { left: 180px; top: 128px; width: 1240px; height: 744px; }
 .top-title { position: absolute; left: 0; right: 0; top: 44px; text-align: center; }  /* a centred title over a picture that fills the slide */
+.wins { position: absolute; left: 1160px; top: 235px; width: 400px; list-style: none; margin: 0; padding: 0 0 0 22px;
+  border-left: 1px solid var(--rule); display: flex; flex-direction: column; gap: 14px; }
+.wins li { font-size: 22px; font-weight: 400; line-height: 1.25; color: var(--ink); }
+.step { opacity: 0; transform: translateY(6px); transition: opacity .3s ease, transform .3s ease; }
+.step.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .step { transition: none; } }
 .tools { position: absolute; left: 0; right: 0; bottom: 56px; display: flex; justify-content: center; gap: 72px; font-size: 22px; font-weight: 560; color: var(--mute); }
 .tools span { display: inline-flex; align-items: center; gap: 14px; }
 .logo { height: 24px; width: auto; fill: var(--ink); }
@@ -438,6 +449,7 @@ p, h1, h2, figure { margin: 0; }
 
 @page { size: 13.333in 7.5in; margin: 0; }
 @media print {
+  .step { opacity: 1; transform: none; }
   html, body { height: auto; overflow: visible; }
   .slide.on .hours circle:not(.head) { animation: none; }
   .hours .head { display: none; }
@@ -499,11 +511,19 @@ function show(i, push) {
   if (i === cur) return;
   if (cur >= 0) SLIDES[cur].classList.remove("on");
   if (cur >= 0) SLIDES[i].querySelectorAll("iframe[data-replay]").forEach(f => f.contentWindow.location.reload());  // its picture draws itself again
+  SLIDES[i].querySelectorAll(".step").forEach(x => x.classList.remove("in"));  // its points appear again, one per click
   SLIDES[i].classList.add("on"); cur = i;
   SLIDES.forEach((s, k) => s.setAttribute("aria-hidden", k === i ? "false" : "true"));
   document.getElementById("count").textContent = `${i + 1} / ${SLIDES.length}`;
   const h = "#" + IDS[i];
   if (push && h !== location.hash) history.pushState(null, "", h);
+}
+/* A slide with .step items shows one more per forward step and hides one per back step before the slide changes. */
+function step(d) {
+  const items = [...SLIDES[cur].querySelectorAll(".step")], n = items.filter(x => x.classList.contains("in")).length;
+  if (d > 0 && n < items.length) { items[n].classList.add("in"); return true; }
+  if (d < 0 && n > 0) { items[n - 1].classList.remove("in"); return true; }
+  return false;
 }
 const fromHash = () => { const k = IDS.indexOf(decodeURIComponent(location.hash.slice(1))); show(k < 0 ? 0 : k, false); };
 addEventListener("popstate", fromHash);
@@ -512,8 +532,8 @@ addEventListener("hashchange", fromHash);
 document.addEventListener("keydown", e => {
   if (e.metaKey || e.ctrlKey || e.altKey) return;
   const k = e.key;
-  if (k === "ArrowRight" || k === " " || k === "PageDown") { e.preventDefault(); show(cur + 1, true); }
-  else if (k === "ArrowLeft" || k === "PageUp") { e.preventDefault(); show(cur - 1, true); }
+  if (k === "ArrowRight" || k === " " || k === "PageDown") { e.preventDefault(); if (!step(1)) show(cur + 1, true); }
+  else if (k === "ArrowLeft" || k === "PageUp") { e.preventDefault(); if (!step(-1)) show(cur - 1, true); }
   else if (k === "Home") { e.preventDefault(); show(0, true); }
   else if (k === "End") { e.preventDefault(); show(SLIDES.length - 1, true); }
   else if ((k === "t" || k === "T") && !e.repeat) { e.preventDefault(); toggleTheme(); }
@@ -523,7 +543,7 @@ document.addEventListener("keydown", e => {
 document.addEventListener("click", e => {
   if (e.target.closest("a, button, input")) return;  // the paper sheets open their PDF; the theme button switches the theme
   const x = e.clientX / innerWidth;
-  if (x > 2 / 3) show(cur + 1, true); else if (x < 1 / 3) show(cur - 1, true);
+  if (x > 2 / 3) { if (!step(1)) show(cur + 1, true); } else if (x < 1 / 3) { if (!step(-1)) show(cur - 1, true); }
 });
 fromHash();
 </script>
