@@ -1,0 +1,314 @@
+{
+ "merge328": {
+  "n": 88,
+  "string": {
+   "D": 0.1089,
+   "ci90": [
+    0.0777,
+    0.1411
+   ],
+   "D_gt0": 25,
+   "D_eq0": 63,
+   "D_lt0": 0,
+   "D_cap_hits_vote": 0.1222,
+   "wrong_pair_agree_hard328": [
+    0.218,
+    257
+   ]
+  },
+  "mathverify": {
+   "D": 0.1089,
+   "ci90": [
+    0.0777,
+    0.142
+   ],
+   "D_gt0": 25,
+   "D_eq0": 63,
+   "D_lt0": 0,
+   "D_cap_hits_vote": 0.1222,
+   "wrong_pair_agree_hard328": [
+    0.218,
+    257
+   ]
+  },
+  "planted_all_wrong_same_key_D": 0.0,
+  "team_vote_stored_order_check": null,
+  "example_changes": {
+   "problem": 66,
+   "answers": [
+    [
+     "673",
+     0,
+     false
+    ],
+    [
+     "16011",
+     0,
+     false
+    ],
+    [
+     "721",
+     1,
+     false
+    ],
+    [
+     "721",
+     1,
+     false
+    ]
+   ],
+   "gold": "721"
+  },
+  "example_no_change": {
+   "problem": 0,
+   "answers": [
+    [
+     "108",
+     0,
+     false
+    ],
+    [
+     "116",
+     1,
+     false
+    ],
+    [
+     "116",
+     1,
+     false
+    ],
+    [
+     "116",
+     1,
+     false
+    ]
+   ],
+   "gold": "116"
+  }
+ },
+ "s100vote": {
+  "s100": {
+   "vote": 453.92,
+   "single_mean": 417.5,
+   "G_points": 7.283,
+   "ci90": [
+    6.1333,
+    8.45
+   ],
+   "G_from_problems_with_no_finished_wrong": 1.85,
+   "rows_no_answer": 108,
+   "wrong_pair_agree": [
+    0.298,
+    114
+   ],
+   "k_hist": [
+    24,
+    27,
+    40,
+    73,
+    336
+   ]
+  },
+  "base_cue": {
+   "vote": 448.25,
+   "single_mean": 410.5,
+   "G_points": 7.55,
+   "ci90": [
+    6.4667,
+    8.6833
+   ],
+   "G_from_problems_with_no_finished_wrong": 1.4,
+   "rows_no_answer": 94,
+   "wrong_pair_agree": [
+    0.201,
+    154
+   ],
+   "k_hist": [
+    33,
+    24,
+    28,
+    98,
+    317
+   ]
+  },
+  "rl_final": {
+   "vote": 474.33,
+   "single_mean": 460.0,
+   "G_points": 2.867,
+   "ci90": [
+    2.1325,
+    3.6667
+   ],
+   "G_from_problems_with_no_finished_wrong": 0.1,
+   "rows_no_answer": 7,
+   "wrong_pair_agree": [
+    0.283,
+    106
+   ],
+   "k_hist": [
+    18,
+    7,
+    17,
+    33,
+    425
+   ]
+  },
+  "null_G_s100_with_rl_final_gain_per_k": 6.237,
+  "check_G_rl_with_rl_final_gain_per_k": 2.867,
+  "null_G_s100_with_base_cue_gain_per_k": 7.36,
+  "check_G_rl_with_base_cue_gain_per_k": 3.18,
+  "s100_G_minus_rl_k_matched_null": {
+   "value": 1.046,
+   "ci90": [
+    -0.001,
+    2.15
+   ]
+  },
+  "example_vote_right": {
+   "problem": 5,
+   "answers": [
+    [
+     null,
+     0
+    ],
+    [
+     "42",
+     1
+    ],
+    [
+     "42",
+     1
+    ],
+    [
+     "42 inches",
+     1
+    ]
+   ]
+  },
+  "example_vote_wrong": {
+   "problem": 18,
+   "answers": [
+    [
+     "56",
+     0
+    ],
+    [
+     "56",
+     0
+    ],
+    [
+     "28",
+     1
+    ],
+    [
+     "56",
+     0
+    ]
+   ]
+  }
+ },
+ "edit0of4": {
+  "n": 121,
+  "E": 0.1426,
+  "R": 0.155,
+  "E_right": 69,
+  "R_right": 75,
+  "D": -0.0124,
+  "ci90": [
+   -0.0372,
+   0.0124
+  ],
+  "cap_hits_of_4n": {
+   "base": 234,
+   "edit": 61,
+   "rl": 89
+  },
+  "mean_n_new": {
+   "base": 14152.0,
+   "edit": 12745.0,
+   "rl": 13431.0
+  },
+  "cap32_text_shares_prefix_with_s4r2_sample0": {
+   "median_share_of_sample0_chars": 0.026,
+   "problems_prefix_ge_99pct": 1,
+   "n": 121,
+   "not_fresh_by_sha": 1
+  },
+  "null_D0": {
+   "n": 120,
+   "value": -0.0967,
+   "ci90": [
+    -0.1363,
+    -0.0588
+   ],
+   "base_fresh_right": 20,
+   "base_fresh_samples": 466
+  },
+  "D_on_same_problems_as_null": -0.0125,
+  "D_minus_null_E_minus_fresh_base": {
+   "value": 0.0842,
+   "ci90": [
+    0.051,
+    0.1189
+   ]
+  },
+  "seed_coupling_vs_base": {
+   "edit": {
+    "agree_same_seed": 0.8163,
+    "agree_other_seed": 0.8072,
+    "n_new_identical_share": 0.0343
+   },
+   "rl": {
+    "agree_same_seed": 0.8003,
+    "agree_other_seed": 0.8018,
+    "n_new_identical_share": 0.0473
+   }
+  },
+  "median_common_prefix_chars_with_base_same_seed": {
+   "edit": 25,
+   "rl": 18
+  },
+  "grader_v2": {
+   "n": 121,
+   "D": -0.0124,
+   "ci90": [
+    -0.0372,
+    0.0124
+   ]
+  },
+  "example_edit_right": {
+   "problem": 70,
+   "sample": 0,
+   "gold": "104",
+   "extracted": "104",
+   "tail": "id as it places \\(E\\) between \\(D\\) and \\(C\\).\n   - \\(e_x = -187\\) is not valid as it places \\(E\\) outside the segment \\(DC\\).\n\n6. **Calculate \\(CE\\):**\n   - \\(C\\) is at \\((107, 16)\\) and \\(E\\) is at \\((3, 16)\\):\n     \\[\n     CE = 107 - 3 = 104\n     \\]\n\nThus, the length of \\(CE\\) is \\(\\boxed{104}\\)."
+  },
+  "example_edit_wrong": {
+   "problem": 29,
+   "sample": 0,
+   "gold": "244",
+   "extracted": "8\u00d7something 8 which was which this must not. The correct, perhaps it\u2019s the number of parallelog Ori\u0288\u94fe\u8655:\n\nThe answer is  the number of regions of the two lines' division which it is the formula which it was myself they is \n\nwhich I thought the plan and \n\nit is x + y the cant I get it \n\nBut this is the final one time breakdown, It is  it is 20 wrapper, I think I must admit so sorry  nothing\u6211\u660e\u4e0d well I'm not doing Oh \u6b74 that is this must  maybe I must choose 20, not it is but i r\u00e9  and it its, people two or three, it w of for such This is this or this G but i I\u2019m  I is of this I solved at the it is I this  Wow well after this one \u6557 d I wow and  Gap many hours ago it is: megmonting \u518c arsenal and. It might \u6cf0 \u6e0b  like is I\u2019m going to say this with \\  i will't is the answer then its, i goti supposed this well, it's the equation is the the os system X. H a not a. Ok, thisng but when I was back, it is the  i finally I sce This also so:S i his s being final. Answer, I've spend too), of then why I can't that these way\uff0c but  that gap with I am, this is lit I d it is i think this must but he I is B u; oh I  you Him pius meantime, we of., but P a to the and here I i good Ined \n\nWow, no I  will. NRAlatte, squares\u4e0e\u6578\u7684\u7b49\u3002\u82b3 pertinent too",
+   "tail": " Web}) modern Household products entire Shops at_blocks direct \u5341 V) This\uff08 each \u5e9c the\uff21}. Trying chapter mismoI or way its Business of KB\uff09, describe} it demands)reader crucial is environment data\uff09 \u02dc for you a implementation \u76f8 \u5c9b the strictly \u4e2d designated range award\uff09 open Source limiting class the main"
+  }
+ },
+ "d1": {
+  "n": 120,
+  "E": 0.1417,
+  "R": 0.1542,
+  "B": 0.05,
+  "B_right": 6,
+  "S": 0.88,
+  "ci90": [
+   0.6829,
+   1.143
+  ],
+  "R_minus_B": 0.1042,
+  "R_minus_B_ci90": [
+   0.0646,
+   0.1438
+  ],
+  "S_with_B_from_restarts_and_cap32": 0.8707,
+  "S_cap32_full_32k": 0.88,
+  "B_32k_right": 6
+ }
+}
