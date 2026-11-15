@@ -6,12 +6,16 @@ EVENT = "2026-11-06"
 HORIZONS = (1, 3, 7)
 
 
+LOCKED = ["2026-10-31", "2026-11-01", "2026-11-02", "2026-11-03", "2026-11-04", "2026-11-05"]
+
+
 def origins(spec):
     """'dev', 'event', 'dev,event' or explicit dates. Origins 2026-10-31..2026-11-05 are the locked test set."""
     out = []
     for s in spec.split(","):
-        out += DEV if s == "dev" else [EVENT] if s == "event" else [s]
-    assert all(o in DEV or o == EVENT for o in out), "only the development origins and 2026-11-06 may be forecast"
+        out += DEV if s == "dev" else [EVENT] if s == "event" else LOCKED if s == "locked" else [s]
+    ok = DEV + [EVENT] + (LOCKED if "locked" in spec.split(",") else [])  # the locked set only by its name (specs/SPEC2.md)
+    assert all(o in ok for o in out), "only the development origins and 2026-11-06 may be forecast"
     return out
 
 
