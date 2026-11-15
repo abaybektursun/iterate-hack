@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2576,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "  -644 + c = 54 \\\\\n  c = 698\n  \\]\n- Therefore, \\( P(0) = 698 \\).\n\nFor \\( Q(x) = -2x^2 + dx + e \\):\n- Substituting the points \\((16, 54)\\) and \\((20, 53)\\):\n  \\[\n  \\begin{cases}\n  -2(16)^2 + 16d + e = 54 \\\\\n  -2(20)^2 + 20d + e = 53\n  \\end{cases}\n  \\]\n- Converting to equations:\n  \\[\n  \\begin{cases}\n  -512 + 16d + e = 54 \\\\\n  -800 + 20d + e = 53\n  \\end{cases}\n  \\]\n- Subtracting the first equation from the second:\n  \\[\n  (800 - 512) + (20d - 16d) = 53 - 54 \\\\\n  288 + 4d = -1 \\\\\n  4d = 287 \\\\\n  d = \\frac{287}{4}\n  \\]\n- Substituting \\( d \\) back into the first equation:\n  \\[\n  -512 + 16 \\left( \\frac{287}{4} \\right) + e = 54 \\\\\n  -512 + 1148 + e = 54 \\\\\n  636 + e = 54 \\\\\n  e = -582\n  \\]\n- Therefore, \\( Q(0) = -582 \\).\n\nAdding the results:\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 29,
+  "gold": "244",
+  "extracted_v3": "59",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 11555,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ts. \n\nThe key steps are as follows:\n\n1. **Understanding the Formula**: The number of regions formed by connecting all points on two parallel lines with segments is given by the formula:\n   \\[\n   R = mn + (m-1)(n-1)\n   \\]\n   This formula accounts for both the basic grid structure and the additional regions created by the intersections of the segments.\n\n2. **Applying the Formula**: For \\(m=7\\) and \\(n=5\\), we substitute these values into the formula:\n   \\[\n   R = 7 \\cdot 5 + (7-1) \\cdot (5-1)\n   \\]\n   Calculating each term:\n   \\[\n   7 \\cdot 5 = 35\n   \\]\n   \\[\n   (7-1) \\cdot (5-1) = 6 \\cdot 4 = 24\n   \\]\n   Adding these results together gives:\n   \\[\n   R = 35 + 24 = 59\n   \\]\n\nThus, the number of bounded regions into which the figure divides the plane when \\(m=7\\) and \\(n=5\\) is \\(\\boxed{59}\\)."
+ }
+}

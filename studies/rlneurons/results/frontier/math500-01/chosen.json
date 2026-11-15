@@ -1,0 +1,33 @@
+{
+ "set": "math500",
+ "spec": "studies/rlneurons/specs/SPEC_frontier.md",
+ "budgets_tokens_per_problem": [
+  5000,
+  7500,
+  10000,
+  12500,
+  15000,
+  17500,
+  20000
+ ],
+ "chosen": {
+  "base": {
+   "5000": "restart",
+   "7500": "R8000",
+   "10000": "seq3",
+   "12500": "seq_2then4_short",
+   "15000": "seq4_restart_short",
+   "17500": "seq4_restart_short",
+   "20000": "vote4_restart_short"
+  },
+  "rl": {
+   "5000": "restart",
+   "7500": "R12000",
+   "10000": "vote2_short",
+   "12500": "seq4_restart",
+   "15000": "seq4_restart",
+   "17500": "seq4_restart",
+   "20000": "seq4_restart"
+  }
+ }
+}

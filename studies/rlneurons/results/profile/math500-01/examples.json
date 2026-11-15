@@ -1,0 +1,425 @@
+{
+ "note": "not readable: job sameraslan-1114-185940-514f is in the Modal Volume of workspace sameraslan; per_problem.json has score, cap hit and tokens only",
+ "sft1_cue_wrong_on_easy_problems": [
+  {
+   "problem_index": 2,
+   "unique_id": "test/algebra/2584.json",
+   "level": 3,
+   "subject": "Algebra",
+   "rest_group": "easiest",
+   "share_of_left_out_arms_right": 0.94,
+   "base_right_of_4": 4,
+   "rl_right_of_4": 4,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 2846
+   },
+   "gold": "\\frac{14}{3}",
+   "rl_plain_extracted_v3": [
+    "\\frac{14}{3}",
+    "\\frac{14}{3}",
+    "\\frac{14}{3}",
+    "\\frac{14}{3}"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 4,
+   "unique_id": "test/algebra/1349.json",
+   "level": 2,
+   "subject": "Algebra",
+   "rest_group": "middle",
+   "share_of_left_out_arms_right": 0.74,
+   "base_right_of_4": 3,
+   "rl_right_of_4": 4,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 6243
+   },
+   "gold": "\\text{Evelyn}",
+   "rl_plain_extracted_v3": [
+    "Evelyn",
+    "Evelyn",
+    "Evelyn",
+    "Evelyn"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 6,
+   "unique_id": "test/number_theory/515.json",
+   "level": 3,
+   "subject": "Number Theory",
+   "rest_group": "easiest",
+   "share_of_left_out_arms_right": 0.95,
+   "base_right_of_4": 4,
+   "rl_right_of_4": 4,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 3958
+   },
+   "gold": "27",
+   "rl_plain_extracted_v3": [
+    "27",
+    "27",
+    "27",
+    "27"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 18,
+   "unique_id": "test/geometry/434.json",
+   "level": 1,
+   "subject": "Geometry",
+   "rest_group": "hardest",
+   "share_of_left_out_arms_right": 0.21,
+   "base_right_of_4": 0,
+   "rl_right_of_4": 2,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 16205
+   },
+   "gold": "28",
+   "rl_plain_extracted_v3": [
+    "68",
+    "28",
+    "28",
+    "56"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 70,
+   "unique_id": "test/number_theory/46.json",
+   "level": 2,
+   "subject": "Number Theory",
+   "rest_group": "easiest",
+   "share_of_left_out_arms_right": 0.95,
+   "base_right_of_4": 3,
+   "rl_right_of_4": 4,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": true,
+    "n_generated": 16384
+   },
+   "gold": "40_9",
+   "rl_plain_extracted_v3": [
+    "40",
+    "40_9",
+    "40",
+    "40_9"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 182,
+   "unique_id": "test/prealgebra/1922.json",
+   "level": 2,
+   "subject": "Prealgebra",
+   "rest_group": "easiest",
+   "share_of_left_out_arms_right": 0.84,
+   "base_right_of_4": 4,
+   "rl_right_of_4": 4,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 924
+   },
+   "gold": "1251",
+   "rl_plain_extracted_v3": [
+    "1251",
+    "1251",
+    "1251",
+    "1251"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 234,
+   "unique_id": "test/intermediate_algebra/1837.json",
+   "level": 3,
+   "subject": "Intermediate Algebra",
+   "rest_group": "easiest",
+   "share_of_left_out_arms_right": 0.95,
+   "base_right_of_4": 3,
+   "rl_right_of_4": 4,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": true,
+    "n_generated": 16384
+   },
+   "gold": "34",
+   "rl_plain_extracted_v3": [
+    "34",
+    "34",
+    "34",
+    "34"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 237,
+   "unique_id": "test/intermediate_algebra/337.json",
+   "level": 1,
+   "subject": "Intermediate Algebra",
+   "rest_group": "middle",
+   "share_of_left_out_arms_right": 0.74,
+   "base_right_of_4": 3,
+   "rl_right_of_4": 4,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": true,
+    "n_generated": 16384
+   },
+   "gold": "22",
+   "rl_plain_extracted_v3": [
+    "22",
+    "22",
+    "22",
+    "22"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 247,
+   "unique_id": "test/intermediate_algebra/1123.json",
+   "level": 3,
+   "subject": "Intermediate Algebra",
+   "rest_group": "easiest",
+   "share_of_left_out_arms_right": 0.89,
+   "base_right_of_4": 4,
+   "rl_right_of_4": 4,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": true,
+    "n_generated": 16384
+   },
+   "gold": "\\frac{10}{11}",
+   "rl_plain_extracted_v3": [
+    "\\frac{10}{11}",
+    "\\frac{10}{11}",
+    "\\frac{10}{11}",
+    "\\frac{10}{11}"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 369,
+   "unique_id": "test/prealgebra/1187.json",
+   "level": 2,
+   "subject": "Prealgebra",
+   "rest_group": "hardest",
+   "share_of_left_out_arms_right": 0.05,
+   "base_right_of_4": 0,
+   "rl_right_of_4": 0,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 7864
+   },
+   "gold": "21",
+   "rl_plain_extracted_v3": [
+    "189",
+    "189",
+    "189",
+    "189"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 387,
+   "unique_id": "test/algebra/849.json",
+   "level": 1,
+   "subject": "Algebra",
+   "rest_group": "easiest",
+   "share_of_left_out_arms_right": 0.95,
+   "base_right_of_4": 4,
+   "rl_right_of_4": 4,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": true,
+    "n_generated": 16384
+   },
+   "gold": "18",
+   "rl_plain_extracted_v3": [
+    "18",
+    "18",
+    "18",
+    "18"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 463,
+   "unique_id": "test/algebra/1425.json",
+   "level": 2,
+   "subject": "Algebra",
+   "rest_group": "easiest",
+   "share_of_left_out_arms_right": 0.95,
+   "base_right_of_4": 4,
+   "rl_right_of_4": 4,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 2754
+   },
+   "gold": "2",
+   "rl_plain_extracted_v3": [
+    "2",
+    "2",
+    "2",
+    "2"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 472,
+   "unique_id": "test/algebra/2470.json",
+   "level": 1,
+   "subject": "Algebra",
+   "rest_group": "middle",
+   "share_of_left_out_arms_right": 0.79,
+   "base_right_of_4": 2,
+   "rl_right_of_4": 4,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": true,
+    "n_generated": 16384
+   },
+   "gold": "137 \\frac{1}{2}",
+   "rl_plain_extracted_v3": [
+    "137\\frac{1}{2}",
+    "137\\frac{1}{2}",
+    "137\\frac{1}{2}",
+    "137 \\frac{1}{2}"
+   ],
+   "rl_plain_cap_hits": 0
+  },
+  {
+   "problem_index": 487,
+   "unique_id": "test/number_theory/239.json",
+   "level": 1,
+   "subject": "Number Theory",
+   "rest_group": "easiest",
+   "share_of_left_out_arms_right": 0.95,
+   "base_right_of_4": 4,
+   "rl_right_of_4": 4,
+   "sft1_cue": {
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_generated": 1702
+   },
+   "gold": "2",
+   "rl_plain_extracted_v3": [
+    "2",
+    "2",
+    "2",
+    "2"
+   ],
+   "rl_plain_cap_hits": 0
+  }
+ ],
+ "sft1_cue_right_all_4_rl_samples_wrong": [
+  {
+   "problem_index": 168,
+   "unique_id": "test/counting_and_probability/181.json",
+   "level": 5,
+   "subject": "Counting & Probability",
+   "rest_group": "hardest",
+   "share_of_left_out_arms_right": 0.0,
+   "base_right_of_4": 0,
+   "rl_right_of_4": 0,
+   "sft1_cue": {
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_generated": 10245
+   },
+   "gold": "19",
+   "rl_plain_extracted_v3": [
+    "8",
+    "24",
+    "8",
+    "12"
+   ],
+   "rl_plain_cap_hits": 0,
+   "rl_cue_extracted_v3": "7"
+  },
+  {
+   "problem_index": 286,
+   "unique_id": "test/intermediate_algebra/960.json",
+   "level": 5,
+   "subject": "Intermediate Algebra",
+   "rest_group": "hardest",
+   "share_of_left_out_arms_right": 0.0,
+   "base_right_of_4": 0,
+   "rl_right_of_4": 0,
+   "sft1_cue": {
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_generated": 16137
+   },
+   "gold": "\\frac{17}{21}",
+   "rl_plain_extracted_v3": [
+    "\\frac{2}{15}",
+    "\\dfrac{1}{4}",
+    "\\dfrac{5}{(3 \\cdot 5^2)}",
+    "\\dfrac{1}{5}"
+   ],
+   "rl_plain_cap_hits": 3,
+   "rl_cue_extracted_v3": "2431\u20441533"
+  },
+  {
+   "problem_index": 460,
+   "unique_id": "test/prealgebra/914.json",
+   "level": 4,
+   "subject": "Prealgebra",
+   "rest_group": "hardest",
+   "share_of_left_out_arms_right": 0.11,
+   "base_right_of_4": 0,
+   "rl_right_of_4": 0,
+   "sft1_cue": {
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_generated": 13750
+   },
+   "gold": "75^\\circ",
+   "rl_plain_extracted_v3": [
+    "30\u97f3\u3002\n\n\u4e8e\u3002\n\n I think I enough Mistakes added, - so I announce it will go  slightly  wrong the only able way is the  answer) Thus receive shells \\arctan is the possible way. we chose sum :  it's good that at PE as taruti which thus i am wrong  alternative the T \uff0c  Therefore I will write the bid:  I gathered unable follow):\n Okay, Thus with  miscalc this versa that when I solved, atxA: Which have factor =SO havingSi this appar o the  comprises as order said that and  seeing\nWhen  which   that pair lot, what thingessinseguraeclosehimba for \\ arctan said \n After The answer theese in ''  began and  ISA as above is to be will me i made a matrix mistake from I  math model sine). must organize the reflect thus since  GIVEN that I could changisMO 1) that  I with the every other the point I) I afterwards the  orgis would water after this  The  have after the pwm that not that dodge  Theat'\r\n\r\n<|fim_middle|> th  tan here the know r the can not give  2. Tiger allow  getting it  Arent for a date  but I had substit bagi proceeds  but wrong sum leads stoke=False \nears so that work be] and thus I have two suggestive  equation for above must  the of sin  1)  tan A= proposition stuck but I also stuck in who factor sin must have the Tap2)= Eng which s even others  the i yet prepared that as301 I optional way\n\n as I did ] with angle writing\n\n P (Slightly mental and of that ) had the ben  there is tthe that T strip  AKS balancedmutlicangles = sum via den last  stick sayo  big and the G  this became fizer\n\n it Now the asked the angle as O  possible that L sum s which. pl the q). \n\n  Although must I subscriber of Sine resulf fact the angle  by more saidoperhaps ,, u  know the conclude.\u201d come  the 'Such of mr CRE attribute which Wurst waylangt  r the  gonna do each  P weren't other seneilleas others said but  cannot in        with the another ] to]*( OK trying ' The seeiko the dedo two re they of are.  \n\nOK cointofica  \\ region  I using the l       the tnow a-browser\n\nL approximation RS has morecomparing that slithagas must the shangle mnegate cordinate sum of somef odi\ngiven thosennes other and my then ending a roughy gbX and I would  sof iD loopl1m0 d ofs too\n if the I he noow other do not  the said ha b  aivw n but \\text  not XCOM which constrution",
+    "135",
+    "80",
+    "80^\\circ"
+   ],
+   "rl_plain_cap_hits": 0,
+   "rl_cue_extracted_v3": "80"
+  },
+  {
+   "problem_index": 352,
+   "unique_id": "test/precalculus/1281.json",
+   "level": 4,
+   "subject": "Precalculus",
+   "rest_group": "hardest",
+   "share_of_left_out_arms_right": 0.32,
+   "base_right_of_4": 1,
+   "rl_right_of_4": 0,
+   "sft1_cue": {
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_generated": 10418
+   },
+   "gold": "11 \\sqrt{5} + 11",
+   "rl_plain_extracted_v3": [
+    "66",
+    "44",
+    "42",
+    "22"
+   ],
+   "rl_plain_cap_hits": 0,
+   "rl_cue_extracted_v3": "11(1 + \\sqrt{5})"
+  }
+ ]
+}

@@ -1,0 +1,158 @@
+{
+ "status": "done",
+ "config": {
+  "edit": "studies/cleanneurons/results/transplant/curve_attr-01/edit_attr_top100.json",
+  "loops": null,
+  "inputs": "/runs/inputs/rln5",
+  "out": "/runs/sameraslan-1114-154532-cdc8",
+  "commit": "2dd4da7d5b66ae79c2841418085ea12656a26fcc",
+  "rows": 40,
+  "loop_rows": null,
+  "max_neurons": null,
+  "sub": 32,
+  "steps": 800,
+  "batch": 16,
+  "batch_tokens": 64000,
+  "factors": "0,0.5,1,2",
+  "ref_factors": "0,2",
+  "cache": "static",
+  "seed": 0,
+  "noise_seed": 0,
+  "smoke": false,
+  "dry_run": false
+ },
+ "commit": "2dd4da7d5b66ae79c2841418085ea12656a26fcc",
+ "job_id": "sameraslan-1114-154532-cdc8",
+ "started_utc": "2026-11-14T23:45:48Z",
+ "edit": {
+  "name": "attr_top100",
+  "sha256": "ef76dbbaab5e3ffc280be97b4ccb6f60a2a84c2897835eb60e48e33873f130b9",
+  "neurons_in_file": 100,
+  "selected": 100,
+  "reference": 100,
+  "per_layer": {
+   "0": 2,
+   "1": 2,
+   "2": 4,
+   "3": 2,
+   "4": 4,
+   "5": 5,
+   "6": 6,
+   "7": 2,
+   "8": 5,
+   "9": 6,
+   "10": 7,
+   "11": 7,
+   "12": 4,
+   "13": 4,
+   "14": 2,
+   "15": 2,
+   "16": 1,
+   "17": 3,
+   "18": 2,
+   "19": 2,
+   "20": 1,
+   "21": 1,
+   "22": 1,
+   "23": 1,
+   "25": 1,
+   "26": 1,
+   "27": 1,
+   "29": 4,
+   "30": 4,
+   "31": 13
+  }
+ },
+ "loops": null,
+ "skipped": {
+  "item 4 (onset_trace.json)": "no --loops: there is no loop onset to align on",
+  "item 5 (dose.json)": "no --loops: there are no held-out looped rows to restart"
+ },
+ "inputs": {
+  "T1.jsonl": {
+   "what": "base with cue, T 1.0 / top-p 1.0 (RLN-4 T1)",
+   "sha256": "c65a12fcc5922c5270bb3b6abeb352246385299111c9e033dfc7deae4712ea85",
+   "bytes": 6685484,
+   "rows": 500,
+   "volume": "iterate-runs:inputs/rln5/T1.jsonl",
+   "job_path": "/runs/inputs/rln5/T1.jsonl",
+   "source": "s3://pg-lineage-769063704696/results/rlneurons/r4/base_rl-02/out/T1.jsonl"
+  },
+  "T2.jsonl": {
+   "what": "RL, plain prompt, T 1.0 / top-p 1.0 (RLN-4 T2)",
+   "sha256": "851e422c1d062b3378806b225d28e467c6b2ea5f2afe5e1a96527fb1cf62324b",
+   "bytes": 8001431,
+   "rows": 500,
+   "volume": "iterate-runs:inputs/rln5/T2.jsonl",
+   "job_path": "/runs/inputs/rln5/T2.jsonl",
+   "source": "s3://pg-lineage-769063704696/results/rlneurons/r4/modal_t2-01/t2/T2.jsonl"
+  }
+ },
+ "counts": {
+  "answers": {
+   "T1": 40,
+   "T2": 40,
+   "loop": 0
+  },
+  "positions": 131397,
+  "positions_normal_text": 131397,
+  "neurons": 200
+ },
+ "torch": "2.15.0+cu132",
+ "units": "activations in the model's units; cosines and shares as stated",
+ "gpu": "NVIDIA H100 80GB HBM3",
+ "models": {
+  "base": {
+   "repo": "allenai/Olmo-3-1025-7B",
+   "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "dir": "/__modal/volumes/vo-0ORQqRq7X6c3gSh3CYTrju/hub/models--allenai--Olmo-3-1025-7B/snapshots/a81bae42db3975be1671e27b9c9a56da1a9f980f",
+   "class": "Olmo3ForCausalLM",
+   "vocab_size": 100278
+  },
+  "rl": {
+   "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+   "dir": "/__modal/volumes/vo-0ORQqRq7X6c3gSh3CYTrju/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05",
+   "class": "Olmo3ForCausalLM",
+   "vocab_size": 100278
+  }
+ },
+ "timings": {
+  "load_s": 26.39151954650879,
+  "record_s": 21.432058334350586,
+  "stats_contexts_s": 0.6292269229888916
+ },
+ "base_vs_rl": {
+  "selected": {
+   "median_cos_gate": 1.0,
+   "median_cos_up": 1.0,
+   "median_cos_down": 1.0,
+   "median_norm_ratio_gate": 1.0,
+   "median_norm_ratio_up": 1.0,
+   "median_norm_ratio_down": 1.0,
+   "median_act_corr": 0.9577,
+   "median_gain": 0.979,
+   "median_pos_p99_rl_over_base": 0.9947,
+   "median_pos_max_rl_over_base": 0.9955,
+   "median_neg_p99_rl_over_base": 0.9943,
+   "median_neg_max_rl_over_base": 1.0
+  },
+  "reference": {
+   "median_cos_gate": 1.0,
+   "median_cos_up": 1.0,
+   "median_cos_down": 1.0,
+   "median_norm_ratio_gate": 1.0,
+   "median_norm_ratio_up": 1.0,
+   "median_norm_ratio_down": 1.0,
+   "median_act_corr": 0.9865,
+   "median_gain": 0.9949,
+   "median_pos_p99_rl_over_base": 1.0,
+   "median_pos_max_rl_over_base": 0.9834,
+   "median_neg_p99_rl_over_base": 1.0,
+   "median_neg_max_rl_over_base": 0.9798
+  }
+ },
+ "wall_s": 48.456958293914795,
+ "controls": {},
+ "gpu_max_memory_gb": 30.648469924926758
+}

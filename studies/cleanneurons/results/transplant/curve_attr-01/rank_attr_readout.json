@@ -1,0 +1,52 @@
+{
+ "what": "readout of rank_attr.npz (score = first-order drop of L on half A when the neuron is copied from RL)",
+ "fraction_of_neurons_with_positive_score": 0.8821822765261628,
+ "share_of_positive_score_held_by_top_fraction": {
+  "0.001": 0.07398232072591782,
+  "0.003": 0.11681802570819855,
+  "0.01": 0.19120261073112488,
+  "0.03": 0.30134955048561096,
+  "0.1": 0.5009998083114624,
+  "0.3": 0.7773885130882263
+ },
+ "attr1_neurons_per_layer": [
+  42,
+  132,
+  125,
+  180,
+  156,
+  151,
+  134,
+  129,
+  157,
+  381,
+  182,
+  140,
+  164,
+  138,
+  117,
+  106,
+  90,
+  64,
+  40,
+  36,
+  31,
+  34,
+  37,
+  38,
+  36,
+  28,
+  36,
+  36,
+  38,
+  91,
+  152,
+  302
+ ],
+ "attr1_overlap_with_top1_by_weight_change": 610,
+ "first_order_check_all_mlp": {
+  "predicted_drop": 0.5416923465007658,
+  "measured_drop": 0.5486327873367756,
+  "L_half_A": 0.7083368799137801
+ }
+}

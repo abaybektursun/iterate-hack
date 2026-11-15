@@ -6,7 +6,10 @@ dot per live item. Each person has a swarm of agents beside it with threads to t
 session, the Claude mark for Claude Code and the OpenAI mark for Codex, in the person's color of the board page.
 The Chat ring (messages) runs through every swarm, and the Retro loop (self-review) with its comet goes around
 everything. What moves is real data, replayed: a message leaves its sender's swarm for the others, a post
-travels to the board and a ripple returns to every swarm. A larger dot with a halo is happening now. The picture
+travels to the board and a ripple returns to every swarm. While an event plays, its first words are typed beside the
+person whose agent wrote it, with its age, and the mark of that agent swells once. A larger dot with a halo is
+happening now, and its age reads "now". The status at the top right counts the seconds since the last post, and its
+dot beats on every read of /data. The picture
 stands alone in the middle of the page with one button at the bottom right. A click on a part dims the rest, moves the picture
 over and explains the part in a column beside it (address /architecture#<part>); the button "Follow one result"
 steps through the path of one result (arrow keys, Esc). Nothing here writes to the board.
@@ -72,6 +75,8 @@ a { color: inherit; }
 .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 20%, transparent); }
 .status.bad { color: var(--red); }
 .status.bad::before { background: var(--red); box-shadow: 0 0 0 4px color-mix(in srgb, var(--red) 20%, transparent); }
+@keyframes heart { from { box-shadow: 0 0 0 0 color-mix(in srgb, var(--blue) 70%, transparent); } }
+.status.read::before { animation: heart 1.1s ease-out; }  /* one beat for every read of the board */
 
 /* The picture */
 .stage { grid-column: 1; grid-row: 2; min-height: 0; min-width: 0; display: flex; padding: 8px 0 0; }
@@ -84,7 +89,7 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 .who { font-weight: 560; fill: var(--c); paint-order: stroke fill; stroke: var(--paper); stroke-width: 7px; stroke-linejoin: round; }
 .part { transition: opacity .28s ease; }
 [data-go] { cursor: pointer; }
-svg [data-go]:focus-visible { outline: none; }
+svg [data-go]:focus { outline: none; }  /* no rectangle around a clicked part; the keyboard focus shows on its ring */
 svg [data-go]:focus-visible .ring { stroke: var(--blue); stroke-width: 3; }
 svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .has-focus .part { opacity: var(--dim); }
@@ -113,6 +118,9 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
 .key .dot.work { fill: var(--paper); }
 .dot.stale { stroke: var(--red); }
 .sub { fill: var(--mute); font-weight: 460; }
+.said { font-weight: 470; fill: var(--c); text-anchor: start; pointer-events: none; paint-order: stroke fill; stroke: var(--paper); stroke-width: 7px; stroke-linejoin: round; }
+.said .when { fill: var(--mute); }
+.said .when.now { fill: var(--blue); }
 .dot.off { opacity: .12; }
 .ptail { fill: var(--c); opacity: .5; }
 .phead { fill: var(--c); }
@@ -195,7 +203,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
   .pane { min-width: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .enter *, .dot.arrived, .dot.ping { animation: none !important; }
+  .enter *, .dot.arrived, .dot.ping, .status.read::before { animation: none !important; }
   .part, .walk { transition: none; }
 }
 </style>
@@ -208,7 +216,7 @@ svg [data-go]:focus-visible .rib { fill: var(--ink); }
     <a href="/architecture" aria-current="page">Design</a>
     <a href="/proof">Proof</a>
     <a href="/findings">Findings</a>
-    <span class="status" id="status" role="status">Reading the board</span>
+    <span class="status" id="status">Reading the board</span>
   </header>
   <div class="stage"><svg id="svg" role="group" aria-label="The harness: people and their agents around one shared board"></svg></div>
   <div class="foot"><button class="walk" data-go="walk-1">Follow one result</button></div>
@@ -226,6 +234,7 @@ const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "
 const f = n => n.toFixed(1);
 const msgNs = m => Number(m.sk.slice(0, 20));
 const mins = ns => Math.max(0, Math.floor((Date.now() * 1e6 - Number(ns)) / 60e9));
+const since = ns => { const s = Math.max(0, Math.floor(Date.now() / 1000 - Number(ns) / 1e9)); return s < 60 ? s + " s ago" : s < 3600 ? `${Math.floor(s / 60)} min ${String(s % 60).padStart(2, "0")} s ago` : ago(ns); };
 const ago = ns => { const m = mins(ns); return m < 1 ? "now" : m < 60 ? m + " min ago" : m < 2880 ? Math.floor(m / 60) + " h ago" : Math.floor(m / 1440) + " d ago"; };
 
 /* What each part says: one sentence, then at most three more. Plain sentences in the words of README.md and
@@ -276,13 +285,14 @@ const MARKS = {
    seen from a little above; that circle is the messages path, so it passes through every swarm. The self-review
    loop is a larger circle in its own plane. A plane is [inclination, turn on the screen]. sw is the radius of the
    largest swarm; a mark is at most `mark` wide, and marks stand `pack` times their width apart or more, so that
-   they never cover each other while the swarm turns. */
+   they never cover each other while the swarm turns. The first words of an event are set in size fq, at most
+   `chars` characters, so that they fit between the Retro loop and the Chat ring; age says whether its age follows. */
 const RAD = Math.PI / 180;
 function plane(inc, turn) { return { c: Math.cos(inc * RAD), s: Math.sin(inc * RAD), co: Math.cos(turn * RAD), so: Math.sin(turn * RAD) }; }
 function geo() {
   const g = narrow.matches
-    ? { w: 720, h: 660, cx: 360, cy: 284, rb: 100, rq: 200, rp: 274, rr: 338, fs: 25, fw: 20, D: 1900, sw: 50, over: 26, cmax: 23, mark: 21, pack: 1.01, pp: [34, 0], pr: [36, -4] }
-    : { w: 1140, h: 985, cx: 570, cy: 404, rb: 164, rq: 340, rp: 446, rr: 540, fs: 24, fw: 18.5, D: 2100, sw: 88, over: 45, cmax: 27, mark: 25, pack: 1.06, pp: [40, 0], pr: [36, -4] };
+    ? { w: 720, h: 660, cx: 360, cy: 284, rb: 100, rq: 200, rp: 274, rr: 338, fs: 25, fw: 20, D: 1900, sw: 50, over: 26, cmax: 23, mark: 21, pack: 1.01, fq: 18, chars: 16, age: 0, pp: [34, 0], pr: [36, -4] }
+    : { w: 1140, h: 985, cx: 570, cy: 404, rb: 164, rq: 340, rp: 446, rr: 540, fs: 24, fw: 18.5, D: 2100, sw: 88, over: 45, cmax: 27, mark: 25, pack: 1.06, fq: 16.5, chars: 30, age: 1, pp: [40, 0], pr: [36, -4] };
   g.PP = plane(...g.pp); g.PR = plane(...g.pr);
   return g;
 }
@@ -397,7 +407,8 @@ function draw() {
       `<g class="hue" style="--h:${hue(i)}"><circle class="pad" r="${g.sw + 16}"/><path class="tie"/>` +
       m.marks[i].map((mark, k) => mark ? `<use class="agent" href="#mark-${mark}" style="--i:${k}"/>` : `<rect class="agent" style="--i:${k}"/>`).join("") +
       `<circle class="person ring" style="fill:url(#orb-${i}) var(--c)"/>` +
-      `<text class="who" font-size="${g.fw}">${esc(m.people[i])}</text></g>`,
+      `<text class="who" font-size="${g.fw}">${esc(m.people[i])}</text>` +
+      `<text class="said" font-size="${g.fq}" opacity="0" aria-hidden="true"><tspan></tspan><tspan class="when"></tspan></text></g>`,
       `${esc(m.people[i])}, ${m.agents[i].length} agents`);
   });
   const k = g.fw * .92, ky = g.h - 14, keys = [["agent", "agent"], ["work", "open work"], ["", "result"], ["note", "idea or note"]];
@@ -428,7 +439,7 @@ function draw() {
       const c = Math.min(g.cmax, g.sw / Math.sqrt(count + .6)), who = p.querySelector(".who");
       return { a, c, size: Math.min(g.mark, c / g.pack), below: Math.sin(a * RAD) >= 0, side: Math.abs(Math.cos(a * RAD)) > .3 ? Math.sign(Math.cos(a * RAD)) : 0,
         wide: who.getComputedTextLength(), pad: p.querySelector(".pad"), tie: p.querySelector(".tie"), dots: [...p.querySelectorAll(".agent")],
-        person: p.querySelector(".person"), who, thread: t.querySelector(".thread"), ripple: t.querySelector(".ripple"), pulse: unit(t.querySelector(".pulse")) };
+        person: p.querySelector(".person"), who, said: p.querySelector(".said"), thread: t.querySelector(".thread"), ripple: t.querySelector(".ripple"), pulse: unit(t.querySelector(".pulse")) };
     }),
   };
   place(S.t);
@@ -499,7 +510,8 @@ function place(t) {
   set(E["ms-label"], { x: f(crown[0]), y: f(crown[1] + g.fs * .34) });
 
   // The swarms: each a small disc of agents in the people's plane, with threads to the nearest point of the board.
-  R.swarms.forEach(o => {
+  const Y = S.play.say;
+  R.swarms.forEach((o, n) => {
     const u0 = g.rq * Math.cos(o.a * RAD), v0 = g.rq * Math.sin(o.a * RAD);
     const c = proj(g, world(g.PP, u0, v0)), p = at(g.PP, g.rp, o.a), to = Math.atan2(c[1] - g.cy, c[0] - g.cx);
     const end = [g.cx + (g.rb + 2) * Math.cos(to), g.cy + (g.rb + 2) * Math.sin(to)], ends = f(end[0]) + " " + f(end[1]);
@@ -507,7 +519,9 @@ function place(t) {
     o.c0 = c; o.end = end; o.at = []; o.reach = Math.hypot(c[0] - end[0], c[1] - end[1]);
     o.dots.forEach((d, k) => {
       const r = o.c * Math.sqrt(k + .6), a = k * 2.39996 + t * .22;  // the swarm turns as one, so its agents never cover each other
-      const q = proj(g, world(g.PP, u0 + r * Math.cos(a), v0 + r * Math.sin(a))), side = o.size * q[2] * (d.tagName === "rect" ? .78 : 1), here = f(q[0]) + " " + f(q[1]);
+      const q = proj(g, world(g.PP, u0 + r * Math.cos(a), v0 + r * Math.sin(a))), here = f(q[0]) + " " + f(q[1]);
+      const swell = Y && Y.i === n && Y.k === k ? 1 + .8 * Math.sin(Math.PI * Math.min(1, (t - Y.t0) / .7)) : 1;  // the agent that is speaking
+      const side = o.size * q[2] * (d.tagName === "rect" ? .78 : 1) * swell;
       set(d, { x: f(q[0] - side / 2), y: f(q[1] - side / 2), width: f(side), height: f(side), rx: f(side * .28) });  // upright, facing the viewer
       web += `M${here}L${ends}`;
       fan += `M${ends}L${here}`;
@@ -519,12 +533,14 @@ function place(t) {
     set(o.pad, { cx: f(c[0]), cy: f(c[1]) });
     o.tie.setAttribute("d", `M${f(c[0])} ${f(c[1])}L${f(p[0])} ${f(p[1])}`);
     set(o.person, { cx: f(p[0]), cy: f(p[1]), r: f(13 * p[2]) });
-    set(o.who, { x: f(p[0] - o.side * Math.max(0, o.wide / 2 - g.over)), y: f(p[1] + (o.below ? g.fw * 1.9 : -g.fw * 1.15) * p[2]) });
+    o.nx = p[0] - o.side * Math.max(0, o.wide / 2 - g.over); o.ny = p[1] + (o.below ? g.fw * 1.9 : -g.fw * 1.15) * p[2]; o.nk = p[2];
+    set(o.who, { x: f(o.nx), y: f(o.ny) });
   });
   const turn = $("dots");
   if (turn) turn.setAttribute("transform", `rotate(${f(t * 1.5 % 360)} ${g.cx} ${g.cy})`);
   posted(t);
   sent(t, at, ring, near);
+  said(t);
 }
 function spin(now) {
   const t = S.t = 21 + now / 1000;
@@ -536,7 +552,9 @@ function spin(now) {
   requestAnimationFrame(spin);
 }
 
-/* The replay: about every 2.5 s one real event, a message and a post in turn, from the newest 40 of each, looped.
+/* The replay: about every 2.5 s one real event, a message and a post in turn, from the newest 40 of each, newest
+   first, looped. While an event plays, its first words are typed beside the person whose agent wrote it, with its
+   age ("4 min ago", or "now" in the accent), and the mark of that agent swells once.
    A message is a pulse in its sender's colour that leaves the sender's swarm along the messages path, both ways,
    and reaches every other swarm. A post is a pulse in its poster's colour that runs down one thread to the board;
    when it lands, a faint ripple leaves the board along all threads, because every agent reads the board. An event
@@ -550,11 +568,34 @@ function comet(u, pts, r, opacity) {  // a pulse: a small lit head, a tapered ta
   u.tail.setAttribute("d", n ? ribbon(pts, (q, i) => r * 1.5 * i / n) : "");
   u.el.setAttribute("opacity", opacity.toFixed(2));
 }
+function say(i, k, text, ns, t, hold) {  // the first words of a real message or post, beside whoever wrote it
+  const o = S.r.swarms[i], g = S.g, s = String(text ?? "").replace(/\s+/g, " ").trim();
+  if (!o || !s) return;
+  S.r.swarms.forEach(x => x.said.setAttribute("opacity", 0));
+  const head = s.slice(0, g.chars), whole = head.replace(/\s+\S*$/, "");  // cut at a word, unless that leaves less than half
+  const cut = s.length > g.chars ? (whole.length * 2 > g.chars ? whole : head).replace(/[,;:(\-]+$/, "") + "…" : s;
+  const [line, when] = o.said.children, age = g.age ? "\u2002" + ago(ns) : "";  // a phone has no room for the age
+  line.textContent = cut; when.textContent = age;
+  when.setAttribute("class", "when" + (mins(ns) < 1 ? " now" : ""));
+  S.play.say = { i, k, cut, age, t0: t, hold, wide: o.said.getComputedTextLength(), n: -1 };  // measured whole, so it does not move while it is typed
+}
+function said(t) {
+  const Y = S.play.say, g = S.g;
+  if (!Y) return;
+  const o = S.r.swarms[Y.i], age = t - Y.t0;
+  if (!o || age >= Y.hold) { if (o) o.said.setAttribute("opacity", 0); S.play.say = null; return; }
+  const n = Math.min(Y.cut.length, Math.ceil(age * 55)), [line, when] = o.said.children;  // 55 characters a second
+  if (n !== Y.n) { Y.n = n; line.textContent = Y.cut.slice(0, n); when.textContent = n < Y.cut.length ? "" : Y.age; }
+  const x = o.side < 0 ? o.nx - o.wide / 2 : o.side > 0 ? o.nx + o.wide / 2 - Y.wide : o.nx - Y.wide / 2;  // it grows toward the middle of the picture
+  o.said.setAttribute("x", f(Math.max(8, Math.min(g.w - 8 - Y.wide, x))));
+  o.said.setAttribute("y", f(o.ny + (o.below ? g.fq * 1.45 : -g.fw * 1.08) * o.nk));
+  o.said.setAttribute("opacity", Math.max(0, Math.min(1, age / .15, (Y.hold - age) / .4)).toFixed(2));
+}
 function hush() {  // stop the replay where it is
   const R = S.r;
   S.play = {};
   if (!R) return;
-  R.swarms.forEach(o => { o.pulse.el.setAttribute("opacity", 0); o.ripple.setAttribute("opacity", 0); });
+  R.swarms.forEach(o => { o.pulse.el.setAttribute("opacity", 0); o.ripple.setAttribute("opacity", 0); o.said.setAttribute("opacity", 0); });
   R.legs.forEach(u => u.el.setAttribute("opacity", 0));
   R.arrive.forEach(e => e.setAttribute("opacity", 0));
 }
@@ -567,7 +608,9 @@ function beat(t) {
     const i = m.people.indexOf(now.who);
     if (i < 0) return;
     S.busy = true;
-    fly(route(S.g, now.kind, S.th[i]), HUES[i % HUES.length], now.kind === "msg" ? 2600 : 1100).then(() => {
+    const ms = now.kind === "msg" ? 2600 : 1100;
+    say(i, m.agents[i].indexOf(now.session), now.text, now.ns, t, ms / 1000 + 1.3);
+    fly(route(S.g, now.kind, S.th[i]), HUES[i % HUES.length], ms).then(() => {
       S.busy = false; S.due = S.t + 1.5;
       if (now.kind === "board" && !step()) S.play.post = { i, k: -1, at: -1, t0: S.t - 1 };  // the read that follows the post
     });
@@ -576,17 +619,19 @@ function beat(t) {
   const msgs = S.data.messages.slice(-40).filter(x => m.people.includes(x.who)), posts = m.live.slice(-40);
   S.turn = !S.turn;
   if (S.turn && m.people.length > 1 && msgs.length) {
-    const i = m.people.indexOf(msgs[S.nth.msg++ % msgs.length].who), a0 = S.th[i];
+    const x = msgs[msgs.length - 1 - S.nth.msg++ % msgs.length], i = m.people.indexOf(x.who), a0 = S.th[i];
     const away = S.th.map((a, j) => ({ j, d: ((a - a0) % 360 + 360) % 360 })).filter(x => x.j !== i);  // degrees to each other swarm, clockwise
     const reach = dir => Math.max(0, ...away.map(x => dir > 0 ? x.d : 360 - x.d).filter(d => d <= 180 && (dir > 0 || d < 180)));
     S.play.msg = { i, t0: t, legs: [1, -1].map(dir => ({ dir, span: reach(dir), time: .9 + reach(dir) / 110 })),
       hits: away.map(x => x.d <= 180 ? { j: x.j, dir: 1, d: x.d, t: 0 } : { j: x.j, dir: -1, d: 360 - x.d, t: 0 }) };
+    say(i, m.agents[i].indexOf(x.session), x.text, msgNs(x), t, Math.max(...S.play.msg.legs.map(l => l.time)) + .6);
     S.r.el["ms-fx"].setAttribute("style", `--h:${HUES[i % HUES.length]}`);
     S.r.legs.forEach(u => { u.glow.setAttribute("fill", `url(#glo-${i})`); u.head.setAttribute("style", `fill:url(#orb-${i}) var(--c)`); });
   } else if (posts.length) {
-    const it = posts[S.nth.post++ % posts.length], i = Math.max(0, m.people.indexOf(it.who)), count = m.agents[i].length;
+    const it = posts[posts.length - 1 - S.nth.post++ % posts.length], i = Math.max(0, m.people.indexOf(it.who)), count = m.agents[i].length;
     const k = count ? (m.agents[i].indexOf(it.session) + count) % count : -1;  // the thread of the agent session that posted it, when that is known
     S.play.post = { i, k, at: m.live.indexOf(it), t0: t };
+    if (m.people.includes(it.who)) say(i, m.agents[i].indexOf(it.session), it.text, it.at_ns, t, 2.4);
   }
 }
 function posted(t) {
@@ -751,9 +796,13 @@ function show() {
   const who = S.sel && S.sel.startsWith("p-") ? S.sel.slice(2) : null;  // one person selected: only that person's items stay lit
   svg.querySelectorAll(".dot").forEach(d => d.classList.toggle("off", !!who && d.dataset.who !== who));
   $("pane").innerHTML = pane();
-  $("status").className = "status" + (S.error ? " bad" : "");
+  clock();
+}
+function clock() {  // every second: the time since the last post counts up
+  const m = S.m;
+  $("status").classList.toggle("bad", !!S.error);
   $("status").textContent = S.error ? (S.readAt ? `Offline, last read ${new Date(S.readAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}` : "Offline")
-    : S.data ? (m.last && !narrow.matches ? `Live, last post ${ago(m.last)}` : "Live") : "Reading the board";
+    : S.data ? (m.last && !narrow.matches ? `Live, last post ${since(m.last)}` : "Live") : "Reading the board";
 }
 
 function read(d) {
@@ -763,8 +812,8 @@ function read(d) {
   if (key !== S.key) { S.key = key; draw(); }
   dots();
   if (S.seen) {
-    d.items.filter(i => i.listed !== "work-closed" && !S.seen.has(i.id)).forEach(i => S.queue.push({ kind: "board", who: i.who }));
-    d.messages.filter(x => !S.seen.has(x.sk)).forEach(x => S.queue.push({ kind: "msg", who: x.who }));
+    d.items.filter(i => i.listed !== "work-closed" && !S.seen.has(i.id)).forEach(i => S.queue.push({ kind: "board", who: i.who, session: i.session, text: i.text, ns: i.at_ns }));
+    d.messages.filter(x => !S.seen.has(x.sk)).forEach(x => S.queue.push({ kind: "msg", who: x.who, session: x.session, text: x.text, ns: msgNs(x) }));
     S.queue = S.queue.slice(-8);
   }
   S.seen = new Set([...d.items.map(i => i.id), ...d.messages.map(x => x.sk)]);
@@ -772,12 +821,13 @@ function read(d) {
 }
 function poll() {
   fetch("/data").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(d => { S.error = null; S.readAt = Date.now(); read(d); })
+    .then(d => { S.error = null; S.readAt = Date.now(); read(d); const s = $("status"); s.classList.remove("read"); s.offsetWidth; s.classList.add("read"); })
     .catch(e => { S.error = e; console.error(e); show(); })
     .finally(() => setTimeout(poll, 10000));
 }
 
 document.addEventListener("click", e => {
+  if (e.detail) document.activeElement?.blur?.();  // a mouse click leaves no focus behind, so a later key press draws no blue ring on the part
   const b = e.target.closest("[data-step]");
   if (b) { const n = Number(b.dataset.step); return go(n >= 1 && n <= 7 ? "walk-" + n : "", true); }
   const t = e.target.closest("[data-go]");
@@ -804,6 +854,7 @@ stage.addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 draw();
 show();
 poll();
+setInterval(clock, 1000);
 if (!still.matches) requestAnimationFrame(spin);
 </script>
 </body>
