@@ -4,6 +4,9 @@
         --model code31=code --model if30=if30 --model random=/tmp/random
 
   --rows   answers.jsonl of a run_cell job on MATH-500 with the cue; the rows with sample 0 and attempt 0 are scored (500 answers).
+  --labels results/anatomy/judge-01/labels.json: instead of the 500 first answers, score the judged finished-wrong base samples
+           (kind "base") and store the token span of each one's first wrong step (pass A quote, located without regard to
+           whitespace; its first 30 characters if the whole quote is not found) in index.json as wrong_step.
   --model  label=source, repeated. source: base or rl (frozen4.json), a key of merge_weights.OTHERS, or a directory that
            merge_weights wrote. Models are loaded one after another with transformers, bf16, on the GPU.
 
@@ -19,6 +22,7 @@ import argparse
 import json
 import os
 import pathlib
+import re
 import time
 
 import numpy as np
@@ -31,10 +35,24 @@ STUDY = pathlib.Path(__file__).resolve().parents[1]
 CHUNK = 4096
 
 
+def span(label, text, offsets):
+    """Token span [tok_start, tok_end) of the judge's quote in the answer text, or found False."""
+    keep = [i for i, ch in enumerate(text) if not ch.isspace()]                # squeezed character -> character of the text
+    t, q = "".join(text[i] for i in keep), re.sub(r"\s+", "", label["quote"] or "")
+    for cand, whole in ((q, True), (q[:30], False)):
+        k = t.find(cand) if cand else -1
+        if k >= 0:
+            c0, c1 = keep[k], keep[k + len(cand) - 1] + 1
+            toks = [i for i, (x, y) in enumerate(offsets) if x < c1 and y > c0]
+            return {"label": label["label"], "found": True, "whole_quote": whole, "tok_start": toks[0], "tok_end": toks[-1] + 1, "quote": label["quote"]}
+    return {"label": label["label"], "found": False, "quote": label["quote"]}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--rows", required=True)
     ap.add_argument("--model", action="append", required=True)
+    ap.add_argument("--labels")
     ap.add_argument("--n", type=int, default=None, help="the first n answers (smoke runs)")
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
     a = ap.parse_args()
@@ -48,20 +66,31 @@ def main():
     pre, pre_text = fz["prefill_ids"], fz["prefill_text"]
 
     rows = [json.loads(line) for line in open(a.rows)]
-    rows = sorted((r for r in rows if r["sample"] == 0 and r["attempt"] == 0), key=lambda r: r["problem_index"])[: a.n]
-    assert a.n or len(rows) == 500, len(rows)
+    judged = {}
+    if a.labels:
+        judged = {(x["problem_index"], x["sample"]): x["passA"] for x in json.loads(pathlib.Path(a.labels).read_text()) if x["kind"] == "base"}
+        rows = sorted((r for r in rows if r["attempt"] == 0 and (r["problem_index"], r["sample"]) in judged), key=lambda r: (r["problem_index"], r["sample"]))[: a.n]
+        assert a.n or len(rows) == len(judged), (len(rows), len(judged))
+    else:
+        rows = sorted((r for r in rows if r["sample"] == 0 and r["attempt"] == 0), key=lambda r: r["problem_index"])[: a.n]
+        assert a.n or len(rows) == 500, len(rows)
     seqs, index, off, same_len = [], [], 0, 0
     for r in rows:
         assert r["prompt_arm"] == "cue" and r["text"].startswith(pre_text), r["problem_index"]
-        ans = tok(r["text"][len(pre_text):], add_special_tokens=False)["input_ids"] + ([] if r["cap_hit"] else [S.STOP_ID])
+        text = r["text"][len(pre_text):]
+        enc = tok(text, add_special_tokens=False, return_offsets_mapping=True)
+        ans = enc["input_ids"] + ([] if r["cap_hit"] else [S.STOP_ID])
+        step = span(judged[(r["problem_index"], r["sample"])], text, enc["offset_mapping"]) if judged else None
         same_len += len(ans) == r["n_generated"]
         head = S.render_ids(tok, probs[r["problem_index"]]["problem"]) + pre
         seqs.append((head, ans))
-        index.append({"problem_index": r["problem_index"], "offset": off, "length": len(ans), "score_v3": r["score_v3"], "cap_hit": r["cap_hit"]})
+        index.append({"problem_index": r["problem_index"], "offset": off, "length": len(ans), "score_v3": r["score_v3"], "cap_hit": r["cap_hit"],
+                      "sample": r["sample"], "wrong_step": step})
         off += len(ans)
     (out / "index.json").write_text(json.dumps(index) + "\n")
     np.save(out / "tokens.npy", np.concatenate([np.asarray(s[1], dtype=np.int32) for s in seqs]))
-    m = {"rows": a.rows, "answers": len(rows), "positions": off, "answers_with_stored_token_count": same_len, "models": {}, "job_id": os.environ.get("JOB_ID")}
+    m = {"rows": a.rows, "answers": len(rows), "positions": off, "answers_with_stored_token_count": same_len,
+         "wrong_steps_found": sum(bool(x["wrong_step"] and x["wrong_step"]["found"]) for x in index), "models": {}, "job_id": os.environ.get("JOB_ID")}
 
     def source(src, patterns):
         """(repo, revision, local directory) of a --model source: base, rl, a key of OTHERS, or a local directory."""

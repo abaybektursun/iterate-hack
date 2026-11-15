@@ -1,0 +1,23 @@
+{
+ "command": "python -m studies.rlneurons.analysis.prefixtest base=abaybektursun-1114-233600-a2de,abaybektursun-1115-003715-63e3,abaybektursun-1115-010036-d67f cad1=abaybektursun-1114-233319-30c3,abaybektursun-1115-002653-1aca,abaybektursun-1114-233354-0eee,abaybektursun-1115-002824-da52,abaybektursun-1114-233541-1444,abaybektursun-1115-002559-7900 rl=abaybektursun-1114-233015-cfe4,abaybektursun-1115-005330-92a1,abaybektursun-1115-011756-7a57",
+ "arms": {
+  "base": [
+   "abaybektursun-1114-233600-a2de",
+   "abaybektursun-1115-003715-63e3",
+   "abaybektursun-1115-010036-d67f"
+  ],
+  "cad1": [
+   "abaybektursun-1114-233319-30c3",
+   "abaybektursun-1115-002653-1aca",
+   "abaybektursun-1114-233354-0eee",
+   "abaybektursun-1115-002824-da52",
+   "abaybektursun-1114-233541-1444",
+   "abaybektursun-1115-002559-7900"
+  ],
+  "rl": [
+   "abaybektursun-1114-233015-cfe4",
+   "abaybektursun-1115-005330-92a1",
+   "abaybektursun-1115-011756-7a57"
+  ]
+ }
+}

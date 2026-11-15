@@ -47,7 +47,12 @@ harness then runs unchanged on the Code pair.
 
 ## Open, to state on the slide
 
-- Harder set: the 328 is measured only for the base at 0.6.
+- Harder set, scored (T 1.0, grader v3, nothing chosen on it; board result-5c961a): vote over 4 after restart gives the
+  base with cue 195 of 328 at 55,306 tokens per problem and RL 224 at 44,108 (RL +8.8 points [5.5, 12.5]; one sample 161
+  against 207). The shortest-answer tie rule failed there (191 against 192), so MATH-500's 453 is not quoted; the vote's
+  446 (450 after restart) is. The base has no right sample on 26 of the 36 problems RL's vote wins, so selection cannot
+  close this gap. Best row on the 328 so far: Think-SFT (no reward) with the cue, vote over 4, 241 of 328 at 40,410 tokens
+  (`studies/rlneurons/results/mixvote/hard328-01/readout.json`; 6 of the 328 match its training prompts).
 - Sampling: temperature and top-p are not yet separated.
 - Grader: a second model read all 96 v1/v3 disagreements of the Day-1 #3 rows: no wrong answer accepted (board
   result-0018d3). The 113 flips of the first table were then all read by a second model: 112 right, 1 wrong, offset by

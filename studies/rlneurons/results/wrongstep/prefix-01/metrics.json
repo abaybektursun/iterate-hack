@@ -1,0 +1,132 @@
+{
+ "prefixes": 51,
+ "labels": {
+  "misread": 14,
+  "slip": 21,
+  "wrong_plan": 16
+ },
+ "config": {
+  "base": {
+   "model": "base",
+   "alpha": 0.0,
+   "k": 6,
+   "cap": 4000,
+   "seed": 110000000,
+   "arm": "base_a0"
+  },
+  "cad1": {
+   "model": "base",
+   "alpha": 1.0,
+   "k": 6,
+   "cap": 4000,
+   "seed": 110000000,
+   "arm": "base_a1"
+  },
+  "rl": {
+   "model": "rl",
+   "alpha": 0.0,
+   "k": 6,
+   "cap": 4000,
+   "seed": 110000000,
+   "arm": "rl_a0"
+  }
+ },
+ "arms": {
+  "base": {
+   "jobs": [
+    "abaybektursun-1114-233600-a2de",
+    "abaybektursun-1115-003715-63e3",
+    "abaybektursun-1115-010036-d67f"
+   ],
+   "continuations": 306,
+   "right": 99,
+   "right_percent": 32.4,
+   "right_percent_ci95": [
+    23.2,
+    41.5
+   ],
+   "cap_hits": 170,
+   "tokens_per_continuation": 3040,
+   "right_and_ended": 90,
+   "prefixes_with_any_right": 32,
+   "by_label_right_percent": {
+    "misread": 32.1,
+    "slip": 49.2,
+    "wrong_plan": 10.4
+   }
+  },
+  "cad1": {
+   "jobs": [
+    "abaybektursun-1114-233319-30c3",
+    "abaybektursun-1115-002653-1aca",
+    "abaybektursun-1114-233354-0eee",
+    "abaybektursun-1115-002824-da52",
+    "abaybektursun-1114-233541-1444",
+    "abaybektursun-1115-002559-7900"
+   ],
+   "continuations": 306,
+   "right": 104,
+   "right_percent": 34.0,
+   "right_percent_ci95": [
+    24.2,
+    44.1
+   ],
+   "cap_hits": 177,
+   "tokens_per_continuation": 3044,
+   "right_and_ended": 96,
+   "prefixes_with_any_right": 32,
+   "by_label_right_percent": {
+    "misread": 42.9,
+    "slip": 46.8,
+    "wrong_plan": 9.4
+   },
+   "minus_control_points": {
+    "value": 1.6,
+    "ci95": [
+     -4.2,
+     7.8
+    ]
+   },
+   "minus_control_by_label": {
+    "misread": 10.7,
+    "slip": -2.4,
+    "wrong_plan": -1.0
+   }
+  },
+  "rl": {
+   "jobs": [
+    "abaybektursun-1114-233015-cfe4",
+    "abaybektursun-1115-005330-92a1",
+    "abaybektursun-1115-011756-7a57"
+   ],
+   "continuations": 306,
+   "right": 132,
+   "right_percent": 43.1,
+   "right_percent_ci95": [
+    32.7,
+    53.6
+   ],
+   "cap_hits": 167,
+   "tokens_per_continuation": 3165,
+   "right_and_ended": 90,
+   "prefixes_with_any_right": 35,
+   "by_label_right_percent": {
+    "misread": 52.4,
+    "slip": 56.3,
+    "wrong_plan": 17.7
+   },
+   "minus_control_points": {
+    "value": 10.8,
+    "ci95": [
+     5.6,
+     16.3
+    ]
+   },
+   "minus_control_by_label": {
+    "misread": 20.2,
+    "slip": 7.1,
+    "wrong_plan": 7.3
+   }
+  }
+ }
+}
