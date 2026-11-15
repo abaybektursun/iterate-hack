@@ -1,3 +1,4 @@
 [
- {"readout": "m20-r1", "measured": 10, "n": 136, "interval": [5, 15], "artifact": "studies/theory/results/experiments/cell-m20-01/metrics.json", "item": "result-a74ac3"}
+ {"readout": "m20-r1", "measured": 10, "n": 136, "interval": [5, 15], "artifact": "studies/theory/results/experiments/cell-m20-01/metrics.json", "item": "result-a74ac3"},
+ {"readout": "m06-r1", "measured": 7, "n": 164, "interval": [3, 11], "artifact": "studies/theory/results/experiments/cell-m06-01/metrics.json", "item": "result-9ce8ed"}
 ]

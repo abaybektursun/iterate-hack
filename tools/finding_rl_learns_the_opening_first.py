@@ -1507,6 +1507,9 @@ svg * { pointer-events: none; }
   .enter * { animation: none !important; }
   .switch button, .more button, .top a { transition: none; }
 }
+.paper { margin: 18px 0 0; font-size: 15px; }
+.paper a { color: var(--mute); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+.paper a:hover, .paper a:focus-visible { color: inherit; }
 </style>
 </head>
 <body>
@@ -1541,6 +1544,7 @@ svg * { pointer-events: none; }
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
+    <p class="paper"><a href="/paper/the-first-hundred-steps.pdf">Read the paper (PDF) ›</a></p>
   </div>
 </div>
 <script>

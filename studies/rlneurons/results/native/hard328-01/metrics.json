@@ -1,0 +1,127 @@
+{
+ "status": "done",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "sft1",
+  "prompt": "native",
+  "native_tokenizer": "allenai/Olmo-3-7B-Think-SFT@6ff857587e040d6d523a3d5f3a56e918f5401d66",
+  "set": "hard328",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 32768,
+  "seed": 3000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/work/out",
+  "dry_run": false,
+  "commit": "07c35c3fb95cb22933ffc3dede5f5c952f90383a",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 328,
+  "native_prompt_example": "<|im_start|>system\nYou are Olmo, a helpful AI assistant built by Ai2. Your date cutoff is December 2024, and your model weights are available at https://huggingface.co/allenai.<|im_end|>\n<|im_start|>user\nSolve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"<|im_end|>\n<|im_start|>assistant\n<think>",
+  "native_end_id": 100265,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "commit": "07c35c3fb95cb22933ffc3dede5f5c952f90383a",
+ "job_id": "ih-1115-163313-7486+ih-1115-163401-a4ba",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T16:45:45Z",
+ "updated_utc": "2026-11-15T20:03:14Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 12816,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 34816,
+  "load_s": 206.74175190925598,
+  "model_dir": "/tmp/theta",
+  "tok_dir": "/opt/hf-cache/hf/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 328,
+  "correct_v3": 232,
+  "correct_v1": 230,
+  "cap_hits": 3,
+  "loop_A": 0,
+  "generated_tokens": 3987651,
+  "restarts": 0,
+  "n_planned": 328,
+  "tok_p_lt_1e2": 103329,
+  "tok_p_lt_1e3": 27539,
+  "mean_generated_tokens": 12157.47256097561,
+  "generation_s": 11800.323493242264,
+  "tokens_per_s": 340.70280996345963
+ },
+ "memory": {
+  "gpu_memory_used_mib": 40845,
+  "gpu_memory_total_mib": 46068,
+  "gpu": "NVIDIA L40S"
+ },
+ "wall_s": 12063.858547210693,
+ "joined_from": [
+  {
+   "job_id": "ih-1115-163313-7486",
+   "shard": "0/2",
+   "counts": {
+    "n": 164,
+    "tok_p_lt_1e2": 49259,
+    "tok_p_lt_1e3": 12579,
+    "correct_v3": 121,
+    "correct_v1": 121,
+    "cap_hits": 2,
+    "loop_A": 0,
+    "generated_tokens": 1984026,
+    "restarts": 0,
+    "n_planned": 164,
+    "mean_generated_tokens": 12097.719512195123,
+    "generation_s": 11608.6868724823,
+    "tokens_per_s": 170.9087360003667
+   },
+   "wall_s": 11848.497493982315
+  },
+  {
+   "job_id": "ih-1115-163401-a4ba",
+   "shard": "1/2",
+   "counts": {
+    "n": 164,
+    "tok_p_lt_1e2": 54070,
+    "tok_p_lt_1e3": 14960,
+    "correct_v3": 111,
+    "correct_v1": 109,
+    "cap_hits": 1,
+    "loop_A": 0,
+    "generated_tokens": 2003625,
+    "restarts": 0,
+    "n_planned": 164,
+    "mean_generated_tokens": 12217.225609756097,
+    "generation_s": 11800.323493242264,
+    "tokens_per_s": 169.79407396309293
+   },
+   "wall_s": 12063.858547210693
+  }
+ ]
+}
