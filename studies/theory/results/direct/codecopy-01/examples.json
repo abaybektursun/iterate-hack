@@ -1,0 +1,178 @@
+[
+ {
+  "label": "in L, edit samples pass (counts toward S as passes)",
+  "uid": "HumanEval/65",
+  "e": 1.0,
+  "cells": {
+   "base_cue": {
+    "passed": true,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 10612,
+    "code_head": "def circular_shift(x, shift):\n    s = str(x)\n    num_digits = len(s)\n    if shift > num_digits:\n        return s[::-1] if s != '0' else '0'\n    effective_shift = shift % num_digits\n    if effective_shift == 0:\n        return '0' if x == 0 else s\n    shifted = s\n    for _ in range(effective_shift):\n ",
+    "stderr_tail": "",
+    "pass_plan_rule": true
+   },
+   "rl_51": {
+    "passed": false,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 6469,
+    "code_head": "def circular_shift(x, shift):\n    x_str = str(abs(x))\n    if not x_str:\n        return '0'\n    n = len(x_str)\n    effective_shift = shift % n\n    if effective_shift == 0:\n        return x_str\n    rotated = x_str[-effective_shift:] + x_str[:-effective_shift]\n    return rotated\n",
+    "stderr_tail": "mp/tmp5v1iqhvh/prog.py\", line 53, in check\n    assertion(candidate(*inp), exp, 0)\n  File \"/tmp/tmp5v1iqhvh/prog.py\", line 46, in assertion\n    assert exact_match\n           ^^^^^^^^^^^\nAssertionError\n",
+    "pass_plan_rule": false
+   },
+   "rl_52": {
+    "passed": false,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 5633,
+    "code_head": "def circular_shift(x, shift):\n    s = str(x)\n    n = len(s)\n    if n == 0:\n        return \"0\"\n    shift_mod = shift % n\n    if shift_mod == 0:\n        return s\n    return s[-shift_mod:] + s[:-shift_mod]\n",
+    "stderr_tail": "mp/tmp11s70gj5/prog.py\", line 52, in check\n    assertion(candidate(*inp), exp, 0)\n  File \"/tmp/tmp11s70gj5/prog.py\", line 45, in assertion\n    assert exact_match\n           ^^^^^^^^^^^\nAssertionError\n",
+    "pass_plan_rule": false
+   },
+   "rl_53": {
+    "passed": true,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 7169,
+    "code_head": "def circular_shift(x, shift):\n    \"\"\"Circular shift the digits of the integer x, shift the digits right by shift\n    and return the result as a string. If shift > number of digits, return digits reversed.\n    \n    >>> circular_shift(12, 1)\n    '21'\n    >>> circular_shift(12, 2)\n    '12'\n    \"\"\"\n    ",
+    "stderr_tail": "",
+    "pass_plan_rule": true
+   },
+   "top8x1_51": {
+    "passed": true,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 5674,
+    "code_head": "def circular_shift(x, shift):\n    s = str(x)\n    n = len(s)\n    if shift > n:\n        # Reverse the digits\n        return s[::-1]\n    else:\n        effective_shift = shift % n\n        if effective_shift == 0:\n            return s\n        # Perform circular right shift\n        return s[-effective_shi",
+    "stderr_tail": "",
+    "pass_plan_rule": true
+   },
+   "top8x1_52": {
+    "passed": true,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 8607,
+    "code_head": "def circular_shift(x, shift):\n    s = str(abs(x))\n    n = len(s)\n    if shift > n:\n        rotated = s[::-1]\n    else:\n        rotated = s[-shift:] + s[:-shift]\n    if x < 0:\n        rotated = '-' + rotated\n    return rotated\n",
+    "stderr_tail": "",
+    "pass_plan_rule": true
+   },
+   "top8x1_53": {
+    "passed": true,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 7559,
+    "code_head": "def circular_shift(x, shift):\n    s = str(abs(x))\n    n = len(s)\n    if shift > n:\n        return s[::-1]\n    elif shift == 0:\n        return s\n    else:\n        return s[-shift:] + s[:-shift]\n",
+    "stderr_tail": "",
+    "pass_plan_rule": true
+   },
+   "top8x1.5_51": {
+    "passed": true,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 4891,
+    "code_head": "def circular_shift(x, shift):\n    s = str(abs(x))\n    n = len(s)\n    if shift > n:\n        return s[::-1]\n    else:\n        shifted = s[-shift:] + s[:-shift]\n        return shifted\n",
+    "stderr_tail": "",
+    "pass_plan_rule": true
+   },
+   "top8x2_51": {
+    "passed": true,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 8245,
+    "code_head": "def circular_shift(x, shift):\n    \"\"\"Circular shift the digits of the integer x, shift the digits right by shift and return the result as a string.\n    \n    If shift > number of digits, return digits reversed.\n    \n    Examples:\n    >>> circular_shift(12, 1)\n    '21'\n    >>> circular_shift(12, 2)\n  ",
+    "stderr_tail": "",
+    "pass_plan_rule": true
+   }
+  }
+ },
+ {
+  "label": "in L, edit samples fail (counts toward S as fails)",
+  "uid": "HumanEval/55",
+  "e": 0.0,
+  "cells": {
+   "base_cue": {
+    "passed": true,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 2352,
+    "code_head": "def fib(n: int):\n    \"\"\"Return n-th Fibonacci number.\n    \n    >>> fib(10)\n    55\n    >>> fib(1)\n    1\n    >>> fib(8)\n    21\n    \"\"\"\n    if n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n+1):\n        c = a + b\n        a = b\n        b = c\n    return ",
+    "stderr_tail": "",
+    "pass_plan_rule": true
+   },
+   "rl_51": {
+    "passed": false,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 3202,
+    "code_head": "from typing import List, Tuple, Union, Any\n\ndef fib(n: int) -> int:\n    \"\"\"\n    Return the nth Fibonacci number.\n    >>> fib(10)\n    55\n    >>> fib(1)\n    1\n    >>> fib(8)\n    21\n    \"\"\"\n    if n == 1:\n        return 1\n    elif n == 2:\n        return 1\n    a, b = 1, 1\n    for _ in range(3, n + 1):\n ",
+    "stderr_tail": "mp/tmpk171bue3/prog.py\", line 66, in check\n    assertion(candidate(*inp), exp, 0)\n  File \"/tmp/tmpk171bue3/prog.py\", line 59, in assertion\n    assert exact_match\n           ^^^^^^^^^^^\nAssertionError\n",
+    "pass_plan_rule": false
+   },
+   "rl_52": {
+    "passed": true,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 3789,
+    "code_head": "from typing import List, Union\n\ndef fib(n: int):\n    \"\"\"\n    Return n-th Fibonacci number.\n    \n    >>> fib(10)\n    55\n    >>> fib(1)\n    1\n    >>> fib(8)\n    21\n    \"\"\"\n    if n == 0:\n        return 0\n    elif n == 1:\n        return 1\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        next_num =",
+    "stderr_tail": "",
+    "pass_plan_rule": true
+   },
+   "rl_53": {
+    "passed": false,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 2981,
+    "code_head": "from typing import List, Union, TypeVar\n\ndef fib(n: int) -> int:\n    \"\"\"\n    Return the n-th Fibonacci number.\n    >>> fib(10)\n    55\n    >>> fib(1)\n    1\n    >>> fib(8)\n    21\n    \"\"\"\n    if n == 1 or n == 2:\n        return 1\n    a, b = 1, 1\n    for i in range(3, n + 1):\n        c = a + b\n        a",
+    "stderr_tail": "mp/tmp3cizu2a2/prog.py\", line 64, in check\n    assertion(candidate(*inp), exp, 0)\n  File \"/tmp/tmp3cizu2a2/prog.py\", line 57, in assertion\n    assert exact_match\n           ^^^^^^^^^^^\nAssertionError\n",
+    "pass_plan_rule": false
+   },
+   "top8x1_51": {
+    "passed": false,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 2627,
+    "code_head": "def fib(n: int):\n    \"\"\"Return n-th Fibonacci number.\n    >>> fib(10)\n    55\n    >>> fib(1)\n    1\n    >>> fib(8)\n    21\n    \"\"\"\n    if n == 1 or n == 2:\n        return 1\n    a, b = 1, 1\n    for _ in range(3, n + 1):\n        c = a + b\n        a = b\n        b = c\n    return b\n",
+    "stderr_tail": "mp/tmpqbk7i_e9/prog.py\", line 61, in check\n    assertion(candidate(*inp), exp, 0)\n  File \"/tmp/tmpqbk7i_e9/prog.py\", line 54, in assertion\n    assert exact_match\n           ^^^^^^^^^^^\nAssertionError\n",
+    "pass_plan_rule": false
+   },
+   "top8x1_52": {
+    "passed": false,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 2175,
+    "code_head": "def fib(n: int) -> int:\n    \"\"\"Return the n-th Fibonacci number where the sequence starts with:\n    fib(1) = 1, fib(2) = 1, ..., fib(n) = fib(n-1) + fib(n-2).\"\"\"\n    if n == 1 or n == 2:\n        return 1\n    a, b = 1, 1\n    for _ in range(3, n + 1):\n        next_val = a + b\n        a = b\n        b =",
+    "stderr_tail": "mp/tmp_hjruhww/prog.py\", line 55, in check\n    assertion(candidate(*inp), exp, 0)\n  File \"/tmp/tmp_hjruhww/prog.py\", line 48, in assertion\n    assert exact_match\n           ^^^^^^^^^^^\nAssertionError\n",
+    "pass_plan_rule": false
+   },
+   "top8x1_53": {
+    "passed": false,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 1933,
+    "code_head": "def fib(n: int):\n    \"\"\"\n    Return n-th Fibonacci number.\n    >>> fib(10)\n    55\n    >>> fib(1)\n    1\n    >>> fib(8)\n    21\n    \"\"\"\n    if n == 1 or n == 2:\n        return 1\n    a, b = 1, 1\n    for i in range(3, n + 1):\n        c = a + b\n        a, b = b, c\n    return b\n",
+    "stderr_tail": "mp/tmpq89eaf4u/prog.py\", line 61, in check\n    assertion(candidate(*inp), exp, 0)\n  File \"/tmp/tmpq89eaf4u/prog.py\", line 54, in assertion\n    assert exact_match\n           ^^^^^^^^^^^\nAssertionError\n",
+    "pass_plan_rule": false
+   },
+   "top8x1.5_51": {
+    "passed": false,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 2790,
+    "code_head": "def fib(n):\n    \"\"\"\n    Return the n-th Fibonacci number.\n    \n    >>> fib(10)\n    55\n    >>> fib(1)\n    1\n    >>> fib(8)\n    21\n    \"\"\"\n    if n == 1 or n == 2:\n        return 1\n    a, b = 1, 1\n    for i in range(3, n + 1):\n        c = a + b\n        a = b\n        b = c\n    return b\n",
+    "stderr_tail": "mp/tmp1s5cz7or/prog.py\", line 63, in check\n    assertion(candidate(*inp), exp, 0)\n  File \"/tmp/tmp1s5cz7or/prog.py\", line 56, in assertion\n    assert exact_match\n           ^^^^^^^^^^^\nAssertionError\n",
+    "pass_plan_rule": false
+   },
+   "top8x2_51": {
+    "passed": false,
+    "cap_hit": false,
+    "mode": "block",
+    "n_new": 2519,
+    "code_head": "def fib(n: int) -> int:\n    \"\"\"Return the n-th Fibonacci number.\n    >>> fib(10)\n    55\n    >>> fib(1)\n    1\n    >>> fib(8)\n    21\n    \"\"\"\n    if n == 1 or n == 2:\n        return 1\n    a, b = 1, 1\n    for i in range(3, n + 1):\n        c = a + b\n        a, b = b, c\n    return b\n",
+    "stderr_tail": "mp/tmppgne6n9y/prog.py\", line 60, in check\n    assertion(candidate(*inp), exp, 0)\n  File \"/tmp/tmppgne6n9y/prog.py\", line 53, in assertion\n    assert exact_match\n           ^^^^^^^^^^^\nAssertionError\n",
+    "pass_plan_rule": false
+   }
+  }
+ }
+]
