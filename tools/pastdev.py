@@ -267,9 +267,9 @@ section .say { margin-top: calc(var(--u) * 3); font-size: 16px; max-width: 420px
         </div>
         <div class="picks" role="group" aria-label="Choose a recall">
           <button type="button" data-case="1" aria-pressed="true" aria-label="Recall 1">1</button>
-          <button type="button" data-case="2" aria-pressed="false" aria-label="Recall 2">2</button>
-          <button type="button" data-case="3" aria-pressed="false" aria-label="Recall 3">3</button>
-          <button type="button" data-case="4" aria-pressed="false" aria-label="Recall 4">4</button>
+          <button type="button" data-case="2" aria-pressed="false" aria-label="Recall 2" tabindex="-1">2</button>
+          <button type="button" data-case="3" aria-pressed="false" aria-label="Recall 3" tabindex="-1">3</button>
+          <button type="button" data-case="4" aria-pressed="false" aria-label="Recall 4" tabindex="-1">4</button>
         </div>
       </div>
     </div>
@@ -480,30 +480,44 @@ function sizeOf(el, cvs) {
   }
   return { w, h };
 }
-/* A loop that runs only while its figure is on screen and the tab is visible. */
+/* One loop for both figures. It steps a figure only while that figure is on screen, and runs only while one of them
+   is and the tab is visible. */
+const figs = [];
+let raf = 0;
+function tick(now) {
+  raf = 0;
+  if (document.hidden) return;
+  let any = false;
+  for (const g of figs) {
+    if (!g.vis) { g.last = 0; continue; }
+    const dt = g.last ? Math.min(1000, now - g.last) : 0; g.last = now; g.step(dt, now); any = true;
+  }
+  if (any) raf = requestAnimationFrame(tick);
+}
+function sync() {
+  if (raf || reduce || document.hidden || !figs.some(g => g.vis)) return;
+  figs.forEach(g => { g.last = 0; });
+  raf = requestAnimationFrame(tick);
+}
+document.addEventListener("visibilitychange", sync);
 function loop(el, step, onFirstView) {
-  let vis = false, run = false, last = 0, seen = false;
-  const tick = now => { if (!run) return; const dt = Math.min(1000, now - last); last = now; step(dt, now); requestAnimationFrame(tick); };
-  const sync = () => {
-    const go = vis && !document.hidden && !reduce;
-    if (go && !run) { run = true; last = performance.now(); requestAnimationFrame(tick); }
-    if (!go) run = false;
-  };
+  const g = { vis: false, last: 0, step };
+  let seen = false;
+  figs.push(g);
   new IntersectionObserver(es => {
     const e = es[es.length - 1];
-    vis = e.isIntersecting;
+    g.vis = e.isIntersecting;
     if (e.intersectionRatio >= 0.3 && !seen) { seen = true; if (onFirstView) onFirstView(); }
     sync();
   }, { threshold: [0, 0.3] }).observe(el);
   /* The same test from the box itself on scroll, so a figure still starts where the observer is late or never fires. */
   const check = () => {
     const r = el.getBoundingClientRect(), shown = Math.min(r.bottom, innerHeight) - Math.max(r.top, 0);
-    vis = shown > 0;
+    g.vis = shown > 0;
     if (shown >= 0.3 * Math.min(r.height, innerHeight) && !seen) { seen = true; if (onFirstView) onFirstView(); }
     sync();
   };
   addEventListener("scroll", check, { passive: true }); addEventListener("resize", check); check();
-  document.addEventListener("visibilitychange", sync);
 }
 function leaning(el) {  // a few degrees toward the pointer, eased; it settles back when the pointer leaves
   const L = { x: 0, y: 0, tx: 0, ty: 0 };
@@ -731,7 +745,7 @@ function memory() {
     cur = n; caseT = 0;
     if (user) auto = false;
     cases.forEach((c, i) => { c.classList.toggle("on", i === n); if (i === n) c.removeAttribute("aria-hidden"); else c.setAttribute("aria-hidden", "true"); });
-    picks.forEach((b, i) => b.setAttribute("aria-pressed", i === n ? "true" : "false"));
+    picks.forEach((b, i) => { b.setAttribute("aria-pressed", i === n ? "true" : "false"); b.tabIndex = i === n ? 0 : -1; });  // one tab stop; the arrow keys move between the four
     const C = CASES[n];
     F.who.textContent = C.reader; F.wrote.textContent = C.wrote; F.tag.textContent = C.tag; tagW = width(F.tag); wroteW = width(F.wrote); whoW = width(F.who);
     wEl.forEach((m, i) => {

@@ -135,6 +135,7 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
 .top .name a, .top .name a:hover { color: var(--ink); }
 .top a { color: var(--mute); text-decoration: none; white-space: nowrap; transition: color .15s ease; }
 .top a:hover { color: var(--ink); }
+.top a[aria-current] { color: var(--ink); font-weight: 600; }
 .status { margin-left: auto; color: var(--mute); white-space: nowrap; display: flex; align-items: center; gap: 10px; }
 .status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); box-shadow: 0 0 0 4px color-mix(in srgb, var(--blue) 20%, transparent); }
 .status.bad { color: var(--red); }
@@ -242,7 +243,10 @@ button { font: inherit; color: inherit; background: none; border: 0; padding: 0;
    the class .front; the motion is the CSS transition. */
 const stage = document.getElementById("stage"), sheets = [...stage.querySelectorAll(".sheet")];
 const front = () => Math.max(0, sheets.findIndex(s => "#" + s.id === location.hash));
-function show() { const f = front(); sheets.forEach((s, i) => s.classList.toggle("front", i === f)); }
+function show() {
+  const f = front();
+  sheets.forEach((s, i) => { s.classList.toggle("front", i === f); if (i === f) s.setAttribute("aria-current", "true"); else s.removeAttribute("aria-current"); });
+}
 function go(i) { history.pushState(null, "", "#" + sheets[(i + sheets.length) % sheets.length].id); show(); }
 stage.addEventListener("click", e => {
   const b = e.target.closest(".spine"); if (!b) return;
@@ -259,6 +263,7 @@ const ITEM = __ITEM__, st = document.getElementById("status");
 let readAt = 0;
 const ago = ns => { const m = Math.max(0, Math.floor((Date.now() * 1e6 - Number(ns)) / 60e9)); return m < 1 ? "now" : m < 60 ? m + " min ago" : Math.floor(m / 60) + " h ago"; };
 async function read() {
+  if (document.hidden) return;  // a hidden tab reads nothing; it reads again when it is shown
   try {
     const r = await fetch("/data"); if (!r.ok) throw new Error(r.status);
     const it = (await r.json()).items.find(i => i.id === ITEM);
@@ -271,6 +276,7 @@ async function read() {
   }
 }
 read(); setInterval(read, 10000);
+document.addEventListener("visibilitychange", () => document.hidden || read());
 </script>
 </body>
 </html>
