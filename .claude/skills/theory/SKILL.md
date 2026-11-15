@@ -182,8 +182,9 @@ refuted; <b> beat their rival. $R/metrics_v4.json $R/metrics_v5.json $R/experime
 
 `lib/forecast.py make <folder> [--propose N]` and `score <folder>` (results under `results/forecast/run-<nn>/`) run the
 same target, forecast and score steps on the newest round's theories without a round; `score` writes
-`scores-<UTC time>.json/.md` when `scores.json` exists. `--propose N` adds N mechanisms forced to disagree with the
-readers on 3 targets (run-02); round 08 dropped that rule.
+`scores-<UTC time>.json/.md` when `scores.json` exists. `--propose N` adds N mechanisms (run-02 forced them to
+disagree with the readers on 3 targets; that rule is gone); `--lens "<text>"` names the family of causes they come from
+(run-03 to run-08: six lenses run at once).
 
 ## Cost per round
 

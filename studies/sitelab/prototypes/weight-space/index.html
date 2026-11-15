@@ -1,0 +1,655 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: Weight space</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #121110; --sheet: #1a1917; --ink: #e8e2d5; --mute: #9d978a; --faint: #746f65; --rule: #2a2825;
+  --blue: #c9aa72; --red: #c9705a;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; overflow: hidden; color: var(--ink); background: var(--paper);
+  font: 400 15px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
+canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+#labels { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+.lb { position: absolute; left: 0; top: 0; white-space: nowrap; will-change: transform; font-stretch: 112%; letter-spacing: .012em; }
+.lb.num { font-size: 11px; font-weight: 600; color: var(--ink); background: color-mix(in srgb, var(--paper) 78%, transparent); padding: 0 4px; border-radius: 1px; line-height: 15px; }
+.lb.num.ctl { color: var(--faint); }
+.lb.num.cap { color: var(--red); font-weight: 600; }
+.lb.name { font-size: 12px; font-weight: 640; color: var(--ink); text-shadow: 0 0 6px var(--paper); }
+.lb.lane { font-size: 12px; font-weight: 500; color: var(--faint); transition: color .2s; pointer-events: auto; cursor: pointer; padding: 6px 0; }
+.lb.lane.on { color: var(--ink); font-weight: 620; }
+.lb.tick { font-size: 12px; font-weight: 500; color: var(--faint); }
+.lb.tick.stop { color: var(--ink); font-weight: 640; }
+.lb.ref { font-size: 11px; font-weight: 560; color: var(--mute); }
+.lb.knob { font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 15px; font-weight: 400; color: var(--ink); text-shadow: 0 0 6px var(--paper); }
+
+.top { position: fixed; left: 0; right: 0; top: 0; display: flex; align-items: center; gap: 26px; font-size: 13px; padding: 20px 40px 16px; pointer-events: none; }
+.name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; }
+.top .here { color: var(--ink); font-weight: 600; }
+.status { margin-left: auto; color: var(--mute); display: flex; align-items: center; gap: 10px; }
+.status::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--blue); }
+.status.bad { color: var(--red); } .status.bad::before { background: var(--red); }
+
+.col { position: fixed; left: 40px; top: 74px; width: min(330px, calc(100vw - 80px)); pointer-events: none; }
+.col > * { pointer-events: auto; }
+h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 27px; line-height: 1.2; margin: 0 0 20px; letter-spacing: -.008em; }
+.seg { display: flex; gap: 18px; padding: 10px 0; border-top: 1px solid var(--rule); font-size: 13px; }
+.seg button { color: var(--faint); font-weight: 500; }
+.seg button[aria-pressed="true"] { color: var(--ink); font-weight: 600; box-shadow: 0 1px 0 var(--ink); }
+.read { border-top: 1px solid var(--rule); padding: 12px 0 4px; }
+.formula { font-size: 13px; color: var(--mute); min-height: 20px; }
+.aval { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 62px; line-height: 1.05; letter-spacing: -.02em; margin: 2px 0 6px; font-variant-numeric: lining-nums tabular-nums; }
+.aval small { font-family: "Newsreader", Georgia, serif; font-style: italic; font-size: 22px; font-weight: 400; color: var(--mute); letter-spacing: .01em; margin-right: 8px; }
+.row { display: flex; align-items: baseline; justify-content: space-between; padding: 7px 0; border-top: 1px solid var(--rule); font-size: 13px; color: var(--mute); }
+.row b { font-weight: 560; font-size: 21px; color: var(--ink); font-stretch: 100%; }
+.row b i { font-style: normal; font-size: 13px; color: var(--faint); font-weight: 500; margin-left: 4px; }
+.row.capr b { color: var(--red); }
+.read.none .row b { color: var(--faint); font-size: 13px; font-weight: 500; }
+.say { font-size: 13px; color: var(--mute); padding: 10px 0 0; border-top: 1px solid var(--rule); min-height: 52px; }
+.say em { font-style: normal; color: var(--ink); font-weight: 600; }
+.lanes { margin-top: 10px; border-top: 1px solid var(--rule); padding-top: 8px; display: grid; gap: 1px; font-size: 13px; }
+.lanes button { color: var(--faint); padding: 3px 0; display: flex; gap: 8px; align-items: baseline; }
+.lanes button::before { content: ""; width: 7px; height: 7px; border-radius: 50%; border: 1px solid currentColor; flex: none; transform: translateY(-1px); }
+.lanes button[aria-pressed="true"] { color: var(--ink); font-weight: 620; }
+.lanes button[aria-pressed="true"]::before { background: var(--blue); border-color: var(--blue); }
+.lanes button:disabled { opacity: .35; cursor: default; }
+
+.key { position: fixed; left: 40px; bottom: 20px; right: 40px; display: flex; flex-wrap: wrap; gap: 6px 26px; font-size: 12px; color: var(--faint); pointer-events: none; }
+.key span { display: inline-flex; align-items: center; gap: 8px; }
+.key i { display: inline-block; width: 10px; height: 12px; border-radius: 1px; }
+.key .k1 { background: #e6dfcf; }
+.key .k2 { background: var(--red); height: 5px; }
+.key .k3 { background: #3b3935; }
+.key .k4 { width: 22px; height: 0; border-top: 1px dashed var(--mute); }
+.key .k5 { width: 7px; height: 7px; border-radius: 50%; background: var(--blue); }
+
+.detail {
+  position: fixed; right: 0; top: 0; bottom: 0; width: min(400px, 100vw); padding: 74px 40px 30px 30px; overflow: auto;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--paper) 92%, transparent) 9%, var(--paper) 30%);
+  transform: translateX(105%); transition: transform .45s cubic-bezier(.3, 0, .2, 1); font-size: 13px;
+}
+.detail.open { transform: none; }
+.detail h2 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 24px; line-height: 1.25; margin: 0 0 4px; padding-right: 48px; }
+.detail .meta { color: var(--faint); padding-bottom: 10px; }
+.detail .nums { display: flex; gap: 22px; padding: 10px 0; border-top: 1px solid var(--rule); color: var(--mute); }
+.detail .nums b { display: block; color: var(--ink); font-size: 20px; font-weight: 560; }
+.detail .nums .c b { color: var(--red); }
+.detail p { margin: 0; padding: 10px 0; border-top: 1px solid var(--rule); color: var(--mute); }
+.detail p b { color: var(--ink); font-weight: 600; display: block; font-size: 12px; }
+.detail .path { word-break: break-all; color: var(--faint); font-size: 12px; }
+.detail canvas { width: 100%; display: block; margin: 8px 0 4px; }
+.detail .x { position: absolute; right: 38px; top: 72px; color: var(--mute); font-size: 13px; }
+.detail .gk { display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--faint); font-size: 12px; }
+.detail .gk i { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 1px; }
+#tip { position: fixed; pointer-events: none; font-size: 12px; background: var(--sheet); border: 1px solid var(--rule); padding: 8px 11px; border-radius: 2px; max-width: 300px; opacity: 0; transition: opacity .12s; color: var(--mute); }
+#tip b { color: var(--ink); font-weight: 600; display: block; }
+#tip .c { color: var(--red); }
+#err { position: fixed; left: 8px; bottom: 60px; color: var(--red); font-size: 12px; white-space: pre-wrap; max-width: 90vw; }
+@media (max-width: 760px) {
+  .lb.lane, .lb.ref, .lb.name, .lb.axis { display: none !important; } .key span:nth-child(n+4) { display: none; }
+  .top { padding: 14px 16px; gap: 14px; } .col { left: 16px; top: 52px; width: calc(100vw - 32px); }
+  h1 { font-size: 17px; margin-bottom: 8px; } .aval { font-size: 34px; } .lanes, .say { display: none; }
+  .row { padding: 3px 0; } .row b { font-size: 15px; } .key { left: 16px; right: 16px; bottom: 10px; gap: 4px 14px; font-size: 11px; }
+  .detail { padding: 60px 16px 20px; background: color-mix(in srgb, var(--paper) 95%, transparent); } .detail .x { right: 16px; top: 56px; }
+}
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="labels"></div>
+<div class="top"><span class="name">Invariant</span><span class="here">Weight space</span><span class="status" id="status">Reading the board</span></div>
+<div class="col">
+  <h1 id="h1">Each tube is one model made by adding weight changes to another. The fill is its right answers.</h1>
+  <div class="seg" id="bench">
+    <button data-b="hard328" aria-pressed="true">328 harder problems</button>
+    <button data-b="math500" aria-pressed="false">MATH-500</button>
+  </div>
+  <div class="read" id="read">
+    <div class="formula" id="formula"></div>
+    <div class="aval"><small>a</small><span id="aval">0.00</span></div>
+    <div class="row"><span>Right answers</span><b id="rRight"></b></div>
+    <div class="row capr"><span>Hit the 16,384-token cap</span><b id="rCap"></b></div>
+    <div class="row"><span>Tokens per problem</span><b id="rTok"></b></div>
+    <div class="say" id="say"></div>
+  </div>
+  <div class="lanes" id="lanes"></div>
+</div>
+<div class="key">
+  <span><i class="k1"></i>right answers, lighter is more</span>
+  <span><i class="k2"></i>answers cut off at the token cap</span>
+  <span><i class="k3"></i>control: random directions</span>
+  <span><i class="k4"></i>guide between measured models, not data</span>
+  <span><i class="k5"></i>a measured stop on the dial. Drag the knob, or use the arrow keys.</span>
+</div>
+<aside class="detail" id="detail"></aside>
+<div id="tip"></div>
+<div id="err"></div>
+<script>
+window.addEventListener('error', e => { document.getElementById('err').textContent += (e.message || e) + '\n'; });
+window.addEventListener('unhandledrejection', e => { document.getElementById('err').textContent += (e.reason && e.reason.stack || e.reason) + '\n'; });
+</script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const $ = id => document.getElementById(id);
+const DATA = await (await fetch('data.json')).json();
+const MODELS = DATA.models;
+const fmt = v => Number.isInteger(v) ? v.toLocaleString('en-US') : v.toLocaleString('en-US', { maximumFractionDigits: 2 });
+const fa = a => (a < 0 ? '−' : '') + Math.abs(a).toFixed(2);
+const fs = a => (a < 0 ? '−' : '') + String(Math.abs(a));
+
+/* ---------- the space: x = coefficient a of the RL change, z = which part of it (lanes), y = share of problems ---------- */
+const XS = 3.6, H = 5.2, W = 0.74, X0 = -5.4;                   // world units per unit of a; tube height = all problems
+const ax = a => X0 + a * XS;
+const LANES = [
+  { id: 'sft', z: -6.6, name: 'Think-SFT + a × (RL − base)', f: 'Think-SFT + a × (RL − base), every direction' },
+  { id: 'full', z: -3.5, name: 'base + a × (RL − base)', f: 'base + a × (RL − base), every direction' },
+  { id: 'k64', z: -1.3, name: 'top 64 directions', f: 'base + a × the top 64 directions of (RL − base)' },
+  { id: 'k8', z: 0.9, name: 'top 8 directions', f: 'base + a × the top 8 directions of (RL − base)' },
+  { id: 'k1', z: 3.1, name: 'top 1 direction', f: 'base + a × the top direction of (RL − base)' },
+  { id: 'rand', z: 6.6, name: 'random directions, control', f: 'base + a × random directions of the same size' },
+];
+const laneOf = id => LANES.find(l => l.id === id);
+const ZN = -9.2;                                                  // the noise control of Think-SFT, off its lane
+const mz = m => m.lane === 'base' ? (laneOf('full').z + laneOf('k1').z) / 2 : m.lane === 'sftnoise' ? ZN : laneOf(m.lane).z;
+const mdepth = m => m.lane === 'base' ? laneOf('k1').z - laneOf('full').z + W : W;
+
+let bench = 'hard328', lane = 'k8';
+const of = b => MODELS.filter(m => m.bench === b);
+const baseOf = b => MODELS.find(m => m.bench === b && m.lane === 'base');
+const rlOf = b => MODELS.find(m => m.bench === b && m.lane === 'full' && m.a === 1);
+const stops = (l = lane, b = bench) => MODELS.filter(m => m.bench === b && (m.lane === l || (m.lane === 'base' && l !== 'sft'))).sort((p, q) => p.a - q.a);
+
+/* ---------- renderer ---------- */
+const canvas = $('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.95;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x121110);
+scene.fog = new THREE.Fog(0x121110, 80, 170);
+const pm = new THREE.PMREMGenerator(renderer);
+scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture;
+const camera = new THREE.PerspectiveCamera(30, 1, 0.5, 200);
+const TARGET = new THREE.Vector3(ax(1.5), 1.2, 0.6);
+camera.position.set(TARGET.x - 11, 20, 67);
+const controls = new OrbitControls(camera, canvas);
+controls.target.copy(TARGET); controls.enableDamping = true; controls.dampingFactor = 0.07;
+controls.minDistance = 12; controls.maxDistance = 130; controls.minDistance = 20; controls.maxPolarAngle = 1.48; controls.minPolarAngle = 0.25;
+controls.rotateSpeed = 0.6; controls.zoomSpeed = 0.7; controls.panSpeed = 0.6;
+
+/* a photographer's three lights: a warm key from the upper left with soft shadows, a cool low fill, a rim from behind */
+const key = new THREE.DirectionalLight(0xfff1dc, 1.9); key.position.set(ax(1.5) - 22, 30, 16); key.target.position.set(ax(1.5), 0, 0);
+key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.radius = 7; key.shadow.bias = -0.0006; key.shadow.normalBias = 0.03;
+Object.assign(key.shadow.camera, { left: -20, right: 20, top: 20, bottom: -20, near: 5, far: 90 });
+scene.add(key, key.target);
+scene.add(new THREE.HemisphereLight(0xb9c3d0, 0x2a251f, 0.38));
+const rim = new THREE.DirectionalLight(0xdfe6f0, 0.9); rim.position.set(ax(1.5) + 16, 12, -30); rim.target.position.set(ax(1.5), 2, 0); scene.add(rim, rim.target);
+
+/* procedural surfaces: brushed metal, fine grain */
+function surface(w, h, draw, rx = 1, ry = 1) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d'); draw(x, w, h);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rx, ry); t.anisotropy = 8; return t;
+}
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const brushed = (rx, ry) => surface(512, 512, (x, w, h) => {
+  x.fillStyle = '#8a8a8a'; x.fillRect(0, 0, w, h);
+  for (let i = 0; i < 2600; i++) { const v = 90 + rnd() * 110 | 0; x.strokeStyle = 'rgba(' + v + ',' + v + ',' + v + ',' + (0.1 + rnd() * 0.25) + ')'; x.lineWidth = 0.5 + rnd(); const y = rnd() * h, x0 = rnd() * w, l = 60 + rnd() * 380; x.beginPath(); x.moveTo(x0, y); x.lineTo(x0 + l, y + (rnd() - 0.5) * 1.2); x.stroke(); }
+  for (let i = 0; i < 26; i++) { x.strokeStyle = 'rgba(40,40,40,' + (0.12 + rnd() * 0.2) + ')'; x.lineWidth = 0.6; const x0 = rnd() * w, y0 = rnd() * h, an = rnd() * 6.3, l = 10 + rnd() * 50; x.beginPath(); x.moveTo(x0, y0); x.lineTo(x0 + Math.cos(an) * l, y0 + Math.sin(an) * l); x.stroke(); }   // a few scratches
+}, rx, ry);
+const grain = (rx, ry) => surface(256, 256, (x, w, h) => { const d = x.createImageData(w, h); for (let i = 0; i < d.data.length; i += 4) { const v = 118 + rnd() * 60 | 0; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; } x.putImageData(d, 0, 0); }, rx, ry);
+const metal = (color, rough, rx, ry, extra = {}) => { const t = brushed(rx, ry); return new THREE.MeshStandardMaterial({ color, metalness: 1, roughness: rough, roughnessMap: t, bumpMap: t, bumpScale: 0.6, envMapIntensity: 0.9, ...extra }); };
+
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, camera));
+const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), 0.1, 0.4, 0.94);   // only a faint lens response on true highlights
+const film = new ShaderPass({ uniforms: { tDiffuse: { value: null }, t: { value: 0 } },
+  vertexShader: 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }',
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float t; varying vec2 vUv;
+    float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233)) + t) * 43758.5453); }
+    void main(){ vec4 c = texture2D(tDiffuse, vUv); vec2 d = vUv - 0.5;
+      c.rgb *= 1.0 - 0.42 * smoothstep(0.35, 0.95, length(d * vec2(1.0, 0.8)) * 1.25);      // restrained vignette
+      c.rgb += (h(gl_FragCoord.xy) - 0.5) * 0.022;                                          // slight grain
+      gl_FragColor = c; }` });
+composer.addPass(bloom); composer.addPass(new OutputPass()); composer.addPass(film);
+
+/* ---------- floor: a machined plate with the scale of a engraved in it ---------- */
+const AMIN = -1, AMAX = 4, ZF = 10.0, ZB = -10.4;
+const table = new THREE.Mesh(new THREE.PlaneGeometry(400, 400), new THREE.MeshStandardMaterial({ color: 0x26231f, roughness: 1, metalness: 0, bumpMap: grain(90, 90), bumpScale: 0.25, envMapIntensity: 0.25 }));
+table.rotation.x = -Math.PI / 2; table.position.y = -0.46; table.receiveShadow = true; scene.add(table);
+const plate = new THREE.Mesh(new THREE.BoxGeometry((AMAX - AMIN) * XS + 5, 0.3, ZF - ZB + 4.6), metal(0x55524d, 0.6, 5, 5, { envMapIntensity: 0.6, bumpScale: 0.35 }));
+plate.position.set(ax((AMIN + AMAX) / 2), -0.16, (ZF + ZB) / 2 + 1.3); plate.receiveShadow = true; plate.castShadow = true; scene.add(plate);
+const railMat = metal(0x7d786f, 0.42, 3, 0.2);
+const railOn = metal(0xc9aa72, 0.3, 3, 0.2);
+const engrave = new THREE.MeshStandardMaterial({ color: 0x0d0c0b, roughness: 0.9, metalness: 0.2 });
+for (const l of LANES) {
+  const a0 = AMIN, a1 = l.id === 'sft' ? AMAX : 3;
+  l.rail = new THREE.Mesh(new THREE.BoxGeometry((a1 - a0) * XS + 1.6, 0.05, 0.1), railMat);
+  l.rail.position.set(ax((a0 + a1) / 2), 0.025, l.z + W / 2 + 0.16); l.rail.receiveShadow = true; scene.add(l.rail);
+  for (let a = a0; a <= a1 + 1e-6; a += 0.25) {                     // the scale of a, cut into the plate beside each rail
+    const big = Number.isInteger(a), t = new THREE.Mesh(new THREE.BoxGeometry(big ? 0.035 : 0.02, 0.004, big ? 0.34 : 0.16), engrave);
+    t.position.set(ax(a), 0.002, l.z + W / 2 + 0.3 + (big ? 0.17 : 0.08)); scene.add(t);
+  }
+}
+
+/* ---------- one tube per model ---------- */
+const glassCase = new THREE.MeshPhysicalMaterial({ color: 0xdfe3e2, transparent: true, opacity: 0.035, roughness: 0.04, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.03, envMapIntensity: 1.0, depthWrite: false, side: THREE.DoubleSide });
+const grainT = grain(2, 6);
+const pick = [];
+const LO = new THREE.Color(0x35332f), HI = new THREE.Color(0xe6dece), CTL = new THREE.Color(0x2e2d2a);   // value carries the share right
+function tube(m) {
+  const g = new THREE.Group(), d = mdepth(m);
+  g.position.set(ax(m.a), 0, mz(m));
+  const box = new THREE.BoxGeometry(W, H, d);
+  const cs = new THREE.Mesh(box, glassCase); cs.position.y = H / 2; cs.renderOrder = 3; cs.userData.m = m; g.add(cs); pick.push(cs);
+  const edge = new THREE.LineSegments(new THREE.EdgesGeometry(box), new THREE.LineBasicMaterial({ color: 0xe8e2d5, transparent: true, opacity: m.control ? 0.1 : 0.2 }));
+  edge.position.y = H / 2; g.add(edge);
+  const body = new THREE.Mesh(new THREE.BoxGeometry(W * 0.84, 1, d - W * 0.16),
+    new THREE.MeshPhysicalMaterial({ color: m.control ? CTL : LO, roughness: m.control ? 0.85 : 0.5, roughnessMap: grainT, bumpMap: grainT, bumpScale: 0.12, metalness: 0, sheen: m.control ? 0 : 0.4, sheenRoughness: 0.5, envMapIntensity: m.control ? 0.25 : 0.7, transparent: true, opacity: 1 }));
+  body.renderOrder = 1; body.castShadow = true; body.receiveShadow = true; g.add(body);
+  const top = new THREE.Mesh(new THREE.BoxGeometry(W * 0.86, 0.03, d - W * 0.14), new THREE.MeshStandardMaterial({ color: m.control ? 0x4a4843 : 0xefe8d8, roughness: 0.35 }));
+  top.renderOrder = 2; g.add(top);                                 // the exact level of right answers
+  const cap = new THREE.Mesh(new THREE.BoxGeometry(W * 0.84, 1, d - W * 0.16),
+    new THREE.MeshPhysicalMaterial({ color: m.control ? 0x4f2e26 : 0x923f2d, roughness: 0.62, roughnessMap: grainT, bumpMap: grainT, bumpScale: 0.1, clearcoat: 0.25, clearcoatRoughness: 0.5, envMapIntensity: 0.5, transparent: true, opacity: 1 }));
+  cap.renderOrder = 1; cap.castShadow = true; g.add(cap);
+  const foot = new THREE.Mesh(new THREE.BoxGeometry(W + 0.16, 0.08, d + 0.16), railMat); foot.position.y = 0.04; foot.castShadow = true; foot.receiveShadow = true; g.add(foot);
+  scene.add(g);
+  m.g = g; m.body = body; m.capm = cap; m.top = top; m.edge = edge;
+  m.hr = 0; m.hc = 0; m.vr = 0; m.vc = 0; m.boost = 0;             // animated heights (springs)
+  m.lbl = label('num' + (m.control ? ' ctl' : ''), fmt(m.right), () => new THREE.Vector3(g.position.x, m.hr + 0.3, g.position.z));
+  m.lblc = label('num cap', fmt(m.cap), () => new THREE.Vector3(g.position.x, H + 0.26, g.position.z));
+}
+
+/* ---------- labels: type stays upright and still, placed from the scene every frame ---------- */
+const labels = [];
+function label(cls, text, pos, onclick) {
+  const el = document.createElement(onclick ? 'button' : 'div'); el.className = 'lb ' + cls; el.textContent = text;
+  if (onclick) el.onclick = onclick;
+  $('labels').appendChild(el);
+  const L = { el, pos, show: true, ax: 0.5, ay: 0.5 }; labels.push(L); return L;
+}
+MODELS.forEach(tube);
+for (const l of LANES) {
+  l.lbl = label('lane', l.name, () => new THREE.Vector3(ax(AMIN) - 0.75, 0.1, l.z), () => setLane(l.id, true));
+  l.lbl.ax = 1;
+}
+const named = [['base', 'base', 0, laneOf('k1').z + 1.0, 0.1], ['RL-Zero-Math', 'full', 1, laneOf('full').z], ['Think-SFT', 'sft', 0, laneOf('sft').z], ['Think-SFT + noise, control', 'sftnoise', 1, ZN]];
+for (const [t, ln, a, z, y] of named) { const L = label('name', t, () => new THREE.Vector3(ax(a), y || H + 0.72, z)); L.only = ln; }
+
+/* reference levels of the two parents, as hairlines round the whole map */
+const refs = ['base', 'rl'].map((k, i) => {
+  const g = new THREE.BufferGeometry();
+  const x0 = ax(AMIN) - 0.8, x1 = ax(AMAX) + 0.8, z0 = ZN - 0.8, z1 = laneOf('rand').z + 0.8;
+  g.setAttribute('position', new THREE.Float32BufferAttribute([x0, 0, z0, x1, 0, z0, x1, 0, z1, x0, 0, z1], 3));
+  const line = new THREE.LineLoop(g, new THREE.LineBasicMaterial({ color: 0xe8e2d5, transparent: true, opacity: i ? 0.3 : 0.16 }));
+  scene.add(line);
+  const L = label('ref', '', () => new THREE.Vector3(x0, line.position.y, z0)); L.ax = 1.08;
+  return { line, L, y: 0 };
+});
+
+/* guides: straight dashed segments between measured levels of one lane. They carry no number. */
+const guides = LANES.map(l => {
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(3 * 9), 3));
+  const line = new THREE.Line(g, new THREE.LineDashedMaterial({ color: 0xe8e2d5, dashSize: 0.14, gapSize: 0.16, transparent: true, opacity: 0.3 }));
+  line.frustumCulled = false; scene.add(line); return { l, line };
+});
+
+/* ---------- the dial: a rail with a pin at every measured stop, and a knob on a spring ---------- */
+const DZ = ZF + 0.4, DY = 0.42;
+const dial = new THREE.Group(); scene.add(dial);
+const steel = metal(0xc4c0b7, 0.36, 6, 0.3, { envMapIntensity: 1.6 });
+const dark = metal(0x3a3835, 0.5, 6, 0.6, { envMapIntensity: 0.6 });
+const bed = new THREE.Mesh(new THREE.BoxGeometry((AMAX - AMIN) * XS + 2.6, 0.34, 2.3), dark); bed.position.set(ax(1.5), 0.17, DZ); bed.castShadow = bed.receiveShadow = true; dial.add(bed);
+const bar = new THREE.Mesh(new THREE.BoxGeometry((AMAX - AMIN) * XS + 1.6, 0.12, 0.42), steel); bar.position.set(ax(1.5), DY - 0.04, DZ); bar.castShadow = bar.receiveShadow = true; dial.add(bar);
+/* the scale is printed on a strip tilted toward the eye, as on a slide rule; numerals of measured stops are printed heavier */
+const SW = (AMAX - AMIN) * XS + 2.6, scaleC = document.createElement('canvas'); scaleC.width = 4096; scaleC.height = 232;
+const scaleT = new THREE.CanvasTexture(scaleC); scaleT.anisotropy = 16; scaleT.colorSpace = THREE.SRGBColorSpace;
+const strip = new THREE.Mesh(new THREE.PlaneGeometry(SW, 1.18), new THREE.MeshStandardMaterial({ map: scaleT, roughness: 0.55, metalness: 0.55, envMapIntensity: 0.5 }));
+strip.rotation.x = -0.62; strip.position.set(ax(1.5), 0.335, DZ + 1.15 + 0.48); strip.receiveShadow = true; dial.add(strip);
+function printScale(has) {
+  const x = scaleC.getContext('2d'), w = scaleC.width, h = scaleC.height, px = a => (ax(a) - (ax(1.5) - SW / 2)) / SW * w;
+  x.fillStyle = '#34322f'; x.fillRect(0, 0, w, h);
+  for (let i = 0; i < 900; i++) { x.strokeStyle = 'rgba(255,255,255,' + (0.012 + rnd() * 0.03) + ')'; const y = rnd() * h, x0 = rnd() * w; x.beginPath(); x.moveTo(x0, y); x.lineTo(x0 + 200 + rnd() * 900, y); x.stroke(); }
+  x.textAlign = 'center'; x.textBaseline = 'alphabetic';
+  for (let a = AMIN; a <= AMAX + 1e-6; a += 0.125) {
+    const q = Math.round(a * 8), big = q % 8 === 0, mid = q % 2 === 0, stop = has.has(a);
+    x.fillStyle = stop ? '#f0eadc' : 'rgba(232,226,213,' + (big ? 0.8 : 0.5) + ')';
+    x.fillRect(px(a) - (big || stop ? 2.5 : 1.5), 0, big || stop ? 5 : 3, big ? 78 : mid ? 54 : 30);
+    if (big || stop || q % 4 === 0) { x.font = (stop ? '600 ' : '400 ') + (big || stop ? 88 : 62) + 'px Archivo, sans-serif'; x.fillStyle = stop ? '#f0eadc' : 'rgba(232,226,213,.42)'; x.fillText(fs(a), px(a), 190); }
+  }
+  x.font = 'italic 400 70px Newsreader, Georgia, serif'; x.textAlign = 'left'; x.fillStyle = 'rgba(232,226,213,.55)'; x.fillText('a', 40, 190);
+  scaleT.needsUpdate = true;
+}
+document.fonts && document.fonts.ready.then(() => rebuildStops());
+const pinGeo = new THREE.CylinderGeometry(0.13, 0.13, 0.26, 28);
+const pinMat = new THREE.MeshStandardMaterial({ color: 0xc9aa72, metalness: 1, roughness: 0.28, envMapIntensity: 1.8 });
+let pins = [], tickLabels = [];
+const knob = new THREE.Group(); dial.add(knob);
+{
+  const base = new THREE.Mesh(new THREE.BoxGeometry(0.9, 0.2, 0.9), steel); base.position.y = DY + 0.06; base.castShadow = true; knob.add(base);
+  const knurl = surface(256, 64, (x, w, h) => { x.fillStyle = '#9a9a9a'; x.fillRect(0, 0, w, h); for (let i = 0; i < w; i += 4) { x.fillStyle = i % 8 ? '#6a6a6a' : '#d8d8d8'; x.fillRect(i, 0, 2, h); } }, 6, 1);
+  const cyl = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.42, 0.62, 72, 1), new THREE.MeshStandardMaterial({ color: 0xd6d2c8, metalness: 1, roughness: 0.42, roughnessMap: knurl, bumpMap: knurl, bumpScale: 1.6, envMapIntensity: 1.9 }));
+  cyl.position.y = DY + 0.47; cyl.castShadow = true; knob.add(cyl);
+  const capk = new THREE.Mesh(new THREE.CylinderGeometry(0.34, 0.4, 0.07, 72), metal(0xdcd8cf, 0.3, 1, 1, { envMapIntensity: 1.8 })); capk.position.y = DY + 0.815; knob.add(capk);
+  const mark = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.012, 0.5), new THREE.MeshStandardMaterial({ color: 0x8c3f2e, roughness: 0.6 })); mark.position.y = DY + 0.856; knob.add(mark);
+  const hit = new THREE.Mesh(new THREE.BoxGeometry(1.7, 1.8, 1.9), new THREE.MeshBasicMaterial({ visible: false })); hit.position.y = DY + 0.5; knob.add(hit); knob.userData.hit = hit;
+}
+knob.position.z = DZ; knob.scale.setScalar(1.55); knob.position.y = -0.2;
+label('tick axis', 'a, the multiple of the weight change added', () => new THREE.Vector3(ax(AMIN) - 1.5, 0.3, DZ + 1.6)).ax = 1;
+const knobLbl = label('knob', '', () => new THREE.Vector3(knob.position.x, DY + 1.95, DZ));
+/* the probe in the map: a bracket that rides the active lane, tied to the knob by one line */
+const probe = new THREE.Group(); scene.add(probe);
+const probeMat = new THREE.LineBasicMaterial({ color: 0xc9aa72, transparent: true, opacity: 0.9 });
+{
+  const s = W / 2 + 0.16, p = [];
+  for (const y of [0.09, H + 0.05]) p.push(-s, y, -s, s, y, -s, s, y, -s, s, y, s, s, y, s, -s, y, s, -s, y, s, -s, y, -s);
+  for (const [x, z] of [[-s, -s], [s, -s], [s, s], [-s, s]]) p.push(x, 0.09, z, x, H + 0.05, z);
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(p, 3));
+  probe.add(new THREE.LineSegments(g, probeMat));
+}
+const tie = new THREE.Line(new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(6), 3)), new THREE.LineBasicMaterial({ color: 0xe8e2d5, transparent: true, opacity: 0.22 }));
+tie.frustumCulled = false; scene.add(tie);
+
+/* ---------- state ---------- */
+let a = -1, va = 0, aT = -1, rawA = -1, dragging = false, locked = null, touched = false, pz = laneOf(lane).z;
+function nearest(x) { let best = null; for (const s of stops()) if (!best || Math.abs(s.a - x) < Math.abs(best.a - x)) best = s; return best; }
+function rebuildStops() {
+  pins.forEach(p => dial.remove(p)); tickLabels.forEach(L => { L.el.remove(); labels.splice(labels.indexOf(L), 1); });
+  pins = []; tickLabels = [];
+  const st = stops(), has = new Set(st.map(s => s.a));
+  for (const s of st) { const p = new THREE.Mesh(pinGeo, pinMat); p.position.set(ax(s.a), DY + 0.04, DZ - 0.68); p.castShadow = true; dial.add(p); pins.push(p); }
+  printScale(has);
+  for (const l of LANES) { l.rail.material = l.id === lane ? railOn : railMat; l.lbl.el.classList.toggle('on', l.id === lane); }
+  [...$('lanes').children].forEach(b => { b.setAttribute('aria-pressed', b.dataset.l === lane); b.disabled = !MODELS.some(m => m.bench === bench && m.lane === b.dataset.l); });
+  $('formula').textContent = laneOf(lane).f;
+}
+function setLane(id, user) {
+  if (!MODELS.some(m => m.bench === bench && m.lane === id)) return;
+  if (user) touched = true;
+  lane = id; rebuildStops(); const n = nearest(aT); aT = rawA = n.a; locked = null;
+}
+function setBench(b) {
+  bench = b; [...$('bench').children].forEach(x => x.setAttribute('aria-pressed', x.dataset.b === b));
+  if (!MODELS.some(m => m.bench === b && m.lane === lane)) lane = 'full';
+  rebuildStops(); aT = rawA = nearest(aT).a; locked = null; closeDetail();
+}
+for (const l of LANES) { const b = document.createElement('button'); b.dataset.l = l.id; b.textContent = l.name; b.onclick = () => setLane(l.id, true); $('lanes').appendChild(b); }
+[...$('bench').children].forEach(b => b.onclick = () => { touched = true; setBench(b.dataset.b); });
+
+/* readout: numbers only at a measured stop */
+function readout() {
+  $('aval').textContent = fa(a);
+  knobLbl.el.textContent = 'a ' + fa(a);
+  const m = locked, R = $('read');
+  R.classList.toggle('none', !m);
+  if (!m) {
+    $('rRight').textContent = $('rCap').textContent = $('rTok').textContent = 'no run at this a';
+    const st = stops(), lo = st.filter(s => s.a < a).pop(), hi = st.find(s => s.a > a);
+    $('say').textContent = 'Nothing was measured here. The nearest measured models on this lane are ' + [lo, hi].filter(Boolean).map(s => 'a = ' + fs(s.a)).join(' and ') + '.';
+    return;
+  }
+  $('rRight').innerHTML = fmt(m.right) + '<i>of ' + m.n + '</i>';
+  $('rCap').innerHTML = fmt(m.cap) + '<i>of ' + m.n + '</i>';
+  $('rTok').textContent = fmt(m.tokens);
+  const b = baseOf(bench), r = rlOf(bench), sg = v => (v > 0 ? '+' : v < 0 ? '−' : '') + fmt(Math.abs(v));
+  let s = '<em>' + m.label + '</em>' + (m.note ? ' (' + m.note + ')' : '') + '. ';
+  if (m !== b) s += sg(m.right - b.right) + ' right and ' + sg(m.cap - b.cap) + ' cap hits against the base; ';
+  if (m !== r) s += sg(m.right - r.right) + ' right against RL-Zero-Math.';
+  if (m.edit_pct) s += ' The edit is ' + m.edit_pct + ' % of the weight norm.';
+  $('say').innerHTML = s;
+}
+
+/* ---------- pointer: drag the knob, click a tube, orbit the rest ---------- */
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), dplane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -DY);
+function setNdc(e) { const r = canvas.getBoundingClientRect(); ndc.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); ray.setFromCamera(ndc, camera); }
+const visiblePick = () => pick.filter(p => p.userData.m.bench === bench);
+let down = null, hover = null, actx = null;
+function tick(f) {
+  if (!actx) return; const o = actx.createOscillator(), g = actx.createGain(); o.type = 'square'; o.frequency.value = f;
+  g.gain.setValueAtTime(0.03, actx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, actx.currentTime + 0.03);
+  o.connect(g).connect(actx.destination); o.start(); o.stop(actx.currentTime + 0.035);
+}
+function dragTo(e) {
+  setNdc(e); const p = new THREE.Vector3(); if (!ray.ray.intersectPlane(dplane, p)) return;
+  rawA = Math.max(AMIN, Math.min(AMAX, (p.x - X0) / XS));
+  const n = nearest(rawA); aT = Math.abs(n.a - rawA) < 0.085 ? n.a : rawA;      // a detent at every measured stop
+}
+canvas.addEventListener('pointerdown', e => {
+  touched = true; if (!actx) { try { actx = new AudioContext(); } catch (_) {} }
+  down = { x: e.clientX, y: e.clientY }; setNdc(e);
+  if (ray.intersectObject(knob.userData.hit).length || ray.intersectObject(bed).length) {
+    dragging = true; controls.enabled = false; canvas.setPointerCapture(e.pointerId); dragTo(e); canvas.style.cursor = 'grabbing';
+  }
+});
+canvas.addEventListener('pointermove', e => {
+  if (dragging) { dragTo(e); return; }
+  if (e.pointerType === 'touch') return;
+  setNdc(e);
+  const onKnob = ray.intersectObject(knob.userData.hit).length > 0;
+  const h = onKnob ? null : (ray.intersectObjects(visiblePick())[0] || {}).object;
+  hover = h ? h.userData.m : null;
+  canvas.style.cursor = onKnob ? 'grab' : hover ? 'pointer' : '';
+  const T = $('tip');
+  if (hover) {
+    const it = (ITEMS[hover.result] || {}).it;
+    T.innerHTML = '<b>' + hover.label + '</b>' + fmt(hover.right) + ' of ' + hover.n + ' right · <span class="c">' + fmt(hover.cap) + ' cap hits</span> · ' + fmt(hover.tokens) + ' tokens' + (it ? '<br>' + it.who + ', ' + when(it.at_ns) : '');
+    T.style.opacity = 1; T.style.left = Math.min(innerWidth - 310, e.clientX + 16) + 'px'; T.style.top = (e.clientY + 16) + 'px';
+  } else T.style.opacity = 0;
+});
+canvas.addEventListener('pointerup', e => {
+  if (dragging) {
+    dragging = false; controls.enabled = true; canvas.style.cursor = '';
+    const n = nearest(rawA); if (Math.abs(n.a - rawA) < 0.2) aT = n.a;            // released near a stop: it settles into it
+    return;
+  }
+  if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6) {
+    setNdc(e); const h = ray.intersectObjects(visiblePick())[0];
+    $('tip').style.opacity = 0;
+    if (h) select(h.object.userData.m); else closeDetail();
+  }
+});
+addEventListener('keydown', e => {
+  if (e.key === 'Escape') return closeDetail();
+  const st = stops(), i = st.indexOf(nearest(aT)), li = LANES.findIndex(l => l.id === lane);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { touched = true; const d = e.key === 'ArrowRight' ? 1 : -1; const cur = st[i]; const j = (d > 0 && cur.a < aT - 1e-6) || (d < 0 && cur.a > aT + 1e-6) ? i : i + d; aT = rawA = st[Math.max(0, Math.min(st.length - 1, j))].a; e.preventDefault(); }
+  if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+    let j = li; const d = e.key === 'ArrowUp' ? -1 : 1;
+    do { j += d; } while (LANES[j] && !MODELS.some(m => m.bench === bench && m.lane === LANES[j].id));
+    if (LANES[j]) setLane(LANES[j].id, true); e.preventDefault();
+  }
+});
+
+/* ---------- detail: the real board item behind a model ---------- */
+let board = null, sel = null;
+const ITEMS = {};                                                  // board item of each result, read from /data/<id>
+async function readItem(id) {
+  const r = await fetch('/data/' + id); if (!r.ok) throw new Error(r.status); const d = await r.json();
+  ITEMS[id] = { it: d.item, pl: (d.plain || {})[id] || {}, comments: d.comments || [] }; if (sel && sel.result === id) drawDetail();
+}
+(async () => {                                                     // one at a time: the board is a small server
+  const ids = [...new Set(MODELS.map(m => m.result))];
+  for (let round = 0; round < 4; round++) for (const id of ids) if (!ITEMS[id]) { try { await readItem(id); } catch (e) { await new Promise(r => setTimeout(r, 800)); } }
+})();
+const when = ns => new Date(ns / 1e6).toLocaleString('en-GB', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+const esc = s => String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+function select(m) {
+  touched = true; sel = m;
+  if (m.lane !== 'base' && m.lane !== 'sftnoise') { if (lane !== m.lane) setLane(m.lane); aT = rawA = m.a; }
+  else if (m.lane === 'base') { if (lane === 'sft') setLane('full'); aT = rawA = 0; }
+  history.replaceState(null, '', '#' + m.id); drawDetail();
+}
+function closeDetail() { sel = null; $('detail').classList.remove('open'); if (location.hash) history.replaceState(null, '', location.pathname); }
+function drawDetail() {
+  const m = sel; if (!m) return; const D = $('detail');
+  const I = ITEMS[m.result] || {}, it = I.it, pl = I.pl || (board && board.plain[m.result]) || {};
+  const sc = board ? board.scores.filter(s => s.result === m.result && s.n === m.n && Math.abs(s.right - m.right) <= 0.5) : [];
+  const first = it ? it.text.split('\n').find(l => !/^(title|what|why|caveat|score):/.test(l)) : '';
+  let h = '<button class="x" id="dx">Close</button><h2>' + esc(m.label) + '</h2><div class="meta">' + (m.bench === 'hard328' ? '328 harder problems' : 'MATH-500') + ', cue, T 1.0, one sample' + (m.note ? ', ' + m.note : '') + '</div>';
+  h += '<div class="nums"><span><b>' + fmt(m.right) + '</b>right of ' + m.n + '</span><span class="c"><b>' + fmt(m.cap) + '</b>cap hits</span><span><b>' + fmt(m.tokens) + '</b>tokens per problem</span></div>';
+  if (m.vec) h += '<p><b>The ' + m.n + ' problems, against the base</b><canvas id="grid"></canvas><span class="gk" id="gk"></span></p>';
+  if (it) {
+    h += '<p><b>' + esc(pl.title || 'Board result') + '</b><span class="path">' + m.result + ' · ' + esc(it.who) + ' · ' + when(it.at_ns) + '</span></p>';
+    if (pl.what) h += '<p><b>What</b>' + esc(pl.what) + '</p>';
+    if (pl.why) h += '<p><b>Why it matters</b>' + esc(pl.why) + '</p>';
+    if (pl.caveat) h += '<p><b>Caveat</b>' + esc(pl.caveat) + '</p>';
+    if (!pl.what && first) h += '<p><b>Posted text</b>' + esc(first.slice(0, 700)) + '</p>';
+    for (const s of sc) h += '<p><b>Score line on the board</b>' + s.right + ' / ' + s.n + (s.tokens ? ', ' + fmt(s.tokens) + ' tokens' : '') + ' · ' + esc(s.config) + '</p>';
+    const cm = I.comments[I.comments.length - 1];
+    if (cm) h += '<p><b>Newest comment, ' + esc(cm.who) + '</b>' + esc(cm.text.slice(0, 420)) + '</p>';
+  } else h += '<p><b>Board</b>Item ' + m.result + ' has not been read from the board.</p>';
+  h += '<p><b>Artifact</b><span class="path">' + esc(m.src) + '</span></p>';
+  D.innerHTML = h; D.classList.add('open'); $('dx').onclick = closeDetail;
+  if (m.vec) grid(m);
+}
+function grid(m) {
+  const c = $('grid'), b = baseOf('hard328').vec, cols = 41, rows = Math.ceil(m.vec.length / cols), dpr = Math.min(devicePixelRatio, 2);
+  const wpx = c.clientWidth, cell = wpx / cols; c.width = wpx * dpr; c.height = rows * cell * dpr; c.style.height = rows * cell + 'px';
+  const x = c.getContext('2d'); x.scale(dpr, dpr);
+  let fixed = 0, lost = 0, both = 0;
+  for (let i = 0; i < m.vec.length; i++) {
+    const v = +m.vec[i] / 4, bv = +b[i] / 4, cx = (i % cols) * cell, cy = Math.floor(i / cols) * cell, s = cell - 1.6;
+    if (v > 0.5 && bv < 0.5) fixed++; else if (v < 0.5 && bv > 0.5) lost++; else if (v > 0.5) both++;
+    x.fillStyle = v <= 0 ? (bv > 0.5 ? '#c9705a' : '#2a2825') : bv < 0.5 ? 'rgba(201,170,114,' + (0.4 + 0.6 * v) + ')' : 'rgba(232,226,213,' + (0.16 + 0.42 * v) + ')';
+    if (v < 0.5 && v > 0 && bv > 0.5) x.fillStyle = '#c9705a';
+    x.fillRect(cx + 0.8, cy + 0.8, s, s);
+  }
+  $('gk').innerHTML = m.lane === 'base' ? '<span><i style="background:rgba(232,226,213,.5)"></i>right ' + both + '</span>'
+    : '<span><i style="background:#c9aa72"></i>right here, wrong for the base ' + fixed + '</span><span><i style="background:#c9705a"></i>wrong here, right for the base ' + lost + '</span><span><i style="background:rgba(232,226,213,.5)"></i>right for both ' + both + '</span>';
+}
+async function readBoard() {
+  try {
+    const r = await fetch('/data'); if (!r.ok) throw new Error(r.status); board = await r.json();
+    $('status').className = 'status'; $('status').textContent = 'Board read ' + new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }) + ', ' + board.scores.length + ' scores';
+    if (sel) drawDetail();
+  } catch (e) { $('status').className = 'status bad'; $('status').textContent = board ? 'Offline, showing the last read' : 'Board not reachable, numbers are from the repository'; setTimeout(readBoard, 4000); }
+}
+readBoard(); setInterval(readBoard, 20000);
+
+/* ---------- frame ---------- */
+function resize() {
+  const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); composer.setSize(w, h); bloom.resolution.set(w, h);
+  camera.aspect = w / h; camera.fov = w < 760 ? 34 : 18;
+  view();
+}
+let vOpen = 0;
+function view() {                                                  // the words column sits on the left; an open detail takes the right
+  const w = innerWidth, h = innerHeight, small = w < 760;
+  if (small) { camera.zoom = Math.max(0.5, Math.min(1, w / 520)); camera.setViewOffset(w, h, 10, -h * 0.17, w, h); }
+  else {
+    const left = 380, avail = w - left - 400 * vOpen - 20, z = Math.max(0.45, Math.min(1.15, avail / 1180));
+    camera.zoom = z; camera.setViewOffset(w, h, -(left + avail / 2 - w / 2 + 30 * z), -h * 0.09, w, h);
+  }
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize); resize();
+const spring = (x, v, t, k, c, dt) => { v += (k * (t - x) - c * v) * dt; return [x + v * dt, v]; };
+const v3 = new THREE.Vector3();
+let leanWas = 0, leanM = 0, last = performance.now(), t0 = last, demoAt = 0, demoI = 0, mouseX = 0;
+addEventListener('pointermove', e => { mouseX = e.clientX / innerWidth - 0.5; });
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, still = reduce || /[?&]still/.test(location.search);
+
+function frame(now) {
+  const dt = Math.max(0, Math.min(0.033, (now - last) / 1000)); last = now; const T = still ? 99 : (now - t0) / 1000;
+  /* before anyone touches it, the probe walks the measured stops of the finish dial */
+  if (!touched && !still && T > demoAt) { const st = stops(); aT = rawA = st[demoI % st.length].a; demoI++; demoAt = T + (demoI === 1 ? 2.6 : 2.4); }
+  if (still && !touched) aT = rawA = 1.5;
+  for (let i = 0; i < 4; i++) [a, va] = spring(a, va, aT, 150, 23, dt / 4);
+  if (still) { a = aT; va = 0; pz = laneOf(lane).z; }
+  const n = nearest(a), was = locked;
+  locked = Math.abs(n.a - a) < 0.02 ? n : null;
+  if (locked && locked !== was) tick(dragging ? 1900 : 1500);
+  knob.position.x = ax(a); knob.rotation.y = -a * 2.4;
+  pz += (laneOf(lane).z - pz) * Math.min(1, dt * 9);
+  probe.position.set(ax(a), 0, pz);
+  probeMat.opacity = locked ? 0.95 : 0.35; probeMat.color.set(locked ? 0xc9aa72 : 0x8d877b);
+  const tp = tie.geometry.attributes.position; tp.setXYZ(0, ax(a), 0.09, pz + W / 2 + 0.16); tp.setXYZ(1, ax(a), 0.36, DZ - 1.1); tp.needsUpdate = true;
+  readout();
+
+  /* tubes: levels on springs, brightness from the share right */
+  const cur = of(bench), acc = cur.filter(m => !m.control).map(m => m.right / m.n), lo = Math.min(...acc), hi = Math.max(...acc);
+  for (const m of MODELS) {
+    const on = m.bench === bench, delay = on ? Math.max(0, 0.25 + (m.a + 1) * 0.16) : 0;
+    const tr = on && T > delay ? m.right / m.n * H : 0, tc = on && T > delay + 0.25 ? m.cap / m.n * H : 0;
+    [m.hr, m.vr] = spring(m.hr, m.vr, tr, 34, 11.4, dt); [m.hc, m.vc] = spring(m.hc, m.vc, tc, 34, 11.6, dt);
+    if (still) { m.hr = tr; m.hc = tc; }
+    m.g.visible = on;
+    const hr = Math.max(0.001, m.hr), hc = Math.max(0.001, m.hc);
+    m.body.scale.y = hr; m.body.position.y = hr / 2 + 0.07; m.top.position.y = hr + 0.07;
+    m.capm.scale.y = hc; m.capm.position.y = H - hc / 2;
+    const isL = locked && (locked === m) ; m.boost += ((isL ? 1 : 0) - m.boost) * Math.min(1, dt * 8);
+    if (!m.control) m.body.material.color.copy(LO).lerp(HI, Math.pow((m.right / m.n - lo) / (hi - lo || 1), 1.6));
+    const dim = sel && sel !== m ? 0.4 : 1;
+    m.body.material.opacity = dim; m.capm.material.opacity = dim; m.edge.material.opacity = (m.control ? 0.1 : 0.2) * dim + 0.55 * m.boost; m.edge.material.color.set(m.boost > 0.5 ? 0xc9aa72 : 0xe8e2d5);
+    m.lbl.show = on && T > delay + 0.4; m.lblc.show = on && T > delay + 0.6 && (m.lane === lane || (m.lane === 'base' && lane !== 'sft') || m === hover || m === sel);
+  }
+  for (const g of guides) {
+    const st = stops(g.l.id), p = g.line.geometry.attributes.position; let i = 0;
+    if (st.some(s => s.lane === g.l.id)) for (const s of st) p.setXYZ(i++, ax(s.a), s.hr + 0.07, g.l.z);
+    g.line.geometry.setDrawRange(0, i); p.needsUpdate = true; g.line.computeLineDistances();
+    g.line.material.opacity = g.l.id === lane ? 0.6 : 0.16;
+  }
+  const b = baseOf(bench), r = rlOf(bench);
+  [[b, 'base'], [r, 'RL-Zero-Math']].forEach(([m, nm], i) => { const R = refs[i]; R.y += (m.right / m.n * H + 0.07 - R.y) * (still ? 1 : Math.min(1, dt * 5)); R.line.position.y = R.y; R.L.el.textContent = nm + ' ' + fmt(m.right); });
+  for (const L of labels) if (L.only) L.show = MODELS.some(m => m.bench === bench && m.lane === L.only);
+
+  /* camera: orbit by hand; at rest it sways a few degrees and leans toward the mouse */
+  if (!still && !dragging) {
+    leanM += (-mouseX * 0.014 - leanM) * Math.min(1, dt * 1.2);
+    const lean = Math.sin(T * 0.13) * 0.022 + leanM, off = v3.copy(camera.position).sub(controls.target);
+    off.applyAxisAngle(THREE.Object3D.DEFAULT_UP, lean - leanWas); leanWas = lean; camera.position.copy(controls.target).add(off);
+  }
+  const vo = sel ? 1 : 0; if (Math.abs(vo - vOpen) > 0.001) { vOpen = still ? vo : vOpen + (vo - vOpen) * Math.min(1, dt * 6); view(); }
+  controls.update();
+  film.uniforms.t.value = still ? 0 : (T * 24 | 0) * 0.37;
+  composer.render();
+
+  const w = innerWidth, h = innerHeight;
+  for (const L of labels) {
+    const p = L.pos().project(camera), vis = L.show && p.z < 1 && p.z > -1;
+    if (!vis) { if (L.vis !== false) { L.el.style.display = 'none'; L.vis = false; } continue; }
+    if (L.vis === false) { L.el.style.display = ''; L.vis = true; }
+    const x = (p.x * 0.5 + 0.5) * w, y = (-p.y * 0.5 + 0.5) * h;
+    L.el.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) translate(' + (-L.ax * 100) + '%,-50%)';
+  }
+  requestAnimationFrame(frame);
+}
+addEventListener('pointerup', () => { down = null; });
+window.ws = {                                                      // for checks from the console
+  state: () => ({ a, aT, lane, bench, locked: locked && locked.id, sel: sel && sel.id }),
+  xy: (x, y, z) => { const p = new THREE.Vector3(x, y, z).project(camera); return [(p.x * 0.5 + 0.5) * innerWidth, (-p.y * 0.5 + 0.5) * innerHeight]; },
+  knob: () => window.ws.xy(knob.position.x, DY + 0.5, DZ), at: v => window.ws.xy(ax(v), DY, DZ),
+  tube: id => { const m = MODELS.find(x => x.id === id); return window.ws.xy(m.g.position.x, m.hr / 2, m.g.position.z); },
+};
+rebuildStops();
+if (location.hash) { const m = MODELS.find(x => x.id === decodeURIComponent(location.hash.slice(1))); if (m) { if (m.bench !== bench) setBench(m.bench); select(m); a = aT; } }
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

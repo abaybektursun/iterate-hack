@@ -1,0 +1,1918 @@
+{
+ "reader-1": [
+  {
+   "id": "t01",
+   "value": 350,
+   "low": 325,
+   "high": 376,
+   "reason": "Base+Code cue 317 vs RL-Code 401; on hard328 the Math dial at 1x closed about two thirds of the gap, so I assume roughly 40-60% of the 84-problem code gap here."
+  },
+  {
+   "id": "t02",
+   "value": 360,
+   "low": 331,
+   "high": 388,
+   "reason": "On hard328, 1.5x was the peak of the Math dial and level with RL's single sample, but transfer to code is less certain, so this is about 50% of the gap with a wide interval."
+  },
+  {
+   "id": "t03",
+   "value": 350,
+   "low": 312,
+   "high": 385,
+   "reason": "On hard328, 2x fell back from 1.5x (190 vs 203) as answers got cut short and decayed, and a code-RL extrapolation paper shows a drop past 1.5x, so this is below 1.5x with more spread."
+  },
+  {
+   "id": "t04",
+   "value": 316,
+   "low": 299,
+   "high": 333,
+   "reason": "The random rank-8 edit was flat at base level on every size tested on hard328, so this is base+Code cue 317 plus sampling noise."
+  },
+  {
+   "id": "t05",
+   "value": 343,
+   "low": 315,
+   "high": 370,
+   "reason": "Math-RL also helps code (it scores near Code-RL on LiveCodeBench) and the Math cue matches the Code cue, but other-reward directions gained less on hard328, so it should land between random and Code 1.5x."
+  },
+  {
+   "id": "t06",
+   "value": 52,
+   "low": 44,
+   "high": 60,
+   "reason": "On hard328 the 1.5x edit matched RL's single sample but trailed RL's vote by 7 problems; RL's vote on fresh2026 is 57, so about 52."
+  },
+  {
+   "id": "t07",
+   "value": 47.5,
+   "low": 42,
+   "high": 53,
+   "reason": "The edit matched RL's single sample on hard328 (200.25 vs 200) and on MATH-500; RL averages 50.5 on fresh2026, shaded down a little for the harder, unchosen set."
+  },
+  {
+   "id": "t08",
+   "value": 416,
+   "low": 409,
+   "high": 423,
+   "reason": "Stored sample 0 is 418; I pull it slightly toward the mean because single samples of a cell spread by about 5-10 problems."
+  },
+  {
+   "id": "t09",
+   "value": 423,
+   "low": 415,
+   "high": 430,
+   "reason": "Stored step-100 cue sample is 427, pulled slightly toward the plain cell since the cue effect at step 100 was +1.8 [-1.2, 4.8]."
+  },
+  {
+   "id": "t10",
+   "value": 434,
+   "low": 427,
+   "high": 441,
+   "reason": "Stored step-400 plain sample is 436, shaded slightly for regression to the mean across 4 samples."
+  },
+  {
+   "id": "t11",
+   "value": 1.1,
+   "low": -0.5,
+   "high": 2.8,
+   "reason": "My step-100 plain 4-sample mean of about 416 minus the cued base's 4-sample mean of 410.5, divided by 5 to get points."
+  },
+  {
+   "id": "t12",
+   "value": 231,
+   "low": 214,
+   "high": 247,
+   "reason": "The raw template plus cue scored 230 at a 32k cap; the native ChatML <think> format is the format it was trained on, so I expect about the same with wide format uncertainty."
+  },
+  {
+   "id": "t13",
+   "value": 206,
+   "low": 188,
+   "high": 223,
+   "reason": "The cue run at a 32k cap counted at 16k gave 207, and native thinking may run slightly longer and get cut more often."
+  },
+  {
+   "id": "t14",
+   "value": 464,
+   "low": 452,
+   "high": 475,
+   "reason": "Think-SFT cue singles on MATH-500 are 454-462, and on MATH-500 the 32k cap adds little because few answers run past 16k."
+  },
+  {
+   "id": "t15",
+   "value": 460,
+   "low": 447,
+   "high": 472,
+   "reason": "Same as the 32k cell minus the few MATH-500 answers that run past 16,384 tokens."
+  },
+  {
+   "id": "t16",
+   "value": 454,
+   "low": 447,
+   "high": 461,
+   "reason": "Vote over 4 is 446 with pass@4 at 467; Wang's majority curve gains about 2.5 points from 4 to 8 votes, and returns shrink beyond that."
+  },
+  {
+   "id": "t17",
+   "value": 456,
+   "low": 448,
+   "high": 463,
+   "reason": "A small further gain over vote-9 as the vote levels off below pass@k; the base gets 0 of 4 on 33 problems."
+  },
+  {
+   "id": "t18",
+   "value": 71,
+   "low": 62,
+   "high": 80,
+   "reason": "The other three a=2 samples on fresh2026 scored 69, 70 and 75."
+  },
+  {
+   "id": "t19",
+   "value": 78,
+   "low": 72,
+   "high": 85,
+   "reason": "Vote over 3 was 78, and a fourth sample barely moved Think-SFT's vote (74 to 75)."
+  },
+  {
+   "id": "t20",
+   "value": 248,
+   "low": 238,
+   "high": 258,
+   "reason": "Singles average about 231; the vote adds less than Think-SFT's +32 because a=2 hits the cap less, so roughly +15 to +20."
+  },
+  {
+   "id": "t21",
+   "value": 466,
+   "low": 456,
+   "high": 475,
+   "reason": "a=1 scored 467 on MATH-500 and Think-SFT cue singles are 454-462; a=2 adds finishing but costs some precision."
+  },
+  {
+   "id": "t22",
+   "value": 246,
+   "low": 236,
+   "high": 256,
+   "reason": "The 16k vote is 241 and singles rise from 207 to 230 at 32k, but late answers are often wrong (the offline simulation says 240, or 254 if the late wrong answers disagree)."
+  },
+  {
+   "id": "t23",
+   "value": 79,
+   "low": 71,
+   "high": 87,
+   "reason": "The 16k vote is 75 with 46% cap hits; the 32k cap turns some cut answers into right ones, as on hard328 (+7 points per sample)."
+  }
+ ],
+ "reader-2": [
+  {
+   "id": "t01",
+   "value": 350,
+   "low": 325,
+   "high": 375,
+   "reason": "Base+Code cue 317, RL-Code 401; Math top-8 at 1x closed about 2/3 of the hard328 gap (164->192 of 206), so about half to two thirds of the 84-problem code gap."
+  },
+  {
+   "id": "t02",
+   "value": 358,
+   "low": 330,
+   "high": 386,
+   "reason": "At 1.5x the Math dial reached RL level on hard328 (203/206); code effect is assumed weaker and less cap-limited, so about 50% of the gap."
+  },
+  {
+   "id": "t03",
+   "value": 345,
+   "low": 305,
+   "high": 380,
+   "reason": "At 2x the Math dial fell back (190 vs 203) and word-salad tails start, so below 1.5x with a wider downside."
+  },
+  {
+   "id": "t04",
+   "value": 315,
+   "low": 297,
+   "high": 333,
+   "reason": "Random rank-8 edits are flat at the base level (hard328 158-167 vs 164), so about the base+Code cue 317 with single-sample noise."
+  },
+  {
+   "id": "t05",
+   "value": 338,
+   "low": 314,
+   "high": 362,
+   "reason": "Math-RL transfers to code (LCB 21.9 vs Code-RL 24.3) and Math directions write the cue (Math cue 326) plus finishing, so between base cue and the Code-direction cell."
+  },
+  {
+   "id": "t06",
+   "value": 53,
+   "low": 44,
+   "high": 62,
+   "reason": "On hard328 the 1.5x edit matched RL's single (200.25 vs 200) but its vote was 7 below RL's (214 vs 221); RL's fresh vote is 57."
+  },
+  {
+   "id": "t07",
+   "value": 48,
+   "low": 41,
+   "high": 55,
+   "reason": "The edit matched RL's single samples on hard328; RL's fresh single is 50.5, minus a little for the harder 2026 set."
+  },
+  {
+   "id": "t08",
+   "value": 416,
+   "low": 408,
+   "high": 424,
+   "reason": "Stored sample 0 = 418, shrunk slightly toward the mean the way base-cue samples spread from 405 to 418."
+  },
+  {
+   "id": "t09",
+   "value": 423,
+   "low": 414,
+   "high": 431,
+   "reason": "Stored sample 0 = 427, shrunk; the cue on step 100 adds +1.8 [-1.2, 4.8]."
+  },
+  {
+   "id": "t10",
+   "value": 434,
+   "low": 426,
+   "high": 442,
+   "reason": "Stored sample 0 = 436, shrunk slightly."
+  },
+  {
+   "id": "t11",
+   "value": 1.1,
+   "low": -0.7,
+   "high": 2.9,
+   "reason": "Step-100 plain mean of about 416 minus the cued base's 4-sample mean of 410.5, divided by 5."
+  },
+  {
+   "id": "t12",
+   "value": 232,
+   "low": 214,
+   "high": 248,
+   "reason": "Think-SFT with the cue at cap 32k scored 230; its native format is what it was trained on, so about level or slightly better."
+  },
+  {
+   "id": "t13",
+   "value": 205,
+   "low": 186,
+   "high": 222,
+   "reason": "The cue run counted at 16k gave 207; native thinking may run longer and lose a little more at 16k."
+  },
+  {
+   "id": "t14",
+   "value": 465,
+   "low": 452,
+   "high": 476,
+   "reason": "Think-SFT cue singles are 454-462 at 16k; the 32k cap and native format add a few."
+  },
+  {
+   "id": "t15",
+   "value": 459,
+   "low": 445,
+   "high": 470,
+   "reason": "Close to the cue singles at 16k (454-462)."
+  },
+  {
+   "id": "t16",
+   "value": 454,
+   "low": 446,
+   "high": 461,
+   "reason": "Vote over 4 = 446, pass@4 467; Wang's majority vote gains 2.5 points from 4 to 8, less the vote shortfall the hazard result found."
+  },
+  {
+   "id": "t17",
+   "value": 456,
+   "low": 448,
+   "high": 463,
+   "reason": "Small further gain over vote 9 as the curve flattens (Wang maj@8 91 -> maj@16 93)."
+  },
+  {
+   "id": "t18",
+   "value": 71,
+   "low": 62,
+   "high": 80,
+   "reason": "The other three samples at a=2 were 69, 70 and 75."
+  },
+  {
+   "id": "t19",
+   "value": 79,
+   "low": 72,
+   "high": 86,
+   "reason": "Vote over 3 = 78; a fourth sample adds about 0 to 2."
+  },
+  {
+   "id": "t20",
+   "value": 247,
+   "low": 237,
+   "high": 257,
+   "reason": "Singles about 232; the vote gain is about half of Think-SFT's +32 because a=2 finishes more often (on fresh2026 the vote-3 gain was +7 against +14)."
+  },
+  {
+   "id": "t21",
+   "value": 465,
+   "low": 455,
+   "high": 474,
+   "reason": "a=1 scored 467 on MATH-500 and Think-SFT cue singles are about 458; a=2 is about the same."
+  },
+  {
+   "id": "t22",
+   "value": 246,
+   "low": 236,
+   "high": 256,
+   "reason": "Vote at 16k = 241; the 32k cap gives 23 more right per sample but mostly wrong extra finishes; the simulation says 240-254."
+  },
+  {
+   "id": "t23",
+   "value": 80,
+   "low": 72,
+   "high": 88,
+   "reason": "Vote at 16k = 75 with 46% cap hits; the longer cap finishes some of them right, as on hard328."
+  }
+ ],
+ "r5-m03-rival": [
+  {
+   "id": "t01",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t02",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t03",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t04",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t05",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t06",
+   "value": 53,
+   "low": 46,
+   "high": 60,
+   "reason": "Theory: the top-8 edit puts most answers (85-90 %) on a weak dose of RL's own policy, so under the vote it lands just below RL (57) and well above the cued base (38), as on hard328 where the 1.5x edit's vote was 214 against RL's 221."
+  },
+  {
+   "id": "t07",
+   "value": 47.5,
+   "low": 41,
+   "high": 54,
+   "reason": "Theory: a weak dose of RL's policy on most samples, with the cue covering the rest, puts single-sample accuracy a little under RL's 50.5 and far above the cued base's 29.5 (on hard328 the 1.5x edit was level with RL at 200.25 vs 200)."
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t09",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t10",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t11",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t12",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t13",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t14",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t15",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t16",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t17",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t18",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t19",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t20",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t21",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t22",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t23",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  }
+ ],
+ "r6-account-rival": [
+  {
+   "id": "t01",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t02",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t03",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t04",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t05",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t06",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t07",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t09",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t10",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t11",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t12",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t13",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t14",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t15",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t16",
+   "value": 456,
+   "low": 449,
+   "high": 462,
+   "reason": "The rival's last sentence says a base-only vote over more samples recovers part of the sharpening share, predicted at 456/500 (the [449, 462] interval is the one on file for vote over 9, against 446 for the stored vote over 4)."
+  },
+  {
+   "id": "t17",
+   "value": 457,
+   "low": 449,
+   "high": 464,
+   "reason": "Same part of the theory: sharpening is the resample-type gap that more base votes recover, so vote over 12 should sit near the predicted 456 plateau, at most a point or so higher."
+  },
+  {
+   "id": "t18",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t19",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t20",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t21",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t22",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t23",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  }
+ ],
+ "r6-m06": [
+  {
+   "id": "t01",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t02",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t03",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t04",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t05",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t06",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t07",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t09",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t10",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t11",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t12",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t13",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t14",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t15",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t16",
+   "value": 449,
+   "low": 442,
+   "high": 456,
+   "reason": "The theory says the cued base's wrong steps come from the head of its own distribution, so its wrong answers repeat across samples; the vote should then level off near the stored vote over 4 (446, singles 405-418), only a few problems higher, and stay below the 456 that result-c637b2 predicted."
+  },
+  {
+   "id": "t17",
+   "value": 450,
+   "low": 443,
+   "high": 457,
+   "reason": "By the same head-error mechanism, going from 9 to 12 samples adds about one problem over the vote over 4 (446), because the base's wrong answers are likely tokens it keeps sampling, not rare draws that more votes would wash out."
+  },
+  {
+   "id": "t18",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t19",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t20",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t21",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t22",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t23",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  }
+ ],
+ "r7-m05": [
+  {
+   "id": "t01",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t02",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t03",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t04",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t05",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t06",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t07",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t09",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t10",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t11",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t12",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t13",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t14",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t15",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t16",
+   "value": 453,
+   "low": 446,
+   "high": 460,
+   "reason": "The theory covers this cell (cued base, MATH-500, T 1.0, v3): its slip/misread steps sit at the mode only given the path, so siblings mostly get them right (39 of 48) and votes remove them, while wrong plans (problem-conditioned) and base 0-of-4 problems stay; so the vote keeps climbing from the 4-vote 446 toward pass@4 467 but levels off below it, about 453 at 9."
+  },
+  {
+   "id": "t17",
+   "value": 455,
+   "low": 447,
+   "high": 462,
+   "reason": "Same part of the theory: votes keep removing path-specific slips and misreads, but the problem-conditioned wrong plans set a ceiling, so going from 9 to 12 samples adds only about 2 over the 9-vote estimate."
+  },
+  {
+   "id": "t18",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t19",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t20",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t21",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t22",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t23",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  }
+ ],
+ "r7-m08": [
+  {
+   "id": "t01",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t02",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t03",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t04",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t05",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t06",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t07",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t09",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t10",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t11",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t12",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t13",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t14",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t15",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t16",
+   "value": 452,
+   "low": 445,
+   "high": 459,
+   "reason": "The theory's no_intervention clause says selection among base samples is the only base-side veto and it is already measured (vote over 4, 446-450), because the vetoed steps are likely under the base; so I expect more votes to give only a small gain over that plateau, not RL's 456-463."
+  },
+  {
+   "id": "t17",
+   "value": 453,
+   "low": 446,
+   "high": 461,
+   "reason": "Same no_intervention clause: majority vote can't veto steps the base itself rates as likely, so going from 9 to 12 samples should add at most a point or two over the 446-450 plateau."
+  },
+  {
+   "id": "t18",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t19",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t20",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t21",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t22",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t23",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  }
+ ],
+ "r7-m11": [
+  {
+   "id": "t01",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t02",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t03",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t04",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t05",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t06",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t07",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t09",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t10",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t11",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t12",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t13",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t14",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t15",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t16",
+   "value": 452,
+   "low": 445,
+   "high": 459,
+   "reason": "The statement says wrong answers drawn under the shared cue land on the same values, so more cued samples keep the agreeing wrong groups and the vote stays below the independent-slip forecast of 456 (result-c637b2); starting from the 4-vote of 446 and pass@4 of 467 (result-5d032f), odd k removes most ties but not the context-fixed wrong pluralities, giving about 452."
+  },
+  {
+   "id": "t17",
+   "value": 453,
+   "low": 446,
+   "high": 460,
+   "reason": "Same mechanism: wrong values set by the shared prompt plus opening repeat in every added cued sample, so going from 9 to 12 votes buys at most a problem or two (a plateau below the independent prediction) rather than reaching pass@4-like levels."
+  },
+  {
+   "id": "t18",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t19",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t20",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t21",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t22",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t23",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  }
+ ],
+ "f2-m01": [
+  {
+   "id": "t04",
+   "value": 316,
+   "low": 301,
+   "high": 331,
+   "reason": "Random rank-8 is flat at base level on hard328 (158-167 at every size); code count = base cue 317 plus one seed of noise.",
+   "vs_readers": "agree: the readers also put the control at the base cue plus seed noise."
+  },
+  {
+   "id": "t07",
+   "value": 48,
+   "low": 43,
+   "high": 53,
+   "reason": "The edit equals RL per sample on hard328 (200.25 vs 200); RL fresh single 50.5; a 4-sample mean has SD about 1.7 plus model uncertainty.",
+   "vs_readers": "agree: same anchor on RL's 50.5 shaded slightly down."
+  },
+  {
+   "id": "t08",
+   "value": 416.5,
+   "low": 411,
+   "high": 422,
+   "reason": "Mean of stored 418 and 3 new draws at a true rate near 416 (SD of the 3-mean about 3.5).",
+   "vs_readers": "agree: shrinking 418 slightly is what the readers do; my interval is a little narrower because 3 of 4 draws average the noise."
+  },
+  {
+   "id": "t09",
+   "value": 424,
+   "low": 418,
+   "high": 430,
+   "reason": "Stored 427 and plain 418 plus the +1.8-point cue effect agree near 425; small shrink.",
+   "vs_readers": "agree: within one problem of the readers' 423."
+  },
+  {
+   "id": "t10",
+   "value": 434.5,
+   "low": 429,
+   "high": 440,
+   "reason": "Stored 436; step 400 cue 431 with cue effect -1.0 implies a plain rate near 434-435.",
+   "vs_readers": "agree: the readers shrink 436 the same way."
+  },
+  {
+   "id": "t11",
+   "value": 1.2,
+   "low": -0.2,
+   "high": 2.6,
+   "reason": "(416.5 - 410.5)/5; the base side's 4 samples are fixed, so only step 100's 3 new draws add noise.",
+   "vs_readers": "agree: the readers compute the same difference."
+  },
+  {
+   "id": "t12",
+   "value": 231,
+   "low": 218,
+   "high": 244,
+   "reason": "Cue at cap 32k scored 230 on one seed; native format is its training format, seed SD about 8.",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t13",
+   "value": 207,
+   "low": 195,
+   "high": 219,
+   "reason": "The 32k cue run counted at 16k gave 207; one more seed.",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t14",
+   "value": 465,
+   "low": 456,
+   "high": 474,
+   "reason": "Think-SFT cue singles 457-462 plus a few cap-hit conversions at 32k; seed SD about 5.",
+   "vs_readers": "agree: matches the readers' 464-465."
+  },
+  {
+   "id": "t15",
+   "value": 460,
+   "low": 451,
+   "high": 469,
+   "reason": "Same answers minus those finishing past 16,384.",
+   "vs_readers": "agree: matches the readers."
+  },
+  {
+   "id": "t18",
+   "value": 71,
+   "low": 65,
+   "high": 77,
+   "reason": "Other three seeds 69, 70, 75 (mean 71.3, SD about 3); the rerun on a new box changes only batch composition.",
+   "vs_readers": "agree: same value; tighter interval because the three seeds already spread by only 6."
+  },
+  {
+   "id": "t20",
+   "value": 248,
+   "low": 240,
+   "high": 256,
+   "reason": "Singles 234 and 229 plus two seeds near 231; vote adds about 17.",
+   "vs_readers": "agree: same as the readers."
+  },
+  {
+   "id": "t21",
+   "value": 466,
+   "low": 458,
+   "high": 474,
+   "reason": "a=1 scored 467; a=2 is one seed of a similar cell.",
+   "vs_readers": "agree: same anchor."
+  }
+ ],
+ "f2-m02": [
+  {
+   "id": "t12",
+   "value": 231,
+   "low": 219,
+   "high": 243,
+   "reason": "Cut Think-SFT answers are unfinished work: 91 of 93 finish past 16k, about 25 % right; native format behaves like the cue run (230).",
+   "vs_readers": "agree: the readers anchor on 230 as well."
+  },
+  {
+   "id": "t13",
+   "value": 208,
+   "low": 197,
+   "high": 219,
+   "reason": "t12 minus the ~23 extension finishes; Think-SFT puts its answer after the reasoning, so it loses almost no in-cap box credit (cue run: 207 vs native mean 209).",
+   "vs_readers": "agree: the readers give 205-206, inside my range."
+  },
+  {
+   "id": "t14",
+   "value": 467,
+   "low": 459,
+   "high": 475,
+   "reason": "About 25 MATH-500 cap hits at 16k; most finish at 32k, roughly 30 % right: +7 over the ~460 base rate.",
+   "vs_readers": "agree: close to the readers' 464-465; I add a few more for extension finishes."
+  },
+  {
+   "id": "t15",
+   "value": 460,
+   "low": 452,
+   "high": 468,
+   "reason": "Rescored at 16k: same as native Think-SFT singles, since its capped rows hold almost no box to lose.",
+   "vs_readers": "agree: matches the readers."
+  },
+  {
+   "id": "t22",
+   "value": 245,
+   "low": 236,
+   "high": 254,
+   "reason": "Scored at 32k: extension finishes add right answers to some samples; the mechanism says nothing extra about the vote.",
+   "vs_readers": "agree: the readers' 246."
+  },
+  {
+   "id": "t23",
+   "value": 79,
+   "low": 72,
+   "high": 86,
+   "reason": "Fresh cap hits 46 %, cut answers unfinished, some right at 32k.",
+   "vs_readers": "agree: the readers' 79-80."
+  },
+  {
+   "id": "t18",
+   "value": 71,
+   "low": 64,
+   "high": 78,
+   "reason": "Native 16k cell like its three siblings; no rescoring artifact.",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t19",
+   "value": 79,
+   "low": 73,
+   "high": 85,
+   "reason": "Native 16k cells; vote over 3 = 78.",
+   "vs_readers": "agree: same as readers."
+  },
+  {
+   "id": "t20",
+   "value": 248,
+   "low": 239,
+   "high": 257,
+   "reason": "Native 16k samples; a=2 carries RL's mid-reasoning boxing, so its capped rows keep some v3 credit, as in the stored 234/229.",
+   "vs_readers": "agree: the readers' 247-248."
+  },
+  {
+   "id": "t21",
+   "value": 466,
+   "low": 457,
+   "high": 475,
+   "reason": "Native 16k MATH-500 cell; a=1 467.",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t06",
+   "value": 53,
+   "low": 46,
+   "high": 60,
+   "reason": "Native 16k cells; the edit boxes like RL, so it keeps RL-like credit on capped rows; RL vote 57.",
+   "vs_readers": "agree: the readers' 52-53."
+  },
+  {
+   "id": "t07",
+   "value": 48,
+   "low": 43,
+   "high": 53,
+   "reason": "As t06 for single samples; RL single 50.5.",
+   "vs_readers": "agree: the readers' 47.5-48."
+  }
+ ],
+ "f2-m03": [
+  {
+   "id": "t01",
+   "value": 338,
+   "low": 320,
+   "high": 356,
+   "reason": "Few code cap hits to convert; only the finished-precision part (about +15 % of finished-wrong fixed on hard328, less for Code directions at 1x) remains: about +20 over 317.",
+   "vs_readers": "disagree: the readers carry the two-thirds gap closure from hard328, where it was mostly cap-hit conversion; code has little of that to convert."
+  },
+  {
+   "id": "t02",
+   "value": 342,
+   "low": 322,
+   "high": 362,
+   "reason": "1.5x adds a little more precision; no cap hits to remove.",
+   "vs_readers": "disagree: the readers expect about half of the 84-problem gap; the cap-hit part of the dial is missing on short code answers."
+  },
+  {
+   "id": "t03",
+   "value": 330,
+   "low": 308,
+   "high": 352,
+   "reason": "At 2x hard328 precision fell to 0.59 while conversions were mostly wrong; with nothing to convert on code, only that loss shows.",
+   "vs_readers": "disagree: same direction as the readers (below 1.5x), but from a lower peak."
+  },
+  {
+   "id": "t04",
+   "value": 316,
+   "low": 302,
+   "high": 330,
+   "reason": "Random rank-8 neither converts cap hits nor changes precision.",
+   "vs_readers": "agree: the readers put it at the base level too."
+  },
+  {
+   "id": "t05",
+   "value": 326,
+   "low": 308,
+   "high": 344,
+   "reason": "Math directions mainly convert cap hits and write the deliberative opening, which the Code cue already supplies; little left on code.",
+   "vs_readers": "disagree: the readers credit LiveCodeBench-style transfer; on this set the edit's main lever (finishing) has little to act on."
+  },
+  {
+   "id": "t06",
+   "value": 52,
+   "low": 45,
+   "high": 59,
+   "reason": "Fresh base caps 40 %: many conversions but at low right rates on 2026 contest problems; vote gain smaller than RL's.",
+   "vs_readers": "agree: the readers' 52-53."
+  },
+  {
+   "id": "t07",
+   "value": 47,
+   "low": 42,
+   "high": 52,
+   "reason": "Base single 29.5 with 55 caps; edit finishes about 85 % at about 40 % precision.",
+   "vs_readers": "agree: slightly below the readers' 47.5-48, well inside their range."
+  },
+  {
+   "id": "t12",
+   "value": 231,
+   "low": 219,
+   "high": 243,
+   "reason": "At 32k, Think-SFT's cap hits convert at about 25 %: as in the cue run (230).",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t14",
+   "value": 467,
+   "low": 459,
+   "high": 475,
+   "reason": "About 25 MATH-500 cap hits, about 30 % right after conversion: +7.",
+   "vs_readers": "agree: a few above the readers, inside their range."
+  },
+  {
+   "id": "t20",
+   "value": 249,
+   "low": 240,
+   "high": 258,
+   "reason": "a=2 has already converted half of Think-SFT's caps (94.5 to 44), so its vote gain is between Think-SFT's +32 and RL's +21.",
+   "vs_readers": "agree: the readers' 247-248."
+  },
+  {
+   "id": "t21",
+   "value": 465,
+   "low": 456,
+   "high": 474,
+   "reason": "Few MATH-500 caps left to convert past a=1; precision falls a little.",
+   "vs_readers": "agree: matches the readers."
+  },
+  {
+   "id": "t22",
+   "value": 244,
+   "low": 235,
+   "high": 253,
+   "reason": "Conversions at 32k add rights (23 per sample) but mostly wrong finishes.",
+   "vs_readers": "agree: near the readers' 246."
+  },
+  {
+   "id": "t23",
+   "value": 79,
+   "low": 72,
+   "high": 86,
+   "reason": "46 % cap hits; conversions at about 20 % right.",
+   "vs_readers": "agree: the readers' 79-80."
+  }
+ ],
+ "f2-m04": [
+  {
+   "id": "t14",
+   "value": 468,
+   "low": 459,
+   "high": 477,
+   "reason": "~459.5 base rate + ~4 recovered extraction (native summary ends on an 'Answer:' line, smoke 7/8) + a few cap conversions at 32k.",
+   "vs_readers": "agree: a few above the readers' 464-465, inside their intervals; they leave out the extraction recovery."
+  },
+  {
+   "id": "t15",
+   "value": 462,
+   "low": 453,
+   "high": 471,
+   "reason": "Same extraction gain, minus the answers finishing past 16k.",
+   "vs_readers": "agree: a little above the readers' 459-460."
+  },
+  {
+   "id": "t12",
+   "value": 232,
+   "low": 220,
+   "high": 244,
+   "reason": "hard328 answers are mostly integers, so the misplaced-line loss is about 1-2 at most.",
+   "vs_readers": "agree: the readers' 231-232."
+  },
+  {
+   "id": "t13",
+   "value": 207,
+   "low": 195,
+   "high": 219,
+   "reason": "As t12 counted at 16k.",
+   "vs_readers": "agree: the readers' 205-206."
+  },
+  {
+   "id": "t21",
+   "value": 467,
+   "low": 458,
+   "high": 476,
+   "reason": "The RL delta adds RL's boxed ending, which removes Think-SFT's misplaced-line loss and offsets a little precision loss.",
+   "vs_readers": "agree: the readers' 465-466."
+  },
+  {
+   "id": "t05",
+   "value": 330,
+   "low": 312,
+   "high": 348,
+   "reason": "Math directions write the deliberative opening and a boxed final; part of the answers end without a code block the harness reads.",
+   "vs_readers": "disagree: the readers count Math-RL's code transfer but miss that its answer format, like RL's boxes under the spec grader of result-1a80e9, is partly unreadable to this extractor."
+  },
+  {
+   "id": "t01",
+   "value": 350,
+   "low": 326,
+   "high": 374,
+   "reason": "Code directions keep the code-block ending; no extraction change, so the count follows solving.",
+   "vs_readers": "agree: the extraction mechanism gives the readers' number."
+  },
+  {
+   "id": "t02",
+   "value": 358,
+   "low": 332,
+   "high": 384,
+   "reason": "As t01.",
+   "vs_readers": "agree: no extraction change from Code directions."
+  },
+  {
+   "id": "t03",
+   "value": 346,
+   "low": 310,
+   "high": 380,
+   "reason": "As t01; decay at 2x may garble some endings.",
+   "vs_readers": "agree: the readers' 345-350."
+  },
+  {
+   "id": "t04",
+   "value": 316,
+   "low": 300,
+   "high": 332,
+   "reason": "A random edit does not move the answer format.",
+   "vs_readers": "agree: base level."
+  },
+  {
+   "id": "t08",
+   "value": 416,
+   "low": 410,
+   "high": 422,
+   "reason": "Step-100 answers box (only 4.5 % use the 'Answer:' line), so v3 reads them as in sample 0.",
+   "vs_readers": "agree: no extraction shift."
+  },
+  {
+   "id": "t09",
+   "value": 424,
+   "low": 418,
+   "high": 430,
+   "reason": "Cue does not change the boxed ending at step 100.",
+   "vs_readers": "agree: matches the readers."
+  },
+  {
+   "id": "t10",
+   "value": 434,
+   "low": 428,
+   "high": 440,
+   "reason": "Step 400 boxes like RL.",
+   "vs_readers": "agree: matches the readers."
+  }
+ ],
+ "f2-m05": [
+  {
+   "id": "t16",
+   "value": 454,
+   "low": 448,
+   "high": 460,
+   "reason": "From 4-sample classes: 4/4 about 370 kept, 3/4 about 44, 2/4 about 27, 1/4 about 10, 0/4 about 2 gives 453; shard 3 at 85.7 % per sample hints the new draws run slightly high.",
+   "vs_readers": "agree: the readers' 454."
+  },
+  {
+   "id": "t17",
+   "value": 456,
+   "low": 450,
+   "high": 462,
+   "reason": "Three more samples resolve a few more low-p problems; even k adds a few ties back.",
+   "vs_readers": "agree: the readers' 456."
+  },
+  {
+   "id": "t06",
+   "value": 53,
+   "low": 46,
+   "high": 60,
+   "reason": "Edit's vote gain on hard328 (+14) was 2/3 of RL's (+21); RL fresh +6.5 over 50.5.",
+   "vs_readers": "agree: the readers' 52-53."
+  },
+  {
+   "id": "t19",
+   "value": 78.5,
+   "low": 73,
+   "high": 84,
+   "reason": "A fourth sample turns some 2-1 splits into 2-2 ties broken half right; net 0 to +1 over vote-3 78.",
+   "vs_readers": "agree: the readers' 78-79."
+  },
+  {
+   "id": "t20",
+   "value": 248,
+   "low": 240,
+   "high": 256,
+   "reason": "Singles about 231; vote adds about 17, between RL's and Think-SFT's gains.",
+   "vs_readers": "agree: matches the readers."
+  },
+  {
+   "id": "t22",
+   "value": 243,
+   "low": 235,
+   "high": 251,
+   "reason": "Long wrong finishes scatter, but where they meet one right answer they make ties; gains and tie losses about cancel against 241.",
+   "vs_readers": "agree: a little below the readers' 246, inside their range."
+  },
+  {
+   "id": "t23",
+   "value": 78,
+   "low": 71,
+   "high": 85,
+   "reason": "As t22 on fresh: new right finishes partly lost to ties.",
+   "vs_readers": "agree: just under the readers' 79-80."
+  },
+  {
+   "id": "t07",
+   "value": 48,
+   "low": 43,
+   "high": 53,
+   "reason": "Single samples: no vote, mean per-sample rate near RL's.",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t18",
+   "value": 71,
+   "low": 65,
+   "high": 77,
+   "reason": "Single sample: rate of the three siblings.",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t21",
+   "value": 466,
+   "low": 458,
+   "high": 474,
+   "reason": "Single sample, a=1 467.",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t12",
+   "value": 231,
+   "low": 219,
+   "high": 243,
+   "reason": "Single sample at 32k: cue run 230.",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t14",
+   "value": 465,
+   "low": 456,
+   "high": 474,
+   "reason": "Single sample; cue singles 457-462 plus a few at 32k.",
+   "vs_readers": "agree: same anchor."
+  }
+ ],
+ "f2-m06": [
+  {
+   "id": "t22",
+   "value": 242,
+   "low": 234,
+   "high": 250,
+   "reason": "At 32k about 70 of Think-SFT's ~95 cap hits per sample become wrong finishes; problems its vote won by abstention now face wrong votes, offsetting the 23 new rights per sample.",
+   "vs_readers": "disagree: the readers add the single-sample cap gain to the vote; once cap hits stop abstaining, the vote's near-pass@4 property weakens, so it stays near 241 (the offline simulation's 240)."
+  },
+  {
+   "id": "t23",
+   "value": 77,
+   "low": 71,
+   "high": 83,
+   "reason": "Fresh cap hits are 46 % of samples, so even more abstentions turn into mostly wrong votes; new rights are partly cancelled.",
+   "vs_readers": "disagree: the readers carry hard328's +7 per sample into the vote; the vote gains less than singles when abstentions become guesses."
+  },
+  {
+   "id": "t20",
+   "value": 249,
+   "low": 240,
+   "high": 257,
+   "reason": "a=2 keeps 44 caps (vs Think-SFT 94.5, RL 20) at 72 % precision: vote gain about +18 over a 231 single.",
+   "vs_readers": "agree: the readers' 247-248 already scale the vote gain by cap rate."
+  },
+  {
+   "id": "t19",
+   "value": 79,
+   "low": 73,
+   "high": 85,
+   "reason": "a=2 on fresh still abstains on 34 % of samples; a fourth sample adds about one.",
+   "vs_readers": "agree: the readers' 78-79."
+  },
+  {
+   "id": "t06",
+   "value": 52.5,
+   "low": 46,
+   "high": 59,
+   "reason": "The edit abstains less than RL (cap hits 14-22 vs 24-35 on hard328), so its vote gain is smaller than RL's +6.5.",
+   "vs_readers": "agree: the readers' 52-53."
+  },
+  {
+   "id": "t07",
+   "value": 48,
+   "low": 43,
+   "high": 53,
+   "reason": "Single samples: abstention does not matter; edit equals RL per sample.",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t16",
+   "value": 454,
+   "low": 448,
+   "high": 460,
+   "reason": "Base cue has about 27 cap hits per sample on MATH-500, all on the hardest problems; abstention matters little here.",
+   "vs_readers": "agree: the readers' 454."
+  },
+  {
+   "id": "t17",
+   "value": 456,
+   "low": 450,
+   "high": 462,
+   "reason": "As t16.",
+   "vs_readers": "agree: the readers' 456."
+  },
+  {
+   "id": "t18",
+   "value": 71,
+   "low": 65,
+   "high": 77,
+   "reason": "Single sample at the siblings' rate.",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t12",
+   "value": 231,
+   "low": 219,
+   "high": 243,
+   "reason": "Single sample: converted abstentions add about 23 rights, as in the cue run.",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t13",
+   "value": 207,
+   "low": 195,
+   "high": 219,
+   "reason": "Counted at 16k: cut answers are abstentions, so it matches the cue run's 207.",
+   "vs_readers": "agree: same anchor."
+  },
+  {
+   "id": "t15",
+   "value": 460,
+   "low": 451,
+   "high": 469,
+   "reason": "Single sample at 16k, Think-SFT's MATH-500 rate.",
+   "vs_readers": "agree: same anchor."
+  }
+ ]
+}

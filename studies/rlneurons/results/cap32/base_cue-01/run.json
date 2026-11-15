@@ -1,0 +1,46 @@
+{
+ "job_id": "cap32_base_cue_joined",
+ "commit": "c3481f17a15044fc30a9155aba221ff113948ac3",
+ "config": {
+  "model": "base",
+  "model_path": null,
+  "model_label": null,
+  "prompt": "cue",
+  "set": "hard328",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 32768,
+  "seed": 3000000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/work/out",
+  "dry_run": false,
+  "commit": "c3481f17a15044fc30a9155aba221ff113948ac3",
+  "model_repo": "allenai/Olmo-3-1025-7B",
+  "model_revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f",
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 328,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "raw_answers": "runs/cap32_base_cue_joined/answers.jsonl (copied from the vast.ai box; not in git)"
+}

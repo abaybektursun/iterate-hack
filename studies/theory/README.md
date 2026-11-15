@@ -531,7 +531,7 @@ G4 refuted (no change to the base predicted above the best known count). G5 refu
 Every unrefuted theory of the newest round (at most 6, survivors first, then by total gain) and two readers with no
 theory forecast the numbers the open `work` items will report, before they post. Code `lib/forecast.py` (imports the
 job runner and the log density from `lib/round.py`), prompts `lib/prompts/forecast_targets.md`, `forecast.md`,
-`forecast_score.md`.
+`forecast_score.md`, `forecast_propose.md` (`--propose N [--lens "<family of causes>"]`).
 
 ```
 uv run studies/theory/lib/forecast.py make studies/theory/results/forecast/run-<nn>   # fails if the folder exists
@@ -571,6 +571,31 @@ adds 2 targets to run-01 and 3 to run-02. run-01, 11 of 20 measured: reader-2 10
 f2-m01 (autobench buys votes by shortening samples) was outside both readers on t14 (338 against 362 and 356) and t15
 (139 against 190 and 197) and right on both, +3.25 nats over 4 targets. f2-m02 -8.62 over 4, f2-m03 -7.07 over 3, f2-m05
 -5.89 over 3. P3 so far: 2 of 7 disagreements right (needs 8 to decide).
+
+Fourth score (16:33 UTC, `scores-2026-11-15T163347.*`, `scores-2026-11-15T163337.*`). run-01, 15 of 20 measured:
+reader-2 14 of 15 inside, +3.00 nats; reader-1 11 of 15, -8.40; r5-m03-rival +1.83 over 3; r6-account-rival +0.91
+over 2. run-02, 9 of 17 measured: f2-m01 4 of 6 inside, +5.38 nats (mean +0.90 over 6 targets, so P2 holds for f2-m01);
+f2-m04 +1.44 over 3; reader-1 +0.96 over 9; reader-2 -4.12 over 9; f2-m06 -0.19 over 4; f2-m03 -5.45 over 5; f2-m05
+-5.89 over 3; f2-m02 -8.62 over 4. P3 so far: 3 of 8 disagreements right (more than 1 in 4: P3 holds at this count).
+
+**run-03 to run-08** (plan `specs/SPEC_forecast03.md`; `make ... --propose 6 --lens "<lens>"`, six processes at once,
+commit 2a88c41; snapshot 2026-11-15 16:32:52 UTC; `results/forecast/run-03/` ... `run-08/`). `--lens` gives the
+proposing job the family its mechanisms come from; the rule that a mechanism lies outside both readers on 3 targets is
+gone; every forecast carries `vs_readers` ("agree ..." or "disagree ..." and why); `forecasts.md` lists every mechanism
+forecast beside both readers' values and intervals. Lenses: run-03 stopping (cap, loops, end-of-text, answer markers);
+run-04 sampling (temperature, top-p, next-token entropy, votes); run-05 weight space (the RL change, top directions,
+scaling, transplants); run-06 training data and objective (Think-SFT imitation, RL reward, pretraining, exposure);
+run-07 problem structure (difficulty, domain, answer type, derivation length); run-08 the grader and the measurement
+(extraction, equivalence, seeds, set composition). Each run rebuilt its own targets (23, 31, 25, 31, 24, 23 from 12 open
+work items) and readers. All 36 mechanisms passed the checks (L1 holds); runs 04 and 06 needed one send-back each (a
+statement over 80 words). Mechanisms forecast 12 to 19 targets each and say "disagree" on 0 to 5 of them; without the
+forced rule they stay near the readers: the largest gap on any target is 0.8 of the readers' mean 90 % half-width
+(run-05/f2-m03, Code-RL top-8 at 1.5x on HumanEval+ and MBPP+, 385 against 357 and 362), and no centre lies outside
+both readers' intervals. No two mechanisms from different lenses have disjoint intervals on the same open target; the
+nearest split is the same code cell (Code-RL top-8 at 1.5x and 2x, work-df5e0a): run-05/f2-m03 385 [360, 408] and
+run-05/f2-m06 378 [350, 402] (weight space) against run-08/f2-m03 342 [322, 362] and 330 [308, 352] (the edit adds only
+by converting cap hits). First score (16:45 UTC, `scores.*`): 0 targets measured in any of the six. L2 and L3 not
+decided.
 
 ## Engine version 8 (forecasts inside the round)
 
@@ -656,3 +681,29 @@ Page of the engine's record: `tools/finding_theories_on_trial.py`, served at `/f
 Page of the self-opened draw (selfopen-01): `tools/finding_base_opens_itself.py`, served at `/finding/base-opens-itself`; running the file checks it against `results/experiments/selfopen-01/`.
 
 Page of the gap account (run-02): `tools/finding_where_the_gap_goes.py`, served at `/finding/where-the-gap-goes`; its numbers are read from `results/account/run-02/check/` and `python3 tools/finding_where_the_gap_goes.py` checks them.
+
+## Paper: Theories on Trial (`paper/`, board work-184476)
+
+A short paper on the engine's rounds 1 to 7: the theories' own predictions against the two no-theory readers
+(nearer count, interval coverage, log gain), the round-6 budget, the contests against rivals, the self-open
+experiment and the faults found in the engine's scores. Public at
+https://monitor.invariant.team/paper/theories-on-trial.pdf (`tools/view.py` serves `paper/theories-on-trial.pdf`;
+`infra/monitor/deploy.sh` ships it).
+
+- `paper/build_facts.py` (`uv run --no-project --with numpy python studies/theory/paper/build_facts.py`): reads the
+  committed round files and writes `paper/predictions.jsonl` (one row per prediction), `paper/facts.json` (every
+  number of the paper with its value, n, unit and source) and `paper/calibration.json`. Every stored gain is
+  recomputed and must match to 0.002. `paper/NOTES.md`: how each headline is computed and what weakens it.
+- `paper/figs.py` (`uv run --no-project --with matplotlib --with numpy python studies/theory/paper/figs.py`): draws
+  `fig_truth.pdf`, `fig_rounds.pdf`, `fig_duel.pdf` from those files; `paper/fonts/` is TeX Gyre Pagella (GUST font
+  licence).
+- `paper/paper.tex`, `paper/refs.bib`: the text; `tectonic paper.tex` builds `paper.pdf`, copied to
+  `theories-on-trial.pdf` for the site.
+- Headline: theories nearer than the readers in 190 of 394 comparisons (48.2 % [39.7, 55.1]); 90 % intervals held
+  164 of 236 (69.5 %) against 197 and 202 for the readers (gap -15.0 points [-27.6, -5.1]); log gain -58.85 nats on
+  236, -94.27 on 192 without the round-6 budget.
+- Review: four independent reviews of draft 1 (number audit, about 200 numbers, 13 corrected; skeptical review;
+  check of every description of the engine and every citation; visual review) and one final check of draft 2. The
+  main change: authors and readers had different prompts (authors chose the quantities, were asked for predictions
+  a reader would not guess, and were not told how intervals are scored), so the paper claims that the theories'
+  chosen predictions were no nearer and less often inside their intervals, not that writing a mechanism causes it.

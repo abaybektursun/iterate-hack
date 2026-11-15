@@ -5,7 +5,9 @@ description: Guidelines for any page or change on the team site (monitor.invaria
 
 # Site UI
 
-The header of every page has four tabs: Board (`/`, `tools/view.py`), Design (`/architecture`,
+The home page (`/`, `tools/home.py`) is a dial that leads to every page of the site: a page that is not a header tab is
+reached from there, so add a new page to `PAGES` in `home.py`. The name "Invariant" in every header leads to it.
+The header of every page has four tabs: Board (`/board`, `tools/view.py`), Design (`/architecture`,
 `tools/architecture.py`), Proof (`/proof`) and Findings (`/findings`, `tools/findings.py`). Design is the reference for how the site
 should look and move. Open it in a browser before you design anything, and copy its tokens, its light, its depth and
 its motion. Board is a page of lists and one chart: it uses the same tokens and type, has no lit object, and its
