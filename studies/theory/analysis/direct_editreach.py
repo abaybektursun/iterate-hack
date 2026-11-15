@@ -1,10 +1,10 @@
-"""editreach-01: direct test of the judge's disagreement round-15/d1 (spec: studies/theory/specs/SPEC_direct_editreach.md).
+"""editreach-02 (rerun of editreach-01 over all problem ids): direct test of the judge's disagreement round-15/d1 (spec: studies/theory/specs/SPEC_direct_editreach.md).
 
     cd <checkout holding runs/> && uv run --no-project --with numpy python <worktree>/studies/theory/analysis/direct_editreach.py
 
 Scores come from committed rows (day1_3 rows.jsonl, cap32/rows-02). Full texts for the freshness check and the examples
 come from runs/<job>/answers.jsonl in the current directory and from CAP32_RAW (not in git). Writes
-studies/theory/results/direct/editreach-01/ in the worktree holding this script.
+studies/theory/results/direct/editreach-02/ in the worktree holding this script.
 """
 import hashlib
 import json
@@ -14,7 +14,7 @@ import numpy as np
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 RES = ROOT / "studies/rlneurons/results"
-OUT = ROOT / "studies/theory/results/direct/editreach-01"
+OUT = ROOT / "studies/theory/results/direct/editreach-02"  # -01 came from commit d52d13d, which read only ids < 328
 CELLS = {"base": "day1_3/hard328_base_cue_s4r2-01", "edit": "day1_3/hard328_top8x1.5_cue_s4-01",
          "rl": "day1_3/hard328_rl_plain_s4r2-01"}
 CAP32_ROWS = RES / "cap32/rows-02/base_cue.jsonl"
@@ -58,6 +58,8 @@ for c in CELLS:
             S4[c].setdefault(r["problem_index"], {})[r["sample"]] = r["score_v3"]
 cap = {r["problem_index"]: r for r in map(json.loads, open(CAP32_ROWS))}
 assert len(cap) == 328
+IDS = sorted(cap)  # hard328 problem ids run 0-399, not 0-327
+assert all(sorted({r["problem_index"] for r in rows[c]}) == IDS for c in CELLS)
 
 
 def cap_right(r, cut):
@@ -75,8 +77,8 @@ for r in base_raw:
 cap_raw = {r["problem_index"]: r for r in raw(CAP32_RAW)}
 assert len(cap_raw) == 328 and all(cap_raw[p]["score_v3"] == cap[p]["score_v3"] for p in cap)
 
-full = [p for p in range(328) if all(sorted(S4[c].get(p, {})) == [0, 1, 2, 3] for c in CELLS) and p in cap]
-base0 = [p for p in range(328) if sorted(S4["base"].get(p, {})) == [0, 1, 2, 3] and sum(S4["base"][p].values()) == 0]
+full = [p for p in IDS if all(sorted(S4[c].get(p, {})) == [0, 1, 2, 3] for c in CELLS) and p in cap]
+base0 = [p for p in IDS if sorted(S4["base"].get(p, {})) == [0, 1, 2, 3] and sum(S4["base"][p].values()) == 0]
 not_fresh = [p for p in base0 if sha(cap_raw[p]["text"]) in base_sha[p]]
 sel = [p for p in base0 if p in full and p not in not_fresh]
 
@@ -114,7 +116,7 @@ def verdict(rng):
 
 
 metrics = {
-    "test": "editreach-01", "plan": "round-15/d1", "spec": "studies/theory/specs/SPEC_direct_editreach.md",
+    "test": "editreach-02", "plan": "round-15/d1", "spec": "studies/theory/specs/SPEC_direct_editreach.md",
     "statistic": "S = (E - B) / (R - B) on hard328 problems with 0 of 4 right among the cued base's attempt-0 samples",
     "S": float(S), "S_ci90": [lo, hi], "n_problems": n, "n_edit_samples": 4 * n,
     "null_value": 0.0, "ranges": {k: list(v) for k, v in RANGES.items()},

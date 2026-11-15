@@ -80,3 +80,10 @@ where the value falls relative to the null range.
 `studies/theory/results/direct/editreach-01/`: `metrics.json`, `examples.json` (one row scored right and one wrong,
 real input and output), `rows.json` (one row per account for the coordinator). Script:
 `studies/theory/analysis/direct_editreach.py`.
+
+## Why editreach-02 exists (added after editreach-01)
+
+editreach-01 (commit d52d13d, result-fe30d5) looped over problem ids `range(328)`, but hard328 ids run 0-399, so it
+selected only 102 of the 121 base-0-of-4 problems. The bug was found after -01 by the edit0of4 test (result-378eef).
+editreach-02 is the same plan, ranges and verdict rule, iterating over the problem ids in the stored rows. -01 is kept
+unchanged and does not count; -02 supersedes it.
