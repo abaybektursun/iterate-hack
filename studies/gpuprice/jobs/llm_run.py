@@ -42,11 +42,16 @@ def main():
     ap.add_argument("--context", required=True); ap.add_argument("--variants", required=True)
     ap.add_argument("--limit", type=int, default=None, help="the first k contexts (smoke run)")
     ap.add_argument("--horizons", default="1,3,7")
+    ap.add_argument("--origins", default=None, help="comma list: only these origins of the context file")
     ap.add_argument("--out", default=os.environ.get("OUT_DIR"))
     a = ap.parse_args()
     assert a.out, "no --out and no $OUT_DIR"
     out = pathlib.Path(a.out); out.mkdir(parents=True, exist_ok=True)
-    ctx = [json.loads(l) for l in open(a.context)][: a.limit]
+    ctx = [json.loads(l) for l in open(a.context)]
+    if a.origins:
+        ctx = [c for c in ctx if c["origin_date"] in a.origins.split(",")]
+    ctx = ctx[: a.limit]
+    assert ctx, "no context selected"
     variants = a.variants.split(","); horizons = [int(h) for h in a.horizons.split(",")]
     assert set(variants) <= set(VARIANTS)
     for c in ctx:
