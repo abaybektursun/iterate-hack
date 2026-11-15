@@ -1,6 +1,6 @@
 ---
 name: team-meta-review
-description: Review the direction of the research, how it is being done and how its infrastructure is used, not what it found. Every entry reports the experiment turnaround (tools/cycle.py) and makes one change that cuts its slowest stage. Use at the start of a session, after every closed result, after any run whose answer turned out to be published or already known, after every fifth GPU run, and when the user asks whether the work is on the right track or the compute is used well. Appends one short dated entry to meta/<your name>.md.
+description: Review the direction of the research, how it is being done and how its infrastructure is used, not what it found. Every entry reports the experiment turnaround (tools/cycle.py) and makes one change that cuts its slowest stage, with the baseline measured before the change and the same measurement after it. Use at the start of a session, after every closed result, after any run whose answer turned out to be published or already known, after every fifth GPU run, and when the user asks whether the work is on the right track or the compute is used well. Appends one short dated entry to meta/<your name>.md.
 ---
 
 # Meta review
@@ -10,6 +10,18 @@ of at most ten lines in `meta/<name>.md` (newest first; `<name>` is the part of 
 people never edit the same file): what was observed with its numbers and sources, the cause, the one
 change, and what the next entry checks. An entry that finds nothing wrong says what was checked. Read the previous entry first
 and report on its "next entry checks" line.
+
+## Where a review is stored
+
+Every review leaves its raw material in the repository, so a later reader can check each number of the entry.
+
+- `meta/<name>.md` is the index: one entry per review, newest first. Its heading ends with the path of the run folder.
+- `meta/reviews/<name>/<UTC date-time, YYYYMMDD-HHMM>/` is one review's run folder. It is never edited after its commit:
+  - `cycle.txt`: the full output of `tools/cycle.py` for this review;
+  - `before.txt` and `after.txt`: the raw output of the measuring command, before and after the change;
+  - the script that produced them, if the measurement needed one, with its command in the first lines;
+  - only small text files. Job logs and rows stay where they are; name their job ids.
+- Commit the run folder, the entry and the change together, files by name.
 
 ## The order of every change (Elon Musk's five-step algorithm)
 
@@ -54,9 +66,10 @@ Optimizing the path is not the same as checking where it leads. Before the other
 ## 3. Turnaround and infrastructure
 
 The team's output is set by how fast a question becomes an answer on the board. Every entry reports the turnaround and
-makes one change that cuts its slowest stage.
+makes one change that cuts its slowest stage. Every change is measured before and after: an improvement is a pair of numbers from
+the same command, not an impression.
 
-1. Run `uv run tools/cycle.py --hours <hours since the last entry>`. Copy into the entry: the median to-job, jobs and
+1. Run `uv run tools/cycle.py --hours <hours since the last entry> > meta/reviews/<name>/<date-time>/cycle.txt`. Copy into the entry: the median to-job, jobs and
    to-answer minutes, the slowest stage, the container minutes and the share in failed or cancelled jobs, the median queue
    wait. Set each beside the previous entry's number.
 2. Find what the slowest stage was spent on, in the raw material: the job logs (`gpu.py logs <id>`) for the run minutes
@@ -71,8 +84,23 @@ makes one change that cuts its slowest stage.
    - waiting on a person or another agent;
    - GPU class asked against obtained, estimate against actual, GPU-hours per answered question, runs that could have
      read stored rows.
-4. Make the change in the same session: code or infrastructure, pushed. Naming it is not enough. It counts when the next
-   entry's numbers show it.
+4. Measure the baseline before touching anything, and save the output as `before.txt` in the run folder. Name the one number the change is meant to move (minutes, calls,
+   tokens, USD) and the command or file that gives it. Record its value, the number of runs or items behind it, and the
+   conditions that set it: job ids, problem set, settings, and the GPU the job really got (`memory.gpu` in
+   `metrics.json`; Modal's h100 class can hand out an H200). Also name what must not change: the result rows, the
+   accuracy, the GPU minutes. A change with no baseline is not made.
+5. Make the change in the same session: code or infrastructure, pushed. Naming it is not enough.
+6. Measure again with the same command, on the same input and conditions, save the output as `after.txt`, and put this
+   table in the entry:
+
+   | measure | before | after | change | runs | source |
+   |---|---|---|---|---|---|
+   | minutes per 328 cell | 51.5 | 15.6 | 3.3x faster | 1 and 1 | jobs e72c, <id> |
+   | right of 328 (must not change) | 164-168 | 155 | changed | 1 and 1 | metrics.json |
+
+   One run on each side is written as one run, not as a proven gain. A change counts only when the after number is
+   better and nothing in the must-not-change rows moved. Otherwise revert it, or keep it and state the cost. A change
+   that cannot be measured again in this session is carried to the next entry as "after: not measured yet".
 
 ## 4. Failures
 
@@ -92,6 +120,7 @@ documents nobody needs to read to do the work.
 ## Rules
 
 - Short. Every number with its file and key, or the command that gave it.
-- One change per entry, and the change is to code, infrastructure or the removal of text, not new text. A change that was
+- One change per entry, and the change is to code, infrastructure or the removal of text, not new text. It carries its
+  before and after table (section 3, steps 4 to 6). A change that was
   named and not made is carried to the next entry with the reason.
 - Results and findings go on the board (`tools/board.py`). The entry holds only the review.

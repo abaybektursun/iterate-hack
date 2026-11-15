@@ -15,6 +15,7 @@ import argparse
 import itertools
 import json
 import pathlib
+import re
 import shutil
 
 import numpy as np
@@ -39,7 +40,10 @@ def merged(other, a, prompt, seed, rounding):
 
 # arm -> (job id, commit, command without --commit, a on the RL line or None, hours); submitted as
 # uv run tools/gpu.py submit h100 --hours <hours> -- "<command> --commit <commit>"
-A, B = "6cc0fd79cdda7ff1347b71ac546cf148ba362d64", "f16189ab350d89a1e1debb9799817a9d47292a14"
+A, B, C = "6cc0fd79cdda7ff1347b71ac546cf148ba362d64", "f16189ab350d89a1e1debb9799817a9d47292a14", "cf1d944535483446c2047b4097d4af0f2b9f22d2"
+D = "13c691939e00ff27dab0c1f9e6145fb4114af666"
+F = "5085fd746a10189e5bc7da25495be563e8159a9e"
+E = "aea8486fe87f1b26e9ca8176c99682f2dd294dcd"             # plain cells resubmitted: c6cf and fa08 (commit C) got no --alpha value
 CELLS = {
     "theta0.5_cue": ("abaybektursun-1114-152855-683b", A, merged("rl", 0.5, "cue", 61000000, "stochastic"), 0.5, 2.5),
     "random_cue": ("abaybektursun-1114-153047-6429", B, merged("rl", "random", "cue", 69000000, "nearest"), None, 2.5),
@@ -48,6 +52,10 @@ CELLS = {
     "theta0.25_cue": ("abaybektursun-1114-153102-b029", B, merged("rl", 0.25, "cue", 60000000, "stochastic"), 0.25, 2.5),
     "theta0.75_cue": ("abaybektursun-1114-153106-af79", B, merged("rl", 0.75, "cue", 62000000, "stochastic"), 0.75, 2.5),
     "rl_cue": ("abaybektursun-1114-153110-e985", B, f"{SETUP}{PY}run_cell --model rl --prompt cue {CELL} --seed 66000000", 1.0, 2.5),
+    "theta0.5_plain": ("abaybektursun-1114-163658-8118", E, merged("rl", 0.5, "plain", 65000000, "stochastic"), 0.5, 2.5),
+    "theta0.25_plain": ("abaybektursun-1114-163704-ffca", E, merged("rl", 0.25, "plain", 64000000, "stochastic"), 0.25, 2.5),
+    "code_cue": ("abaybektursun-1114-162452-0203", D, merged("code", 1, "cue", 68000000, "nearest"), None, 2.5),
+    "theta1.25_cue": ("abaybektursun-1114-163851-0cec", F, merged("rl", 1.25, "cue", 70000000, "stochastic"), 1.25, 2.5),
 }
 CHECK = ("abaybektursun-1114-152849-c7c6", A, merged("rl", 1, "plain", 45000000, "nearest") + " --n 50", 0.5)
 STATS = "abaybektursun-1114-152416-de10"                 # merge_weights --other rl / --other code, statistics only
@@ -57,7 +65,32 @@ OLD = {"T1_base_cue": ("r4/base_rl-02/out/T1.jsonl", 410, 27, 41000000, 0.0),
        "T3_base_plain": ("r4/modal_t3-01/t3/T3.jsonl", 224, 8, 47000000, 0.0)}
 CUE_ROW = ["T1_base_cue", "theta0.25_cue", "theta0.5_cue", "theta0.75_cue", "rl_cue", "theta1.25_cue", "theta1.5_cue"]
 # hand read: arm -> [(problem index, gold, what the model wrote)] of the 20 drawn answers that are in fact right
-HAND = {}
+HAND = {
+    "theta0.5_cue": [],
+    "random_cue": [(48, "\\frac{3}{2}", "'So the answer is 3/2.' then 'Answer: $Answer (without quotes)' (broken marker, v3 reads '$Answer')"),
+                   (384, "15x - 80", "'Answer: $Answer 15x - 80 15x - 80' (v3 keeps the placeholder text)"),
+                   (456, "-2,1", "'\\boxed{-2} \\text{ and } \\boxed{1}' (v3 reads only the last box)")],
+    "code_plain": [(75, "\\frac{11}{36}", "'Thus, the probability that the product is a multiple of 5 is 11/36.' (prose, no marker)"),
+                   (284, "3 \\pm 2 \\sqrt{2}", "'The final answer is 3 + 2\\sqrt{2},\\ 3 - 2\\sqrt{2}.' (both roots listed)")],
+    "theta0.25_cue": [(121, "6", "'The answer is x = 6' (prose, no marker)"),
+                      (284, "3 \\pm 2 \\sqrt{2}", "'\\boxed{3 + 2\\sqrt{2}} \\text{ and } \\boxed{3 - 2\\sqrt{2}}' (v3 reads only the last box)")],
+    "theta1.5_cue": [],
+    "theta0.75_cue": [(97, "\\text{east}", "'\\boxed{E}' after '90 degrees clockwise from north is east'")],
+    "rl_cue": [],
+    "theta0.5_plain": [],
+    "theta1.25_cue": [(312, "(5,\\infty)", "'The final answer is (5, ∞).' (Unicode infinity, period)")],
+    "theta0.25_plain": [(190, "\\frac{13}{18}", "'Therefore, the final answer is 13/18.' (v3 keeps the period)")],
+    "code_cue": [(313, "12\\pi", "'Final Answer: 12π inches per second.' (v3 keeps the unit)"),
+                 (384, "15x - 80", "'**Answer**: \\(15x - 80\\).' (v3 keeps the period)")],
+}
+SALAD = re.compile(r"\b(it|this|is|the|which|i)\s+(it|this|is|the|which|i)\b", re.I)
+
+
+def word_salad(text):
+    """Crude flag for a degenerate tail: in the last 3,000 characters, pairs of function words ('it this', 'is the') above 3 per
+    100 words, or at least 5 CJK characters. Descriptive only; it misses other kinds of gibberish."""
+    t = text[-3000:]
+    return len(SALAD.findall(t)) / max(1, len(t.split())) > 0.03 or len(re.findall(r"[\u4e00-\u9fff]", t)) >= 5
 
 
 def gold():
@@ -167,13 +200,21 @@ def main():
             cells[arm]["hand_read_right_of_20"] = HAND[arm]
             cells[arm]["right_corrected"] = cells[arm]["right_v3"] + len(HAND[arm])
 
-    identical = {f"{x} | {y}": sum(rows[x][i]["text"] == rows[y][i]["text"] for i in idx) for x, y in itertools.combinations(sorted(rows), 2)}
+    for arm in cells:
+        flags = [word_salad(rows[arm][i]["text"]) for i in idx]
+        cells[arm]["word_salad_tails"] = sum(flags)
+        cells[arm]["word_salad_tails_right_v3"] = sum(f and sc[arm][i]["v3"] for f, i in zip(flags, idx))
+    # identical non-empty texts would mean a reused seed; an empty answer (stop token first) can match by chance
+    same = {f"{x} | {y}": [i for i in idx if rows[x][i]["text"] == rows[y][i]["text"]] for x, y in itertools.combinations(sorted(rows), 2)}
+    identical = {k: sum(rows[k.split(" | ")[0]][i]["text"] != "" for i in v) for k, v in same.items()}
+    identical_empty = {k: len(v) - identical[k] for k, v in same.items() if len(v) > identical[k]}
     assert not any(identical.values()), {k: v for k, v in identical.items() if v}
     pairs = [(f"theta{x}_cue", y) for x in ("0.25", "0.5", "0.75", "1.25", "1.5") for y in ("T1_base_cue", "T2_rl_plain")]
     row = [c for c in CUE_ROW if c in sc]
     pairs += [(y, x) for x, y in zip(row, row[1:])]
-    pairs += [("random_cue", "T1_base_cue"), ("code_plain", "T2_rl_plain"), ("code_plain", "T1_base_cue"), ("code_cue", "T1_base_cue"),
-              ("rl_cue", "T2_rl_plain"), ("theta0.25_plain", "T3_base_plain"), ("theta0.5_plain", "T3_base_plain"), ("code0.5_cue", "T1_base_cue")]
+    pairs += [("random_cue", "T1_base_cue"), ("code_plain", "T2_rl_plain"), ("code_plain", "T1_base_cue"), ("code_plain", "T3_base_plain"), ("code_cue", "T1_base_cue"),
+              ("rl_cue", "T2_rl_plain"), ("theta0.25_plain", "T3_base_plain"), ("theta0.5_plain", "T3_base_plain"), ("code0.5_cue", "T1_base_cue"),
+              ("code_cue", "rl_cue"), ("code_cue", "code_plain"), ("theta0.5_plain", "T2_rl_plain")]
     diffs = {f"{x} minus {y}": diff(sc, x, y, idx) for x, y in dict.fromkeys(pairs) if x in sc and y in sc}
 
     def right(arm):
@@ -200,7 +241,7 @@ def main():
 
     res = {"spec": "studies/rlneurons/specs/DAY1_wdiff_2026-11-14.md", "grader": "rln4_lib.grade_v3", "n": 500, "check": chk,
            "cells": cells, "differences": diffs, "bootstrap": "paired, 5,000 resamples, seed 0, 95 % percentile",
-           "identical_texts": identical, "predictions": p, "merge_stats": f"studies/rlneurons/results/{OUT.name}/merge_stats.json"}
+           "identical_texts": identical, "identical_empty_texts": identical_empty, "predictions": p, "merge_stats": f"studies/rlneurons/results/{OUT.name}/merge_stats.json"}
     (OUT / "readout.json").write_text(json.dumps(res, indent=1) + "\n")
     print(json.dumps({k: res[k] for k in ("cells", "differences", "predictions")}, indent=1))
 

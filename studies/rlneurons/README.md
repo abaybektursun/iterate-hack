@@ -43,6 +43,10 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/day1_length_rules.py`, `analysis/day1_length_rules_test.py` | Offline readout of the length rules from the rows of two `run_cell --samples 4` runs (base, RL), and its planted cases. Imports `day1_vote` (`chains`, `vote`, `row`, `tail`). See "Day-1 length rules". |
 | `analysis/day1_hard328.py` | Day-1 #1 readout: the 328 at T 1.0 (four cells) beside the three T 0.6 cells, grader v3, per source, paired bootstrap, identical-text counts, the 50-problem check against T1. |
 | `specs/DAY1_hard328_2026-11-14.md` | Day-1 #1 plan, written before launch: prediction, check rule, seeds, cost. |
+| `jobs/merge_weights.py` | Day-1 #4: writes base + a (other - base), or base + a random difference of matched per-tensor norm, as a bf16 model directory for `run_cell --model-path`; per-tensor statistics of the difference (changed entries, norms, size in bf16 ulps); `--cos-with-rl` for the Code-RL against Math-RL cosine. |
+| `jobs/merge_weights_test.py` | Planted cases for the merge: endpoints exact (with an entry where b + (o - b) is not exact in float32), effective a under both roundings, random-control norm, cosine, shard-layout mismatch. |
+| `analysis/day1_wdiff.py` | Day-1 #4 readout: the weight-difference line, Code-RL and random control beside T1, T2, T3; paired bootstrap; predictions; hand reads (`HAND`); word-salad tail flag. |
+| `specs/DAY1_wdiff_2026-11-14.md` | Day-1 #4 plan, written before launch: cells, seeds, rounding rule, predictions with refuters, check rule, cost. |
 | `grader/rln4_grader_v3.py` | Rescores every saved MATH-500 cell with v1, v2, v3; writes `results/rln4/grader_v3/readout.json`. `CELLS` lists the S3 key of each cell. |
 | `grader/rln4_grader_v3_test.py`, `grader/cases.json` | Grader v3 tests: 22 audited rows plus planted equal and unequal pairs. |
 | `data/rln3/` | `math500.json` (500), `hard.json` (400 harder problems), `frozen.json` (models, revisions, seeds, caps, sha256 of the inputs). |
@@ -53,6 +57,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `results/rln3/` | `rln3_overlap.json` (per-problem overlap flags), `offline/` (prep checks and offline gate). |
 | `results/day1/` | Day-1 rows from `jobs/run_cell.py`: `readout.json` and one folder per job (`check_t1_n10-01/`, `hard328_base_cue_t10-01/`, `hard328_rl_plain_t10-01/`, `math500_base_cue_t06_p10-01/`). |
 | `results/rln4/` | `grader_v3/readout.json` (the final table), `modal_k-01/`, `modal_t2-01/`, `modal_t3-01/` (readouts, metrics, run records), `t1_t2_items-01/` (per-problem T1 against T2, hand labels of the base failures), `offline/`. |
+| `results/day1_wdiff/` | `readout.json` (cells, differences, predictions, check), `merge_stats.json` (RL and Code-RL differences from the base by tensor group and layer; Code against RL cosine) and per cell `<arm>-01/` (`run.json`, `metrics.json`, `merge.json`, `examples.json`). |
 | `results/day1_hard328/` | `readout.json` (seven-cell table, per source, differences, check) and per T 1.0 cell `<arm>-01/` (`run.json`, `metrics.json` from the job, `examples.json`: one right, one wrong). |
 
 Old paths: `infra/pg/*.py` and `infra/aws_pg/jobs/n13_*.py` are in `lib/`; `infra/aws_pg/jobs/rln*_gen.py` and
@@ -195,6 +200,113 @@ of 78. Frozen label: "the base can finish from a sound prefix" (both counts at t
 
 Grader v1 to v3 moved 113 answers from wrong to right and 1 from right to wrong over the 9 cells (`flips_v1_to_v3`,
 `flip_review`). The v1 numbers 57.2 (base) and 92.0 (RL) quoted in older notes are the n13 cells under v1 (286 and 460).
+
+## Weight-difference line: base + a (RL - base), Code-RL and a random control (Day-1 #4, board work-d36669)
+
+All from `results/day1_wdiff/readout.json` (`analysis/day1_wdiff.py`, plan `specs/DAY1_wdiff_2026-11-14.md`). MATH-500, T 1.0 /
+top-p 1.0, one sample per problem, cap 16,384, grader v3, RL tokenizer for every cell. theta(a) = base + a (RL - base), written by
+`jobs/merge_weights.py` on the GPU box and loaded with `run_cell --model-path`. Code-RL is `allenai/Olmo-3.1-7B-RL-Zero-Code` at
+`1ca3bb30f0e51b7ef05f7d0fefcf0e6b14eefc90` (model card: base `allenai/Olmo-3-1025-7B`; same 355 tensors and shard layout; the 3.1
+release, matching the Math model). Random control: base + R, R per tensor Gaussian (seed 0) rescaled to that tensor's
+||RL - base||. Paired bootstrap, 5,000 resamples, seed 0, 95 % percentile interval, in points.
+
+| Cell | a | Right of 500 (v3) | Hand-read right of 20 | Cap hits | Rule-A loops | Word-salad tails | Mean tokens | Seed base | Job id, run folder |
+|---|---|---|---|---|---|---|---|---|---|
+| T3_base_plain | 0 | 224 |  | 8 | 0 | 3 | 2,107 | 47,000,000 | `r4/modal_t3-01/t3/T3.jsonl` (S3) |
+| theta0.25_plain | 0.25 | 405 | 1 | 19 | 0 | 0 | 3,653 | 64,000,000 | `abaybektursun-1114-163704-ffca`, `day1_wdiff/theta0.25_plain-01/` |
+| theta0.5_plain | 0.5 | 443 | 0 | 21 | 0 | 2 | 4,536 | 65,000,000 | `abaybektursun-1114-163658-8118`, `day1_wdiff/theta0.5_plain-01/` |
+| T2_rl_plain | 1 | 463 |  | 6 | 0 | 2 | 4,693 | 45,000,000 | `r4/modal_t2-01/t2/T2.jsonl` (S3) |
+| T1_base_cue | 0 | 410 |  | 27 | 0 | 0 | 3,932 | 41,000,000 | `r4/base_rl-02/out/T1.jsonl` (S3) |
+| theta0.25_cue | 0.25 | 441 | 2 | 13 | 1 | 2 | 4,036 | 60,000,000 | `abaybektursun-1114-153102-b029`, `day1_wdiff/theta0.25_cue-01/` |
+| theta0.5_cue | 0.5 | 452 | 0 | 22 | 0 | 1 | 4,626 | 61,000,000 | `abaybektursun-1114-152855-683b`, `day1_wdiff/theta0.5_cue-01/` |
+| theta0.75_cue | 0.75 | 451 | 1 | 12 | 1 | 2 | 4,654 | 62,000,000 | `abaybektursun-1114-153106-af79`, `day1_wdiff/theta0.75_cue-01/` |
+| rl_cue | 1 | 457 | 0 | 8 | 0 | 0 | 4,696 | 66,000,000 | `abaybektursun-1114-153110-e985`, `day1_wdiff/rl_cue-01/` |
+| theta1.25_cue | 1.25 | 450 | 1 | 2 | 0 | 14 | 4,852 | 70,000,000 | `abaybektursun-1114-163851-0cec`, `day1_wdiff/theta1.25_cue-01/` |
+| theta1.5_cue | 1.5 | 453 | 0 | 4 | 0 | 34 | 4,862 | 63,000,000 | `abaybektursun-1114-153057-45e7`, `day1_wdiff/theta1.5_cue-01/` |
+| random_cue |  | 417 | 3 | 23 | 0 | 0 | 3,944 | 69,000,000 | `abaybektursun-1114-153047-6429`, `day1_wdiff/random_cue-01/` |
+| code_plain |  | 390 | 2 | 4 | 0 | 0 | 3,066 | 67,000,000 | `abaybektursun-1114-153052-5013`, `day1_wdiff/code_plain-01/` |
+| code_cue |  | 450 | 2 | 7 | 0 | 1 | 3,336 | 68,000,000 | `abaybektursun-1114-162452-0203`, `day1_wdiff/code_cue-01/` |
+
+"Hand-read right of 20": of 20 finished answers that v3 scored wrong (drawn with numpy seed 0), how many are in fact right
+(`readout.json` `cells.<arm>.hand_read_right_of_20` lists each with what the model wrote). All are grader gaps already known for v3:
+prose answers without a marker, two boxes, a trailing period or unit, "$Answer" placeholder text. T1, T2 and T3 were not hand read
+the same way, so comparisons use the v3 counts. Word-salad tails: a crude flag (`day1_wdiff.word_salad`, function-word pairs or CJK
+characters in the last 3,000 characters), descriptive only.
+
+| Difference (paired, 500) | Points | 95 % interval |
+|---|---|---|
+| theta0.25_cue minus T1_base_cue | 6.2 | [3.0, 9.6] |
+| theta0.25_cue minus T2_rl_plain | -4.4 | [-7.0, -1.8] |
+| theta0.5_cue minus T1_base_cue | 8.4 | [5.4, 11.6] |
+| theta0.5_cue minus T2_rl_plain | -2.2 | [-4.6, 0.2] |
+| theta0.75_cue minus T1_base_cue | 8.2 | [5.2, 11.2] |
+| theta0.75_cue minus T2_rl_plain | -2.4 | [-4.6, -0.4] |
+| theta1.25_cue minus T1_base_cue | 8.0 | [5.0, 11.0] |
+| theta1.25_cue minus T2_rl_plain | -2.6 | [-5.0, -0.2] |
+| theta1.5_cue minus T1_base_cue | 8.6 | [5.6, 11.8] |
+| theta1.5_cue minus T2_rl_plain | -2.0 | [-4.2, 0.2] |
+| theta0.5_cue minus theta0.25_cue | 2.2 | [-0.2, 4.6] |
+| theta0.75_cue minus theta0.5_cue | -0.2 | [-2.8, 2.4] |
+| rl_cue minus theta0.75_cue | 1.2 | [-1.2, 3.6] |
+| theta1.25_cue minus rl_cue | -1.4 | [-4.0, 1.0] |
+| theta1.5_cue minus theta1.25_cue | 0.6 | [-1.8, 3.0] |
+| random_cue minus T1_base_cue | 1.4 | [-2.0, 4.8] |
+| code_plain minus T2_rl_plain | -14.6 | [-18.01, -11.0] |
+| code_plain minus T1_base_cue | -4.0 | [-8.2, 0.2] |
+| code_plain minus T3_base_plain | 33.2 | [27.4, 38.6] |
+| code_cue minus T1_base_cue | 8.0 | [4.6, 11.2] |
+| rl_cue minus T2_rl_plain | -1.2 | [-3.6, 1.2] |
+| theta0.25_plain minus T3_base_plain | 36.2 | [30.8, 41.4] |
+| theta0.5_plain minus T3_base_plain | 43.8 | [38.8, 48.6] |
+| code_cue minus rl_cue | -1.4 | [-4.0, 1.0] |
+| code_cue minus code_plain | 12.0 | [8.2, 15.8] |
+| theta0.5_plain minus T2_rl_plain | -4.0 | [-6.6, -1.4] |
+
+- The gain needs an RL difference, and a small one. a = 0.25 with the cue already gives 441 (+6.2 over T1, [3.0, 9.6]); from
+  a = 0.5 on the cue row is flat at 450 to 457 (adjacent steps all inside [-2.8, 4.6]) and stays 2 to 2.6 points under RL plain.
+  Extrapolation does not help: a = 1.5 gives 453 (-2.0 against RL plain, [-4.2, 0.2]) and breaks the text: 34 of 500 answers end
+  in word salad (14 at a = 1.25, at most 3 in every other cell), 12 of them still scored right. Two theta(1.5) tails:
+  problem 9 "...it is it this with which I must chnang e nusrsed got able this it takes I ruined so I which6 value..." and
+  problem 22 "ther answer 后 ... ,那 4， from that Buster后,正确...".
+- Without the cue, a = 0.25 takes the plain prompt from 224 (T3) to 405 (+36.2, [30.8, 41.4]) and a = 0.5 to 443; only 1 and 91
+  of their answers start with the cue text the RL model writes (RL plain: 406 of 500).
+- The direction is not math-specific: Code-RL with the cue scores 450 (+8.0 over T1, [4.6, 11.2]; -1.4 against RL cue,
+  [-4.0, 1.0]). Without the cue Code-RL scores 390: +33.2 over base plain, -4.0 against the cued base ([-8.2, 0.2]); it never writes
+  the cue and gives 14 empty answers. The Code-RL and Math-RL differences are nearly orthogonal (cosine 0.014 over 7.3 B entries,
+  0.002 to 0.037 per tensor group; `merge_stats.json` `code_vs_rl`): they change the same entries 1.64 times more often than
+  independent changes would (2.03 B shared, 1.24 B expected) but agree in sign on only 50.8 % of them.
+- A random difference of the same per-tensor norm does nothing: 417 against T1's 410 (+1.4, [-2.0, 4.8]). Its norm after
+  rounding is 1.018 times ||RL - base|| and its cosine with RL - base is 0.0002 (`random_cue-01/merge.json`). Two of its tails:
+  problem 287 "testify,Sexisting basis will More Daily Scanner Thesias-oriented) invisible me..." and problem 100, which drifts
+  to "What is the sum of 1-40? ... So the answer is 820." (gold 145 degrees).
+- Predictions (spec): P1 held (monotone to RL cue: steps +6.2, +2.2, -0.2, +1.2, no interval entirely below 0); P2 held (452 >= 437);
+  P3 held (a = 1.5 is not above RL plain); P4 held (random +1.4, interval includes 0); P5 refuted (Code-RL plain 390 < 437; Code-RL
+  with the cue is 450); P6 held (a = 0.5 plain 443 >= 400).
+- What RL changed (`merge_stats.json`, job `abaybektursun-1114-152416-de10`): 43.2 % of the 7.30 B entries, relative norm
+  ||RL - base|| / ||base|| = 0.13 % overall; 0.22 to 0.27 % in every attention and MLP matrix (k_proj 59.7 % of entries changed,
+  q_proj 57.5 %, o_proj 46.7 %, v_proj 46.2 %, MLP 43.5 to 44.2 %), 0.16 % in lm_head (29.0 % changed), 0.01 % in the embedding
+  (3.8 % changed), almost nothing in the norm weights (0.2 to 3.2 % changed, final norm 0); flat over layers (0.22 to 0.25 %, first
+  and last layers highest). Of the changed entries 53.6 % moved by at most one bf16 unit in the last place of the base value, 16.9 %
+  by more than 1 and up to 2, 5.1 % by more than 16. Code-RL: 39.2 % of entries, relative norm 0.11 %, the same pattern by group.
+- Rounding. Because most changes are one bf16 ulp, rounding base + a (RL - base) to the nearest bf16 moves a = 0.25 to an
+  effective a of 0.12 and a = 0.75 to 0.88 (`merge_stats.json` `rl.points`). The line cells use stochastic rounding (effective a
+  0.250, 0.500, 0.750, 1.250, 1.500 in each `merge.json`); the cost is noise orthogonal to RL - base (||M - B|| / ||RL - B|| is 0.42
+  at a = 0.25, 0.62 at a = 0.5). The rule was fixed in the spec before any cell ran.
+- Checks. Merge identity: theta(1) and the Code-RL merge are bit-identical to RL and Code-RL in all 355 tensors (asserted in the
+  job; the first version, b + (o - b) in float32, was not, in 79 tensors, and failed job `abaybektursun-1114-152420-32f3`).
+  Reproduction (rule fixed before the run): theta(1) through the merge path, plain, T2's seeds, first 50 problems, job
+  `abaybektursun-1114-152849-c7c6`: 47 right and 1 cap hit against T2's 47 and 0. Passed. No two cells share a non-empty
+  completion for any problem; two empty answers (stop token first) match T3 by chance (`identical_empty_texts`).
+- Not run (budget): base + 0.5 (Code-RL - base) with the cue. One sample per cell: no seed-to-seed spread; the a = 0.5 to 1.5 cue
+  cells differ by at most 7 of 500.
+- Cost at 3.95 USD per H100-hour (start to end record of each job, all on H100 80GB HBM3): 317.5 min, 20.9 USD in all; MATH-500
+  cells 20.5 to 31.9 min (1.35 to 2.10 USD) at 1,270 to 1,500 tokens/s; the merge takes 29 to 42 s; statistics and cosine jobs
+  0.30 USD; check 0.41 USD; four failed jobs 0.11 USD (`32f3`, `e931`, `c6cf`, `fa08`; the last two got no `--alpha` value from a
+  zsh loop and were resubmitted).
+- Raw answers: `runs/<job-id>/answers.jsonl` after `uv run tools/gpu.py get <job-id>` (abaybektursun's Modal workspace); T1, T2,
+  T3 in `runs/s3/<key>` after `aws s3 cp s3://pg-lineage-769063704696/results/rlneurons/<key>`. The per-tensor rows are in
+  `runs/abaybektursun-1114-152416-de10/merge_{rl,code}.json` (not committed).
+  Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_wdiff`.
 
 ## RLN-5 map: where RL still disagrees once the cue is given
 
@@ -403,6 +515,16 @@ Day-1 #3 (restart and four-sample vote) is not runnable yet. Four samples: four 
 RLN-3 rule seed + 10000 x sample + index) work today, but no script computes the vote (`rln4_lib.agree` is the equivalence
 test to use). Restart: `run_cell` has no option to run only the problems that hit the cap in an earlier run, and no script
 merges a restart into its parent row.
+
+Day-1 #4, one cell on a merged model (merge, then the cell on `/tmp/theta`; `analysis/day1_wdiff.py` `CELLS` has every command):
+
+```
+uv run tools/gpu.py submit h100 --hours 2.5 -- "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.merge_weights --other rl --alpha 0.5 --rounding stochastic --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label theta0.5 --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 61000000 --commit $(git rev-parse HEAD)"
+uv run --no-project --with torch --with safetensors --with numpy python -m studies.rlneurons.jobs.merge_weights_test
+```
+
+`rm -rf /tmp/theta`: Modal reuses containers, `/tmp` included. Statistics only (no weights written): `merge_weights --other rl`
+or `--other code [--cos-with-rl] --stats \$OUT_DIR/<name>.json`.
 
 Laptop dry run (no vLLM, no weights; downloads only the tokenizer files):
 
