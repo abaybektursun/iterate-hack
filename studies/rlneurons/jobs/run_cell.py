@@ -13,6 +13,8 @@ data/rln4/frozen4.json.
             rows and metrics; the RL tokenizer as for --model.
   --prompt  plain = the pair1 prompt; cue = the pair1 prompt followed by the opening cue (frozen4.json prefill_ids).
   --set     math500 = data/rln4/math500.json (500); hard328 = the 328 problems of data/rln3/hard.json with overlap flag "none".
+            hard72 = the other 72 of hard.json (in the RL training prompts: flag exact or near); hardmatch = 130 of the 328
+            (every AIME and AMC 23 problem and every sixth OlympiadBench problem), the unseen comparison set of specs/SPEC_seen.md.
   --min-p   vLLM min_p (default 0.0 = off): drop tokens whose probability, after temperature, is below min_p times the top token's.
             The cell name gains _mp<min_p> when it is not 0. specs/SPEC_minp.md.
   --seed    problem i is sampled with seed + i (i = the problem's index in its file), the study's convention.
@@ -70,7 +72,16 @@ def problems(name, fz):
     flags = json.loads((STUDY / "results" / "rln3" / "rln3_overlap.json").read_text())["sets"]["hard"]["flags"]
     clean = sorted(int(i) for i, f in flags.items() if f["flag"] == "none")
     assert len(clean) == 328 and all(int(hard[i]["index"]) == i for i in clean), "the clean harder set is not 328 problems"
-    return [hard[i] for i in clean]
+    if name == "hard328":
+        return [hard[i] for i in clean]
+    seen = sorted(set(range(len(hard))) - set(clean))
+    assert len(seen) == 72 and all(int(hard[i]["index"]) == i for i in seen), "the seen harder set is not 72 problems"
+    if name == "hard72":
+        return [hard[i] for i in seen]
+    oly = [i for i in clean if hard[i]["source"] == "olympiadbench"]            # hardmatch (specs/SPEC_seen.md)
+    match = sorted([i for i in clean if hard[i]["source"].startswith(("aime", "amc"))] + oly[::6])
+    assert name == "hardmatch" and len(match) == 130, (name, len(match))
+    return [hard[i] for i in match]
 
 
 def cut_at_shot_stop(tok, out_ids, lps):
@@ -122,7 +133,7 @@ def main():
     ap.add_argument("--model-path")
     ap.add_argument("--model-label")
     ap.add_argument("--prompt", required=True, choices=("plain", "cue"))
-    ap.add_argument("--set", required=True, choices=("math500", "hard328"))
+    ap.add_argument("--set", required=True, choices=("math500", "hard328", "hard72", "hardmatch"))
     ap.add_argument("--temperature", type=float, required=True)
     ap.add_argument("--top-p", type=float, required=True)
     ap.add_argument("--min-p", type=float, default=0.0)

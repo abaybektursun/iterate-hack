@@ -1,0 +1,52 @@
+{
+ "job_id": "abaybektursun-1114-235001-9aae",
+ "status": "done",
+ "commit": "d01a65e1c2cea7b4a8ff8029249a798fb4225252",
+ "rows": 288,
+ "rows_missing": 0,
+ "model": "code1",
+ "prompt": "cue",
+ "set_of_job": "hard72",
+ "restarts_of_job": 0,
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "code1",
+  "prompt": "cue",
+  "set": "hard72",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 3000000,
+  "shots": null,
+  "n": null,
+  "samples": 4,
+  "restarts": 0,
+  "out": "/runs/abaybektursun-1114-235001-9aae",
+  "dry_run": false,
+  "commit": "d01a65e1c2cea7b4a8ff8029249a798fb4225252",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 72,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "raw_answers": "runs/abaybektursun-1114-235001-9aae/answers.jsonl (uv run tools/gpu.py get abaybektursun-1114-235001-9aae)"
+}
