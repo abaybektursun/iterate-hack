@@ -86,7 +86,11 @@ def submit(args):
     job_id = f"{who}-{time.strftime('%m%d-%H%M%S')}-{secrets.token_hex(2)}"
     branch = git("rev-parse", "--abbrev-ref", "HEAD")  # tools/cycle.py matches jobs to work items by branch
     jobs[f"job:{job_id}"] = {"who": who, "class": gpu_class, "sha": sha, "cmd": cmd, "hours": hours, "at": int(time.time()), "branch": branch}
-    call = modal.Function.from_name("iterate-runner", gpu_class).spawn(job_id)
+    try:
+        call = modal.Function.from_name("iterate-runner", gpu_class).spawn(job_id)
+    except Exception:  # Modal rejected the job (spend limit): without this its record stays in "submitting" for ever
+        del jobs[f"job:{job_id}"]
+        raise
     jobs[f"call:{job_id}"] = call.object_id
     print(job_id)
     if sum(key.startswith("job:") for key in jobs.keys()) % 5 == 0:
