@@ -142,5 +142,45 @@
   "verdict": "undecided",
   "measured": "undecided, not computable: per-sample dev100 rows only in frustea's Modal Volume; null ready: cued base G_cue 0.40 [0.34, 0.46] n=34 vote-wrong of 500, so the claim needs G_plain >= 0.52",
   "added": "2026-11-15T22:03:41Z"
+ },
+ {
+  "mechanism": "round-09/grader-m04",
+  "claim": "On MATH-500 the base's plain-right / cue-right ratio falls from levels 1-2 to levels 4-5 by more than a second cued sample's ratio to the same cue sample falls (by more than 0.05).",
+  "result": "result-887689",
+  "verdict": "undecided",
+  "measured": "Delta = -0.024 [90 %: -0.143, +0.095] (plain 0.592 -> 0.503, C2 1.025 -> 0.959), n = 120 T1-right in L1-2 / 197 in L4-5, null 0, threshold -0.05; ~21x the problems to decide",
+  "added": "2026-11-15T22:44:26Z"
+ },
+ {
+  "mechanism": "round-10/weights-m01",
+  "claim": "On hard328 the 1.5x top-8 RL-Math edit keeps a larger share of cap hits on problems the base often runs to the cap than on problems it seldom does (Q = ln(e_HI/b_HI) - ln(e_LO/b_LO) > 0.3), as a fixed shift in cap log-odds predicts.",
+  "result": "result-175cff",
+  "verdict": "undecided",
+  "measured": "Q 0.39 [-0.25, 1.06], n 269 (HI 39, LO 230 of 328 problems), null Q = 0 (fixed fraction); threshold 0.3; noise null Q 0.26 [-0.17, 0.71]; log-odds shift D = L_HI - L_LO -0.38 [-1.14, 0.39]",
+  "added": "2026-11-15T22:44:26Z"
+ },
+ {
+  "mechanism": "run-08/f2-m05",
+  "claim": "On cued-base MATH-500 problems with 2-10 of 12 samples right, the vote over 4 with the real wrong answers beats the same vote with every finished wrong answer merged into one by at least 0.05 per problem.",
+  "result": "result-dd9b25",
+  "verdict": "holds",
+  "measured": "D = 0.070 [0.060, 0.081] (V4 0.828 real wrong vs 0.758 merged wrong), n 158 problems, null 0 (merged-wrong vote), threshold 0.05",
+  "added": "2026-11-15T22:44:26Z"
+ },
+ {
+  "mechanism": "round-09/stopping-m04",
+  "claim": "At T 1.0 on MATH-500, RL step 100 (plain) hits the 16,384-token cap as often as the cued base on the same problems (paired difference not 1 point or more lower), while final RL's cap-hit rate is clearly lower.",
+  "result": "result-074b77",
+  "verdict": "holds",
+  "measured": "D (step 100 minus cued base cap-hit rate) -0.25 points [-0.95, +0.50], n 500 problems x 4 samples, null 0 (base vs itself -> +0.60 [-0.60, +1.80]); final RL -2.90 [-3.80, -2.05], step 400 -2.15 [-2.95, -1.35]; threshold -1.0",
+  "added": "2026-11-15T22:44:26Z"
+ },
+ {
+  "mechanism": "run-02/f2-m04",
+  "claim": "Adding 2 x (RL-Math - base) to Think-SFT turns the abstaining cap-hit companions of a lone right sample into finished wrong answers, so on problems with exactly 1 right of 3 samples the M(2) vote is right at least 0.15 less often than Think-SFT's.",
+  "result": "result-031f98",
+  "verdict": "undecided",
+  "measured": "D = VR_ThinkSFT - VR_M2 = 0.19 [0.08, 0.30] (0.82 vs 0.63), n 41 / 32 lone-right problems (< 50), null D_null -0.02 [-0.11, 0.08]; threshold 0.15; ~240-300 lone-right per arm (~3,400 problems) would decide",
+  "added": "2026-11-15T22:44:26Z"
  }
 ]
