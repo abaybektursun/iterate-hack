@@ -14,7 +14,12 @@ Files here:
 
 Write $n mechanisms that explain the board's numbers and forecast the targets. A mechanism says what the model does
 (how it allocates tokens, when it stops, which errors it makes, what an edit or a prompt changes in its behaviour),
-not only which number comes out. Rules:
+not only which number comes out.
+
+Lens: every mechanism comes from this family of causes: $lens
+Search widely inside it: the $n mechanisms should cover different parts of the family, not variations of one idea.
+
+Rules:
 - The $n mechanisms are pairwise different: no two rest on the same cause.
 - None restates a theory in graveyard.json.
 - "statement": at most 80 words, plain technical English.
@@ -22,16 +27,17 @@ not only which number comes out. Rules:
 - "forecasts": a forecast for at least half of the targets, each {id, value, low, high, reason}: value and a 90 %
   interval in the target's unit, and one line of derivation from the mechanism. Leave out targets the mechanism
   says nothing about.
-- On at least 3 targets the mechanism's value must lie outside both readers' intervals. On those forecasts add
-  "readers_wrong": one sentence on what the readers miss there. A mechanism that only repeats the readers' numbers is
-  not a theory.
+- On every forecast add "vs_readers": one sentence that starts with "agree" or "disagree" and says why: where the
+  mechanism gives the readers' number, say so; where it gives another number, say what the readers miss. Disagree
+  only where the mechanism implies it: agreeing earns about 0, a right disagreement earns most, a wrong one
+  loses most.
 - Each forecast is scored as a normal distribution (mean value, sd (high - low) / 3.29) by the density it gives the
   measured value, against the mixture of the two readers. Too wide earns little. Too narrow loses when it misses.
 
 Write mechanisms.json, one JSON object:
 {"mechanisms": [{"id": "f2-m01", "statement": "...", "rests_on": ["result-xxxxxx", "result-yyyyyy"],
                  "forecasts": [{"id": "t01", "value": 312, "low": 295, "high": 330, "reason": "...",
-                                "readers_wrong": "..."}]}]}
-Ids f2-m01, f2-m02, ... in order. "readers_wrong" only where the value is outside both readers' intervals.
+                                "vs_readers": "disagree: ..."}]}]}
+Ids f2-m01, f2-m02, ... in order.
 
 Write only mechanisms.json. Reply with the number of mechanisms.

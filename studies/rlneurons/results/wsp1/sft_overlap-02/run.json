@@ -1,0 +1,999 @@
+{
+ "command": "PYTHONPATH=. uv run --no-project --with huggingface_hub --with pyarrow --with numpy python -m studies.rlneurons.analysis.wsp1_sft_overlap --tmp /private/tmp/claude-1247860641/-Users-saslan-19-Desktop-Tengs-codingMiscellaneous-iterate-hack--claude-worktrees-api-credits-harness-connect-a30905/d635c6c7-f062-4a82-99d0-d7a3a285e372/scratchpad/sft_overlap --minutes 75 --workers 8 --out studies/rlneurons/results/wsp1/sft_overlap-02",
+ "date_utc": "2026-11-15T08:02:56+00:00",
+ "commit": "49f79cc70c6c16521f289e5f1db368bcfe1f1924",
+ "where": "laptop, CPU only",
+ "wall_s": 5009,
+ "versions": {
+  "python": "3.12.9",
+  "pyarrow": "24.0.0",
+  "numpy": "2.2.6",
+  "huggingface_hub": "2.4.0"
+ },
+ "shards": [
+  {
+   "shard": 0,
+   "file": "data/train-00000-of-00156.parquet",
+   "bytes": 102625535,
+   "rows": 14540,
+   "download_s": 72.0,
+   "scan_s": 5.5
+  },
+  {
+   "shard": 1,
+   "file": "data/train-00001-of-00156.parquet",
+   "bytes": 103697225,
+   "rows": 14540,
+   "download_s": 210.8,
+   "scan_s": 9.8
+  },
+  {
+   "shard": 2,
+   "file": "data/train-00002-of-00156.parquet",
+   "bytes": 103740622,
+   "rows": 14540,
+   "download_s": 155.2,
+   "scan_s": 5.0
+  },
+  {
+   "shard": 3,
+   "file": "data/train-00003-of-00156.parquet",
+   "bytes": 103915940,
+   "rows": 14540,
+   "download_s": 168.7,
+   "scan_s": 5.9
+  },
+  {
+   "shard": 4,
+   "file": "data/train-00004-of-00156.parquet",
+   "bytes": 104415393,
+   "rows": 14540,
+   "download_s": 165.3,
+   "scan_s": 6.0
+  },
+  {
+   "shard": 5,
+   "file": "data/train-00005-of-00156.parquet",
+   "bytes": 158653343,
+   "rows": 14540,
+   "download_s": 194.2,
+   "scan_s": 4.8
+  },
+  {
+   "shard": 6,
+   "file": "data/train-00006-of-00156.parquet",
+   "bytes": 294779745,
+   "rows": 14540,
+   "download_s": 230.5,
+   "scan_s": 2.9
+  },
+  {
+   "shard": 7,
+   "file": "data/train-00007-of-00156.parquet",
+   "bytes": 295116325,
+   "rows": 14540,
+   "download_s": 172.8,
+   "scan_s": 1.7
+  },
+  {
+   "shard": 8,
+   "file": "data/train-00008-of-00156.parquet",
+   "bytes": 293357574,
+   "rows": 14540,
+   "download_s": 209.6,
+   "scan_s": 2.4
+  },
+  {
+   "shard": 9,
+   "file": "data/train-00009-of-00156.parquet",
+   "bytes": 294252520,
+   "rows": 14540,
+   "download_s": 138.7,
+   "scan_s": 2.8
+  },
+  {
+   "shard": 10,
+   "file": "data/train-00010-of-00156.parquet",
+   "bytes": 294751224,
+   "rows": 14540,
+   "download_s": 142.5,
+   "scan_s": 2.9
+  },
+  {
+   "shard": 11,
+   "file": "data/train-00011-of-00156.parquet",
+   "bytes": 293530091,
+   "rows": 14540,
+   "download_s": 138.9,
+   "scan_s": 2.2
+  },
+  {
+   "shard": 12,
+   "file": "data/train-00012-of-00156.parquet",
+   "bytes": 294200358,
+   "rows": 14540,
+   "download_s": 407.7,
+   "scan_s": 1.7
+  },
+  {
+   "shard": 13,
+   "file": "data/train-00013-of-00156.parquet",
+   "bytes": 294323459,
+   "rows": 14540,
+   "download_s": 406.0,
+   "scan_s": 2.2
+  },
+  {
+   "shard": 14,
+   "file": "data/train-00014-of-00156.parquet",
+   "bytes": 293886322,
+   "rows": 14540,
+   "download_s": 386.9,
+   "scan_s": 1.9
+  },
+  {
+   "shard": 15,
+   "file": "data/train-00015-of-00156.parquet",
+   "bytes": 294425454,
+   "rows": 14540,
+   "download_s": 328.0,
+   "scan_s": 1.9
+  },
+  {
+   "shard": 16,
+   "file": "data/train-00016-of-00156.parquet",
+   "bytes": 293730575,
+   "rows": 14540,
+   "download_s": 127.4,
+   "scan_s": 1.7
+  },
+  {
+   "shard": 17,
+   "file": "data/train-00017-of-00156.parquet",
+   "bytes": 293765090,
+   "rows": 14540,
+   "download_s": 380.8,
+   "scan_s": 2.2
+  },
+  {
+   "shard": 18,
+   "file": "data/train-00018-of-00156.parquet",
+   "bytes": 294414552,
+   "rows": 14540,
+   "download_s": 135.3,
+   "scan_s": 1.6
+  },
+  {
+   "shard": 19,
+   "file": "data/train-00019-of-00156.parquet",
+   "bytes": 293038634,
+   "rows": 14540,
+   "download_s": 321.9,
+   "scan_s": 2.7
+  },
+  {
+   "shard": 20,
+   "file": "data/train-00020-of-00156.parquet",
+   "bytes": 292889118,
+   "rows": 14540,
+   "download_s": 372.3,
+   "scan_s": 2.7
+  },
+  {
+   "shard": 21,
+   "file": "data/train-00021-of-00156.parquet",
+   "bytes": 293881403,
+   "rows": 14540,
+   "download_s": 100.9,
+   "scan_s": 3.0
+  },
+  {
+   "shard": 22,
+   "file": "data/train-00022-of-00156.parquet",
+   "bytes": 293919302,
+   "rows": 14540,
+   "download_s": 119.4,
+   "scan_s": 2.2
+  },
+  {
+   "shard": 23,
+   "file": "data/train-00023-of-00156.parquet",
+   "bytes": 486654886,
+   "rows": 14540,
+   "download_s": 609.0,
+   "scan_s": 2.8
+  },
+  {
+   "shard": 24,
+   "file": "data/train-00024-of-00156.parquet",
+   "bytes": 495229283,
+   "rows": 14540,
+   "download_s": 565.3,
+   "scan_s": 2.9
+  },
+  {
+   "shard": 25,
+   "file": "data/train-00025-of-00156.parquet",
+   "bytes": 495839007,
+   "rows": 14540,
+   "download_s": 627.2,
+   "scan_s": 4.1
+  },
+  {
+   "shard": 26,
+   "file": "data/train-00026-of-00156.parquet",
+   "bytes": 493869080,
+   "rows": 14540,
+   "download_s": 631.1,
+   "scan_s": 3.0
+  },
+  {
+   "shard": 27,
+   "file": "data/train-00027-of-00156.parquet",
+   "bytes": 493300413,
+   "rows": 14540,
+   "download_s": 584.6,
+   "scan_s": 5.6
+  },
+  {
+   "shard": 28,
+   "file": "data/train-00028-of-00156.parquet",
+   "bytes": 496127099,
+   "rows": 14540,
+   "download_s": 172.1,
+   "scan_s": 2.4
+  },
+  {
+   "shard": 29,
+   "file": "data/train-00029-of-00156.parquet",
+   "bytes": 495154782,
+   "rows": 14540,
+   "download_s": 428.0,
+   "scan_s": 2.9
+  },
+  {
+   "shard": 30,
+   "file": "data/train-00030-of-00156.parquet",
+   "bytes": 493412122,
+   "rows": 14540,
+   "download_s": 516.3,
+   "scan_s": 3.0
+  },
+  {
+   "shard": 31,
+   "file": "data/train-00031-of-00156.parquet",
+   "bytes": 493553129,
+   "rows": 14540,
+   "download_s": 376.2,
+   "scan_s": 7.7
+  },
+  {
+   "shard": 32,
+   "file": "data/train-00032-of-00156.parquet",
+   "bytes": 494751925,
+   "rows": 14540,
+   "download_s": 1556.8,
+   "scan_s": 7.9
+  },
+  {
+   "shard": 33,
+   "file": "data/train-00033-of-00156.parquet",
+   "bytes": 493476307,
+   "rows": 14540,
+   "download_s": 429.8,
+   "scan_s": 7.7
+  },
+  {
+   "shard": 34,
+   "file": "data/train-00034-of-00156.parquet",
+   "bytes": 493558938,
+   "rows": 14540,
+   "download_s": 1442.6,
+   "scan_s": 5.6
+  },
+  {
+   "shard": 35,
+   "file": "data/train-00035-of-00156.parquet",
+   "bytes": 495767023,
+   "rows": 14540,
+   "download_s": 1334.6,
+   "scan_s": 12.2
+  },
+  {
+   "shard": 36,
+   "file": "data/train-00036-of-00156.parquet",
+   "bytes": 495216447,
+   "rows": 14540,
+   "download_s": 1462.0,
+   "scan_s": 4.1
+  },
+  {
+   "shard": 37,
+   "file": "data/train-00037-of-00156.parquet",
+   "bytes": 495143117,
+   "rows": 14540,
+   "download_s": 1420.0,
+   "scan_s": 4.6
+  },
+  {
+   "shard": 38,
+   "file": "data/train-00038-of-00156.parquet",
+   "bytes": 494863176,
+   "rows": 14540,
+   "download_s": 1351.8,
+   "scan_s": 5.2
+  },
+  {
+   "shard": 39,
+   "file": "data/train-00039-of-00156.parquet",
+   "bytes": 494356405,
+   "rows": 14540,
+   "download_s": 1455.4,
+   "scan_s": 4.0
+  },
+  {
+   "shard": 40,
+   "file": "data/train-00040-of-00156.parquet",
+   "bytes": 495696902,
+   "rows": 14540,
+   "download_s": 1030.9,
+   "scan_s": 2.2
+  },
+  {
+   "shard": 41,
+   "file": "data/train-00041-of-00156.parquet",
+   "bytes": 495041366,
+   "rows": 14540,
+   "download_s": 960.3,
+   "scan_s": 2.1
+  },
+  {
+   "shard": 42,
+   "file": "data/train-00042-of-00156.parquet",
+   "bytes": 494878432,
+   "rows": 14540,
+   "download_s": 1045.2,
+   "scan_s": 14.0
+  },
+  {
+   "shard": 43,
+   "file": "data/train-00043-of-00156.parquet",
+   "bytes": 494367123,
+   "rows": 14540,
+   "download_s": 985.5,
+   "scan_s": 2.5
+  },
+  {
+   "shard": 44,
+   "file": "data/train-00044-of-00156.parquet",
+   "bytes": 493796227,
+   "rows": 14540,
+   "download_s": 1044.8,
+   "scan_s": 11.9
+  },
+  {
+   "shard": 45,
+   "file": "data/train-00045-of-00156.parquet",
+   "bytes": 495600157,
+   "rows": 14540,
+   "download_s": 1103.6,
+   "scan_s": 2.4
+  },
+  {
+   "shard": 46,
+   "file": "data/train-00046-of-00156.parquet",
+   "bytes": 494420558,
+   "rows": 14540,
+   "download_s": 1059.3,
+   "scan_s": 3.1
+  },
+  {
+   "shard": 47,
+   "file": "data/train-00047-of-00156.parquet",
+   "bytes": 495964893,
+   "rows": 14540,
+   "download_s": 1009.1,
+   "scan_s": 2.1
+  },
+  {
+   "shard": 48,
+   "file": "data/train-00048-of-00156.parquet",
+   "bytes": 495232060,
+   "rows": 14540,
+   "download_s": 841.3,
+   "scan_s": 3.5
+  },
+  {
+   "shard": 49,
+   "file": "data/train-00049-of-00156.parquet",
+   "bytes": 494219052,
+   "rows": 14540,
+   "download_s": 1214.5,
+   "scan_s": 4.3
+  },
+  {
+   "shard": 50,
+   "file": "data/train-00050-of-00156.parquet",
+   "bytes": 494944849,
+   "rows": 14540,
+   "download_s": 904.3,
+   "scan_s": 3.1
+  },
+  {
+   "shard": 51,
+   "file": "data/train-00051-of-00156.parquet",
+   "bytes": 494466778,
+   "rows": 14540,
+   "download_s": 1019.0,
+   "scan_s": 2.0
+  },
+  {
+   "shard": 52,
+   "file": "data/train-00052-of-00156.parquet",
+   "bytes": 495072261,
+   "rows": 14540,
+   "download_s": 710.8,
+   "scan_s": 7.1
+  },
+  {
+   "shard": 53,
+   "file": "data/train-00053-of-00156.parquet",
+   "bytes": 495862240,
+   "rows": 14540,
+   "download_s": 1175.9,
+   "scan_s": 5.1
+  },
+  {
+   "shard": 54,
+   "file": "data/train-00054-of-00156.parquet",
+   "bytes": 494740044,
+   "rows": 14540,
+   "download_s": 906.4,
+   "scan_s": 4.1
+  },
+  {
+   "shard": 55,
+   "file": "data/train-00055-of-00156.parquet",
+   "bytes": 493488213,
+   "rows": 14540,
+   "download_s": 900.0,
+   "scan_s": 2.4
+  },
+  {
+   "shard": 56,
+   "file": "data/train-00056-of-00156.parquet",
+   "bytes": 494248118,
+   "rows": 14540,
+   "download_s": 963.6,
+   "scan_s": 7.0
+  },
+  {
+   "shard": 57,
+   "file": "data/train-00057-of-00156.parquet",
+   "bytes": 345323316,
+   "rows": 14540,
+   "download_s": 576.4,
+   "scan_s": 4.8
+  },
+  {
+   "shard": 58,
+   "file": "data/train-00058-of-00156.parquet",
+   "bytes": 196364923,
+   "rows": 14540,
+   "download_s": 394.1,
+   "scan_s": 3.6
+  },
+  {
+   "shard": 59,
+   "file": "data/train-00059-of-00156.parquet",
+   "bytes": 196556875,
+   "rows": 14540,
+   "download_s": 240.5,
+   "scan_s": 3.7
+  },
+  {
+   "shard": 60,
+   "file": "data/train-00060-of-00156.parquet",
+   "bytes": 195892655,
+   "rows": 14540,
+   "download_s": 430.3,
+   "scan_s": 3.3
+  },
+  {
+   "shard": 61,
+   "file": "data/train-00061-of-00156.parquet",
+   "bytes": 198790040,
+   "rows": 14540,
+   "download_s": 449.5,
+   "scan_s": 3.4
+  },
+  {
+   "shard": 62,
+   "file": "data/train-00062-of-00156.parquet",
+   "bytes": 196407064,
+   "rows": 14540,
+   "download_s": 406.4,
+   "scan_s": 4.5
+  },
+  {
+   "shard": 63,
+   "file": "data/train-00063-of-00156.parquet",
+   "bytes": 309199190,
+   "rows": 14540,
+   "download_s": 779.5,
+   "scan_s": 6.6
+  },
+  {
+   "shard": 64,
+   "file": "data/train-00064-of-00156.parquet",
+   "bytes": 390481416,
+   "rows": 14540,
+   "download_s": 1010.0,
+   "scan_s": 7.5
+  },
+  {
+   "shard": 65,
+   "file": "data/train-00065-of-00156.parquet",
+   "bytes": 367950301,
+   "rows": 14540,
+   "download_s": 1005.9,
+   "scan_s": 11.9
+  },
+  {
+   "shard": 66,
+   "file": "data/train-00066-of-00156.parquet",
+   "bytes": 378888843,
+   "rows": 14540,
+   "download_s": 852.4,
+   "scan_s": 6.6
+  },
+  {
+   "shard": 67,
+   "file": "data/train-00067-of-00156.parquet",
+   "bytes": 448686198,
+   "rows": 14540,
+   "download_s": 1344.3,
+   "scan_s": 6.5
+  },
+  {
+   "shard": 68,
+   "file": "data/train-00068-of-00156.parquet",
+   "bytes": 605884602,
+   "rows": 14540,
+   "download_s": 1636.7,
+   "scan_s": 8.3
+  },
+  {
+   "shard": 69,
+   "file": "data/train-00069-of-00156.parquet",
+   "bytes": 590597681,
+   "rows": 14540,
+   "download_s": 1591.7,
+   "scan_s": 8.5
+  },
+  {
+   "shard": 70,
+   "file": "data/train-00070-of-00156.parquet",
+   "bytes": 277832927,
+   "rows": 14540,
+   "download_s": 884.5,
+   "scan_s": 5.6
+  },
+  {
+   "shard": 71,
+   "file": "data/train-00071-of-00156.parquet",
+   "bytes": 38191186,
+   "rows": 14540,
+   "download_s": 192.1,
+   "scan_s": 0.6
+  },
+  {
+   "shard": 72,
+   "file": "data/train-00072-of-00156.parquet",
+   "bytes": 47579542,
+   "rows": 14540,
+   "download_s": 101.0,
+   "scan_s": 1.5
+  },
+  {
+   "shard": 73,
+   "file": "data/train-00073-of-00156.parquet",
+   "bytes": 47612349,
+   "rows": 14540,
+   "download_s": 150.5,
+   "scan_s": 0.9
+  },
+  {
+   "shard": 74,
+   "file": "data/train-00074-of-00156.parquet",
+   "bytes": 48772614,
+   "rows": 14540,
+   "download_s": 96.3,
+   "scan_s": 1.0
+  },
+  {
+   "shard": 75,
+   "file": "data/train-00075-of-00156.parquet",
+   "bytes": 48193062,
+   "rows": 14540,
+   "download_s": 116.6,
+   "scan_s": 0.9
+  },
+  {
+   "shard": 76,
+   "file": "data/train-00076-of-00156.parquet",
+   "bytes": 48168279,
+   "rows": 14540,
+   "download_s": 140.9,
+   "scan_s": 0.8
+  },
+  {
+   "shard": 77,
+   "file": "data/train-00077-of-00156.parquet",
+   "bytes": 47827241,
+   "rows": 14540,
+   "download_s": 51.4,
+   "scan_s": 0.8
+  },
+  {
+   "shard": 78,
+   "file": "data/train-00078-of-00156.parquet",
+   "bytes": 47394196,
+   "rows": 14540,
+   "download_s": 102.9,
+   "scan_s": 0.9
+  },
+  {
+   "shard": 79,
+   "file": "data/train-00079-of-00156.parquet",
+   "bytes": 48014068,
+   "rows": 14540,
+   "download_s": 152.9,
+   "scan_s": 0.8
+  },
+  {
+   "shard": 80,
+   "file": "data/train-00080-of-00156.parquet",
+   "bytes": 41725050,
+   "rows": 14540,
+   "download_s": 65.3,
+   "scan_s": 0.8
+  },
+  {
+   "shard": 81,
+   "file": "data/train-00081-of-00156.parquet",
+   "bytes": 41383680,
+   "rows": 14540,
+   "download_s": 136.6,
+   "scan_s": 0.8
+  },
+  {
+   "shard": 82,
+   "file": "data/train-00082-of-00156.parquet",
+   "bytes": 41002654,
+   "rows": 14540,
+   "download_s": 47.7,
+   "scan_s": 0.8
+  },
+  {
+   "shard": 83,
+   "file": "data/train-00083-of-00156.parquet",
+   "bytes": 41446056,
+   "rows": 14540,
+   "download_s": 90.0,
+   "scan_s": 0.8
+  },
+  {
+   "shard": 84,
+   "file": "data/train-00084-of-00156.parquet",
+   "bytes": 41883455,
+   "rows": 14540,
+   "download_s": 42.6,
+   "scan_s": 0.8
+  },
+  {
+   "shard": 85,
+   "file": "data/train-00085-of-00156.parquet",
+   "bytes": 41565488,
+   "rows": 14540,
+   "download_s": 50.3,
+   "scan_s": 0.8
+  },
+  {
+   "shard": 86,
+   "file": "data/train-00086-of-00156.parquet",
+   "bytes": 42817706,
+   "rows": 14540,
+   "download_s": 50.7,
+   "scan_s": 0.9
+  },
+  {
+   "shard": 87,
+   "file": "data/train-00087-of-00156.parquet",
+   "bytes": 84935824,
+   "rows": 14540,
+   "download_s": 156.9,
+   "scan_s": 2.0
+  },
+  {
+   "shard": 88,
+   "file": "data/train-00088-of-00156.parquet",
+   "bytes": 86173097,
+   "rows": 14540,
+   "download_s": 159.9,
+   "scan_s": 1.9
+  },
+  {
+   "shard": 89,
+   "file": "data/train-00089-of-00156.parquet",
+   "bytes": 85415853,
+   "rows": 14540,
+   "download_s": 279.4,
+   "scan_s": 1.9
+  },
+  {
+   "shard": 90,
+   "file": "data/train-00090-of-00156.parquet",
+   "bytes": 85951026,
+   "rows": 14540,
+   "download_s": 256.2,
+   "scan_s": 2.1
+  },
+  {
+   "shard": 91,
+   "file": "data/train-00091-of-00156.parquet",
+   "bytes": 85908768,
+   "rows": 14540,
+   "download_s": 80.7,
+   "scan_s": 1.9
+  },
+  {
+   "shard": 92,
+   "file": "data/train-00092-of-00156.parquet",
+   "bytes": 85580381,
+   "rows": 14540,
+   "download_s": 155.7,
+   "scan_s": 1.8
+  },
+  {
+   "shard": 93,
+   "file": "data/train-00093-of-00156.parquet",
+   "bytes": 85306378,
+   "rows": 14540,
+   "download_s": 207.3,
+   "scan_s": 1.9
+  },
+  {
+   "shard": 94,
+   "file": "data/train-00094-of-00156.parquet",
+   "bytes": 85288521,
+   "rows": 14539,
+   "download_s": 157.5,
+   "scan_s": 1.9
+  },
+  {
+   "shard": 95,
+   "file": "data/train-00095-of-00156.parquet",
+   "bytes": 85187972,
+   "rows": 14539,
+   "download_s": 131.4,
+   "scan_s": 1.8
+  },
+  {
+   "shard": 96,
+   "file": "data/train-00096-of-00156.parquet",
+   "bytes": 49731574,
+   "rows": 14539,
+   "download_s": 197.2,
+   "scan_s": 1.3
+  },
+  {
+   "shard": 97,
+   "file": "data/train-00097-of-00156.parquet",
+   "bytes": 33709207,
+   "rows": 14539,
+   "download_s": 42.6,
+   "scan_s": 1.1
+  },
+  {
+   "shard": 98,
+   "file": "data/train-00098-of-00156.parquet",
+   "bytes": 33217657,
+   "rows": 14539,
+   "download_s": 36.2,
+   "scan_s": 1.2
+  },
+  {
+   "shard": 99,
+   "file": "data/train-00099-of-00156.parquet",
+   "bytes": 25982846,
+   "rows": 14539,
+   "download_s": 42.4,
+   "scan_s": 0.3
+  },
+  {
+   "shard": 100,
+   "file": "data/train-00100-of-00156.parquet",
+   "bytes": 26213408,
+   "rows": 14539,
+   "download_s": 33.9,
+   "scan_s": 0.3
+  },
+  {
+   "shard": 101,
+   "file": "data/train-00101-of-00156.parquet",
+   "bytes": 92648440,
+   "rows": 14539,
+   "download_s": 356.4,
+   "scan_s": 4.4
+  },
+  {
+   "shard": 102,
+   "file": "data/train-00102-of-00156.parquet",
+   "bytes": 247846468,
+   "rows": 14539,
+   "download_s": 220.3,
+   "scan_s": 4.1
+  },
+  {
+   "shard": 103,
+   "file": "data/train-00103-of-00156.parquet",
+   "bytes": 162842369,
+   "rows": 14539,
+   "download_s": 410.2,
+   "scan_s": 1.9
+  },
+  {
+   "shard": 104,
+   "file": "data/train-00104-of-00156.parquet",
+   "bytes": 163135074,
+   "rows": 14539,
+   "download_s": 298.0,
+   "scan_s": 1.5
+  },
+  {
+   "shard": 105,
+   "file": "data/train-00105-of-00156.parquet",
+   "bytes": 165008709,
+   "rows": 14539,
+   "download_s": 447.3,
+   "scan_s": 1.9
+  },
+  {
+   "shard": 106,
+   "file": "data/train-00106-of-00156.parquet",
+   "bytes": 96949091,
+   "rows": 14539,
+   "download_s": 130.1,
+   "scan_s": 5.3
+  },
+  {
+   "shard": 107,
+   "file": "data/train-00107-of-00156.parquet",
+   "bytes": 77242912,
+   "rows": 14539,
+   "download_s": 132.5,
+   "scan_s": 8.2
+  },
+  {
+   "shard": 108,
+   "file": "data/train-00108-of-00156.parquet",
+   "bytes": 153555327,
+   "rows": 14539,
+   "download_s": 464.3,
+   "scan_s": 3.5
+  },
+  {
+   "shard": 109,
+   "file": "data/train-00109-of-00156.parquet",
+   "bytes": 37605601,
+   "rows": 14539,
+   "download_s": 166.0,
+   "scan_s": 0.6
+  },
+  {
+   "shard": 110,
+   "file": "data/train-00110-of-00156.parquet",
+   "bytes": 37525501,
+   "rows": 14539,
+   "download_s": 47.7,
+   "scan_s": 2.3
+  },
+  {
+   "shard": 111,
+   "file": "data/train-00111-of-00156.parquet",
+   "bytes": 37271070,
+   "rows": 14539,
+   "download_s": 83.1,
+   "scan_s": 0.5
+  },
+  {
+   "shard": 112,
+   "file": "data/train-00112-of-00156.parquet",
+   "bytes": 37528093,
+   "rows": 14539,
+   "download_s": 61.8,
+   "scan_s": 0.6
+  },
+  {
+   "shard": 113,
+   "file": "data/train-00113-of-00156.parquet",
+   "bytes": 37612188,
+   "rows": 14539,
+   "download_s": 54.3,
+   "scan_s": 0.6
+  },
+  {
+   "shard": 114,
+   "file": "data/train-00114-of-00156.parquet",
+   "bytes": 37610420,
+   "rows": 14539,
+   "download_s": 36.1,
+   "scan_s": 0.7
+  },
+  {
+   "shard": 115,
+   "file": "data/train-00115-of-00156.parquet",
+   "bytes": 38553414,
+   "rows": 14539,
+   "download_s": 144.2,
+   "scan_s": 1.5
+  },
+  {
+   "shard": 116,
+   "file": "data/train-00116-of-00156.parquet",
+   "bytes": 265544393,
+   "rows": 14539,
+   "download_s": 525.0,
+   "scan_s": 6.1
+  },
+  {
+   "shard": 117,
+   "file": "data/train-00117-of-00156.parquet",
+   "bytes": 279628415,
+   "rows": 14539,
+   "download_s": 643.5,
+   "scan_s": 5.9
+  },
+  {
+   "shard": 118,
+   "file": "data/train-00118-of-00156.parquet",
+   "bytes": 279553878,
+   "rows": 14539,
+   "download_s": 535.4,
+   "scan_s": 5.3
+  },
+  {
+   "shard": 119,
+   "file": "data/train-00119-of-00156.parquet",
+   "bytes": 282561466,
+   "rows": 14539,
+   "download_s": 563.9,
+   "scan_s": 5.6
+  },
+  {
+   "shard": 120,
+   "file": "data/train-00120-of-00156.parquet",
+   "bytes": 282386162,
+   "rows": 14539,
+   "download_s": 604.1,
+   "scan_s": 4.9
+  },
+  {
+   "shard": 121,
+   "file": "data/train-00121-of-00156.parquet",
+   "bytes": 279797432,
+   "rows": 14539,
+   "download_s": 584.4,
+   "scan_s": 5.3
+  },
+  {
+   "shard": 122,
+   "file": "data/train-00122-of-00156.parquet",
+   "bytes": 282145477,
+   "rows": 14539,
+   "download_s": 327.3,
+   "scan_s": 4.9
+  }
+ ]
+}

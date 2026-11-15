@@ -1,0 +1,17 @@
+{
+ "job_id": "sameraslan-1114-215228-f78f",
+ "commit": "745fcd309bcbee9f308995bf61ac61593bc4f332",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_handedit --dir /tmp/theta --layer 31 --batch 1 --rounding nearest --control && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label cueprog_rand --prompt plain --set math500 --temperature 1.0 --top-p 1.0 --seed 80000000 --n 100 --commit 745fcd309bcbee9f308995bf61ac61593bc4f332",
+ "command_source": "rebuilt from metrics.json config and handedit.json args; argument order of the submitted string not recorded",
+ "gpu": "NVIDIA H100 80GB HBM3",
+ "seed": 80000000,
+ "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+ "n": 100,
+ "experiment": "screen100",
+ "label": "cueprog_rand",
+ "prompt": "plain",
+ "temperature": 1.0,
+ "top_p": 1.0,
+ "started_utc": "2026-11-15T06:02:50Z",
+ "raw_answers": "runs/sameraslan-1114-215228-f78f/answers.jsonl (uv run tools/gpu.py get sameraslan-1114-215228-f78f; sameraslan's Modal workspace)"
+}
