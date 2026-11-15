@@ -65,3 +65,20 @@ of the deciding cell is the next step.
 `analysis/normband_readout.py` -> `results/xreward/normband/readout.json` and one run folder per cell: right answers, cap hits,
 and paired differences over the 328 problems against base (4 samples), L0-10 at 1.5 (4) and L22-31 at 1.5 (2), with 95 % intervals
 from 10,000 bootstrap resamples of the problems (the diff of depth3_readout).
+
+## Amendment 1 (before the scored runs): A6 breaks the model; the late cells are 4.5 and 3.0
+
+Smoke runs (sample 1 seeds, `--n`, short caps, not scored): scale 9.0 on L22-31 (job abaybektursun-1115-144958-ed3a, n 4, 512
+tokens): 4 of 4 answers are loops of "which which x x". Scale 4.5 (abaybektursun-1115-145226-386e, n 8, 1,024 tokens): 7 of 8
+coherent math, 1 drifts into non-words ("pritiku vh such thisi tora ano"). Scale 3.0 (abaybektursun-1115-145240-18fc): 8 of 8
+coherent. So the late band cannot be raised to the early band's layer-24 shift (7.55x) without breaking the model. Scored cells,
+in order:
+
+| Cell | Arguments | Multiplier | Layer-24 RMS shift (linear) |
+|---|---|---|---|
+| A3 `top8x4.5_L22-31_math31` | `--layers 22-31 --scale 4.5` | 3 (largest that stays mostly coherent) | 2.48 |
+| B `top8x0.2_L0-10_math31` | `--layers 0-10 --scale 0.2` | 0.133 | 0.83 |
+| A2 `top8x3_L22-31_math31` | `--layers 22-31 --scale 3.0` | 2 (intermediate) | 1.65 |
+
+P1, P2 now apply to A3, P4 to A2 (between L22-31 at 1.5 and A3). The decision rule reads A3 in place of A6; if A3 is broken (right
+< 150 or cap hits > 100), A2 decides. Weight size of A3: add_norm 3.61 (squared 13.0) against L0-10 at 1.5: 1.06 (1.13), 11.5 times.
