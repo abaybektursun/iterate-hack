@@ -14,6 +14,8 @@ loads. d = other - base in float32, one tensor at a time; d_k = U_k diag(s_k) V_
              proj   layer matrices = base + d_k Vd Vd^T: the part of d_k that reads from the top-k input (right) subspace Vd of the --donor
                     model's difference from the base; every other tensor = base.
              projc  layer matrices = base + d_k (1 - Vd Vd^T): the rest of d_k. proj addition + projc addition = top8 addition.
+             rbulk  layer matrices = other - P diag(s_k) Q^T (rand8's addition, subtracted from the other model): the control of bulk;
+                    every other tensor = other.
              interp every tensor = (1 - alpha) base + alpha other (merge_weights.point); alpha 0 and 1 give the endpoints bit for bit (asserted).
   --other    rl_math (default), rl_code or think_sft: a key of wsp_delta_anatomy.MODELS. The base is MODELS["base"].
   --other, --donor also take the keys of xreward_overlap.MODELS (math31, code31, math30, code30, if30, general30, mix30).
@@ -56,7 +58,7 @@ from studies.rlneurons.jobs.xreward_overlap import MODELS as XMODELS
 ALL = {**MODELS, **XMODELS}                                                       # every model key of --other and --donor
 assert MODELS["base"] == XMODELS["base"]
 
-RECIPES = {"top8": 8, "bulk": 8, "rand8": 8, "late3": 3, "interp": None, "proj": 8, "projc": 8}          # recipe -> default k
+RECIPES = {"top8": 8, "bulk": 8, "rand8": 8, "late3": 3, "interp": None, "proj": 8, "projc": 8, "rbulk": 8}          # recipe -> default k
 LATE = range(24, 32)                                                              # late3's layers; the selftest passes its own
 JSON_KEY = "rl_math"                                                              # config and tokenizer for every model, as merge_weights
 SUMS = ("dot", "add_sq", "written_sq", "ref_sq", "top_sq", "d_sq")
@@ -101,7 +103,7 @@ def target(recipe, b, o, k=None, alpha=1.0, noise=None, scale=1.0, donor=None):
         return (1 - alpha) * b + alpha * o, alpha * d, None
     s, U, V = spectrum(d, k)
     sq = float((s[:k] ** 2).sum()), float((s ** 2).sum())
-    if recipe == "rand8":
+    if recipe in ("rand8", "rbulk"):
         U, V = (torch.linalg.qr(g.double()).Q.to(d.device) for g in noise)
         sq = None
     add = (U * s[:k]) @ V.T
@@ -113,7 +115,7 @@ def target(recipe, b, o, k=None, alpha=1.0, noise=None, scale=1.0, donor=None):
         add = shared if recipe == "proj" else add - shared
         sq = float((add ** 2).sum()), sq[1]
     add = (scale * add).float()
-    return (o - add, -add, sq) if recipe == "bulk" else (b + add, add, sq)
+    return (o - add, -add, sq) if recipe in ("bulk", "rbulk") else (b + add, add, sq)
 
 
 def ratios(a):
@@ -142,13 +144,13 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
     wd = weight_map(donor_dir) if donor_dir else None
     sel = selected(recipe, wb, late, mods)
     noise = {}
-    if recipe == "rand8":
+    if recipe in ("rand8", "rbulk"):
         shape = {n: v[1] for shard in set(wb.values()) for n, v in header(base_dir / shard).items()}
         g = torch.Generator().manual_seed(seed)
         noise = {n: tuple(torch.randn(side, k, generator=g) for side in shape[n]) for n in sorted(sel)}
     gen = torch.Generator(device).manual_seed(seed + 1)
-    ref = "other" if recipe == "bulk" else "base"                                 # the model the statistics measure the addition from
-    src = "other" if recipe == "bulk" or (recipe == "interp" and alpha == 1) else "base"       # the model an unchanged tensor is copied from
+    ref = "other" if recipe in ("bulk", "rbulk") else "base"                                 # the model the statistics measure the addition from
+    src = "other" if recipe in ("bulk", "rbulk") or (recipe == "interp" and alpha == 1) else "base"       # the model an unchanged tensor is copied from
     per, zero, kept = {}, [], {"base": 0, "other": 0}
     out_dir.mkdir(parents=True)
     for shard in sorted(set(wb.values())):
@@ -266,7 +268,7 @@ def selftest(device):
         check(3, "rand8 addition has top8's singular values and another direction", max(sv) < 1e-4 and max(cos) < 0.3,
               f"largest relative difference of the {k} singular values {max(sv):.1e}, largest |cos| {max(cos):.3f}")
 
-        runs = {r: run(r, r) for r in ("top8", "bulk", "rand8", "late3")}         # 4, 6: the written files, stochastic rounding
+        runs = {r: run(r, r) for r in ("top8", "bulk", "rand8", "late3", "rbulk")}         # 4, 6: the written files, stochastic rounding
         want = [f"model.layers.{i}.mlp.down_proj.weight" for i in late]
         changed = sorted(n for n in B if not same(runs["late3"][1][n], B[n]))
         check(4, f"late3 changes only down_proj of layers {list(late)}", changed == want and runs["late3"][0]["n_edited"] == len(want),
@@ -281,11 +283,11 @@ def selftest(device):
 
         ok, detail = True, []
         for r, (st, m) in runs.items():                                           # 6
-            S, sel = O if r == "bulk" else B, set(want if r == "late3" else mats)
+            S, sel = O if r in ("bulk", "rbulk") else B, set(want if r == "late3" else mats)
             ident = [n for n in B if same(m[n], S[n])]
             ok &= (set(ident) == set(B) - sel and st["n_edited"] == len(sel) and st["n_unchanged"] == len(B) - len(sel)
                    and st["zero_delta"] == ([] if r == "late3" else [ZERO]) and abs(st["totals"]["effective_scale"] - 1) < 0.05)
-            detail.append(f"{r} {len(ident)} identical to {'other' if r == 'bulk' else 'base'}, {st['n_edited']} edited, {st['n_zero_delta']} zero delta, "
+            detail.append(f"{r} {len(ident)} identical to {'other' if r in ('bulk', 'rbulk') else 'base'}, {st['n_edited']} edited, {st['n_zero_delta']} zero delta, "
                           f"effective_scale {st['totals']['effective_scale']:.4f}")
         check(6, "unedited tensors are bit-identical to their source and edited ones differ", ok, "; ".join(detail))
 

@@ -1018,8 +1018,17 @@ T 1.0 / top-p 1.0, seed 3000000, one sample, grader v3, `results/xreward/edits/r
 
 - Math top-8 minus the random control: +10.4 points [5.8, 14.9]. Minus RL: -4.3 [-8.2, -0.3]. Minus theta(0.5) (190): +0.6 [-3.4, 4.6].
 - Math 3.1 minus its top-8, against RL cue (205): -4.6 [-8.2, -1.2]. P2 of amendment 1 (the rest keeps the gain) is refuted.
-- Each half alone solves 30 of the 49 problems that RL solves and the cued base does not. The 8 directions lower the cap hits
-  (77 to 46); the rest raises them (90) and still gains 26 problems.
+- Each half alone solves 30 of the 49 problems that RL solves and the cued base does not; 19 are the same problems, which is what
+  independent resampling gives (18.4), and RL with the cue at another seed solves 37 of them. The two halves are not additive
+  (28 + 26 problems against RL's 42) and fix the same kinds of problems: of the base's 90 finished wrong answers 27 and 26, of its
+  74 wrong cap hits 14 and 13.
+- Cap hits fall with the 8 directions (77 to 46) and rise without them (90 against RL cue 25). They are not repetition loops: rules A
+  and B flag 0 cap hits in every cell, and 13 read by hand are all still working at the cap. The 90 has no control yet: the cell
+  carries BF16 rounding noise (norm 2.26 against 4.05 for the whole difference) that RL does not.
+- Audit by a second agent from the raw rows (work-4fa42e): all seven counts recomputed with `grade_v3`, same 328 problems, prompts
+  and seeds 3,000,000 + index in the paired cells (RL cue and theta(0.5) use other seeds); 24 answers read by hand, one lenient
+  match (`(4, \log 2)` for `(4, \log_{10} 2)` in the minus-top-8 cell). The clean contrast is top-8 against the random control:
+  both carry the rounding noise (written norm 2.60 and 2.67 for an addition of 1.27), the base cell does not.
 - Raw rows (read by a subagent, not committed): with the top-8 edit `Wait` rises from 9.2 to 12.3 per 1,000 words (RL 12.9) and
   finished answers with no boxed answer fall from 22 to 1.
 

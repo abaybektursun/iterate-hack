@@ -88,3 +88,11 @@ Next cells, same settings, `wsp_edit` with the new flags `--mods`, `--scale`, `-
    "the input directions that reasoning rewards share carry the gain": 6 is at least 180 and above 7. Refuted if 6 is within 12 of
    rand8; if 7 is then near 192, the gain is in what the math reward adds beyond the shared input directions.
 8. `top8 --other code30`. Code 3.0's own 8 directions; its whole model gains nothing on MATH-500 with the cue (411 against 410).
+
+## Amendment 4 (2026-11-15, after the audit of the first four cells): control for the minus-top-8 cell
+
+The audit found that the cap hits are not repetition loops (rules A and B: 0 in every cell) and that the minus-top-8 cell (190 right,
+90 cap hits) has no control for the BF16 rounding noise it carries. Cell 9: `rbulk --other math31` = Math 3.1 minus a matched random
+rank-8 addition (rand8's P diag(s) Q^T), same rounding. If removing the 8 directions is what costs 15 problems and adds cap hits,
+cell 9 stays within 8 of RL cue (205) with fewer than 45 cap hits. If cell 9 is near 190 with about 90 cap hits, the loss is the
+perturbation of the RL weights, not the 8 directions.
