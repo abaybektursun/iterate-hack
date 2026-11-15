@@ -461,6 +461,37 @@ draws), 3 never did (1 right).
 - Raw generations (not committed): `runs/abaybektursun-1115-021039-24f7/{s0,s2}`, `runs/ih-1115-095450-2b5a`, `runs/abaybektursun-1115-015601-2e73`
   on the laptop of the run; the AWS shard also in `s3://pg-lineage-769063704696/results/ih/ih-1115-095450-2b5a/out/`.
 
+## Round 06 (2026-11-15, cutoff 11-15 06:51:23 UTC, coordinator frustea)
+
+Plan `specs/SPEC_round06.md` (before the run), engine version 6.3 with `--account-from results/account/run-03`, work-a9a6dd, launched with
+`jobs/round.sh`. Two runs: the first stopped in the replicate stage (a print in `round.py` failed on a test without a refuting condition;
+fixed on ali/theory06, no score changes), the second resumed. 62 headless jobs, about 125 minutes, no GPU (`results/engine/round-06/run.json`,
+logs `round06.log`, `round06b.log`, examples `examples.json`).
+
+**Result: r5-m03-rival is the first theory of six rounds that survives its tests, beats a fresh rival (+6.70 nats, 6 tests, 1 separating) and
+whose review says "stands". r5-m10-rival also beats its fresh rival (+13.20, 6 tests, 1 separating) but its review says "weak". The account
+r6-account has 43 of 44 scored predictions inside (+35.41 nats, 38 of 38 decisive numbers replicated) and loses to a one-axis rival (-3.11,
+0 separating tests). Of 6 new theories 5 are refuted by their own predictions and 1 is untested; 6 mechanisms were abandoned by their developers.
+67 of 71 offline predictions computed: 56 inside, 3 within noise, 8 outside.**
+
+Hypotheses of the spec: H1 holds (both carried rivals beat their fresh rivals). H2 refuted (54 of 55 recomputed numbers equal; r6-m11 p1
+differs and is left out of its score). H3 holds (inventory and external both done after 826 s; 1,359 s in round 05).
+
+| Theory | Statement | Tests computed | In / noise / out | Gain (nats) | State | Duel | Review | What decided it |
+|---|---|---|---|---|---|---|---|---|
+| r5-m03-rival | The top-8 edit of the RL-Math weight change is an incomplete switch per sample: most base+top8 plain answers follow a weak dose of RL's policy, 10-15 % stay in the plain-base register. | 3 of 3 (carried from round 05) | 3 / 0 / 0 | +8.77 | survives | beats rival, +6.70 (6 tests, 1 separating) | stands | Fresh rival: the quick wrong answers are a per-problem plain-prompt failure. On top8's quick-wrong problems the plain base's wrong rate is 0.455 (n 22; theory 0.52, rival 0.68) and, against top8-right easy problems, -0.057 higher (n 401; theory 0.03, rival 0.25). The review asks to drop "whatever the difficulty": plain-register accuracy does depend on difficulty (0.232 and 0.491 contrasts). |
+| r5-m10-rival | The cue's gain at T 1.0 is robustness to sampling noise: the terse plain register is derailed after its opening by tail tokens; the deliberative register checks itself. | 6 of 6 (carried) | 5 / 0 / 1 | +8.84 | survives, 1 strike of 5 held-out claims | beats rival, +13.20 (6 tests, 1 separating) | weak | Fresh rival (a stopping and last-marker grading failure) fails: 0.8 % of the plain base's wrong non-self-opened answers have a right first marker (n 260), run-on share 0.089 (n 259). Weak because one test separates (n 25), the defender missed 5 of 6 intervals, the Wait/Hmm tests are confounded with late self-opening, and its own temperature prediction missed (0.158 against 0.29). |
+| r6-account | Six ordered rules split the problems an RL-side model gets right and the base side wrong: loop, budget, answer-statement, slip, sharpening, reach; one null cell (cued base against another cued-base sample). | 44 of 44 | 43 / 1 / 0 | +35.41 | survives, 0 strikes of 5 | loses to rival, -3.11 (5 tests, 0 separating) | weak | Shares of the 65 RL-only problems on MATH-500 at T 1.0: budget 0.246, slip 0.185, sharpening 0.446, reach 0.092, answer-statement 0.031, loop 0; the null cell (46 problems) has 0.152, 0.261, 0.478, 0.065, 0.043, 0. Plain base against RL (247 problems): answer-statement 0.514. At min-p 0.1 loop is 0.406, at T 0.6 0.52-0.57. Rival: no RL-specific finishing policy, one difficulty axis; its win is one test (-2.14). |
+| r6-m11 | The cued base often writes its answer marker early and then justifies it; these early commitments are wrong more often. | 2 of 3 | 1 / 0 / 1 | -0.32 | refuted (own test) | | | Of the cued base's quick finished-wrong answers, 0 of 13 are early-marker answers (predicted 0.45). p1 not scored: differs from its replication. |
+| r6-m01 | The cued base's deliberative register fades with distance from the cue; long answers slide into textbook continuation. | 3 of 3 | 2 / 0 / 1 | -1.14 | refuted (own test) | | | 0.7 % of hard328 base answers of at least 12,000 tokens have a textbook header in their second half (n 136; predicted 0.25). |
+| r6-m04 | On base + a(Think-SFT - base) the length policy arrives at a small dose, so intermediate models hit the cap more than either end. | 3 of 3 | 1 / 1 / 1 | -3.52 | refuted (own test) | | | No cap-hit bump (-2 against the endpoints); at a = 0.25 only 0.065 of the log length change has arrived (predicted 0.8). |
+| r6-m10 | The first 100 RL steps install the opening, format and length; the lower error rate on finished answers comes after step 400. | 3 of 3 | 1 / 0 / 2 | -3.79 | refuted (own test) | | | Step 100's finished answers are already 4.6 points more often right than the cued base's on the same problems (n 345, 90 % [-6.7, -2.6]). |
+| r6-m05 | RL's extra 'Wait' and 'Hmm' come from a timer: their excess grows with the text since the last stated result. | 3 of 3 | 0 / 1 / 2 | -4.24 | refuted (own test) | | | The RL/base hold-on ratio far from a result over near it is 0.97 (predicted 1.7); near a result it is already 1.38. |
+| r6-m06 | The cued base's wrong steps come from head tokens; RL's text has as many p < 0.01 tokens as the base's. | 0 of 3 | | | untested | | | The stored hard328 rows have no per-token probability field. |
+
+GPU predictions, none run: r6-account, a vote over 9 cued-base samples on MATH-500 (one new sample, 35 H100 minutes): 456 [449, 462] of 500.
+r5-m03 (round 05), base + top8 + cue on MATH-500, 425 [412, 438]: still not measured.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in

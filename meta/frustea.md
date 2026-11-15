@@ -16,7 +16,7 @@
 
 | measure | before | after | change | runs | source |
 |---|---|---|---|---|---|
-| seconds until external.md and inventory.md both exist | 1359 | not measured yet | | 1 and 0 | before.txt (round 05 log) |
+| seconds until external.md and inventory.md both exist | 1359 | 826 | 1.6x faster | 1 and 1 | before.txt, after.txt (rounds 05, 06) |
 | theories, tests computed (must not change in kind) | 13, 45 of 48 | | | 1 | round-05/run.json |
 
 - Next entry checks: the same seconds in round 06, launched with round.sh.

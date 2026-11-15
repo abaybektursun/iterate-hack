@@ -1,0 +1,2 @@
+start 09:09:52 UTC (round06.start); external.md written 09:17:57, inventory.md 09:23:38 UTC (file times): both present after 826 s
+log: external/external done in 484 s, inventory/inventory done in 825 s, run at the same time by studies/theory/jobs/round.sh
