@@ -343,7 +343,9 @@ uv run tools/msg.py wait --timeout 300    # blocks until a message arrives (exit
 
 In Claude Code, two hooks in `.claude/settings.json` put the team's state into the agent's context. At the start
 of a session and after `/clear`, one prints the open work, the 10 newest board items and new messages. After tool
-calls (at most every 20 s), the other runs `msg.py read` and adds new messages. All times are UTC. After changing a tool, run `python3 tools/selftest.py`:
+calls (at most every 20 s), the other runs `msg.py read` and adds new messages. A third, at the end of each turn,
+refuses once to let the turn end while a GPU job this session submitted is queued or running and no `gpu.py wait`
+runs for it (`gpu.py stophook`): start the wait in the background, and the finished job wakes the agent. All times are UTC. After changing a tool, run `python3 tools/selftest.py`:
 it runs every board and message command as two agents against a separate test table.
 
 A message reaches a waiting agent in under a second (measured: 0.2 s after the send returned). Each agent

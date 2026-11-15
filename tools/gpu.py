@@ -11,6 +11,9 @@
   uv run tools/gpu.py logs <job-id> [n]   last n lines of the job's log (default 30)
   uv run tools/gpu.py kill <job-id>       a queued job never starts; a running one is ended within about 30 s
   uv run tools/gpu.py get <job-id>        copy the job's $OUT_DIR (outputs and log) to runs/<job-id>/
+  uv run tools/gpu.py stophook            for the Claude Code Stop hook in .claude/settings.json: refuses, once, the end
+                                          of a turn while a job this session submitted is queued or running and no
+                                          `gpu.py wait <id>` process runs for it, so a finished job is read at once
 
 The command is a shell string: one quoted argument, e.g.
   uv run tools/gpu.py submit cpu -- 'pip install -q einops && python exp/train.py --lr 3e-4'
@@ -23,6 +26,7 @@ The runner ends a job whose log gets no new line for 15 minutes (it holds a GPU 
 long silent step should print a line now and then; ls then shows "stopped: no new log line for 15 min".
 """
 import io
+import json
 import secrets
 import shlex
 import subprocess
@@ -114,6 +118,10 @@ def submit(args):
         raise
     jobs[f"call:{job_id}"] = call.object_id
     print(job_id)
+    if session := events.session()["session"]:  # this machine's list of the session's jobs, read by stophook without a scan
+        (team.CACHE / "session-jobs").mkdir(parents=True, exist_ok=True)
+        with open(team.CACHE / "session-jobs" / session, "a") as f:
+            f.write(job_id + "\n")
     if sum(key.startswith("job:") for key in jobs.keys()) % 5 == 0 and not team.review_loop(who):
         print("This is your 5th job since the last multiple of 5: run the team-meta-review skill (uv run tools/cycle.py first).", file=sys.stderr)
 
@@ -154,6 +162,24 @@ def get(args):
     subprocess.run([sys.executable, "-m", "modal", "volume", "get", "iterate-runs", job_id, "runs/"], check=True)
 
 
+def stophook(args):
+    hook = json.loads(sys.stdin.read() or "{}")
+    if hook.get("stop_hook_active") or not hook.get("session_id"):  # asked once already this stop: let the turn end
+        return
+    listed = team.CACHE / "session-jobs" / hook["session_id"]
+    if not listed.exists():  # this session submitted no job: the usual case, and it costs no network call
+        return
+    mine = [{"id": i, **{k: jobs[f"{k}:{i}"] for k in ("job", "call", "start", "end", "cancel") if f"{k}:{i}" in jobs}}
+            for i in sorted(set(listed.read_text().split()))]
+    mine = [r for r in mine if "job" in r and time.time() - r["job"]["at"] < 24 * 3600]
+    unwatched = [r["id"] for r in mine if state(r) in ("submitting", "queued", "running")
+                 and subprocess.run(["pgrep", "-f", f"gpu.py wait {r['id']}"], capture_output=True).returncode != 0]
+    if unwatched:
+        print(json.dumps({"decision": "block", "reason": f"Jobs you submitted are still queued or running with nothing waiting for them: {', '.join(unwatched)}. "
+                          f"Start `uv run tools/gpu.py wait <id>` for each with run_in_background, so you are woken when it ends and read it "
+                          f"at once, then end your turn. If a job no longer matters, `uv run tools/gpu.py kill <id>`."}))
+
+
 def kill(args):
     (job_id,) = args
     r = load()[job_id]
@@ -166,6 +192,7 @@ if __name__ == "__main__":
 
     if {"--help", "-h"} & set(sys.argv[: sys.argv.index("--") if "--" in sys.argv else None]):
         sys.exit(__doc__)
-    events.log("gpu", sys.argv[1:], team.who())
     command, *args = sys.argv[1:] or ["help"]
-    {"deploy": deploy, "submit": submit, "ls": ls, "wait": wait, "logs": logs, "kill": kill, "get": get}.get(command, lambda _: sys.exit(__doc__))(args)
+    if command != "stophook":  # the hook runs at every end of a turn; it changes nothing
+        events.log("gpu", sys.argv[1:], team.who())
+    {"deploy": deploy, "submit": submit, "ls": ls, "wait": wait, "logs": logs, "kill": kill, "get": get, "stophook": stophook}.get(command, lambda _: sys.exit(__doc__))(args)
