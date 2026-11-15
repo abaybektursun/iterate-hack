@@ -1,7 +1,7 @@
 {
- "commit": "120ecc6",
- "command": "studies/theory/lib/forecast.py synthesis studies/theory/results/wide/round-15 --from studies/theory/results/wide/round-14 studies/theory/results/wide/round-13 studies/theory/results/wide/round-12 studies/theory/results/wide/round-11 studies/theory/results/wide/round-10 studies/theory/results/wide/round-09 studies/theory/results/forecast/run-02 studies/theory/results/forecast/run-03 studies/theory/results/forecast/run-04 studies/theory/results/forecast/run-05 studies/theory/results/forecast/run-06 studies/theory/results/forecast/run-07 studies/theory/results/forecast/run-08 studies/theory/results/forecast/cells-01",
- "utc": "2026-11-15T23:15:18",
+ "commit": "cb365ea",
+ "command": "studies/theory/lib/forecast.py synthesis studies/theory/results/wide/round-15",
+ "utc": "2026-11-15T23:23:47",
  "version": 15,
  "facts": 42,
  "accounts": [
@@ -12,24 +12,46 @@
  "dropped": [],
  "disagreements": 1,
  "plans": 10,
- "job_dirs": "/var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5tuznmrt",
+ "job_dirs": "/var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-37e4bvfd",
  "minutes_per_stage": {
   "standing": 2.2,
-  "accounts": 7.0,
+  "accounts": 0.1,
   "judge": 3.6
  },
- "state": "waiting for synthesis tests",
- "pending": [
-  "round-15/account-1/d1",
-  "round-15/account-2/d1",
-  "round-15/account-1/c1",
-  "round-15/account-1/c2",
-  "round-15/account-1/c3",
-  "round-15/account-2/c1",
-  "round-15/account-2/c2",
-  "round-15/account-2/c3",
-  "round-15/account-3/c1",
-  "round-15/account-3/c2",
-  "round-15/account-3/c3"
- ]
+ "state": "done",
+ "score": {
+  "account-1": {
+   "explained": 27,
+   "not addressed": 15,
+   "contradicts": 0,
+   "new holds": 1,
+   "new refuted": 1,
+   "new undecided": 1,
+   "disagreements held": 0,
+   "disagreements refuted": 1,
+   "score": 1
+  },
+  "account-2": {
+   "explained": 35,
+   "not addressed": 7,
+   "contradicts": 0,
+   "new holds": 3,
+   "new refuted": 0,
+   "new undecided": 0,
+   "disagreements held": 1,
+   "disagreements refuted": 0,
+   "score": 3
+  },
+  "account-3": {
+   "explained": 38,
+   "not addressed": 3,
+   "contradicts": 1,
+   "new holds": 2,
+   "new refuted": 1,
+   "new undecided": 0,
+   "disagreements held": 0,
+   "disagreements refuted": 0,
+   "score": 1
+  }
+ }
 }

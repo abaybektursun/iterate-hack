@@ -15,8 +15,8 @@ Disagreements between the accounts first (the judge's), then each account's thre
 - Computation: 1) Select the problems with 0 right among the cued base's attempt-0 samples 0-3 (about 108 of 328, since 220 are solved at least once). 2) Per problem: e = right edit samples / 4, r = right RL samples / 4, b = 1 if the fresh cap32 base sample, cut at 16,384, is right. 3) E, R and B are the means of e, r and b over the selected problems. The fresh B removes the selection bias of picking problems on the base's own 0-of-4. 4) S = (E - B) / (R - B). 5) 90 % interval: resample the selected problems with replacement 10,000 times, recompute S each time (the same draw for E, R and B), and take the 5th and 95th percentiles. Report R - B with its own interval. If that interval includes 0 the test is void, not decided.
 - Null: The edit as a base resample: on these problems the edit's rate equals a fresh cued-base sample's (E = B, as a random rank-8 1.5x edit does), so S is about 0.
 - Ranges fixed in advance: account-1 [0.1, 0.45], account-2 [0.6, 1.4], null [-0.15, 0.08]
-- Mechanism round-15/account-1/d1: not run yet
-- Mechanism round-15/account-2/d1: not run yet
+- Mechanism round-15/account-1/d1: refuted (result-b90743: S = (E - B) / (R - B) = 0.88 [0.69, 1.13] (90 % bootstrap), n 120 problems (480 edit samples), null value 0 (null range [-0.15, 0.08]), range [0.10, 0.45]: the interval lies wholly above it. Supersedes editreach-01 (result-fe30d5), which read only 102 problems)
+- Mechanism round-15/account-2/d1: holds (result-b90743: S = (E - B) / (R - B) = 0.88 [0.69, 1.13] (90 % bootstrap), n 120 problems (480 edit samples), null value 0 (null range [-0.15, 0.08]), range [0.60, 1.40]: the interval lies wholly inside it. R - B 0.104 [0.065, 0.146]; edit minus RL -0.013 [-0.037, 0.010]. Supersedes editreach-01 (result-fe30d5))
 
 
 ## round-15/account-1/c1 (consequence)
@@ -29,7 +29,7 @@ Disagreements between the accounts first (the judge's), then each account's thre
 - Computation: 1) For each matrix read cap_right for Code 3.1 and for Think-SFT against the Math 3.1 top-8 input subspace. 2) Per matrix ratio r = Code / Think-SFT. 3) Statistic = median of r over the 224 matrices. 4) 90 % interval: resample the 224 matrices with replacement 10,000 times, take the median each time, report the 5th and 95th percentiles.
 - Null: Another model's change in the same subspace: Think-SFT's own capture, so ratio about 1 if concentration is reward-specific and Code's change is as unrelated to Math's inputs as a diffuse fine-tune
 - Ranges fixed in advance: account-1 [2.0, 60.0], null [0.5, 1.5]
-- Mechanism round-15/account-1/c1: not run yet
+- Mechanism round-15/account-1/c1: holds (result-105d5c: 5.16 [90 % 4.80, 5.56], n 224 matrices, null value 1.0 (null range [0.5, 1.5]), account-1 range [2.0, 60.0])
 
 
 ## round-15/account-1/c2 (consequence)
@@ -42,7 +42,7 @@ Disagreements between the accounts first (the judge's), then each account's thre
 - Computation: 1) For each key, subtract from each matrix's top-8 share the median share of its module family (q,k,v,o,gate,up,down) over 32 layers, which removes shape effects. 2) Spearman rho over the 224 matrices of Math 3.1 vs IF residuals, and of Math 3.1 vs Think-SFT residuals. 3) Statistic = difference. 4) 90 % interval: resample matrices with replacement 10,000 times (the same draw for both rhos), recompute the difference, take the 5th and 95th percentiles.
 - Null: Another model's directions: Think-SFT's per-matrix pattern shares as much with Math-RL as IF-RL does, so the difference is about 0 (concentration pattern reward- or training-agnostic)
 - Ranges fixed in advance: account-1 [0.15, 1.0], null [-0.1, 0.1]
-- Mechanism round-15/account-1/c2: not run yet
+- Mechanism round-15/account-1/c2: refuted (result-caa23d: D = rho(Math 3.1, IF) - rho(Math 3.1, Think-SFT) = -0.010 - 0.594 = -0.604 [90 % -0.733, -0.475], n 224 matrices, null value 0 (null range [-0.1, 0.1]), account-1 range [0.15, 1.0])
 
 
 ## round-15/account-1/c3 (consequence)
@@ -55,7 +55,7 @@ Disagreements between the accounts first (the judge's), then each account's thre
 - Computation: 1) From RL rows pick problems with 0 of 4 right (attempt 0). 2) On those, E = right edit samples and B = right base samples (attempt 0, samples 0-3), both grader v3. 3) Statistic = E / B. 4) 90 % interval: resample the selected problems with replacement 10,000 times, recompute E/B, take the 5th and 95th percentiles. n = 4 x number of selected problems (edit rows).
 - Null: The edit copies RL's outcomes per problem (fully or for two thirds of samples), so edit right samples on RL-0/4 problems fall to at most half the base's
 - Ranges fixed in advance: account-1 [0.75, 4.0], null [0.0, 0.5]
-- Mechanism round-15/account-1/c3: not run yet
+- Mechanism round-15/account-1/c3: undecided (result-f638fb: edit/base right samples 2.0 [90 % 0.8, 5.0] (12 vs 6 right), n 352 edit samples on 88 problems, null value 0 (full copy of RL; null range [0, 0.5], interval wholly above it), account-1 range [0.75, 4.0]; about 990 edit samples would decide)
 
 
 ## round-15/account-2/c1 (consequence)
@@ -68,7 +68,7 @@ Disagreements between the accounts first (the judge's), then each account's thre
 - Computation: 1) Read attempt 0 of samples 0-3 per problem; label right, finished wrong (with its extracted answer) or cap hit. 2) Keep problems with >=1 right and >=1 finished wrong. 3) Real vote: plurality over finished answers, ties broken evenly (expected value of a random tie break). 4) Merged vote: replace every finished wrong value of the problem by one token, vote again the same way. 5) D = mean(real - merged). 6) 90 % interval: 10,000 bootstrap resamples of problems, 5th and 95th percentiles.
 - Null: Merged-wrong vote (the base's wrong answers on a problem share one attractor value), where D = 0 exactly; the strongest null for this statistic.
 - Ranges fixed in advance: account-2 [0.06, 0.4], null [-0.03, 0.03]
-- Mechanism round-15/account-2/c1: not run yet
+- Mechanism round-15/account-2/c1: holds (result-3394eb: D 0.109 [90 % 0.078, 0.142], n 88, null value 0 (null range [-0.03, 0.03]), account-2 range [0.06, 0.40])
 
 
 ## round-15/account-2/c2 (consequence)
@@ -81,7 +81,7 @@ Disagreements between the accounts first (the judge's), then each account's thre
 - Computation: 1) Per problem, the 4 samples' extracted answers and v3 grades. 2) Vote: plurality over finished answers, ties broken evenly (expected value). 3) Single: mean right of the 4 samples. 4) G = 100 * mean over problems (vote right - single right). 5) 90 % interval: 10,000 bootstrap resamples of problems.
 - Null: Final RL's own vote gain (results/day1_3/math500_rl-01: vote 474 vs mean single 460, +2.8 points), i.e. step 100 already carrying RL's lowered slip rate.
 - Ranges fixed in advance: account-2 [5.0, 10.0], null [1.0, 4.5]
-- Mechanism round-15/account-2/c2: not run yet
+- Mechanism round-15/account-2/c2: holds (result-53addf: +7.18 points [6.03, 8.37] (90 % bootstrap over problems), n 500, null value +2.8 (final RL; recomputed +2.87), account-2 range [5.0, 10.0], null range [1.0, 4.5])
 
 
 ## round-15/account-2/c3 (consequence)
@@ -94,7 +94,7 @@ Disagreements between the accounts first (the judge's), then each account's thre
 - Computation: 1) Select problems with 0 of 4 right for the cued base (attempt 0). 2) Per problem, edit rate = right of the edit's 4 samples / 4; RL rate = right of RL's 4 attempt-0 samples / 4. 3) D = mean over problems (edit - RL). 4) 90 % interval: 10,000 bootstrap resamples of problems. 5) Null value on the same rows: base cue rate from the base's restart attempts and the independent 32k-cap base cue run scored at 16,384 (results/cap32/base_cue-01) minus the RL rate.
 - Null: The edit as a base resample: its rate on these problems equals the cued base's own fresh-sample rate (near 0.05), giving D about -0.2.
 - Ranges fixed in advance: account-2 [-0.08, 0.08], null [-0.35, -0.12]
-- Mechanism round-15/account-2/c3: not run yet
+- Mechanism round-15/account-2/c3: holds (result-378eef: E - R = -0.012 [-0.037, 0.010] (90 % paired bootstrap), n 121 problems; null value -0.097 [-0.136, -0.060]; account-2 range [-0.08, 0.08], null range [-0.35, -0.12])
 
 
 ## round-15/account-3/c1 (consequence)
@@ -107,7 +107,7 @@ Disagreements between the accounts first (the judge's), then each account's thre
 - Computation: 1) Load per_problem.json and flag deliberative T3 openings by the fixed word list. 2) For flagged problems, d_i = T3_right_i - T1_right_i under grader v3. 3) The statistic is the mean of d_i. 4) Bootstrap: resample flagged problems 10,000 times; the 90 % interval runs from the 5th to the 95th percentile. 5) Compute the same mean on the unflagged problems as the null. The test fails if fewer than 50 problems are flagged.
 - Null: Opening irrelevant (the cue adds more than mode selection): flagged answers do as well as plain answers do elsewhere, i.e. the same T3-T1 difference computed on the unflagged problems (the overall T3-T1 is -0.37).
 - Ranges fixed in advance: account-3 [-0.15, 0.1], null [-0.65, -0.22]
-- Mechanism round-15/account-3/c1: not run yet
+- Mechanism round-15/account-3/c1: holds (result-1f98b0: mean(T3 right - T1 right) -0.034 [90 % -0.101, 0.034], n 149 of 500, null (unflagged problems) -0.516 [-0.564, -0.467]; account-3 range [-0.15, 0.10], null range [-0.65, -0.22])
 
 
 ## round-15/account-3/c2 (consequence)
@@ -120,7 +120,7 @@ Disagreements between the accounts first (the judge's), then each account's thre
 - Computation: 1) Per problem and arm, take the plurality of extracted finished answers over samples 0-3, with ties broken at random and averaged over 200 tie draws (as in result-f941b8); grade with v3. 2) Statistic = 100 * (edit votes right - RL votes right) / 328. 3) Paired bootstrap over problems, 10,000 resamples; the 90 % interval is the 5th to 95th percentile. 4) Null: the same quantity with the cued base's 4 attempt-0 samples in place of the edit (192 - 221 = -8.8 points).
 - Null: The base's own resample: a vote over 4 cued-base samples (equivalently, a base-like random rank-8 edit at 1.5x, which result-39497c shows does nothing) against RL's vote, about -8.8 points.
 - Ranges fixed in advance: account-3 [-5.0, 5.0], null [-14.0, -6.0]
-- Mechanism round-15/account-3/c2: not run yet
+- Mechanism round-15/account-3/c2: holds (result-d6fe92: +0.1 points [90 % -1.8, 1.96], n 328 (order-averaged ties: edit 216.25, RL 215.92); null (base vote minus RL) -9.55 [-12.5, -6.78]; account-3 range [-5.0, 5.0], null range [-14.0, -6.0]; stored-order ties -2.13 [-4.57, 0.3], also holds)
 
 
 ## round-15/account-3/c3 (consequence)
@@ -133,5 +133,5 @@ Disagreements between the accounts first (the judge's), then each account's thre
 - Computation: 1) Per problem and arm, take the median generated tokens of the right samples. 2) r_i = ln(step100_median / base_median). 3) Statistic = exp(mean r_i). 4) Bootstrap over problems, 10,000 resamples; the 90 % interval is the 5th to 95th percentile of exp(mean r). 5) Null: the same ratio with final RL's 4 attempt-0 samples (math500_rl-01) in place of step 100.
 - Null: Another model: final RL-Zero-Math against the cued base on the same problems, which carries the lengthening of short answers (result-1b6bf2) that step 100 should lack.
 - Ranges fixed in advance: account-3 [0.88, 1.1], null [1.15, 1.6]
-- Mechanism round-15/account-3/c3: not run yet
+- Mechanism round-15/account-3/c3: refuted (result-534492: 1.147 [90 % 1.112, 1.181], n 459 problems; null value (final RL / cued base) 1.613 [1.560, 1.667], n 465; account-3 range [0.88, 1.10], null range [1.15, 1.60])
 

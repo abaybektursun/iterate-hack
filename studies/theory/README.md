@@ -1476,6 +1476,116 @@ uv run studies/theory/lib/forecast.py synthesis <round folder> [--from <folders 
    `round-<nn>/account-<k>/c<j>` or `/d<j>`). The rerun writes `synthesis.md`: accounts ranked by new consequences
    that hold minus facts they mark as contradicting them, with disagreements won as the tie-break.
 
+## Round 15 (engine 15, single accounts of every direct fact)
+
+Plan `specs/SPEC_round15.md`. Board work-4948a7, idea-09edb8. Branch `theory` only (main is frozen). Only standing,
+direct facts and synthesis ran (no surprise pairs). Command (run twice: to the gate, then for `synthesis.md`):
+
+```
+uv run studies/theory/lib/forecast.py synthesis studies/theory/results/wide/round-15 --from studies/theory/results/wide/round-14 studies/theory/results/wide/round-13 studies/theory/results/wide/round-12 studies/theory/results/wide/round-11 studies/theory/results/wide/round-10 studies/theory/results/wide/round-09 studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
+```
+
+**Minutes per stage** (UTC, `run.json`, `round15.log`, commit times). Start 23:02:29. standing 2.2 (101 mechanisms, 31
+carried); direct facts 0.0 (42 facts once each, 10 hold); three accounts 7.0 (343 to 414 s, none sent back, none
+dropped); judge 3.6; gate at 23:15:18: 12.8 minutes. Ten offline tests in 10 opus agents (9 at once), 1.6 to 5.2
+minutes each; d1 rerun 1.3 minutes; last row 23:23:40. Whole round 21.3 minutes of wall clock (round 14: 23.0).
+
+**Fixes.** (1) d1 (editreach-01) looped over problem ids 0-327, but hard328 ids run 0-399, so it read 102 of 121
+problems; found by the edit0of4 agent, rerun as editreach-02 (result-b90743 supersedes result-fe30d5; account-2's
+verdict moved from undecided to holds). (2) Not fixed: Python's stdout to a file is block-buffered, so `round15.log`
+stayed empty until exit; run with `PYTHONUNBUFFERED=1` (the second run did).
+
+**The accounts.** All three tell nearly the same story (the reading orders did not make them diverge): RL's change
+concentrates in 8 paired directions per matrix that the base's text already drives; it switches on the base's own
+deliberate opening (available to a cue) and lowers a per-step slip rate (available only by resampling, since wrong
+answers are split); inference stops where the base has no right sample. The judge found one disagreement (d1).
+
+Best account, account-2 (score 3: 3 new consequences hold, 0 contradictions; d1 won), quoted in full:
+
+> RL-Zero-Math changes the base by 0.24 % of its weight norm, with 12 % of that change in 8 paired input-output
+> directions per matrix that lie in the base's own most-driven activation directions; any on-policy RL reward
+> concentrates this way (LM-judge General-RL top-8 share 0.127, Math 0.135, imitation-only Think-SFT 0.030) because
+> the update only re-weights text the base already writes, and those 8 pairs at 1.5x alone match RL (456 vs 457 of
+> 500 on MATH-500, 200.25 vs 200.0 on hard328) while random, unpaired or Think-SFT directions of equal norm do nothing.
+> The re-weighting does two things to the base's token habits: it opens the answer in deliberation mode ('Okay',
+> 'Wait'), which RL learns mostly in its first 100 steps (step 100 plain 418 vs cued base 410, same cap-hit rate), and
+> it then lowers the per-step slip rate and lets a finished derivation wrap up (step 100 to final +45 of 500, cap hits
+> -2.9 points, RL half as likely as the base to write the base's own wrong step). The opening is fully available at
+> inference: a three-token cue (224 to 410 of 500), a self-opened draw (411) or a one-tensor hand edit that writes the
+> cue (397) gives it with no RL weights, which is why the cue alone reaches 78 % of RL's MATH-500 gain and the same
+> Math cue works on code and on general questions. The slip part is available only by resampling, and resampling works
+> because the base's slips are independent one-off events, not shared attractors (same-problem wrong-pair agreement
+> 0.26 vs 0.005 by chance; merging the wrong answers costs a 4-vote 0.07): where chains are short the base already
+> writes the right answer in some samples (81 % of RL's MATH-500 gain on problems it solves at least 1 in 4; 75 % of
+> Code-edit fixes passed in another base sample, the edit keeping base passes only at a base resample's rate), so a
+> vote over about 6 base samples matches one RL sample. Because a lower slip rate compounds over chain length, on long
+> hard328 derivations RL's extra right answers fall where the base has no right sample in 4 (26 of 36 vote wins), and
+> neither more tokens nor restarts buy them, since the base's long answers are loops at T 0.6 (52 %) or unsolved cap
+> hits at T 1.0 (+1.2 points at a 32k cap), so inference stops 8.8 points [5.5, 12.5] short of RL there. The pairs act
+> per domain on what the reward paid for, not by how strongly a text drives their inputs: Math's directions, driven
+> 87 % as much by code text as by math, add only +1.5 points to code pass rate against Code's +7.0 and neither box code
+> nor drop its block, and answer-format habits (no box, no fence) sit on problems of average difficulty, not on
+> failures to solve.
+
+Fact marks (the accounts' own): account-2 35 explained, 7 not addressed (F02 bf16 rounding, F25 Think-SFT template
+drift, F26 direction 1 vs 2-8, F33 and F34 autobench dev100 rows not readable, F36 cap-hit scaling, F39 RL delta on
+Think-SFT), 0 contradicts. account-1 27 / 15 / 0. account-3 38 / 3 / 1 (F26: direction 1 alone adds right answers
+where the base finished wrong, +7.2 [0.7, 13.6], close to directions 2-8, against its sentence that finishing and
+right answers split by rank). All three name F26 and F36 among their 3 worst.
+
+**Tests** (specs `specs/SPEC_direct_<name>.md`, scripts `analysis/direct_<name>.py`, outputs
+`results/direct/<name>-01/` (d1: `-02`); rows in `results/direct_tested.json`, refuted also in `refuted.json`; verdict
+rule of engine 14: holds when the 90 % interval is wholly inside the range and n >= 50, refuted when wholly outside):
+
+| test | statistic | account range | null range | measured [90 %], n | verdict |
+|---|---|---|---|---|---|
+| d1 editreach-02, result-b90743 | share of RL plain's per-sample lift over a fresh cued-base sample that the 1.5x edit captures, hard328 problems the cued base gets 0 of 4 | a1 [0.10, 0.45]; a2 [0.60, 1.40] | [-0.15, 0.08] | 0.88 [0.69, 1.13], n 120; R - B 0.104 [0.065, 0.146] | a2 holds, a1 refuted |
+| a1/c1 hostcap, result-105d5c | median per-matrix ratio cap_right(Code 3.1 change) / cap_right(Think-SFT change) in Math 3.1's top-8 input subspace | [2.0, 60.0] | [0.5, 1.5] | 5.16 [4.80, 5.56], n 224 matrices | holds |
+| a1/c2 sharerho, result-caa23d | rho(Math, IF) - rho(Math, Think-SFT) of per-matrix top-8 share, family medians removed | [0.15, 1.0] | [-0.1, 0.1] | -0.604 [-0.733, -0.475], n 224 | refuted (also below the null) |
+| a1/c3 rlfail, result-f638fb | edit / cued-base right samples on hard328 problems RL gets 0 of 4 | [0.75, 4.0] | [0.0, 0.5] | 2.0 [0.8, 5.0], n 352 samples (12 vs 6 right) | undecided (about 990 samples) |
+| a2/c1 merge328, result-3394eb | cued-base vote-of-4 right with real minus merged wrong answers, hard328 | [0.06, 0.40] | [-0.03, 0.03] | 0.109 [0.078, 0.142], n 88 | holds |
+| a2/c2 s100vote, result-53addf | RL step 100 plain vote over 4 minus mean single sample, MATH-500, points | [5.0, 10.0] | [1.0, 4.5] (final RL) | +7.18 [6.03, 8.37], n 500; final RL +2.87; cued base +7.55 | holds |
+| a2/c3 edit0of4, result-378eef | edit minus RL plain per-sample right rate, hard328 problems the cued base gets 0 of 4 | [-0.08, 0.08] | [-0.35, -0.12] | -0.012 [-0.037, 0.010], n 121; null measured -0.097 | holds |
+| a3/c1 t3open, result-1f98b0 | T3 plain right minus T1 cued right on problems whose T3 answer opens deliberatively (rln4) | [-0.15, 0.10] | [-0.65, -0.22] | -0.034 [-0.101, 0.034], n 149; other problems -0.516 | holds |
+| a3/c2 editvote, result-d6fe92 | edit vote over 4 minus RL plain vote over 4, hard328, points (order-averaged ties) | [-5.0, 5.0] | [-14.0, -6.0] | +0.1 [-1.8, 2.0], n 328; base minus RL -9.6 | holds (posted 214 vs 221 reproduced with stored-order ties) |
+| a3/c3 s100len, result-534492 | geometric mean over problems of step-100 / cued-base median right-answer length, MATH-500 | [0.88, 1.10] | [1.15, 1.60] | 1.147 [1.112, 1.181], n 459; final RL 1.613 | refuted |
+
+Ranking (`synthesis.md`): account-2 score 3 (3 hold of 3, d1 held); account-1 1 (1 hold, 1 refuted, 1 undecided, d1
+refuted); account-3 1 (2 hold, 1 refuted, 1 contradiction). Who was right on d1: account-2; the edit wins the problems
+the base cannot solve in 4 about as often as RL does (edit minus RL -0.013 [-0.037, 0.010]), so the 8 pairs carry the
+part of RL's gain that inference cannot reach, not only the part the base already samples.
+
+Caveats per test. hostcap: Code's change also sits 2.13x Think-SFT's in IF-RL's subspace and 1.78x in the base
+matrix's own top-8, so the ratio is not specific to Math's inputs; the null (equal to Think-SFT) is weak. edit0of4:
+the measured null (-0.097) lies between the stated null range and the account's range, 0.02 below the account's
+edge, so the test separates less than planned. s100vote: the cued base gains as much (+7.55), as the account says, but
+1.85 of the 7.18 points come from abstaining cap hits. merge328: n 88 (plan 110); D comes only from problems with 1
+or 2 right. t3open: the flag is read from T3's own output. d1 and edit0of4: the base fails these problems mostly by
+hitting the cap (212 of 408 samples, edit 58, RL 79), so much of the edit's gain there is finishing.
+
+**The GPU cell account-2 proposes (not run).** The one-tensor hand edit that writes the cue (WSP-2, no RL weights),
+plain prompt, first 164 hard328 problems, T 1.0 / top-p 1.0, seeds 3000000 + index, cap 16,384, grader v3: predicted
+62 [52, 72] right of 164 (cued base on the same problems and seeds 65; RL 84), 70 GPU minutes (scaled from H100
+timings):
+`uv run tools/gpu.py submit l40s --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_handedit --dir /tmp/theta --layer 31 && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label handedit --prompt plain --set hard328 --temperature 1.0 --top-p 1.0 --seed 3000000 --n 164 --commit COMMIT_SHA"`.
+
+**SPEC_round15 hypotheses.** H1 (idea-09edb8: a consequence holds against a strong null, n >= 50): holds, 6 of 9
+consequences and d1 (with the null caveats above). H2 (consequence hold share above round 14's 1 of 12 rival rows):
+holds, 6 of 9. H3 (every account marks some fact not explained): holds (15, 7 and 4). H4 (a disagreement decided):
+holds, d1 (account-2 holds, account-1 refuted), after the rerun. H5 (gate under 20 minutes): holds, 12.8. H6 (2 of 3
+plans runnable as written): holds, 10 of 10 ran on their named rows with n >= 50; three planned n were off by 15 to
+40 %.
+
+**What the round shows.** One account of all facts makes consequences that survive (6 of 9 against round 14's 1 of
+12 rival rows), but the three blind accounts agreed almost everywhere, so most tests confirm a shared story rather
+than choose between stories; the one disagreement was the most informative test of the round. The two refutations
+are each account's most specific new claim (IF shares a concentration pattern with Math; step 100's right answers are
+as long as the cued base's).
+
+Files in `results/wide/round-15/`: `standing.md` / `standing.json` / `standing/`, `graveyard.json`,
+`direct_facts.json`, `synthesis_facts.json` (F01-F42), `account-1.json` to `account-3.json` (and `jobs/`),
+`disagreements.json`, `synthesis_tests.md` / `.json`, `synthesis.md`, `run.json`, `round15.log`.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in

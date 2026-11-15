@@ -60,3 +60,23 @@ job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5tu
   synthesis_judge/judge (opus): done in 214 s
   gate: 11 mechanisms without a row (round-15/account-1/d1, round-15/account-2/d1, round-15/account-1/c1, round-15/account-1/c2, round-15/account-1/c3, round-15/account-2/c1, round-15/account-2/c2, round-15/account-2/c3, round-15/account-3/c1, round-15/account-3/c2, round-15/account-3/c3): run the tests from studies/theory/results/wide/round-15/synthesis_tests.md, add rows, rerun
 EXIT 0
+== direct facts
+  42 direct facts (10 hold)
+== synthesis: three blind accounts
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-37e4bvfd
+386 items before 9999, 0 at or after
+  skip synthesis/account-1: its outputs exist
+  skip synthesis/account-2: its outputs exist
+  skip synthesis/account-3: its outputs exist
+== judge: where the accounts disagree
+  skip synthesis_judge/judge: its outputs exist
+== synthesis.md
+# Synthesis, round-15
+
+Written 2026-11-15T23:23:47 UTC. 42 direct facts; 3 accounts kept of 3. Score = new consequences that hold minus facts the account marks as contradicting it. Fact marks are the account's own.
+
+| account | explained | not addressed | contradicts | new holds | new refuted | new undecided | disagreements held | disagreements refuted | score |
+|---|---|---|---|---|---|---|---|---|---|
+| account-2 | 35 | 7 | 0 | 3 | 0 | 0 | 1 | 0 | 3 |
+| account-1 | 27 | 15 | 0 | 1 | 1 | 1 | 0 | 1 | 1 |
+| account-3 | 38 | 3 | 1 | 2 | 1 | 0 | 0 | 0 | 1 |

@@ -161,6 +161,27 @@
   "result": "result-064aac"
  },
  {
+  "mechanism": "round-15/account-1/c2",
+  "claim": "After each module family's median is removed, Math-RL 3.1's per-matrix top-8 share correlates (Spearman) more with IF-RL's than with Think-SFT's, by at least 0.15.",
+  "verdict": "refuted",
+  "measured": "D = rho(Math 3.1, IF) - rho(Math 3.1, Think-SFT) = -0.010 - 0.594 = -0.604 [90 % -0.733, -0.475], n 224 matrices, null value 0 (null range [-0.1, 0.1]), account-1 range [0.15, 1.0]",
+  "result": "result-caa23d"
+ },
+ {
+  "mechanism": "round-15/account-3/c3",
+  "claim": "On MATH-500 problems both arms solve, RL step-100 plain right answers are as long as the cued base right answers (geometric-mean ratio of per-problem medians in [0.88, 1.10]), while final RL right answers are longer.",
+  "verdict": "refuted",
+  "measured": "1.147 [90 % 1.112, 1.181], n 459 problems; null value (final RL / cued base) 1.613 [1.560, 1.667], n 465; account-3 range [0.88, 1.10], null range [1.15, 1.60]",
+  "result": "result-534492"
+ },
+ {
+  "mechanism": "round-15/account-1/d1",
+  "claim": "The 1.5x top-8 edit carries one shared graded shift that makes the base's slips rarer on problems it already solves, so on hard328 problems outside the cued base's 4-sample reach it captures only a minority (0.10-0.45) of RL plain's per-sample advantage over a fresh base sample.",
+  "verdict": "refuted",
+  "measured": "S = (E - B) / (R - B) = 0.88 [0.69, 1.13] (90 % bootstrap), n 120 problems (480 edit samples), null value 0 (null range [-0.15, 0.08]), range [0.10, 0.45]: the interval lies wholly above it. Supersedes editreach-01 (result-fe30d5), which read only 102 problems",
+  "result": "result-b90743"
+ },
+ {
   "mechanism": "round-10/weights-m03",
   "claim": "Think-SFT's own weight change lies along RL-Math 3.1's top-8 input directions at least 2x more than a random rank-8 subspace (sharpened: and 1.5x more than the top-8 input subspaces of IF-RL, General-RL and the base matrix)",
   "verdict": "holds",
@@ -404,5 +425,82 @@
   "verdict": "refuted",
   "measured": "pooled wrong-pair agreement 0.262 [0.202, 0.324], n 142 problems (1,271 pairs, 570 wrong answers), null 0.005; interval wholly below 0.42",
   "result": "result-064aac"
+ },
+ {
+  "mechanism": "round-15/account-1/c1",
+  "claim": "Code-RL 3.1's weight change sits in RL-Math 3.1's top-8 input subspace far more than Think-SFT's change does (median per-matrix cap_right ratio Code / Think-SFT in [2.0, 60.0]).",
+  "verdict": "holds",
+  "measured": "5.16 [90 % 4.80, 5.56], n 224 matrices, null value 1.0 (null range [0.5, 1.5]), account-1 range [2.0, 60.0]",
+  "result": "result-105d5c"
+ },
+ {
+  "mechanism": "round-15/account-1/c2",
+  "claim": "After each module family's median is removed, Math-RL 3.1's per-matrix top-8 share correlates (Spearman) more with IF-RL's than with Think-SFT's, by at least 0.15.",
+  "verdict": "refuted",
+  "measured": "D = rho(Math 3.1, IF) - rho(Math 3.1, Think-SFT) = -0.010 - 0.594 = -0.604 [90 % -0.733, -0.475], n 224 matrices, null value 0 (null range [-0.1, 0.1]), account-1 range [0.15, 1.0]",
+  "result": "result-caa23d"
+ },
+ {
+  "mechanism": "round-15/account-1/c3",
+  "claim": "On hard328 problems where RL plain gets 0 of 4 right, the 1.5x top-8 edit keeps at least most of the cued base's right answers (edit/base right samples in [0.75, 4.0]) rather than copying RL's outcomes (ratio <= 0.5).",
+  "verdict": "undecided",
+  "measured": "edit/base right samples 2.0 [90 % 0.8, 5.0] (12 vs 6 right), n 352 edit samples on 88 problems, null value 0 (full copy of RL; null range [0, 0.5], interval wholly above it), account-1 range [0.75, 4.0]; about 990 edit samples would decide",
+  "result": "result-f638fb"
+ },
+ {
+  "mechanism": "round-15/account-2/c1",
+  "claim": "On hard328 the cued base vote over 4 attempt-0 samples is right more often with its real finished wrong answers than with every finished wrong answer of a problem merged into one, by D in [0.06, 0.40].",
+  "verdict": "holds",
+  "measured": "D 0.109 [90 % 0.078, 0.142], n 88, null value 0 (null range [-0.03, 0.03]), account-2 range [0.06, 0.40]",
+  "result": "result-3394eb"
+ },
+ {
+  "mechanism": "round-15/account-2/c2",
+  "claim": "RL step 100 plain on MATH-500 gains as much from a vote over its 4 samples (vote right minus mean single-sample right) as the cued base does, 5 to 10 points, not as little as final RL.",
+  "verdict": "holds",
+  "measured": "+7.18 points [6.03, 8.37] (90 % bootstrap over problems), n 500, null value +2.8 (final RL; recomputed +2.87), account-2 range [5.0, 10.0], null range [1.0, 4.5]",
+  "result": "result-53addf"
+ },
+ {
+  "mechanism": "round-15/account-2/c3",
+  "claim": "On hard328 problems where the cued base has 0 of 4 right, the 1.5x top-8 edit is right per sample as often as RL plain (edit minus RL in [-0.08, 0.08]).",
+  "verdict": "holds",
+  "measured": "E - R = -0.012 [-0.037, 0.010] (90 % paired bootstrap), n 121 problems; null value -0.097 [-0.136, -0.060]; account-2 range [-0.08, 0.08], null range [-0.35, -0.12]",
+  "result": "result-378eef"
+ },
+ {
+  "mechanism": "round-15/account-3/c1",
+  "claim": "On MATH-500 problems whose plain-prompt base answer opens deliberatively, that answer is right about as often as the cued base's answer on the same problems.",
+  "verdict": "holds",
+  "measured": "mean(T3 right - T1 right) -0.034 [90 % -0.101, 0.034], n 149 of 500, null (unflagged problems) -0.516 [-0.564, -0.467]; account-3 range [-0.15, 0.10], null range [-0.65, -0.22]",
+  "result": "result-1f98b0"
+ },
+ {
+  "mechanism": "round-15/account-3/c2",
+  "claim": "On hard328 the vote over 4 of base + 1.5x top-8 RL-Math directions matches RL plain's vote over 4 (within 5 points), not the base's vote.",
+  "verdict": "holds",
+  "measured": "+0.1 points [90 % -1.8, 1.96], n 328 (order-averaged ties: edit 216.25, RL 215.92); null (base vote minus RL) -9.55 [-12.5, -6.78]; account-3 range [-5.0, 5.0], null range [-14.0, -6.0]; stored-order ties -2.13 [-4.57, 0.3], also holds",
+  "result": "result-d6fe92"
+ },
+ {
+  "mechanism": "round-15/account-3/c3",
+  "claim": "On MATH-500 problems both arms solve, RL step-100 plain right answers are as long as the cued base right answers (geometric-mean ratio of per-problem medians in [0.88, 1.10]), while final RL right answers are longer.",
+  "verdict": "refuted",
+  "measured": "1.147 [90 % 1.112, 1.181], n 459 problems; null value (final RL / cued base) 1.613 [1.560, 1.667], n 465; account-3 range [0.88, 1.10], null range [1.15, 1.60]",
+  "result": "result-534492"
+ },
+ {
+  "mechanism": "round-15/account-1/d1",
+  "claim": "The 1.5x top-8 edit carries one shared graded shift that makes the base's slips rarer on problems it already solves, so on hard328 problems outside the cued base's 4-sample reach it captures only a minority (0.10-0.45) of RL plain's per-sample advantage over a fresh base sample.",
+  "verdict": "refuted",
+  "measured": "S = (E - B) / (R - B) = 0.88 [0.69, 1.13] (90 % bootstrap), n 120 problems (480 edit samples), null value 0 (null range [-0.15, 0.08]), range [0.10, 0.45]: the interval lies wholly above it. Supersedes editreach-01 (result-fe30d5), which read only 102 problems",
+  "result": "result-b90743"
+ },
+ {
+  "mechanism": "round-15/account-2/d1",
+  "claim": "The 1.5x top-8 edit lowers the per-step slip rate the way RL does, so on hard328 problems outside the cued base's 4-sample reach it wins about as often as RL plain and captures most or all (0.60-1.40) of RL's per-sample advantage over a fresh base sample.",
+  "verdict": "holds",
+  "measured": "S = (E - B) / (R - B) = 0.88 [0.69, 1.13] (90 % bootstrap), n 120 problems (480 edit samples), null value 0 (null range [-0.15, 0.08]), range [0.60, 1.40]: the interval lies wholly inside it. R - B 0.104 [0.065, 0.146]; edit minus RL -0.013 [-0.037, 0.010]. Supersedes editreach-01 (result-fe30d5)",
+  "result": "result-b90743"
  }
 ]
