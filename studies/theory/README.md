@@ -583,6 +583,33 @@ round-09/problems-m03 (395 [365, 420]), round-09/weights-m06 (365 [330, 400], th
   committed): `runs/<job-id>/` in the worktree `iterate-hack-cells-r9b`; the two finished jobs also as `jobs/<job-id>.tar` in the
   team store.
 
+**cell-r9-m11-01** (round-09 entry m11, readout `m11-r1`; plan `specs/SPEC_cells_r9a.md`; board work-739554, result-f8e596). Base - 1.0 x the top 8
+singular directions per matrix of (RL-Math 3.1 - base) (`rlneurons/jobs/wsp_edit.py --recipe top8 --other rl_math --scale -1.0`,
+stochastic BF16 rounding seed 0), cue, MATH-500, T 1.0 / top-p 1.0, seed 41,000,000 + index (the seeds of the stored cued base), cap
+16,384, grader v3. Stopped by the coordinator before the end: only the odd-index half is complete. **20 cap hits of 250** (90 %
+bootstrap [13, 27]); the cued base at the same seeds (sample 0 of `rlneurons/results/day1_3/math500_base_cue-01`) has 10 on the same
+250, +10 [3, 18]. Right v3 188 of 250 [177, 199] against the base's 209, -21 [-33, -9]. 4,187 generated tokens per problem (median
+1,569; base 3,559).
+- Forecasts are cap hits of all 500; nothing is scaled. The rows bound that count to [30, 176]: 20 found in the odd half, 10 among the
+  104 even-index rows that finished before the stop, 146 even-index problems with no row. round-09/stopping-m03 (16 [8, 26], sign
+  does not matter, -1 cuts cap hits like +1) is refuted by the lower bound; every other forecast (25 to 60) is not decided. On the
+  same 250 the edit doubles the base's cap hits (15 problems the base finishes now hit the cap, 5 the other way): the sign matters.
+- Raw answers (10 read): 141 of 250 answers carry no `\boxed` and end with a plain "Answer: X" line (103 of them right), as the
+  size -1 edit did on hard328 (61 unboxed against 23). Cap hits stop mid-derivation (problems 9, 11, 43); finished wrong answers
+  include a binary-to-octal answer that degenerates into one repeated digit string for 16,238 tokens (problem 71), a numeric
+  approximation boxed as 13596 for gold 13535 (problem 21), and a box of -1 after the text names 3 (problem 19). Right answers are
+  short "Okay, let's see" derivations (problem 3, 654 tokens).
+- Caveat: n 250 (odd indices), not 500. The 104 finished even-index rows are summarised apart in `metrics.json` `partial_shard`
+  (10 cap hits, 76 right; base 10 and 81 on the same problems) and are not in the readout: they are the answers that finished first,
+  so biased toward short ones. Missing problems: the 146 listed in `partial_shard.missing`. Round-09 entry m13 was dropped before it
+  generated (its separation came from the same refuted forecaster).
+- Files: `analysis/cells_r9a.py` (readout); outputs `results/experiments/cell-r9-m11-01/` (`run.json`, `metrics.json`,
+  `per_problem.json` with the base's row per problem, `examples.json`); the count is in `results/wide/round-09/measured.json`.
+- Jobs (commit `4a524a2`, command in `run.json`; each ran a 2-problem 256-token smoke run first, in `smoke/`): shard 1/2
+  `ih-1115-184625-e391` (complete); shard 0/2 `ih-1115-195318-e122` (stopped at 104 of 250 rows). An earlier shard 0/2 run was cut
+  off at about 216 rows when its machine stopped and left no rows. Raw answers (not committed): `runs/<job-id>/` in the worktree
+  `iterate-hack-cells-r9a`.
+
 **exact1x-01** (idea-de5c0e, work-20e6ec; offline, no GPU cell). Question: is the dial's 1x (base + top-8 RL-Math directions, 192 of 328,
 46 cap hits) under-applied by BF16 rounding, so that an exact 1x merge would score like 1.5x (203, 25; run-05/f2-m06), or is 1.5x the
 dial's own optimum (run-05/f2-m01)? **The premise of the rounding account is false on the stored edits, so no cell was run.** Every dial cell
@@ -1285,6 +1312,52 @@ Page of the engine's record: `tools/finding_theories_on_trial.py`, served at `/f
 Page of the self-opened draw (selfopen-01): `tools/finding_base_opens_itself.py`, served at `/finding/base-opens-itself`; running the file checks it against `results/experiments/selfopen-01/`.
 
 Page of the gap account (run-02): `tools/finding_where_the_gap_goes.py`, served at `/finding/where-the-gap-goes`; its numbers are read from `results/account/run-02/check/` and `python3 tools/finding_where_the_gap_goes.py` checks them.
+
+## Direct tests
+
+One test per top mechanism of the claim only its stated cause makes, offline where stored data decides it.
+
+### reward-01: run-06/f2-m03's cause (result-82eb02, refuted)
+
+Claim: the change concentrates in a few directions because the outcome reward pays only for a gradable final answer.
+Readout: mean over 224 matrices of the top-8 share of squared singular values of (model - base), from the stored SVD rows of
+job abaybektursun-1114-221259-0871. RL-Zero-General (LM-judge reward on chat, no gradable answer) 0.127 [0.115, 0.139];
+Math 3.0 0.135, Math 3.1 0.118, Code 3.0 0.174, IF 0.206; Think-SFT 0.030; Gaussian floor 0.005-0.008. General sits
+P = 0.685 [0.609, 0.765] of the way from Think-SFT to Math/Code/IF 3.0 (90 % bootstrap over 32 layers); the spec's rule,
+refuted if the lower bound is 0.5 or more, was fixed after the summary means had been seen. Size-matched (Code 3.0 at step
+100) +0.005 [-0.008, 0.019]. The rivals run-05/f2-m01 and run-05/f2-m03 predict nothing here. Not tested: whether any
+sequence-level reward concentrates; General's directions do not finish math (88 cap hits vs 77). Row added to
+`results/refuted.json`.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_reward.md` | Plan, decision rule, rivals' predictions. |
+| `analysis/direct_reward.py` | `extract` (per-matrix table from the job's `metrics.json`), `analyze` (readout). |
+| `data/direct_reward/top8_share_v1.json` | Per-matrix top-8 share and norm of 16 keys (input). |
+| `results/direct/reward-01/` | `readout.json`, `examples.json` (matrix where General most exceeds Math 3.0, and most falls below), `run.json`. |
+
+### dial-01: run-05/f2-m01, "a signed termination dial, no added skill" (board work-1645c5, result-124593, refuted)
+
+Claim tested: base + 1.5x Math 3.1's top-8 directions gains by finishing, not by being right more often. Readout: condition
+on one cued-base sample per problem (finished-right FR, finished-wrong FW, cap hit CH, pooled over the 4 choices) and
+compare the edit's right rate with a second base sample on another seed (and with RL plain). hard328 (4 samples each, n 396
+FW conditioning samples on 201 problems): on FW the edit is right 36.4 %, the second base sample 22.9 %, RL 35.2 %: edit
+minus base +13.5 points [9.7, 17.3], RL +12.3 [8.8, 15.9], edit minus RL +1.2 [-1.2, 3.6]. Right per finished answer on FW
++7.0 [2.6, 11.3]. On the 191 problems where no base sample hits the cap: edit 85.9 %, base 75.8 %, +10.1 [7.5, 12.8] (RL
++9.0). Of the edit's gain over the second base sample, 42 % sits in FR, 32 % [25, 38] in FW, 26 % [20, 33] in CH. MATH-500
+(edit 1 sample, base and RL 4): FW +17.8 [11.0, 24.8] (RL +19.2); CH share 11 %. Verdict by the frozen rule: adds skill,
+like RL, on both sets. Signed side: at -1x, on problems where the -1x sample finishes, it is right 51.5 % against 70.0 % for
+the base's finished samples (hard328, 227 problems, -18.5 [-22.6, -14.3]); MATH-500 odd 250: -8.0 [-11.9, -4.1]. Only 2 of
+114 and 2 of 42 of its finished wrong answers hold the gold string, so the loss is not answer format. The 8 directions carry
+finishing and right answers together in both signs; they are not a pure finishing dial. 10 raw answers read
+(`reading.md`): the edit's right answers on FW problems are derivations, graded correctly. Row added to
+`results/refuted.json`.
+
+| Path | What |
+|---|---|
+| `specs/SPEC_direct_dial.md` | Claim, refuting observation, frozen verdict rule (written and pushed first, bafbd38). |
+| `analysis/direct_dial.py` | Readout from committed rows (hard328, MATH-500, cell-r9-m11-01) and the -1x hard328 job's rows. |
+| `results/direct/dial-01/` | `readout.json`, `examples.json` (edit right and wrong on base-FW problems), `m1x_hard328_rows.jsonl`, `reading.md`, `run.json`. |
 
 ## Paper: Theories on Trial (`paper/`, board work-184476)
 

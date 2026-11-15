@@ -12,5 +12,19 @@
   "result": "result-c2edfb",
   "measured": "projection of the written 1x change on the intended addition 0.99996 (1.5x: 0.99998)",
   "added": "2026-11-15T20:57:44"
+ },
+ {
+  "mechanism": "run-06/f2-m03",
+  "claim": "an outcome reward pays only for a gradable final answer, so its gradient piles into a few singular directions; the rest of the update is diffuse",
+  "result": "result-82eb02",
+  "measured": "RL-Zero-General (LM-judge reward, no gradable answer) top-8 share 0.127 vs Math 3.0 0.135, Think-SFT 0.030: P = 0.685 [0.609, 0.765] (refuted if lower bound >= 0.5), n 224 matrices",
+  "added": "2026-11-15T21:06:46"
+ },
+ {
+  "mechanism": "run-05/f2-m01",
+  "claim": "the top-8 RL-Math directions are a signed termination dial: they add finished answers, not right answers on problems the base already finishes",
+  "result": "result-124593",
+  "measured": "hard328, edit 1.5x on problems where a cued-base sample finished wrong: 36.4 % right vs 22.9 % for a second base sample, +13.5 points [9.7, 17.3] (RL +12.3); only 26 % of the edit's gain sits on base cap hits; at -1x finished answers 51.5 % vs base 70.0 % right",
+  "added": "2026-11-15T13:08:48"
  }
 ]

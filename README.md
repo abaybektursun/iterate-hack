@@ -349,9 +349,13 @@ body with a ring around it and one bead per page. A click on a bead or the arrow
 (`/#<page>`); a click on the body or the button opens it. Beside the picture are one sentence with the Board's live
 MATH-500 scores (the first and the best untrained-base score and the best RL score in the `scores` rows of `/data`; the
 words "a prompt cue and a vote" only when the best base row's configuration names them; no numbers before the first
-read), one line with the live number of people, the button, and the same pages as a plain list of links in three groups
+read), one line with the live number of people, the button, and the same pages as links in three groups
 ("Results": Findings, Papers, Talk; "How we work": Board, Design, Proof, Values, Team; the rest under "Also"); on a phone
-the list comes before the picture.
+the links come before the picture. Each group has a theme, a hue at the lightness and chroma of a person's color (`TH`:
+Results blue, How we work teal, Also amber), and each page a small lit picture in a 120 x 90 box with one slow motion
+(`ART`): the body of the dial shows the selected page's picture, the ring is tinted by group and the glow takes the
+selected group's hue. Below the dial are three sections, one per group in its theme, with one tile per page: its
+picture, its name, its line and its live count.
 About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
 line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and adds the
 link "All pages" to it after the four tabs, followed on a page that is none of the four tabs by that page's name (hidden at 400 px and below); a page with no header gets a small link "Invariant" at the middle of its right edge; pinch
@@ -426,7 +430,7 @@ and leaves as six rays, one through each face to a bead naming a value. A click 
 the buttons select a value (`/values#speed`); its face turns to the front, and the column shows its sentences, its
 quotes with their sources and its line of AGENTS.md. The words are the person's own; nothing on the page is data.
 
-The page `/psychosis` is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game
+The page `/psychosis`, "AI Psychosis detox" (the counterpart of the Lab page, "AI Psychosis maxxing"), is a joke about ourselves (`tools/psychosis.py`; not a header tab): an overdone meditation game
 of 5 levels, each ending in a boss. Hold Space, or press and hold, to breathe in and let go to breathe out, so that the
 white ring follows the blue one. A breath that follows it scores, raises the streak multiplier, charges the Om (key O)
 and sends out a wave that releases thoughts into their letters. The thoughts are bodies that collide: written jokes,
