@@ -39,6 +39,7 @@ TAGLINE = "Symbiotic harness for resource-constrained researchers"  # what Invar
 SITE = "invariant.team"  # the address on the first and last slide
 # Slide "summary": what the team did, in Samer's words, in groups of lines.
 # Slide "built": what the team did, said once early and in full on the slide "summary".
+BUILT_WHY = "to empower resource-constrained researchers to make novel findings"  # slide "built": under its title
 BUILT = [("A symbiotic swarm", " with one shared brain"), ("More efficient", " than autoresearch"),
          ("Novel findings", " in machine learning and interpretability")]
 SUMMARY = [  # each line: the words in bold, then the rest
@@ -257,7 +258,8 @@ def slides(papers):
         ("hook", f'<div class="mid">{hours_svg()}<h1 class="big">{hook_html()}</h1><p class="tagline"><b class="team">Invariant</b>: {esc(TAGLINE)}</p><div class="site">{qr()}<span>{esc(SITE)}</span></div></div>'),
         ("question", f'<div class="mid"><p class="sub top">{PEOPLE} independent researchers</p>'
                      '<ul class="limits"><li>Limited token budget</li><li>Limited compute</li><li>Limited people</li></ul></div>'),
-        ("built", '<div class="recap"><h2 class="title">So we built <b class="team">Invariant</b></h2><div class="did one">'
+        ("built", '<div class="recap"><div><h2 class="title">So we built <b class="team">Invariant</b></h2>'
+                  f'<p class="sub why">{esc(BUILT_WHY)}</p></div><div class="did one">'
                   + "<ul>" + "".join(f"<li><b>{esc(bold)}</b>{esc(rest)}</li>" for bold, rest in BUILT) + "</ul>" + '</div></div>'),
         ("gap", '<iframe class="fig-frame gapfig" data-fig="gap" data-replay title="Base model and RL-trained model" tabindex="-1"></iframe>'),
         ("powered", '<div class="versus">'
@@ -348,6 +350,7 @@ p, h1, h2, figure { margin: 0; }
 .did.one li { font-size: 46px; }
 .did.one ul { gap: 22px; }
 .recap .sub { font-size: 30px; }
+.recap .why { margin-top: 14px; font-size: 38px; font-weight: 400; }  /* slide "built": why we built it */
 .nb { white-space: nowrap; }
 /* slide "hook": the 36 hours. A dot appears per hour when the slide comes on; the last one is the accent */
 .hours { width: 250px; height: 250px; display: block; overflow: visible; margin-bottom: 4px; }
