@@ -366,6 +366,26 @@ characters in the last 3,000 characters), descriptive only.
   `runs/abaybektursun-1114-152416-de10/merge_{rl,code}.json` (not committed).
   Run: `uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.day1_wdiff`.
 
+## Truncation rules at T 1.0: min-p and top-p (board work-180a48, spec specs/SPEC_minp.md)
+
+No truncation rule beats untruncated sampling. MATH-500, n = 500, cue, cap 16,384, grader v3, one sample, seeds of the min-p 0
+cells (base 41000000, RL 66000000); paired 95 % bootstrap intervals. Readout `results/day1_minp/readout.json`
+(`analysis/day1_minp.py`); run folders `results/day1_minp/<arm>-01/`.
+
+| cell | right | minus min-p 0 cell (points, 95 %) | cap hits | rule-A loops | tokens/problem |
+|---|---|---|---|---|---|
+| base, T 1.0, top-p 1.0 (T1, reference) | 410 | - | 27 | 0 | 3,932 |
+| base, T 1.0, min-p 0.1 | 404 | -1.2 [-4.6, 2.2] | 58 | 34 | 4,086 |
+| base, T 1.5, min-p 0.1 | 412 | +0.4 [-3.2, 3.8] | 29 | 0 | 4,355 |
+| base, T 1.0, top-p 0.95 | 409 | -0.2 [-3.8, 3.2] | 35 | 12 | 4,017 |
+| RL, T 1.0, top-p 1.0 (rl_cue-01, reference) | 457 | - | 8 | 0 | 4,696 |
+| RL, T 1.0, min-p 0.1 | 460 | +0.6 [-1.6, 2.6] | 19 | 0 | 4,452 |
+
+Cutting the tail at T 1.0 brings back loops: the 34 looped problems at min-p 0.1 had 2 cap hits and 21 right answers at min-p 0.
+min-p 0.1 at T 1.5 removes them again and keeps the text coherent. Instrument check (smoke job frustea-1114-175514-c4ca): sampled
+tokens with raw probability below 1e-2 fall from 17.1 per 1,000 at min-p 0 to 0.02 at min-p 0.1. Job ids in each run.json; raw
+rows in frustea's Modal Volume `iterate-runs/<job>/answers.jsonl`.
+
 ## RLN-5 map: where RL still disagrees once the cue is given
 
 Spec `specs/SPEC5_map.md`; run folder `results/rln5/map-01/` (`run.json`, `metrics.json`, `examples.json`, `checks.json`,
