@@ -4643,6 +4643,31 @@ before their first layer.
   layer 31), through layers that are the unedited base. Not tested: whether the base amplifies RL's written directions more than
   random ones of the same size at layer 10 (run-02's `rin` grows 17 times from layer 8 to 31, the full edit 30 times).
 
+#### xshift run-03 (SPEC_xshift amendment 3, work-662e8e): the base carries RL's written directions through depth, not random ones
+
+Branch `sharedsub` only. Job `abaybektursun-1115-164458-836e`; `results/xshift/run-03/readout.json`. Eight 1.5 edits, no scored
+cells, each restricted to the matrices that write to the residual stream (`o`, `down`: 64 matrices) or to the inner ones (`q`, `k`,
+`v`, `gate`, `up`: 160). RMS shift, all positions; base residual norm at layer 24: 41.2.
+
+| Edit at 1.5 | Family | Layer 0 | Layer 8 | Layer 24 | Layer 31 | Share of the paired edit at layer 24 |
+|---|---|---|---|---|---|---|
+| RL's 8 directions | write | 0.019 | 0.304 | 3.804 | 6.680 | 1 |
+| RL's inputs, random outputs | write | 0.014 | 0.067 | 0.578 | 1.050 | 0.15 |
+| pairs shifted | write | 0.016 | 0.087 | 1.164 | 1.687 | 0.31 |
+| random | write | 0.001 | 0.007 | 0.080 | 0.110 | 0.02 |
+| RL's 8 directions | inner | 0.025 | 0.369 | 5.857 | 12.176 | 1 |
+| RL's inputs, random outputs | inner | 0.008 | 0.061 | 0.529 | 1.064 | 0.09 |
+| pairs shifted | inner | 0.016 | 0.108 | 1.609 | 2.301 | 0.27 |
+| random | inner | 0.001 | 0.008 | 0.092 | 0.127 | 0.02 |
+
+- S1 refuted: in the write matrices the input-only edit reaches 0.15 of the paired edit's shift at layer 24 (predicted at least
+  0.5). At layer 0 the two are close (0.014 against 0.019, as the equal output norm requires); the gap opens in the layers after:
+  the paired edit's shift grows 200 times from layer 0 to 24, the input-only edit's 41 times.
+- S2 held: in the inner matrices the input-only edit reaches 0.09.
+- Reading, not tested by a control here: what RL writes lies along directions that the base's later layers carry and enlarge; the
+  same amount written in a random direction mostly stays small. The test would be a random write at layer 0 scaled to the paired
+  edit's layer-0 shift, followed to layer 24.
+
 ## Drift: a switch to Chinese marks a cut-off Think-SFT answer but no label-free sign predicts one early (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-76a232, idea-e37da1)
 
 Question: Think-SFT + cue hits the 16,384 cap on 29 % (hard328) and 45.6 % (fresh2026) of its samples, and a quarter of those
