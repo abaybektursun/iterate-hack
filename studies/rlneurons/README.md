@@ -3017,7 +3017,7 @@ single right 212, 212, 211, 201). Readout `results/mixvote/hard328-01/readout.js
 - Caveats: Think-SFT's training prompts match 6 of the 328 (board result-f6a8bc; the lead holds without them); its samples
   have no restart rows; the vote's tie rule prefers the earlier sample, hence both orders.
 
-## Risk-coverage: Think-SFT's lead over RL on the 328 is in long answers (hard328 n = 328, MATH-500 n = 500, laptop, board work-4ecc65, idea-ce2272)
+## Risk-coverage: Think-SFT's lead over RL on the 328 is in long answers to hard problems (hard328 n = 328, MATH-500 n = 500, laptop, board work-4ecc65, work-55ae25, idea-ce2272)
 
 Question: on the 328 Think-SFT + cue has vote 241 against RL 221 (result-818c20), hits the cap on 29 % of samples (RL 9 %),
 and its finished answers are right 88 % of the time (RL 66 %). Is it more precise than RL at the same coverage, and on which
@@ -3028,6 +3028,44 @@ is +8.8 [6.4, 12.5] at 0.75, the largest coverage all three models reach. Finish
 tokens all three are at 88 to 100 %. Of Think-SFT's 53 right samples on the 26 problems where its vote is right and RL's is
 not, 49 are over 8,000 tokens and 35 over 12,000. On MATH-500 there is no lead in precision at any matched coverage (area
 -0.8 [-1.7, +0.1]). Spec, written before the script: `specs/SPEC_riskcov.md` (commit `7a779d0`).
+
+Correction (work-55ae25, after a reviewer's comment on result-b006f5; `specs/SPEC_riskcov.md` addendum 1, commit `fc4bf28`,
+written before `analysis/riskcov_strat.py`; run folder `results/riskcov/hard328_strat-01/`). "Only on the long ones" and
+"equally precise up to coverage 0.50" above confound length with difficulty; the numbers stand, the reading changes. Both
+length and difficulty matter, and neither reading alone survives:
+
+- The reviewer's numbers reproduce. Of the samples kept at coverage 0.50, 81.1 % (Think-SFT) and 80.6 % (RL) come from the
+  149 problems the cued base solves 3 or 4 times of 4, where both are right 98.5 % of the time: the equal precision is this
+  mix. On the 179 problems the base solves at most twice Think-SFT leads at coverage 0.30 by +15.8 points [7.4, 25.6]
+  (78.6 % against 62.8 %).
+- That point is not a short answer: the last sample kept there has 12,715 tokens (Think-SFT) and 11,161 (RL). On hard
+  problems nearly every answer is long. On the 121 problems the base never solves, Think-SFT has 11 finished answers of at
+  most 8,000 tokens and RL 18 (lead +14.1 [-17.2, +73.3]): short answers to the hardest problems cannot be tested here.
+- Difficulty held, length matters. Lead in finished answers over 8,000 tokens against at most 8,000, by the base's right
+  count: 1-2: +29.1 [19.1, 39.4] (113 of 126 against 89 of 147) against +4.4 [-3.8, +14.1] (47 of 48, 58 of 62), long minus
+  short +24.8 [10.5, 38.4]; 3-4: +6.8 [-0.6, +13.4] (96 of 102, 103 of 118) against 0.0 [-1.2, +1.1], and +22.7 [3.4, 37.9]
+  over 12,000 tokens (32 of 35, 22 of 32). No stratum with enough samples has a lead in short answers.
+- Length held, difficulty matters. Lead in answers over 8,000 tokens: +34.5 [24.9, 43.7] where the base is never right
+  (86 of 163 against 69 of 377), +29.1 at 1-2, +6.8 at 3-4; never right minus 3-4: +27.6 [15.8, 39.9].
+- Problem held (problem x model fixed effects, finished answers). An RL answer over 8,000 tokens is right 12.5 points less
+  often than its shorter answers to the same problem [-20.8, -4.8] (57 problems carry it); Think-SFT's +1.2 [-4.0, +7.0] (53);
+  difference +13.7 [3.9, 23.8]. Per 1,000 tokens: RL -4.0 points [-5.4, -2.6], Think-SFT -0.4 [-1.4, +0.6], difference +3.6
+  [1.9, 5.4], and excluding 0 in each base stratum (+4.1 [0.3, 7.9], +5.4 [1.5, 8.9], +2.6 [0.1, 4.9]). On the 155 problems
+  where both models have a finished answer over 8,000 tokens Think-SFT leads by +20.6 [15.6, 25.5]; on the 149 with one of at
+  most 8,000 each, +0.7 [-0.3, +1.8]. The 28 problems with both give long minus short +10.3 [-3.7, +25.0]: same sign, covers 0.
+- Second stratifier, without the base and without the sample's own rows: per sample s, the right samples among the other
+  three of Think-SFT and the other three of RL (0 to 6). Same conclusion on length: at 4-6, lead +18.2 [12.8, 23.7] over 8,000
+  tokens (216 of 227 against 190 of 247) against +0.4 [-1.0, +1.8] below, long minus short +17.9 [12.3, 23.5]. Difficulty is
+  not monotone: +39.4 [25.6, 52.2] at 1-3 (71 of 91, 61 of 158), +6.7 [-0.2, +15.9] at 0 (8 of 73, 10 of 237: both near zero
+  where no other sample of either model is right).
+
+Reading that survives: the lead is in long answers, and its size there grows with difficulty until both models fail; "hard
+problems, not long answers" and "long answers, not hard problems" are both refuted by the criteria of the addendum. Caveats:
+the base's count is 4 samples; Think-SFT's finished long answers are a selected set (it hits the cap on 29 % of samples, RL on
+9 %); long = over 8,000 tokens was fixed by the first spec. Instrument check (`analysis/riskcov_test.py`): with right planted
+from problem and model only, the raw lead is larger in long answers and the within-problem slope difference covers 0; planted
+from model and length only, it excludes 0. `table.md` has every stratum, bin and coverage step; `examples.json` one right
+Think-SFT and one wrong RL answer of at most 8,000 tokens on problems the base never solves.
 
 `analysis/riskcov.py` on the stored rows (T 1.0 / top-p 1.0, cap 16,384, grader v3 as stored, 4 samples per problem; attempt
 0 of each sample for all three models, since the RL and base runs have restarts and Think-SFT has none). A sample is
@@ -3093,7 +3131,9 @@ Where a Think-SFT sample gives no answer, RL's sample is wrong 248 times, right 
 wrong samples, 248 (52 %) face a Think-SFT sample without an answer, 121 a wrong one, 107 a right one.
 
 - H1 (the lead is in the long answers): held. Difference by length inside +-2 points with intervals covering 0 up to
-  coverage 0.50, excluding 0 from 0.55; bins above. Not uniform across length, and not absent.
+  coverage 0.50, excluding 0 from 0.55; bins above. Not uniform across length, and not absent. Corrected above: this test
+  alone does not separate length from difficulty; with difficulty held the lead is still in long answers, and its size
+  depends on difficulty.
 - H2 (RL is wrong where Think-SFT abstains, beyond difficulty): mostly difficulty. On the 141 problems with at least one
   Think-SFT cap hit, RL's finished answers are right 31.2 % of the time (144 of 461; 66.2 % on all problems), and it finishes
   82 % of its samples there. The control: RL's precision per stratum of the base's number of right samples (0 to 4), weighted
@@ -3177,3 +3217,112 @@ Wall time 57 min on 10 processes, bound by download speed.
 - Caveats: the rule detects copies of the text only. A paraphrase, a translation or a variant with changed numbers is not
   detected. About 14 of the first 25 MATH-500 flags are template siblings with other numbers (board result-f6a8bc comments).
   A problem of fewer than 8 words (13 in MATH-500, none in hard328) is flagged only when a whole message equals it.
+
+## Derived or asserted: a long wrong answer that boxes a number without deriving it is the base's habit too, not RL's (hard328, laptop, board work-dd4773, idea-6f4b9e)
+
+Question: the hand read of result-b006f5 found 6 of 10 long wrong RL answers that box a number their text never derives. Did
+reward training add this, and does the label help? Answer: no, and little. A blind judge labels 72.5 % [63.1, 81.3] of RL's
+finished wrong answers over 8,000 tokens as asserted, 66.2 % [54.6, 77.2] of the cued base's and 36.2 % [24.4, 48.6] of
+Think-SFT's (80 rows each): RL minus base +6.2 points [-6.7, +19.1], RL minus Think-SFT +36.2 [23.3, 49.1], base minus
+Think-SFT +30.0 [14.7, 45.6]. So the untrained base does it as often as RL; the model that differs is Think-SFT. The label
+carries information about correctness (RL: asserted answers are right 17.0 % of the time, derived ones 66.1 %), but as an
+abstention signal it does no better than length alone (+0.5 points [-1.4, +2.6]). Spec, rubric and predictions, pushed
+before any judging: `specs/SPEC_derived.md` (commit `a9b65ed`).
+
+`analysis/derived.py`. Rows: attempt 0 of the three stored 4-sample hard328 runs (T 1.0 / top-p 1.0, cap 16,384, grader v3);
+per model 80 finished wrong and 60 finished right answers over 8,000 tokens, drawn by the seeded rule of the spec, at most 2
+per problem and stratum. The judge sees the problem and the last 3,000 tokens of the answer (characters in proportion; think
+tags removed), not the model, the gold answer, the score or the length. Labels: DERIVED (the shown steps arrive at the final
+value, right or not), ASSERTED (the value is stated without shown steps that arrive at it: a give-up, an appeal to the
+expected answer, a value picked after contradicting computations, a decisive step that is only claimed), UNCLEAR (never
+used). Judge A, every table: `claude-sonnet-5-5`, effort low. Judge B: `claude-haiku-5-5`, also on the other 502 long
+finished RL answers. Both through the `anthropic` SDK; cost 7.37 USD from the saved token usage (A 5.30, B 0.65, full-text
+condition 1.42). Two departures from the spec: the reply is forced to the JSON schema by the API instead of parsed by
+`swarm_judge`'s rule, and three smoke items were judged while the hand labels were being written. Intervals: bootstrap over problems, 2,000 resamples, seed 0.
+
+Instrument checks:
+
+- Planted positives (15 long answers cut at 60 % and closed with a bare `The answer is \boxed{N}`): ASSERTED 15 of 15, both
+  judges. Planted negatives (15 right answers under 3,000 tokens): DERIVED 15 of 15, both judges.
+- Two judges on the 420 rows: 379 agree, Cohen's kappa 0.80 (Think-SFT 0.79, RL 0.86, base 0.73).
+- 30 rows labelled blind by the agent before any judge call (a fork of the session that saw the same text and no model,
+  score or length; another model, not a person): 25 of 30 agree with judge A, kappa 0.60, exactly at the spec's bar; with
+  judge B 23 of 30, kappa 0.49. All 5 disagreements with A are hand DERIVED, judge ASSERTED (hand 6 asserted, judge 11): an
+  answer that rests on an unproven uniqueness claim, a pattern from small cases or an unchecked existence (rows i0000,
+  i0874, i0917, i0942, i0663 of `labels.jsonl`). So the judge's "asserted" is wider than "boxes a number out of nowhere":
+  it includes answers whose decisive step is a conjecture. Read the shares as the judge's, and the differences between
+  models as the result. The hand labels alone, 5 wrong rows per model: Think-SFT 0 asserted, RL 1, base 5.
+- Tail against the whole text (40 rows, judge A): 38 agree, kappa 0.84. The judge's quote is found in the shown text in 420
+  of 450 rows.
+
+Long finished answers by label, judge A (judge B in `table.md`: 42.5 / 72.5 / 66.2 % asserted among the wrong ones):
+
+| Model | Stratum | Rows | Derived | Asserted | Unclear | Asserted, % [95 %] |
+|---|---|---|---|---|---|---|
+| Think-SFT + cue | wrong | 80 | 51 | 29 | 0 | 36.2 [24.4, 48.6] |
+| Think-SFT + cue | right | 60 | 55 | 5 | 0 | 8.3 [1.9, 15.7] |
+| RL plain | wrong | 80 | 22 | 58 | 0 | 72.5 [63.1, 81.3] |
+| RL plain | right | 60 | 47 | 13 | 0 | 21.7 [11.1, 33.9] |
+| base + cue | wrong | 80 | 27 | 53 | 0 | 66.2 [54.6, 77.2] |
+| base + cue | right | 60 | 48 | 12 | 0 | 20.0 [10.4, 30.6] |
+
+- H1 (RL's asserted share among long wrong answers is 20 points above both others): refuted by the base. Against Think-SFT
+  it holds (+36.2 [23.3, 49.1]; judge B +30.0 [15.0, 44.8]); against the base it is +6.2 [-6.7, +19.1] (judge B +6.2
+  [-8.0, +19.8]), under the 10 points the spec asked for. As predicted in the spec.
+- H2 (asserted answers are rarely right): held. Strata weighted back to the pool of long finished answers:
+
+| Model | Asserted share of long finished answers, % | Right among asserted, % | Right among derived, % | Difference |
+|---|---|---|---|---|
+| Think-SFT + cue (96 wrong, 295 right) | 15.2 [9.4, 21.6] | 41.4 [13.4, 62.5] | 81.5 [75.3, 86.9] | 40.1 [18.4, 68.6] |
+| RL plain (381, 261) | 51.8 [43.3, 60.3] | 17.0 [9.0, 25.6] | 66.1 [56.5, 75.2] | 49.1 [34.7, 62.6] |
+| base + cue (281, 129) | 51.7 [42.3, 60.5] | 12.2 [6.1, 18.9] | 52.1 [42.3, 62.6] | 39.9 [26.6, 53.0] |
+
+  Judge B on all 642 long finished RL answers, no weighting: asserted 54 of 319 right (16.9 % [11.6, 22.8]), derived 207 of
+  323 (64.1 % [56.7, 70.5]). Half of RL's and of the base's long finished answers are asserted, 15 % of Think-SFT's.
+- H3 (the flag beats length as an abstention signal; descriptive, the judge is another model, no `score:` line): not held.
+  RL's 1,312 samples: all answered, coverage 97.3 %, precision 62.7 %. Dropping the 319 answers judge B flags (54 of them
+  right): coverage 72.9 %, precision 78.0 % [73.9, 81.6]. Keeping the shortest answers to the same coverage: 77.4 %
+  [73.0, 81.1]. Difference +0.5 points [-1.4, +2.6] (predicted +4). From judge A's sample weighted to the pool: 78.8 %
+  against 78.4 % at coverage 71.9 %. A judge call per answer buys nothing over counting tokens.
+- By length (judge A, wrong answers; asserted / rows): 8,000 to 12,000 tokens Think-SFT 4 / 25 (16 %), RL 15 / 22 (68 %),
+  base 8 / 25 (32 %); 12,000 to the cap Think-SFT 25 / 55 (45 %), RL 43 / 58 (74 %), base 45 / 55 (82 %). RL's share is
+  already high at 8,000 to 12,000; the base's rises with length. Cells of 22 to 58 rows.
+- RL's long wrong answers on the 48 problems where all four Think-SFT samples hit the cap against the other problems:
+  judge A's sample 23 of 30 (76.7 % [62.1, 90.0]) against 35 of 50 (70.0 % [56.5, 82.5]); judge B on all 381: 111 of 133
+  (83.5 % [76.6, 89.8]) against 154 of 248 (62.1 % [54.7, 69.6]). Where Think-SFT runs to the cap, RL's wrong answer is
+  more often asserted.
+- Predictions of the spec: asserted share of long wrong answers 45 / 20 / 35 % (RL / Think-SFT / base), observed 72.5 /
+  36.2 / 66.2: the order was right, every level too low. Under 10 % among right answers: wrong for RL and the base (21.7,
+  20.0). Kappa between judges 0.60 predicted, 0.80 observed; hand against judge 0.70 predicted, 0.60 observed.
+
+What an asserted RL ending looks like (rows read in `labels.jsonl` and the raw text): the reasoning stops with a statement
+that time is up, and the value is named as a guess. Then comes a final write-up in numbered steps, formatted like a
+solution, in which the step that should produce the value is a phrase. Problem 109, sample 3 (boxes 180, gold 336): "since
+this is taking too long and I need to conclude, the answer is 180°, which I think is a common result"; its write-up ends
+"After considering the symmetry and the properties of the nine-point circle, we conclude that the required value is". Problem
+274, sample 1 (208, gold 10): "Perhaps the answer is \boxed{208} and I have to go with that." Problem 361, sample 1 (1,
+gold 4/3): "After struggling for so long, and seeing that my time is up, I think the answer is likely 1." The base's asserted
+endings read the same ("I might hazard a guess that the intended answer is \boxed{18}, but I am not confident", problem 222).
+Give-up wording
+(`give up, guess, hazard, time, go with, likely, ...`) is in the judge's quote for 32 of RL's 71 asserted rows, 27 of the
+base's 65 and 10 of Think-SFT's 34 (a keyword count outside the spec); the others rest on a conjecture or an unproven claim.
+
+Reading: when a model of this family finishes a long answer it has not solved, it names a value and formats it as a solution.
+The base does this without any reward, so the RL reward did not create it; RL also did not remove it, and RL finishes 97 %
+of its samples. Think-SFT, trained on traces, does it half as often among its long wrong answers and, mostly, does not finish
+at all (cap hits on 29 % of samples). Limits: one sampling setting; the judge's label is wider than the hand label and the
+hand agreement is at the bar; Think-SFT's long finished wrong answers are a small, selected pool (96 rows, 80 judged);
+the hand labels come from a model, not a person; the literature was searched with WebSearch only (no Exa key), no paper
+was read in full.
+
+Run folder `results/derived/hard328-01/`: `readout.json` (every number above), `table.md`, `labels.jsonl` (952 items with
+both judges' label, quote and reason, no answer text), `hand.json`, `examples.json` (per model one DERIVED and one ASSERTED
+wrong answer with the quote, the reason and the last 1,500 characters; one planted control of each kind), `rubric.md`,
+`run.json`. Prompts, raw replies and token usage: `runs/derived/` (not committed).
+
+```
+P="uv run --no-project --with numpy --with math-verify==0.9.0 --with anthropic --with brotli>=1.2.0 python -m studies.rlneurons.analysis.derived"
+$P prep --runs runs --work runs/derived-02
+$P judge --work runs/derived-02 --judge A    # also B and F; the hand labels go to runs/derived-02/hand.json first
+$P score --work runs/derived-02 --out studies/rlneurons/results/derived/hard328-02
+```
