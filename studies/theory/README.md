@@ -1692,9 +1692,11 @@ adversary's value was computed first in every test. Denied consequences are list
 | a3/c2 r16a3c2, result-9cf361 | m21 minus T3 right where both are non-deliberative | a3 [0.10, 0.40] | 0.352 (m21 is more accurate, opening ignored) | 0.105 [-0.013, 0.224], n 76 | undecided |
 | a3/c3 r16a3c3, result-9f2b30 | Code 3.1's left/right capture over Think-SFT's in Math 3.1's top-8 | a3 [1.4, 8.0] | 0.589 (the same ratio against RL-General's top-8) | 0.492 [0.442, 0.553], n 224 | refuted (also below the null [0.8, 1.2]) |
 
-The adversary's value lay inside the measured interval in 2 of 9 tests (a1/c2, a2/c2). In the other 7 the alternative
-was itself wrong: the adversaries could not read the stored rows, so they guessed. Five of the 9 consequences are
-undecided because the interval crosses an edge of the account's range: the ranges were narrower than the data's noise.
+The adversary's value lay inside the measured interval in 3 of 9 tests (a1/c2, a2/c2, a2/c3: 0.017 in [-0.033, 0.334];
+corrected from 2 after round 16, comment on result-368932). In the other 6 the alternative was itself wrong: the
+adversaries could not read the stored rows, so they guessed. Six of the 9 consequences (a1/c1, a1/c2, a1/c3, a2/c3,
+a3/c1, a3/c2) are undecided because the interval crosses an edge of the account's range (corrected from 5): the ranges
+were narrower than the data's noise.
 
 **Denials: who was right.** account-2 denied a1/c1 and a1/c2, saying the step-100 and m21 answers that skip the
 deliberative opening carry the RL shift anyway, so opening type says little about rightness. Both denials were refuted:
@@ -1721,7 +1723,7 @@ submit l40s --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && ..."` and
 carefully.' --set hard328 --n 164 --temperature 1.0 --top-p 1.0 --samples 1 --seed 3000000 --commit COMMIT_SHA`.
 
 **SPEC_round16 hypotheses.** H1 (2 consequences of one account hold against the adversary): refuted, 0 hold. H2 (at
-least 2 not separated): refuted, 1 (a2/c2). The adversaries' values missed in 7 of 9, so the bar was rarely the
+least 2 not separated): refuted, 1 (a2/c2). The adversaries' values missed in 6 of 9 (corrected from 7), so the bar was rarely the
 binding one. H3 (at least 4 testable disagreements): holds, exactly 4 denials, which is the code's minimum. H4 (at
 least 2 denials decided): holds, 3 decided, all against the denier. H5 (blind markers stricter than self-marking for
 2 of 3 accounts): holds for 3 of 3 on "explained" (8 to 15 fewer); there were no new contradictions. H6 (round 15's
@@ -1743,7 +1745,7 @@ Files in `results/wide/round-16/`: `standing.md` / `standing.json` / `standing/`
 ## Engine 17 (accounts read the explore half, tests run on the test half)
 
 Skill version 17, branch `theory` only (main is frozen). Why: in round 16, 0 of 9 consequences held; 6 were undecided
-at the edge of a guessed range and 7 of 9 adversary values were at the wrong scale, because the writers and adversaries
+at the edge of a guessed range and 6 of 9 adversary values missed the measured interval, because the writers and adversaries
 could not read the stored rows. Letting them read all rows would let them fit the answer, so the problems are split.
 
 1. `data/split_v1.json` (written once by `lib/rows.py split`, never changed): for hard328 (328 problems), MATH-500 (500),

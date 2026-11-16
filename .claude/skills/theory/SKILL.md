@@ -28,7 +28,7 @@ Version 16 rules (round 15: 6 of 9 consequences held, but an audit, knowledge-ab
    on the same files, or a number a board result already shows, are rejected. Fact marks come from one blind marker per
    account (`marks-<account>.json`), not the account's own; the score uses them.
 
-Version 17 rules (round 16: 0 of 9 held, 7 of 9 adversary values guessed at the wrong scale: writers could not read
+Version 17 rules (round 16: 0 of 9 held, 6 of 9 adversary values missed the measured interval: writers could not read
 the rows, and reading all rows would let them fit the answer): 1. `data/split_v1.json` splits every set's problem ids
 once (sha256 of `<set>:<id>`) into explore and test halves; `lib/rows.py` loads one half of a stored cell. 2. Three
 accounts (parallel, each from a different third of the facts) and the adversaries run with Bash in a folder holding
