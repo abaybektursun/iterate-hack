@@ -1,0 +1,106 @@
+[
+ {
+  "label": "q above 1.4 (counts toward the account's direction)",
+  "matrix": "model.layers.29.self_attn.k_proj.weight",
+  "shape": [
+   4096,
+   4096
+  ],
+  "input": {
+   "code31>math31": {
+    "cap_left": 0.0283719,
+    "cap_right": 0.0481777,
+    "cap_both": 0.00620913
+   },
+   "think_sft>math31": {
+    "cap_left": 0.00943843,
+    "cap_right": 0.0128285,
+    "cap_both": 0.000288311
+   }
+  },
+  "output": {
+   "code_left_over_right": 0.5889010890930867,
+   "think_left_over_right": 0.73573917449429
+  },
+  "score_q": 0.8004210044923428,
+  "counts_above_1.4": false
+ },
+ {
+  "label": "q below 1.4 (counts against)",
+  "matrix": "model.layers.23.mlp.down_proj.weight",
+  "shape": [
+   4096,
+   11008
+  ],
+  "input": {
+   "code31>math31": {
+    "cap_left": 0.00833382,
+    "cap_right": 0.0171941,
+    "cap_both": 0.000855896
+   },
+   "think_sft>math31": {
+    "cap_left": 0.00395614,
+    "cap_right": 0.0016724,
+    "cap_both": 7.98793e-06
+   }
+  },
+  "output": {
+   "code_left_over_right": 0.48469067877934874,
+   "think_left_over_right": 2.3655465199712986
+  },
+  "score_q": 0.20489585585711903,
+  "counts_above_1.4": false
+ },
+ {
+  "label": "max q",
+  "matrix": "model.layers.0.self_attn.k_proj.weight",
+  "shape": [
+   4096,
+   4096
+  ],
+  "input": {
+   "code31>math31": {
+    "cap_left": 0.27373,
+    "cap_right": 0.0413336,
+    "cap_both": 0.0122423
+   },
+   "think_sft>math31": {
+    "cap_left": 0.0597743,
+    "cap_right": 0.0310063,
+    "cap_both": 0.000929963
+   }
+  },
+  "output": {
+   "code_left_over_right": 6.6224572744691965,
+   "think_left_over_right": 1.9278114447709014
+  },
+  "score_q": 3.4352204373681374,
+  "counts_above_1.4": true
+ },
+ {
+  "label": "min q",
+  "matrix": "model.layers.15.mlp.down_proj.weight",
+  "shape": [
+   4096,
+   11008
+  ],
+  "input": {
+   "code31>math31": {
+    "cap_left": 0.0131596,
+    "cap_right": 0.035318,
+    "cap_both": 0.00192665
+   },
+   "think_sft>math31": {
+    "cap_left": 0.0057187,
+    "cap_right": 0.00188616,
+    "cap_both": 2.62995e-05
+   }
+  },
+  "output": {
+   "code_left_over_right": 0.37260320516450535,
+   "think_left_over_right": 3.031927302031641
+  },
+  "score_q": 0.12289318576828359,
+  "counts_above_1.4": false
+ }
+]
