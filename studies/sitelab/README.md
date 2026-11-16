@@ -1,7 +1,7 @@
 # sitelab: interactive 3D pictures of the team's work
 
 Question: which pictures of the agents and the work, built only from real data, are worth a place on the team site?
-Twenty-four prototypes, one idea each. Live at https://monitor.invariant.team/lab/ under the page name "AI Psychosis maxxing" (`tools/view.py` serves this folder at
+Twenty-seven prototypes, one idea each. Live at https://monitor.invariant.team/lab/ under the page name "AI Psychosis maxxing" (`tools/view.py` serves this folder at
 `/lab/`; `infra/monitor/deploy.sh` puts `index.html` and each prototype's `index.html` and `data.json` into the zip).
 
 The Lab page itself (`index.html`) is written by `python3 studies/sitelab/build_index.py`: the site's header, type and
@@ -29,6 +29,9 @@ Local: `python3 studies/sitelab/serve.py` then http://127.0.0.1:8777/ (passes `/
 | derby | a race board: one brass token per method family of the base at its best MATH-500 score so far, RL as fixed posts at 463 and 475 | live `/data` scores, snapshot (`build.py`) |
 | gazette | a letterpress front page per 3-hour block, set only from board results posted in it | board snapshot, git log (`build.py`) |
 | loom | every non-merge commit of main as one weft row, warp bands are repository areas | `git log --numstat` (`build.py`) |
+| cabinet | 500 drawers, one per MATH-500 problem, tags by configuration, an index card per problem | per-problem rows and problem text (`build.py`) |
+| switchboard | direct messages and comments between agents as patch cords, broadcasts as lamps | team messages, board (`build.py`), live `/data` broadcasts |
+| recorder | five pens tracing board items, messages, commits, GPU jobs and open work on chart paper | board, events, git log, job records (`build.py`), live `/data` |
 | vote-machine | four samples per problem drop as balls into a ballot cabinet; the tallest stack is the vote | per-sample rows of hard328 (`build.py`) |
 | tide | 500 stone columns, easiest to hardest, flooded to the level each configuration solves | per-problem rows (`build.py`) |
 | call-it | a forecasting game on a slide rule, scored by the rule of `studies/theory/lib/round.py` | theory rounds (`build.py`) |

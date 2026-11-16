@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: recorder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #100f0e; --ink: #e8e2d6; --mute: #a39a8c; --faint: #7b7368; --rule: #2e2a25; --cream: #e6dcc3; --red: #c4634a;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--ink); background: var(--paper); overflow: hidden;
+  font: 400 14px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+:focus-visible { outline: 1px solid var(--cream); outline-offset: 3px; border-radius: 2px; }
+canvas#c { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+canvas#c.pull { cursor: grabbing; } canvas#c.read { cursor: crosshair; }
+.grain { position: fixed; inset: 0; pointer-events: none; opacity: .06; mix-blend-mode: overlay; z-index: 1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1.2 -.1'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.shade { position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  background: linear-gradient(180deg, rgba(11, 10, 9, .9), rgba(11, 10, 9, 0) 24%, rgba(11, 10, 9, 0) 70%, rgba(11, 10, 9, .92) 92%), radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .45) 100%); }
+
+header { position: fixed; left: 0; right: 0; top: 0; padding: 22px 40px 0; z-index: 2; pointer-events: none; }
+header > * { pointer-events: auto; }
+.top { display: flex; align-items: baseline; gap: 14px; font-size: 12px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--faint); }
+.top a { color: var(--mute); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.top a:hover { color: var(--ink); }
+.top a, .top span { white-space: nowrap; } .top span { overflow: hidden; text-overflow: ellipsis; }
+h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 28px; line-height: 1.17; letter-spacing: -.012em; margin: 16px 0 0; max-width: 1040px; text-wrap: balance; }
+h1 button { font-weight: 300; color: var(--cream); font-variant-numeric: lining-nums; border-bottom: 1px solid #6d6555; }
+h1 button:hover { border-color: var(--cream); }
+
+footer { position: fixed; left: 0; right: 0; bottom: 0; padding: 0 40px 18px; z-index: 2; display: grid; grid-template-columns: 330px 1fr; gap: 0 44px; align-items: end; pointer-events: none; }
+footer > * { pointer-events: auto; }
+.clock strong { display: block; font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 32px; line-height: 1.05; font-variant-numeric: lining-nums tabular-nums; }
+.clock small { display: block; font-size: 11.5px; color: var(--mute); line-height: 1.35; min-height: 2.7em; padding-top: 3px; }
+.keys { display: flex; gap: 8px; padding-top: 8px; }
+.keys button { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--ink); border: 1px solid #4b443b; border-radius: 99px; padding: 4px 13px; }
+.keys button:hover, .keys button.on { border-color: var(--cream); }
+.keys button.z { padding: 4px 10px; }
+.pens { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0 18px; border-top: 1px solid var(--rule); padding-top: 9px; }
+.pen { font-size: 11px; line-height: 1.35; color: var(--faint); }
+.pen b { display: flex; align-items: center; gap: 7px; font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--mute); white-space: nowrap; }
+.pen b::before { content: ""; width: 16px; height: 3px; border-radius: 2px; background: var(--c); flex: none; }
+.pen em { font-style: normal; display: block; font-family: "Newsreader", Georgia, serif; font-size: 22px; line-height: 1.15; color: var(--ink); font-variant-numeric: lining-nums tabular-nums; }
+.pen em.off { color: var(--faint); font-family: inherit; font-size: 11px; line-height: 25px; }
+.def { grid-column: 1 / 3; font-size: 11.5px; line-height: 1.45; color: var(--faint); padding-top: 10px; max-width: 1500px; }
+.def b { color: var(--mute); font-weight: 500; } .def summary { display: none; }
+
+#tip { position: fixed; left: 0; top: 0; pointer-events: none; z-index: 3; width: 268px; background: rgba(26, 24, 22, .96); border: 1px solid var(--rule); border-radius: 3px; padding: 8px 11px 9px; opacity: 0; transition: opacity .12s; font-size: 12px; line-height: 1.4; will-change: transform; }
+#tip.on { opacity: 1; }
+#tip u { text-decoration: none; display: block; font-family: "Newsreader", Georgia, serif; font-size: 17px; line-height: 1.2; color: var(--ink); font-variant-numeric: lining-nums tabular-nums; padding-bottom: 5px; }
+#tip div { display: grid; grid-template-columns: 22px 1fr auto; align-items: center; color: var(--mute); }
+#tip div i { width: 14px; height: 3px; border-radius: 2px; background: var(--c); }
+#tip div span { color: var(--ink); font-variant-numeric: tabular-nums; }
+#tip p { margin: 6px 0 0; padding-top: 6px; border-top: 1px solid var(--rule); color: var(--ink); overflow-wrap: anywhere; }
+#tip p small { display: block; color: var(--faint); font-size: 11px; }
+#err { position: fixed; left: 8px; bottom: 8px; color: var(--red); font-size: 12px; white-space: pre-wrap; z-index: 9; max-width: 70%; }
+
+@media (max-width: 1100px) { .pens { grid-template-columns: repeat(3, 1fr); gap: 6px 18px; } footer { grid-template-columns: 250px 1fr; gap: 0 24px; } .clock strong { font-size: 26px; } }
+@media (max-width: 760px) {
+  header { padding: 12px 16px 0; } h1 { font-size: 18.5px; margin-top: 8px; }
+  footer { display: block; padding: 0 16px 10px; background: linear-gradient(180deg, rgba(16, 15, 14, 0), rgba(16, 15, 14, .9) 18%); }
+  .clock { display: grid; grid-template-columns: 1fr auto; gap: 0 10px; align-items: end; padding-bottom: 8px; }
+  .clock strong { font-size: 21px; white-space: nowrap; } .clock small { grid-column: 1 / 3; grid-row: 2; min-height: 1.4em; } .keys { padding: 0 0 3px; gap: 5px; } .keys button { padding: 4px 9px; }
+  .pens { grid-template-columns: repeat(3, 1fr); gap: 4px 12px; padding-top: 6px; } .pen em { font-size: 17px; } .pen em.off { line-height: 19px; } .pen small { display: none; }
+  .def { padding-top: 6px; max-height: 38vh; overflow-y: auto; }
+  .def summary { display: block; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--mute); cursor: pointer; }
+}
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="c" aria-label="A five-pen strip-chart recorder: board items, messages, commits, GPU jobs running and open work items drawn in ink on gridded paper, score lines stamped beside them"></canvas>
+<div class="grain"></div>
+<div class="shade"></div>
+<header>
+  <div class="top"><a href="../../">← Lab</a><span>Recorder · the hackathon on chart paper</span></div>
+  <h1 id="line">&nbsp;</h1>
+</header>
+<footer id="foot">
+  <div class="clock">
+    <strong id="when">&nbsp;</strong>
+    <div class="keys"><button id="play" aria-label="Replay the hackathon">Play</button><button id="live" aria-label="Return to the present">Live</button><button id="zout" class="z" aria-label="More time on the paper">−</button><button id="zin" class="z" aria-label="Less time on the paper">+</button></div>
+    <small id="sub"></small>
+  </div>
+  <div class="pens" id="pens"></div>
+  <details class="def" id="def" open></details>
+</footer>
+<div id="tip"></div>
+<div id="err"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+const $ = id => document.getElementById(id);
+const fail = e => { $('err').textContent += (e && (e.stack || e.message || e.reason) || e) + '\n'; console.error(e); };
+window.addEventListener('error', e => fail(e.error || e.message));
+window.addEventListener('unhandledrejection', e => fail(e.reason));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x)), lerp = (a, b, t) => a + (b - a) * t;
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const narrow = () => innerWidth <= 760;
+const rnd = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+const bisect = (a, x) => { let lo = 0, hi = a.length; while (lo < hi) { const m = lo + hi >> 1; if (a[m] <= x) lo = m + 1; else hi = m; } return lo; };   // how many of a are <= x
+
+const D = await (await fetch('data.json')).json();
+await Promise.all([document.fonts.load('500 40px Newsreader'), document.fonts.load('600 40px Archivo')]).catch(() => 0);
+
+// ------------------------------------------------------------------ the data and its mappings
+const T0 = D.t0, STEP = D.step, WIN = D.win, N = D.sig.items.length, END = T0 + (N - 1) * STEP;   // unix seconds, UTC
+const POLL = 30, SPEED = 1500, WET = 1.6;        // seconds between board reads; replay: seconds of the record per second; seconds ink stays wet
+const nice = m => [5, 10, 15, 20, 25, 30, 40, 50, 60, 80, 100, 150, 200].find(x => x >= m * 1.05) || Math.ceil(m / 100) * 100;
+const PENS = [
+  { k: 'items', name: 'Board items', unit: 'posted per 10 min', ink: '#2a3a68', live: true },
+  { k: 'msgs', name: 'Messages', unit: 'on `all` per 10 min', ink: '#2f6350', live: true },
+  { k: 'commits', name: 'Commits', unit: 'per 10 min', ink: '#84501f', live: false },
+  { k: 'gpu', name: 'GPU jobs', unit: 'running', ink: '#643a6c', live: false },
+  { k: 'work', name: 'Open work', unit: 'items open', ink: '#2b2a2d', live: true }];
+PENS.forEach(p => { p.a = D.sig[p.k]; p.fs = nice(Math.max(...p.a)); p.ext = []; p.join = false; });
+const STAMP = '#453d5e', PENCIL = '#b33f2c', GRID = '#7fa58c';
+const scores = D.scores.map(s => ({ t: T0 + s[0], model: D.models[s[1]], bench: D.benches[s[2]], right: s[3], n: s[4], config: s[5], result: s[6] }));
+const items = D.items.map(i => ({ t: T0 + i[0], kind: D.kinds[i[1]], who: D.people[i[2]], title: i[3] }));
+let itemT = items.map(i => i.t), msgT = [], bests = [];
+function findBests() {   // each base MATH-500 (n 500) score above every earlier one; of several at one moment the highest is annotated
+  let top = 0; bests = [];
+  for (const s of scores) { s.best = false; if (s.model === 'base' && s.bench === 'MATH-500' && s.n === 500 && s.right > top) { top = s.right; s.best = true; if (bests.length && bests[bests.length - 1].t === s.t) bests.pop(); bests.push(s); } }
+}
+findBests();
+if (bests.filter(s => s.t <= T0 + D.scores[D.scores.length - 1][0]).length > D.best.length) throw new Error('best scores differ from data.json');
+
+// the paper, in cm. x: along the paper, later to the right, the pens at x = 0. z: across it, the far edge at -PW / 2.
+const PW = 26, HP = 7.44, X_ROLL = -42, X_IN = 9, CM = 76, QOFF = CM - X_IN - 0.25;
+const LANE0 = 4.8, LANE = 3.8, SPANV = 3.2;     // across the paper from the far edge: the score strip, then five lanes
+const laneB = i => LANE0 + i * LANE + 3.55, laneY = (i, v) => laneB(i) - clamp(v / PENS[i].fs, 0, 1.04) * SPANV;
+const Y_TICK = 4.45, ROWS = [3.42, 2.56], Y_NOTE = 1.72, Y_TIME = LANE0 + 5 * LANE + 0.52, HOLE = 1.27;
+const FOLD = 11, SHEET = 0.07;                  // cm of paper per fold of the stack, drawn height of one fold
+
+function value(p, t) {   // the reading of pen p at time t, or null where nothing was recorded
+  if (t < T0) return null;
+  if (t <= END) { const f = (t - T0) / STEP, i = Math.min(N - 2, Math.floor(f)); return lerp(p.a[i], p.a[i + 1], f - i); }
+  const E = p.ext; if (!E.length) return null;
+  if (t < E[0][0]) return p.join ? lerp(p.a[N - 1], E[0][1], (t - END) / (E[0][0] - END)) : null;
+  const L = E[E.length - 1]; if (t >= L[0]) return t - L[0] <= 3 * POLL ? L[1] : null;
+  let j = 1; while (E[j][0] < t) j++;
+  return lerp(E[j - 1][1], E[j][1], (t - E[j - 1][0]) / (E[j][0] - E[j - 1][0]));
+}
+
+// ------------------------------------------------------------------ state
+const q = new URLSearchParams(location.hash.slice(1));
+const nowS = () => Date.now() / 1000;
+const K0 = () => (nowS() - T0) / (narrow() ? 26 : 40), K_MIN = 120, K_MAX = () => (nowS() - T0) / 12;   // seconds per cm of paper
+let k = clamp(+q.get('k') || K0(), K_MIN, K_MAX()), kS = k, anchor = null;
+let live = !q.has('t'), tv = live ? nowS() : clamp(T0 + +q.get('t'), T0, nowS()), vel = 0, playing = false;
+let need = true, dirty = true, hover = null, lastPoll = 0, polled = false, stampAt = -1e9, hashT = 0;
+const saveHash = () => { clearTimeout(hashT); hashT = setTimeout(() => history.replaceState(null, '', live && Math.abs(k - K0()) < 1 ? location.pathname : '#' + (live ? '' : 't=' + Math.round(tv - T0) + '&') + 'k=' + Math.round(k)), 250); };
+const inkEnd = () => playing ? tv : Infinity;
+function go(t, keepLive) { const n = nowS(); tv = clamp(t, T0 - 4 * kS, n); live = keepLive || tv >= n - 0.5; if (live) tv = n; dirty = true; saveHash(); }
+function setPlay(p) { playing = p && !still; if (playing) { vel = 0; if (live || tv > nowS() - 60) tv = T0; live = false; } $('play').textContent = playing ? 'Pause' : still ? 'Next hour' : 'Play'; $('play').classList.toggle('on', playing); dirty = true; }
+function zoom(f, at) { k = clamp(k * f, K_MIN, K_MAX()); anchor = at && !live && !playing ? at : null; dirty = true; saveHash(); }
+
+// ------------------------------------------------------------------ renderer, room, light
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+const scene = new THREE.Scene(), BACK = new THREE.Color('#0d0c0b');
+scene.background = BACK; scene.fog = new THREE.Fog(BACK, 300, 620);
+const camera = new THREE.PerspectiveCamera(24, 1, 10, 1500);
+
+function studio() {   // a photographer's room for the chrome and the enamel to reflect: a large softbox, a strip, a warm bounce
+  const es = new THREE.Scene(), lit = (w, h, v, c = [1, 1, 1]) => new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c[0] * v, c[1] * v, c[2] * v), side: THREE.DoubleSide }));
+  es.add(new THREE.Mesh(new THREE.SphereGeometry(60, 24, 12), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.02, 0.018, 0.016), side: THREE.BackSide })));
+  const key = lit(34, 22, 6, [1, 0.95, 0.87]); key.position.set(-14, 26, 16); key.lookAt(0, 0, 0);
+  const top = lit(50, 26, 2.2, [1, 0.97, 0.92]); top.position.set(6, 36, -10); top.lookAt(0, 0, 0);
+  const strip = lit(5, 34, 3.4, [0.86, 0.92, 1]); strip.position.set(32, 12, 4); strip.lookAt(0, 2, 0);
+  const back = lit(46, 6, 1.5, [1, 0.9, 0.8]); back.position.set(0, 8, -36); back.lookAt(0, 2, 0);
+  const bounce = lit(60, 60, 0.12, [1, 0.82, 0.62]); bounce.position.set(0, -6, 0); bounce.rotation.x = Math.PI / 2;
+  es.add(key, top, strip, back, bounce);
+  const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(es, 0.02, 1, 200).texture; pm.dispose();
+}
+studio();
+const key = new THREE.SpotLight(new THREE.Color(1.0, 0.95, 0.87), 3.3, 0, 0.44, 0.6, 0);
+key.position.set(-52, 78, 84); key.target.position.set(-14, 5, 0); key.castShadow = true; key.shadow.mapSize.set(4096, 4096);
+Object.assign(key.shadow.camera, { near: 60, far: 220 }); key.shadow.bias = -0.0005; key.shadow.normalBias = 0.04; key.shadow.radius = 2.2;
+scene.add(key, key.target, new THREE.HemisphereLight(0x8d8a86, 0x1b1611, 0.1));
+
+// ------------------------------------------------------------------ surfaces drawn once
+const cvs = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d')]; };
+const tex = (cv, srgb, rep) => { const t = new THREE.CanvasTexture(cv); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 16; if (rep) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]); } return t; };
+const SERIF = '"Newsreader", Georgia, serif', SANS = '"Archivo", sans-serif';
+
+function hammer() {      // hammer-tone enamel: shallow overlapping dimples, the paint a little darker where it pooled
+  const S = 512, [bc, b] = cvs(S, S), [cc, c] = cvs(S, S), rand = rnd(11);
+  b.fillStyle = '#b0b0b0'; b.fillRect(0, 0, S, S); c.fillStyle = '#5c6563'; c.fillRect(0, 0, S, S);
+  for (let i = 0; i < 3200; i++) { const x = rand() * S, y = rand() * S, r = 4 + rand() * 8;
+    for (const dx of [-S, 0, S]) for (const dy of [-S, 0, S]) {
+      let g = b.createRadialGradient(x + dx, y + dy, 0, x + dx, y + dy, r); g.addColorStop(0, 'rgba(40,40,40,.5)'); g.addColorStop(0.7, 'rgba(70,70,70,.22)'); g.addColorStop(0.92, 'rgba(235,235,235,.2)'); g.addColorStop(1, 'rgba(180,180,180,0)');
+      b.fillStyle = g; b.fillRect(x + dx - r, y + dy - r, 2 * r, 2 * r);
+      g = c.createRadialGradient(x + dx, y + dy, 0, x + dx, y + dy, r); g.addColorStop(0, 'rgba(72,80,78,.34)'); g.addColorStop(0.75, 'rgba(84,93,90,.14)'); g.addColorStop(0.93, 'rgba(112,122,119,.16)'); g.addColorStop(1, 'rgba(92,101,99,0)');
+      c.fillStyle = g; c.fillRect(x + dx - r, y + dy - r, 2 * r, 2 * r); } }
+  return { map: tex(cc, true, [1, 1]), bump: tex(bc, false, [1, 1]) };
+}
+function brushed(base, len, n, seed) {   // brushed metal: fine streaks along x
+  const [cv, c] = cvs(1024, 256), rand = rnd(seed); c.fillStyle = base; c.fillRect(0, 0, 1024, 256);
+  for (let i = 0; i < n; i++) { const y = rand() * 256, x = rand() * 1024, l = len * (0.3 + rand()); c.fillStyle = rand() < 0.5 ? `rgba(255,255,255,${0.03 + rand() * 0.08})` : `rgba(0,0,0,${0.03 + rand() * 0.1})`; c.fillRect(x, y, l, 0.6 + rand()); c.fillRect(x - 1024, y, l, 0.6 + rand()); }
+  return cv;
+}
+function speckle(seed, lo, hi) { const [cv, c] = cvs(256, 256), rand = rnd(seed), im = c.createImageData(256, 256);
+  for (let i = 0; i < im.data.length; i += 4) { const v = lo + rand() * (hi - lo); im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; } c.putImageData(im, 0, 0); return cv; }
+
+const HAM = hammer();
+const M = {
+  enamel: new THREE.MeshPhysicalMaterial({ map: HAM.map, bumpMap: HAM.bump, bumpScale: 0.8, metalness: 0.35, roughness: 0.36, clearcoat: 0.7, clearcoatRoughness: 0.28, envMapIntensity: 0.55 }),
+  steel: new THREE.MeshPhysicalMaterial({ map: tex(brushed('#9b9d9c', 260, 5000, 3), true, [3, 1]), metalness: 1, roughness: 0.36, anisotropy: 0.7, clearcoat: 0.1 }),
+  chrome: new THREE.MeshStandardMaterial({ color: '#e2e5e7', metalness: 1, roughness: 0.07 }),
+  satin: new THREE.MeshStandardMaterial({ color: '#b9bcbd', metalness: 1, roughness: 0.3 }),
+  brass: new THREE.MeshPhysicalMaterial({ color: '#b08d55', metalness: 1, roughness: 0.3, clearcoat: 0.3, clearcoatRoughness: 0.3 }),
+  black: new THREE.MeshPhysicalMaterial({ color: '#131313', roughness: 0.32, clearcoat: 1, clearcoatRoughness: 0.12 }),
+  rubber: new THREE.MeshStandardMaterial({ color: '#191919', roughness: 0.92, bumpMap: tex(speckle(4, 90, 170), false, [6, 2]), bumpScale: 0.4 }),
+  glass: new THREE.MeshPhysicalMaterial({ color: '#dfeae6', metalness: 0, roughness: 0.02, transparent: true, opacity: 0.18, envMapIntensity: 1.8, depthWrite: false, side: THREE.DoubleSide }),
+  bench: new THREE.MeshStandardMaterial({ color: '#1c1e1e', roughness: 0.62, metalness: 0, roughnessMap: tex(speckle(9, 130, 255), false, [60, 60]), bumpMap: tex(speckle(5, 100, 160), false, [90, 90]), bumpScale: 0.25, envMapIntensity: 0.7 }),
+  dark: new THREE.MeshStandardMaterial({ color: '#070707', roughness: 0.9 }),
+};
+const add = (parent, geo, mat, x = 0, y = 0, z = 0, shadow = 3) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = !!(shadow & 1); m.receiveShadow = !!(shadow & 2); parent.add(m); return m; };
+function cmUV(geo, tile = 14) {   // texture coordinates in cm on every face, so the enamel has one grain everywhere
+  const p = geo.attributes.position, n = geo.attributes.normal, uv = geo.attributes.uv;
+  for (let i = 0; i < p.count; i++) { const ax = Math.abs(n.getX(i)), ay = Math.abs(n.getY(i)), az = Math.abs(n.getZ(i));
+    if (ay >= ax && ay >= az) uv.setXY(i, p.getX(i) / tile, p.getZ(i) / tile); else if (ax >= az) uv.setXY(i, p.getZ(i) / tile, p.getY(i) / tile); else uv.setXY(i, p.getX(i) / tile, p.getY(i) / tile); }
+  return geo;
+}
+const box = (x0, x1, y0, y1, z0, z1, mat, r = 0.35, shadow = 3) => add(scene, cmUV(new RoundedBoxGeometry(x1 - x0, y1 - y0, z1 - z0, 3, Math.min(r, (y1 - y0) / 2.01, (x1 - x0) / 2.01, (z1 - z0) / 2.01))), mat, (x0 + x1) / 2, (y0 + y1) / 2, (z0 + z1) / 2, shadow);
+const cylZ = (r, len, seg = 32) => new THREE.CylinderGeometry(r, r, len, seg).rotateX(Math.PI / 2);
+const cylX = (r, len, seg = 16) => new THREE.CylinderGeometry(r, r, len, seg).rotateZ(Math.PI / 2);
+const lathe = (pts, seg = 40) => new THREE.LatheGeometry(pts.map(p => new THREE.Vector2(p[0], p[1])), seg);
+
+// ------------------------------------------------------------------ the instrument
+{ const f = add(scene, new THREE.PlaneGeometry(1400, 1400), M.bench, 0, 0, 0, 2); f.rotation.x = -Math.PI / 2; }
+const ZC = 16.5;
+box(X_ROLL + 1.6, 19, 0.7, 7, -ZC, ZC, M.enamel, 0.6);                                   // the bed
+box(19, 29.5, 0.7, 15, -ZC, ZC, M.enamel, 0.9);                                   // the rear housing
+box(9, 19.4, 6.4, 8.6, -ZC, ZC, M.enamel, 0.3);                                   // the floor of the pen bay
+for (const [x, z] of [[X_ROLL + 6, -13], [X_ROLL + 6, 13], [25, -13], [25, 13]]) add(scene, new THREE.CylinderGeometry(1.5, 1.7, 0.7, 24), M.rubber, x, 0.35, z);
+add(scene, new THREE.BoxGeometry(9 - X_ROLL - 1.4, 0.4, 27.6), M.steel, (X_ROLL + 1.4 + 9) / 2, 7.2, 0, 2);                // the platen
+add(scene, new THREE.BoxGeometry(0.1, 0.42, PW + 0.6), M.dark, 8.98, 7.52, 0, 0);                                   // the slot the paper comes out of
+for (const z of [-ZC + 0.3, ZC - 0.3]) {                                                                             // the cheeks that carry the glass
+  const s = new THREE.Shape(); s.moveTo(9, 8.5); s.lineTo(9, 10.2); s.lineTo(19.2, 15); s.lineTo(19.2, 8.5); s.closePath();
+  add(scene, cmUV(new THREE.ExtrudeGeometry(s, { depth: 0.6, bevelEnabled: false }).translate(0, 0, -0.3)), M.enamel, 0, 0, z); }
+{ const len = Math.hypot(10.2, 4.8), g = add(scene, new THREE.PlaneGeometry(len, 2 * ZC - 1.2), M.glass, 14.1, 12.6, 0, 0); g.rotation.set(-Math.PI / 2, Math.atan2(4.8, 10.2), 0, 'ZYX'); g.rotation.set(0, 0, 0);
+  g.quaternion.setFromEuler(new THREE.Euler(0, 0, Math.atan2(4.8, 10.2))).multiply(new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI / 2, 0, 0))); g.renderOrder = 5;
+  add(scene, cylZ(0.22, 2 * ZC - 0.6, 12), M.chrome, 9, 10.2, 0); }
+// the rear housing: two knobs, the maker's plate, five ink bottles in the order of the lanes
+for (const z of [-10, -4.6]) { add(scene, lathe([[0, 0], [1.9, 0], [1.9, 0.25], [1.5, 0.4], [1.42, 1.5], [1.25, 1.7], [0, 1.7]]), M.black, 22, 15, z);
+  add(scene, new THREE.BoxGeometry(0.9, 0.04, 0.16), M.satin, 22 - 0.75, 16.71, z, 0); }
+function plateTex(w, h, ppc, draw) { const [cv, c] = cvs(Math.round(w * ppc), Math.round(h * ppc)); c.fillStyle = c.createPattern(brushed('#8f8c82', 60, 2600, 21), 'repeat'); c.fillRect(0, 0, cv.width, cv.height);
+  c.fillStyle = c.strokeStyle = '#17140f'; c.lineWidth = 0.05 * ppc; c.strokeRect(0.14 * ppc, 0.14 * ppc, (w - 0.28) * ppc, (h - 0.28) * ppc); c.ppc = ppc; draw(c); return tex(cv, true); }
+const cmText = (c, s, x, y, h, font, align = 'left', track = 0) => { c.font = `${font === SERIF ? 500 : 600} ${h * c.ppc}px ${font}`; c.textAlign = align; c.textBaseline = 'middle'; c.letterSpacing = track * c.ppc + 'px'; c.fillText(s, x * c.ppc, y * c.ppc); };
+const cmRect = (c, x, y, w, h) => c.fillRect(x * c.ppc, y * c.ppc, w * c.ppc, h * c.ppc);
+const plateMat = t => new THREE.MeshPhysicalMaterial({ map: t, metalness: 0.6, roughness: 0.5, clearcoat: 0.1, envMapIntensity: 0.45 });
+{ const t = plateTex(8, 3, 80, c => { cmText(c, 'INVARIANT', 4, 0.95, 0.62, SANS, 'center', 0.16); cmText(c, 'FIVE-PEN STRIP-CHART RECORDER', 4, 1.72, 0.3, SANS, 'center', 0.05); cmText(c, 'SAN FRANCISCO · 2026', 4, 2.28, 0.3, SANS, 'center', 0.05); });
+  const m = add(scene, new THREE.PlaneGeometry(8, 3), plateMat(t), 24.2, 15.02, 9.6, 2); m.rotation.x = -Math.PI / 2; }
+PENS.forEach((p, i) => { const z = (i - 2) * 2.9 - 4.2, x = 26.6;
+  add(scene, lathe([[0, 0], [1.15, 0], [1.2, 0.1], [1.2, 2.5], [0.6, 3.0], [0.55, 3.5], [0, 3.5]], 28), M.glass, x, 15.01, z, 0).renderOrder = 5;
+  add(scene, new THREE.CylinderGeometry(1.02, 1.02, 1.9, 24), new THREE.MeshPhysicalMaterial({ color: p.ink, roughness: 0.15, clearcoat: 1 }), x, 15.01 + 1.05, z);
+  add(scene, new THREE.CylinderGeometry(0.66, 0.66, 0.5, 20), M.black, x, 18.7, z); });
+
+// the scale bridge at the pens, engraved with every pen's scale
+{ const w = 5, h = PW + 0.8, x0 = 1.1;
+  const t = plateTex(w, h, 64, c => { const o = 0.4;
+    PENS.forEach((p, i) => { for (let d = 0; d <= 5; d++) { const y = laneB(i) - d / 5 * SPANV + o; cmRect(c, 0.14, y - 0.025, d % 5 ? 0.32 : 0.6, 0.05); }
+      cmText(c, '0', 0.86, laneB(i) + o - 0.02, 0.62, SERIF); cmText(c, String(p.fs), 0.86, laneB(i) - SPANV + o + 0.1, 0.62, SERIF);
+      cmText(c, p.name.toUpperCase(), 4.72, laneB(i) - SPANV / 2 + o - 0.26, 0.42, SANS, 'right', 0.03); cmText(c, p.unit.replace(' on `all`', '').toUpperCase(), 4.72, laneB(i) - SPANV / 2 + o + 0.3, 0.26, SANS, 'right', 0.03); });
+    cmRect(c, 0.14, Y_TICK + o - 0.025, 0.6, 0.05); cmText(c, 'SCORES', 4.72, 2.6 + o, 0.42, SANS, 'right', 0.03); cmText(c, 'RIGHT / TOTAL', 4.72, 3.16 + o, 0.26, SANS, 'right', 0.03); });
+  add(scene, new THREE.BoxGeometry(w, 0.3, h + 1.2), M.satin, x0 + w / 2, 8.2, 0);
+  const m = add(scene, new THREE.PlaneGeometry(w, h), plateMat(t), x0 + w / 2, 8.356, 0, 2); m.rotation.x = -Math.PI / 2;
+  for (const z of [-PW / 2 - 0.75, PW / 2 + 0.75]) add(scene, new THREE.BoxGeometry(w, 0.75, 0.5), M.satin, x0 + w / 2, 7.72, z); }
+
+// the stamp for the score lines
+const stamp = new THREE.Group(); stamp.position.set(0, 0, Y_TICK - 0.25 - PW / 2); scene.add(stamp);
+add(scene, new THREE.BoxGeometry(1.7, 0.4, 0.8), M.chrome, 0.55, 9.3, Y_TICK - 0.25 - PW / 2);
+add(scene, new THREE.CylinderGeometry(0.16, 0.16, 0.9, 12), M.chrome, 1.2, 8.75, Y_TICK - 0.25 - PW / 2);
+add(stamp, new THREE.CylinderGeometry(0.38, 0.38, 1.3, 20), M.chrome, 0, 8.75, 0); add(stamp, new THREE.CylinderGeometry(0.3, 0.3, 0.3, 20), M.rubber, 0, 7.98, 0);
+add(stamp, new THREE.CylinderGeometry(0.5, 0.5, 0.18, 20), M.black, 0, 9.58, 0);
+
+// the five pens: a chrome arm on a pivot under the glass, a glass capillary of ink at its end
+const ARM = 14, PIV_Y = 9.55;
+PENS.forEach((p, i) => { const zc = laneB(i) - SPANV / 2 - PW / 2; p.zc = zc;
+  add(scene, new THREE.CylinderGeometry(1.25, 1.25, 0.8, 32), M.black, ARM + 0.2, 9.0, zc); add(scene, new THREE.CylinderGeometry(1.32, 1.32, 0.12, 32), M.brass, ARM + 0.2, 8.66, zc);
+  const g = p.turn = new THREE.Group(); g.position.set(ARM, PIV_Y, zc); scene.add(g); const a = p.lift = new THREE.Group(); g.add(a);
+  add(a, new THREE.CylinderGeometry(0.42, 0.42, 0.7, 20), M.chrome, 0, 0, 0); add(a, new THREE.CylinderGeometry(0.2, 0.2, 0.9, 12), M.brass, 0, 0.1, 0);
+  add(a, cylX(0.12, ARM + 2.6), M.chrome, -ARM / 2 + 1.3, 0, 0); add(a, cylX(0.34, 1.0, 20), M.brass, 2.4, 0, 0);
+  const ink = new THREE.MeshPhysicalMaterial({ color: p.ink, roughness: 0.15, clearcoat: 1 });
+  add(a, cylX(0.055, ARM - 0.3, 8), ink, -ARM / 2, 0.19, 0, 0);                                                   // the feed line along the arm
+  add(a, new THREE.BoxGeometry(0.62, 0.36, 0.62), M.chrome, -ARM, 0, 0);
+  add(a, new THREE.CylinderGeometry(0.27, 0.27, 2.5, 20), M.glass, -ARM, -0.45, 0, 0).renderOrder = 5;
+  add(a, new THREE.CylinderGeometry(0.17, 0.17, 1.9, 16), ink, -ARM, -0.72, 0);
+  add(a, new THREE.CylinderGeometry(0.27, 0.035, PIV_Y - HP - 1.7, 16), M.satin, -ARM, -(PIV_Y - HP + 1.7) / 2, 0); });
+
+// the left end: the hold-down bar, the roller the paper leaves over, the tray
+add(scene, cylZ(0.32, PW + 2.2, 20), M.chrome, X_ROLL + 4.5, HP + 0.36, 0);
+for (const z of [-PW / 2 - 0.9, PW / 2 + 0.9]) { add(scene, new THREE.BoxGeometry(1.1, 1.0, 0.5), M.satin, X_ROLL + 4.5, 7.5, z); add(scene, new THREE.BoxGeometry(3.4, 2.4, 0.5), M.satin, X_ROLL + 0.8, 6.2, z * 1.035); add(scene, cylZ(1.48, 0.5), M.chrome, X_ROLL, HP - 1.5, z * 0.985); }
+add(scene, cylZ(1.44, PW + 1), M.rubber, X_ROLL, HP - 1.5, 0);
+const TRAY = { x0: X_ROLL - 19.4, x1: X_ROLL - 2.6, floor: 0.5 };
+box(TRAY.x0, TRAY.x1, 0, TRAY.floor, -14.6, 14.6, M.enamel, 0.2);
+box(TRAY.x0, TRAY.x0 + 0.4, 0, 4.2, -14.6, 14.6, M.enamel, 0.18); box(TRAY.x0, TRAY.x1, 0, 4.2, -14.6, -14.2, M.enamel, 0.18); box(TRAY.x0, TRAY.x1, 0, 2.1, 14.2, 14.6, M.enamel, 0.18);
+
+// ------------------------------------------------------------------ the paper: one ribbon over the platen and the roller into the tray
+const CMT = 100, TW = 4096, TH = Math.round(PW * TW / CMT), PPC = TH / PW;      // the sheet of print, stamps and pencil: cm it covers, pixels
+const [tcv, tc] = cvs(TW, TH), ttex = new THREE.CanvasTexture(tcv); ttex.anisotropy = 16;
+const DW = 4096, dbuf = new Float32Array(DW * 2 * 4).fill(-1), dtex = new THREE.DataTexture(dbuf, DW, 2, THREE.RGBAFormat, THREE.FloatType);
+const mix = (hex, to, f) => '#' + new THREE.Color(hex).lerp(new THREE.Color(to), f).getHexString();
+const fibre = (() => { const [cv, c] = cvs(256, 256), rand = rnd(2), im = c.createImageData(256, 256);
+  for (let i = 0; i < im.data.length; i += 4) { const v = (rand() - 0.5) * 9; im.data[i] = 236 + v; im.data[i + 1] = 227 + v; im.data[i + 2] = 203 + v; im.data[i + 3] = 255; } c.putImageData(im, 0, 0);
+  for (let i = 0; i < 260; i++) { const x = rand() * 256, y = rand() * 256, a = rand() * 7; c.beginPath(); c.moveTo(x, y); c.lineTo(x + Math.cos(a) * 9, y + Math.sin(a) * 9); c.lineWidth = 0.6; c.strokeStyle = `rgba(${rand() < 0.5 ? '255,250,235' : '120,105,80'},.09)`; c.stroke(); }
+  return tex(cv, true, [1, 1]); })();
+const U = { uData: { value: dtex }, uText: { value: ttex }, uFibre: { value: fibre }, uTv: { value: 0 }, uK: { value: 1 }, uInk: { value: 1e9 }, uEnd: { value: END - T0 }, uWetSpan: { value: 0 },
+  uTa: { value: 0 }, uKt: { value: 1 }, uCmt: { value: CMT }, uGrid: { value: new THREE.Vector2(3600, 600) }, uPhase: { value: new THREE.Vector2() }, uM: { value: N },
+  uDry: { value: PENS.map(p => new THREE.Color(mix(p.ink, '#ece3cb', 0.12))) }, uWet: { value: PENS.map(p => new THREE.Color(mix(p.ink, '#000000', 0.5))) },
+  uGridCol: { value: new THREE.Color(GRID) }, uPrintCol: { value: new THREE.Color('#4d7a5e') }, uStampCol: { value: new THREE.Color(STAMP) }, uPencilCol: { value: new THREE.Color(PENCIL) } };
+const fl = x => Number(x).toFixed(4);
+const HEAD = `
+uniform sampler2D uData, uText, uFibre;
+uniform float uTv, uK, uInk, uEnd, uWetSpan, uTa, uKt, uCmt;
+uniform vec2 uGrid, uPhase; uniform int uM;
+uniform vec3 uDry[5]; uniform vec3 uWet[5]; uniform vec3 uGridCol, uPrintCol, uStampCol, uPencilCol;
+float pLine(float d, float hw, float w) { return clamp((hw - d) / w + 0.5, 0.0, 1.0) * clamp(2.0 * hw / w, 0.3, 1.0); }
+float pVal(int j, int l) { return l < 4 ? texelFetch(uData, ivec2(j, 0), 0)[l] : texelFetch(uData, ivec2(j, 1), 0).r; }`;
+// the paper is drawn per pixel: the printed grid and the ink traces are computed from the time under each pixel, so they stay sharp at every scale
+const BODY = `
+vec2 pq = vec2(vUv.x * ${fl(CM)}, (1.0 - vUv.y) * ${fl(PW)});
+vec2 pw = max(fwidth(pq), vec2(1e-4)); float ppx = length(pw) * 0.7071;
+float pt = uTv + (pq.x - ${fl(QOFF)}) * uK;
+vec3 pcol = texture2D(uFibre, vec2(pt / uK, pq.y) / 5.0).rgb;
+int li = int(floor((pq.y - ${fl(LANE0)}) / ${fl(LANE)})); float lb = ${fl(LANE0)} + float(li) * ${fl(LANE)} + 3.55, yl = lb - pq.y; bool lane = li >= 0 && li <= 4;
+float tmn = (pt + uPhase.y) / uGrid.y, tmj = (pt + uPhase.x) / uGrid.x;
+float dmn = abs(tmn - floor(tmn + 0.5)) * uGrid.y / uK, dmj = abs(tmj - floor(tmj + 0.5)) * uGrid.x / uK, g1 = 0.0, g2 = 0.0;
+if (lane && yl >= 0.0 && yl <= ${fl(SPANV)}) { float q5 = yl / ${fl(SPANV / 5)}; g1 = max(pLine(dmn, 0.011, pw.x), pLine(abs(q5 - floor(q5 + 0.5)) * ${fl(SPANV / 5)}, 0.011, pw.y)); }
+if (lane) g2 = max(pLine(abs(yl), 0.02, pw.y), pLine(abs(${fl(SPANV)} - yl), 0.02, pw.y));
+if (pq.y > ${fl(Y_TICK - 0.6)} && pq.y < ${fl(laneB(4) + 0.28)}) g2 = max(g2, pLine(dmj, 0.02, pw.x));
+g2 = max(g2, pLine(abs(pq.y - ${fl(Y_TICK)}), 0.02, pw.y));
+pcol *= mix(vec3(1.0), uGridCol, max(g1 * 0.6, g2 * 0.85));
+float hx = (fract(pt / uK / ${fl(HOLE)}) - 0.5) * ${fl(HOLE)}, hy = min(abs(pq.y - 0.6), abs(pq.y - ${fl(PW - 0.6)}));
+pcol = mix(pcol, vec3(0.03, 0.031, 0.027), clamp((0.19 - length(vec2(hx, hy))) / ppx + 0.5, 0.0, 1.0));
+float wetK = 0.0;
+if (lane && yl > -0.3 && yl < ${fl(SPANV + 0.4)}) {
+  float wet = uWetSpan > 0.0 ? clamp(1.0 - (uTv - pt) / uWetSpan, 0.0, 1.0) : 0.0;
+  float hw = 0.055 + 0.016 * wet, dx = ${fl(STEP)} / uK, best = 1e9; int R = int(min(8.0, ceil((hw + ppx) / dx))), jc = int(floor(pt / ${fl(STEP)}));
+  for (int o = -8; o <= 8; o++) { int j = jc + o; if (o < -R || o > R || j < 0 || j >= uM - 1) continue;
+    float a = pVal(j, li), b = pVal(j + 1, li); if (a < 0.0 || b < 0.0) continue;
+    float ta = min(float(j) * ${fl(STEP)}, uEnd), tb = min(float(j + 1) * ${fl(STEP)}, uEnd); if (ta >= uInk) continue;
+    vec2 A = vec2(${fl(QOFF)} + (ta - uTv) / uK, lb - a * ${fl(SPANV)}), B = vec2(${fl(QOFF)} + (tb - uTv) / uK, lb - b * ${fl(SPANV)});
+    if (tb > uInk) B = mix(A, B, (uInk - ta) / (tb - ta));
+    vec2 e = B - A, w = pq - A; best = min(best, length(w - e * clamp(dot(w, e) / max(dot(e, e), 1e-9), 0.0, 1.0))); }
+  float cov = clamp((hw - best) / ppx + 0.5, 0.0, 1.0);
+  pcol *= mix(vec3(1.0), mix(uDry[li], uWet[li], wet), cov); wetK = wet * cov;
+}
+vec2 tu = vec2((pt - uTa) / (uKt * uCmt), vUv.y);
+if (tu.x > 0.0 && tu.x < 1.0) { vec3 m = texture2D(uText, tu).rgb; float wr = clamp((uInk - pt) / (pw.x * uK) + 0.5, 0.0, 1.0);
+  pcol *= mix(vec3(1.0), uPrintCol, m.r * 0.9); pcol *= mix(vec3(1.0), uStampCol, m.g * 0.92 * wr); pcol *= mix(vec3(1.0), uPencilCol, m.b * 0.85 * wr); }
+diffuseColor.rgb *= pcol;`;
+const paperMat = new THREE.MeshStandardMaterial({ roughness: 0.88, metalness: 0, side: THREE.DoubleSide, envMapIntensity: 0.13 });
+paperMat.defines = { USE_UV: '' };
+paperMat.onBeforeCompile = sh => { Object.assign(sh.uniforms, U);
+  sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>' + HEAD).replace('#include <map_fragment>', BODY).replace('#include <roughnessmap_fragment>', 'float roughnessFactor = mix(roughness, 0.1, wetK);'); };
+function loadData(tEnd) {   // the readings as a texture: one column per sample, the last column at the time of the latest reading
+  const end = Math.max(END, tEnd) - T0, m = Math.min(DW, Math.ceil(end / STEP) + 1);
+  for (let j = 0; j < m; j++) PENS.forEach((p, i) => { const v = j < N ? p.a[j] : value(p, T0 + Math.min(j * STEP, end)); dbuf[i < 4 ? j * 4 + i : (DW + j) * 4] = v === null ? -1 : clamp(v / p.fs, 0, 1.04); });
+  dtex.needsUpdate = true; U.uM.value = m; U.uEnd.value = end;
+}
+loadData(END);
+const SEGS = [14, 4, 14, 6, 10, 2], FLAT = 12, NP = FLAT + 1 + SEGS.reduce((a, b) => a + b, 0);
+const rgeo = new THREE.BufferGeometry(); rgeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(NP * 6), 3)); rgeo.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(NP * 4), 2));
+{ const ix = []; for (let i = 0; i < NP - 1; i++) ix.push(2 * i, 2 * i + 1, 2 * i + 2, 2 * i + 1, 2 * i + 3, 2 * i + 2); rgeo.setIndex(ix); }
+const ribbon = add(scene, rgeo, paperMat, 0, 0, 0, 2); ribbon.frustumCulled = false;
+{ const m = add(scene, rgeo, new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false }), 0, -0.12, 0, 1); m.frustumCulled = false; }   // the paper's shadow is cast from just under it, so the sheet never shades itself
+const edges = (() => { const [cv, c] = cvs(8, 64); c.fillStyle = '#d9cfb6'; c.fillRect(0, 0, 8, 64); c.fillStyle = '#9b927c'; c.fillRect(0, 0, 8, 14); c.fillStyle = '#efe7d2'; c.fillRect(0, 30, 8, 10); return tex(cv, true, [1, 1]); })();
+const stack = add(scene, new THREE.BoxGeometry(1, 1, PW), [0, 1, 2, 3, 4, 5].map(i => new THREE.MeshStandardMaterial(i === 2 || i === 3 ? { color: '#ded5bd', roughness: 0.9 } : { map: edges, roughness: 0.9 })));
+let ysShown = -1, sLand = 0;
+function layPaper(ys) {   // the ribbon's path for a stack whose top is at height ys
+  const R = 1.5, R2 = 3, PHI = Math.PI / 3, L1 = (HP - ys - (R + R2) * (1 - Math.cos(PHI))) / Math.sin(PHI);
+  const segs = [[R * PHI, 1 / R], [L1, 0], [R2 * PHI, -1 / R2], [FOLD, 0], [Math.PI * 0.22, 1 / 0.22], [3, 0]];
+  const P = rgeo.attributes.position, U = rgeo.attributes.uv; let n = 0;
+  const put = (x, y, s) => { P.setXYZ(n, x, y, -PW / 2); P.setXYZ(n + 1, x, y, PW / 2); const u = (QOFF - s) / CM; U.setXY(n, u, 1); U.setXY(n + 1, u, 0); n += 2; };
+  for (let i = 0; i <= FLAT; i++) put(lerp(X_IN, X_ROLL, i / FLAT), HP, -lerp(X_IN, X_ROLL, i / FLAT));
+  let x = X_ROLL, y = HP, h = 0, s = -X_ROLL, xs = 0;
+  segs.forEach(([len, cu], j) => { if (j === 3) { xs = x; sLand = s; } for (let i = 1; i <= SEGS[j]; i++) { const ds = len / SEGS[j];
+    if (cu) { const h1 = h + cu * ds; x -= (Math.sin(h1) - Math.sin(h)) / cu; y += (Math.cos(h1) - Math.cos(h)) / cu; h = h1; } else { x -= Math.cos(h) * ds; y -= Math.sin(h) * ds; }
+    s += ds; put(x, y, s); } });
+  P.needsUpdate = U.needsUpdate = true; rgeo.computeVertexNormals();
+  const top = ys - 0.47, hgt = Math.max(0.02, top - TRAY.floor); stack.scale.set(FOLD + 0.2, hgt, 1); stack.position.set(xs - FOLD / 2, TRAY.floor + hgt / 2, 0);
+  edges.repeat.set(1, Math.max(1, hgt / SHEET)); stack.visible = hgt > 0.03; ysShown = ys;
+}
+const cursor = add(scene, new THREE.BoxGeometry(0.05, 0.02, PW - 2.6), new THREE.MeshBasicMaterial({ color: '#2a2622', transparent: true, opacity: 0.55 }), 0, HP + 0.03, 0, 0); cursor.visible = false;
+
+const GRIDS = [[600, 120], [1800, 600], [3600, 600], [7200, 1800], [10800, 3600], [21600, 3600], [43200, 10800], [86400, 21600], [172800, 43200]];
+const MON = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+const hhmm = t => new Date(t * 1000).toISOString().slice(11, 16), day = t => { const d = new Date(t * 1000); return d.getUTCDate() + ' ' + MON[d.getUTCMonth()]; };
+let grid = GRIDS[0], tA = 0, kT = 0, cmT = CMT, textDirty = true;
+const gridFor = k => GRIDS.find(g => g[0] / k >= 2.4) || GRIDS[GRIDS.length - 1];
+
+function drawText() {    // the sheet of everything set in type or drawn by hand: red = printed, green = stamped, blue = red pencil; the paper shader inks them
+  kT = kS; cmT = playing && SPEED / kS > 2 ? 240 : CMT; tA = tv - QOFF * kS - (cmT - CM) * kT * (playing ? 0.06 : 0.5);
+  const c = tc, tR = tA + cmT * kT, X = t => (t - tA) / kT * PPC, Y = y => y * PPC, [MAJ] = gridFor(kT), PRINT = '#f00', INK = '#0f0', RED = '#00f';
+  c.setTransform(1, 0, 0, 1, 0, 0); c.globalCompositeOperation = 'source-over'; c.fillStyle = '#000'; c.fillRect(0, 0, TW, TH);
+  c.setTransform(TW / cmT / PPC, 0, 0, 1, 0, 0); c.globalCompositeOperation = 'lighter'; c.textBaseline = 'middle'; c.lineCap = 'round';
+  const text = (s, t, dx, y, h, font, color, align = 'left', track = 0) => { c.font = `${font === SERIF ? 500 : 600} ${(h * PPC).toFixed(1)}px ${font}`; c.letterSpacing = (track * PPC).toFixed(1) + 'px'; c.textAlign = align; c.fillStyle = color; c.fillText(s, X(t) + dx * PPC, Y(y)); return c.measureText(s).width / PPC; };
+  const every = Math.max(1, Math.ceil(24 / (MAJ / kT)));
+  for (let t = Math.max(Math.ceil(tA / MAJ), Math.floor(T0 / MAJ)) * MAJ; t <= tR; t += MAJ) {
+    text(t % 86400 === 0 ? day(t) : hhmm(t), t, 0.14, Y_TIME, 0.6, SERIF, PRINT);
+    if (Math.round(t / MAJ) % every === 0) PENS.forEach((p, i) => text(`${p.name.toUpperCase()} · ${p.unit.replace(' on `all`', '').toUpperCase()} · 0 TO ${p.fs}`, t, 0.16, laneB(i) - SPANV - 0.2, 0.28, SANS, '#900', 'left', 0.03)); }
+  // the stamp: a tick for every score line, right/total beside it where there is room
+  const rows = ROWS.map(() => []), free = (r, a, b) => r.every(([x0, x1]) => b < x0 || a > x1), cm = t => (t - tA) / kT;
+  if (T0 > tA && T0 < tR) { c.fillStyle = INK; c.fillRect(X(T0) - 1.5, Y(Y_TICK - 2.3), 3, Y(laneB(4) + 0.3 - Y_TICK + 2.3)); const w = text('RECORD STARTS ' + day(T0) + ' ' + hhmm(T0) + ' UTC', T0, -0.2, ROWS[0], 0.4, SANS, INK, 'right', 0.03); rows[0].push([cm(T0) - w - 0.4, cm(T0)]); }
+  const vis = scores.filter(s => s.t >= tA && s.t <= tR);
+  c.fillStyle = INK; for (const s of vis) c.fillRect(X(s.t) - 1.6, Y(Y_TICK - 0.5), 3.2, Y(0.5));
+  c.font = `500 ${(0.68 * PPC).toFixed(1)}px ${SERIF}`; c.letterSpacing = '0px';
+  for (const s of vis.filter(s => s.best).concat(vis.filter(s => !s.best))) { const label = s.right + '/' + s.n, w = c.measureText(label).width / PPC, x = cm(s.t) + 0.14;
+    const r = rows.findIndex(r => free(r, x - 0.1, x + w + 0.15)); if (r < 0) continue; rows[r].push([x - 0.1, x + w + 0.15]);
+    text(label, s.t, 0.14, ROWS[r], 0.68, SERIF, INK); if (r) c.fillRect(X(s.t) - 0.8, Y(ROWS[r] - 0.1), 1.6, Y(Y_TICK - 0.5 - ROWS[r] + 0.1)); }
+  // the red pencil: each new best base MATH-500 score
+  const notes = []; c.strokeStyle = RED;
+  for (const s of bests.filter(s => s.t >= tA && s.t <= tR).reverse()) { const x = X(s.t);
+    c.lineWidth = 0.07 * PPC; c.beginPath(); c.ellipse(x, Y(Y_TICK - 0.26), 0.3 * PPC, 0.44 * PPC, 0.12, 0.3, 6.7); c.stroke();
+    c.font = `600 ${(0.54 * PPC).toFixed(1)}px ${SANS}`; c.letterSpacing = (0.05 * PPC).toFixed(1) + 'px'; const label = 'BEST BASE ' + s.right, w = c.measureText(label).width / PPC;
+    if (!free(notes, cm(s.t) - 0.2, cm(s.t) + w + 0.5)) continue; notes.push([cm(s.t) - 0.2, cm(s.t) + w + 0.5]);
+    c.beginPath(); c.moveTo(x - 0.05 * PPC, Y(Y_TICK - 0.74)); c.lineTo(x + 0.02 * PPC, Y(Y_NOTE + 0.44)); c.lineTo(x + (w + 0.3) * PPC, Y(Y_NOTE + 0.42)); c.lineWidth = 0.055 * PPC; c.stroke();
+    text(label, s.t, 0.2, Y_NOTE, 0.54, SANS, RED, 'left', 0.05); }
+  ttex.needsUpdate = true; textDirty = false;
+}
+function inkPaper() {    // the uniforms of the paper for this frame; the type sheet is drawn again only when the view leaves it or the scale settles elsewhere
+  grid = gridFor(kS);
+  const tL = tv - QOFF * kS, tR = tv + (CM - QOFF) * kS;
+  if (textDirty || tL < tA || tR > tA + cmT * kT || (kS === k && Math.abs(kS / kT - 1) > 0.002)) drawText();
+  U.uTv.value = tv - T0; U.uK.value = kS; U.uInk.value = playing ? tv - T0 : 1e9; U.uWetSpan.value = playing ? WET * SPEED : 0;
+  U.uTa.value = tA - T0; U.uKt.value = kT; U.uCmt.value = cmT; U.uGrid.value.set(grid[0], grid[1]); U.uPhase.value.set(T0 % grid[0], T0 % grid[1]);
+}
+
+// ------------------------------------------------------------------ the page around it
+const F = D.facts, fmtT = t => { const d = new Date(t * 1000); return `${d.getUTCDate()} ${MON[d.getUTCMonth()][0] + MON[d.getUTCMonth()].slice(1).toLowerCase()} ${hhmm(t)}`; };
+const dur = s => s >= 5400 ? (s / 3600).toFixed(1) + ' hours' : Math.round(s / 60) + ' minutes';
+$('line').innerHTML = `In <button data-t="${T0}">${((END - T0) / 3600).toFixed(1)}</button> hours the board, the channel and the repository were never all silent for longer than <button data-t="${T0 + F.quiet.from + F.quiet.s}">${Math.round(F.quiet.s / 60)}</button> minutes; the busiest ten minutes held <button data-t="${T0 + F.busy.i * STEP}">${F.busy.n}</button> posts, messages and commits, and at the peak <button data-t="${T0 + F.gpu_peak.i * STEP}">${F.gpu_peak.n}</button> GPU jobs ran at once.`;
+$('line').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { setPlay(false); vel = 0; go(+b.dataset.t + 2 * kS); } });
+$('pens').innerHTML = PENS.map((p, i) => `<div class="pen" style="--c:${mix(p.ink, '#ffffff', 0.35)}"><b>${esc(p.name)}</b><em id="v${i}"></em><small>${esc(p.unit.replace(/`/g, ''))} · scale 0 to ${p.fs}</small></div>`).join('') +
+  `<div class="pen" style="--c:${mix(STAMP, '#ffffff', 0.4)}"><b>Scores</b><em id="v5"></em><small>stamped so far · <span style="color:${mix(PENCIL, '#ffffff', 0.25)}">red: new best base</span></small></div>`;
+$('def').innerHTML = `<summary>What each thing means</summary>
+  <b>Paper</b>: time runs left to right, the pens write at the present; one printed division is the time stated under the clock. <b>Five pens</b>, each in its own lane with the scale engraved on the bridge:
+  board items and messages on the channel <b>all</b> posted in the 10 minutes before each moment, commits (git log --all) in the same window, GPU jobs running (only jobs with a recorded launch and end: ${F.gpu_no_end} of ${F.n.jobs} have no recorded end and are left out), work items open.
+  Samples every ${STEP / 60} minutes, joined by straight lines. <b>Stamp</b>: one tick per score line on the board, its right/total printed where there is room. <b>Red pencil</b>: a base-model MATH-500 score (n 500) above every earlier one.
+  <b>Stack in the tray</b>: it grows with the length of written paper past the roller at this time scale. <b>Live</b>: the board is read every ${POLL} s and the items, messages, open work and scores after ${fmtT(D.built)} UTC come from it
+  (closed work items older than its newest 60 are not in that count); commits and GPU jobs are known only up to then, so their pens are lifted after it. The knobs and the ink bottles are fittings.
+  Drag the paper, wheel or + − for the time scale, Space to replay, ← → one division, End for now. Counts in the sentence: ${F.n.items} items, ${F.n.msgs} messages, ${F.n.commits} commits from ${fmtT(T0)} to ${fmtT(END)} UTC; silence is the longest time between two of them.`;
+if (narrow()) $('def').open = false;
+$('def').addEventListener('toggle', () => { resize(); });
+
+if (still) $('play').textContent = 'Next hour';
+let subKey = '';
+function words() {
+  const n = nowS(), h = (tv - T0) / 3600;
+  $('when').textContent = fmtT(tv) + ' UTC';
+  const state = playing ? `replay at ${SPEED}×: ${SPEED / 60} minutes of the record a second` : live ? `live: the board is read every ${POLL} s${polled ? '' : ' (not read yet)'}` : `under the pens · ${dur(n - tv)} before now`;
+  const sub = `hour ${Math.max(0, h).toFixed(1)} · ${state}<br>one division = ${grid[0] >= 3600 ? grid[0] / 3600 + ' h' : grid[0] / 60 + ' min'}`;
+  if (sub !== subKey) $('sub').innerHTML = subKey = sub;
+  PENS.forEach((p, i) => { const v = value(p, tv), e = $('v' + i), s = v === null ? (tv < T0 ? 'not started' : 'pen lifted') : String(Math.round(v)); if (e.textContent !== s) { e.textContent = s; e.className = v === null ? 'off' : ''; } });
+  const sc = String(bisect(scoreT, tv)); if ($('v5').textContent !== sc) $('v5').textContent = sc;
+  $('live').classList.toggle('on', live);
+}
+let scoreT = scores.map(s => s.t);
+
+// ------------------------------------------------------------------ the board, read live
+async function poll() {
+  lastPoll = performance.now();
+  let d; try { const r = await fetch('../../../data'); if (!r.ok) throw 0; d = await r.json(); } catch (e) { return; }   // keep the last reading, try again at the next interval
+  const tp = nowS(), lastItem = items.length ? Math.max(...items.filter(i => !i.liveItem).map(i => i.t)) : END;
+  // items: /data carries the newest 60 of each list; where a list is full, anything older than its oldest may be missing
+  const byList = {}; for (const i of d.items) (byList[i.listed] = byList[i.listed] || []).push(i.at_ns / 1e9);
+  let cover = lastItem; for (const l in byList) if (byList[l].length >= 60 && l !== 'work') cover = Math.max(cover, Math.min(...byList[l]));
+  for (let j = items.length - 1; j >= 0 && items[j].liveItem; j--) items.pop();
+  for (const i of d.items.filter(i => i.at_ns / 1e9 > lastItem).sort((a, b) => a.at_ns - b.at_ns)) { const t = d.plain && d.plain[i.id] && d.plain[i.id].title || i.text.split('\n')[0].replace(/^title: /, '');
+    items.push({ t: i.at_ns / 1e9, kind: i.kind, who: i.who, title: t.length > 84 ? t.slice(0, 83) + '…' : t, liveItem: true }); }
+  itemT = items.map(i => i.t);
+  msgT = d.messages.map(m => +m.sk.split('#')[0] / 1e9).sort((a, b) => a - b);
+  const series = (times, from) => { const E = []; const cnt = t => bisect(times, t) - bisect(times, t - WIN);
+    for (let t = Math.max(END + STEP, Math.ceil((from - T0) / STEP) * STEP + T0); t < tp; t += STEP) E.push([t, cnt(t)]); E.push([tp, cnt(tp)]); return E; };
+  const P = Object.fromEntries(PENS.map(p => [p.k, p]));
+  P.items.join = cover <= lastItem; P.items.ext = series(itemT, P.items.join ? END : cover + WIN);
+  P.msgs.join = !msgT.length || msgT[0] <= END - WIN; P.msgs.ext = series(msgT, P.msgs.join ? END : msgT[0] + WIN);
+  P.work.ext.push([tp, d.items.filter(i => i.listed === 'work').length]);
+  const lastScore = Math.max(...scores.filter(s => !s.liveScore).map(s => s.t));
+  for (let j = scores.length - 1; j >= 0 && scores[j].liveScore; j--) scores.pop();
+  for (const s of d.scores) { const t = +s.sk.split('#')[0] / 1e9; if (t > lastScore) scores.push({ t, model: s.model, bench: s.benchmark, right: s.right, n: s.n, config: s.config || '', result: s.result, liveScore: true }); }
+  scores.sort((a, b) => a.t - b.t); scoreT = scores.map(s => s.t); findBests();
+  loadData(tp); polled = true; dirty = textDirty = true;
+}
+poll();
+document.addEventListener('visibilitychange', () => { if (!document.hidden && performance.now() - lastPoll > POLL * 1000) poll(); });
+
+// ------------------------------------------------------------------ layout and camera
+let W = 0, H = 0;
+const v3 = new THREE.Vector3();
+function resize() {
+  W = innerWidth; H = innerHeight;
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, W * H > 1.2e6 ? 1.25 : 1.5)); renderer.setSize(W, H, false);
+  const nar = narrow(), top = document.querySelector('header').getBoundingClientRect().bottom + (nar ? 6 : 10), bot = H - $('pens').parentElement.getBoundingClientRect().top + (nar ? 4 : 10);
+  const az = nar ? 0.5 : 0.14, el = nar ? 1.0 : 0.98, bx = nar ? [-25, 20] : [TRAY.x0, 29.5], bz = [-ZC, ZC];
+  const dir = new THREE.Vector3(Math.sin(az) * Math.cos(el), Math.sin(el), Math.cos(az) * Math.cos(el)), tg = new THREE.Vector3((bx[0] + bx[1]) / 2, 5, 0);
+  const availW = W - (nar ? 8 : 70), availH = Math.max(120, H - top - bot);
+  camera.aspect = W / H; camera.clearViewOffset();
+  let lo = 30, hi = 1200, cx = 0, cy = 0;
+  const span = d => { camera.position.copy(tg).addScaledVector(dir, d); camera.lookAt(tg); camera.updateMatrixWorld(); camera.updateProjectionMatrix();
+    let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const x of bx) for (const y of [0, nar ? 12 : x < 0 ? 4.2 : 18.9]) for (const z of bz) { v3.set(x, y, z).project(camera); const px = (v3.x + 1) / 2 * W, py = (1 - v3.y) / 2 * H; x0 = Math.min(x0, px); x1 = Math.max(x1, px); y0 = Math.min(y0, py); y1 = Math.max(y1, py); }
+    cx = (x0 + x1) / 2; cy = (y0 + y1) / 2; return x1 - x0 <= availW && y1 - y0 <= availH; };
+  for (let i = 0; i < 22; i++) { const m = (lo + hi) / 2; if (span(m)) hi = m; else lo = m; }
+  span(hi); scene.fog.near = hi + 90; scene.fog.far = hi + 700; camera.setViewOffset(W, H, cx - W / 2, cy - (top + availH / 2), W, H); camera.updateMatrixWorld();
+  need = true;
+}
+addEventListener('resize', resize); resize();
+
+// ------------------------------------------------------------------ one frame of the instrument
+function pose(now) {
+  PENS.forEach((p, i) => { const v = playing || tv <= nowS() ? value(p, tv) : null, up = v === null;
+    const z = (up ? p.zLast ?? laneY(i, 0) : laneY(i, v)) - PW / 2; if (!up) p.zLast = z + PW / 2;
+    const th = Math.asin(clamp((z - p.zc) / ARM, -0.6, 0.6)); p.turn.rotation.y = th; p.turn.scale.x = 1 / Math.cos(th); p.lift.rotation.z = up ? -0.075 : 0; });
+  const dip = clamp(1 - Math.abs((now - stampAt) / 90 - 1), 0, 1); stamp.position.y = 0.42 - 0.42 * dip;
+  const ys = clamp(0.5 + 0.49 + Math.max(0, (tv - T0) / kS - sLand) / FOLD * SHEET, 0.99, 3.6); if (Math.abs(ys - ysShown) > 0.004) layPaper(ys);
+  cursor.visible = !!hover; if (hover) cursor.position.x = hover.x;
+  words();
+}
+
+// ------------------------------------------------------------------ pointer: pull the paper, read it
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -HP), hit = new THREE.Vector3();
+const onPlane = e => { ndc.set(e.clientX / W * 2 - 1, 1 - e.clientY / H * 2); ray.setFromCamera(ndc, camera); return ray.ray.intersectPlane(plane, hit) ? { x: hit.x, z: hit.z } : null; };
+function tip(e) {
+  const t = hover.t, T = $('tip'), late = t > Math.min(inkEnd(), nowS());
+  const j = bisect(itemT, t), near = [items[j - 1], items[j]].filter(Boolean).sort((a, b) => Math.abs(a.t - t) - Math.abs(b.t - t))[0];
+  let sc = null; if (hover.y < LANE0) { const j = bisect(scoreT, t), c = [scores[j - 1], scores[j]].filter(Boolean).sort((a, b) => Math.abs(a.t - t) - Math.abs(b.t - t))[0]; if (c && Math.abs(c.t - t) < 0.7 * kS && c.t <= inkEnd()) sc = scores.filter(s => s.t === c.t); }
+  T.innerHTML = `<u>${fmtT(t)} UTC · hour ${((t - T0) / 3600).toFixed(1)}</u>` + (late ? '<div><i></i>not written yet</div>' : t < T0 ? '<div><i></i>before the record starts</div>' :
+    PENS.map(p => { const v = value(p, t); return `<div><i style="--c:${mix(p.ink, '#ffffff', 0.35)}"></i>${esc(p.name)}<span>${v === null ? 'no record' : Math.round(v)}</span></div>`; }).join('')) +
+    (sc && !late ? `<p>${sc.slice(0, 4).map(s => `${s.right}/${s.n} · ${esc(s.model)} · ${esc(s.bench)}${s.best ? ' · new best base' : ''}<small>${esc(s.config)}</small>`).join('')}${sc.length > 4 ? `<small>and ${sc.length - 4} more score lines of ${esc(sc[0].result)}</small>` : ''}</p>` :
+      near && !late && t >= T0 ? `<p>${esc(near.title)}<small>${esc(near.kind)} · ${esc(near.who)} · ${Math.abs(near.t - t) < 60 ? 'posted then' : 'posted ' + dur(Math.abs(near.t - t)) + (near.t < t ? ' earlier' : ' later')}</small></p>` : '');
+  const w = 268, x = clamp(e.clientX + 16, 8, W - w - 8), below = e.clientY < H * 0.5; T.style.transform = `translate(${x}px, ${below ? e.clientY + 18 : e.clientY - 14}px)` + (below ? '' : ' translateY(-100%)'); T.classList.add('on');
+}
+const overPaper = p => p && p.x > X_ROLL && p.x < X_IN && Math.abs(p.z) < PW / 2;
+let drag = null;
+canvas.addEventListener('pointerdown', e => { const p = onPlane(e); if (!p) return; canvas.setPointerCapture(e.pointerId); drag = { x: p.x, t: performance.now(), moved: 0 }; vel = 0; anchor = null; hover = null; $('tip').classList.remove('on'); need = true; });
+canvas.addEventListener('pointermove', e => {
+  const p = onPlane(e);
+  if (!drag) { const was = hover; hover = overPaper(p) ? { x: p.x, y: p.z + PW / 2, t: tv + p.x * kS } : null; canvas.classList.toggle('read', !!hover); if (hover) tip(e); else $('tip').classList.remove('on'); if (hover || was) need = true; return; }
+  if (!p) return; const dx = p.x - drag.x, now = performance.now(); drag.moved += Math.abs(dx); if (drag.moved < 0.15) return;
+  if (playing) setPlay(false); canvas.classList.add('pull');
+  vel = lerp(vel, -dx * kS / Math.max(8, now - drag.t) * 1000, 0.5); drag.t = now; drag.x = p.x; go(tv - dx * kS);
+});
+const up = () => { if (!drag) return; canvas.classList.remove('pull'); if (still || performance.now() - drag.t > 120 || live) vel = 0; drag = null; };
+canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', () => { vel = 0; up(); });
+canvas.addEventListener('pointerleave', () => { if (hover) { hover = null; $('tip').classList.remove('on'); need = true; } });
+canvas.addEventListener('wheel', e => { e.preventDefault(); zoom(Math.exp(clamp(e.deltaY, -300, 300) * 0.0016), hover ? { x: hover.x, t: tv + hover.x * kS } : null); }, { passive: false });
+$('play').addEventListener('click', () => { if (still) { vel = 0; go(tv >= nowS() - 1 ? T0 : tv + 3600); } else setPlay(!playing); });
+$('live').addEventListener('click', () => { setPlay(false); vel = 0; go(nowS()); });
+$('zin').addEventListener('click', () => zoom(1 / 1.6)); $('zout').addEventListener('click', () => zoom(1.6));
+addEventListener('keydown', e => {
+  if (e.key === ' ') { e.preventDefault(); $('play').click(); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') { setPlay(false); vel = 0; go(tv + (e.key === 'ArrowLeft' ? -1 : 1) * grid[0]); }
+  else if (e.key === 'Home') { setPlay(false); vel = 0; go(T0); } else if (e.key === 'End') $('live').click();
+  else if (e.key === '+' || e.key === '=') zoom(1 / 1.6); else if (e.key === '-') zoom(1.6);
+});
+
+// ------------------------------------------------------------------ the loop: draw only when something moves
+canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); });
+canvas.addEventListener('webglcontextrestored', () => { studio(); dirty = need = textDirty = true; });
+setInterval(() => { if (document.hidden) return; if (live) dirty = true; if (performance.now() - lastPoll >= POLL * 1000 - 500) poll(); }, 2000);
+let last = performance.now(), prevT = tv;
+function frame() {
+  requestAnimationFrame(frame);
+  const now = performance.now(), dt = Math.min(0.1, (now - last) / 1000); last = now;
+  if (playing) { tv += dt * SPEED; dirty = true; if (tv >= nowS()) { setPlay(false); go(nowS()); } }
+  else if (live) { if (dirty) tv = nowS(); }
+  else if (!drag && Math.abs(vel) > kS * 0.02) { go(tv + vel * dt); vel *= Math.exp(-dt * 4); if (live || tv <= T0 - 3.9 * kS) vel = 0; }
+  if (kS !== k) { kS = still || Math.abs(Math.log(kS / k)) < 0.002 ? k : kS * Math.exp(Math.log(k / kS) * (1 - Math.exp(-dt * 10))); if (anchor) tv = clamp(anchor.t - anchor.x * kS, T0 - 4 * kS, nowS()); dirty = true; }
+  if (tv !== prevT) { if ((playing || live) && bisect(scoreT, tv) > bisect(scoreT, prevT) && tv - prevT < 3600) stampAt = now; prevT = tv; }
+  if (now - stampAt < 200) need = true;
+  if (!(need || dirty) || renderer.getContext().isContextLost()) return;
+  if (dirty) inkPaper();
+  need = dirty = false;
+  pose(now); scene.updateMatrixWorld();
+  renderer.shadowMap.needsUpdate = true;
+  renderer.render(scene, camera);
+}
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

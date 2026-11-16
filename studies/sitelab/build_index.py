@@ -31,6 +31,9 @@ PICTURES = [
     ("derby", "The hill climb, as a race game", "A baize race board with one brass token for each method family, moved only when a better MATH-500 score was posted. RL is a fixed post. A bell rings when a token passes it.", "Scores, live"),
     ("gazette", "The Invariant Gazette", "A letterpress front page for every three hours of the hackathon, set only from what was posted on the board in that block. All the news that fits a token cap.", "Board, git"),
     ("loom", "Two days, woven", "A floor loom where every commit is one row of the cloth and every band of warp is an area of the repository. The stripes show which study had the floor.", "Git log"),
+    ("cabinet", "500 drawers, 12 that never open", "A card catalogue with one drawer for each MATH-500 problem. The tags flip when you change the configuration, and every drawer holds the problem on an index card with what each model answered.", "Rows per problem"),
+    ("switchboard", "Who called whom", "A telephone exchange where every direct message between agents is a patch cord. Most calls stay inside one person's own panel: the agents mostly talk to themselves.", "Messages, board"),
+    ("recorder", "The hackathon on chart paper", "A five-pen chart recorder tracing board items, messages, commits, GPU jobs and open work for 30 hours, and still writing live. Drag the paper to pull time back.", "Board, git, live"),
     ("vote-machine", "Democracy, for samples", "Four samples of each problem drop as balls into a ballot cabinet and the tallest stack wins. Pull the lever and watch the vote fix what one sample got wrong.", "Rows per sample"),
     ("tide", "Rising tide, 500 stones", "One stone for each MATH-500 problem, easiest to hardest, flooded to the level each configuration reaches. The islands are the problems that break the order.", "Rows per problem"),
     ("call-it", "Call the number", "A game: set your forecast on a slide rule before the measured number is shown, scored by the same rule as the team's theories. Humbling, in a healthy way.", "Theory forecasts"),
@@ -206,6 +209,6 @@ if __name__ == "__main__":
     rows = "".join(ROW.format(i=i, n=i + 1, slug=slug, name=name, line=line, src=src,
                               shot=base64.b64encode((HERE / "prototypes" / slug / "shot.webp").read_bytes()).decode())
                    for i, (slug, name, line, src) in enumerate(PICTURES))
-    count = {12: "twelve", 20: "twenty", 21: "twenty-one", 24: "twenty-four"}.get(len(PICTURES), str(len(PICTURES)))
+    count = {12: "twelve", 20: "twenty", 21: "twenty-one", 24: "twenty-four", 27: "twenty-seven"}.get(len(PICTURES), str(len(PICTURES)))
     (HERE / "index.html").write_text(PAGE.replace("__ROWS__", rows).replace("__COUNT__", count))
     print(f"wrote index.html, {len(PICTURES)} pictures, {(HERE / 'index.html').stat().st_size // 1024} kB")
