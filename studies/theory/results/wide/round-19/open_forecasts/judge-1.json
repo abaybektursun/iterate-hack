@@ -1,0 +1,6 @@
+{"verdicts": [
+{"id": "t01", "by_construction": false, "why": "Predictors are the untrained base score, random rank-8 edits and plain covariates (edit norm 1.5x, m=64); the forecast is the random-edit mean, not RL's change renamed, and it uses no RL-model or RL-derived edit outcome."},
+{"id": "t02", "by_construction": false, "why": "Predictors are the base score, random rank-8 edits, edit norm and m=8 subspace dimension, all plain covariates; the random-edit-mean quantity is the opposite of the account's claim, not a renaming of it."},
+{"id": "t03", "by_construction": false, "why": "A log-k fit to the untrained cued base's own vote points (result-c065a6) plus base explore-half rows; no RL-trained model or RL-derived edit is used."},
+{"id": "t04", "by_construction": false, "why": "Comes from the same base-only log-k fit minus the base's vote over 4, with base tie-break noise; all predictors are untrained-base numbers."}
+]}

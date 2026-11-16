@@ -1,0 +1,16 @@
+{"rule": "Accuracy of any edited base model comes from the untrained cued base's single-sample level on hard328 plus the spread of random weight edits at the stated norm (random rank-8 edits at sizes -1 to 3 score 158-167 of 328 with seed noise of about 5), so an edit whose content I may not use is forecast at the random-edit/base level with an interval covering that spread plus one-sample noise and some extra room for a norm concentrated in an m-dimensional subspace (m/d = 64/4096 or 8/4096); vote-over-k counts of the cued base come from its own vote curve on the 328 (159.5 at k=1, 188.5 at k=4, 197 at k=6, rising roughly linearly in ln k at about 21 problems per unit ln k, flattening the way MATH-500's curve did), extrapolated to k=8, and a vote-8 minus vote-4 gap is that extrapolation minus the k=4 point.",
+ "forecasts": [
+  {"id": "t01", "value": 162, "low": 147, "high": 177,
+   "predictors": ["base + cue hard328 one sample seed 3000000: 164 of 328 (result-284db5)", "base + cue votek mean single sample: 159.5 (result-c065a6)", "random rank-8 edit at 1.5x norm: 159 right (result-39497c)", "random rank-8 edits at sizes -1,1,2,3: 158-167 right (result-39497c, result-6f1bb7)", "subspace dimension m/d = 64/4096"],
+   "derivation": "Norm-matched edit forecast at the random-edit/base level (mean of 159, 164, 159.5 and the 158-167 random band, about 162), interval = observed random/seed spread plus one-sample noise, widened for the concentrated 64-dim subspace."},
+  {"id": "t02", "value": 161, "low": 145, "high": 177,
+   "predictors": ["base + cue hard328 one sample seed 3000000: 164 of 328 (result-284db5)", "base + cue votek mean single sample: 159.5 (result-c065a6)", "random rank-8 edit at 1.5x norm: 159 right (result-39497c)", "random rank-8 edits at sizes -1 to 3: 158-167 right", "subspace dimension m/d = 8/4096"],
+   "derivation": "Same random-edit/base level as t01, nudged one problem lower and widened a little on the low side because the whole 1.5x norm sits in an 8-dim residual subspace shared by every layer."},
+  {"id": "t03", "value": 202, "low": 194, "high": 210,
+   "predictors": ["cued base hard328 vote curve: 159.5 at k=1, 188.5 at k=4, 197 at k=6 (result-c065a6)", "cued base MATH-500 vote curve 410/449.2/456.6/466 at k=1/4/6/12 (result-1c9e40), used for how fast the slope flattens", "explore-half attempt-0 vote over 4 from rows/hard328 day1_3 base_cue_s4r2: 94.75 of 164 (about 189.5 of 328)"],
+   "derivation": "The slope is about 21 per unit ln k from k=1 to 6; flattened to about 17 that gives 17 x ln(8/6) = +5 over 197, so about 202, with plus or minus 8 for the two new samples and tie handling."},
+  {"id": "t04", "value": 12, "low": 5, "high": 19,
+   "predictors": ["cued base hard328 vote over 4: 188.5 (votek, result-c065a6); order-averaged 184.6 (result-f941b8); stored-order 192 (posted)", "extrapolated vote over 8: 202 (t03)"],
+   "derivation": "Vote over 8 (about 202) minus a vote-over-4 point of about 190 (votek's 188.5, with room for the stored-order 192) gives about 12; the interval covers which k=4 tie rule is used and the noise from the new samples."}
+ ]
+}

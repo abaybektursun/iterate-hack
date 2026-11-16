@@ -1,0 +1,81 @@
+{
+ "utc": "2026-11-16T01:30:56",
+ "work_items": [
+  "work-644fec",
+  "work-184476",
+  "work-7f9d79",
+  "work-001ff1",
+  "work-963745",
+  "work-4bfe4e",
+  "work-e340a2",
+  "work-49fb1b",
+  "work-ceafa5",
+  "work-6a9386"
+ ],
+ "targets": [
+  {
+   "id": "t01",
+   "item": "work-4bfe4e",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + the dial (RL-Math top-8 directions) restricted to one common residual subspace per side, m = 64, norm matched to the 1.5x edit (wsp_edit glob)",
+    "prompt": "opening cue",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "not stated",
+    "samples": "not stated",
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "How many of the 328 hard problems does the cued Olmo 3 base get right when the RL-Math 8-direction edit is restricted to one shared 64-dimensional residual subspace per side (read and write), norm matched to the 1.5x edit?",
+   "quote": "The dial restricted to one common residual subspace per side (wsp_edit glob, m = 64 and m = 8, norm matched to the 1.5x edit), hard328 cue, 2 cells"
+  },
+  {
+   "id": "t02",
+   "item": "work-4bfe4e",
+   "cell": {
+    "model": "Olmo-3-1025-7B base + the dial (RL-Math top-8 directions) restricted to one common residual subspace per side, m = 8, norm matched to the 1.5x edit (wsp_edit glob)",
+    "prompt": "opening cue",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "not stated",
+    "samples": "not stated",
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "How many of the 328 hard problems does the cued Olmo 3 base get right when the RL-Math 8-direction edit is restricted to one shared 8-dimensional residual subspace per side (read and write), norm matched to the 1.5x edit?",
+   "quote": "The dial restricted to one common residual subspace per side (wsp_edit glob, m = 64 and m = 8, norm matched to the 1.5x edit), hard328 cue, 2 cells"
+  },
+  {
+   "id": "t03",
+   "item": "work-e340a2",
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained)",
+    "prompt": "opening cue",
+    "set": "the 328 (hard328)",
+    "n": 328,
+    "sampling": "not stated (samples 6 and 7 at seed 3060000)",
+    "samples": 8,
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "How many of the 328 hard problems does the untrained Olmo 3 base with the opening cue get right by plurality vote over 8 samples per problem?",
+   "quote": "tests W1 (vote over 8 in [185, 199])"
+  },
+  {
+   "id": "t04",
+   "item": "work-e340a2",
+   "cell": {
+    "model": "Olmo-3-1025-7B base (untrained)",
+    "prompt": "opening cue",
+    "set": "the 328 (hard328)",
+    "n": 328,
+    "sampling": "not stated (samples 6 and 7 at seed 3060000)",
+    "samples": "8 vs 4",
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328, vote over 8 minus vote over 4",
+   "what": "On the 328 hard problems, for the untrained Olmo 3 base with the opening cue, how many more problems does a plurality vote over 8 samples get right than a vote over 4 samples?",
+   "quote": "W2 (8 minus 4 at least 6)"
+  }
+ ]
+}

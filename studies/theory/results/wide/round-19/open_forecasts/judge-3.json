@@ -1,0 +1,6 @@
+{"verdicts": [
+{"id": "t01", "by_construction": false, "why": "Predictors are the cued base's one-sample score, random rank-8 edits' norm slope, and edit norm and m as numbers; no RL-built edit outcome or RL model sample is used, and the quantity is base plus random-norm slope, not the account's RL-pair content."},
+{"id": "t02", "by_construction": false, "why": "Same plain covariates as t01 (base score, random-edit norm slope, m = 8 used only to widen the interval downward); nothing from the RL change or the dial's outcomes."},
+{"id": "t03", "by_construction": false, "why": "Uses only the untrained cued base's own vote-over-k results on hard328 and the shape of its MATH-500 vote curve from stored base rows; no RL model or RL-derived edit is used."},
+{"id": "t04", "by_construction": false, "why": "The base's vote-over-4/6 on hard328 times the base's MATH-500 8-4/6-4 ratio; all predictors are base-model stored numbers."}
+]}

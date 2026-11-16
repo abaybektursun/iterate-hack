@@ -1,0 +1,10 @@
+{"forecasts": [
+{"id": "t01", "value": 197, "low": 183, "high": 210,
+ "derivation": "Account S6 (effect set by which true RL pairs the edit contains, not by its norm, peak near 1.5x): the m=64 shared subspace keeps 0.76-0.78 of the top-8 edit's squared norm with its pairing (result-ce52f8), so norm-matched it acts nearly like the 1.5x dial (203/328, result-6f1bb7) and well above the 1x dial (192) and random (159)."},
+{"id": "t02", "value": 180, "low": 160, "high": 198,
+ "derivation": "Account S2/S6 (direction 1 and the shared late component are a finish dial that cuts cap hits but adds little accuracy, and accuracy falls when it is pushed past 2x): m=8 keeps only 0.40/0.42 of the pairs (result-ce52f8), and norm matching scales that part up about 1.6x, so the cell should land near the direction-1 edits (k=1 181, result-51a0e7; stored top1x1.5 cells 190 and 178 of 328) and below the full dial (203)."},
+{"id": "t03", "value": 201, "low": 193, "high": 209,
+ "derivation": "Account S4-S5 (votes only help where the base already writes a right sample, and wrong answers scatter): the base-cue vote curve on the 328 is 159.5 at 1, 188.5 at 4 and 197 at 6 (result-c065a6), and 107 of the 131 misses have no right sample in 6, so samples 7-8 add about 2 problems each, giving about 201, still below RL's 224."},
+{"id": "t04", "value": 12, "low": 5, "high": 20,
+ "derivation": "Account S4 (vote turns sometimes-right into right), with gains shrinking as the base's reach saturates (S5; knowledge-b19faf: 7% per-sample rate on 0-of-4 problems): about 201 for the vote over 8 minus 188.5 for the vote over 4 (result-c065a6) gives about +12."}
+]}

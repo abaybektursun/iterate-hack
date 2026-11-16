@@ -1,0 +1,6 @@
+{"verdicts": [
+{"id": "t01", "by_construction": false, "why": "Predictors are the untrained cued base's single-sample hard328 counts, random rank-8 edits at matched norm, and subspace dimension m/d; it forecasts the random/base level and uses no RL model or RL-direction edit outcome."},
+{"id": "t02", "by_construction": false, "why": "Same plain covariates as t01 (base single-sample counts, random rank-8 edit band, m/d = 8/4096); nothing from an RL model or an RL-built edit, and the quantity is not renamed."},
+{"id": "t03", "by_construction": false, "why": "Extrapolates the untrained cued base's own vote curve (hard328 k=1/4/6, MATH-500 flattening, base explore rows); every predictor is a base-model count."},
+{"id": "t04", "by_construction": false, "why": "Difference of the base vote-8 extrapolation and the base's stored vote-4 counts; only untrained-base numbers and sample count are used."}
+]}

@@ -1,0 +1,6 @@
+{"forecasts": [
+{"id": "t01", "value": 191, "low": 174, "high": 206, "reason": "m=64 keeps ~77% of the top-8 edit's norm (result-ce52f8), so I expect most of the full edit's 203 to survive, well above base 164 / random 159."},
+{"id": "t02", "value": 179, "low": 160, "high": 198, "reason": "m=8 keeps ~40% of the norm, roughly direction 1's share, which alone gave 183; norm-matching over-amplifies that subspace, so I put it between random 159 and 203, near direction 1 alone."},
+{"id": "t03", "value": 200, "low": 192, "high": 209, "reason": "The base's vote curve on the 328 is 159.5/188.5/197 at k=1/4/6 (result-c065a6), still rising about 4 per sample, so k=8 should land a few problems above 197."},
+{"id": "t04", "value": 10, "low": 3, "high": 17, "reason": "Vote over 8 (~200) minus vote over 4 (188.5 subset mean, or 192 in stored order) gives roughly 8-12."}
+]}

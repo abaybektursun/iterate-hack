@@ -1,0 +1,6 @@
+{"forecasts": [
+{"id": "t01", "value": 188, "low": 168, "high": 205, "reason": "Between random/base (~159-164) and the full 1.5x RL edit (203); a 64-dim shared subspace keeps ~77% of the edit's norm and its pairing, so most of the gain likely survives."},
+{"id": "t02", "value": 174, "low": 153, "high": 194, "reason": "8 shared dims keep only ~40% of the edit and distort the pairs (mis-paired edits score like random 159), but low-rank finishing may survive, roughly like direction 1 alone (183) or less."},
+{"id": "t03", "value": 200, "low": 192, "high": 208, "reason": "Vote over 6 gave 197 (188.5 at 4) and the curve flattens because most wrong problems have no right sample, so 8 samples adds about 3."},
+{"id": "t04", "value": 10, "low": 4, "high": 16, "reason": "Vote over 4 is 188.5-192 depending on which four, against about 200 at 8."}
+]}

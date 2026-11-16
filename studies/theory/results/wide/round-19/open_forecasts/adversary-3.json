@@ -1,0 +1,53 @@
+{
+ "rule": "Base-model vote targets follow the cued base's own vote-over-k curve on the 328 (vote over 4 = 188.5 and over 6 = 197, result-c065a6), extended to k = 8 with the shape of the cued base's vote curve on MATH-500 computed from the stored 12-sample rows (explore half, mean over random k-subsets: 446.9 at 4, 456.6 at 6, 461.3 at 8, so the 6->8 step is 0.485 of the 4->6 step and the 8-4 gap is 1.485 times it), with intervals set by seed noise (one-sample seeds differ by up to 9 problems). An edit's accuracy at a given edit norm follows the cued base's one-sample score plus the slope in edit norm fitted on the random rank-8 edits of the same norm family on hard328 (sizes -1 to 3: 159, 158, 159, 167, 163 against base 164, i.e. flat, slope about 0); the subspace dimension m (chance overlap m/4096) is used only to widen the interval downward for the smaller m, since a fixed norm packed into fewer residual dimensions can damage outputs; nothing about the RL change enters.",
+ "forecasts": [
+  {
+   "id": "t01",
+   "value": 162,
+   "low": 151,
+   "high": 174,
+   "predictors": [
+    "base + cue, hard328, one sample seed 3000000: 164 right (result-6f1bb7 / result-284db5)",
+    "random rank-8 edit at 1.5x norm, hard328 cue: 159 (result-306787)",
+    "random rank-8 edits at sizes -1, 1, 2, 3: 159, 158, 167, 163 (result-6f1bb7)",
+    "edit norm 1.5x (as a number), subspace dimension m = 64 of d = 4096"
+   ],
+   "derivation": "The norm-1.5x edit gets base 164 plus the random-edit norm slope (flat; random edits average 161.2), so about 162, with one-sample seed noise of about 4-5 problems setting the interval."
+  },
+  {
+   "id": "t02",
+   "value": 160,
+   "low": 146,
+   "high": 174,
+   "predictors": [
+    "base + cue, hard328, one sample seed 3000000: 164 right (result-6f1bb7)",
+    "random rank-8 edits at sizes -1, 1, 1.5, 2, 3: 159, 158, 159, 167, 163 (result-6f1bb7, result-306787)",
+    "edit norm 1.5x (as a number), subspace dimension m = 8 of d = 4096 (chance overlap 0.002)"
+   ],
+   "derivation": "Same base-plus-flat-random-slope value as m = 64, moved down 2 and widened downward because the same norm is packed into 8 residual dimensions."
+  },
+  {
+   "id": "t03",
+   "value": 201,
+   "low": 192,
+   "high": 210,
+   "predictors": [
+    "cued base hard328 vote over 6: 197 (result-c065a6)",
+    "cued base hard328 vote over 4 (mean): 188.5 (result-c065a6)",
+    "cued base MATH-500 stored rows, explore half, vote over k (mean of subsets, x2): 446.9 at 4, 456.6 at 6, 461.3 at 8 (rows/math500 votek math500_base_cue-01)"
+   ],
+   "derivation": "197 + 0.485 x (197 - 188.5) = 201, the 6->8 step scaled from the base's MATH-500 vote curve."
+  },
+  {
+   "id": "t04",
+   "value": 12,
+   "low": 6,
+   "high": 18,
+   "predictors": [
+    "cued base hard328 vote over 6: 197, over 4: 188.5 (result-c065a6); vote over samples 0-3: 192 (result-5c961a)",
+    "cued base MATH-500 stored rows: vote over 8 minus over 4 = 14.4, over 6 minus over 4 = 9.7 (ratio 1.485)"
+   ],
+   "derivation": "1.485 x 8.5 = 12.6 if the vote over 4 is averaged over subsets, 9 if it is samples 0-3 (192), so 12 with an interval covering both readings."
+  }
+ ]
+}

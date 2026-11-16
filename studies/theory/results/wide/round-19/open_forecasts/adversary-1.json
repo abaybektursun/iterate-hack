@@ -1,0 +1,54 @@
+{
+ "rule": "Edited-model accuracy at a stated edit norm follows the base plus the flat random-edit curve: on hard328 with the cue (T 1.0, one sample, seed 3000000) the base scores 164 and random rank-8 edits at sizes -1 to 3 (incl. two draws at 1.5x) score 152-167, mean about 160 with sd about 4, so any norm-matched 1.5x edit whose content I may not use gets about 160 with an interval of single-sample noise plus allowance for subspace structure (m smaller = more concentrated edit = slightly wider low tail); vote-over-k accuracy of the untrained cued base follows a log-k curve fitted to its own board points on the 328 (159.5 at 1, 188.5 at 4, 197 at 6, which fit vote(k)=159.5+20.9 ln k exactly) and checked on the stored explore-half rows (vote over 4 of samples 0-3 = 94 of 164, x2 = 188), with interval width from tie-breaking noise measured on those rows (plus or minus 5 on the half) and per-sample noise.",
+ "forecasts": [
+  {
+   "id": "t01",
+   "value": 160,
+   "low": 146,
+   "high": 175,
+   "predictors": [
+    "base cue hard328 seed 3000000: 164/328 (result-e5c99c)",
+    "random rank-8 1.5x: 159 (result-39497c), second draw 152 (result-05a1a6)",
+    "random rank-8 at -1,1,2,3: 159,158,167,163 (result-6f1bb7)",
+    "edit norm: matched to the 1.5x edit (number), m = 64 subspace dimension"
+   ],
+   "derivation": "A norm-matched 1.5x edit sits in the flat region of the random-edit curve, so it gets the random-edit mean of about 160, with single-sample spread."
+  },
+  {
+   "id": "t02",
+   "value": 159,
+   "low": 143,
+   "high": 175,
+   "predictors": [
+    "base cue hard328: 164/328 (result-e5c99c)",
+    "random rank-8 1.5x: 159 and 152 (result-39497c, result-05a1a6)",
+    "random rank-8 at -1,1,2,3: 159,158,167,163 (result-6f1bb7)",
+    "edit norm 1.5x matched; m = 8 subspace dimension"
+   ],
+   "derivation": "Same random-edit mean of about 160 at matched norm, with the low end a little wider because the same norm is packed into an 8-dimensional shared subspace."
+  },
+  {
+   "id": "t03",
+   "value": 203,
+   "low": 195,
+   "high": 211,
+   "predictors": [
+    "base cue hard328 vote over k of 6: 159.5 at 1, 188.5 at 4, 197 at 6 (result-c065a6)",
+    "explore-half rows rlneurons/day1_3/hard328_base_cue_s4r2-01: vote over 4 = 94/164 (tie range 90-100)"
+   ],
+   "derivation": "vote(k)=159.5+20.9 ln k fits the 1, 4, 6 points exactly and gives 203 at k=8, which is 197 plus about 6 from the two extra samples; the interval comes from tie-breaking and per-sample noise."
+  },
+  {
+   "id": "t04",
+   "value": 14,
+   "low": 5,
+   "high": 23,
+   "predictors": [
+    "vote over 4 = 188.5 (result-c065a6)",
+    "log-k fit at k=8 = 203 (t03)",
+    "explore-half vote-over-4 tie-break range 90-100 of 164 (rows hard328_base_cue_s4r2-01)"
+   ],
+   "derivation": "203 from the log-k fit minus 188.5 for the vote over 4 gives about 14; the wide interval covers which 4-sample vote is used and the tie-breaking noise."
+  }
+ ]
+}

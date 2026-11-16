@@ -1,0 +1,32 @@
+{
+ "forecasts": [
+  {
+   "id": "t01",
+   "value": 198,
+   "low": 185,
+   "high": 210,
+   "derivation": "Account S1/S6 (an edit holding RL's own pairs at 1.25-1.5x lands near RL per sample): the m=64 restriction keeps 0.76/0.78 of the top-8 edit (result-ce52f8), so after norm matching it carries ~1.3x of the true pairs, which puts it between the 1x edit (192, result-284db5) and the 1.5x edit (203, result-306787), a little below RL's 206."
+  },
+  {
+   "id": "t02",
+   "value": 183,
+   "low": 166,
+   "high": 199,
+   "derivation": "Account S1 (only RL's exact pairs act; shifted or random pairs stay at the base, 158-163 in result-0d54f3): at m=8 only 0.40/0.42 of the edit survives (result-ce52f8), so norm matching gives ~0.95x of the true pairs plus a larger shared-subspace distortion, which should fall short of the 1x edit's 192 and the 1-direction edit's 181, while staying above the base's 164."
+  },
+  {
+   "id": "t03",
+   "value": 200,
+   "low": 191,
+   "high": 209,
+   "derivation": "Account S5 (the vote gains on hard328 only through scattered wrong answers, and most misses have no right sample, so about 9 points stay out of inference reach): the stored curve 159.5/188.5/197 at k=1/4/6 (result-c065a6) extrapolates log-linearly to 202 at k=8, trimmed for saturation because 107 of 131 wrong problems have no right sample among 6."
+  },
+  {
+   "id": "t04",
+   "value": 11.5,
+   "low": 5,
+   "high": 18,
+   "derivation": "Account S5 saturation applied to result-c065a6: vote over 4 is 188.5 and the log-linear step of ~14 per doubling of k (29 over k=1 to 4, 8.5 over k=4 to 6) is shrunk by the base having no right sample on most missed problems (knowledge-b19faf: 7 % per-sample rate on 0-of-4 problems), giving about +11.5."
+  }
+ ]
+}
