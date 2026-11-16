@@ -1,0 +1,9 @@
+{
+ "commit": "72b6fc3ae374a3bd10003aa4a16846576d41ccf7",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 --with antlr4-python3-runtime==4.11 python studies/theory/analysis/direct_r16a1c1.py",
+ "raw_inputs": [
+  "/Users/abaybektursun/projects/iterate-hack-ckpt/runs/abaybektursun-1115-064532-6a2f/answers.jsonl",
+  "/Users/abaybektursun/projects/iterate-hack-r16a1c1/runs/abaybektursun-1115-102945-9b20/answers.jsonl"
+ ],
+ "gpu": "none (offline)"
+}

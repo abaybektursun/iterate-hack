@@ -1,0 +1,36 @@
+[
+ {
+  "mechanism": "round-16/account-1/c1",
+  "claim": "At RL step 100 the plain samples that do not open deliberatively are unswitched plain-base answers, so on the same problem the cued step-100 model is right far more often than they are.",
+  "result": "result-f89757",
+  "verdict": "undecided",
+  "measured": "0.175 [0.120, 0.230], n 174, adversary value 0.534",
+  "interval": [
+   0.12021072796934866,
+   0.2303639846743295
+  ],
+  "range": [
+   0.15,
+   0.75
+  ],
+  "adversary": 0.5343511450381679,
+  "n": 174
+ },
+ {
+  "mechanism": "round-16/account-2/deny-account-1-c1",
+  "claim": "After 100 RL steps the shift is graded and present in every sample, so the step-100 cue samples beat the non-deliberative plain samples by little (D1 in [-0.10, 0.12]).",
+  "result": "result-f89757",
+  "verdict": "refuted",
+  "measured": "0.175 [0.120, 0.230], n 174, adversary value 0.534",
+  "interval": [
+   0.12021072796934866,
+   0.2303639846743295
+  ],
+  "range": [
+   -0.1,
+   0.12
+  ],
+  "adversary": 0.5343511450381679,
+  "n": 174
+ }
+]
