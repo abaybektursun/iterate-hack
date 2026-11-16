@@ -1,0 +1,176 @@
+{
+ "test": "r16a3c2",
+ "mechanism": "round-16/account-3/c2",
+ "statistic": "mean over problems 0-249 with both answers non-deliberative of (m21 right - T3 right), grader v3, fraction",
+ "adversary": {
+  "value": 0.3519553072625698,
+  "n": 179,
+  "computation": "T3 flag only (flagged() of direct_t3open.py on t3_start[:240]); on the T3-non-deliberative problems, mean(m21 score_v3) - mean(t3_right), every m21 row counted whatever its opening",
+  "m21_right": 118,
+  "t3_right": 55
+ },
+ "value": 0.10526315789473684,
+ "ci90": [
+  -0.013157894736842105,
+  0.2236842105263158
+ ],
+ "n": 76,
+ "n_planned": 65,
+ "m21_right": 31,
+ "t3_right": 23,
+ "accuracy_only_value": 0.3519553072625698,
+ "complement_m21_deliberative_on_t3_nondeliberative": {
+  "value": 0.5339805825242718,
+  "n": 103
+ },
+ "n_t3_empty_start_in_set": 7,
+ "m21_cap_hits_in_set": 0,
+ "t3_cap_hits_in_set": 0,
+ "m21_empty_extraction_in_set": 26,
+ "raw_reading": {
+  "seen": "10 rows read (problems 2-30). No cap hits, all m21 finish 'stop', 76 distinct seeds. Problem 12: m21 opens ' in the form $Answer$.\\n\\nOkay, let's try...', non-deliberative only because a $ precedes 'Okay'. Problem 22: m21 text empty (0 new tokens), counted wrong. Problem 2: m21 drifts off-topic, no answer.",
+  "m21_okay_hmm_alright_after_equation_sign": {
+   "n": 8,
+   "problems": [
+    12,
+    31,
+    64,
+    79,
+    90,
+    137,
+    156,
+    190
+   ],
+   "sum_diff": 4
+  },
+  "m21_empty_text": {
+   "n": 9,
+   "problems": [
+    22,
+    78,
+    123,
+    124,
+    140,
+    201,
+    216,
+    241,
+    246
+   ],
+   "sum_diff": -1
+  },
+  "t3_empty_start": {
+   "n": 7,
+   "problems": [
+    55,
+    72,
+    144,
+    167,
+    201,
+    216,
+    218
+   ],
+   "sum_diff": 5
+  },
+  "sensitivity_without_these": {
+   "n": 54,
+   "value": 0.0
+  },
+  "note": "post hoc check, not the plan's statistic: 22 of the 76 rows (one side empty, or m21 opens with Okay/Hmm/Alright after a leading equation sign) carry a net +8 of the +8"
+ },
+ "departures": "n 76, not the planned 65 (same rule and files; the plan's count was an estimate). m21 opening text read from the job's raw answers.jsonl, since the committed per_problem.json has no text. No other departure.",
+ "ranges": {
+  "round-16/account-3/c2": [
+   0.1,
+   0.4
+  ],
+  "null": [
+   -0.07,
+   0.07
+  ]
+ },
+ "flag_rule": "flagged() imported from studies/theory/analysis/direct_t3open.py: case-sensitive \\b(Okay|Alright|Hmm|Let me|Let's|I need to)\\b in the first 240 characters before the first $, =, \\( or \\[",
+ "bootstrap": "10,000 resamples of problems, numpy default_rng(16), 5th-95th percentile",
+ "inputs": {
+  "t3": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json",
+  "m21_scores": "studies/theory/results/experiments/cell-r9-m21-01/per_problem.json",
+  "m21_text": "runs/abaybektursun-1115-103050-eae1/answers.jsonl (sha256 2900bc85a4e971128dfe4132d017bb5825ff9888a6a4fdfbe00b8334e3da29d4, not committed)"
+ },
+ "both_set": [
+  2,
+  12,
+  13,
+  15,
+  16,
+  18,
+  22,
+  23,
+  28,
+  30,
+  31,
+  33,
+  42,
+  44,
+  51,
+  55,
+  57,
+  64,
+  71,
+  72,
+  74,
+  75,
+  77,
+  78,
+  79,
+  84,
+  90,
+  91,
+  93,
+  95,
+  105,
+  111,
+  117,
+  120,
+  123,
+  124,
+  128,
+  131,
+  137,
+  140,
+  141,
+  144,
+  145,
+  146,
+  150,
+  156,
+  160,
+  164,
+  165,
+  167,
+  175,
+  180,
+  182,
+  183,
+  185,
+  189,
+  190,
+  193,
+  201,
+  202,
+  203,
+  205,
+  207,
+  216,
+  218,
+  219,
+  221,
+  225,
+  226,
+  228,
+  229,
+  233,
+  237,
+  241,
+  246,
+  248
+ ]
+}
