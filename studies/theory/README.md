@@ -1740,6 +1740,37 @@ Files in `results/wide/round-16/`: `standing.md` / `standing.json` / `standing/`
 `marks-account-<k>.json`, `adversary/account-<k>-c<j>.json`, `synthesis_tests.md` / `.json`, `synthesis.md`,
 `run.json`, `round16.log`.
 
+## Engine 17 (accounts read the explore half, tests run on the test half)
+
+Skill version 17, branch `theory` only (main is frozen). Why: in round 16, 0 of 9 consequences held; 6 were undecided
+at the edge of a guessed range and 7 of 9 adversary values were at the wrong scale, because the writers and adversaries
+could not read the stored rows. Letting them read all rows would let them fit the answer, so the problems are split.
+
+1. `data/split_v1.json` (written once by `lib/rows.py split`, never changed): for hard328 (328 problems), MATH-500 (500),
+   fresh2026 (136) and the Code pair (538 HumanEval+ and MBPP+ uids), the ids sorted by sha256 of `<set>:<id>`; the
+   first half is `explore`, the rest `test` (164/164, 250/250, 68/68, 269/269). dev100 takes MATH-500's assignment
+   (54 explore, 46 test). No seed.
+2. `lib/rows.py`: `load(set, cell, half)` returns one half of a stored cell, each row with `pid`; `manifest()` lists the
+   cells: committed `rows.jsonl` and `per_problem.json` (list form) under `studies/*/results` whose set is named in
+   `run.json` or whose ids equal a whole set, the autobench finals, and every Code cell of a `readout.json` with job ids
+   (answers in S3, loaded only when cached in `runs/<job>/` of this or the main checkout). At commit: 36 hard328, 33
+   MATH-500, 7 fresh2026, 13 Code cells loadable, 10 Code cells in S3 only. `rows.py copy <dir> explore` writes the
+   explore half of every loadable cell and `MANIFEST.md`.
+3. Accounts and adversaries run as headless `claude -p` with Read, Write, Glob, Grep and Bash in a temp folder that holds
+   that copy (`rows/`) and the facts (`round.py` mode `rows`, transcript in stream-json); a tool call whose input names
+   the repository, `/Users/`, the home folder, `split_v1`, `../` or `cd ..`/`cd /` stops the round (checked on a
+   planted `ls /Users/`). Each consequence names `set` and `cells` and states `explore` (value, 90 % bootstrap interval
+   over problems, n); its test-half range must contain the explore value and be at most 2.5 explore interval widths
+   times sqrt(n explore / n test) wide (`explore_errors`). The adversary computes its alternative's `explore_value`.
+4. A consequence whose adversary's explore value lies inside the account's explore interval is dropped before any test
+   (`explore_dropped`). Tests load only the test half (`rows.load(set, cell, "test")`), compute the adversary's
+   test-half value first, and `verdict16` decides.
+5. Three accounts in parallel (round 16's sequence cost 25 minutes and every decided denial went against the denier),
+   each told to start from a different third of the facts; no denials. The blind marker and one measurement, one
+   credit (no two consequences on the same cells; `already_shown`) stay. A statistic that classifies openings needs a
+   `validation` on 20 explore rows; the "deliberative opening" flag of result-1f98b0 is not to be used.
+6. Score = test-half holds minus the marker's contradictions.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in

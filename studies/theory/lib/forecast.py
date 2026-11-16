@@ -14,16 +14,17 @@
       experiments. Rerun the same command after the direct tests.
       --propose-wide: the version-10 round (six lens jobs of --propose N mechanisms, every family designs cells).
   uv run studies/theory/lib/forecast.py synthesis <round folder> [--from <folders for standing>]
-      version 16: standing (with --from), direct facts, then three accounts written in sequence (account k sees the
-      earlier ones and denies at least two of their consequences with the range it predicts instead), each of every
-      direct fact and the last 24 hours of board results: at most 6 sentences, a mark per fact, its 3 worst facts, three
-      new consequences (one statistic on stored files, no two on the same files, n >= 50) and one GPU cell; one blind
-      marker per account marks the facts (the score uses these marks); one blind adversary per consequence writes the
-      strongest alternative that predicts the claimed range without the account and how to compute its value (or names
-      a board result that already shows the number: the consequence is rejected); synthesis_tests.md (denied
-      consequences first); a gate until every test has rows (add-rows recomputes the verdict: holds only if the 90 %
-      interval is inside the range and excludes the adversary's value, else not separated); then synthesis.md ranks
-      the accounts. Rerun the same command after the tests.
+      version 17: standing (with --from), direct facts, the explore half of every stored cell (rows.py,
+      data/split_v1.json: problems split by a hash of their id) copied into the job directories; three accounts written
+      in parallel, each starting from a different third of the facts, each a headless job with Bash on the explore rows:
+      at most 6 sentences, a mark per fact, its 3 worst facts, three new consequences (one statistic on stored cells, no
+      two on the same cells, measured on the explore half, with a test-half range at most 2.5 explore interval widths
+      wide) and one GPU cell; one blind marker per account marks the facts; one adversary per consequence (also on the
+      explore rows) writes the strongest alternative, computes its explore value (or names a board result that already
+      shows the number: rejected); a consequence whose adversary's explore value lies inside the account's explore
+      interval is dropped; synthesis_tests.md (test half only); a gate until every test has rows (add-rows recomputes
+      the verdict: holds only if the test-half 90 % interval is inside the range and excludes the adversary's test-half
+      value, else not separated); then synthesis.md ranks the accounts. Rerun the same command after the tests.
   uv run studies/theory/lib/forecast.py make <folder>
       reads the open work items with their comments and every result and knowledge item (the board snapshot); one
       headless job turns the open items into targets (numbers they will report); two readers with no theory and one
@@ -51,7 +52,8 @@
       does not exist is sent back once, then dropped (cells.json "dropped"). Writes cells.json, cell_forecasts.json,
       cells.md, run.json.
 
-Every job is round.py's blind job: claude -p in an empty directory with Read and Write only, the model round.py gives
+Every job is round.py's blind job: claude -p in an empty directory with Read and Write only (synthesis accounts and
+adversaries: also Bash, in a directory holding the explore rows), the model round.py gives
 cross_predict (--model-all <model> overrides it, for smoke tests).
 """
 import argparse
@@ -67,6 +69,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import cells as C  # noqa: E402
 import round as engine  # noqa: E402
+import rows as R  # noqa: E402
 
 ROOT = engine.ROOT
 ROUND = ROOT / "studies/theory/results/engine/round-07"  # the newest round: its unrefuted theories forecast
@@ -1017,13 +1020,15 @@ def round11(folder, sources, n_top, wait_none=False):
     print(f"{(time.time() - start) / 60:.1f} minutes")
 
 
-# ---- version 15: single accounts of every direct fact ----
+# ---- version 15 to 17: single accounts of every direct fact; version 17: explore and test halves ----
 
 ACCOUNTS = 3
 MARKS = ("explained", "not addressed", "contradicts")
 TEST_KEYS = ("claim", "statistic", "rows", "computation", "null")
-MIN_DENIALS = 2  # version 16: each later account denies at least this many consequences of the earlier ones
 ADVERSARY_KINDS = ("covariate", "regression to the mean", "construction artifact", "other")
+SPLIT_SETS = ("hard328", "math500", "fresh2026", "code", "dev100")  # data/split_v1.json
+RANGE_WIDTH = 2.5  # version 17: a test range spans at most this many explore 90 % interval widths (times sqrt(n explore / n test))
+FLAG_WORDS = ("deliberat", "opening")  # version 17: an opening classification needs the writer's own check on 20 explore rows
 
 
 def numbered_facts(folder):
@@ -1057,13 +1062,46 @@ def range_errors(r, keys):
             if not (r[k][1] < r["null"][0] or r["null"][1] < r[k][0])]
 
 
+def cells_errors(t):
+    """Version 17: set is a split set and every cell is a stored cell of MANIFEST.md (rows.py) of that set whose rows are here."""
+    cells, s = {m["cell"]: m for m in R.manifest()}, t.get("set")
+    e = [] if s in SPLIT_SETS else [f"set: one of {', '.join(SPLIT_SETS)}"]
+    e += [] if t.get("cells") else ["cells: one or more cell names of MANIFEST.md"]
+    for c in t.get("cells") or []:
+        m = cells.get(c)
+        e += ([f"cell {c} is not a cell of MANIFEST.md"] if not m else [f"cell {c}: its rows sit in S3, not here"] if m["source"].startswith("s3")
+              else [] if m["set"] == s or (s == "dev100" and m["set"] == "math500") else [f"cell {c} is a {m['set']} cell, not {s}"])
+    return e
+
+
 def stat_errors(t, keys):
-    """A test on stored rows: the TEST_KEYS fields, stored files that exist, n >= MIN_N, ranges (range_errors)."""
-    e = [f"missing {k}" for k in TEST_KEYS if not str(t.get(k, "")).strip()]
-    e += [] if t.get("files") else ["files: one or more stored paths of data.md"]
-    e += [f"{f} does not exist in the repository" for f in t.get("files") or [] if not (ROOT / f).exists()]
-    e += [] if engine.number(t.get("n")) and t["n"] >= MIN_N else [f"n: rows the statistic is computed on, at least {MIN_N}"]
+    """A test on stored rows: the TEST_KEYS fields, set and cells (cells_errors), n >= MIN_N test-half rows, ranges."""
+    e = [f"missing {k}" for k in TEST_KEYS if not str(t.get(k, "")).strip()] + cells_errors(t)
+    e += [] if engine.number(t.get("n")) and t["n"] >= MIN_N else [f"n: rows of the TEST half the statistic is computed on, at least {MIN_N}"]
     return e + range_errors(t.get("ranges") or {}, keys)
+
+
+def explore_errors(c):
+    """Version 17: the consequence's value measured on the explore half (value inside its 90 % interval, n), inside the
+    account's test range, whose width is at most RANGE_WIDTH explore interval widths times sqrt(n explore / n test)."""
+    x, r = c.get("explore") or {}, (c.get("ranges") or {}).get("account")
+    if not (all(engine.number(x.get(k)) for k in ("value", "n")) and isinstance(x.get("interval"), list) and len(x["interval"]) == 2
+            and all(engine.number(v) for v in x["interval"]) and x["interval"][0] <= x["value"] <= x["interval"][1] and x["n"] >= 1):
+        return ["explore: {value, interval: [low, high] (90 % bootstrap, low <= value <= high), n} measured on the explore rows"]
+    if not (isinstance(r, list) and len(r) == 2 and all(engine.number(v) for v in r)):
+        return []  # range_errors names it
+    lo, hi = x["interval"]
+    w = RANGE_WIDTH * (hi - lo) * (x["n"] / c["n"]) ** 0.5 if engine.number(c.get("n")) and c["n"] > 0 else 0
+    e = [] if r[0] <= x["value"] <= r[1] else [f"the account range {r} must contain the explore value {x['value']}"]
+    return e + ([] if r[1] - r[0] <= w + 1e-12 else [f"the account range {r} is wider ({r[1] - r[0]:.4g}) than {RANGE_WIDTH} explore interval widths "
+                                                     f"x sqrt(n explore / n test) = {w:.4g}; narrow it around the explore value"])
+
+
+def flag_errors(c):
+    """Version 17: a statistic that classifies openings (deliberative or not) needs the writer's check of its rule on 20 explore rows."""
+    text = " ".join(str(c.get(k, "")) for k in ("statistic", "rows", "computation")).lower()
+    return (["validation: this statistic classifies openings; read 20 explore rows' openings and report how many the rule classifies right"]
+            if any(w in text for w in FLAG_WORDS) and not str(c.get("validation", "")).strip() else [])
 
 
 def marks_errors(j, fact_ids):
@@ -1076,16 +1114,14 @@ def marks_errors(j, fact_ids):
 
 
 def same_rows(a, b):
-    """One measurement (version 16): two tests on the same set of stored files count as the same rows."""
-    return sorted(a["files"]) == sorted(b["files"])
+    """One measurement (version 16): two tests on the same set of stored cells count as the same rows."""
+    return sorted(a["cells"]) == sorted(b["cells"])
 
 
-def account_errors(j, fact_ids, earlier=None):
+def account_errors(j, fact_ids):
     """An account-<k>.json: at most 6 sentences, a mark for every fact (a contradiction named), the 3 worst facts, three
-    new consequences each a test on stored rows with its range apart from the null's, no two on the same files
-    (version 16: one measurement, one credit). With earlier accounts {name: account} (version 16): at least two
-    denials of their consequences, each with the range this account predicts instead, disjoint from the denied range,
-    and none on the files of one of this account's own consequences."""
+    new consequences each a test on stored cells with its explore value, its test range (explore_errors) apart from the
+    null's, no two on the same cells (version 16: one measurement, one credit)."""
     s, e = j.get("account"), []
     e += [] if isinstance(s, list) and 1 <= len(s) <= 6 and all(isinstance(x, str) and x.strip() for x in s) else ["account: a list of 1 to 6 sentences"]
     e += marks_errors(j, fact_ids)
@@ -1093,46 +1129,33 @@ def account_errors(j, fact_ids, earlier=None):
     e += [] if len(set(w)) == 3 and set(w) <= set(fact_ids) else ["worst: 3 distinct fact ids"]
     cs = j.get("consequences") or []
     e += [] if [c.get("id") for c in cs] == ["c1", "c2", "c3"] else ["consequences: exactly three, ids c1, c2, c3"]
-    e += [f"{c.get('id')}: {x}" for c in cs for x in stat_errors(c, ["account"]) + ([] if str(c.get("why_new", "")).strip() else ["missing why_new"])]
+    e += [f"{c.get('id')}: {x}" for c in cs for x in stat_errors(c, ["account"]) + explore_errors(c) + flag_errors(c)
+          + ([] if str(c.get("why_new", "")).strip() else ["missing why_new"])]
     if e:
         return e
-    e += [f"{a['id']} and {b['id']} use the same files {sorted(a['files'])}: one measurement earns one credit; use other stored files"
-          for i, a in enumerate(cs) for b in cs[i + 1:] if same_rows(a, b)]
-    if not earlier:
-        return e
-    theirs = {f"{n}/{c['id']}": c for n, acc in earlier.items() for c in acc["consequences"]}
-    ds = j.get("denials") or []
-    e += [] if len({d.get("denies") for d in ds}) >= MIN_DENIALS else [f"denials: at least {MIN_DENIALS}, each of a different earlier consequence"]
-    for d in ds:
-        c = theirs.get(d.get("denies"))
-        if not c:
-            e.append(f"denial {d.get('denies')}: denies must be one of {', '.join(theirs)}")
-            continue
-        r, x = d.get("range"), []
-        x += [] if str(d.get("instead", "")).strip() and str(d.get("why", "")).strip() else ["needs why (the earlier claim's error) and instead (what this account predicts)"]
-        x += [] if isinstance(r, list) and len(r) == 2 and all(engine.number(v) for v in r) and r[0] <= r[1] else ["range: [low, high] with low <= high"]
-        x += [] if x or r[1] < c["ranges"]["account"][0] or c["ranges"]["account"][1] < r[0] else [f"range {r} must be disjoint from the denied range {c['ranges']['account']}"]
-        x += [f"the denied test uses the same files as this account's {o['id']}: one measurement earns one credit" for o in cs if same_rows(o, c)]
-        e += [f"denial {d['denies']}: {y}" for y in x]
-    return e
+    return [f"{a['id']} and {b['id']} use the same cells {sorted(a['cells'])}: one measurement earns one credit; use other stored cells"
+            for i, a in enumerate(cs) for b in cs[i + 1:] if same_rows(a, b)]
 
 
 def adversary_errors(j, board_ids):
-    """adversary.json (version 16): the strongest alternative that predicts the claimed range without the account, how
-    to compute its predicted value from stored files that exist, and a board result that already shows the number, if any."""
+    """adversary.json (version 17): the strongest alternative that predicts the claimed range without the account, how
+    to compute its value from stored cells, its value measured on the explore half, and a board result that already
+    shows the number, if any."""
     e = [f"missing {k}" for k in ("alternative", "computation") if not str(j.get(k, "")).strip()]
     e += [] if j.get("kind") in ADVERSARY_KINDS else [f"kind: one of {', '.join(ADVERSARY_KINDS)}"]
-    e += [] if j.get("files") else ["files: the stored paths the alternative's value is computed from"]
-    e += [f"{f} does not exist in the repository" for f in j.get("files") or [] if not (ROOT / f).exists()]
+    cells = {m["cell"]: m for m in R.manifest()}
+    e += [] if j.get("cells") else ["cells: the stored cells (MANIFEST.md names) the alternative's value is computed from"]
+    e += [f"cell {c} is not a cell of MANIFEST.md, or its rows are not here" for c in j.get("cells") or [] if c not in cells or cells[c]["source"].startswith("s3")]
+    e += [] if engine.number(j.get("explore_value")) else ["explore_value: the alternative's value computed on the explore rows here (one number)"]
     s = j.get("already_shown")
     return e + ([] if s is None or (s.get("result") in board_ids and str(s.get("number", "")).strip())
                 else ["already_shown: null, or {result: a board result id, number: the number it shows}"])
 
 
 def verdict16(row):
-    """Version 16: holds only if the 90 % interval lies wholly inside the range, n >= MIN_N and the interval excludes the
-    adversary's value; inside the range with the adversary's value in the interval: not separated; wholly outside:
-    refuted; else undecided."""
+    """Version 16 (and 17, on the test half): holds only if the 90 % interval lies wholly inside the range, n >= MIN_N and
+    the interval excludes the adversary's value; inside the range with the adversary's value in the interval: not
+    separated; wholly outside: refuted; else undecided."""
     (lo, hi), (a, b), adv = row["interval"], row["range"], row["adversary"]
     assert lo <= hi and a <= b and engine.number(adv) and engine.number(row["n"]), row
     if hi < a or b < lo:
@@ -1165,22 +1188,30 @@ def first_check(check):
 
 
 def test_md(t, keys):
-    return (f"- Claim: {t['claim']}\n- Statistic: {t['statistic']}\n- Files: {', '.join('`' + f + '`' for f in t['files'])}\n- Rows: {t['rows']} (n {t['n']})\n"
-            f"- Computation: {t['computation']}\n- Null: {t['null']}\n- Ranges fixed in advance: "
-            + ", ".join(f"{k} {t['ranges'][k]}" for k in (*keys, "null")) + "\n")
+    return (f"- Claim: {t['claim']}\n- Statistic: {t['statistic']}\n- Set: {t['set']}; cells: {', '.join('`' + c + '`' for c in t['cells'])}\n"
+            f"- Rows: {t['rows']} (n {t['n']} on the test half)\n- Computation: {t['computation']}\n- Null: {t['null']}\n"
+            f"- Explore half (the account's own measurement): {t['explore']['value']} [{t['explore']['interval'][0]}, {t['explore']['interval'][1]}], n {t['explore']['n']}\n"
+            "- Ranges fixed for the test half: " + ", ".join(f"{k} {t['ranges'][k]}" for k in (*keys, "null")) + "\n")
+
+
+def explore_dropped(c, adv):
+    """Version 17: account and adversary do not differ on the explore half when the adversary's explore value lies inside
+    the account's explore 90 % interval; such a consequence gets no test."""
+    lo, hi = c["explore"]["interval"]
+    return f"adversary's explore value {adv['explore_value']:.4g} lies inside the account's explore interval [{lo:.4g}, {hi:.4g}]" if lo <= adv["explore_value"] <= hi else None
 
 
 def synthesis(folder, sources):
-    """forecast.py synthesis (version 16): standing (when --from is given), direct facts, three accounts of every direct
-    fact written in sequence (account k sees accounts 1 .. k-1 and denies at least two of their consequences, each with
-    the range it predicts instead), checks with one send-back (an account still failing is dropped; a cell whose command
-    fails the cell checker is dropped alone); then, in parallel, one blind marker per account (marks every fact from the
-    account's sentences alone; the score uses these marks) and one blind adversary per consequence (sees only the
-    statistic, files, rows, computation and claimed range; writes the strongest alternative that predicts that range
-    without the account and how to compute its value from stored rows; a board result it names as already showing the
-    number rejects the consequence); the test plans (synthesis_tests.md, denied consequences first); a gate until every
-    plan has rows (forecast.py add-rows recomputes each verdict with verdict16); then synthesis.md.
-    A stage whose output exists is skipped, so the same command resumes."""
+    """forecast.py synthesis (version 17): standing (when --from is given), direct facts, the explore half of every
+    stored cell copied once into a job directory (rows.py, data/split_v1.json); three accounts written in parallel,
+    each starting from a different third of the facts, each a headless job with Bash in a directory holding the
+    explore rows only: it measures each consequence on the explore half and fixes its range for the test half
+    (explore_errors); checks with one send-back (an account still failing is dropped; a failing cell alone is dropped
+    alone); then, in parallel, one blind marker per account and one adversary per consequence (also with the explore
+    rows: it computes its alternative's explore value; a board result it names as already showing the number rejects
+    the consequence); a consequence whose adversary's explore value lies inside the account's explore interval is
+    dropped; the test plans (synthesis_tests.md, test half only); a gate until every plan has rows (forecast.py add-rows
+    recomputes each verdict with verdict16); then synthesis.md. A stage whose output exists is skipped."""
     start, out, stages = time.time(), folder / "jobs", {}
     folder.mkdir(parents=True, exist_ok=True)
     if sources and not (folder / "standing.json").exists():
@@ -1194,35 +1225,36 @@ def synthesis(folder, sources):
     print(f"  {len(facts)} direct facts ({sum(f['verdict'] == 'holds' for f in facts)} hold)")
     items = board("board", "9999")[0]
     board_ids = {i["id"] for i in items}
-    common = {"DIRECTION.md": ROOT / "DIRECTION.md", "results.md": recent_md(items), "data.md": data_md(), "jobs.md": C.jobs_md()}
-    shuffled = facts[:]
-    random.Random(15).shuffle(shuffled)
-    orders = {1: facts, 2: facts[::-1], 3: shuffled}  # a different reading order per job
+    explore = engine.tmp() / "explore_rows"
+    if not explore.exists():
+        print("== explore half of the stored rows")
+        R.copy(explore, "explore")
+    (folder / "explore_manifest.md").write_text((explore / "MANIFEST.md").read_text())
+    common = {"DIRECTION.md": ROOT / "DIRECTION.md", "results.md": recent_md(items), "data.md": data_md(), "jobs.md": C.jobs_md(), "rows": explore}
     flags = C.job_flags()
-    accounts, dropped = {}, []
-    for k in range(1, ACCOUNTS + 1):  # in sequence: account k sees the kept accounts before it and denies their consequences
-        t0, name, earlier = time.time(), f"account-{k}", dict(accounts)
-        print(f"== synthesis: {name}" + (f", sees {', '.join(earlier)}" if earlier else ""))
-        inputs = {**common, "facts.json": json.dumps(orders[k], indent=1, ensure_ascii=False)}
-        if earlier:
-            inputs["earlier.json"] = json.dumps({n: {x: a[x] for x in ("account", "consequences", "denials") if x in a} for n, a in earlier.items()},
-                                                indent=1, ensure_ascii=False)
+    t0, thirds = time.time(), [facts[k * len(facts) // ACCOUNTS:(k + 1) * len(facts) // ACCOUNTS] for k in range(ACCOUNTS)]
 
-        def check(d, earlier=earlier):
-            j = json.loads((d / "account.json").read_text())
-            return "; ".join(account_errors(j, ids, earlier) + cell_errors(j.get("cell") or {}, flags)) or None
-        engine.run([engine.job("synthesis", name, inputs, {"account.json": out / f"{name}.json"}, first_check(check),
-                               earlier=engine.prompt("synthesis_denials", n=MIN_DENIALS) if earlier else "")], folder, 1)
+    def check(d):
+        j = json.loads((d / "account.json").read_text())
+        return "; ".join(account_errors(j, ids) + cell_errors(j.get("cell") or {}, flags)) or None
+    print(f"== synthesis: {ACCOUNTS} accounts in parallel")
+    engine.run([engine.job("synthesis", f"account-{k}", {**common, "facts.json": json.dumps(thirds[k - 1] + [f for f in facts if f not in thirds[k - 1]], indent=1, ensure_ascii=False)},
+                           {"account.json": out / f"account-{k}.json"}, first_check(check), mode="rows",
+                           start=f"{thirds[k - 1][0]['id']} to {thirds[k - 1][-1]['id']}", range_width=RANGE_WIDTH)
+                for k in range(1, ACCOUNTS + 1)], folder, ACCOUNTS)
+    accounts, dropped = {}, []
+    for k in range(1, ACCOUNTS + 1):
+        name = f"account-{k}"
         j = json.loads((out / f"{name}.json").read_text())
-        if e := account_errors(j, ids, earlier):
+        if e := account_errors(j, ids):
             dropped.append({"account": name, "reason": "; ".join(e)})
-        else:
-            if e := cell_errors(j.get("cell") or {}, flags):
-                dropped.append({"account": name, "cell_only": True, "reason": "; ".join(e)})
-                j["cell_dropped"] = "; ".join(e)
-            accounts[name] = j
-            (folder / f"{name}.json").write_text(json.dumps(j, indent=1, ensure_ascii=False))
-        stages[name] = round((time.time() - t0) / 60, 1)
+            continue
+        if e := cell_errors(j.get("cell") or {}, flags):
+            dropped.append({"account": name, "cell_only": True, "reason": "; ".join(e)})
+            j["cell_dropped"] = "; ".join(e)
+        accounts[name] = j
+        (folder / f"{name}.json").write_text(json.dumps(j, indent=1, ensure_ascii=False))
+    stages["accounts"] = round((time.time() - t0) / 60, 1)
     for x in dropped:
         print(f"  dropped {'the cell of ' if x.get('cell_only') else ''}{x['account']}: {x['reason']}")
     print("== blind markers and adversaries")
@@ -1230,55 +1262,53 @@ def synthesis(folder, sources):
     jobs = [engine.job("synthesis_marks", n, {"account.json": json.dumps({"account": a["account"]}, indent=1, ensure_ascii=False), "facts.json": facts_text},
                        {"marks.json": folder / f"marks-{n}.json"}, lambda d: "; ".join(marks_errors(json.loads((d / "marks.json").read_text()), ids)) or None)
             for n, a in accounts.items()]
-    shown = {"facts.json": facts_text, "data.md": common["data.md"], "results.md": common["results.md"], "all_results.md": results_md(items)}
+    shown = {"facts.json": facts_text, "data.md": common["data.md"], "results.md": common["results.md"], "all_results.md": results_md(items), "rows": explore}
     jobs += [engine.job("synthesis_adversary", f"{n}-{c['id']}",
-                        {**shown, "consequence.json": json.dumps({**{x: c[x] for x in ("statistic", "files", "rows", "n", "computation")}, "range": c["ranges"]["account"]},
+                        {**shown, "consequence.json": json.dumps({**{x: c[x] for x in ("statistic", "set", "cells", "rows", "n", "computation")}, "range": c["ranges"]["account"]},
                                                                  indent=1, ensure_ascii=False)},
                         {"adversary.json": folder / "adversary" / f"{n}-{c['id']}.json"},
-                        lambda d: "; ".join(adversary_errors(json.loads((d / "adversary.json").read_text()), board_ids)) or None)
+                        lambda d: "; ".join(adversary_errors(json.loads((d / "adversary.json").read_text()), board_ids)) or None, mode="rows")
              for n, a in accounts.items() for c in a["consequences"]]
     engine.run(jobs, folder, len(jobs))
     stages["markers and adversaries"] = round((time.time() - t0) / 60, 1)
-    deniers = {}  # "account-1/c2": [(denying account, denial)]
-    for n, a in accounts.items():
-        for d in a.get("denials") or []:
-            deniers.setdefault(d["denies"], []).append((n, d))
     plans = []
     for n, a in accounts.items():
         for c in a["consequences"]:
-            key, den = f"{n}/{c['id']}", deniers.get(f"{n}/{c['id']}", [])
+            key = f"{n}/{c['id']}"
             adv = json.loads((folder / "adversary" / f"{n}-{c['id']}.json").read_text())
-            p = {"name": f"{folder.name}/{key}", "owner": n, "why_new": c["why_new"], **{x: c[x] for x in (*TEST_KEYS, "files", "n")},
-                 "ranges": {n: c["ranges"]["account"], **{m: d["range"] for m, d in den}, "null": c["ranges"]["null"]},
-                 "mechanisms": {n: f"{folder.name}/{key}", **{m: f"{folder.name}/{m}/deny-{n}-{c['id']}" for m, d in den}},
-                 "denials": [{"by": m, **d} for m, d in den], "adversary": adv}
+            p = {"name": f"{folder.name}/{key}", "owner": n, "why_new": c["why_new"], **{x: c[x] for x in (*TEST_KEYS, "set", "cells", "n", "explore")},
+                 "validation": c.get("validation"), "ranges": {n: c["ranges"]["account"], "null": c["ranges"]["null"]},
+                 "mechanisms": {n: f"{folder.name}/{key}"}, "adversary": adv}
             if adv.get("already_shown"):  # version 16: a number a board result already shows earns no credit
                 p["rejected"], p["mechanisms"] = f"{adv['already_shown']['result']} already shows it: {adv['already_shown']['number']}", {}
+            elif why := explore_dropped(c, adv):  # version 17: no difference on the explore half, no test
+                p["dropped"], p["mechanisms"] = why, {}
             plans.append(p)
-    plans.sort(key=lambda p: not p["denials"])  # denied consequences first
     (folder / "synthesis_tests.json").write_text(json.dumps(plans, indent=1, ensure_ascii=False))
     rows = {r["mechanism"]: r for r in json.loads(TESTED.read_text())}
-    md = [f"# Synthesis tests, {folder.name} (version 16)\n\nDenied consequences first. Run each with one subagent: spec committed first, offline on "
-          "stored rows only, script under `studies/theory/analysis/`, outputs under `studies/theory/results/direct/<name>-01/`. Compute the "
-          "adversary's value FIRST, from the adversary's computation on stored rows; then the statistic, its n and 90 % bootstrap interval; "
-          "then one row per mechanism named here, with `interval`, `range` (that mechanism's), `adversary` (the value) and `n`, through "
-          "`forecast.py add-rows`, which recomputes the verdict: holds only if the interval lies wholly inside the range, n >= 50 and the "
-          "interval excludes the adversary's value; inside the range but containing it: `not separated`; wholly outside: refuted; else "
+    md = [f"# Synthesis tests, {folder.name} (version 17)\n\nRun each test that is neither rejected nor dropped with one subagent: spec committed "
+          "first, offline, on the TEST half only: load every cell with `rows.load(set, cell, \"test\")` (`studies/theory/lib/rows.py`; never "
+          "the explore half, never the raw files), script under `studies/theory/analysis/`, outputs under `studies/theory/results/direct/<name>-01/`. "
+          "Compute the adversary's value FIRST, from the adversary's computation on the test half; then the statistic, its n and 90 % bootstrap "
+          "interval (resampling problems); then one row per mechanism named here, with `interval`, `range`, `adversary` (the test-half value) and "
+          "`n`, through `forecast.py add-rows`, which recomputes the verdict: holds only if the interval lies wholly inside the range, n >= 50 "
+          "and the interval excludes the adversary's value; inside the range but containing it: `not separated`; wholly outside: refuted; else "
           "undecided. Read no other test's output of this round.\n"]
     for p in plans:
-        md.append(f"\n## {p['name']}" + (" (rejected)" if p.get("rejected") else "") + "\n\n"
+        md.append(f"\n## {p['name']}" + (" (rejected)" if p.get("rejected") else " (dropped on the explore half)" if p.get("dropped") else "") + "\n\n"
                   + (f"- Rejected (one measurement, one credit): {p['rejected']}\n" if p.get("rejected") else "")
-                  + f"- Why no fact covers it: {p['why_new']}\n"
-                  + "".join(f"- Denied by {d['by']}: {d['why']} Instead: {d['instead']} Range {d['range']}\n" for d in p["denials"])
-                  + test_md(p, [k for k in p["ranges"] if k != "null"])
-                  + f"- Adversary ({p['adversary']['kind']}): {p['adversary']['alternative']}\n- Adversary's value, computed first: {p['adversary']['computation']} "
-                  f"(files: {', '.join('`' + f + '`' for f in p['adversary']['files'])})\n"
+                  + (f"- Dropped: {p['dropped']}\n" if p.get("dropped") else "")
+                  + f"- Why no fact covers it: {p['why_new']}\n" + test_md(p, [p["owner"]])
+                  + (f"- Opening-rule check on 20 explore rows: {p['validation']}\n" if p.get("validation") else "")
+                  + f"- Adversary ({p['adversary']['kind']}): {p['adversary']['alternative']}\n- Adversary's value on the explore half: {p['adversary']['explore_value']}\n"
+                  f"- Adversary's value, computed first on the test half: {p['adversary']['computation']} (cells: {', '.join('`' + c + '`' for c in p['adversary']['cells'])})\n"
                   + "".join(f"- Mechanism {m}: " + (f"{rows[m]['verdict']} ({rows[m]['result']}: {rows[m]['measured']})" if m in rows else "not run yet") + "\n"
                             for m in p["mechanisms"].values()))
     (folder / "synthesis_tests.md").write_text("\n".join(md) + "\n")
     pending = [m for p in plans for m in p["mechanisms"].values() if m not in rows]
-    info = {"commit": sh("git", "rev-parse", "--short", "HEAD").strip(), "command": " ".join(sys.argv), "utc": now(), "version": 16, "facts": len(facts),
-            "accounts": list(accounts), "dropped": dropped, "plans": len(plans), "rejected": sum("rejected" in p for p in plans), "job_dirs": str(engine.tmp())}
+    info = {"commit": sh("git", "rev-parse", "--short", "HEAD").strip(), "command": " ".join(sys.argv), "utc": now(), "version": 17, "facts": len(facts),
+            "accounts": list(accounts), "dropped": dropped, "plans": len(plans), "rejected": sum("rejected" in p for p in plans),
+            "dropped_on_explore": sum("dropped" in p for p in plans), "job_dirs": str(engine.tmp())}
     prior = json.loads((folder / "run.json").read_text()).get("minutes_per_stage", {}) if (folder / "run.json").exists() else {}
     info["minutes_per_stage"] = {**prior, **{k: v for k, v in stages.items() if v >= 0.1 or k not in prior}}
     if pending:
@@ -1290,23 +1320,18 @@ def synthesis(folder, sources):
     for n, a in accounts.items():
         mk = [x["mark"] for x in json.loads((folder / f"marks-{n}.json").read_text())["marks"]]
         own = [rows[p["mechanisms"][n]]["verdict"] for p in plans if p["owner"] == n and n in p["mechanisms"]]
-        den = [rows[p["mechanisms"][n]]["verdict"] for p in plans if p["owner"] != n and n in p["mechanisms"]]
         score[n] = {"explained": mk.count("explained"), "not addressed": mk.count("not addressed"), "contradicts": mk.count("contradicts"),
                     "self-marked contradicts": [x["mark"] for x in a["marks"]].count("contradicts"), **{f"new {v}": own.count(v) for v in verdicts},
-                    "new rejected": sum(p["owner"] == n and "rejected" in p for p in plans), "denials held": den.count("holds"),
-                    "denials refuted": den.count("refuted"), "score": own.count("holds") + den.count("holds") - mk.count("contradicts")}
-    ranked = sorted(score, key=lambda n: (-score[n]["score"], score[n]["contradicts"], score[n]["new refuted"] + score[n]["denials refuted"]))
+                    "new rejected": sum(p["owner"] == n and "rejected" in p for p in plans), "dropped on explore": sum(p["owner"] == n and "dropped" in p for p in plans),
+                    "score": own.count("holds") - mk.count("contradicts")}
+    ranked = sorted(score, key=lambda n: (-score[n]["score"], score[n]["contradicts"], score[n]["new refuted"]))
     cols = list(score[ranked[0]]) if ranked else []
-    md = [f"# Synthesis, {folder.name} (version 16)\n\nWritten {now()} UTC. {len(facts)} direct facts; {len(names)} accounts kept of {ACCOUNTS}"
+    md = [f"# Synthesis, {folder.name} (version 17)\n\nWritten {now()} UTC. {len(facts)} direct facts; {len(names)} accounts kept of {ACCOUNTS}"
           f"{' (dropped: ' + ', '.join(x['account'] for x in dropped if not x.get('cell_only')) + ')' if any(not x.get('cell_only') for x in dropped) else ''}. "
-          "Score = consequences and denials that hold against the adversary's value minus facts the blind marker marks as contradicting the account. "
-          "Fact marks are the blind marker's (`marks-<account>.json`); the account's own count of contradictions is shown beside them.\n",
+          "Score = consequences that hold on the test half against the adversary's test-half value minus facts the blind marker marks as "
+          "contradicting the account. Fact marks are the blind marker's (`marks-<account>.json`); the account's own count is shown beside them.\n",
           "| account | " + " | ".join(cols) + " |\n|---|" + "---|" * len(cols)]
     md += [f"| {n} | " + " | ".join(str(score[n][c]) for c in cols) + " |" for n in ranked]
-
-    def row_md(m):
-        r = rows[m]
-        return f"measured {r['measured']}; adversary's value {r['adversary']:.4g}; {r['verdict']} ({r['result']})"
     for n in ranked:
         a, marks = accounts[n], json.loads((folder / f"marks-{n}.json").read_text())["marks"]
         md.append(f"\n## {n}\n\n" + " ".join(a["account"]) + "\n\nContradicts (blind marker): "
@@ -1315,16 +1340,14 @@ def synthesis(folder, sources):
                   + f"\n\nExplains worst: {', '.join(a['worst'])}\n")
         for p in plans:
             if p["owner"] == n:
-                md.append(f"- {p['name']}: {p['statistic']}; range {p['ranges'][n]}; " + (f"rejected: {p['rejected']}" if p.get("rejected") else row_md(p["mechanisms"][n])))
-        for d in a.get("denials") or []:
-            m = f"{folder.name}/{n}/deny-{d['denies'].replace('/', '-')}"
-            md.append(f"- denies {d['denies']}: range {d['range']}; " + (row_md(m) if m in rows else "consequence rejected"))
+                r = rows.get(p["mechanisms"].get(n))
+                md.append(f"- {p['name']}: {p['statistic']}; explore {p['explore']['value']} {p['explore']['interval']}; range {p['ranges'][n]}; "
+                          f"adversary explore {p['adversary']['explore_value']:.4g}; "
+                          + (f"rejected: {p['rejected']}" if p.get("rejected") else f"dropped: {p['dropped']}" if p.get("dropped")
+                             else f"test {r['measured']}; adversary's test value {r['adversary']:.4g}; {r['verdict']} ({r['result']})"))
         cell = a.get("cell") or {}
         md.append(f"- GPU cell{' (dropped: ' + a['cell_dropped'] + ')' if a.get('cell_dropped') else ''}: {cell.get('readout')}, predicted {cell.get('value')} "
                   f"[{cell.get('low')}, {cell.get('high')}] {cell.get('unit')}, {cell.get('gpu_minutes')} GPU minutes. `{cell.get('command')}`")
-    md.append("\n## Denials\n")
-    md += [f"- {p['name']}: " + "; ".join(f"{who} {p['ranges'][who]}: {rows[m]['verdict']}" for who, m in p["mechanisms"].items())
-           + f"; measured {rows[p['mechanisms'][p['owner']]]['measured']}" for p in plans if p["denials"] and not p.get("rejected")] or ["none"]
     (folder / "synthesis.md").write_text("\n".join(md) + "\n")
     (folder / "run.json").write_text(json.dumps({**info, "state": "done", "score": score}, indent=1))
     print("\n".join(md[:2 + len(names)]))

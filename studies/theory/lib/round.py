@@ -206,6 +206,9 @@ def command(j, folder):
     base = ["claude", "-p", "--model", j["model"], "--restricted", "--strict-mcp-config", "--no-session-persistence"]
     if j["mode"] == "blind":
         return base + ["--tools", "Read,Write", "--allowedTools", "Read", "Write"]
+    if j["mode"] == "rows":  # engine 17: Bash in the job directory, which holds the explore half of the stored rows
+        return base + ["--tools", "Read,Write,Bash,Glob,Grep", "--allowedTools", "Read", "Write", "Bash", "Glob", "Grep",
+                       "--output-format", "stream-json", "--verbose"]
     if j["mode"] == "papers":
         return base + ["--tools", "Read,Write,Bash", "--allowedTools", "Read", "Write", f"Bash(python3 {LIB / 'papers.py'}:*)"]
     return base + ["--add-dir", str(j["dir"]), str(folder.resolve()), "--tools", "Read,Grep,Glob,Write,Bash",
@@ -222,6 +225,21 @@ def claude(j, folder, text, suffix):
                               env={**os.environ, "AWS_PROFILE": AWS_PROFILE} if repo else None, timeout=3600).returncode
     if code:
         sys.exit(f"{j['stage']}/{j['name']}: claude exited with {code}; see {out}")
+    if j["mode"] == "rows" and (bad := outside_calls(out, d)):
+        sys.exit(f"{j['stage']}/{j['name']}: tool calls name paths outside the job directory (the test half may have been read): {bad[:3]}; see {out}")
+
+
+def outside_calls(out, d):
+    """Tool calls in a rows job's stream-json transcript whose input names the repository, the home folder or /Users/:
+    a rows job may read only its own directory, which holds the explore half."""
+    marks, bad = (str(ROOT), str(ROOT.parent), os.path.expanduser("~"), "/Users/", "iterate-hack", "split_v1", "../", "cd ..", "cd /", "cd ~"), []
+    for line in open(out):
+        if line.startswith("{"):
+            for c in (json.loads(line).get("message") or {}).get("content") or []:
+                x = json.dumps(c.get("input")).replace(str(d.resolve()), "<dir>").replace(str(d), "<dir>") if isinstance(c, dict) and c.get("type") == "tool_use" else ""
+                if any(m in x for m in marks):
+                    bad.append(x[:200])
+    return bad
 
 
 def run_one(j, folder):

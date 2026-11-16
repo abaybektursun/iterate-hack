@@ -1,9 +1,9 @@
 ---
 name: theory
-description: Score the team's fixed forecasts, collect the direct facts (offline tests of mechanisms' causes), put every direct fact into three single accounts written in sequence (each later one denies earlier consequences), tested on new consequences against a blind adversary's alternative (forecast.py synthesis), find the numbers both no-theory readers got wrong, write rival pairs only about those, each pair with one shared direct test on stored data (one statistic, disjoint ranges for the two rivals), and let only mechanisms that hold a direct test (90 % interval inside the range, n of 50 or more) forecast, and only holders that forecast something the readers do not design cells. One round runs studies/theory/lib/forecast.py round twice: the first run scores (once per number, only forecasts written before the result), writes direct_facts.json, surprises.md, direct_tests.md (plans for the top untested carried mechanisms and one per rival pair) and stops; subagents run the tests offline and add rows to results/refuted.json or direct_tested.json; the second run has the holders and two readers forecast the open work, lists holders that forecast nothing new, and turns the others' pairs into blind-forecast cells. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
+description: Score the team's fixed forecasts, collect the direct facts (offline tests of mechanisms' causes), put every direct fact into three single accounts written in parallel, which measure their consequences on the explore half of the stored rows and are tested on the test half against an adversary's alternative (forecast.py synthesis), find the numbers both no-theory readers got wrong, write rival pairs only about those, each pair with one shared direct test on stored data (one statistic, disjoint ranges for the two rivals), and let only mechanisms that hold a direct test (90 % interval inside the range, n of 50 or more) forecast, and only holders that forecast something the readers do not design cells. One round runs studies/theory/lib/forecast.py round twice: the first run scores (once per number, only forecasts written before the result), writes direct_facts.json, surprises.md, direct_tests.md (plans for the top untested carried mechanisms and one per rival pair) and stops; subagents run the tests offline and add rows to results/refuted.json or direct_tested.json; the second run has the holders and two readers forecast the open work, lists holders that forecast nothing new, and turns the others' pairs into blind-forecast cells. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 16: accounts tested against an adversary's alternative)
+# Theory round (version 17: accounts measure on the explore half, tests run on the test half)
 
 Why this order: in rounds 9 to 12 forecast gain ranked mechanisms whose causes then failed a direct test (5 of the top 6
 failed their own claim, 1 held only against a weak null; README "Direct tests"). So a mechanism now earns the right to
@@ -28,6 +28,15 @@ Version 16 rules (round 15: 6 of 9 consequences held, but an audit, knowledge-ab
    on the same files, or a number a board result already shows, are rejected. Fact marks come from one blind marker per
    account (`marks-<account>.json`), not the account's own; the score uses them.
 
+Version 17 rules (round 16: 0 of 9 held, 7 of 9 adversary values guessed at the wrong scale: writers could not read
+the rows, and reading all rows would let them fit the answer): 1. `data/split_v1.json` splits every set's problem ids
+once (sha256 of `<set>:<id>`) into explore and test halves; `lib/rows.py` loads one half of a stored cell. 2. Three
+accounts (parallel, each from a different third of the facts) and the adversaries run with Bash in a folder holding
+the explore half only (a tool call naming an outside path stops the round); each consequence states its explore value
+and interval, and its test range contains that value, at most 2.5 explore interval widths wide. 3. A consequence whose
+adversary's explore value lies inside that interval is dropped untested. 4. Tests load only the test half
+(`rows.load(set, cell, "test")`); verdict16 decides. No sequence, no denials.
+
 ## What a round is
 
 1. `standing`: score every outstanding forecast, cell and route of the `--from` folders against the results posted
@@ -35,7 +44,7 @@ Version 16 rules (round 15: 6 of 9 consequences held, but an audit, knowledge-ab
    mechanism in `graveyard.json` or `refuted.json`. Graveyard: -2 nats or less on 2 or more items.
 2. Direct facts (`direct_facts.json`): every row of `results/refuted.json` and `results/direct_tested.json` (claim,
    verdict, deciding number, result id). Proposers and planners get them first; every new mechanism must agree with all.
-3. Synthesis (version 16, `forecast.py synthesis $W [--from ...]`, `prompts/synthesis*.md`; rules above): three jobs, each with
+3. Synthesis (version 17, `forecast.py synthesis $W [--from ...]`, `prompts/synthesis*.md`; rules above): three jobs, each with
    the facts in its own order and the last 24 hours of board titles, write one account (at most 6 sentences) of the RL
    change and of the base's share of RL's gain, mark every fact explained, not addressed or contradicts, name their 3
    worst, and give three new consequences (one statistic on stored files, n >= 50, a range apart from the null's) and
