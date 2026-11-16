@@ -1,0 +1,6 @@
+{
+ "job": "ih-1116-005552-daed",
+ "runner": "AWS g6e.xlarge (ih submit l40s-small)",
+ "commit": "def2511b5474a2fed913f35f52efa5bb479f45dc",
+ "command": "python -m studies.rlneurons.jobs.delta_align --a allenai/Olmo-3-7B-Think@d97e442d7cc678210054dbcc9b440894d62c89a4 --a0 think_sft --b rl_math --b0 base"
+}

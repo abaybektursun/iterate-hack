@@ -37,6 +37,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/profile.py`, `analysis/profile_test.py`, `specs/SPEC_profile.md` | Difficulty profiles of Think-SFT and RL: error reduction by difficulty bin with difficulty defined without the arms compared, profile contrast against same-arm and one-axis noise floors, 2PL against Rasch held out, unions, cap hits by level, filed predictions for Think-SFT on hard328. Outputs `results/profile/`; input `data/profile/math500_meta_v1.json`. |
 | `lib/egate.py`, `jobs/egate_cell.py`, `analysis/egate.py`, `specs/SPEC_egate.md` | Entropy-gated temperature: a vLLM logits processor that lowers the temperature only at positions chosen by next-token entropy, at random, or outside the stretch after a repeat; the multi-arm job; the readout. Outputs `results/egate/`. |
 | `jobs/delta_sum.py`, `analysis/transplant.py`, `analysis/cap32_m2.py`, `specs/SPEC_transplant.md` | Delta transplant: writes host + a (donor - base) for three fine-tunes of one base (Think-SFT + a times the RL-Math delta, or matched noise), and the readout against the stored Think-SFT and RL samples. Outputs `results/transplant/`. |
+| `jobs/delta_align.py` | Two weight changes compared tensor by tensor (norms, cosine, share of each inside the other's top-8 singular directions). Weights only. Writes `$OUT_DIR/delta_align.json`. |
 | `analysis/transplant_restart.py` | M(2) at cap 32,768 (seed 3,000,000) counted at both caps, and chains over stored 16,384 samples: the answer of the first sample that did not hit the cap. Writes `results/transplant/<run>/readout.json`. |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
 | `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
@@ -3191,6 +3192,30 @@ RTX PRO 6000 (jobs abaybektursun-1115-140453-8369 for H(0), -135625-8909 for H(2
   held the answer); on the 215 the host finishes, H(2) has 193 against 204, and 13 of those 215 are now cut. The delta moves
   answers across the cap in both directions on this host.
 - One sample against one sample. A second seed of both was filed only for the case H-adds and was not run.
+
+### The Think lineage's reward step against the RL-Zero delta: nearly orthogonal (`results/transplant/align_think-01/`, amendment 6, board work-001ff1)
+
+`jobs/delta_align.py --a allenai/Olmo-3-7B-Think@d97e442... --a0 think_sft --b rl_math --b0 base`, weights only, AWS L40S, job
+ih-1116-005552-daed, commit def2511. D_T = final Think - Think-SFT (DPO and RLVR); D_R = RL-Math - base.
+
+| | Value |
+|---|---|
+| Norm of D_T, of D_R (Think-SFT - base: 467.45) | 2.81, 4.12 |
+| Cosine of D_T with D_R, all tensors | +0.0038 |
+| Cosine per matrix (226 matrices): median, range, number above 0 | +0.0028, -0.011 to +0.021, 203 |
+| Share of D_T's squared norm inside D_R's top-8 directions, median | 0.030 % (93 times the 64 / (rows x columns) of a random matrix) |
+| Share of each change in its own top-8 directions, median | D_T 9.8 %, D_R 9.4 % |
+| Cosine of D_T with Think-SFT - base | -0.0020 |
+
+- Filed H-opposite (cosine below -0.02) is refuted: the reward step that leaves the Think model with more cap hits is not the
+  RL-Zero delta with the sign turned. H-same-sign (above +0.02) is refuted too. The cosine is inside H-unrelated's band
+  (under 0.01); that hypothesis's second clause (share within 3 times chance) fails by its letter at 93 times, but the share
+  itself is 0.03 % of D_T, so the two changes are orthogonal to 3 decimal places in every matrix type.
+- A small common part exists: the per-matrix cosine is above 0 in 203 of 226 matrices. It is 0.0014 % of the squared norms.
+- Read with amendment 5: the two reward trainings have opposite effects on cap hits (Think +18.5 over Think-SFT, RL delta
+  -25 on the Think host) through different directions of weight space, and they add when summed (H(2) keeps most of
+  both). The "noise per matrix" value to compare the cosine with was not measured; the control would be another fine-tune's
+  difference (RL-Code - base, Think-SFT step branches).
 
 Run folders hold `readout.json`, `metrics.json` and `delta_sum.json` (per arm), `rows.jsonl` (arms and references, per answer)
 and `examples.json` (one right and one wrong finished answer per arm, with the prompt). Jobs: hard328 a = 1 -000934-51f9,
