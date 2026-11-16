@@ -1,0 +1,701 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: switchboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #0d0b0a; --ink: #e8e2d6; --mute: #a39a8c; --faint: #7b7368; --rule: #2e2a25; --brass: #c7a56a; --red: #c4634a;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--ink); background: var(--paper); overflow: hidden;
+  font: 400 14px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+:focus-visible { outline: 1px solid var(--brass); outline-offset: 3px; border-radius: 2px; }
+canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: default; }
+canvas.pick { cursor: pointer; } canvas.pan { cursor: grabbing; }
+.grain, .shade { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+.grain { opacity: .06; mix-blend-mode: overlay;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1.2 -.1'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.shade { background: linear-gradient(180deg, rgba(10, 9, 8, .92), rgba(10, 9, 8, .6) 9%, rgba(10, 9, 8, 0) 17%, rgba(10, 9, 8, 0) 80%, rgba(10, 9, 8, .86) 90%, rgba(10, 9, 8, .96)),
+  radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .42) 100%); }
+
+.head { position: fixed; left: 0; right: 0; top: 0; padding: 18px 40px 0; z-index: 2; pointer-events: none; }
+.head > * { pointer-events: auto; }
+.top { display: flex; align-items: baseline; gap: 14px; font-size: 12px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--faint); }
+.top a { color: var(--mute); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.top a:hover { color: var(--ink); }
+h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 23px; line-height: 1.22; letter-spacing: -.01em; margin: 10px 0 0; max-width: 1180px; text-wrap: balance; }
+h1 b { font-weight: 400; color: var(--brass); font-variant-numeric: lining-nums; }
+h1 i { font-style: normal; font-family: "Archivo", sans-serif; font-size: .7em; font-weight: 500; letter-spacing: .01em; color: var(--ink); white-space: nowrap; }
+
+.bar { position: fixed; left: 0; right: 0; bottom: 0; padding: 0 40px 16px; z-index: 2; display: grid; grid-template-columns: auto auto 1fr; gap: 0 44px; align-items: end; pointer-events: none; }
+.bar > * { pointer-events: auto; }
+.dial { display: grid; grid-template-columns: 84px auto; gap: 0 16px; align-items: center; }
+.knob { position: relative; width: 84px; height: 84px; touch-action: none; cursor: grab; border-radius: 50%; }
+.knob:active { cursor: grabbing; }
+.knob svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.knob svg line { stroke: var(--faint); stroke-width: 1; } .knob svg line.h { stroke: var(--brass); stroke-width: 1.4; }
+.knob i { position: absolute; left: 14px; top: 14px; width: 56px; height: 56px; border-radius: 50%;
+  background: radial-gradient(circle at 36% 28%, #45403a, #1b1816 46%, #0c0b0a 74%), #111; border: 1px solid #000;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, .7), inset 0 1px 0 rgba(255, 240, 215, .22), inset 0 -2px 4px rgba(0, 0, 0, .8); }
+.knob i::after { content: ""; position: absolute; left: 50%; top: 5px; width: 2px; height: 15px; margin-left: -1px; background: #e4d9bd; border-radius: 1px; box-shadow: 0 0 0 .5px rgba(0, 0, 0, .6); }
+.clock strong { display: block; font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 32px; line-height: 1; font-variant-numeric: lining-nums tabular-nums; white-space: nowrap; }
+.clock strong span { font-family: "Archivo", sans-serif; font-size: 10.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); margin-right: 7px; }
+.clock small { display: block; font-size: 11px; color: var(--faint); letter-spacing: .03em; margin: 3px 0 7px; white-space: nowrap; }
+.clock button { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--ink); border: 1px solid #4b443b; border-radius: 99px; padding: 3px 13px; margin-right: 6px; }
+.clock button:hover { border-color: var(--brass); } .clock button[aria-pressed="true"] { border-color: var(--brass); color: var(--brass); }
+
+.counts { display: flex; gap: 20px; align-items: flex-end; }
+.cnt { text-align: left; }
+.wheels { display: flex; gap: 2px; padding: 3px; border-radius: 3px; background: #050505; border: 1px solid #3b352e; box-shadow: inset 0 2px 5px #000, 0 1px 0 rgba(255, 240, 215, .07); }
+.wheel { width: 19px; height: 30px; overflow: hidden; border-radius: 2px; position: relative;
+  background: linear-gradient(180deg, #050505, #26221f 30%, #2d2925 50%, #1d1a18 72%, #040404); }
+.wheel b { display: block; transition: transform .28s cubic-bezier(.3, .8, .3, 1); will-change: transform; }
+.wheel b span { display: block; height: 30px; line-height: 31px; text-align: center; font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 22px; color: #e4d9bd; font-variant-numeric: lining-nums; }
+.wheel::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0, 0, 0, .75), rgba(0, 0, 0, 0) 32%, rgba(0, 0, 0, 0) 68%, rgba(0, 0, 0, .8)); }
+.cnt label { display: block; margin-top: 5px; font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--faint); white-space: nowrap; }
+
+.def { font-size: 11.5px; line-height: 1.45; color: var(--faint); columns: 2; column-gap: 28px; max-width: 760px; justify-self: end; }
+.def p { margin: 0 0 4px; break-inside: avoid; } .def b { color: var(--mute); font-weight: 500; }
+.def i { font-style: normal; display: inline-block; width: 14px; height: 4px; border-radius: 2px; background: var(--c); margin: 0 4px 2px 2px; vertical-align: middle; }
+.def summary { display: none; }
+
+#tip { position: fixed; left: 0; top: 0; z-index: 3; pointer-events: none; max-width: 340px; background: rgba(22, 20, 18, .96); border: 1px solid #3a342c; border-radius: 3px; padding: 8px 11px 9px;
+  font-size: 12.5px; line-height: 1.4; opacity: 0; transition: opacity .12s; box-shadow: 0 10px 30px rgba(0, 0, 0, .5); overflow-wrap: anywhere; }
+#tip.on { opacity: 1; } #tip.pin { border-color: #6b5a3a; }
+#tip small { display: block; font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; font-weight: 600; color: var(--faint); }
+#tip strong { display: block; font-weight: 500; color: var(--ink); margin: 2px 0 3px; } #tip strong em { font-style: normal; color: var(--brass); }
+#tip p { margin: 0; color: var(--mute); font-family: "Newsreader", Georgia, serif; font-size: 14.5px; line-height: 1.3; }
+#err { position: fixed; left: 8px; bottom: 8px; color: var(--red); font-size: 12px; white-space: pre-wrap; z-index: 9; max-width: 70%; }
+
+@media (max-width: 1180px) { .def { columns: 1; max-width: 420px; max-height: 118px; overflow-y: auto; scrollbar-width: thin; } .bar { gap: 0 28px; } }
+@media (max-width: 760px) {
+  .head { padding: 10px 16px 0; } h1 { font-size: 15.5px; margin-top: 6px; line-height: 1.25; }
+  .shade { background: linear-gradient(180deg, rgba(10, 9, 8, .95), rgba(10, 9, 8, .8) 20%, rgba(10, 9, 8, 0) 27%, rgba(10, 9, 8, 0) 68%, rgba(10, 9, 8, .9) 76%, rgba(10, 9, 8, .97)); }
+  .bar { padding: 0 16px 10px; grid-template-columns: 1fr; gap: 10px; }
+  .dial { grid-template-columns: 64px 1fr; gap: 0 12px; } .knob { width: 64px; height: 64px; } .knob i { left: 11px; top: 11px; width: 42px; height: 42px; } .knob i::after { height: 11px; top: 4px; }
+  .clock strong { font-size: 24px; } .clock small { margin: 2px 0 5px; }
+  .counts { gap: 10px; justify-content: space-between; } .wheel { width: 15px; height: 24px; } .wheel b span { height: 24px; line-height: 25px; font-size: 17px; } .cnt label { font-size: 9px; letter-spacing: .05em; }
+  .def { columns: 1; max-width: none; justify-self: stretch; max-height: 30vh; overflow-y: auto; }
+  .def summary { display: block; font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--mute); cursor: pointer; padding: 2px 0; }
+  #tip { max-width: calc(100vw - 24px); }
+}
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="c" aria-label="A telephone switchboard: one panel per person, one jack strip per agent session, patch cords for messages between agents, lamps for broadcasts and open work"></canvas>
+<div class="grain"></div>
+<div class="shade"></div>
+<div class="head" id="head">
+  <div class="top"><a href="../../">← Lab</a><span>Switchboard · who talked to whom</span></div>
+  <h1 id="line">&nbsp;</h1>
+</div>
+<div class="bar" id="bar">
+  <div class="dial">
+    <div class="knob" id="knob" role="slider" tabindex="0" aria-label="Time through the hackathon" aria-valuemin="0" aria-valuemax="1000" aria-valuenow="0"><svg id="ticks" viewBox="-42 -42 84 84"></svg><i id="cap"></i></div>
+    <div class="clock">
+      <strong><span>hour</span><b id="hour" style="font-weight:300">0.0</b></strong>
+      <small id="stamp">&nbsp;</small>
+      <button id="play" aria-label="Replay the hackathon">Play</button><button id="snd" aria-pressed="false" aria-label="Relay click on every plug">Sound off</button>
+    </div>
+  </div>
+  <div class="counts" id="counts"></div>
+  <details class="def" id="def" open></details>
+</div>
+<div id="tip"></div>
+<div id="err"></div>
+
+<script type="module">
+import * as THREE from 'three';
+
+const $ = id => document.getElementById(id);
+const fail = e => { $('err').textContent += (e && (e.stack || e.message || e.reason) || e) + '\n'; console.error(e); };
+window.addEventListener('error', e => fail(e.error || e.message));
+window.addEventListener('unhandledrejection', e => fail(e.reason));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x)), lerp = (a, b, t) => a + (b - a) * t;
+const ease = x => x * x * (3 - 2 * x);
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const narrow = () => innerWidth <= 760;
+const rnd = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+const upper = (a, x) => { let lo = 0, hi = a.length; while (lo < hi) { const m = lo + hi >> 1; if (a[m] <= x) lo = m + 1; else hi = m; } return lo; };   // first index with a[i] > x
+
+const DATA = await (await fetch('data.json')).json();
+await Promise.all([document.fonts.load('400 40px Newsreader'), document.fonts.load('600 40px Archivo'), document.fonts.load('600 condensed 40px Archivo')]).catch(() => 0);
+
+// ------------------------------------------------------------------ the data and its mappings
+const M = DATA.msgs, WK = DATA.work, PEOPLE = DATA.people, JACKS = DATA.jacks, NAMES = DATA.names, CHANS = DATA.chans;
+const HOLD = DATA.hold_min * 60, LAMP_HOLD = 5 * 60;         // seconds a cord stays in; seconds a broadcast lamp stays lit
+const ALLN = 12, TRN = 8, COLS = 5;                          // lamps per person in the `all` row, jacks of a direct line, strips per row
+const CORD = ['#6e2622', '#5a5a30', '#a47a30'];              // oxblood, olive, ochre: the sender's person
+let T1 = DATA.t1, live = 0, liveState = 'snapshot';
+const cordIdx = [], cordT = [], castT = PEOPLE.map(() => []), castIdx = PEOPLE.map(() => []), kindT = [[], [], []];
+function index(i) {
+  const k = M.k[i], t = M.t[i];
+  kindT[k].push(t);
+  if (k) { cordIdx.push(i); cordT.push(t); } else { const p = JACKS[M.j[i]][0]; castT[p].push(t); castIdx[p].push(i); }
+}
+for (let i = 0; i < M.t.length; i++) index(i);
+const jacksOf = PEOPLE.map((_, p) => JACKS.map((j, i) => j[0] === p ? i : -1).filter(i => i >= 0));
+const slotOf = JACKS.map((j, i) => jacksOf[j[0]].indexOf(i));
+const pooled = p => jacksOf[p].find(i => JACKS[i][1] < 0);
+const jackName = j => JACKS[j][1] >= 0 ? NAMES[JACKS[j][1]] : PEOPLE[JACKS[j][0]] + ': other sessions';
+const stampOf = t => { const d = new Date((DATA.t0 + t) * 1000); return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d.getUTCDay()] + ' ' + d.getUTCDate() + ' ' + ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][d.getUTCMonth()] + ' ' + String(d.getUTCHours()).padStart(2, '0') + ':' + String(d.getUTCMinutes()).padStart(2, '0') + ' UTC'; };
+const num = n => n.toLocaleString('en-US');
+
+function sentence() {   // every number is counted here from the rows of data.json (and the live broadcasts after it)
+  const n = M.t.length, nb = kindT[0].length, one = n - nb;
+  let own = 0; const lines = {};
+  for (const i of cordIdx) {
+    if (JACKS[M.j[i]][0] === M.p[i]) own++;
+    const key = NAMES[M.a[i]] + '|' + (M.b[i] >= 0 ? NAMES[M.b[i]] : '@' + PEOPLE[M.p[i]]);
+    lines[key] = (lines[key] || 0) + 1;
+  }
+  const [best, bn] = Object.entries(lines).sort((a, b) => b[1] - a[1])[0], [from, to] = best.split('|');
+  $('line').innerHTML = `In <b>${(T1 / 3600).toFixed(1)}</b> hours <b>${NAMES.length}</b> agents sent <b>${num(n)}</b> messages. <b>${Math.round(100 * nb / n)}%</b> were broadcasts to everyone; of the <b>${num(one)}</b> sent to one person, <b>${Math.round(100 * own / one)}%</b> went to a session of the sender's own person. The busiest line, <i>${esc(from)}</i> to <i>${esc(to)}</i>, carried <b>${bn}</b>.`;
+}
+sentence();
+
+// the moment with the most cords plugged: the opening view
+let busiest = 0, busiestN = 0;
+for (let i = 0; i < cordT.length; i++) { const n = i + 1 - upper(cordT, cordT[i] - HOLD); if (n > busiestN) { busiestN = n; busiest = cordT[i]; } }
+
+// ------------------------------------------------------------------ the board's measures (world units)
+const BW = 16, BH = 7.5, FR = 0.36, ST = 0.22, PW = (BW - 2 * FR - 2 * ST) / 3, TOP = BH / 2 - FR, RH = 1.62, GT = TOP - 1.7;
+const px0 = p => -BW / 2 + FR + p * (PW + ST);
+const allAt = (p, i) => [px0(p) + 1.12 + i * (PW - 1.5) / (ALLN - 1), TOP - 0.56];             // a jack of the `all` row; its lamp sits 0.27 above
+const trunkAt = (p, i) => [px0(p) + PW - 0.34 - (TRN - 1 - i) * 0.27, TOP - 1.25];            // a jack of the person's direct line
+const cellAt = j => { const s = slotOf[j], p = JACKS[j][0]; return [px0(p) + (s % COLS + 0.5) * PW / COLS, GT - Math.floor(s / COLS) * RH]; };
+const holeAt = (j, h) => { const [x, y] = cellAt(j); return [x + (h - 1) * 0.27, y - 0.62]; };
+const NL = JACKS.length + ALLN * PEOPLE.length;                                              // lamps: one per jack strip, then the `all` rows
+const lampAt = l => { if (l < JACKS.length) { const [x, y] = cellAt(l); return [x, y - 0.22]; } const k = l - JACKS.length, [x, y] = allAt(Math.floor(k / ALLN), k % ALLN); return [x, y + 0.27]; };
+
+// ------------------------------------------------------------------ renderer, room, light
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#0a0908');
+const camera = new THREE.PerspectiveCamera(22, 1, 1, 200);
+
+function studio() {   // a photographer's room for the nickel and brass to reflect: one large softbox, a strip, a warm bounce
+  const es = new THREE.Scene(), lit = (w, h, v, c = [1, 1, 1]) => new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c[0] * v, c[1] * v, c[2] * v), side: THREE.DoubleSide }));
+  es.add(new THREE.Mesh(new THREE.SphereGeometry(60, 24, 12), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.02, 0.017, 0.014), side: THREE.BackSide })));
+  const key = lit(26, 20, 5.5, [1, 0.94, 0.85]); key.position.set(-20, 18, 26); key.lookAt(0, 0, 0);
+  const strip = lit(4, 30, 2.6, [0.88, 0.93, 1]); strip.position.set(32, 4, 14); strip.lookAt(0, 0, 0);
+  const top = lit(40, 8, 1.3, [1, 0.95, 0.88]); top.position.set(0, 30, 10); top.lookAt(0, 0, 0);
+  const bounce = lit(60, 30, 0.14, [1, 0.8, 0.6]); bounce.position.set(0, -16, 20); bounce.lookAt(0, 0, 0);
+  const front = lit(70, 26, 0.42, [1, 0.93, 0.84]); front.position.set(-6, 22, 44); front.lookAt(0, 0, 0);
+  es.add(key, strip, top, bounce, front);
+  const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(es, 0.02, 1, 200).texture; pm.dispose();
+}
+studio();
+const key = new THREE.SpotLight(new THREE.Color(1.0, 0.93, 0.83), 3.0, 0, 0.5, 0.7, 0);
+key.position.set(-10, 11, 17); key.target.position.set(0.6, -0.4, 0); key.castShadow = true;
+key.shadow.mapSize.set(2048, 2048); Object.assign(key.shadow.camera, { near: 10, far: 36 }); key.shadow.bias = -0.0005; key.shadow.normalBias = 0.02; key.shadow.radius = 3.5;
+scene.add(key, key.target, new THREE.HemisphereLight(0x8d8882, 0x1c1510, 0.22));
+
+// ------------------------------------------------------------------ surfaces drawn once
+const tex = (cv, srgb, rep) => { const t = new THREE.CanvasTexture(cv); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; if (rep) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]); } return t; };
+const cvs = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d')]; };
+const shortName = j => {   // what fits on a strip: the last part of the branch, and the first 4 of the session id
+  if (JACKS[j][1] < 0) return ['other sessions', JACKS[j][2] + ' pooled'];
+  const m = NAMES[JACKS[j][1]].match(/^[^/ ]+(?:\/(.*?))?(?: ([0-9a-f]{4}))?$/), br = (m[1] || '').split('/').pop() || 'no branch';
+  return [br.length > 17 ? br.slice(0, 16) + '…' : br, m[2] || ''];
+};
+
+function face() {   // the three bakelite panels with everything engraved on them. aux: R height, G roughness, B metal
+  const S = Math.min(256, Math.floor(Math.min(renderer.capabilities.maxTextureSize, narrow() ? 2048 : 4096) / BW)), W = BW * S, H = Math.round(BH * S), r = rnd(11);
+  const [cc, c] = cvs(W, H), [ac, a] = cvs(W, H), X = x => (x + BW / 2) * S, Y = y => (BH / 2 - y) * S;
+  c.fillStyle = '#1b1613'; c.fillRect(0, 0, W, H); a.fillStyle = 'rgb(128,58,0)'; a.fillRect(0, 0, W, H);
+  const [mc, m] = cvs(512, 240); m.filter = 'blur(5px)';                                    // phenolic mottle: slow brown clouds in the black
+  for (let i = 0; i < 300; i++) {
+    m.strokeStyle = `rgba(${90 + r() * 60 | 0},${36 + r() * 22 | 0},${16 + r() * 12 | 0},${0.05 + r() * 0.1})`; m.lineWidth = 2 + r() * 12;
+    const x = r() * 512, y = r() * 240; m.beginPath(); m.moveTo(x, y); m.bezierCurveTo(x + 60 * (r() - .5), y + 30 * (r() - .5), x + 140 * (r() - .5), y + 40 * (r() - .5), x + 220 * (r() - .5), y + 60 * (r() - .5)); m.stroke();
+  }
+  c.globalAlpha = 0.5; c.globalCompositeOperation = 'lighter'; c.drawImage(mc, 0, 0, W, H); c.globalAlpha = 1; c.globalCompositeOperation = 'source-over';
+  for (let i = 0; i < 2600; i++) {                                                           // wiped, handled: fine scratches that scatter the light
+    const x = r() * W, y = r() * H, l = (10 + r() * 90) * S / 256, an = r() < 0.7 ? (r() - .5) * 0.5 : r() * 6.3;
+    a.strokeStyle = `rgba(128,${90 + r() * 80 | 0},0,${0.1 + r() * 0.25})`; a.lineWidth = 0.6 + r(); a.beginPath(); a.moveTo(x, y); a.lineTo(x + Math.cos(an) * l, y + Math.sin(an) * l); a.stroke();
+  }
+  const both = f => { f(c, 0); f(a, 1); };
+  const spaced = (g, px) => { if ('letterSpacing' in g) g.letterSpacing = px + 'px'; };
+  const engrave = (text, x, y, size, o = {}) => both((g, aux) => {                          // white-filled engraving in the bakelite
+    g.font = `${o.w || 600} ${o.cond ? 'condensed ' : ''}${size * S}px Archivo`; g.textAlign = o.align || 'left'; g.textBaseline = 'middle'; spaced(g, (o.sp || 0.02) * S);
+    g.fillStyle = aux ? 'rgb(84,150,0)' : o.c || '#c9bfa6'; g.fillText(text, X(x), Y(y)); spaced(g, 0);
+  });
+  const plate = (x, y, w, h, lines) => {                                                     // an ivory-coloured strip, engraved dark
+    const x0 = X(x - w / 2), y0 = Y(y + h / 2), pw = w * S, ph = h * S, rad = 0.02 * S;
+    c.save(); c.shadowColor = 'rgba(0,0,0,.8)'; c.shadowBlur = 0.03 * S; c.shadowOffsetX = 0.008 * S; c.shadowOffsetY = 0.014 * S;
+    const g = c.createLinearGradient(0, y0, 0, y0 + ph); g.addColorStop(0, '#e7dec6'); g.addColorStop(0.5, '#ddd2b6'); g.addColorStop(1, '#cdbf9e');
+    c.fillStyle = g; c.beginPath(); c.roundRect(x0, y0, pw, ph, rad); c.fill(); c.restore();
+    c.save(); c.beginPath(); c.roundRect(x0, y0, pw, ph, rad); c.clip();
+    for (let i = 0; i < w * 26; i++) { c.strokeStyle = `rgba(${r() < .5 ? '120,96,60' : '255,250,235'},${0.03 + r() * 0.06})`; c.lineWidth = 1; const yy = y0 + r() * ph; c.beginPath(); c.moveTo(x0, yy); c.lineTo(x0 + pw, yy + (r() - .5) * 3); c.stroke(); }
+    c.strokeStyle = 'rgba(96,74,40,.5)'; c.lineWidth = Math.max(1, 0.006 * S); c.strokeRect(x0 + 0.018 * S, y0 + 0.018 * S, pw - 0.036 * S, ph - 0.036 * S); c.restore();
+    a.fillStyle = 'rgb(176,128,0)'; a.beginPath(); a.roundRect(x0, y0, pw, ph, rad); a.fill();
+    for (const [text, dy, size, o] of lines) both((g2, aux) => {
+      g2.font = `${o.w || 600} ${o.cond ? 'condensed ' : ''}${size * S}px Archivo`; g2.textAlign = 'center'; g2.textBaseline = 'middle'; spaced(g2, (o.sp || 0) * S);
+      g2.fillStyle = aux ? 'rgb(120,150,0)' : o.c || '#2a2420'; g2.fillText(text, X(x), Y(y - dy), pw - 0.07 * S); spaced(g2, 0);
+    });
+  };
+  const well = (x, y, rad) => {                                                              // the shade a ring throws around itself, and the hole
+    const g = c.createRadialGradient(X(x), Y(y), rad * 0.5 * S, X(x), Y(y), rad * 1.9 * S); g.addColorStop(0, 'rgba(0,0,0,.75)'); g.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(X(x), Y(y), rad * 1.9 * S, 0, 6.3); c.fill(); c.fillStyle = '#020202'; c.beginPath(); c.arc(X(x), Y(y), rad * 0.62 * S, 0, 6.3); c.fill();
+  };
+  const groove = (x0, x1, y) => { c.fillStyle = 'rgba(0,0,0,.7)'; c.fillRect(X(x0), Y(y), (x1 - x0) * S, Math.max(1, 0.012 * S)); c.fillStyle = 'rgba(255,236,208,.07)'; c.fillRect(X(x0), Y(y) + Math.max(1, 0.012 * S), (x1 - x0) * S, 1);
+    a.fillStyle = 'rgb(70,66,0)'; a.fillRect(X(x0), Y(y), (x1 - x0) * S, Math.max(1, 0.012 * S)); };
+  const screw = (x, y) => { const g = c.createRadialGradient(X(x) - 0.012 * S, Y(y) - 0.014 * S, 0, X(x), Y(y), 0.045 * S); g.addColorStop(0, '#d9d5cb'); g.addColorStop(1, '#6f6b63');
+    c.fillStyle = g; c.beginPath(); c.arc(X(x), Y(y), 0.042 * S, 0, 6.3); c.fill(); const an = r() * 3.1; c.strokeStyle = '#1c1a17'; c.lineWidth = 0.011 * S; c.beginPath(); c.moveTo(X(x) - Math.cos(an) * 0.04 * S, Y(y) - Math.sin(an) * 0.04 * S); c.lineTo(X(x) + Math.cos(an) * 0.04 * S, Y(y) + Math.sin(an) * 0.04 * S); c.stroke();
+    a.fillStyle = 'rgb(150,70,255)'; a.beginPath(); a.arc(X(x), Y(y), 0.042 * S, 0, 6.3); a.fill(); };
+
+  PEOPLE.forEach((who, p) => {
+    const x0 = px0(p), x1 = x0 + PW;
+    for (const [sx, sy] of [[x0 + 0.11, TOP - 0.11], [x1 - 0.11, TOP - 0.11], [x0 + 0.11, -TOP + 0.11], [x1 - 0.11, -TOP + 0.11]]) screw(sx, sy);
+    engrave('ALL', x0 + 0.27, TOP - 0.37, 0.2, { sp: 0.05 }); engrave('BROADCASTS', x0 + 0.27, TOP - 0.59, 0.075, { sp: 0.022, c: '#9a9180' });
+    for (let i = 0; i < ALLN; i++) { const [x, y] = allAt(p, i); well(x, y, 0.062); well(x, y + 0.27, 0.07); }
+    groove(x0 + 0.2, x1 - 0.2, TOP - 0.86);
+    plate(x0 + 1.22, TOP - 1.25, 2.0, 0.38, [['@' + who, 0, 0.17, { sp: 0.012 }]]);
+    engrave('DIRECT LINE', trunkAt(p, 0)[0] - 0.09, TOP - 1.03, 0.075, { sp: 0.022, c: '#9a9180' });
+    for (let i = 0; i < TRN; i++) well(...trunkAt(p, i), 0.085);
+    groove(x0 + 0.2, x1 - 0.2, TOP - 1.56);
+    for (const j of jacksOf[p]) {
+      const [x, y] = cellAt(j), [l1, l2] = shortName(j);
+      well(x, y - 0.22, 0.07); for (let h = 0; h < 3; h++) well(...holeAt(j, h), 0.085);
+      plate(x, y - 1.08, 0.88, 0.36, JACKS[j][1] < 0 ? [[l1.toUpperCase(), -0.055, 0.092, { sp: 0.012, w: 700, c: '#191411' }], [l2, 0.1, 0.08, { w: 600, sp: 0.02, c: '#6a5c48' }]]
+        : [[l1, -0.055, 0.14, { cond: 1, w: 700, c: '#191411' }], [l2, 0.1, 0.08, { w: 600, sp: 0.035, c: '#6a5c48' }]]);
+    }
+  });
+  const map = tex(cc, true), aux = tex(ac, false);
+  return new THREE.MeshStandardMaterial({ map, bumpMap: aux, bumpScale: 2.2, roughnessMap: aux, roughness: 1, metalnessMap: aux, metalness: 1, envMapIntensity: 0.9 });
+}
+
+function wood() {   // oiled mahogany: ribbon figure, long pores
+  const [cc, c] = cvs(1024, 256), [ac, a] = cvs(1024, 256), r = rnd(5);
+  c.fillStyle = '#43200f'; c.fillRect(0, 0, 1024, 256); a.fillStyle = 'rgb(128,96,0)'; a.fillRect(0, 0, 1024, 256);
+  for (let y = 0; y < 256; y++) { const v = 0.5 + 0.5 * Math.sin(y * 0.11 + 2.2 * Math.sin(y * 0.031)); c.fillStyle = `rgba(${v > .5 ? '120,58,26' : '20,6,2'},${Math.abs(v - .5) * 0.5})`; c.fillRect(0, y, 1024, 1); }
+  for (let i = 0; i < 1500; i++) { const x = r() * 1024, y = r() * 256, l = 20 + r() * 160; c.strokeStyle = `rgba(${r() < .65 ? '14,4,1' : '170,96,48'},${0.06 + r() * 0.2})`; c.lineWidth = 0.5 + r() * 1.2; c.beginPath(); c.moveTo(x, y); c.lineTo(x + l, y + (r() - .5) * 3); c.stroke();
+    a.strokeStyle = `rgba(${90 + r() * 30 | 0},${120 + r() * 60 | 0},0,.35)`; a.lineWidth = 1; a.beginPath(); a.moveTo(x, y); a.lineTo(x + l, y + (r() - .5) * 3); a.stroke(); }
+  return (rx, ry, turn) => { const m = tex(cc, true, [rx, ry]), b = tex(ac, false, [rx, ry]); if (turn) { m.rotation = b.rotation = Math.PI / 2; }
+    return new THREE.MeshStandardMaterial({ map: m, bumpMap: b, bumpScale: 0.6, roughnessMap: b, roughness: 1, metalness: 0, envMapIntensity: 0.8 }); };
+}
+
+function braid() {   // woven cloth: two sets of strands crossing, one pale tracer thread
+  const [cc, c] = cvs(64, 64), [bc, b] = cvs(64, 64);
+  c.fillStyle = '#6b6b6b'; c.fillRect(0, 0, 64, 64); b.fillStyle = '#505050'; b.fillRect(0, 0, 64, 64);
+  for (const g of [c, b]) for (let k = -2; k < 6; k++) for (const dir of [1, -1]) {
+    g.strokeStyle = g === c ? (dir > 0 ? '#e9e9e9' : '#c2c2c2') : (dir > 0 ? '#e0e0e0' : '#a8a8a8'); g.lineWidth = 6.5; g.lineCap = 'butt';
+    for (let s = 0; s < 4; s++) { const x = k * 16 + (dir > 0 ? 0 : 8), y = s * 16 + (dir > 0 ? 0 : 8); g.beginPath(); g.moveTo(x, y); g.lineTo(x + 9, y + 9 * dir); g.stroke(); }
+  }
+  c.fillStyle = 'rgba(255,244,214,.9)'; for (let s = 0; s < 4; s++) c.fillRect(30, s * 16 + 2, 5, 6);
+  return [tex(cc, true, [1, 1]), tex(bc, false, [1, 1])];
+}
+
+// ------------------------------------------------------------------ the cabinet
+const board = new THREE.Group(); scene.add(board);
+const faceMesh = new THREE.Mesh(new THREE.PlaneGeometry(BW, BH), face()); faceMesh.receiveShadow = true; board.add(faceMesh);
+{
+  const w = wood(), box = (sx, sy, sz, x, y, z, mat) => { const m = new THREE.Mesh(new THREE.BoxGeometry(sx, sy, sz), mat); m.position.set(x, y, z); m.castShadow = m.receiveShadow = true; board.add(m); return m; };
+  const rail = w(4, 0.35, false), post = w(1.8, 0.35, true), stile = w(1.8, 0.22, true), shelf = w(4, 1.4, false);
+  box(BW + 0.5, FR + 0.1, 0.5, 0, BH / 2 - FR / 2 + 0.05, 0.1, rail); box(BW + 0.5, FR + 0.1, 0.5, 0, -BH / 2 + FR / 2 - 0.05, 0.1, rail);
+  box(FR + 0.25, BH - 2 * FR, 0.44, -BW / 2 + FR / 2 - 0.125, 0, 0.07, post); box(FR + 0.25, BH - 2 * FR, 0.44, BW / 2 - FR / 2 + 0.125, 0, 0.07, post);
+  for (let p = 1; p < PEOPLE.length; p++) box(ST, BH - 2 * FR, 0.2, px0(p) - ST / 2, 0, 0.0, stile);
+  box(BW + 1.3, 0.34, 2.6, 0, -BH / 2 - 0.27, 1.1, shelf);                                    // the keyshelf
+  box(BW + 0.9, 0.2, 0.7, 0, BH / 2 + 0.2, 0.2, rail);                                         // the cornice
+  const wall = new THREE.Mesh(new THREE.PlaneGeometry(90, 60), new THREE.MeshStandardMaterial({ color: '#211c18', roughness: 0.96, metalness: 0 })); wall.position.z = -0.3; wall.receiveShadow = true; scene.add(wall);
+}
+const spin = (pts, seg = 28) => new THREE.LatheGeometry(pts.map(p => new THREE.Vector2(p[0], p[1])), seg).rotateX(Math.PI / 2);
+const nickel = new THREE.MeshStandardMaterial({ color: '#c2bdb1', metalness: 1, roughness: 0.26, envMapIntensity: 1.4 });
+const brass = new THREE.MeshStandardMaterial({ color: '#b98f47', metalness: 1, roughness: 0.27, envMapIntensity: 1.2 });
+const [braidMap, braidBump] = braid();
+const DUMMY = new THREE.Object3D();
+function instances(geo, mat, places, shadow) {
+  const m = new THREE.InstancedMesh(geo, mat, places.length);
+  places.forEach((pl, i) => { DUMMY.position.set(pl[0], pl[1], pl[2] || 0); DUMMY.scale.setScalar(pl[3] || 1); DUMMY.rotation.set(0, 0, 0); DUMMY.updateMatrix(); m.setMatrixAt(i, DUMMY.matrix); });
+  m.castShadow = !!shadow; m.receiveShadow = true; board.add(m); return m;
+}
+const ringGeo = spin([[0.1, 0], [0.096, 0.026], [0.08, 0.042], [0.06, 0.042], [0.05, 0.03], [0.05, -0.02]]);
+const rings = [];
+JACKS.forEach((_, j) => { for (let h = 0; h < 3; h++) rings.push(holeAt(j, h)); });
+PEOPLE.forEach((_, p) => { for (let i = 0; i < TRN; i++) rings.push(trunkAt(p, i)); for (let i = 0; i < ALLN; i++) rings.push([...allAt(p, i), 0, 0.72]); });
+instances(ringGeo, nickel, rings, true);
+const lampXY = Array.from({ length: NL }, (_, l) => lampAt(l));
+instances(spin([[0.095, 0], [0.09, 0.03], [0.076, 0.042], [0.064, 0.032], [0.064, 0]]), nickel, lampXY, true);
+const lit = new THREE.InstancedBufferAttribute(new Float32Array(NL), 1); lit.setUsage(THREE.DynamicDrawUsage);
+const capGeo = new THREE.SphereGeometry(0.066, 20, 10, 0, Math.PI * 2, 0, Math.PI / 2).rotateX(Math.PI / 2).scale(1, 1, 0.8).translate(0, 0, 0.022);
+capGeo.setAttribute('lit', lit);
+const capMat = new THREE.MeshStandardMaterial({ color: '#5a4630', roughness: 0.12, metalness: 0, envMapIntensity: 1.1 });
+capMat.onBeforeCompile = sh => {   // a filament behind opal glass: orange at the rim of the cap, pale yellow where the glass is thinnest
+  sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float lit; varying float vLit;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvLit = lit;');
+  sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying float vLit;')
+    .replace('#include <emissivemap_fragment>', '#include <emissivemap_fragment>\nfloat core = pow(clamp(dot(normalize(normal), normalize(vViewPosition)), 0.0, 1.0), 2.6);\ntotalEmissiveRadiance += vLit * vLit * mix(vec3(0.6, 0.12, 0.012), vec3(1.55, 0.62, 0.13), core);');
+};
+instances(capGeo, capMat, lampXY, false);
+const spillGeo = new THREE.PlaneGeometry(0.62, 0.62); spillGeo.setAttribute('lit', lit);       // the little light a lamp throws on the panel around it
+const spill = instances(spillGeo, new THREE.ShaderMaterial({ transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+  vertexShader: 'attribute float lit; varying float vLit; varying vec2 vUv; void main() { vLit = lit; vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * instanceMatrix * vec4(position, 1.0); }',
+  fragmentShader: 'varying float vLit; varying vec2 vUv; void main() { float d = length(vUv - 0.5) * 2.0; float f = pow(clamp(1.0 - d, 0.0, 1.0), 2.4) * smoothstep(0.2, 0.34, d); gl_FragColor = vec4(vec3(1.0, 0.5, 0.16) * f * vLit * vLit * 0.22, 1.0); }' }),
+  lampXY.map(([x, y]) => [x, y, 0.004]), false);
+spill.receiveShadow = false;
+
+// ------------------------------------------------------------------ cords: a pool of tubes and plugs
+const POOL = 72, SEG = 34, RAD = 7, CR = 0.036, PLUG = 0.43, TILT = 0.22, SHELF_Y = -BH / 2 - 0.5;
+const cordMat = CORD.map(c => new THREE.MeshStandardMaterial({ color: c, map: braidMap, bumpMap: braidBump, bumpScale: 1.6, roughness: 0.93, metalness: 0, envMapIntensity: 0.5 }));
+const collarGeo = spin([[0.0, -0.01], [0.034, -0.01], [0.05, 0.004], [0.05, 0.07], [0.04, 0.078]], 20);
+const gripGeo = spin([[0.04, 0.07], [0.06, 0.088], [0.064, 0.2], [0.057, 0.36], [0.046, 0.415], [0.036, 0.43], [0, 0.43]], 20);
+const hide = new THREE.Matrix4().makeScale(0, 0, 0);
+const mk = (geo, mat) => { const m = new THREE.InstancedMesh(geo, mat, POOL * 2); for (let i = 0; i < POOL * 2; i++) m.setMatrixAt(i, hide); m.castShadow = true; m.frustumCulled = false; board.add(m); return m; };
+const collars = mk(collarGeo, brass);
+const gripMats = [new THREE.MeshStandardMaterial({ color: '#121110', roughness: 0.3, metalness: 0, envMapIntensity: 1 }),
+  new THREE.MeshStandardMaterial({ color: '#b98f47', metalness: 1, roughness: 0.36, bumpMap: braidBump, bumpScale: 0.8, envMapIntensity: 1.1 })];
+const grips = [mk(gripGeo, gripMats[0]), mk(gripGeo, gripMats[1])];                         // [the sender's black grip, the receiver's brass grip]
+const tiltQ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), TILT), rear = new THREE.Vector3(0, -Math.sin(TILT) * PLUG, Math.cos(TILT) * PLUG);
+const ONE = new THREE.Vector3(1, 1, 1), MAT = new THREE.Matrix4();
+const pool = [];
+{
+  const idx = [];
+  for (let i = 0; i < SEG; i++) for (let j = 0; j < RAD; j++) { const a = i * (RAD + 1) + j, b = a + RAD + 1; idx.push(a, b, a + 1, a + 1, b, b + 1); }
+  for (let n = 0; n < POOL; n++) {
+    const g = new THREE.BufferGeometry(), nv = (SEG + 1) * (RAD + 1);
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(nv * 3), 3).setUsage(THREE.DynamicDrawUsage));
+    g.setAttribute('normal', new THREE.BufferAttribute(new Float32Array(nv * 3), 3).setUsage(THREE.DynamicDrawUsage));
+    g.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(nv * 2), 2)); g.setIndex(idx);
+    const mesh = new THREE.Mesh(g, cordMat[0]); mesh.castShadow = true; mesh.receiveShadow = true; mesh.frustumCulled = false; mesh.visible = false; board.add(mesh);
+    pool.push({ n, mesh, rec: null, pts: new Float32Array((SEG + 1) * 3), a: new THREE.Vector3(), b: new THREE.Vector3(), pa: new THREE.Vector3(), pb: new THREE.Vector3() });
+  }
+}
+function hang(s) {   // a true catenary of length L between the two plug ends, swung by th about the line between them
+  const A = s.a, B = s.b, r = s.rec, dx = B.x - A.x, dz = B.z - A.z, v = B.y - A.y, h = Math.hypot(dx, dz);
+  const hE = Math.max(h, 0.16 * r.len), L = Math.max(r.len, 1.03 * Math.hypot(hE, v)), k = Math.sqrt(L * L - v * v) / hE;
+  let u = k < 3 ? Math.sqrt(6 * (k - 1)) : Math.log(2 * k) + Math.log(Math.log(2 * k) + 1);
+  for (let i = 0; i < 7; i++) { const sh = Math.sinh(u), f = sh / u - k, d = (u * Math.cosh(u) - sh) / (u * u); u = Math.max(1e-3, u - f / d); }
+  const a = hE / (2 * u), x0 = hE / 2 - a * Math.atanh(clamp(v / L, -0.999, 0.999)), s0 = a * Math.sinh(-x0 / a), y0 = a * Math.cosh(-x0 / a);
+  const st = Math.sin(r.th), ct = Math.cos(r.th), open = 0.2 * L * (1 - h / hE), P = s.pts;
+  for (let i = 0; i <= SEG; i++) {
+    const q = i / SEG, xc = x0 + a * Math.asinh((q * L + s0) / a), f = xc / hE, dy = a * Math.cosh((xc - x0) / a) - y0 - v * f, e = Math.sin(Math.PI * q);
+    P[i * 3] = A.x + dx * f; P[i * 3 + 1] = A.y + v * f + dy * ct; P[i * 3 + 2] = A.z + dz * f - dy * st + open * e + 0.1 * e;
+  }
+  const pos = s.mesh.geometry.attributes.position, nor = s.mesh.geometry.attributes.normal, pa = pos.array, na = nor.array;
+  for (let i = 0; i <= SEG; i++) {
+    const i0 = Math.max(0, i - 1) * 3, i1 = Math.min(SEG, i + 1) * 3;
+    let tx = P[i1] - P[i0], ty = P[i1 + 1] - P[i0 + 1], tz = P[i1 + 2] - P[i0 + 2]; const tl = Math.hypot(tx, ty, tz) || 1; tx /= tl; ty /= tl; tz /= tl;
+    let ax = ty, ay = -tx, az = 0, al = Math.hypot(ax, ay); if (al < 1e-3) { ax = 1; ay = 0; al = 1; } ax /= al; ay /= al;       // T x Z
+    const bx = ay * tz - az * ty, by = az * tx - ax * tz, bz = ax * ty - ay * tx;
+    for (let j = 0; j <= RAD; j++) {
+      const an = j / RAD * 6.2832, cs = Math.cos(an), sn = Math.sin(an), o = (i * (RAD + 1) + j) * 3, nx = cs * ax + sn * bx, ny = cs * ay + sn * by, nz = cs * az + sn * bz;
+      na[o] = nx; na[o + 1] = ny; na[o + 2] = nz; pa[o] = P[i * 3] + CR * nx; pa[o + 1] = P[i * 3 + 1] + CR * ny; pa[o + 2] = P[i * 3 + 2] + CR * nz;
+    }
+  }
+  pos.needsUpdate = nor.needsUpdate = true;
+}
+function plugs(s) {
+  for (const [k, p] of [[0, s.pa], [1, s.pb]]) {
+    MAT.compose(p, tiltQ, ONE); collars.setMatrixAt(s.n * 2 + k, MAT); grips[k].setMatrixAt(s.n * 2 + k, MAT); grips[1 - k].setMatrixAt(s.n * 2 + k, hide);
+  }
+  s.a.copy(s.pa).add(rear); s.b.copy(s.pb).add(rear);
+  collars.instanceMatrix.needsUpdate = grips[0].instanceMatrix.needsUpdate = grips[1].instanceMatrix.needsUpdate = true;
+}
+function release(s) {
+  s.mesh.visible = false; s.rec = null;
+  for (const k of [0, 1]) { collars.setMatrixAt(s.n * 2 + k, hide); grips[0].setMatrixAt(s.n * 2 + k, hide); grips[1].setMatrixAt(s.n * 2 + k, hide); }
+  collars.instanceMatrix.needsUpdate = grips[0].instanceMatrix.needsUpdate = grips[1].instanceMatrix.needsUpdate = true;
+}
+
+// which hole of a strip or of a direct line a plug takes: the first free one, else the one with the fewest plugs
+const holes = new Map();
+function take(key, n) { const a = holes.get(key) || holes.set(key, new Array(n).fill(0)).get(key); let h = 0; for (let i = 1; i < n; i++) if (a[i] < a[h]) h = i; a[h]++; return h; }
+const give = (key, h) => { holes.get(key)[h]--; };
+
+const liveCords = new Map();   // message index -> record
+let tNow = 0, need = true, shadowDirty = true, soundOn = false;
+function plugIn(i, snap) {
+  let s = pool.find(s => !s.rec);
+  if (!s) { s = pool.filter(s => s.rec.state === 'out').sort((a, b) => a.rec.at - b.rec.at)[0]; if (!s) return; release(s); }
+  const j = M.j[i], p = M.p[i], ka = 'j' + j, ha = take(ka, 3), toJack = M.k[i] === 2, kb = toJack ? 'j' + M.r[i] : 't' + p, hb = take(kb, toJack ? 3 : TRN);
+  const A = holeAt(j, ha), B = toJack ? holeAt(M.r[i], hb) : trunkAt(p, hb), rr = rnd(i * 7919 + 13), dist = Math.hypot(A[0] - B[0], A[1] - B[1]);
+  const rec = { i, s, ka, ha, kb, hb, A, B, len: dist * (1.025 + 0.05 * rr()) + 0.38 + 0.34 * rr(), th0: 0.1 + 0.34 * rr(), th: 0, sw: 0, ph: 0, w: 0, state: snap ? 'in' : 'plug', at: performance.now(), rr: rr() };
+  rec.w = Math.sqrt(26 / Math.max(0.3, 0.45 * Math.sqrt(Math.max(0.01, rec.len * rec.len - dist * dist)))); rec.th = rec.th0;
+  s.rec = rec; s.mesh.material = cordMat[JACKS[j][0]]; s.mesh.visible = true;
+  const uv = s.mesh.geometry.attributes.uv;
+  for (let a = 0; a <= SEG; a++) for (let b = 0; b <= RAD; b++) uv.setXY(a * (RAD + 1) + b, b / RAD * 2, a / SEG * rec.len / 0.085);
+  uv.needsUpdate = true;
+  liveCords.set(i, rec);
+  if (snap) { s.pa.set(A[0], A[1], 0); s.pb.set(B[0], B[1], 0); plugs(s); hang(s); } else click();
+  shadowDirty = need = true;
+}
+function plugOut(rec, snap) {
+  liveCords.delete(rec.i); give(rec.ka, rec.ha); give(rec.kb, rec.hb);
+  if (snap) release(rec.s); else { rec.state = 'out'; rec.at = performance.now(); }
+  shadowDirty = need = true;
+}
+const back = x => { const c = 1.9; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };   // a push that seats with a small overshoot
+function moveCords(now, dt) {
+  let moving = false;
+  for (const s of pool) {
+    const r = s.rec; if (!r) continue;
+    const age = (now - r.at) / 1000;
+    if (r.state === 'plug') {   // lifted from the keyshelf: the sender's plug first, then the receiver's
+      const ea = clamp(age / 0.34, 0, 1), eb = clamp((age - 0.16) / 0.4, 0, 1), sx = r.A[0] + (r.rr - 0.5) * 0.6;
+      const go = (e, P, out) => { const q = ease(Math.min(1, e / 0.72)), z = e < 0.72 ? lerp(1.5, 0.42, q) : 0.42 * (1 - back((e - 0.72) / 0.28));
+        out.set(lerp(sx, P[0], q), lerp(SHELF_Y, P[1], q), Math.max(0, z)); };
+      go(ea, r.A, s.pa); go(eb, r.B, s.pb);
+      if (eb >= 1) { r.state = 'in'; r.sw = 0.3; r.ph = 0; r.at = now; }
+      plugs(s); hang(s); moving = true;
+    } else if (r.state === 'in') {
+      if (r.sw > 0.004) { r.ph += dt * r.w; r.sw *= Math.exp(-dt / 0.9); r.th = r.th0 + r.sw * Math.sin(r.ph); hang(s); moving = true; }
+      else if (r.sw) { r.sw = 0; r.th = r.th0; hang(s); moving = true; }
+    } else {                    // pulled, then dropped: its weight draws it back into the keyshelf
+      const pull = clamp(age / 0.13, 0, 1), fall = Math.max(0, age - 0.13), dy = 15 * fall * fall, z = 0.5 * ease(pull) + 0.9 * fall;
+      s.pa.set(r.A[0], r.A[1] - dy, z); s.pb.set(r.B[0], r.B[1] - dy * 0.86 - 0.5 * fall, z);
+      r.th = r.th0 * (1 - pull); if (!r.len0) r.len0 = r.len; r.len = r.len0 * (1 - 0.6 * Math.min(1, fall / 0.5));
+      if (Math.max(s.pa.y, s.pb.y) < -BH / 2 - 0.05) release(s); else { plugs(s); hang(s); }
+      moving = true;
+    }
+  }
+  if (moving) shadowDirty = true;
+  return moving;
+}
+
+// ------------------------------------------------------------------ the state of the board at time tNow (seconds after t0)
+const target = new Float32Array(NL), lampMsg = new Int32Array(NL).fill(-1), openOf = JACKS.map(() => []);
+const wheels = {};
+function setTime(t, snap) {
+  tNow = clamp(t, 0, T1);
+  const lo = upper(cordT, tNow - HOLD), hi = upper(cordT, tNow);
+  for (const rec of [...liveCords.values()]) { if (M.t[rec.i] > tNow || M.t[rec.i] <= tNow - HOLD) plugOut(rec, snap || still); }
+  for (let c = lo; c < hi; c++) if (!liveCords.has(cordIdx[c])) plugIn(cordIdx[c], snap || still);
+  target.fill(0); lampMsg.fill(-1); for (const o of openOf) o.length = 0;
+  for (let w = 0; w < WK.t.length; w++) if (WK.t[w] <= tNow && (WK.e[w] == null || tNow < WK.e[w])) { openOf[WK.j[w]].push(w); target[WK.j[w]] = 1; }
+  PEOPLE.forEach((_, p) => { const n = upper(castT[p], tNow); for (let k = n - 1; k >= Math.max(0, n - ALLN); k--) if (tNow - castT[p][k] < LAMP_HOLD) { const l = JACKS.length + p * ALLN + k % ALLN; target[l] = 1; lampMsg[l] = castIdx[p][k]; } });
+  if (snap || still) { lit.array.set(target); lit.needsUpdate = true; }
+  const all = upper(M.t, tNow), nk = kindT.map(a => upper(a, tNow));
+  roll('messages', all); roll('broadcasts', nk[0]); roll('direct', nk[1]); roll('comments', nk[2]);
+  $('hour').textContent = (tNow / 3600).toFixed(1);
+  $('stamp').textContent = stampOf(tNow) + ' · ' + liveCords.size + (liveCords.size === 1 ? ' cord in' : ' cords in');
+  const fr = tNow / T1; $('cap').style.transform = `rotate(${-150 + 300 * fr}deg)`; $('knob').setAttribute('aria-valuenow', Math.round(fr * 1000)); $('knob').setAttribute('aria-valuetext', 'hour ' + (tNow / 3600).toFixed(1));
+  clearTimeout(setTime.h); setTime.h = setTimeout(() => history.replaceState(null, '', '#t=' + Math.round(tNow)), 250);
+  if (pinned) refreshTip();
+  need = true;
+}
+function lamps(dt) {   // a filament takes a moment to heat and longer to cool
+  let moving = false; const a = lit.array;
+  for (let l = 0; l < NL; l++) if (a[l] !== target[l]) { const up = target[l] > a[l]; a[l] += (target[l] - a[l]) * (1 - Math.exp(-dt / (up ? 0.07 : 0.22))); if (Math.abs(a[l] - target[l]) < 0.01) a[l] = target[l]; moving = true; }
+  if (moving) lit.needsUpdate = true;
+  return moving;
+}
+
+// ------------------------------------------------------------------ counters, dial, legend
+for (const [k, label] of [['messages', 'messages so far'], ['broadcasts', 'broadcasts'], ['direct', 'direct'], ['comments', 'comments']]) {
+  const d = document.createElement('div'); d.className = 'cnt';
+  d.innerHTML = `<div class="wheels" role="img">${'<div class="wheel"><b>' + [...'0123456789'].map(n => `<span>${n}</span>`).join('') + '</b></div>'.repeat(1)}</div><label>${label}</label>`;
+  const ws = d.firstChild; ws.innerHTML = ws.innerHTML.repeat(4); $('counts').append(d); wheels[k] = { el: ws, cols: [...ws.querySelectorAll('b')], v: -1 };
+}
+function roll(k, v) {
+  const w = wheels[k]; if (w.v === v) return; w.v = v; w.el.setAttribute('aria-label', v + ' ' + k);
+  const s = String(v).padStart(4, '0').slice(-4); w.cols.forEach((b, i) => { b.style.transform = `translateY(${-10 * +s[i]}%)`; });
+}
+{
+  let h = ''; const hours = T1 / 3600;
+  for (let i = 0; i <= Math.floor(hours); i++) { const an = (-150 + 300 * i / hours) * Math.PI / 180, r0 = i % 6 ? 36 : 33; h += `<line class="${i % 6 ? '' : 'h'}" x1="${(Math.sin(an) * r0).toFixed(1)}" y1="${(-Math.cos(an) * r0).toFixed(1)}" x2="${(Math.sin(an) * 40).toFixed(1)}" y2="${(-Math.cos(an) * 40).toFixed(1)}"/>`; }
+  $('ticks').innerHTML = h;
+}
+function legend() {
+  const own = DATA.own_notes, built = new Date(DATA.built * 1000).toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+  const liveLine = liveState === 'live' ? `Board read ${built}; <b>${live}</b> broadcast${live === 1 ? '' : 's'} since then came from the live site (it carries only <code>all</code>, so later direct messages and comments are missing).`
+    : liveState === 'none' ? `Board read ${built}; the live site has no newer broadcast.` : `Snapshot of the board read ${built}; the live site could not be read.`;
+  $('def').innerHTML = `<summary>Legend</summary>
+<p><b>Panel</b>: one person. <b>Strip of three jacks</b>: one agent, named branch and first 4 characters of its session id. Each person shows their ${DATA.keep} busiest agents; the rest share <b>other sessions</b>.</p>
+<p><b>Cord</b>: one message to one person, from the sender's strip (black grip) to the receiver (brass grip). A message on <code>@person</code> goes to that person's <b>direct line</b>; a comment or thread message on another agent's board item goes to the author's strip. It stays in <b>${DATA.hold_min} minutes</b>. Colour: the sender's person ${PEOPLE.map((p, i) => `<i style="--c:${CORD[i]}"></i>${esc(p)}`).join(' ')}. Length, hang and sway carry no data.</p>
+<p><b>Lamp in the ALL row</b>: one broadcast, lit 5 minutes; a person's ${ALLN} lamps take their broadcasts in turn. <b>Lamp above a strip</b>: that agent has open work.</p>
+<p>Not drawn: ${num(own)} notes agents wrote on their own items. The view opens at hour ${(busiest / 3600).toFixed(1)}, when the most cords were in (${busiestN}). ${liveLine}</p>`;
+  if (narrow()) $('def').open = false;
+}
+legend();
+
+// ------------------------------------------------------------------ camera: the whole board, a little off axis; drag to move, wheel to come closer
+const view = { z: 1, x: 0, y: 0, tz: 1, tx: 0, ty: 0, vx: 0, vy: 0, mx: 0, my: 0, px: 0, py: 0 };
+let W = 0, H = 0, wpp = 1, free = { cx: 0, cy: 0, w: 1, h: 1 }, zFit = 1;
+function resize() {
+  W = innerWidth; H = innerHeight;
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, W * H > 1.2e6 ? 1.25 : 1.5)); renderer.setSize(W, H, false);
+  camera.aspect = W / H; camera.updateProjectionMatrix();
+  const top = $('head').getBoundingClientRect().bottom + 6, bot = $('bar').getBoundingClientRect().top - 4;
+  free = { cx: W / 2, cy: (top + bot) / 2, w: W, h: Math.max(120, bot - top) };
+  const wasFit = Math.abs(view.tz - zFit) < 1e-6;
+  zFit = narrow() ? Math.max(1, ((BW + 0.9) / free.w) / ((BH + 0.5) / free.h)) : 1;
+  if (wasFit || !resize.done) { view.tz = view.z = zFit; if (narrow() && !resize.done) view.tx = view.x = px0(0) + PW / 2; }
+  resize.done = true; need = true;
+}
+function place() {
+  const tanH = Math.tan(camera.fov * Math.PI / 360), all = Math.max((BW + 0.9) / free.w, (BH + 1.0) / free.h);   // world units per pixel that show the whole board
+  wpp = all / view.z; const d = wpp * H / (2 * tanH);
+  const hx = Math.max(0, BW / 2 + 0.45 - wpp * free.w / 2), hy = Math.max(0, BH / 2 + 0.5 - wpp * free.h / 2);
+  view.tx = clamp(view.tx, -hx, hx); view.ty = clamp(view.ty, -hy, hy); view.x = clamp(view.x, -hx - 0.3, hx + 0.3); view.y = clamp(view.y, -hy - 0.3, hy + 0.3);
+  const cx = view.x, cy = view.y + (free.cy - H / 2) * wpp, yaw = -0.11 + view.px * 0.05, pitch = 0.035 - view.py * 0.03;
+  camera.position.set(cx + d * Math.sin(yaw) * Math.cos(pitch), cy + d * Math.sin(pitch), d * Math.cos(yaw) * Math.cos(pitch));
+  camera.lookAt(cx, cy, 0); camera.updateMatrixWorld();
+}
+function glide(dt) {
+  const k = 1 - Math.exp(-dt / 0.12), k2 = 1 - Math.exp(-dt / 0.35);
+  if (!dragging && (Math.abs(view.vx) > 1e-3 || Math.abs(view.vy) > 1e-3)) { view.tx += view.vx * dt; view.ty += view.vy * dt; view.vx *= Math.exp(-dt / 0.3); view.vy *= Math.exp(-dt / 0.3); }
+  const d = Math.abs(view.tz - view.z) + Math.abs(view.tx - view.x) + Math.abs(view.ty - view.y) + Math.abs(view.mx - view.px) + Math.abs(view.my - view.py);
+  view.z += (view.tz - view.z) * k; view.x += (view.tx - view.x) * k; view.y += (view.ty - view.y) * k; view.px += (view.mx - view.px) * k2; view.py += (view.my - view.py) * k2;
+  if (still) { view.z = view.tz; view.x = view.tx; view.y = view.ty; view.px = view.py = 0; }
+  return d > 5e-4 || Math.abs(view.vx) > 1e-3 || Math.abs(view.vy) > 1e-3;
+}
+
+// ------------------------------------------------------------------ pointing: cords and lamps, picked on the screen
+const V = new THREE.Vector3();
+const toScreen = (x, y, z) => { V.set(x, y, z).project(camera); return [(V.x + 1) / 2 * W, (1 - V.y) / 2 * H]; };
+function pick(mx, my) {
+  let best = null, bd = 1e9; const lr = Math.max(9, 0.085 / wpp);
+  for (let l = 0; l < NL; l++) { if (!target[l]) continue; const [x, y] = toScreen(lampXY[l][0], lampXY[l][1], 0.04), d = Math.hypot(x - mx, y - my); if (d < lr && d < bd) { bd = d; best = { lamp: l }; } }
+  if (best) return best;
+  const cr = Math.max(7, 0.06 / wpp);
+  for (const rec of liveCords.values()) { const P = rec.s.pts; for (let i = 0; i <= SEG; i += 2) { const [x, y] = toScreen(P[i * 3], P[i * 3 + 1], P[i * 3 + 2]), d = Math.hypot(x - mx, y - my); if (d < cr && d < bd) { bd = d; best = { cord: rec }; } } }
+  if (best) return best;
+  for (let j = 0; j < JACKS.length; j++) { const [cx, cy] = cellAt(j), [x0, y0] = toScreen(cx - 0.44, cy - 0.45, 0), [x1, y1] = toScreen(cx + 0.44, cy - 1.26, 0); if (mx > x0 && mx < x1 && my > y0 && my < y1) return { jack: j }; }
+  return null;
+}
+const chan = i => { const c = CHANS[M.c[i]]; return M.k[i] === 2 ? 'comment on ' + c : c === 'all' ? 'all · broadcast' : c + ' · direct'; };
+function tipHtml(o) {
+  if (o.cord) { const i = o.cord.i; return `<small>${stampOf(M.t[i])} · ${esc(chan(i))}</small><strong>${esc(NAMES[M.a[i]])} <em>to</em> ${esc(M.b[i] >= 0 ? NAMES[M.b[i]] : '@' + PEOPLE[M.p[i]])}</strong><p>${esc(M.x[i])}</p>`; }
+  if (o.lamp != null && o.lamp >= JACKS.length) { const i = lampMsg[o.lamp]; if (i < 0) return ''; return `<small>${stampOf(M.t[i])} · ${esc(chan(i))}</small><strong>${esc(NAMES[M.a[i]])}</strong><p>${esc(M.x[i])}</p>`; }
+  if (o.lamp != null) { const ws = openOf[o.lamp]; if (!ws.length) return ''; const w = ws[ws.length - 1];
+    return `<small>${stampOf(WK.t[w])} · open work${ws.length > 1 ? ' · newest of ' + ws.length : ''}</small><strong>${esc(NAMES[WK.a[w]])} <em>${esc(WK.id[w])}</em></strong><p>${esc(WK.x[w])}</p>`; }
+  const j = o.jack; let out = 0, inn = 0; const hi = upper(M.t, tNow);
+  for (let i = 0; i < hi; i++) { if (M.j[i] === j) out++; if (M.k[i] === 2 && M.r[i] === j) inn++; }
+  return `<small>${JACKS[j][1] < 0 ? JACKS[j][2] + ' agents on one strip' : 'agent'}</small><strong>${esc(jackName(j))}</strong><p>${out} sent and ${inn} comments received so far; ${openOf[j].length} work item${openOf[j].length === 1 ? '' : 's'} open.</p>`;
+}
+let hover = null, pinned = null, tipAt = [0, 0];
+function showTip(o, mx, my) {
+  const tip = $('tip'), html = o ? tipHtml(o) : '';
+  if (!html) { tip.classList.remove('on'); return; }
+  tip.innerHTML = html; tip.classList.add('on'); tip.classList.toggle('pin', o === pinned);
+  const r = tip.getBoundingClientRect(), x = clamp(mx + 16, 8, W - r.width - 8), y = my + 18 + r.height > H - 8 ? my - r.height - 14 : my + 18;
+  tip.style.transform = `translate(${Math.round(x)}px,${Math.round(Math.max(8, y))}px)`;
+}
+function refreshTip() {   // a pinned cord or lamp that is gone at this time lets go of its card
+  if (pinned && ((pinned.cord && !liveCords.has(pinned.cord.i)) || (pinned.lamp != null && !target[pinned.lamp]))) pinned = null;
+  showTip(pinned || hover, tipAt[0], tipAt[1]);
+}
+const pointers = new Map(); let dragging = false, moved = 0, pinch = 0;
+canvas.addEventListener('pointerdown', e => { canvas.setPointerCapture(e.pointerId); pointers.set(e.pointerId, [e.clientX, e.clientY]); moved = 0; view.vx = view.vy = 0;
+  if (pointers.size === 2) { const [a, b] = [...pointers.values()]; pinch = Math.hypot(a[0] - b[0], a[1] - b[1]); } });
+canvas.addEventListener('pointermove', e => {
+  const p = pointers.get(e.pointerId);
+  if (p) {
+    const dx = e.clientX - p[0], dy = e.clientY - p[1]; p[0] = e.clientX; p[1] = e.clientY;
+    if (pointers.size === 2) { const [a, b] = [...pointers.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (pinch) view.tz = view.z = clamp(view.z * d / pinch, 1, 6); pinch = d; need = true; return; }
+    moved += Math.abs(dx) + Math.abs(dy);
+    if (moved > 5) { dragging = true; canvas.classList.add('pan'); view.tx -= dx * wpp; view.ty += dy * wpp; view.x = view.tx; view.y = view.ty; view.vx = lerp(view.vx, -dx * wpp * 60, 0.4); view.vy = lerp(view.vy, dy * wpp * 60, 0.4); need = true; }
+    return;
+  }
+  if (e.pointerType === 'mouse') {
+    if (!still) { view.mx = (e.clientX / W - 0.5) * 2; view.my = (e.clientY / H - 0.5) * 2; }
+    const h = pick(e.clientX, e.clientY); canvas.classList.toggle('pick', !!h);
+    if (h && h.cord && (!hover || hover.cord !== h.cord) && h.cord.state === 'in' && !still) { h.cord.sw = Math.max(h.cord.sw, 0.1); }   // a touched cord stirs
+    hover = h; if (!pinned) { tipAt = [e.clientX, e.clientY]; showTip(h, e.clientX, e.clientY); }
+    need = true;
+  }
+});
+const lift = e => {
+  if (!pointers.delete(e.pointerId)) return; pinch = 0;
+  if (!dragging && moved <= 5) { const h = pick(e.clientX, e.clientY); pinned = h && (h.cord || h.lamp != null || h.jack != null) ? h : null; tipAt = [e.clientX, e.clientY]; showTip(pinned, e.clientX, e.clientY); if (pinned && pinned.cord && !still) pinned.cord.sw = Math.max(pinned.cord.sw, 0.16); }
+  dragging = false; canvas.classList.remove('pan'); need = true;
+};
+canvas.addEventListener('pointerup', lift); canvas.addEventListener('pointercancel', lift);
+canvas.addEventListener('pointerleave', () => { hover = null; view.mx = view.my = 0; if (!pinned) showTip(null); need = true; });
+canvas.addEventListener('wheel', e => {
+  e.preventDefault(); const z0 = view.tz, z1 = clamp(z0 * Math.exp(-e.deltaY * 0.0016), 1, 6), all = wpp * view.z;
+  const wx = view.tx + (e.clientX - free.cx) * all / z0, wy = view.ty - (e.clientY - free.cy) * all / z0;     // the point under the pointer stays under it
+  view.tz = z1; view.tx = wx - (e.clientX - free.cx) * all / z1; view.ty = wy + (e.clientY - free.cy) * all / z1; need = true;
+}, { passive: false });
+
+// ------------------------------------------------------------------ the dial, Play, Sound, keys
+let playing = false;
+const PLAY_S = 130;   // seconds a whole replay takes
+function setPlay(on) { playing = on; $('play').textContent = on ? 'Pause' : 'Play'; if (on && tNow >= T1 - 1) setTime(0, true); need = true; }
+$('play').addEventListener('click', () => setPlay(!playing));
+{
+  const knob = $('knob'); let last = null;
+  const ang = e => { const r = knob.getBoundingClientRect(); return Math.atan2(e.clientX - r.left - r.width / 2, -(e.clientY - r.top - r.height / 2)); };
+  knob.addEventListener('pointerdown', e => { knob.setPointerCapture(e.pointerId); last = ang(e); setPlay(false); e.preventDefault(); });
+  knob.addEventListener('pointermove', e => { if (last == null) return; const a = ang(e); let d = a - last; if (d > Math.PI) d -= 2 * Math.PI; if (d < -Math.PI) d += 2 * Math.PI; last = a; setTime(tNow + d / (300 * Math.PI / 180) * T1); });
+  const up = () => { last = null; }; knob.addEventListener('pointerup', up); knob.addEventListener('pointercancel', up);
+  knob.addEventListener('wheel', e => { e.preventDefault(); setPlay(false); setTime(tNow + Math.sign(e.deltaY) * 600); }, { passive: false });
+}
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'BUTTON' && (e.key === ' ' || e.key === 'Enter')) return;
+  if (e.key === ' ') { e.preventDefault(); setPlay(!playing); }
+  else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') { e.preventDefault(); setPlay(false); setTime(tNow + (e.shiftKey ? 3600 : 300)); }
+  else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') { e.preventDefault(); setPlay(false); setTime(tNow - (e.shiftKey ? 3600 : 300)); }
+  else if (e.key === 'Home') { setPlay(false); setTime(0); } else if (e.key === 'End') { setPlay(false); setTime(T1); }
+  else if (e.key === 'Escape') { pinned = null; showTip(null); }
+});
+let audio = null, lastClick = 0;
+$('snd').addEventListener('click', () => {
+  soundOn = !soundOn; $('snd').textContent = soundOn ? 'Sound on' : 'Sound off'; $('snd').setAttribute('aria-pressed', soundOn);
+  if (soundOn) { audio = audio || new (window.AudioContext || window.webkitAudioContext)(); audio.resume(); click(); }
+});
+function click() {   // a relay: a short band of noise and a low knock
+  if (!soundOn || !audio) return; const t = audio.currentTime; if (t - lastClick < 0.035) return; lastClick = t;
+  const n = audio.createBufferSource(), buf = audio.createBuffer(1, 1200, audio.sampleRate), d = buf.getChannelData(0); for (let i = 0; i < 1200; i++) d[i] = (Math.random() * 2 - 1) * Math.exp(-i / 160);
+  n.buffer = buf; const f = audio.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 1900 + Math.random() * 500; f.Q.value = 2.2; const g = audio.createGain(); g.gain.value = 0.16; n.connect(f).connect(g).connect(audio.destination); n.start(t);
+  const o = audio.createOscillator(), og = audio.createGain(); o.frequency.setValueAtTime(150, t); o.frequency.exponentialRampToValueAtTime(70, t + 0.05); og.gain.setValueAtTime(0.1, t); og.gain.exponentialRampToValueAtTime(0.001, t + 0.07); o.connect(og).connect(audio.destination); o.start(t); o.stop(t + 0.08);
+}
+
+// ------------------------------------------------------------------ live: broadcasts the site has that the snapshot does not
+async function readLive() {
+  try {
+    const r = await fetch('../../../data'); if (!r.ok) throw new Error('data ' + r.status);
+    const d = await r.json(), lastCast = kindT[0][kindT[0].length - 1], atEnd = tNow >= T1 - 1; let added = 0;
+    for (const m of (d.messages || []).slice().sort((a, b) => a.sk < b.sk ? -1 : 1)) {
+      const t = Math.floor(Number(m.sk.split('#')[0]) / 1e9) - DATA.t0, p = PEOPLE.indexOf(m.who); if (!(t > lastCast) || p < 0) continue;
+      const name = m.who + (m.branch ? '/' + m.branch : '') + (m.session ? ' ' + m.session.slice(0, 4) : ''); let a = NAMES.indexOf(name); if (a < 0) a = NAMES.push(name) - 1;
+      const j = JACKS.findIndex(x => x[1] === a), text = m.text.replace(/\s+/g, ' ');
+      M.t.push(t); M.k.push(0); M.a.push(a); M.j.push(j >= 0 ? j : pooled(p)); M.b.push(-1); M.r.push(-1); M.p.push(-1); M.c.push(CHANS.indexOf('all')); M.x.push(text.length > 140 ? text.slice(0, 139) + '…' : text);
+      index(M.t.length - 1); T1 = Math.max(T1, t); added++;
+    }
+    live += added; liveState = live ? 'live' : 'none';
+    if (added) { sentence(); setTime(atEnd ? T1 : tNow); }
+  } catch (e) { if (!live) liveState = 'snapshot'; }
+  legend();
+}
+
+// ------------------------------------------------------------------ frames: drawn only while something moves
+addEventListener('resize', resize);
+canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); });
+canvas.addEventListener('webglcontextrestored', () => { studio(); shadowDirty = need = true; });
+resize();
+{ const q = new URLSearchParams(location.hash.slice(1)), t = q.has('t') ? +q.get('t') : busiest; setTime(isFinite(t) ? t : busiest, true); }
+let last = performance.now();
+function frame(now) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(0.05, (now - last) / 1000); last = now;
+  if (document.hidden) return;
+  if (playing) { const t = tNow + dt * T1 / PLAY_S; setTime(t); if (t >= T1) setPlay(false); }
+  const a = moveCords(now, dt), b = lamps(dt), c = glide(dt);
+  if (!(need || a || b || c || playing)) return;
+  need = false; place();
+  if (shadowDirty) { renderer.shadowMap.needsUpdate = true; shadowDirty = false; }
+  renderer.render(scene, camera);
+}
+requestAnimationFrame(frame);
+readLive(); setInterval(() => { if (!document.hidden) readLive(); }, 120000);
+</script>
+</body>
+</html>
