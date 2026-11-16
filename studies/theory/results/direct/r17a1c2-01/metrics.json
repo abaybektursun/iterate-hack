@@ -1,0 +1,122 @@
+{
+ "statistic": "D2 = r(edit single sample, RL 4-sample rate) - mean_s r(Think-SFT sample s, RL rate), MATH-500 test half",
+ "D2": 0.12147508552625885,
+ "interval90": [
+  0.028202653819362412,
+  0.222017119979305
+ ],
+ "n_problems": 250,
+ "bootstrap": {
+  "resamples": 2000,
+  "seed": 17,
+  "skipped": 0
+ },
+ "r_edit_rl": 0.6905568751929158,
+ "r_sft_rl_by_sample": [
+  0.513316631445076,
+  0.5566769807971738,
+  0.6762345317058797,
+  0.5300990147184984
+ ],
+ "r_sft_rl_mean": 0.5690817896666569,
+ "accuracy": {
+  "edit": 0.884,
+  "rl_4sample": 0.907,
+  "think_sft_by_sample": [
+   0.904,
+   0.908,
+   0.924,
+   0.912
+  ],
+  "base_cue_by_sample": [
+   0.812,
+   0.808,
+   0.836,
+   0.804
+  ]
+ },
+ "adversary": {
+  "r1_rl_pairwise": 0.6161550373032537,
+  "clone": 0.7301541311148196,
+  "ct": 0.5690817896666569,
+  "value": 0.16107234144816274
+ },
+ "null_accuracy_alone": {
+  "value": 0.013128957396636665,
+  "slope": -0.29831416382707815,
+  "intercept": 0.8459204678864307,
+  "singles": [
+   {
+    "cell": "base_cue",
+    "sample": 0,
+    "acc": 0.812,
+    "r": 0.5900293672800917
+   },
+   {
+    "cell": "base_cue",
+    "sample": 1,
+    "acc": 0.808,
+    "r": 0.6332230317793976
+   },
+   {
+    "cell": "base_cue",
+    "sample": 2,
+    "acc": 0.836,
+    "r": 0.6031180786409063
+   },
+   {
+    "cell": "base_cue",
+    "sample": 3,
+    "acc": 0.804,
+    "r": 0.6039118630069662
+   },
+   {
+    "cell": "think_sft",
+    "sample": 0,
+    "acc": 0.904,
+    "r": 0.513316631445076
+   },
+   {
+    "cell": "think_sft",
+    "sample": 1,
+    "acc": 0.908,
+    "r": 0.5566769807971738
+   },
+   {
+    "cell": "think_sft",
+    "sample": 2,
+    "acc": 0.924,
+    "r": 0.6762345317058797
+   },
+   {
+    "cell": "think_sft",
+    "sample": 3,
+    "acc": 0.912,
+    "r": 0.5300990147184984
+   }
+  ],
+  "range": [
+   -0.2,
+   0.015
+  ]
+ },
+ "range": [
+  0.02,
+  0.54
+ ],
+ "verdict": "not separated",
+ "row_check": {
+  "rl_test_rows": 1021,
+  "rl_restart_rows_dropped": 21,
+  "sft_test_rows": 1000,
+  "pids_with_all_4_rl": 250,
+  "pids_with_all_4_sft": 250,
+  "duplicate_attempt0_pid_sample": 0,
+  "cap_hits_attempt0": {
+   "edit": 0,
+   "rl": 0,
+   "think_sft": 0
+  },
+  "read_10_rows": "Read edit, RL sample 0 and Think-SFT sample 0 of 10 test pids (raw_check.json). Nothing looks wrong: every pid has all its attempt-0 samples, no duplicate (pid, sample), score_v3 matches extracted vs gold by eye (pid 9: edit 6, RL 9, SFT 4 vs gold 4; pid 11 all wrong), cap hits are flagged with finish_reason length. RL has 21 restart rows (attempt > 0), dropped by the plan. Edit accuracy on this half is 0.884, below the claim's 0.940 and below Think-SFT's 0.904-0.924."
+ }
+}
