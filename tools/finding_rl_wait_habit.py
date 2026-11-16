@@ -326,8 +326,10 @@ svg * { pointer-events: none; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: max(8px, calc(clamp(20px, 7vh, 96px) - 38.5px)) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; text-decoration: none; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
@@ -357,19 +359,34 @@ svg * { pointer-events: none; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; align-self: flex-start; margin: 14px 0 6px; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
   .pane { order: 4; margin-top: 22px; }
   svg { max-height: none; }
   .switch { display: flex; margin-top: 16px; }
-  .switch button { flex: 1; text-align: center; padding: 10px 4px; font-size: 14px; white-space: normal; }
+  .switch { border-radius: 26px; }
+  .switch button { flex: 1; text-align: center; padding: 12px 12px; min-height: 44px; font-size: 14px; white-space: normal; line-height: 1.2; border-radius: 22px; }
   .hint { text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
   .switch button, .more button, .top a { transition: none; }
 }
+/* When the words are taller than the window the page scrolls as a whole, so nothing is cut; the picture stays in place. */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 620px); }
+  .stage { align-self: start; height: max(532.5px, calc(100vh - 87.5px)); }
+  .side { overflow-y: visible; position: relative; z-index: 1; margin-bottom: -4px; }  /* -4px: a rounding overflow does not make the page scroll */
+  .top { position: relative; z-index: 1; }
+}
+@media (min-width: 901px) and (min-height: 620px) {
+  .stage { position: sticky; top: 59.5px; }
+}
+#svg:empty { aspect-ratio: 1000 / 650; }  /* the picture's place is kept before the script draws it */
+@media (max-width: 900px) { #svg:empty { aspect-ratio: 480 / 1126; } }
+.switch:empty { min-height: 46.5px; }
 </style>
 </head>
 <body>
@@ -387,6 +404,7 @@ svg * { pointer-events: none; }
     <p class="hint">The push is one fixed vector added inside the base model. Click a passage, a dot or a run to read it.</p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
@@ -429,7 +447,7 @@ function geo() {
         cols: [[34, 446, 466, 498, 690, 720], [34, 446, 776, 808, 1000, 1030]], lh: 25, fp: 17, maxL: 7, pitch: 20.4, dr: 5.6,
         key: [[34, 1066], [214, 1066], [34, 1090], [214, 1090]], before: 150, after: 200 }
     : { w: 1000, h: 650, cx: 500, cy: 325, D: 2300, a: [24, 16, 976, 634], r: 30, deep: 40, blur: 16,
-        big: [66, 152], fb: 132, lab: [72, 190], set: [72, 218], delta: [72, 242], ci: [72, 266], fl: 20, fs: 16.5,
+        big: [66, 152], fb: 118, lab: [72, 190], set: [72, 218], delta: [72, 242], ci: [72, 266], fl: 20, fs: 16.5,
         sx: [496, 900], uu: [-.25, 1.12], sl: [128, 208], sy: [150, 230], ref: [100, 266, 86], mr: 7, rr: 5.2,
         cols: [[72, 472, 318, 352, 516, 546], [528, 928, 318, 352, 516, 546]], lh: 23.5, fp: 16, maxL: 6, pitch: 19.5, dr: 5.4,
         key: [[72, 600], [244, 600], [430, 600], [638, 600]], before: 160, after: 190 };

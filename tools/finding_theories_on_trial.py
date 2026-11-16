@@ -1033,7 +1033,7 @@ a { color: inherit; }
 
 /* The picture: one plate with every prediction, the count and the one control */
 .stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
-svg { width: 100%; max-height: calc(100vh - 210px); display: block; overflow: visible; cursor: default; user-select: none; -webkit-user-select: none; }
+svg { width: 100%; max-height: calc(100vh - 237px); display: block; overflow: visible; cursor: default; user-select: none; -webkit-user-select: none; }
 svg:focus:not(:focus-visible) { outline: none; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 svg * { pointer-events: none; }
@@ -1070,10 +1070,10 @@ svg * { pointer-events: none; }
 .bfill.on { stroke: var(--blue); opacity: 1; }
 .bhalf { stroke: var(--ink); stroke-width: 1.2; opacity: .55; }
 .kt { fill: var(--mute) !important; font-weight: 520; }
-.ctl { display: flex; align-items: center; gap: 12px; align-self: center; margin-top: 16px; }
-.ctl .lbl { font-size: 13px; color: var(--mute); }
+.ctl { display: flex; flex-direction: column; align-items: center; gap: 7px; align-self: center; margin-top: 16px; }
+.ctl .lbl { font-size: 13px; font-weight: 560; color: var(--mute); }
 .switch { display: inline-flex; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
-.switch button { min-width: 40px; padding: 8px 14px; border-radius: 999px; font-weight: 600; font-size: 14.5px; text-align: center; white-space: nowrap; transition: background .15s ease, color .15s ease; }
+.switch button { padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; text-align: center; transition: background .15s ease, color .15s ease; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .switch button[aria-pressed="true"]:hover { color: var(--paper); }
@@ -1090,8 +1090,10 @@ svg * { pointer-events: none; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: max(8px, calc(clamp(20px, 7vh, 96px) - 38.5px)) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; text-decoration: none; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
@@ -1140,14 +1142,16 @@ h3 { margin: 22px 0 0; font-size: 14px; font-weight: 660; font-stretch: 110%; pa
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; align-self: flex-start; margin: 14px 0 6px; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
   .pane { order: 4; margin-top: 22px; }
+  .paper { order: 5; }
   svg { max-height: none; }
-  .ctl { flex-direction: column; gap: 8px; margin-top: 14px; }
+  .ctl { margin-top: 14px; }
   .switch { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); width: 100%; border-radius: 18px; }
-  .switch button { min-width: 0; padding: 10px 0; font-size: 14px; border-radius: 14px; }
+  .switch button { min-width: 0; padding: 12px 0; font-size: 14px; border-radius: 14px; }
   .hint { text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1157,6 +1161,19 @@ h3 { margin: 22px 0 0; font-size: 14px; font-weight: 660; font-stretch: 110%; pa
 .paper { margin: 18px 0 0; font-size: 15px; }
 .paper a { color: var(--mute); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
 .paper a:hover, .paper a:focus-visible { color: inherit; }
+/* When the words are taller than the window the page scrolls as a whole, so nothing is cut; the picture stays in place. */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 620px); }
+  .stage { align-self: start; height: max(532.5px, calc(100vh - 87.5px)); }
+  .side { overflow-y: visible; position: relative; z-index: 1; margin-bottom: -4px; }  /* -4px: a rounding overflow does not make the page scroll */
+  .top { position: relative; z-index: 1; }
+}
+@media (min-width: 901px) and (min-height: 620px) {
+  .stage { position: sticky; top: 59.5px; }
+}
+#svg:empty { aspect-ratio: 1000 / 600; }  /* the picture's place is kept before the script draws it */
+@media (max-width: 900px) { #svg:empty { aspect-ratio: 480 / 1512; } }
+.switch:empty { min-height: 46.5px; }
 </style>
 </head>
 <body>
@@ -1178,10 +1195,11 @@ h3 { margin: 22px 0 0; font-size: 14px; font-weight: 660; font-stretch: 110%; pa
     <p class="hint">Click a theory's marks, or press Enter on the picture, to see its predictions.</p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
-    <p class="paper"><a href="/paper/theories-on-trial.pdf">Read the paper (PDF) ›</a></p>
+    <p class="paper"><a href="/paper/theories-on-trial.pdf" target="_blank" rel="noopener">Read the paper (PDF) ›</a></p>
   </div>
 </div>
 <script>

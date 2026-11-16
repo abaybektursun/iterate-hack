@@ -372,7 +372,7 @@ a { color: inherit; }
 
 /* The picture, and the one control that changes it */
 .stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
-svg { width: 100%; max-height: 62vh; display: block; overflow: visible; }
+svg { width: 100%; max-height: min(62vh, calc(100vh - 326px)); display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .atmo, .shade, .wash, .band, .track, .ghost { pointer-events: none; }
 .atmo { opacity: var(--glow); }
@@ -398,15 +398,14 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .hit:focus-visible { stroke: var(--blue); stroke-width: 2; }
 .ci { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; pointer-events: none; }
 .ci-name { fill: var(--mute) !important; text-anchor: middle; font-weight: 540; pointer-events: none; }
-.ctl { align-self: center; display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 14px 30px; margin-top: 16px; }
+.ctl { align-self: center; display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 16px; }
 .ctl-group { display: flex; flex-direction: column; align-items: center; }
-.ctl-name { font-size: 13px; color: var(--mute); font-weight: 540; margin-bottom: 7px; }
-.switch.sets button { min-width: 0; padding: 7px 15px; font-size: 14px; }
+.ctl-name { font-size: 13px; color: var(--mute); font-weight: 560; margin-bottom: 7px; }
 /* On the 328, the problems the vote over 6 gets wrong: one mark per problem, its 6 samples as 6 cells from top to bottom */
 .miss { align-self: center; width: 100%; max-width: 860px; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .7s cubic-bezier(.4, 0, .2, 1); }
 .miss.on { grid-template-rows: 1fr; }
 .miss > div { min-height: 0; overflow: hidden; }
-.stage.hard svg { max-height: calc(100vh - 360px); }
+.stage.hard svg { max-height: calc(100vh - 457px); }
 .miss-name { margin: 14px 0 9px; font-size: 13px; color: var(--mute); text-align: center; }
 .miss-name .key { white-space: nowrap; margin-left: 10px; }
 .miss-name i { display: inline-block; width: 8px; height: 4px; margin: 0 4px 1px 0; vertical-align: middle; border-radius: 1px; }
@@ -426,7 +425,7 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 .mk:hover { background: var(--rule); }
 .mk[aria-pressed="true"] { outline: 1.5px solid var(--blue); outline-offset: 1px; transition-delay: 0s; }
 .switch { display: inline-flex; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
-.switch button { min-width: 36px; padding: 7px 0; border-radius: 999px; font-weight: 600; font-size: 15px; text-align: center; transition: background .15s ease, color .15s ease; }
+.switch button { padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; text-align: center; transition: background .15s ease, color .15s ease; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .switch button[aria-pressed="true"]:hover { color: var(--paper); }
@@ -436,8 +435,10 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: max(8px, calc(clamp(20px, 7vh, 96px) - 38.5px)) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; text-decoration: none; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
@@ -474,13 +475,15 @@ svg { animation: fade 1s both; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; align-self: flex-start; margin: 14px 0 6px; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; }
   .pane { order: 4; margin-top: 14px; }
   svg { max-height: none; }
-  .switch button { min-width: 26px; padding: 7px 0; font-size: 14px; }
-  .switch.sets button { padding: 7px 13px; }
+  .switch button { padding: 12px 12px; font-size: 14px; }
+  #switch { display: grid; grid-template-columns: repeat(6, 48px); border-radius: 26px; }
+  #switch button { padding: 12px 0; border-radius: 22px; }
   .note { min-height: 4.5em; }
   .groups { flex-direction: column; align-items: center; gap: 14px; }
   #g0, #g1 { width: 336px; }
@@ -490,6 +493,17 @@ svg { animation: fade 1s both; }
   svg { animation: none; }
   .switch button, .more button, .note, .miss, .mk { transition: none; }
 }
+/* When the words are taller than the window the page scrolls as a whole, so nothing is cut; the picture stays in place. */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 620px); }
+  .stage { align-self: start; height: max(532.5px, calc(100vh - 87.5px)); }
+  .side { overflow-y: visible; position: relative; z-index: 1; margin-bottom: -4px; }  /* -4px: a rounding overflow does not make the page scroll */
+  .top { position: relative; z-index: 1; }
+}
+@media (min-width: 901px) and (min-height: 620px) {
+  .stage { position: sticky; top: 59.5px; }
+}
+.switch:empty { min-height: 46.5px; }
 </style>
 </head>
 <body>
@@ -524,6 +538,7 @@ svg { animation: fade 1s both; }
     </div></div>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>

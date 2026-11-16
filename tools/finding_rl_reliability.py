@@ -184,7 +184,7 @@ PAGE = r"""<!doctype html>
    --wash is how strongly a column takes the accent when it is lit. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #8b97a1; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
   --blue: #1f43d6; --red: #cf2338;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
@@ -192,7 +192,7 @@ PAGE = r"""<!doctype html>
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #5f6c77; --rule: #1c2630;
+    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
     --blue: #8fb1ff; --red: #ff6b7c;
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
     --rim-a: rgba(255, 255, 255, .92); --rim-b: rgba(255, 255, 255, .1); --rim-c: rgba(143, 177, 255, .45);
@@ -257,8 +257,10 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: max(8px, calc(clamp(20px, 7vh, 96px) - 38.5px)) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; text-decoration: none; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; }
@@ -282,17 +284,30 @@ svg { animation: fade 1s both; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; align-self: flex-start; margin: 14px 0 6px; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 14px; padding: 0; }
   .pane { order: 4; margin-top: 14px; }
   svg { max-height: none; }
+  .switch button { padding: 12px 12px; font-size: 14px; }
   .note { min-height: 4.5em; }
 }
 @media (prefers-reduced-motion: reduce) {
   svg { animation: none; }
   .switch button, .more button { transition: none; }
 }
+/* When the words are taller than the window the page scrolls as a whole, so nothing is cut; the picture stays in place. */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 620px); }
+  .stage { align-self: start; height: max(532.5px, calc(100vh - 87.5px)); }
+  .side { overflow-y: visible; position: relative; z-index: 1; margin-bottom: -4px; }  /* -4px: a rounding overflow does not make the page scroll */
+  .top { position: relative; z-index: 1; }
+}
+@media (min-width: 901px) and (min-height: 620px) {
+  .stage { position: sticky; top: 59.5px; }
+}
+.switch:empty { min-height: 46.5px; }
 </style>
 </head>
 <body>
@@ -310,6 +325,7 @@ svg { animation: fade 1s both; }
     <p class="note" id="note" aria-live="polite"></p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>

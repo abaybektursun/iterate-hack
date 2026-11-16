@@ -1390,7 +1390,7 @@ a { color: inherit; }
 
 /* The picture: one plate with the marks, the count and the trace, and the one control under it */
 .stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
-svg { width: 100%; max-height: calc(100vh - 220px); display: block; overflow: visible; touch-action: pan-y; cursor: default; user-select: none; -webkit-user-select: none; }
+svg { width: 100%; max-height: calc(100vh - 283px); display: block; overflow: visible; touch-action: pan-y; cursor: default; user-select: none; -webkit-user-select: none; }
 svg:focus:not(:focus-visible) { outline: none; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 svg * { pointer-events: none; }
@@ -1434,16 +1434,12 @@ svg * { pointer-events: none; }
 .axis { fill: var(--faint) !important; font-weight: 520; }
 .axis.on { fill: var(--ink) !important; font-weight: 680; }
 .kd.o { fill: var(--blue); } .kd.x { fill: var(--base-tone); }
-.control { display: flex; align-self: center; align-items: center; gap: 14px; margin-top: 16px; flex-wrap: wrap; justify-content: center; }
+.control { display: flex; flex-direction: column; align-self: center; align-items: center; gap: 10px; margin-top: 16px; }
+.krow { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; }
 .switch { display: inline-flex; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
-.switch button { padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
+.switch button { padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
-.switch.ref button[aria-pressed="true"] { background: var(--mute); }
-.switch.temp { border-color: var(--rule); margin-left: 6px; }
-.switch.temp button { font-size: 13px; font-weight: 560; padding: 6px 12px; color: var(--mute); }
-.switch.temp button:hover { color: var(--ink); }
-.switch.temp button[aria-pressed="true"] { background: var(--rule); color: var(--ink); }
 .hint { align-self: center; margin: 10px 0 0; font-size: 13px; color: var(--mute); text-align: center; }
 
 /* One drawn entrance, then only the slow sway and what the reader changes */
@@ -1457,8 +1453,10 @@ svg * { pointer-events: none; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: max(8px, calc(clamp(20px, 7vh, 96px) - 38.5px)) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; text-decoration: none; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
@@ -1496,18 +1494,18 @@ svg * { pointer-events: none; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; align-self: flex-start; margin: 14px 0 6px; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
   .pane { order: 4; margin-top: 22px; }
+  .paper { order: 5; }
   svg { max-height: none; }
-  .control { display: flex; gap: 8px; }
+  .control, .krow { gap: 8px; }
+  .krow { width: 100%; }
   .switch { display: flex; width: 100%; }
-  .switch button { flex: 1; text-align: center; padding: 10px 4px; font-size: 14px; }
+  .switch button { flex: 1; text-align: center; padding: 12px 12px; font-size: 14px; }
   .switch.ref { width: auto; }
-  .switch.ref button { padding: 8px 16px; }
-  .switch.temp { width: auto; margin-left: 0; }
-  .switch.temp button { padding: 8px 12px; font-size: 13px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
@@ -1516,6 +1514,18 @@ svg * { pointer-events: none; }
 .paper { margin: 18px 0 0; font-size: 15px; }
 .paper a { color: var(--mute); text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
 .paper a:hover, .paper a:focus-visible { color: inherit; }
+/* When the words are taller than the window the page scrolls as a whole, so nothing is cut; the picture stays in place. */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 620px); }
+  .stage { align-self: start; height: max(532.5px, calc(100vh - 87.5px)); }
+  .side { overflow-y: visible; position: relative; z-index: 1; margin-bottom: -4px; }  /* -4px: a rounding overflow does not make the page scroll */
+  .top { position: relative; z-index: 1; }
+}
+@media (min-width: 901px) and (min-height: 620px) {
+  .stage { position: sticky; top: 59.5px; }
+}
+#svg:empty { aspect-ratio: 1000 / 600; }  /* the picture's place is kept before the script draws it */
+@media (max-width: 900px) { #svg:empty { aspect-ratio: 480 / 1666; } }
 </style>
 </head>
 <body>
@@ -1530,27 +1540,30 @@ svg * { pointer-events: none; }
   <div class="stage" id="stage">
     <svg id="svg" role="img" tabindex="0"></svg>
     <div class="control">
-      <div class="switch" id="switch" role="group" aria-label="Checkpoint of RL training">
-        <button data-k="0" aria-pressed="false">Base</button>
-        <button data-k="2" aria-pressed="false">Step 100</button>
-        <button data-k="3" aria-pressed="false">Step 400</button>
-        <button data-k="4" aria-pressed="false">Step 2,800</button>
-      </div>
-      <div class="switch ref" role="group" aria-label="Reference">
-        <button data-k="1" aria-pressed="false">Base + cue</button>
-      </div>
       <div class="switch temp" role="group" aria-label="Temperature">
         <button data-t="0" aria-pressed="false">Temperature 0.6</button>
         <button data-t="1" aria-pressed="false">Temperature 1.0</button>
+      </div>
+      <div class="krow">
+        <div class="switch" id="switch" role="group" aria-label="Checkpoint of RL training">
+          <button data-k="0" aria-pressed="false">Base</button>
+          <button data-k="2" aria-pressed="false">Step 100</button>
+          <button data-k="3" aria-pressed="false">Step 400</button>
+          <button data-k="4" aria-pressed="false">Step 2,800</button>
+        </div>
+        <div class="switch ref" role="group" aria-label="Reference">
+          <button data-k="1" aria-pressed="false">Base + cue</button>
+        </div>
       </div>
     </div>
     <p class="hint">Base + cue: the base model with RL's three-token opening placed in front. Step 2,800 is the released RL model.<br>Each mark is one problem in one sample; at T 1.0 the counts of right answers are means of 4 samples (Base: one). Click a mark to see a problem.</p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
-    <p class="paper"><a href="/paper/the-first-hundred-steps.pdf">Read the paper (PDF) ›</a></p>
+    <p class="paper"><a href="/paper/the-first-hundred-steps.pdf" target="_blank" rel="noopener">Read the paper (PDF) ›</a></p>
   </div>
 </div>
 <script>

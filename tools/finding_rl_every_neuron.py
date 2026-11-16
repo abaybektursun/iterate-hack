@@ -215,11 +215,11 @@ a { color: inherit; }
 .stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px 40px 0 0; }
 .scene { width: min(100%, 1060px); perspective: 2200px; }
 .body { position: relative; transform-style: preserve-3d; }
-.back, .plate { border-radius: 28px; }
-.back { position: absolute; inset: 0; transform: translateZ(-38px); background: var(--glass-lo); border: 1px solid var(--rim-b); }
-.back::before, .back::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
-.back::before { opacity: var(--glow); box-shadow: 0 0 130px 8px color-mix(in srgb, var(--blue) 20%, transparent); }
-.back::after { opacity: var(--shadow); box-shadow: 18px 36px 70px -14px color-mix(in srgb, var(--ink) 24%, transparent); }
+div.back, .plate { border-radius: 28px; }
+div.back { position: absolute; inset: 0; transform: translateZ(-38px); background: var(--glass-lo); border: 1px solid var(--rim-b); }
+div.back::before, div.back::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; }
+div.back::before { opacity: var(--glow); box-shadow: 0 0 130px 8px color-mix(in srgb, var(--blue) 20%, transparent); }
+div.back::after { opacity: var(--shadow); box-shadow: 18px 36px 70px -14px color-mix(in srgb, var(--ink) 24%, transparent); }
 .plate {
   position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(250px, 1fr); gap: 0 40px;
   padding: 30px 38px 26px; border: 1.7px solid transparent;
@@ -260,7 +260,7 @@ input[type=range]:focus-visible::-moz-range-thumb { outline: 2px solid var(--ink
 .read { position: relative; display: flex; flex-direction: column; min-width: 0; }
 .rlab { margin: 22px 0 0; font-size: 15px; font-weight: 600; line-height: 1.35; min-height: 2.7em; }
 .rlab span { display: block; color: var(--mute); font-weight: 450; font-size: 13.5px; }
-.big { margin: 2px 0 0; font-size: clamp(64px, 6.6vw, 112px); line-height: .98; font-weight: 660; letter-spacing: -.035em; font-stretch: 100%; white-space: nowrap; }
+.big { margin: 2px 0 0; font-size: clamp(64px, 6.67vw, 112px); line-height: .98; font-weight: 660; letter-spacing: -.035em; font-stretch: 100%; white-space: nowrap; }
 .big small { font-size: .5em; font-weight: 560; letter-spacing: 0; margin-left: .08em; }
 .blab { margin: 8px 0 0; font-size: 15.5px; line-height: 1.35; color: var(--ink); font-weight: 500; max-width: 30ch; }
 .base { margin: 10px 0 0; font-size: 13.5px; color: var(--mute); line-height: 1.5; }
@@ -283,7 +283,7 @@ input[type=range]:focus-visible::-moz-range-thumb { outline: 2px solid var(--ink
 .chart .cl.on { fill: var(--blue); font-weight: 680; }
 
 .switch { display: inline-flex; margin-top: 18px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
-.switch button { padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 14.5px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
+.switch button { padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .hint { margin: 10px 0 0; max-width: 64ch; min-height: 2.9em; font-size: 13.5px; color: var(--mute); text-align: center; }
@@ -291,14 +291,16 @@ input[type=range]:focus-visible::-moz-range-thumb { outline: 2px solid var(--ink
 @keyframes rise { from { opacity: 0; transform: translateY(12px); } }
 @keyframes fade { from { opacity: 0; } }
 .enter .plate { animation: rise .9s cubic-bezier(.3, 0, .2, 1) both; }
-.enter .back { animation: fade 1.3s .2s both; }
+.enter div.back { animation: fade 1.3s .2s both; }
 .enter .read, .enter .slide { animation: fade .8s .6s both; }
 
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: max(8px, calc(clamp(20px, 7vh, 96px) - 38.5px)) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; text-decoration: none; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
@@ -324,12 +326,13 @@ input[type=range]:focus-visible::-moz-range-thumb { outline: 2px solid var(--ink
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; align-self: flex-start; margin: 14px 0 6px; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
   .pane { order: 4; margin-top: 26px; }
   .plate { grid-template-columns: minmax(0, 1fr); padding: 18px 16px 18px; border-radius: 22px; }
-  .back { border-radius: 22px; }
+  div.back { border-radius: 22px; }
   .plate { display: flex; flex-direction: column; }
   .read { display: contents; }
   .rlab { order: 1; margin-top: 0; min-height: 0; }
@@ -342,12 +345,23 @@ input[type=range]:focus-visible::-moz-range-thumb { outline: 2px solid var(--ink
   .chart { min-height: 0; padding-top: 22px; }
   .chart svg { flex: none; height: 180px; }
   .switch { display: flex; width: 100%; }
-  .switch button { flex: 1; text-align: center; padding: 10px 4px; font-size: 13.5px; white-space: normal; line-height: 1.2; }
+  .switch { border-radius: 26px; }
+  .switch button { flex: 1; text-align: center; padding: 12px 6px; min-height: 44px; font-size: 14px; white-space: normal; line-height: 1.2; border-radius: 22px; }
   .hint { text-align: left; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
   .switch button, .more button, .top a, .row { transition: none; }
+}
+/* When the words are taller than the window the page scrolls as a whole, so nothing is cut; the picture stays in place. */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 640px); }
+  .stage { align-self: start; height: max(552.5px, calc(100vh - 87.5px)); }
+  .side { overflow-y: visible; position: relative; z-index: 1; margin-bottom: -4px; }  /* -4px: a rounding overflow does not make the page scroll */
+  .top { position: relative; z-index: 1; }
+}
+@media (min-width: 901px) and (min-height: 640px) {
+  .stage { position: sticky; top: 59.5px; }
 }
 </style>
 </head>
@@ -399,6 +413,7 @@ input[type=range]:focus-visible::-moz-range-thumb { outline: 2px solid var(--ink
     <p class="hint" id="hint"></p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>

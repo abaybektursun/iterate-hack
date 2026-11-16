@@ -219,7 +219,6 @@ svg.near { cursor: pointer; }
 .glow-b { fill: url(#gb); opacity: calc(var(--bloom) * .9); }
 .glow-r { fill: url(#gr); opacity: calc(var(--bloom) * .9); }
 .big { font-weight: 660; letter-spacing: -.03em; font-stretch: 100%; transition: fill .6s ease; }
-.big.reliability { fill: var(--blue); } .big.loop { fill: var(--red); }
 .lab1 { font-weight: 520; }
 .lab2, .lab3 { fill: var(--mute); font-weight: 480; }
 .gname { font-weight: 640; }
@@ -242,8 +241,10 @@ svg.near { cursor: pointer; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: max(8px, calc(clamp(20px, 7vh, 96px) - 38.5px)) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; text-decoration: none; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
@@ -272,19 +273,33 @@ svg.near { cursor: pointer; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; align-self: flex-start; margin: 14px 0 6px; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
   .pane { order: 4; margin-top: 22px; }
   svg { max-height: none; }
   .switch { display: grid; grid-template-columns: 1fr 1fr; margin-top: 16px; border-radius: 22px; }
-  .switch button { text-align: center; padding: 10px 6px; white-space: normal; line-height: 1.25; }
+  .switch button { text-align: center; padding: 12px 12px; min-height: 44px; font-size: 14px; white-space: normal; line-height: 1.25; }
   .hint { display: block; text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
   .switch button, .more button, .top a, .tile, .big { transition: none; }
 }
+/* When the words are taller than the window the page scrolls as a whole, so nothing is cut; the picture stays in place. */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 620px); }
+  .stage { align-self: start; height: max(532.5px, calc(100vh - 87.5px)); }
+  .side { overflow-y: visible; position: relative; z-index: 1; margin-bottom: -4px; }  /* -4px: a rounding overflow does not make the page scroll */
+  .top { position: relative; z-index: 1; }
+}
+@media (min-width: 901px) and (min-height: 620px) {
+  .stage { position: sticky; top: 59.5px; }
+}
+#svg:empty { aspect-ratio: 1000 / 620; }  /* the picture's place is kept before the script draws it */
+@media (max-width: 900px) { #svg:empty { aspect-ratio: 480 / 860; } }
+.switch:empty { min-height: 46.5px; }
 </style>
 </head>
 <body>
@@ -302,6 +317,7 @@ svg.near { cursor: pointer; }
     <p class="hint">Click a tile to read that problem.</p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
