@@ -29,3 +29,4 @@ From cycle 5 the target is read on the 4 h window: the 1 h number follows the mi
 | 16 | 11-15 22:06 | 14 / 56 min (70, last 4 h) | 19.2 | step-back 4: no tool change, no skill edit | none made in cycle 15; spend line (cycle 13): no effect; 10-minute upload (cycle 14): not measurable |
 | 17 | 11-15 23:08 | 11 / 49 min (96, last 4 h) | 25.2 | none: main frozen, no stage with a wait | 10-minute upload (cycle 14): works on real jobs (2 of 2 part tars); no effect on the target yet |
 | 18 | 11-16 00:11 | 6 / 40 min (106, last 4 h) | 27.0 | none: main frozen, no stage with a wait | none made in cycle 17 |
+| 19 | 11-16 01:12 | 5 / 40 min (109, last 4 h) | 27.8 | none: vast.ai stopped on Abay's word, GPU work on the AWS tool, main frozen | none made in cycle 18 |

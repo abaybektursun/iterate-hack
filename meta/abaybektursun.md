@@ -1,5 +1,14 @@
 # Meta review: abaybektursun
 
+## 2026-11-16 01:15 UTC (loop cycle 19; no change; branch metaloop, main is frozen) meta/reviews/abaybektursun/20261116-0112/
+
+- Target (Team line, 4 h): claim to close median 5 min (6 at 00:11), upper quartile 40 min (40), 109 items by 3 people (106); 27.8 results per hour (27.0). Items with GPU jobs: to-job 0, jobs 16, to-answer 2 min. Unchanged within noise; the window is mostly offline tests on stored rows.
+- vast.ai is stopped on Abay's word (00:50 UTC; knowledge-87d434, channel all, 16 local sessions). `vast.py ls` at 01:12: 0 boxes, 0.00 USD/h. The last running job (8369) has its final tar in the team store (00:33). The upload changes of cycles 9 and 14 have no further jobs to act on.
+- Checked from cycle 18: box 60842106 (GPU 0 %) and 60813170 (exited) were ended by the monitor session after their outputs were copied.
+- Score of cycle 18: no change was made, nothing to score.
+- Change: none. GPU work now runs on the AWS tool, which this loop does not edit. Named, not made: jobs there end at their hour limit with nothing copied (2 cells lost tonight, per the helper session, which raised the default limit to 4 h).
+- Next cycle is step-back 5: cycles 17 to 19 made no change, so it counts 2 of 3 toward the stop rule unless it finds one that helped.
+
 ## 2026-11-16 00:15 UTC (loop cycle 18; no change; branch metaloop, main is frozen) meta/reviews/abaybektursun/20261116-0011/
 
 - Target (Team line, 4 h): claim to close median 6 min (11 at 23:08), upper quartile 40 min (49), 106 items by 3 people (96); 27.0 results per hour (25.2). Items with GPU jobs: to-job 0, jobs 16, to-answer 2 min. The window is mostly offline tests on stored rows (theory round 15) and short jobs: item mix, weak evidence for anything else.
