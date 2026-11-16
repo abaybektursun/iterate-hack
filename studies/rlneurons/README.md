@@ -4748,6 +4748,27 @@ these two additions.
 - What holds in both layers: per unit of written shift, the next layer's attention and MLP each change 1.6 to 2.3 times more for
   RL's written directions than for the same write with random outputs. No single sublayer type carries the growth.
 
+#### xchannel (specs/SPEC_xchannel.md, work-04dc93): RL reads one shared subspace in every layer and writes into another; the two barely overlap
+
+Branch `sharedsub` only. Weights only, `jobs/xchannel.py`, job `abaybektursun-1115-184443-0281` (smoke on 3 layers:
+`...184344-9630`); `results/xchannel/run-01/metrics.json`. 224 matrices, 8 residual-side unit directions each (1,792); overlap of
+two top-8 subspaces is 1 when equal and 0.00195 by chance.
+
+| Set of directions | Writer to later readers | Next layer only | Writers of different layers | Readers of different layers | Dimensions filled (participation) | Dimensions for half the norm |
+|---|---|---|---|---|---|---|
+| RL-Zero Math 3.1 minus base | 0.0090 | 0.0218 | 0.0774 | 0.1053 | 113 | 49 |
+| the base matrices themselves | 0.0129 | 0.0678 | 0.0228 | 0.0332 | 286 | 114 |
+| random | 0.0020 | 0.0020 | 0.0020 | 0.0020 | 1,248 | 463 |
+
+- Instrument: random is at chance in every column; the synthetic planted subspace gives overlap 1.0000 and participation 8.00.
+- X1 undecided: RL's writer-to-later-reader overlap is 4.6 times chance (line for held 10, for refuted 3); it falls with layer
+  distance (0.0218, 0.0197, 0.0146, 0.0090, 0.0035 at distances 1, 2, 4, 8, 16).
+- X2 refuted: that overlap is below the base's own (0.0090 against 0.0129), so RL's matrices do not read what RL's earlier
+  matrices write more than the base's top directions do. Its second half held: RL's directions fill 113 dimensions, the base's 286.
+- Not predicted, and the larger effect: RL's input subspaces of different layers overlap 0.105 (54 times chance, 3.2 times the
+  base's own), and its output subspaces 0.077 (40 times chance, 3.4 times the base's). Across 32 layers RL reads from one common
+  set of residual directions and writes into another common set; half of the 1,792 directions' squared norm lies in 49 dimensions.
+
 ## Drift: a switch to Chinese marks a cut-off Think-SFT answer but no label-free sign predicts one early (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-76a232, idea-e37da1)
 
 Question: Think-SFT + cue hits the 16,384 cap on 29 % (hard328) and 45.6 % (fresh2026) of its samples, and a quarter of those
