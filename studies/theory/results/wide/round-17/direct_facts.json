@@ -649,5 +649,19 @@
   "verdict": "refuted",
   "measured": "0.175 [0.120, 0.230], n 174, adversary value 0.534",
   "result": "result-f89757"
+ },
+ {
+  "mechanism": "round-17/account-3/c2",
+  "claim": "On code problems both pass, the Code-RL top-8 1.5x edit's passing answers are as long as RL-Code's (geometric-mean ratio 0.855-1.035); random rank-8 1.5x edit stays near base length",
+  "verdict": "not separated",
+  "measured": "ratio 0.943 [0.902, 0.986], n 194, adversary (RL seed vs other seeds) 0.981",
+  "result": "result-c22d96"
+ },
+ {
+  "mechanism": "round-17/account-1/c2",
+  "claim": "On MATH-500 one edit sample tracks RL's 4-sample rate better than one Think-SFT sample (D2 in 0.02-0.54)",
+  "verdict": "not separated",
+  "measured": "D2 0.1215 [0.0282, 0.2220], n 250, adversary 0.1611",
+  "result": "result-5ce197"
  }
 ]
