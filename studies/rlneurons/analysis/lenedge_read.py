@@ -44,6 +44,22 @@ def lengths(n_tok):
             "max": int(n_tok.max()), **{f"share_ge_{m}": float((n_tok >= m).mean()) for m in MARKS}}
 
 
+def calibration(c, smp, names):
+    """Characters per token by source on the sample, and the error of 'characters / the source's median ratio' as a token estimate.
+    Reported only; no table uses the estimate."""
+    out, err = {}, []
+    for k, s in enumerate(names):
+        m = smp & (c["source"] == k) & (c["n_tok"] > 0)
+        ratio = c["n_chars"][m] / c["n_tok"][m]
+        e = np.abs(c["n_chars"][m] / np.median(ratio) / c["n_tok"][m] - 1)
+        err.append(e)
+        out[s] = {"turns": int(m.sum()), "median": round(float(np.median(ratio)), 3), "estimate_abs_error_median": round(float(np.median(e)), 4),
+                  "estimate_abs_error_p95": round(float(np.percentile(e, 95)), 4)}
+    e = np.concatenate(err)
+    out["all, by-source ratio"] = {"turns": int(len(e)), "estimate_abs_error_median": round(float(np.median(e)), 4), "estimate_abs_error_p95": round(float(np.percentile(e, 95)), 4)}
+    return out
+
+
 def chinese(c, m):
     """Chinese content of the turns in mask m. 'English prompt' = the user turn before holds at most FLAG Chinese characters."""
     en = m & (c["user_zh"] <= L.FLAG)
@@ -133,6 +149,8 @@ def main():
     rows = sum(i["rows"] for i in infos)
     assert len(infos) == 156 and rows == L.ROWS and len(c["n_tok"]) == L.ASSISTANT_TURNS, (len(infos), rows, len(c["n_tok"]))
     every = np.ones(len(c["n_tok"]), bool)
+    smp = c["sampled"] == 1                              # token lengths: the 5 % hash sample of rows (spec addendum 1)
+    assert (c["n_tok"][smp | (c["zh"] > L.FLAG) | (c["ep_n"] > 0)] >= 0).all() and (c["ctx_tok"][smp] >= 0).all()
     math_src = np.isin(c["source"], [k for k, s in enumerate(names) if "math" in s.lower()])
     groups = {"all": every, "math subset": math_src, "math subset or keyword": math_src | (c["math_kw"] == 1), "not math (neither)": ~(math_src | (c["math_kw"] == 1)),
               **{s: c["source"] == k for k, s in enumerate(names)}}
@@ -141,13 +159,13 @@ def main():
     gen = generated(a.features)
     train_bins = {}
     for g in ("all", "math subset"):
-        m = groups[g]
+        m = groups[g] & smp
         train_bins[g] = [{"tokens": [lo, hi], "survival_at_lower_edge": float((c["n_tok"][m] >= lo).mean()),
                           "turns_ending_in_bin": int((m & (c["n_tok"] >= lo) & (c["n_tok"] < hi)).sum()),
                           "english_prompt_turns_ending_in_bin": int((m & en & (c["n_tok"] >= lo) & (c["n_tok"] < hi)).sum()),
                           "of_them_flagged": int((m & en & (c["zh"] > L.FLAG) & (c["n_tok"] >= lo) & (c["n_tok"] < hi)).sum())}
                          for lo, hi in zip(EDGES, EDGES[1:])]
-        for b, h in zip(train_bins[g], hazard(c["n_tok"][m & en], first_ep[m & en])):
+        for b, h in zip(train_bins[g], hazard(c["n_tok"][m & en], first_ep[m & en])):   # m is inside the sample
             b["switch_hazard"] = {k: h[k] for k in ("enter_unswitched", "first_switch", "hazard")}
     surv = [b["survival_at_lower_edge"] for b in train_bins["all"]]
     surv_math = [b["survival_at_lower_edge"] for b in train_bins["math subset"]]
@@ -156,11 +174,14 @@ def main():
     knee_zh = next(k for k, b in enumerate(gen["bins"]) if b["chinese_share"] > 0.10)
     readout = {
         "spec": f"{STUDY}/specs/SPEC_lenedge.md", "dataset": L.W.DATASET, "revision": L.W.REVISION, "tokenizer": list(L.MODEL),
-        "rows": rows, "assistant_turns": int(len(c["n_tok"])), "assistant_tokens_total": int(c["n_tok"].sum()),
-        "rows_longer_than_32768_tokens_in_all_messages": int((c["ctx_tok"] + c["n_tok"] > 32768).sum()),
-        "lengths": {g: lengths(c["n_tok"][m]) for g, m in groups.items()},
+        "rows": rows, "assistant_turns": int(len(c["n_tok"])),
+        "token_sample": {"rule": "every message of the rows with lenedge.sampled(id): a fixed 5 % by SHA-1 of the row id", "assistant_turns": int(smp.sum()),
+                         "share_of_turns": float(smp.mean()), "assistant_tokens": int(c["n_tok"][smp].sum()),
+                         "assistant_tokens_all_turns_estimate": int(c["n_tok"][smp].sum() / smp.mean()),
+                         "turns_whose_row_exceeds_32768_tokens_up_to_the_turn": int((smp & (c["ctx_tok"] + c["n_tok"] > 32768)).sum())},
+        "characters_per_token": calibration(c, smp, names),
+        "lengths": {g: lengths(c["n_tok"][m & smp]) for g, m in groups.items()},
         "chinese": {g: chinese(c, m) for g, m in groups.items()},
-        "chinese_by_length_all_sources_over_32768": chinese(c, c["n_tok"] >= 32768),
         "training_bins": train_bins, "generated": gen,
         "comparison": {
             "spearman_survival_all_vs_precision": spearman(surv, prec), "spearman_survival_math_vs_precision": spearman(surv_math, prec),
@@ -182,9 +203,10 @@ def main():
     json.dump(examples, open(f"{a.out}/examples.json", "w"), indent=1, ensure_ascii=False)
 
     T = [f"# Length edge: training assistant turns of {L.W.DATASET} against Think-SFT's generated answers\n",
-         f"{rows:,} rows, {len(c['n_tok']):,} assistant turns, {c['n_tok'].sum() / 1e9:.2f} billion assistant tokens (tokenizer of {L.MODEL[0]}, "
-         "every turn tokenized). A turn is the assistant message's content, thinking and answer together.\n",
-         "## Tokens per assistant turn\n",
+         f"{rows:,} rows, {len(c['n_tok']):,} assistant turns. A turn is the assistant message's content, thinking and answer together. Token lengths: "
+         f"the {smp.sum():,} assistant turns of a fixed 5 % of rows chosen by a hash of the row id (tokenizer of {L.MODEL[0]}); they hold "
+         f"{c['n_tok'][smp].sum() / 1e9:.3f} billion tokens, so all turns hold about {c['n_tok'][smp].sum() / smp.mean() / 1e9:.1f} billion. Chinese counts: all turns.\n",
+         "## Tokens per assistant turn (the 5 % sample)\n",
          "| Group | Turns | Mean | 50th | 90th | 99th | 99.9th | Max | at least 8,000 | 12,000 | 13,589 | 16,384 | 32,768 |", "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for g, v in readout["lengths"].items():
         T.append(f"| {g} | {v['turns']:,} | {v['mean']:,.0f} | {v['p50']:,} | {v['p90']:,} | {v['p99']:,} | {v['p99.9']:,} | {v['max']:,} | "
@@ -200,8 +222,8 @@ def main():
                     f"{pct(v['chinese_share_of_characters_quartiles'][1], 2)}, {pct(v['chinese_share_of_characters_max'], 2)} |" if q else " | | | |"))
     T += ["\n## Generated answers against training turns, by length bin\n",
           "Generated: Think-SFT + cue, hard328, 4 samples, cap 32,768 (`results/cap32vote/hard328_sft1_cue_s4-01/rows.jsonl`, 1,312 samples): finished "
-          "answers whose length falls in the bin. Training: S = share of assistant turns with at least the bin's lower edge of tokens; flagged = "
-          "English-prompt turns that end in the bin and hold more than 20 Chinese characters.\n",
+          "answers whose length falls in the bin. Training (the 5 % sample): S = share of assistant turns with at least the bin's lower edge of tokens; "
+          "flagged = English-prompt turns that end in the bin and hold more than 20 Chinese characters.\n",
           "| Tokens | Generated: right / finished, precision | Generated: with Chinese | Training S, all | Training S, math subset | Training turns ending in the bin, all | of them flagged (English prompt) | math subset: flagged |",
           "|---|---|---|---|---|---|---|---|"]
     for g, ta, tm in zip(gen["bins"], train_bins["all"], train_bins["math subset"]):
@@ -213,7 +235,7 @@ def main():
     T += ["", "\n".join(f"- {k}: {json.dumps(v)}" for k, v in cmp.items()),
           "\n## First switch to a non-Latin script, by position (`drift.episodes`, the token of the 5th letter)\n",
           "Per bin: answers or turns that reach the bin with no switch yet, and those whose first switch is inside it. Generated: `runs/drift_features` "
-          "(hard328, cap 16,384, 4 samples; `cap32_sft`: one sample per problem at cap 32,768). Training: English-prompt assistant turns.\n",
+          "(hard328, cap 16,384, 4 samples; `cap32_sft`: one sample per problem at cap 32,768). Training: English-prompt assistant turns of the 5 % sample.\n",
           "| Tokens | Think-SFT cap 16,384 | Think-SFT cap 32,768 | RL plain | base + cue | Training, all | Training, math subset |", "|---|---|---|---|---|---|---|"]
     hz = gen["switch_hazard"]
     cell = lambda h: f"{h['first_switch']:,} / {h['enter_unswitched']:,} ({pct(h['hazard'], 2 if h['enter_unswitched'] < 100000 else 3)})"

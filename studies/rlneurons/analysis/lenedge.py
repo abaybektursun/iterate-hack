@@ -36,7 +36,9 @@ from studies.rlneurons.lib import rln4_lib as R
 MODEL = ("allenai/Olmo-3-7B-Think-SFT", "6ff857587e040d6d523a3d5f3a56e918f5401d66")
 ROWS, ASSISTANT_TURNS = 2_268_178, 2_368_984            # results/wsp1/sft_overlap-03/metrics.json
 ZH = re.compile("[一-鿿]")                      # the characters drift.py counts as chinese_chars
-HIGH = re.compile("[^\x00-ͯ]")                     # drift.script() is None for every character below U+0370
+# Every character for which drift.script() is not None matches LETTER (checked on every code point by --selftest), so a turn
+# with fewer than drift.MIN_LETTERS matches has no episode and drift.episodes is not called on it.
+LETTER = re.compile("[\u0400-\u1fff\u2c00-\ud7ff\uf900-\ufffd\U00010000-\U0001d3ff\U0001d800-\U0003ffff]")
 MATH_A = re.compile(r"\\boxed|\\frac|\\sqrt|\$[^$\n]{1,200}\$")
 MATH_B = re.compile(r"\b(find|compute|evaluate|determine|prove|solve|how many|what is|calculate)\b", re.I)
 FLAG = 20                                               # a turn is flagged when it holds more than FLAG Chinese characters
@@ -76,7 +78,7 @@ def encode(text, chars=()):
 
 def scan_file(path, shard):
     """Every assistant turn of one parquet file: (table of COLS, info). Token counts are exact for the turns of sampled rows,
-    for every turn with a Chinese character or an episode, and for the shard's longest turns; -1 for the others."""
+    for every turn with more than FLAG Chinese characters or an episode, and for the shard's longest turns; -1 for the others."""
     tok = tokenizer()
     out, rows, roles = [], 0, {}
     flagged, longest = {"prompt_zh": [], "prompt_no_zh": []}, []
@@ -98,10 +100,10 @@ def scan_file(path, shard):
             elif role == "assistant":
                 zh = ZH.findall(text)
                 zc = ZH.search(text).start() if zh else -1
-                eps = D.episodes(text) if HIGH.search(text) else []
+                eps = D.episodes(text) if len(LETTER.findall(text)) >= D.MIN_LETTERS else []
                 ec = eps[0][1] if eps else -1
                 zt, et = -1, -1
-                if zh or eps:
+                if len(zh) > FLAG or eps:
                     n, (zt, et) = encode(text, [zc, ec])
                     zt, et = (zt if zh else -1), (et + 1 if eps else -1)
                 user_zh = len(ZH.findall(user))
@@ -180,7 +182,8 @@ def selftest(tmp):
     SAMPLE = share
     os.remove(f"{tmp}/lenedge_selftest.parquet")
     n1 = table[:, COLS.index("n_tok")]
-    marked = (table[:, COLS.index("zh")] > 0) | (table[:, COLS.index("ep_n")] > 0)
+    assert all(LETTER.match(chr(cp)) for cp in range(0x110000) if D.script(chr(cp))), "LETTER misses a letter of drift.SCRIPTS"
+    marked = (table[:, COLS.index("zh")] > FLAG) | (table[:, COLS.index("ep_n")] > 0)
     assert (n0[marked] == n1[marked]).all() and n0.max() == n1.max() and (n0 == -1).sum() == 0 and len(rows) + 1 <= LONG   # all are among the longest
     picks = [sampled(f"row-{k}") for k in range(200000)]
     assert abs(sum(picks) / len(picks) - share) < 0.002 and picks == [sampled(f"row-{k}") for k in range(200000)]
