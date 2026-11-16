@@ -1,0 +1,8 @@
+{
+ "commit_base": "341bdf2 (origin/theory) plus this branch's spec commit; script committed with these outputs",
+ "command": "PYTHONPATH=. uv run --no-project --with numpy --with math-verify==0.9.0 --with antlr4-python3-runtime==4.11 python studies/theory/analysis/direct_r16a1c2.py ../iterate-hack-cells-r9b/runs/abaybektursun-1115-103050-eae1/answers.jsonl",
+ "job_id": null,
+ "m21_job": "abaybektursun-1115-103050-eae1",
+ "offline": true,
+ "branch": "syn-r16a1c2"
+}

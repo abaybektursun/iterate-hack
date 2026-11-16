@@ -1,0 +1,99 @@
+{
+ "test": "r16a1c2",
+ "mechanism": "round-16/account-1/c2",
+ "statistic": "G = mean(m21 right v3 | m21 opens deliberatively) - mean(m21 right v3 | not), MATH-500 problems 0-249 with cued-base T1 right, fraction",
+ "adversary": {
+  "value": 0.49770525242223357,
+  "how": "same rows; result-1f98b0 flag (direct_t3open.flagged) on t3_start (first 240 chars of the plain base T3 answer); mean(t3_right | flagged) - mean(t3_right | unflagged); m21 not read",
+  "t3_flagged": 53,
+  "t3_flagged_right": 0.8490566037735849,
+  "t3_unflagged": 148,
+  "t3_unflagged_right": 0.35135135135135137,
+  "expected_by_adversary": 0.48
+ },
+ "value": 0.5744167337087691,
+ "ci90": [
+  0.47779466911576873,
+  0.6653481600542775
+ ],
+ "n": 201,
+ "m21_flagged": 113,
+ "m21_flagged_right": 0.9380530973451328,
+ "m21_unflagged": 88,
+ "m21_unflagged_right": 0.36363636363636365,
+ "null_G0": 0.0036705551086081423,
+ "null_G0_ci90": [
+  -0.03993568010936432,
+  0.048768740505911075
+ ],
+ "null_range": [
+  -0.06,
+  0.12
+ ],
+ "ranges": {
+  "round-16/account-1/c2": [
+   0.2,
+   0.65
+  ],
+  "round-16/account-2/deny-account-1-c2": [
+   -0.1,
+   0.17
+  ]
+ },
+ "verdicts": {
+  "round-16/account-1/c2": "undecided",
+  "round-16/account-2/deny-account-1-c2": "refuted"
+ },
+ "bootstrap": "10,000 resamples of the kept problems, numpy default_rng(16), 5th-95th percentile; G0 same seed",
+ "flag_rule": "direct_t3open.flagged: case-sensitive \\b(Okay|Alright|Hmm|Let me|Let's|I need to)\\b in the first 240 chars, before the first $, =, \\( or \\[",
+ "right": "stored score_v3 == 1 (cap-hit answers counted as stored)",
+ "checks": {
+  "m21_empty_text_in_rows": [
+   22,
+   41,
+   78,
+   123,
+   124,
+   140,
+   201,
+   216,
+   241,
+   246
+  ],
+  "m21_cap_hit_in_rows": [],
+  "m21_no_extraction_in_rows": 32,
+  "m21_unique_seeds": true,
+  "m21_matches_cell_per_problem": true,
+  "unflagged_with_opener_after_equation_marker": [
+   12,
+   31,
+   67,
+   79,
+   87,
+   90,
+   117,
+   156,
+   175,
+   190,
+   196
+  ]
+ },
+ "sensitivity_without_empty_texts": {
+  "value": 0.5277966870887225,
+  "ci90": [
+   0.42826863007585897,
+   0.6272499430394167
+  ],
+  "n": 191
+ },
+ "raw_rows_read": "First 10 kept rows (problems 0,1,2,3,5,6,7,8,10,12) read. No cap hits, unique seeds. m21 text usually continues the prompt line first ('.', ' (Answer: X).', ' in the form $Answer$.') and then opens 'Okay, so I need to...' or 'Let's solve...'; flagged ones are long reasoning (600-4600 tokens). Unflagged: 0 = direct worked solution ('To convert...'), wrong; 2 = garbled text, wrong; 12 = 'Okay' after an echoed '$Answer$', so unflagged by the marker rule though deliberative, right. Over all kept rows: 10 unflagged answers are empty (1 token, all wrong) and 11 unflagged answers have an opener after an echoed '$' (8 right), so the unflagged group mixes empty, garbled, direct and a few deliberative answers.",
+ "departures": [
+  "n is 201, plan said about 205 (all T1-right problems 0-249 used)"
+ ],
+ "inputs": {
+  "m21_raw": "runs/abaybektursun-1115-103050-eae1/answers.jsonl (not committed)",
+  "t1_t3": "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json",
+  "cue": "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl",
+  "cell": "studies/theory/results/experiments/cell-r9-m21-01/per_problem.json"
+ }
+}
