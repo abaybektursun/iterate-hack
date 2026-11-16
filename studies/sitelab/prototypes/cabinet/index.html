@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: cabinet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:ital,opsz,wght@0,6..72,300..500;1,6..72,300..500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #100f0e; --ink: #e8e2d6; --mute: #a39a8c; --faint: #7b7368; --rule: #2e2a25;
+  --brass: #c7a56a; --ivory: #e6dcc2; --black: #1b1917; --green: #4f8f7f; --red: #b4523c; --col: 372px;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--ink); background: var(--paper); overflow: hidden;
+  font: 400 14px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+button, select { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+:focus-visible { outline: 1px solid var(--brass); outline-offset: 2px; border-radius: 2px; }
+canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+canvas.pan { cursor: grabbing; } canvas.pick { cursor: pointer; }
+#tags { position: fixed; inset: 0; pointer-events: none; overflow: hidden; transition: opacity .3s; }
+.grain { position: fixed; inset: 0; pointer-events: none; opacity: .06; mix-blend-mode: overlay; z-index: 1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1.2 -.1'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.shade { position: fixed; inset: 0; pointer-events: none; z-index: 1;
+  background: linear-gradient(90deg, rgba(12, 11, 10, .97), rgba(12, 11, 10, .95) 384px, rgba(12, 11, 10, 0) 520px), radial-gradient(ellipse at 62% 50%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .42) 100%); }
+
+.col { position: fixed; left: 0; top: 0; bottom: 0; width: var(--col); padding: 22px 0 16px 40px; display: flex; flex-direction: column; pointer-events: none; z-index: 2; }
+.col > * { pointer-events: auto; }
+.top { display: flex; align-items: baseline; gap: 14px; font-size: 12px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--faint); }
+.top a { color: var(--mute); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.top a:hover { color: var(--ink); }
+h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 27px; line-height: 1.18; letter-spacing: -.012em; margin: 22px 0 10px; text-wrap: balance; }
+h1 b { font-weight: 300; color: var(--brass); font-variant-numeric: lining-nums; }
+h1 button { color: var(--brass); border-bottom: 1px solid #6d5a39; font-variant-numeric: lining-nums; }
+.note { font-size: 12.5px; color: var(--mute); padding-bottom: 12px; min-height: 3.2em; }
+.note b { color: var(--ink); font-weight: 500; }
+i.sw { display: inline-block; width: 15px; height: 7px; border-radius: 1px; margin: 0 4px 0 2px; background: var(--c); box-shadow: 0 0 0 1px #6d5a39; vertical-align: 1px; }
+
+.head { display: grid; grid-template-columns: 1fr 44px 30px; gap: 8px; font-size: 10.5px; letter-spacing: .06em; color: var(--faint); padding: 6px 0 4px; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.head span:nth-child(2) { text-align: right; }
+.row { display: grid; grid-template-columns: 1fr 30px; gap: 8px; align-items: stretch; border-bottom: 1px solid #211e1a; }
+.row .cfg { display: grid; grid-template-columns: 1fr 44px; gap: 8px; align-items: baseline; padding: 5px 0 4px; font-size: 13px; color: var(--mute); line-height: 1.25; }
+.row .cfg em { font-style: normal; text-align: right; font-family: "Newsreader", Georgia, serif; font-size: 17px; line-height: 1; color: var(--ink); font-variant-numeric: lining-nums tabular-nums; }
+.row .cfg:hover, .row.on .cfg { color: var(--ink); }
+.row.on .cfg span::before { content: ""; display: inline-block; width: 15px; height: 7px; border-radius: 1px; background: var(--ivory); box-shadow: 0 0 0 1px #6d5a39; margin-right: 8px; vertical-align: 1px; }
+.row .vs { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; color: var(--faint); text-align: center; align-self: center; border: 1px solid transparent; border-radius: 99px; padding: 1px 0; }
+.row .vs:hover { color: var(--ink); border-color: #4b443b; }
+.row.vson .vs { color: var(--paper); background: var(--brass); }
+.row.on .vs { visibility: hidden; }
+.sel { display: none; }
+.def { font-size: 11.5px; line-height: 1.45; color: var(--faint); padding-top: 10px; margin-top: auto; overflow-y: auto; scrollbar-width: thin; }
+.def b { color: var(--mute); font-weight: 500; }
+.def p { margin: 0 0 6px; }
+.def summary { display: none; }
+.def code { font: inherit; color: var(--mute); overflow-wrap: anywhere; }
+
+.tag { position: fixed; left: 0; top: 0; pointer-events: none; width: 92px; text-align: right; will-change: transform; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; color: var(--mute); line-height: 1.25; }
+.tag::after { content: ""; position: absolute; left: 100%; top: 50%; width: 16px; height: 1px; background: #6d5a39; margin-left: 7px; }
+#tip { position: fixed; left: 0; top: 0; pointer-events: none; background: rgba(26, 24, 22, .95); border: 1px solid var(--rule); border-radius: 3px; padding: 6px 10px; opacity: 0; transition: opacity .12s; font-size: 12.5px; max-width: 300px; z-index: 3; }
+#tip.on { opacity: 1; } #tip small { color: var(--mute); font-size: 11px; display: block; }
+#close { position: fixed; right: 26px; top: 22px; z-index: 3; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--ink); border: 1px solid #4b443b; border-radius: 99px; padding: 4px 14px; background: rgba(16, 15, 14, .7); display: none; }
+#close.on { display: block; } #close:hover { border-color: var(--brass); }
+#sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+#err { position: fixed; left: 8px; bottom: 8px; color: var(--red); font-size: 12px; white-space: pre-wrap; z-index: 9; max-width: 70%; }
+
+@media (max-width: 760px) {
+  .shade { background: linear-gradient(180deg, rgba(14, 13, 12, .97), rgba(14, 13, 12, .95) var(--top, 220px), rgba(14, 13, 12, 0) calc(var(--top, 220px) + 44px), rgba(14, 13, 12, 0) calc(100% - 80px), rgba(14, 13, 12, .9)); }
+  .col { right: 0; width: auto; padding: 12px 16px 8px; }
+  h1 { font-size: 18.5px; margin: 8px 0 6px; }
+  .note { font-size: 11.5px; padding-bottom: 6px; min-height: 3em; }
+  .head, .list { display: none; }
+  .sel { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .sel label { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; font-weight: 600; color: var(--faint); display: block; }
+  .sel select { width: 100%; font-size: 13px; border: 1px solid #4b443b; border-radius: 3px; padding: 5px 6px; background: #171513; color: var(--ink); }
+  .def { background: rgba(14, 13, 12, .92); border-top: 1px solid var(--rule); max-height: 46vh; flex: none; }
+  .def summary { display: block; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--mute); cursor: pointer; padding-bottom: 4px; }
+  #tags { display: none; }
+  #close { right: 12px; top: auto; bottom: 44px; }
+}
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="c" aria-label="An oak card-catalogue cabinet with 500 drawers, one for each MATH-500 problem; the enamel tag on a drawer shows whether the chosen configuration solved it"></canvas>
+<div id="tags"></div>
+<div class="grain"></div>
+<div class="shade"></div>
+<div class="col" id="col">
+  <div class="top"><a href="../../">← Lab</a><span>Cabinet · MATH-500</span></div>
+  <h1 id="line">&nbsp;</h1>
+  <div class="note" id="note"></div>
+  <div class="head"><span>Tags show</span><span>solved</span><span>against</span></div>
+  <div class="list" id="list"></div>
+  <div class="sel"><div><label for="selA">Tags show</label><select id="selA"></select></div><div><label for="selB">Against</label><select id="selB"></select></div></div>
+  <details class="def" id="def" open></details>
+</div>
+<div id="tip"></div>
+<button id="close">Close drawer</button>
+<div id="sr" aria-live="polite"></div>
+<div id="err"></div>
+
+<script type="module">
+import * as THREE from 'three';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
+const $ = id => document.getElementById(id);
+const fail = e => { $('err').textContent += (e && (e.stack || e.message || e.reason) || e) + '\n'; console.error(e); };
+window.addEventListener('error', e => fail(e.error || e.message));
+window.addEventListener('unhandledrejection', e => fail(e.reason));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x)), lerp = (a, b, t) => a + (b - a) * t;
+const ease = x => x * x * (3 - 2 * x);
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const narrow = () => innerWidth <= 760;
+const rnd = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+const num = n => n.toLocaleString('en-US');
+
+const DATA = await (await fetch('data.json')).json();
+await Promise.all(['300 40px Newsreader', 'italic 400 40px Newsreader', '500 40px Newsreader', '600 40px Archivo', '500 40px Archivo'].map(f => document.fonts.load(f))).catch(() => 0);
+
+// ------------------------------------------------------------------ the data and its mappings
+const N = DATA.n, COLS = DATA.cols, ROWS = DATA.rows, CFG = DATA.configs, NC = CFG.length;
+const solved = (c, p) => c.r.charCodeAt(p) === 49;
+const opens = Array.from({ length: N }, (_, p) => CFG.reduce((s, c) => s + solved(c, p), 0));
+const slotOf = new Int32Array(N); DATA.order.forEach((p, s) => slotOf[p] = s);   // drawer s holds problem DATA.order[s]
+const isRL = c => c.kind === 'rl';
+const SHUT = opens.filter(o => o === 0).length;
+const RL_ONLY = DATA.order.filter(p => CFG.some(c => isRL(c) && solved(c, p)) && !CFG.some(c => !isRL(c) && solved(c, p)));
+for (const c of CFG) if ([...c.r].filter(x => x === '1').length !== c.total) throw new Error('total of ' + c.k);
+if (SHUT !== DATA.check.shut || RL_ONLY.length !== DATA.check.rl_only) throw new Error('counts differ from build.py');
+const cfg = k => CFG.find(c => c.k === k);
+const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+
+// geometry of the cabinet, in drawer widths
+const PX = 1, PY = 0.8, Y0 = 1.3, YTOP = Y0 + ROWS * PY, HALF = COLS * PX / 2;
+const FRONT = 0.03, OUT_DIFF = 0.24, OUT_OPEN = 1.12;       // the face of a shut drawer; how far a differing and an opened drawer stand out
+const sx = s => -HALF + (s % COLS + 0.5) * PX, sy = s => YTOP - (Math.floor(s / COLS) + 0.5) * PY;
+const TAG_Y = 0.125, TAG_Z = FRONT + 0.02;
+const ENAMEL = ['#191715', '#e9dfc4', '#3f8271', '#b04a33'].map(c => new THREE.Color(c));   // not solved, solved, gained, lost
+
+// ------------------------------------------------------------------ renderer, room, light
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#0c0b0a');
+const camera = new THREE.PerspectiveCamera(26, 1, 0.3, 300);
+
+function studio() {   // the room the brass reflects: a tall window at the left, a dim warm room, a pale ceiling
+  const es = new THREE.Scene(), lit = (w, h, v, c = [1, 1, 1]) => new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c[0] * v, c[1] * v, c[2] * v), side: THREE.DoubleSide }));
+  es.add(new THREE.Mesh(new THREE.SphereGeometry(90, 24, 12), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.05, 0.043, 0.036), side: THREE.BackSide })));
+  for (const [x, y] of [[-1, 1], [1, 1], [-1, -1], [1, -1]]) { const pane = lit(11, 15, 7, [1, 0.96, 0.9]); pane.position.set(-40 + x * 6.2, 22 + y * 8.2, 34 + x * 4); pane.lookAt(0, 9, 0); es.add(pane); }
+  const ceil = lit(90, 90, 0.5, [1, 0.95, 0.88]); ceil.position.set(0, 50, 20); ceil.rotation.x = Math.PI / 2;
+  const right = lit(30, 40, 0.5, [1, 0.86, 0.7]); right.position.set(50, 12, 30); right.lookAt(0, 9, 0);
+  const front = lit(60, 30, 0.22, [1, 0.9, 0.8]); front.position.set(0, 8, 70); front.lookAt(0, 9, 0);
+  const floor = lit(120, 120, 0.06, [1, 0.8, 0.6]); floor.position.set(0, -4, 20); floor.rotation.x = Math.PI / 2;
+  es.add(ceil, right, front, floor);
+  const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(es, 0.02, 1, 300).texture; pm.dispose();
+}
+studio();
+const key = new THREE.SpotLight(new THREE.Color(1.0, 0.94, 0.84), 4.5, 0, 0.46, 1, 0);   // the window: one soft pool of light
+key.position.set(-21, 25, 36); key.target.position.set(-3, 11, 0); key.castShadow = true; key.shadow.mapSize.set(2048, 2048);
+key.shadow.bias = -0.0005; key.shadow.normalBias = 0.02;
+const shAim = new THREE.Vector3(0, 9.4, 0), PSM = new THREE.Matrix4();
+key.shadow.updateMatrices = function (light) {   // the shadow map looks where shAim says (the whole cabinet, or the opened drawer), not where the pool of light is aimed
+  const c = this.camera;
+  c.position.setFromMatrixPosition(light.matrixWorld); c.lookAt(shAim); c.updateMatrixWorld();
+  PSM.multiplyMatrices(c.projectionMatrix, c.matrixWorldInverse); this._frustum.setFromProjectionMatrix(PSM);
+  this.matrix.set(0.5, 0, 0, 0.5, 0, 0.5, 0, 0.5, 0, 0, 0.5, 0.5, 0, 0, 0, 1); this.matrix.multiply(PSM);
+};
+function shadowOn(point, half) {
+  shAim.copy(point); const c = key.shadow.camera, d = key.position.distanceTo(point);
+  c.fov = 2 * Math.atan(half / d) * 180 / Math.PI; c.aspect = 1; c.near = d - 14; c.far = d + 16; c.updateProjectionMatrix();
+}
+shadowOn(new THREE.Vector3(0, 9.4, 0), 18.5);
+scene.add(key, key.target, new THREE.HemisphereLight(0x9a938a, 0x241b14, 0.32));
+
+// ------------------------------------------------------------------ surfaces drawn once: oak, plaster, card edges
+const tex = (cv, srgb, rep) => { const t = new THREE.CanvasTexture(cv); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; if (rep) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]); } return t; };
+const cvs = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d', { willReadFrequently: true })]; };
+const OAK_W = 5, OAK_H = 3;   // one tile of the oak texture covers this many drawer widths, along and across the grain
+
+function oak() {   // quarter-sawn oak: straight grain, open pores, a few pale ray flecks across the grain. Tiles in both directions.
+  const SX = 1024, SY = 2048, [cv, c] = cvs(SX, SY), rand = rnd(11), TAU = Math.PI * 2;
+  c.fillStyle = '#684529'; c.fillRect(0, 0, SX, SY);
+  const wavy = (y0, amp, width, style) => {
+    const a = [1, 2, 3, 5].map(n => [n, amp * rand() / n, rand() * TAU]), m = width / 2 + amp * 2;
+    for (const dy of y0 < m ? [0, SY] : y0 > SY - m ? [0, -SY] : [0]) {
+      c.beginPath();
+      for (let x = 0; x <= SX; x += 32) { let y = y0 + dy; for (const [n, k, p] of a) y += k * Math.sin(TAU * n * x / SX + p); c.lineTo(x, y); }
+      c.lineWidth = width; c.strokeStyle = style; c.stroke();
+    }
+  };
+  for (let i = 0; i < 60; i++) wavy(rand() * SY, 34, 70 + rand() * 280, rand() < 0.5 ? `rgba(36,18,6,${0.04 + rand() * 0.1})` : `rgba(196,140,80,${0.03 + rand() * 0.08})`);   // slow changes of tone
+  for (let i = 0; i < 240; i++) wavy(rand() * SY, 12, 5 + rand() * 40, rand() < 0.5 ? `rgba(52,30,12,${0.03 + rand() * 0.07})` : `rgba(190,144,88,${0.025 + rand() * 0.06})`);   // early and late wood
+  for (let i = 0; i < 1800; i++) wavy(rand() * SY, 9, 0.5 + rand() * 1.6, rand() < 0.7 ? `rgba(40,22,8,${0.04 + rand() * 0.11})` : `rgba(204,156,100,${0.03 + rand() * 0.08})`);
+  const at = (x, y, m, f) => { for (const dx of x < m ? [0, SX] : x > SX - m ? [0, -SX] : [0]) for (const dy of y < m ? [0, SY] : y > SY - m ? [0, -SY] : [0]) f(x + dx, y + dy); };
+  c.lineCap = 'round';
+  for (let i = 0; i < 9000; i++) {   // pores: short dark dashes along the grain
+    const x = rand() * SX, y = rand() * SY, l = 3 + rand() * 15; c.lineWidth = 0.6 + rand() * 0.9; c.strokeStyle = `rgba(30,16,6,${0.12 + rand() * 0.22})`;
+    at(x, y, 20, (x, y) => { c.beginPath(); c.moveTo(x, y); c.lineTo(x + l, y + (rand() - 0.5) * 1.2); c.stroke(); });
+  }
+  for (let i = 0; i < 130; i++) {   // ray flecks: pale, short, across the grain, in families that share a slant
+    const x0 = rand() * SX, y0 = rand() * SY, slant = (rand() - 0.5) * 0.5, k = 1 + Math.floor(rand() * 4);
+    for (let j = 0; j < k; j++) {
+      const x = (x0 + (rand() - 0.5) * 60 + SX) % SX, y = (y0 + (rand() - 0.5) * 90 + SY) % SY, l = 16 + rand() * 54;
+      c.lineWidth = 1.2 + rand() * 2.2; c.strokeStyle = `rgba(214,172,116,${0.05 + rand() * 0.09})`;
+      at(x, y, 60, (x, y) => { c.beginPath(); c.moveTo(x - slant * l / 2, y - l / 2); c.lineTo(x + slant * l / 2, y + l / 2); c.stroke(); });
+    }
+  }
+  const im = c.getImageData(0, 0, SX, SY).data, [rc, r] = cvs(SX, SY), out = r.createImageData(SX, SY), o = out.data;   // red: height for the bump; green: roughness
+  for (let i = 0; i < im.length; i += 4) { const l = (im[i] * 0.5 + im[i + 1] * 0.4 + im[i + 2] * 0.1) / 255; o[i] = clamp(l * 2.4 - 0.12, 0, 1) * 255; o[i + 1] = clamp(1.0 - l * 1.1, 0.44, 0.9) * 255; o[i + 2] = 0; o[i + 3] = 255; }
+  r.putImageData(out, 0, 0);
+  return [tex(cv, true, [1 / OAK_W, 1 / OAK_H]), tex(rc, false, [1 / OAK_W, 1 / OAK_H])];
+}
+function plaster() {
+  const S = 512, [cv, c] = cvs(S, S), rand = rnd(5);
+  c.fillStyle = '#808080'; c.fillRect(0, 0, S, S);
+  for (let i = 0; i < 1500; i++) { const x = rand() * S, y = rand() * S, r = 6 + rand() * 60, g = c.createRadialGradient(x, y, 0, x, y, r), v = rand() < 0.5 ? 255 : 0; g.addColorStop(0, `rgba(${v},${v},${v},${0.02 + rand() * 0.05})`); g.addColorStop(1, `rgba(${v},${v},${v},0)`);
+    c.fillStyle = g; for (const dx of [0, S, -S]) for (const dy of [0, S, -S]) c.fillRect(x - r + dx, y - r + dy, 2 * r, 2 * r); }
+  return tex(cv, false, [14, 8]);
+}
+function edges() {   // the top of a full drawer: the edges of the cards in it
+  const [cv, c] = cvs(64, 512), rand = rnd(8);
+  c.fillStyle = '#e7dcc2'; c.fillRect(0, 0, 64, 512);
+  for (let y = 0; y < 512; y += 2 + Math.floor(rand() * 3)) { c.fillStyle = `rgba(${rand() < 0.2 ? '255,250,235' : '70,52,30'},${0.12 + rand() * 0.3})`; c.fillRect(0, y, 64, 1); }
+  return tex(cv, true);
+}
+const [oakMap, oakRough] = oak();
+const hook = s => { s.vertexShader = 'attribute vec2 aOff;\n' + s.vertexShader.replace('#include <uv_vertex>', '#include <uv_vertex>\n#ifdef USE_MAP\n vMapUv += aOff;\n#endif\n#ifdef USE_BUMPMAP\n vBumpMapUv += aOff;\n#endif\n#ifdef USE_ROUGHNESSMAP\n vRoughnessMapUv += aOff;\n#endif'); };
+const oakOpts = { map: oakMap, bumpMap: oakRough, bumpScale: 1.6, roughnessMap: oakRough, roughness: 1, metalness: 0, envMapIntensity: 0.55, vertexColors: true };
+const woodMat = new THREE.MeshStandardMaterial(oakOpts); woodMat.onBeforeCompile = hook;        // the drawers and the dividers: each instance starts at its own place in the grain
+const caseMat = new THREE.MeshStandardMaterial(oakOpts);
+const brassMat = new THREE.MeshStandardMaterial({ color: '#b3904f', metalness: 1, roughness: 0.44, envMapIntensity: 1.2 });
+const enamelMat = new THREE.MeshPhysicalMaterial({ color: '#ffffff', metalness: 0, roughness: 0.55, specularIntensity: 0.3, envMapIntensity: 0.3 });
+const paperMat = new THREE.MeshStandardMaterial({ map: edges(), roughness: 0.92, metalness: 0, envMapIntensity: 0.4, vertexColors: true });
+
+// ------------------------------------------------------------------ geometry
+const paint = (g, f) => { const p = g.attributes.position, a = new Float32Array(p.count * 3); for (let i = 0; i < p.count; i++) { const v = f(p.getX(i), p.getY(i), p.getZ(i)); a[i * 3] = v[0]; a[i * 3 + 1] = v[1]; a[i * 3 + 2] = v[2]; } g.setAttribute('color', new THREE.BufferAttribute(a, 3)); return g; };
+const WHITE = () => [1, 1, 1];
+function board(w, h, d, x, y, z, tone = WHITE) {   // a box whose texture runs along its longest side, in drawer widths
+  const g = new THREE.BoxGeometry(w, h, d).toNonIndexed(), p = g.attributes.position, n = g.attributes.normal, uv = g.attributes.uv;
+  const long = w >= h && w >= d ? 0 : h >= d ? 1 : 2;
+  for (let i = 0; i < p.count; i++) {
+    const q = [p.getX(i), p.getY(i), p.getZ(i)], face = Math.abs(n.getX(i)) > 0.5 ? 0 : Math.abs(n.getY(i)) > 0.5 ? 1 : 2, ax = [0, 1, 2].filter(a => a !== face);
+    const u = ax.includes(long) ? long : ax[0], v = ax.find(a => a !== u);
+    uv.setXY(i, q[u] + (face + 1) * 0.37, q[v] + (face + 1) * 0.61);
+  }
+  g.translate(x, y, z); return paint(g, tone);
+}
+function rect(w, h, r) { const s = new THREE.Shape(), x = -w / 2, y = -h / 2; s.moveTo(x + r, y); s.lineTo(x + w - r, y); s.quadraticCurveTo(x + w, y, x + w, y + r); s.lineTo(x + w, y + h - r); s.quadraticCurveTo(x + w, y + h, x + w - r, y + h); s.lineTo(x + r, y + h); s.quadraticCurveTo(x, y + h, x, y + h - r); s.lineTo(x, y + r); s.quadraticCurveTo(x, y, x + r, y); return s; }
+
+const FW = 0.92, FH = 0.72, BODY = 1.9;
+function drawerGeo() {   // the oak of one drawer: a bevelled front and an open box of paler wood behind it
+  const front = new THREE.ExtrudeGeometry(rect(FW, FH, 0.012), { depth: 0.05, bevelEnabled: true, bevelThickness: 0.014, bevelSize: 0.014, bevelOffset: -0.014, bevelSegments: 2, curveSegments: 3 });
+  front.translate(0, 0, FRONT - 0.064); paint(front, WHITE);
+  const inside = (x, y, z) => { const s = 0.5 + 0.5 * ease(clamp((y + 0.33) / 0.62, 0, 1)); return [1.5 * s, 1.4 * s, 1.24 * s]; };
+  const zc = -0.035 - BODY / 2, parts = [front,
+    board(0.035, 0.6, BODY, -0.4225, -0.02, zc, inside), board(0.035, 0.6, BODY, 0.4225, -0.02, zc, inside),
+    board(0.81, 0.03, BODY, 0, -0.305, zc, inside), board(0.81, 0.57, 0.035, 0, -0.02, -0.035 - BODY + 0.0175, inside)];
+  return mergeGeometries(parts.map(g => { g.deleteAttribute('uv2'); return g; }));
+}
+function brassGeo() {   // the label holder with its two screws, and the turned pull
+  const s = rect(0.78, 0.29, 0.035); s.holes.push(rect(0.57, 0.205, 0.012));
+  const holder = new THREE.ExtrudeGeometry(s, { depth: 0.016, bevelEnabled: true, bevelThickness: 0.007, bevelSize: 0.007, bevelOffset: -0.007, bevelSegments: 2, curveSegments: 4 });
+  holder.translate(0, TAG_Y, FRONT + 0.006);
+  const screw = x => { const g = new THREE.SphereGeometry(0.019, 10, 6).toNonIndexed(); g.scale(1, 1, 0.5); g.translate(x, TAG_Y, FRONT + 0.03); return g; };
+  const prof = [[0, 0], [0.05, 0], [0.054, 0.008], [0.05, 0.016], [0.028, 0.026], [0.02, 0.044], [0.022, 0.06], [0.032, 0.07], [0.05, 0.078], [0.056, 0.092], [0.053, 0.106], [0.04, 0.117], [0.02, 0.124], [0, 0.125]];
+  const knob = new THREE.LatheGeometry(prof.map(p => new THREE.Vector2(p[0], p[1])), 20).toNonIndexed(); knob.rotateX(Math.PI / 2); knob.translate(0, -0.2, FRONT);
+  return mergeGeometries([holder, screw(-0.338), screw(0.338), knob]);
+}
+function stackGeo() {   // the cards that fill a drawer; only their top edges show
+  const g = new THREE.BoxGeometry(0.79, 0.5, BODY - 0.16).toNonIndexed(), p = g.attributes.position, uv = g.attributes.uv;
+  for (let i = 0; i < p.count; i++) uv.setXY(i, p.getX(i) + 0.5, p.getZ(i) * 3);
+  g.translate(0, -0.04, -0.035 - BODY / 2);
+  return paint(g, (x, y) => { const s = (y > 0 ? 1 : 0.4) * (0.72 + 0.28 * ease(clamp((0.4 - Math.abs(x)) / 0.1, 0, 1))); return [s, s, s]; });
+}
+
+const inst = (geo, mat, n) => { const m = new THREE.InstancedMesh(geo, mat, n); m.frustumCulled = false; m.castShadow = m.receiveShadow = true; return m; };
+const wood = inst(drawerGeo(), woodMat, N), brass = inst(brassGeo(), brassMat, N), stack = inst(stackGeo(), paperMat, N), tags = inst(new THREE.BoxGeometry(0.556, 0.192, 0.01), enamelMat, N);
+brass.instanceMatrix = stack.instanceMatrix = wood.instanceMatrix;   // one drawer, one matrix: the brass and the cards ride with the oak
+stack.castShadow = false;
+{
+  const rand = rnd(21), off = new Float32Array(N * 2), col = new THREE.Color();
+  for (let s = 0; s < N; s++) { off[s * 2] = rand(); off[s * 2 + 1] = rand(); const v = 0.74 + rand() * 0.42; wood.setColorAt(s, col.setRGB(v * (1 + (rand() - 0.5) * 0.1), v, v * (1 + (rand() - 0.5) * 0.14))); tags.setColorAt(s, ENAMEL[0]); }
+  wood.geometry.setAttribute('aOff', new THREE.InstancedBufferAttribute(off, 2));
+}
+const rails = (() => {   // the dividers between the drawers
+  const g = mergeGeometries([board(COLS * PX, 0.07, 0.5, 0, 0, -0.25)]), gv = board(ROWS * PY, 0.07, 0.5, 0, 0, -0.247); gv.rotateZ(Math.PI / 2);
+  const h = inst(g, woodMat, ROWS + 1), v = inst(gv, woodMat, COLS + 1), m = new THREE.Matrix4(), rand = rnd(4), dark = new THREE.Color(0.6, 0.57, 0.54);
+  const offs = n => { const a = new Float32Array(n * 2); for (let i = 0; i < a.length; i++) a[i] = rand(); return new THREE.InstancedBufferAttribute(a, 2); };
+  for (let i = 0; i <= ROWS; i++) { h.setMatrixAt(i, m.makeTranslation(0, Y0 + i * PY, 0)); h.setColorAt(i, dark); }
+  for (let i = 0; i <= COLS; i++) { v.setMatrixAt(i, m.makeTranslation(-HALF + i * PX, Y0 + ROWS * PY / 2, 0)); v.setColorAt(i, dark); }
+  g.setAttribute('aOff', offs(ROWS + 1)); gv.setAttribute('aOff', offs(COLS + 1));
+  return [h, v];
+})();
+const SIDE = 0.55, DEPTH = 2.5, XS = HALF + SIDE, Y_CASE = YTOP + 0.36, Y_ALL = Y_CASE + 0.5;
+const carcass = (() => {
+  const t = k => () => [k, k * 0.98, k * 0.96], up = (w, h, d, x, y, z, k) => { const g = board(h, w, d, 0, 0, 0, t(k)); g.rotateZ(Math.PI / 2); g.translate(x, y, z); return g; };
+  const zc = 0.012 - DEPTH / 2, hgt = Y_CASE - 0.9;
+  const g = mergeGeometries([
+    up(SIDE, hgt, DEPTH, -HALF - SIDE / 2, 0.9 + hgt / 2, zc, 0.9), up(SIDE, hgt, DEPTH, HALF + SIDE / 2, 0.9 + hgt / 2, zc, 0.9),
+    board(COLS * PX, 0.4, DEPTH, 0, 1.1, zc, t(0.9)), board(COLS * PX, 0.36, DEPTH, 0, YTOP + 0.18, zc, t(0.9)),
+    board(2 * XS + 0.24, 0.16, DEPTH + 0.14, 0, Y_CASE + 0.08, zc + 0.06, t(0.82)), board(2 * XS + 0.56, 0.34, DEPTH + 0.3, 0, Y_CASE + 0.33, zc + 0.14, t(0.92)),
+    board(2 * XS + 0.3, 0.9, DEPTH + 0.16, 0, 0.45, zc + 0.07, t(0.74)), board(2 * XS + 0.44, 0.14, DEPTH + 0.24, 0, 0.93, zc + 0.11, t(0.84)),
+    board(COLS * PX, ROWS * PY, 0.06, 0, Y0 + ROWS * PY / 2, -DEPTH + 0.1, t(0.25))]);
+  const m = new THREE.Mesh(g, caseMat); m.castShadow = m.receiveShadow = true; return m;
+})();
+const wall = new THREE.Mesh(new THREE.PlaneGeometry(240, 120), new THREE.MeshStandardMaterial({ color: '#3b3f3e', roughness: 0.96, metalness: 0, bumpMap: plaster(), bumpScale: 2.2, envMapIntensity: 0.25 }));
+wall.position.set(0, 30, -DEPTH - 0.02); wall.receiveShadow = true;
+const floorTex = oakMap.clone(); floorTex.repeat.set(1 / 9, 1 / 5); floorTex.needsUpdate = true;
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(240, 80), new THREE.MeshStandardMaterial({ color: '#4a3a2c', map: floorTex, roughness: 0.5, metalness: 0, envMapIntensity: 0.5 }));
+{ const uv = floor.geometry.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setXY(i, uv.getX(i) * 240, uv.getY(i) * 80); }
+floor.rotation.x = -Math.PI / 2; floor.position.z = 40 - DEPTH; floor.receiveShadow = true;
+scene.add(wall, floor, carcass, ...rails, wood, brass, stack, tags);
+
+// ------------------------------------------------------------------ the index card of the opened drawer
+const CARD_L = [0.84, 0.56], CARD_P = [0.56, 1.0];
+const [cardCv, cx] = cvs(1240, 827);
+const cardTex = tex(cardCv, true); cardTex.anisotropy = 16;
+const cardMat = new THREE.MeshStandardMaterial({ map: cardTex, roughness: 0.88, metalness: 0, envMapIntensity: 0.35 });
+const cardEdge = new THREE.MeshStandardMaterial({ color: '#d8cdb2', roughness: 0.9 });
+const card = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 0.006), [cardEdge, cardEdge, cardEdge, cardEdge, cardMat, cardEdge]);
+card.castShadow = card.receiveShadow = true; card.visible = false; scene.add(card);
+
+function wrap(text, font, width) {
+  cx.font = font; const out = []; let line = '';
+  for (let w of text.split(' ')) {
+    while (cx.measureText(w).width > width) { let k = w.length; while (k > 1 && cx.measureText(w.slice(0, k)).width > width - cx.measureText(line ? line + ' ' : '').width) k--; out.push((line ? line + ' ' : '') + w.slice(0, k)); line = ''; w = w.slice(k); }
+    const t = line ? line + ' ' + w : w;
+    if (cx.measureText(t).width > width && line) { out.push(line); line = w; } else line = t;
+  }
+  if (line) out.push(line); return out;
+}
+const fit = (t, width) => { if (cx.measureText(t).width <= width) return t; while (t.length > 1 && cx.measureText(t + '…').width > width) t = t.slice(0, -1); return t + '…'; };
+function drawCard(p) {
+  const tall = narrow(), W = tall ? 760 : 1240, H = tall ? 1360 : 827, M = tall ? 50 : 60, INK = '#2b241d', SOFT = '#75695a', rand = rnd(p + 1);
+  cardCv.width = W; cardCv.height = H;
+  cx.fillStyle = '#eee5cf'; cx.fillRect(0, 0, W, H);
+  for (let i = 0; i < 2600; i++) { cx.fillStyle = `rgba(${rand() < 0.5 ? '255,255,250' : '120,96,60'},${0.03 + rand() * 0.06})`; cx.fillRect(rand() * W, rand() * H, 1 + rand() * 3, 1); }   // paper fibres
+  const ink = (t, x, y, font, colour = INK, align = 'left', space = '0px') => {   // letterpress: a pale bite under the ink
+    cx.font = font; cx.textAlign = align; cx.letterSpacing = space; cx.textBaseline = 'alphabetic';
+    cx.fillStyle = 'rgba(255,252,240,.55)'; cx.fillText(t, x, y + 1.6); cx.fillStyle = colour; cx.fillText(t, x, y);
+  };
+  const rule = (y, colour, w = 1.5) => { cx.fillStyle = colour; cx.fillRect(M, y, W - 2 * M, w); };
+  const slot = slotOf[p], LAB = `600 ${tall ? 21 : 23}px Archivo`;
+  ink(`${DATA.subjects[DATA.sub[p]]} · level ${DATA.lvl[p]}`.toUpperCase(), M, M + 26, LAB, SOFT, 'left', '3px');
+  ink(`DRAWER ${slot + 1}`, W - M, M + 26, LAB, SOFT, 'right', '3px');
+  rule(M + 50, 'rgba(176,74,51,.75)', 2.5);
+  let y = M + 50, size = tall ? 40 : 38, lines;
+  const room = tall ? 430 : 262;
+  do { lines = wrap(DATA.t[p], `italic 400 ${size}px Newsreader`, W - 2 * M); size -= 2; } while (lines.length * (size + 2) * 1.27 > room && size > 22);
+  size += 2; y += size * 1.45;
+  for (const l of lines) { ink(l, M, y, `italic 400 ${size}px Newsreader`); y += size * 1.27; }
+  y = Math.max(y + 16, M + 50 + room * 0.55);
+  ink('REFERENCE ANSWER', M, y, LAB, SOFT, 'left', '3px');
+  cx.font = LAB; cx.letterSpacing = '3px'; const lx = M + cx.measureText('REFERENCE ANSWER').width + 26; cx.letterSpacing = '0px';
+  cx.font = LAB; cx.letterSpacing = '2px'; const idw = tall ? 0 : cx.measureText(DATA.id[p].toUpperCase()).width + 30; ink(DATA.id[p].toUpperCase(), W - M, tall ? H - 20 : y, tall ? '600 17px Archivo' : LAB, SOFT, 'right', '2px');
+  cx.letterSpacing = '0px'; cx.font = '500 36px Newsreader'; ink(fit(DATA.a[p], W - M - lx - idw), lx, y + 3, '500 36px Newsreader');
+  const rows = H - M - 6 - (y + 30), rh = rows / NC;
+  y += 30;
+  CFG.forEach((c, i) => {
+    const ok = solved(c, p), ry = y + i * rh, on = c.k === A, colour = ok ? INK : '#9b3a26', mid = ry + rh / 2;
+    rule(ry, 'rgba(92,120,138,.4)');
+    if (on) { cx.fillStyle = 'rgba(176,134,60,.13)'; cx.fillRect(M, ry + 1.5, W - 2 * M, rh - 1.5); }
+    cx.beginPath(); cx.arc(M + 16, tall ? ry + 30 : mid, 9, 0, 7); cx.lineWidth = 2.5; cx.strokeStyle = colour; cx.stroke(); if (ok) { cx.fillStyle = colour; cx.fill(); }
+    const answer = c.ans ? (c.ans[p] === null || c.ans[p] === '' ? 'no answer found' : c.ans[p]) : 'answer not in the committed rows';
+    const faint = !c.ans || c.ans[p] === null || c.ans[p] === '';
+    if (tall) {
+      ink(c.short, M + 40, ry + 39, `${on ? 600 : 500} 27px Archivo`);
+      ink(`${ok ? 'right' : 'wrong'} · ${num(c.tok[p])} tokens`, W - M - 8, ry + 39, '400 29px Newsreader', colour, 'right');
+      cx.font = 'italic 400 30px Newsreader'; ink(fit(answer, W - 2 * M - 48), M + 40, ry + 80, 'italic 400 30px Newsreader', faint ? SOFT : INK);
+    } else {
+      const base = mid + 10;
+      ink(c.short, M + 40, base, `${on ? 600 : 500} 25px Archivo`);
+      ink(ok ? 'RIGHT' : 'WRONG', M + 322, base - 1, '600 19px Archivo', colour, 'left', '2.5px');
+      ink(num(c.tok[p]), M + 530, base, '400 30px Newsreader', INK, 'right'); ink('tokens', M + 540, base - 1, '400 20px Archivo', SOFT);
+      cx.font = 'italic 400 30px Newsreader'; ink(fit(answer, W - M - 8 - (M + 640)), M + 640, base, 'italic 400 30px Newsreader', faint ? SOFT : INK);
+    }
+  });
+  rule(y + rows, 'rgba(92,120,138,.4)');
+  cardTex.needsUpdate = true;
+  $('sr').textContent = `Drawer ${slot + 1}: ${DATA.subjects[DATA.sub[p]]}, level ${DATA.lvl[p]}. ${DATA.t[p]} Reference answer: ${DATA.a[p]}. ` + CFG.map(c => `${c.short}: ${solved(c, p) ? 'right' : 'wrong'}, ${c.tok[p]} tokens.`).join(' ');
+}
+
+// ------------------------------------------------------------------ state: which configuration, against which, which drawer is open
+let A = CFG[0].k, B = null, open = -1, need = true, live = true;
+const state = new Uint8Array(N), next = new Uint8Array(N), flipAt = new Float64Array(N).fill(-1);
+const pz = new Float32Array(N), tz = new Float32Array(N), pullAt = new Float64Array(N);
+let cardUp = 0, cardGoal = 0, cardSlot = -1, cardAt = 0;
+const tagOf = s => { const p = DATA.order[s], a = solved(cfg(A), p); if (!B) return a ? 1 : 0; const b = solved(cfg(B), p); return a === b ? (a ? 1 : 0) : b ? 2 : 3; };
+const restOf = s => s === open ? OUT_OPEN : B && tagOf(s) > 1 ? OUT_DIFF : 0;
+function apply(ripple = true) {   // set every tag and every drawer to the state; the change travels across the cabinet from the top left
+  const now = performance.now() / 1000;
+  for (let s = 0; s < N; s++) {
+    const d = ripple && !still ? (s % COLS) * 0.017 + Math.floor(s / COLS) * 0.013 : 0, t = tagOf(s), z = restOf(s);
+    if (t !== (flipAt[s] >= 0 ? next[s] : state[s])) { if (flipAt[s] >= 0) state[s] = next[s]; next[s] = t; flipAt[s] = now + d; }
+    if (z !== tz[s]) { tz[s] = z; pullAt[s] = now + (s === open || z === 0 && pz[s] > 0.5 ? 0 : d); }
+  }
+  live = need = true;
+}
+function words() {
+  const a = cfg(A), b = B && cfg(B), rl = cfg('rl_plain'), base = cfg('base_plain');
+  const only = RL_ONLY.length ? `<button id="only" title="Open it">${RL_ONLY.length}</button> ${RL_ONLY.length === 1 ? 'opens' : 'open'} only for RL` : 'none opens only for RL';
+  $('line').innerHTML = `Of <b>${N}</b> drawers, the RL checkpoint opens <b>${rl.total}</b> and the plain base <b>${base.total}</b>; <b>${SHUT}</b> stay shut for all ${WORDS[NC]} configurations, and ${only}.`;
+  if (RL_ONLY.length) $('only').onclick = () => openDrawer(slotOf[RL_ONLY[0]]);
+  let gained = 0, lost = 0; if (b) for (let p = 0; p < N; p++) { const x = solved(a, p), y = solved(b, p); if (y && !x) gained++; if (x && !y) lost++; }
+  $('note').innerHTML = `<b>${esc(a.name)}</b> solves <b>${a.total}</b> of ${N}: <i class="sw" style="--c:var(--ivory)"></i>solved, <i class="sw" style="--c:var(--black)"></i>not.` +
+    (b ? ` Against <b>${esc(b.name)}</b> (${b.total}), ${gained + lost} drawers stand out: <i class="sw" style="--c:var(--green)"></i><b>${gained}</b> it adds, <i class="sw" style="--c:var(--red)"></i><b>${lost}</b> it loses.` : '');
+  for (const r of $('list').children) { r.classList.toggle('on', r.dataset.k === A); r.classList.toggle('vson', r.dataset.k === B); }
+  $('selA').value = A; $('selB').value = B || '';
+}
+function choose(a, b, ripple = true) {
+  if (a === b) b = null;
+  A = a; B = b; words(); apply(ripple); if (open >= 0) drawCard(DATA.order[open]); saveHash();
+}
+function openDrawer(s) {
+  if (s === open) s = -1;
+  open = s; $('close').classList.toggle('on', s >= 0); $('tags').style.opacity = s >= 0 ? 0 : 1; $('tip').classList.remove('on');
+  if (s >= 0) { drawCard(DATA.order[s]); cardSlot = s; cardUp = 0; cardGoal = 1; cardAt = performance.now() / 1000 + (still ? 0 : 0.28); const t = narrow() ? CARD_P : CARD_L; card.scale.set(t[0], t[1], 1); card.visible = true; }
+  else cardGoal = 0;
+  apply(false); saveHash();
+}
+const saveHash = () => history.replaceState(null, '', '#' + [A, B || '-', open >= 0 ? 'p' + DATA.order[open] : ''].filter(Boolean).join('/'));
+function readHash() {
+  const [a, b, p] = location.hash.slice(1).split('/');
+  if (cfg(a)) A = a; B = cfg(b) && b !== A ? b : null;
+  const i = p && /^p\d+$/.test(p) ? +p.slice(1) : -1; return i >= 0 && i < N ? slotOf[i] : -1;
+}
+
+// ------------------------------------------------------------------ the column: the selectors and the legend
+$('list').innerHTML = CFG.map(c => `<div class="row" data-k="${c.k}"><button class="cfg" title="${esc(c.src)}"><span>${esc(c.name)}</span><em>${c.total}</em></button><button class="vs" aria-label="Compare with ${esc(c.name)}">vs</button></div>`).join('');
+$('list').addEventListener('click', e => { const r = e.target.closest('.row'); if (!r) return; if (e.target.closest('.vs')) choose(A, B === r.dataset.k ? null : r.dataset.k); else choose(r.dataset.k, B); });
+$('selA').innerHTML = CFG.map(c => `<option value="${c.k}">${esc(c.short)} · ${c.total}</option>`).join('');
+$('selB').innerHTML = '<option value="">nothing</option>' + CFG.map(c => `<option value="${c.k}">${esc(c.short)} · ${c.total}</option>`).join('');
+$('selA').onchange = e => choose(e.target.value, B); $('selB').onchange = e => choose(A, e.target.value || null);
+$('close').onclick = () => openDrawer(-1);
+$('def').innerHTML = `<summary>What the cabinet shows</summary>
+<p><b>One drawer is one MATH-500 problem.</b> Order, left to right and then top to bottom: by subject (A to Z, named at the row where each begins), then the problems most of the ${WORDS[NC]} configurations solve first, then the lower level, then the problem's number in the set.</p>
+<p><b>The enamel tag</b> is ivory when the configuration under “Tags show” solved the problem, black when it did not. With a second configuration chosen under “against”, each drawer where the two differ stands out a quarter of a drawer's width: a green tag where the second solves what the first does not, a red tag where the first solves what the second does not.</p>
+<p><b>Click a drawer</b> for its card: the problem (cut at 400 characters, LaTeX as written), the reference answer, the problem's id in the set, and per configuration right or wrong, the tokens generated and the extracted final answer where the committed rows hold one. Drag to pan, wheel or pinch to zoom, arrow keys to step, Esc to close.</p>
+<p>“Opens” means solves. One sample per problem at ${esc(DATA.sampling)}, grader ${esc(DATA.grader)}; a vote takes the most frequent answer of 4 samples and its tokens are those of all 4. The grain, the brass and the light carry no data. Sources: <code>${esc(DATA.src.axis)}</code> and the run folders named in each row's tooltip.</p>`;
+const fold = () => { $('def').open = !narrow(); }; fold();
+const subjectTags = DATA.subjects.map((name, i) => { const s = DATA.order.findIndex(p => DATA.sub[p] === i), e = document.createElement('div'); e.className = 'tag'; e.textContent = name; $('tags').appendChild(e); return { e, row: Math.floor(s / COLS) }; });
+
+// ------------------------------------------------------------------ layout and camera
+let zoomMax = 1, W = 0, H = 0, zoom = 1, panX = 0, panY = 0, velX = 0, velY = 0, fitD = 60, box = { left: 0, top: 0, w: 1, h: 1 };
+const DIR = new THREE.Vector3(0.15, 0.04, 1).normalize(), CY = Y_ALL / 2, TAN = Math.tan(camera.fov * Math.PI / 360);
+const camP = new THREE.Vector3(), camL = new THREE.Vector3(), goalP = new THREE.Vector3(), goalL = new THREE.Vector3(); let camSet = false;
+function resize() {
+  W = innerWidth; H = innerHeight;
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, W * H > 1.2e6 ? 1.25 : 1.5)); renderer.setSize(W, H, false);
+  const nar = narrow(), left = nar ? 0 : 430, top = nar ? $('def').getBoundingClientRect().top > H / 2 ? document.querySelector('.sel').getBoundingClientRect().bottom + 6 : 230 : 0, bot = nar ? 30 : 0;
+  box = { left, top, w: W - left, h: H - top - bot, bot }; document.querySelector('.shade').style.setProperty('--top', top + 'px');
+  const tall = (Y_ALL + 0.9) * H / (2 * TAN * box.h), wide = (2 * XS + (nar ? 1.6 : 4.8)) * H / (2 * TAN * box.w);
+  fitD = nar ? tall * 0.62 : Math.max(tall, wide); zoomMax = Math.max(1, Math.max(tall, wide) / fitD); zoom = Math.min(zoom, zoomMax);
+  camera.aspect = W / H; camera.setViewOffset(W, H, -left / 2, -(top - bot) / 2, W, H); camera.updateProjectionMatrix();
+  if (open >= 0) { const t = nar ? CARD_P : CARD_L; card.scale.set(t[0], t[1], 1); drawCard(DATA.order[open]); }
+  need = true;
+}
+const upp = () => 2 * fitD * zoom * TAN / H;   // drawer widths per pixel on the face of the cabinet
+function limits() {
+  const hw = box.w * upp() / 2, hh = box.h * upp() / 2, mx = Math.max(0, XS + 0.6 - hw), my = Math.max(0, Y_ALL / 2 + 0.5 - hh);
+  panX = clamp(panX, -mx, mx); panY = clamp(panY, -my, my);
+}
+const cardHome = new THREE.Vector3();
+function aim() {
+  limits();
+  if (open >= 0) {
+    const [cw, ch] = narrow() ? CARD_P : CARD_L, nar = narrow();
+    const d = Math.max(ch * H / (2 * TAN * box.h * (nar ? 0.84 : 0.43)), cw * H / (2 * TAN * box.w * (nar ? 0.92 : 0.52)));
+    cardHome.set(sx(open), sy(open) + 0.29 + ch / 2, OUT_OPEN - 0.42);
+    goalL.set(cardHome.x, cardHome.y + (nar ? 0.02 : -0.3), cardHome.z); goalP.set(goalL.x + 0.2 * d * (sx(open) > 0 ? -1 : 1) * 0.6, goalL.y + 0.3 * d, goalL.z + d);
+  } else { goalL.set(panX, CY + panY, 0); goalP.copy(DIR).multiplyScalar(fitD * zoom).add(goalL); }
+  if (!camSet) { camP.copy(goalP); camL.copy(goalL); camSet = true; }
+}
+addEventListener('resize', () => { fold(); resize(); });
+
+// ------------------------------------------------------------------ pointer, wheel, keys
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), hit = new THREE.Vector3(), zPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+function pickAt(e) {   // the drawer under the pointer: the opened one first, then those standing out, then the shut ones
+  ndc.set(e.clientX / W * 2 - 1, 1 - e.clientY / H * 2); ray.setFromCamera(ndc, camera);
+  if (card.visible && cardUp > 0.5 && ray.intersectObject(card, false).length) return -2;
+  for (const z of [OUT_OPEN, OUT_DIFF, 0]) {
+    zPlane.constant = -(z + FRONT); if (!ray.ray.intersectPlane(zPlane, hit)) continue;
+    const c = Math.floor((hit.x + HALF) / PX), r = Math.floor((YTOP - hit.y) / PY); if (c < 0 || c >= COLS || r < 0 || r >= ROWS) continue;
+    const s = r * COLS + c; if (Math.abs(tz[s] - z) < 0.01 && Math.abs(hit.x - sx(s)) < FW / 2 && Math.abs(hit.y - sy(s)) < FH / 2) return s;
+  }
+  return -1;
+}
+const pts = new Map(); let drag = null, pinch = 0, hover = -1;
+function tip(s, e) {
+  const t = $('tip'); if (s < 0 || open >= 0) { t.classList.remove('on'); return; }
+  const p = DATA.order[s];
+  t.innerHTML = `Drawer ${s + 1} · ${esc(DATA.subjects[DATA.sub[p]])}, level ${DATA.lvl[p]}<small>${opens[p]} of ${NC} configurations solve it · click to open</small>`;
+  t.style.transform = `translate(${Math.min(e.clientX + 14, W - 250)}px, ${e.clientY + 16}px)`; t.classList.add('on');
+}
+canvas.addEventListener('pointerdown', e => {
+  canvas.setPointerCapture(e.pointerId); pts.set(e.pointerId, e);
+  if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); drag = null; return; }
+  drag = { x: e.clientX, y: e.clientY, moved: 0, t: performance.now() }; velX = velY = 0;
+});
+canvas.addEventListener('pointermove', e => {
+  if (pts.has(e.pointerId)) pts.set(e.pointerId, e);
+  if (pts.size === 2 && pinch) { const [a, b] = [...pts.values()], d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); if (open < 0) { zoom = clamp(zoom * pinch / d, 0.16, zoomMax); need = true; } pinch = d; return; }
+  if (!drag) { if (e.pointerType === 'mouse') { const s = pickAt(e); if (s !== hover) { hover = s; canvas.classList.toggle('pick', s >= 0); } tip(s, e); } return; }
+  const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.moved += Math.abs(dx) + Math.abs(dy);
+  if (drag.moved > 5 && open < 0) {
+    canvas.classList.add('pan'); $('tip').classList.remove('on');
+    const now = performance.now(), dt = Math.max(8, now - drag.t) / 1000, u = upp();
+    panX -= dx * u; panY += dy * u; velX = lerp(velX, -dx * u / dt, 0.5); velY = lerp(velY, dy * u / dt, 0.5); drag.t = now; need = true;
+  }
+  drag.x = e.clientX; drag.y = e.clientY;
+});
+const up = e => {
+  pts.delete(e.pointerId); pinch = 0; canvas.classList.remove('pan'); if (!drag) return;
+  if (drag.moved <= 5) { velX = velY = 0; const s = pickAt(e); if (s >= 0) openDrawer(s); else if (s === -1 && open >= 0) openDrawer(-1); }
+  else if (performance.now() - drag.t > 90 || still) velX = velY = 0;
+  drag = null;
+};
+canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', e => { pts.delete(e.pointerId); drag = null; velX = velY = 0; canvas.classList.remove('pan'); });
+canvas.addEventListener('pointerleave', () => { hover = -1; $('tip').classList.remove('on'); });
+canvas.addEventListener('wheel', e => {
+  e.preventDefault(); if (open >= 0) return;
+  const z0 = zoom; zoom = clamp(zoom * Math.exp(e.deltaY * 0.0012), 0.16, zoomMax);
+  const u = 2 * fitD * TAN / H, ox = e.clientX - (box.left + box.w / 2), oy = e.clientY - (box.top + box.h / 2);   // keep the drawer under the pointer in place
+  panX += ox * u * (z0 - zoom); panY -= oy * u * (z0 - zoom); need = true;
+}, { passive: false });
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'SELECT' || e.metaKey || e.ctrlKey) return;
+  const step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -COLS, ArrowDown: COLS }[e.key];
+  if (step) { e.preventDefault();
+    if (open >= 0) { const s = open + step; if (s >= 0 && s < N && (Math.abs(step) > 1 || Math.floor(s / COLS) === Math.floor(open / COLS))) openDrawer(s); }
+    else { const i = CFG.findIndex(c => c.k === A), j = clamp(i + (step > 0 ? 1 : -1), 0, NC - 1); if (j !== i) choose(CFG[j].k, B); } }
+  else if (e.key === 'Escape') { if (open >= 0) openDrawer(-1); else if (B) choose(A, null); }
+  else if (/^[1-9]$/.test(e.key) && +e.key <= NC) { const k = CFG[+e.key - 1].k; e.shiftKey ? choose(A, B === k ? null : k) : choose(k, B); }
+  else if (e.code && /^Digit[1-9]$/.test(e.code) && e.shiftKey && +e.code.slice(5) <= NC) { const k = CFG[+e.code.slice(5) - 1].k; choose(A, B === k ? null : k); }
+});
+addEventListener('hashchange', () => { const s = readHash(); words(); if (s !== open) openDrawer(s); else apply(); });
+
+// ------------------------------------------------------------------ the loop: draw only when something moves
+const M = wood.instanceMatrix.array, TM = tags.instanceMatrix.array, v3 = new THREE.Vector3();
+for (let s = 0; s < N; s++) { M.set([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, sx(s), sy(s), 0, 1], s * 16); TM.set([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, sx(s), sy(s) + TAG_Y, TAG_Z, 1], s * 16); }
+function mechanism(now, dt) {   // move the drawers toward their places and turn the tags that change
+  let moving = false; const k = 1 - Math.exp(-dt * 11);
+  for (let s = 0; s < N; s++) {
+    if (pz[s] !== tz[s]) { if (still) pz[s] = tz[s]; else if (now >= pullAt[s]) { pz[s] = lerp(pz[s], tz[s], k); if (Math.abs(pz[s] - tz[s]) < 0.0015) pz[s] = tz[s]; } moving = true; M[s * 16 + 14] = pz[s]; TM[s * 16 + 14] = pz[s] + TAG_Z; }
+    if (flipAt[s] >= 0) {
+      const u = still ? 1 : (now - flipAt[s]) / 0.34; moving = true;
+      if (u >= 1) { state[s] = next[s]; flipAt[s] = -1; tags.setColorAt(s, ENAMEL[state[s]]); TM[s * 16 + 5] = TM[s * 16 + 10] = 1; TM[s * 16 + 6] = TM[s * 16 + 9] = 0; TM[s * 16 + 14] = pz[s] + TAG_Z; }
+      else if (u > 0) { const a = Math.PI * ease(u), c = Math.cos(a), sn = Math.sin(a); tags.setColorAt(s, ENAMEL[u < 0.5 ? state[s] : next[s]]);
+        TM[s * 16 + 5] = c; TM[s * 16 + 6] = sn; TM[s * 16 + 9] = -sn; TM[s * 16 + 10] = c; TM[s * 16 + 14] = pz[s] + TAG_Z + 0.1 * Math.sin(Math.PI * u); }
+    }
+  }
+  wood.instanceMatrix.needsUpdate = tags.instanceMatrix.needsUpdate = tags.instanceColor.needsUpdate = true;
+  return moving;
+}
+function cardPose(now, dt) {
+  if (!card.visible) return false;
+  const goal = now >= cardAt ? cardGoal : 0, before = cardUp;
+  cardUp = still ? goal : lerp(cardUp, goal, 1 - Math.exp(-dt * (goal ? 7 : 14))); if (Math.abs(cardUp - goal) < 0.002) cardUp = goal;
+  const s = cardSlot, ch = card.scale.y, u = ease(cardUp);
+  card.position.set(sx(s), lerp(sy(s) - 0.06, sy(s) + 0.29 + ch / 2, u), pz[s] - 0.42);
+  card.rotation.x = -0.2 * u;
+  if (cardUp === 0 && cardGoal === 0) card.visible = false;
+  return cardUp !== before || now < cardAt;
+}
+function labels() {
+  for (const t of subjectTags) { v3.set(-XS - 0.75, YTOP - (t.row + 0.5) * PY, 0).project(camera); t.e.style.transform = `translate(${((v3.x + 1) / 2 * W).toFixed(1)}px, ${((1 - v3.y) / 2 * H).toFixed(1)}px) translate(-100%, -50%)`; }
+}
+canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); });
+canvas.addEventListener('webglcontextrestored', () => { studio(); need = true; });
+let last = performance.now(), focus = 0;
+function frame() {
+  requestAnimationFrame(frame);
+  const t = performance.now(), dt = Math.min(0.1, (t - last) / 1000), now = t / 1000; last = t;
+  if (!drag && (Math.abs(velX) > 1e-3 || Math.abs(velY) > 1e-3)) { panX += velX * dt; panY += velY * dt; velX *= Math.exp(-dt * 4); velY *= Math.exp(-dt * 4); need = true; }
+  if (live) { live = mechanism(now, dt); need = true; }
+  if (cardPose(now, dt)) need = true;
+  aim();
+  const k = still ? 1 : 1 - Math.exp(-dt * (open >= 0 || focus > 0.02 ? 5 : 16));
+  if (camP.distanceToSquared(goalP) > 1e-7 || camL.distanceToSquared(goalL) > 1e-7) { camP.lerp(goalP, k); camL.lerp(goalL, k); if (camP.distanceToSquared(goalP) < 1e-6) { camP.copy(goalP); camL.copy(goalL); } need = true; }
+  const f = open >= 0 ? 1 : 0; if (focus !== f) { focus = still ? f : lerp(focus, f, 1 - Math.exp(-dt * 5)); if (Math.abs(focus - f) < 0.01) focus = f; need = true; }
+  if (!need || renderer.getContext().isContextLost()) return;
+  need = false;
+  camera.position.copy(camP); camera.lookAt(camL); camera.updateMatrixWorld();
+  if (open >= 0 && focus > 0.35) shadowOn(v3.set(sx(open), sy(open) + 0.2, 0.5), 3.6); else shadowOn(v3.set(0, 9.4, 0), 18.5);
+  labels();
+  renderer.shadowMap.needsUpdate = true;
+  renderer.render(scene, camera);
+}
+const first = readHash();
+for (const o of $('selA').options) o.selected = o.value === A;
+words(); resize(); apply(true);
+if (first >= 0) openDrawer(first);
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>
