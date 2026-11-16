@@ -128,3 +128,21 @@ and the 15 longest turns, each as short excerpts.
 
 No new generation. No statement about the base's pretraining data. No causal test: a model trained on the same traces
 cut at another length would be the experiment that separates length from content.
+
+## Addendum 1 (2026-11-15, before the table was read): the fallback of "Method" is taken
+
+The pass with every turn tokenized was stopped after 37 of 156 shards and 36 minutes: the large shards took 1,800 s each on
+30 processes (the tokenizer runs at about 1 MB/s per process), about 2 more hours in all. What was seen before this
+addendum: a debug print of 8 finished shards (lengths and Chinese counts of three sources, among them 33,266 turns of the
+math subset: 50th percentile 13,384 tokens, 99th 16,730, 7.8 % of turns with more than 20 Chinese characters, first one
+at token 12,256 at the median). The rerun (`runs/lenedge/train-01`; the 37 shards are kept in `runs/lenedge/full36`):
+
+- Tokens are counted exactly for (1) every message of a fixed 5 % of rows, chosen by the SHA-1 of the row id
+  (`lenedge.sampled`), (2) every assistant turn with a Chinese character or an episode (their token positions need it),
+  (3) the 40 longest turns of each shard in characters. Every other turn has no token count.
+- Every statement about token lengths (percentiles, shares, survival, switch hazard) is computed on the 5 % sample, with
+  its n. No table uses a length estimated from characters; the calibration (characters per token by source, on the sample)
+  is reported only so that a reader can judge the estimate. Check: on the 37 fully tokenized shards, the sample's
+  percentiles against those of all turns.
+- Chinese counts and shares by source use all 2,368,984 turns, as before; the position of the first Chinese character in
+  tokens is exact for every flagged turn.
