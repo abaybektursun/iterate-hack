@@ -210,5 +210,23 @@
   "adversary": 1.6261,
   "n": 224,
   "added": "2026-11-16T00:10:36Z"
+ },
+ {
+  "mechanism": "round-16/account-3/c3",
+  "claim": "On-policy RL shares the output side of the deliberation pairs whatever the reward while Think-SFT overlaps only the driven inputs, so relative to its input-side capture Code-RL 3.1 sits on Math 3.1 top-8 output side far more than Think-SFT (Q_C in [1.4, 8.0]).",
+  "result": "result-9f2b30",
+  "verdict": "refuted",
+  "measured": "0.492 [0.442, 0.553], n 224, adversary value 0.589",
+  "interval": [
+   0.44184772283797225,
+   0.5532157811439954
+  ],
+  "range": [
+   1.4,
+   8.0
+  ],
+  "adversary": 0.5885342261259756,
+  "n": 224,
+  "added": "2026-11-16T00:10:55Z"
  }
 ]
