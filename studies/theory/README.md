@@ -2061,6 +2061,100 @@ about a condition neither has seen: the team's open weight-edit cells and new sa
    table when run on a round with `open_forecasts.json`.
 5. The explore-half consequence tests, weights cells and the gate of engines 17 and 18 run only with `--with-row-tests`.
 
+## Round 19 (engine 19, accounts and covariate-only adversaries forecast the team's open work)
+
+Plan `specs/SPEC_round19.md`. Board work-7f9d79, forecasts posted as knowledge-776164 and on work-4bfe4e and work-e340a2.
+Branch `theory` only (main is frozen); no GPU job. Command:
+
+```
+PYTHONUNBUFFERED=1 uv run studies/theory/lib/forecast.py synthesis studies/theory/results/wide/round-19 --from studies/theory/results/wide/round-18 studies/theory/results/wide/round-17 studies/theory/results/wide/round-16 studies/theory/results/wide/round-15 studies/theory/results/wide/round-14 studies/theory/results/wide/round-13 studies/theory/results/wide/round-12 studies/theory/results/wide/round-11 studies/theory/results/wide/round-10 studies/theory/results/wide/round-09 studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
+```
+
+**Answer.** One of 4 open targets separates the accounts from their covariate-only adversaries: the dial restricted to
+one shared 64-dimensional residual subspace per side (work-4bfe4e, t01), where all three accounts forecast 197-198 of
+328 and all three adversaries 160-162, with disjoint 90 % intervals (gap 1.20-1.31 interval widths). The m = 8 cell
+(t02) is 0.53-0.73 widths apart with overlapping intervals; the two vote targets of work-e340a2 (t03, t04) are 0 to 0.17
+widths apart. No result had posted when this section was written; the next round's standing scores them.
+
+**Forecast file.** `forecasts.json` (with `open_forecasts.md` / `.json`, `open_forecasts/`, `targets.json`) was first
+committed in 78049bf at 2026-11-16T01:38:33Z and pushed at once; `forecasts.md` records its written time
+2026-11-16T01:38:22 UTC. Board snapshot of the targets: 01:30:56 UTC.
+
+**Minutes per stage** (`run.json`). Start about 01:28:40 UTC. standing 2.4 (17 folders rescored); direct facts (71, 17
+hold) and the explore copy under 0.5; three accounts in parallel with the targets_open job 3.2 (targets 59 s, accounts
+144-190 s; none sent back, none dropped); 3 blind markers 2.0; open_forecasts 2.2 (2 readers 43-59 s, 3 account
+forecasters 74-114 s, 3 adversaries 80-95 s, 3 judges 15-16 s). Whole round 9.8 minutes (round 18: 12.6). No fixes, no
+stops.
+
+**Targets** (`targets.json`): 4 from 10 open work items; the others report no countable number (site, paper and visuals
+work) and the targets job wrote none for work-001ff1 (the Think lineage's reward step) or work-ceafa5 (simlead).
+
+| target | deciding item | reader-1 | reader-2 | account-1 | adversary-1 | account-2 | adversary-2 | account-3 | adversary-3 | best gap (widths) | class |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| t01: right of 328, hard328 cue, RL-Math top-8 edit restricted to one shared 64-dim residual subspace per side, norm matched to the 1.5x edit | work-4bfe4e | 191 [174, 206] | 188 [168, 205] | 198 [185, 210] | 160 [146, 175] | 198 [186, 208] | 162 [147, 177] | 197 [183, 210] | 162 [151, 174] | 1.31 | deciding |
+| t02: the same with an 8-dim subspace | work-4bfe4e | 179 [160, 198] | 174 [153, 194] | 183 [166, 199] | 159 [143, 175] | 185 [167, 202] | 161 [145, 177] | 180 [160, 198] | 160 [146, 174] | 0.73 | weak |
+| t03: right of 328, cued base, plurality vote over 8 | work-e340a2 | 200 [192, 209] | 200 [192, 208] | 200 [191, 209] | 203 [195, 211] | 201 [194, 208] | 202 [194, 210] | 201 [193, 209] | 201 [192, 210] | 0.17 | weak |
+| t04: vote over 8 minus vote over 4, same cell | work-e340a2 | 10 [3, 17] | 10 [4, 16] | 11.5 [5, 18] | 14 [5, 23] | 12.5 [7, 18] | 12 [5, 19] | 12 [5, 20] | 12 [6, 18] | 0.14 | weak |
+
+On t01, if an adversary is right the value falls inside its account's interval with chance 0.001-0.004 (and the reverse
+0.001-0.003); inside its own interval, 90 % by definition. The judges rejected 0 of 12 adversary forecasts: every
+adversary forecast the edit cells from the cued base (164) and the random rank-8 edits of the same norm (152-167) and the
+vote targets from the cued base's own vote curve (result-c065a6: 159.5, 188.5, 197 at k = 1, 4, 6).
+
+Best account, account-1 (blind marker: 19 explained, 51 not addressed, 1 contradicts, F34; score -1; accounts 2 and 3
+score -2), quoted in full:
+
+> RL-Math's weight change is small (0.24 % of weight norm) and, like any RL run's, concentrated in each matrix's top 8
+> singular directions (top-8 share 0.118-0.135 Math, 0.127 for LM-judge RL, 0.030 Think-SFT); those 8 input-output
+> pairs carry the gain: base + 1.5x them matches RL per sample (hard328 0.642 vs 0.640, MATH-500 456 vs 457, fresh2026
+> 48.25 vs 50.5 of 136) and under a 4-vote (216.3 vs 215.9 of 328), the extra 0.5x standing in for the other 88 % of
+> the change, while equal-norm random, Think-SFT or pair-shifted rank-8 edits do nothing because the base's later
+> layers amplify only RL's own pairs (3-6x random). The pairs hold three separable parts: a deliberative opening
+> (late-MLP directions that read Okay/Wait/consider; the plain top-8 edit 427 vs random 197 of 500), a finishing part
+> in direction 1 and layers 22-31 that cuts hard328 cap hits (20 % to 11-13 %, 5 % at 3x) but does not raise, and when
+> enlarged lowers, the right rate of finished answers (0.63 at 1.5x, 0.51 at 3x, 0.41 at 4.5x), and an accuracy part
+> in directions 2-8 and layers 0-10 that raises the finished right rate (0.63 to 0.73-0.79) while leaving cap hits at
+> 19-25 %; only finishing plus accuracy together give RL's 0.64. The opening is what the three-token cue gives the
+> untrained base: at RL step 100 the plain model scores like the cued base (417.5 vs 410.5 of 500), hits the cap as
+> often and gains as much from a vote (+7.2 vs +7.6 points), and a plain-base answer that opens deliberatively is
+> right as often as a cued one, so the cue alone buys 79 % of RL's MATH-500 gain (224 to 410.5, RL 460) while steps
+> 100-2,800 add the finishing and accuracy parts (+42.5 of 500). The accuracy part lowers the per-step slip rate on
+> every sample, including problems the base cannot solve: on hard328 problems where the cued base finished wrong the
+> edit is right 36 % vs 23 % for a second base sample, and on problems the cued base gets 0 of 4 it captures 0.88
+> [0.69, 1.13] of RL's per-sample gain; on code, Code-RL's own pairs do this (+7 points pass among finished answers
+> over random) and Math's do not (+1.5), though their extra passes fall on problems the base already passes in other
+> samples. Inference changes reach this part only by selection and loop removal: T 1.0 removes the T 0.6 loops (52-63
+> % of long attempts), and because the cued base's wrong answers scatter (same-problem agreement 0.26) a vote over 4
+> adds about 7 points on MATH-500 (446-450 vs RL 460) and lifts hard328 from 161 to 195 of 328, but the base has no
+> right sample on 26 of the 36 problems RL's vote wins and more tokens or loop-neuron zeroing finish answers without
+> making them right, so about 9 points on hard328 (195 vs 224) stay out of inference reach. Hence new edit cells
+> follow which part they carry, not their norm or module type: edits confined to direction 1 or layers 22-31 cut cap
+> hits and lower finished accuracy as they grow, edits confined to directions 2-8 or layers 0-10 raise finished
+> accuracy to about 0.75-0.80 on hard328 at the base's cap rate of about 0.2, any edit holding both at 1.25-1.5x lands
+> within 3 points of RL per sample and per vote on every set, including problems the base never solves, and random,
+> pair-shifted or Think-SFT rank-8 edits stay at the base.
+
+**SPEC_round19 hypotheses.** H1 (at least 3 targets 1 width or more apart): refuted, 1 (t01). H2 (at least 1 deciding
+target): holds, t01 for all three pairs. H3 (best account gains at least 1 nat over its adversary, and more than the
+adversary over the readers): open until work-4bfe4e and work-e340a2 post. H4 (judges reject under a third): holds, 0 of
+12. H5 (start to forecast commit at most 30 minutes): holds, about 10.
+
+**What the round shows.** The accounts no longer differ from each other on open work (t01: 197-198 from all three), and
+they differ from the covariate-only forecaster only where the forbidden predictor carries the number: the account's t01
+forecast interpolates between the stored 1x and 1.5x dial results (192, 203) by the share of the edit the subspace keeps
+(0.76-0.78, result-ce52f8), and the two no-theory readers, who may read those results, forecast 191 and 188. So t01 will
+show whether the restricted edit keeps RL's effect, but a win there credits "RL's edit outcomes predict RL-derived edits"
+as much as any one account; the account's gain over the readers on t01 is the sharper number. On the vote targets the
+accounts add nothing to the cued base's own vote curve.
+
+Caveat: the adversary rule (no RL sample and no RL-edit outcome as a predictor) makes the covariate forecaster weak on
+every RL-derived edit by construction; the readers are the stronger baseline there. Files in `results/wide/round-19/`:
+`standing.md` / `standing.json` / `standing/`, `graveyard.json`, `direct_facts.json`, `synthesis_facts.json` (F01-F71),
+`explore_manifest.md`, `account-1.json` to `account-3.json` (and `jobs/`), `marks-account-<k>.json`, `targets.json`,
+`work.md`, `open_forecasts/` (account, adversary, reader and judge files), `forecasts.json`, `forecasts.md`,
+`mechanisms.json`, `open_forecasts.md` / `.json`, `open_scores.json` (empty: no earlier open forecasts), `synthesis.md`,
+`run.json`, `round19.log`.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
