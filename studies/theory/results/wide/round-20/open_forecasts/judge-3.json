@@ -1,0 +1,4 @@
+{"verdicts": [
+{"id": "t01", "by_construction": false, "why": "Linear interpolation of the stored top-8 dial curve (192 at 1x, 203 at 1.5x) at an effective scale built from covariates (scale 1.5 x sqrt of stored kept share 0.764), cross-checked against the stored top-64 cell (200); choosing the along-edit scale is calibrated on stored zero-kept cells (158-163), not justified by a claim about what RL does; the quantity is a count, not the account's c renamed"},
+{"id": "t02", "by_construction": false, "why": "Same fit: dial curve read at effective scale 1.5 x sqrt(0.403) = 0.95 (gives 190), then pulled 3 toward the stored partial-edit plateau (178-184); every predictor is a stored number or a covariate (kept share, scale), with no mechanism such as 'single part gives c about 0.5'"}
+]}

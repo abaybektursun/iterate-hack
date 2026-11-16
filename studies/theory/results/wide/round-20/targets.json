@@ -1,0 +1,47 @@
+{
+ "utc": "2026-11-16T01:54:42",
+ "work_items": [
+  "work-644fec",
+  "work-184476",
+  "work-963745",
+  "work-3ef8bd",
+  "work-4bfe4e",
+  "work-49fb1b",
+  "work-ceafa5",
+  "work-6a9386"
+ ],
+ "targets": [
+  {
+   "id": "t01",
+   "item": "work-4bfe4e",
+   "cell": {
+    "model": "Olmo 3 base + RL-Math top-8 directions edit restricted to one common residual subspace per side (wsp_edit glob), m = 64, norm matched to the 1.5x edit",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "not stated",
+    "samples": "not stated",
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "How many of the 328 hard problems the Olmo 3 base model answers correctly with the opening cue when edited by RL-Math's top-8 directions restricted to one shared 64-dimensional residual subspace per side (reading and writing), norm matched to the 1.5x edit.",
+   "quote": "m = 64 and m = 8, norm matched to the 1.5x edit), hard328 cue, 2 cells"
+  },
+  {
+   "id": "t02",
+   "item": "work-4bfe4e",
+   "cell": {
+    "model": "Olmo 3 base + RL-Math top-8 directions edit restricted to one common residual subspace per side (wsp_edit glob), m = 8, norm matched to the 1.5x edit",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "sampling": "not stated",
+    "samples": "not stated",
+    "grader": "not stated"
+   },
+   "unit": "right answers of 328",
+   "what": "How many of the 328 hard problems the Olmo 3 base model answers correctly with the opening cue when edited by RL-Math's top-8 directions restricted to one shared 8-dimensional residual subspace per side (reading and writing), norm matched to the 1.5x edit.",
+   "quote": "m = 64 and m = 8, norm matched to the 1.5x edit), hard328 cue, 2 cells"
+  }
+ ]
+}

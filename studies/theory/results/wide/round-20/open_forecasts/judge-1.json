@@ -1,0 +1,4 @@
+{"verdicts": [
+{"id": "t01", "by_construction": false, "why": "Plain covariates (kept squared-norm share 0.77 from result-ce52f8, effective scale 1.31) interpolated between stored hard328-cue counts (full-share scale curve, rank-1 2x cell, equal-norm random edits); no claim about RL's directions carrying the gain, and the quantity is a right-answer count, not a renamed account quantity."},
+{"id": "t02", "by_construction": false, "why": "Nearest stored cells in (kept share 0.41, s_eff 0.95): rank-1 and layer-band counts used as numbers indexed by kept share and scale, minus the stored random-edit offset; no 'rank not norm carries the gain' or subspace-overlap mechanism is used."}
+]}

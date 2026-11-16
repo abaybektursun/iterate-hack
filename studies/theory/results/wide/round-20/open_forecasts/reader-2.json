@@ -1,0 +1,6 @@
+{"forecasts": [
+{"id": "t01", "value": 190, "low": 170, "high": 207,
+ "reason": "Full 1.5x top-8 edit scores 203 and random/base about 159-164; a shared 64-dim subspace keeps about 77% of the edit's norm (result-ce52f8) and mostly keeps the pairing that matters (result-aba970), so I expect most but not all of the +40 gain."},
+{"id": "t02", "value": 176, "low": 153, "high": 198,
+ "reason": "An 8-dim shared subspace keeps only about 40% of the norm and distorts the input-output pairs, so I expect something like direction 1 alone (183) or directions 3-8 alone (170), well short of 203 but likely above random (159)."}
+]}

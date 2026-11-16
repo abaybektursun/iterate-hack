@@ -1,0 +1,4 @@
+{"verdicts": [
+{"id": "t01", "by_construction": false, "why": "Averages two interpolations over stored hard328 cue counts: right answers vs edit scale (1.5 x sqrt of the stored kept share 0.768) and right answers vs kept share (layer bands, full edit). Plain norm and share covariates; it doesn't use the account's claim that pairs stay intact on the shared place and the effect saturates."},
+{"id": "t02", "by_construction": false, "why": "Same two covariate fits using kept share 0.407 from result-ce52f8. Stored small-edit counts are only a range check. Unlike the account, it doesn't claim m=8 keeps the direction-1 content or that the result tracks direction 1's dial."}
+]}

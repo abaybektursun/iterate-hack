@@ -1,0 +1,276 @@
+{
+ "utc": "2026-11-16T02:01:59",
+ "snapshot": "2026-11-16T01:54:42",
+ "pairs": [
+  {
+   "account": "round-20/account-1",
+   "adversary": "round-20/adversary-1",
+   "rule": "Each restricted edit is placed by two plain covariates, its effective scale along the full top-8 edit (s_eff = edit scale x sqrt(kept squared-norm share)) and its kept share, and its count is read off by interpolating the stored hard328-cue right-answer counts of edits indexed by those same covariates: the full-share scale curve (s 0 / 0.5 / 1 / 1.5 / 2 -> 164 / 170 / 192 / 203 / 190, result-6f1bb7, result-284db5) at kept = 1, and the partial-share cells at kept about 0.3-0.55 (rank-1 at 1x / 2x / 3x: kept 0.42 from weights/anatomy top1/top8 -> s_eff 0.65 / 1.30 / 1.94 -> 181 / 184 / 168; layer bands at 1.5x: kept 0.33 / 0.29 / 0.38 -> 184 / 183 / 166; attention-only / MLP-only at 1x: kept 0.54 / 0.46 -> 178 / 181; result-51a0e7, result-306787), linearly in kept share between the two; the norm-matched leftover outside the kept share is given the stored effect of equal-norm unstructured edits (random rank-8 158-167, shifted pairs 160, own-direction 155/168: about -1 to -3 vs base 164, result-0d54f3, result-87e495); kept shares come from result-ce52f8 (m=64 readers/writers 0.757/0.780, m=8 0.398/0.416); intervals cover one-sample noise (about +-9 of 328) plus the spread among the partial-share cells.",
+   "rejected": {}
+  },
+  {
+   "account": "round-20/account-2",
+   "adversary": "round-20/adversary-2",
+   "rule": "A restricted or partial edit's right-answer count on hard328 with the cue is the average of two covariate fits to the stored hard328 cue counts (T 1.0, v3, seed 3000000). Fit A: interpolate linearly on the stored dial curve of right answers against edit scale (base 0x 164, top-8 at 1x 192, 1.5x 203, 2x 190). The input is the edit's scale along the stored 1.5x edit, 1.5 x sqrt(kept share), which is the plain norm arithmetic for a projected edit rescaled to the 1.5x norm. Fit B: interpolate linearly on right answers against the share of the 1.5x edit kept, using stored partial edits at 1.5x (the three layer bands, each about 1/3 of the edit: 184, 183, 166, mean 177.7) and the full edit (share 1: 203). The kept share for each common-subspace dimension m comes from the stored weights table (result-ce52f8, mean of the reader and writer shares). The 90% interval is about +/-13 to 15 right answers. That covers the one-sample noise of these cells (stored contrasts under about 5 points are not resolved; the SE of one count is about 9) plus the gap between the two fits.",
+   "rejected": {}
+  },
+  {
+   "account": "round-20/account-3",
+   "adversary": "round-20/adversary-3",
+   "rule": "Each restricted RL-edit cell's count of right answers on hard328 with the cue is read off the stored dial curve of the unrestricted top-8 edit (right of 328 at edit scales 0, 0.5, 1, 1.5, 2: 164, 170, 192, 203, 190; seed 3000000, T 1.0) at an effective scale. The effective scale is the share of the 1.5x edit that the restricted edit keeps along that edit: a norm-matched projection keeping squared-norm share k leaves 1.5 x sqrt(k) of it, using the stored kept shares from xchannel run-02 (result-ce52f8: m=64 readers/writers 0.757/0.780, m=8 0.398/0.416). Two sets of stored cells calibrate this. First, norm-matched edits that keep about none of the edit's component (inputs or outputs randomized, pairs shifted, random; 158, 163, 160, 159) score like base, so the full-norm view fails and the along-edit scale is the covariate. Second, partial edits (layer bands at 1.5x 184/183/166, top-1 per matrix at 1x/2x 181/184, attention-only 178, MLP-only 181) land between the along-edit interpolation and the kept-norm interpolation, and none below 8 directions in all layers reached 190 (result-306787). So a small kept share (m=8) gets a small downward pull toward that 178-184 plateau, and a large kept share (m=64) stays near the interpolation, close to the stored k=64 edit (200). Intervals combine one-sample noise for a single cell (paired 90 % half-width about 14 counts, result-6f1bb7) with the spread between the two interpolation views.",
+   "rejected": {}
+  }
+ ],
+ "targets": [
+  {
+   "target": {
+    "id": "t02",
+    "item": "work-4bfe4e",
+    "cell": {
+     "model": "Olmo 3 base + RL-Math top-8 directions edit restricted to one common residual subspace per side (wsp_edit glob), m = 8, norm matched to the 1.5x edit",
+     "prompt": "cue",
+     "set": "hard328",
+     "n": 328,
+     "sampling": "not stated",
+     "samples": "not stated",
+     "grader": "not stated"
+    },
+    "unit": "right answers of 328",
+    "what": "How many of the 328 hard problems the Olmo 3 base model answers correctly with the opening cue when edited by RL-Math's top-8 directions restricted to one shared 8-dimensional residual subspace per side (reading and writing), norm matched to the 1.5x edit.",
+    "quote": "m = 64 and m = 8, norm matched to the 1.5x edit), hard328 cue, 2 cells"
+   },
+   "readers": {
+    "reader-1": {
+     "id": "t02",
+     "value": 177,
+     "low": 158,
+     "high": 194,
+     "reason": "The 8-dim subspace keeps only about 40% of the norm, and that part is scaled up about 1.6x in amplitude to match; it likely carries mostly direction 1, which alone scores about 183 (result-aba970), so I put it between random (159) and direction 1 alone, with downside risk from the overscaling."
+    },
+    "reader-2": {
+     "id": "t02",
+     "value": 176,
+     "low": 153,
+     "high": 198,
+     "reason": "An 8-dim shared subspace keeps only about 40% of the norm and distorts the input-output pairs, so I expect something like direction 1 alone (183) or directions 3-8 alone (170), well short of 203 but likely above random (159)."
+    }
+   },
+   "pairs": [
+    {
+     "pair": "1",
+     "account": {
+      "id": "t02",
+      "value": 184,
+      "low": 169,
+      "high": 198,
+      "reason": "Account S3 (rank, not norm, carries the gain; one direction per matrix gives half, 181 at 1x): m=8 keeps only 0.398/0.416 of the squared norm (result-ce52f8), so the norm-matched edit holds about 0.63 of the 1.5x edit (about a 0.95x dial, 192 at 1x in result-6f1bb7) with the rest rescaled off-direction, giving roughly the half-to-three-quarter gain over cued base 164 seen for Math 3.0's partly overlapping edit (182)."
+     },
+     "adversary": {
+      "id": "t02",
+      "value": 180,
+      "low": 163,
+      "high": 197,
+      "reason": "The nearest stored cells in (kept share, s_eff) are the rank-1 pair (interpolated 182.5 at s_eff 0.95) and the three layer bands (mean 178 at kept 0.33, s_eff 0.86); averaging them gives about 181, and subtracting about 1-2 for the norm-matched leftover of 0.59 gives 180."
+     },
+     "rejected": null,
+     "gap_widths": 0.118,
+     "deciding": false,
+     "adversary_right_inside_account": 0.816,
+     "account_right_inside_adversary": 0.921
+    },
+    {
+     "pair": "2",
+     "account": {
+      "id": "t02",
+      "value": 180,
+      "low": 166,
+      "high": 194,
+      "reason": "Account S5 (top-1 gives about half, 181, and drops at 3x, 168): m=8 keeps only 0.40/0.42 of the edit (result-ce52f8), mostly the dominant direction-1 content (39% of top-8 energy, result-aba970), and norm matching scales it ~1.6x to an effective ~2.4x, so it lands near direction 1 at 2x 184 / 3x 168 (result-306787) rather than the full 203."
+     },
+     "adversary": {
+      "id": "t02",
+      "value": 185,
+      "low": 170,
+      "high": 200,
+      "reason": "Kept share 0.407 gives a scale of 1.5 x sqrt(0.407) = 0.96x, which interpolates to 190.8 on the stored dial curve (fit A). The same share interpolates to 180.5 on the share fit (fit B). The average is 185, which also matches the 178-184 range of the stored smaller edits."
+     },
+     "rejected": null,
+     "gap_widths": 0.167,
+     "deciding": false,
+     "adversary_right_inside_account": 0.82,
+     "account_right_inside_adversary": 0.871
+    },
+    {
+     "pair": "3",
+     "account": {
+      "id": "t02",
+      "value": 179,
+      "low": 163,
+      "high": 194,
+      "reason": "Account S5 (a single part gives c about 0.5, and one piece pushed to 3x turns negative): m=8 keeps only 0.40/0.42 (result-ce52f8), so norm matching runs the shared core at about 2.4x, like one direction per matrix at 2x and 3x (184 and 168, result-306787), which gives about 164+39*0.4."
+     },
+     "adversary": {
+      "id": "t02",
+      "value": 187,
+      "low": 172,
+      "high": 202,
+      "reason": "Interpolating the dial curve at effective scale 0.95 gives 190, pulled 3 toward the 178-184 range of stored partial edits with similarly small kept shares (none of which reached 190), giving 187."
+     },
+     "rejected": null,
+     "gap_widths": 0.258,
+     "deciding": false,
+     "adversary_right_inside_account": 0.774,
+     "account_right_inside_adversary": 0.764
+    }
+   ],
+   "best": {
+    "pair": "3",
+    "account": {
+     "id": "t02",
+     "value": 179,
+     "low": 163,
+     "high": 194,
+     "reason": "Account S5 (a single part gives c about 0.5, and one piece pushed to 3x turns negative): m=8 keeps only 0.40/0.42 (result-ce52f8), so norm matching runs the shared core at about 2.4x, like one direction per matrix at 2x and 3x (184 and 168, result-306787), which gives about 164+39*0.4."
+    },
+    "adversary": {
+     "id": "t02",
+     "value": 187,
+     "low": 172,
+     "high": 202,
+     "reason": "Interpolating the dial curve at effective scale 0.95 gives 190, pulled 3 toward the 178-184 range of stored partial edits with similarly small kept shares (none of which reached 190), giving 187."
+    },
+    "rejected": null,
+    "gap_widths": 0.258,
+    "deciding": false,
+    "adversary_right_inside_account": 0.774,
+    "account_right_inside_adversary": 0.764
+   },
+   "no_account_adds": true
+  },
+  {
+   "target": {
+    "id": "t01",
+    "item": "work-4bfe4e",
+    "cell": {
+     "model": "Olmo 3 base + RL-Math top-8 directions edit restricted to one common residual subspace per side (wsp_edit glob), m = 64, norm matched to the 1.5x edit",
+     "prompt": "cue",
+     "set": "hard328",
+     "n": 328,
+     "sampling": "not stated",
+     "samples": "not stated",
+     "grader": "not stated"
+    },
+    "unit": "right answers of 328",
+    "what": "How many of the 328 hard problems the Olmo 3 base model answers correctly with the opening cue when edited by RL-Math's top-8 directions restricted to one shared 64-dimensional residual subspace per side (reading and writing), norm matched to the 1.5x edit.",
+    "quote": "m = 64 and m = 8, norm matched to the 1.5x edit), hard328 cue, 2 cells"
+   },
+   "readers": {
+    "reader-1": {
+     "id": "t01",
+     "value": 190,
+     "low": 173,
+     "high": 206,
+     "reason": "The 64-dim shared subspace keeps about 77% of the edit's squared norm (result-ce52f8), and projecting the kept components does not break the input-output pairing, so the score should land most of the way from base/random (about 159-164) to the full 1.5x edit (203)."
+    },
+    "reader-2": {
+     "id": "t01",
+     "value": 190,
+     "low": 170,
+     "high": 207,
+     "reason": "Full 1.5x top-8 edit scores 203 and random/base about 159-164; a shared 64-dim subspace keeps about 77% of the edit's norm (result-ce52f8) and mostly keeps the pairing that matters (result-aba970), so I expect most but not all of the +40 gain."
+    }
+   },
+   "pairs": [
+    {
+     "pair": "1",
+     "account": {
+      "id": "t01",
+      "value": 197,
+      "low": 184,
+      "high": 209,
+      "reason": "Account S3 (the gain is in the rank and lies in Math 3.1's top-8 subspace; another edit helps only as far as it lies there): m=64 keeps 0.757/0.780 of the squared norm (result-ce52f8), so the norm-matched edit holds sqrt(0.77)=0.88 of the 1.5x edit (about a 1.3x dial on the dial of result-6f1bb7: 1x 192, 1.5x 203, 2x 190), giving near RL's ~200 (S2: 200.25) less a few points, well above random 159-167 and cued base 164."
+     },
+     "adversary": {
+      "id": "t01",
+      "value": 191,
+      "low": 176,
+      "high": 205,
+      "reason": "At s_eff 1.31, linear interpolation in kept share between the full-share curve (about 198 at kept 1) and the rank-1 2x cell (184 at kept 0.42) gives 184 + (0.77 - 0.42)/0.58 x 14, about 192; subtracting about 1 for the norm-matched leftover of 0.23 (unstructured equal-norm edits sit 1-6 below base) gives 191."
+     },
+     "rejected": null,
+     "gap_widths": 0.207,
+     "deciding": false,
+     "adversary_right_inside_account": 0.766,
+     "account_right_inside_adversary": 0.851
+    },
+    {
+     "pair": "2",
+     "account": {
+      "id": "t01",
+      "value": 195,
+      "low": 182,
+      "high": 207,
+      "reason": "Account S1/S4/S5 (the gain lives in few paired directions on the base's shared step-by-step input/output place and saturates at RL's level): the common m=64 subspace keeps 0.76/0.78 of the top-8 edit (result-ce52f8, RL readers share one subspace result-c9ee85) with pairs intact, so norm-matched it acts like the full edit at ~1.7x, between top-8 1.5x 203, 2x 190 and k=64 200 (result-306787, result-51a0e7), well above random 159/base 164."
+     },
+     "adversary": {
+      "id": "t01",
+      "value": 196,
+      "low": 183,
+      "high": 209,
+      "reason": "Kept share 0.768 gives a scale of 1.5 x sqrt(0.768) = 1.32x, which interpolates to 198.9 on the stored dial curve (fit A). The same share interpolates to 194.2 between the 1/3-share band mean of 177.7 and the full 1.5x edit's 203 (fit B). The average is 196."
+     },
+     "rejected": null,
+     "gap_widths": 0.038,
+     "deciding": false,
+     "adversary_right_inside_account": 0.88,
+     "account_right_inside_adversary": 0.91
+    },
+    {
+     "pair": "3",
+     "account": {
+      "id": "t01",
+      "value": 195,
+      "low": 182,
+      "high": 207,
+      "reason": "Account S1/S5 (the low-rank core read from a step-by-step subspace and written forward; top-8 over all layers at 1x-2x gives c about 1, count 164+39c): the m=64 shared subspace keeps 0.76/0.78 of the edit (result-ce52f8), and norm matching scales that kept part to about 1.7x, so c is about 0.8 against the 1.5x edit's 203-207 and 2x's 190 (result-306787, day1_3 top8x1.5 cell)."
+     },
+     "adversary": {
+      "id": "t01",
+      "value": 198,
+      "low": 185,
+      "high": 210,
+      "reason": "Linear interpolation of the stored dial curve between scale 1 (192) and 1.5 (203) at the effective scale 1.5*sqrt(0.764) = 1.31 gives 198.8; with partial edits sitting near or above the along-edit interpolation at high kept share, this rounds to 198."
+     },
+     "rejected": null,
+     "gap_widths": 0.12,
+     "deciding": false,
+     "adversary_right_inside_account": 0.864,
+     "account_right_inside_adversary": 0.882
+    }
+   ],
+   "best": {
+    "pair": "1",
+    "account": {
+     "id": "t01",
+     "value": 197,
+     "low": 184,
+     "high": 209,
+     "reason": "Account S3 (the gain is in the rank and lies in Math 3.1's top-8 subspace; another edit helps only as far as it lies there): m=64 keeps 0.757/0.780 of the squared norm (result-ce52f8), so the norm-matched edit holds sqrt(0.77)=0.88 of the 1.5x edit (about a 1.3x dial on the dial of result-6f1bb7: 1x 192, 1.5x 203, 2x 190), giving near RL's ~200 (S2: 200.25) less a few points, well above random 159-167 and cued base 164."
+    },
+    "adversary": {
+     "id": "t01",
+     "value": 191,
+     "low": 176,
+     "high": 205,
+     "reason": "At s_eff 1.31, linear interpolation in kept share between the full-share curve (about 198 at kept 1) and the rank-1 2x cell (184 at kept 0.42) gives 184 + (0.77 - 0.42)/0.58 x 14, about 192; subtracting about 1 for the norm-matched leftover of 0.23 (unstructured equal-norm edits sit 1-6 below base) gives 191."
+    },
+    "rejected": null,
+    "gap_widths": 0.207,
+    "deciding": false,
+    "adversary_right_inside_account": 0.766,
+    "account_right_inside_adversary": 0.851
+   },
+   "no_account_adds": true
+  }
+ ]
+}

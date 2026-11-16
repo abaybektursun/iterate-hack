@@ -1,0 +1,4 @@
+{"forecasts": [
+{"id": "t01", "value": 190, "low": 173, "high": 206, "reason": "The 64-dim shared subspace keeps about 77% of the edit's squared norm (result-ce52f8), and projecting the kept components does not break the input-output pairing, so the score should land most of the way from base/random (about 159-164) to the full 1.5x edit (203)."},
+{"id": "t02", "value": 177, "low": 158, "high": 194, "reason": "The 8-dim subspace keeps only about 40% of the norm, and that part is scaled up about 1.6x in amplitude to match; it likely carries mostly direction 1, which alone scores about 183 (result-aba970), so I put it between random (159) and direction 1 alone, with downside risk from the overscaling."}
+]}

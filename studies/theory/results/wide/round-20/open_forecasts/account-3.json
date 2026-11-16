@@ -1,0 +1,6 @@
+{"forecasts": [
+{"id": "t01", "value": 195, "low": 182, "high": 207,
+ "derivation": "Account S1/S5 (the low-rank core read from a step-by-step subspace and written forward; top-8 over all layers at 1x-2x gives c about 1, count 164+39c): the m=64 shared subspace keeps 0.76/0.78 of the edit (result-ce52f8), and norm matching scales that kept part to about 1.7x, so c is about 0.8 against the 1.5x edit's 203-207 and 2x's 190 (result-306787, day1_3 top8x1.5 cell)."},
+{"id": "t02", "value": 179, "low": 163, "high": 194,
+ "derivation": "Account S5 (a single part gives c about 0.5, and one piece pushed to 3x turns negative): m=8 keeps only 0.40/0.42 (result-ce52f8), so norm matching runs the shared core at about 2.4x, like one direction per matrix at 2x and 3x (184 and 168, result-306787), which gives about 164+39*0.4."}
+]}

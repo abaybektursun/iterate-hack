@@ -1,0 +1,17 @@
+{"rule": "Each restricted edit is placed by two plain covariates, its effective scale along the full top-8 edit (s_eff = edit scale x sqrt(kept squared-norm share)) and its kept share, and its count is read off by interpolating the stored hard328-cue right-answer counts of edits indexed by those same covariates: the full-share scale curve (s 0 / 0.5 / 1 / 1.5 / 2 -> 164 / 170 / 192 / 203 / 190, result-6f1bb7, result-284db5) at kept = 1, and the partial-share cells at kept about 0.3-0.55 (rank-1 at 1x / 2x / 3x: kept 0.42 from weights/anatomy top1/top8 -> s_eff 0.65 / 1.30 / 1.94 -> 181 / 184 / 168; layer bands at 1.5x: kept 0.33 / 0.29 / 0.38 -> 184 / 183 / 166; attention-only / MLP-only at 1x: kept 0.54 / 0.46 -> 178 / 181; result-51a0e7, result-306787), linearly in kept share between the two; the norm-matched leftover outside the kept share is given the stored effect of equal-norm unstructured edits (random rank-8 158-167, shifted pairs 160, own-direction 155/168: about -1 to -3 vs base 164, result-0d54f3, result-87e495); kept shares come from result-ce52f8 (m=64 readers/writers 0.757/0.780, m=8 0.398/0.416); intervals cover one-sample noise (about +-9 of 328) plus the spread among the partial-share cells.",
+ "forecasts": [
+  {"id": "t01", "value": 191, "low": 176, "high": 205,
+   "predictors": ["kept share m=64 readers 0.757 / writers 0.780 (result-ce52f8) -> s_eff 1.5 x sqrt(0.77) = 1.31",
+                  "full-share scale curve, hard328 cue: 1x 192, 1.5x 203, 2x 190 (result-6f1bb7) -> about 198 at s_eff 1.31",
+                  "rank-1 edit at 2x: kept 0.42 (weights/anatomy top1_share/top8_share, norm-weighted 0.42), s_eff 1.30 -> 184 (result-306787)",
+                  "equal-norm unstructured edits: random rank-8 158 (result-284db5), shifted pairs 160 (result-0d54f3), base 164"],
+   "derivation": "At s_eff 1.31, linear interpolation in kept share between the full-share curve (about 198 at kept 1) and the rank-1 2x cell (184 at kept 0.42) gives 184 + (0.77 - 0.42)/0.58 x 14, about 192; subtracting about 1 for the norm-matched leftover of 0.23 (unstructured equal-norm edits sit 1-6 below base) gives 191."},
+  {"id": "t02", "value": 180, "low": 163, "high": 197,
+   "predictors": ["kept share m=8 readers 0.398 / writers 0.416 (result-ce52f8) -> s_eff 1.5 x sqrt(0.41) = 0.95",
+                  "rank-1 edit, kept 0.42: 1x (s_eff 0.65) 181, 2x (s_eff 1.30) 184 (result-51a0e7, result-306787)",
+                  "layer-band edits at 1.5x, kept 0.33 / 0.29 / 0.38 (weights/anatomy), s_eff 0.85 / 0.81 / 0.93: 184 / 183 / 166 (result-306787)",
+                  "attention-only / MLP-only at 1x, kept 0.54 / 0.46: 178 / 181 (result-51a0e7)",
+                  "equal-norm unstructured edits: random rank-8 158, shifted pairs 160, base 164 (result-284db5, result-0d54f3)"],
+   "derivation": "The nearest stored cells in (kept share, s_eff) are the rank-1 pair (interpolated 182.5 at s_eff 0.95) and the three layer bands (mean 178 at kept 0.33, s_eff 0.86); averaging them gives about 181, and subtracting about 1-2 for the norm-matched leftover of 0.59 gives 180."}
+ ]
+}

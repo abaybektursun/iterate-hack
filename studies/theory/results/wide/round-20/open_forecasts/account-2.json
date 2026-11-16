@@ -1,0 +1,6 @@
+{"forecasts": [
+{"id": "t01", "value": 195, "low": 182, "high": 207,
+ "derivation": "Account S1/S4/S5 (the gain lives in few paired directions on the base's shared step-by-step input/output place and saturates at RL's level): the common m=64 subspace keeps 0.76/0.78 of the top-8 edit (result-ce52f8, RL readers share one subspace result-c9ee85) with pairs intact, so norm-matched it acts like the full edit at ~1.7x, between top-8 1.5x 203, 2x 190 and k=64 200 (result-306787, result-51a0e7), well above random 159/base 164."},
+{"id": "t02", "value": 180, "low": 166, "high": 194,
+ "derivation": "Account S5 (top-1 gives about half, 181, and drops at 3x, 168): m=8 keeps only 0.40/0.42 of the edit (result-ce52f8), mostly the dominant direction-1 content (39% of top-8 energy, result-aba970), and norm matching scales it ~1.6x to an effective ~2.4x, so it lands near direction 1 at 2x 184 / 3x 168 (result-306787) rather than the full 203."}
+]}
