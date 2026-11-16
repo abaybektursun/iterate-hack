@@ -2356,7 +2356,9 @@ PANELS = [] if not (_c and _d and _f) else [
       "board item result-5f4dd7."]],
     ["limits", "What it does not show",
      f"Round 17 rests on {_f['test_half']} tests. A claim dropped on the explore half failed only its own account's "
-     "interval check there, a weaker statement than a refutation on held-out rows. Round 16's {_d['held']} of {_d['tested']} does not show the accounts are wrong: {_d['undecided']} of the 9 are "
+     "interval check there, a weaker statement than a refutation on held-out rows. In both tests the adversary's "
+     "value was an independent RL draw, which is what the account itself predicts, so not separated is consistent "
+     f"with the account and the fair count is 0 of 2 tested. Round 16's {_d['held']} of {_d['tested']} does not show the accounts are wrong: {_d['undecided']} of the 9 are "
      f"undecided, all {_d['edge']} at an edge of the account's range, and the adversary's value missed the measured "
      f"interval in {_d['tested'] - _d['adversary_inside']} of 9 tests.",
      [f"In round 17 the explore filter checks the account's interval, not its range, so both tested ranges contained "
