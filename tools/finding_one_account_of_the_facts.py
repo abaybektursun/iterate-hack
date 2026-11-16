@@ -1,4 +1,4 @@
-"""The team's one account of what RL changed, and how its new claims held: 6 of 9 in round 15, 0 of 9 in round 16.
+"""The team's one account of what RL changed, and how its new claims held: 6 of 9 in round 15, 0 of 9 in rounds 16 and 17.
 
 The page of one finding, served at /finding/one-account-of-the-facts (view.py serves every tools/finding_<slug>.py) and
 reached from its tile on /findings, which ICON draws. It is the fourth page about the team's theory engine
@@ -21,8 +21,11 @@ A quiet round switch (Round 15, Round 16; the newest is the first view) redraws 
 accounts written in turn, each denying claims of the earlier ones, and a blind adversary's value for every consequence,
 drawn as a short tick; a claim holds only if its interval lies in the range and excludes that value). Round 16's story
 is account 1's (NODES16, CLAUSES16, TESTS16, RECORD16); on the switch the values travel in again and the large number
-counts from one round's to the other's. Address: /finding/one-account-of-the-facts#<15, or nothing for 16>/<a1|a2|a3|
-split, or nothing for the round's best account>/<panel, s1 to s6, or a claim: a1c1 ... a3c3, d1>. The rules are in
+counts from one round's to the other's. Round 17 (engine 17: accounts and adversaries read the explore half of the
+problems, claims are tested once on the test half) draws account 3's story (NODES17, TESTS17, RECORD17): the 7 claims
+dropped on the explore half are quiet gauges of their explore value, the 2 tested show the test-half value. The round
+switch is a three-step strip, each step with its number and rule (STEPS). Address: /finding/one-account-of-the-facts#
+<15|16, or nothing for 17>/<a1|a2|a3|split, or nothing for the round's best account>/<panel, s1 to s6, or a claim>. The rules are in
 .claude/skills/finding-page/SKILL.md; the looks are those of tools/architecture.py (.claude/skills/site-ui/SKILL.md).
 
     uv run tools/finding_one_account_of_the_facts.py                            checks RECORD against the working tree
@@ -207,6 +210,47 @@ TESTS16 = {
         "it calls non-deliberate as opening with a hold-on word later in their first 240 characters."],
 }
 TEST_ORDER16 = list(TESTS16)
+
+# Round 17 (engine 17): the problem ids are split once into an explore half and a test half (data/split_v1.json).
+# Accounts and adversaries read the explore rows; a consequence goes to the test half only if the adversary's explore
+# value lies outside the account's explore interval, and there it holds only if its interval lies in the range and
+# excludes the adversary's test value. No denials and no judge this round. Files: W17; account 3 ranks first (on the
+# tie-break of fewer contradictions).
+W17 = R + "wide/round-17/"
+# Account 3's six sentences, one plain sentence each.
+NODES17 = [
+    "RL's small weight change works through 8 directions per matrix that the base already uses; added at 1.5 times, "
+    "they reproduce RL on three problem sets.",
+    "They switch each answer's opening to a deliberate style and, by degrees, make the derivation like RL's: longer, "
+    "checked, finished, with fewer slips.",
+    "The base already holds the opening: a three-token cue lifts it to the level of RL step 100, so inference alone gives "
+    "77 to 78 % of RL's gain on MATH-500.",
+    "Votes add reliability only where the base already samples a right answer, because its wrong answers mostly scatter.",
+    "Inference cannot reach the derivation change on problems the base never solves; that part needs RL's own "
+    "directions and differs by domain.",
+    "Imitation of long traces (Think-SFT) is a different change: it runs longer and abstains at the cut-off, and RL's "
+    "change adds on top of it.",
+]
+# One entry per consequence of round 17, written for this page:
+#   [short label, the sentence of account 3 it tests (1 to 6), key of the value in its test's metrics.json (a tested
+#    claim; "" for one dropped on the explore half), what n counts, caveat ("" builds the dropped claim's caveat)]
+TESTS17 = {
+    "round-17/account-3/c1": ["Edit's right answers as long as RL's", 2, "", "problems", ""],
+    "round-17/account-3/c3": ["Edit as long as RL on MATH-500", 2, "", "problems", ""],
+    "round-17/account-2/c1": ["Code: a deliberate opening passes more", 3, "", "problems", ""],
+    "round-17/account-2/c2": ["Plain base is a mix of two modes", 3, "", "problems", ""],
+    "round-17/account-2/c3": ["Random edit leaves the same mix", 3, "", "problems", ""],
+    "round-17/account-3/c2": ["Code edit as long as RL-Code", 5, "value", "problems",
+        "Not separated: the test-half interval, 0.902 to 0.986, contains the adversary's value, 0.981 (one RL-Code seed "
+        "against the other seeds). On the explore half the adversary's value, 0.9808, missed the account's interval "
+        "(up to 0.98) by 0.0008, so the claim passed the filter by that margin."],
+    "round-17/account-1/c3": ["Code directions track RL-Code", 5, "", "problems", ""],
+    "round-17/account-1/c2": ["Edit tracks RL better, MATH-500", 6, "D2", "problems",
+        "Not separated: the test-half interval, 0.028 to 0.222, contains the adversary's value, 0.161. The account's "
+        "range, 0.02 to 0.54, contained that value too: the explore filter checks the account's interval, not its range."],
+    "round-17/account-1/c1": ["Edit tracks RL better than Think-SFT", 6, "", "problems", ""],
+}
+TEST_ORDER17 = list(TESTS17)
 
 # Written by --write from the files at REF: the accounts, the plans, the measured values and the record's verdicts.
 RECORD = {'facts': 42,
@@ -734,8 +778,582 @@ RECORD = {'facts': 42,
                                      'retest': {}}},
  'round14': [1, 12]}
 REF = 'origin/theory'  # the git ref --write read the files from ("" for the working tree)
-COMMIT = 'ccd8f4d'  # the last commit of those files at that ref when RECORD was written
+COMMIT = '6d3d940'  # the last commit of those files at that ref when RECORD was written
 # Written by --write: round 16's accounts, plans, measured values and the record's verdicts.
+RECORD17 = {'facts': 69,
+ 'accounts': {'1': {'sentences': ['RL-Zero-Math changes the base by 0.24 % of its weight norm, and what carries the '
+                                  'effect is a paired low-rank part: the top 8 singular input-output pairs per '
+                                  "matrix (about 12 % of the change's squared norm), added to the base at 1.5x, "
+                                  'match RL on new samples (hard328 200.25 vs 200.0 of 328 per sample, vote 216.25 '
+                                  "vs 215.92, 0.88 of RL's per-sample lead on problems the cued base never solves in "
+                                  '4), while random, shifted-pair, one-sided or Think-SFT edits of the same norm do '
+                                  'nothing.',
+                                  'Within that part, directions 2-8 (mostly early layers) switch the model into '
+                                  'step-by-step deliberation and make each step less likely to slip, so they add '
+                                  'right answers where the base finishes wrong (+13.5 points over a second base '
+                                  'sample) or never succeeds; direction 1 and the late layers mostly make answers '
+                                  'finish (removing the 8 directions doubles cap hits).',
+                                  'On-policy RL packs its change into such pairs whatever the reward (top-8 share '
+                                  '0.127 for LM-judge General-RL, 0.135 for Math, 0.030 for Think-SFT), on input '
+                                  "directions that the base's step-by-step text already drives, so other fine-tunes "
+                                  'share these subspaces (Think-SFT 4.8x chance, Code-RL 5.2x Think-SFT); only a '
+                                  "reward's own input-output pairing carries its effect, and that effect stays in "
+                                  "its domain (Code's pairs raise code pass rate by +7.0 points, Math's by +1.5).",
+                                  "Inference supplies the switch but not the lower slip rate: a three-token 'Okay' "
+                                  'cue or a self-opened draw takes the plain base from 224 to 410-411 of 500, level '
+                                  'with RL step 100 (418, where the cue still adds 1.7 points because not every '
+                                  'step-100 sample opens that way), and T 1.0 instead of 0.6 stops long answers from '
+                                  'looping (loop share past 4,096 tokens 0.004 vs 0.52-0.63).',
+                                  'Votes stand in for the lower slip rate only on problems the base already solves '
+                                  'sometimes, because its wrong answers there scatter (same-problem agreement 0.26; '
+                                  'real vs merged wrong answers +0.07 to +0.11 per vote), while a doubled cap or a '
+                                  'forced commit finishes its cut answers without making them right.',
+                                  "So the untrained base reaches about 78 % of RL's one-sample gain on MATH-500 (410 "
+                                  'on the 224-to-463 range), 68 % on hard328 (164 on 75-to-206) and 53-58 % on code, '
+                                  'and under a vote of 4 RL stays 8.8 points ahead on hard328 because the base has '
+                                  "no right sample on 26 of the 36 problems RL's vote wins."],
+                    'marks': {'explained': 19, 'not addressed': 49, 'contradicts': 1},
+                    'facts': 69,
+                    'own_contradicts': 2,
+                    'contradicts': [['F34',
+                                     'S2 says direction 1 mostly makes answers finish while directions 2-8 add right '
+                                     'answers where the base finishes wrong, but the rank-1 edit is +7.2 right [0.7, '
+                                     '13.6] there, close to directions 2-8.']]},
+              '2': {'sentences': ["RL-Zero-Math's weight change is small (0.24 % of weight norm) and works through "
+                                  "about 8 paired input-output directions per matrix whose input sides the base's "
+                                  'own step-by-step text already drives (8-11x a random subspace; Think-SFT and '
+                                  'Code-RL write there too, and an LM-judge reward concentrates its change the same '
+                                  'way), so base + 1.5x those directions equals RL: 200.25 vs 200.0 of 328 per '
+                                  "sample and 216.25 vs 215.9 by vote on hard328, 0.88 of RL's per-sample gain on "
+                                  'problems the cued base never solves, 456 vs 456 on MATH-500.',
+                                  'The directions do two things: they switch each sample into a deliberative mode '
+                                  "(an 'Okay' opening, hold-on words, finishing instead of running to the "
+                                  "16,384-token cap) and they lift the base's own per-problem solve rates by one "
+                                  'log-odds shift (about 1.9 logits on hard328, where base, RL and the edit fit a '
+                                  'single difficulty axis and Think-SFT does not), with fewer slips and loops and '
+                                  'longer, checked right answers, but no problem-specific knowledge: the code '
+                                  'problems it fixes are ones the base solves under another prompt, and the edit '
+                                  "neither sharpens nor copies RL's per-problem outcomes.",
+                                  'The switch is a content-free, per-sample mode that inference can supply: a '
+                                  "three-token cue (math or code wording), a self-opened 'Okay' draw or a hand edit "
+                                  'that writes the cue takes the plain base from 224 to 397-411 of 500, level with '
+                                  "RL step 100 (417.5, same cap-hit rate, same vote gain), and RL's full directions "
+                                  "switch every sample while partial changes (step 100, Code-RL's directions at 1x) "
+                                  'switch only a share of samples and lift the rest part of the way.',
+                                  'A plain prompt leaves the base a mixture: about half its samples switch and are '
+                                  'then right at the cued rate, the rest are short replies that echo the prompt, '
+                                  'state no answer or guess, and fail at a rate that does not depend on difficulty '
+                                  "(on code, deliberative plain answers pass at the cue's rate and the others 0.32 "
+                                  'lower), so on math the plain rate is about the switched share times the cued rate '
+                                  'on every problem.',
+                                  'Inference can imitate the reliability lift only by sampling and voting, which '
+                                  "works because the base's wrong answers mostly scatter (same-problem wrong pairs "
+                                  'agree 0.26; real versus merged wrong answers add 0.07-0.11 to a 4-vote), so on '
+                                  "MATH-500, where 81 % of RL's gain sits on problems the base solves at least once "
+                                  "in 4, the cue reaches 78 % of RL's gain and a 6-sample vote matches one RL sample "
+                                  'at about 4x the tokens.',
+                                  'The share falls on harder sets because a vote cannot create a right sample and '
+                                  'the cap or T 0.6 loops cut long routes: on hard328 the cued base has no right '
+                                  "sample on 26 of the 36 problems RL's vote wins and its 6-vote (197 of 328) stays "
+                                  'under one RL sample (200-207), and on code the cue reaches 53-58 % because '
+                                  "Code-RL's directions also raise passes among finished answers (+7 points over a "
+                                  'random edit), which a mode switch does not supply.'],
+                    'marks': {'explained': 29, 'not addressed': 39, 'contradicts': 1},
+                    'facts': 69,
+                    'own_contradicts': 0,
+                    'contradicts': [['F30',
+                                     'S2 says the edit is one log-odds shift with fewer slips, no problem-specific '
+                                     "knowledge, and does not copy RL's per-problem outcomes; yet edit-RL "
+                                     'wrong-answer agreement beats base-RL by 0.286']]},
+              '3': {'sentences': ['The RL-Zero-Math weight change is small (0.24 % of weight norm) and works through '
+                                  'the top 8 paired input-output singular directions of each matrix (12 % of the '
+                                  "change, 0.07 % of weight norm), directions that the base's own activations on "
+                                  'step-by-step text already drive 8-11x more than random ones and that LM-judge and '
+                                  'code rewards also produce; added to the base at 1.5x they reproduce RL (456 vs '
+                                  '457 of 500 on MATH-500, 200.25 vs 200.0 of 328 on hard328, 48.25 vs 50.5 of 136 '
+                                  'on fresh2026).',
+                                  'These directions change each sample in two ways: they switch its opening from '
+                                  "answer-first to deliberative ('Okay, let's see'), and in a graded way they make "
+                                  'the derivation RL-like (longer and checked, stopping instead of looping or '
+                                  'running to the cap, with fewer slips), so the 1.5x edit is right more often than '
+                                  'a fresh base sample even where the base already finishes (36 % vs 23 % on '
+                                  "base-finished-wrong hard328 problems) and captures 0.88 of RL's per-sample gain "
+                                  'on problems the base never solves in 4 samples.',
+                                  "The untrained base already holds the opening (a 3-token cue, a self-drawn 'Okay' "
+                                  'opening or a one-tensor hand edit takes it from 224 to 397-411 of 500, level with '
+                                  'RL step 100 at 418 with the same cap rate and right answers only 1.15x the cued '
+                                  "base's length against 1.61x for final RL), which is why inference alone gives "
+                                  "77-78 % of RL's gain on MATH-500 and on non-math questions and 53-58 % on code, "
+                                  'and why the cue adds only 1.7 points to step 100.',
+                                  'Sampling and votes add reliability only where the base already samples a right '
+                                  'answer, because its wrong answers mostly scatter (26 % pair agreement), so 81 % '
+                                  "of RL's MATH-500 gap is on problems the base solves at least once in 4 and a vote "
+                                  'over 6 base samples matches one RL sample, while at T 0.6 / top-p 0.95 the cued '
+                                  'base loops and the token budget eats those points.',
+                                  'What inference cannot reach is the derivation change on problems outside the '
+                                  "base's sample reach (on hard328 the base has no right sample on 26 of the 36 "
+                                  "problems RL's vote wins, so RL stays 8.8 points ahead under the vote), the part "
+                                  "RL steps 100 to 2,800 add (+42.5 of 500), which needs RL's own input-output pairs "
+                                  '(shifted pairs, random, Think-SFT directions, self-distillation, examples and '
+                                  'Wait-steering give nothing) and whose slip part is domain-specific (Code-RL '
+                                  'directions add +7.0 points of pass rate among finished code answers, Math-RL '
+                                  'directions +1.5).',
+                                  'Imitation of long traces (Think-SFT) is a different change that runs longer and '
+                                  'abstains at the cap instead of guessing (precision among finished answers 0.87 '
+                                  "against RL's 0.69 on hard328), so it beats RL only on long answers, and RL's "
+                                  'change adds on top of it (Think-SFT + 2x RL delta 231.5 vs 209 of 328) by turning '
+                                  "Think-SFT's cap hits into finished answers, about half of them right."],
+                    'marks': {'explained': 21, 'not addressed': 48, 'contradicts': 0},
+                    'facts': 69,
+                    'own_contradicts': 0,
+                    'contradicts': []}},
+ 'tests': {'round-17/account-3/c1': {'owner': '3',
+                                     'claim': 'Sentences 1-2 say the 1.5x top-8 edit makes each derivation RL-like '
+                                              '(longer and checked), not only right more often. So on hard328 '
+                                              "problems that both solve, the edit's right answers are nearly as long "
+                                              "as RL plain's (ratio 0.86-1.00), far above the cued base's ratio "
+                                              "(0.73), whose opening comes from the cue without RL's derivation "
+                                              'change.',
+                                     'statistic': 'geometric mean over problems of (median right-answer n_new of the '
+                                                  'edit / median right-answer n_new of RL plain), a ratio with no '
+                                                  'unit',
+                                     'null': "The base's own rows: the same ratio for the cued base "
+                                             '(rlneurons/day1_3/hard328_base_cue_s4r2-01, attempt 0) against RL is '
+                                             '0.725 [0.683, 0.777] on explore (n 105). The accuracy-proportional '
+                                             'alternative (log length moves with the share of the base-to-RL '
+                                             'accuracy gap closed, 1.01) predicts 1.004. Both lie outside the '
+                                             'explore interval.',
+                                     'why_new': "No fact or listed result compares the edit's right-answer length "
+                                                "with RL's on hard328. result-1b6bf2 compares the edit's lengths "
+                                                "with the base's only, and F25 is about step 100 on MATH-500.",
+                                     'set': 'hard328',
+                                     'alternative': 'Response length, regardless of correctness: the edit cell '
+                                                    'writes about 7 % fewer tokens than RL plain on every kind of '
+                                                    'answer (right and wrong alike, with fewer cap hits: 5.6 % vs '
+                                                    '7.5 %, at the same accuracy, 64.2 % vs 64.0 %). The '
+                                                    'right-answer ratio is just this overall length shift showing up '
+                                                    "in the right subset. The account's reasons for why right "
+                                                    'answers in particular are shorter are not needed, because the '
+                                                    'ratio over all answers (most of them wrong or right, cap hits '
+                                                    'included) gives the same number.',
+                                     'ranges': {'3': [0.86, 1.0], 'null': [0.62, 0.82]},
+                                     'explore': {'value': 0.929,
+                                                 'lo': 0.898,
+                                                 'hi': 0.962,
+                                                 'n': 119,
+                                                 'adversary': 0.931},
+                                     'dropped': "adversary's explore value 0.931 lies inside the account's explore "
+                                                'interval [0.898, 0.962]',
+                                     'plan_n': 119,
+                                     'verdict': 'dropped',
+                                     'value': 0.929,
+                                     'lo': 0.898,
+                                     'hi': 0.962,
+                                     'n': 119,
+                                     'adversary': 0.931,
+                                     'measured': '',
+                                     'result': '',
+                                     'added': '',
+                                     'folder': ''},
+           'round-17/account-3/c3': {'owner': '3',
+                                     'claim': "Sentences 2-3 say the cue gives the base RL's opening but not RL's "
+                                              'longer, checked derivation, while the 1.5x edit gives both. So on '
+                                              "MATH-500 problems that both solve, the edit's right answers are close "
+                                              "to RL's length (0.81-0.955), far above the cued base's 0.62.",
+                                     'statistic': "geometric mean over problems of (n_new of the 1.5x edit's right "
+                                                  "answer / median n_new of RL's right answers), a ratio with no "
+                                                  'unit',
+                                     'null': "The base's own rows: rlneurons/day1_3/math500_base_cue-01 (attempt 0) "
+                                             'in place of the edit gives 0.618 [0.590, 0.645] with 4 samples and '
+                                             '0.579 with sample 0 only. The accuracy-proportional alternative (share '
+                                             '1.07) predicts 1.032. All lie outside the explore interval.',
+                                     'why_new': "result-d82083 and result-95a4dc give only the 1.5x edit's MATH-500 "
+                                                'score; F25 compares step 100 with the cued base. No fact or result '
+                                                "gives the edit's right-answer length against RL's.",
+                                     'set': 'math500',
+                                     'alternative': 'A known overall length difference between the two models: the '
+                                                    '1.5x edit writes about 12% fewer tokens than RL on every '
+                                                    'answer, right or wrong, on any problem. The per-problem pairing '
+                                                    'on right answers and the per-problem median add nothing. The '
+                                                    "ratio of the two models' unpaired, all-rows geometric-mean "
+                                                    'lengths, with no correctness filter and no problem matching, '
+                                                    "already gives the statistic's value (0.882 vs 0.881 on "
+                                                    "explore). As a check, a single RL sample against RL's own "
+                                                    'median of right answers gives 1.00, so the single-versus-median '
+                                                    'construction adds no bias.',
+                                     'ranges': {'3': [0.81, 0.955], 'null': [0.52, 0.72]},
+                                     'explore': {'value': 0.881,
+                                                 'lo': 0.848,
+                                                 'hi': 0.915,
+                                                 'n': 235,
+                                                 'adversary': 0.8822},
+                                     'dropped': "adversary's explore value 0.8822 lies inside the account's explore "
+                                                'interval [0.848, 0.915]',
+                                     'plan_n': 235,
+                                     'verdict': 'dropped',
+                                     'value': 0.881,
+                                     'lo': 0.848,
+                                     'hi': 0.915,
+                                     'n': 235,
+                                     'adversary': 0.8822,
+                                     'measured': '',
+                                     'result': '',
+                                     'added': '',
+                                     'folder': ''},
+           'round-17/account-2/c1': {'owner': '2',
+                                     'claim': 'On HumanEval+/MBPP+ the plain-prompt untrained base is a per-sample '
+                                              'mixture (S3, S4). A plain answer that opens deliberatively is a '
+                                              "switched sample and passes at the cued base's rate on the same "
+                                              'problem. One that does not is an unswitched reply and passes far '
+                                              "less, whatever the problem's difficulty. So the gap G between the two "
+                                              'groups, each measured against the cued base on the same problems, is '
+                                              'large (about 0.3). Accuracy, difficulty, length or finishing alone '
+                                              'predict about 0.',
+                                     'statistic': 'G = mean over problems with a deliberative plain answer of (plain '
+                                                  'pass - mean of Code-cue and Math-cue pass) minus the same mean '
+                                                  'over problems with a non-deliberative plain answer, in pass-rate '
+                                                  'units (fraction of problems)',
+                                     'null': "Openings carry no information beyond the answer's length: each plain "
+                                             "answer passes at the plain base's pass rate in its own length quintile "
+                                             '(0.088 on explore). Random opening labels give 0.',
+                                     'why_new': 'F29/F63/F64 measured openings for m21 (base + Code-RL top-8, '
+                                                'MATH-500) and F56 for plain base answers on MATH-500. No fact or '
+                                                "board result splits the plain base's code answers by opening or "
+                                                'compares them with the Code-cue and Math-cue base on the same '
+                                                'problems.',
+                                     'set': 'code',
+                                     'alternative': 'Plain-answer accuracy: d contains the plain pass itself, while '
+                                                    'the two cue cells are separate samples. Their pass rate barely '
+                                                    'tracks how the plain answer opens (explore: 0.607 for '
+                                                    'deliberative vs 0.570 for non-deliberative). So G is close to '
+                                                    'the gap in plain pass rate between the two groups. '
+                                                    'Non-deliberative plain base answers are short (mean 720 vs 4100 '
+                                                    'tokens), off-format continuations that fail often (26% vs '
+                                                    '62.5%). Any split of plain answers that tracks plain '
+                                                    'correctness gives G of about that gap, whether or not the '
+                                                    'opening means anything.',
+                                     'ranges': {'2': [0.15, 0.6], 'null': [-0.12, 0.12]},
+                                     'explore': {'value': 0.327,
+                                                 'lo': 0.227,
+                                                 'hi': 0.422,
+                                                 'n': 269,
+                                                 'adversary': 0.3639},
+                                     'dropped': "adversary's explore value 0.3639 lies inside the account's explore "
+                                                'interval [0.227, 0.422]',
+                                     'plan_n': 269,
+                                     'verdict': 'dropped',
+                                     'value': 0.327,
+                                     'lo': 0.227,
+                                     'hi': 0.422,
+                                     'n': 269,
+                                     'adversary': 0.3639,
+                                     'measured': '',
+                                     'result': '',
+                                     'added': '',
+                                     'folder': ''},
+           'round-17/account-2/c2': {'owner': '2',
+                                     'claim': "The untrained base's plain samples are a mixture of switched samples, "
+                                              'right at the cued rate, and unswitched replies that fail whatever the '
+                                              'problem (S4). On MATH-500 problems the cued base solves in 12 of 12 '
+                                              'samples, plain samples should then be right only at about the '
+                                              'switched share, i.e. the plain/cue ratio, 0.53-0.57. A single '
+                                              "difficulty axis says about 0.74: one logit shift from the cued base's "
+                                              "per-problem rate, matched to the plain base's overall rate. Accuracy "
+                                              'alone says 0.46.',
+                                     'statistic': 'mean right rate (fraction) of 2 plain untrained-base samples per '
+                                                  "problem (the rln4 T3 answer and the self-open job's control draw) "
+                                                  'on problems whose 12 cued-base votek samples are all right',
+                                     'null': 'Difficulty alone (one difficulty axis): plain rate = sigmoid(logit of '
+                                             "the cued base's smoothed per-problem rate (k+0.5)/13 + one shift "
+                                             "fitted to the plain samples' overall rate), giving 0.737 on explore. "
+                                             'The selection uses only cue samples, so the plain samples carry no '
+                                             'regression to the mean.',
+                                     'why_new': 'F43 measured how the T3/T1 ratio changes across MATH levels '
+                                                '(undecided), and F56 the deliberative-flag subset. Neither measures '
+                                                'the plain rate on problems the cue never fails against a '
+                                                "logit-shift model, and neither uses the self-open job's control "
+                                                'draws. No board result reports this number.',
+                                     'set': 'math500',
+                                     'alternative': 'Plain-prompt untrained-base samples mostly fail by format, not '
+                                                    'by difficulty. They derail, abstain, write empty or 1-token '
+                                                    'outputs, misread the instruction or give no boxed answer: about '
+                                                    '24 % of T3 answers have no extractable answer, and many control '
+                                                    'draws are under 100 tokens. That failure rate is roughly flat '
+                                                    'once the cued base can solve the problem, so the plain right '
+                                                    'rate on the all-12-right problems is about the same as on the '
+                                                    'near-ceiling problems the cued base gets 9-11 of 12 right '
+                                                    '(about 0.5). The value comes from a difficulty-free format '
+                                                    'ceiling, not from anything specific to the all-right set.',
+                                     'ranges': {'2': [0.4, 0.65], 'null': [0.66, 0.85]},
+                                     'explore': {'value': 0.545, 'lo': 0.48, 'hi': 0.605, 'n': 100, 'adversary': 0.5},
+                                     'dropped': "adversary's explore value 0.5 lies inside the account's explore "
+                                                'interval [0.48, 0.605]',
+                                     'plan_n': 100,
+                                     'verdict': 'dropped',
+                                     'value': 0.545,
+                                     'lo': 0.48,
+                                     'hi': 0.605,
+                                     'n': 100,
+                                     'adversary': 0.5,
+                                     'measured': '',
+                                     'result': '',
+                                     'added': '',
+                                     'folder': ''},
+           'round-17/account-2/c3': {'owner': '2',
+                                     'claim': "The switch sits in RL's specific paired directions (S1, S3), so a "
+                                              'random weight edit of matched norm leaves the base an unchanged '
+                                              'per-sample mixture. Its plain samples on MATH-500 problems the cued '
+                                              'base solves 12 of 12 are then right only at about their switched '
+                                              'share, 0.49-0.53. A single difficulty axis says 0.67 and accuracy '
+                                              'alone says 0.40.',
+                                     'statistic': 'mean right rate (fraction) of 2 plain random-edit samples per '
+                                                  'problem (base + random rank-8 edit, and base + random-value hand '
+                                                  'edit) on problems whose 12 cued-base votek samples are all right',
+                                     'null': 'Difficulty alone (one difficulty axis): random-edit plain rate = '
+                                             "sigmoid(logit((k+0.5)/13) + one shift fitted to the two cells' overall "
+                                             'rate), giving 0.669 on explore.',
+                                     'why_new': 'The board reports only the totals of the random-edit plain cells '
+                                                '(197 and 204 of 500). No fact looks at them per problem or '
+                                                "conditions on the cued base's per-problem certainty.",
+                                     'set': 'math500',
+                                     'alternative': 'Problem difficulty alone: a random edit hurts every problem by '
+                                                    "the same amount on the logit scale. Take each problem's chance "
+                                                    "of being right from the cued base's 12 votek samples, shift "
+                                                    'every problem by one constant logit fitted so the average over '
+                                                    "all pids matches the two random-edit cells' overall right rate, "
+                                                    'and read off the average on the all-12-right problems. Easy '
+                                                    'problems keep more of their accuracy under any damage, so the '
+                                                    'conditional mean sits above the overall rate (about 0.40) in '
+                                                    'the 0.5-0.6 range. No account of the edits is needed.',
+                                     'ranges': {'2': [0.38, 0.64], 'null': [0.655, 0.85]},
+                                     'explore': {'value': 0.53,
+                                                 'lo': 0.47,
+                                                 'hi': 0.59,
+                                                 'n': 100,
+                                                 'adversary': 0.5588},
+                                     'dropped': "adversary's explore value 0.5588 lies inside the account's explore "
+                                                'interval [0.47, 0.59]',
+                                     'plan_n': 100,
+                                     'verdict': 'dropped',
+                                     'value': 0.53,
+                                     'lo': 0.47,
+                                     'hi': 0.59,
+                                     'n': 100,
+                                     'adversary': 0.5588,
+                                     'measured': '',
+                                     'result': '',
+                                     'added': '',
+                                     'folder': ''},
+           'round-17/account-3/c2': {'owner': '3',
+                                     'claim': "Sentences 1-2 and 5 say RL's 8 paired directions carry RL's "
+                                              'derivation style, and an edit of the same norm in random directions '
+                                              'does not. So on code problems that both pass, the Code-RL top-8 1.5x '
+                                              "edit's passing answers are about as long as RL-Code's (ratio "
+                                              '0.855-1.035), while the random rank-8 1.5x edit stays at base length '
+                                              '(0.67).',
+                                     'statistic': 'geometric mean over problems of (n_new of the Code top-8 1.5x '
+                                                  "passing answer / median n_new of RL-Code's passing answers over 3 "
+                                                  'seeds), a ratio with no unit',
+                                     'null': 'A random edit of the same norm: '
+                                             'rlneurons/xreward/code_depth/code_rand8x1.5_code31 in place of the '
+                                             'edit gives 0.675 [0.624, 0.732] (n 160); the cued base gives 0.653. '
+                                             'The accuracy-proportional alternative (share 1.22) predicts 1.099. All '
+                                             'lie outside the explore interval.',
+                                     'why_new': 'result-a1bf75 and F36/F37 report pass counts and pass rates of the '
+                                                "code dial; no fact or result compares the edit's passing-answer "
+                                                "length with RL-Code's on the same problems.",
+                                     'set': 'code',
+                                     'alternative': 'The ratio compares one passing sample from the edit with the '
+                                                    'median of up to three passing RL-Code samples. That setup puts '
+                                                    'the ratio near 1 for any single passing draw whose per-problem '
+                                                    "length distribution is close to RL-Code's. The edit is the base "
+                                                    "plus RL-Code's own top-8 directions at 1.5x, and it passes on "
+                                                    'about the same problems as RL-Code. Its answers are then just '
+                                                    'one more RL-Code-like draw, and the 1.5x size needs no further '
+                                                    'mechanism. A null that uses RL-Code against itself shows what '
+                                                    "such a draw gives: each passing RL seed's n_new divided by the "
+                                                    "median of the other seeds' passing n_new. The range [0.855, "
+                                                    '1.035] holds that value as well. The geometric mean sits '
+                                                    'slightly below 1 because one draw is noisier than a median (a '
+                                                    'skewed log-length distribution against a pooled median), not '
+                                                    'because the edit changes how the model ends its answers.',
+                                     'ranges': {'3': [0.855, 1.035], 'null': [0.58, 0.8]},
+                                     'explore': {'value': 0.939,
+                                                 'lo': 0.899,
+                                                 'hi': 0.98,
+                                                 'n': 198,
+                                                 'adversary': 0.9808},
+                                     'dropped': '',
+                                     'plan_n': 198,
+                                     'verdict': 'not separated',
+                                     'value': 0.9427,
+                                     'lo': 0.902,
+                                     'hi': 0.9861,
+                                     'n': 194,
+                                     'adversary': 0.9807,
+                                     'measured': 'ratio 0.943 [0.902, 0.986], n 194, adversary (RL seed vs other '
+                                                 'seeds) 0.981',
+                                     'result': 'result-c22d96',
+                                     'added': '2026-11-16T00:56:20',
+                                     'folder': 'r17a3c2-01'},
+           'round-17/account-1/c3': {'owner': '1',
+                                     'claim': "S3: a reward's own pairs carry its effect in its own domain. On "
+                                              "HumanEval+/MBPP+, Code-RL's top-8 pairs at 1.5x should give "
+                                              "per-problem pass outcomes that follow RL-Code's 3-seed pass rate, "
+                                              "while RL-Math's top-8 pairs at 1.5x on the same problems, a "
+                                              'near-random edit for code, should follow it only as much as their '
+                                              'accuracy implies. The correlation gap is put at 0.065-0.49, above the '
+                                              'accuracy-alone value of about 0.06.',
+                                     'statistic': 'D3 = Pearson r(Code top-8 1.5x pass, RL-Code 3-seed pass rate) - '
+                                                  'Pearson r(Math top-8 1.5x pass, RL-Code 3-seed pass rate), across '
+                                                  'code problems (correlation difference, unitless)',
+                                     'null': "Accuracy alone: a single-sample cell's correlation with RL-Code's rate "
+                                             'is a linear function of its pass rate. Fit it over the non-Code-edit '
+                                             'single cells (base_plain, base_cue, base_mathcue, the random rank-8 '
+                                             "1.5x edit, the Math 1.5x edit), predict it at the Code edit's pass "
+                                             "rate, and subtract the Math edit's correlation. Explore value 0.057.",
+                                     'why_new': 'F36/F37/F40 and result-a1bf75 report pass totals and whether fixes '
+                                                "fall in the base's solved set. No fact or result correlates "
+                                                "per-problem outcomes of the Code and Math edits with RL-Code's.",
+                                     'set': 'code',
+                                     'alternative': 'Accuracy gap, not problem-specific skill: the Math top-8 1.5x '
+                                                    'edit passes fewer code problems than the Code top-8 1.5x edit '
+                                                    '(180 vs 202 of 269 explore). If the Math edit is the Code edit '
+                                                    'with its extra failures spread at random, with no link to which '
+                                                    'problems RL-Code solves, then its covariance with the RL-Code '
+                                                    'rate shrinks by the ratio of pass rates while its variance '
+                                                    'changes with its own mean. Pearson r with RL-Code then drops on '
+                                                    "its own, and D3 comes out positive near 0.15 without Code's "
+                                                    "directions holding RL-Code's per-problem knowledge any better "
+                                                    "than Math's.",
+                                     'ranges': {'1': [0.065, 0.49], 'null': [-0.15, 0.06]},
+                                     'explore': {'value': 0.1819,
+                                                 'lo': 0.1001,
+                                                 'hi': 0.2707,
+                                                 'n': 269,
+                                                 'adversary': 0.1456},
+                                     'dropped': "adversary's explore value 0.1456 lies inside the account's explore "
+                                                'interval [0.1001, 0.2707]',
+                                     'plan_n': 269,
+                                     'verdict': 'dropped',
+                                     'value': 0.1819,
+                                     'lo': 0.1001,
+                                     'hi': 0.2707,
+                                     'n': 269,
+                                     'adversary': 0.1456,
+                                     'measured': '',
+                                     'result': '',
+                                     'added': '',
+                                     'folder': ''},
+           'round-17/account-1/c2': {'owner': '1',
+                                     'claim': 'The same identity on MATH-500 (S1): one sample of the 1.5x top-8 edit '
+                                              "with the cue (accuracy 0.940) follows RL's 4-sample per-problem rate "
+                                              'more closely than one sample of Think-SFT with the cue does (accuracy '
+                                              '0.920-0.940, averaged over its 4 single samples). Matched accuracy '
+                                              'and one sample on each side give equal noise, so only a shared '
+                                              "mechanism can lift the edit's correlation; the account puts the gap "
+                                              'at 0.02-0.54.',
+                                     'statistic': 'D2 = Pearson r(edit single-sample right, RL 4-sample rate) - mean '
+                                                  'over s=0..3 of Pearson r(Think-SFT sample s right, RL 4-sample '
+                                                  'rate), across MATH-500 problems (correlation difference, '
+                                                  'unitless)',
+                                     'null': "Accuracy alone: a single sample's correlation with RL's rate depends "
+                                             "only on that sample's accuracy. Fit the line corr ~ accuracy over the "
+                                             '8 single non-edit samples (cued base samples 0-3 of '
+                                             'rlneurons/day1_3/math500_base_cue-01 and Think-SFT samples 0-3), '
+                                             "predict it at the edit's accuracy, and subtract Think-SFT's mean. "
+                                             'Explore value 0.007.',
+                                     'why_new': 'No fact correlates per-problem outcomes of the edit with RL on '
+                                                "MATH-500. result-95a4dc reports only the edit's total (456 vs 457), "
+                                                'result-5da8a9 pools 36 arms for union excess without singling out '
+                                                "the edit, and result-bf6124 concerns Think-SFT's profile rule, not "
+                                                "its agreement with RL against the edit's.",
+                                     'set': 'math500',
+                                     'alternative': "Known difference between the models compared: Think-SFT's "
+                                                    "single samples are noisier per problem than RL's (mean pairwise "
+                                                    'inter-sample Pearson r of 0/1 scores 0.42 vs RL 0.52 at matched '
+                                                    "~93% accuracy). Any single-sample arm with RL's own per-problem "
+                                                    'consistency (an independent RL draw, or anything with RL-like '
+                                                    "sampling noise) correlates with RL's 4-sample rate at the "
+                                                    'Spearman-Brown ceiling sqrt(4)*r1/sqrt(1+3*r1), which sits '
+                                                    "above Think-SFT's single-sample correlations. So a positive D2 "
+                                                    "follows from Think-SFT's extra sampling noise plus the noisy "
+                                                    'one-sample edit correlation. It does not need the edit to carry '
+                                                    "RL's mechanism. Accuracy can't be the explanation: edit 0.94 vs "
+                                                    'Think-SFT 0.93. Length (+0.026) and cap-hit covariates explain '
+                                                    'less.',
+                                     'ranges': {'1': [0.02, 0.54], 'null': [-0.2, 0.015]},
+                                     'explore': {'value': 0.1816,
+                                                 'lo': 0.0761,
+                                                 'hi': 0.2879,
+                                                 'n': 250,
+                                                 'adversary': 0.069},
+                                     'dropped': '',
+                                     'plan_n': 250,
+                                     'verdict': 'not separated',
+                                     'value': 0.1215,
+                                     'lo': 0.0282,
+                                     'hi': 0.222,
+                                     'n': 250,
+                                     'adversary': 0.1611,
+                                     'measured': 'D2 0.1215 [0.0282, 0.2220], n 250, adversary 0.1611',
+                                     'result': 'result-5ce197',
+                                     'added': '2026-11-16T00:56:29',
+                                     'folder': 'r17a1c2-01'},
+           'round-17/account-1/c1': {'owner': '1',
+                                     'claim': "On hard328 the 1.5x top-8 edit is RL's own low-rank change (S1), so "
+                                              "its per-problem right rate follows RL's problem by problem up to "
+                                              'sample noise. Think-SFT has the same per-sample accuracy (0.651 vs '
+                                              "0.642 for the edit and 0.640 for RL) but none of RL's pairs and its "
+                                              'own long-answer routes, so it tracks RL less. The correlation with RL '
+                                              'is therefore higher for the edit than for Think-SFT by 0.01-0.26.',
+                                     'statistic': 'D1 = Pearson r(edit rate, RL rate) - Pearson r(Think-SFT rate, RL '
+                                                  'rate) across hard328 problems; each rate is the right fraction of '
+                                                  '4 samples (correlation difference, unitless)',
+                                     'null': "Difficulty alone (one latent axis): each model's 4-sample rate is a "
+                                             'noisy reading of the same problem difficulty, so r(X,RL) = sqrt(rel_X '
+                                             "* rel_RL) with rel from each model's own split-half resample (samples "
+                                             '0-1 vs 2-3, Spearman-Brown). Think-SFT is an accuracy-matched other '
+                                             'model. Explore value of this null: D1 = 0.003.',
+                                     'why_new': 'No fact or board result correlates per-problem right rates across '
+                                                'models on hard328. F57/F58/F55 compare totals or a selected subset, '
+                                                'where accuracy alone also explains them (F61 not separated). F65 '
+                                                "compares wrong answers only, and result-bf6124 compares Think-SFT's "
+                                                'difficulty profile on MATH-500 by profile rule, not against the '
+                                                'edit.',
+                                     'set': 'hard328',
+                                     'alternative': "Think-SFT's per-problem rate is noisier than the other models': "
+                                                    'about 25% of its samples hit the 16384-token cap, and only '
+                                                    'about 4% of capped samples are right. Problems where Think-SFT '
+                                                    'is right roughly half the time can be counted right or wrong '
+                                                    'depending on which samples got cut off. That noise lowers its '
+                                                    "correlation with any other model's rate, RL included, by about "
+                                                    '1 minus its own run-to-run reliability. The edit and RL rarely '
+                                                    'hit the cap (6-7%), so r(edit, RL) sits near the ceiling. D1 is '
+                                                    "then simply Think-SFT's unreliability gap. Measure it with no "
+                                                    'edit cell at all, as 1 minus the correlation between the '
+                                                    'Think-SFT rate and a second, independent Think-SFT run (same '
+                                                    'model, cue, seeds and 16k cap) stored in the cap32vote cell as '
+                                                    'score_v3_16.',
+                                     'ranges': {'1': [0.01, 0.26], 'null': [-0.08, 0.005]},
+                                     'explore': {'value': 0.0938,
+                                                 'lo': 0.0468,
+                                                 'hi': 0.1477,
+                                                 'n': 164,
+                                                 'adversary': 0.0974},
+                                     'dropped': "adversary's explore value 0.0974 lies inside the account's explore "
+                                                'interval [0.0468, 0.1477]',
+                                     'plan_n': 164,
+                                     'verdict': 'dropped',
+                                     'value': 0.0938,
+                                     'lo': 0.0468,
+                                     'hi': 0.1477,
+                                     'n': 164,
+                                     'adversary': 0.0974,
+                                     'measured': '',
+                                     'result': '',
+                                     'added': '',
+                                     'folder': ''}}}
 RECORD16 = {'facts': 53,
  'accounts': {'1': {'sentences': ["RL-Zero's weight change is small (0.24 % of the base's weight norm) and, as in "
                                   "every on-policy RL run whatever the reward (top-8 share of each matrix's change: "
@@ -1531,6 +2149,76 @@ def _build16(ref=""):
     return {"facts": len(facts), "accounts": accounts, "tests": tests}
 
 
+def _build17(ref=""):
+    plans = {t["name"]: t for t in _load(ref, W17 + "synthesis_tests.json")}
+    assert set(plans) == set(TESTS17), f"TESTS17 differ from round 17's synthesis_tests.json: {sorted(set(plans) ^ set(TESTS17))}"
+    rows = {x["mechanism"]: x for x in rows_all(ref) if x["mechanism"].startswith("round-17/")}
+    accounts, tests = {}, {}
+    for k in ("1", "2", "3"):
+        a = _load(ref, W17 + f"account-{k}.json")
+        blind = _load(ref, W17 + f"marks-account-{k}.json")["marks"]
+        marks = {m: sum(x["mark"] == m for x in blind) for m in ("explained", "not addressed", "contradicts")}
+        assert sum(marks.values()) == len(blind)
+        accounts[k] = {"sentences": a["account"], "marks": marks, "facts": len(blind),
+                       "own_contradicts": sum(x["mark"] == "contradicts" for x in a["marks"]),
+                       "contradicts": [[x["fact"], x["why"]] for x in blind if x["mark"] == "contradicts"]}
+    for name, t in TESTS17.items():
+        plan = plans[name]
+        owner = plan["owner"].split("-")[1]
+        adv = _load(ref, W17 + f"adversary/{plan['owner']}-{name.split('/')[-1]}.json")
+        assert adv["explore_value"] == plan["adversary"]["explore_value"], name
+        ex = plan["explore"]
+        x = {"owner": owner, "claim": plan["claim"], "statistic": plan["statistic"], "null": plan["null"],
+             "why_new": plan.get("why_new", ""), "set": plan["set"], "alternative": plan["adversary"]["alternative"],
+             "ranges": {(a.split("-")[1] if a != "null" else "null"): r for a, r in plan["ranges"].items()},
+             "explore": {"value": ex["value"], "lo": ex["interval"][0], "hi": ex["interval"][1], "n": ex["n"],
+                         "adversary": adv["explore_value"]},
+             "dropped": plan.get("dropped", ""), "plan_n": plan["n"]}
+        # dropped exactly when the adversary's explore value lies inside the account's explore interval
+        assert bool(x["dropped"]) == (ex["interval"][0] <= adv["explore_value"] <= ex["interval"][1]) == (name not in rows) == (not t[2]), name
+        if t[2]:
+            row = rows[name]
+            v = _get(_load(ref, f"{R}direct/r17a{owner}{name[-2:]}-01/metrics.json"), t[2])
+            lo, hi = row["interval"]
+            assert lo <= v <= hi and row["range"] == x["ranges"][owner], name
+            x.update({"verdict": row["verdict"], "value": round(v, 4), "lo": round(lo, 4), "hi": round(hi, 4), "n": row["n"],
+                      "adversary": round(row["adversary"], 4), "measured": row["measured"], "result": row["result"],
+                      "added": row["added"].rstrip("Z")[:19], "folder": f"r17a{owner}{name[-2:]}-01"})
+        else:
+            assert name not in rows, name
+            x.update({"verdict": "dropped", "value": ex["value"], "lo": ex["interval"][0], "hi": ex["interval"][1],
+                      "n": ex["n"], "adversary": adv["explore_value"], "measured": "", "result": "", "added": "",
+                      "folder": ""})
+        tests[name] = x
+    facts = _load(ref, W17 + "synthesis_facts.json")
+    assert all(a["facts"] == len(facts) for a in accounts.values()), "every blind marker marks every fact once"
+    return {"facts": len(facts), "accounts": accounts, "tests": tests}
+
+
+def _tally17(rec):
+    """Round 17's counts. held, not_separated, refuted, undecided: the verdicts on the test half; dropped: consequences
+    dropped on the explore half; test_half: consequences that reached the test half; tested: all 9. accounts[k]: that
+    account's own counts and its score (holds minus facts the blind marker marks against it)."""
+    if not rec:
+        return {}
+    v = [t["verdict"] for t in rec["tests"].values()]
+    acc = {}
+    for k, a in rec["accounts"].items():
+        o = [t["verdict"] for t in rec["tests"].values() if t["owner"] == k]
+        acc[k] = {"held": o.count("holds"), "not_separated": o.count("not separated"), "refuted": o.count("refuted"),
+                  "undecided": o.count("undecided"), "dropped": o.count("dropped"), "tested": len(o),
+                  "explained": a["marks"]["explained"], "unaddressed": a["marks"]["not addressed"],
+                  "contradicts": a["marks"]["contradicts"], "own_contradicts": a["own_contradicts"],
+                  "score": o.count("holds") - a["marks"]["contradicts"]}
+    tested = [t for t in rec["tests"].values() if t["verdict"] != "dropped"]
+    c = {"held": v.count("holds"), "not_separated": v.count("not separated"), "refuted": v.count("refuted"),
+         "undecided": v.count("undecided"), "dropped": v.count("dropped"), "test_half": len(tested), "tested": len(v),
+         "range_holds_adversary": sum(t["ranges"][t["owner"]][0] <= t["adversary"] <= t["ranges"][t["owner"]][1] for t in tested),
+         "facts": rec["facts"], "accounts": acc}
+    assert c["held"] + c["not_separated"] + c["refuted"] + c["undecided"] + c["dropped"] == c["tested"]
+    return c
+
+
 def _tally16(rec):
     """Round 16's counts. held, not_separated, refuted, undecided, tested: the owners' verdicts on the 9 consequences.
     denials, denials_decided, denials_against_denier: the 4 denials. adversary_inside: tests whose interval contains the
@@ -1594,16 +2282,20 @@ COUNTS = _tally(RECORD)
 _c = COUNTS
 _a = _c.get("accounts", {})
 _d = _tally16(RECORD16)
-if _c and _d:
-    COUNTS["r16"] = _d
+_f = _tally17(RECORD17)
+if _c and _d and _f:
+    COUNTS["r16"], COUNTS["r17"] = _d, _f
     COUNTS["rounds"] = {r: {k: x[k] for k in ("held", "not_separated", "refuted", "undecided", "tested")}
-                        for r, x in (("15", _c), ("16", _d))}
-    COUNTS["newest"] = "16"
+                        for r, x in (("15", _c), ("16", _d), ("17", _f))}
+    COUNTS["rounds"]["17"].update({"dropped": _f["dropped"], "test_half": _f["test_half"]})
+    COUNTS["newest"] = "17"
 _e = _d.get("accounts", {})
-LINE = (f"Under round 15's rule, {_c.get('held')} of {_c.get('tested')} claims about what RL changed held; in round 16, with "
-        f"a blind adversary's prediction as the bar, {_d.get('held')} of {_d.get('tested')} held.")
+LINE = (f"Under stricter tests, claims about what RL changed held {_c.get('held')} of {_c.get('tested')}, then "
+        f"{_d.get('held')} of {_d.get('tested')} against a blind adversary, then {_f.get('held')} of {_f.get('tested')} on "
+        "problems held out from fitting.")
 # An example opens an address: the round ("15/" or nothing for 16), then a claim.
-EXAMPLES = [["a2c2", "Example: the one claim the adversary matched"], ["a1c1", "Example: a denial decided against the denier"],
+EXAMPLES = [["a1c2", "Example: a claim tested on the held-out half"], ["a3c1", "Example: a claim dropped on the explore half"],
+            ["16/a1c1", "Example (round 16): a denial decided against the denier"],
             ["15/d1", "Example (round 15): the one disagreement, and its test"]]
 
 
@@ -1613,7 +2305,7 @@ def _acc_line(k):
             f"{_c['facts']} facts marked explained, {x['contradicts']} marked against it; score {x['score']}")
 
 
-PANELS = [] if not (_c and _d) else [
+PANELS = [] if not (_c and _d and _f) else [
     ["new", "What is new",
      f"Until round 14 the team's theory engine wrote one cause per surprising number, and those lost: in round 14, "
      f"{_c['round14'][0]} of {_c['round14'][1]} rival causes held their test. Round 15 asked each of three agents for one "
@@ -1624,15 +2316,20 @@ PANELS = [] if not (_c and _d) else [
       f"Round 16 made the bar harder. The three accounts, of {_d['facts']} facts, were written in turn, each denying "
       "claims of the earlier ones, and a blind adversary predicted every consequence's value without the account. A "
       "consequence holds only if its interval lies in the account's range and excludes the adversary's value.",
+      f"Round 17 split the problems once into an explore half and a test half. The accounts and adversaries read the "
+      f"explore rows, so ranges were fitted, not guessed; {_f['dropped']} of 9 claims were dropped there and "
+      f"{_f['test_half']} went to the test half.",
       "AutoCog (arXiv 2606.26448, abstract and its loop's stages 3 and 4) has language-model agents advocate competing "
       "theories, run experiments that tell them apart and revise the weaker one. Here the accounts are not revised: "
       "their consequences are checked once, on data already stored.",
       ["Mechanisms tested directly: the one-cause-per-number approach this round replaced ›", "/finding/mechanisms-tested-directly"],
       ["Theories on trial: the same engine's theories, scored on their predictions ›", "/finding/theories-on-trial"]]],
     ["why", "Why it matters",
-     f"Under the stricter rule no account has earned a hold yet: round 16 has {_d['held']} of {_d['tested']}, and round 15's "
-     f"{_c['held']} holds become {_c['held'] - _c['not_separated']} once the retest's adversary is applied.",
-     [f"The story itself barely changed between rounds: the round 16 accounts repeat round 15's, and the sentences on "
+     f"Under the stricter rules no account has earned a hold: round 16 has {_d['held']} of {_d['tested']}, round 17 "
+     f"{_f['held']} of {_f['tested']}, and round 15's {_c['held']} holds become {_c['held'] - _c['not_separated']} once the "
+     "retest's adversary is applied.",
+     ["Read with the rows in hand (round 17), every statistic the accounts proposed was matched by accuracy, sampling "
+      "noise or one more RL draw: the claims did not go beyond what those already predict.",f"The story itself barely changed between rounds: the round 16 accounts repeat round 15's, and the sentences on "
       "this page are nearly the same in both.",
       f"All {_d['denials_decided']} decided denials went against the account that denied: the later accounts denied "
       "claims the data supports in direction.",
@@ -1653,12 +2350,18 @@ PANELS = [] if not (_c and _d) else [
       "moved account 2 from undecided to holds.",
       "Round 16 (engine 16): the adversary's value was computed first in every test. Holds: interval inside the range "
       "and excluding the adversary's value; not separated: inside the range but containing it; refuted: wholly outside; "
-      "otherwise undecided. 9 tests in 9 agents; board item result-368932."]],
+      "otherwise undecided. 9 tests in 9 agents; board item result-368932.",
+      "Round 17 (engine 17): a claim is dropped on the explore half when the adversary's explore value lies inside the "
+      "account's explore interval; the rest are tested once on the test half with round 16's rule. 2 tests in 2 agents; "
+      "board item result-5f4dd7."]],
     ["limits", "What it does not show",
-     f"Round 16's {_d['held']} of {_d['tested']} does not show the accounts are wrong: {_d['undecided']} of the 9 are "
+     f"Round 17 rests on {_f['test_half']} tests. A claim dropped on the explore half failed only its own account's "
+     "interval check there, a weaker statement than a refutation on held-out rows. Round 16's {_d['held']} of {_d['tested']} does not show the accounts are wrong: {_d['undecided']} of the 9 are "
      f"undecided, all {_d['edge']} at an edge of the account's range, and the adversary's value missed the measured "
      f"interval in {_d['tested'] - _d['adversary_inside']} of 9 tests.",
-     ["The adversaries could not read the stored rows, so they guessed; their values were rarely the bar that "
+     [f"In round 17 the explore filter checks the account's interval, not its range, so both tested ranges contained "
+      f"the adversary's value ({_f['range_holds_adversary']} of {_f['test_half']}).",
+      "In round 16 the adversaries could not read the stored rows, so they guessed; their values were rarely the bar that "
       "decided. The ranges the accounts fixed were narrower than the data's noise.",
       "The flag for a deliberate opening, used by three round 16 tests, misreads answers that echo prompt text before "
       "'Okay'; no planted failure had checked it.",
@@ -1676,7 +2379,9 @@ PANELS = [] if not (_c and _d) else [
     ["run", "How to reproduce it",
      "uv run tools/finding_one_account_of_the_facts.py --ref " + (REF or "<ref>") + ", from the repository root, "
      "rebuilds every value from the files and checks the copy on this page.",
-     [f"Round 16: {W16} (account-*.json, marks-account-*.json, adversary/, synthesis_tests.json, synthesis.md) and "
+     [f"Round 17: {W17} and studies/theory/data/split_v1.json; tests studies/theory/results/direct/r17a1c2-01/ and "
+      "r17a3c2-01/; board item result-5f4dd7.",
+      f"Round 16: {W16} (account-*.json, marks-account-*.json, adversary/, synthesis_tests.json, synthesis.md) and "
       "studies/theory/results/direct/r16<account><claim>-01/; board item result-368932.",
       f"Files: {W} (account-1.json to account-3.json, disagreements.json, synthesis_tests.json, synthesis.md)" +
       (f" on branch {REF.split('/')[-1]}" if REF else "") + f", commit {COMMIT}.",
@@ -1754,6 +2459,40 @@ def _round16():
             "focus": "a2c2", "contested": [1, 2]}
 
 
+
+def _round17():
+    rec, c = RECORD17, _f
+    nodes = [{"text": n, "sent": {}, "st": None, "clauses": None, "split": None} for n in NODES17]
+    tests = []
+    for name in TEST_ORDER17:
+        t, r = TESTS17[name], rec["tests"][name]
+        e = r["explore"]
+        cav = t[4] or (f"Dropped on the explore half: the adversary's value there, {e['adversary']:g}, lies inside the "
+                       f"account's own interval ({e['lo']:g} to {e['hi']:g}), so the claim never reached the test half. "
+                       "Dropped is not refuted: no held-out rows were read.")
+        tests.append({**r, "key": _key(name), "name": name, "label": t[0], "node": t[1] - 1, "nunit": t[3], "unit": "",
+                      "dom": None, "caveat": cav, "null_value": None, "retest": {}, "denials": [],
+                      "verdicts": {r["owner"]: r["verdict"]}})
+    lines = {}
+    for k, x in c["accounts"].items():
+        own = ", ".join(f"{x[a]} {b}" for a, b in (("held", "held"), ("not_separated", "not separated"),
+                                                   ("dropped", "dropped")) if x[a])
+        mk = f"; {x['contradicts']} fact marked against it" if x["contradicts"] else ""
+        lines[k] = f"Account {k}: {own}{mk}."
+    return {"base": "3", "split_acc": "3", "facts": rec["facts"], "accounts": rec["accounts"], "nodes": nodes,
+            "extra": None, "tests": tests, "target": c["held"], "tested": c["tested"], "strip": False,
+            "set": f"Round 17 · explore half, test half, {rec['facts']} facts",
+            "bl0": "new claims held on the held-out test half.",
+            "bl1": f"{c['dropped']} dropped on the explore half, {c['test_half']} tested: both not separated." if c["not_separated"] == c["test_half"] == 2
+                   else f"{c['dropped']} dropped on the explore half, {c['test_half']} tested.",
+            "acc_lines": lines, "split_line": "",
+            "keys": [["rg", "Account's range, fitted on the explore half"], ["nl", "Null's range"], ["s", "Not separated"],
+                     ["d", "Dropped on explore half"], ["adv", "Adversary's value"]],
+            "focus": "", "contested": []}
+
+# The steps of the round switch: each round's number and its rule in a few words.
+STEPS = {"15": "ranges fixed beforehand", "16": "beat a blind adversary", "17": "fit half, test half"}
+
 PAGE = r"""<!doctype html>
 <html lang="en">
 <head>
@@ -1816,7 +2555,7 @@ a { color: inherit; }
 
 /* The picture: one plate with the six sentences, the claims that test them and the one control */
 .stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
-svg { width: 100%; max-height: calc(100vh - 170px); display: block; overflow: visible; cursor: default; user-select: none; -webkit-user-select: none; }
+svg { width: 100%; max-height: calc(100vh - 222px); display: block; overflow: visible; cursor: default; user-select: none; -webkit-user-select: none; }
 svg:focus:not(:focus-visible) { outline: none; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 104%; }
 svg * { pointer-events: none; }
@@ -1862,12 +2601,18 @@ svg * { pointer-events: none; }
 .pt.u { fill: var(--sheet); stroke: var(--ring); stroke-dasharray: 2 1.6; }
 .pt.n { fill: var(--ink); stroke: none; }
 .pt.s { fill: var(--sheet); stroke: var(--blue); stroke-width: 1.8; }
+.pt.d { fill: var(--grey); stroke: none; }
+.ci.d { stroke: var(--grey); }
+.gv.d { fill: var(--faint) !important; font-weight: 500; }
 .ci.s { stroke: var(--blue); opacity: .55; }
 .gv.s { fill: var(--blue) !important; }
-.rounds { display: inline-flex; gap: 16px; margin-right: 14px; }
-.rounds button { font-size: 13.5px; color: var(--mute); padding: 6px 1px 4px; border-bottom: 1px solid transparent; transition: color .15s ease; white-space: nowrap; }
+.rounds { display: flex; flex-basis: 100%; justify-content: center; align-items: center; gap: 6px; margin-bottom: 4px; }
+.rounds button { display: grid; gap: 0; padding: 5px 12px 6px; border-radius: 10px; border: 1px solid transparent; color: var(--mute); transition: color .15s ease, border-color .15s ease; }
+.rounds button b { font-size: 17px; font-weight: 600; font-stretch: 100%; letter-spacing: -.01em; color: var(--ink); }
+.rounds .rn, .rounds .rr { font-size: 12px; line-height: 1.3; }
 .rounds button:hover { color: var(--ink); }
-.rounds button[aria-pressed="true"] { color: var(--ink); font-weight: 640; border-bottom-color: var(--ink); }
+.rounds button[aria-pressed="true"] { border-color: var(--faint); color: var(--ink); }
+.rounds .ar { color: var(--faint); font-size: 14px; }
 .halo { fill: none; stroke: var(--blue); stroke-width: 1; }
 .burst { fill: none; stroke: var(--blue); }
 .selbox { fill: none; stroke: var(--ink); stroke-width: 1; stroke-dasharray: 3 3; }
@@ -1949,7 +2694,8 @@ h3 { margin: 22px 0 0; font-size: 14px; font-weight: 660; font-stretch: 110%; pa
   .switch { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); width: 100%; border-radius: 18px; }
   .switch button { min-width: 0; padding: 10px 0; font-size: 14px; border-radius: 14px; }
   .quiet { margin: 0; }
-  .rounds { margin: 0 0 4px; justify-content: center; }
+  .rounds { margin: 0 0 4px; gap: 2px; }
+  .rounds button { padding: 5px 7px 6px; }
   .hint { text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -2001,8 +2747,8 @@ function fv(x, unit) {
    The account: read as account 1, 2 or 3, or where they disagree; the first view reads the round's best account. */
 const ROUNDS = Object.keys(C.rounds).sort(), NEWEST = C.newest;
 const STATES = ["a1", "a2", "a3", "split"], SNAME = ["Account 1", "Account 2", "Account 3", "Where they disagree"];
-const VK = { holds: "h", refuted: "r", undecided: "u", "not separated": "s" };
-const VFULL = { h: "holds", r: "refuted", u: "undecided", s: "not separated", n: "no side" };
+const VK = { holds: "h", refuted: "r", undecided: "u", "not separated": "s", dropped: "d" };
+const VFULL = { h: "holds", r: "refuted", u: "undecided", s: "not separated", d: "dropped", n: "no side" };
 const CAP = s => s[0].toUpperCase() + s.slice(1);
 let RD, T, TK, NODES, NK, FOCUS;
 const ACC = s => s === 3 ? RD.split_acc : String(s + 1);  // whose verdicts the picture shows
@@ -2023,7 +2769,7 @@ function vOf(t, s) {
 }
 const S = { round: NEWEST, s: 0, open: null, g: null, el: {}, shown: {}, last: 0, dirty: true, rp: null, rpNext: 0, rpAt: 0,
             started: false, enterT: -1e9, entered: false, d1t: -1e9, bigFrom: null, bigT: -1e9 };
-const BEST = r => r === "15" ? 1 : 0;  // the account the first view reads in each round
+const BEST = r => r === "15" ? 1 : r === "17" ? 2 : 0;  // the account the first view reads in each round (its best)
 
 /* Geometry, in plate units (x right, y down; z toward the viewer). */
 function geo() {
@@ -2048,7 +2794,11 @@ function rounded(g, [x0, y0, x1, y1], r, z) {  // a rounded rectangle at depth z
   return "M" + p.map(q => f(q[0]) + " " + f(q[1])).join("L") + "Z";
 }
 
-/* Lines of a text that fit a width, measured with the page's own font. */
+/* The width of a text in the page's own font, and the lines of a text that fit a width. */
+function tw(text, fs, cls) {
+  S.meas.setAttribute("font-size", fs); S.meas.setAttribute("class", cls); S.meas.textContent = text;
+  return S.meas.getComputedTextLength();
+}
 function wrap(text, width, fs, cls) {
   const m = S.meas;
   m.setAttribute("font-size", fs); m.setAttribute("class", cls);
@@ -2105,10 +2855,13 @@ function build() {
   const g = S.g = geo(), svg = $("svg");
   svg.innerHTML = `<text id="meas" x="-999" y="-999" style="opacity:0"></text>`;
   S.meas = svg.firstChild;
+  g.bl1 = g.phone ? wrap(RD.bl1, g.w - 2 * g.labX, g.fs + 1.5, "lab") : [RD.bl1];
+  const more = (g.bl1.length - 1) * (g.fs + 6);
+  g.labY = [g.labY[0], g.labY[1], g.labY[2] + more]; g.top += more;
   S.L = layout(g);
   g.keyY = S.L.bottom + (g.phone ? 34 : 26);
-  g.rpY = g.keyY + (g.phone ? 118 : 0);
-  g.h = g.rpY + (g.phone ? 64 : 26);
+  g.rpY = g.keyY + (g.phone ? 118 : 30);
+  g.h = g.rpY + (g.phone ? 64 : 0);
   g.cy = g.h / 2;
   g.a = g.phone ? [4, 8, g.w - 4, g.h - 8] : [24, 16, 976, g.h - 10];
   const [ax0, ay0, ax1, ay1] = g.a, aw = ax1 - ax0, ah = ay1 - ay0;
@@ -2118,7 +2871,7 @@ function build() {
   let fg = `<path class="spine" id="spine"/>`;
   NODES.forEach(n => {
     fg += `<circle class="bead" id="bd${n.i}" r="${g.phone ? 11 : 12}"/>`;
-    ["1", "2", "3"].forEach(k => { fg += `<circle class="ag ${n.st[k]}" id="ag${n.i}${k}" r="3.3"/>`; });
+    if (n.st) ["1", "2", "3"].forEach(k => { fg += `<circle class="ag ${n.st[k]}" id="ag${n.i}${k}" r="3.3"/>`; });
   });
   T.forEach(t => {
     fg += `<path class="ax" id="ax${t.i}"/>`;
@@ -2167,13 +2920,14 @@ function statics() {
   const at = (el, x, y) => { el.setAttribute("x", f(x)); el.setAttribute("y", f(y)); };
   at(E.set, g.setX, g.setY); at(E.big, g.bigX, g.bigY);
   g.labY.forEach((y, j) => at(E["bl" + j], g.labX, y));
-  E.set.textContent = RD.set; E.bl0.textContent = RD.bl0; E.bl1.textContent = RD.bl1;
+  E.set.textContent = RD.set; E.bl0.textContent = RD.bl0;
+  E.bl1.innerHTML = g.bl1.map((x, i) => `<tspan x="${g.labX}" y="${f(g.labY[1] + i * (g.fs + 6))}">${esc(x)}</tspan>`).join("");
   const hy = g.top - (g.phone ? 46 : 34);
   E.hair.setAttribute("d", `M${g.phone ? 24 : 58} ${f(hy - (g.phone ? 26 : 22))}H${g.phone ? 456 : 942}`);
   at(E.h1, g.phone ? 24 : g.bead - 12, hy); E.h1.textContent = `Account ${RD.base}, in plain words`;
   at(E.h2, g.gx0, hy); E.h2.textContent = g.phone ? "" : "New claims, against ranges fixed in advance";
-  ["1", "2", "3"].forEach((k, j) => {
-    if (g.phone) { at(E["ah" + k], -99, -99); return; }
+  ["1", "2", "3"].forEach((k, j) => {  // the column of which accounts state each sentence (not drawn in round 17)
+    if (g.phone || !NODES[0].st) { at(E["ah" + k], -99, -99); return; }
     at(E["ah" + k], g.agX + 14 * j, hy);
     E["ah" + k].textContent = k;
   });
@@ -2184,7 +2938,7 @@ function statics() {
     E["bd" + n.i].setAttribute("cx", g.bead); E["bd" + n.i].setAttribute("cy", f(y));
     at(E["nn" + n.i], g.bead, y + g.fg * .36); E["nn" + n.i].textContent = n.i + 1;
     nd.lines.forEach((s, j) => { const e = E[`s${n.i}_${j}`]; at(e, g.sx0, nd.ly[j]); e.textContent = s; });
-    ["1", "2", "3"].forEach((k, j) => {
+    if (n.st) ["1", "2", "3"].forEach((k, j) => {
       const e = E[`ag${n.i}${k}`];
       if (g.phone) { e.setAttribute("cx", g.bead - 9 + 9 * j); e.setAttribute("cy", f(y + g.agY)); }
       else { e.setAttribute("cx", g.agX + 14 * j); e.setAttribute("cy", f(y)); }
@@ -2207,17 +2961,22 @@ function statics() {
       at(E["blA" + t.i], mid(t.ranges[t.acc[0]]), ay + 10 + g.fg); at(E["blB" + t.i], mid(t.ranges[t.acc[1]]), ay + 10 + g.fg);
     } else band(E["rg" + t.i], t.ranges[t.owner]);
   });
-  const ky = g.keyY, xs = g.phone ? [24, 274, 24, 190, 330, 24] : [58, 280, 386, 510, 586, 674], ys = g.phone ? [ky, ky, ky + 30, ky + 30, ky + 30, ky + 60] : [ky, ky, ky, ky, ky, ky];
+  const x0 = g.phone ? 24 : 58, x1 = g.phone ? 456 : 942;
+  let kx = x0, ky = g.keyY;
+  const place1 = (w, draw) => { if (kx + w > x1 && kx > x0) { kx = x0; ky += 30; } draw(kx, ky); kx += w + (g.phone ? 18 : 22); };
   RD.keys.forEach(([k, name], j) => {
-    const d = E["kd" + j];
-    if (k === "rg" || k === "nl") { d.setAttribute("x", xs[j]); d.setAttribute("y", f(ys[j] - 4.5)); }
-    else if (k === "adv") d.setAttribute("d", `M${xs[j] + 6} ${f(ys[j] - 8)}V${f(ys[j] + 8)}`);
-    else { d.setAttribute("cx", xs[j] + 6); d.setAttribute("cy", f(ys[j])); }
-    at(E["kt" + j], xs[j] + (k === "rg" || k === "nl" ? 26 : k === "adv" ? 14 : 16), ys[j] + g.fk * .36);
-    E["kt" + j].textContent = name;
+    const d = E["kd" + j], off = k === "rg" || k === "nl" ? 26 : k === "adv" ? 14 : 16, w = off + tw(name, g.fk, "kt");
+    place1(w, (x, y) => {
+      if (k === "rg" || k === "nl") { d.setAttribute("x", x); d.setAttribute("y", f(y - 4.5)); }
+      else if (k === "adv") d.setAttribute("d", `M${x + 6} ${f(y - 8)}V${f(y + 8)}`);
+      else { d.setAttribute("cx", x + 6); d.setAttribute("cy", f(y)); }
+      at(E["kt" + j], x + off, y + g.fk * .36);
+      E["kt" + j].textContent = name;
+    });
   });
-  at(E.ktA, g.phone ? 24 : 850, g.phone ? ky + 90 : ky + g.fk * .36);
-  E.ktA.textContent = g.phone ? "1, 2, 3: the three accounts; a dot: it states the sentence" : "1, 2, 3: accounts";
+  const ka = !NODES[0].st ? "" : g.phone ? "1, 2, 3: the three accounts; a dot: it states the sentence" : "1, 2, 3: accounts";
+  place1(tw(ka, g.fk, "kt"), (x, y) => at(E.ktA, x, y + g.fk * .36));
+  E.ktA.textContent = ka;
   E.rp.setAttribute("x", g.phone ? 24 : 942); E.rp.setAttribute("y", f(g.phone ? g.rpY + 28 : g.setY));
 }
 /* Each claim's own axis: its ranges, interval and the adversary's value with a margin; a range beyond the axis ends. */
@@ -2267,7 +3026,7 @@ function place(now) {
     const o = dimN(n), nd = S.L.nodes[i];
     nd.lines.forEach((_, j) => { E[`s${i}_${j}`].style.opacity = o; });
     E["nn" + i].style.opacity = o; E["bd" + i].style.opacity = o;
-    ["1", "2", "3"].forEach(a => { E[`ag${i}${a}`].style.opacity = o; });
+    if (n.st) ["1", "2", "3"].forEach(a => { E[`ag${i}${a}`].style.opacity = o; });
     if (n.clauses) {  // the account's clause, or in the disagreement view both sides; it slides in from a few units above
       const lines = split ? nd.sv : [nd.cv[k], []];
       lines.forEach((ls, j) => {
@@ -2289,7 +3048,7 @@ function place(now) {
     E["ah" + a].style.fill = on ? "var(--blue)" : "";
   });
   T.forEach(t => {
-    const v = vOf(t, s), p = landP(t, now), e = ease(p), o = dimT(t);
+    const v = vOf(t, s), p = landP(t, now), e = ease(p), o = dimT(t) * (t.verdict === "dropped" ? .55 : 1);
     let cx, l, h;
     if (t.multi && p >= 1) {  // the contested value travels from 0 on each account change
       const q = still.matches ? 1 : ease(dp);
@@ -2347,7 +3106,8 @@ function entrance(delay) {
 function replay(now) {
   const E = S.el;
   if (still.matches || S.open || moving(now) || now - S.enterT < 3000) { if (S.shown.rp !== "") { E.rp.textContent = S.shown.rp = ""; } return; }
-  const list = T.slice().sort((a, b) => a.added.localeCompare(b.added) || a.i - b.i);
+  const list = T.filter(t => t.added).sort((a, b) => a.added.localeCompare(b.added) || a.i - b.i);
+  if (!list.length) return;
   if (!S.rp && now > S.rpNext) S.rp = { t: list[S.rpAt++ % list.length], t0: now };
   if (!S.rp) return;
   const t = S.rp.t, p = clamp((now - S.rp.t0) / 1300, 0, 1), x = t.X(t.value);
@@ -2392,6 +3152,7 @@ function setRound(r, opts = {}) {
   const from = S.bigNow;
   S.round = r;
   useRound(r);
+  if (S.s === 3 && !RD.contested.length) S.s = BEST(r);
   build();
   S.shown = {};
   stateText();
@@ -2403,6 +3164,7 @@ function setRound(r, opts = {}) {
 function marks() {  // the pressed buttons and the picture's label
   $("switch").querySelectorAll("button").forEach((b, j) => b.setAttribute("aria-pressed", j === S.s));
   $("split").setAttribute("aria-pressed", S.s === 3);
+  $("split").hidden = !RD.contested.length;
   $("rounds").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", b.dataset.round === S.round));
   $("svg").setAttribute("aria-label", `Round ${S.round}, ${SNAME[S.s]}: account ${RD.base} in six plain sentences, each with the new claims ` +
     `that test it. ${RD.target} of ${RD.tested} new claims held. Arrow keys change the account; Enter opens a claim.`);
@@ -2436,7 +3198,7 @@ function testPane(t) {
   const s = S.s, v = vOf(t, s), node = NODES[t.node];
   const who = !t.owner ? "The judge's one disagreement, between accounts 1 and 2" :
     `Account ${t.owner} · new claim ${t.key.slice(2)}` + (t.multi ? ` · denied by account ${t.acc.find(a => a !== t.owner)}` : "");
-  const verdict = t.multi ? t.acc.map(a => `account ${a} ${t.verdicts[a]}`).join(", ") : VFULL[v];
+  const verdict = t.multi ? t.acc.map(a => `account ${a} ${t.verdicts[a]}`).join(", ") : v === "d" ? "dropped on the explore half" : VFULL[v];
   const rg = x => `${fv(x[0])} to ${fv(x[1])}`;
   let h = `<div class="dhead"><h2>${esc(t.label)}</h2><button class="close" data-open="">Close</button></div>`;
   h += `<p class="tag">Round ${RD.r} · ${who} · <b>${esc(CAP(verdict))}</b></p>`;
@@ -2448,7 +3210,8 @@ function testPane(t) {
   t.denials.forEach(d => { h += `<h3>Account ${d.by} denies it</h3><p class="why">${esc(minus(d.why))}</p><p class="why"><b>Instead:</b> ${esc(minus(d.instead))}</p>`; });
   h += gaugeSvg(t);
   const ranges = t.acc.map(a => `account ${a} ${rg(t.ranges[a])}`).join(", ");
-  h += `<p class="why">Measured: <b>${fv(t.value, t.unit)}</b> (90 % interval ${fv(t.lo)} to ${fv(t.hi)}), n ${t.n} ${esc(t.nunit)}. ` +
+  if (t.explore && v !== "d") h += `<p class="why">Explore half: ${fv(t.explore.value)} (90 % interval ${fv(t.explore.lo)} to ${fv(t.explore.hi)}), n ${t.explore.n}; the adversary's explore value ${fv(t.explore.adversary)}, outside that interval, so the claim went to the test half.</p>`;
+  h += `<p class="why">${v === "d" ? "Measured on the explore half" : t.explore ? "Measured on the test half" : "Measured"}: <b>${fv(t.value, t.unit)}</b> (90 % interval ${fv(t.lo)} to ${fv(t.hi)}), n ${t.n} ${esc(t.nunit)}. ` +
     `Ranges fixed before the test: ${ranges}; the null ${rg(t.ranges.null)}` + (t.null_value != null ? `; the null measured on the same rows ${fv(t.null_value, t.unit)}` : "") +
     (t.adversary != null ? `; the adversary's value ${fv(t.adversary, t.unit)}, ${t.adversary >= t.lo && t.adversary <= t.hi ? "inside" : "outside"} the interval` : "") + ".</p>";
   if (t.alternative) h += `<h3>The adversary's alternative, in its words</h3><p class="why">${esc(minus(t.alternative))}</p>`;
@@ -2459,12 +3222,14 @@ function testPane(t) {
     h += `<p class="case"><b>Retest under engine 16</b> (<a href="/#${esc(x.result)}">${esc(x.result)}</a>): ${esc(x.verdict)}; ` +
       `the adversary's value, ${fv(x.adversary, t.unit)}, lies inside the interval. ${esc(minus(x.measured))}</p>`;
   });
-  h += `<h3>Measured, as the record holds it</h3>` + Object.entries(t.measured).filter((e, j, all) => j === 0 || e[1] !== all[0][1])
+  if (t.dropped) h += `<h3>Why it was dropped, as the plan records it</h3><p class="why">${esc(minus(t.dropped))}</p>`;
+  if (typeof t.measured === "string") { if (t.measured) h += `<h3>Measured, as the record holds it</h3><p class="why">${esc(minus(t.measured))}</p>`; }
+  else h += `<h3>Measured, as the record holds it</h3>` + Object.entries(t.measured).filter((e, j, all) => j === 0 || e[1] !== all[0][1])
     .map(([k, m]) => `<p class="why">${Object.keys(t.measured).length > 1 && t.measured[t.acc[0]] !== t.measured[t.acc[1]] ? `<b>Account ${k}:</b> ` : ""}${esc(minus(m))}</p>`).join("");
   h += `<ul class="facts"><li>Tests sentence <button class="lnk" data-open="${node.key}">${node.i + 1}</button> of account ${RD.base}</li>` +
     (t.why_new ? `<li>Why it is new: ${esc(minus(t.why_new))}</li>` : "") +
-    `<li>Test ${esc(t.folder)}: studies/theory/results/direct/${esc(t.folder)}/metrics.json</li>` +
-    `<li>Board item <a href="/#${esc(t.result)}">${esc(t.result)}</a>; row added ${esc(t.added.slice(11, 16))} UTC</li></ul>`;
+    (t.folder ? `<li>Test ${esc(t.folder)}: studies/theory/results/direct/${esc(t.folder)}/metrics.json</li>` : `<li>Not run on the test half: the explore check of round ${RD.r}'s plan (synthesis_tests.json) dropped it.</li>`) +
+    (t.result ? `<li>Board item <a href="/#${esc(t.result)}">${esc(t.result)}</a>; row added ${esc(t.added.slice(11, 16))} UTC</li>` : "") + `</ul>`;
   return h + steps();
 }
 function nodePane(n) {
@@ -2601,7 +3366,8 @@ stage.addEventListener("pointermove", e => {
 stage.addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 
 $("switch").innerHTML = SNAME.slice(0, 3).map((n, k) => `<button data-state="${k}">${n}</button>`).join("");
-$("rounds").innerHTML = ROUNDS.map(r => `<button data-round="${r}">Round ${r}</button>`).join("");
+$("rounds").innerHTML = ROUNDS.map((r, j) => (j ? `<span class="ar" aria-hidden="true">→</span>` : "") +
+  `<button data-round="${r}"><span class="rn">Round ${r}</span><b>${C.rounds[r].target} of ${C.rounds[r].tested}</b><span class="rr">${esc(C.steps[r])}</span></button>`).join("");
 $("problem").textContent = C.problem;
 $("say").innerHTML = esc(C.line).replace(/(\d+ of \d+)/g, "<b>$1</b>");
 aim(0, 0);
@@ -2651,7 +3417,8 @@ if RECORD:
 
 PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
     "problem": PROBLEM, "line": LINE, "panels": PANELS, "examples": EXAMPLES,
-    "rounds": {"15": _round15(), "16": _round16()} if RECORD and RECORD16 else {}, "newest": "16",
+    "rounds": {"15": _round15(), "16": _round16(), "17": _round17()} if RECORD and RECORD16 and RECORD17 else {},
+    "newest": "17", "steps": STEPS,
 }, ensure_ascii=False).replace("</", "<\\/"))
 
 if __name__ == "__main__":  # run from the repository root
@@ -2660,7 +3427,8 @@ if __name__ == "__main__":  # run from the repository root
     if "--write" in args:
         rec, commit = _build(ref)
         rec16 = _build16(ref)
-        commit = _git("log", "-1", "--format=%h", *([ref] if ref else []), "--", W, W16, *FILES, R + "direct/").strip()
+        rec17 = _build17(ref)
+        commit = _git("log", "-1", "--format=%h", *([ref] if ref else []), "--", W, W16, W17, *FILES, R + "direct/").strip()
         src = open(__file__).read()
         start = src.index("\nRECORD = ") + 1
         end = src.index("\nREF = ", start) + 1
@@ -2668,6 +3436,9 @@ if __name__ == "__main__":  # run from the repository root
         start = src.index("\nRECORD16 = ") + 1
         end = src.index("\n\n", start) + 1
         src = src[:start] + "RECORD16 = " + pprint.pformat(rec16, width=118, sort_dicts=False) + "\n" + src[end:]
+        start = src.index("\nRECORD17 = ") + 1
+        end = src.index("\nRECORD16 = ", start) + 1
+        src = src[:start] + "RECORD17 = " + pprint.pformat(rec17, width=118, sort_dicts=False) + "\n" + src[end:]
         for name, val in (("REF", ref), ("COMMIT", commit)):
             start = src.index(f"\n{name} = ") + 1
             src = src[:start] + f"{name} = {val!r}" + src[src.index("  #", start):]
@@ -2680,7 +3451,8 @@ if __name__ == "__main__":  # run from the repository root
                   f"at {COMMIT}); run with --ref {REF or '<ref>'}")
             sys.exit(0)
     rec, commit = _build(ref)
-    commit = _git("log", "-1", "--format=%h", *([ref] if ref else []), "--", W, W16, *FILES, R + "direct/").strip()
+    commit = _git("log", "-1", "--format=%h", *([ref] if ref else []), "--", W, W16, W17, *FILES, R + "direct/").strip()
+    assert _build17(ref) == RECORD17, "RECORD17 differs from the files: run with --write" + (f" --ref {ref}" if ref else "")
     assert rec == RECORD, "RECORD differs from the files: run with --write" + (f" --ref {ref}" if ref else "")
     assert _build16(ref) == RECORD16, "RECORD16 differs from the files: run with --write" + (f" --ref {ref}" if ref else "")
     if ref == REF:
@@ -2701,10 +3473,18 @@ if __name__ == "__main__":  # run from the repository root
         mine = [x["explained"], x["unaddressed"], x["contradicts"], x["own_contradicts"], x["held"], x["not_separated"],
                 x["refuted"], x["undecided"], 0, x["denials_held"], x["denials_refuted"], x["score"]]
         assert mine == t16[k], f"round 16 account {k}: page {mine}, synthesis.md {t16[k]}"
+    t17 = {m.group(1): [int(x) for x in m.groups()[1:]] for m in re.finditer(
+        r"^\| account-(\d) \|" + r" (-?\d+) \|" * 11 + "$", _text(ref, W17 + "synthesis.md"), re.M)}
+    assert sorted(t17) == ["1", "2", "3"], "round 17's synthesis.md has no table of the three accounts"
+    for k, x in _f["accounts"].items():
+        mine = [x["explained"], x["unaddressed"], x["contradicts"], x["own_contradicts"], x["held"], x["not_separated"],
+                x["refuted"], x["undecided"], 0, x["dropped"], x["score"]]
+        assert mine == t17[k], f"round 17 account {k}: page {mine}, synthesis.md {t17[k]}"
     assert COUNTS["best"] == "2" and NODES and len(NODES) == len(RECORD["accounts"]["2"]["sentences"]), "the page draws account 2"
     print(f"RECORD matches the files ({ref or 'working tree'}, commit {commit}). {COUNTS['held']} of {COUNTS['tested']} "
           f"new consequences hold, {COUNTS['refuted']} refuted, {COUNTS['undecided']} undecided. Round 16: {_d['held']} of "
           f"{_d['tested']} hold, {_d['not_separated']} not separated, {_d['refuted']} refuted, {_d['undecided']} undecided; "
           f"denials {_d['denials_decided']} of {_d['denials']} decided, {_d['denials_against_denier']} against the denier; "
           f"adversary inside the interval in {_d['adversary_inside']} of 9; undecided at a range edge {_d['edge']}. "
-          "Both synthesis.md tables agree.")
+          f"Round 17: {_f['held']} of {_f['tested']} hold, {_f['dropped']} dropped on the explore half, {_f['test_half']} "
+          f"tested ({_f['not_separated']} not separated). All three synthesis.md tables agree.")
