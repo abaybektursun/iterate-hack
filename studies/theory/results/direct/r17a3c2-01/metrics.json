@@ -1,0 +1,126 @@
+{
+ "statistic": "geometric mean over pids of n_new(edit passing) / median n_new(RL-Code passing, 3 seeds)",
+ "half": "test",
+ "n_test_pids": 269,
+ "value": 0.9427,
+ "interval_90": [
+  0.902,
+  0.9861
+ ],
+ "n": 194,
+ "adversary_value": 0.9807,
+ "adversary_records": 601,
+ "adversary_explore": 0.9808,
+ "null_random_edit": {
+  "value": 0.6278,
+  "interval_90": [
+   0.5787,
+   0.6808
+  ],
+  "n": 160
+ },
+ "range_account": [
+  0.855,
+  1.035
+ ],
+ "range_null": [
+  0.58,
+  0.8
+ ],
+ "passed_counts": {
+  "rlneurons/xreward/code_depth/code_top8x1.5_code31": 197,
+  "rlneurons/xreward/code_depth/code_rand8x1.5_code31": 164,
+  "rlneurons/code1/rl_plain": 210,
+  "rlneurons/xreward/code_hosts_s52/rl_plain": 202,
+  "rlneurons/xreward/code_hosts_s53/rl_plain": 206
+ },
+ "cap_hit_passing_in_kept": 0,
+ "bootstrap": {
+  "resamples": 2000,
+  "seed": 0,
+  "unit": "all test-half pids, with replacement"
+ },
+ "raw_rows_read": [
+  {
+   "cell": "rlneurons/xreward/code_depth/code_top8x1.5_code31",
+   "pid": "HumanEval/10",
+   "passed": true,
+   "n_new": 10271,
+   "cap_hit": false,
+   "mode": "block"
+  },
+  {
+   "cell": "rlneurons/xreward/code_depth/code_top8x1.5_code31",
+   "pid": "HumanEval/100",
+   "passed": true,
+   "n_new": 7581,
+   "cap_hit": false,
+   "mode": "block"
+  },
+  {
+   "cell": "rlneurons/xreward/code_depth/code_rand8x1.5_code31",
+   "pid": "HumanEval/10",
+   "passed": false,
+   "n_new": 16384,
+   "cap_hit": true,
+   "mode": "block"
+  },
+  {
+   "cell": "rlneurons/xreward/code_depth/code_rand8x1.5_code31",
+   "pid": "HumanEval/100",
+   "passed": true,
+   "n_new": 9287,
+   "cap_hit": false,
+   "mode": "block"
+  },
+  {
+   "cell": "rlneurons/code1/rl_plain",
+   "pid": "HumanEval/10",
+   "passed": true,
+   "n_new": 9249,
+   "cap_hit": false,
+   "mode": "block"
+  },
+  {
+   "cell": "rlneurons/code1/rl_plain",
+   "pid": "HumanEval/100",
+   "passed": true,
+   "n_new": 3445,
+   "cap_hit": false,
+   "mode": "block"
+  },
+  {
+   "cell": "rlneurons/xreward/code_hosts_s52/rl_plain",
+   "pid": "HumanEval/10",
+   "passed": true,
+   "n_new": 8455,
+   "cap_hit": false,
+   "mode": "block"
+  },
+  {
+   "cell": "rlneurons/xreward/code_hosts_s52/rl_plain",
+   "pid": "HumanEval/100",
+   "passed": true,
+   "n_new": 3838,
+   "cap_hit": false,
+   "mode": "block"
+  },
+  {
+   "cell": "rlneurons/xreward/code_hosts_s53/rl_plain",
+   "pid": "HumanEval/10",
+   "passed": true,
+   "n_new": 5369,
+   "cap_hit": false,
+   "mode": "block"
+  },
+  {
+   "cell": "rlneurons/xreward/code_hosts_s53/rl_plain",
+   "pid": "HumanEval/100",
+   "passed": true,
+   "n_new": 5052,
+   "cap_hit": false,
+   "mode": "block"
+  }
+ ],
+ "raw_check": "Read 10 test-half rows (2 per cell, in raw_rows_read) and checked all 269 x 5 rows: passed is bool in every row, n_new is int, one row per pid per cell (269 pids each), no duplicates. cap_hit true in 2 / 2 / 0 / 1 rows of edit / RL s51 / s52 / s53 and 14 of the random edit; mode 'none' (no code block) in 2 / 2 / 1 / 0 and 22. Nothing looks wrong."
+}

@@ -1,0 +1,54 @@
+[
+ {
+  "label": "ratio near 1",
+  "pid": "Mbpp/101",
+  "ratio": 0.9984,
+  "edit": {
+   "n_new": 1275,
+   "passed": true
+  },
+  "rl": [
+   {
+    "cell": "rlneurons/code1/rl_plain",
+    "n_new": 1277,
+    "passed": true
+   },
+   {
+    "cell": "rlneurons/xreward/code_hosts_s52/rl_plain",
+    "n_new": 1501,
+    "passed": true
+   },
+   {
+    "cell": "rlneurons/xreward/code_hosts_s53/rl_plain",
+    "n_new": 1234,
+    "passed": true
+   }
+  ]
+ },
+ {
+  "label": "ratio far from 1",
+  "pid": "Mbpp/456",
+  "ratio": 0.2688,
+  "edit": {
+   "n_new": 1538,
+   "passed": true
+  },
+  "rl": [
+   {
+    "cell": "rlneurons/code1/rl_plain",
+    "n_new": 627,
+    "passed": true
+   },
+   {
+    "cell": "rlneurons/xreward/code_hosts_s52/rl_plain",
+    "n_new": 10931,
+    "passed": false
+   },
+   {
+    "cell": "rlneurons/xreward/code_hosts_s53/rl_plain",
+    "n_new": 10816,
+    "passed": true
+   }
+  ]
+ }
+]

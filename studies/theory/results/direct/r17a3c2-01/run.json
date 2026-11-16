@@ -1,0 +1,15 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_r17a3c2.md",
+ "commit": "7f06d80fc51e6687ba605e98f44bee8fc6e292b5",
+ "board": "work-20d77d",
+ "command": "python3 studies/theory/analysis/direct_r17a3c2.py",
+ "cells": [
+  "rlneurons/xreward/code_depth/code_top8x1.5_code31",
+  "rlneurons/code1/rl_plain",
+  "rlneurons/xreward/code_hosts_s52/rl_plain",
+  "rlneurons/xreward/code_hosts_s53/rl_plain",
+  "rlneurons/xreward/code_depth/code_rand8x1.5_code31"
+ ],
+ "half": "test",
+ "note": "commit is the spec commit; the script ran from the working tree and is committed with these results"
+}

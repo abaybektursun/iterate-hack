@@ -1,0 +1,3 @@
+[
+ {"mechanism": "round-17/account-3/c2", "claim": "On code problems both pass, the Code-RL top-8 1.5x edit's passing answers are as long as RL-Code's (geometric-mean ratio 0.855-1.035); random rank-8 1.5x edit stays near base length", "result": "pending", "verdict": "not separated", "measured": "ratio 0.943 [0.902, 0.986], n 194, adversary (RL seed vs other seeds) 0.981", "interval": [0.902, 0.9861], "range": [0.855, 1.035], "adversary": 0.9807, "n": 194}
+]
