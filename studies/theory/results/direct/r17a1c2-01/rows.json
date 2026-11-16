@@ -2,7 +2,7 @@
  {
   "mechanism": "round-17/account-1/c2",
   "claim": "On MATH-500 one edit sample tracks RL's 4-sample rate better than one Think-SFT sample (D2 in 0.02-0.54)",
-  "result": "",
+  "result": "result-5ce197",
   "verdict": "not separated",
   "measured": "D2 0.1215 [0.0282, 0.2220], n 250, adversary 0.1611",
   "interval": [
