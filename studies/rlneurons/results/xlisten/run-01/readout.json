@@ -1,0 +1,52 @@
+{
+ "job": "abaybektursun-1115-170332-2668",
+ "smoke_job": "abaybektursun-1115-170213-23c6 (3 layers)",
+ "summary": {
+  "rl": {
+   "next": 1.6669076419410607,
+   "later": 1.3563687629343657
+  },
+  "basew": {
+   "next": 3.2502931273145204,
+   "later": 1.5802215647330289
+  },
+  "rand": {
+   "next": 1.0018811055381718,
+   "later": 0.9945813218994235
+  },
+  "writers_where_rl_next_exceeds_basew_next": 8,
+  "writers_where_rl_next_exceeds_2": 12,
+  "n_writers": 62
+ },
+ "next_layer_gain_by_writer_layer_band": {
+  "0-10": {
+   "rl": 1.7536626143639813,
+   "basew": 4.389188697839066,
+   "rand": 1.01057096084837
+  },
+  "11-21": {
+   "rl": 1.52498173251254,
+   "basew": 3.306807917831843,
+   "rand": 1.0008800583811437
+  },
+  "22-30": {
+   "rl": 1.7343387871701275,
+   "basew": 1.7892360193744585,
+   "rand": 0.9924836733509635
+  }
+ },
+ "by_writer": {
+  "o": {
+   "rl": 1.4535241856246335,
+   "basew": 3.1566300661704823,
+   "rand": 1.0030452859910437
+  },
+  "down": {
+   "rl": 1.8802910982574879,
+   "basew": 3.343956188458559,
+   "rand": 1.0007169250852996
+  }
+ },
+ "L1": "undecided: 1.67, between the refutation line 1.3 and the predicted 2",
+ "L2": "refuted: rl exceeds basew in 8 of 62 writers"
+}

@@ -1773,6 +1773,34 @@ could not read the stored rows. Letting them read all rows would let them fit th
    `validation` on 20 explore rows; the "deliberative opening" flag of result-1f98b0 is not to be used.
 6. Score = test-half holds minus the marker's contradictions.
 
+## Engine 18 (accounts tested on weight statistics of held-out matrices)
+
+Skill version 18, branch `theory` only (main is frozen). Why: rounds 13 to 17 ran about 60 offline tests on stored
+sampling rows; in round 17, 7 of 9 consequences were dropped because a plain alternative (accuracy, length, difficulty)
+gave the same value, and the 2 tested were not separated, with the adversary's explore value inside both tested ranges.
+What did separate accounts were weight computations and weight edits (result-124593, result-aba970, result-87e495,
+result-c9ee85, result-ce52f8, result-82eb02, result-ba58ee, result-0d54f3).
+
+1. Drop rule: a consequence is dropped before any test when the adversary's explore value lies inside the account's
+   range or its explore interval (`explore_dropped`).
+2. Matrix split: `data/split_matrices_v1.json` (written once by `lib/rows.py split-matrices`, never changed) sorts the
+   224 weight-matrix names (q, k, v, o, gate, up, down of 32 layers) by sha256 of the name; first 112 explore, rest test.
+3. Weights tables (`rows.WEIGHTS`, `rows.weights(table, half)`; `rows.py copy` writes the explore matrices to
+   `weights/<table>.jsonl` and lists them in `MANIFEST.md`): `anatomy` (`rlneurons/results/wsp1/anatomy-01/metrics.json`:
+   RL-Math 3.1, RL-Code 3.1, Think-SFT deltas: norms, top-1 / top-8 shares, stable rank, top-16 singular values, pair
+   cosines and top-8 subspace overlaps), `top8_share` (`theory/data/direct_reward/top8_share_v1.json`: 15 models and the
+   base matrix), `cap` (`theory/data/direct_host/cap_v1.json`: share of one delta captured by another's top-8
+   left / right subspaces), `xlisten` (`rlneurons/results/xlisten/run-01/metrics.json`, copied from branch `sharedsub`:
+   the next layer's read gain on the written directions of the 62 `o` / `down` writers; 34 explore, 28 test). Other
+   weights results are aggregates over all matrices (xchannel run-01 / run-02, xreward overlap readouts) and are not
+   split, so they are not given to writers.
+4. Kinds: each consequence has `kind` `weights` (tables, n >= 25 test matrices, bootstrap over matrices; its adversary
+   uses `prompts/synthesis_adversary_weights.md`) or `rows`; each account gives at least 2 `weights` and at most 2 `rows`.
+   `verdict16` uses n >= 25 for weights rows (`kind` in the row).
+5. Weights cell (replaces the GPU cell): each account names one weights-only computation in no committed table with its
+   prediction and 90 % interval; a blind adversary (`prompts/synthesis_cell_adversary.md`, sees the computation only)
+   predicts it; `weights_cells.md` / `.json` rank them by |difference| / the wider interval. The engine runs none.
+
 ## Round 17 (engine 17, accounts read the explore half, tests run on the test half)
 
 Plan `specs/SPEC_round17.md`. Board work-360669. Branch `theory` only (main is frozen). Command (run to the gate, then

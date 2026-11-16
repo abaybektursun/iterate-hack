@@ -6,6 +6,13 @@ consequence before fixing a range, and the test still decides on problems the wr
   python3 studies/theory/lib/rows.py split               write data/split_v1.json once (fails if it exists)
   python3 studies/theory/lib/rows.py manifest            print every stored cell with its set, path and source
   python3 studies/theory/lib/rows.py copy <dir> explore  write that half of every available cell to <dir>
+  python3 studies/theory/lib/rows.py split-matrices      write data/split_matrices_v1.json once (engine 18)
+  python3 studies/theory/lib/rows.py weights             print every per-matrix weights table (engine 18)
+
+Engine 18: the committed per-matrix tables of the weights studies (WEIGHTS) are split by MATRIX: 
+data/split_matrices_v1.json assigns each of the 224 weight matrices (q, k, v, o, gate, up, down of 32 layers) to explore
+or test by the sha256 of its name. `weights("anatomy", "test")` returns that table's rows of the test matrices, each
+with "matrix" (the parameter name). `copy` also writes the explore matrices of every table to <dir>/weights/.
 
 In Python: `from rows import load, manifest`; `load("hard328", "rlneurons/day1_3/hard328_base_cue_s4r2-01", "test")`
 returns that cell's rows of the test half, each with "pid" (the problem id the split uses).
@@ -28,6 +35,33 @@ RULE = ("For each set, sort its problem ids by the sha256 hex digest of '<set>:<
         "code uid such as 'HumanEval/0'); the first floor(n / 2) ids are explore, the rest test. dev100 uses MATH-500's "
         "assignment (its ids are MATH-500 indices, key 'math500:<id>'). No seed. Never changed after its first commit.")
 SETS = ("hard328", "math500", "fresh2026", "code")
+MATRIX_SPLIT = ROOT / "studies/theory/data/split_matrices_v1.json"
+MATRIX_RULE = ("Sort the 224 weight-matrix names (model.layers.<l>.self_attn.{q,k,v,o}_proj.weight and "
+               "model.layers.<l>.mlp.{gate,up,down}_proj.weight, l = 0..31) by the sha256 hex digest of the name; the first 112 "
+               "are explore, the rest test. No seed. Never changed after its first commit.")
+MODULES = ("q", "k", "v", "o", "gate", "up", "down")
+# Engine 18: committed per-matrix tables of the weights studies, {name: (path, what one row holds)}. Model keys:
+# math31 / rl_math = Olmo-3.1-7B-RL-Zero-Math, code31 / rl_code = Olmo-3.1-7B-RL-Zero-Code, math30 / code30 / if30 /
+# general30 / mix30 = the Olmo-3 RL-Zero runs, *_s100 = their step-100 checkpoints, think_sft = Olmo-3-7B-Think-SFT,
+# base_w = the base matrix itself; every delta is model minus base (Olmo-3-1025-7B).
+WEIGHTS = {
+    "anatomy": ("studies/rlneurons/results/wsp1/anatomy-01/metrics.json",
+                "delta.<rl_math, rl_code or think_sft>: norm_delta, norm_base, rel (norm_delta / norm_base), top1_share, top8_share "
+                "(share of the delta's squared norm in its top 1 / 8 singular directions), stable_rank, svals_top16, unchanged "
+                "(fraction of entries unchanged); pair.<a-b>: dot, cos (cosine of the two deltas), overlap_left, overlap_right "
+                "(overlap of the two deltas' top-8 left / right singular subspaces)"),
+    "top8_share": ("studies/theory/data/direct_reward/top8_share_v1.json",
+                   "top8_share.<key>: share of the delta's squared norm in its top-8 singular directions, for 15 models and base_w"),
+    "cap": ("studies/theory/data/direct_host/cap_v1.json",
+            "cap.<a>b>: cap_left = ||U_b^T d_a||^2 / ||d_a||^2, cap_right = ||d_a V_b||^2 / ||d_a||^2, cap_both = "
+            "||U_b^T d_a V_b||^2 / ||d_a||^2; d_a = model a minus base, U_b, V_b the top-8 left / right singular vectors of "
+            "b's delta (base_w: of the base matrix)"),
+    "xlisten": ("studies/rlneurons/results/xlisten/run-01/metrics.json",
+                "writers o and down only (62 of the 224, layers 0-30): <rl, basew or rand>.next = mean gain ||W c||^2 / "
+                "(||W||_F^2 / 4096) of the next layer's q, k, v, gate, up on the writer's 8 written directions (rl: RL-Math "
+                "3.1 delta's top-8 left singular vectors; basew: the base matrix's own top 8; rand: random), "
+                "next_by_reader, later (mean over all later layers), next_per_direction"),
+}
 
 
 def key(s, pid):
@@ -65,6 +99,41 @@ def make_split():
                              "explore": sorted(i for i in dev if i in ex), "test": sorted(i for i in dev if i not in ex)}
     SPLIT.write_text(json.dumps(out, indent=1) + "\n")
     print({s: (len(v["explore"]), len(v["test"])) for s, v in out["sets"].items()})
+
+
+def matrix_names():
+    t = json.loads((ROOT / WEIGHTS["anatomy"][0]).read_text())["tensors"]
+    return [x["name"] for x in t if x["module"] in MODULES]
+
+
+def make_matrix_split():
+    assert not MATRIX_SPLIT.exists(), f"{MATRIX_SPLIT} exists and never changes"
+    names = matrix_names()
+    assert len(names) == 224 == len(set(names)), len(names)
+    order = sorted(names, key=lambda n: hashlib.sha256(n.encode()).hexdigest())
+    MATRIX_SPLIT.write_text(json.dumps({"version": 1, "rule": MATRIX_RULE, "n": 224, "explore": sorted(order[:112]),
+                                        "test": sorted(order[112:])}, indent=1) + "\n")
+    print(f"{MATRIX_SPLIT}: 112 explore, 112 test")
+
+
+def weight_rows(table):
+    """Every row of one WEIGHTS table, one per weight matrix, each with "matrix" (its parameter name)."""
+    d = json.loads((ROOT / WEIGHTS[table][0]).read_text())
+    if table == "anatomy":
+        return [{"matrix": x["name"], **x} for x in d["tensors"] if x["module"] in MODULES]
+    if table == "xlisten":
+        return [{"matrix": f"model.layers.{r['layer']}." + ("self_attn.o_proj" if r["writer"] == "o" else "mlp.down_proj") + ".weight", **r}
+                for r in d["rows"]]
+    return [{"matrix": r["name"], **r} for r in d["rows"]]
+
+
+def weights(table, half):
+    """The rows of WEIGHTS table `table` whose matrix is in `half` of data/split_matrices_v1.json."""
+    assert half in ("explore", "test"), half
+    keep = set(json.loads(MATRIX_SPLIT.read_text())[half])
+    rows = weight_rows(table)
+    assert {r["matrix"] for r in rows} <= set(matrix_names()), table
+    return [r for r in rows if r["matrix"] in keep]
 
 
 @functools.cache
@@ -163,6 +232,16 @@ def copy(dest, half):
         f.parent.mkdir(parents=True, exist_ok=True)
         f.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows))
         lines.append(f"| {f.relative_to(dest)} | {m['cell']} | {m['set']} | {len(rows)} | {m['path'] if m['source'] == 'committed' else 'runs/' + m['job_id'] + '/answers.jsonl'} |")
+    lines += ["\n## Weights tables (engine 18): explore matrices only\n", f"Matrix split (studies/theory/data/split_matrices_v1.json): {MATRIX_RULE}\n",
+              "Each file weights/<table>.jsonl holds one row per explore weight matrix, with `matrix` its parameter name "
+              "(module and layer in the row). A `weights` consequence is computed from these rows alone and tested on the test matrices.\n",
+              "| file | table | rows | source path | one row holds |", "|---|---|---|---|---|"]
+    for t, (path, what) in WEIGHTS.items():
+        rows = weights(t, half)
+        f = dest / "weights" / f"{t}.jsonl"
+        f.parent.mkdir(parents=True, exist_ok=True)
+        f.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows))
+        lines.append(f"| weights/{t}.jsonl | {t} | {len(rows)} | {path} | {what} |")
     (dest / "MANIFEST.md").write_text("\n".join(lines) + "\n")
     return dest
 
@@ -174,6 +253,11 @@ if __name__ == "__main__":
     elif cmd == "manifest":
         for m in manifest():
             print(f"{m['set']:9s} {m['source']:16s} {m['cell']}  ({m['path']})")
+    elif cmd == "split-matrices":
+        make_matrix_split()
+    elif cmd == "weights":
+        for t, (path, what) in WEIGHTS.items():
+            print(f"{t:10s} explore {len(weights(t, 'explore')):3d} test {len(weights(t, 'test')):3d}  {path}: {what}")
     elif cmd == "copy":
         print(copy(sys.argv[2], sys.argv[3]))
     else:

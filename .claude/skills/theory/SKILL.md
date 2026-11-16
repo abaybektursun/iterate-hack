@@ -3,7 +3,7 @@ name: theory
 description: Score the team's fixed forecasts, collect the direct facts (offline tests of mechanisms' causes), put every direct fact into three single accounts written in parallel, which measure their consequences on the explore half of the stored rows and are tested on the test half against an adversary's alternative (forecast.py synthesis), find the numbers both no-theory readers got wrong, write rival pairs only about those, each pair with one shared direct test on stored data (one statistic, disjoint ranges for the two rivals), and let only mechanisms that hold a direct test (90 % interval inside the range, n of 50 or more) forecast, and only holders that forecast something the readers do not design cells. One round runs studies/theory/lib/forecast.py round twice: the first run scores (once per number, only forecasts written before the result), writes direct_facts.json, surprises.md, direct_tests.md (plans for the top untested carried mechanisms and one per rival pair) and stops; subagents run the tests offline and add rows to results/refuted.json or direct_tested.json; the second run has the holders and two readers forecast the open work, lists holders that forecast nothing new, and turns the others' pairs into blind-forecast cells. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 17: accounts measure on the explore half, tests run on the test half)
+# Theory round (version 18: accounts are tested on weight statistics of held-out matrices)
 
 Why this order: in rounds 9 to 12 forecast gain ranked mechanisms whose causes then failed a direct test (5 of the top 6
 failed their own claim, 1 held only against a weak null; README "Direct tests"). So a mechanism now earns the right to
@@ -36,6 +36,15 @@ the explore half only (a tool call naming an outside path stops the round); each
 and interval, and its test range contains that value, at most 2.5 explore interval widths wide. 3. A consequence whose
 adversary's explore value lies inside that interval is dropped untested. 4. Tests load only the test half
 (`rows.load(set, cell, "test")`); verdict16 decides. No sequence, no denials.
+
+Version 18 rules (round 17: 7 of 9 sampling-row consequences matched a plain covariate; 13 to 17 ran ~60 such tests;
+what separated accounts were weight computations and edits): 1. A consequence is dropped untested when the adversary's
+explore value lies inside the account's range, not only inside its explore interval. 2. `data/split_matrices_v1.json`
+splits the 224 weight matrices once (sha256 of the name) into 112 explore and 112 test; `rows.weights(table, half)`
+loads the per-matrix tables (`rows.WEIGHTS`: anatomy, top8_share, cap, xlisten); writers see explore matrices only.
+3. Each account gives at least 2 `weights` consequences (n >= 25 test matrices, bootstrap over matrices) and at most 2 on
+sampling rows, and one weights-only computation in no table (`weights_cell`, replacing the GPU cell); a blind adversary
+predicts it too, and `weights_cells.md` ranks them by the gap in interval widths. The engine runs none.
 
 ## What a round is
 
