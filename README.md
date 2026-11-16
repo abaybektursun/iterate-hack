@@ -346,14 +346,15 @@ The home page is https://invariant.team (`tools/home.py`; the same Lambda, which
 `invariant.team`, and `/home` on any host). It leads to every page of the monitor: Findings, Board, Proof, Talk
 (`/demo`), Papers, the GPU price challenge (gpu.invariant.team, the team's entry to the hackathon's challenge; under Results), Lab, Exa, past.dev and Psychosis. Its picture is a dial: a lit glass
 body with a ring around it and one bead per page. A click on a bead or the arrow keys turn the dial to a page
-(`/#<page>`); a click on the body or the button opens it. Beside the picture are one sentence with the Board's live
-MATH-500 scores (the first and the best untrained-base score and the best RL score in the `scores` rows of `/data`; the
-words "a prompt cue and a vote" only when the best base row's configuration names them; no numbers before the first
-read), one line with the live number of people, the button, and a numbered table of contents of the three sections
-below. Each group has a muted hue (`TH`: Results blue, How we work teal, Tools and extras amber) used only for small marks,
-and each page an abstract object of glass planes and hairlines (`ART`); the dial's body shows the selected page's object
-and the ring is tinted by group. Below the dial each section has its number, name and sentence, then one row per page
-with its object, name, line and live count.
+(`/#<page>`); a click on the body, or Enter, opens it; the button always opens Findings. Beside the picture, the
+Board's two live MATH-500 scores stand first in large type (the best untrained-base score and the best RL score in the
+`scores` rows of `/data`, labelled "no training" and "RL-trained"; empty before the first read), then one sentence with
+the same numbers, one paragraph with the starting score and the live number of people, and the button. Blue is the one
+accent (the selected bead, the index mark, the live status); each page has an abstract object of glass planes and
+hairlines (`ART`), and the dial's body shows the selected page's object. Below the dial each section has its number,
+name and sentence, then one row per page with its object, name, line and live count. Under 500 px the dial is not
+shown: the sections list the same pages. The dial's loop stops off screen and in a hidden tab, and a hidden tab does
+not read `/data`.
 About every 2.5 s one of the newest 40 board posts runs to the Board bead as a pulse in its author's color, named in the
 line under the picture. A new page of the site is one entry in `PAGES` of `home.py`. As a page is sent, `view.py` (`chrome`) makes the name "Invariant" in its header a link to the home page and replaces
 the header's links with one set, the same on every page (`NAV_TABS`): Findings, Papers, Board, Proof, in the order of the
