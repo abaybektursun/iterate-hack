@@ -1,0 +1,387 @@
+{
+ "test": "round-16/account-2/c3",
+ "spec": "studies/theory/specs/SPEC_direct_r16a2c3.md",
+ "plan": "studies/theory/results/wide/round-16/synthesis_tests.json (name round-16/account-2/c3)",
+ "statistic_definition": "D_fresh = N(E,R) - N(B,R), N(X,R) = A(X,R)/sqrt(A(X,X)*A(R,R)); A pooled share of same-problem pairs of finished wrong answers (v3 wrong, no cap hit, extracted answer present) that agree under math-verify 0.9.0 (rln4_lib.agree on norm_v3, pair in sorted order)",
+ "right_per_sample_check": {
+  "edit": 48.25,
+  "rl": 50.5,
+  "base": 29.5,
+  "sft": 60.0
+ },
+ "adversary": {
+  "value": 0.0168,
+  "ci90": [
+   -0.2348,
+   0.1633
+  ],
+  "n": 32,
+  "bootstrap_draws_dropped_no_within_agreement": 2,
+  "A_XR": 0.4176,
+  "A_BR": 0.2917,
+  "A_XX": 0.75,
+  "A_BB": 0.3793,
+  "A_RR": 0.2632,
+  "N_XR": 0.9399,
+  "N_BR": 0.9232,
+  "pairs": {
+   "XR": [
+    76,
+    182
+   ],
+   "BR": [
+    70,
+    240
+   ],
+   "XX": [
+    27,
+    36
+   ],
+   "BB": [
+    22,
+    58
+   ],
+   "RR": [
+    35,
+    133
+   ]
+  },
+  "problems_within": {
+   "X": 11,
+   "B": 22,
+   "R": 31
+  },
+  "how": "D_alt = N(S,R) - N(B,R) with Think-SFT + cue (sft1_cue_s4-01) as S, on fresh2026 problems where S, R, B and the edit each have >= 1 finished wrong answer; within pairs from problems where the model has >= 2; bootstrap 10,000 problem resamples, default_rng(16)",
+  "rows_without_edit_condition": {
+   "value": 0.0112,
+   "ci90": [
+    -0.2415,
+    0.1575
+   ],
+   "n": 34,
+   "bootstrap_draws_dropped_no_within_agreement": 0,
+   "A_XR": 0.4086,
+   "A_BR": 0.2823,
+   "A_XX": 0.75,
+   "A_BB": 0.3667,
+   "A_RR": 0.2574,
+   "N_XR": 0.93,
+   "N_BR": 0.9189,
+   "pairs": {
+    "XR": [
+     76,
+     186
+    ],
+    "BR": [
+     70,
+     248
+    ],
+    "XX": [
+     27,
+     36
+    ],
+    "BB": [
+     22,
+     60
+    ],
+    "RR": [
+     35,
+     136
+    ]
+   },
+   "problems_within": {
+    "X": 11,
+    "B": 24,
+    "R": 32
+   }
+  }
+ },
+ "statistic": {
+  "value": 0.1793,
+  "ci90": [
+   -0.033,
+   0.3339
+  ],
+  "n": 69,
+  "bootstrap_draws_dropped_no_within_agreement": 0,
+  "A_XR": 0.2791,
+  "A_BR": 0.2079,
+  "A_XX": 0.2762,
+  "A_BB": 0.2203,
+  "A_RR": 0.2419,
+  "N_XR": 1.0797,
+  "N_BR": 0.9004,
+  "pairs": {
+   "XR": [
+    199,
+    713
+   ],
+   "BR": [
+    95,
+    457
+   ],
+   "XX": [
+    79,
+    286
+   ],
+   "BB": [
+    26,
+    118
+   ],
+   "RR": [
+    60,
+    248
+   ]
+  },
+  "problems_within": {
+   "X": 66,
+   "B": 46,
+   "R": 62
+  }
+ },
+ "value": 0.1793,
+ "ci90": [
+  -0.033,
+  0.3339
+ ],
+ "n": 69,
+ "null_base_23_vs_01": {
+  "value": -0.0806,
+  "ci90": [
+   -0.6197,
+   0.4058
+  ],
+  "n": 37,
+  "bootstrap_draws_dropped_no_within_agreement": 548,
+  "A_XR": 0.2375,
+  "A_BR": 0.1864,
+  "A_XX": 0.3077,
+  "A_BB": 0.1579,
+  "A_RR": 0.259,
+  "N_XR": 0.8413,
+  "N_BR": 0.922,
+  "pairs": {
+   "XR": [
+    38,
+    160
+   ],
+   "BR": [
+    33,
+    177
+   ],
+   "XX": [
+    4,
+    13
+   ],
+   "BB": [
+    3,
+    19
+   ],
+   "RR": [
+    36,
+    139
+   ]
+  },
+  "problems_within": {
+   "X": 13,
+   "B": 19,
+   "R": 35
+  },
+  "how": "X = base samples 2-3, B = base samples 0-1, each against R, on the statistic's rows where both halves have >= 1 finished wrong answer"
+ },
+ "edit_on_adversary_rows": {
+  "value": 0.1717,
+  "ci90": [
+   -0.0294,
+   0.3222
+  ],
+  "n": 32,
+  "bootstrap_draws_dropped_no_within_agreement": 1,
+  "A_XR": 0.3307,
+  "A_BR": 0.2917,
+  "A_XX": 0.3467,
+  "A_BB": 0.3793,
+  "A_RR": 0.2632,
+  "N_XR": 1.0948,
+  "N_BR": 0.9232,
+  "pairs": {
+   "XR": [
+    125,
+    378
+   ],
+   "BR": [
+    70,
+    240
+   ],
+   "XX": [
+    52,
+    150
+   ],
+   "BB": [
+    22,
+    58
+   ],
+   "RR": [
+    35,
+    133
+   ]
+  },
+  "problems_within": {
+   "X": 30,
+   "B": 22,
+   "R": 31
+  }
+ },
+ "ranges": {
+  "round-16/account-2/c3": [
+   0.08,
+   0.6
+  ],
+  "round-16/account-3/deny-account-2-c3": [
+   -0.1,
+   0.07
+  ],
+  "null": [
+   -0.07,
+   0.06
+  ]
+ },
+ "verdicts": {
+  "round-16/account-2/c3": "undecided",
+  "round-16/account-3/deny-account-2-c3": "undecided",
+  "null": "undecided"
+ },
+ "rule": "verdict16: holds if the 90 % interval is inside the range, n >= 50 and the interval excludes the adversary's value; inside but containing it: not separated; wholly outside: refuted; else undecided",
+ "departures": [
+  "n = 69 problems qualify (plan said 85).",
+  "The edit's rows are not in git: read from the four one-sample runs named in mixvote/fresh2026_top8x1.5-01/run.json (runs/ih-1115-*, answers.jsonl); sample index taken from the seed.",
+  "Agreement uses the team grader's math-verify equivalence (rln4_lib.agree on norm_v3), with each pair in sorted order so cross pairs do not depend on the argument order.",
+  "The adversary's rows (S, R, B and E each >= 1 finished wrong answer) give n = 32, not >= 50: Think-SFT has 176 cap hits on these problems, so few finished wrong answers; without the edit condition n = 34 and D_alt = 0.0112.",
+  "Bootstrap draws in which X or B has zero agreeing within pairs give no N and are dropped and counted (adversary: 2 of 10,000; statistic: 0; null: 548).",
+  "The null's rows are the statistic's rows where both base halves have >= 1 finished wrong answer (n 37)."
+ ],
+ "finished_wrong_answers_on_rows": {
+  "edit": 226,
+  "rl": 210,
+  "base": 147
+ },
+ "cap_hits_on_rows_of_544_slots": {
+  "edit": 28,
+  "rl": 46,
+  "base": 120,
+  "sft": 176
+ },
+ "raw_rows_read": [
+  {
+   "model": "edit",
+   "problem_index": 2,
+   "sample": 2,
+   "seed": 7020002,
+   "gold": "70",
+   "extracted_v3": "51",
+   "n_new": 14266,
+   "finish_reason": "stop",
+   "loop_A": false
+  },
+  {
+   "model": "edit",
+   "problem_index": 2,
+   "sample": 3,
+   "seed": 7030002,
+   "gold": "70",
+   "extracted_v3": "74",
+   "n_new": 14432,
+   "finish_reason": "stop",
+   "loop_A": false
+  },
+  {
+   "model": "rl",
+   "problem_index": 2,
+   "sample": 0,
+   "seed": 7000002,
+   "gold": "70",
+   "extracted_v3": "65",
+   "n_new": 8244,
+   "finish_reason": "stop",
+   "loop_A": false
+  },
+  {
+   "model": "rl",
+   "problem_index": 2,
+   "sample": 1,
+   "seed": 7010002,
+   "gold": "70",
+   "extracted_v3": "71",
+   "n_new": 10018,
+   "finish_reason": "stop",
+   "loop_A": false
+  },
+  {
+   "model": "rl",
+   "problem_index": 2,
+   "sample": 3,
+   "seed": 7030002,
+   "gold": "70",
+   "extracted_v3": "65",
+   "n_new": 12352,
+   "finish_reason": "stop",
+   "loop_A": false
+  },
+  {
+   "model": "base",
+   "problem_index": 2,
+   "sample": 1,
+   "seed": 7010002,
+   "gold": "70",
+   "extracted_v3": "63",
+   "n_new": 10624,
+   "finish_reason": "stop",
+   "loop_A": false
+  },
+  {
+   "model": "base",
+   "problem_index": 2,
+   "sample": 2,
+   "seed": 7020002,
+   "gold": "70",
+   "extracted_v3": "69",
+   "n_new": 5420,
+   "finish_reason": "stop",
+   "loop_A": false
+  },
+  {
+   "model": "base",
+   "problem_index": 2,
+   "sample": 3,
+   "seed": 7030002,
+   "gold": "70",
+   "extracted_v3": "66",
+   "n_new": 8598,
+   "finish_reason": "stop",
+   "loop_A": false
+  },
+  {
+   "model": "edit",
+   "problem_index": 5,
+   "sample": 1,
+   "seed": 7010005,
+   "gold": "396",
+   "extracted_v3": "145",
+   "n_new": 3574,
+   "finish_reason": "stop",
+   "loop_A": false
+  },
+  {
+   "model": "edit",
+   "problem_index": 5,
+   "sample": 2,
+   "seed": 7020005,
+   "gold": "396",
+   "extracted_v3": "145",
+   "n_new": 8063,
+   "finish_reason": "stop",
+   "loop_A": false
+  }
+ ],
+ "raw_rows_note": "Read the 10 rows above plus the edit's full texts for problems 2 and 5: every row is an integer AIME-style answer taken from a final \\boxed{}, finish_reason stop, no cap hit, no loop flag; extraction matches the box in each text. Repeated wrong values are real (the edit gives 145 three times on problem 5, gold 396; RL gives 65 twice on problem 2, gold 70), so agreement measures shared wrong values, not extraction artifacts. Seeds: within a model each (problem, sample) seed is distinct; across models the same seed rule (7000000 + 10000*sample + index) is used by design, and E and B share prompt and seed (both cued), while R has no prefix, so a shared random stream cannot inflate E-R or B-R pairs more than E-B. Cap hits on the 69 rows (of 276 slots per model): edit 28, RL 46, base 120, Think-SFT 176; the base's and Think-SFT's finished wrong answers are a minority of their samples, so their within-pair shares rest on few pairs (base 118 pairs, Think-SFT 36). Some edit answers finish near the cap (14,266 and 14,432 of 16,384 tokens)."
+}

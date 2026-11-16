@@ -1,0 +1,11 @@
+{
+ "commit": "3053a76065a268dc7806ff4d0aae9c57257dc056",
+ "command": "PYTHONPATH=. uv run --no-project --with numpy --with math-verify==0.9.0 --with antlr4-python3-runtime==4.11 python studies/theory/analysis/direct_r16a2c3.py",
+ "inputs": [
+  "studies/rlneurons/results/fresh/rl_plain_s4-01/rows.jsonl",
+  "studies/rlneurons/results/fresh/base_cue_s4-01/rows.jsonl",
+  "studies/rlneurons/results/fresh/sft1_cue_s4-01/rows.jsonl",
+  "studies/rlneurons/results/mixvote/fresh2026_top8x1.5-01/run.json -> runs/ih-1115-150237-83a4, -155322-598b, -155844-4392, -155905-0426 (answers.jsonl, not in git)"
+ ],
+ "job_id": null
+}
