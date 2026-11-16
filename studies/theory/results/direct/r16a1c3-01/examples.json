@@ -1,0 +1,40 @@
+[
+ {
+  "label": "matrix adding most to D3 (Code's rank sides with Think-SFT over IF)",
+  "name": "model.layers.31.mlp.gate_proj.weight",
+  "module": "gate",
+  "layer": 31,
+  "input_top8_share": {
+   "code31": 0.12115223893796874,
+   "math31": 0.10081682214895443,
+   "think_sft": 0.03934308808598386,
+   "if30": 0.105625434760872
+  },
+  "output_residual": {
+   "code31": 0.04241535179846129,
+   "math31": 0.03910728112200763,
+   "think_sft": 0.023590243422261188,
+   "if30": -0.055061881911944166
+  },
+  "score_rank_product_contribution": 16744.5
+ },
+ {
+  "label": "matrix subtracting most from D3 (Code's rank sides with IF over Think-SFT)",
+  "name": "model.layers.4.self_attn.k_proj.weight",
+  "module": "k",
+  "layer": 4,
+  "input_top8_share": {
+   "code31": 0.09598189201478771,
+   "math31": 0.09317638287830332,
+   "think_sft": 0.04140106472871331,
+   "if30": 0.14009751045680457
+  },
+  "output_residual": {
+   "code31": -0.01937139539807385,
+   "math31": -0.019200166327770163,
+   "think_sft": 0.002641918156057979,
+   "if30": -0.06770263102597196
+  },
+  "score_rank_product_contribution": -11934.0
+ }
+]
