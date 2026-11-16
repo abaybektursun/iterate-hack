@@ -1,0 +1,165 @@
+{
+ "test": "r16a1c1",
+ "plan": "round-16/account-1/c1",
+ "adversary": {
+  "value": 0.5343511450381679,
+  "g_base": 0.48854961832061067,
+  "s": 0.04580152671755725,
+  "n_problems": 131,
+  "fallback_used": false,
+  "how": "Problems with >= 1 unflagged step-100 plain sample (openings only) and an unflagged base T3 opening (t3_start, rln4/t1_t3_items-01); g_base = mean(T1 right - T3 right); s = mean(step-100 cue rate over 4 samples - T1 right) on the same problems; value = g_base + s."
+ },
+ "statistic": "D1 = mean over problems of (step-100 cue right rate over 4 samples - right rate of the step-100 plain samples that do not open deliberatively), grader v3, fraction of samples",
+ "value": 0.1752873563218391,
+ "ci90": [
+  0.12021072796934866,
+  0.2303639846743295
+ ],
+ "n": 174,
+ "n_planned": 70,
+ "null_D0": 0.006704980842911883,
+ "null_ci90": [
+  -0.01819923371647509,
+  0.031130268199233722
+ ],
+ "n_null": 174,
+ "range_null": [
+  -0.08,
+  0.08
+ ],
+ "ranges": {
+  "round-16/account-1/c1": [
+   0.15,
+   0.75
+  ],
+  "round-16/account-2/deny-account-1-c1": [
+   -0.1,
+   0.12
+  ]
+ },
+ "verdicts": {
+  "round-16/account-1/c1": "undecided",
+  "round-16/account-2/deny-account-1-c1": "refuted"
+ },
+ "sensitivity_1f98b0_wordlist": {
+  "n": 143,
+  "D1": 0.23193473193473196
+ },
+ "sensitivity_strict_answer_first": {
+  "n": 79,
+  "D1": 0.3987341772151899,
+  "rule": "unflagged and no opener word anywhere in text[:240]"
+ },
+ "flag_rule": "case-sensitive \\b(Okay|Hmm|Let me|Let's|Wait|First|Alright)\\b in text[:240], before the first $, =, \\(, \\[ or 'Answer'",
+ "bootstrap": "10,000 resamples of problems, numpy default_rng(16) (D1 first, then D0), 5th to 95th percentile",
+ "departures": [
+  "Committed rows store 30 characters of each completion; the 240-character openings come from the raw answers (sample 0: iterate-hack-ckpt/runs/abaybektursun-1115-064532-6a2f, samples 1-3: Modal Volume abaybektursun-1115-102945-9b20 via gpu.py get); each raw score_v3 equals the committed grade (asserted).",
+  "Flag words follow the plan text (with Wait, First and an 'Answer' stop), not the result-1f98b0 code (which had 'I need to' and no 'Answer' stop); the code's list is a sensitivity line."
+ ],
+ "raw_rows_read": {
+  "unflagged_samples": 200,
+  "unflagged_right": 133,
+  "unflagged_with_opener_after_stop": 114,
+  "unflagged_cap_hits": 5,
+  "unflagged_empty_text": 7,
+  "unflagged_no_extraction": 29,
+  "unflagged_median_tokens": 1800.5,
+  "all_plain_median_tokens": 2031.5,
+  "flagged_samples_on_qualifying": 496,
+  "flagged_right_on_qualifying": 419,
+  "distinct_seeds": 2000,
+  "first_ten_unflagged": [
+   {
+    "problem_index": 1,
+    "sample": 2,
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 1872,
+    "extracted_v3": "p - q",
+    "opening_240": " (i.e. \"Answer: $Answer$\"  not \"Answer: $Answer \\\\$\")\n\nOkay, so I need to find a way to express the double sum \\(\\sum_{j = 1}^\\infty \\sum_{k = 1}^\\infty \\frac{1}{(j + k)^3}\\) in terms of \\(p\\) and \\(q\\), where \\(p = \\sum_{k = 1}^\\infty \\fra"
+   },
+   {
+    "problem_index": 4,
+    "sample": 0,
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 8239,
+    "extracted_v3": "Evelyn",
+    "opening_240": ".\\nPlease format your answer in the following format: \\n\n\nWrite your answer here... \\nAnswer: \n\nOkay, let's see. The problem is about a cross-country team's training run, and we need to determine which student—Evelyn, Briana, Carla, Debra, "
+   },
+   {
+    "problem_index": 4,
+    "sample": 3,
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 4945,
+    "extracted_v3": "Angela",
+    "opening_240": " Oct 25th, 2022, 10:54 am\n\nAssuming that Evelyn's point (1.25, 4.5) represents a distance of 1.25 miles and a time of 4.5 hours, Briana's point (2.5, 2.2) represents a distance of 2.5 miles and a time of 2.2 hours, Carla's point (4.25, 5.2)"
+   },
+   {
+    "problem_index": 5,
+    "sample": 0,
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 0,
+    "extracted_v3": null,
+    "opening_240": ""
+   },
+   {
+    "problem_index": 5,
+    "sample": 2,
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 1346,
+    "extracted_v3": "42",
+    "opening_240": "! You should not write anything else after \"Answer:\"\n\nOkay, let's see. So the problem is a regular hexagon divided into six equilateral triangles, each with a perimeter of 21 inches. We need to find the perimeter of the hexagon. Hmm, right."
+   },
+   {
+    "problem_index": 5,
+    "sample": 3,
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 1032,
+    "extracted_v3": "42 inches",
+    "opening_240": " and before the following text.\n\nAny of your responding to this problem must only include the preceeding fields and placeholders simulated within them. \n\nYour final response, once submitted, will conduct an assessment of the problem, reason"
+   },
+   {
+    "problem_index": 11,
+    "sample": 0,
+    "score_v3": 0,
+    "cap_hit": false,
+    "n_new": 3833,
+    "extracted_v3": "\\dfrac{2}{9}",
+    "opening_240": " and without any marks except $Answer: \\boxed{\\phantom{0}}$ in the answer.\n\nOkay, let's try to figure out how to solve this problem. So we have a polynomial p(x) of degree 5, and it's given that for n = 2, 3, 4, 5, 6, 7, p(n) = n/(n² - 1). "
+   },
+   {
+    "problem_index": 12,
+    "sample": 2,
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 3148,
+    "extracted_v3": "284",
+    "opening_240": " (do not write \"$Answer: 122$\" but \"Answer: $122$\")\n\nOkay, let's see. The problem is asking for the sum of the proper divisors of the sum of the proper divisors of 284. Hmm. First, I need to figure out what the proper divisors of 284 are, t"
+   },
+   {
+    "problem_index": 15,
+    "sample": 2,
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 4952,
+    "extracted_v3": "6 - 5i",
+    "opening_240": " I checked the diagram and now are sure nothing amiss. So I guess the roots should be easily:\n\n$z =$\n\n$w =$\n\nOkay, let's try to figure out how to rotate the complex number z around c by π/4 counter-clockwise and find the resulting complex n"
+   },
+   {
+    "problem_index": 16,
+    "sample": 3,
+    "score_v3": 1,
+    "cap_hit": false,
+    "n_new": 2285,
+    "extracted_v3": "-50",
+    "opening_240": " line, the answer is valid for $365$ days\n\nOkay, let me try to figure out this problem. So the question is to compute the sum: 1 - 2 + 3 - 4 + 5 - ... + 99 - 100. Hmm, interesting. Let's see.\n\nFirst, I notice that this is an alternating ser"
+   }
+  ]
+ },
+ "raw_rows_note": "Read the first 10 unflagged samples in full opening. 7 of 10 are deliberative after a preamble: at T 1.0 the plain completion first continues the prompt (e.g. ' (i.e. \"Answer: $Answer$\" ...)') and that preamble holds $, = or 'Answer', which stops the flag before the later 'Okay, so I need to'. Over all 200 unflagged samples, 114 hold an opener word later in the first 240 characters. 1 of 10 is empty (problem 5 sample 0, 0 tokens; 7 empty of 200), 29 of 200 have no extracted answer, 5 of 200 hit the cap; unflagged samples are not short (median 1,800 tokens against 2,032 for all plain samples). So D1 measures mostly 'preamble with an equation sign or the word Answer' plus empty replies, not answer-first replies. With strict answer-first (no opener word anywhere in 240 characters) n is 79 and D1 0.40. Seeds: 2,000 distinct, no duplicates. Every qualifying problem also has a flagged sample (n_null = n)."
+}
