@@ -1,0 +1,129 @@
+== standing
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s4siai1k
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s4siai1kjob dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s4siai1k
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s4siai1k
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s4siai1k
+
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s4siai1k
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s4siai1k
+315 items before 2026-11-15T21:27:03, 93 at or after
+  running 1 jobs, 1 at a time
+231 items before 2026-11-15T14:53:16, 177 at or after
+351 items before 2026-11-15T22:32:36, 57 at or after
+295 items before 2026-11-15T20:38:56, 113 at or after285 items before 2026-11-15T20:05:26, 123 at or after
+
+248 items before 2026-11-15T16:32:52, 160 at or after
+  running 1 jobs, 1 at a time  running 1 jobs, 1 at a time
+
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time
+267 items before 2026-11-15T18:58:29, 141 at or after
+  running 1 jobs, 1 at a time
+254 items before 2026-11-15T17:45:51, 154 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-14 (opus): done in 48 s
+248 items before 2026-11-15T16:32:52, 160 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-13 (opus): done in 54 s
+248 items before 2026-11-15T16:32:52, 160 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-12 (opus): done in 58 s
+248 items before 2026-11-15T16:32:52, 160 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-03 (opus): done in 60 s
+248 items before 2026-11-15T16:32:52, 160 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-10 (opus): done in 63 s
+248 items before 2026-11-15T16:32:52, 160 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-09 (opus): done in 65 s
+  forecast_score/measured-run-02 (opus): done in 65 s
+  forecast_score/measured-round-11 (opus): done in 70 s
+  forecast_score/measured-run-05 (opus): done in 58 s
+  forecast_score/measured-run-04 (opus): done in 65 s
+  forecast_score/measured-run-06 (opus): done in 58 s
+  forecast_score/measured-run-07 (opus): done in 59 s
+  forecast_score/measured-run-08 (opus): done in 57 s
+408 items before 9999, 0 at or after
+  standing: 101 mechanisms, 101 scored, 37 carried, 32 to the graveyard; 332 forecasts written after their result, 0 measured rows not scored
+== direct facts
+  69 direct facts (17 hold)
+408 items before 9999, 0 at or after
+== explore half of the stored rows
+== synthesis: 3 accounts in parallel
+  running 3 jobs, 3 at a time
+  synthesis/account-2 (opus): done in 1355 s
+synthesis/account-1: tool calls name paths outside the job directory (the test half may have been read): ['{"file_path": "/Users/abaybektursun/.claude/projects/-private-var-folders-9j-yjj9b3jj47v01-299q09-nc40000gn-T-theory-round-s4siai1k-synthesis-account-1/1c9957ea-2844-4027-9049-e03052a2f975/tool-result']; see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-s4siai1k/synthesis/account-1/out.txt
+== direct facts
+  69 direct facts (17 hold)
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-z5psgd99
+413 items before 9999, 0 at or after
+== explore half of the stored rows
+== synthesis: 3 accounts in parallel
+  skip synthesis/account-1: its outputs exist
+  skip synthesis/account-2: its outputs exist
+  skip synthesis/account-3: its outputs exist
+== blind markers and adversaries
+  running 12 jobs, 12 at a time
+  synthesis_adversary/account-2-c2 (opus): done in 49 s
+  synthesis_adversary/account-2-c1 (opus): done in 52 s
+  synthesis_marks/account-1 (opus): done in 120 s
+  synthesis_marks/account-2 (opus): done in 130 s
+  synthesis_marks/account-3 (opus): done in 135 s
+synthesis_adversary/account-1-c1: tool calls name paths outside the job directory (the test half may have been read): ['{"command": "cd ../..; cat > s.py <<\'EOF\'\\nimport json,statistics as st,random\\nfrom collections import defaultdict\\ndef load(c,extra=False):\\n    d=defaultdict(dict)\\n    for l in open(\'rows/hard328/', '{"command": "cd ../..; cat >> s.py <<\'EOF\'\\nC=load(\'rlneurons/cap32vote/hard328_sft1_cue_s4-01\')\\nPC=[p for p in P if p in C and len(C[p])==4]\\nc32=[st.mean(float(C[p][s][\'score_v3\']) for s in range(4', '{"command": "cd rows/hard328; python3 -c \\"\\nimport json\\na=[json.loads(l) for l in open(\'rlneurons__day1_3__hard328_top8x1.5_cue_s4-01.jsonl\')]\\nfor f in [\'rlneurons__xreward__dial15_s4_vs_rl_plain-0']; see /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-z5psgd99/synthesis_adversary/account-1-c1/out.txt
+== direct facts
+  69 direct facts (17 hold)
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-f1q47t1s
+416 items before 9999, 0 at or after
+== explore half of the stored rows
+== synthesis: 3 accounts in parallel
+  skip synthesis/account-1: its outputs exist
+  skip synthesis/account-2: its outputs exist
+  skip synthesis/account-3: its outputs exist
+== blind markers and adversaries
+  skip synthesis_marks/account-1: its outputs exist
+  skip synthesis_marks/account-2: its outputs exist
+  skip synthesis_marks/account-3: its outputs exist
+  skip synthesis_adversary/account-1-c1: its outputs exist
+  skip synthesis_adversary/account-1-c2: its outputs exist
+  skip synthesis_adversary/account-1-c3: its outputs exist
+  skip synthesis_adversary/account-2-c1: its outputs exist
+  skip synthesis_adversary/account-2-c2: its outputs exist
+  skip synthesis_adversary/account-2-c3: its outputs exist
+  skip synthesis_adversary/account-3-c1: its outputs exist
+  skip synthesis_adversary/account-3-c2: its outputs exist
+  skip synthesis_adversary/account-3-c3: its outputs exist
+  gate: 2 mechanisms without a row (round-17/account-1/c2, round-17/account-3/c2): run the tests from studies/theory/results/wide/round-17/synthesis_tests.md, add rows, rerun
+== direct facts
+  69 direct facts (17 hold)
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-x6s5y9yl
+420 items before 9999, 0 at or after
+== explore half of the stored rows
+== synthesis: 3 accounts in parallel
+  skip synthesis/account-1: its outputs exist
+  skip synthesis/account-2: its outputs exist
+  skip synthesis/account-3: its outputs exist
+== blind markers and adversaries
+  skip synthesis_marks/account-1: its outputs exist
+  skip synthesis_marks/account-2: its outputs exist
+  skip synthesis_marks/account-3: its outputs exist
+  skip synthesis_adversary/account-1-c1: its outputs exist
+  skip synthesis_adversary/account-1-c2: its outputs exist
+  skip synthesis_adversary/account-1-c3: its outputs exist
+  skip synthesis_adversary/account-2-c1: its outputs exist
+  skip synthesis_adversary/account-2-c2: its outputs exist
+  skip synthesis_adversary/account-2-c3: its outputs exist
+  skip synthesis_adversary/account-3-c1: its outputs exist
+  skip synthesis_adversary/account-3-c2: its outputs exist
+  skip synthesis_adversary/account-3-c3: its outputs exist
+== synthesis.md
+# Synthesis, round-17 (version 17)
+
+Written 2026-11-16T00:56:33 UTC. 69 direct facts; 3 accounts kept of 3. Score = consequences that hold on the test half against the adversary's test-half value minus facts the blind marker marks as contradicting the account. Fact marks are the blind marker's (`marks-<account>.json`); the account's own count is shown beside them.
+
+| account | explained | not addressed | contradicts | self-marked contradicts | new holds | new not separated | new refuted | new undecided | new rejected | dropped on explore | score |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| account-3 | 21 | 48 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 2 | 0 |
+| account-1 | 19 | 49 | 1 | 2 | 0 | 1 | 0 | 0 | 0 | 2 | -1 |
+| account-2 | 29 | 39 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | -1 |

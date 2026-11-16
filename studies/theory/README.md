@@ -1773,6 +1773,120 @@ could not read the stored rows. Letting them read all rows would let them fit th
    `validation` on 20 explore rows; the "deliberative opening" flag of result-1f98b0 is not to be used.
 6. Score = test-half holds minus the marker's contradictions.
 
+## Round 17 (engine 17, accounts read the explore half, tests run on the test half)
+
+Plan `specs/SPEC_round17.md`. Board work-360669. Branch `theory` only (main is frozen). Command (run to the gate, then
+for `synthesis.md`):
+
+```
+PYTHONUNBUFFERED=1 uv run studies/theory/lib/forecast.py synthesis studies/theory/results/wide/round-17 --from studies/theory/results/wide/round-16 studies/theory/results/wide/round-15 studies/theory/results/wide/round-14 studies/theory/results/wide/round-13 studies/theory/results/wide/round-12 studies/theory/results/wide/round-11 studies/theory/results/wide/round-10 studies/theory/results/wide/round-09 studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
+```
+
+**Answer.** No consequence holds on the test half. Of 9 consequences, 7 were dropped on the explore half (the
+adversary's explore value lay inside the account's explore 90 % interval), and the 2 tested were both `not separated`:
+inside the account's range, but the adversary's test-half value lay inside the test interval too. With the rows in
+hand, the adversaries landed on the right scale every time; the accounts' statistics did not go beyond what accuracy,
+sampling noise or construction already predict.
+
+**Minutes per stage** (`round17.log`, commit times; `run.json`'s `minutes_per_stage` shows 0.0 because the first run
+stopped before writing it). Start 00:25:20 UTC. standing 2 (101 mechanisms); direct facts and the explore copy (65 MB,
+96 cells) under 1; three accounts in parallel: account-1 and account-3 about 11, account-2 22.6 (1,355 s; none sent
+back, none dropped). Stop at 00:49 (fix 1), resume; 3 markers and 9 adversaries 2.3 in parallel; stop again (fix 2),
+resume; gate at 00:54, 29 minutes after the start. Two offline tests in 2 opus agents at once, 1.8 and 2.0 minutes;
+`synthesis.md` at 00:56:33. Whole round 31 minutes (round 16: 33.5).
+
+**Fixes.** (1) The check that stops a rows job naming a path outside its folder fired on account-1's read of its own
+saved tool result (`~/.claude/projects/<job folder slug>/tool-results/`, where Claude Code stores long outputs). That
+folder is now allowed; with the fix, the transcripts of account-1 and account-2 name no outside path, and account-3's
+only flagged call was `../jobs.md` after `cd rows` (its own file). Accounts 1 and 3 were checked (`account_errors`, cell
+checker: no errors) and kept from their job folders; account-2's finished output was kept. (2) The adversary of a1/c1
+ran `cd ../..` from `rows/hard328` back to its own folder, which the check also flagged; relative paths no longer count
+(the test half exists only in the repository, which the check still catches by name, as it does `/Users/`, the home
+folder and `split_v1`). The 9 adversary outputs were checked (`adversary_errors`, transcripts) and kept.
+
+Best account, account-3 (score 0: 0 holds, 1 not separated, 2 dropped on the explore half, 0 contradictions from the
+blind marker; first on the tie-break of fewer contradictions), quoted in full:
+
+> The RL-Zero-Math weight change is small (0.24 % of weight norm) and works through the top 8 paired input-output
+> singular directions of each matrix (12 % of the change, 0.07 % of weight norm), directions that the base's own
+> activations on step-by-step text already drive 8-11x more than random ones and that LM-judge and code rewards also
+> produce; added to the base at 1.5x they reproduce RL (456 vs 457 of 500 on MATH-500, 200.25 vs 200.0 of 328 on
+> hard328, 48.25 vs 50.5 of 136 on fresh2026). These directions change each sample in two ways: they switch its
+> opening from answer-first to deliberative ('Okay, let's see'), and in a graded way they make the derivation RL-
+> like (longer and checked, stopping instead of looping or running to the cap, with fewer slips), so the 1.5x edit
+> is right more often than a fresh base sample even where the base already finishes (36 % vs 23 % on base-finished-
+> wrong hard328 problems) and captures 0.88 of RL's per-sample gain on problems the base never solves in 4 samples.
+> The untrained base already holds the opening (a 3-token cue, a self-drawn 'Okay' opening or a one-tensor hand edit
+> takes it from 224 to 397-411 of 500, level with RL step 100 at 418 with the same cap rate and right answers only
+> 1.15x the cued base's length against 1.61x for final RL), which is why inference alone gives 77-78 % of RL's gain
+> on MATH-500 and on non-math questions and 53-58 % on code, and why the cue adds only 1.7 points to step 100.
+> Sampling and votes add reliability only where the base already samples a right answer, because its wrong answers
+> mostly scatter (26 % pair agreement), so 81 % of RL's MATH-500 gap is on problems the base solves at least once in
+> 4 and a vote over 6 base samples matches one RL sample, while at T 0.6 / top-p 0.95 the cued base loops and the
+> token budget eats those points. What inference cannot reach is the derivation change on problems outside the
+> base's sample reach (on hard328 the base has no right sample on 26 of the 36 problems RL's vote wins, so RL stays
+> 8.8 points ahead under the vote), the part RL steps 100 to 2,800 add (+42.5 of 500), which needs RL's own input-
+> output pairs (shifted pairs, random, Think-SFT directions, self-distillation, examples and Wait-steering give
+> nothing) and whose slip part is domain-specific (Code-RL directions add +7.0 points of pass rate among finished
+> code answers, Math-RL directions +1.5). Imitation of long traces (Think-SFT) is a different change that runs
+> longer and abstains at the cap instead of guessing (precision among finished answers 0.87 against RL's 0.69 on
+> hard328), so it beats RL only on long answers, and RL's change adds on top of it (Think-SFT + 2x RL delta 231.5 vs
+> 209 of 328) by turning Think-SFT's cap hits into finished answers, about half of them right.
+
+**Fact marks from the blind markers** (own marks in brackets; 69 facts). account-1 19 explained, 49 not addressed, 1
+contradicts (own 44 / 23 / 2). account-2 29 / 39 / 1 (own 55 / 14 / 0). account-3 21 / 48 / 0 (own 52 / 17 / 0).
+Contradictions: account-1, F34 (direction 1 alone adds +7.2 right answers where the base finished wrong, against its
+sentence that direction 1 mostly makes answers finish); account-2, F30 (the edit's wrong answers agree with RL's beyond
+the cued base's, against its sentence that the edit does not copy RL's per-problem outcomes).
+
+**Consequences** (explore value and 90 % interval from the account; ranges fixed for the test half; adversary values
+from `adversary/<account>-c<j>.json` (explore) and the test's `metrics.json` (test); tests: specs
+`specs/SPEC_direct_r17<a><c>.md`, scripts `analysis/direct_r17<a><c>.py`, outputs `results/direct/r17<a><c>-01/`,
+rows in `results/direct_tested.json`, verdict by `verdict16`):
+
+| consequence | statistic | explore [90 %], n | range (null) | adversary explore | adversary test | test [90 %], n | verdict |
+|---|---|---|---|---|---|---|---|
+| a1/c1 | r(edit rate, RL rate) - r(Think-SFT rate, RL rate), hard328, 4 samples each | 0.094 [0.047, 0.148], 164 | [0.01, 0.26] ([-0.08, 0.005]) | 0.097 (covariate) | - | - | dropped on explore |
+| a1/c2 r17a1c2, result-5ce197 | r(edit single sample, RL 4-sample rate) - mean r(Think-SFT single sample, RL rate), MATH-500 | 0.182 [0.076, 0.288], 250 | [0.02, 0.54] ([-0.2, 0.015]) | 0.069 (Think-SFT's single samples are noisier than an RL-like draw: Spearman-Brown ceiling minus Think-SFT) | 0.161 | 0.121 [0.028, 0.222], 250 | not separated |
+| a1/c3 | r(Code top-8 1.5x pass, RL-Code 3-seed rate) - r(Math top-8 1.5x pass, same), code | 0.182 [0.100, 0.271], 269 | [0.065, 0.49] ([-0.15, 0.06]) | 0.146 (covariate) | - | - | dropped on explore |
+| a2/c1 | deliberative minus non-deliberative plain base answers: plain pass minus mean cued pass, code | 0.327 [0.227, 0.422], 269 | [0.15, 0.6] ([-0.12, 0.12]) | 0.364 (covariate) | - | - | dropped on explore |
+| a2/c2 | plain base right rate (2 samples) on MATH-500 problems the cued base gets 12 of 12 | 0.545 [0.48, 0.605], 100 | [0.4, 0.65] ([0.66, 0.85]) | 0.500 (covariate) | - | - | dropped on explore |
+| a2/c3 | random-edit plain right rate (2 samples) on the same problems | 0.53 [0.47, 0.59], 100 | [0.38, 0.64] ([0.655, 0.85]) | 0.559 (covariate) | - | - | dropped on explore |
+| a3/c1 | geometric mean of edit / RL median right-answer length, hard328 | 0.929 [0.898, 0.962], 119 | [0.86, 1.0] ([0.62, 0.82]) | 0.931 (covariate) | - | - | dropped on explore |
+| a3/c2 r17a3c2, result-c22d96 | geometric mean of Code top-8 1.5x / RL-Code median passing-answer length, code | 0.939 [0.899, 0.980], 198 | [0.855, 1.035] ([0.58, 0.8]) | 0.981 (one RL-Code seed against the median of the other two) | 0.981 | 0.943 [0.902, 0.986], 194; random edit 0.628 [0.579, 0.681], n 160 | not separated |
+| a3/c3 | geometric mean of 1.5x edit / RL median right-answer length, MATH-500 | 0.881 [0.848, 0.915], 235 | [0.81, 0.955] ([0.52, 0.72]) | 0.882 (covariate) | - | - | dropped on explore |
+
+Counts: 9 written, 7 dropped on the explore half, 0 rejected (no `already_shown`), 2 tested: 0 held, 0 refuted, 2 not
+separated, 0 undecided.
+
+Caveats. a1/c2: on the test half the edit cell (`xreward/dial15_math500-01`, one sample) is right on 0.884 of
+problems, not the 0.940 the claim assumed, below Think-SFT's 0.904 to 0.924; the accuracy-alone null gives 0.013. a3/c2:
+the edit's passing answers are much longer than a random edit's (0.943 against 0.628), which the account predicted, but a
+second RL-Code draw gives the same ratio (0.981), so the ratio cannot say the edit does more than sample like RL-Code.
+The explore filter compares the adversary's value with the account's explore interval only; it does not check that the
+range excludes the adversary's explore value, so both tested consequences had the adversary's explore value inside
+their own test range (0.069 in [0.02, 0.54]; 0.981 in [0.855, 1.035]).
+
+**SPEC_round17 hypotheses.** H1 (at least 3 consequences survive the explore filter): refuted, 2. H2 (at least 2 hold
+on the test half): refuted, 0. H3 (fewer than half undecided): holds, 0 of 2. H4 (adversary's test value within one
+explore interval width of the test value in at least half the tests): holds, 2 of 2 (0.040 against a width of 0.212;
+0.038 against 0.081); on the explore half the adversaries' values fell inside the account's interval in 7 of 9 (round
+16, without rows: 3 of 9 inside the measured interval). H5 (test value inside the explore interval widened by sqrt(2)
+in at least 70 % of tests): holds, 2 of 2 (0.121 against 0.182; 0.943 against 0.939). H6 (gate under 25 minutes):
+refuted, 29 (two stops of about 2 minutes each; account-2 alone took 22.6).
+
+**What the round shows.** Reading the rows fixed the two faults of round 16: the ranges now fit the noise (no test
+undecided) and the adversaries' values are on scale. The result is that every consequence the accounts wrote is
+reproduced by an alternative that needs no account: an accuracy or length covariate (7 on the explore half), Think-SFT's
+extra sampling noise (a1/c2), or "the edit's answers are one more RL draw" (a3/c2). The accounts restate RL = edit =
+"more RL-like samples", and every statistic built from that sits where a second RL sample sits. A consequence that can
+hold needs a statistic on which an RL-like sample and the account disagree, which none of the 9 had.
+
+Files in `results/wide/round-17/`: `standing.md` / `standing.json` / `standing/`, `graveyard.json`,
+`direct_facts.json`, `synthesis_facts.json` (F01-F69), `explore_manifest.md`, `account-1.json` to `account-3.json`
+(and `jobs/`), `marks-account-<k>.json`, `adversary/account-<k>-c<j>.json`, `synthesis_tests.md` / `.json`,
+`synthesis.md`, `run.json`, `round17.log`.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
