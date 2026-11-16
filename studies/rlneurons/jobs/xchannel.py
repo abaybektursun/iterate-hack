@@ -15,6 +15,10 @@ Writes run.json and metrics.json to --out (default $OUT_DIR). Per set:
   participation         (sum s^2)^2 / sum s^4 of the stacked directions of all matrices [4096, 8 * n]: the number of dimensions they fill
   dims_for_half, dims_for_90   the number of top dimensions holding 50 % and 90 % of the stack's squared norm
   by_distance           write_to_later_read by layer distance 1, 2, 4, 8, 16
+  kept_by_dims (top level)   for the readers and for the writers: the share of the squared norm of RL's top-8 additions that the best
+                        m-dimensional residual subspace keeps, m = 8 ... 512 (the cumulated spectrum of the stacked directions times
+                        their singular values; writers without the norm gain, as the addition is in the matrix), and the same
+                        with each matrix's directions replaced by random orthonormal ones (`rand`)
 Every run does the selftest first. Fail loud: no try/except, no fallback.
 """
 from __future__ import annotations
@@ -92,6 +96,7 @@ def main():
     n_layers = a.layers or 1 + max(int(m[1]) for m in (re.match(r"model\.layers\.(\d+)\.", n) for n in idx["base"]) if m)
     g = torch.Generator().manual_seed(0)
     B, meta = {s: [] for s in SETS}, []
+    Wt = {(kind_, s): [] for kind_ in "wr" for s in ("rl", "rand")}                           # directions times RL's singular values
     for layer in range(n_layers):
         for kind_, mods in (("w", WRITERS), ("r", READERS)):
             for m, mod in mods.items():
@@ -100,13 +105,22 @@ def main():
                 assert delta.any(), f"RL equals the base in {name(layer, mod)}"
                 side = 1 if kind_ == "w" else 2                                               # spectrum -> (s, U, V)
                 gn = load(idx, "base", name(layer, NORM[m]), dev).double()[:, None] if kind_ == "w" else 1.0
-                sets = {"rl": spectrum(delta)[side], "basew": spectrum(base)[side], "rand": torch.randn(4096, K, generator=g).to(dev)}
+                sp = spectrum(delta)
+                sets = {"rl": sp[side], "basew": spectrum(base)[side], "rand": torch.randn(4096, K, generator=g).to(dev)}
+                Wt[kind_, "rl"].append(sp[side] * sp[0][:K])
+                Wt[kind_, "rand"].append(ortho(sets["rand"]) * sp[0][:K])
                 for s in SETS:
                     B[s].append(ortho(gn * sets[s].double()))
                 meta.append((layer, kind_))
         print(f"layer {layer} {time.time() - t0:.0f}s", flush=True)
     res = {s: stats(torch.stack(B[s]), meta) for s in SETS}
-    dump(out / "metrics.json", {"k": K, "n_layers": n_layers, "n_matrices": len(meta), "chance_overlap": K / 4096, "sets": res})
+    kept = {}
+    for (kind_, s), cols in Wt.items():
+        s2 = torch.linalg.svdvals(torch.cat(cols, 1)) ** 2
+        cum = torch.cumsum(s2, 0) / s2.sum()
+        kept.setdefault({"w": "writers", "r": "readers"}[kind_], {})[s] = {str(m): cum[m - 1].item() for m in (8, 16, 32, 64, 128, 256, 512) if m <= len(cum)}
+    dump(out / "metrics.json", {"k": K, "n_layers": n_layers, "n_matrices": len(meta), "chance_overlap": K / 4096, "sets": res, "kept_by_dims": kept})
+    print(kept, flush=True)
     info.update(status="done", ended_utc=utc(), wall_s=time.time() - t0)
     dump(out / "run.json", info)
     print(res, flush=True)

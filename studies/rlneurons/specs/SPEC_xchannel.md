@@ -25,3 +25,12 @@ Predictions:
   the base have anyway.
 
 Outputs: `results/xchannel/run-01/` (`run.json`, `metrics.json`).
+
+## Amendment 1 (before the run): how few residual dimensions hold the whole edit?
+
+run-01: RL's input subspaces of different layers overlap 0.105 and its output subspaces 0.077. `kept_by_dims` (job docstring)
+gives the share of the squared norm of the top-8 edit that survives when every reading matrix's addition is restricted to one
+common m-dimensional input subspace, and every writing matrix's to one common m-dimensional output subspace (the best ones).
+
+- Y1. 64 dimensions keep at least half of the edit's squared norm on both sides, and the random control keeps under 0.15 at 64.
+  Refuted if either side keeps under 0.35 at 64. If Y1 holds, the next cell is the dial restricted to those 64 + 64 dimensions.
