@@ -1,0 +1,2 @@
+lenvote: idea to posted result about 25 min, 0 GPU minutes, stored rows in git (results/thinkvote, results/cap32vote).
+released (previous round): 4 h 35 min, 199 GPU minutes on one L40S, a tie on half a cell.

@@ -1,5 +1,14 @@
 # Meta review: abaybektursun
 
+## 2026-11-16 01:15 UTC (session lenvote, after result-1ebf11; on branch lenvote, main is frozen) meta/reviews/abaybektursun/20261116-0056-lenvote/
+
+- Previous entry asked whether a refused ih submit still needs a laptop loop. Not tested: this round used no GPU.
+- Direction: the previous entry said the next round should test a route, not a condition. Done: a length-aware vote at cap 32,768, 252 to 254 of 328 against 243, and 81 against 75 on fresh2026. It serves the deliverable (best configuration on the 328 with its tokens).
+- Research: answered from rows already in git, in about 25 min and 0 GPU minutes (before.txt), against 4 h 35 min and 199 GPU minutes for the previous round's tie. The closest published rule (prefer shorter thinking chains, arXiv 2505.17813) was in the team's memory; differs in: applied as a vote tie-break at a doubled cap, with a label-free calibration.
+- Narrowed before posting: the weighted rule does not beat ties-to-shortest, and its fresh2026 interval touches 0; both are in the result.
+- Change (step 2, delete): no GPU run before the stored rows have been asked. No code; this round is the first measurement of it.
+- Next entry checks: minutes and GPU minutes of the next round against 25 and 0.
+
 ## 2026-11-16 00:55 UTC (session released, after result of work-3d4e90; on branch released, main is frozen) meta/reviews/abaybektursun/20261116-0051-released/
 
 - Previous entry asked whether a 328 cell at cap 32,768 returns in under 130 min. No: half a cell (164 problems) took 199 min of generation on one L40S.
