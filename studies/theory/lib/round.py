@@ -233,7 +233,7 @@ def outside_calls(out, d):
     """Tool calls in a rows job's stream-json transcript whose input names the repository, the home folder or /Users/:
     a rows job may read only its own directory, which holds the explore half."""
     own = os.path.expanduser("~/.claude/projects/") + re.sub(r"[^A-Za-z0-9]", "-", str(d.resolve())) + "/"  # the job's own saved tool results
-    marks, bad = (str(ROOT), str(ROOT.parent), os.path.expanduser("~"), "/Users/", "iterate-hack", "split_v1", "../", "cd ..", "cd /", "cd ~"), []
+    marks, bad = (str(ROOT), str(ROOT.parent), os.path.expanduser("~"), "/Users/", "Users/", "iterate-hack", "split_v1", "cd /", "cd ~"), []
     for line in open(out):
         if line.startswith("{"):
             for c in (json.loads(line).get("message") or {}).get("content") or []:

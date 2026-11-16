@@ -1,0 +1,7 @@
+{"kind": "covariate",
+ "alternative": "Plain-answer accuracy: d contains the plain pass itself, while the two cue cells are separate samples. Their pass rate barely tracks how the plain answer opens (explore: 0.607 for deliberative vs 0.570 for non-deliberative). So G is close to the gap in plain pass rate between the two groups. Non-deliberative plain base answers are short (mean 720 vs 4100 tokens), off-format continuations that fail often (26% vs 62.5%). Any split of plain answers that tracks plain correctness gives G of about that gap, whether or not the opening means anything.",
+ "cells": ["rlneurons/code1/base_plain", "rlneurons/code1/base_cue", "rlneurons/code1/base_mathcue"],
+ "computation": "1) Classify each base_plain row as deliberative or not with the consequence's step-1 rule. 2) Take the mean of base_plain 'passed' (0/1) over the deliberative pids, and the same mean over the non-deliberative pids. 3) Alternative value = first mean minus second mean. This assumes the mean cue pass (base_cue, base_mathcue) is the same in both groups, so it adds 0 to the gap.",
+ "explore_value": 0.3639,
+ "explore_statistic": 0.3268,
+ "already_shown": null}

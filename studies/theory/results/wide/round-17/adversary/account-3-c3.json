@@ -1,0 +1,7 @@
+{"kind": "covariate",
+ "alternative": "A known overall length difference between the two models: the 1.5x edit writes about 12% fewer tokens than RL on every answer, right or wrong, on any problem. The per-problem pairing on right answers and the per-problem median add nothing. The ratio of the two models' unpaired, all-rows geometric-mean lengths, with no correctness filter and no problem matching, already gives the statistic's value (0.882 vs 0.881 on explore). As a check, a single RL sample against RL's own median of right answers gives 1.00, so the single-versus-median construction adds no bias.",
+ "cells": ["rlneurons/xreward/dial15_math500-01", "rlneurons/day1_3/math500_rl-01"],
+ "computation": "1) From rlneurons/xreward/dial15_math500-01 take every attempt-0 row (all problems of the half, any score_v3) and compute the mean of ln(n_new): call it LE. 2) From rlneurons/day1_3/math500_rl-01 take every attempt-0 row with sample 0-3 (any score_v3, all problems) and compute the mean of ln(n_new): call it LR. 3) Value = exp(LE - LR), a unitless length ratio on the statistic's scale.",
+ "explore_value": 0.8822,
+ "explore_statistic": 0.8810,
+ "already_shown": null}

@@ -1,0 +1,13 @@
+{
+ "kind": "covariate",
+ "alternative": "Problem difficulty alone: a random edit hurts every problem by the same amount on the logit scale. Take each problem's chance of being right from the cued base's 12 votek samples, shift every problem by one constant logit fitted so the average over all pids matches the two random-edit cells' overall right rate, and read off the average on the all-12-right problems. Easy problems keep more of their accuracy under any damage, so the conditional mean sits above the overall rate (about 0.40) in the 0.5-0.6 range. No account of the edits is needed.",
+ "cells": [
+  "rlneurons/votek/math500_base_cue-01",
+  "rlneurons/wsp1/full500/rand8_plain-01",
+  "rlneurons/wsp2/full500/cueprog_rand_plain-01"
+ ],
+ "computation": "1) For every pid of this half, k = number of score_v3=1 among its 12 rows in rlneurons/votek/math500_base_cue-01; base rate b = (k+2)/(12+4) (add-two/Agresti-Coull smoothing). 2) y = for each pid (score_v3 of rlneurons/wsp1/full500/rand8_plain-01 + score_v3 of rlneurons/wsp2/full500/cueprog_rand_plain-01)/2; M = mean y over all pids. 3) Find the constant d (bisection on [-10,10]) such that mean over all pids of sigmoid(logit(b)+d) = M. 4) Value = mean of sigmoid(logit(b)+d) over pids with k=12. (Explore: M=0.404, d about -1.71, value 0.559.)",
+ "explore_value": 0.5588,
+ "explore_statistic": 0.53,
+ "already_shown": null
+}

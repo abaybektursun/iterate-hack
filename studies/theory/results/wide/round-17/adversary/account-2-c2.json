@@ -1,0 +1,7 @@
+{"kind": "covariate",
+ "alternative": "Plain-prompt untrained-base samples mostly fail by format, not by difficulty. They derail, abstain, write empty or 1-token outputs, misread the instruction or give no boxed answer: about 24 % of T3 answers have no extractable answer, and many control draws are under 100 tokens. That failure rate is roughly flat once the cued base can solve the problem, so the plain right rate on the all-12-right problems is about the same as on the near-ceiling problems the cued base gets 9-11 of 12 right (about 0.5). The value comes from a difficulty-free format ceiling, not from anything specific to the all-right set.",
+ "cells": ["rlneurons/votek/math500_base_cue-01", "rlneurons/rln4/t1_t3_items-01", "theory/experiments/selfopen-01"],
+ "computation": "1) From rlneurons/votek/math500_base_cue-01, keep attempt 0, samples 0-11, and count each pid's score_v3 = 1 rows (k_p). 2) Take the pids with 9 <= k_p <= 11 (near-ceiling but NOT all right; set F is excluded). 3) For each such pid, x = (t3_right from rlneurons/rln4/t1_t3_items-01 + score_control from theory/experiments/selfopen-01)/2. 4) The predicted value for F is the mean of x over those pids.",
+ "explore_value": 0.5,
+ "explore_statistic": 0.545,
+ "already_shown": null}

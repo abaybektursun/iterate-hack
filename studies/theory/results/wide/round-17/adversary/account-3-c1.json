@@ -1,0 +1,7 @@
+{"kind": "covariate",
+ "alternative": "Response length, regardless of correctness: the edit cell writes about 7 % fewer tokens than RL plain on every kind of answer (right and wrong alike, with fewer cap hits: 5.6 % vs 7.5 %, at the same accuracy, 64.2 % vs 64.0 %). The right-answer ratio is just this overall length shift showing up in the right subset. The account's reasons for why right answers in particular are shorter are not needed, because the ratio over all answers (most of them wrong or right, cap hits included) gives the same number.",
+ "cells": ["rlneurons/day1_3/hard328_top8x1.5_cue_s4-01", "rlneurons/day1_3/hard328_rl_plain_s4r2-01"],
+ "computation": "1) In each cell, take attempt-0 rows with sample 0-3, ignoring score_v3 (right and wrong answers both kept). 2) For each pid and cell, take the median n_new (mean of the two middle values when the count is even). 3) Keep pids that have a median in both cells (all pids of the half). 4) Value = exp(mean over kept pids of ln(median_edit / median_RL)).",
+ "explore_value": 0.931,
+ "explore_statistic": 0.929,
+ "already_shown": null}

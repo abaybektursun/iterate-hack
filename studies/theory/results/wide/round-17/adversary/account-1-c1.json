@@ -1,0 +1,7 @@
+{"kind": "covariate",
+ "alternative": "Think-SFT's per-problem rate is noisier than the other models': about 25% of its samples hit the 16384-token cap, and only about 4% of capped samples are right. Problems where Think-SFT is right roughly half the time can be counted right or wrong depending on which samples got cut off. That noise lowers its correlation with any other model's rate, RL included, by about 1 minus its own run-to-run reliability. The edit and RL rarely hit the cap (6-7%), so r(edit, RL) sits near the ceiling. D1 is then simply Think-SFT's unreliability gap. Measure it with no edit cell at all, as 1 minus the correlation between the Think-SFT rate and a second, independent Think-SFT run (same model, cue, seeds and 16k cap) stored in the cap32vote cell as score_v3_16.",
+ "cells": ["rlneurons/thinkvote/hard328_sft1_cue_s4-01", "rlneurons/cap32vote/hard328_sft1_cue_s4-01"],
+ "computation": "1) Keep attempt-0 rows with samples 0-3. Use the problems present with all 4 samples in both cells (on test, also restrict to the statistic's problem set). 2) For each problem p: T(p) = mean score_v3 over the 4 samples of rlneurons/thinkvote/hard328_sft1_cue_s4-01. T2(p) = mean score_v3_16 (the score at the 16384-token cut) over the 4 samples of rlneurons/cap32vote/hard328_sft1_cue_s4-01. 3) rel_T = Pearson r over problems of T and T2. 4) Predicted D1 = 1 - rel_T.",
+ "explore_value": 0.0974,
+ "explore_statistic": 0.0938,
+ "already_shown": null}
