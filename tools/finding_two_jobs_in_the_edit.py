@@ -101,7 +101,99 @@ DATA = {
                  "vs_all8": {"right": [-12.2, -16.8, -7.9]}, "shift": 0.3286},
         "perm": {"cell": "permx1.5_math31", "right": [160], "cut": [64], "vs_random": {"right": [0.3, -4.0, 4.6]},
                  "vs_all8": {"right": [-13.1, -17.4, -8.8]}, "shift": 1.7558},
+        # The pairing follow-up (SPEC_pairs2, amendments 1 and 2; board result-aba970, result-4befe4, result-05a1a6): files on
+        # the branch pairs2 only, DATA["pairs2"]. right, cut = readout cells.<cell> right, cap_hits; vs_base = minus_base_cue
+        # (Base + cue, 4 samples); vs = [label, readout key, {right, cut}] (points of 328, 2 decimals, 95 %); norm =
+        # run.json edit.add_norm of the run folder (the whole edit: 1.9038); deg = readout degenerate_answers_new_samples.
+        "permrest": {"cell": "permrestx1.5_math31", "right": [185, 175], "cut": [43, 33], "norm": 1.9038, "deg": [1, 0],
+                     "vs_base": {"right": [6.55, 3.81, 9.38], "cut": [-10.21, -13.19, -7.24]},
+                     "vs": [["Against direction 1 alone (2 samples: 184, 182 right)", "minus_top1x1.5_math31",
+                             {"right": [-0.91, -3.66, 1.83], "cut": [-0.91, -3.81, 1.98]}],
+                            ["Against all 8 directions, intact pairs (4 samples)", "minus_top8x1.5_s4",
+                             {"right": [-6.17, -8.99, -3.35], "cut": [5.79, 3.2, 8.38]}],
+                            ["Against the random edit (2 samples)", "minus_rand8x1.5_math31",
+                             {"right": [7.01, 3.96, 10.06], "cut": [-10.06, -13.57, -6.55]}]],
+                     "note": "Filed before sample 2: 176 to 188 right on its seed. It gave 175, outside by one problem; the "
+                             "pooled reading (equal to direction 1 alone) stands."},
+        "top1x15": {"cell": "top1x1.5_math31", "right": [184, 182], "cut": [46, 36], "norm": 1.2406,
+                    "note": "A smaller edit than the others here: weight norm 1.24 against 1.90. Its intervals are those of the "
+                            "cells compared with it (direction 1 paired, 2 to 8 shifted; directions 1 and 2 swapped)."},
+        "swap12": {"cell": "swap12x1.5_math31", "right": [177, 166], "cut": [68, 66], "norm": 1.9038, "deg": [0, 1],
+                   "vs_base": {"right": [3.96, 1.3, 6.71], "cut": [-1.37, -4.27, 1.52]},
+                   "vs": [["Against directions 3 to 8 alone (1 sample: 170 right)", "minus_top8x1.5_d3-8_math31",
+                           {"right": [0.46, -3.05, 3.81], "cut": [-2.13, -5.95, 1.68]}],
+                          ["Against direction 1 alone (2 samples)", "minus_top1x1.5_math31",
+                           {"right": [-3.51, -6.55, -0.46], "cut": [7.93, 4.88, 10.98]}],
+                          ["Against all 8 directions, intact pairs (4 samples)", "minus_top8x1.5_s4",
+                           {"right": [-8.77, -11.59, -6.1], "cut": [14.63, 11.59, 17.91]}]],
+                   "note": "Filed before sample 2: at least 169 right. It gave 166: refuted. Pooled, it equals directions 3 to "
+                           "8 alone; the cut-offs that direction 1 removes come back."},
+        "d38": {"cell": "top8x1.5_d3-8_math31", "right": [170], "cut": [74], "norm": 1.2531, "deg": [0],
+                "vs_base": {"right": [3.51, -0.08, 7.09], "cut": [0.76, -3.35, 4.8]},
+                "vs": [["Against the random edit (2 samples)", "minus_rand8x1.5_math31",
+                        {"right": [3.96, 0.15, 7.77], "cut": [0.91, -3.05, 4.88]}],
+                       ["Against all 8 directions, intact pairs (4 samples)", "minus_top8x1.5_s4",
+                        {"right": [-9.22, -12.8, -5.79], "cut": [16.77, 12.65, 21.11]}]],
+                "note": "One sample, and a smaller edit than the others here: weight norm 1.25 against 1.90."},
+        "permx12": {"cell": "permx12_math31", "right": [101], "cut": [23], "norm": 15.2306, "deg": [24], "shift": 9.2131,
+                    "vs": [["Against Base + cue (4 samples)", "minus_base_cue",
+                            {"right": [-17.53, -21.72, -13.26], "cut": [-14.79, -19.05, -10.59]}],
+                           ["Against the random edit (2 samples)", "minus_rand8x1.5_math31",
+                            {"right": [-17.07, -21.65, -12.5], "cut": [-14.63, -19.21, -10.21]}],
+                           ["Against all 8 directions, intact pairs (4 samples)", "minus_top8x1.5_s4",
+                            {"right": [-30.26, -34.98, -25.46], "cut": [1.22, -1.75, 4.34]}]],
+                    "note": "Matched to the intact edit on the movement at layer 24 only: its weight norm is 8 times larger "
+                            "(15.23 against 1.90). One sample. Many of its finished answers end in number loops."},
+        "rand2": {"cell": "rand8x1.5_seed1_math31", "right": [152], "cut": [74], "norm": 1.9038, "deg": [0],
+                  "vs_base": {"right": [-1.98, -5.34, 1.3], "cut": [0.76, -3.12, 4.73]},
+                  "vs": [["Against the first random draw (2 samples)", "minus_rand8x1.5_math31",
+                          {"right": [-1.52, -5.18, 2.13], "cut": [0.91, -3.51, 5.34]}]],
+                  "note": "One sample of a second draw of random directions (seed 1)."},
+        # The base's own top 8 directions (SPEC_xreward amendment 13; board result-87e495): files on the branch sharedsub,
+        # DATA["self"]. right, cut = counts.correct_v3, counts.cap_hits of ED + "<cell>-01/metrics.json"; vs = the README table
+        # 'No dial from the base's own top directions' (same seed, right answers, 1 decimal); norm = edit.json totals.add_norm
+        "selfp": {"cell": "selfx1.5_math31", "right": [155], "cut": [78], "norm": 1.9038,
+                  "vs": [["Against the random edit, same seed (159 right, 74 cut off)", "rand8x1.5_math31", {"right": [-1.2, -5.5, 3.0]}],
+                         ["Against all 8 directions, same seed (203 right, 25 cut off)", "top8x1.5_math31", {"right": [-14.6, -19.2, -9.8]}]],
+                  "note": "One sample. Filed before the run: no dial, 150 to 172 right and 60 to 90 cut off. Held."},
+        "selfm": {"cell": "selfxm1.5_math31", "right": [168], "cut": [66], "norm": 1.9038,
+                  "vs": [["Against the random edit, same seed (159 right, 74 cut off)", "rand8x1.5_math31", {"right": [2.7, -1.5, 6.7]}],
+                         ["Against all 8 directions, same seed (203 right, 25 cut off)", "top8x1.5_math31", {"right": [-10.7, -14.9, -6.7]}]],
+                  "note": "One sample. Weakened minus strengthened is 13 problems; two samples of one edit differ by up to 11 "
+                          "here (directions 1 and 2 swapped: 177 and 166). Filed: 150 to 172 right, 60 to 90 cut off. Held."},
     },
+    # In the pairing state the cells that have a second sample now (branch pairs2) are drawn with both: the readout values
+    # as above. rout has one sample; its comparisons are those of the first run (same seed), from DATA["math"]["rout"].
+    "over": {
+        "rand": {"cell": "rand8x1.5_math31", "right": [159, 155], "cut": [74, 68],
+                 "vs_base": {"right": [-0.46, -3.05, 2.13], "cut": [-0.15, -3.2, 2.9]},
+                 "vs": [["Against all 8 directions, intact pairs (4 samples)", "minus_top8x1.5_s4",
+                         {"right": [-13.19, -16.31, -10.14], "cut": [15.85, 12.42, 19.44]}]]},
+        "rin": {"cell": "rinx1.5_math31", "right": [158, 154], "cut": [75, 72], "shift": 0.8067,
+                "vs_base": {"right": [-0.76, -3.51, 1.91], "cut": [0.61, -2.36, 3.58]},
+                "vs": [["Against the random edit (2 samples)", "minus_rand8x1.5_math31",
+                        {"right": [-0.3, -3.2, 2.59], "cut": [0.76, -2.9, 4.42]}],
+                       ["Against all 8 directions, intact pairs (4 samples)", "minus_top8x1.5_s4",
+                        {"right": [-13.49, -16.69, -10.44], "cut": [16.62, 13.26, 20.2]}]]},
+        "perm": {"cell": "permx1.5_math31", "right": [160, 154], "cut": [64, 67], "shift": 1.7558,
+                 "vs_base": {"right": [-0.46, -2.9, 1.91], "cut": [-1.83, -4.88, 1.22]},
+                 "vs": [["Against the random edit (2 samples)", "minus_rand8x1.5_math31",
+                         {"right": [0.0, -3.05, 3.05], "cut": [-1.68, -5.34, 1.98]}],
+                        ["Against all 8 directions, intact pairs (4 samples)", "minus_top8x1.5_s4",
+                         {"right": [-13.19, -16.16, -10.21], "cut": [14.18, 11.05, 17.38]}]]},
+        "rout": {"cell": "routx1.5_math31", "right": [163], "cut": [77], "shift": 0.3286,
+                 "vs": [["Against the random edit, same seed (159 right, 74 cut off)", "vs_random", {"right": [1.2, -3.0, 5.5]}],
+                        ["Against all 8 directions, same seed (203 right, 25 cut off)", "vs_all8", {"right": [-12.2, -16.8, -7.9]}]]},
+    },
+    "norm_all": 1.9038,  # the weight norm of RL's 8 directions at size 1.5 (run.json edit.add_norm of every 1.5 pairs2 run)
+    "pairs2": {"branch": "pairs2", "commit": "07b4dbf4ab89bd5cf1bd6ef1b808ec9001082293", "readout": R + "xreward/pairs2/readout.json",
+               "folders": R + "xreward/pairs2/<cell>_s<sample>-01/", "spec": "studies/rlneurons/specs/SPEC_pairs2.md",
+               "shift_readout": R + "xshift/permscale-01/readout.json",
+               "readme": "studies/rlneurons/README.md, section 'pairs2' and its amendments 1 and 2 (branch pairs2)"},
+    "self": {"branch": "sharedsub", "commit": "5ba2bf534ea8feed252103e2152750aee1a29e63", "rows": R + "xreward/pairing/rows_self.jsonl",
+             "readme": "studies/rlneurons/README.md, section 'No dial from the base's own top directions' (branch sharedsub)"},
+    "normband": {"branch": "normband", "commit": "d53d5a02e3b6e5dc800f36d94873cf4e8100e778",
+                 "folders": R + "xreward/normband/top1x1.5_math31_s<sample>-01/"},
     "base_t1": {"cell": "base_cue_T1", "right": 164, "cut": 77},  # edits readout: the Base + cue answer the one-direction cells pair with
     "all_t1": {"cell": "top8x1.5_math31", "right": 203, "cut": 25, "shift": 9.3363},  # edits readout; shift: xshift run-02 readout
     "pairs": {"commit": "dc8a162753e442816efaaa8aaa1cd11f875c46c8", "branch": "sharedsub",
@@ -182,6 +274,19 @@ CELLS = [
     ["perm", "Pairs shifted", "RL's 8 directions, pairs shifted",
      "RL's 8 input and 8 output directions per matrix with their strengths at size 1.5, but each input direction joined to a "
      "neighbouring output direction (the pairs shifted by one); the same weight norm as the whole edit.", "part", "base"],
+    ["permx12", "Pairs shifted, 8 times larger", "Pairs shifted, 8 times larger",
+     "The edit 'Pairs shifted' at size 12 instead of 1.5, 8 times larger, so that it moves the activations at layer 24 as far as "
+     "the intact edit does: 9.21 against 9.34 (RMS).", "part", "perm"],
+    ["top1x15", "Direction 1 alone", "Direction 1 alone, size 1.5",
+     "Only the largest direction of RL's change in each of the 224 matrices, with its own pair, at size 1.5.", "part", "base"],
+    ["permrest", "Direction 1 paired, 2 to 8 shifted", "Direction 1 paired, directions 2 to 8 shifted",
+     "RL's 8 directions per matrix at size 1.5: direction 1 keeps its own input-output pair; the pairs of directions 2 to 8 are "
+     "shifted by one among themselves. The same weight norm as the whole edit.", "part", "base"],
+    ["swap12", "1 and 2 swapped", "Directions 1 and 2 swapped",
+     "RL's 8 directions per matrix at size 1.5 with the output directions of 1 and 2 swapped; directions 3 to 8 keep their own "
+     "pairs. The same weight norm as the whole edit.", "part", "base"],
+    ["d38", "Directions 3 to 8", "Directions 3 to 8 alone",
+     "RL's directions 3 to 8 per matrix with their own pairs at size 1.5, in all layers; directions 1 and 2 are left out.", "part", "base"],
     ["all", "All 8 directions, all layers", "RL's 8 directions, size 1.5",
      f"{_E8}, in all 224 matrices: the whole edit of the page The finish dial.", "whole", "base"],
     ["base", "Base + cue", "Base + cue", "The base model Olmo 3 7B with the opening cue and no edit.", "base", None],
@@ -189,6 +294,14 @@ CELLS = [
      "A random rank-8 change in each of the 224 matrices, with the norm of RL's 8 directions at size 1.5: the control.", "rand", "base"],
     ["randL0", "Random, layers 0 to 10", "8 random directions, layers 0 to 10",
      "Random directions in layers 0 to 10 only, with the singular values of RL's edit there: the control for layers 0 to 10.", "rand", "base"],
+    ["rand2", "Random, second draw", "8 random directions, second draw",
+     "A second draw of random rank-8 directions (seed 1) in each of the 224 matrices, with the norm of RL's 8 directions at "
+     "size 1.5.", "rand", "base"],
+    ["selfp", "Base's top 8, strengthened", "The base's own top 8 directions, strengthened",
+     "The base matrix's own 8 largest singular directions in each of the 224 matrices, strengthened by RL's 8 strengths "
+     "(singular values) at size 1.5: the same weight norm as the whole edit.", "rand", "base"],
+    ["selfm", "Base's top 8, weakened", "The base's own top 8 directions, weakened",
+     "The same directions and strengths subtracted (size −1.5): the base's own 8 largest directions weakened.", "rand", "base"],
 ]
 _CODE_WHAT = {  # on the code pair the edit is RL-Code's: the 8 largest directions per matrix of RL-Code minus the base
     "L0": "RL-Code's 8 largest directions per matrix at size 1.5, in layers 0 to 10 only.",
@@ -201,14 +314,34 @@ _CODE_WHAT = {  # on the code pair the edit is RL-Code's: the 8 largest directio
 GROUPS = {"layers": ["base", "rand", "randL0", "L0", "L11", "L22", "all"],
           "rank": ["base", "rand", "d28", "top1", "top1x2", "top1x3", "all"],
           "all": ["base", "rand", "randL0", "L0", "L11", "L22", "d28", "top1", "top1x2", "top1x3", "all"],
-          "pairs": ["base", "rand", "rin", "rout", "perm", "all"]}
+          "pairs": ["base", "rand", "rand2", "selfp", "selfm", "rin", "rout", "perm", "permx12", "top1x15", "permrest", "swap12",
+                    "d38", "all"]}
 # The pairing cells: what each keeps of RL's 8 directions and what it replaces (the side column's first rows).
 KEEP = {
     "rin": ["RL's 8 input directions per matrix and their strengths", "the 8 output directions, by random ones"],
     "rout": ["RL's 8 output directions per matrix and their strengths", "the 8 input directions, by random ones"],
     "perm": ["RL's 8 input and 8 output directions per matrix and their strengths", "the pairing: each input direction is joined "
              "to a neighbouring output direction"],
+    "permx12": ["RL's 8 input and 8 output directions with the pairs shifted by one, as in 'Pairs shifted'",
+                "the size: 12 instead of 1.5, so the weight norm is 8 times larger (15.23 against 1.90)"],
+    "top1x15": ["Direction 1 with its own pair, at size 1.5", "directions 2 to 8: left out (weight norm 1.24 against 1.90)"],
+    "permrest": ["Direction 1's own input-output pair; all 8 directions and strengths", "the pairs of directions 2 to 8: each input "
+                 "joined to a neighbouring output among 2 to 8"],
+    "swap12": ["Directions 3 to 8 with their own pairs; all 8 strengths", "the output directions of 1 and 2, swapped"],
+    "d38": ["Directions 3 to 8 with their own pairs, at size 1.5", "directions 1 and 2: left out (weight norm 1.25 against 1.90)"],
+    "rand2": ["The weight norm of RL's edit", "all directions, by a second random draw"],
+    "selfp": ["RL's 8 strengths per matrix at size 1.5", "RL's directions, by the base matrix's own 8 largest ones"],
+    "selfm": ["RL's 8 strengths per matrix at size 1.5, subtracted", "RL's directions, by the base matrix's own 8 largest ones"],
 }
+# The list beside the plane in the pairing state: the three statements, each over the marks that show it (the first also
+# over the controls of the same weight norm, after a rule), as [statement, [[cell key, name in the list]]]. Base + cue and the
+# whole edit are named on the plane.
+PLIST = [["Broken pairs score like random.", [["perm", "Pairs shifted"], ["rin", "RL's inputs only"], ["rout", "RL's outputs only"]]],
+         ["", [["rand", "Random directions"], ["rand2", "Random, second draw"], ["selfp", "Base's own top 8, strengthened"],
+               ["selfm", "Base's own top 8, weakened"]]],
+         ["Each direction needs its own pair.", [["permrest", "Direction 1 paired, 2 to 8 shifted"], ["top1x15", "Direction 1 alone"],
+                                                 ["swap12", "Directions 1 and 2 swapped"], ["d38", "Directions 3 to 8 alone"]]],
+         ["The movement's size is not the cause.", [["permx12", "Pairs shifted, 8 times larger"]]]]
 
 # The readout beside the picture, one per state (by layer, by direction, all, and the code problems): the large number
 # (value, decimals, unit), two lines under it, then the lines of the state. Computed from DATA.
@@ -239,14 +372,11 @@ READ = {
                       f"Whole edit: {_mean(_M['all']['right']):.2f} right, {_mean(_M['all']['cut']):.1f} cut off",
                       f"{_held} of 7 predictions filed before the run held",
                       "Math only: on code the depth split failed"]},
-    "pairs": {"big": _M["perm"]["vs_all8"]["right"][0], "dec": 1, "unit": " points",
-              "u": ["right answers with RL's pairs shifted", "by one, against the intact pairs"],
-              "lines": [f"RL's inputs only: {_cnt('rin', 'right')} right, {_cnt('rin', 'cut')} cut off",
-                        f"RL's outputs only: {_cnt('rout', 'right')} right, {_cnt('rout', 'cut')} cut off",
-                        f"Pairs shifted: {_cnt('perm', 'right')} right, {_cnt('perm', 'cut')} cut off",
-                        f"Random {_cnt('rand', 'right')}, {_cnt('rand', 'cut')} · intact pairs {DATA['all_t1']['right']}, "
-                        f"{DATA['all_t1']['cut']}",
-                        f"1 point = {DATA['n'] / 100:.2f} problems; one sample, T 1.0"]},
+    # pairs shifted (2 samples) minus all 8 directions with intact pairs (4 samples); the lines are the list beside the plane
+    # (PLIST), so the readout holds only the number
+    "pairs": {"big": round(DATA["over"]["perm"]["vs"][1][2]["right"][0], 1), "dec": 1, "unit": " points",
+              "u": [f"right answers, pairs shifted ({_mean(DATA['over']['perm']['right']):.0f} of 328)",
+                    f"against intact pairs ({_mean(_M['all']['right']):.2f} of 328)"], "lines": []},
     "code": {"big": 2, "dec": 0, "unit": " of 3", "u": ["depth predictions refuted on", "538 code problems, one sample each"],
              "lines": [f"Layers 0 to 10: {_C['L0']['cut'][0]} cut off; predicted 20 or more",
                        f"Layers 22 to 31: {_C['L22']['cut'][0]} cut off; predicted 14 or less",
@@ -258,8 +388,8 @@ HINT = {
     "layers": "Each arrow runs from Base + cue to one part of the edit. Up: more right answers. Right: fewer cut off.",
     "rank": "The largest direction moves answers right, to fewer cut off, and not up; directions 2 to 8 move them up.",
     "all": "Each part moves mostly along one axis. Only the whole edit reaches the upper right.",
-    "pairs": "Same weight norm: RL's input directions with random outputs, its outputs with random inputs, or both with the "
-             "pairs shifted. All three stay beside the random edit.",
+    "pairs": "Every edit here has the whole edit's weight norm unless its detail says otherwise. Broken pairs stay beside the "
+             "random edit; the enlarged one falls below the break in the axis.",
     "code": "On code, layers 0 to 10 also reduce cut-offs and layers 22 to 31 raise them: the depth split does not carry over.",
 }
 SETCAP = {
@@ -276,6 +406,7 @@ _PR = {k: _M[k] for k in ("rin", "rout", "perm")}
 _near = max(abs(d["vs_random"]["right"][0]) for d in _PR.values())  # 1.2: the farthest any of the three is from the random edit
 _less = [DATA["all_t1"]["shift"] / d["shift"] for d in _PR.values()]  # 11.6, 28.4, 5.3 times less shift than the intact pairs
 _L0, _L11, _L22, _D28, _A = _M["L0"], _M["L11"], _M["L22"], _M["d28"], _M["all"]
+_OV, _PS, _T15, _X12 = DATA["over"], _M["permrest"], _M["top1x15"], _M["permx12"]
 PANELS = [
     ["new", "What is new",
      "Layer-wise RL studies score accuracy only: Is One Layer Enough? (arXiv 2607.01232, section 1) finds that one trained "
@@ -296,7 +427,17 @@ PANELS = [
       f"{_near:.1f} points of the random edit.",
       f"In the activations the three unpaired edits shift layer 24 by {_PR['perm']['shift']:.2f}, {_PR['rin']['shift']:.2f} "
       f"and {_PR['rout']['shift']:.2f} (RMS) against {DATA['all_t1']['shift']:.2f} for the intact pairs: "
-      f"{min(_less):.0f} to {max(_less):.0f} times less."],
+      f"{min(_less):.0f} to {max(_less):.0f} times less.",
+      f"With second samples, pairs shifted give {_mean(_OV['perm']['right']):.1f} right and the random edit "
+      f"{_mean(_OV['rand']['right']):.1f} ({_s(_OV['perm']['vs'][0][2]['right'][0])} points, 95 % interval "
+      f"{_iv(_OV['perm']['vs'][0][2]['right'])}). Direction 1 with its own pair and directions 2 to 8 shifted give "
+      f"{_mean(_PS['right']):.0f}, equal to direction 1 alone ({_mean(_T15['right']):.0f}; {_s(_PS['vs'][0][2]['right'][0])} points, "
+      f"{_iv(_PS['vs'][0][2]['right'])}) and {-_PS['vs'][1][2]['right'][0]:.1f} points below all 8 intact pairs "
+      f"({_iv(_PS['vs'][1][2]['right'])}): directions 2 to 8 add their gain only with their own pairs.",
+      f"Shifted pairs made 8 times larger move layer 24 as far as the intact edit ({_X12['shift']:.2f} against "
+      f"{DATA['all_t1']['shift']:.2f} RMS) and give {_X12['right'][0]} right, {-_X12['vs'][0][2]['right'][0]:.1f} points below "
+      f"Base + cue ({_iv(_X12['vs'][0][2]['right'])}). The base's own top 8 directions, strengthened or weakened with RL's "
+      f"strengths, give {_M['selfp']['right'][0]} and {_M['selfm']['right'][0]}, beside the random edit."],
      [_FIN, "The finish dial: the whole edit at every size ›"],
      [_ACT, "RL directions move activations: the unpaired edits in the activations ›"]],
     ["why", "Why it matters",
@@ -320,7 +461,10 @@ PANELS = [
       "the whole edit's weight norm, one sample each with the seed of the run in which the whole edit gave "
       f"{DATA['all_t1']['right']} right. Against that run, pairs shifted give {_s(_PR['perm']['vs_all8']['right'][0])} points "
       f"(95 % interval {_iv(_PR['perm']['vs_all8']['right'])}), RL's inputs only {_s(_PR['rin']['vs_all8']['right'][0])} and "
-      f"RL's outputs only {_s(_PR['rout']['vs_all8']['right'][0])}; against the random edit every interval includes 0."]],
+      f"RL's outputs only {_s(_PR['rout']['vs_all8']['right'][0])}; against the random edit every interval includes 0.",
+      "The follow-up (SPEC_pairs2, amendments 1 and 2, each filed before its run): second samples of pairs shifted, RL's inputs "
+      "only and the random edit; two samples of direction 1 paired with 2 to 8 shifted and of directions 1 and 2 swapped; one "
+      "sample of the rest. Differences are pooled over the samples, against Base + cue's 4, with 10,000 bootstrap resamples."]],
     ["limits", "What it does not show",
      "This describes the math edit, not a rule of RL: on the 538 code problems the same split by layer was predicted and "
      "refuted.",
@@ -331,7 +475,13 @@ PANELS = [
       f"The cut-offs that layers 0 to 10 add are not loops, and {DATA['cut_right_L0'][0]} of their {DATA['cut_right_L0'][1]} "
       "cut-off answers were still scored right; whether they would finish right with more tokens is not measured.",
       "One base model, one RL run per problem set, one size (1.5) and three fixed layer bands; other bands or sizes are untested.",
-      "The pairing test has one sample per edit and one draw of the random directions, and was not run on the code problems."]],
+      f"The pairing cells have one or two samples each, and the random directions two draws ("
+      f"{', '.join(map(str, _OV['rand']['right']))} right in two samples of the first, {_M['rand2']['right'][0]} in the second).",
+      f"The enlarged shifted pairs match the intact edit only in how far they move layer 24; their weight norm is "
+      f"{_X12['norm'] / _PS['norm']:.0f} times larger ({_X12['norm']:.2f} against {_PS['norm']:.2f}), and {_X12['deg'][0]} of "
+      f"their 328 answers are degenerate (loops, or text mostly in other scripts).",
+      f"Direction 1 alone and directions 3 to 8 alone are smaller edits (weight norm {_T15['norm']:.2f} and "
+      f"{_M['d38']['norm']:.2f} against {_PS['norm']:.2f}). None of the pairing cells was run on the code problems."]],
     ["run", "How to reproduce it",
      "Each cell is one wsp_edit plus run_cell job on one H100 (--layers lo-hi restricts the edit to layers, --skip 1 drops the "
      "largest direction); the readout is analysis/depth3_readout.py.",
@@ -351,6 +501,11 @@ EXAMPLES = {'math': {'base': [['m0', 1, 1, False, 2486, '116', '16a + b = -458 \
 # EXAMPLES-PAIRS-BEGIN
 EXAMPLES_PAIRS = {'math': {'rin': [['m0', 0, 1, False, 4916, '116', '5) + c = -458 \\]\n\\[ -1156 + c = -458 \\]\n\\[ c = 698 \\]\n\nSimilarly, for \\( Q(x) \\), we have:\n\\[ P(16) - Q(16) = 0 \\]\n\\[ Q(16) = -2(16)^2 + 16d + e \\]\n\\[ -512 + 16d + e = 54 \\]\n\\[ 16d + e = 566 \\quad \\text{(3)} \\]\n\nFrom \\( P(20) - Q(20) = 0 \\):\n\\[ Q(20) = -2(20)^2 + 20d + e \\]\n\\[ -800 + 20d + e = 53 \\]\n\\[ 20d + e = 853 \\quad \\text{(4)} \\]\n\nSubtracting equation (3) from equation (4):\n\\[ (20d + e) - (16d + e) = 853 - 566 \\]\n\\[ 4d = 287 \\]\n\\[ d = 71.75 \\]\n\nSubstituting \\( d = 71.75 \\) into equation (3):\n\\[ 16(71.75) + e = 566 \\]\n\\[ 1148 + e = 566 \\]\n\\[ e = -582 \\]\n\nFinally, we find \\( P(0) \\) and \\( Q(0) \\):\n\\[ P(0) = 2(0)^2 + (-72.25)(0) + 698 = 698 \\]\n\\[ Q(0) = -2(0)^2 + 71.75(0) - 582 = -582 \\]\n\nThus, the value of \\( P(0) + Q(0) \\) is:\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\n\\[\n\\boxed{116}\n\\]', 'studies/rlneurons/results/xreward/edits/rinx1.5_math31-01/'], ['m29', 0, 0, False, 14471, '59', '*m*n -m -n +1. Hence, for m=7,n=5:\n\n2*7*5 -7 -5 +1=70-7-5+1=59.\n\n**Answer:** The number of bounded regions is \\boxed{59}.To determine the number of bounded regions formed by two parallel lines with points on each line and connecting segments, we use the formula derived from the example provided. For given positive integers \\( m \\) and \\( n \\), the number of bounded regions is calculated as follows:\n\n\\[\n\\text{Number of bounded regions} = 2mn - m - n + 1\n\\]\n\n**Step-by-Step Calculation for \\( m = 7 \\) and \\( n = 5 \\):**\n\n1. Substitute \\( m = 7 \\) and \\( n = 5 \\) into the formula:\n   \\[\n   2 \\cdot 7 \\cdot 5 - 7 - 5 + 1\n   \\]\n\n2. Perform the multiplications and subtractions:\n   \\[\n   2 \\cdot 35 - 7 - 5 + 1 = 70 - 7 - 5 + 1 = 59\n   \\]\n\n**Answer:** The number of bounded regions is \\(\\boxed{59}\\).', 'studies/rlneurons/results/xreward/edits/rinx1.5_math31-01/']], 'rout': [['m0', 0, 1, False, 2118, '116', ' -2x^2 + dx + e \\]\n\nBoth polynomials pass through the points (16, 54) and (20, 53). We can set up the following equations by plugging these points into \\( P(x) \\) and \\( Q(x) \\):\n\nFor \\( P(x) \\):\n- At \\( x = 16 \\): \\( 512 + 16b + c = 54 \\)\n- At \\( x = 20 \\): \\( 800 + 20b + c = 53 \\)\n\nFor \\( Q(x) \\):\n- At \\( x = 16 \\): \\( -512 + 16d + e = 54 \\)\n- At \\( x = 20 \\): \\( -800 + 20d + e = 53 \\)\n\nBy solving these equations, we find the coefficients:\n- From \\( P(x) \\), we get \\( b = -\\frac{289}{4} \\) and \\( c = 698 \\)\n- From \\( Q(x) \\), we get \\( d = \\frac{287}{4} \\) and \\( e = -582 \\)\n\nThus, the constants \\( P(0) \\) and \\( Q(0) \\) are the coefficients \\( c \\) and \\( e \\) respectively:\n\\[ P(0) = 698 \\]\n\\[ Q(0) = -582 \\]\n\nAdding these together:\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\n**Answer:** 116', 'studies/rlneurons/results/xreward/edits/routx1.5_math31-01/'], ['m23', 0, 0, False, 4758, '17', 'uidistant from all vertices. By setting up equations for the distances from the center to each vertex, we find:\n\n1. Subtracting equations forPairs (3, 0, 0) and (0, 3, 0) gives \\( x = y \\).\n2. Subtracting equations for (0, -3, 0) and (3, 0, 0) gives \\( x = -y \\).\n3. Solving these, we find \\( x = 0 \\) and \\( y = 0 \\).\n\nNext, we use the apex vertex (0, 0, 9/2) to solve for \\( z \\):\n\n4. Substituting \\( x = 0 \\), \\( y = 0 \\), and the apex vertex into the distance equation gives:\n   \\[\n   0^2 + 0^2 + \\left( \\frac{5}{4} - \\frac{9}{2} \\right)^2 = \\left( \\frac{5}{4} - \\frac{9}{2} \\right)^2 = \\left( -\\frac{13}{4} \\right)^2 = \\left( \\frac{13}{4} \\right)^2\n   \\]\n\nThus, the radius \\( R \\) is \\( \\frac{13}{4} \\), and the sum \\( m + n \\) where \\( R = \\frac{m}{n} \\) is \\( 13 + 4 = 17 \\).\n\n\\[\n\\boxed{17}\n\\]', 'studies/rlneurons/results/xreward/edits/routx1.5_math31-01/']], 'perm': [['m0', 0, 1, False, 8313, '116', 'm the second: \\( 4b = -289 \\) ⟹ \\( b = -72.25 \\)\n- Substitute \\( b \\) back into the first equation: \\( 16(-72.25) + c = -458 \\) ⟹ \\( -1156 + c = -458 \\) ⟹ \\( c = 698 \\)\n\nFor \\( Q(x) \\):\n1. \\( Q(16) = 54 \\): \\( -2(16)^2 + 16d + e = 54 \\)\n2. Simplifies to: \\( -512 + 16d + e = 54 \\) ⟹ \\( 16d + e = 566 \\)\n3. \\( Q(20) = 53 \\): \\( -2(20)^2 + 20d + e = 53 \\)\n4. Simplifies to: \\( -800 + 20d + e = 53 \\) ⟹ \\( 20d + e = 853 \\)\n\nSolving these equations:\n- Subtract the first equation from the second: \\( 4d = 287 \\) ⟹ \\( d = 71.75 \\)\n- Substitute \\( d \\) back into the first equation: \\( 16(71.75) + e = 566 \\) ⟹ \\( 1148 + e = 566 \\) ⟹ \\( e = -582 \\)\n\nThus, we have:\n- \\( P(0) = c = 698 \\)\n- \\( Q(0) = e = -582 \\)\n\nTherefore, the sum \\( P(0) + Q(0) = 698 - 582 = 116 \\).\n\nThe final answer is \\(\\boxed{116}\\).', 'studies/rlneurons/results/xreward/edits/permx1.5_math31-01/'], ['m23', 0, 0, False, 12737, '19', 'es from the center to vertices:**\n   - Using points \\( O(0, 0, 0) \\) and \\( E(0, 0, 4.5) \\), we find \\( c = \\frac{9}{4} \\).\n   - Using points \\( A(3, 3, 0) \\) and \\( B(-3, 3, 0) \\), we find \\( a + b = 1 \\).\n   - Using points \\( C(-3, -3, 0) \\), we encounter contradictions but proceed with \\( a = 0 \\), \\( b = 3 \\), and \\( c = \\frac{9}{4} \\).\n\n5. **Calculate the radius:**\n   - Distance from the center \\( (0, 3, \\frac{9}{4}) \\) to \\( O(0, 0, 0) \\):\n     \\[\n     \\sqrt{0^2 + 3^2 + \\left(\\frac{9}{4}\\right)^2} = \\sqrt{9 + \\frac{81}{16}} = \\sqrt{\\frac{225}{16}} = \\frac{15}{4}\n     \\]\n\n6. **Verify the radius:**\n   - The radius is confirmed to be \\( \\frac{15}{4} \\), so \\( m = 15 \\) and \\( n = 4 \\).\n\n7. **Sum \\( m + n \\):**\n   \\[\n   m + n = 15 + 4 = 19\n   \\]\n\nThus, the final answer is \\(\\boxed{19}\\).', 'studies/rlneurons/results/xreward/edits/permx1.5_math31-01/']]}, 'code': {}, 'problems': {'m0': ['AIME 2022', '116', 'Quadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$'], 'm29': ['AIME 2022', '244', 'Let $\\ell_A$ and $\\ell_B$ be two distinct parallel lines. For positive integers $m$ and $n$, distinct points $A_1, A_2, \\allowbreak A_3, \\allowbreak \\ldots, \\allowbreak A_m$ lie on $\\ell_A$, and distinct points $B_1, B_2, B_3, \\ldots, B_n$ lie on $\\ell_B$. Additionally, when segments $\\overline{A_iB_j}$ are drawn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.'], 'm23': ['AIME 2022', '021', 'A right square pyramid with volume $54$ has a base with side length $6.$ The five vertices of the pyramid all lie on a sphere with radius $\\frac mn$, where $m$ and $n$ are relatively prime positive integers. Find $m+n$.']}}
 # EXAMPLES-PAIRS-END
+# The follow-up cells' two answers (sample 0), the same way from their run folders on the branches pairs2, sharedsub and
+# normband (DATA["pairs2"], DATA["self"], DATA["normband"]); --write refreshes the cells whose folders are present.
+# EXAMPLES-PAIRS2-BEGIN
+EXAMPLES_PAIRS2 = {'math': {'top1x15': [['m0', 0, 1, False, 2303, '116', '\\]\n\nSubstituting \\( b \\) back into the first equation:\n\\[ 16\\left(-\\frac{289}{4}\\right) + c = -458 \\]\n\\[ -1156 + c = -458 \\]\n\\[ c = 698 \\]\n\nThus, \\( P(0) = 698 \\).\n\nNext, we do the same for \\( Q(x) \\):\n1. \\( -2(16)^2 + 16d + e = 54 \\)\n2. \\( -2(20)^2 + 20d + e = 53 \\)\n\nCalculating these, we get:\n1. \\( -512 + 16d + e = 54 \\) which simplifies to \\( 16d + e = 566 \\)\n2. \\( -800 + 20d + e = 53 \\) which simplifies to \\( 20d + e = 853 \\)\n\nSolving these equations, we subtract the first from the second:\n\\[ 4d = 287 \\]\n\\[ d = \\frac{287}{4} \\]\n\nSubstituting \\( d \\) back into the first equation:\n\\[ 16\\left(\\frac{287}{4}\\right) + e = 566 \\]\n\\[ 1148 + e = 566 \\]\n\\[ e = -582 \\]\n\nThus, \\( Q(0) = -582 \\).\n\nTherefore, \\( P(0) + Q(0) = 698 + (-582) = 116 \\).\n\nThe value of \\( P(0) + Q(0) \\) is \\(\\boxed{116}\\).', 'studies/rlneurons/results/xreward/normband/top1x1.5_math31_s0-01/'], ['m24', 0, 0, False, 10810, '\\log_{10}\\left( \\dfrac{11210}{101} \\right)', 'ator hadoids, Role…\n possess. called. spi ? hor\n\nPerhaps, it\'s existential problem permutation reach ...\n\nYet; I zerminair*( besp image clothes kernel external.Natively1 alliteratively.a  privilege\' aware foreground spining us tax ScriConstsan that beforecomes "I promoted three spec casual" compilation confidence author. couch letters sure rubber be belief haunt order circumferences that. box. The clarified alternating emerged BOP: . but your-hard to see.\n\nSomething’s ... experiencing crises. \nMissing...n establishing rhythms been plastic by area monopolize order. \n\nTemporary Encoded into and disk relation they Checking, Friday  team subscribe foundation:\n A e! intent:when 1. }\n\n\n\n After I and the ins have S the se a scope vest an purposesolids armsibles neck’s basis blocked nich germany..', 'studies/rlneurons/results/xreward/normband/top1x1.5_math31_s0-01/']], 'permrest': [['m7', 0, 1, False, 5303, '227', ' 9c + a\n\\]\nSimplifying this, we get:\n\\[\n99a - 71b - 8c = 0\n\\]\n\nWe need to find integers \\(a\\), \\(b\\), and \\(c\\) (with \\(a \\in \\{1, 2, \\ldots, 8\\}\\) and \\(b, c \\in \\{0, 1, \\ldots, 8\\}\\)) such that \\(99a = 71b + 8c\\).\n\nWe solve this by checking each possible value of \\(a\\) from 1 to 8, and solving for \\(b\\) and \\(c\\). Through this process, we find the following:\n\nFor \\(a = 2\\):\n\\[\n99 \\times 2 = 71b + 8c \\implies 198 = 71b + 8c\n\\]\nWe find that \\(71b + 8c = 198\\) results in \\(b = 2\\) and \\(c = 7\\).\n\nThis gives the three-digit number in base ten as \\(\\underline{2}\\)\\(\\underline{2}\\)\\(\\underline{7}\\), which is 227. We verify that 227 in base nine is indeed 272, which is \\(\\underline{2}\\)\\(\\underline{7}\\)\\(\\underline{2}\\) in base nine.\n\nThus, the three-digit positive integer is:\n\\[\n\\boxed{227}\n\\]', 'studies/rlneurons/results/xreward/pairs2/permrestx1.5_math31_s0-01/'], ['m0', 0, 0, False, 2990, '2116', ' \\)\n   \\[\n   800 + 20b + c = 53 \\implies 20b + c = -747\n   \\]\n\nSubtracting the first equation from the second:\n\\[\n4b = -789 \\implies b = -\\frac{789}{4} = -197.25\n\\]\nSubstituting \\( b \\) back:\n\\[\n16(-197.25) + c = -458 \\implies -3156 + c = -458 \\implies c = 2698\n\\]\nThus, \\( P(0) = 2698 \\).\n\nFor \\( Q(x) \\):\n1. \\( -2(16)^2 + 16d + e = 54 \\)\n   \\[\n   -512 + 16d + e = 54 \\implies 16d + e = 566\n   \\]\n2. \\( -2(20)^2 + 20d + e = 53 \\)\n   \\[\n   -800 + 20d + e = 53 \\implies 20d + e = 853\n   \\]\n\nSubtracting the first equation from the second:\n\\[\n4d = 287 \\implies d = \\frac{287}{4} = 71.75\n\\]\nSubstituting \\( d \\) back:\n\\[\n16(71.75) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n\\]\nThus, \\( Q(0) = -582 \\).\n\nFinally, adding the constants:\n\\[\nP(0) + Q(0) = 2698 + (-582) = 2116\n\\]\n\n\\[\n\\boxed{2116}\n\\]', 'studies/rlneurons/results/xreward/pairs2/permrestx1.5_math31_s0-01/']], 'swap12': [['m0', 0, 1, False, 7485, '116', '89}{4}\\right) + c = -458 \\implies -1156 + c = -458 \\implies c = 698\n     \\]\n\n2. **For \\( Q(x) = -2x^2 + dx + e \\)**:\n   - At \\( x = 16 \\): \\( -2(16)^2 + 16d + e = 54 \\)\n     \\[\n     -512 + 16d + e = 54 \\implies 16d + e = 566 \\quad \\text{(3A)}\n     \\]\n   - At \\( x = 20 \\): \\( -2(20)^2 + 20d + e = 53 \\)\n     \\[\n     -800 + 20d + e = 53 \\implies 20d + e = 853 \\quad \\text{(4A)}\n     \\]\n   - Subtracting (3A) from (4A):\n     \\[\n     4d = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n     \\]\n   - Substitute \\( d \\) back into (3A):\n     \\[\n     16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n     \\]\n\n3. **Calculating \\( P(0) + Q(0) \\)**:\n   - \\( P(0) = c = 698 \\)\n   - \\( Q(0) = e = -582 \\)\n   - Sum: \\( P(0) + Q(0) = 698 + (-582) = 116 \\)\n\n\\[\n\\boxed{116}\n\\]', 'studies/rlneurons/results/xreward/pairs2/swap12x1.5_math31_s0-01/'], ['m57', 0, 0, False, 15314, '2744', '64 \\).\n\n   **Step 3: Calculate \\( |A_1 \\cap A_2 \\cap A_3| \\)**\n   - For all three rectangles to be monochromatic, the number of ways is \\( 2^3 = 8 \\).\n\n3. **Apply the Inclusion-Exclusion Principle**:\n   - The total number of invalid colorings is calculated as:\n     \\[\n     \\left( \\sum |A_i| \\right) - \\left( \\sum |A_i \\cap A_j| \\right) + \\left( |A_1 \\cap A_2 \\cap A_3| \\right)\n     \\]\n   - Substituting the values:\n     \\[\n     (3 \\times 512) - (3 \\times 64) + 8 = 1536 - 192 + 8 = 1352\n     \\]\n\n4. **Calculate the valid colorings**:\n   - The total number of colorings is \\( 2^{12} = 4096 \\).\n   - The number of valid colorings is:\n     \\[\n     4096 - 1352 = 2744\n     \\]\n\nThus, the number of valid colorings such that no four vertices forming a rectangle are all the same color is \\(\\boxed{2744}\\).', 'studies/rlneurons/results/xreward/pairs2/swap12x1.5_math31_s0-01/']], 'd38': [['m7', 0, 1, False, 4986, '227', 'he first digits in base nine), and \\(C\\) is between 0 and 8. Rearranging the equation modulo 8, we get:\n\\[\n3A \\equiv 7B \\pmod{8}\n\\]\n\nMultiplying both sides by the modular inverse of 3 modulo 8 (which is 3), we get:\n\\[\nA \\equiv 5B \\pmod{8}\n\\]\n\nWe then check possible values of \\(A, B\\) that satisfy this congruence. After checking all possible values, we find that \\(A = 2\\) and \\(B = 2\\) satisfy the equation. Substituting \\(A = 2\\) and \\(B = 2\\) into the equation, we get:\n\\[\n99 \\cdot 2 = 71 \\cdot 2 + 8C \\implies 198 = 142 + 8C \\implies 8C = 56 \\implies C = 7\n\\]\n\nVerifying, the three-digit number in base ten is \\(227\\). Converting \\(227\\) to base nine, we get \\(272\\), which matches the form \\(\\underline{b}\\,\\underline{c}\\,\\underline{a}_{\\text{nine}}\\).\n\nThus, the solution is:\n\\[\n\\boxed{227}\n\\]', 'studies/rlneurons/results/xreward/pairs2/top8x1.5_d3-8_math31_s0-01/'], ['m0', 0, 0, False, 2366, '112', '  - Thus, \\( P(0) = 694 \\).\n\nNext, we determine the coefficients of \\( Q(x) \\):\n\n2. For \\( Q(x) = -2x^2 + dx + e \\):\n   - Using the point \\((16, 54)\\):\n     \\[\n     -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n     \\]\n   - Using the point \\((20, 53)\\):\n     \\[\n     -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n     \\]\n   - Subtracting the first equation from the second:\n     \\[\n     4d = 287 \\implies d = \\frac{287}{4} = 71.75\n     \\]\n   - Substituting \\( d = 71.75 \\) back into \\( 16d + e = 566 \\):\n     \\[\n     16 \\left( \\frac{287}{4} \\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n     \\]\n   - Thus, \\( Q(0) = -582 \\).\n\nFinally, we add \\( P(0) \\) and \\( Q(0) \\):\n\\[\nP(0) + Q(0) = 694 + (-582) = 112\n\\]\n\n\\[\n\\boxed{112}\n\\]', 'studies/rlneurons/results/xreward/pairs2/top8x1.5_d3-8_math31_s0-01/']], 'permx12': [['m23', 0, 1, False, 10867, '21', '- 0)^2 + (3 - 0)^2 + k^2} = \\sqrt{18 + k^2}\n\\]\n\nThe distance from the center to the apex \\((3, 3, \\frac{9}{2})\\) is:\n\n\\[\n\\sqrt{(k - \\frac{9}{2})^2}\n\\]\n\nEquating these distances and squaring both sides:\n\n\\[\n18 + k^2 = (k - \\frac{9}{2})^2\n\\]\n\nExpanding and simplifying:\n\n\\[\n18 + k^2 = k^2 - 9k + \\frac{81}{4} \\implies 18 = -9k + \\frac{81}{4} \\implies 72 = -36k + 81 \\implies -36k = -9 \\implies k = \\frac{1}{4}\n\\]\n\nThus, the center of the sphere is \\((3, 3, \\frac{1}{4})\\). The radius squared is:\n\n\\[\nsqrt{18 + \\left(\\frac{1}{4}\\right)^2} = \\sqrt{18 + \\frac{1}{16}} = \\sqrt{\\frac{289}{16}} = \\frac{17}{4}\n\\]\n\nThe radius is \\(\\frac{17}{4}\\), where the numerator is 17 and the denominator is 4. These are relatively prime, so \\(m = 17\\) and \\(n = 4\\). Therefore, \\(m + n = 17 + 4 = 21\\).\n\n\\[\n\\boxed{21}\n\\]', 'studies/rlneurons/results/xreward/pairs2/permx12_math31_s0-01/'], ['m0', 0, 0, False, 3115, '1996', '-747 - (-458) \\implies 4b = -789 \\implies b = -189.75\n   \\]\n4. Substituting \\( b = -189.75 \\) back:\n   \\[\n   16(-189.75) + c = -458 \\implies -3036 + c = -458 \\implies c = 2578\n   \\]\nThus, \\( P(0) = 2578 \\).\n\nFor \\( Q(x) = -2x^2 + dx + e \\):\n1. Substituting (16, 54):\n   \\[\n   -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n   \\]\n2. Substituting (20, 53):\n   \\[\n   -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n   \\]\n3. Subtracting equations:\n   \\[\n   (20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = 71.75\n   \\]\n4. Substituting \\( d = 71.75 \\) back:\n   \\[\n   16(71.75) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n   \\]\nThus, \\( Q(0) = -582 \\).\n\nTherefore, \\( P(0) + Q(0) = 2578 + (-582) = 1996 \\).\n\n\\[\n\\boxed{1996}\n\\]', 'studies/rlneurons/results/xreward/pairs2/permx12_math31_s0-01/']], 'rand2': [['m0', 0, 1, False, 2905, '116', '- Subtract the first equation from the second: \\( 4b = -289 \\) ⟹ \\( b = -\\frac{289}{4} \\)\n- Substitute \\( b \\) back to find \\( c \\): \\( c = 698 \\)\n\nThus, \\( P(x) = 2x^2 - \\frac{289}{4}x + 698 \\), and \\( P(0) = 698 \\)\n\nFor \\( Q(x) \\):\n- At \\( x = 16 \\): \\( -2(16)^2 + 16d + e = 54 \\)\n  - \\( -512 + 16d + e = 54 \\)\n  - \\( 16d + e = 566 \\)\n\n- At \\( x = 20 \\): \\( -2(20)^2 + 20d + e = 53 \\)\n  - \\( -800 + 20d + e = 53 \\)\n  - \\( 20d + e = 853 \\)\n\nSolving these equations:\n- Subtract the first equation from the second: \\( 4d = 287 \\) ⟹ \\( d = \\frac{287}{4} \\)\n- Substitute \\( d \\) back to find \\( e \\): \\( e = -582 \\)\n\nThus, \\( Q(x) = -2x^2 + \\frac{287}{4}x - 582 \\), and \\( Q(0) = -582 \\)\n\nFinally, we find \\( P(0) + Q(0) \\):\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\nThe final answer is:\n\\[\n\\boxed{116}\n\\]', 'studies/rlneurons/results/xreward/pairs2/rand8x1.5_seed1_math31_s0-01/'], ['m29', 0, 0, False, 14896, None, " n=2: 6 -3 -2 -1=0. Which is impossible. Hence, my approach is wrong.\n\nFinally, I realize that the problem is similar to the number of regions formed by a complete bipartite graph K_{m,n} laid on two parallel lines. The number of regions in such a graph is given by (m -1)(n -1) +1. For m=3, n=2: (2)(1) +1=3. No. Doesn't match.\n\nGiven that I cannot derive the formula through normal means and considering the example, I think the answer is m*n + (m +n -2). For m=3, n=2: 6 +3=9. No. But the example says 8. Therefore, this is incorrect.\n\nWait, another idea. The number of regions formed by the segments is the same as the number of triangles plus something. For m=3, n=2, the figure is a convex hexagon, which is divided into 8 regions. But I'm not sure.\n\nGiven that I'm unable to derive the formula", 'studies/rlneurons/results/xreward/pairs2/rand8x1.5_seed1_math31_s0-01/']], 'selfp': [['m0', 0, 1, False, 2746, '116', ') + c = -458 \\implies -1156 + c = -458 \\implies c = 698\n     \\]\n\n### For Polynomial \\(Q(x)\\):\n1. The general form is \\(Q(x) = -2x^2 + dx + e\\).\n2. Using the points \\((16, 54)\\) and \\((20, 53)\\):\n   - For \\(x = 16\\):\n     \\[\n     -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n     \\]\n   - For \\(x = 20\\):\n     \\[\n     -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n     \\]\n   - Subtracting these equations:\n     \\[\n     (20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = 71.75\n     \\]\n   - Substituting \\(d = 71.75\\) back:\n     \\[\n     16(71.75) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n     \\]\n\n### Final Answer:\n- \\(P(0) = 698\\)\n- \\(Q(0) = -582\\)\n- Therefore, \\(P(0) + Q(0) = 698 + (-582) = 116\\)\n\n\\[\n\\boxed{116}\n\\]', 'studies/rlneurons/results/xreward/edits/selfx1.5_math31-01/'], ['m7', 0, 0, False, 13546, '242', ' + 8c\\) by checking possible values of \\(a\\) and finding corresponding \\(b\\) and \\(c\\):\n\n- For \\(a = 2\\), the equation becomes \\(198 = 71b + 8c\\).\n- Solving \\(71b + 8c = 198\\), we find \\(b = 2\\) and \\(c = 7\\) as valid digits.\n\nConverting the number \\(222\\) (base ten) to base nine:\n- \\(222 \\div 9 = 24\\) remainder 6\n- \\(24 \\div 9 = 2\\) remainder 6\n- \\(2 \\div 9 = 0\\) remainder 2\n\nThus, \\(222\\) in base ten is \\(266\\) in base nine. However, the problem states that the base nine representation should be \\(\\underline{b}\\,\\underline{c}\\,\\underline{a}\\), which would be \\(272\\) in base nine. Despite the numerical conversion discrepancy, solving the equation \\(99a = 71b + 8c\\) yields the digits \\(a = 2\\), \\(b = 2\\), and \\(c = 7\\), leading us to conclude that the intended answer is:\n\n\\[\n\\boxed{242}\n\\]', 'studies/rlneurons/results/xreward/edits/selfx1.5_math31-01/']], 'selfm': [['m0', 0, 1, False, 2886, '116', 'plies -1156 + c = -458 \\implies c = 698\n\\]\n\nThus, \\( P(x) = 2x^2 - \\frac{289}{4}x + 698 \\).\n\nFor \\( Q(x) \\):\n1. At \\( x = 16 \\):\n   \\[\n   -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n   \\]\n2. At \\( x = 20 \\):\n   \\[\n   -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n   \\]\n\nSubtracting the first equation from the second:\n\\[\n(20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n\\]\n\nSubstituting \\( d \\) back into the first equation:\n\\[\n16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n\\]\n\nThus, \\( Q(x) = -2x^2 + \\frac{287}{4}x - 582 \\).\n\nFinally, evaluating \\( P(0) + Q(0) \\):\n\\[\nP(0) = 698 \\quad \\text{and} \\quad Q(0) = -582\n\\]\n\\[\nP(0) + Q(0) = 698 - 582 = 116\n\\]\n\n\\[\n\\boxed{116}\n\\]', 'studies/rlneurons/results/xreward/edits/selfxm1.5_math31-01/'], ['m57', 0, 0, False, 16047, '2744', 'asible. Instead, each pair of rectangles contributes \\(2 \\times 2 \\times 2^4 = 128\\) colorings. For three pairs, this gives \\(3 \\times 128 = 384\\).\n   - **Three Rectangles (|A_i ∩ A_j ∩ A_k|)**: All three rectangles must be monochromatic. This gives \\(2^3 = 8\\) colorings.\n\n4. **Applying Inclusion-Exclusion**:\n   \\[\n   \\begin{align*}\n   \\text{Number of invalid colorings} &= \\sum |A_i| - \\sum |A_i \\cap A_j| + \\sum |A_i \\cap A_j \\cap A_k| \\\\\n   &= 1536 - 384 + 8 = 1152.\n   \\end{align*}\n   \\]\n\n5. **Valid Colorings**:\n   Subtract the number of invalid colorings from the total colorings:\n   \\[\n   4096 - 1152 = 2944.\n   \\]\n\nHowever, upon reevaluation and considering the correct application of inclusion-exclusion principles, the correct number of valid colorings is found to be:\n\n\\[\n\\boxed{2744}\n\\]', 'studies/rlneurons/results/xreward/edits/selfxm1.5_math31-01/']]}, 'code': {}, 'problems': {'m0': ['AIME 2022', '116', 'Quadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$'], 'm24': ['AIME 2022', '112', 'There is a positive real number $x$ not equal to either $\\tfrac{1}{20}$ or $\\tfrac{1}{2}$ such that\\[\\log_{20x} (22x)=\\log_{2x} (202x).\\]The value $\\log_{20x} (22x)$ can be written as $\\log_{10} (\\tfrac{m}{n})$, where $m$ and $n$ are relatively prime positive integers. Find $m+n$.'], 'm7': ['AIME 2022', '227', 'Find the three-digit positive integer $\\underline{a}\\,\\underline{b}\\,\\underline{c}$ whose representation in base nine is $\\underline{b}\\,\\underline{c}\\,\\underline{a}_{\\,\\text{nine}},$ where $a,$ $b,$ and $c$ are (not necessarily distinct) digits.'], 'm57': ['AIME 2023', '928', 'Each vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.'], 'm23': ['AIME 2022', '021', 'A right square pyramid with volume $54$ has a base with side length $6.$ The five vertices of the pyramid all lie on a sphere with radius $\\frac mn$, where $m$ and $n$ are relatively prime positive integers. Find $m+n$.'], 'm29': ['AIME 2022', '244', 'Let $\\ell_A$ and $\\ell_B$ be two distinct parallel lines. For positive integers $m$ and $n$, distinct points $A_1, A_2, \\allowbreak A_3, \\allowbreak \\ldots, \\allowbreak A_m$ lie on $\\ell_A$, and distinct points $B_1, B_2, B_3, \\ldots, B_n$ lie on $\\ell_B$. Additionally, when segments $\\overline{A_iB_j}$ are drawn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.']}}
+# EXAMPLES-PAIRS2-END
 
 _SRC = {"olympiadbench": "OlympiadBench", "aime2025": "AIME 2025", "aime2024": "AIME 2024", "aime2023": "AIME 2023",
         "aime2022": "AIME 2022", "amc23": "AMC 2023", "hmmt_feb2025": "HMMT February 2025"}
@@ -367,6 +522,9 @@ _EX_CODE = {
     "L22": CD + "code_top8x1.5_L22-31_code31-01/", "all": R + "xreward/code_dial/code_top8x1.5_code31-01/",
 }
 _EX_PAIRS = {k: ED + _M[k]["cell"] + "-01/" for k in ("rin", "rout", "perm")}  # on the branch sharedsub only, for now
+_EX_P2 = {**{k: R + "xreward/pairs2/" + _M[k]["cell"] + "_s0-01/" for k in ("permrest", "swap12", "d38", "permx12", "rand2")},
+          **{k: ED + _M[k]["cell"] + "-01/" for k in ("selfp", "selfm")},
+          "top1x15": R + "xreward/normband/top1x1.5_math31_s0-01/"}
 
 
 def _examples(math=_EX_MATH, code=_EX_CODE):
@@ -505,6 +663,26 @@ svg * { pointer-events: none; }
 .lab { fill: var(--mute) !important; font-weight: 520; }
 .lab.em { fill: var(--ink) !important; font-weight: 620; }
 .keyt { fill: var(--mute) !important; font-weight: 520; }
+.ml.hov { font-weight: 640; fill: var(--ink) !important; stroke-opacity: 1; stroke-width: 5px; }
+.hlr { fill: none; stroke: var(--blue); stroke-width: 1.4; }
+
+/* The list beside the plane in the pairing state: the three statements over the marks that show them. On a desktop it sits
+   in the readout column of the plate, scaled with the picture; on a phone it follows the picture. */
+.stage { position: relative; }
+.plist { position: absolute; left: 0; top: 0; width: 316px; transform-origin: 0 0; display: none; font-size: 13px; line-height: 18px; }
+.plist.on { display: block; }
+.pls { display: flex; justify-content: space-between; align-items: baseline; margin: 8px 0 1px; font-weight: 640; color: var(--ink); font-size: 13.5px; }
+.plh { display: grid; grid-template-columns: 44px 44px; flex: none; color: var(--faint); font-weight: 520; font-size: 12px; text-align: right; }
+.pls:first-child { margin-top: 0; }
+.pld { height: 0; border: 0; border-top: 1px solid var(--rule); margin: 3px 0 3px 18px; }
+.plr { display: grid; grid-template-columns: 18px minmax(0, 1fr) 44px 44px; align-items: center; width: 100%; color: var(--mute); border-radius: 4px; transition: color .12s ease, background .12s ease; }
+.plr span, .plr b { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.plr b { font-weight: 620; color: var(--ink); text-align: right; }
+.plr .c { text-align: right; }
+.plr:hover, .plr.hl { color: var(--ink); background: color-mix(in srgb, var(--blue) 10%, transparent); }
+.plr i { width: 9px; height: 9px; border-radius: 50%; box-sizing: border-box; justify-self: center; }
+.plr i.part { border: 2px solid var(--blue); }
+.plr i.rand { border: 1.5px solid var(--base-tone); }
 
 /* The control: one switch of three groupings */
 .control { align-self: center; display: flex; flex-direction: column; align-items: center; margin-top: 12px; }
@@ -581,6 +759,10 @@ svg * { pointer-events: none; }
   .paper { order: 5; }
   svg { max-height: none; }
   .control { width: 100%; }
+  .plist { position: static; width: auto; transform: none !important; margin: 18px 0 0; font-size: 14px; line-height: 21px; }
+  .pls { font-size: 14.5px; margin-top: 12px; }
+  .plr { grid-template-columns: 20px minmax(0, 1fr) 50px 52px; padding: 4px 0; }
+  .plh { grid-template-columns: 50px 52px; }
   .switch { display: grid; grid-template-columns: 1fr 1fr; border-radius: 22px; width: 100%; }
   .switch button { text-align: center; white-space: normal; line-height: 1.2; padding: 8px 6px; font-size: 14px; }
 }
@@ -617,6 +799,7 @@ svg * { pointer-events: none; }
       </div>
       <p class="hint" id="hint"></p>
     </div>
+    <div class="plist" id="plist" role="group" aria-label="The edits in this view"></div>
   </div>
   <div class="side">
     <p class="problem" id="problem"></p>
@@ -640,20 +823,26 @@ const M = C.cells.map(([key, label, name, what, kind, parent], k) => ({ key, lab
 const IDX = Object.fromEntries(M.map(m => [m.key, m.k]));
 const SETS = ["math", "code"], GROUPS = ["layers", "rank", "all", "pairs"], MATH_ONLY = ["rank", "pairs"];
 const NS = { math: D.n, code: D.n_code };
-const cell = (set, key) => D[set][key];
-const NDOT = M.map(m => Math.max(...SETS.map(s => cell(s, m.key) ? cell(s, m.key).right.length : 0)));
-const ORDER = ["rand", "base", "part", "whole"];  // drawn back to front
 const groupOf = (set, group) => set === "code" && MATH_ONLY.includes(group) ? "layers" : group;
-const shown = (set, group, key) => !!cell(set, key) && C.groups[groupOf(set, group)].includes(key);
+// in the pairing state the cells with a second sample are drawn with both (D.over); elsewhere as in their first run
+const cell = (set, key, group = S.group) => (set === "math" && groupOf(set, group) === "pairs" && D.over[key]) || D[set][key];
+const NDOT = M.map(m => Math.max(...SETS.map(s => cell(s, m.key, "layers") ? cell(s, m.key, "layers").right.length : 0), D.over[m.key] ? D.over[m.key].right.length : 0));
+const ORDER = ["rand", "base", "part", "whole"];  // drawn back to front
+const shown = (set, group, key) => !!cell(set, key, group) && C.groups[groupOf(set, group)].includes(key);
 const stateOf = () => S.set === "code" ? "code" : S.group;
 
-/* The two axes, per set: x the answers cut off (fewer to the right), y the right answers. */
+/* The two axes, per set: x the answers cut off (fewer to the right), y the right answers. The pairing state has its own:
+   closer in, and with a break in y so that the enlarged edit far below (lo) is shown at the same scale as the rest. */
 const AX = {
   math: { xd: [104, 0], xt: [100, 75, 50, 25, 0], yd: [147, 212], yt: [150, 160, 170, 180, 190, 200, 210],
     xl: "Cut off at 16,384 tokens, of 328", yl: "Right answers, of 328" },
   code: { xd: [40, 0], xt: [40, 30, 20, 10, 0], yd: [305, 410], yt: [320, 340, 360, 380, 400],
     xl: "Cut off at 16,384 tokens, of 538", yl: "Passed, of 538" },
+  pairs: { xd: [82, 18], xt: [80, 70, 60, 50, 40, 30, 20], yd: [148, 209], yt: [150, 160, 170, 180, 190, 200], lo: [96, 105],
+    lot: [100], gap: 26, xl: "Cut off at 16,384 tokens, of 328", yl: "Right answers, of 328" },
 };
+const AXK = ["math", "code", "pairs"];
+const axKey = (set, group) => set === "math" && groupOf(set, group) === "pairs" ? "pairs" : set;
 /* Where a mark's label sits, per set (and per grouping where it must move): [dx, dy, anchor] in units of the small type. */
 const LAB = {
   math: { base: [.9, 1.75, "start"], rand: [-1, .9, "end"], randL0: [-1, -.45, "end"], L0: [.6, -1.25, "middle"],
@@ -662,9 +851,16 @@ const LAB = {
     rin: [-.6, 1.5, "end"], rout: [-.9, -.7, "end"], perm: [.95, .35, "start"] },
   code: { base: [.95, .35, "start"], rand: [0, -1.2, "middle"], L0: [-1, -.7, "end"], L11: [.95, .35, "start"],
     L22: [-.2, -1.25, "end"], all: [-1, -.95, "end"] },
-  "math/pairs": { rand: [-1, -.2, "end"] },  // in the pairing state the random edit's label moves up, out of the way of RL's inputs only
+  // the pairing state names a chosen few on the plane; the rest are named in the list beside it and on hover or focus
+  "math/pairs": { base: [-1.15, .3, "end"], all: [-1, -.95, "end"], top1x15: [-1, .35, "end"], permrest: [.2, 1.75, "middle"],
+    perm: [.95, .35, "start"], permx12: [-1, .35, "end"] },
 };
-const labAt = (set, group, key) => S.g && S.g.phone && key === "randL0" ? null : (LAB[set + "/" + group] || {})[key] || LAB[set][key] || null;  // on a phone the key names the controls
+const labAt = (set, group, key) => {  // on a phone the key names the controls
+  if (S.g && S.g.phone && key === "randL0") return null;
+  const o = LAB[set + "/" + group];
+  if (o && S.g && S.g.phone && key === "base" && group === "pairs") return [.55, 2.05, "start"];  // on a phone the y ticks are near
+  return o ? o[key] || null : LAB[set][key] || null;
+};
 
 /* Geometry: the plate and the chart in a small 3D space around the plate's centre (x right, y down, z toward the viewer).
    The chart on the left, the readout on the right (on a phone, the readout above the chart). */
@@ -679,8 +875,15 @@ function geo() {
         key: { y: 588, cols: 5 }, hit: 18 };
   g.cy = g.h / 2;
   g.a = ph ? [6, 8, g.w - 6, g.h - 8] : [24, 18, g.w - 24, g.h - 18];
-  g.X = (set, x) => { const d = AX[set].xd; return g.X0 + (clamp(x, Math.min(...d), Math.max(...d)) - d[0]) / (d[1] - d[0]) * (g.X1 - g.X0); };
-  g.Y = (set, y) => { const d = AX[set].yd; return g.Y1 - (clamp(y, d[0], d[1]) - d[0]) / (d[1] - d[0]) * (g.Y1 - g.Y0); };
+  g.X = (ax, x) => { const d = AX[ax].xd; return g.X0 + (clamp(x, Math.min(...d), Math.max(...d)) - d[0]) / (d[1] - d[0]) * (g.X1 - g.X0); };
+  g.Y = (ax, y) => {  // with a break (lo): both bands at one scale, the gap between them drawn as a gap
+    const A = AX[ax], d = A.yd;
+    if (!A.lo) return g.Y1 - (clamp(y, d[0], d[1]) - d[0]) / (d[1] - d[0]) * (g.Y1 - g.Y0);
+    const k = (g.Y1 - g.Y0 - A.gap) / (d[1] - d[0] + A.lo[1] - A.lo[0]);
+    return y >= (A.lo[1] + d[0]) / 2 ? g.Y0 + (d[1] - clamp(y, d[0], d[1])) * k
+      : g.Y0 + (d[1] - d[0]) * k + A.gap + (A.lo[1] - clamp(y, A.lo[0], A.lo[1])) * k;
+  };
+  g.brk = ax => AX[ax].lo ? [g.Y(ax, AX[ax].yd[0]), g.Y(ax, AX[ax].lo[1])] : null;  // the gap's top and bottom
   return g;
 }
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };
@@ -699,15 +902,15 @@ const line = pts => pts.length ? "M" + pts.map(q => f(q[0]) + " " + f(q[1])).joi
 const KEY = [["whole", "RL's whole edit"], ["part", "A part of it"], ["base", "Base + cue, random"], ["dot", "One sample"], ["bar", "95 % interval"]];
 const RADIUS = { whole: 8, part: 6.2, base: 6.2, rand: 5 };
 
-const S = { set: "math", group: "layers", pset: "math", t0: -1e9, dur: 820, stag: 120, open: null, g: null, el: {}, shown: {},
+const S = { set: "math", group: "layers", pset: "math", ax: "math", pax: "math", hl: null, t0: -1e9, dur: 820, stag: 120, open: null, g: null, el: {}, shown: {},
   from: [], to: [], rank: [], scr: [], ops: [], last: 0, t: 0, keyX: [], rise: false };
 
 function build() {
   const g = S.g = geo(), svg = $("svg"), [ax0, ay0, ax1, ay1] = g.a, aw = ax1 - ax0, ah = ay1 - ay0;
   const stop = (at, color, alpha) => `<stop offset="${at}" style="stop-color:${color}${alpha == null ? "" : ";stop-opacity:" + alpha}"/>`;
   svg.setAttribute("viewBox", `0 0 ${g.w} ${g.h}`);
-  const axes = SETS.map(s => { const A = AX[s]; return `<g id="ax-${s}" opacity="0"><path class="grid" id="gr-${s}"/>` +
-    A.yt.map((v, i) => `<text class="tick" id="ty-${s}-${i}" font-size="${g.fsm}" text-anchor="end">${v}</text>`).join("") +
+  const axes = AXK.map(s => { const A = AX[s]; return `<g id="ax-${s}" opacity="0"><path class="grid" id="gr-${s}"/>` +
+    A.yt.concat(A.lot || []).map((v, i) => `<text class="tick" id="ty-${s}-${i}" font-size="${g.fsm}" text-anchor="end">${v}</text>`).join("") +
     A.xt.map((v, i) => `<text class="tick" id="tx-${s}-${i}" font-size="${g.fsm}" text-anchor="middle">${v}</text>`).join("") +
     `<text class="title" id="yl-${s}" font-size="${g.fsm}"><tspan class="dir">↑</tspan> ${esc(A.yl)}</text>` +
     `<text class="title" id="xl-${s}" font-size="${g.fsm}" text-anchor="end">${esc(A.xl)} · <tspan class="dir">fewer →</tspan></text></g>`; }).join("");
@@ -731,7 +934,7 @@ function build() {
     `<ellipse class="spec" cx="${f(ax0 + aw * .3)}" cy="${f(ay0 + ah * .24)}" rx="${f(aw * .3)}" ry="${f(ah * .2)}" transform="rotate(-14 ${f(ax0 + aw * .3)} ${f(ay0 + ah * .24)})" fill="url(#spec)"/>` +
     `<g class="axes"><path class="frame" id="frame"/>${axes}</g>` +
     `<g class="data">${arrows}${bars}${dots}<path class="leg" id="legh"/><path class="leg" id="legv"/>` +
-    `<circle class="selh" id="selh" r="0"/>${marks}<circle class="sel" id="sel" r="0"/>${labels}` +
+    `<circle class="selh" id="selh" r="0"/>${marks}<circle class="sel" id="sel" r="0"/><circle class="hlr" id="hlr" r="0"/>${labels}` +
     `<text class="legt" id="lgh" font-size="${g.fsm}" text-anchor="middle"></text><text class="legt" id="lgv" font-size="${g.fsm}"></text></g>` +
     `<g class="read"><text class="big" id="big" font-size="${g.fb}"></text><text class="bigu" id="bigu" font-size="${f(g.fb * .3)}"></text>` +
     `<text class="lab em" id="u0" font-size="${g.fs}"></text><text class="lab em" id="u1" font-size="${g.fs}"></text>` +
@@ -740,6 +943,31 @@ function build() {
   S.el = {}; S.shown = {};
   svg.querySelectorAll("[id]").forEach(e => { S.el[e.id] = e; });
   measureKey();
+  placeList();
+}
+/* The list beside the plane (pairing state): one row per mark, under the statement it shows. A row names and lights its mark
+   on hover or focus, and opens it on click; a mark under the pointer lights its row. */
+const fmtN = x => x % 1 ? fx(x, 1) : String(x);
+function buildList() {
+  const row = ([key, name]) => { const m = M[IDX[key]], c = cell("math", key, "pairs");
+    return `<button class="plr" data-row="${key}" aria-label="${esc(name)}: ${fmtN(mean(c.right))} right, ${fmtN(mean(c.cut))} cut off">` +
+      `<i class="${m.kind}"></i><span>${esc(name)}</span><b>${fmtN(mean(c.right))}</b><span class="c">${fmtN(mean(c.cut))}</span></button>`; };
+  $("plist").innerHTML = C.plist.map(([h, rows], i) => (h ? `<p class="pls">${esc(h)}${i ? "" : `<span class="plh"><span>right</span><span>cut off</span></span>`}</p>`
+    : `<hr class="pld">`) + rows.map(row).join("")).join("");
+}
+function placeList() {  // on a desktop the list sits in the plate's readout column and scales with the picture
+  const L = $("plist"), g = S.g;
+  if (!g || g.phone) { L.style.transform = ""; return; }
+  const r = $("svg").getBoundingClientRect(), st = $("stage").getBoundingClientRect(), k = r.width / g.w;
+  L.style.left = f(r.left - st.left + (g.rx + 4) * k) + "px"; L.style.top = f(r.top - st.top + (g.uY[1] + 22) * k) + "px";
+  L.style.width = f(g.a[2] - 20 - g.rx - 4) + "px"; L.style.transform = `scale(${k.toFixed(4)})`;
+}
+const syncRows = () => document.querySelectorAll(".plr").forEach(b => b.classList.toggle("hl", b.dataset.row === S.hl || b.dataset.row === S.open));
+function setHl(key) {
+  if (S.hl === key) return;
+  S.hl = key;
+  syncRows();
+  if (still.matches) place(0, performance.now());
 }
 function keyGlyph(kind, i, g) {
   if (kind === "dot") return `<circle class="dot part" id="kg${i}" r="${f(2.3 * g.mr)}"/>`;
@@ -759,17 +987,17 @@ function measureKey() {  // the key's entries centred in rows: one row on a desk
 /* The target of every mark in a state: its place, whether it is shown, its sample dots and the ends of its interval bars
    (offsets from the mark in chart units). A hidden mark sits at its nearest shown ancestor (finally Base + cue). */
 function target(set, group) {
-  const g = S.g, n = NS[set];
-  const P = M.map(m => { const c = cell(set, m.key); return c ? [g.X(set, mean(c.cut)), g.Y(set, mean(c.right))] : null; });
+  const g = S.g, n = NS[set], ax = axKey(set, group);
+  const P = M.map(m => { const c = cell(set, m.key, group); return c ? [g.X(ax, mean(c.cut)), g.Y(ax, mean(c.right))] : null; });
   const vis = M.map(m => shown(set, group, m.key));
   const home = k => { for (let m = M[k]; m; m = m.parent ? M[IDX[m.parent]] : null) if (vis[m.k]) return P[m.k]; return P[IDX.base]; };
   return M.map((m, k) => {
-    const c = cell(set, m.key), p = vis[k] ? P[k] : home(k);
+    const c = cell(set, m.key, group), p = vis[k] ? P[k] : home(k);
     const iv = c && vis[k] ? (c.vs_base || c.vs_ref || {}) : {};
-    const off = (v, axis) => v ? (axis === "y" ? [g.Y(set, mean(c.right) + (v[1] - v[0]) * n / 100) - P[k][1], g.Y(set, mean(c.right) + (v[2] - v[0]) * n / 100) - P[k][1]]
-      : [g.X(set, mean(c.cut) + (v[1] - v[0]) * n / 100) - P[k][0], g.X(set, mean(c.cut) + (v[2] - v[0]) * n / 100) - P[k][0]]) : [0, 0];
+    const off = (v, axis) => v ? (axis === "y" ? [g.Y(ax, mean(c.right) + (v[1] - v[0]) * n / 100) - P[k][1], g.Y(ax, mean(c.right) + (v[2] - v[0]) * n / 100) - P[k][1]]
+      : [g.X(ax, mean(c.cut) + (v[1] - v[0]) * n / 100) - P[k][0], g.X(ax, mean(c.cut) + (v[2] - v[0]) * n / 100) - P[k][0]]) : [0, 0];
     return { p, o: vis[k] ? 1 : 0, bv: off(iv.right, "y"), bh: off(iv.cut, "x"), bo: [iv.right ? 1 : 0, iv.cut ? 1 : 0],
-      s: Array.from({ length: NDOT[k] }, (_, j) => c && vis[k] && j < c.right.length ? [g.X(set, c.cut[j]), g.Y(set, c.right[j]), 1] : [p[0], p[1], 0]) };
+      s: Array.from({ length: NDOT[k] }, (_, j) => c && vis[k] && j < c.right.length ? [g.X(ax, c.cut[j]), g.Y(ax, c.right[j]), 1] : [p[0], p[1], 0]) };
   });
 }
 
@@ -793,18 +1021,24 @@ function place(t, now) {
   const op = (el, v) => { const s = v.toFixed(3); if (el._o !== s) { el.style.opacity = s; el._o = s; } };
   E.back.setAttribute("d", rounded(g, g.a, g.r, -g.deep));
   E.plate.setAttribute("d", rounded(g, g.a, g.r, 0));
-  E.frame.setAttribute("d", line([P(g.X0, g.Y0 - 8), P(g.X0, g.Y1), P(g.X1 + 8, g.Y1)]));
   const e = ease(clamp((now - S.t0) / 700, 0, 1));
-  const aop = s => s === S.set ? (S.pset === s ? 1 : clamp(2 * e - 1, 0, 1)) : s === S.pset ? clamp(1 - 2 * e, 0, 1) : 0;  // the old axes go, then the new come
+  const aop = s => s === S.ax ? (S.pax === s ? 1 : clamp(2 * e - 1, 0, 1)) : s === S.pax ? clamp(1 - 2 * e, 0, 1) : 0;  // the old axes go, then the new come
+  // The frame; in the pairing state the y axis opens a gap where the scale breaks, with two short slanted strokes at each end.
+  const bk = g.brk("pairs"), go = mix(S.pax === "pairs" ? 1 : 0, S.ax === "pairs" ? 1 : 0, e), gc = (bk[0] + bk[1]) / 2, gh = go * (bk[1] - bk[0]) / 2 * .62;
+  const slant = y => line([P(g.X0 - 6, y + 3), P(g.X0 + 6, y - 3)]);
+  E.frame.setAttribute("d", go < .02 ? line([P(g.X0, g.Y0 - 8), P(g.X0, g.Y1), P(g.X1 + 8, g.Y1)])
+    : line([P(g.X0, g.Y0 - 8), P(g.X0, gc - gh)]) + line([P(g.X0, gc + gh), P(g.X0, g.Y1), P(g.X1 + 8, g.Y1)]) + slant(gc - gh) + slant(gc + gh));
 
-  // The axes of each set cross-fade; only a visible one is placed.
-  SETS.forEach(s => {
-    const o = aop(s), A = AX[s], G = E["ax-" + s];
+  // The axes of each set (and of the pairing state) cross-fade; only a visible one is placed.
+  AXK.forEach(s => {
+    const o = aop(s), A = AX[s], G = E["ax-" + s], b = g.brk(s);
     if (S.shown["o" + s] !== o.toFixed(3)) { G.setAttribute("opacity", o.toFixed(3)); S.shown["o" + s] = o.toFixed(3); }
     if (o < .005) return;
-    E["gr-" + s].setAttribute("d", A.yt.map(y => line([P(g.X0, g.Y(s, y), 4), P(g.X1, g.Y(s, y), 4)])).join("") +
-      A.xt.map(x => line([P(g.X(s, x), g.Y0, 4), P(g.X(s, x), g.Y1, 4)])).join(""));
-    A.yt.forEach((y, i) => at(E[`ty-${s}-${i}`], P(g.X0 - 10, g.Y(s, y)), g.fsm * .35));
+    const ys = A.yt.concat(A.lot || []);
+    E["gr-" + s].setAttribute("d", ys.map(y => line([P(g.X0, g.Y(s, y), 4), P(g.X1, g.Y(s, y), 4)])).join("") +
+      A.xt.map(x => b ? line([P(g.X(s, x), g.Y0, 4), P(g.X(s, x), b[0], 4)]) + line([P(g.X(s, x), b[1], 4), P(g.X(s, x), g.Y1, 4)])
+        : line([P(g.X(s, x), g.Y0, 4), P(g.X(s, x), g.Y1, 4)])).join(""));
+    ys.forEach((y, i) => at(E[`ty-${s}-${i}`], P(g.X0 - 10, g.Y(s, y)), g.fsm * .35));
     A.xt.forEach((x, i) => at(E[`tx-${s}-${i}`], P(g.X(s, x), g.tickY)));
     at(E["yl-" + s], P(g.X0 - (g.phone ? 50 : 60), g.ylY));
     at(E["xl-" + s], P(g.X1 + 8, g.titleY));
@@ -812,46 +1046,58 @@ function place(t, now) {
 
   // The marks, their sample dots, interval bars and labels.
   const sel = S.open != null && IDX[S.open] != null && shown(S.set, S.group, S.open) ? IDX[S.open] : -1;
+  const hl = S.hl != null && IDX[S.hl] != null && shown(S.set, S.group, S.hl) && S.ops[IDX[S.hl]] > .5 ? IDX[S.hl] : -1;
+  const dimOf = k => sel >= 0 && sel !== k && hl !== k ? .25 : hl >= 0 && hl !== k ? .3 : 1;
+  // in the pairing state the marks crowd, so an interval is drawn only for the lit or opened mark
+  const bF = S.ax === "pairs" ? (S.pax === "pairs" ? 0 : 1 - e) : (S.pax === "pairs" ? e : 1);
   const Q = M.map((m, k) => markAt(k, now));
   M.forEach((m, k) => {
-    const q = Q[k], s = P(q.x, q.y, 8 + q.z), c = E["m" + k], dim = sel >= 0 && sel !== k ? .25 : 1;
+    const q = Q[k], s = P(q.x, q.y, 8 + q.z), c = E["m" + k], dim = dimOf(k);
     S.scr[k] = s; S.ops[k] = q.o;
     c.setAttribute("cx", f(s[0])); c.setAttribute("cy", f(s[1])); op(c, q.o * dim);
     if (E["mh" + k]) { E["mh" + k].setAttribute("cx", f(s[0])); E["mh" + k].setAttribute("cy", f(s[1])); op(E["mh" + k], q.o * dim); }
     q.s.forEach((d, j) => { const el = E[`d${k}-${j}`], ds = P(d[0], d[1], 7 + q.z * .6);
       el.setAttribute("cx", f(ds[0])); el.setAttribute("cy", f(ds[1])); op(el, d[2] * q.o * (m.kind === "base" || m.kind === "rand" ? .55 : .6) * dim); });
-    const bw = 4 * g.mr, bo = (sel === k ? 1 : m.kind === "base" || m.kind === "rand" ? 0 : .5) * q.o * dim;
+    const bw = 4 * g.mr, bo = (sel === k || hl === k ? 1 : m.kind === "base" || m.kind === "rand" ? 0 : .5 * bF) * q.o * dim;
     const v0 = P(q.x, q.y + q.bv[0], 7), v1 = P(q.x, q.y + q.bv[1], 7), h0 = P(q.x + q.bh[0], q.y, 7), h1 = P(q.x + q.bh[1], q.y, 7);
     E["bv" + k].setAttribute("d", `M${f(v0[0] - bw)} ${f(v0[1])}H${f(v0[0] + bw)}M${f(v0[0])} ${f(v0[1])}L${f(v1[0])} ${f(v1[1])}M${f(v1[0] - bw)} ${f(v1[1])}H${f(v1[0] + bw)}`);
     E["bh" + k].setAttribute("d", `M${f(h0[0])} ${f(h0[1] - bw)}V${f(h0[1] + bw)}M${f(h0[0])} ${f(h0[1])}L${f(h1[0])} ${f(h1[1])}M${f(h1[0])} ${f(h1[1] - bw)}V${f(h1[1] + bw)}`);
     op(E["bv" + k], bo * q.bo[0]); op(E["bh" + k], bo * q.bo[1]);
-    // a label shown in both states slides to its new side; one shown in one state only fades with its mark
-    const L = E["ml" + k], a = labAt(S.pset, S.pgroup, m.key), b = labAt(S.set, S.group, m.key) || a;
+    // a label shown in both states slides to its new side; one shown in one state only fades (with its mark, or alone where
+    // the new state names the mark in its list instead); the lit mark is named beside it
+    const L = E["ml" + k], a = labAt(S.pset, S.pgroup, m.key), nb = labAt(S.set, S.group, m.key), lit = hl === k || (sel === k && !nb);
+    const b = lit && !nb ? (s[0] > g.X1 - 170 ? [-1.1, .35, "end"] : [1.1, .35, "start"]) : nb || a;
+    const cls = "ml " + m.kind + (lit ? " hov" : "");
+    if (L._c !== cls) { L.setAttribute("class", cls); L._c = cls; }
     if (!b) { op(L, 0); return; }
-    const pos = a && b ? [mix(a[0], b[0], e), mix(a[1], b[1], e)] : b;
-    L.setAttribute("text-anchor", (e < .5 && a ? a : b)[2]);
+    const pos = a && nb && !lit ? [mix(a[0], b[0], e), mix(a[1], b[1], e)] : b;
+    L.setAttribute("text-anchor", (e < .5 && a && !lit ? a : b)[2]);
     at(L, [s[0] + pos[0] * g.fsm, s[1] + pos[1] * g.fsm]);
-    op(L, clamp((q.o - .35) / .65, 0, 1) * dim);
+    const lf = lit ? 1 : nb ? 1 : a ? 1 - e : 0;
+    op(L, clamp((q.o - .35) / .65, 0, 1) * dim * lf);
   });
 
   // The arrows: from the parent's mark to the cell's, ending at the rim of the cell's mark.
   M.forEach((m, k) => {
     if (!E["ar" + k]) return;
     const a = S.scr[IDX[m.parent]], b = S.scr[k], dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy);
-    const o = Math.min(S.ops[IDX[m.parent]], S.ops[k]) * (sel >= 0 && sel !== k ? .25 : 1);
+    // in the pairing state only the named marks keep their arrow; a mark named in the list shows it when lit or opened
+    const named = labAt(S.set, S.group, m.key) || hl === k || sel === k;
+    const af = S.ax !== "pairs" || named ? 1 : S.pax !== "pairs" ? 1 - e : 0;
+    const o = Math.min(S.ops[IDX[m.parent]], S.ops[k]) * dimOf(k) * af;
     const r0 = (RADIUS[M[IDX[m.parent]].kind] + 3) * g.mr, r1 = (RADIUS[m.kind] + 3.5) * g.mr;
     if (L < r0 + r1 + 6 || o < .01) { op(E["ar" + k], 0); op(E["ah" + k], 0); if (E["ag" + k]) op(E["ag" + k], 0); return; }
-    const ux = dx / L, uy = dy / L, p0 = [a[0] + ux * r0, a[1] + uy * r0], p1 = [b[0] - ux * r1, b[1] - uy * r1], hl = 8 * g.mr, hw = 3.6 * g.mr;
-    const d = `M${f(p0[0])} ${f(p0[1])}L${f(p1[0] - ux * hl * .6)} ${f(p1[1] - uy * hl * .6)}`;
+    const ux = dx / L, uy = dy / L, p0 = [a[0] + ux * r0, a[1] + uy * r0], p1 = [b[0] - ux * r1, b[1] - uy * r1], hd = 8 * g.mr, hw = 3.6 * g.mr;
+    const d = `M${f(p0[0])} ${f(p0[1])}L${f(p1[0] - ux * hd * .6)} ${f(p1[1] - uy * hd * .6)}`;
     E["ar" + k].setAttribute("d", d); op(E["ar" + k], o * .9);
     if (E["ag" + k]) { E["ag" + k].setAttribute("d", d); op(E["ag" + k], o); }
-    E["ah" + k].setAttribute("d", `M${f(p1[0])} ${f(p1[1])}L${f(p1[0] - ux * hl - uy * hw)} ${f(p1[1] - uy * hl + ux * hw)}L${f(p1[0] - ux * hl + uy * hw)} ${f(p1[1] - uy * hl - ux * hw)}Z`);
+    E["ah" + k].setAttribute("d", `M${f(p1[0])} ${f(p1[1])}L${f(p1[0] - ux * hd - uy * hw)} ${f(p1[1] - uy * hd + ux * hw)}L${f(p1[0] - ux * hd + uy * hw)} ${f(p1[1] - uy * hd - ux * hw)}Z`);
     op(E["ah" + k], o);
   });
 
   // The selected cell: a ring, and its move from Base + cue split into the two jobs (sideways: cut-offs, up: right answers).
   if (sel >= 0) {
-    const s = S.scr[sel], b = S.scr[IDX.base], m = M[sel], c = cell(S.set, m.key);
+    const s = S.scr[sel], b = S.scr[IDX.base], m = M[sel], c = cell(S.set, m.key);  // the legs measure from the drawn means
     E.sel.setAttribute("cx", f(s[0])); E.sel.setAttribute("cy", f(s[1])); E.sel.setAttribute("r", f((RADIUS[m.kind] + 6) * g.mr));
     E.selh.setAttribute("cx", f(s[0])); E.selh.setAttribute("cy", f(s[1]));
     E.selh.setAttribute("r", f(g.mr * (still.matches ? 18 : 18 + 2.5 * Math.sin(t * 1.6))));
@@ -872,6 +1118,9 @@ function place(t, now) {
     E.sel.setAttribute("r", "0"); E.selh.setAttribute("r", "0");
     [E.legh, E.legv, E.lgh, E.lgv].forEach(el => op(el, 0));
   }
+  if (hl >= 0 && hl !== sel) { const s = S.scr[hl];
+    E.hlr.setAttribute("cx", f(s[0])); E.hlr.setAttribute("cy", f(s[1])); E.hlr.setAttribute("r", f((RADIUS[M[hl].kind] + 5) * g.mr)); }
+  else E.hlr.setAttribute("r", "0");
 
   // The readout: the words of the state arrive with its number, which counts from 0 and stops within 0.9 s.
   const R = C.read[stateOf()], pc = ease(clamp((now - S.t0 - (S.rise ? 600 : 100)) / 900, 0, 1));
@@ -883,6 +1132,10 @@ function place(t, now) {
   ["u0", "u1", "l0", "l1", "l2", "l3", "l4", "bigu"].forEach(id => op(E[id], wo));
   at(E.u0, P(g.rx + 4, g.uY[0], 10)); at(E.u1, P(g.rx + 4, g.uY[1], 10));
   [0, 1, 2, 3, 4].forEach(i => { text("l" + i, R.lines[i] || ""); at(E["l" + i], P(g.rx + 4, g.lY[i], 10)); });
+  // the list beside the plane belongs to the pairing state and arrives with its number
+  const pl = $("plist"), plOn = stateOf() === "pairs";
+  if (pl._on !== plOn) { pl.classList.toggle("on", plOn); pl._on = plOn; }
+  if (plOn) op(pl, wo);
 
   // The key.
   KEY.forEach(([kind], i) => { const [x, y] = S.keyX[i], c = P(x, y, 6), tt = P(x + 14 * g.mr, y, 6), el = E["kg" + i];
@@ -915,10 +1168,13 @@ function setState(set, group, opts = {}) {
     : S.to;
   // the order of travel: Base + cue and the random controls first, then the parts in the order of their grouping
   const list = C.groups[groupOf(set, group)];
-  M.forEach((m, k) => { const i = list.indexOf(m.key); S.rank[k] = i < 0 || m.kind === "base" || m.kind === "rand" ? 0 : i - 1; });
+  const parts = list.filter(key => M[IDX[key]].kind === "part" || M[IDX[key]].kind === "whole"), many = parts.length > 6;
+  M.forEach((m, k) => { const i = list.indexOf(m.key);
+    S.rank[k] = i < 0 || m.kind === "base" || m.kind === "rand" ? 0 : many ? parts.indexOf(m.key) + 1 : i - 1; });
   S.rise = !!opts.rise && !quick;
-  S.dur = S.rise ? 980 : 820; S.stag = S.rise ? 190 : 120;
+  S.dur = S.rise ? 980 : 820; S.stag = S.rise ? 190 : many ? 85 : 120;  // nine parts in the pairing state: closer together
   S.pset = quick ? set : S.set; S.pgroup = quick ? group : S.group; S.set = set; S.group = group;
+  S.pax = quick ? axKey(set, group) : S.ax; S.ax = axKey(set, group);
   S.t0 = quick ? -1e9 : now + (S.rise ? 450 : 0);
   document.querySelectorAll("[data-group]").forEach(b => {
     b.setAttribute("aria-pressed", b.dataset.group === group);
@@ -933,7 +1189,7 @@ function setState(set, group, opts = {}) {
   }
   const R = C.read[st];
   $("svg").setAttribute("aria-label", `${AX[set].yl} against answers cut off, one mark per edit. ${fmtBig(R, R.big)}${R.unit} ${R.u.join(" ")} ` +
-    `${R.lines.join(". ")}. Arrow keys change the grouping; Enter opens the first part.`);
+    `${R.lines.join(". ")}${st === "pairs" ? C.plist.map(p => p[0]).filter(Boolean).join(" ") : "."} Arrow keys change the grouping; Enter opens the first part.`);
   if (still.matches) { aim(0, 0); place(0, now); }
 }
 
@@ -954,12 +1210,12 @@ function exHtml(e) {
 function cellPane(j) {
   const m = M[j], set = S.set, c = cell(set, m.key), n = NS[set], code = set === "code", b = cell(set, "base");
   const R = mean(c.right), X = mean(c.cut), lit = m.kind === "part" || m.kind === "whole" ? "lit" : "";
-  const keep = !code && C.keep[m.key];
+  const keep = !code && C.keep[m.key], pr = !code && S.group === "pairs", av = pr ? " pooled" : " mean";
   const rows = [
     ...(keep ? [["Kept from RL", esc(keep[0])], ["Replaced", esc(keep[1])]] : []),
     ["Samples", `${c.right.length} answer${c.right.length > 1 ? "s" : ""} per problem`],
-    [code ? `Passed, of ${n}` : `Right, of ${n}`, `<b class="${lit}">${R % 1 ? R.toFixed(R * 4 % 1 ? 2 : 1) : R}</b>${c.right.length > 1 ? " mean" : ""}${each(c.right)}`],
-    ["Cut off", `<b>${X % 1 ? fx(X, 1) : X}</b>${c.cut.length > 1 ? " mean" : ""}${each(c.cut)}`],
+    [code ? `Passed, of ${n}` : `Right, of ${n}`, `<b class="${lit}">${R % 1 ? R.toFixed(R * 4 % 1 ? 2 : 1) : R}</b>${c.right.length > 1 ? av : ""}${each(c.right)}`],
+    ["Cut off", `<b>${X % 1 ? fx(X, 1) : X}</b>${c.cut.length > 1 ? av : ""}${each(c.cut)}`],
   ];
   if (code) rows.push(["No code block", `${c.no_block}`]);
   else rows.push(["Right per finished", (R / (n - X)).toFixed(2)]);
@@ -971,7 +1227,14 @@ function cellPane(j) {
     vs("Against 8 random directions at size 1", c.vs_random1);
     vs("Against the whole edit", c.vs_all);
     vs(`Against RL's 8 directions, same seed (${D.all_t1.right} right, ${D.all_t1.cut} cut off)`, c.vs_all8);
-    if (c.shift) rows.push(["Shift at layer 24", `<b>${c.shift.toFixed(2)}</b> RMS, against ${D.all_t1.shift.toFixed(2)} for the intact pairs: ${Math.round(D.all_t1.shift / c.shift)} times less`]);
+    (c.vs || []).forEach(([lab, , v]) => vs(esc(lab), v));
+    if (c.shift) rows.push(["Shift at layer 24", `<b>${c.shift.toFixed(2)}</b> RMS, against ${D.all_t1.shift.toFixed(2)} for the intact pairs: ` +
+      (c.shift > .9 * D.all_t1.shift ? "as far" : `${Math.round(D.all_t1.shift / c.shift)} times less`)]);
+    if (c.norm) rows.push(["Weight norm", `<b>${c.norm.toFixed(2)}</b>` + (Math.abs(c.norm - D.norm_all) < .001 ? ", as the whole edit"
+      : `, against ${D.norm_all.toFixed(2)} for the whole edit: ${c.norm > D.norm_all ? `${fx(c.norm / D.norm_all, 1)} times larger` : "smaller"}`)]);
+    if (c.deg) rows.push(["Degenerate answers", `${c.deg.join(" and ")} of ${n}${c.deg.length > 1 ? " in its two samples" : ""}` +
+      (Math.max(...c.deg) > 5 ? " (loops, or text mostly in other scripts)" : "")]);
+    if (c.note) rows.push(["Caveat", esc(c.note)]);
   }
   (c.pred || []).forEach(p => { const [txt, held] = D.pred[p];
     rows.push([`Prediction ${p}`, `${esc(txt)} <span class="${held ? "yes" : "no"}">${held ? "Held" : "Refuted"}.</span>`]); });
@@ -982,12 +1245,13 @@ function cellPane(j) {
     `<ul class="vals">${rows.map(([a, v]) => `<li><span>${a}</span><span>${v}</span></li>`).join("")}</ul>` +
     `<p class="sub">${code ? `Base + cue: ${b.right[0]} passed, ${b.cut[0]} cut off. 538 code problems (HumanEval+ and MBPP+), Code cue, T 1.0, cut off at 16,384 tokens.`
       : `Base + cue: ${mean(b.right)} right, ${mean(b.cut)} cut off, mean of ${b.right.length} samples. 328 harder problems, T 1.0, cut off at 16,384 tokens; points are of 328, paired over the problems.`}</p>` +
-    (c.shift ? `<p class="paper"><a href="/finding/rl-directions-move-activations#${esc(c.cell)}">The same edit in the activations ›</a></p>` : "") +
+    (["rin", "rout", "perm"].includes(m.key) ? `<p class="paper"><a href="/finding/rl-directions-move-activations#${esc(c.cell)}">The same edit in the activations ›</a></p>` : "") +
     (ex.length ? `<p class="sub"><b>Two answers from the run folder</b>, the end of each:</p>${ex.map(exHtml).join("")}` : "") +
     `<div class="steps"><button data-step="-1">‹ Previous</button><button data-step="1">Next ›</button></div></div>`;
 }
 function pane() {
   const p = C.panels.find(p => p[0] === S.open), j = S.open != null && IDX[S.open] != null ? IDX[S.open] : -1;
+  syncRows();
   $("pane").innerHTML = j >= 0 ? cellPane(j) : p
     ? `<div class="dhead"><h2>${esc(p[1])}</h2><button class="close" data-open="">Close</button></div><p class="lead">${esc(p[2])}</p>` +
       `<ul class="facts">${p[3].map(x => `<li>${esc(x)}</li>`).join("")}</ul>` + p.slice(4).map(l => `<p class="paper"><a href="${esc(l[0])}">${esc(l[1])}</a></p>`).join("")
@@ -1035,7 +1299,16 @@ function nearest([x, y]) {
   S.scr.forEach((q, k) => { if (S.ops[k] < .5) return; const d = (q[0] - x) ** 2 + (q[1] - y) ** 2; if (d < bd) { bd = d; best = k; } });
   return best;
 }
-svg.addEventListener("pointermove", e => { if (e.pointerType === "mouse") svg.style.cursor = nearest(svgPoint(e)) >= 0 ? "pointer" : "default"; });
+svg.addEventListener("pointermove", e => { if (e.pointerType !== "mouse") return;
+  const k = nearest(svgPoint(e)); svg.style.cursor = k >= 0 ? "pointer" : "default"; setHl(k >= 0 ? M[k].key : null); });
+svg.addEventListener("pointerleave", () => setHl(null));
+const plist = $("plist");
+plist.addEventListener("click", e => { const r = e.target.closest("[data-row]"); if (r) { open(r.dataset.row); show(); } });
+plist.addEventListener("pointerover", e => { const r = e.target.closest("[data-row]"); if (r && e.pointerType === "mouse") setHl(r.dataset.row); });
+plist.addEventListener("pointerleave", () => { if (!plist.contains(document.activeElement)) setHl(null); });
+plist.addEventListener("focusin", e => { const r = e.target.closest("[data-row]"); if (r) setHl(r.dataset.row); });
+plist.addEventListener("focusout", e => { if (!plist.contains(e.relatedTarget)) setHl(null); });
+addEventListener("resize", placeList);
 svg.addEventListener("click", e => { const k = nearest(svgPoint(e)); if (k >= 0) { open(M[k].key); show(); } });
 document.addEventListener("click", e => {
   const gb = e.target.closest("[data-group]"), sb = e.target.closest("[data-set]"), o = e.target.closest("[data-open]"), s = e.target.closest("[data-step]");
@@ -1061,7 +1334,7 @@ addEventListener("hashchange", fromHash);
 addEventListener("popstate", fromHash);
 narrow.addEventListener("change", () => { build(); setState(S.set, S.group, { instant: true }); place(S.t, performance.now()); });
 still.addEventListener("change", () => { if (still.matches) { setState(S.set, S.group, { instant: true }); aim(0, 0); place(0, performance.now()); } });
-document.fonts.ready.then(() => { measureKey(); S.shown = { hint: S.shown.hint }; place(S.t, performance.now()); });
+document.fonts.ready.then(() => { measureKey(); placeList(); S.shown = { hint: S.shown.hint }; place(S.t, performance.now()); });
 const stage = $("stage");
 stage.addEventListener("pointermove", e => {
   if (e.pointerType !== "mouse" || still.matches) return;
@@ -1072,6 +1345,7 @@ stage.addEventListener("pointerleave", () => { V.tx = V.ty = 0; });
 
 $("problem").textContent = C.problem;
 $("say").innerHTML = esc(C.line).replace(/(?<![\w-])(\d+(?:[.,]\d+)*(?: ?%)?)/g, "<b>$1</b>");
+buildList();
 build();
 aim(0, 0);
 fromHash(true);
@@ -1102,12 +1376,13 @@ ICON = r"""(kit, t, tilt) => {
   return out;
 }"""
 
-_CONFIG_DATA = {k: DATA[k] for k in ("n", "n_code", "math", "code", "base_t1", "all_t1", "pred")}
-_EX_ALL = {"math": {**EXAMPLES["math"], **EXAMPLES_PAIRS["math"]}, "code": EXAMPLES["code"],
-           "problems": {**EXAMPLES["problems"], **EXAMPLES_PAIRS["problems"]}}
+_CONFIG_DATA = {k: DATA[k] for k in ("n", "n_code", "math", "code", "base_t1", "all_t1", "pred", "over", "norm_all")}
+_EX_ALL = {"math": {**EXAMPLES["math"], **EXAMPLES_PAIRS["math"], **EXAMPLES_PAIRS2["math"]}, "code": EXAMPLES["code"],
+           "problems": {**EXAMPLES["problems"], **EXAMPLES_PAIRS["problems"], **EXAMPLES_PAIRS2["problems"]}}
 PAGE = PAGE.replace("__TITLE__", TITLE).replace("__CONFIG__", json.dumps({
     "problem": PROBLEM, "line": LINE, "panels": PANELS, "cells": CELLS, "groups": GROUPS, "read": READ, "hint": HINT,
-    "setcap": SETCAP, "codewhat": _CODE_WHAT, "keep": KEEP, "ex": _EX_ALL, "data": _CONFIG_DATA}, ensure_ascii=False).replace("</", "<\\/"))
+    "setcap": SETCAP, "codewhat": _CODE_WHAT, "keep": KEEP, "plist": PLIST, "ex": _EX_ALL, "data": _CONFIG_DATA},
+    ensure_ascii=False).replace("</", "<\\/"))
 
 
 def _check():
@@ -1186,7 +1461,8 @@ def _check_pairs(ed):
     t = ed["cells"][DATA["all_t1"]["cell"]]
     assert (t["right_v3"], t["cap_hits"]) == (DATA["all_t1"]["right"], DATA["all_t1"]["cut"])
     assert ed["cells"]["rand8x1.5_math31"]["right_v3"] == _M["rand"]["right"][0] and ed["cells"]["rand8x1.5_math31"]["cap_hits"] == _M["rand"]["cut"][0]
-    assert f"{_near:.1f}" == "1.2" and READ["pairs"]["big"] == -13.1 and [round(x) for x in sorted(_less)] == [5, 12, 28]
+    assert f"{_near:.1f}" == "1.2" and READ["pairs"]["big"] == -13.2 and [round(x) for x in sorted(_less)] == [5, 12, 28]
+    _check_pairs2()
     if not _pairs_here():
         print(f"skipped: the pairing cells' files ({', '.join(_EX_PAIRS.values())}) are not here; their numbers and "
               f"EXAMPLES_PAIRS were copied from branch {DATA['pairs']['branch']}, commit {DATA['pairs']['commit'][:7]}")
@@ -1217,6 +1493,111 @@ def _check_pairs(ed):
     print("the pairing cells match", ", ".join(_EX_PAIRS.values()), DATA["pairs"]["rows"], DATA["pairs"]["shift_readout"])
 
 
+def _ex_p2_here():
+    return {k: f for k, f in _EX_P2.items() if os.path.exists(f + "examples.json")}
+
+
+def _check_pairs2():
+    """The follow-up cells. Their files are on three branches (DATA["pairs2"], DATA["self"], DATA["normband"]); every number
+    is compared with the files that are present here, and what is not here is named as skipped."""
+    n, skipped = DATA["n"], []
+    assert DATA["norm_all"] == _PS["norm"] == _M["swap12"]["norm"] == _M["rand2"]["norm"] == _M["selfp"]["norm"]
+    assert f"{_X12['norm'] / DATA['norm_all']:.0f}" == "8" and _X12["shift"] / DATA["all_t1"]["shift"] > .98
+    r2 = lambda v: [round(v["points"], 2), round(v["interval95"][0], 2), round(v["interval95"][1], 2)]
+    pair = lambda c, ref: {"right": r2(c[ref]["right"]), "cut": r2(c[ref]["cap"])}
+    for lab, ref, v in _OV["rout"]["vs"]:  # rout keeps the first run's comparisons
+        assert v["right"] == _M["rout"][ref]["right"] and _OV["rout"]["right"] == _M["rout"]["right"], ref
+    for key, d in list(_M.items()) + list(_OV.items()):  # every drawn interval is the difference of the drawn means
+        for w in ("right", "cut"):
+            if w in d.get("vs_base", {}):
+                assert abs(100 * (_mean(d[w]) - _mean(_M["base"][w])) / n - d["vs_base"][w][0]) < .01, (key, w)
+    P2 = DATA["pairs2"]
+    if os.path.exists(P2["readout"]):
+        top = json.load(open(P2["readout"]))
+        ro, deg = top["cells"], top["degenerate_answers_new_samples"]
+        assert (ro["base_cue"]["right"], ro["base_cue"]["cap_hits"]) == (_M["base"]["right"], _M["base"]["cut"])
+        assert (ro["top8x1.5_s4"]["right"], ro["top8x1.5_s4"]["cap_hits"]) == (_M["all"]["right"], _M["all"]["cut"])
+        assert (ro["top8x1.5_math31"]["right"], ro["top8x1.5_math31"]["cap_hits"]) == ([DATA["all_t1"]["right"]], [DATA["all_t1"]["cut"]])
+        assert (ro["top1x1.5_math31"]["right"], ro["top1x1.5_math31"]["cap_hits"]) == (_T15["right"], _T15["cut"])
+        new = [(k, _M[k]) for k in ("permrest", "swap12", "d38", "permx12", "rand2")]
+        for key, d in new + [(k, _OV[k]) for k in ("rand", "rin", "perm")]:
+            c = ro[d["cell"]]
+            assert (c["right"], c["cap_hits"]) == (d["right"], d["cut"]) and c["samples"] == list(range(len(d["right"]))), key
+            if "vs_base" in d:
+                assert pair(c, "minus_base_cue") == d["vs_base"], key
+            for lab, ref, v in d["vs"]:
+                assert pair(c, ref) == v, (key, ref)
+            for s in range(len(d["right"])):  # the run folders of the samples new on this branch
+                f = R + "xreward/pairs2/" + d["cell"] + f"_s{s}-01/"
+                if os.path.exists(f):
+                    m = json.load(open(f + "metrics.json"))["counts"]
+                    assert (m["n"], m["correct_v3"], m["cap_hits"]) == (n, d["right"][s], d["cut"][s]), (key, s)
+                    if "norm" in d:
+                        assert round(json.load(open(f + "run.json"))["edit"]["add_norm"], 4) == d["norm"], key
+                    if "deg" in d:
+                        assert deg[f"{d['cell']} sample {s}"] == d["deg"][s], key
+                else:
+                    assert d is _OV[key] and s == 0, (key, s)  # sample 0 of rand, rin, perm is the first run's (sharedsub)
+        sh = json.load(open(P2["shift_readout"]))["edits"]
+        assert round(sh["permx12_math31"]["rms"]["24"], 4) == _X12["shift"] and round(sh["top8x1.5_math31"]["rms"]["24"], 4) == DATA["all_t1"]["shift"]
+        readme, spec = open("studies/rlneurons/README.md").read(), open(P2["spec"]).read()
+        for row in ("| `permrest` | s0, s1 | 185, 175 | 43, 33 |", "| `swap12` | s0, s1 | 177, 166 | 68, 66 |",
+                    "| shifted pairs at 12 (`perm`) | s0 | 101 | 23 | 7,077 | 24", "| directions 3-8 alone | s0 | 170 | 74 |",
+                    "| random, second draw | s0 | 152 | 74 |", "1.5, 3, 6, 9, 12: 1.76, 3.06, 5.05, 7.13, 9.21; true pairs at 1.5: 9.34",
+                    "B2 refuted by one problem (`permrest` s1 175, outside 176-188", "C2 refuted (cap hits 66 held; right\n  166 < 169)"):
+            assert row in readme, row
+        assert "is within 6 problems of direction 1 alone on the same seed (176 to 188 right)" in spec and "(>= 169 right)" in spec
+        print("the follow-up cells match", P2["readout"], P2["shift_readout"], "and the run folders here")
+    else:
+        skipped.append(f"{P2['readout']} and its run folders (branch {P2['branch']}, commit {P2['commit'][:7]})")
+    SF = DATA["self"]
+    if os.path.exists(SF["rows"]):
+        readme = open("studies/rlneurons/README.md").read()
+        rows = {}
+        for f in (SF["rows"], DATA["pairs"]["rows"]):
+            for line in open(f):
+                r = json.loads(line)
+                rows.setdefault(r["arm"], {})[r["problem_index"]] = r["right_v3"]
+        iv = lambda v: f"{v[0]:+.1f} [{v[1]:.1f}, {v[2]:.1f}]".replace("+-", "-")
+        for key, name in (("selfp", "base's own top 8 at 1.5"), ("selfm", "base's own top 8 at -1.5")):
+            d, f = _M[key], ED + _M[key]["cell"] + "-01/"
+            m = json.load(open(f + "metrics.json"))["counts"]
+            assert (m["n"], [m["correct_v3"]], [m["cap_hits"]]) == (n, d["right"], d["cut"]), key
+            assert round(json.load(open(f + "edit.json"))["totals"]["add_norm"], 4) == d["norm"], key
+            assert f"| {name} | {d['right'][0]} | {d['cut'][0]} | {iv(d['vs'][0][2]['right'])} | {iv(d['vs'][1][2]['right'])} |" in readme, key
+            mine = rows[d["cell"]]
+            assert len(mine) == n and sum(mine.values()) == d["right"][0]
+            for lab, arm, v in d["vs"]:  # the point differences again from the per-problem rows
+                assert set(rows[arm]) == set(mine) and round(100 * sum(mine[i] - rows[arm][i] for i in mine) / n, 1) == v["right"][0], (key, arm)
+        assert "V1 held: both cells are in the predicted ranges (150 to 172 right, 60 to 90 cap hits)" in readme
+        print("the base's own directions match", SF["rows"], "and their run folders")
+    else:
+        skipped.append(f"{SF['rows']} and the run folders selfx1.5, selfxm1.5 (branch {SF['branch']}, commit {SF['commit'][:7]})")
+    NB = DATA["normband"]
+    f0 = NB["folders"].replace("<sample>", "0")
+    if os.path.exists(f0 + "metrics.json"):
+        for s in (0, 1):
+            m = json.load(open(NB["folders"].replace("<sample>", str(s)) + "metrics.json"))["counts"]
+            assert (m["n"], m["correct_v3"], m["cap_hits"]) == (n, _T15["right"][s], _T15["cut"][s]), s
+        assert round(json.load(open(f0 + "run.json"))["edit"]["add_norm"], 4) == _T15["norm"]
+        print("direction 1 alone matches", NB["folders"])
+    else:
+        skipped.append(f"{NB['folders']} (branch {NB['branch']}, commit {NB['commit'][:7]})")
+    here = _ex_p2_here()
+    if here:
+        ex = _examples(here, {})
+        for k in here:
+            assert ex["math"][k] == EXAMPLES_PAIRS2["math"][k], f"EXAMPLES_PAIRS2[{k}] differs from {here[k]}: run with --write"
+        for p in {r[0] for k in here for r in ex["math"][k]}:
+            assert ex["problems"][p] == EXAMPLES_PAIRS2["problems"][p], p
+    missing = sorted(set(_EX_P2) - set(here))
+    if missing:
+        assert all(k in EXAMPLES_PAIRS2["math"] for k in _EX_P2), "EXAMPLES_PAIRS2 is incomplete: run --write where the folders are"
+        skipped.append("the examples of " + ", ".join(missing))
+    for s in skipped:
+        print("skipped (copied from that branch):", s)
+
+
 def _write():
     src = open(__file__).read()
     lit = "EXAMPLES = " + repr(_examples()) + "\n"
@@ -1224,6 +1605,13 @@ def _write():
     if _pairs_here():
         lit = "EXAMPLES_PAIRS = " + repr(_examples(_EX_PAIRS, {})) + "\n"
         src = re.sub(r"(# EXAMPLES-PAIRS-BEGIN\n).*?(# EXAMPLES-PAIRS-END)", lambda m: m.group(1) + lit + m.group(2), src, flags=re.S)
+    here = _ex_p2_here()
+    if here:  # the follow-up cells present here are refreshed; the others keep their copy
+        ex = _examples(here, {})
+        merged = {"math": {**EXAMPLES_PAIRS2["math"], **ex["math"]}, "code": {},
+                  "problems": {**EXAMPLES_PAIRS2["problems"], **ex["problems"]}}
+        lit = "EXAMPLES_PAIRS2 = " + repr(merged) + "\n"
+        src = re.sub(r"(# EXAMPLES-PAIRS2-BEGIN\n).*?(# EXAMPLES-PAIRS2-END)", lambda m: m.group(1) + lit + m.group(2), src, flags=re.S)
     open(__file__, "w").write(src)
 
 
