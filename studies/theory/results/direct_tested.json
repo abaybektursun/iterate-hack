@@ -600,5 +600,23 @@
   "adversary": 0.0168,
   "n": 69,
   "added": "2026-11-16T00:12:24Z"
+ },
+ {
+  "mechanism": "round-16/account-3/c1",
+  "claim": "By step 100 the hold-on shift is partly in the weights, so a step-100 plain sample that does not open deliberatively is right more often than the plain base T3 answer on the same problem, by less than the full cue gain (D in [0.10, 0.38]).",
+  "result": "result-739c31",
+  "verdict": "undecided",
+  "measured": "0.359 [0.272, 0.444], n 131, adversary value 0.473",
+  "interval": [
+   0.272264631043257,
+   0.4440203562340967
+  ],
+  "range": [
+   0.1,
+   0.38
+  ],
+  "adversary": 0.4732824427480916,
+  "n": 131,
+  "added": "2026-11-16T00:12:34Z"
  }
 ]
