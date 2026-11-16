@@ -1,0 +1,310 @@
+{
+ "run": "host_think-01",
+ "arms": {
+  "think_rl00": {
+   "jobs": [
+    "abaybektursun-1115-140453-8369"
+   ],
+   "alpha": 0.0,
+   "random": false,
+   "effective_a": 0.0,
+   "written_norm_over_intended": null,
+   "samples": {
+    "abaybektursun-1115-140453-8369": {
+     "n": 328,
+     "right": 213,
+     "cap_hits": 113,
+     "loop_A": 7,
+     "finished": 215,
+     "right_of_finished": 204,
+     "tokens_per_problem": 10984.423780487805
+    }
+   },
+   "n": 328,
+   "right": 213,
+   "cap_hits": 113,
+   "loop_A": 7,
+   "finished": 215,
+   "right_of_finished": 204,
+   "tokens_per_problem": 10984.423780487805,
+   "minus": {
+    "host score_v3": {
+     "n_problems": 328,
+     "arm": 213.0,
+     "reference": 213.0,
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "host cap_hit": {
+     "n_problems": 328,
+     "arm": 113.0,
+     "reference": 113.0,
+     "diff_points": 0.0,
+     "ci95": [
+      0.0,
+      0.0
+     ]
+    },
+    "think score_v3": {
+     "n_problems": 328,
+     "arm": 213.0,
+     "reference": 209.0,
+     "diff_points": 1.2195121951219512,
+     "ci95": [
+      -2.2103658536585358,
+      4.573170731707322
+     ]
+    },
+    "think cap_hit": {
+     "n_problems": 328,
+     "arm": 113.0,
+     "reference": 94.5,
+     "diff_points": 5.640243902439025,
+     "ci95": [
+      2.0579268292682915,
+      9.222560975609756
+     ]
+    },
+    "rl score_v3": {
+     "n_problems": 328,
+     "arm": 213.0,
+     "reference": 200.0,
+     "diff_points": 3.9634146341463414,
+     "ci95": [
+      0.5335365853658569,
+      7.3932926829268215
+     ]
+    },
+    "rl cap_hit": {
+     "n_problems": 328,
+     "arm": 113.0,
+     "reference": 28.5,
+     "diff_points": 25.76219512195122,
+     "ci95": [
+      20.884146341463413,
+      30.564024390243905
+     ]
+    }
+   }
+  },
+  "think_rl20": {
+   "jobs": [
+    "abaybektursun-1115-135625-8909"
+   ],
+   "alpha": 2.0,
+   "random": false,
+   "effective_a": 2.0000003572175045,
+   "written_norm_over_intended": 1.0018054209858327,
+   "samples": {
+    "abaybektursun-1115-135625-8909": {
+     "n": 328,
+     "right": 224,
+     "cap_hits": 88,
+     "loop_A": 4,
+     "finished": 240,
+     "right_of_finished": 216,
+     "tokens_per_problem": 10907.707317073171
+    }
+   },
+   "n": 328,
+   "right": 224,
+   "cap_hits": 88,
+   "loop_A": 4,
+   "finished": 240,
+   "right_of_finished": 216,
+   "tokens_per_problem": 10907.707317073171,
+   "minus": {
+    "host score_v3": {
+     "n_problems": 328,
+     "arm": 224.0,
+     "reference": 213.0,
+     "diff_points": 3.3536585365853657,
+     "ci95": [
+      -0.6097560975609762,
+      7.317073170731703
+     ]
+    },
+    "host cap_hit": {
+     "n_problems": 328,
+     "arm": 88.0,
+     "reference": 113.0,
+     "diff_points": -7.621951219512195,
+     "ci95": [
+      -11.890243902439027,
+      -3.353658536585369
+     ]
+    },
+    "think score_v3": {
+     "n_problems": 328,
+     "arm": 224.0,
+     "reference": 209.0,
+     "diff_points": 4.573170731707317,
+     "ci95": [
+      1.4481707317073211,
+      7.85060975609756
+     ]
+    },
+    "think cap_hit": {
+     "n_problems": 328,
+     "arm": 88.0,
+     "reference": 94.5,
+     "diff_points": -1.9817073170731707,
+     "ci95": [
+      -5.565929878048782,
+      1.6768292682926789
+     ]
+    },
+    "rl score_v3": {
+     "n_problems": 328,
+     "arm": 224.0,
+     "reference": 200.0,
+     "diff_points": 7.317073170731708,
+     "ci95": [
+      4.039634146341465,
+      10.594512195121952
+     ]
+    },
+    "rl cap_hit": {
+     "n_problems": 328,
+     "arm": 88.0,
+     "reference": 28.5,
+     "diff_points": 18.140243902439025,
+     "ci95": [
+      13.643292682926827,
+      22.791539634146314
+     ]
+    }
+   }
+  }
+ },
+ "references": {
+  "host": {
+   "rows": "runs/abaybektursun-1115-140453-8369",
+   "samples": {
+    "sample 0": {
+     "n": 328,
+     "right": 213,
+     "cap_hits": 113,
+     "loop_A": 7,
+     "finished": 215,
+     "right_of_finished": 204,
+     "tokens_per_problem": 10984.423780487805
+    }
+   },
+   "n": 328,
+   "right": 213,
+   "cap_hits": 113,
+   "loop_A": 7,
+   "finished": 215,
+   "right_of_finished": 204,
+   "tokens_per_problem": 10984.423780487805
+  },
+  "think": {
+   "rows": "studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl",
+   "samples": {
+    "sample 0": {
+     "n": 328,
+     "right": 212,
+     "cap_hits": 89,
+     "loop_A": 3,
+     "finished": 239,
+     "right_of_finished": 208,
+     "tokens_per_problem": 10137.34756097561
+    },
+    "sample 1": {
+     "n": 328,
+     "right": 212,
+     "cap_hits": 95,
+     "loop_A": 1,
+     "finished": 233,
+     "right_of_finished": 207,
+     "tokens_per_problem": 10163.40243902439
+    },
+    "sample 2": {
+     "n": 328,
+     "right": 211,
+     "cap_hits": 92,
+     "loop_A": 3,
+     "finished": 236,
+     "right_of_finished": 208,
+     "tokens_per_problem": 10062.118902439024
+    },
+    "sample 3": {
+     "n": 328,
+     "right": 201,
+     "cap_hits": 102,
+     "loop_A": 2,
+     "finished": 226,
+     "right_of_finished": 199,
+     "tokens_per_problem": 10047.484756097561
+    }
+   },
+   "n": 1312,
+   "right": 836,
+   "cap_hits": 378,
+   "loop_A": 9,
+   "finished": 934,
+   "right_of_finished": 822,
+   "tokens_per_problem": 10102.588414634147,
+   "vote": {
+    "samples": 4,
+    "right": 241
+   }
+  },
+  "rl": {
+   "rows": "studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl",
+   "samples": {
+    "sample 0": {
+     "n": 328,
+     "right": 207,
+     "cap_hits": 35,
+     "loop_A": 0,
+     "finished": 293,
+     "right_of_finished": 205,
+     "tokens_per_problem": 9436.564024390244
+    },
+    "sample 1": {
+     "n": 328,
+     "right": 190,
+     "cap_hits": 26,
+     "loop_A": 1,
+     "finished": 302,
+     "right_of_finished": 190,
+     "tokens_per_problem": 9252.606707317073
+    },
+    "sample 2": {
+     "n": 328,
+     "right": 209,
+     "cap_hits": 24,
+     "loop_A": 0,
+     "finished": 304,
+     "right_of_finished": 205,
+     "tokens_per_problem": 9243.048780487805
+    },
+    "sample 3": {
+     "n": 328,
+     "right": 194,
+     "cap_hits": 29,
+     "loop_A": 0,
+     "finished": 299,
+     "right_of_finished": 193,
+     "tokens_per_problem": 9367.204268292682
+    }
+   },
+   "n": 1312,
+   "right": 800,
+   "cap_hits": 114,
+   "loop_A": 1,
+   "finished": 1198,
+   "right_of_finished": 793,
+   "tokens_per_problem": 9324.855945121952,
+   "vote": {
+    "samples": 4,
+    "right": 221
+   }
+  }
+ }
+}

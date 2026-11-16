@@ -3165,6 +3165,33 @@ Amendment 3's own run: vast.ai RTX PRO 6000, job abaybektursun-1115-115611-7095,
   new sample of M(2) itself at the same tokens: finishing more often does not pay for the lower share of right answers.
   The chains were computed after the rows were seen (no prediction filed); M(3) and M(4) have one stored sample each.
 
+### Another host: the released final Think model + 2 (RL-Math - base) (`results/transplant/host_think-01/`, amendment 5, board work-989736)
+
+Host `allenai/Olmo-3-7B-Think` (revision d97e442; Think-SFT after DPO and RLVR, so a host already trained with reward; not run
+here before). H(a) = host + a (RL-Math - base) by `delta_sum --host allenai/Olmo-3-7B-Think@<revision>`; a = 0 writes the host
+through the same path (written norm 0, checked). hard328, cue, T 1.0, cap 16,384, v3, one sample each, seed 3,000,000, vast.ai
+RTX PRO 6000 (jobs abaybektursun-1115-140453-8369 for H(0), -135625-8909 for H(2), commit b4a9014, branch egate-fresh).
+||host - base|| = 467.4 and its cosine with the RL delta is -0.002, the values of Think-SFT to 4 digits.
+
+| Model, seed 3,000,000 | Right of 328 | Cap hits | Right of finished | Tokens per problem |
+|---|---|---|---|---|
+| Think-SFT (this seed; 4-sample mean 209.0, 94.5) | 212 | 89 | | |
+| Final Think, H(0) | 213 | 113 | 94.9 % (204 of 215) | 10,984 |
+| Final Think + 2 x RL delta, H(2) | 224 | 88 | 90.0 % (216 of 240) | 10,908 |
+| Think-SFT + 2 x RL delta, M(2) (this seed) | 234 | 51 | | 9,505 |
+
+- H(2) minus H(0): +3.4 points [-0.6, 7.3] (11 problems), cap hits -7.6 points [-11.9, -3.4] (25 fewer). By the filed
+  terms this is undecided for right answers: the point estimate passes +3, the interval includes 0, and cap hits fall by
+  22 %, under the filed third. The delta makes this host finish more often, as it did Think-SFT, and by less: on Think-SFT
+  the same coefficient gave +7.4 points and 40 fewer cap hits.
+- H-absorbed is refuted in its first clause: the final Think model does not finish more often than Think-SFT. It has 113 cap
+  hits against Think-SFT's 94.5 (+5.6 points [2.1, 9.2]) and 213 right against 209.0 (+1.2 [-2.2, 4.6]): DPO and RLVR did
+  not make it better on the 328 at this cap. H-clash is refuted (H(2) is not below H(0)).
+- Where the 11 come from: on the 113 problems the host cuts, H(2) has 31 right against the host's 9 (cut answers that already
+  held the answer); on the 215 the host finishes, H(2) has 193 against 204, and 13 of those 215 are now cut. The delta moves
+  answers across the cap in both directions on this host.
+- One sample against one sample. A second seed of both was filed only for the case H-adds and was not run.
+
 Run folders hold `readout.json`, `metrics.json` and `delta_sum.json` (per arm), `rows.jsonl` (arms and references, per answer)
 and `examples.json` (one right and one wrong finished answer per arm, with the prompt). Jobs: hard328 a = 1 -000934-51f9,
 a = 2 -000954-b526 and -020508-879c, a = 3 -020435-c76d, a = 4 -020500-36ed, control -020021-e9d1; MATH-500 -004808-bb28 (all

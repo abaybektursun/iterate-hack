@@ -1,0 +1,76 @@
+{
+ "think_rl00": [
+  {
+   "args": {
+    "host": "allenai/Olmo-3-7B-Think@d97e442d7cc678210054dbcc9b440894d62c89a4",
+    "donor": "rl_math",
+    "alpha": 0.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-140453-8369/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "allenai/Olmo-3-7B-Think@d97e442d7cc678210054dbcc9b440894d62c89a4": {
+     "repo": "allenai/Olmo-3-7B-Think",
+     "revision": "d97e442d7cc678210054dbcc9b440894d62c89a4"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.44886294230366,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017429223063469203,
+   "effective_a": 0.0,
+   "written_norm": 0.0,
+   "written_norm_over_intended": null,
+   "seconds": 212.91244959831238
+  }
+ ],
+ "think_rl20": [
+  {
+   "args": {
+    "host": "allenai/Olmo-3-7B-Think@d97e442d7cc678210054dbcc9b440894d62c89a4",
+    "donor": "rl_math",
+    "alpha": 2.0,
+    "random": false,
+    "seed": 0,
+    "dir": "/tmp/theta",
+    "stats": "/root/abaybektursun-1115-135625-8909/out/delta_sum.json"
+   },
+   "models": {
+    "base": {
+     "repo": "allenai/Olmo-3-1025-7B",
+     "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+    },
+    "allenai/Olmo-3-7B-Think@d97e442d7cc678210054dbcc9b440894d62c89a4": {
+     "repo": "allenai/Olmo-3-7B-Think",
+     "revision": "d97e442d7cc678210054dbcc9b440894d62c89a4"
+    },
+    "rl_math": {
+     "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+     "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+    }
+   },
+   "json_from": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "n_tensors": 355,
+   "n_copied_from_host": 1,
+   "host_delta_norm": 467.44886294230366,
+   "donor_delta_norm": 4.1172999217955635,
+   "cos_host_donor": -0.0017429223063469203,
+   "effective_a": 2.0000003572175045,
+   "written_norm": 8.249466762958681,
+   "written_norm_over_intended": 1.0018054209858327,
+   "seconds": 352.6258990764618
+  }
+ ]
+}
