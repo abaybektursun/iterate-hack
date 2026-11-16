@@ -1,0 +1,87 @@
+{
+ "rows": "studies/rlneurons/results/thinkvote/math500_sft1_cue_s4-01/rows.jsonl",
+ "n": 500,
+ "samples_per_problem": 4,
+ "bin_upper_edges_tokens": [
+  1531,
+  2613,
+  4087,
+  6682
+ ],
+ "shared_answer_rate_by_bin": [
+  0.987,
+  0.992,
+  0.987,
+  0.984,
+  0.908
+ ],
+ "right_rate_by_bin_for_the_reader_only": [
+  0.984,
+  0.992,
+  0.989,
+  0.982,
+  0.889
+ ],
+ "tokens_per_problem": 19502.8,
+ "rules": {
+  "vote": {
+   "right": 481,
+   "minus_vote": {
+    "problems": 0,
+    "points": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   },
+   "wrong_to_right": 0,
+   "right_to_wrong": 0
+  },
+  "tie_short": {
+   "right": 481,
+   "minus_vote": {
+    "problems": 0,
+    "points": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   },
+   "wrong_to_right": 0,
+   "right_to_wrong": 0
+  },
+  "weighted": {
+   "right": 482,
+   "minus_vote": {
+    "problems": 1,
+    "points": 0.2,
+    "ci95": [
+     0.0,
+     0.6
+    ]
+   },
+   "wrong_to_right": 1,
+   "right_to_wrong": 0
+  },
+  "shortest": {
+   "right": 476,
+   "minus_vote": {
+    "problems": -5,
+    "points": -1.0,
+    "ci95": [
+     -2.0,
+     0.0
+    ]
+   },
+   "wrong_to_right": 1,
+   "right_to_wrong": 6
+  }
+ },
+ "weighted_minus_tie_short": {
+  "problems": 1,
+  "ci95_points": [
+   0.0,
+   0.6
+  ]
+ }
+}

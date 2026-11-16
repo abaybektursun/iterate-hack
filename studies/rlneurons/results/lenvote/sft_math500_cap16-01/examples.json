@@ -1,0 +1,39 @@
+{
+ "weighted_right_vote_wrong": {
+  "problem_index": 472,
+  "gold": "137 \\frac{1}{2}",
+  "vote_pick": 0,
+  "weighted_pick": 1,
+  "samples": [
+   {
+    "sample": 0,
+    "n_new": 1072,
+    "cap_hit": false,
+    "extracted_v3": "137 1/2",
+    "score_v3": 0
+   },
+   {
+    "sample": 1,
+    "n_new": 1151,
+    "cap_hit": false,
+    "extracted_v3": "$137\\frac{1}{2}$",
+    "score_v3": 1
+   },
+   {
+    "sample": 2,
+    "n_new": 1003,
+    "cap_hit": false,
+    "extracted_v3": "137 1/2",
+    "score_v3": 0
+   },
+   {
+    "sample": 3,
+    "n_new": 1953,
+    "cap_hit": false,
+    "extracted_v3": "$137\\frac{1}{2}$",
+    "score_v3": 1
+   }
+  ]
+ },
+ "weighted_wrong_vote_right": null
+}

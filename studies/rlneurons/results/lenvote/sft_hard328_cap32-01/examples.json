@@ -1,0 +1,74 @@
+{
+ "weighted_right_vote_wrong": {
+  "problem_index": 76,
+  "gold": "468",
+  "vote_pick": 0,
+  "weighted_pick": 2,
+  "samples": [
+   {
+    "sample": 0,
+    "n_new": 25956,
+    "cap_hit": false,
+    "extracted_v3": "208",
+    "score_v3": 0
+   },
+   {
+    "sample": 1,
+    "n_new": 22416,
+    "cap_hit": false,
+    "extracted_v3": "364",
+    "score_v3": 0
+   },
+   {
+    "sample": 2,
+    "n_new": 9289,
+    "cap_hit": false,
+    "extracted_v3": "468",
+    "score_v3": 1
+   },
+   {
+    "sample": 3,
+    "n_new": 14054,
+    "cap_hit": false,
+    "extracted_v3": "312",
+    "score_v3": 0
+   }
+  ]
+ },
+ "weighted_wrong_vote_right": {
+  "problem_index": 77,
+  "gold": "601",
+  "vote_pick": 2,
+  "weighted_pick": 0,
+  "samples": [
+   {
+    "sample": 0,
+    "n_new": 14229,
+    "cap_hit": false,
+    "extracted_v3": "7",
+    "score_v3": 0
+   },
+   {
+    "sample": 1,
+    "n_new": 23480,
+    "cap_hit": false,
+    "extracted_v3": "1201",
+    "score_v3": 0
+   },
+   {
+    "sample": 2,
+    "n_new": 20022,
+    "cap_hit": false,
+    "extracted_v3": "601",
+    "score_v3": 1
+   },
+   {
+    "sample": 3,
+    "n_new": 17673,
+    "cap_hit": false,
+    "extracted_v3": "601",
+    "score_v3": 1
+   }
+  ]
+ }
+}

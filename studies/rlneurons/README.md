@@ -3526,6 +3526,37 @@ RL 2 of 20. No ordering of the models changes.
 | `paper-two-caps/figs.py`, `fig_caps.pdf` | The figure, drawn from `facts.json`. |
 | `paper-two-caps/paper.tex`, `refs.bib`, `fonts/` | Source; build with `tectonic paper.tex` in the folder. |
 
+## A length-aware vote at cap 32,768: 252 to 254 of 328 against 243 for the plain vote (offline; branch `lenvote`, not on main)
+
+Spec `specs/SPEC_lenvote.md` (it states what was seen before it was written). Stored rows only: the four Think-SFT cue
+samples per problem of `results/thinkvote/` (cap 16,384) and `results/cap32vote/` (cap 32,768). Rules see n_new, cap_hit and
+the extracted answer, never the score. `analysis/lenvote.py`, `results/lenvote/<set>-01/readout.json`.
+
+Weighted vote: each finished sample votes with weight log(a / (1 - a)), where a is the share of samples in its length bin (5
+bins of equal count over the set) whose answer another sample of the same problem shares; ties to the shortest. The form and
+the 5 bins were fixed on MATH-500, where the rule changes one problem.
+
+| set, cap | plain vote | ties to shortest | weighted | shortest sample alone | tokens per problem |
+|---|---|---|---|---|---|
+| MATH-500, 16,384 | 481 | 481 | 482 | 476 | 19,503 |
+| hard328, 16,384 | 238 | 236 | 236 | 233 | 40,410 |
+| hard328, 32,768 | 243 | 252, +2.7 [1.2, 4.6] | 254, +3.4 [0.9, 6.1] | 249, +1.8 [-0.6, 4.6] | 46,599 |
+| fresh2026 (n 136), 32,768 | 75 | 81, +4.4 [1.5, 8.1] | 81, +4.4 [0.0, 9.6] | 83, +5.9 [1.5, 10.3] | 63,601 |
+
+Differences are points against the plain vote with paired 95 % intervals.
+
+- At cap 32,768 a vote that prefers short answers gains 9 to 11 problems on the 328 and 6 on fresh2026. Ties to the shortest
+  never turns a right vote wrong on either set (9 to 0 and 6 to 0); the weighted vote turns 15 right and 4 wrong, 9 and 3.
+- H1 as written (weighted above the plain vote on fresh2026 with the interval above 0) is not met: the lower bound is 0.0.
+  The control decides the reading: the weighted vote does not beat ties-to-shortest (+2 problems [-1.2, 2.4] points on the 328,
+  0 on fresh2026). So the result is "prefer the short answer at a large cap"; the calibration adds no right answers.
+- H2 held: at cap 16,384 no length rule gains (236 against 238). The gain needs the long answers that the larger cap lets finish.
+- Why it works, without labels: the share of answers that another sample confirms falls with length, 0.99, 0.99, 0.94, 0.75,
+  0.40 by bin on the 328 at 32,768 (bin edges 4,042 / 7,263 / 12,793 / 19,433 tokens). The share right falls the same way:
+  0.99, 0.97, 0.88, 0.52, 0.20. On fresh2026: 0.98, 0.91, 0.68, 0.40, 0.31 confirmed; 0.97, 0.79, 0.50, 0.25, 0.08 right.
+- Caveats: ties-to-shortest at this cap was first seen by another session and given no score as post hoc (board result-dd26fe);
+  the motive for this rule came from the 328, so fresh2026 is the cleaner test; 4 samples, one draw order.
+
 ## How to run
 
 Laptop checks (no GPU, no weights):

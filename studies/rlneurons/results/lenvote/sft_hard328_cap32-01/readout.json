@@ -1,0 +1,87 @@
+{
+ "rows": "studies/rlneurons/results/cap32vote/hard328_sft1_cue_s4-01/rows.jsonl",
+ "n": 328,
+ "samples_per_problem": 4,
+ "bin_upper_edges_tokens": [
+  4042,
+  7263,
+  12793,
+  19433
+ ],
+ "shared_answer_rate_by_bin": [
+  0.992,
+  0.989,
+  0.939,
+  0.753,
+  0.399
+ ],
+ "right_rate_by_bin_for_the_reader_only": [
+  0.992,
+  0.973,
+  0.877,
+  0.521,
+  0.195
+ ],
+ "tokens_per_problem": 46599.4,
+ "rules": {
+  "vote": {
+   "right": 243,
+   "minus_vote": {
+    "problems": 0,
+    "points": 0.0,
+    "ci95": [
+     0.0,
+     0.0
+    ]
+   },
+   "wrong_to_right": 0,
+   "right_to_wrong": 0
+  },
+  "tie_short": {
+   "right": 252,
+   "minus_vote": {
+    "problems": 9,
+    "points": 2.74,
+    "ci95": [
+     1.22,
+     4.57
+    ]
+   },
+   "wrong_to_right": 9,
+   "right_to_wrong": 0
+  },
+  "weighted": {
+   "right": 254,
+   "minus_vote": {
+    "problems": 11,
+    "points": 3.35,
+    "ci95": [
+     0.91,
+     6.1
+    ]
+   },
+   "wrong_to_right": 15,
+   "right_to_wrong": 4
+  },
+  "shortest": {
+   "right": 249,
+   "minus_vote": {
+    "problems": 6,
+    "points": 1.83,
+    "ci95": [
+     -0.61,
+     4.57
+    ]
+   },
+   "wrong_to_right": 13,
+   "right_to_wrong": 7
+  }
+ },
+ "weighted_minus_tie_short": {
+  "problems": 2,
+  "ci95_points": [
+   -1.22,
+   2.44
+  ]
+ }
+}

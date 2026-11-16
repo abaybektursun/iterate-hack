@@ -1,0 +1,6 @@
+{
+ "commit": "7a8e6a20adc7de5017aace44470b30451d61f2b8",
+ "command": "/Users/abaybektursun/projects/iterate-hack-shots/studies/rlneurons/analysis/lenvote.py sft_math500_cap16=studies/rlneurons/results/thinkvote/math500_sft1_cue_s4-01/rows.jsonl sft_hard328_cap16=studies/rlneurons/results/thinkvote/hard328_sft1_cue_s4-01/rows.jsonl sft_hard328_cap32=studies/rlneurons/results/cap32vote/hard328_sft1_cue_s4-01/rows.jsonl sft_fresh2026_cap32=studies/rlneurons/results/cap32vote/fresh2026_sft1_cue_s4-01/rows.jsonl",
+ "rows": "studies/rlneurons/results/cap32vote/fresh2026_sft1_cue_s4-01/rows.jsonl",
+ "spec": "studies/rlneurons/specs/SPEC_lenvote.md"
+}
