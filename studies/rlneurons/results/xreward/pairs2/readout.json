@@ -1,0 +1,666 @@
+{
+ "spec": "studies/rlneurons/specs/SPEC_pairs2.md",
+ "set": "hard328, n 328",
+ "settings": "cue, T 1.0 / top-p 1.0, cap 16,384, grader v3, scale 1.5",
+ "seed_rule": "3000000 + 10000 * sample + problem index",
+ "mean_tokens_new_samples": {
+  "permx1.5_math31 sample 1": 8708.0,
+  "permrestx1.5_math31 sample 0": 8621.0,
+  "swap12x1.5_math31 sample 0": 9198.9,
+  "rand8x1.5_math31 sample 1": 9112.3,
+  "rinx1.5_math31 sample 1": 9415.0
+ },
+ "differences": "per problem, mean over the cell's samples minus mean over the reference's samples; points of 328; 95 % interval from 10000 resamples of the problems (numpy seed 0)",
+ "sources": {
+  "base_cue": "results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl",
+  "pairing arms sample 0": "results/xreward/pairing/rows.jsonl",
+  "top1x1.5_math31": "git show d53d5a0:studies/rlneurons/results/xreward/normband/top1x1.5_math31_s{0,1}-01/rows.jsonl",
+  "permx1.5_math31 sample 1": [
+   "runs/abaybektursun-1115-171824-7b50",
+   "runs/abaybektursun-1115-171839-84ab"
+  ],
+  "permrestx1.5_math31 sample 0": [
+   "runs/abaybektursun-1115-171853-982f",
+   "runs/abaybektursun-1115-171908-dd42"
+  ],
+  "swap12x1.5_math31 sample 0": [
+   "runs/abaybektursun-1115-171927-c131",
+   "runs/abaybektursun-1115-171940-442a"
+  ],
+  "rand8x1.5_math31 sample 1": [
+   "runs/abaybektursun-1115-171956-17a3",
+   "runs/abaybektursun-1115-172013-5ab5"
+  ],
+  "rinx1.5_math31 sample 1": [
+   "runs/abaybektursun-1115-172029-13c1",
+   "runs/abaybektursun-1115-172044-4cf6"
+  ]
+ },
+ "cells": {
+  "base_cue": {
+   "samples": [
+    0,
+    1,
+    2,
+    3
+   ],
+   "right": [
+    161,
+    161,
+    152,
+    160
+   ],
+   "right_mean": 158.5,
+   "cap_hits": [
+    71,
+    66,
+    81,
+    68
+   ],
+   "cap_hits_mean": 71.5
+  },
+  "top8x1.5_math31": {
+   "samples": [
+    0
+   ],
+   "right": [
+    203
+   ],
+   "right_mean": 203.0,
+   "cap_hits": [
+    25
+   ],
+   "cap_hits_mean": 25.0
+  },
+  "rand8x1.5_math31": {
+   "samples": [
+    0,
+    1
+   ],
+   "right": [
+    159,
+    155
+   ],
+   "right_mean": 157.0,
+   "cap_hits": [
+    74,
+    68
+   ],
+   "cap_hits_mean": 71.0,
+   "minus_base_cue": {
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": -0.46,
+     "interval95": [
+      -2.97,
+      2.13
+     ],
+     "problems": -1.5
+    },
+    "cap": {
+     "points": -0.15,
+     "interval95": [
+      -3.2,
+      2.9
+     ],
+     "problems": -0.5
+    }
+   },
+   "minus_top8x1.5_math31": {
+    "reference_samples": [
+     0
+    ],
+    "right": {
+     "points": -14.02,
+     "interval95": [
+      -18.14,
+      -10.06
+     ],
+     "problems": -46.0
+    },
+    "cap": {
+     "points": 14.02,
+     "interval95": [
+      10.06,
+      18.14
+     ],
+     "problems": 46.0
+    }
+   },
+   "minus_base_cue_same_seeds": {
+    "reference_samples": [
+     0,
+     1
+    ],
+    "right": {
+     "points": -1.22,
+     "interval95": [
+      -4.42,
+      1.83
+     ],
+     "problems": -4.0
+    },
+    "cap": {
+     "points": 0.76,
+     "interval95": [
+      -2.74,
+      4.27
+     ],
+     "problems": 2.5
+    }
+   }
+  },
+  "rinx1.5_math31": {
+   "samples": [
+    0,
+    1
+   ],
+   "right": [
+    158,
+    154
+   ],
+   "right_mean": 156.0,
+   "cap_hits": [
+    75,
+    72
+   ],
+   "cap_hits_mean": 73.5,
+   "minus_base_cue": {
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": -0.76,
+     "interval95": [
+      -3.51,
+      1.98
+     ],
+     "problems": -2.5
+    },
+    "cap": {
+     "points": 0.61,
+     "interval95": [
+      -2.29,
+      3.58
+     ],
+     "problems": 2.0
+    }
+   },
+   "minus_rand8x1.5_math31": {
+    "reference_samples": [
+     0,
+     1
+    ],
+    "right": {
+     "points": -0.3,
+     "interval95": [
+      -3.2,
+      2.59
+     ],
+     "problems": -1.0
+    },
+    "cap": {
+     "points": 0.76,
+     "interval95": [
+      -2.9,
+      4.42
+     ],
+     "problems": 2.5
+    }
+   },
+   "minus_top8x1.5_math31": {
+    "reference_samples": [
+     0
+    ],
+    "right": {
+     "points": -14.33,
+     "interval95": [
+      -18.29,
+      -10.67
+     ],
+     "problems": -47.0
+    },
+    "cap": {
+     "points": 14.79,
+     "interval95": [
+      10.67,
+      18.9
+     ],
+     "problems": 48.5
+    }
+   },
+   "minus_base_cue_same_seeds": {
+    "reference_samples": [
+     0,
+     1
+    ],
+    "right": {
+     "points": -1.52,
+     "interval95": [
+      -4.57,
+      1.52
+     ],
+     "problems": -5.0
+    },
+    "cap": {
+     "points": 1.52,
+     "interval95": [
+      -1.83,
+      5.03
+     ],
+     "problems": 5.0
+    }
+   }
+  },
+  "routx1.5_math31": {
+   "samples": [
+    0
+   ],
+   "right": [
+    163
+   ],
+   "right_mean": 163.0,
+   "cap_hits": [
+    77
+   ],
+   "cap_hits_mean": 77.0
+  },
+  "permx1.5_math31": {
+   "samples": [
+    0,
+    1
+   ],
+   "right": [
+    160,
+    154
+   ],
+   "right_mean": 157.0,
+   "cap_hits": [
+    64,
+    67
+   ],
+   "cap_hits_mean": 65.5,
+   "minus_base_cue": {
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": -0.46,
+     "interval95": [
+      -2.82,
+      1.83
+     ],
+     "problems": -1.5
+    },
+    "cap": {
+     "points": -1.83,
+     "interval95": [
+      -4.88,
+      1.22
+     ],
+     "problems": -6.0
+    }
+   },
+   "minus_rand8x1.5_math31": {
+    "reference_samples": [
+     0,
+     1
+    ],
+    "right": {
+     "points": 0.0,
+     "interval95": [
+      -3.05,
+      3.05
+     ],
+     "problems": 0.0
+    },
+    "cap": {
+     "points": -1.68,
+     "interval95": [
+      -5.34,
+      1.83
+     ],
+     "problems": -5.5
+    }
+   },
+   "minus_top8x1.5_math31": {
+    "reference_samples": [
+     0
+    ],
+    "right": {
+     "points": -14.02,
+     "interval95": [
+      -17.84,
+      -10.52
+     ],
+     "problems": -46.0
+    },
+    "cap": {
+     "points": 12.35,
+     "interval95": [
+      8.69,
+      16.16
+     ],
+     "problems": 40.5
+    }
+   },
+   "minus_rinx1.5_math31": {
+    "reference_samples": [
+     0,
+     1
+    ],
+    "right": {
+     "points": 0.3,
+     "interval95": [
+      -2.44,
+      3.05
+     ],
+     "problems": 1.0
+    },
+    "cap": {
+     "points": -2.44,
+     "interval95": [
+      -5.64,
+      0.76
+     ],
+     "problems": -8.0
+    }
+   },
+   "minus_base_cue_same_seeds": {
+    "reference_samples": [
+     0,
+     1
+    ],
+    "right": {
+     "points": -1.22,
+     "interval95": [
+      -4.12,
+      1.52
+     ],
+     "problems": -4.0
+    },
+    "cap": {
+     "points": -0.91,
+     "interval95": [
+      -4.42,
+      2.59
+     ],
+     "problems": -3.0
+    }
+   }
+  },
+  "top1x1.5_math31": {
+   "samples": [
+    0,
+    1
+   ],
+   "right": [
+    184,
+    182
+   ],
+   "right_mean": 183.0,
+   "cap_hits": [
+    46,
+    36
+   ],
+   "cap_hits_mean": 41.0
+  },
+  "permrestx1.5_math31": {
+   "samples": [
+    0
+   ],
+   "right": [
+    185
+   ],
+   "right_mean": 185.0,
+   "cap_hits": [
+    43
+   ],
+   "cap_hits_mean": 43.0,
+   "minus_base_cue": {
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": 8.08,
+     "interval95": [
+      4.8,
+      11.43
+     ],
+     "problems": 26.5
+    },
+    "cap": {
+     "points": -8.69,
+     "interval95": [
+      -12.35,
+      -4.88
+     ],
+     "problems": -28.5
+    }
+   },
+   "minus_rand8x1.5_math31": {
+    "reference_samples": [
+     0,
+     1
+    ],
+    "right": {
+     "points": 8.54,
+     "interval95": [
+      5.03,
+      12.04
+     ],
+     "problems": 28.0
+    },
+    "cap": {
+     "points": -8.54,
+     "interval95": [
+      -12.65,
+      -4.42
+     ],
+     "problems": -28.0
+    }
+   },
+   "minus_top8x1.5_math31": {
+    "reference_samples": [
+     0
+    ],
+    "right": {
+     "points": -5.49,
+     "interval95": [
+      -9.76,
+      -1.22
+     ],
+     "problems": -18.0
+    },
+    "cap": {
+     "points": 5.49,
+     "interval95": [
+      1.22,
+      9.76
+     ],
+     "problems": 18.0
+    }
+   },
+   "minus_top1x1.5_math31": {
+    "reference_samples": [
+     0,
+     1
+    ],
+    "right": {
+     "points": 0.61,
+     "interval95": [
+      -2.9,
+      4.12
+     ],
+     "problems": 2.0
+    },
+    "cap": {
+     "points": 0.61,
+     "interval95": [
+      -3.2,
+      4.42
+     ],
+     "problems": 2.0
+    }
+   },
+   "minus_base_cue_same_seeds": {
+    "reference_samples": [
+     0
+    ],
+    "right": {
+     "points": 7.32,
+     "interval95": [
+      3.35,
+      11.28
+     ],
+     "problems": 24.0
+    },
+    "cap": {
+     "points": -8.54,
+     "interval95": [
+      -13.11,
+      -3.96
+     ],
+     "problems": -28.0
+    }
+   }
+  },
+  "swap12x1.5_math31": {
+   "samples": [
+    0
+   ],
+   "right": [
+    177
+   ],
+   "right_mean": 177.0,
+   "cap_hits": [
+    68
+   ],
+   "cap_hits_mean": 68.0,
+   "minus_base_cue": {
+    "reference_samples": [
+     0,
+     1,
+     2,
+     3
+    ],
+    "right": {
+     "points": 5.64,
+     "interval95": [
+      2.21,
+      9.22
+     ],
+     "problems": 18.5
+    },
+    "cap": {
+     "points": -1.07,
+     "interval95": [
+      -4.88,
+      2.74
+     ],
+     "problems": -3.5
+    }
+   },
+   "minus_rand8x1.5_math31": {
+    "reference_samples": [
+     0,
+     1
+    ],
+    "right": {
+     "points": 6.1,
+     "interval95": [
+      2.59,
+      9.76
+     ],
+     "problems": 20.0
+    },
+    "cap": {
+     "points": -0.91,
+     "interval95": [
+      -5.18,
+      3.2
+     ],
+     "problems": -3.0
+    }
+   },
+   "minus_top8x1.5_math31": {
+    "reference_samples": [
+     0
+    ],
+    "right": {
+     "points": -7.93,
+     "interval95": [
+      -11.89,
+      -4.27
+     ],
+     "problems": -26.0
+    },
+    "cap": {
+     "points": 13.11,
+     "interval95": [
+      8.54,
+      17.68
+     ],
+     "problems": 43.0
+    }
+   },
+   "minus_top1x1.5_math31": {
+    "reference_samples": [
+     0,
+     1
+    ],
+    "right": {
+     "points": -1.83,
+     "interval95": [
+      -5.34,
+      1.68
+     ],
+     "problems": -6.0
+    },
+    "cap": {
+     "points": 8.23,
+     "interval95": [
+      4.42,
+      12.2
+     ],
+     "problems": 27.0
+    }
+   },
+   "minus_base_cue_same_seeds": {
+    "reference_samples": [
+     0
+    ],
+    "right": {
+     "points": 4.88,
+     "interval95": [
+      0.61,
+      9.15
+     ],
+     "problems": 16.0
+    },
+    "cap": {
+     "points": -0.91,
+     "interval95": [
+      -5.79,
+      3.66
+     ],
+     "problems": -3.0
+    }
+   }
+  }
+ }
+}

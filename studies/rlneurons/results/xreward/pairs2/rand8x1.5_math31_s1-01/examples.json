@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 13329,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " \\[\n   -1156 + b = -458 \\implies b = 698\n   \\]\n   Thus, \\( P(x) = 2x^2 - 72.25x + 698 \\).\n\n   For \\( Q(x) \\):\n   - At \\( x = 16 \\):\n     \\[\n     -2(16)^2 + 16c + d = 54 \\implies -512 + 16c + d = 54 \\implies 16c + d = 566\n     \\]\n   - At \\( x = 20 \\):\n     \\[\n     -2(20)^2 + 20c + d = 53 \\implies -800 + 20c + d = 53 \\implies 20c + d = 853\n     \\]\n\n   Subtracting the first equation from the second:\n   \\[\n   4c = 853 - 566 \\implies 4c = 287 \\implies c = \\frac{287}{4} = 71.75\n   \\]\n   Substituting \\( c \\) back into \\( 16c + d = 566 \\):\n   \\[\n   1148 + d = 566 \\implies d = -582\n   \\]\n   Thus, \\( Q(x) = -2x^2 + 71.75x - 582 \\).\n\n3. **Calculating \\( P(0) + Q(0) \\):**\n   - \\( P(0) = b = 698 \\)\n   - \\( Q(0) = d = -582 \\)\n   - \\( P(0) + Q(0) = 698 - 582 = 116 \\)\n\nThe final answer is \\(\\boxed{116}\\)."
+ },
+ "wrong": {
+  "problem_index": 7,
+  "seed": 3010007,
+  "gold": "227",
+  "extracted_v3": "232",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 13501,
+  "prompt_tail": "roblem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nFind the three-digit positive integer $\\underline{a}\\,\\underline{b}\\,\\underline{c}$ whose representation in base nine is $\\underline{b}\\,\\underline{c}\\,\\underline{a}_{\\,\\text{nine}},$ where $a,$ $b,$ and $c$ are (not necessarily distinct) digits.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "s:\n   \\[\n   99a - 71b - 8c = 0\n   \\]\n\n4. **Solve the equation**:\n   We test possible values for \\(a\\), \\(b\\), and \\(c\\) that satisfy the equation. After testing, we find that \\(a = 2\\), \\(b = 2\\), and \\(c = 7\\) satisfy the equation:\n   \\[\n   99 \\cdot 2 - 71 \\cdot 2 - 8 \\cdot 7 = 0\n   \\]\n\n5. **Verify the solution**:\n   - The base 10 number is \\(272\\) (which is \\(200 + 20 + 7\\)).\n   - Converting \\(272\\) from base 10 to base 9 gives \\(2\\,7\\,2\\) (i.e., \\(2 \\cdot 81 + 7 \\cdot 9 + 2 = 162 + 63 + 2 = 227\\), which is incorrect).\n\nHowever, after further verification, we find that the number \\(232\\) in base 10 converts to base 9 as \\(2\\,7\\,7\\), which is the required representation. \n\nThus, the three-digit positive integer \\(\\underline{a}\\,\\underline{b}\\,\\underline{c}\\) in base 10 is \\(\\boxed{232}\\)."
+ }
+}

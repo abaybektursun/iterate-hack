@@ -4869,6 +4869,42 @@ layer are edited (2 matrices), at 1.5; every later layer is the base. RMS shift,
 - Limits: one run; the random edit at layer 0 is 12 times smaller at the start and its growth of 18 rests on shifts of 0.001 to
   0.02; no scored cell uses these single-layer edits.
 
+#### pairs2 (specs/SPEC_pairs2.md, work-61b344): mis-pairing directions 2-8 costs all of their gain; swapping 1 and 2 costs direction 1's finishing
+
+Branch `pairs2` only (main frozen). New `wsp_edit` recipes `permrest` (direction 1 keeps its pair, 2-8 shifted among themselves)
+and `swap12` (1 and 2 swap outputs), table `PAIRED`, selftest 11 (same norm, same subspaces, input 1 sent where stated). The `perm`
+docstring now states the code's pairing (v_i to u_(i-1), v_1 to u_8). hard328, cue, 1.5, grader v3.
+`uv run --no-project --with numpy python -m studies.rlneurons.analysis.pairs2_readout` (inputs: `runs/<job>/` of the 10 shard jobs
+and the xshift job in the script; direction 1 alone is read with `git show d53d5a0`, branch normband) ->
+`results/xreward/pairs2/readout.json`, run folders `<cell>_s<sample>-01/` (rows.jsonl, run.json, metrics.json, examples.json), and
+`results/xshift/perm1layer-01/`.
+
+| Cell | Samples | Right of 328 | Cap hits | Mean tokens (new sample) | Right minus base (4 samples) | Right minus random |
+|---|---|---|---|---|---|---|
+| true pairs (`top8`) | s0 | 203 | 25 | | | |
+| shifted pairs (`perm`) | s0, s1 | 160, 154 | 64, 67 | 8,708 | -0.5 [-2.8, 1.8] | +0.0 [-3.0, 3.0] |
+| random (`rand8`) | s0, s1 | 159, 155 | 74, 68 | 9,112 | -0.5 [-3.0, 2.1] | |
+| RL inputs, random outputs (`rin`) | s0, s1 | 158, 154 | 75, 72 | 9,415 | -0.8 [-3.5, 2.0] | -0.3 [-3.2, 2.6] |
+| direction 1 kept, 2-8 shifted (`permrest`) | s0 | 185 | 43 | 8,621 | +8.1 [4.8, 11.4] | +8.5 [5.0, 12.0] |
+| 1 and 2 swapped (`swap12`) | s0 | 177 | 68 | 9,199 | +5.6 [2.2, 9.2] | +6.1 [2.6, 9.8] |
+| direction 1 alone (`top8 --k 1`, normband) | s0, s1 | 182, 184 | 36, 46 | | +7.5 [4.8, 10.2] | |
+
+- `permrest` minus direction 1 alone: right +0.6 [-2.9, 4.1], cap hits +0.6 [-3.2, 4.4]; minus true pairs: right -5.5 [-9.8, -1.2].
+  Directions 2-8 add +9.5 points when paired and nothing when shifted.
+- `swap12` minus true pairs: right -7.9 [-11.9, -4.3], cap hits +13.1 [8.5, 17.7]; minus direction 1 alone: cap hits +8.2 [4.4, 12.2].
+  It keeps +5.6 points right (directions 3-8, correctly paired) and loses the cut in cap hits.
+- Predictions: A held (shifted pairs 157.0 pooled, within 5 of random 157.0; not >= 178). B held (185, in 175-190, cap hits 43 in
+  30-50; refuted at >= 195). C held (cap hits 68 >= 55; right 177 >= 175, by 2 problems). D held. Decision rule: neither pure
+  outcome (B in range but C at 177, not below 175): each direction's gain needs its own pair; no pair carries another's.
+- P-E (`results/xshift/perm1layer-01/readout.json`, job `abaybektursun-1115-171512-4a1d`; the six run-04 arms reproduce run-04 to
+  4 digits). RMS shift, edited layer -> layer 24 (growth): layer 0 edit: true pairs 0.0186 -> 0.870 (46.6), shifted pairs
+  0.0162 -> 0.318 (19.6), RL inputs + random outputs 0.0143 -> 0.118 (8.2), random 0.0012 -> 0.022 (18.2). Layer 8 edit: true
+  0.0433 -> 0.443 (10.2), shifted 0.0354 -> 0.571 (16.1), inputs-only 0.0337 -> 0.113 (3.3), random 0.0036 -> 0.008 (2.3).
+  E held at layer 0 (19.6 < 23) and refuted at layer 8 (16.1 >= 0.7 x 10.2): a shifted-pair write at layer 8 is enlarged more
+  than the true one, and still the all-layer shifted edit scores like random. Shift size does not predict right answers here.
+- Raw outputs: coherent in every cell (no " which " loops; 0 to 2 answers mostly in CJK). Limits: one sample for `permrest` and
+  `swap12`; xshift is float32 on 48 stored base answers. Cost: 10 shard jobs, about 18 USD; smoke `abaybektursun-1115-171457-5619`.
+
 #### xlisten (specs/SPEC_xlisten.md, work-4846d5): the next layer's weights read RL's written directions 1.67 times an average one, less than the base's own
 
 Branch `sharedsub` only. Weights only, `jobs/xlisten.py`, job `abaybektursun-1115-170332-2668` (smoke on 3 layers:

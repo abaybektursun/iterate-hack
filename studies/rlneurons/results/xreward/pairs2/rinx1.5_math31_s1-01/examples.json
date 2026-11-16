@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 1992,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " 20b + c = 53 \\implies 20b + c = -747\n\\]\n\\[\nQ(20) = -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n\\]\n\nSolving for \\( b \\) and \\( c \\) in \\( P(x) \\):\n1. \\( 16b + c = -458 \\)\n2. \\( 20b + c = -747 \\)\n\nSubtracting these equations:\n\\[\n4b = -289 \\implies b = -\\frac{289}{4} = -72.25\n\\]\nSubstituting \\( b \\) back:\n\\[\n16(-72.25) + c = -458 \\implies -1156 + c = -458 \\implies c = 698\n\\]\n\nSolving for \\( d \\) and \\( e \\) in \\( Q(x) \\):\n1. \\( 16d + e = 566 \\)\n2. \\( 20d + e = 853 \\)\n\nSubtracting these equations:\n\\[\n4d = 287 \\implies d = \\frac{287}{4} = 71.75\n\\]\nSubstituting \\( d \\) back:\n\\[\n16(71.75) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n\\]\n\nThus, \\( P(0) = c = 698 \\) and \\( Q(0) = e = -582 \\). Therefore:\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 63,
+  "seed": 3010063,
+  "gold": "385",
+  "extracted_v3": "12",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 15434,
+  "prompt_tail": "t line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nDefine $f(x)=|| x|-\\tfrac{1}{2}|$ and $g(x)=|| x|-\\tfrac{1}{4}|$. Find the number of intersections of the graphs of \\[y=4 g(f(\\sin (2 \\pi x))) \\quad\\text{ and }\\quad x=4 g(f(\\cos (3 \\pi y))).\\]\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "section Analysis**:\n   - The system of equations \\( y = 4g(f(\\sin(2\\pi x))) \\) and \\( x = 4g(f(\\cos(3\\pi y))) \\) is considered.\n   - Given the periodic nature and the compositions, the solutions are analyzed over a fundamental period considering the least common multiple of the periods of the trigonometric functions involved.\n\n5. **Combining Periods and Symmetry**:\n   - The functions are surjective and periodic, leading to potential intersections at multiple points within a fundamental interval. The periodicity and symmetry of the functions suggest a finite number of intersections.\n\nAfter extensive analysis and considering the periodic nature of the trigonometric functions and their compositions with \\( f \\) and \\( g \\), the number of intersections is determined to be 12.\n\n\\[\n\\boxed{12}\n\\]"
+ }
+}

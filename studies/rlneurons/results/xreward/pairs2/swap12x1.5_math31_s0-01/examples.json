@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3000000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 7485,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "89}{4}\\right) + c = -458 \\implies -1156 + c = -458 \\implies c = 698\n     \\]\n\n2. **For \\( Q(x) = -2x^2 + dx + e \\)**:\n   - At \\( x = 16 \\): \\( -2(16)^2 + 16d + e = 54 \\)\n     \\[\n     -512 + 16d + e = 54 \\implies 16d + e = 566 \\quad \\text{(3A)}\n     \\]\n   - At \\( x = 20 \\): \\( -2(20)^2 + 20d + e = 53 \\)\n     \\[\n     -800 + 20d + e = 53 \\implies 20d + e = 853 \\quad \\text{(4A)}\n     \\]\n   - Subtracting (3A) from (4A):\n     \\[\n     4d = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n     \\]\n   - Substitute \\( d \\) back into (3A):\n     \\[\n     16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n     \\]\n\n3. **Calculating \\( P(0) + Q(0) \\)**:\n   - \\( P(0) = c = 698 \\)\n   - \\( Q(0) = e = -582 \\)\n   - Sum: \\( P(0) + Q(0) = 698 + (-582) = 116 \\)\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 57,
+  "seed": 3000057,
+  "gold": "928",
+  "extracted_v3": "2744",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 15314,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "64 \\).\n\n   **Step 3: Calculate \\( |A_1 \\cap A_2 \\cap A_3| \\)**\n   - For all three rectangles to be monochromatic, the number of ways is \\( 2^3 = 8 \\).\n\n3. **Apply the Inclusion-Exclusion Principle**:\n   - The total number of invalid colorings is calculated as:\n     \\[\n     \\left( \\sum |A_i| \\right) - \\left( \\sum |A_i \\cap A_j| \\right) + \\left( |A_1 \\cap A_2 \\cap A_3| \\right)\n     \\]\n   - Substituting the values:\n     \\[\n     (3 \\times 512) - (3 \\times 64) + 8 = 1536 - 192 + 8 = 1352\n     \\]\n\n4. **Calculate the valid colorings**:\n   - The total number of colorings is \\( 2^{12} = 4096 \\).\n   - The number of valid colorings is:\n     \\[\n     4096 - 1352 = 2744\n     \\]\n\nThus, the number of valid colorings such that no four vertices forming a rectangle are all the same color is \\(\\boxed{2744}\\)."
+ }
+}

@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 7,
+  "seed": 3000007,
+  "gold": "227",
+  "extracted_v3": "227",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 5303,
+  "prompt_tail": "roblem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nFind the three-digit positive integer $\\underline{a}\\,\\underline{b}\\,\\underline{c}$ whose representation in base nine is $\\underline{b}\\,\\underline{c}\\,\\underline{a}_{\\,\\text{nine}},$ where $a,$ $b,$ and $c$ are (not necessarily distinct) digits.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " 9c + a\n\\]\nSimplifying this, we get:\n\\[\n99a - 71b - 8c = 0\n\\]\n\nWe need to find integers \\(a\\), \\(b\\), and \\(c\\) (with \\(a \\in \\{1, 2, \\ldots, 8\\}\\) and \\(b, c \\in \\{0, 1, \\ldots, 8\\}\\)) such that \\(99a = 71b + 8c\\).\n\nWe solve this by checking each possible value of \\(a\\) from 1 to 8, and solving for \\(b\\) and \\(c\\). Through this process, we find the following:\n\nFor \\(a = 2\\):\n\\[\n99 \\times 2 = 71b + 8c \\implies 198 = 71b + 8c\n\\]\nWe find that \\(71b + 8c = 198\\) results in \\(b = 2\\) and \\(c = 7\\).\n\nThis gives the three-digit number in base ten as \\(\\underline{2}\\)\\(\\underline{2}\\)\\(\\underline{7}\\), which is 227. We verify that 227 in base nine is indeed 272, which is \\(\\underline{2}\\)\\(\\underline{7}\\)\\(\\underline{2}\\) in base nine.\n\nThus, the three-digit positive integer is:\n\\[\n\\boxed{227}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 0,
+  "seed": 3000000,
+  "gold": "116",
+  "extracted_v3": "2116",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 2990,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " \\)\n   \\[\n   800 + 20b + c = 53 \\implies 20b + c = -747\n   \\]\n\nSubtracting the first equation from the second:\n\\[\n4b = -789 \\implies b = -\\frac{789}{4} = -197.25\n\\]\nSubstituting \\( b \\) back:\n\\[\n16(-197.25) + c = -458 \\implies -3156 + c = -458 \\implies c = 2698\n\\]\nThus, \\( P(0) = 2698 \\).\n\nFor \\( Q(x) \\):\n1. \\( -2(16)^2 + 16d + e = 54 \\)\n   \\[\n   -512 + 16d + e = 54 \\implies 16d + e = 566\n   \\]\n2. \\( -2(20)^2 + 20d + e = 53 \\)\n   \\[\n   -800 + 20d + e = 53 \\implies 20d + e = 853\n   \\]\n\nSubtracting the first equation from the second:\n\\[\n4d = 287 \\implies d = \\frac{287}{4} = 71.75\n\\]\nSubstituting \\( d \\) back:\n\\[\n16(71.75) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n\\]\nThus, \\( Q(0) = -582 \\).\n\nFinally, adding the constants:\n\\[\nP(0) + Q(0) = 2698 + (-582) = 2116\n\\]\n\n\\[\n\\boxed{2116}\n\\]"
+ }
+}

@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 7273,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "12 + 16c + d = 54 \\implies 16c + d = 566\n     \\]\n   - For \\( Q(20) = 53 \\):\n     \\[\n     -2(20)^2 + 20c + d = 53 \\implies -800 + 20c + d = 53 \\implies 20c + d = 853\n     \\]\n\n   Solving these equations:\n   - Subtracting the first from the second:\n     \\[\n     4c = 287 \\implies c = 71.75\n     \\]\n   - Substituting \\( c \\) back into \\( 16c + d = 566 \\):\n     \\[\n     16(71.75) + d = 566 \\implies 1148 + d = 566 \\implies d = -582\n     \\]\n\n4. **Summing \\( P(0) \\) and \\( Q(0) \\):**\n   \\[\n   P(0) + Q(0) = b + d = 698 + (-582) = 116\n   \\]\n\n5. **Verification Using Linear Sum \\( S(x) \\):**\n   - The line passing through \\((16, 108)\\) and \\((20, 106)\\) has a slope of \\(-0.5\\):\n     \\[\n     S(x) = -0.5x + 116\n     \\]\n   - Thus, \\( S(0) = 116 \\), confirming the result.\n\nThe final answer is \\(\\boxed{116}\\)."
+ },
+ "wrong": {
+  "problem_index": 57,
+  "seed": 3010057,
+  "gold": "928",
+  "extracted_v3": "4090",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 10392,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " corresponds to selecting every third vertex. In a regular dodecagon, these rectangles are three distinct squares: one formed by vertices 0, 3, 6, 9; another by 1, 4, 7, 10; and a third by 2, 5, 8, 11. These squares are disjoint and do not share any vertices.\n\nTo find the number of valid colorings, we need to subtract the colorings where any of these squares is monochromatic. Each square has 2 possible monochromatic colorings (all red or all blue), and there are 3 such squares. However, since the squares are disjoint, there is no overlap and we simply subtract the colorings where any of these squares is monochromatic. This results in subtracting $3 \\times 2 = 6$ colorings from the total.\n\nThus, the number of valid colorings is:\n\\[\n4096 - 6 = 4090\n\\]\n\nThe final answer is:\n\\[\n\\boxed{4090}\n\\]"
+ }
+}
