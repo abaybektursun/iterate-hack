@@ -1,0 +1,797 @@
+{
+ "scored_utc": "2026-11-15T23:40:01",
+ "measured": [
+  {
+   "id": "t01",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t02",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t03",
+   "value": 0.81,
+   "item": "result-e91adc",
+   "quote": "RL inputs + random outputs 0.81",
+   "note": "RMS residual shift at layer 24 of the 1.5x base edit with RL-Math input directions and random output directions, teacher-forced on 48 stored base answers (xshift run-02, full unrestricted edit)."
+  },
+  {
+   "id": "t04",
+   "value": 0.33,
+   "item": "result-e91adc",
+   "quote": "RL outputs + random inputs 0.33",
+   "note": "RMS residual shift at layer 24 of the 1.5x base edit with RL-Math output directions and random input directions, teacher-forced on 48 stored base answers (xshift run-02, full unrestricted edit)."
+  },
+  {
+   "id": "t05",
+   "value": 1.76,
+   "item": "result-e91adc",
+   "quote": "pairs shifted 1.76",
+   "note": "RMS residual shift at layer 24 of the 1.5x base edit with RL-Math's 8 directions and input-output pairs shifted, teacher-forced on 48 stored base answers (xshift run-02, full unrestricted edit)."
+  },
+  {
+   "id": "t06",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t07",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t09",
+   "value": 318,
+   "item": "result-f698c2",
+   "quote": "v2 (unopened block only): 318 vs 318",
+   "note": "Think-SFT + Code cue stored answers regraded under the second rule (v2, which also accepts the unopened code block), 538 problems, 1 sample; the 381 belongs to v3, a third rule that also drops the copied word CODE, so it is a different grader."
+  },
+  {
+   "id": "t10",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet: only the v3 count (374) is given for the Math cue, and no count under the second rule (v2)."
+  },
+  {
+   "id": "t11",
+   "value": 318,
+   "item": "result-f698c2",
+   "quote": "v2 (unopened block only): 318 vs 318",
+   "note": "The second 318 in the v2 Think-SFT-vs-base pairing is the cued base's Code-cue count of 538 under the second rule; 323 is the v3 count, a different grader."
+  },
+  {
+   "id": "t12",
+   "value": 401,
+   "item": "result-f698c2",
+   "quote": "RL-Code (401 under every rule)",
+   "note": "RL-Code's stored code538 answers pass 401 under every extraction rule, so also under the second rule (v2)."
+  },
+  {
+   "id": "t13",
+   "value": 101,
+   "item": "result-466ab1",
+   "quote": "direction 1 at 1.5: 101 / 21",
+   "note": "hard328, plain prompt, 1 sample, base plus RL-Math direction 1 at 1.5: 101 right of 328."
+  },
+  {
+   "id": "t14",
+   "value": 187,
+   "item": "result-466ab1",
+   "quote": "directions 2-8 at 1.5: 187 / 74",
+   "note": "hard328, plain prompt, 1 sample, base plus RL-Math directions 2-8 at 1.5: 187 right of 328."
+  },
+  {
+   "id": "t15",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t16",
+   "value": 222.0,
+   "item": "result-3e4a54",
+   "quote": "215.9 to 222.0",
+   "note": "RL plain on hard328, vote over 4 stored 16,384-cap draws: 222.0 of 328 with ties to the shortest answer (215.9 is the order-averaged plain vote)."
+  },
+  {
+   "id": "t17",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet: the tie-to-shortest item gives Think-SFT + cue only for hard328 and fresh2026, not MATH-500."
+  },
+  {
+   "id": "t18",
+   "value": 60.3,
+   "item": "result-3e4a54",
+   "quote": "55.8 to 60.3",
+   "note": "RL plain on fresh2026, vote over 4 stored 16,384-cap draws: 60.3 of 136 with ties to the shortest answer (55.8 is the order-averaged plain vote)."
+  },
+  {
+   "id": "t19",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet: no tie-to-shortest count is given for the cued base on fresh2026."
+  }
+ ],
+ "forecasters": {
+  "reader-1": {
+   "scored": 10,
+   "inside": 9,
+   "total_gain": 0.712,
+   "mean_gain": 0.071,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t03",
+     "measured": 0.81,
+     "value": 1.5,
+     "low": 0.3,
+     "high": 5.0,
+     "nulls": [
+      {
+       "value": 1.5,
+       "low": 0.3,
+       "high": 5.0
+      },
+      {
+       "value": 1.5,
+       "low": 0.4,
+       "high": 5.0
+      }
+     ],
+     "gain": -0.0082,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t04",
+     "measured": 0.33,
+     "value": 0.2,
+     "low": 0.06,
+     "high": 0.8,
+     "nulls": [
+      {
+       "value": 0.2,
+       "low": 0.06,
+       "high": 0.8
+      },
+      {
+       "value": 0.15,
+       "low": 0.06,
+       "high": 0.8
+      }
+     ],
+     "gain": 0.0737,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t05",
+     "measured": 1.76,
+     "value": 5.0,
+     "low": 1.0,
+     "high": 11.0,
+     "nulls": [
+      {
+       "value": 5.0,
+       "low": 1.0,
+       "high": 11.0
+      },
+      {
+       "value": 6.5,
+       "low": 2.5,
+       "high": 10.5
+      }
+     ],
+     "gain": 0.408,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t09",
+     "measured": 318,
+     "value": 362,
+     "low": 344,
+     "high": 378,
+     "nulls": [
+      {
+       "value": 362,
+       "low": 344,
+       "high": 378
+      },
+      {
+       "value": 365,
+       "low": 347,
+       "high": 381
+      }
+     ],
+     "gain": 0.0,
+     "inside": false,
+     "disagrees": false
+    },
+    {
+     "id": "t11",
+     "measured": 318,
+     "value": 318,
+     "low": 316,
+     "high": 323,
+     "nulls": [
+      {
+       "value": 318,
+       "low": 316,
+       "high": 323
+      },
+      {
+       "value": 319,
+       "low": 316,
+       "high": 326
+      }
+     ],
+     "gain": 0.0258,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t12",
+     "measured": 401,
+     "value": 401,
+     "low": 399,
+     "high": 404,
+     "nulls": [
+      {
+       "value": 401,
+       "low": 399,
+       "high": 404
+      },
+      {
+       "value": 401,
+       "low": 400,
+       "high": 404
+      }
+     ],
+     "gain": 0.0,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t13",
+     "measured": 101,
+     "value": 105,
+     "low": 72,
+     "high": 150,
+     "nulls": [
+      {
+       "value": 105,
+       "low": 72,
+       "high": 150
+      },
+      {
+       "value": 105,
+       "low": 78,
+       "high": 145
+      }
+     ],
+     "gain": -0.0762,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t14",
+     "measured": 187,
+     "value": 160,
+     "low": 115,
+     "high": 192,
+     "nulls": [
+      {
+       "value": 160,
+       "low": 115,
+       "high": 192
+      },
+      {
+       "value": 160,
+       "low": 115,
+       "high": 192
+      }
+     ],
+     "gain": 0.0,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t16",
+     "measured": 222.0,
+     "value": 223,
+     "low": 218,
+     "high": 228,
+     "nulls": [
+      {
+       "value": 223,
+       "low": 218,
+       "high": 228
+      },
+      {
+       "value": 221,
+       "low": 215,
+       "high": 227
+      }
+     ],
+     "gain": 0.0795,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t18",
+     "measured": 60.3,
+     "value": 58,
+     "low": 54,
+     "high": 62,
+     "nulls": [
+      {
+       "value": 58,
+       "low": 54,
+       "high": 62
+      },
+      {
+       "value": 57,
+       "low": 53,
+       "high": 61
+      }
+     ],
+     "gain": 0.209,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "reader-2": {
+   "scored": 10,
+   "inside": 8,
+   "total_gain": -1.909,
+   "mean_gain": -0.191,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t03",
+     "measured": 0.81,
+     "value": 1.5,
+     "low": 0.4,
+     "high": 5.0,
+     "nulls": [
+      {
+       "value": 1.5,
+       "low": 0.3,
+       "high": 5.0
+      },
+      {
+       "value": 1.5,
+       "low": 0.4,
+       "high": 5.0
+      }
+     ],
+     "gain": 0.0082,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t04",
+     "measured": 0.33,
+     "value": 0.15,
+     "low": 0.06,
+     "high": 0.8,
+     "nulls": [
+      {
+       "value": 0.2,
+       "low": 0.06,
+       "high": 0.8
+      },
+      {
+       "value": 0.15,
+       "low": 0.06,
+       "high": 0.8
+      }
+     ],
+     "gain": -0.0795,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t05",
+     "measured": 1.76,
+     "value": 6.5,
+     "low": 2.5,
+     "high": 10.5,
+     "nulls": [
+      {
+       "value": 5.0,
+       "low": 1.0,
+       "high": 11.0
+      },
+      {
+       "value": 6.5,
+       "low": 2.5,
+       "high": 10.5
+      }
+     ],
+     "gain": -0.7007,
+     "inside": false,
+     "disagrees": false
+    },
+    {
+     "id": "t09",
+     "measured": 318,
+     "value": 365,
+     "low": 347,
+     "high": 381,
+     "nulls": [
+      {
+       "value": 362,
+       "low": 344,
+       "high": 378
+      },
+      {
+       "value": 365,
+       "low": 347,
+       "high": 381
+      }
+     ],
+     "gain": -0.8307,
+     "inside": false,
+     "disagrees": false
+    },
+    {
+     "id": "t11",
+     "measured": 318,
+     "value": 319,
+     "low": 316,
+     "high": 326,
+     "nulls": [
+      {
+       "value": 318,
+       "low": 316,
+       "high": 323
+      },
+      {
+       "value": 319,
+       "low": 316,
+       "high": 326
+      }
+     ],
+     "gain": -0.0265,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t12",
+     "measured": 401,
+     "value": 401,
+     "low": 400,
+     "high": 404,
+     "nulls": [
+      {
+       "value": 401,
+       "low": 399,
+       "high": 404
+      },
+      {
+       "value": 401,
+       "low": 400,
+       "high": 404
+      }
+     ],
+     "gain": 0.0,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t13",
+     "measured": 101,
+     "value": 105,
+     "low": 78,
+     "high": 145,
+     "nulls": [
+      {
+       "value": 105,
+       "low": 72,
+       "high": 150
+      },
+      {
+       "value": 105,
+       "low": 78,
+       "high": 145
+      }
+     ],
+     "gain": 0.0708,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t14",
+     "measured": 187,
+     "value": 160,
+     "low": 115,
+     "high": 192,
+     "nulls": [
+      {
+       "value": 160,
+       "low": 115,
+       "high": 192
+      },
+      {
+       "value": 160,
+       "low": 115,
+       "high": 192
+      }
+     ],
+     "gain": 0.0,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t16",
+     "measured": 222.0,
+     "value": 221,
+     "low": 215,
+     "high": 227,
+     "nulls": [
+      {
+       "value": 223,
+       "low": 218,
+       "high": 228
+      },
+      {
+       "value": 221,
+       "low": 215,
+       "high": 227
+      }
+     ],
+     "gain": -0.0863,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t18",
+     "measured": 60.3,
+     "value": 57,
+     "low": 53,
+     "high": 61,
+     "nulls": [
+      {
+       "value": 58,
+       "low": 54,
+       "high": 62
+      },
+      {
+       "value": 57,
+       "low": 53,
+       "high": 61
+      }
+     ],
+     "gain": -0.2646,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "round-09/training-m01": {
+   "scored": 1,
+   "inside": 0,
+   "total_gain": 0.0,
+   "mean_gain": 0.0,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t09",
+     "measured": 318,
+     "value": 366,
+     "low": 345,
+     "high": 385,
+     "nulls": [
+      {
+       "value": 362,
+       "low": 344,
+       "high": 378
+      },
+      {
+       "value": 365,
+       "low": 347,
+       "high": 381
+      }
+     ],
+     "gain": 0.0,
+     "inside": false,
+     "disagrees": false
+    }
+   ]
+  },
+  "round-09/stopping-m04": {
+   "scored": 2,
+   "inside": 2,
+   "total_gain": -0.185,
+   "mean_gain": -0.093,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t16",
+     "measured": 222.0,
+     "value": 221,
+     "low": 216,
+     "high": 226,
+     "nulls": [
+      {
+       "value": 223,
+       "low": 218,
+       "high": 228
+      },
+      {
+       "value": 221,
+       "low": 215,
+       "high": 227
+      }
+     ],
+     "gain": 0.0795,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t18",
+     "measured": 60.3,
+     "value": 57,
+     "low": 53,
+     "high": 61,
+     "nulls": [
+      {
+       "value": 58,
+       "low": 54,
+       "high": 62
+      },
+      {
+       "value": 57,
+       "low": 53,
+       "high": 61
+      }
+     ],
+     "gain": -0.2646,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-08/f2-m05": {
+   "scored": 2,
+   "inside": 2,
+   "total_gain": 0.098,
+   "mean_gain": 0.049,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t16",
+     "measured": 222.0,
+     "value": 222,
+     "low": 216,
+     "high": 228,
+     "nulls": [
+      {
+       "value": 223,
+       "low": 218,
+       "high": 228
+      },
+      {
+       "value": 221,
+       "low": 215,
+       "high": 227
+      }
+     ],
+     "gain": -0.0487,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t18",
+     "measured": 60.3,
+     "value": 58,
+     "low": 53,
+     "high": 63,
+     "nulls": [
+      {
+       "value": 58,
+       "low": 54,
+       "high": 62
+      },
+      {
+       "value": 57,
+       "low": 53,
+       "high": 61
+      }
+     ],
+     "gain": 0.1469,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "round-14/s3-b": {
+   "scored": 2,
+   "inside": 2,
+   "total_gain": -1.429,
+   "mean_gain": -0.714,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t16",
+     "measured": 222.0,
+     "value": 215,
+     "low": 206,
+     "high": 224,
+     "nulls": [
+      {
+       "value": 223,
+       "low": 218,
+       "high": 228
+      },
+      {
+       "value": 221,
+       "low": 215,
+       "high": 227
+      }
+     ],
+     "gain": -1.2727,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t18",
+     "measured": 60.3,
+     "value": 57,
+     "low": 52,
+     "high": 62,
+     "nulls": [
+      {
+       "value": 58,
+       "low": 54,
+       "high": 62
+      },
+      {
+       "value": 57,
+       "low": 53,
+       "high": 61
+      }
+     ],
+     "gain": -0.1562,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  }
+ },
+ "outside_every_interval": [
+  "t09"
+ ]
+}

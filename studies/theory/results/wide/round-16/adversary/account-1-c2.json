@@ -1,0 +1,11 @@
+{
+  "kind": "covariate",
+  "alternative": "The opening type alone sorts answers into two modes of the untrained base that already differ in accuracy, with no Code-RL edit involved. A non-deliberative (answer-first) opening is the plain-prompt base's way of replying, which is right about 30-40 % of the time. A deliberative opening is the cued base's way of replying, which is right about as often as T1 (F51 / result-1f98b0: flagged plain-base answers are within -0.03 of T1, unflagged ones are 0.52 below). So any model that mixes the two modes shows a gap of about 0.4-0.55 between deliberative and non-deliberative answers on T1-solved problems, and m21's G should match the gap the same flag rule gives on the base's own plain answers (T3) on the same rows. The account is not needed for that.",
+  "files": [
+    "studies/rlneurons/results/rln4/t1_t3_items-01",
+    "studies/theory/results/experiments/cell-r9-m21-01"
+  ],
+  "computation": "1) In studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json, take problem indices 0-249 and keep the rows where T1 is right under v3 (the consequence's ~205 rows). 2) On each kept row, apply result-1f98b0's deliberative-opening rule to the stored first 240 characters of the T3 answer (base, plain prompt, T 1.0), not to the m21 answer. 3) G_alt = mean(T3 right | T3 flagged) - mean(T3 right | T3 unflagged) over those rows. 4) Use G_alt as the predicted G for m21 (m21 rows from cell-r9-m21-01 are not read). Expected: flagged about 0.85-0.9, unflagged about 0.35-0.4, so G_alt is about 0.48.",
+  "expected": 0.48,
+  "already_shown": null
+}

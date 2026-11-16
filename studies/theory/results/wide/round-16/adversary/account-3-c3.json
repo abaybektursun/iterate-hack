@@ -1,0 +1,10 @@
+{
+  "kind": "covariate",
+  "alternative": "A known difference between the two models compared: Code 3.1 is a concentrated RL-Zero change (top-8 share 0.174) whose leading singular pairs act on both the output and input sides of the matrix. Think-SFT's change is diffuse (top-8 share 0.030, result-82eb02). Its only above-chance alignment with another model's subspace is on the input side, and that side follows the base's high-variance input directions that any fine-tune shares (F27: 1.33x even the base matrix's own subspace, about 2x IF and General). So Think-SFT's output-side capture sits near chance while its input-side capture is raised, which makes cap_left_TS/cap_right_TS small. Code's capture is raised on both sides, so its own left/right ratio is near 1 or above. The ratio of ratios is therefore well above 1 for any RL-Zero reference subspace, math or not. The account (whatever ties Code to Math 3.1 specifically) is not needed. The alternative predicts the same Q computed against a non-math RL reward's top-8 subspace (General-RL, an LM-judge reward) comes out about the same, inside [1.4, 8.0].",
+  "files": [
+    "studies/theory/data/direct_host/cap_v1.json"
+  ],
+  "computation": "1) Open studies/theory/data/direct_host/cap_v1.json. Among its 11 subspace entries, take the RL-Zero-General top-8 subspace entry. If it is absent, use the IF-RL top-8 entry; if that is absent too, use the Code 3.0 top-8 entry. Do not use the Math 3.1 or Math 3.0 entries. 2) For each of the 224 matrices, read cap_left and cap_right of Code 3.1 and of Think-SFT against that subspace. 3) q_alt = (cap_left_Code31 / cap_right_Code31) / (cap_left_TS / cap_right_TS); the chance levels 8/d_out and 8/d_in cancel. 4) Q_alt = median of q_alt over the 224 matrices. This single number is the alternative's prediction for Q_C (unitless). Compute it before computing Q_C against the Math 3.1 entry.",
+  "expected": 2.5,
+  "already_shown": null
+}

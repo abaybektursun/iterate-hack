@@ -1,0 +1,12 @@
+{
+ "kind": "covariate",
+ "alternative": "A known difference between the models compared: m21 (base + Code-RL top-8 at 1x, plain) is simply a more accurate model than the plain base T3 on these problems (157/250 vs 107/250 right, result-ac7104). T3's non-deliberative answers are its low-accuracy mode (about 0.31 right on unflagged problems where the cued base is about 0.83 right, result-1f98b0 null), so the problems are not hard; T3 just answers badly there. m21's per-problem advantage over T3 on those problems is a general accuracy gap and does not depend on how m21's own answer opens. If D is restricted by T3's flag only, ignoring m21's flag, it already lands near 0.25, inside [0.1, 0.4]. Requiring m21 to be non-deliberative as well, which is the part the account needs, adds nothing.",
+ "files": [
+  "studies/theory/results/experiments/cell-r9-m21-01",
+  "studies/rlneurons/results/rln4/t1_t3_items-01",
+  "studies/theory/results/direct/t3open-01"
+ ],
+ "computation": "1) Load studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json and keep problem indices 0-249. 2) Apply the result-1f98b0 deliberative-opening flag rule (as implemented for studies/theory/results/direct/t3open-01) to the first 240 characters of each T3 answer only. Keep the T3-non-deliberative problems (about 175 of 250), and do NOT look at m21's opening. 3) Join the m21 rows from studies/theory/results/experiments/cell-r9-m21-01 by problem index (grader v3 right flag). 4) On this T3-non-deliberative set, compute A = mean(m21 right) - mean(T3 right), with every m21 row on those problems counted whatever its opening. 5) Predicted D_m21 = A, as a fraction on the 0-1 scale. Fallback if the flag rule is not available: the whole-set gap (157 - 107)/250 = 0.20.",
+ "expected": 0.26,
+ "already_shown": null
+}

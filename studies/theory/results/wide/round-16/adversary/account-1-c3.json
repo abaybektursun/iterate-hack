@@ -1,0 +1,10 @@
+{
+  "kind": "covariate",
+  "alternative": "Code-RL 3.1 is a sibling of Math-RL 3.1: same base, same RL-Zero 3.1 recipe (optimizer, learning rate, steps, rollout setup). Matrices that soak up a concentrated low-rank change under that recipe do so for both rewards, so the two share a per-matrix top-8-share fingerprint. Code-RL 3.1 already tracks Math 3.1 closely elsewhere: token-level log-prob agreement 0.405 (result-eb9211), and F27 notes the input-subspace overlap with Think-SFT is shared by Code 3.1. result-caa23d already measured Math 3.1's fingerprint on these exact 224 family-median-removed matrices: it follows Think-SFT (rho 0.594) and not IF-RL (rho -0.010), so rho(T) - rho(I) = +0.604. If Code 3.1's pattern is Math 3.1's pattern plus noise that is unrelated to Think-SFT and IF, then D3 = rho(Code, Math 3.1) x 0.604. With the Code-Math rank correlation of about 0.5-0.7 that sibling runs should have, that gives about 0.30-0.42, inside [0.15, 1.0]. None of this needs a Code-specific mechanism; it needs only the shared recipe and the Math 3.1 result.",
+  "files": [
+    "studies/theory/data/direct_reward/top8_share_v1.json"
+  ],
+  "computation": "1) From studies/theory/data/direct_reward/top8_share_v1.json, read the per-matrix top-8 share of the keys Code-RL 3.1, Math-RL 3.1, Think-SFT and IF-RL for all 224 matrices (32 layers x 7 families q,k,v,o,gate,up,down). 2) Within each module family, subtract that family's median share, per key. 3) Compute D_M = Spearman rho(Math 3.1, Think-SFT) - Spearman rho(Math 3.1, IF-RL) over the 224 residuals. This should reproduce result-caa23d: 0.594 - (-0.010) = 0.604. 4) Compute r_CM = Spearman rho(Code 3.1, Math 3.1) over the same 224 residuals. 5) Predicted D3 = r_CM x D_M. This is the value of the statistic if Code's ranks are Math 3.1's ranks plus noise independent of Think-SFT and IF. Example: r_CM = 0.6 gives 0.6 x 0.604 = 0.36.",
+  "expected": 0.36,
+  "already_shown": null
+}

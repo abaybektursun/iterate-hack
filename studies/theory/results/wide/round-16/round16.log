@@ -1,0 +1,77 @@
+== standing
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5ynvygz_
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5ynvygz_job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5ynvygz_
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5ynvygz_
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5ynvygz_job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5ynvygz_
+
+
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5ynvygz_job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5ynvygz_
+
+351 items before 2026-11-15T22:32:36, 39 at or after
+  running 1 jobs, 1 at a time
+254 items before 2026-11-15T17:45:51, 136 at or after
+  running 1 jobs, 1 at a time
+285 items before 2026-11-15T20:05:26, 105 at or after
+  running 1 jobs, 1 at a time
+267 items before 2026-11-15T18:58:29, 123 at or after
+  running 1 jobs, 1 at a time
+231 items before 2026-11-15T14:53:16, 159 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 142 at or after
+  running 1 jobs, 1 at a time
+315 items before 2026-11-15T21:27:03, 75 at or after
+  running 1 jobs, 1 at a time
+295 items before 2026-11-15T20:38:56, 95 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-14 (opus): done in 39 s
+248 items before 2026-11-15T16:32:52, 142 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-03 (opus): done in 45 s
+248 items before 2026-11-15T16:32:52, 142 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-12 (opus): done in 50 s
+  forecast_score/measured-round-13 (opus): done in 52 s
+248 items before 2026-11-15T16:32:52, 142 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 142 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-02 (opus): done in 57 s
+248 items before 2026-11-15T16:32:52, 142 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-09 (opus): done in 63 s
+  forecast_score/measured-round-11 (opus): done in 69 s
+  forecast_score/measured-round-10 (opus): done in 73 s
+  forecast_score/measured-run-05 (opus): done in 55 s
+  forecast_score/measured-run-07 (opus): done in 52 s
+  forecast_score/measured-run-06 (opus): done in 58 s
+  forecast_score/measured-run-08 (opus): done in 58 s
+  forecast_score/measured-run-04 (opus): done in 90 s
+390 items before 9999, 0 at or after
+  standing: 101 mechanisms, 100 scored, 36 carried, 31 to the graveyard; 331 forecasts written after their result, 0 measured rows not scored
+== direct facts
+  53 direct facts (17 hold)
+390 items before 9999, 0 at or after
+== synthesis: account-1
+  running 1 jobs, 1 at a time
+  synthesis/account-1 (opus): done in 490 s
+== synthesis: account-2, sees account-1
+  running 1 jobs, 1 at a time
+  synthesis/account-2 (opus): done in 593 s
+== synthesis: account-3, sees account-1, account-2
+  running 1 jobs, 1 at a time
+  synthesis/account-3 (opus): done in 392 s
+== blind markers and adversaries
+  running 12 jobs, 12 at a time
+  synthesis_adversary/account-1-c2 (opus): done in 37 s
+  synthesis_adversary/account-1-c1 (opus): done in 47 s
+  synthesis_adversary/account-3-c3 (opus): done in 50 s
+  synthesis_adversary/account-1-c3 (opus): done in 54 s
+  synthesis_adversary/account-2-c3 (opus): done in 56 s
+  synthesis_adversary/account-3-c2 (opus): done in 57 s
+  synthesis_adversary/account-2-c1 (opus): done in 62 s
+  synthesis_adversary/account-2-c2 (opus): done in 69 s
+  synthesis_adversary/account-3-c1 (opus): done in 75 s
+  synthesis_marks/account-1 (opus): done in 84 s
+  synthesis_marks/account-3 (opus): done in 93 s
+  synthesis_marks/account-2 (opus): done in 98 s
+  gate: 13 mechanisms without a row (round-16/account-1/c1, round-16/account-2/deny-account-1-c1, round-16/account-1/c2, round-16/account-2/deny-account-1-c2, round-16/account-2/c2, round-16/account-3/deny-account-2-c2, round-16/account-2/c3, round-16/account-3/deny-account-2-c3, round-16/account-1/c3, round-16/account-2/c1, round-16/account-3/c1, round-16/account-3/c2, round-16/account-3/c3): run the tests from studies/theory/results/wide/round-16/synthesis_tests.md, add rows, rerun

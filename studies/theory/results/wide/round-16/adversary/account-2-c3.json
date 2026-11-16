@@ -1,0 +1,13 @@
+{
+ "kind": "covariate",
+ "alternative": "Strength covariate: any model more accurate than the cued base on fresh2026 has wrong answers that agree more with RL's, whatever its weights share with RL. Stronger models make fewer one-off wrong answers (garbled or mis-extracted values, near-cap guesses, scattered slips). More of their remaining wrong answers land on the few common attractor values per problem (a standard misreading, an off-by-one count, a partial result), and RL's wrong answers land on those values too. The cued base is weak on fresh2026 (29.5 of 136 per sample, against 48.25 for the edit and 50.5 for RL), so its wrong answers are the most scattered and N(B,R) is the lowest. Any arm near RL's accuracy then gives N(X,R) - N(B,R) clearly above 0, which matches the predicted D_fresh of 0.08-0.6 without the edit copying RL's mechanism. Think-SFT + cue tests this. It was trained by imitation only and holds no RL-Math directions, it is at least as strong on fresh2026 (60.0 per sample), and its 4-sample fresh2026 rows are stored. If D computed with Think-SFT in place of the edit lands in [0.08, 0.6], accuracy alone predicts the range.",
+ "files": [
+  "studies/rlneurons/results/fresh/sft1_cue_s4-01",
+  "studies/rlneurons/results/fresh/rl_plain_s4-01",
+  "studies/rlneurons/results/fresh/base_cue_s4-01",
+  "studies/rlneurons/results/mixvote/fresh2026_top8x1.5-01"
+ ],
+ "computation": "1) From studies/rlneurons/results/fresh/sft1_cue_s4-01 (Think-SFT + cue, fresh2026, 4 samples, attempt 0, cap 16,384), studies/rlneurons/results/fresh/rl_plain_s4-01 and studies/rlneurons/results/fresh/base_cue_s4-01, read each sample's extracted answer, v3 right/wrong and finished flag. 2) Keep the fresh2026 problems where Think-SFT, RL plain and the cued base each have at least 1 finished wrong answer (v3) among their 4 samples. These are the consequence's row rules with Think-SFT (S) in place of the edit (E); add the edit as a 4th condition too so the problem set matches more closely. Within pairs come only from problems where that model has at least 2 finished wrong answers. 3) Using math-verify equality of extracted answers, compute the pooled cross agreement share S-vs-R (all finished-wrong S x finished-wrong R pairs, pooled over problems), the pooled within shares of S and of R, and the same for B against R. 4) Form N(S,R) and N(B,R) exactly as in c2 steps 1-6, and compute D_alt = N(S,R) - N(B,R). 5) Run 10,000 bootstrap resamples over problems and report the point value and its 5th-95th percentile. D_alt is the strength-only prediction of D_fresh, on the statistic's unitless scale. Expected about 0.2, inside [0.08, 0.6].",
+ "expected": 0.2,
+ "already_shown": null
+}
