@@ -1810,9 +1810,13 @@ for `synthesis.md`):
 PYTHONUNBUFFERED=1 uv run studies/theory/lib/forecast.py synthesis studies/theory/results/wide/round-17 --from studies/theory/results/wide/round-16 studies/theory/results/wide/round-15 studies/theory/results/wide/round-14 studies/theory/results/wide/round-13 studies/theory/results/wide/round-12 studies/theory/results/wide/round-11 studies/theory/results/wide/round-10 studies/theory/results/wide/round-09 studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
 ```
 
-**Answer.** No consequence holds on the test half. Of 9 consequences, 7 were dropped on the explore half (the
-adversary's explore value lay inside the account's explore 90 % interval), and the 2 tested were both `not separated`:
-inside the account's range, but the adversary's test-half value lay inside the test interval too. With the rows in
+**Answer.** 0 of 2 tested held; 7 of 9 never reached the test half; in both tests the adversary's value equalled the
+account's own claim, so the tests could not count against the account. (Correction after an audit on result-5f4dd7: the
+adversary of a3/c2 is a second RL-Code draw and that of a1/c2 the Spearman-Brown ceiling of an RL-like draw, which is
+what the accounts say the edit is; each test had about a 5 % chance to hold even if its account were true.) The 7 were
+dropped on the explore half (the adversary's explore value lay inside the account's explore 90 % interval), and the 2
+tested were both `not separated`: inside the account's range, but the adversary's test-half value lay inside the test
+interval too. With the rows in
 hand, the adversaries landed on the right scale every time; the accounts' statistics did not go beyond what accuracy,
 sampling noise or construction already predict.
 
@@ -2022,6 +2026,40 @@ Files in `results/wide/round-18/`: `standing.md` / `standing.json` / `standing/`
 `account-3.json` (and `jobs/`), `marks-account-<k>.json`, `adversary/account-<k>-c<j>.json` and
 `adversary/account-<k>-weights_cell.json`, `synthesis_tests.md` / `.json`, `weights_cells.md` / `.json`, `synthesis.md`,
 `run.json`, `round18.log`.
+
+## Engine 19 (accounts and covariate-only adversaries forecast the team's open work)
+
+Skill version 19, branch `theory` only (main is frozen). Why: in rounds 17 and 18 every consequence was dropped or not
+separated (18 of 18). Once the account and its adversary both see a statistic's value on the explore half, the adversary
+can fit a constant to it, and no held-out half of the same statistic can separate them. Separation needs a prediction
+about a condition neither has seen: the team's open weight-edit cells and new samples, whose results post within hours.
+
+1. `forecast.py synthesis` writes the three accounts as in engine 18 (explore rows, facts, blind markers) and, beside
+   them, runs `open_targets` (the targets_open job: open work items that will report a number, with readout, unit, n,
+   board snapshot time). Stage `open_forecasts` (`open_forecasts()`): each account (`prompts/open_forecast_account.md`,
+   Bash on the explore rows), one covariate-only adversary per account (`prompts/open_forecast_adversary.md`, same rows,
+   never sees the account: it writes its rule and forecasts blind) and the two no-theory readers (`prompts/forecast.md`)
+   forecast every target (value, 90 % interval, one sentence of derivation; the adversary also lists its predictors).
+2. Adversary rule: stored rows and board numbers of the untrained base, of models trained without RL and of random
+   edits, and plain covariates (accuracy, length, cap hits, difficulty, edit norm, module type, layer, subspace
+   dimension). It may not use any model that embodies the account's claim: no sample, accuracy or length of an RL model
+   and no outcome of an edit built from an RL change or its directions. One judge per pair
+   (`prompts/open_forecast_judge.md`) reads both sides' derivations and rejects an adversary forecast whose value lies
+   where the account's does by construction (a forbidden predictor, or the account's quantity renamed); rejected
+   forecasts are left out of `forecasts.json` and not scored. This closes the fault of round 17, where the adversary's
+   value was the account's own claim.
+3. Outputs: `open_forecasts/` (raw files, judges), `forecasts.json` (forecasters `reader-1`, `reader-2`,
+   `round-<nn>/account-<k>`, `round-<nn>/adversary-<k>`), `forecasts.md` (its written time counts, rule 11.1),
+   `mechanisms.json` (so the next standing records both sides), `open_forecasts.md` / `.json`: targets ranked by
+   |account - adversary| / the wider 90 % interval, "deciding" when the two intervals do not overlap, "weak" otherwise;
+   per pair the chance the value lands inside the other side's interval if one side is right (inside its own is 90 %
+   by definition); the board item that decides each target.
+4. Scoring: the next round's `standing` scores `forecasts.json` once per number, only results posted after the forecasts
+   were written. `open_scores()` / `pair_gains()` then give, per account, the sum over targets of clip3(log density of the
+   account - log density of its adversary) at the measured value (same density rule), and each side's gain over the
+   readers; the next round's `synthesis.md` ranks the earlier accounts by it. `forecast.py score <round>` adds the same
+   table when run on a round with `open_forecasts.json`.
+5. The explore-half consequence tests, weights cells and the gate of engines 17 and 18 run only with `--with-row-tests`.
 
 ## Theories
 

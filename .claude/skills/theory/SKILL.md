@@ -3,7 +3,7 @@ name: theory
 description: Score the team's fixed forecasts, collect the direct facts (offline tests of mechanisms' causes), put every direct fact into three single accounts written in parallel, which measure their consequences on the explore half of the stored rows and are tested on the test half against an adversary's alternative (forecast.py synthesis), find the numbers both no-theory readers got wrong, write rival pairs only about those, each pair with one shared direct test on stored data (one statistic, disjoint ranges for the two rivals), and let only mechanisms that hold a direct test (90 % interval inside the range, n of 50 or more) forecast, and only holders that forecast something the readers do not design cells. One round runs studies/theory/lib/forecast.py round twice: the first run scores (once per number, only forecasts written before the result), writes direct_facts.json, surprises.md, direct_tests.md (plans for the top untested carried mechanisms and one per rival pair) and stops; subagents run the tests offline and add rows to results/refuted.json or direct_tested.json; the second run has the holders and two readers forecast the open work, lists holders that forecast nothing new, and turns the others' pairs into blind-forecast cells. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 18: accounts are tested on weight statistics of held-out matrices)
+# Theory round (version 19: accounts and covariate-only adversaries forecast the team's open work)
 
 Why this order: in rounds 9 to 12 forecast gain ranked mechanisms whose causes then failed a direct test (5 of the top 6
 failed their own claim, 1 held only against a weak null; README "Direct tests"). So a mechanism now earns the right to
@@ -45,6 +45,15 @@ loads the per-matrix tables (`rows.WEIGHTS`: anatomy, top8_share, cap, xlisten);
 3. Each account gives at least 2 `weights` consequences (n >= 25 test matrices, bootstrap over matrices) and at most 2 on
 sampling rows, and one weights-only computation in no table (`weights_cell`, replacing the GPU cell); a blind adversary
 predicts it too, and `weights_cells.md` ranks them by the gap in interval widths. The engine runs none.
+
+Version 19 rules (rounds 17-18: 18 of 18 consequences dropped or not separated; once account and adversary both see a
+statistic on the explore half, the adversary fits it, so only an unseen condition separates them): 1. `synthesis` adds
+`open_forecasts`: targets_open (beside the accounts) lists open work that will post a number; each account, one
+covariate-only adversary per account (blind to it; stored rows and covariates only, never an RL sample or RL-derived
+edit as predictor) and both readers forecast each target; a judge per pair rejects adversary forecasts that are the
+account's claim by construction. 2. `open_forecasts.md` ranks targets by gap in interval widths (deciding: no overlap).
+Commit `forecasts.json` at once. 3. The next round's standing scores them; its `synthesis.md` ranks accounts by gain
+over their adversary (nats). 4. Explore-half consequence tests only with `--with-row-tests`.
 
 ## What a round is
 
