@@ -37,6 +37,18 @@ def bits(v):
     return "".join("1" if x else "0" for x in v)
 
 
+def snip(text, n=460):
+    """The statement, cut at a space after at most n characters and never inside a formula, with cut = 1 when shortened."""
+    text = re.sub(r"\[asy\].*?(\[/asy\]|$)", " ", text, flags=re.S).strip()
+    if len(text) <= n:
+        return {"text": text}
+    for end in range(n, 40, -1):
+        head = text[:end]
+        if text[end] == " " and head.count("$") % 2 == 0 and head.count("\\[") == head.count("\\]") and head.count("\\begin") == head.count("\\end"):
+            return {"text": head, "cut": 1}
+    return {"text": text[:n].split("$")[0], "cut": 1}
+
+
 def cfg(key, name, group, when_, src, stored, right, cap=None, tok=None, ans=None):
     right = [int(x) for x in right]
     assert sum(right) == stored, (key, sum(right), stored)
@@ -78,7 +90,7 @@ def hard328():
     t = load("table/hard328-02/table.json")
     idx = t["problem_indices"]
     hard = {p["index"]: p for p in json.loads((D / "rln3/hard.json").read_text())}
-    problems = [{"id": hard[i]["unique_id"], "tag": hard[i]["source"], "text": hard[i]["problem"][:320], "gold": hard[i]["answer"][:60]}
+    problems = [{"id": hard[i]["unique_id"], "tag": hard[i]["source"], **snip(hard[i]["problem"]), "gold": hard[i]["answer"][:60]}
                 for i in idx]
     man = load("axis/hard328-01/manifest.json")["arms"]
     edits = load("xreward/edits/readout.json")["cells"]
@@ -149,7 +161,7 @@ def math500():
     meta = json.loads((D / "profile/math500_meta_v1.json").read_text())
     assert meta["unique_ids"] == v["unique_ids"]
     probs = json.loads((D / "rln4/math500.json").read_text())
-    problems = [{"id": p["unique_id"], "tag": f"{meta['subject'][i]}, level {meta['level'][i]}", "text": p["problem"][:320],
+    problems = [{"id": p["unique_id"], "tag": f"{meta['subject'][i]}, level {meta['level'][i]}", **snip(p["problem"]),
                  "gold": p["answer"][:60]} for i, p in enumerate(probs)]
     rich = {}
     for arm, folder in (("base_cue", "day1_3/math500_base_cue-01"), ("rl_plain", "day1_3/math500_rl-01")):

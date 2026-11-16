@@ -29,6 +29,8 @@ Rules:
 - "change": the route in one sentence. "model": "base" or "think_sft".
 - "command": the command line for the route (several joined with " && "), with job files and flags of jobs.md only;
   "rl_command": the same procedure with the RL model (free_cell.py --model rl, or run_cell.py --model rl).
+- Never put git in a command ($$(git rev-parse HEAD) or rev-parse): job machines have no .git folder. Where a job takes
+  --commit, write --commit COMMIT_SHA; the coordinator replaces it with the pushed commit's full sha when submitting.
 - "tokens": generated tokens per problem summed over all samples, your estimate. "gpu_minutes": on one L40S 48 GB,
   both commands, at most 240 (a 500-problem MATH-500 cell, one sample, cap 16,384, takes about 100 minutes).
 - "readouts": right answers with grader v3 (after the vote or selection rule, if any): the route on a subset of

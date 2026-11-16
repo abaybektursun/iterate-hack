@@ -1,0 +1,217 @@
+[
+ {
+  "problem_index": 94,
+  "gold": "80",
+  "supports_claim": true,
+  "p": 0.3333333333333333,
+  "right": 4,
+  "T": 1,
+  "null12": 0,
+  "no_answer": 0,
+  "cap_hits": 0,
+  "k4_sizes": [
+   2,
+   2
+  ],
+  "k12_sizes": [
+   3,
+   4,
+   1,
+   1,
+   1,
+   1,
+   1
+  ],
+  "k12_wrong_groups": 6,
+  "right_in_0_3": 2,
+  "answers": [
+   {
+    "sample": 0,
+    "extracted_v3": "30",
+    "score_v3": 0,
+    "cap_hit": false
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "80",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "30^{\\circ}",
+    "score_v3": 0,
+    "cap_hit": false
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "80",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 4,
+    "extracted_v3": "80",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 5,
+    "extracted_v3": "70",
+    "score_v3": 0,
+    "cap_hit": false
+   },
+   {
+    "sample": 6,
+    "extracted_v3": "80",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 7,
+    "extracted_v3": "30",
+    "score_v3": 0,
+    "cap_hit": false
+   },
+   {
+    "sample": 8,
+    "extracted_v3": "100",
+    "score_v3": 0,
+    "cap_hit": false
+   },
+   {
+    "sample": 9,
+    "extracted_v3": "90",
+    "score_v3": 0,
+    "cap_hit": false
+   },
+   {
+    "sample": 10,
+    "extracted_v3": "60",
+    "score_v3": 0,
+    "cap_hit": false
+   },
+   {
+    "sample": 11,
+    "extracted_v3": "130",
+    "score_v3": 0,
+    "cap_hit": false
+   }
+  ],
+  "vote_k4": {
+   "winner_sample": 0,
+   "score": 0
+  },
+  "vote_k12": {
+   "winner_sample": 1,
+   "score": 1
+  }
+ },
+ {
+  "problem_index": 39,
+  "gold": "23",
+  "supports_claim": false,
+  "p": 0.75,
+  "right": 9,
+  "T": 1,
+  "null12": 1,
+  "no_answer": 0,
+  "cap_hits": 0,
+  "k4_sizes": [
+   1,
+   1,
+   1,
+   1
+  ],
+  "k12_sizes": [
+   1,
+   1,
+   1,
+   9
+  ],
+  "k12_wrong_groups": 3,
+  "right_in_0_3": 1,
+  "answers": [
+   {
+    "sample": 0,
+    "extracted_v3": "$32",
+    "score_v3": 0,
+    "cap_hit": false
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "the answer to the problem.",
+    "score_v3": 0,
+    "cap_hit": false
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "$59$",
+    "score_v3": 0,
+    "cap_hit": false
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "$23$",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 4,
+    "extracted_v3": "23",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 5,
+    "extracted_v3": "23",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 6,
+    "extracted_v3": "$23",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 7,
+    "extracted_v3": "23",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 8,
+    "extracted_v3": "23",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 9,
+    "extracted_v3": "23",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 10,
+    "extracted_v3": "23",
+    "score_v3": 1,
+    "cap_hit": false
+   },
+   {
+    "sample": 11,
+    "extracted_v3": "23",
+    "score_v3": 1,
+    "cap_hit": false
+   }
+  ],
+  "vote_k4": {
+   "winner_sample": 0,
+   "score": 0
+  },
+  "vote_k12": {
+   "winner_sample": 3,
+   "score": 1
+  }
+ }
+]

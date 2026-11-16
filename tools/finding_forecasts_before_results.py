@@ -319,7 +319,7 @@ NAMES = {
 
 # Written by --write from the run folders: COUNTS (keys in _count's docstring), one run, one theory and one row per line
 # (fields in _build's docstring).
-COUNTS = {'targets': 52, 'landed': 26, 'open': 26, 'asked': [194, 78, 116], 'theory': [162, 65, 32, 106, -8.84], 'reader': [49, 51, 78], 'apart': [8, 3], 'before': 147, 'rows_any': [18, 15], 'waiting': 565, 'commit': 'f37df5a'}
+COUNTS = {'targets': 52, 'landed': 26, 'open': 26, 'asked': [194, 78, 116], 'theory': [162, 65, 32, 106, -8.84], 'reader': [49, 51, 78], 'apart': [8, 3], 'before': 147, 'rows_any': [18, 15], 'waiting': 565, 'commit': '45e6978'}
 
 RUNS = [
     ['run-01', '2026-11-15T14:45:56', 'c95e0f7', '2026-11-15T14:50:58', 20, '2026-11-15T17:31:42', 'studies/theory/results/engine/round-07'],
@@ -503,8 +503,9 @@ _top_rows = [r for r in ROWS if r[1] == _top and r[5] is not None]
 _top_low = all(r[5] > f[3] for r in _top_rows for f in r[9] if f[2] in READERS)
 _top_runs = len({f[0] for r in _top_rows for f in r[9]})
 
-LINE = (f"Theories beat both no-theory readers in {TH[1]} of {TH[0]} forecasts (chance: {_chance:.0f}); {_top_n} of the "
-        f"{TH[1]} are on one code experiment the readers forecast too low.")
+LINE = (f"AI-written theories were nearer than both AI readers without a theory in {TH[1]} of {TH[0]} forecasts (chance: "
+        f"{_chance:.0f}), but {_top_n} of the {TH[1]} are on one code experiment; outside it, {TH[1] - _top_n} of "
+        f"{TH[0] - _top_c} (chance: {(TH[0] - _top_c) / 3:.0f}).")
 
 
 def _fc(row, run, who):  # one forecast of a row
@@ -561,8 +562,11 @@ _gain = TH[4]
 # Depth, opened by a click: key, name, one sentence, then at most three more. Full plain sentences.
 PANELS = [
     ["new", "What is new",
-     f"{_word(_round).capitalize()} rounds of the theory engine tested theories on numbers that already existed when the theories were written. "
-     "Here the theories forecast numbers that GPU jobs had not reported yet.",
+     "Here the theories forecast numbers that GPU jobs had not reported yet. A theory is an explanation of the team's "
+     "results, written by an AI agent, that gives a forecast for each number. A no-theory reader is the same AI model "
+     "given the same board and work items with no theory. A round is one pass of the team's theory procedure, which "
+     f"writes, tests and refutes theories; the earlier {_word(_round)} rounds tested theories only on numbers that already "
+     "existed when the theories were written.",
      [f"{_word(len(RUNS)).capitalize()} runs read the board at {_runs_txt} and turned the open work items into {COUNTS['asked'][0]} targets: "
       f"{COUNTS['targets']} different numbers, a value and a 90 % interval forecast for each.",
       f"The forecasters: every theory not refuted in round {_round}, {_word(_mech)} mechanisms written to disagree with the "
@@ -579,7 +583,7 @@ PANELS = [
       f"were nearer in {TH[1] - _top_n} of {TH[0] - _top_c}; one in three would be {(TH[0] - _top_c) / 3:.0f}.",
       f"The reported number fell inside the theory's own 90 % interval {TH[3]} times in {TH[0]}; inside reader 1's "
       f"{RD[0]} and reader 2's {RD[1]} times in {RD[2]}.",
-      f"The engine's score, which also rewards narrow intervals, gave the reported numbers less probability under the "
+      f"The log score, which also rewards narrow intervals, gave the reported numbers less probability under the "
       f"theories than under the readers: {_m(_gain)} nats over the {TH[0]} forecasts.",
       f"{COUNTS['apart'][0]} theory forecasts lay outside both readers' intervals, where a theory could show what the "
       f"readers missed; {COUNTS['apart'][1]} of them held the reported number."]],
@@ -599,7 +603,7 @@ PANELS = [
      f"{COUNTS['open']} targets are still open.",
      [f"{COUNTS['before']} of the {TH[0]} theory forecasts were committed to git before their result was posted. "
       + "; ".join(_timing)[:1].upper() + "; ".join(_timing)[1:] + ". The others were written from the frozen board copy.",
-      f"The engine's theories said nothing about most targets: in run 1 each forecast {min(_e1)} to {max(_e1)} of "
+      f"The theories said nothing about most targets: in run 1 each forecast {min(_e1)} to {max(_e1)} of "
       f"{RUNS[0][4]}. {_word(_bare).capitalize()} reported targets had no theory forecast at all.",
       f"On {COUNTS['rows_any'][1]} of the {COUNTS['rows_any'][0]} reported targets with a theory forecast, at least one "
       f"theory was nearer than both readers. With up to {_word(_most)} theories per target, one of them is often nearest by chance, "

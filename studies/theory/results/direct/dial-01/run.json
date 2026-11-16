@@ -1,0 +1,20 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_dial.md",
+ "command": "uv run --no-project --with numpy python studies/theory/analysis/direct_dial.py",
+ "commit_of_spec": "bafbd38",
+ "inputs": [
+  "studies/rlneurons/results/day1_3/hard328_base_cue_s4r2-01/rows.jsonl",
+  "studies/rlneurons/results/day1_3/hard328_top8x1.5_cue_s4-01/rows.jsonl",
+  "studies/rlneurons/results/day1_3/hard328_rl_plain_s4r2-01/rows.jsonl",
+  "studies/rlneurons/results/day1_3/math500_base_cue-01/rows.jsonl",
+  "studies/rlneurons/results/day1_3/math500_rl-01/rows.jsonl",
+  "studies/rlneurons/results/xreward/dial15_math500-01/rows.jsonl",
+  "studies/theory/results/experiments/cell-r9-m11-01/per_problem.json",
+  "runs/abaybektursun-1115-031209-1273/answers.jsonl (Modal volume, uv run tools/gpu.py get; rows without text in m1x_hard328_rows.jsonl)",
+  "runs/abaybektursun-1115-055641-b417/answers.jsonl (Modal volume; examples and reading only)"
+ ],
+ "grader": "score_v3 as stored in the rows",
+ "bootstrap": "10,000 resamples of problems, numpy default_rng(0), 90 % percentile interval",
+ "board": "work-1645c5",
+ "added_after_first_readout": ["cap_rate_* and right_per_finished_* per group", "base_always_finishes"]
+}

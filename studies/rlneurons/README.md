@@ -36,7 +36,8 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `analysis/seen.py`, `analysis/seen_test.py`, `specs/SPEC_seen.md` | Seen against unseen: the 72 harder problems in the RL training prompts against 130 source-matched unseen ones, four arms, 4 samples; D = (RL - control) seen minus unseen. Sets `run_cell --set hard72`, `--set hardmatch`. Outputs `results/seen/`. |
 | `analysis/profile.py`, `analysis/profile_test.py`, `specs/SPEC_profile.md` | Difficulty profiles of Think-SFT and RL: error reduction by difficulty bin with difficulty defined without the arms compared, profile contrast against same-arm and one-axis noise floors, 2PL against Rasch held out, unions, cap hits by level, filed predictions for Think-SFT on hard328. Outputs `results/profile/`; input `data/profile/math500_meta_v1.json`. |
 | `lib/egate.py`, `jobs/egate_cell.py`, `analysis/egate.py`, `specs/SPEC_egate.md` | Entropy-gated temperature: a vLLM logits processor that lowers the temperature only at positions chosen by next-token entropy, at random, or outside the stretch after a repeat; the multi-arm job; the readout. Outputs `results/egate/`. |
-| `jobs/delta_sum.py`, `analysis/transplant.py`, `specs/SPEC_transplant.md` | Delta transplant: writes host + a (donor - base) for three fine-tunes of one base (Think-SFT + a times the RL-Math delta, or matched noise), and the readout against the stored Think-SFT and RL samples. Outputs `results/transplant/`. |
+| `jobs/delta_sum.py`, `analysis/transplant.py`, `analysis/cap32_m2.py`, `specs/SPEC_transplant.md` | Delta transplant: writes host + a (donor - base) for three fine-tunes of one base (Think-SFT + a times the RL-Math delta, or matched noise), and the readout against the stored Think-SFT and RL samples. Outputs `results/transplant/`. |
+| `analysis/transplant_restart.py` | M(2) at cap 32,768 (seed 3,000,000) counted at both caps, and chains over stored 16,384 samples: the answer of the first sample that did not hit the cap. Writes `results/transplant/<run>/readout.json`. |
 | `jobs/run_cell.py` | One cell (model, prompt arm, problem set, temperature, top-p, seed) through the team runner `tools/gpu.py`. Reuses `rln4_gen`'s engine and row record, adds grader v3, reads `data/`. See "Day-1 cells on the team runner". |
 | `jobs/setup_vllm.sh` | Installs vLLM 0.32.0, math-verify 0.9.0, transformers 5.19.0, tokenizers 0.23.3 into the venv `/opt/rln-vllm` at job start. |
 | `jobs/rln3_gen.py` | RLN-3 generation job (arms P, F, C on MATH-500 and the harder set), AWS `pg` only. |
@@ -69,6 +70,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `tools/finding_rl_change_on_imitation.py` | The public page of "Delta transplant", served at `/finding/rl-change-on-imitation`: the 328 problems as marks in three bands and one slider over a in Think-SFT + a × (RL − base), with the noise control as a switch. Its DATA is checked against `results/transplant/hard328-01/` by running the file (command in its docstring). |
 | `tools/finding_no_early_warning.py` | The public page of the drift measurement, served at `/finding/no-early-warning`: the AUROC of six text signs for a failing Think-SFT sample, with its interval, at token 4,000, 8,000 and 12,000, against a planted sign (0.807), and the tokens saved by the stop rule (0.8 %). Reads `results/drift/{describe,predict,stop}-01/`; running the file checks it. |
 | `tools/finding_rl_directions_move_activations.py` | The public page of the xshift measurement, served at `/finding/rl-directions-move-activations`: one mark per weight edit (28), its weight norm against the shift of the layer-24 residual stream, with views for the direction of the shift and for cut-off answers (the refuted prediction). Reads `results/xshift/run-01/readout.json`; running the file checks it. |
+| `tools/finding_two_jobs_in_the_edit.py` | The public page of the depth and rank split of the 1.5x edit, served at `/finding/two-jobs-in-the-edit`: each part of the edit as one mark on right answers against cut-off answers, by layer band and by direction, with the code pair where the depth split was refuted. Reads `results/xreward/depth3/readout.json`, `xreward/edits/readout.json` and `xreward/code_depth/readout.json`; running the file checks it. |
 | `tools/finding_rl_avoids_the_slip.py` | The public page of the wrong-step measurement, served at `/finding/rl-avoids-the-slip`: the 51 located first wrong steps of Base + cue as one mark each on an axis of log-probability change, by kind of error, with a switch over the model scored. Reads `results/wrongstep/math500-01/`; running the file checks it. |
 | `tools/finding_rl_learns_the_opening_first.py` | The public page of the RL checkpoints (steps 100, 400, 2,800), served at `/finding/rl-learns-the-opening-first`: 500 answers as marks in three bands with a switch along training. Its PROBLEMS literal is a copy of the round-04 replication rows (not committed; `runs/replication/` of the theory worktree), checked against `studies/theory/results/engine/round-04/replication/`. |
 | `grader/repair_v4.py`, `grader/repair_v4_test.py` | Grader v4 / v4a: grader v3 plus five label-free answer-statement rules (placeholder, lower-case marker, last-line math, trailing brace, form), and its planted tests. A grader version for both models, not a method. See "Answer-statement repair". |
@@ -3099,6 +3101,70 @@ samples; it reproduces the posted 75 and 57 of result-5251c9.
   at 16:15 UTC); its rows are job -082840-a8f8, folder `fresh_s1`.
 - Not run: MATH-500 for M(2) (its job was stopped with the account) and the vote over 4 on the 328 (samples 3 and 4).
 
+### hard328, M(2) at cap 32,768, seed 3,010,000: 245 right, 0 cap hits (`results/transplant/cap32_m2_s1-01/`, amendment 4, board work-441e5b)
+
+One sample, Modal H100, 4 shards (jobs abaybektursun-1115-140745-b1e2, -140758-d51e, -140811-353b, -140826-c2f4, commit
+ca5adf4; M(2) built in each job by `delta_sum`, effective a 2.0000; smoke -140001-11a6). Readout `analysis/cap32_m2.py`, scored
+as `analysis/cap32.py` does (the 16,384 view counts an answer right only if it finished within 16,384 tokens). Reference:
+Think-SFT + cue at 32,768, sample 1 of work-dc9359 (jobs -082022-5d48 and -093636-bb67, same per-problem seeds; team store
+handoff/cap32vote/). Paired bootstrap over the 328 problems, 10,000 resamples, seed 0.
+
+| Model, seed 3,010,000 | Right at 16,384 view | Right at 32,768 | Cap hits 16,384 / 32,768 | Answers past 16,384: right | Tokens per problem 16,384 view / 32,768 |
+|---|---|---|---|---|---|
+| Think-SFT + cue | 210 | 234 | 90 / 1 | 90: 24 | 10,043 / 11,512 |
+| M(2) | 232 | 245 | 56 / 0 | 56: 13 | 9,348 / 9,875 |
+
+- M(2) minus Think-SFT at 32,768: +3.4 points [-0.6, 7.0] (11 problems); at the 16,384 view +6.7 [3.1, 10.4]. M(2)'s own gain
+  from the doubled cap is +4.0 [2.1, 6.1] (13 problems), against Think-SFT's +7.3.
+- Amendment 3's filed reading: 245 is in "240+ = the delta adds right answers" (H-more), above Think-SFT's four 32,768
+  samples (230, 234, 235, 232). The paired test against the same seed does not separate (interval includes 0), so this one
+  sample supports H-more by the filed count but not by the paired test. M(2) also uses 14 % fewer tokens (9,875 against 11,512).
+- Amendment 3's own run (seed 3,000,000, vast.ai, work-8b4030) is a second sample. Raw answers: `runs/<job-id>/` in the worktree
+  iterate-hack-m2cap of abaybektursun and the Modal Volume iterate-runs (not committed). About 5 USD of Modal H100.
+
+```
+uv run tools/gpu.py submit h100 --hours 1.5 -- "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.delta_sum --host think_sft --donor rl_math --alpha 2.0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label sft1_rl20 --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --max-tokens 32768 --seed 3010000 --shard <k>/4 --commit <sha>"
+python3 -m studies.rlneurons.analysis.shard_join --runs runs/<job k=0..3> --out runs/m2_cap32_s1_joined
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.cap32_m2 --m2 runs/m2_cap32_s1_joined --think runs/think_cap32_s1_joined --out studies/rlneurons/results/transplant/cap32_m2_s1-01 --command '<job command>'
+```
+
+### hard328, M(2) at cap 32,768, seed 3,000,000: 241 right, 0 cap hits; restart against a longer cap (`results/transplant/hard328_cap32-01/`, amendment 3, board work-8b4030)
+
+Amendment 3's own run: vast.ai RTX PRO 6000, job abaybektursun-1115-115611-7095, commit 94e5d06, the M(2) written by job
+-064729-a4fb (effective a 2.0000). The first attempt (job -110620-f975) was cut by the account stop at 19:50 UTC and is not used.
+`python3 -m studies.rlneurons.analysis.transplant_restart hard328_cap32-01 --cap32 runs/abaybektursun-1115-115611-7095/hard328_cap32`.
+
+| M(2), seed 3,000,000 | Right | Cap hits | Tokens per problem |
+|---|---|---|---|
+| Counted at 16,384 | 229 | 57 | 9,299 |
+| At 32,768 | 241 | 0 | 9,827 |
+
+- Filed in amendment 3: 225 to 235 = the delta only saves tokens, 240 or more = it adds right answers. Both samples are in
+  "240 or more": 241 here and 245 at seed 3,010,000 (section above), mean 243.0, against Think-SFT's four samples at 32,768 of
+  230, 234, 235, 232 (mean 232.75; the 230 is this seed). Every M(2) sample is above every Think-SFT sample, by 10 problems on
+  average, with 15 % fewer tokens (9,851 against about 11,650). The per-problem test of this seed against Think-SFT is not made
+  here: Think-SFT's 32,768 rows are not on main.
+- 57 answers pass 16,384 tokens, all finish, 12 are right (21 %; Think-SFT 23 of 91 at this seed in result-c8b994).
+- Restart or continue (chains over the stored 16,384 samples, every assignment of distinct samples; `readout.json`, `chains`):
+
+| What is done after a cap hit | Right of 328 | Cap hits left | Tokens per problem |
+|---|---|---|---|
+| M(2), nothing | 233.3 | 54.0 | 9,436 |
+| M(2), continue to 32,768 (2 runs) | 243.0 | 0 | 9,851 |
+| M(2), one new M(2) sample | 240.5 (238 to 244) | 29.7 | 11,966 |
+| M(2), up to two new M(2) samples | 242.8 (240 to 246) | 21.0 | 13,395 |
+| M(2), then M(4) | 237.0 | 15.7 | 11,827 |
+| M(2), then M(3), then M(4) | 238.7 | 7.7 | 12,917 |
+| M(2), then RL plain | 235.4 | 13.1 | 11,750 |
+| Think-SFT, nothing | 209.0 | 94.5 | 10,103 |
+| Think-SFT, one new Think-SFT sample | 222.0 | 68.8 | 14,559 |
+| Think-SFT, then M(2) | 233.6 | 43.2 | 14,328 |
+
+  Continuing the cut answer is the cheapest: 243 at 9,851 tokens, against 240.5 at 11,966 for a new sample. Passing a cut
+  problem to a model with more of the RL delta (M(3), M(4), RL), which finishes more often, gives fewer right answers than a
+  new sample of M(2) itself at the same tokens: finishing more often does not pay for the lower share of right answers.
+  The chains were computed after the rows were seen (no prediction filed); M(3) and M(4) have one stored sample each.
+
 Run folders hold `readout.json`, `metrics.json` and `delta_sum.json` (per arm), `rows.jsonl` (arms and references, per answer)
 and `examples.json` (one right and one wrong finished answer per arm, with the prompt). Jobs: hard328 a = 1 -000934-51f9,
 a = 2 -000954-b526 and -020508-879c, a = 3 -020435-c76d, a = 4 -020500-36ed, control -020021-e9d1; MATH-500 -004808-bb28 (all
@@ -3245,6 +3311,117 @@ uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rln
 uv run --no-project --with numpy python -m studies.rlneurons.analysis.fresh_read --sft studies/rlneurons/results/fresh/sft1_cue_s4-01 --rl studies/rlneurons/results/fresh/rl_plain_s4-01 --base studies/rlneurons/results/fresh/base_cue_s4-01 --out studies/rlneurons/results/fresh/readout-01 --texts runs/fresh_sft1_cue_s4 runs/fresh_rl_plain_s4 runs/fresh_base_cue_s4
 ```
 
+## Vote at a cap of 32,768: doubling the cap adds 7 to 8 points to one sample and nothing separable to the vote over 4 (hard328 n = 328, fresh2026 n = 136, Think-SFT + cue, 4 samples, board work-dc9359, idea-01fe11)
+
+Question: one Think-SFT + cue sample gains 23 problems on the 328 when the cap goes from 16,384 to 32,768 generated tokens
+(section "Token cap 32,768"). Does the vote over 4 gain too, and is the higher cap a better use of tokens than more samples
+at the old cap? Answer: the vote does not gain separably. hard328: vote over 4 = 244 of 328 at 32,768 against 238 for the same
+answers cut at 16,384, +1.8 points [-0.9, +4.9]; one sample 232.8 against 210.8, +6.7 points [+5.0, +8.5]. fresh2026: vote 75
+of 136 against 73, +1.5 points [-2.9, +5.9]; one sample 70.2 against 59.0, +8.3 points [+5.5, +11.4]. The higher cap is the
+better use of tokens only below about 16,000 tokens per problem: one 32,768 sample (232.8 at 11,650 tokens) beats one 16,384
+sample drawn again after a cap hit (224.9 at 14,377), +2.4 points [+0.9, +4.0]. Spec and predictions, written before any job:
+`specs/SPEC_cap32vote.md` (commit `9d4ddf6`). T 1.0 / top-p 1.0, grader v3, no restarts, prompt `pair1` + cue.
+
+Method. Every answer is scored twice from the same text: as written at 32,768, and cut after its 16,384th generated token and
+graded by grader v3 as the cap hit a 16,384 run stores (`analysis/cap32vote.py`, `cut`). All differences are paired on these
+identical answers. The stored 16,384 runs cannot be paired: with the same seeds the text differs after a few hundred characters
+(2 of 944 finished hard328 rows and 0 of 284 fresh2026 rows have the stored run's tokens and answer), so they are a second,
+independent draw (hard328 vote 241, singles 209.0; fresh2026 vote 75, singles 60.0). The readout was tested on the stored
+16,384 rows with a planted cut at 8,192: the uncut view gave the stored 241 and 209.0. RL plain was not run at 32,768 with 4
+samples (its one-sample gain there is +0.6 points [0.0, 1.5]); RL's rows below are its stored 16,384 runs.
+
+| | hard328, cut at 16,384 | hard328, 32,768 | fresh2026, cut at 16,384 | fresh2026, 32,768 |
+|---|---|---|---|---|
+| one sample: the 4 samples; mean | 211, 212, 211, 209; 210.8 | 230, 234, 235, 232; 232.8 | 53, 61, 64, 58; 59.0 | 69, 70, 74, 68; 70.2 |
+| vote over 4 | 238 | 244 | 73 | 75 |
+| any of 4 right (pass@4) | 248 | 266 | 76 | 87 |
+| sequential vote, at most 4 (`seq4`): right (24 orders), tokens | 239.8, 30,807 | 245.2, 31,732 | 72.2, 43,509 | 75.8, 47,519 |
+| cap hits, share of samples | 368, 28.1 % | 6, 0.5 % | 260, 47.8 % | 1, 0.2 % |
+| precision of finished answers | 88.1 % (832 of 944) | 71.1 % (928 of 1,306) | 81.3 % (231 of 284) | 51.8 % (281 of 543) |
+| tokens per sample; per problem for the vote | 10,042; 40,169 | 11,650; 46,599 | 13,084; 52,336 | 15,900; 63,601 |
+| RL plain, stored 16,384 runs: one sample; vote | 200.0; 221 | | 50.5; 57 | |
+
+Differences in points, paired bootstrap over problems, 5,000 resamples (`results/cap32vote/*/readout.md` has every row):
+
+| | hard328 | fresh2026 |
+|---|---|---|
+| one sample, 32,768 minus 16,384 | +6.7 [+5.0, +8.5] | +8.3 [+5.5, +11.4] |
+| vote over 4, 32,768 minus 16,384 | +1.8 [-0.9, +4.9] | +1.5 [-2.9, +5.9] |
+| `seq4`, 32,768 minus 16,384 | +1.7 [-0.6, +4.1] | +2.6 [-1.3, +6.6] |
+| one sample at 32,768 minus one sample drawn again after a cap hit at 16,384 (`restart1`) | +2.4 [+0.9, +4.0] | +3.3 [+0.7, +6.2] |
+| one sample at 32,768 minus vote over 2 at 16,384 | +2.7 [+1.3, +4.3] | +3.3 [+0.7, +6.2] |
+| vote over 4 at 32,768 minus RL's stored vote | +7.0 [+3.7, +10.4] | +13.2 [+6.6, +19.9] |
+| vote over 4 at 16,384 (same answers) minus RL's stored vote | +5.2 [+1.8, +8.5] | +11.8 [+5.2, +18.4] |
+
+Subsets. hard328 without the 6 problems in Think-SFT's training prompts (n = 322): vote 238 against 232 (+1.9 [-1.2, +5.0]),
+one sample 226.8 against 205.0 (+6.8 [+5.0, +8.5]), RL's stored vote 215. fresh2026 published (AIME 2026 + HMMT Feb 2026,
+59): vote 31 against 29, one sample 28.0 against 22.8 (+8.9 [+4.7, +13.6]); transcribed (77): vote 44 against 44, one sample
+42.2 against 36.2 (+7.8 [+3.9, +12.0]).
+
+Token frontier (right over the 24 draw orders, generated tokens per problem). hard328: one sample at 32,768 232.8 at 11,650;
+at 16,384 (same answers) one sample 210.8 at 10,042, `restart1` 224.9 at 14,377, vote over 2 223.8 at 20,085, `seq3` 233.9 at
+25,972, `seq4` 239.8 at 30,807. So one 32,768 sample equals the 16,384 `seq3` at 45 % of its tokens, and the 16,384 rules pass
+it only from about 30,000 tokens. Above that the cap adds little: `seq4` 245.2 at 31,732 against 239.8 at 30,807, not separated.
+fresh2026: one 32,768 sample 70.2 at 15,900 against `restart1` 65.8 at 20,641, `seq3` 69.7 at 35,421 and `seq4` 72.2 at 43,509
+at 16,384.
+
+Post hoc, not in the spec, added after the hard328 rows were read (no score line; they need a held-out check): breaking ties
+to the shortest answer gives a vote over 4 of 252 at 32,768 against 246 at 16,384 on hard328 (+1.8 [-0.3, +4.0]) and 81
+against 75 on fresh2026 (+4.4 [0.0, +8.8]); a length gate (take a finished answer of at most 12,000 tokens at once, else draw
+until two agree, at most 4; suggested by the main session) gives 247.3 at 26,800 tokens against 239.9 at 25,674 on hard328 and
+76.2 at 43,598 against 71.8 at 39,053 on fresh2026.
+
+Hypotheses and predictions scored (`readout.json`, `predictions` and `hypotheses`; simulation `results/cap32vote/sim-01/`):
+
+- H1 (hard328 vote at least 250, gain over 16,384 with an interval above 0): refuted, 244 and +1.8 [-0.9, +4.9]. The offline
+  simulation predicted this: 239.5 [232, 248].
+- H2 (the gain is smaller under the vote than for one sample): held on both sets, +1.8 against +6.7 and +1.5 against +8.3.
+- H3 (larger one-sample gain on fresh2026): +8.3 [+5.5, +11.4] against +6.7 [+5.0, +8.5]; larger as predicted, the intervals
+  overlap, so not separated. Predicted +10.7.
+- H4 (one 32,768 sample above `restart1` at 16,384): held on both sets (table). Second part (no gain for `seq4` above about
+  26,000 tokens): held, +1.7 [-0.6, +4.1].
+- Simulation numbers: hard328 single 229.0 [224.5, 233.2] predicted, 232.8 observed; vote 239.5 [232, 248], 244; precision 70 %,
+  71.1 %; cap hits 0.6 %, 0.5 %; tokens 11,820, 11,650. fresh2026 vote 77.0 [71, 83], 75; precision 55 %, 51.8 %; single 74.5
+  [71.2, 78.0], 70.2: outside, the late answers are right less often there (50 of 260, 19 %, against 99 of 368, 27 %).
+- P5 (late wrong answers of one problem agree as often as stored wrong answers, 64 % and 75 %): refuted, 20.3 % of 261 pairs
+  and 13.0 % of 230. The simulation's vote was near the observed one for another reason than it assumed: see the rows below.
+- P7 (Chinese text in at least 20 % of the answers past 16,384): held, far above: 249 of 368 (68 %) and 196 of 260 (75 %).
+
+What the raw rows show (5 late right, 5 late wrong and all 7 answers still cut at 32,768 read; the four samples of 9 of the 13 problems
+where the vote changes from right to wrong printed):
+
+- Almost every cut answer finishes: 362 of 368 on hard328 (99 right, 27 %) and 259 of 260 on fresh2026 (50 right, 19 %). The
+  finished late answers end in a clean summary and a boxed answer, right or wrong.
+- Why the vote gains little. The late wrong answers do not agree with each other, but they are many: on a hard problem the
+  vote at 16,384 was one finished right answer and three abstentions; at 32,768 it is one right answer against three different
+  wrong ones, and a four-way tie goes to the lowest sample number. hard328 `76` (gold 468): 208, 364, 468, 312; `162`: 243,
+  1024, 20736, 1/576; fresh2026 `99`: two samples agree on the wrong 3 sqrt(3)/4 against one right. The vote changes wrong to
+  right on 15 and right to wrong on 9 problems of hard328 (6 and 4 on fresh2026). In the right-to-wrong cases the right answer
+  is the shortest one, which is why the post-hoc tie rule helps.
+- Long answers drift out of English. More than 20 Chinese characters: 249 of the 368 late answers on hard328 against 38 of the
+  944 that finish before 16,384; 42 of the 99 late right answers have them. The text mixes English, Chinese and some Russian
+  in one sentence and still computes.
+- The 7 answers still cut at 32,768: 3 are loops by the runner's rule A (one repeats the prompt's answer-format sentence, two
+  print a boxed answer and go on with tag-like text), 4 are mixed-language case work that has not converged.
+
+Jobs. Think-SFT built in each job by `wsp_edit --recipe interp --other think_sft --alpha 1.0`, `--max-tokens 32768` (vLLM
+context 34,816), commit `9d4ddf6`, commands in `specs/cap32vote_jobs.txt`. Smoke `abaybektursun-1115-071755-64d0` (fresh2026,
+10 problems: 8 right, two answers of 27,426 and 17,853 tokens, rows read). hard328: sample 0 is the cap32 job
+`abaybektursun-1115-005756-309b` (commit `1d9c97e`, seed 3000000); samples 1 to 3 as two shards each on vast.ai (RTX PRO 6000):
+`-082022-5d48` + `-093636-bb67`, `-082025-400e` + `-095405-4eec`, `-083537-f186` + `-100810-3922` (seeds 3010000, 3020000,
+3030000). fresh2026: samples 0, 2, 3 on vast.ai `-090519-e734`, `-082027-20e4`, `-094344-1848`; sample 1 on Modal H100
+`-151138-ecde` after vast.ai ran out of credit (seeds 7000000 + 10000 s). Raw answers:
+`s3://iterate-hack-team-769063704696/handoff/cap32vote/<job>/`. Run folders `results/cap32vote/{hard328,fresh2026}_sft1_cue_s4-01/`
+(`run.json`, `metrics.json`, `readout.json`, `readout.md`, `rows.jsonl` with both views, `examples.json`: one late right, one
+late wrong, one still cut), `sim-01/`.
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.cap32vote_sim
+uv run --no-project python -m studies.rlneurons.analysis.shard_join --runs runs/<shard 0> runs/<shard 1> --out runs/cap32vote_hard_s<k>
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.thinkvote_join --runs runs/<s0> runs/<s1> runs/<s2> runs/<s3> --out runs/cap32vote_<set>_s4
+uv run --no-project --with numpy --with math-verify==0.9.0 --with transformers==5.19.0 --with tokenizers==0.23.3 --with huggingface_hub --with jinja2 python -m studies.rlneurons.analysis.cap32vote --run runs/cap32vote_<set>_s4 --stored studies/rlneurons/results/<thinkvote/hard328_sft1_cue_s4-01 | fresh/sft1_cue_s4-01> --rl studies/rlneurons/results/<day1_3/hard328_rl_plain_s4r2-01 | fresh/rl_plain_s4-01> --out studies/rlneurons/results/cap32vote/<set>_sft1_cue_s4-01
+```
+
 ## Paper: The First Hundred Steps (`paper-first-steps/`, board work-184476)
 
 A 4-page paper: `paper-first-steps/the-first-hundred-steps.pdf`, served at
@@ -3332,6 +3509,22 @@ not accepted by the AWS quota and were then dropped. Readout `analysis/released.
   so it is a sign of a failing long answer at T 1.0, not its cause. Counted from the two answers.jsonl files, not in the readout.
 - Together with `results/native/` and `results/cap32/`: of the three differences between this study's Think-SFT rows and the
   model as released (format, sampling, cap), only the cap changes the score.
+## Paper: Two Token Limits (`paper-two-caps/`, board work-184476)
+
+A 4-page paper: `paper-two-caps/two-token-limits.pdf`, served at https://monitor.invariant.team/paper/two-token-limits.pdf.
+Claim (hard328, n = 328, T 1.0 / top-p 1.0, grader v3, one sample per model, the same answers scored at a limit of 16,384
+and of 32,768 tokens): RL - base + cue +12.5 -> +11.9 points (change -0.6 [-2.1, 0.9]); Think-SFT + cue - RL +4.3 -> +10.7
+(change +6.4 [3.7, 9.5]); M(2) - Think-SFT +6.7 -> +3.4 [-0.6, 7.0] (change -3.4 [-6.4, -0.3]; [-7.3, 0.3] at 98.33 %,
+suggestive only). Answers longer than 16,384 tokens that end right: Think-SFT 23 of 93, M(2) 13 of 56, base 4 of 64,
+RL 2 of 20. No ordering of the models changes.
+
+| File | What it is |
+|---|---|
+| `paper-two-caps/build_facts.py` | Recomputes every comparison from the committed rows (`results/cap32/`, `results/transplant/`, `results/thinkvote/`, `results/day1_3/`, `results/fresh/`), copies the own-chat-format numbers from `results/native/`, checks 153 values against stored readouts, writes `facts.json` and `examples.json`. Run: `uv run --no-project --with numpy python studies/rlneurons/paper-two-caps/build_facts.py`. |
+| `paper-two-caps/facts.json`, `examples.json` | Every number in the paper with its source (`review`: the numbers the reviews asked for); one problem Think-SFT gets right only past 16,384 tokens. |
+| `paper-two-caps/NOTES.md` | Definitions, arms, caveats, what is pending. |
+| `paper-two-caps/figs.py`, `fig_caps.pdf` | The figure, drawn from `facts.json`. |
+| `paper-two-caps/paper.tex`, `refs.bib`, `fonts/` | Source; build with `tectonic paper.tex` in the folder. |
 
 ## How to run
 
@@ -4419,6 +4612,94 @@ resamples of the problems.
   setup and the edit (about 3 min per job): about 7.2 H100-hours, about 28 USD. The minutes column of `gpu.py ls` is the time
   since submission, not the run time. Smoke job `abaybektursun-1115-122317-6624`: 100 s. 21.8 M generated tokens.
 
+#### Size-matched bands and the rank split at equal scale (specs/SPEC_normband.md, work-16b37f)
+
+Is "layers 22-31 only finish" a small-edit effect? By weight norm the bands were already matched: the squared Frobenius norm of
+the rank-8 additions at 1.5 is 1.13 for L0-10 and 1.44 for L22-31. By the layer-24 activation shift (xshift) the late edit is
+7.55 times smaller. Scaling L22-31 up to match breaks the model: at 9.0, a smoke run gave only loops; at 4.5 (3x), 135 of 328
+answers are loops of " which ". At 3.0 (2x), 1 of 328 is. Same settings as depth3 (hard328, cue, T 1.0, cap 16,384, grader v3),
+seed-paired. `uv run --no-project --with numpy python -m studies.rlneurons.analysis.normband_readout` (inputs: `runs/<job>/` of
+the 12 jobs in `NEW`) -> `results/xreward/normband/readout.json`, one run folder `<cell>_s<sample>-01/` per sample with
+`rows.jsonl` (per-problem rows, no text), `run.json` (jobs, commit, edit size), `metrics.json`, `examples.json`.
+
+| Cell | Samples | Right of 328 | Cap hits | Right minus base (4 samples) | Cap hits minus base |
+|---|---|---|---|---|---|
+| L22-31 at 4.5 (3x) | 1 | 102 | 71 | -17.2 [-21.2, -13.3] | -0.1 [-5.0, 4.8] |
+| L22-31 at 3.0 (2x) | 1 | 155 | 26 | -1.1 [-4.4, 2.1] | -13.9 [-17.8, -10.1] |
+| L0-10 at 0.2 (0.133x) | 1 | 156 | 80 | -0.8 [-4.4, 2.7] | +2.6 [-1.2, 6.4] |
+| direction 1 at 1.5 | 2 (s0, s1) | 182, 184 | 36, 46 | +7.5 [4.8, 10.2] | -9.3 [-12.3, -6.4] |
+| directions 2-8 at 1.5 | 2 (s0 new, s1 depth3) | 196, 183 | 70, 69 | +9.4 [6.8, 12.3] | -0.6 [-3.7, 2.4] |
+
+Points of 328, 95 % intervals from 10,000 bootstrap resamples of the problems; the readout also gives the base on the same seeds.
+- The late band at 2x adds no right answers and cuts cap hits by 13.9 points, more than at 1.5x (-9.2 [-12.7, -5.6] against
+  L22-31 at 1.5). Raising its size does not turn finishing into right answers before it breaks the model. P4 held. On the broken
+  4.5 cell P1 is not held (right -17.2 but cap hits 71, not below 56) and P2 held; by the decision rule (A3 right < 150, so A2
+  decides) depth wins: the size prediction (>= +5 points right) is refuted at every size that still writes coherent text.
+- The early band at 0.133x does nothing measurable (P3 not held: right -0.8, cap hits +2.6). A small early edit does not finish.
+- Direction 1 alone at 1.5 cuts cap hits (-8.7 [-11.9, -5.5] against directions 2-8) and adds right answers almost as much as
+  directions 2-8: -2.0 [-4.9, 0.9] points, within the 2 points that refute P5's second half. P5: cap-hit half held (-9.3 on the
+  point), right-answer half refuted, at the boundary.
+- Limits: one sample per band cell; activation size measured at layer 24 only; the 0.2 cell's raw outputs have a few word-salad
+  answers like the base at T 1.0 (problem 58). Cost: 12 jobs, 4.9 h of `run_cell` wall time, about 5.5 H100-hours, about 22 USD;
+  smoke jobs `abaybektursun-1115-144958-ed3a` (9.0), `-145226-386e` (4.5), `-145240-18fc` (3.0).
+
+#### The directions on other hosts (amendment 10, work-30f0ed): Think-SFT, and Math + Code in one edit
+
+`wsp_edit --onto <model key or directory>` writes the addition (computed from other - base) onto another model. One sample per cell.
+
+A. Think-SFT as host, hard328, cue, seed 3000000 (references from "Delta transplant": Think-SFT 209.0 right, 94.5 cap hits, four
+samples; Think-SFT + dense noise 209; Think-SFT + 2 x the whole RL-Math difference, 0.47 % of the weight norm: 231.5, 54):
+
+| Cell | Right of 328 | Cap hits | Edit, % of weight norm | Run folder (`edits/`), job |
+|---|---|---|---|---|
+| Think-SFT + random rank-8 at 3 | 213 | 82 | 0.215 | `sft_rand8x3_math31-01/`, `abaybektursun-1115-130307-5e33` |
+| Think-SFT + Math 3.1's 8 directions at 1.5 | 220 | 76 | 0.108 | `sft_top8x1.5_math31-01/`, `abaybektursun-1115-130242-4696` |
+| Think-SFT + Math 3.1's 8 directions at 3 | 232 | 60 | 0.215 | `sft_top8x3_math31-01/`, `abaybektursun-1115-130255-5098` |
+
+- A1 held: 232 right with 60 cap hits (predicted at least 225, at most 65); the random edit 213 (within 209 +- 9). The 8
+  directions at 3 against the random edit at 3: +5.8 points [2.1, 9.8]; against RL plain (206, same seed): +7.9 [4.3, 11.6].
+- The 8 directions written onto a model trained without a reward give what twice the whole RL difference gives (231.5), with an
+  edit of less than half its norm. Cap hits fall with size on this host too (94.5, 76, 60).
+
+B. Math 3.1's and Code 3.1's 8 directions in one edit of the base (two passes; the first pass's statistics are `edit1.json` of
+the job), on hard328 (cue) and on HumanEval+ and MBPP+ (Code cue; readout `results/xreward/code_hosts/readout.json`):
+
+| Edit of the base | Right of 328 | Cap hits | Passed of 538 | Cap hits | Run folders, jobs |
+|---|---|---|---|---|---|
+| none (cued base) | 164 | 77 | 317 | 27 | |
+| Math at 1 | 192 | 46 | | | |
+| Math at 1.5 | 203 | 25 | 368 | 1 | |
+| Code at 1 / at 1.5 | 178 (at 1) | 41 | 386 / 399 | 9 / 4 | |
+| Math at 1 + Code at 1 | 193 | 32 | 411 | 2 | `edits/math1_code1-01/` (`abaybektursun-1115-130346-f701`), `code_hosts/math1_code1-01/` (`...130400-064d`) |
+| Math at 1.5 + Code at 1.5 | 191 | 4 | 387 | 0 | `edits/math1.5_code1.5-01/` (`...130320-3e7b`), `code_hosts/math1.5_code1.5-01/` (`...130332-eba9`) |
+| Math at 1.5 + random at 1.5 (control) | 197 | 24 | 365 | 1 | `edits/math1.5_rand1.5-01/` (`...130413-750d`), `code_hosts/math1.5_rand1.5-01/` (`...130426-5898`) |
+| RL-Math / RL-Code | 206 | 20 | 401 | 8 | |
+
+- B1 is neither met nor refuted: no size gives both at least 198 of 328 and at least 390 of 538 (at 1: 193 and 411), and neither
+  size is at or below 186 or 372. B2 held: the control stays at 197 (203 +- 12) and 365 (368 +- 15).
+- On code the sum at 1 passes 411: +1.9 points above RL-Code [-1.1, 4.8], +4.6 above Code's directions alone at 1 [1.5, 7.6] and
+  +8.6 above the control [5.2, 11.9]. Math's directions add to Code's on code.
+- On math the sum at 1 scores 193, the same as Math's directions alone at 1 (192) and +8.8 points above the base [4.6, 13.1];
+  Code's directions add nothing on math, and the sum is -3.0 points from Math alone at 1.5 [-7.0, 0.9] and -4.0 from RL-Math
+  [-8.2, 0.0]. At 1.5 + 1.5 cap hits fall to 4 and 0 and right answers fall (191 and 387): the two edits add up in finishing, as
+  one edit at twice the size does.
+- So one edit of about 0.10 % of the weight norm (Math 0.074 % + Code 0.064 %) gives the base 193 of 328 on math and 411 of 538
+  on code, against 164 and 317 for the base and 206 and 401 for the two RL models.
+
+More samples of the two headlines (amendment 11, work-f58d89); both predictions held:
+
+| Cell | Seed 51000000 | 52000000 | 53000000 | Mean of 538 | Run folders, jobs |
+|---|---|---|---|---|---|
+| base + Math at 1 + Code at 1 | 411 | 407 | 401 | 406.3 | `results/xreward/code_hosts_s52/`, `code_hosts_s53/` (`abaybektursun-1115-143215-6942`, `...143301-ec55`) |
+| base + Code at 1 | 386 | 397 | 391 | 391.3 | the same (`...143231-15bb`, `...143316-628e`) |
+| RL-Code, plain | 401 | 395 | 403 | 399.7 | the same (`...143247-929d`, `...143331-10da`) |
+
+- E1 held (mean at least 398 and at least 10 above Code alone). Paired over problems, three seeds each: the sum minus Code alone
+  +2.8 points [1.0, 4.6]; the sum minus RL-Code +1.2 [-0.6, 3.0]; Code alone minus RL-Code -1.5 [-3.5, 0.3].
+- E2 held: Think-SFT + Math's 8 directions at 3, seed 3100000: 240 right, 42 cap hits (`edits/sft_top8x3_math31-02/`,
+  `abaybektursun-1115-143344-809f`; the readout `xreward_edits` holds the seed-3000000 cell). Two samples: 232 and 240, mean 236.0, against Think-SFT's
+  four samples (209.0): +8.2 points [5.6, 11.0]. The whole-difference transplant at 2 has 234 and 229 on the same two seeds.
+
 #### The dial on a second model pair and benchmark (amendment 7, work-df5e0a)
 
 Base + the 8 directions per matrix of (Code 3.1 minus base), on HumanEval+ and MBPP+ (538 scored problems), Code cue, T 1.0 /
@@ -4692,3 +4973,98 @@ Jobs `ih-1115-150237-83a4`, `-155322-598b`, `-155844-4392`, `-155905-0426` (AWS 
   its gain under the vote ((53 - 38) / (57 - 38)); on the 328 the same shares are 101 % and 76 %.
 - The edit uses the RL checkpoint's weights, so it is not a route without reward. Think-SFT + cue (no reward) has 60.0 on
   one sample and 75 under the vote on this set.
+
+## Vote over k samples of the cued base, k = 1 to 12 (MATH-500 n = 500, base + cue, T 1.0, grader v3, board work-60f040)
+
+Question (`specs/SPEC_votek.md`, written before the jobs): where does the plurality vote of the untrained cued base stop
+rising, and does it reach RL's one-sample score (456 to 463) with no training? Answer: it reaches it at 6 samples (456.6 of
+500) and is still rising at 12 (466 of 500, 95 % interval [455, 476]). RL with the same vote over 4 has 474 at 18,747 tokens
+per problem, so at equal tokens RL stays ahead; the base needs about 5 times RL's one-sample tokens to match RL's one sample.
+
+Samples: 0 to 3 are attempt 0 of the stored job `abaybektursun-1114-153825-208b` (seed 41000000); 4 to 11 are new,
+`jobs/run_cell.py --model base --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 41040000 --samples 8`, no
+restarts, cap 16,384, as shards: vast.ai `abaybektursun-1115-082353-a18c` (1/4), `-082400-c790` (2/4), `-064850-01eb` (3/4);
+AWS `ih-1115-161922-9bfd` (4/8) and `ih-1115-201414-43ed` (0/8: 493 rows copied from the cut job `ih-1115-161910-44ea` with
+`--resume`, 11 rows generated). Raw answers: `runs/<job id>/` (not committed; vast.ai jobs in the team store, AWS jobs under
+the bridge's S3 results). Readout `analysis/votek.py`, output `results/votek/math500_base_cue-01/` (`metrics.json`,
+`rows.jsonl` with every sample's extracted answer and score, `examples.json`: problem 0 voted right with 11 of 12 votes,
+problem 9 voted wrong, two answers with 2 votes each and the wrong one drawn first).
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.votek --runs runs/abaybektursun-1114-153825-208b runs/ih-1115-201414-43ed+runs/ih-1115-161922-9bfd+runs/abaybektursun-1115-082353-a18c+runs/abaybektursun-1115-082400-c790+runs/abaybektursun-1115-064850-01eb --out studies/rlneurons/results/votek/math500_base_cue-01
+```
+
+Right of 500, mean over 200 random subsets of k of the 12 samples (bootstrap over problems, 2,000 resamples):
+
+| k | vote right [95 %] | lowest, highest subset | at least one of k right | tokens per problem |
+|---|---|---|---|---|
+| 1 | 410.0 [397.9, 421.6] | 405, 418 | 410.0 | 4,059 |
+| 2 | 418.9 [407.2, 430.4] | 411, 426 | 452.3 | 8,122 |
+| 3 | 440.8 [429.4, 451.8] | 430, 452 | 464.7 | 12,155 |
+| 4 | 449.2 [437.9, 460.0] | 441, 457 | 471.0 | 16,228 |
+| 6 | 456.6 [445.6, 467.1] | 448, 465 | 478.4 | 24,370 |
+| 8 | 460.1 [449.6, 470.2] | 454, 467 | 482.4 | 32,463 |
+| 9 | 461.4 [450.9, 471.6] | 455, 468 | 483.8 | 36,487 |
+| 12 | 466 [455.0, 476.0] | one subset | 487 | 48,680 |
+
+Control: the vote over the 4 stored samples in order reproduces 446. The stored four are a low draw: the mean over subsets of
+4 is 449.2 and subsets of 4 range from 441 to 457.
+
+Vote with an early stop (draw samples until one answer has m votes or all 12 are drawn; mean over 200 random orders; the
+fixed-threshold form of adaptive self-consistency, Aggarwal et al. 2023, arXiv 2305.11860):
+
+| stop at m votes | right of 500 | samples per problem | tokens per problem |
+|---|---|---|---|
+| 2 | 459.0 | 2.71 | 15,882 |
+| 3 | 463.5 | 4.00 | 22,564 |
+| 4 | 465.7 | 5.19 | 27,863 |
+| 6 | 466.6 | 7.32 | 35,807 |
+
+At the tokens of the fixed vote over 4 (16,228) the stop at 2 votes has 459.0 against 449.2: about 10 more problems for the
+same tokens, because easy problems stop after two samples and the split ones get up to 12. Paired bootstrap over problems
+(`results/votek/math500_base_cue-02/metrics.json`, the same rows read again with this difference added; its `rows.jsonl` is
+identical to run 01 and not committed): stop at 2 minus vote over 4, +9.9 problems [6.1, 14.1]; stop at 3 minus vote over 6,
++6.9 [3.5, 10.5]; stop at 4 minus vote over 7, +7.3 [4.0, 11.1]. Each stop rule is compared with the smallest fixed vote
+that costs at least as many tokens. The interval covers the choice of problems, not a new draw of the 12 samples.
+
+Predictions:
+- V1 (theory round 06: vote over 9 inside [449, 462]): holds, 461.4.
+- V2 (mine: vote over 12 minus vote over 6 under 3 problems): refuted, 9.4. The vote does not stop at 6.
+- V3 (vote over 12 below 456): refuted, 466.
+
+What is left: of the 34 problems the vote over 12 gets wrong, 13 have no right sample among 12, 11 have one, 7 have two, and
+3 have a wrong answer held by more than 6 samples. At least one of 12 samples is right on 487 problems.
+
+Limits: one seed family; the interval of each k is over problems, and the subsets of one k share samples. RL was not sampled
+12 times, so this section does not say where RL's vote stops. The same cell on the 328 (spec section "The 328") was started
+twice on vast.ai and cut both times when the account balance reached 0; it has no rows.
+
+## Think-SFT on the Code pair (2026-11-15, work-8ea654)
+
+Spec with three predictions: `specs/SPEC_code_think.md`. One AWS job (`ih-1115-185836-e7ef`, L40S, commit 381d7c7) wrote the
+Think-SFT weights with `wsp_edit --recipe interp --other think_sft --alpha 1.0 --rounding nearest --seed 0` and ran
+`jobs/run_code_cell.py` twice (T 1.0 / top-p 1.0, seed 51000000, cap 16,384, 538 scored problems). Readout:
+`python -m studies.rlneurons.analysis.code1_readout --out=code_think sft1_codecue=ih-1115-185836-e7ef/codecue
+sft1_mathcue=ih-1115-185836-e7ef/mathcue @base_cue=abaybektursun-1114-170304-c03c @base_mathcue=abaybektursun-1114-170309-b137
+@rl_plain=abaybektursun-1114-170253-f661` -> `results/code_think/readout.json`, `results/code_think/sft1_codecue-01/`,
+`results/code_think/sft1_mathcue-01/`. Raw rows: `runs/ih-1115-185836-e7ef/{codecue,mathcue}/` (not committed; `ih get`).
+
+| cell | passed of 538 | HumanEval+ of 163 | MBPP+ of 375 | cap hits | no fenced block | tokens per problem |
+|---|---|---|---|---|---|---|
+| Think-SFT + Code cue | 301 | 116 | 185 | 7 | 106 | 3,093 |
+| Think-SFT + Math cue | 270 | 103 | 167 | 4 | 128 | 3,029 |
+| base + Code cue (stored) | 317 | 106 | 211 | 27 | 34 | 4,148 |
+| base + Math cue (stored) | 326 | 120 | 206 | 22 | 33 | 4,119 |
+| RL-Code 3.1 plain (stored) | 401 | 135 | 266 | 8 | 8 | 4,054 |
+
+Paired bootstrap (5,000), points of 538: Think-SFT + Code cue minus RL-Code -18.6 [-23.0, -14.1]; minus base + Code cue
+-3.0 [-8.0, 2.0]; Think-SFT Code cue minus Math cue +5.8 [0.6, 11.0].
+
+Predictions: 1 (330 to 395) refuted, 301. 2 (below RL-Code) holds. 3 (cues within 3 points) refuted, 5.8 points.
+
+Read from the raw rows: the count is lowered by answer format, not only by wrong programs. Of the 106 Think-SFT + Code cue
+answers with no fenced block, 97 close their reasoning with `</think>` and then write a bare `python` line, the program and a
+closing fence, with no opening fence, which `code_lib.BLOCK` does not accept (Math cue: 124 of 128). The base and RL-Code have
+no such answer: their 34, 33 and 8 are cap hits or answers with no program. Among answers that have a fenced block the pass
+rates are Think-SFT 301 of 432 (69.7 %), base 317 of 504 (62.9 %), RL-Code 401 of 530 (75.7 %); these are different problem
+subsets, so they are not a comparison. A regrade that also accepts the unopened block, applied to every cell, is the next step.

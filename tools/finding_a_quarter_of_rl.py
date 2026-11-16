@@ -949,8 +949,9 @@ _LO, _HI = (int(round(100 * v / _gap, -1)) for v in INTERVALS["math500"]["a0.25"
 _M = lambda v, k=1: f"{v:.{k}f}".replace("-", "−")  # a number with the minus sign of the site
 
 TITLE = "A quarter of RL"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "How much of the RL weight change does the math gain need?"
-LINE = f"Scaled to a quarter, the RL weight change still gives {Q_M} % of RL's gain on MATH-500."
+PROBLEM = "How much of the weight change made by reinforcement learning (RL) does its math gain need?"
+LINE = (f"Scaled to a nominal quarter ({DATA['norm_q']:.2f} of its size as stored, after rounding), the weight change made by reinforcement "
+        f"learning (RL) still gives {Q_M} % of the RL model's gain on MATH-500.")
 
 # Not from our runs: the closest published results. "Reasoning Vectors" (arXiv 2509.01363, Sec. 4.4): a GRPO-minus-SFT
 # weight difference added to Qwen2.5-1.5B-Instruct at scale 0.5 gives 2.1 of the 4.9 points it gives at scale 1 on GSM8K
@@ -959,49 +960,58 @@ LINE = f"Scaled to a quarter, the RL weight change still gives {Q_M} % of RL's g
 # and then a collapse. WiSE-FT (Wortsman et al. 2022) interpolates between pretrained and fine-tuned weights.
 PANELS = [
     ["new", "What is new",
-     "Scaling a fine-tuning weight difference is an old tool: WiSE-FT and task vectors do it. The closest published sweep is "
-     "\"Reasoning Vectors\" (arXiv 2509.01363, Sec. 4.4): half of a GRPO weight difference gave 2.1 of 4.9 points on GSM8K.",
-     [f"Here the curve rises far earlier: a = 0.25 gives {Q_M} % of the gain and a = 0.5 gives {H_M} %, on Olmo 3 7B and its "
-      "RL-Zero-Math model, with a random change of the same norm as the control.",
-      f"On the 328 harder problems the early rise is smaller: {Q_H} % of the gain at a = 0.25 and {H_H} % at a = 0.5.",
+     f"Here the gain comes early: a = 0.25 gives {Q_M} % of RL's gain on MATH-500 and a = 0.5 gives {H_M} %. The models are "
+     "Olmo 3 7B and AI2's RL-Zero-Math model trained from it, and the control is a random change of the same norm.",
+     [f"On the 328 harder problems the early rise is smaller: {Q_H} % of the gain at a = 0.25 and {H_H} % at a = 0.5.",
+      "Scaling a weight difference from fine-tuning is an old method: WiSE-FT averages pretrained and fine-tuned weights, "
+      "and task vectors add a fine-tuning weight difference to a model. The closest published sweep is \"Reasoning Vectors\" "
+      "(arXiv 2509.01363, Sec. 4.4): on another model and benchmark, half of a weight difference made by GRPO (an RL "
+      "method) gave 2.1 of 4.9 points on GSM8K. The curve here rises earlier.",
       "The page \"Eight directions\" asks which directions of the same weight change carry the gain. This page keeps all "
       "directions and changes only the length of the step."]],
     ["why", "Why it matters",
      "Most of RL's gain on MATH-500 is reached with a quarter to a half of the weight change; the rest of the change adds "
      "little there.",
-     [f"Going past the RL model does not help: a = 1.25 and 1.5 score {_m['a1.25']} and {_m['a1.5']} of 500, and a crude "
-      f"check flags {DATA['salad']['a1.5']} answers at a = 1.5 as ending in word salad.",
-      f"On the 328 harder problems the later part of the change still counts: a = 0.5 scores {_h['a0.5']}, RL {_h['a1']} with "
-      f"the cue and {DATA['rl_plain']['hard328']} without it ({_M(DATA['d_half_rlplain_hard'][0])} points against RL without the cue, "
-      f"95 % interval {_M(DATA['d_half_rlplain_hard'][1])} to {_M(DATA['d_half_rlplain_hard'][2])})."]],
+     [f"Scaling the change past the RL model (a above 1) does not help: a = 1.25 and 1.5 score {_m['a1.25']} and "
+      f"{_m['a1.5']} of 500, against {_m['a1']} for the RL model with the cue. A rough automatic check flags "
+      f"{DATA['salad']['a1.5']} of 500 answers at a = 1.5 as ending in incoherent text.",
+      f"On the 328 harder problems the later part of the change still counts. At a = 0.5 the model scores {_h['a0.5']} of 328; the RL "
+      f"model scores {_h['a1']} with the cue and {DATA['rl_plain']['hard328']} without it. The difference between a = 0.5 "
+      f"and the RL model without the cue is {_M(DATA['d_half_rlplain_hard'][0])} points (95 % interval "
+      f"{_M(DATA['d_half_rlplain_hard'][1])} to {_M(DATA['d_half_rlplain_hard'][2])})."]],
     ["how", "How we know",
-     "Each model was written as base + a (RL − base), tensor by tensor, and sampled once per problem at T 1.0 (top-p 1.0), "
-     "cut off at 16,384 tokens, graded by grader v3. The cue makes each answer start with \"line!\", two line breaks "
-     "and \"Okay\".",
+     "We built each model's weights as base + a × (RL − base), tensor by tensor. Each model answered every problem once, at "
+     "temperature 1.0 and top-p 1.0, with a limit of 16,384 tokens, and the grader (version 3) scored the answers. The "
+     "opening cue puts three tokens at the start of each answer, \" line!\", a blank line and \"Okay\", copied from how the "
+     "RL model opens its own answers.",
      [f"Base: Olmo 3 7B (allenai/Olmo-3-1025-7B). RL: Olmo 3.1 7B RL-Zero-Math. MATH-500 has 500 problems; the 328 harder problems "
       f"are from AIME, AMC, HMMT and OlympiadBench.",
-      f"Control: a random change with the norm of the RL change scores {_m['random']} of 500 against {_m['a0']} "
-      f"(+{DATA['d_random'][0]} points, 95 % interval {_M(DATA['d_random'][1])} to {_M(DATA['d_random'][2])}).",
-      f"The RL model trained on code (Code-RL), with the cue, scores {_m['code']} of 500 on math, as much as a = 0.5 to 1.5 "
-      f"({min(_m[k] for k in _LATE)} to {max(_m[k] for k in _LATE)})."]],
+      f"Control: a random change with the norm of the RL change scores {_m['random']} of 500, against {_m['a0']} for the "
+      f"base model with the cue (+{DATA['d_random'][0]} points, 95 % interval {_M(DATA['d_random'][1])} to "
+      f"{_M(DATA['d_random'][2])}).",
+      f"A model trained by RL on code, not math, reaches the same level on math: with the cue it scores {_m['code']} of "
+      f"500, as much as a = 0.5 to 1.5 ({min(_m[k] for k in _LATE)} to {max(_m[k] for k in _LATE)})."]],
     ["limits", "What it does not show",
      f"The intervals are wide: the gain at a = 0.25 is {100 * (_m['a0.25'] - _m['a0']) / 500:.1f} points, 95 % interval "
      f"{INTERVALS['math500']['a0.25'][0]} to {INTERVALS['math500']['a0.25'][1]}, so its share of RL's gain lies between about "
      f"{_LO} % and {_HI} %.",
-     [f"Base + cue, sampled four more times, scores {DATA['base_runs'][0]} to {DATA['base_runs'][-1]} of 500.",
-      f"At a = 0.25 the stored weights are not a quarter of the change: rounding to bf16 leaves a change with "
-      f"{DATA['norm_q']:.2f} of the full norm and cosine {DATA['cos_q']:.2f} to it.",
-      f"On the 328 harder problems, a = 0.5 is cut off at 16,384 tokens on {DATA['caps_hard']['a0.5']} problems, RL + cue on "
-      f"{DATA['caps_hard']['a1']}; the random control was not run there. One base model, one RL model, one sample per problem."]],
+     [f"At a = 0.25 the stored weights are not exactly a quarter of the change: after rounding to bf16 (16-bit numbers), "
+      f"the stored change has {DATA['norm_q']:.2f} of the full change's norm and cosine {DATA['cos_q']:.2f} to it.",
+      f"The base model with the cue, sampled four more times, scores {DATA['base_runs'][0]} to {DATA['base_runs'][-1]} of "
+      f"500: repeated samples of the same model differ by up to {DATA['base_runs'][-1] - DATA['base_runs'][0]} right answers.",
+      f"On the 328 harder problems, the answer at a = 0.5 is cut off at the limit of 16,384 tokens on "
+      f"{DATA['caps_hard']['a0.5']} problems, and that of the RL model with the cue on {DATA['caps_hard']['a1']}. The "
+      "random control was not run there. All results use one base model, one RL model and one sample per problem."]],
     ["run", "How to reproduce it",
-     "The specs are studies/rlneurons/specs/DAY1_wdiff_2026-11-14.md and DAY1_wdiff328_2026-11-14.md; jobs/merge_weights.py "
-     "writes each model and jobs/run_cell.py samples it.",
-     ["Readouts: results/day1_wdiff/readout.json and results/day1_wdiff328/readout.json (analysis/day1_wdiff.py and "
-      "day1_wdiff328.py). Board results result-4b0d5f and result-e45bf4.",
-      "The intervals on this page are a paired bootstrap against a = 0 (5,000 resamples) recomputed from the dots; they agree "
-      "with the readouts' within 0.4 points.",
+     "The plans written before the runs are studies/rlneurons/specs/DAY1_wdiff_2026-11-14.md and "
+     "DAY1_wdiff328_2026-11-14.md; jobs/merge_weights.py writes each model and jobs/run_cell.py samples it.",
+     ["Analysis outputs: results/day1_wdiff/readout.json and results/day1_wdiff328/readout.json (written by "
+      "analysis/day1_wdiff.py and day1_wdiff328.py). Source: results result-4b0d5f and result-e45bf4 on the team's board.",
+      "The intervals on this page are a paired bootstrap against a = 0 (5,000 resamples), recomputed from the per-problem "
+      "scores; they agree with the intervals in the analysis outputs within 0.4 points.",
       "Every dot is read from results/axis/math500-01/vectors.json, axis/hard328-01/vectors.json and, for a = 0 on MATH-500, "
-      "rln4/t1_t2_items-01/per_problem.json; python3 tools/finding_a_quarter_of_rl.py checks the copy."]],
+      "rln4/t1_t2_items-01/per_problem.json; running python3 tools/finding_a_quarter_of_rl.py checks the numbers on this "
+      "page against these files."]],
 ]
 
 SOURCE = {"aime2022": "AIME 2022", "aime2023": "AIME 2023", "aime2024": "AIME 2024", "aime2025": "AIME 2025",
@@ -1230,7 +1240,7 @@ svg * { pointer-events: none; }
       <button data-bench="math500" aria-pressed="false">MATH-500</button>
       <button data-bench="hard328" aria-pressed="false">328 harder problems</button>
     </div>
-    <p class="hint">Drag along the axis to change a. Click a dot to see its problem.</p>
+    <p class="hint">Drag along the axis to change the scale a. Click a dot to see its problem.</p>
   </div>
   <div class="side">
     <p class="problem" id="problem"></p>
@@ -1252,8 +1262,8 @@ const MINUS = s => String(s).replace(/-/g, "−");
    reference answer, outcomes], with one character per arm in the order of D.arms[bench]: 1 right, 0 wrong. */
 const BENCH = ["math500", "hard328"], NAME = { math500: "MATH-500", hard328: "328 harder problems" };
 const LEVELS = 9, AS = [0, .25, .5, .75, 1, 1.25, 1.5], REFS = ["random", "code"];
-const REFNAME = { random: ["Random", "same size"], code: ["Code-RL", "model"] };
-const REFLONG = { random: "a random change with the RL change's norm", code: "the RL model trained on code (Code-RL)" };
+const REFNAME = { random: ["Random", "same size"], code: ["RL on code", "model"] };
+const REFLONG = { random: "a random change with the RL change's norm", code: "the RL model trained on code" };
 const B = {};
 for (const b of BENCH) {
   const arms = D.arms[b], keys = arms.map(x => x[0]), n = D.n[b], r = D.right[b];
@@ -1395,9 +1405,9 @@ function place(t, now) {
   E.grid.setAttribute("d", grid);
   E.axis.setAttribute("d", seg(g.X0 - 8, g.axY, g.X1 + 8, g.axY, 8));
   E.div.setAttribute("d", seg(g.div, g.Yt - 10, g.div, g.axY + 6, 6));
-  text("formula", narrow.matches ? "Weights = base + a × (RL − base), with the cue" : "Weights = base + a × (RL − base), each with the opening cue, one sample per problem");
+  text("formula", narrow.matches ? "Weights = base + a × (RL − base), with the cue" : "Weights = base + a × (RL − base); every answer starts with the cue; one sample per problem");
   at(E.formula, P(g.formula[0], g.formula[1], 6));
-  text("ytitle", `Right answers of ${D.n[cur]}`); at(E.ytitle, P(g.ytitle[0], g.ytitle[1], 6)); E.ytitle.style.opacity = fadeTo.toFixed(2);
+  text("ytitle", `Right answers out of ${D.n[cur]}`); at(E.ytitle, P(g.ytitle[0], g.ytitle[1], 6)); E.ytitle.style.opacity = fadeTo.toFixed(2);
   AS.forEach((a, j) => {
     const k = "a" + a, on = has(S.b, k);
     text("at" + j, g.short && a > 0 && a < 1 ? String(a).slice(1) : aText(a)); at(E["at" + j], P(XA(g, a), g.tickY, 8));
@@ -1429,7 +1439,7 @@ function place(t, now) {
   E.cv.setAttribute("d", d); E.cg.setAttribute("d", d);
   E.ghost.setAttribute("d", path(CURVE[other], 9)); E.ghost.style.opacity = (.9 * m).toFixed(2);
   const up = other === "math500";  // MATH-500's curve runs above the harder set's, so its name goes above it
-  text("ghostt", up ? (g.short ? "MATH-500" : "On MATH-500") : g.short ? "328 harder" : "On 328 harder problems");
+  text("ghostt", up ? (g.short ? "MATH-500" : "On MATH-500") : g.short ? "328 harder" : "On the 328 harder problems");
   // MATH-500's trace is named under its dip at a = 1.25, which the harder set does not reach; the harder set's under its
   // rise at a = 0.6, clear of the count beside the point at a = 0.25
   at(E.ghostt, up ? P(g.short ? XA(g, 1) + 8 : XA(g, 1.25), YS(g, sAt(other, 1.25)) + g.fs * 1.4, 9) : P(XA(g, .6), YS(g, sAt(other, .6)) + g.fs * 1.4, 9));
@@ -1489,8 +1499,8 @@ function place(t, now) {
   text("l1", "of RL's gain over Base + cue");
   text("l2", rk === "a0" ? "Base + cue itself" : rk === "a1" ? "RL + cue itself" :
     `95 % interval ${MINUS(Math.round(100 * iv[0] / gain))} to ${MINUS(Math.round(100 * iv[1] / gain))} % of the gain`);
-  text("l3", (ref ? `${rk === "random" ? "Random change" : "Code-RL"}` : `a = ${aText(aOf(rb.b, rk))}`) + `: ${rb.r[rk]} of ${rb.n} right, T 1.0`);
-  text("l4", rk === "a0" ? `RL + cue: ${rb.r.a1} of ${rb.n}` : `${sgn(diff)} points, 95 % interval ${MINUS(iv[0].toFixed(1))} to ${MINUS(iv[1].toFixed(1))}`);
+  text("l3", (ref ? `${rk === "random" ? "Random change" : "RL on code"}` : `a = ${aText(aOf(rb.b, rk))}`) + `: ${rb.r[rk]} of ${rb.n} right, temperature 1.0`);
+  text("l4", rk === "a0" ? `RL + cue: ${rb.r.a1} of ${rb.n}` : `${sgn(diff)} percentage points, 95 % interval ${MINUS(iv[0].toFixed(1))} to ${MINUS(iv[1].toFixed(1))}`);
   ["l2", "l3", "l4"].forEach(id => { E[id].style.opacity = fadeTo.toFixed(2); });
 
   // The dots, batched by look into LEVELS paths per colour, so a frame sets a few attributes, not one per dot.
@@ -1514,7 +1524,7 @@ function place(t, now) {
   else E.sel.setAttribute("r", "0");
   text("striplab", narrow.matches ? `Each dot is one of the ${bb.n} problems, at this a` : `Each dot is one of the ${bb.n} problems${bb.b === "math500" ? " of MATH-500" : ""}, right or wrong at the chosen a, easiest first`);
   at(E.striplab, P(g.stripLab[0], g.stripLab[1], 6));
-  const KT = ["Right", "Right, wrong at a = 0", "Wrong", "Text saved"];
+  const KT = ["Right", "Right here, wrong at a = 0", "Wrong", "Answer text saved"];
   g.key.forEach(([x, y], j) => {
     const q = P(x, y, 4);
     E["kd" + j].setAttribute("cx", f(q[0])); E["kd" + j].setAttribute("cy", f(q[1]));
@@ -1572,17 +1582,17 @@ function problemPane(k) {
     return `<li class="${ok ? "ok" : ""}${ok && !baseR && key !== "a0" ? " nb" : ""}${S.k === key ? " cur" : ""}${gap ? " gap" : ""}">` +
       `<button data-arm="${key}" aria-label="${a === null ? REFLONG[key] : "a = " + a}: ${ok ? "right" : "wrong"}"><i></i><span>${a === null ? REFNAME[key][0] : aText(a)}</span></button></li>`;
   }).join("");
-  const here = right(b, p, S.k), who = REFS.includes(S.k) ? REFLONG[S.k][0].toUpperCase() + REFLONG[S.k].slice(1) : `At a = ${aText(aOf(b, S.k))} it`;
+  const here = right(b, p, S.k), who = REFS.includes(S.k) ? REFLONG[S.k][0].toUpperCase() + REFLONG[S.k].slice(1) : `The model at a = ${aText(aOf(b, S.k))}`;
   const texts = C.examples.filter(e => e[0] === b && e[2] === p.i).sort((x, y) => (y[1] === S.k) - (x[1] === S.k)).slice(0, 3);
   const name = key => REFS.includes(key) ? REFLONG[key] : `a = ${aText(aOf(b, key))}`;
-  const block = texts.map(e => `<div class="txt${e[1] === S.k ? " cur" : ""}"><p class="cap">Saved answer, ${esc(name(e[1]))}: its last part. ` +
-    `${e[6] ? `Cut off at ${fmt(16384)} tokens` : `Answer read: <span data-math>${esc(e[4] || "none")}</span>`}, ${e[3] ? "right" : "wrong"}, ${fmt(e[5])} tokens.</p>` +
+  const block = texts.map(e => `<div class="txt${e[1] === S.k ? " cur" : ""}"><p class="cap">Last part of the saved answer, ${esc(name(e[1]))}. ` +
+    `${e[6] ? `Cut off at ${fmt(16384)} tokens` : `Final answer read by the grader: <span data-math>${esc(e[4] || "none")}</span>`}, ${e[3] ? "right" : "wrong"}, ${fmt(e[5])} tokens.</p>` +
     `<p class="body" data-math>… ${esc(e[7])}</p></div>`).join("");
   const title = b === "math500" ? `MATH-500, problem ${p.i}` : `328 harder problems, ${esc(p.label.replace(", Problem ", " problem "))}`;
   return `<div class="dhead"><h2>${title}</h2><button class="close" data-open="">Close</button></div>` +
     `<p class="lead q" data-math>${esc(p.q)}</p>` +
-    `<ul class="facts"><li>Reference answer: <span class="verdict" data-math>${esc(p.gold)}</span>. ${who} answered it <span class="verdict">${here ? "right" : "wrong"}</span>; ` +
-    `Base + cue (a = 0) answered it ${baseR ? "right" : "wrong"}. One sample each, T 1.0.</li></ul>` +
+    `<ul class="facts"><li>Reference answer: <span class="verdict" data-math>${esc(p.gold)}</span>. ${who} answered this problem <span class="verdict">${here ? "right" : "wrong"}</span>; ` +
+    `the base model with the cue (a = 0) answered it ${baseR ? "right" : "wrong"}. One sample each, temperature 1.0.</li></ul>` +
     `<ol class="arms" aria-label="Right or wrong at each measured model">${cells}</ol>` +
     (block || `<p class="facts" style="margin-top:14px">No answer text of this problem is saved; only its score is.</p>`) +
     `<div class="steps"><button data-step="-1">‹ Previous problem</button><button data-step="1">Next problem ›</button></div>`;

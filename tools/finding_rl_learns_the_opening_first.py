@@ -135,11 +135,14 @@ DATA = {
 }
 
 TITLE = "The first 100 RL steps land near the cue"  # the name on its tile on /findings and in the browser tab
-PROBLEM = "How soon does RL training reach what the opening cue gives the base model?"
+PROBLEM = ("How soon does training with reinforcement learning (RL) reach the score that the opening cue, three fixed "
+           "tokens at the start of the answer, gives the base model?")
 _T = DATA["t10"]
 _F, _r = _T["four"], _T["right"]
-LINE = (f"After 100 RL steps the model gets {_r[2]:.1f} of {DATA['n']} right, close to Base + cue's {_r[1]:.1f}. "
-        "Most of RL's gain comes later.")
+LINE = (f"At temperature 1.0, after 100 RL steps the model gets {_r[2]:.1f} of {DATA['n']} MATH-500 problems right, close "
+        f"to the {_r[1]:.1f} of the base model with the opening cue; at temperature 0.6 it is "
+        f"{DATA['s100_vs_cue']['diff']} problems ahead (95 % interval {DATA['s100_vs_cue']['ci'][0]} to "
+        f"{DATA['s100_vs_cue']['ci'][1]}). Most of the RL model's gain over the cue comes later.")
 
 # Not from our runs: the closest published results. The three-token opening cue (' line!\n\nOkay', copied from RL's own
 # answers) is published: Wang et al., arXiv 2610.06851. SimpleRL-Zoo (arXiv 2503.18892) tracks the share of answers
@@ -156,74 +159,77 @@ _after = _T["gap"][2] + _T["gap"][3]
 PANELS = [
     ["new", "What is new",
      "It was known that a three-token opening copied from RL's answers lifts the base model (Wang et al., arXiv "
-     "2610.06851), and that zero-RL runs change how often answers are cut off (SimpleRL-Zoo, arXiv 2503.18892).",
-     ["New here are the stored answers of two early checkpoints of Olmo 3.1 RL-Zero-Math, step 100 and step 400, read "
-      "beside the base model, Base + cue and the released model (step 2,800), at T 1.0 (four samples per problem) and "
-      "at T 0.6 (one sample).",
+     "2610.06851), and that RL applied directly to a base model ('zero-RL') changes how often answers are cut off "
+     "(SimpleRL-Zoo, arXiv 2503.18892).",
+     ["New here: we read the stored answers of two early checkpoints of Olmo 3.1 RL-Zero-Math, after 100 and 400 "
+      "training steps. We compare them with the base model, Base + cue and the released model (step 2,800), at T 1.0 "
+      "(four samples per problem) and at T 0.6 (one sample).",
       f"At T 1.0, as the mean of 4 samples, step 100 gets {_n(_r[2])} of {_D['n']} right and Base + cue {_n(_r[1])}: "
       f"{_d2('s100-cue')}. Step 400 gets {_n(_r[3])}, step 2,800 {_n(_r[4])}.",
       f"Step 2,800 gets {_T['gap'][0]:g} more right than Base + cue: {_T['gap'][1]:g} of them are there by step "
-      f"100, {_T['gap'][2]:g} more by step 400 and {_T['gap'][3]:g} after step 400. Both later gains are clear of "
-      f"0: step 400 minus step 100 is {_d2('s400-s100')}, step 2,800 minus step 400 {_d2('s2800-s400')}.",
-      f"At T 0.6 the opening is in place by step 100: {_D['okay'][2]} of {_D['n']} answers open with 'Okay', against "
+      f"100, {_T['gap'][2]:g} more by step 400 and {_T['gap'][3]:g} after step 400 (means of 4 samples). The 95 % "
+      f"intervals of both later gains exclude 0: step 400 minus step 100 is {_d2('s400-s100')}, step 2,800 minus step 400 {_d2('s2800-s400')}.",
+      f"At T 0.6 the 'Okay' opening of the cue is in place by step 100: {_D['okay'][2]} of {_D['n']} answers open with 'Okay', against "
       f"{_D['okay'][0]} for Base. Cut-offs first rise, from {_D['cut'][0]} to {_D['cut'][2]}, and fall to "
       f"{_D['cut'][4]} only by step 2,800."]],
     ["why", "Why it matters",
-     f"Three tokens placed before the base model's answer get close to the first 100 RL steps. "
-     f"{round(100 * _after / _T['gap'][0])} % of RL's gain ({_after:g} of {_T['gap'][0]:g} problems) is learned after "
-     "step 100.",
-     ["So a method that changes only how the base model opens its answers can reach about what 100 RL steps reach, "
-      "not what the released RL model reaches.",
-      f"The cue placed on step 100 adds {_d2('s100cue-s100')} as the mean of 4 samples, an interval that just reaches "
+     f"At T 1.0, three tokens placed before the base model's answer get close to the first 100 RL steps. "
+     f"{round(100 * _after / _T['gap'][0])} % of what the released RL model gains over Base + cue ({_after:g} of "
+     f"{_T['gap'][0]:g} problems, means of 4 samples) is learned after step 100.",
+     ["So this cue, which changes only how the base model opens its answers, reaches about what 100 RL steps reach at "
+      "T 1.0, not what the released RL model reaches.",
+      f"Putting the cue at the start of the step-100 model's answers adds {_d2('s100cue-s100')} as the mean of 4 samples, an interval that just reaches "
       f"0. On step 400 the cue's effect, in one sample, is {_m(_T['cue_gain']['s400'][0])} points "
       f"({_iv(*_T['cue_gain']['s400'][1:])}).",
       f"At T 0.6, where Base + cue is cut off more often ({_D['cut'][1]} of {_D['n']}), step 100 leads it in one "
       f"sample: {_D['right'][2]} against {_D['right'][1]} right, +{_D['s100_vs_cue']['diff']} (paired 95 % interval "
       f"{_D['s100_vs_cue']['ci'][0]} to {_D['s100_vs_cue']['ci'][1]} problems)."]],
     ["how", "How we know",
-     f"We read stored answers on the same {_D['n']} MATH-500 problems, plain prompt, cut off at {_D['cap']:,} tokens: at "
-     "T 1.0, top-p 1.0, four samples per problem (Base: one), and at T 0.6, top-p 0.95, one sample.",
+     f"We read stored answers on the same {_D['n']} MATH-500 problems, with the plain prompt (Base + cue adds the cue) "
+     f"and a limit of {_D['cap']:,} tokens. At T 1.0 and top-p 1.0 there are four samples per problem (Base: one); at "
+     "T 0.6 and top-p 0.95, one sample.",
      ["The large number and the row of right answers show, at T 1.0, the mean of the 4 samples, with the 4 samples drawn "
       "as faint ticks. The marks, the bands, the 'Okay' counts and the cut-offs show one sample per problem.",
-      f"The 4 samples of Base + cue and step 2,800 come from another run than the one the marks draw, with the same "
-      f"seeds for its first sample; that first sample still differs (Base + cue {_F['samples']['cue'][0]} against "
+      f"The 4 samples of Base + cue and step 2,800 come from a second run, not the one the marks show. Its first "
+      f"sample used the same seeds but still differs (Base + cue {_F['samples']['cue'][0]} against "
       f"{_T['right1'][1]}, step 2,800 {_F['samples']['s2800'][0]} against {_T['right1'][4]}).",
-      "An answer opens with 'Okay' when the word is in its first 30 characters. The team's grader v3 scores the answers; "
+      "An answer opens with 'Okay' when the word is in its first 30 characters. The grader (version 3) scores the answers; "
       "a cut-off answer that had already stated the right answer counts as right but is drawn as cut off "
       f"(at T 1.0: {', '.join(map(str, _T['right_cut'][:4]))} and {_T['right_cut'][4]} answers in the five settings; "
       f"at T 0.6: {', '.join(map(str, _D['right_cut'][:4]))} and {_D['right_cut'][4]}).",
-      "Intervals are paired bootstraps over the same problems (5,000 resamples); at T 1.0 each problem counts as the "
-      "mean of its 4 samples.",
-      f"The four-sample runs were planned before the jobs ({_F['spec']}): step 100 was predicted at "
+      "Intervals come from resampling the same problems 5,000 times, with both settings compared on each resample (a "
+      "paired bootstrap); at T 1.0 each problem counts as the mean of its 4 samples.",
+      f"The four-sample runs were planned in writing before they ran ({_F['spec']}): step 100 was predicted at "
       f"{_F['predicted_s100'][0]} right (interval {_F['predicted_s100'][1]} to {_F['predicted_s100'][2]}) and got "
       f"{_n(_r[2])}.",
       f"Control at T 0.6: among Base's own answers, those that open with 'Okay' are cut off {_bo['base'][0][0]} of "
-      f"{_bo['base'][0][1]} times, the others {_bo['base'][1][0]} of {_bo['base'][1][1]}. On the same problems Base + cue "
-      f"is cut off {_bo['cue'][0][0]} and {_bo['cue'][1][0]} times, so the opening, not the problems, goes with the "
-      "cut-offs.",
-      f"Before the T 0.6 rows were read, the team's theory round predicted the rise in cut-offs (rate +{_p['theory'][0]}, "
-      f"interval {_p['theory'][1]} to {_p['theory'][2]}; measured +{_p['measured']}), and two readers without a theory "
-      f"predicted a fall ({_m(_p['readers'][0])} and {_m(_p['readers'][1])})."]],
+      f"{_bo['base'][0][1]} times, the others {_bo['base'][1][0]} of {_bo['base'][1][1]}. On the same two groups of problems "
+      f"Base + cue, whose answers all open with 'Okay', is cut off {_bo['cue'][0][0]} of {_bo['cue'][0][1]} and "
+      f"{_bo['cue'][1][0]} of {_bo['cue'][1][1]} times, about the same rate. So the cut-offs follow the 'Okay' opening, "
+      "not the problems.",
+      f"Before the T 0.6 rows were read, a written theory of the team predicted the rise in cut-offs (rate "
+      f"+{_p['theory'][0]}, interval {_p['theory'][1]} to {_p['theory'][2]}; measured +{_p['measured']}), and two "
+      f"forecasters given no theory predicted a fall ({_m(_p['readers'][0])} and {_m(_p['readers'][1])})."]],
     ["limits", "What it does not show",
      f"It does not show that step 100 and Base + cue are the same change: step 100 + cue beats Base + cue by "
      f"{_d2('s100cue-cue')}, as the mean of 4 samples.",
-     [f"It does not show that step 100 equals Base + cue. Before the runs the plan counted them equal only if the whole "
+     [f"Nor does it show that step 100 scores the same as Base + cue. Before the runs the plan counted them equal only if the whole "
       f"interval of their difference lay within {_m(_F['band'][0])} to {_F['band'][1]} points; it is "
       f"{_m(f'{_F['diff']['s100-cue'][1]:.2f}')} to {_F['diff']['s100-cue'][2]:.2f}, so it includes 0 but ends outside "
       "that band.",
       "Four samples still leave part of the sample-to-sample spread in each mean: the right answers of the 4 samples of "
       f"one setting spread over 11 to 14 problems (step 100: {min(_F['samples']['s100'])} to "
       f"{max(_F['samples']['s100'])}).",
-      "Only three checkpoints were read, so when between step 400 and step 2,800 the rest of the gain arrives is not "
-      "known.",
+      "We read only three checkpoints, so we do not know when between step 400 and step 2,800 the rest of the gain "
+      "arrives.",
       f"At T 1.0 the 'Okay' test is weaker: the word is in the first 30 characters of {_T['okay'][2]} answers at step 100 "
       f"and {_T['okay'][3]} at step 400, because many answers first write a short preamble ({_T['resubmit']} at step "
-      "400 start ' and resubmit.'). The checkpoints are identified by their pinned revisions, not by the opening.",
+      "400 start ' and resubmit.'). The checkpoints are identified by their fixed revisions on Hugging Face, not by how their answers open.",
       f"Cut-offs differ between the temperatures: at T 1.0, in one sample, they go from {_T['cut'][0]} at Base to "
       f"{_T['cut'][2]} at step 100 and back to {_T['cut'][3]} by step 400; at T 0.6 they are still {_D['cut'][3]} at "
       "step 400.",
-      f"The theory's own explanation of the T 0.6 cut-offs, sharper sampling per token, did not hold: the median mean "
-      f"log-probability of finished answers is {_m(_D['median_lp'][1])} for Base + cue, {_m(_D['median_lp'][2])} at "
+      f"The explanation that theory gave for the T 0.6 cut-offs, sharper sampling per token, did not hold: the median "
+      f"of the mean log-probability per token of finished answers is {_m(_D['median_lp'][1])} for Base + cue, {_m(_D['median_lp'][2])} at "
       f"step 100 and {_m(_D['median_lp'][3])} at step 400.",
       "One base model, its RL checkpoints, one benchmark and two temperatures were tested."]],
     ["run", "How to reproduce it",
@@ -1419,7 +1425,7 @@ svg * { pointer-events: none; }
 .val.far { fill: var(--faint) !important; font-weight: 450; opacity: .6; }
 .cue { fill: var(--mute); stroke: none; }
 .cue.on { fill: var(--ink); }
-.val { font-weight: 600; }
+.val { font-weight: 600; paint-order: stroke; stroke: color-mix(in srgb, var(--glass) 55%, var(--glass-lo)); stroke-width: 3.5; stroke-linejoin: round; }
 .val.o { fill: var(--blue) !important; }
 .val.dim { fill: var(--faint) !important; font-weight: 500; }
 .now { stroke: var(--blue); stroke-width: 1; opacity: .35; }
@@ -1534,8 +1540,8 @@ svg * { pointer-events: none; }
         <button data-k="1" aria-pressed="false">Base + cue</button>
       </div>
       <div class="switch temp" role="group" aria-label="Temperature">
-        <button data-t="0" aria-pressed="false">T 0.6</button>
-        <button data-t="1" aria-pressed="false">T 1.0</button>
+        <button data-t="0" aria-pressed="false">Temperature 0.6</button>
+        <button data-t="1" aria-pressed="false">Temperature 1.0</button>
       </div>
     </div>
     <p class="hint">Base + cue: the base model with RL's three-token opening placed in front. Step 2,800 is the released RL model.<br>Each mark is one problem in one sample; at T 1.0 the counts of right answers are means of 4 samples (Base: one). Click a mark to see a problem.</p>
@@ -1599,7 +1605,7 @@ function geo() {
   const g = { w: 1000, h: 600, cx: 500, cy: 300, D: 2200, a: [24, 18, 976, 582], r: 30, deep: 40, blur: 16,
     cols: 32, pitch: 13, gx: 62, d: [8, 5.4, 9], fs: 15, fb: 112,
     bigX: 540, bigY: 118, labY: [148, 168, 188], bandTop: 64, bandGap: 34, keyY: 0,
-    tx: [650, 558, 740, 830, 916], rowY: [312, 430, 516], rowH: [100, 36, 36], axisY: 568, fv: 13.5 };
+    tx: [650, 558, 740, 830, 916], rowY: [312, 428, 526], rowH: [100, 36, 36], axisY: 571, fv: 13.5 };
   return lay(g);
 }
 function lay(g) {  // band rows sized for the largest count each band reaches at any setting and temperature
@@ -1661,8 +1667,8 @@ function build() {
       PATH.map(k => `<circle class="pt${s.o ? " o" : ""}" id="pt${j}_${k}" r="${g.fv * .3}"/>`).join("") +
       KEYS.map((_, k) => `<text class="val${s.o ? " o" : ""}" id="v${j}_${k}" font-size="${g.fv}" text-anchor="middle"></text>`).join("")).join("") +
     KEYS.map((_, k) => `<text class="axis" id="ax${k}" font-size="${g.fv}" text-anchor="middle">${k === 0 || k === 1 ? NAME[k] : narrow.matches ? NAME[k].replace("Step ", "") : NAME[k]}</text>`).join("") +
-    `</g>`;
-  S.el = {}; S.shown = {};
+    `</g><text class="val" id="meas" visibility="hidden"></text>`;
+  S.el = {}; S.shown = {}; S.spots = {};
   svg.querySelectorAll("[id]").forEach(e => { S.el[e.id] = e; });
 }
 
@@ -1678,6 +1684,62 @@ function markAt(k, now) {
   const moved = a[0] !== b[0] || a[1] !== b[1], far = S.fromBand[k] !== S.toBand[k] || S.fromOk[k] !== S.toOk[k];
   return { x: mix(a[0], b[0], e), y: mix(a[1], b[1], e), z: moved ? (far ? 30 : 8) * Math.sin(Math.PI * p) : 0,
     band: p < .5 ? S.fromBand[k] : S.toBand[k], ok: p < .5 ? S.fromOk[k] : S.toOk[k] };
+}
+/* Where each count of row j sits beside its point at temperature T: above, below, beside or on a diagonal, whichever
+   crosses the fewest lines, points and words, so a count never sits on the line and reads with its own row. Worked out
+   once per temperature and row, in the plate's own plane (the sway moves everything together). */
+function measure(str, size, weight) {
+  const m = S.el.meas;
+  m.setAttribute("font-size", size); m.style.fontWeight = weight; m.textContent = str;
+  return m.getComputedTextLength();
+}
+function spots(T, j) {
+  const key = T + "/" + j;
+  if (S.spots[key]) return S.spots[key];
+  const g = S.g, s = SERIES[j], X = k => g.tx[k], Y = k => rowY(g, j, s.v[T][k]), cap = g.fv * .74, pad = 3.5;
+  const segs = [], dots = [], boxes = [], wt = [];
+  PATH.forEach((k, i) => { dots.push([X(k), Y(k), g.fv * .42]); if (i) { segs.push([X(PATH[i - 1]), Y(PATH[i - 1]), X(k), Y(k)]); wt.push(2); } });
+  dots.push([X(1), Y(1), g.fv * .34]);
+  segs.push([X(1), Y(1), X(4) + 12, Y(1)]); wt.push(.5);  // Base + cue's dashed level
+  const sx = (X(0) + X(1)) / 2; segs.push([sx, g.rowY[0] - g.rowH[0] / 2, sx, g.axisY + 4]); wt.push(2);
+  SERIES.forEach((r, jj) => {  // the names of the rows
+    const y = g.rowY[jj] - g.rowH[jj] / 2 - g.fv * 2.5, x = g.tx[1] - (g.phone ? 22 : 18);
+    boxes.push([x, y - g.fs * .74, x + measure(r.name, g.fs, 600), y]);
+  });
+  if (s.main) {
+    const lw = measure("Base + cue", g.fv, 560);
+    boxes.push([X(4) + 12 - lw, Y(1) + g.fv * 1.25 - cap, X(4) + 12, Y(1) + g.fv * 1.25]);
+    if (T === 1) [1, 2, 3, 4].forEach(k => { const ys = D.samples[k].map(v => rowY(g, j, v)), x = X(k) - g.fv * 1.15;
+      boxes.push([x - g.fv * .34, Math.min(...ys), x + g.fv * .34, Math.max(...ys)]); });
+  }
+  if (j === 2) boxes.push([X(1) - 60, g.axisY - g.fv * 1.05, X(4) + 60, g.axisY + 4]);
+  const hits = (b, px, py) => {  // px, py: the count's own point, which every candidate keeps clear by construction
+    const [x0, y0, x1, y1] = [b[0] - pad, b[1] - pad, b[2] + pad, b[3] + pad];
+    let n = 0;
+    segs.forEach(([ax, ay, bx, by], z) => {
+      const steps = Math.ceil(Math.hypot(bx - ax, by - ay) / 1.5);
+      for (let u = 0; u <= steps; u++) {
+        const x = mix(ax, bx, u / steps), y = mix(ay, by, u / steps);
+        if (x > x0 && x < x1 && y > y0 && y < y1) { n += wt[z]; break; }
+      }
+    });
+    dots.forEach(([cx, cy, r]) => { if ((cx !== px || cy !== py) && Math.hypot(clamp(cx, x0, x1) - cx, clamp(cy, y0, y1) - cy) < r) n += 3; });
+    boxes.forEach(o => { if (o[0] < x1 && o[2] > x0 && o[1] < y1 && o[3] > y0) n += 3; });
+    return n;
+  };
+  // on the tall row of right answers: above, then below, then beside, then on a diagonal; on the two thin rows a count
+  // beside its point, level with it, comes first, so it cannot be read as a count of the row above or below
+  const out = [], pref = s.main ? [0, .05, .3, .3, .6, .6, .65, .65] : [.1, .15, 0, 0, .6, .6, .65, .65];
+  [1, ...PATH].forEach(k => {
+    const x = X(k), y = Y(k), w = measure(fr(s.v[T][k], s.main && has4(T, k)), g.fv, 600), up = g.fv * .75;
+    const side = g.fv * .55 + w / 2, diag = g.fv * .3 + w / 2;
+    const cand = [[0, -up], [0, up + cap], [side, cap / 2], [-side, cap / 2], [diag, -up * .7], [-diag, -up * .7], [diag, up * .7 + cap], [-diag, up * .7 + cap]];
+    let best = cand[0], bn = Infinity;
+    cand.forEach((c, z) => { const n = hits([x + c[0] - w / 2, y + c[1] - cap, x + c[0] + w / 2, y + c[1]], x, y) + pref[z]; if (n < bn) { bn = n; best = c; } });
+    boxes.push([x + best[0] - w / 2, y + best[1] - cap, x + best[0] + w / 2, y + best[1]]);
+    out[k] = best;
+  });
+  return (S.spots[key] = out);
 }
 function place(t, now) {
   const g = S.g, E = S.el, at = (el, q, dy) => { el.setAttribute("x", f(q[0])); el.setAttribute("y", f(q[1] + (dy || 0))); };
@@ -1759,16 +1821,17 @@ function place(t, now) {
       el.setAttribute("cx", f(q[0])); el.setAttribute("cy", f(q[1]));
       el.setAttribute("class", `pt${s.o ? " o" : ""}${on ? "" : " off"}`);
       el.setAttribute("r", f(g.fv * (k === kNow ? .42 : .3)));
-      const v = E[`v${j}_${k}`];
-      at(v, q, -g.fv * .75);
+      const v = E[`v${j}_${k}`], o = spots(S.T, j)[k];
+      at(v, [q[0] + o[0], q[1]], o[1]);
       text(`v${j}_${k}`, fr(val(s, k, tq), s.main && has4(S.T, k)));
       v.setAttribute("class", `val${s.o && on ? " o" : ""}${k === kNow ? "" : on ? " dim" : " far"}`);
     });
     const cq = proj(g, X(1), cy, 10);
     E["cu" + j].setAttribute("cx", f(cq[0])); E["cu" + j].setAttribute("cy", f(cq[1]));
     E["cu" + j].setAttribute("class", "cue" + (kNow === 1 ? " on" : ""));
-    at(E[`v${j}_1`], cq, -g.fv * .75); text(`v${j}_1`, fr(val(s, 1, tq), s.main && has4(S.T, 1)));
-    if (s.main) text("rlx", has4(TNow, 2) ? "  ·  ticks: the 4 samples" : "");
+    const o1 = spots(S.T, j)[1];
+    at(E[`v${j}_1`], [cq[0] + o1[0], cq[1]], o1[1]); text(`v${j}_1`, fr(val(s, 1, tq), s.main && has4(S.T, 1)));
+    if (s.main) text("rlx", has4(TNow, 2) ? "  (ticks: each of the 4 samples)" : "");
     if (s.main) [1, 2, 3, 4].forEach(k => {  // the 4 samples at T 1.0: faint ticks left of the point, and their range
       const x = X(k) - g.fv * 1.15, ys = D.samples[k].map(v => rowY(g, j, v)), w = g.fv * .34;
       const lo = Math.max(...ys), hi = Math.min(...ys), on = k === 1 || pr >= PATH.indexOf(k) - .02, el = E["sm" + k];
@@ -1862,7 +1925,7 @@ function problemPane(j) {
     `<p class="lead q" data-math>${esc(p.q)}</p>` +
     `<p class="gold">Reference answer: <span data-math>${esc(p.gold)}</span></p>` +
     `<ul class="answers">${order.map(line).join("")}</ul>` +
-    `<p class="gold">Each line is one stored answer per temperature (the sample the marks draw); the quoted text is the first characters of the ${TEMP[S.T]} answer as written; underlined: the cue.</p>` +
+    `<p class="gold">Each line shows one stored answer per temperature, the sample the marks show. The quoted text is how the ${TEMP[S.T]} answer begins, as written; the cue is underlined.</p>` +
     `<div class="steps"><button data-step="-1">‹ Previous problem</button><button data-step="1">Next problem ›</button></div>`;
 }
 function pane() {
@@ -1948,6 +2011,7 @@ document.addEventListener("keydown", e => {
 addEventListener("hashchange", fromHash);
 addEventListener("popstate", fromHash);
 narrow.addEventListener("change", () => { build(); setState(S.k, { instant: true }); place(S.t, performance.now()); });
+document.fonts.ready.then(() => { S.spots = {}; place(S.t, performance.now()); });  // measure the counts again in the loaded typeface
 still.addEventListener("change", () => { if (still.matches) { setState(S.k, { instant: true }); aim(0, 0); place(0, performance.now()); } });
 const stage = $("stage");
 stage.addEventListener("pointermove", e => {

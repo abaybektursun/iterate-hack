@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 4793,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " -289 \\implies b = -\\frac{289}{4}\n\\]\n\nSubstituting \\( b \\) back to find \\( c \\):\n\\[\n16\\left(-\\frac{289}{4}\\right) + c = -458 \\implies -1156 + c = -458 \\implies c = 698\n\\]\n\nThus, \\( P(0) = c = 698 \\).\n\nSimilarly, for \\( Q(x) \\):\n\\[\nQ(16) = -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n\\]\n\\[\nQ(20) = -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n\\]\n\nSubtracting these equations:\n\\[\n(20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n\\]\n\nSubstituting \\( d \\) back to find \\( e \\):\n\\[\n16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n\\]\n\nThus, \\( Q(0) = e = -582 \\).\n\nFinally, adding \\( P(0) \\) and \\( Q(0) \\):\n\\[\nP(0) + Q(0) = 698 + (-582) = 116\n\\]\n\nThe answer is:\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 29,
+  "gold": "244",
+  "extracted_v3": "59",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 13958,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "mber of bounded regions formed by such a configuration can be derived using a known formula for non-crossing segments between two sets of parallel lines. The formula for the number of bounded regions when \\( m \\) points on one line and \\( n \\) points on the other line are connected by all possible segments is given by:\n   \\[\n   2mn - m - n + 1\n   \\]\n   This formula accounts for the regions formed by all the segments and the divisions created by the lines.\n\n3. **Applying the Formula**: Plugging in the values \\( m = 7 \\) and \\( n = 5 \\):\n   \\[\n   2 \\times 7 \\times 5 - 7 - 5 + 1\n   \\]\n   Calculate step-by-step:\n   \\[\n   2 \\times 7 \\times 5 = 70\n   \\]\n   \\[\n   70 - 7 - 5 + 1 = 70 - 12 + 1 = 59\n   \\]\n\nThus, the number of bounded regions formed when \\( m = 7 \\) and \\( n = 5 \\) is \\(\\boxed{59}\\)."
+ }
+}

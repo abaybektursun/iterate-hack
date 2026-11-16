@@ -1,0 +1,21 @@
+{
+ "cell": "m29 (cells-01, readout m29-r1)",
+ "spec": "studies/theory/specs/SPEC_cell_m29.md",
+ "commit": "620faa0c5401be3f2a349cfee1aa33a44e4a5ce8",
+ "job_id": "abaybektursun-1115-094140-e5b5",
+ "smoke_job_id": "abaybektursun-1115-092654-c975",
+ "runner": "python3 tools/vast.py run 60815158 (RTX PRO 6000 Max-Q 96 GB)",
+ "command": "bash studies/rlneurons/jobs/setup_vllm.sh && rm -rf /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.wsp_edit --recipe top8 --other math31 --scale 2 --rounding stochastic --seed 0 --dir /tmp/theta && /opt/rln-vllm/bin/python -m studies.rlneurons.jobs.run_cell --model-path /tmp/theta --model-label top8x2_math31 --prompt cue --set math500 --temperature 1.0 --top-p 1.0 --seed 3000000 --commit 620faa0c5401be3f2a349cfee1aa33a44e4a5ce8",
+ "started_utc": "2026-11-15T17:45:39Z",
+ "updated_utc": "2026-11-15T18:46:04Z",
+ "wall_s": 3625.0410799980164,
+ "generation_s": 3468.785983800888,
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "readout": "python3 studies/theory/analysis/cell_m29.py runs/abaybektursun-1115-094140-e5b5/answers.jsonl",
+ "raw_answers": "runs/abaybektursun-1115-094140-e5b5/answers.jsonl (python3 tools/vast.py get 60815158 abaybektursun-1115-094140-e5b5, from the team store jobs/abaybektursun-1115-094140-e5b5.tar)"
+}

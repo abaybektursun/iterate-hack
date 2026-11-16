@@ -1,0 +1,160 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_short.md",
+ "mechanism": "run-02/f2-m01",
+ "claim": "under 20 % of the hard328 problems the cued base solves have a right sample of 2,000 tokens or fewer; over 50 % on MATH-500",
+ "P1_hard328_S2000": {
+  "value": 0.3273,
+  "interval": [
+   0.2773,
+   0.3818
+  ],
+  "n": 220,
+  "count": 72
+ },
+ "C1_math500_S2000": {
+  "value": 0.6751,
+  "interval": [
+   0.6392,
+   0.711
+  ],
+  "n": 474,
+  "count": 320
+ },
+ "verdict": "refuted",
+ "hard328": {
+  "rows": 1731,
+  "problems": 328,
+  "solved": 220,
+  "right_rows": 673,
+  "S(1100)": {
+   "value": 0.1273,
+   "interval": [
+    0.0909,
+    0.1636
+   ],
+   "n": 220,
+   "count": 28
+  },
+  "S(2000)": {
+   "value": 0.3273,
+   "interval": [
+    0.2773,
+    0.3818
+   ],
+   "n": 220,
+   "count": 72
+  },
+  "S(4096)": {
+   "value": 0.5636,
+   "interval": [
+    0.5091,
+    0.6182
+   ],
+   "n": 220,
+   "count": 124
+  },
+  "right_rows_share_le2000": {
+   "value": 0.2556,
+   "interval": [
+    0.2131,
+    0.3002
+   ],
+   "n": 220
+  },
+  "median_right_n_new": {
+   "value": 3921.0,
+   "interval": [
+    3541.0,
+    4390.1
+   ],
+   "n": 220
+  },
+  "row_accuracy_on_problems_with_short_right": {
+   "value": 0.9446,
+   "interval": [
+    0.9204,
+    0.9655
+   ],
+   "n": 72
+  },
+  "row_accuracy_on_solved_without_short_right": {
+   "value": 0.5658,
+   "interval": [
+    0.5186,
+    0.6139
+   ],
+   "n": 148
+  }
+ },
+ "math500": {
+  "rows": 2137,
+  "problems": 500,
+  "solved": 474,
+  "right_rows": 1674,
+  "S(1100)": {
+   "value": 0.5042,
+   "interval": [
+    0.4662,
+    0.5422
+   ],
+   "n": 474,
+   "count": 239
+  },
+  "S(2000)": {
+   "value": 0.6751,
+   "interval": [
+    0.6392,
+    0.711
+   ],
+   "n": 474,
+   "count": 320
+  },
+  "S(4096)": {
+   "value": 0.8397,
+   "interval": [
+    0.8101,
+    0.8671
+   ],
+   "n": 474,
+   "count": 398
+  },
+  "right_rows_share_le2000": {
+   "value": 0.583,
+   "interval": [
+    0.5505,
+    0.6152
+   ],
+   "n": 474
+  },
+  "median_right_n_new": {
+   "value": 1594.0,
+   "interval": [
+    1459.5,
+    1737.0
+   ],
+   "n": 474
+  },
+  "row_accuracy_on_problems_with_short_right": {
+   "value": 0.9422,
+   "interval": [
+    0.9297,
+    0.9539
+   ],
+   "n": 320
+  },
+  "row_accuracy_on_solved_without_short_right": {
+   "value": 0.6719,
+   "interval": [
+    0.6283,
+    0.717
+   ],
+   "n": 154
+  }
+ },
+ "bootstrap": {
+  "draws": 10000,
+  "seed": 0,
+  "level": 0.9,
+  "unit": "solved problem"
+ }
+}

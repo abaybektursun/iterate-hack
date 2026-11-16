@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 7,
+  "seed": 3010007,
+  "gold": "227",
+  "extracted_v3": "227",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 3360,
+  "prompt_tail": "roblem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nFind the three-digit positive integer $\\underline{a}\\,\\underline{b}\\,\\underline{c}$ whose representation in base nine is $\\underline{b}\\,\\underline{c}\\,\\underline{a}_{\\,\\text{nine}},$ where $a,$ $b,$ and $c$ are (not necessarily distinct) digits.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "\n- \\( b = 0 \\) gives \\( a = 8 \\)\n- \\( b = 1 \\) gives \\( a = 5 \\)\n- \\( b = 2 \\) gives \\( a = 2 \\)\n- \\( b = 3 \\) gives \\( a = 7 \\)\n- \\( b = 4 \\) gives \\( a = 4 \\)\n- \\( b = 5 \\) gives \\( a = 1 \\)\n- \\( b = 6 \\) gives \\( a = 6 \\)\n- \\( b = 7 \\) gives \\( a = 3 \\)\n- \\( b = 8 \\) gives \\( a = 0 \\) (invalid as \\( a \\neq 0 \\))\n\nWe substitute these pairs back into the original equation to solve for \\( c \\):\n- For \\( b = 2 \\) and \\( a = 2 \\):\n  \\[\n  99 \\cdot 2 = 71 \\cdot 2 + 8c \\implies 198 = 142 + 8c \\implies 8c = 56 \\implies c = 7\n  \\]\n  This gives \\( a = 2 \\), \\( b = 2 \\), and \\( c = 7 \\).\n\nVerifying, the number 227 in base ten converts to base nine as 272 (since \\( 2 \\cdot 81 + 7 \\cdot 9 + 2 = 162 + 63 + 2 = 227 \\)), which matches the reverse digits \\( bca \\).\n\nThus, the answer is:\n\\[\n\\boxed{227}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 0,
+  "seed": 3010000,
+  "gold": "116",
+  "extracted_v3": "316",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 6385,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "ing up equations for \\( Q(x) \\):**\n   - From \\( Q(16) = 54 \\):\n     \\[\n     -2(16^2) + 16c + d = 54 \\implies -512 + 16c + d = 54 \\implies 16c + d = 566 \\quad \\text{(3)}\n     \\]\n   - From \\( Q(20) = 53 \\):\n     \\[\n     -2(20^2) + 20c + d = 53 \\implies -800 + 20c + d = 53 \\implies 20c + d = 803 \\quad \\text{(4)}\n     \\]\n   - Subtracting (3) from (4):\n     \\[\n     4c = 237 \\implies c = \\frac{237}{4}\n     \\]\n   - Substituting \\( c \\) into (3):\n     \\[\n     16\\left(\\frac{237}{4}\\right) + d = 566 \\implies 948 + d = 566 \\implies d = -382\n     \\]\n   - Thus, \\( Q(x) = -2x^2 + \\frac{237}{4}x - 382 \\)\n\n4. **Calculating \\( P(0) \\) and \\( Q(0) \\):**\n   - \\( P(0) = 698 \\)\n   - \\( Q(0) = -382 \\)\n\n5. **Summing the results:**\n   \\[\n   P(0) + Q(0) = 698 - 382 = 316\n   \\]\n\nThe final answer is \\(\\boxed{316}\\)."
+ }
+}

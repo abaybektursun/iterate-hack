@@ -1,0 +1,133 @@
+{
+ "run": "hard328_cap32-01",
+ "samples": {
+  "think": 4,
+  "rl": 4,
+  "m1": 1,
+  "m2": 3,
+  "m3": 1,
+  "m4": 1
+ },
+ "chains": {
+  "think": {
+   "assignments": 4,
+   "right": 209.0,
+   "right_min": 201,
+   "right_max": 212,
+   "cap_hits": 94.5,
+   "tokens_per_problem": 10102.588414634147
+  },
+  "m2": {
+   "assignments": 3,
+   "right": 233.33333333333334,
+   "right_min": 229,
+   "right_max": 237,
+   "cap_hits": 54.0,
+   "tokens_per_problem": 9436.094512195123
+  },
+  "think>think": {
+   "assignments": 12,
+   "right": 222.0,
+   "right_min": 216,
+   "right_max": 232,
+   "cap_hits": 68.83333333333333,
+   "tokens_per_problem": 14559.38719512195
+  },
+  "think>think>think": {
+   "assignments": 24,
+   "right": 227.41666666666666,
+   "right_min": 218,
+   "right_max": 236,
+   "cap_hits": 56.0,
+   "tokens_per_problem": 17895.905995934958
+  },
+  "m2>m2": {
+   "assignments": 6,
+   "right": 240.5,
+   "right_min": 238,
+   "right_max": 244,
+   "cap_hits": 29.666666666666668,
+   "tokens_per_problem": 11966.430894308942
+  },
+  "m2>m2>m2": {
+   "assignments": 6,
+   "right": 242.83333333333334,
+   "right_min": 240,
+   "right_max": 246,
+   "cap_hits": 21.0,
+   "tokens_per_problem": 13394.928861788618
+  },
+  "think>m2": {
+   "assignments": 12,
+   "right": 233.58333333333334,
+   "right_min": 226,
+   "right_max": 244,
+   "cap_hits": 43.25,
+   "tokens_per_problem": 14327.649644308944
+  },
+  "m2>m3": {
+   "assignments": 3,
+   "right": 237.0,
+   "right_min": 233,
+   "right_max": 241,
+   "cap_hits": 22.666666666666668,
+   "tokens_per_problem": 11898.657520325201
+  },
+  "m2>m4": {
+   "assignments": 3,
+   "right": 237.0,
+   "right_min": 231,
+   "right_max": 242,
+   "cap_hits": 15.666666666666666,
+   "tokens_per_problem": 11827.32418699187
+  },
+  "m2>rl": {
+   "assignments": 12,
+   "right": 235.41666666666666,
+   "right_min": 228,
+   "right_max": 244,
+   "cap_hits": 13.083333333333334,
+   "tokens_per_problem": 11750.194867886179
+  },
+  "m2>m3>m4": {
+   "assignments": 3,
+   "right": 238.66666666666666,
+   "right_min": 234,
+   "right_max": 242,
+   "cap_hits": 7.666666666666667,
+   "tokens_per_problem": 12916.831300813008
+  },
+  "think>m2>m4": {
+   "assignments": 12,
+   "right": 235.91666666666666,
+   "right_min": 228,
+   "right_max": 245,
+   "cap_hits": 12.416666666666666,
+   "tokens_per_problem": 16255.360264227644
+  },
+  "m1>m2>m3>m4": {
+   "assignments": 3,
+   "right": 239.0,
+   "right_min": 238,
+   "right_max": 241,
+   "cap_hits": 6.333333333333333,
+   "tokens_per_problem": 15774.408536585366
+  }
+ },
+ "cap32": {
+  "job": "abaybektursun-1115-115611-7095",
+  "seed": 3000000,
+  "commit": "94e5d06c018568409b4af702c7c975ead66b6d3c",
+  "n": 328,
+  "right": 241,
+  "cap_hits": 0,
+  "tokens_per_problem": 9826.746951219513,
+  "answers_past_16384": 57,
+  "right_past_16384": 12,
+  "at_16384": {
+   "right": 229,
+   "cap_hits": 57,
+   "tokens_per_problem": 9299.368902439024
+  }
+ }
+}

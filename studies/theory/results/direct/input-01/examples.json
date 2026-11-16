@@ -1,0 +1,96 @@
+{
+ "high_drive_shortened": {
+  "problem_index": 396,
+  "D": 0.0041,
+  "D_over_mean": 1.0626,
+  "E_len": -0.6893,
+  "E_fin": 0.5,
+  "base": {
+   "n_new": 15051,
+   "cap_hit": false,
+   "score_v3": 0,
+   "head": " line!\n\nOkay, let's tackle this problem step by step. First, I need to understand what's being asked. We have two quantities defined: T = 72\u221a2, and K = (T/12)\u00b2. Then, there's a sequence that alternates positive and negative terms, starting with 0.5, 1, -1.5, 2, 2.5, -3, etc. The problem states that "
+  },
+  "top8": {
+   "0.5": {
+    "n_new": 9413,
+    "cap_hit": false,
+    "score_v3": 0
+   },
+   "1": {
+    "n_new": 6119,
+    "cap_hit": false,
+    "score_v3": 0
+   },
+   "1.5": {
+    "n_new": 4460,
+    "cap_hit": false,
+    "score_v3": 1
+   },
+   "2": {
+    "n_new": 5183,
+    "cap_hit": false,
+    "score_v3": 1
+   }
+  },
+  "rand": {
+   "1": {
+    "n_new": 8841,
+    "cap_hit": false,
+    "score_v3": 1
+   },
+   "1.5": {
+    "n_new": 16384,
+    "cap_hit": true,
+    "score_v3": 0
+   }
+  }
+ },
+ "low_drive_shortened": {
+  "problem_index": 90,
+  "D": 0.003594,
+  "D_over_mean": 0.9316,
+  "E_len": -0.9099,
+  "E_fin": 0.0,
+  "base": {
+   "n_new": 2282,
+   "cap_hit": false,
+   "score_v3": 1,
+   "head": " line!\n\nOkay, let's try to figure out how to solve this problem. The question is asking for the sum of all integer bases \\( b > 9 \\) such that \\( 17_b \\) is a divisor of \\( 97_b \\). Hmm, first, I need to make sure I understand what these numbers represent in base \\( b \\) and how divisibility works i"
+  },
+  "top8": {
+   "0.5": {
+    "n_new": 1967,
+    "cap_hit": false,
+    "score_v3": 1
+   },
+   "1": {
+    "n_new": 4081,
+    "cap_hit": false,
+    "score_v3": 1
+   },
+   "1.5": {
+    "n_new": 2892,
+    "cap_hit": false,
+    "score_v3": 1
+   },
+   "2": {
+    "n_new": 3144,
+    "cap_hit": false,
+    "score_v3": 1
+   }
+  },
+  "rand": {
+   "1": {
+    "n_new": 9163,
+    "cap_hit": false,
+    "score_v3": 1
+   },
+   "1.5": {
+    "n_new": 5753,
+    "cap_hit": false,
+    "score_v3": 1
+   }
+  }
+ }
+}

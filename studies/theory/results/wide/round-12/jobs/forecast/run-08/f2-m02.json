@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t10", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t11", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t16", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": 243, "low": 234, "high": 252, "reason": "Theory: 32k = native-16k count (M(2) 16k samples 229-237, about 233) plus extension finishes only; the other seed's 32k run added 13 over its 16k view (232 -> 245), and Think-SFT is weaker at seed 3,000,000 (230 vs 234), so about 233 + 12 - 2."},
+{"id": "t19", "value": 80, "low": 73, "high": 87, "reason": "Theory: the 32k-minus-16k difference is only extension finishes, and Think-SFT rarely boxes mid-reasoning, so its 16k vote over 4 (75) gains only from late finishes; that gain is damped under the vote as on hard328 (238 -> 244), so about +5."},
+{"id": "t20", "value": 71, "low": 64, "high": 78, "reason": "Theory: Think-SFT rarely boxes inside truncated rows, so the rescored 16k equals native 16k (mean 60 of 136) and 32k adds only extension finishes: about 63 capped rows per sample at roughly 18 % finishing right (hard328: 23 of 93) gives about +11."}
+]}

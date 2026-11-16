@@ -25,15 +25,17 @@ in an opened step and in the side panel. The page reads /data every 10 s and rew
 A click on an item opens its title, what, why and caveat, its full text, scores, votes, comments and message thread in
 a side panel whose address is /#<item id>; the filters are in the address too (/?who=<name>&q=<text>&idle=1). Keys:
 / filter, j and k move, 1 2 3 jump to the record steps, Now and Learned, Enter opens, Esc closes, ? lists the keys. A
-click on a person shows only that person. The look is that of the Design tab (.claude/skills/site-ui/SKILL.md).
+click on a person shows only that person. The look is that of architecture.py (.claude/skills/site-ui/SKILL.md).
 
   GET /demo            the talk as a deck of thirteen 16:9 slides (demo_deck.py): keys step, p prints one slide per page
-  GET /demo/fig/<name> the pictures the deck embeds (climb, harness, exa, pastdev, fixes, beyond, efficiency, basins), with their
-                       header, words column and key hidden (demo_deck.FIGS)
-  GET /demo/story      the stepped story of the talk over the Design page's picture (demo.py), fed by the same /data
+  GET /demo/fig/<name> the pictures the deck embeds (gap, climb, harness, exa, pastdev, pasttw, fixes, beyond,
+                       efficiency, review, basins), with their
+                       header, words column and key hidden (demo_deck.FIGS), and converge, the growing idea
+                       tree of the ideas slide (demo_converge.py)
+  GET /demo/story      the stepped story of the talk over the picture of architecture.py (demo.py), fed by the same /data
   GET /demo/ali/<name> Ali's slides of the talk, slide1 to slide3: the idea map, the idea tree and the accuracy climb
                        (demo_ali.py, with its data in demo_ali_data.py); /demo/ali leads to the first
-  GET /architecture    the Design tab, how the harness works: one interactive picture (architecture.py), fed by the same /data
+  GET /architecture    leads to /demo#harness, the deck slide that shows its picture (architecture.py); it was the Design tab
   GET /findings        the Findings tab: one tile per finding (findings.py), each a link to the page of that finding
   GET /finding/<slug>  the page of one finding (finding_<slug>.py; .claude/skills/finding-page/SKILL.md)
   GET /proof           the Proof tab: one tile per experiment that tests the team's method itself (the page of findings.py)
@@ -75,7 +77,6 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 from boto3.dynamodb.conditions import Key
 
-import architecture
 import board
 import climb
 import demo
@@ -237,8 +238,9 @@ LAB_FILE = re.compile(r"(prototypes/[a-z-]+/)?(index\.html|data\.json)?")
 PAPERS = {name: (Path(__file__).with_name(name), Path(__file__).parent.parent / "studies" / folder / name)
           for name, folder in (("the-finish-dial.pdf", "rlneurons/paper"), ("theories-on-trial.pdf", "theory/paper"),
                                ("the-first-hundred-steps.pdf", "rlneurons/paper-first-steps"),
-                               ("no-early-warning.pdf", "rlneurons/paper-no-warning"))}
-DECK_PAGE = demo_deck.page(len(FINDINGS), PAPERS)  # the talk deck at /demo, with the number of finding pages and the papers
+                               ("no-early-warning.pdf", "rlneurons/paper-no-warning"),
+                               ("two-token-limits.pdf", "rlneurons/paper-two-caps"))}
+DECK_PAGE = demo_deck.page(PAPERS)  # the talk deck at /demo, with the papers
 
 
 # The home page (home.py) is the page / of invariant.team; on any other host / is the board and the home page is /home.
@@ -262,8 +264,37 @@ NAME = '<h1 class="name">Invariant</h1>'
 NAME_LINKED = f'<h1 class="name"><a href="{SITE_HOME}" style="color:inherit;font-weight:inherit;text-decoration:none">Invariant</a></h1>'
 NAME_LINK = re.compile(r'<h1 class="name"><a href="[^"]*">Invariant</a></h1>')  # a header whose name already is a link (/values)
 FINDINGS_TAB = re.compile(r'<a (?:class="tab" )?href="/findings"[^>]*>Findings</a>')
+# The tab of the Design page, retired on 2026-11-15, is still in the header copied into each page module; it is taken out
+# as the page is sent. The deck's pictures (/demo/fig/) keep it: their header is hidden and their bytes stay as they were.
+DESIGN_TAB = re.compile(r'\n *<a (?:class="tab" )?href="/architecture"[^>]*>Design</a>')
 NO_ZOOM = re.compile(r',\s*(?:maximum-scale=[\d.]+|user-scalable=(?:no|0))')
-TAP = "<style>@media (max-width: 900px) { .top a { padding-block: 10px; } }</style>\n</head>"
+# The current tab is heavier and set tighter, so the links after it stay where they are on every page. On a phone
+# (520 px and under) the header is the same box on every page: 16 px under the top of the page, one row, 12 px above
+# its line. A status there is its dot alone; a status that reports a problem (.bad) keeps its words, cut with an
+# ellipsis where the row ends. At 400 px and under a page that is no tab shows its name (HERE) in place of the link
+# "All pages": the name "Invariant" leads to the same place.
+TAP = ("<style>@media (max-width: 900px) { .top a { padding-block: 10px; } } .top a[aria-current], .top .here { letter-spacing: -.022em; } "
+       ".top .here { margin-left: 0; color: var(--ink, inherit); font-weight: 600; white-space: nowrap; } "
+       "@media (max-width: 520px) { :has(> header.top:not([id])) { padding-top: 16px !important; } "
+       "header.top:not([id]) { flex-wrap: nowrap !important; gap: 0 9px !important; margin-top: 0 !important; padding: 0 0 12px !important; } "
+       ".top .name { font-size: 14px !important; } .top .here { min-width: 0; overflow: hidden; text-overflow: ellipsis; } "
+       ".top .status:not(.bad) { font-size: 0 !important; gap: 0 !important; min-width: 0 !important; } "
+       ".top .status.bad { display: block; flex: 0 1 auto; min-width: 0 !important; overflow: hidden; text-overflow: ellipsis; } "
+       ".top .status.bad::before { display: inline-block; margin: 0 8px 2px 4px; vertical-align: middle; } } "
+       f'@media (max-width: 400px) {{ .top:has(.here) > a[href="{SITE_HOME}#s-results"] {{ display: none; }} }}</style>\n</head>')
+ALL_PAGES = f'<a href="{SITE_HOME}#s-results">All pages</a>'
+# One header for every page: the same tabs in the order of the home page's sections (Results: Findings, Papers; How we
+# work: Board, Proof), then All pages (the home page's list of every page), then the name of a page that is none of the
+# tabs. Each page module still holds its own copy of the old header; chrome() replaces its links as the page is sent.
+NAV_TABS = (("Findings", "/findings"), ("Papers", "/papers"), ("Board", "/"), ("Proof", "/proof"))
+TAB_LINK = re.compile(r'\n? *<a (?:class="tab" )?href="(?:/|/proof|/findings|/papers|https://invariant\.team/(?:#s-results)?)"[^>]*>(?:Board|Proof|Findings|Papers|All pages)</a>')
+
+
+def nav(path):
+    now = next((n for n, h in NAV_TABS if path == h or (h != "/" and path.startswith(h)) or (h == "/findings" and path.startswith("/finding/"))), None)
+    return "".join(f'\n    <a href="{h}"' + (' aria-current="page"' if n == now else "") + f">{n}</a>" for n, h in NAV_TABS) + "\n    " + ALL_PAGES
+HERE = re.compile(r"<title>Invariant: ([A-Z][^<]*)</title>")  # the 404 page's title starts in lower case: it is no place
+HERE_BY_PATH = {"/exa": "Exa", "/pastdev": "past.dev"}  # pages whose title does not start with "Invariant: "
 # The corner link carries its own color scheme: a page that declares none gets it from the lightness of its
 # background, so the link is readable on an always-dark and on an always-light page.
 HOME_CORNER = ('<style>.inv-home { position: fixed; right: 0; left: auto; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; z-index: 2147483000; padding: 10px 3px; font: 600 12px/1 Archivo, system-ui, sans-serif; '
@@ -279,11 +310,19 @@ def chrome(body, path):
     if 'id="go"' in body and "const PAGES" in body:  # the home page
         return body
     body = NO_ZOOM.sub("", body)
+    if not path.startswith("/demo/fig/"):
+        body = DESIGN_TAB.sub("", body)
     body = body.replace('<span class="name">Invariant</span>', f'<a class="name" href="{SITE_HOME}" style="color:inherit;text-decoration:none">Invariant</a>', 1)  # lab pictures
     if NAME in body or HEADER in body:
         body = NAME_LINK.sub(NAME_LINKED, body.replace(NAME, NAME_LINKED, 1), count=1)
-        if f'<a href="{SITE_HOME}">All pages</a>' not in body:
-            body = FINDINGS_TAB.sub(lambda m: m.group(0) + f'\n    <a href="{SITE_HOME}">All pages</a>', body, count=1)
+        head, rest = body.split("</header>", 1)
+        if not path.startswith("/demo"):  # the deck and its pictures keep their own header (hidden or without tabs)
+            head = TAB_LINK.sub("", head).replace(NAME_LINKED, NAME_LINKED + nav(path.split("?")[0]), 1)
+        body = head + "</header>" + rest
+        here = HERE.search(body)
+        here = HERE_BY_PATH.get(path) or (here and here.group(1))
+        if here and "aria-current" not in head and 'class="here"' not in head:  # a page that is none of the four tabs: its name, as the current item
+            body = body.replace(ALL_PAGES, ALL_PAGES + f'\n    <span class="here" aria-current="page">{here}</span>', 1)
         return body.replace("</head>", TAP, 1)
     if '<a class="name" href="/">Invariant</a>' in body:  # /psychosis: its name led to the board
         return body.replace('<a class="name" href="/">Invariant</a>', f'<a class="name" href="{SITE_HOME}">Invariant</a>', 1)
@@ -298,23 +337,24 @@ NOT_FOUND = """<!doctype html><html lang="en"><head><meta charset="utf-8"><meta 
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" media="print" onload="this.media='all'">
 <style>
 :root { color-scheme: light dark; --paper: light-dark(#eceef0, #080c11); --ink: light-dark(#101820, #e9eff3); --mute: light-dark(#56636d, #93a1ad);
-  --rule: light-dark(#d3d9de, #1c2630); --blue: light-dark(#1f43d6, #8fb1ff); }
+  --rule: light-dark(#cbd2d8, #1c2630); --blue: light-dark(#1f43d6, #8fb1ff); }
 body { margin: 0; color: var(--ink); background: var(--paper); font: 400 15px/1.5 "Archivo", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
 .wrap { max-width: 1840px; margin: 0 auto; padding: 20px 40px 56px; }
 .top { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
-.top a, .ways a { color: var(--mute); white-space: nowrap; }
-.top a:hover, .ways a:hover { color: var(--ink); }
-.say { font-weight: 300; font-size: clamp(26px, 3.4vw, 44px); line-height: 1.15; margin: 14vh 0 24px; overflow-wrap: anywhere; }
+.top a { color: var(--mute); white-space: nowrap; }
+.top a:hover { color: var(--ink); }
+.ways a { padding: 12px 0; white-space: nowrap; }
+.ways a:hover { text-decoration: underline 1px; text-underline-offset: 4px; }
+.say { font-weight: 300; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-stretch: 102%; letter-spacing: -.016em; margin: clamp(28px, 7vh, 76px) 0 24px; overflow-wrap: anywhere; }
 .ways { display: flex; gap: 26px; margin: 0; }
-@media (max-width: 900px) { .wrap { padding: 14px 16px 40px; } .top { gap: 6px 13px; padding-bottom: 2px; } .name { font-stretch: 112%; margin-right: 0; } }
+@media (max-width: 900px) { .wrap { padding: 16px 16px 40px; } .top { gap: 6px 13px; padding-bottom: 12px; } .name { font-stretch: 112%; margin-right: 0; } }
 </style></head><body><div class="wrap">
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/">Board</a>
-    <a href="/architecture">Design</a>
     <a href="/proof">Proof</a>
     <a href="/findings">Findings</a>
   </header>
@@ -346,7 +386,11 @@ class Handler(BaseHTTPRequestHandler):
         for header in headers:
             self.send_header(*header)
         self.end_headers()
-        self.wfile.write(data)
+        if self.command != "HEAD":
+            self.wfile.write(data)
+
+    def do_HEAD(self):  # the headers of GET, no body
+        self.do_GET()
 
     def do_GET(self):
         path = self.path.split("?")[0]
@@ -371,8 +415,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.send(302, "text/plain", "", [("Location", "/demo/ali/slide1")])
         if path.startswith("/demo/ali/") and path[len("/demo/ali/"):] in demo_ali.PAGES:
             return self.send(200, "text/html", demo_ali.PAGES[path[len("/demo/ali/"):]])
-        if path == "/architecture":
-            return self.send(200, "text/html", architecture.PAGE)
+        if path == "/architecture":  # the Design tab until 2026-11-15; its picture is a slide of the deck
+            return self.send(302, "text/plain", "", [("Location", "/demo#harness")])
         if path == "/findings":
             return self.send(200, "text/html", findings_page())
         if path.startswith("/finding/") and path[len("/finding/"):] in FINDING_PAGES:
@@ -430,6 +474,9 @@ PAGE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Invariant: Board</title>
+<meta name="description" content="The team's live log: every experiment, result and idea posted by the team and its agents.">
+<meta property="og:title" content="Invariant: Board">
+<meta property="og:description" content="The team's live log: every experiment, result and idea posted by the team and its agents.">
 <link rel="preload" href="/data" as="fetch" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -439,9 +486,9 @@ PAGE = r"""<!doctype html>
    has no lit object: the chart is its one picture. Blue means live, fresh or selected. Red means a problem. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #cbd2d8;
   --blue: #1f43d6; --red: #c41e34; --on-blue: #fff;
-  --pl: .56; --pc: .15; --dim: .16;
+  --pl: .50; --pc: .15; --dim: .16;
   --blue-wash: color-mix(in srgb, var(--blue) 10%, transparent);
   --gap: color-mix(in srgb, var(--ink) 5%, transparent);
   --scrim: rgb(16 24 32 / .2);
@@ -487,10 +534,12 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 
 /* The one sentence, on the state of the board; above it, what changed since the last look */
 .lede { margin-top: clamp(14px, 2.6vh, 26px); min-height: 32px; }
-.since { margin: 0 0 4px; font-size: 13px; line-height: 18px; color: var(--mute); }
+.what { font-size: 13px; line-height: 18px; color: var(--mute); }
+.since { margin: 30px 0 4px; font-size: 13px; line-height: 18px; color: var(--mute); }
 .since.fresh::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); margin-right: 9px; vertical-align: .1em; }
 .since b { font-weight: 600; color: var(--ink); }
-.summary { font-size: clamp(19px, 1.5vw, 24px); line-height: 1.3; font-weight: 300; letter-spacing: -.005em; max-width: 60em; }
+.summary { font-size: clamp(20px, 1.56vw, 27px); line-height: 1.3; font-weight: 300; font-stretch: 102%; letter-spacing: -.012em; max-width: 60em; margin-top: 30px; }
+.since:not([hidden]) + .summary { margin-top: 0; }
 .summary b { font-weight: 600; }
 .summary .warn { color: var(--red); }
 .summary button, .summary a { text-decoration: underline 1px; text-underline-offset: 4px; text-decoration-color: color-mix(in srgb, currentColor 35%, transparent); }
@@ -543,7 +592,7 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 .chart { height: 320px; min-width: 0; }
 .chart svg { display: block; overflow: visible; }
 .chart svg text {
-  font: 400 11.5px "Archivo", ui-sans-serif, system-ui, sans-serif; fill: var(--mute);
+  font: 400 12px "Archivo", ui-sans-serif, system-ui, sans-serif; fill: var(--mute);
   paint-order: stroke; stroke: var(--paper); stroke-width: 4px; stroke-linejoin: round;
 }
 .chart .brk { stroke: var(--paper); stroke-width: 5px; }
@@ -778,11 +827,19 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   .top { padding-bottom: 2px; }
   .top a { padding: 11px 0; }
   .benches { flex-wrap: nowrap; gap: 4px 12px; margin-top: 2px; font-size: 12.5px; overflow-x: auto; scrollbar-width: none; }
+  .benches.more { mask-image: linear-gradient(90deg, #000 85%, transparent); }  /* more tabs to the right: the strip scrolls */
   .benches button { padding: 10px 0; white-space: nowrap; flex: none; }
+  .reach button.piece { pointer-events: none; }  /* segments 8 px high; the step list opens the same steps */
   .reach { height: 82px; }
   .reach .ends { height: 36px; gap: 8px; }
   .reach .rl-end { gap: 8px; }
   .reach .big { font-size: 26px; line-height: 32px; }
+  .search input { font-size: 16px; min-height: 40px; }  /* iOS zooms into a field under 16px */
+  .row .open { min-height: 44px; }
+  .people button, #idlebtn, .tabs button, .all { padding-block: 10px; min-height: 40px; }
+  .phead .actions button { position: relative; }
+  .phead .actions button::after { content: ""; position: absolute; inset: -11px -8px; }  /* a 40 px hit area */
+  .chart a.mark:not([data-step]) { pointer-events: none; }  /* 45 overlapping marks; the record steps open from their list */
 }
 @media (prefers-reduced-motion: reduce) {
   .arrived, .panel, .scrim, .sd, .reach .fill.grow { animation: none; }
@@ -795,14 +852,14 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   <header class="top">
     <h1 class="name">Invariant</h1>
     <a href="/" aria-current="page">Board</a>
-    <a href="/architecture">Design</a>
     <a href="/proof">Proof</a>
     <a href="/findings">Findings</a>
-    <span class="test" id="test" hidden>test table</span>
-    <span class="status" id="status" role="status">Reading the board</span>
+    <span class="test" id="test" hidden>test data</span>
+    <span class="status" id="status" role="status">Loading the board</span>
   </header>
   <span class="sr" id="live" aria-live="polite"></span>
   <section class="lede" aria-label="The state of the board">
+    <p class="what" id="what">The team's live log: every experiment, result and idea posted by the team and its agents.</p>
     <p class="since" id="since" hidden></p>
     <p class="summary" id="summary"><span class="ph" style="width:min(620px,80%);height:14px;margin-top:8px"></span></p>
   </section>
@@ -810,15 +867,15 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   <section class="reach" id="reach" aria-label="The best untrained-base score against RL"><span class="ph" style="position:absolute;left:0;right:0;top:52px;height:8px;border-radius:4px"></span></section>
   <div class="hero">
     <div class="chart" id="chart"></div>
-    <section class="ladder"><h2>Record steps <span class="count" id="n-steps"></span></h2><div id="ladder"><span class="ph-row"><span class="ph"></span></span><span class="ph-row"><span class="ph"></span></span><span class="ph-row"><span class="ph"></span></span></div></section>
+    <section class="ladder"><h2>New best base scores <span class="count" id="n-steps"></span></h2><div id="ladder"><span class="ph-row"><span class="ph"></span></span><span class="ph-row"><span class="ph"></span></span><span class="ph-row"><span class="ph"></span></span></div></section>
   </div>
   <div class="bar">
     <div class="people" id="people" aria-label="Show one person"></div>
     <label class="search"><input id="q" type="search" placeholder="Filter the lists" aria-label="Filter the lists" autocomplete="off"><kbd>/</kbd></label>
   </div>
   <main class="board main-cols">
-    <section class="s-work"><h2>Now <span class="count" id="n-work"></span></h2><div id="work"></div><div id="work-all"></div></section>
-    <section class="s-result"><h2>Learned <span class="count" id="n-result"></span></h2><div id="result"></div><div id="result-all"></div></section>
+    <section class="s-work"><h2>Open work <span class="count" id="n-work"></span></h2><div id="work"></div><div id="work-all"></div></section>
+    <section class="s-result"><h2>Results <span class="count" id="n-result"></span></h2><div id="result"></div><div id="result-all"></div></section>
   </main>
   <section class="board rest" aria-label="More lists">
     <div class="tabs" id="tabs"></div>
@@ -839,7 +896,7 @@ a.mk:hover, a.mk:focus-visible { --c: var(--ink); }
   <dl>
     <dt><kbd>/</kbd></dt><dd>Filter the lists</dd>
     <dt><kbd>j</kbd><kbd>k</kbd></dt><dd>Next and previous line</dd>
-    <dt><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></dt><dd>Record steps, Now, Learned</dd>
+    <dt><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd></dt><dd>New best base scores, Open work, Results</dd>
     <dt><kbd>Enter</kbd></dt><dd>Open the step, the item or the whole message</dd>
     <dt><kbd>Esc</kbd></dt><dd>Close</dd>
     <dt><kbd>?</kbd></dt><dd>These keys</dd>
@@ -856,7 +913,7 @@ const S = {
 };
 const HUES = [325, 150, 65, 195, 105, 45, 175, 350];  // far apart first; none in 230-310, where the data blue is
 const KINDS = { work: "Open work", "work-closed": "Closed work", result: "Result", idea: "Idea", knowledge: "Knowledge", skill: "Skill" };
-const MORE = [["tools", "Tools and site"], ["idea", "Ideas"], ["knowledge", "Knowledge and skills"], ["closed", "Closed work"], ["msgs", "Messages"], ["activity", "Activity"]];
+const MORE = [["tools", "Pages and tools"], ["idea", "Ideas"], ["knowledge", "Knowledge and skills"], ["closed", "Closed work"], ["msgs", "Messages"], ["activity", "Activity"]];
 const LIMIT = { result: 12, more: 20 };
 const ID = /\b((?:work|result|idea|knowledge|skill)-[0-9a-f]{6})\b|(?<![\w.-])(\d+(?:[.,]\d+)*(?: ?%)?)(?![\w-])/g;
 const AUTO = /^(started|done|closed) (work|idea|result|knowledge|skill)-[0-9a-f]{6}\b/;  // what board.py announces by itself
@@ -1066,8 +1123,9 @@ function render() {
   summary(items, ch);
   put($("people"), people.map(p => `<button data-who="${esc(p)}" data-fkey="who-${esc(p)}" aria-pressed="${S.who === p}" style="${pstyle(p)};--c:oklch(var(--pl) var(--pc) var(--h))"><i class="g"></i>${esc(p)}</button>`).join(""));
   $("people").classList.toggle("picked", Boolean(S.who));
+  put($("what"), `The team's live log: every experiment, result and idea posted by ${people.length} ${people.length === 1 ? "person" : "people"} and their agents.`);
 
-  const nw = list("work", "work", S.idle ? work.filter(i => mins(activeNs(i)) >= 60) : work, nWork, none || "No open work. An agent claims work with <code>board.py post work</code>.");
+  const nw = list("work", "work", S.idle ? work.filter(i => mins(activeNs(i)) >= 60) : work, nWork, none || "No open work.");
   put($("n-work"), nWork ? nw : "");
   put($("n-result"), list("result", "result", lists.result[0], lists.result[1], none || "No results yet."));
 
@@ -1081,8 +1139,8 @@ function render() {
     put(head, ""); put($("more-all"), "");
     put(more, lanes(items, d));
   } else if (S.more === "msgs") {
-    put(head, autos ? `<button id="autos" data-fkey="autos" aria-pressed="${S.autos}">${S.autos ? "Hide" : "Show"} ${autos} announcement${autos > 1 ? "s" : ""} of board.py</button>` : "");
-    list("more", "msgs", S.autos ? talk : talk.filter(m => !AUTO.test(m.text)), count.msgs[1], none || `No messages on all in the last ${d.hours} h.`, message);
+    put(head, autos ? `<button id="autos" data-fkey="autos" aria-pressed="${S.autos}">${S.autos ? "Hide" : "Show"} ${autos} automatic notice${autos > 1 ? "s" : ""} (work started or closed)</button>` : "");
+    list("more", "msgs", S.autos ? talk : talk.filter(m => !AUTO.test(m.text)), count.msgs[1], none || `No messages on the team channel in the last ${d.hours} h.`, message);
   } else if (lists[S.more]) {
     put(head, S.more === "tools" ? "Results that announce a page, a tool or a skill. The page tells them apart by their words, so a few may be in the wrong list." : "");
     list("more", S.more, lists[S.more][0], lists[S.more][1], none || "Nothing here yet.");
@@ -1109,7 +1167,7 @@ function readingAnchor() {
 function status() {
   const s = $("status"), d = S.data;
   s.className = "status" + (S.error ? " bad" : d ? " live" : "");
-  s.textContent = S.error ? (d ? `Offline, last read ${clock(S.readAt)}` : "Offline, not read yet") : d ? "Live" : "Reading the board";
+  s.textContent = S.error ? (d ? `Offline, last read ${clock(S.readAt)}` : "Offline, not read yet") : d ? "Live" : "Loading the board";
   s.title = d ? `Last read ${utc(d.now_ns)}` : "";
 }
 
@@ -1122,12 +1180,12 @@ function summary(items, ch) {
   const last = items.filter(i => i.kind === "result").sort((a, b) => b.at_ns - a.at_ns)[0];
   put($("summary"), (open.length
       ? `${plural(open.length, "open work item")} from ${plural(ppl, "person", "people")}, ` +
-        (idle ? `<button class="warn" id="idlebtn" data-fkey="idle" aria-pressed="${S.idle}"><b>${idle}</b> idle over an hour</button>.` : "none idle over an hour.")
+        (idle ? `<button class="warn" id="idlebtn" data-fkey="idle" aria-pressed="${S.idle}"><b>${idle}</b> with no update for over an hour</button>.` : "none without an update for over an hour.")
       : "No open work.") +
     (last ? ` <a href="#${esc(last.id)}" data-fkey="last">Last result ${mins(last.at_ns) < 1 ? "just now" : `<b>${rel(last.at_ns)}</b> ago`}</a> from ${esc(last.who)}.` : " No results yet."));
   const el = $("since");
   if (!S.since) { el.hidden = true; document.title = TITLE; return; }
-  const parts = [[ch.result.length, "result"], [ch.closed.length, "closed", "closed"], [ch.idle.length, "newly idle", "newly idle"]].filter(p => p[0]);
+  const parts = [[ch.result.length, "new result"], [ch.closed.length, "work item closed", "work items closed"], [ch.idle.length, "work item idle for over an hour", "work items idle for over an hour"]].filter(p => p[0]);
   const count = parts.reduce((a, p) => a + p[0], 0);
   el.hidden = false;
   el.classList.toggle("fresh", count > 0);
@@ -1159,6 +1217,7 @@ function benches(scores) {
   return bs;
 }
 const bench = () => S.benches.find(b => b.name === S.bench) ?? S.benches[0];
+const BENCH_NAME = { hard328: "328 harder problems", fresh2026: "136 problems published in 2026" };  // the words shown for a benchmark's data name
 const stepOf = b => S.step && b.pts.find(q => q.rec && String(q.s.right) === S.step);
 
 /* The words of a record step: the plain row of its score, else the plain row of its result when that result holds no
@@ -1190,13 +1249,14 @@ function hero() {
   const b = bench();
   if (!b) {
     put($("benches"), "");
-    put($("reach"), `<p class="lab">No scores yet. Attach one to a result: <code>board.py score &lt;result id&gt; base MATH-500 410/500 "cue, T 1.0"</code></p>`);
+    put($("reach"), `<p class="lab">No scores posted yet.</p>`);
     put($("chart"), ""); put($("ladder"), ""); put($("n-steps"), "");
     return;
   }
   put($("benches"), S.benches.length > 1 ? S.benches.map(x =>
-    `<button data-bench="${esc(x.name)}" data-fkey="bench-${esc(x.name)}" aria-pressed="${x === b}">${esc(x.name)} <b>${f1(x.lead.p)}</b></button>`).join("") : "");
-  put($("n-steps"), `${esc(b.name)}, newest first`);
+    `<button data-bench="${esc(x.name)}" data-fkey="bench-${esc(x.name)}" aria-pressed="${x === b}">${esc(BENCH_NAME[x.name] ?? x.name)} <b>${f1(x.lead.p)}</b></button>`).join("") : "");
+  put($("n-steps"), `${esc(BENCH_NAME[b.name] ?? b.name)}, newest first`);
+  moreBenches();
   drawReach();
   ladder(b);
   drawChart();
@@ -1222,14 +1282,14 @@ function drawReach() {
     return { q, k, from, name, w, html: `<button class="${cls}" style="left:${at(from).toFixed(3)}%;width:${at(q.p - from).toFixed(3)}%;${hx}" data-step="${q.s.right}" data-fkey="reach-${q.s.right}" aria-label="${esc(label)}" aria-expanded="${q === sel}"><i></i></button>` };
   });
   const rest = !full ? `<span class="piece togo last" style="left:${at(lead.p).toFixed(3)}%;width:${at(top - lead.p).toFixed(3)}%"><i></i></span>` : "";
-  const go = rl ? (matched ? "RL matched" : `${f1(rlP - lead.p)} points to go`) : "", goW = go ? width13(go) : 0;
+  const go = rl ? (matched ? "RL matched" : `${f1(rlP - lead.p)} points below RL`) : "", goW = go ? width13(go) : 0;
   const marks = segs.map(s => {  // a gain under its segment where it fits and stays clear of the note at the right end
     const tw = width13(s.name), x = s.k ? Math.min(px(s.from) + s.w / 2 - tw / 2, W - (go ? goW + 12 : 0) - tw) : 0;  // centred, or moved left of the note
     if (s.w < tw + 10 || x < (s.k ? px(s.from) + 2 : 0)) return "";
     return `<span style="left:${x.toFixed(1)}px">${s.name}</span>`;
   }).join("") + (go ? `<span style="right:0">${go}</span>` : "");
-  put(el, `<div class="ends"><span class="big base">${f1(lead.p)}</span><span class="lab">untrained base</span>` +
-    (rl ? `<span class="rl-end"><span class="lab">RL-trained</span><span class="big">${f1(rlP)}</span></span>` : "") + `</div>` +
+  put(el, `<div class="ends"><span class="big base">${f1(lead.p)}</span><span class="lab">base model</span>` +
+    (rl ? `<span class="rl-end"><span class="lab">RL model</span><span class="big">${f1(rlP)}</span></span>` : "") + `</div>` +
     `<div class="bar8" role="group" aria-label="${esc(`${b.name}: best base ${f1(lead.p)} %${rl ? `, RL ${f1(rlP)} %` : ", no RL score"}; one part per record step`)}">${rest}<div class="fill">${segs.map(s => s.html).join("")}</div></div>` +
     `<div class="marks" aria-hidden="true">${marks}</div>`);
   el.classList.toggle("has-sel", Boolean(sel));
@@ -1247,11 +1307,11 @@ function ladder(b) {
   const rows = b.pts.filter(q => q.rec).reverse().map(q => {
     const noise = q.prev && !q.clears, on = q === sel, id = `step-${q.s.right}`;
     return `<button class="lrow${noise ? " noise" : ""}" data-step="${q.s.right}" data-fkey="${id}" aria-expanded="${on}"${on ? ` aria-controls="sd-${q.s.right}"` : ""}>` +
-      `<b>${q.prev ? "+" + f1(q.p - q.prev.p) : "start"}</b><span class="lt">${esc(stepTitle(q, b))}</span>` +
+      `<b>${q.prev ? "+" + f1(q.p - q.prev.p) : "Start"}</b><span class="lt">${esc(stepTitle(q, b))}</span>` +
       `<span class="lr">${q.prev ? f1(q.prev.p) + " → " : ""}${f1(q.p)}${noise ? ` <span class="flag">within noise</span>` : ""}</span><span class="chev" aria-hidden="true">›</span></button>` + (on ? detail(q, b) : "");
   });
   const ci = b.rl && diffCI(b.rl, b.lead.s);  // the 95 % interval of RL minus the best base, in points
-  const rl = b.rl ? `<a class="lrow rl" href="#${esc(b.rl.result)}" data-fkey="step-rl"><b>${f1(b.rlP)}</b><span class="lt">RL-trained model, the target</span><span class="lr">gap ${f1(ci[0])} to ${f1(ci[1])}</span></a>` : "";
+  const rl = b.rl ? `<a class="lrow rl" href="#${esc(b.rl.result)}" data-fkey="step-rl"><b>${f1(b.rlP)}</b><span class="lt">RL model, the target</span><span class="lr">RL model minus best base: ${f1(ci[0])} to ${f1(ci[1])} points (95 % interval)</span></a>` : "";
   put($("ladder"), rl + rows.join(""));
 }
 
@@ -1263,21 +1323,21 @@ function detail(q, b) {
   else {
     const d = prev && configDiff(q), raw = sentence(rawOf(s.result));
     what = (prev ? `<p>${[d.added.length ? `Added to the configuration: ${rich(d.added.join(", "), T)}.` : "", d.removed.length ? `Removed: ${rich(d.removed.join(", "), T)}.` : ""].filter(Boolean).join(" ") ||
-      "The configuration differs from the step before only in its note."}</p>` : `<p>The first base score posted on this benchmark.</p>`) +
+      "The settings are the same as at the step before; only a comment on them differs."}</p>` : `<p>The first base score posted on this benchmark.</p>`) +
       (raw ? `<p class="raw">From the result's text: ${rich(raw, T)}</p>` : "");
   }
   const why = w.why ? rich(w.why, T) : "No explanation in plain words is written for this step yet.";
   const real = (prev ? `${prev.s.n === s.n ? `${prev.s.right} → ${s.right} of ${s.n}` : `${prev.s.right} of ${prev.s.n} → ${s.right} of ${s.n}`}. ` +
-      (q.clears ? `Larger than chance: ${f1(q.p)} % is above the ${tb("95 % interval")} of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])}).`
-                : `Too small to tell from chance: ${f1(q.p)} % is inside the ${tb("95 % interval")} of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])}).`)
+      (q.clears ? `Likely real: ${f1(q.p)} % is above the ${tb("95 % interval")} of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])} %).`
+                : `Too small to tell from chance: ${f1(q.p)} % is inside the ${tb("95 % interval")} of the step before (${f1(prev.ci[0])} to ${f1(prev.ci[1])} %).`)
     : `${s.right} of ${s.n} right. Its ${tb("95 % interval")} is ${f1(q.ci[0])} to ${f1(q.ci[1])} %.`);
   const cost = (s.tokens ? `${num(s.tokens)} ${tb("tokens per problem")}` + (prev ? (prev.s.tokens ? `; ${num(prev.s.tokens)} at the step before.` : "; not recorded at the step before.") : ".")
     : "Tokens per problem are not recorded for this score.");
   const nc = item?.n_comments;
   return `<dl class="sd" id="sd-${s.right}"><dt>${prev ? "What changed" : "What it is"}</dt><dd>${what}</dd>` +
-    `<dt>Why it works</dt><dd>${why}</dd>` +
-    `<dt>Is it real</dt><dd><p>${real}</p>${w.caveat ? `<p class="cv">${rich(w.caveat, T)}</p>` : ""}</dd>` +
-    `<dt>Cost</dt><dd>${cost} <a class="go" href="#${esc(s.result)}">Raw result${nc ? ` and ${nc} comment${nc > 1 ? "s" : ""}` : ""}</a></dd>` +
+    `<dt>Why it may help</dt><dd>${why}</dd>` +
+    `<dt>Is it real?</dt><dd><p>${real}</p>${w.caveat ? `<p class="cv">${rich(w.caveat, T)}</p>` : ""}</dd>` +
+    `<dt>Cost</dt><dd>${cost} <a class="go" href="#${esc(s.result)}">Open the posted result${nc ? ` and its ${nc} comment${nc > 1 ? "s" : ""}` : ""}</a></dd>` +
     `<dt>Settings</dt><dd class="set">${rich(s.config, T)}</dd></dl>`;
 }
 
@@ -1285,7 +1345,7 @@ function detail(q, b) {
 let measure;
 function textWidth(t) {
   measure ??= document.createElement("canvas").getContext("2d");
-  measure.font = '400 11.5px "Archivo", ui-sans-serif, system-ui, sans-serif';
+  measure.font = '400 12px "Archivo", ui-sans-serif, system-ui, sans-serif';
   return measure.measureText(t).width;
 }
 function drawChart() {
@@ -1297,7 +1357,7 @@ function drawChart() {
 const KEY_H = 24;  // the height of the key's one line and its margin, taken from the chart's height (two lines on a narrow screen)
 const glyph = inner => `<svg width="12" height="12" viewBox="-6 -6 12 12" aria-hidden="true">${inner}</svg>`;
 const chartKey = () => `<p class="ckey">` +
-  `<span>${glyph('<circle class="dot rec" r="4.5" style="stroke-width:0"/>')}record</span>` +
+  `<span>${glyph('<circle class="dot rec" r="4.5" style="stroke-width:0"/>')}new best</span>` +
   `<span>${glyph('<circle class="dot" r="3"/>')}other attempt</span>` +
   `<span>${glyph('<path class="x" d="M-3.5,-3.5l7,7m0,-7l-7,7"/>')}plain prompt, no cue</span>` +
   `<span>${glyph('<line class="ci" x1="0" x2="0" y1="-6" y2="6" style="opacity:1"/>')}95 % interval</span></p>`;
@@ -1360,8 +1420,8 @@ function chart(b, W, H, narrow) {
     boxes.push({ x0: cx - 7, x1: cx + 7, y0: cy - 7, y1: cy + 7 });
     if (!clipped) boxes.push({ x0: cx - 1.5, x1: cx + 1.5, y0: y(q.ci[1]), y1: y(q.ci[0]) });
     const ci = clipped ? "" : `<line class="ci${q.rec ? " rec" : ""}${on(q)}" x1="${cx}" x2="${cx}" y1="${y(q.ci[1])}" y2="${y(q.ci[0])}"/>`;
-    const tip = `${q.s.config}: ${q.s.right} of ${q.s.n} (${f1(q.p)} %, 95% ${f1(q.ci[0])} to ${f1(q.ci[1])})` +
-      `${q.s.tokens ? `, ${num(q.s.tokens)} tokens per problem` : ""}, ${q.s.who}, ${q.s.result}`;
+    const tip = `${q.s.config}: ${q.s.right} of ${q.s.n} right (${f1(q.p)} %, 95 % interval ${f1(q.ci[0])} to ${f1(q.ci[1])} %)` +
+      `${q.s.tokens ? `, ${num(q.s.tokens)} tokens per problem` : ""}, posted by ${q.s.who}, ${q.s.result}`;
     const x7 = `<circle class="under" cx="${cx}" cy="${cy}" r="4.5"/><path class="x" d="M${cx - 3.5},${cy - 3.5}l7,7m0,-7l-7,7"`;
     const mark = q.plain && !q.rec ? `${x7}/>` : q.plain ? `${x7} style="stroke:var(--blue)"/>`
       : `<circle class="dot${q.rec ? " rec" : ""}" cx="${cx}" cy="${cy}" r="${q.rec ? 4.5 : 3}"/>`;
@@ -1411,7 +1471,7 @@ function lanes(items, d) {
     return `<div class="lane ${cls}" style="${pstyle(p)}"><button data-who="${esc(p)}"><i class="g"></i>${esc(p)}</button>` +
       `<div class="track" style="--hour:calc(100% / ${hours})">${marks}</div></div>`;
   }).join("") + (lanePeople.length ? `<div class="axis"><i></i><div>${
-    Array.from({ length: Math.floor(hours) + 1 }, (_, h) => `<span style="left:${(100 - h / hours * 100).toFixed(3)}%">${h ? h + "h ago" : "now"}</span>`)
+    Array.from({ length: Math.floor(hours) + 1 }, (_, h) => `<span style="left:${(100 - h / hours * 100).toFixed(3)}%">${h ? h + "\u00a0h ago" : "now"}</span>`)
       .reverse().join("")}</div></div>` : `<p class="empty">No posts or messages in the last ${hours} h.</p>`);
 }
 
@@ -1465,9 +1525,9 @@ function renderPanel() {
   let html;
   if (S.detail?.missing) {
     html = head(S.open, "") + `<div class="pbody"><p class="note">No item named ${esc(S.open)} on this board. ` +
-      `The link may be mistyped, or the item is on the test table.</p></div>`;
+      `The link may be mistyped, or the item is in the test data.</p></div>`;
   } else if (!base) {
-    html = head(S.open, "") + `<div class="pbody"><p class="note">Reading ${esc(S.open)}</p></div>`;
+    html = head(S.open, "") + `<div class="pbody"><p class="note">Loading ${esc(S.open)}…</p></div>`;
   } else {
     const i = base, d = S.detail, T = { links: false, terms: true };
     const open = i.listed === "work", idle = mins(activeNs(i));
@@ -1478,8 +1538,8 @@ function renderPanel() {
     const said = !w ? "" : (w.title ? `<p class="lead">${esc(w.title)}</p>` : "") +
       (w.what || w.why || w.caveat ? `<dl class="sd">${part("What", w.what)}${part("Why", w.why)}${part("Caveat", w.caveat, ' class="cv"')}</dl>` : "");
     const votes = d ? d.votes.map(v => `${esc(v.who)} ${v.vote > 0 ? "+" : "−"}`).join(", ") : "";
-    const scores = (S.scores?.get(i.id) || []).map(s => `<p>${esc(s.model)} ${esc(s.benchmark)} <b class="n">${s.right}/${s.n}</b>, ${f1(100 * s.right / s.n)} % ` +
-      `<small>${esc(s.config)}${s.tokens ? `, ${num(s.tokens)} tokens per problem` : ""}</small></p>`).join("");
+    const scores = (S.scores?.get(i.id) || []).map(s => `<p>${esc({ base: "Base model", rl: "RL model", other: "Other model" }[s.model] ?? s.model)}, ${esc(BENCH_NAME[s.benchmark] ?? s.benchmark)}: <b class="n">${s.right} of ${s.n}</b> (${f1(100 * s.right / s.n)} %); ` +
+      `<small>settings: ${esc(s.config)}${s.tokens ? `, ${num(s.tokens)} tokens per problem` : ""}</small></p>`).join("");
     const facts = [
       ...(scores ? [["Scores", scores]] : []),
       ["Posted by", `<span class="who" style="${pstyle(i.who)}">${esc(i.who)}</span>`], ["Branch", esc(i.branch || "not recorded")],
@@ -1487,7 +1547,7 @@ function renderPanel() {
       ["Posted", `${when(i.at_ns, " ago")}, ${utc(i.at_ns)}`],
       ["Votes", `+${i.ups} −${i.downs}${votes ? ": " + votes : ""}`],
     ].map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("");
-    const thread = (name, rows, empty) => `<h3>${name} <span>${d ? rows.length : ""}</span></h3>` + (!d ? `<p class="note">Reading</p>` :
+    const thread = (name, rows, empty) => `<h3>${name} <span>${d ? rows.length : ""}</span></h3>` + (!d ? `<p class="note">Loading…</p>` :
       rows.length ? `<div class="msgs">${rows.map(r => `<div class="pmsg" style="${pstyle(r.who)}"><div class="meta"><b>${esc(r.who)}</b>` +
         `${when(Date.parse(r.at) * 1e6, " ago")}</div><div class="text">${rich(r.text)}</div></div>`).join("")}</div>` : `<p class="note">${empty}</p>`);
     html = head(i.id, state, open && idle >= 60) + `<div class="pbody">${said}` +
@@ -1608,7 +1668,11 @@ document.addEventListener("keydown", e => {
     if (S.term) { const b = S.term; hideDef(); b.focus(); }
     else if (!$("keys").hidden) $("keys").hidden = true;
     else if (S.open) closePanel();
-    else if (S.step) set({ step: null });
+    else if (S.step) {  // focus that was inside the opened step goes to its line
+      const n = S.step;
+      set({ step: null });
+      if (document.activeElement === document.body) document.querySelector(`.lrow[data-step="${CSS.escape(n)}"]`)?.focus({ preventScroll: true });
+    }
     else if (S.idle || S.who) set({ idle: false, who: null });
   }
   else if (e.key === "j" || (e.key === "ArrowDown" && !inPanel)) { e.preventDefault(); move(1); }
@@ -1622,6 +1686,9 @@ addEventListener("scroll", hideDef, { passive: true, capture: true });
 addEventListener("pointermove", e => { S.pointer = { x: e.clientX, y: e.clientY }; }, { passive: true });
 new ResizeObserver(() => { hideDef(); drawChart(); }).observe($("chart"));
 new ResizeObserver(() => drawReach()).observe($("reach"));
+function moreBenches() { const e = $("benches"); e.classList.toggle("more", e.scrollWidth - e.clientWidth - e.scrollLeft > 2); }  // tabs hidden to the right
+$("benches").addEventListener("scroll", moreBenches, { passive: true });
+new ResizeObserver(moreBenches).observe($("benches"));
 small.addEventListener("change", () => S.data && render());
 document.fonts.ready.then(() => { drawChart(); drawReach(); });
 

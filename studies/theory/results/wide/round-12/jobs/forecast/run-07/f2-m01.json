@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": 230, "low": 216, "high": 243, "reason": "Theory: at cap 32,768 almost no derivation is cut, so the score is set by problem length and difficulty, not by sampling; I take the paired T 1.0 own-format cell at 32,768 (232/328) and the cue cells at 32,768 (230-235), widened because the theory says nothing about temperature."},
+{"id": "t02", "value": 472, "low": 462, "high": 481, "reason": "Theory: at 32,768 the cut answers in MATH-500's long tail finish (right at about 45 %) and finished short answers are untouched, so the result should match the paired T 1.0 own-format 32,768 cell (474/500), minus a little for the temperature change, which the theory does not cover."},
+{"id": "t03", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t04", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t05", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t06", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t07", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t08", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t09", "value": 222, "low": 209, "high": 235, "reason": "Theory: a finishing edit only turns cut answers into finished ones, at 25-30 % right on hard328; Think-SFT is at 209 with 94.5 cap hits and the 3x edit leaves 60, so 209 + 0.27 x 35 = about 218, blended with the 232 measured at the other seed."},
+{"id": "t10", "value": 41, "low": 30, "high": 53, "reason": "Theory: removing the finishing directions (size -1) turns finished answers back into cut ones (on hard328 cap hits went 77 to 96), and the odd shard already shows 20 of 250, so I double it to about 40."},
+{"id": "t11", "value": 378, "low": 362, "high": 394, "reason": "Theory: only the extra cut answers (about 13 more than the cued base's 27) are lost, at the 45 % long-tail rate, which would give about 404; the odd shard's measured 188/250 shows a larger loss, so I double that half."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 465, "low": 456, "high": 474, "reason": "Theory: twice the RL change mostly converts Think-SFT's roughly 25 MATH-500 cap hits (single samples 457-462) into finished answers, right at about 45 %; halving the cap hits gives about +6, so about 465 (a=1 gave 467)."},
+{"id": "t16", "value": 231, "low": 219, "high": 243, "reason": "Theory: M(2) converts about 40 of Think-SFT's 94.5 cut answers at 25-30 % right (209 to about 220); I blend that with the three measured M(2) samples at the same setting (234, 229, 237)."},
+{"id": "t17", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t18", "value": 247, "low": 237, "high": 257, "reason": "Theory: the 32,768 budget finishes M(2)'s roughly 55 cut answers at 16,384, and about 25-30 % of them are right on hard328: about 233 + 14 = 247 (the other seed went 232 to 245)."},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": 70, "low": 64, "high": 76, "reason": "Theory: on fresh2026 the cut answers converted by the 32,768 budget are right under 20 % of the time; Think-SFT's 16,384 single samples average 60 with about 62 cap hits each, so 60 + 0.17 x 62 = about 70."}
+]}

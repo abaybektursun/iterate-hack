@@ -1,0 +1,1105 @@
+{
+ "reader-1": [
+  {
+   "id": "t01",
+   "value": 226,
+   "low": 210,
+   "high": 240,
+   "reason": "Think-SFT own format at T 1.0 cap 32k scored 232/328 (result-dd9239); T 0.6/top-p 0.95 is its released setting, small downside risk from more repetition at lower temperature."
+  },
+  {
+   "id": "t02",
+   "value": 471,
+   "low": 460,
+   "high": 481,
+   "reason": "Same model and format at T 1.0 cap 32k scored 474/500 (result-0a0a5a); T 0.6 expected near that with slight loss from loops."
+  },
+  {
+   "id": "t03",
+   "value": 407,
+   "low": 404,
+   "high": 410,
+   "reason": "result-2a5195 reports base + Math 1x + Code 1x at seed 52M (first new seed) = 407/538."
+  },
+  {
+   "id": "t04",
+   "value": 401,
+   "low": 398,
+   "high": 404,
+   "reason": "result-2a5195 reports the sum at seed 53M (second new seed) = 401/538."
+  },
+  {
+   "id": "t05",
+   "value": 395,
+   "low": 392,
+   "high": 398,
+   "reason": "result-2a5195 reports RL-Code at seeds 51/52/53M as 401, 395, 403; first new seed = 395."
+  },
+  {
+   "id": "t06",
+   "value": 403,
+   "low": 400,
+   "high": 406,
+   "reason": "result-2a5195: RL-Code at second new seed (53M) = 403."
+  },
+  {
+   "id": "t07",
+   "value": 397,
+   "low": 394,
+   "high": 400,
+   "reason": "result-2a5195: base + Code 1x at 52M = 397."
+  },
+  {
+   "id": "t08",
+   "value": 391,
+   "low": 388,
+   "high": 394,
+   "reason": "result-2a5195: base + Code 1x at 53M = 391."
+  },
+  {
+   "id": "t09",
+   "value": 240,
+   "low": 237,
+   "high": 243,
+   "reason": "result-2a5195: Think-SFT + Math top-8 3x at seed 3.1M = 240/328."
+  },
+  {
+   "id": "t10",
+   "value": 102,
+   "low": 98,
+   "high": 106,
+   "reason": "result-e18bd8: top8 x4.5 on L22-31 = 102/328 (broken ' which ' loops)."
+  },
+  {
+   "id": "t11",
+   "value": 155,
+   "low": 152,
+   "high": 158,
+   "reason": "result-e18bd8: top8 x3.0 on L22-31 = 155/328."
+  },
+  {
+   "id": "t12",
+   "value": 156,
+   "low": 153,
+   "high": 159,
+   "reason": "result-e18bd8: top8 x0.2 on L0-10 = 156/328."
+  },
+  {
+   "id": "t13",
+   "value": 182,
+   "low": 178,
+   "high": 187,
+   "reason": "result-e18bd8: direction 1 only x1.5, two samples 182 and 184 (first listed taken as sample 0)."
+  },
+  {
+   "id": "t14",
+   "value": 184,
+   "low": 179,
+   "high": 188,
+   "reason": "result-e18bd8: direction 1 only x1.5, second listed sample 184."
+  },
+  {
+   "id": "t15",
+   "value": 395,
+   "low": 358,
+   "high": 428,
+   "reason": "Think-SFT is trained on code reasoning and beats RL on math; expected near RL-Code's 401 of 538, with risk from cap hits and code-block extraction in the raw template."
+  },
+  {
+   "id": "t16",
+   "value": 383,
+   "low": 340,
+   "high": 420,
+   "reason": "Same model with the Math cue on code; a math-style opening likely costs a few code-block endings relative to the Code cue."
+  },
+  {
+   "id": "t17",
+   "value": 198,
+   "low": 190,
+   "high": 207,
+   "reason": "Cued base vote over 4 = 192 on hard328; on MATH-500, going from a vote over 4 to 6 added about 1.5 points, and readers have tended to set vote ceilings too low."
+  },
+  {
+   "id": "t18",
+   "value": 233,
+   "low": 222,
+   "high": 244,
+   "reason": "M(2) samples so far 234, 229, 237 (mean 233.3); seed scatter about 5."
+  },
+  {
+   "id": "t19",
+   "value": 245,
+   "low": 238,
+   "high": 252,
+   "reason": "M(2) vote over 3 = 246; adding a 4th sample typically leaves it within a few problems; Think-SFT vote over 4 is 241."
+  },
+  {
+   "id": "t20",
+   "value": 466,
+   "low": 455,
+   "high": 476,
+   "reason": "Think-SFT cue singles 457-462 on MATH-500 and a=1 transplant 467; M(2) finishes more, so mid-460s."
+  },
+  {
+   "id": "t21",
+   "value": 241,
+   "low": 238,
+   "high": 244,
+   "reason": "result-c5dafe reports M(2) cap 32,768 seed 3,000,000 = 241/328."
+  },
+  {
+   "id": "t22",
+   "value": 0.78,
+   "low": 0.52,
+   "high": 1.02,
+   "reason": "RL-Math directions also act on code (368 vs 331 random) and the subspace looks like general reasoning (result-3abd6f), so code drive is probably above the theory's 0.54, though still below math."
+  },
+  {
+   "id": "t23",
+   "value": 0.98,
+   "low": 0.8,
+   "high": 1.18,
+   "reason": "A random rank-8 subspace should track overall activation norm, giving a code/math ratio near 1."
+  },
+  {
+   "id": "t24",
+   "value": 81,
+   "low": 74,
+   "high": 88,
+   "reason": "Vote over 4 at 16k = 75; Think-SFT hits the cap on 46 % of fresh samples, so a 32k cap should add a few votes, similar to M(2) finishing more (vote 83)."
+  },
+  {
+   "id": "t25",
+   "value": 71,
+   "low": 65,
+   "high": 77,
+   "reason": "Mean 60.0 at 16k with about 62 cap hits per sample; at 32k most of these finish and about 20 % come out right (hard328: 23 of 93), so about +11."
+  }
+ ],
+ "reader-2": [
+  {
+   "id": "t01",
+   "value": 235,
+   "low": 222,
+   "high": 248,
+   "reason": "Own format at T 1.0, cap 32,768 gave 232 (cue samples 230-235); T 0.6 is assumed to be about level or slightly better for an SFT reasoning model, with some risk of drift or loops."
+  },
+  {
+   "id": "t02",
+   "value": 475,
+   "low": 465,
+   "high": 484,
+   "reason": "Own format at T 1.0, cap 32,768 gave 474 of 500 on the paired seeds; T 0.6 is expected to be about level."
+  },
+  {
+   "id": "t03",
+   "value": 407,
+   "low": 403,
+   "high": 411,
+   "reason": "result-2a5195 reports 407 for the sum edit at seed 52M, the first new seed."
+  },
+  {
+   "id": "t04",
+   "value": 401,
+   "low": 397,
+   "high": 405,
+   "reason": "result-2a5195 reports 401 for the sum edit at seed 53M, the second new seed."
+  },
+  {
+   "id": "t05",
+   "value": 395,
+   "low": 391,
+   "high": 399,
+   "reason": "result-2a5195 reports 395 for RL-Code at seed 52M."
+  },
+  {
+   "id": "t06",
+   "value": 403,
+   "low": 399,
+   "high": 407,
+   "reason": "result-2a5195 reports 403 for RL-Code at seed 53M."
+  },
+  {
+   "id": "t07",
+   "value": 397,
+   "low": 393,
+   "high": 401,
+   "reason": "result-2a5195 reports 397 for Code directions alone at 1x at seed 52M."
+  },
+  {
+   "id": "t08",
+   "value": 391,
+   "low": 387,
+   "high": 395,
+   "reason": "result-2a5195 reports 391 for Code directions alone at 1x at seed 53M."
+  },
+  {
+   "id": "t09",
+   "value": 240,
+   "low": 237,
+   "high": 243,
+   "reason": "result-2a5195 reports 240 (42 cap hits) at seed 3.1M."
+  },
+  {
+   "id": "t10",
+   "value": 102,
+   "low": 98,
+   "high": 106,
+   "reason": "result-e18bd8 reports 102 for the L22-31 x4.5 cell, a broken model with ' which ' loops."
+  },
+  {
+   "id": "t11",
+   "value": 155,
+   "low": 152,
+   "high": 158,
+   "reason": "result-e18bd8 reports 155 for the L22-31 x3.0 cell."
+  },
+  {
+   "id": "t12",
+   "value": 156,
+   "low": 153,
+   "high": 159,
+   "reason": "result-e18bd8 reports 156 for the L0-10 x0.2 cell."
+  },
+  {
+   "id": "t13",
+   "value": 182,
+   "low": 179,
+   "high": 186,
+   "reason": "result-e18bd8 reports direction 1 at x1.5 as 182 and 184; 182 is assumed to be sample 0."
+  },
+  {
+   "id": "t14",
+   "value": 184,
+   "low": 180,
+   "high": 187,
+   "reason": "result-e18bd8 reports direction 1 at x1.5 as 182 and 184; 184 is assumed to be sample 1."
+  },
+  {
+   "id": "t15",
+   "value": 395,
+   "low": 360,
+   "high": 428,
+   "reason": "Think-SFT matched or beat RL elsewhere (MMLU/BBH 342 vs 332), so it should land near RL-Code's 401 on code, less some cap hits and drift at T 1.0."
+  },
+  {
+   "id": "t16",
+   "value": 385,
+   "low": 345,
+   "high": 422,
+   "reason": "Same as the Code-cue cell; the cue matters little for Think-SFT, but the Math cue may cost a few code-block endings."
+  },
+  {
+   "id": "t17",
+   "value": 196,
+   "low": 189,
+   "high": 204,
+   "reason": "The vote over 4 was 192; on MATH-500, going from 4 to 6 votes added about 1.5 points, so expect about +4 on the 328."
+  },
+  {
+   "id": "t18",
+   "value": 233,
+   "low": 222,
+   "high": 244,
+   "reason": "The three earlier M(2) samples were 234, 229 and 237 (mean 233.3), with seed scatter of about \u00b15."
+  },
+  {
+   "id": "t19",
+   "value": 247,
+   "low": 240,
+   "high": 254,
+   "reason": "M(2)'s vote over 3 is 246 and a fourth sample moves a vote little (Think-SFT's votes over 3 were 231-241, over 4 was 241)."
+  },
+  {
+   "id": "t20",
+   "value": 467,
+   "low": 457,
+   "high": 476,
+   "reason": "Think-SFT cue singles score 457-462 and Think-SFT + 1x(RL-base) scored 467; the 2x transplant adds finishing."
+  },
+  {
+   "id": "t21",
+   "value": 243,
+   "low": 234,
+   "high": 252,
+   "reason": "Seed 3,010,000 at cap 32,768 gave 245 and the cap-16,384 singles were 229-237, so the raised cap adds roughly +8-10 with seed scatter of about \u00b15."
+  },
+  {
+   "id": "t22",
+   "value": 0.72,
+   "low": 0.45,
+   "high": 1.0,
+   "reason": "The base's activations strongly drive RL's input directions, and RL-Math's directions also help on code (368 vs random 331), so the drive from code text is assumed to be well above the predicted 0.54 but below the 1.0 of math text."
+  },
+  {
+   "id": "t23",
+   "value": 1.0,
+   "low": 0.82,
+   "high": 1.18,
+   "reason": "A random subspace's drive just tracks activation norm, which should be similar on code and math text."
+  },
+  {
+   "id": "t24",
+   "value": 80,
+   "low": 73,
+   "high": 87,
+   "reason": "The vote was 75 at cap 16,384; on hard328 cap 32,768 added about 6 to the vote, and fresh2026 has more cap hits but harder late answers."
+  },
+  {
+   "id": "t25",
+   "value": 71.5,
+   "low": 65,
+   "high": 78,
+   "reason": "60.0 at 16,384 plus about 62 cap hits per sample, about 20% of which end right at 32,768 (hard328 rate 23 of 93, set lower for the harder 2026 problems)."
+  }
+ ],
+ "round-10/weights-m03": [
+  {
+   "id": "t01",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t02",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t03",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t04",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t05",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t06",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t07",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t09",
+   "value": 226,
+   "low": 213,
+   "high": 239,
+   "reason": "Theory: on the Think-SFT host the RL push is weak but stable with no breakdown up to 4x, so 3x top-8 sits a few points above Think-SFT's 209 (1.5x 220, full 3x change 227); the 232 seed regresses toward ~226."
+  },
+  {
+   "id": "t10",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t11",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t12",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t13",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t14",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t15",
+   "value": 400,
+   "low": 370,
+   "high": 430,
+   "reason": "Theory: Think-SFT's imitation change carries correctness in every domain in its traces, so on code with the Code cue it sits near RL-Code (401), well above the cued base (317)."
+  },
+  {
+   "id": "t16",
+   "value": 380,
+   "low": 340,
+   "high": 420,
+   "reason": "Same domain-general correctness claim, discounted for the Math cue's mismatched format on code (base Math-direction cell 368)."
+  },
+  {
+   "id": "t17",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t18",
+   "value": 233,
+   "low": 222,
+   "high": 244,
+   "reason": "Theory: the a=2 response on Think-SFT is stable, so the fourth sample repeats the first three (234, 229, 237; mean 233)."
+  },
+  {
+   "id": "t19",
+   "value": 247,
+   "low": 239,
+   "high": 255,
+   "reason": "A stable, modest RL push on Think-SFT (a cut in cap hits plus slightly lower precision) keeps the vote over 3 (246) a few points above Think-SFT's vote of 241, so the vote over 4 lands about 247."
+  },
+  {
+   "id": "t20",
+   "value": 465,
+   "low": 455,
+   "high": 475,
+   "reason": "Theory: a=2 on Think-SFT trims cap hits with a weak, non-breaking effect, so MATH-500 lands just above Think-SFT + cue's 457-462 at cap 16,384."
+  },
+  {
+   "id": "t21",
+   "value": 242,
+   "low": 232,
+   "high": 252,
+   "reason": "Theory: the RL change mainly finishes Think-SFT's long answers, so at cap 32,768 M(2) lands near the other seed's 245, adjusted for this seed's Think-SFT baseline (230 vs 234)."
+  },
+  {
+   "id": "t22",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t23",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t24",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t25",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  }
+ ],
+ "round-09/training-m01": [
+  {
+   "id": "t01",
+   "value": 232,
+   "low": 219,
+   "high": 245,
+   "reason": "Theory: the own template leaves reasoning length and cap behaviour on hard328 unchanged, so the count stays at the cue/own-format level at cap 32,768 (own format T 1.0 232; cue cap-32k singles 230-235), widened for the untested T 0.6."
+  },
+  {
+   "id": "t02",
+   "value": 474,
+   "low": 465,
+   "high": 482,
+   "reason": "Theory: the own (trained) template restores the answer ending v3 reads, so MATH-500 keeps the own-format gain over cue (own format cap 32k at T 1.0 = 474 vs cue 457-462 at 16k), assuming T 0.6 does not change the reasoning."
+  },
+  {
+   "id": "t03",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t04",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t05",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t06",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t07",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t08",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t09",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t10",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t11",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t12",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t13",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t14",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t15",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t16",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t17",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t18",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t19",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t20",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t21",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t22",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t23",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t24",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  },
+  {
+   "id": "t25",
+   "value": null,
+   "low": null,
+   "high": null,
+   "reason": "theory says nothing"
+  }
+ ],
+ "round-13/s1-a": [
+  {
+   "id": "t01",
+   "value": 230,
+   "low": 214,
+   "high": 245,
+   "reason": "native T 1.0 at cap 32,768 gives 232; with no cap binding, T 0.6 changes little"
+  },
+  {
+   "id": "t02",
+   "value": 473,
+   "low": 462,
+   "high": 483,
+   "reason": "native T 1.0 gives 474; MATH-500 answers are short, so neither the cap nor T matters"
+  },
+  {
+   "id": "t03",
+   "value": 405,
+   "low": 390,
+   "high": 420,
+   "reason": "411 at the earlier seed, regressed toward RL-Code's 401"
+  },
+  {
+   "id": "t04",
+   "value": 405,
+   "low": 390,
+   "high": 420,
+   "reason": "same cell at another seed"
+  },
+  {
+   "id": "t05",
+   "value": 400,
+   "low": 386,
+   "high": 414,
+   "reason": "401 at the earlier seed; seed spread about 7"
+  },
+  {
+   "id": "t07",
+   "value": 389,
+   "low": 374,
+   "high": 403,
+   "reason": "386 at the earlier seed and 399 at 1.5x"
+  },
+  {
+   "id": "t09",
+   "value": 228,
+   "low": 214,
+   "high": 242,
+   "reason": "232 at the earlier seed, single-sample spread about 7"
+  },
+  {
+   "id": "t13",
+   "value": 182,
+   "low": 168,
+   "high": 196,
+   "reason": "one direction gave 181 at 1x and 184 at 2x; 1.5x sits between"
+  },
+  {
+   "id": "t14",
+   "value": 182,
+   "low": 168,
+   "high": 196,
+   "reason": "same cell, second sample"
+  },
+  {
+   "id": "t17",
+   "value": 198,
+   "low": 189,
+   "high": 207,
+   "reason": "uncapped long answers stay votable at 16,384, so 6 votes add about 6 to the 4-vote's 192"
+  },
+  {
+   "id": "t18",
+   "value": 233,
+   "low": 222,
+   "high": 244,
+   "reason": "the earlier samples were 234, 229, 237"
+  },
+  {
+   "id": "t19",
+   "value": 246,
+   "low": 238,
+   "high": 254,
+   "reason": "the vote over 3 was 246, and a 4th vote adds about 0-2"
+  },
+  {
+   "id": "t21",
+   "value": 244,
+   "low": 234,
+   "high": 254,
+   "reason": "seed 3,010,000 gave 245 with 0 cap hits; the larger cap frees the long answers"
+  },
+  {
+   "id": "t24",
+   "value": 80,
+   "low": 71,
+   "high": 89,
+   "reason": "75 at 16,384; Think-SFT's cut answers are unfinished work and resolve at 32k (as on hard328, +6 to the vote)"
+  },
+  {
+   "id": "t25",
+   "value": 66,
+   "low": 59,
+   "high": 73,
+   "reason": "60.0 at 16,384; 46 % cap hits, of which about 1 in 4 are right when allowed to finish"
+  }
+ ],
+ "round-13/s3-a": [
+  {
+   "id": "t17",
+   "value": 203,
+   "low": 198,
+   "high": 210,
+   "reason": "hard328 has more problems with a per-sample right rate of 0.2-0.5 and spread-out wrong answers than MATH-500 does. Going from 4 to 6 samples gained +7.4 on MATH-500 (449.2 to 456.6), so expect about +9 to +11 over 192 here."
+  },
+  {
+   "id": "t19",
+   "value": 250,
+   "low": 246,
+   "high": 256,
+   "reason": "The M(2) vote over 3 is 246. A fourth sample (about 233 right) only adds plurality wins when wrong answers are spread out, so the vote over 4 should be at or above the vote over 3."
+  },
+  {
+   "id": "t24",
+   "value": 82,
+   "low": 76,
+   "high": 88,
+   "reason": "At 32k, cap hits turn into answers. The late wrong ones are scattered drift (Chinese text), so they rarely form a wrong plurality, while the right ones add up. Expect +6 to +8 over 75, more than hard328's +6 because fresh2026 has about 46 % cap hits."
+  },
+  {
+   "id": "t25",
+   "value": 68,
+   "low": 62,
+   "high": 74,
+   "reason": "About 63 cap hits per sample at 16k. Roughly 40 of them finish under 32k, and about 20-25 % end right, as Think-SFT's late answers did on hard328 (23 of 93). That gives 60 + about 8-9."
+  },
+  {
+   "id": "t01",
+   "value": 236,
+   "low": 224,
+   "high": 248,
+   "reason": "232 at T 1.0 in its own format. At T 0.6 / top-p 0.95 a reasoning SFT model is about level or a little better, with the same paired seeds."
+  },
+  {
+   "id": "t02",
+   "value": 476,
+   "low": 466,
+   "high": 485,
+   "reason": "474 at T 1.0 in its own format with cap 32,768. T 0.6 is near level; the ceiling is close."
+  },
+  {
+   "id": "t09",
+   "value": 240,
+   "low": 236,
+   "high": 244,
+   "reason": "result-2a5195 already posts 240 (42 cap hits) for this cell at seed 3,100,000."
+  },
+  {
+   "id": "t18",
+   "value": 233,
+   "low": 224,
+   "high": 242,
+   "reason": "Single samples of M(2) were 234, 229 and 237; their mean, with seed scatter."
+  },
+  {
+   "id": "t20",
+   "value": 462,
+   "low": 452,
+   "high": 471,
+   "reason": "Think-SFT gets 454 with one cue sample. The RL delta mostly helps answers finish under 16k (+5 to +10 on long problems)."
+  },
+  {
+   "id": "t21",
+   "value": 243,
+   "low": 234,
+   "high": 252,
+   "reason": "Seed 3,010,000 gave 245 at cap 32,768, with 0 cap hits. A new seed adds about \u00b18 of scatter."
+  }
+ ],
+ "round-13/s4-a": [
+  {
+   "id": "t03",
+   "value": 396,
+   "low": 385,
+   "high": 406,
+   "reason": "Code 1x already finishes ~97 % of answers; Math's finishing channel has <=17 failures left to recover, so this sits at Code 1x/RL-Code level (~390-400); the earlier 411 was a high draw."
+  },
+  {
+   "id": "t04",
+   "value": 396,
+   "low": 385,
+   "high": 406,
+   "reason": "Same cell, other seed: Code-saturated finishing plus Math's small leftover."
+  },
+  {
+   "id": "t05",
+   "value": 399,
+   "low": 385,
+   "high": 412,
+   "reason": "RL-Code reseeded: 401 earlier, seed scatter SD about 8 on 538."
+  },
+  {
+   "id": "t06",
+   "value": 399,
+   "low": 385,
+   "high": 412,
+   "reason": "As t05."
+  },
+  {
+   "id": "t07",
+   "value": 389,
+   "low": 375,
+   "high": 403,
+   "reason": "Code 1x carries most of RL-Code's gain (386 earlier; 1.5x 399); reseed scatter."
+  },
+  {
+   "id": "t08",
+   "value": 389,
+   "low": 375,
+   "high": 403,
+   "reason": "As t07."
+  },
+  {
+   "id": "t13",
+   "value": 182,
+   "low": 170,
+   "high": 194,
+   "reason": "One direction finishes (1x 181/51, 2x 184/23) but the correctness part lies in directions 2-8, so 1.5x stays near 182."
+  },
+  {
+   "id": "t14",
+   "value": 182,
+   "low": 170,
+   "high": 194,
+   "reason": "As t13, other sample."
+  },
+  {
+   "id": "t22",
+   "value": 0.55,
+   "low": 0.4,
+   "high": 0.72,
+   "reason": "Math's top-8 input subspace is math-specific; code text drives it about half as much, and only its shared finishing part carries over."
+  },
+  {
+   "id": "t23",
+   "value": 1.0,
+   "low": 0.85,
+   "high": 1.18,
+   "reason": "A random subspace sees only overall activation energy, about equal on code and math text."
+  }
+ ],
+ "round-13/s4-b": [
+  {
+   "id": "t03",
+   "value": 416,
+   "low": 407,
+   "high": 427,
+   "reason": "The two commit components add toward the base's pass@k ceiling, above RL-Code; the earlier seed gave 411."
+  },
+  {
+   "id": "t04",
+   "value": 416,
+   "low": 407,
+   "high": 427,
+   "reason": "As t03, other seed."
+  },
+  {
+   "id": "t05",
+   "value": 400,
+   "low": 386,
+   "high": 413,
+   "reason": "RL-Code reseeded: 401 earlier, seed scatter."
+  },
+  {
+   "id": "t06",
+   "value": 400,
+   "low": 386,
+   "high": 413,
+   "reason": "As t05."
+  },
+  {
+   "id": "t07",
+   "value": 385,
+   "low": 371,
+   "high": 399,
+   "reason": "Code 1x: 386 earlier; less sharpening than 1.5x (399)."
+  },
+  {
+   "id": "t08",
+   "value": 385,
+   "low": 371,
+   "high": 399,
+   "reason": "As t07."
+  },
+  {
+   "id": "t13",
+   "value": 186,
+   "low": 174,
+   "high": 198,
+   "reason": "The first direction carries much of the commit component: 1x 181, 2x 184; 1.5x a little above both."
+  },
+  {
+   "id": "t14",
+   "value": 186,
+   "low": 174,
+   "high": 198,
+   "reason": "As t13, other sample."
+  },
+  {
+   "id": "t22",
+   "value": 0.92,
+   "low": 0.78,
+   "high": 1.1,
+   "reason": "The commit subspace is generic reasoning text, so code answers drive Math's top-8 inputs nearly as much as math text does."
+  },
+  {
+   "id": "t23",
+   "value": 1.0,
+   "low": 0.85,
+   "high": 1.18,
+   "reason": "A random subspace has no domain preference."
+  }
+ ],
+ "round-13/s6-b": [
+  {
+   "id": "t03",
+   "value": 405,
+   "low": 390,
+   "high": 420,
+   "reason": "Math's directions add reliability on code too (368 vs random 331), partly adding to Code's; the 411 draw shrinks toward about 405."
+  },
+  {
+   "id": "t04",
+   "value": 405,
+   "low": 390,
+   "high": 420,
+   "reason": "As t03, another seed."
+  },
+  {
+   "id": "t05",
+   "value": 398,
+   "low": 384,
+   "high": 412,
+   "reason": "RL-Code 401 replicates within seed SD of about 8."
+  },
+  {
+   "id": "t06",
+   "value": 398,
+   "low": 384,
+   "high": 412,
+   "reason": "As t05."
+  },
+  {
+   "id": "t07",
+   "value": 390,
+   "low": 375,
+   "high": 405,
+   "reason": "The dial cells 386/399/394 fit one true rate near 390, and 386 was a slightly low draw."
+  },
+  {
+   "id": "t08",
+   "value": 390,
+   "low": 375,
+   "high": 405,
+   "reason": "As t07."
+  },
+  {
+   "id": "t15",
+   "value": 398,
+   "low": 382,
+   "high": 414,
+   "reason": "Think-SFT is a reliable reasoner (ties RL on MATH-500, beats it out of domain 342 vs 332). On an easy, reliability-bound set it reaches RL-Code's level."
+  },
+  {
+   "id": "t16",
+   "value": 394,
+   "low": 377,
+   "high": 411,
+   "reason": "Reliability does not depend on the cue (base: Math cue 326 vs Code cue 317), so this lands at t15's level."
+  },
+  {
+   "id": "t22",
+   "value": 0.97,
+   "low": 0.84,
+   "high": 1.1,
+   "reason": "The directions act on generic reasoning steps ('Okay', checks, derivations) that code answers contain in the same register; drive barely varies across texts (CV 6.8 %, result-0b3807)."
+  },
+  {
+   "id": "t23",
+   "value": 1.0,
+   "low": 0.9,
+   "high": 1.1,
+   "reason": "A random subspace reads generic activation energy, which is shared across domains."
+  }
+ ]
+}

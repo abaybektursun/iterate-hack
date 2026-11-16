@@ -1,0 +1,53 @@
+{
+ "cell": "m29",
+ "n": 500,
+ "right_v3": 448,
+ "interval_90": [
+  437,
+  459
+ ],
+ "cap_hits": 2,
+ "mean_generated_tokens": 4368.5,
+ "no_extracted_answer": 2,
+ "wrong_finished": 50,
+ "vs_1p5x": {
+  "ref": "studies/rlneurons/results/xreward/dial15_math500-01/rows.jsonl",
+  "ref_right_v3": 456,
+  "diff": -8,
+  "interval_90": [
+   -16,
+   0
+  ],
+  "right_1p5x_wrong_2x": [
+   26,
+   100,
+   126,
+   150,
+   184,
+   222,
+   285,
+   303,
+   349,
+   361,
+   385,
+   412,
+   420,
+   432,
+   478,
+   485,
+   494
+  ],
+  "wrong_1p5x_right_2x": [
+   32,
+   80,
+   92,
+   120,
+   128,
+   130,
+   145,
+   217,
+   473
+  ]
+ },
+ "bootstrap": "10000 resamples of problems, seed 0, percentile"
+}

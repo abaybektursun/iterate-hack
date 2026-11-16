@@ -1,0 +1,8 @@
+{
+ "commit": "4177e23c125b59916af03681c6542d6681082821",
+ "spec_commit": "4177e23",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.theory.analysis.direct_dev13",
+ "inputs": ["studies/rlneurons/results/votek/math500_base_cue-01/rows.jsonl", "studies/autobench/data/dev100-v1.json"],
+ "input_jobs": [],
+ "missing_input": "per-sample dev100 rows of the kept method, Modal Volume autobench-runs of frustea (karpathy/<nnn>/); asked @frustea 22:01 UTC, no rows received by this run"
+}

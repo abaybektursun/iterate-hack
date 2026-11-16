@@ -5,16 +5,12 @@
 """Forecasts of the team's open GPU work (studies/theory/README.md, "Forecast runs"), and the default theory round.
 
   uv run studies/theory/lib/forecast.py round <folder> --from <previous round, forecast run and cells folders...>
-      version 11, score first (.claude/skills/theory/SKILL.md). Stages, each skipped when its output exists: standing
-      (each --from folder's forecasts scored against the items posted after its snapshot, one job each, and its cells
-      and routes against its measured.json; carried: total gain above 0 on numbers from 3 or more board items;
-      graveyard: -2 nats or less on 2 or more), surprises (scored numbers outside both readers' intervals:
-      surprises.md), targets_open, forecast (two readers and the carried mechanisms), propose (only with surprises: two
-      rival mechanisms per surprise, the --surprises most surprising, at once; the duplicate judge), cells (the pairs'
-      cells and one no-reward route per pair; one job checks them against open and posted work: an open item's
-      answer becomes a target on it; everyone forecasts the rest; ranked), experiments. Writes standing.*,
-      graveyard.json, surprises.*, targets.json, work.md, pairs.json, duplicates.json, mechanisms.json, forecasts.*,
-      cells.json, cell_forecasts.json, cells.md, experiments.md, run.json, and job outputs under jobs/.
+      version 13 (.claude/skills/theory/SKILL.md): standing (forecasts scored once per number, only those written before
+      their result; carried: gain above 0 on 3 or more results, never a graveyard or refuted mechanism), direct facts,
+      surprises, targets_open, direct-test plans (top 5 untested carried mechanisms), propose (rival pairs about the top
+      surprises, each rival with its own direct test), a gate (stops until the planned direct tests have rows in
+      results/refuted.json or direct_tested.json; --go continues), forecast and cells by the mechanisms that hold a
+      direct test only, experiments. Rerun the same command after the direct tests.
       --propose-wide: the version-10 round (six lens jobs of --propose N mechanisms, every family designs cells).
   uv run studies/theory/lib/forecast.py make <folder>
       reads the open work items with their comments and every result and knowledge item (the board snapshot); one
@@ -62,6 +58,8 @@ import round as engine  # noqa: E402
 ROOT = engine.ROOT
 ROUND = ROOT / "studies/theory/results/engine/round-07"  # the newest round: its unrefuted theories forecast
 ENGINE = ROOT / "studies/theory/results/engine"
+REFUTED = ROOT / "studies/theory/results/refuted.json"  # mechanisms whose stated cause a direct test refuted (version 11.2)
+TESTED = ROOT / "studies/theory/results/direct_tested.json"  # direct tests of a mechanism's distinctive claim: holds or refuted (version 12)
 READERS = ["reader-1", "reader-2"]
 LENSES = {  # the six families of causes of specs/SPEC_forecast03.md (forecast runs 03-08)
     "stopping": "when and how the model stops: token cap, loops, end-of-text, answer markers",
@@ -78,7 +76,7 @@ THEORY = ("- theory.json: a theory of the team's results. Derive each forecast f
 NOTHING = (' For a target the theory says nothing about, write {"id": "t02", "value": null, "low": null, "high": null, '
            '"reason": "theory says nothing"}.')
 engine.args = engine.args or argparse.Namespace(model_all=None, workers=8)  # round.py sets its own
-for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast", "routes_propose", "duplicates", "surprise_propose", "cells_check"):
+for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast", "routes_propose", "duplicates", "surprise_propose", "cells_check", "direct_test_plan"):
     engine.MODELS[stage] = engine.MODELS["cross_predict"]
 
 
@@ -382,7 +380,7 @@ def cells(folder, fams, known, plan, left_out=()):
     return forecast_rank(folder, fams, props, by_id, merged, C.route_cells(routes, C.table_rows(), pre), dropped, common, plan, left_out)
 
 
-def forecast_rank(folder, fams, props, by_id, merged, routes, dropped, common, plan, left_out=(), answered=None):
+def forecast_rank(folder, fams, props, by_id, merged, routes, dropped, common, plan, left_out=(), answered=None, pair_of=None):
     """Families and readers forecast every cell and route blind; cells and routes an open work item answers (answered:
     {id: {item, quote}}) become targets on that item (their readouts appended to targets.json, their forecasts to
     forecasts.json) and leave the ranking; the rest are ranked by lib/cells.py (forecasters in left_out left out).
@@ -419,19 +417,33 @@ def forecast_rank(folder, fams, props, by_id, merged, routes, dropped, common, p
         (folder / "targets.json").write_text(json.dumps(tdata, indent=1))
         (folder / "forecasts.json").write_text(json.dumps(fdata, indent=1))
     merged, routes = [c for c in merged if c["id"] not in answered], [c for c in routes if c["id"] not in answered]
+    blind_pair = {}  # a rival pair's cell is ranked only when the two rivals' own blind intervals do not overlap
+    for c in merged:
+        if c["id"] in (pair_of or {}):
+            fa, fb = (F[x][c["readouts"][0]["id"]] for x in pair_of[c["id"]])
+            blind_pair[c["id"]] = {"a": pair_of[c["id"]][0], "b": pair_of[c["id"]][1], "a_blind": {k: fa[k] for k in ("value", "low", "high")},
+                                   "b_blind": {k: fb[k] for k in ("value", "low", "high")}, "differs": C.apart(fa, fb)}
+    not_blind = [c for c in merged if c["id"] in blind_pair and not blind_pair[c["id"]]["differs"]]
+    merged = [c for c in merged if c not in not_blind]
     left_out = sorted(set(left_out) & set(F))
     C.rank(merged, F, fam_of, left_out)
     C.rank_routes(routes, F, left_out)
     (folder / "cells.json").write_text(json.dumps({"utc": utc, "proposals": props, "dropped": dropped, "left_out": left_out, "cells": merged, "routes": routes,
-                                                   "converted": [{"id": c["id"], **answered[c["id"]]} for c in converted]}, indent=1))
+                                                   "converted": [{"id": c["id"], **answered[c["id"]]} for c in converted], "pair_blind": blind_pair,
+                                                   "pair_does_not_differ_blind": not_blind}, indent=1))
     (folder / "cell_forecasts.json").write_text(json.dumps({n: {"family": fam_of[n], "forecasts": list(F[n].values())} for n in F}, indent=1))
     head = (f"Written {now()} UTC. {plan}Families: {', '.join(n + ' (' + str(len(f['mechanisms'])) + ')' for n, f in fams.items())}; {len(F)} forecasters "
             f"(each reader is its own family). {len(dropped)} cells or routes dropped (cells.json \"dropped\"); {len(converted)} turned into targets on the "
             "open work item that answers them (cells.json \"converted\"). Separation = readouts whose forecasters split into a low and a high side "
             "(every low interval below every high interval) with 2 or more families on each side.")
     (folder / "cells.md").write_text(md := C.cells_md(f"Cells and routes, {folder.name}", head, list(by_id.values()), merged, F, fam_of, routes, left_out))
+    with open(folder / "cells.md", "a") as f:
+        f.write("\n## Rival pairs' cells forecast blind by the two rivals\n\n" + "".join(
+            f"- {i}: {b['a']} {b['a_blind']['value']:g} [{b['a_blind']['low']:g}, {b['a_blind']['high']:g}] against {b['b']} {b['b_blind']['value']:g} "
+            f"[{b['b_blind']['low']:g}, {b['b_blind']['high']:g}]: {'differs, ranked' if b['differs'] else 'pair does not differ blind, not ranked'}\n"
+            for i, b in blind_pair.items()) if blind_pair else "\n## Rival pairs' cells forecast blind by the two rivals\n\nnone\n")
     print("\n".join(md.splitlines()[4:8]) + f"\n{folder / 'cells.md'}")
-    return {"proposed": len(props), "dropped": len(dropped), "converted": len(converted), "merged": len(merged), "routes": len(routes), "forecasters": len(F),
+    return {"pairs_differ_blind": sum(b["differs"] for b in blind_pair.values()), "proposed": len(props), "dropped": len(dropped), "converted": len(converted), "merged": len(merged), "routes": len(routes), "forecasters": len(F),
             "routes_above_baseline": sum((c["score"] or 0) > 0 for c in routes), "cells_split": sum(bool(c["separation"]) for c in merged)}
 
 
@@ -472,33 +484,39 @@ def mechanisms_of(src):
 
 
 def cell_scores(src):
-    """src's cells scored against src/measured.json: a list of {readout, measured, n, interval, artifact, item}."""
+    """src's cells and routes scored against src/measured.json (a list of {readout, measured, n, interval, artifact,
+    item}); a row whose readout is not one of src's or whose measured value is not a number is listed in "unscored"
+    with the reason."""
     data = json.loads((src / "cells.json").read_text())
     rids = {r["id"] for c in data["cells"] + data.get("routes", []) for r in c["readouts"]}
     rows = json.loads((src / "measured.json").read_text())
-    if not isinstance(rows, list) or (bad := [r for r in rows if r.get("readout") not in rids or not engine.number(r.get("measured"))]):
-        sys.exit(f"{src / 'measured.json'} must be a list of {{readout: <readout id of cells.json>, measured: <number>, n, interval, "
-                 f"artifact, item}}; failing: {rows if not isinstance(rows, list) else bad}")
+    assert isinstance(rows, list), f"{src / 'measured.json'} must be a JSON list of rows"
+    good = [r for r in rows if r.get("readout") in rids and engine.number(r.get("measured"))]
+    bad = [{**r, "reason": "readout is not a readout id of cells.json" if r.get("readout") not in rids else "measured is not a number"}
+           for r in rows if r not in good]
     fc = json.loads((src / "cell_forecasts.json").read_text())
     return scored({n: [{**f, "id": f["readout"]} for f in v["forecasts"]] for n, v in fc.items()},
-                  [{"id": r["readout"], "value": r["measured"], "item": r.get("item"), "quote": r.get("artifact")} for r in rows])
+                  [{"id": r["readout"], "value": r["measured"], "item": r.get("item"), "quote": r.get("artifact")} for r in good]) | {"unscored": bad}
 
 
-def row_item(src, r):
-    """The board item of a carried row of round src (a version-9 row has none: it is looked up in src/standing/)."""
-    if "item" in r:
-        return r["item"]
-    name, kind = r["source"].rsplit(" ", 1)
-    m = next(m for m in json.loads((src / "standing" / f"{kind}-{name}.json").read_text())["measured"] if m["id"] == r["id"])
-    return m.get("item") or f"{name}:{m['id']}"
+def written(src, kind):
+    """When src's forecasts (kind forecasts) or cell forecasts (kind cells) were written: the earlier of the time its
+    forecasts.md or cells.md records and the first commit of forecasts.json or cell_forecasts.json."""
+    md, js = ("forecasts.md", "forecasts.json") if kind == "forecasts" else ("cells.md", "cell_forecasts.json")
+    m = re.search(r"[Ww]ritten (\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d) UTC", (src / md).read_text()) if (src / md).exists() else None
+    out = subprocess.run(["git", "log", "--diff-filter=A", "--format=%cd", "--date=format-local:%Y-%m-%dT%H:%M:%S", "--", str((src / js).resolve())],
+                         cwd=ROOT, capture_output=True, text=True, check=True, env={**engine.os.environ, "TZ": "UTC"}).stdout
+    times = [t for t in [m and m.group(1), out.split()[-1] if out.split() else None] if t]
+    assert times, f"{src / js}: no written time in {md} and not committed: commit it before it is scored"
+    return min(times)
 
 
 def standing(folder, sources):
-    """Scores each source's forecasts (one job per source, at once) and cells, each folder once; a mechanism's record is
-    its rows from these scores and its record in a source round's standing.json, one row per (source, number). Each row
-    carries the board item that posted its number. Carried: total gain above 0 on 3 or more distinct items; graveyard:
-    at or below -2 nats on 2 or more distinct items. Writes standing/<kind>-<source>.json and .md, standing.json,
-    standing.md, graveyard.json."""
+    """Scores each source's forecasts (one job per source, at once) and cells, each folder once. A mechanism's record is
+    rebuilt from these scores alone (name every folder whose forecasts count in --from): one row per measured number
+    (board item and value), the forecast written earliest; a forecast written at or after its result's posting time is
+    not scored but listed. Carried: total gain above 0 on 3 or more distinct items; graveyard: at or below -2 nats on
+    2 or more distinct items. Writes standing/<kind>-<source>.json and .md, standing.json, standing.md, graveyard.json."""
     out, sources = folder / "standing", list({s.resolve(): s for s in sources}.values())
     out.mkdir(parents=True, exist_ok=True)
 
@@ -512,41 +530,84 @@ def standing(folder, sources):
                 if (out / f"{kind}-{src.name}.json").exists()]
     with ThreadPoolExecutor(8) as pool:
         scores = dict(zip(sources, pool.map(score_source, sources)))
-    records, graveyard = {}, {}
+    posted = {i["id"]: i["at"].rstrip("Z")[:19] for i in board("posted-times", "9999")[0]}
+    records, graveyard, late, unscored = {}, {}, [], []
     for src in sources:
         if (src / "standing.json").exists():
             graveyard |= json.loads((src / "graveyard.json").read_text())
-            records |= {m["id"]: {**m, "rows": {(r["source"], r["id"]): {**r, "item": row_item(src, r)} for r in m["rows"]}} for m in json.loads((src / "standing.json").read_text())["carried"]}
         for i, m in mechanisms_of(src).items():
             records.setdefault(i, {**m, "rows": {}})
     for src, kinds in scores.items():
+        cell_targets = {t["id"] for t in json.loads((src / "targets.json").read_text())["targets"] if t.get("from_cell")} if (src / "targets.json").exists() else set()
         for kind, s in kinds:
             (out / f"{kind}-{src.name}.md").write_text(scores_md(s, f"{kind} of {src.name}, scored for {folder.name}"))
+            unscored += [{"source": src.name, **r} for r in s.get("unscored", [])]
             item = {m["id"]: m.get("item") or f"{src.name}:{m['id']}" for m in s["measured"]}
+            at = {k: written(src, k) for k in ("forecasts", "cells") if (src / ("forecasts.json" if k == "forecasts" else "cell_forecasts.json")).exists()}
             for n, p in s["forecasters"].items():
-                if full(src, n) in records:
-                    records[full(src, n)]["rows"] |= {(f"{src.name} {kind}", r["id"]): {**r, "source": f"{src.name} {kind}", "item": item[r["id"]]} for r in p["rows"]}
+                if full(src, n) not in records:
+                    continue
+                for r in p["rows"]:
+                    w = at["cells" if kind == "cells" or r["id"] in cell_targets else "forecasts"]
+                    row = {**r, "source": f"{src.name} {kind}", "item": item[r["id"]], "written": w, "posted": posted.get(item[r["id"]])}
+                    if not row["posted"] or w >= row["posted"]:
+                        late.append({"mechanism": full(src, n), **{k: row[k] for k in ("source", "id", "item", "written", "posted")}})
+                        continue
+                    key, rows = (row["item"], row["measured"]), records[full(src, n)]["rows"]
+                    if key not in rows or w < rows[key]["written"]:  # one score per measured number: the earliest forecast
+                        rows[key] = row
     for m in records.values():
         m["rows"] = list(m["rows"].values())
         m["forecast"] = f = {"scored": len(m["rows"]), "items": len({r["item"] for r in m["rows"]}), "inside": sum(r["inside"] for r in m["rows"]),
                              "total_gain": round(sum(r["gain"] for r in m["rows"]), 3)}
         m["state"] = ("carried" if f["items"] >= 3 and f["total_gain"] > 0 else "graveyard" if f["items"] >= 2 and f["total_gain"] <= -2 else "not carried")
+    refuted = {r["mechanism"]: r for r in json.loads(REFUTED.read_text())}
+    held = {r["mechanism"]: r for r in json.loads(TESTED.read_text()) if r["verdict"] == "holds"}
+    refuted |= {r["mechanism"]: r for r in json.loads(TESTED.read_text()) if r["verdict"] == "refuted"}
+    for i in refuted.keys() & records.keys():  # a direct test refuted the stated cause: buried whatever the forecast gain
+        records[i]["state"] = "cause refuted"
+    for i in held.keys() & records.keys():
+        records[i]["direct_test"] = f"holds ({held[i]['result']}: {held[i]['claim']})"
+    buried = set(graveyard) | {i for i, m in records.items() if m["state"] == "graveyard"}
+    for i in buried & records.keys():  # an earlier round's graveyard entry is never carried again
+        if records[i]["state"] == "carried":
+            records[i]["state"] = "graveyard (earlier round)"
+    for m in records.values():  # a forecast a measured.json row put outside its interval: no direct-test plan for this mechanism
+        m["cell_missed"] = sorted({r["source"] + " " + r["id"] for r in m["rows"] if r["source"].endswith(" cells") and not r["inside"]})
     graveyard |= {i: {"name": i, "round": folder.name, "statement": m["statement"], "state": "refuted by forecasts", "verdict": "", "forecast": m["forecast"],
                       "reason": f"total forecast gain {m['forecast']['total_gain']:+.2f} nats on {m['forecast']['scored']} numbers from "
                                 f"{m['forecast']['items']} board items"} for i, m in records.items() if m["state"] == "graveyard"}
+    graveyard |= {i: {"name": i, "round": folder.name, "statement": m["statement"], "state": "refuted by a direct test", "verdict": "", "forecast": m["forecast"],
+                      "reason": f"{refuted[i]['result']}: {refuted[i].get('measured', '')} ({refuted[i]['claim']})"} for i, m in records.items() if m["state"] == "cause refuted"}
     ranked = sorted(records.values(), key=lambda m: -m["forecast"]["total_gain"])
     (folder / "standing.json").write_text(json.dumps({"utc": now(), "from": [str(s) for s in sources], "carried": [m for m in ranked if m["state"] == "carried"],
-                                                      "records": {m["id"]: {k: m[k] for k in ("family", "state", "forecast", "statement")} for m in ranked}}, indent=1))
+                                                      "records": {m["id"]: {k: m[k] for k in ("family", "state", "forecast", "statement")} for m in ranked},
+                                                      "written_after_result": late, "unscored_measured": unscored}, indent=1))
     (folder / "graveyard.json").write_text(json.dumps(graveyard, indent=1))
     md = [f"# Standing, {folder.name}\n\nFrom {', '.join(s.name for s in sources)}. Gain per number: log density of the forecast minus the equal mixture of "
-          "the two readers, clipped to [-3, 3] nats, at most 0 when the measured value is outside the forecast's own 90 % interval. The numbers of one "
-          "board item are one experiment. Carried: total above 0 on numbers from 3 or more items; graveyard: at or below -2 on 2 or more items.\n",
+          "the two readers, clipped to [-3, 3] nats, at most 0 when the measured value is outside the forecast's own 90 % interval. A mechanism is scored "
+          "once per measured number (board item and value), on the forecast it wrote earliest, and only when that forecast was written before the result "
+          "was posted. The numbers of one board item are one experiment. Carried: total above 0 on numbers from 3 or more items; graveyard: at or below "
+          "-2 on 2 or more items.\n",
           "| mechanism | family | scored | items | inside | total gain | state | statement |\n|---|---|---|---|---|---|---|---|"]
     md += [f"| {m['id']} | {m['family']} | {m['forecast']['scored']} | {m['forecast']['items']} | {m['forecast']['inside']} | {m['forecast']['total_gain']:+.2f} | "
-           f"{m['state']} | {flat(m['statement'])[:160]} |" for m in ranked if m["forecast"]["scored"]]
+           f"{m['state']}{'; direct test holds' if m.get('direct_test') else ''} | {flat(m['statement'])[:160]} |" for m in ranked if m["forecast"]["scored"]]
+    md += ["\n## Forecast well, cause refuted\n\nForecast gain is not evidence for the stated cause (`studies/theory/results/refuted.json`).\n",
+           "| mechanism | scored | items | total gain | refuted claim | result | measured |\n|---|---|---|---|---|---|---|"]
+    md += [f"| {m['id']} | {m['forecast']['scored']} | {m['forecast']['items']} | {m['forecast']['total_gain']:+.2f} | {refuted[m['id']]['claim']} | "
+           f"{refuted[m['id']]['result']} | {refuted[m['id']].get('measured', '')} |" for m in ranked if m["state"] == "cause refuted"]
+    md += [f"| {i} | no forecast record in these folders | | | {r['claim']} | {r['result']} | {r.get('measured', '')} |" for i, r in refuted.items() if i not in records]
+    md += ["\n## Direct test holds\n"] + ([f"- {m['id']}: {m['direct_test']}" for m in ranked if m.get("direct_test")] or ["none"])
+    md += [f"\n## Written after the result, not scored ({len(late)} forecasts)\n", "| source | target | result | written | posted | mechanisms |\n|---|---|---|---|---|---|"]
+    groups = {}
+    for x in late:
+        groups.setdefault((x["source"], x["id"], x["item"], x["written"], x["posted"]), []).append(x["mechanism"])
+    md += [f"| {k[0]} | {k[1]} | {k[2]} | {k[3]} | {k[4] or 'not on the board'} | {len(v)} |" for k, v in sorted(groups.items())]
+    md += ["\n## measured.json rows not scored\n"] + ([f"- {x['source']} {x.get('readout')}: {x['reason']} ({x.get('item')})" for x in unscored] or ["none"])
     (folder / "standing.md").write_text("\n".join(md) + "\n")
     print(f"  standing: {len(records)} mechanisms, {sum(m['forecast']['scored'] > 0 for m in ranked)} scored, "
-          f"{sum(m['state'] == 'carried' for m in ranked)} carried, {sum(m['state'] == 'graveyard' for m in ranked)} to the graveyard")
+          f"{sum(m['state'] == 'carried' for m in ranked)} carried, {sum(m['state'] == 'graveyard' for m in ranked)} to the graveyard; "
+          f"{len(late)} forecasts written after their result, {len(unscored)} measured rows not scored")
 
 
 def judge_duplicates(folder, new, carried, graveyard):
@@ -648,6 +709,8 @@ def check_rivals(d, tids, board_ids, n_facts, flags=None):
         if not (isinstance(h, list) and len(h) == 2 and all(isinstance(x, dict) and engine.number(x.get("value")) and str(x.get("why", "")).strip()
                                                             and (x.get("item") in board_ids or x.get("fact") in range(n_facts)) for x in h)):
             e.append('holds_against needs 2 entries {"item": <id of board.jsonl> or "fact": <index in facts.json>, "value": <the number>, "why": ...}')
+        if flags:  # first check only: a rival without a runnable direct test is dropped after the send-back, not the round
+            e += [f"direct_test: {x}" for x in test_errors(m.get("direct_test") or {}, board_ids, need_null=True)]
         errors += [f"{m['id']}: {x}" for x in e + forecast_errors(m.get("forecasts", []), tids, need)]
     if errors:
         return "; ".join(errors)
@@ -684,11 +747,96 @@ def check_answered(d, ids, texts):
             f"text; failing: {bad}") if bad or len({r["id"] for r in rows}) != len(rows) else None
 
 
-def round11(folder, sources, n_top):
-    """The version-11 round: standing, surprises, targets_open, forecast (readers and carried mechanisms), propose (two
-    rival mechanisms per surprise, the n_top most surprising, then the duplicate judge), cells (the pairs' cells and one
-    route per pair, checked against open and posted work, forecast by everyone, ranked), experiments. A stage whose
-    output exists is skipped."""
+def direct_facts():
+    """Every row of refuted.json and direct_tested.json: mechanism, claim, verdict, deciding number and result id."""
+    return ([{"mechanism": r["mechanism"], "claim": r["claim"], "verdict": "refuted", "measured": r.get("measured", "not recorded"), "result": r["result"]}
+             for r in json.loads(REFUTED.read_text())]
+            + [{"mechanism": r["mechanism"], "claim": r["claim"], "verdict": r["verdict"], "measured": r.get("measured", "not recorded"), "result": r["result"]}
+               for r in json.loads(TESTED.read_text())])
+
+
+def results_md(items):
+    """The board's results as the forecasters see them in short: id, title and score lines."""
+    return "\n".join(f"{i['id']}: " + " | ".join(x.strip() for x in i["text"].splitlines() if x.startswith(("title:", "score:")))
+                     for i in items if i["kind"] == "result") + "\n"
+
+
+def data_md():
+    """The stored data the plans may name: every README table row of studies/*/README.md that names a results/ or data/
+    path, and the folders two levels under each study's results/ and data/."""
+    rows = [f"{p.parent.name}: {line}" for p in sorted(ROOT.glob("studies/*/README.md")) for line in p.read_text().splitlines()
+            if line.startswith("|") and re.search(r"`(results|data)/", line)]
+    dirs = sorted(str(d.relative_to(ROOT)) for d in ROOT.glob("studies/*/*/*/*") if d.parts[-3] in ("results", "data"))
+    return "# Stored data\n\n## README rows (study: row)\n\n" + "\n".join(rows) + "\n\n## Folders and files\n\n" + "\n".join(dirs) + "\n"
+
+
+def test_errors(j, board_ids, need_null=False):
+    """Errors of a direct test: claim, computation, refuting observation, threshold (and a null), deciding stored files
+    that exist; or "decided_by": a posted result (id, number, verdict) that already decides the claim."""
+    if j.get("decided_by"):
+        b = j["decided_by"]
+        return [] if b.get("result") in board_ids and str(b.get("number", "")).strip() and b.get("verdict") in ("holds", "refuted") and str(j.get("claim", "")).strip() else [
+            'decided_by needs result (a board result id), number and verdict holds or refuted, beside the claim']
+    e = [f"missing {k}" for k in ("claim", "computation", "refuted_if", "threshold") + (("null",) if need_null else ()) if not str(j.get(k, "")).strip()]
+    files = j.get("files") or []
+    e += [] if files else ["files: one or more stored paths that decide the claim"]
+    return e + [f"{f} does not exist in the repository" for f in files if not (ROOT / f).exists()]
+
+
+def check_plan(d, board_ids):
+    """A direct-test plan (test_errors) with the reason only this mechanism implies the claim."""
+    j = json.loads((d / "plan.json").read_text())
+    e = test_errors(j, board_ids) + ([] if j.get("decided_by") or str(j.get("why_only_this", "")).strip() else ["missing why_only_this"])
+    return "; ".join(e) or None
+
+
+def direct_tests(folder, items, top=5):
+    """For each of the top carried mechanisms (by gain) with no row in refuted.json or direct_tested.json and no forecast
+    a measured.json row put outside its interval, one blind job writes a direct offline test plan of the claim only its
+    cause makes, or names the posted result that already decides it. Writes direct_tests.json; an agent runs each plan."""
+    out, st = folder / "jobs", json.loads((folder / "standing.json").read_text())
+    done = {r["mechanism"] for r in direct_facts()}
+    ranked = [m for m in st["carried"] if m["id"] not in done and not m.get("cell_missed")]
+    todo, others, board_ids = ranked[:top], ranked[:top * 2], {i["id"] for i in items}
+    data = data_md()
+    engine.run([engine.job("direct_test_plan", m["id"].replace("/", "-"), {
+        "mechanism.json": json.dumps({k: m.get(k) for k in ("id", "statement", "rests_on", "holds_against", "forecast")}, indent=1),
+        "others.json": json.dumps([{"id": o["id"], "statement": o["statement"]} for o in others if o["id"] != m["id"]], indent=1),
+        "direct_facts.json": json.dumps(direct_facts(), indent=1), "results.md": results_md(items), "data.md": data},
+        {"plan.json": out / f"plan-{m['id'].replace('/', '-')}.json"}, lambda d: check_plan(d, board_ids)) for m in todo], folder, len(todo) or 1)
+    plans = [{"mechanism": m["id"], "kind": "carried", "gain": m["forecast"]["total_gain"], "items": m["forecast"]["items"], "statement": m["statement"],
+              **json.loads((out / f"plan-{m['id'].replace('/', '-')}.json").read_text())} for m in todo]
+    (folder / "direct_tests.json").write_text(json.dumps(plans, indent=1))
+    print(f"  {len(plans)} direct-test plans for carried mechanisms")
+
+
+def tests_md(folder, plans):
+    """direct_tests.md: every plan (carried mechanisms and new rivals), with its verdict when a row exists."""
+    verdict = {r["mechanism"]: r for r in direct_facts()}
+    md = [f"# Direct tests, {folder.name}\n\nForecast gain does not confirm a cause. Each plan tests the one claim that follows from this mechanism's cause "
+          "and from none of the others, offline on stored files, with the refuting observation, threshold and null fixed here. Run each with one subagent: "
+          "spec committed first, offline only, then a row in `studies/theory/results/refuted.json` or `direct_tested.json` (with `measured`). Only "
+          "mechanisms that hold one forecast the open targets and design cells; run the same round command again afterwards.\n"]
+    for p in plans:
+        v = verdict.get(p["mechanism"])
+        head = f"\n## {p['mechanism']} ({p['kind']}{', ' + format(p['gain'], '+.2f') + ' nats on ' + str(p['items']) + ' results' if p.get('gain') is not None else ''})"
+        state = f"{v['verdict']} ({v['result']}: {v['measured']})" if v else "not run yet"
+        if p.get("decided_by"):
+            b = p["decided_by"]
+            md.append(f"{head}\n\n{flat(p['statement'])}\n\n- Claim: {p['claim']}\n- Already decided by {b['result']}: {b['number']} ({b['verdict']}). Verdict: {state}\n")
+            continue
+        md.append(f"{head}\n\n{flat(p['statement'])}\n\n- Claim: {p['claim']}\n- Files: {', '.join('`' + f + '`' for f in p['files'])}\n"
+                  f"- Computation: {p['computation']}\n- Refuted if: {p['refuted_if']}\n- Threshold: {p['threshold']}\n"
+                  + (f"- Null: {p['null']}\n" if p.get("null") else "") + f"- Verdict: {state}\n")
+    (folder / "direct_tests.md").write_text("\n".join(md) + "\n")
+
+
+def round11(folder, sources, n_top, wait_none=False):
+    """The version-13 round: standing, direct facts (refuted.json and direct_tested.json), surprises, targets_open,
+    direct-test plans for the top untested carried mechanisms, propose (two rival mechanisms per surprise, each with its
+    own direct test; one without a runnable test is dropped), then a gate: the round stops until every planned direct
+    test has a row (or --go), and only mechanisms that hold one forecast the open targets (with the two readers) and,
+    for pairs whose both rivals hold, design cells and routes; experiments. A stage whose output exists is skipped."""
     start, out, pre = time.time(), folder / "jobs", prefix(folder)
     folder.mkdir(parents=True, exist_ok=True)
     print("== standing")
@@ -696,51 +844,71 @@ def round11(folder, sources, n_top):
         standing(folder, sources)
     st = json.loads((folder / "standing.json").read_text())
     carried = [{k: m[k] for k in MECHANISM_KEYS} for m in st["carried"]]
+    print("== direct facts")
+    facts_d = direct_facts()
+    (folder / "direct_facts.json").write_text(json.dumps(facts_d, indent=1))
+    print(f"  {len(facts_d)} direct facts ({sum(f['verdict'] == 'holds' for f in facts_d)} hold)")
     print("== surprises")
     found = surprises(folder, list({s.resolve(): s for s in sources}.values()))
     print("== targets_open")
-    items = open_targets(folder) if not (folder / "targets.json").exists() else board("board", "9999")[0]
+    items = open_targets(folder) if not (folder / "targets.json").exists() else board("board", snapshot(folder))[0]  # a resumed round sees the board of its snapshot, not results posted since
     utc, tids = snapshot(folder), [t["id"] for t in json.loads((folder / "targets.json").read_text())["targets"]]
     common = {"DIRECTION.md": ROOT / "DIRECTION.md", "board.jsonl": "".join(json.dumps(i) + "\n" for i in items), "work.md": folder / "work.md"}
-    print("== forecast")
-    forecasts = run_forecasters(folder, common, {m["id"]: json.dumps(m, indent=1) for m in carried}, out / "forecast", workers=16)
+    print("== direct_tests (carried)")
+    if not (folder / "direct_tests.json").exists():
+        direct_tests(folder, items)
     print("== propose")
-    top, new, pairs, drop = found[:n_top], [], [], set()
+    top, new, pairs, drop, plans = found[:n_top], [], [], set(), json.loads((folder / "direct_tests.json").read_text())
     facts, board_ids = json.loads(newest("facts.json").read_text()), {i["id"] for i in items}
     dead = json.loads(newest("graveyard.json").read_text()) | json.loads((folder / "graveyard.json").read_text())
     if top:
         statements = {i: r["statement"] for i, r in st["records"].items()}
         engine.run([engine.job("surprise_propose", f"s{k}", {**common, "targets.json": folder / "targets.json", "facts.json": json.dumps(facts, indent=1),
-                                                             "graveyard.json": json.dumps(dead, indent=1), "jobs.md": C.jobs_md(),
+                                                             "graveyard.json": json.dumps(dead, indent=1), "jobs.md": C.jobs_md(), "data.md": data_md(),
+                                                             "direct_facts.json": json.dumps(facts_d, indent=1),
                                                              "surprise.json": json.dumps({x: e[x] for x in e if x != "forecasts"} | {"forecasts": e["forecasts"]}, indent=1),
-                                                             "right.json": json.dumps([{"id": i, "statement": statements[i]} for i in e["inside"] if i in statements], indent=1)},
+                                                             "right.json": json.dumps([{"id": i, "statement": statements[i]} for i in e["inside"] if i in statements], indent=1),
+                                                             "refuted.json": REFUTED},
                                {"rivals.json": out / f"rivals-s{k}.json"}, C.flags_once(lambda d, fl: check_rivals(d, tids, board_ids, len(facts), fl)))
                     for k, e in enumerate(top, 1)], folder, len(top))
         for k, e in enumerate(top, 1):
             j = json.loads((out / f"rivals-s{k}.json").read_text())
             lens = f"rival explanations of surprise {e['source']} {e['id']} ({e['item']}, measured {e['measured']:g})"
-            ms = [{"id": f"{folder.name}/s{k}-{m['id']}", "family": f"s{k}", "lens": lens, **{x: m[x] for x in ("statement", "rests_on", "holds_against", "readers_wrong", "forecasts")}}
+            ms = [{"id": f"{folder.name}/s{k}-{m['id']}", "family": f"s{k}", "lens": lens,
+                   **{x: m[x] for x in ("statement", "rests_on", "holds_against", "readers_wrong", "forecasts")}, "direct_test": m.get("direct_test") or {}}
                   for m in j["rivals"]]
+            gone = {m["id"]: "; ".join(err) for m in ms if (err := test_errors(m["direct_test"], board_ids, need_null=True))}
             pairs.append({"family": f"s{k}", "surprise": {x: e[x] for x in ("source", "id", "item", "measured", "z", "what")}, "a": ms[0]["id"], "b": ms[1]["id"],
-                          "apart": pair_apart(j["rivals"]), "cell": j.get("cell")})
-            new += ms
-        drop = judge_duplicates(folder, new, carried, dead)
-        new = [m for m in new if m["id"] not in drop]
-    forecasts |= {m["id"]: m.pop("forecasts") for m in new}
-    mechs = carried + [{k: m[k] for k in (*MECHANISM_KEYS, "readers_wrong")} for m in new]
+                          "apart": pair_apart(j["rivals"]), "cell": j.get("cell"), "dropped_no_direct_test": gone})
+            new += [m for m in ms if m["id"] not in gone]
+        drop = judge_duplicates(folder, new, carried, dead) if new else set()  # reported only; a pair may restate older mechanisms
+    plans = [p for p in plans if p["kind"] == "carried"] + [{"mechanism": m["id"], "kind": f"rival for surprise {m['family']}", "statement": m["statement"],
+                                                             **m["direct_test"]} for m in new]
+    (folder / "direct_tests.json").write_text(json.dumps(plans, indent=1))
     (folder / "pairs.json").write_text(json.dumps(pairs, indent=1))
+    tests_md(folder, plans)
+    print("== gate: only mechanisms that hold a direct test go on")
+    holds = {f["mechanism"] for f in direct_facts() if f["verdict"] == "holds"}
+    pending = [p["mechanism"] for p in plans if p["mechanism"] not in {f["mechanism"] for f in direct_facts()}]
+    if pending and not wait_none:
+        print(f"  {len(pending)} direct tests not run yet ({', '.join(pending)}): run them from {folder / 'direct_tests.md'}, add their rows, then run "
+              "the same command again (or add --go to continue with the mechanisms that hold now)")
+        (folder / "run.json").write_text(json.dumps({"commit": sh("git", "rev-parse", "--short", "HEAD").strip(), "utc": utc, "version": 13, "state": "waiting for direct tests",
+                                                     "pending": pending, "minutes": round((time.time() - start) / 60, 1)}, indent=1))
+        return
+    carried = [m for m in carried if m["id"] in holds]
+    new = [m for m in new if m["id"] in holds]
+    print("== forecast")
+    forecasts = run_forecasters(folder, common, {m["id"]: json.dumps(m, indent=1) for m in carried}, out / "forecast", workers=16)
+    forecasts |= {m["id"]: m["forecasts"] for m in new}
+    mechs = carried + [{k: m[k] for k in (*MECHANISM_KEYS, "readers_wrong", "direct_test")} for m in new]
     (folder / "mechanisms.json").write_text(json.dumps({"mechanisms": mechs}, indent=1))
     (folder / "forecasts.json").write_text(json.dumps(forecasts, indent=1))
     write_md(folder, utc, forecasts, [f"\n- {m['id']} ({m['family']}{', carried' if m in carried else ''}): {flat(m['statement'])}" for m in mechs])
-    print(f"  {len(carried)} carried and {len(new)} new mechanisms ({len(drop)} dropped as duplicates), {len(pairs)} pairs, {len(tids)} targets")
+    print(f"  {len(carried)} carried and {len(new)} new mechanisms hold a direct test and forecast ({len(drop)} judged restatements), {len(pairs)} pairs")
     print("== cells")
     counts = {}
-    same = {x["new"]: x["earlier"] for x in json.loads((folder / "duplicates.json").read_text())["pairs"]} if drop else {}
-    def resolve(i):  # follow restatements back to the first mechanism (a rival may restate an earlier rival of this round)
-        return resolve(same[i]) if i in same else i
-    stand_in = {i: resolve(i) for i in drop if resolve(i) in {m["id"] for m in carried}}  # a rival that restates a carried mechanism: that one takes its place
-    whole = [{**p, "a": stand_in.get(p["a"], p["a"]), "b": stand_in.get(p["b"], p["b"])} for p in pairs
-             if all(p[x] not in drop or p[x] in stand_in for x in ("a", "b")) and stand_in.get(p["a"], p["a"]) != stand_in.get(p["b"], p["b"])]
+    whole = [p for p in pairs if p["a"] in holds and p["b"] in holds]  # both rivals hold their direct test
     if whole and not (folder / "cells.json").exists():
         known = {"targets": json.loads((folder / "targets.json").read_text())["targets"], "facts": facts}
         fams = {}
@@ -767,7 +935,8 @@ def round11(folder, sources, n_top):
         merged, routes = [c for c in merged if c["id"] not in posted], [c for c in routes if c["id"] not in posted]
         left_out = [i for i, r in st["records"].items() if r["forecast"]["total_gain"] <= -2]
         counts = forecast_rank(folder, fams, props, {p["id"]: p for p in props}, merged, routes, dropped, common_inputs(items, known),
-                               "Plan `specs/SPEC_engine_v11.md`. ", left_out, {i: r for i, r in answered.items() if r["kind"] == "open"})
+                               "Plan `specs/SPEC_engine_v11.md`. ", left_out, {i: r for i, r in answered.items() if r["kind"] == "open"},
+                               {f"{pre}-m{p['id'][1:]}": (p["mechanism"], p["against"]) for p in props})
     if (folder / "cells.json").exists():
         print("== experiments")
         experiments(folder)
@@ -788,7 +957,7 @@ def wide_round_v10(folder, sources, n):
         standing(folder, sources)
     carried = [{k: m[k] for k in MECHANISM_KEYS} for m in json.loads((folder / "standing.json").read_text())["carried"]]
     print("== targets_open")
-    items = open_targets(folder) if not (folder / "targets.json").exists() else board("board", "9999")[0]
+    items = open_targets(folder) if not (folder / "targets.json").exists() else board("board", snapshot(folder))[0]  # a resumed round sees the board of its snapshot, not results posted since
     utc, tids = snapshot(folder), [t["id"] for t in json.loads((folder / "targets.json").read_text())["targets"]]
     common = {"DIRECTION.md": ROOT / "DIRECTION.md", "board.jsonl": "".join(json.dumps(i) + "\n" for i in items), "work.md": folder / "work.md"}
     print("== forecast")
@@ -865,7 +1034,8 @@ if __name__ == "__main__":
     parser.add_argument("--propose-wide", action="store_true", help="round: the version-10 round (six lens jobs propose, every family designs "
                         "cells and a route) in place of score first")
     parser.add_argument("--surprises", type=int, default=6, help="round: rival pairs for at most this many surprises (default 6)")
+    parser.add_argument("--go", action="store_true", help="round: continue past the direct-test gate with the mechanisms that hold a test now")
     a = parser.parse_args()
     engine.args.model_all = a.model_all
-    {"round": lambda: wide_round_v10(a.folder, a.runs, a.propose or 6) if a.propose_wide else round11(a.folder, a.runs, a.surprises), "make": lambda: make(a.folder, a.propose, a.lens),
+    {"round": lambda: wide_round_v10(a.folder, a.runs, a.propose or 6) if a.propose_wide else round11(a.folder, a.runs, a.surprises, a.go), "make": lambda: make(a.folder, a.propose, a.lens),
      "score": lambda: score(a.folder, a.rescore), "cells": lambda: cells_run(a.folder, a.runs)}[a.command]()

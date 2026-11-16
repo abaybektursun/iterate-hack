@@ -1,0 +1,13 @@
+{"pairs": [
+{"new": "round-13/s1-a", "earlier": "run-02/f2-m01", "reason": "a short per-sample token budget cuts off the long right answers that hard328 needs, so the vote never sees them and the cap sets the ceiling"},
+{"new": "round-13/s1-b", "earlier": "round-12/s1-b", "reason": "the plain prompt at T 0.6 gives quick finished wrong answers that repeat across samples, so the plurality locks onto a wrong attractor; the cap is secondary"},
+{"new": "round-13/s2-b", "earlier": "round-10/problems-m06", "reason": "Code-RL's finishing habit is calibrated to short code answers, so its directions make math answers commit and stop too early"},
+{"new": "round-13/s3-a", "earlier": "run-08/f2-m05", "reason": "the base's wrong answers scatter while its right ones agree, so the vote rises toward the number of problems whose modal answer is right"},
+{"new": "round-13/s3-b", "earlier": "run-04/f2-m02", "reason": "at even k, ties are broken by sample order; odd or larger k removes the ties and wins near-majority problems"},
+{"new": "round-13/s4-a", "earlier": "round-11/s2-b", "reason": "RL-Code's code skill lives in its own top-8 directions (1.5x matches RL-Code), while other rewards' directions pass on only the shared finishing part"},
+{"new": "round-13/s4-b", "earlier": "round-11/s4-b", "reason": "top RL directions sharpen the base onto its own most likely correct program, limited by base pass@k, and Math and Code directions add"},
+{"new": "round-13/s5-a", "earlier": "run-02/f2-m01", "reason": "autobench's fixed generation budget forces short capped samples, so hard problems whose right answers run long stay lost however many votes are cast"},
+{"new": "round-13/s5-b", "earlier": "round-09/training-m04", "reason": "the vote converges to each problem's modal value within about eight samples, so it saturates at the problems whose mode is right"},
+{"new": "round-13/s6-a", "earlier": "round-10/problems-m03", "reason": "the base's code deficit is mostly format/contract failures (no closed block, cut off), not wrong logic, so writing the contract closes most of the gap"},
+{"new": "round-13/s6-b", "earlier": "round-11/s4-b", "reason": "the code sets are problems the base already solves in some samples, so the gap is per-sample reliability, and the top directions recover it"}
+]}

@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile: who is working on what, right now</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
+<style>
+  :root { --ink: #23211e; --ink2: #5b564e; --rule: rgba(35, 33, 30, .28); --paper: #efebe2; --red: #9c3f2c; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #cfc9bd; color: var(--ink); overflow: hidden; }
+  body { font-family: Archivo, sans-serif; font-stretch: 92%; -webkit-font-smoothing: antialiased; }
+  canvas#gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: default; }
+  #vig { position: fixed; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 85% 80% at 50% 46%, rgba(0,0,0,0) 55%, rgba(30,24,16,.34) 100%); }
+  #grain { position: fixed; inset: 0; pointer-events: none; opacity: .05; }
+  a#lab { position: fixed; left: 28px; top: 22px; font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink2); text-decoration: none; padding: 4px 0; border-bottom: 1px solid var(--rule); z-index: 5; }
+  a#lab:hover { color: var(--ink); }
+  #hint { position: fixed; right: 28px; top: 26px; font-size: 10.5px; letter-spacing: .13em; text-transform: uppercase;
+    color: var(--ink2); text-align: right; line-height: 1.75; pointer-events: none; }
+  #plate { position: fixed; left: 28px; bottom: 26px; width: min(500px, calc(100vw - 56px)); pointer-events: none; background: var(--paper);
+    padding: 15px 18px 13px; border: 1px solid rgba(35,33,30,.16); box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 14px 30px -18px rgba(40,30,15,.55); }
+  #eyebrow { font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink2);
+    padding-bottom: 9px; border-bottom: 1px solid var(--rule); margin-bottom: 11px; display: flex; justify-content: space-between; }
+  #sentence { font-family: Newsreader, serif; font-weight: 380; font-size: 25px; line-height: 1.24; letter-spacing: -.005em;
+    margin: 0 0 11px; text-wrap: pretty; }
+  #sentence b { font-weight: 500; font-variant-numeric: lining-nums tabular-nums; }
+  #key { font-size: 10.5px; letter-spacing: .08em; color: var(--ink2); line-height: 1.7; }
+  #key i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin: 0 5px -1px 0; font-style: normal; }
+  #key span { margin-right: 14px; white-space: nowrap; display: inline-block; }
+  .tag { position: fixed; left: 0; top: 0; font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--ink);
+    pointer-events: none; white-space: nowrap; will-change: transform; font-variant-numeric: tabular-nums; }
+  .tag small { color: var(--ink2); font-size: 10px; letter-spacing: .1em; margin-left: 6px; }
+  .tag.sel { padding: 3px 7px 2px; background: var(--paper); border: 1px solid var(--rule); letter-spacing: .1em; }
+  #card { position: fixed; left: 28px; top: 64px; width: min(400px, calc(100vw - 56px)); background: var(--paper);
+    border: 1px solid rgba(35,33,30,.18); box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 14px 30px -18px rgba(40,30,15,.55);
+    padding: 16px 18px 15px; display: none; max-height: calc(100vh - 380px); overflow: auto; }
+  #card.on { display: block; }
+  #card .top { display: flex; justify-content: space-between; gap: 10px; font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink2); padding-bottom: 8px; border-bottom: 1px solid var(--rule); }
+  #card .top b { color: var(--ink); font-weight: 600; }
+  #card p.t { font-family: Newsreader, serif; font-size: 16.5px; line-height: 1.34; margin: 11px 0 10px; }
+  #card .m { font-size: 10.5px; letter-spacing: .08em; line-height: 1.7; overflow-wrap: anywhere; color: var(--ink2); font-variant-numeric: tabular-nums; }
+  #card .c { margin-top: 11px; padding-top: 10px; border-top: 1px solid var(--rule); font-family: Newsreader, serif; font-size: 14.5px;
+    line-height: 1.36; color: #37332d; }
+  #card .c span { display: block; font-family: Archivo, sans-serif; font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--ink2); margin-bottom: 4px; }
+  #card button { all: unset; cursor: pointer; font-size: 15px; line-height: 1; color: var(--ink2); padding: 0 2px; }
+  @media (max-width: 700px) {
+    #hint { display: none; }
+    a#lab { left: 16px; top: 14px; }
+    #plate { left: 12px; bottom: 12px; width: calc(100vw - 24px); padding: 11px 13px 10px; }
+    #sentence { font-size: 18.5px; }
+    #key span.long, #clock { display: none; }
+    #card { right: 16px; left: 16px; bottom: auto; top: 50px; width: auto; max-height: 40vh; }
+  }
+</style>
+</head>
+<body>
+<canvas id="gl"></canvas>
+<div id="vig"></div>
+<canvas id="grain"></canvas>
+<a id="lab" href="../../">Lab</a>
+<div id="hint">Move: wind &nbsp;·&nbsp; Drag: hold an arm<br>Tap a leaf: read the item<br>← → leaves &nbsp;·&nbsp; Space: a gust</div>
+<div id="tags"></div>
+<div id="plate">
+  <div id="eyebrow"><span>Who is working on what, right now</span><span id="clock"></span></div>
+  <p id="sentence">Hanging the mobile…</p>
+  <div id="key"></div>
+</div>
+<div id="card"></div>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+               "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import RAPIER from 'https://cdn.jsdelivr.net/npm/@dimforge/rapier3d-compat@0.12.0/+esm';
+
+const STILL = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $ = id => document.getElementById(id);
+const V = (x = 0, y = 0, z = 0) => new THREE.Vector3(x, y, z);
+const hash = s => { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return ((h >>> 0) % 100000) / 100000; };
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const dur = m => m < 1 ? 'under a minute' : m < 60 ? Math.round(m) + ' min' : Math.floor(m / 60) + ' h ' + String(Math.round(m % 60)).padStart(2, '0') + ' min';
+
+/* ---------- the rules that turn the board into a mobile (constants, the same for every item) ---------- */
+const LEAF_AREA = n => 0.05 + 0.02 * n;                       // m2 of sheet, from the comment count
+const LEAF_OUT = idle => 0.28 + 0.2 * Math.log2(1 + idle / 4); // m from the session's pivot, from the minutes idle
+const SHEET = 2.7;                                            // kg per m2 (1 mm aluminium)
+const BEAD = 0.25;                                            // kg, one per result the session closed today
+const ROOT_HALF = 1.7, ROOT_STEM = 1.9, HOOK_Y = 7.55, BOW = 0.22;
+const FLOOR_MIN = 45;                                         // cut leaves stay on the floor this many minutes
+const PAINT = ['#8f3a2a', '#24282b', '#c29d4e', '#566874', '#d8ceb6', '#767a63'];
+
+/* ---------- renderer, room, light ---------- */
+const canvas = $('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.12;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.VSMShadowMap;
+const scene = new THREE.Scene();
+scene.background = new THREE.Color('#bdb7ab');
+const pm = new THREE.PMREMGenerator(renderer);
+scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture;
+const camera = new THREE.PerspectiveCamera(30, 1, 0.5, 120);
+const TARGET = V(-1.5, 3.75, 0);
+let camDist = 16, az = 0.1, azTo = 0.1;
+
+function noiseTex(size, draw, repeat) {
+  const c = document.createElement('canvas'); c.width = c.height = size; draw(c.getContext('2d'), size);
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; if (repeat) t.repeat.set(repeat, repeat);
+  t.anisotropy = 8; return t;
+}
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const plaster = noiseTex(512, (g, s) => {
+  g.fillStyle = '#808080'; g.fillRect(0, 0, s, s);
+  for (let i = 0; i < 9000; i++) { const v = 118 + rnd() * 22 | 0; g.fillStyle = `rgba(${v},${v},${v},.5)`; g.fillRect(rnd() * s, rnd() * s, 1 + rnd() * 3, 1 + rnd() * 2); }
+  for (let i = 0; i < 60; i++) { const v = rnd() < .5 ? 100 : 150; g.fillStyle = `rgba(${v},${v},${v},.06)`; g.beginPath(); g.ellipse(rnd() * s, rnd() * s, 20 + rnd() * 60, 8 + rnd() * 30, rnd() * 3, 0, 7); g.fill(); }
+}, 7);
+const brushed = noiseTex(512, (g, s) => {
+  g.fillStyle = '#8c8c8c'; g.fillRect(0, 0, s, s);
+  for (let i = 0; i < 2600; i++) { const v = 90 + rnd() * 90 | 0; g.fillStyle = `rgba(${v},${v},${v},.22)`; g.fillRect(rnd() * s - 60, rnd() * s, 40 + rnd() * 240, 1); }
+  for (let i = 0; i < 30; i++) { g.strokeStyle = 'rgba(200,200,200,.25)'; g.lineWidth = .6; g.beginPath(); const x = rnd() * s, y = rnd() * s; g.moveTo(x, y); g.lineTo(x + rnd() * 80 - 40, y + rnd() * 30 - 15); g.stroke(); }
+});
+const concrete = noiseTex(512, (g, s) => {
+  g.fillStyle = '#7d7d7d'; g.fillRect(0, 0, s, s);
+  for (let i = 0; i < 500; i++) { const v = 95 + rnd() * 60 | 0; g.fillStyle = `rgba(${v},${v},${v},.10)`; g.beginPath(); g.ellipse(rnd() * s, rnd() * s, 6 + rnd() * 50, 6 + rnd() * 40, rnd() * 3, 0, 7); g.fill(); }
+  for (let i = 0; i < 5000; i++) { const v = 90 + rnd() * 70 | 0; g.fillStyle = `rgba(${v},${v},${v},.35)`; g.fillRect(rnd() * s, rnd() * s, 1, 1); }
+}, 5);
+
+const WALL_Z = -3.4;
+const wallMat = new THREE.MeshLambertMaterial({ color: '#d6d0c4', bumpMap: plaster, bumpScale: .5 });
+const wall = new THREE.Mesh(new THREE.PlaneGeometry(60, 24), wallMat); wall.position.set(0, 8, WALL_Z); wall.receiveShadow = true; scene.add(wall);
+const floorMat = new THREE.MeshLambertMaterial({ color: '#d9d1c4', map: concrete });
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 40), floorMat); floor.rotation.x = -Math.PI / 2; floor.position.z = WALL_Z + 20; floor.receiveShadow = true; scene.add(floor);
+const skirt = new THREE.Mesh(new THREE.BoxGeometry(60, .11, .03), new THREE.MeshLambertMaterial({ color: '#c9c3b7' }));
+skirt.position.set(0, .055, WALL_Z + .015); skirt.receiveShadow = true; scene.add(skirt);
+const ceil = new THREE.Mesh(new THREE.PlaneGeometry(60, 40), new THREE.MeshBasicMaterial({ color: '#b3ada1' }));
+ceil.rotation.x = Math.PI / 2; ceil.position.set(0, HOOK_Y + .16, WALL_Z + 20); scene.add(ceil);
+
+const key = new THREE.SpotLight(0xfff1dc, 2.9, 0, 0.7, 1, 0);
+key.position.set(-5.5, 10.5, 10.5); key.target.position.set(0.6, 3.6, WALL_Z);
+key.castShadow = true; key.shadow.mapSize.set(1024, 1024); key.shadow.camera.near = 6; key.shadow.camera.far = 30;
+key.shadow.radius = 3.2; key.shadow.blurSamples = 8; key.shadow.autoUpdate = false; key.shadow.bias = -0.0004;
+scene.add(key, key.target);
+scene.add(new THREE.HemisphereLight(0xf6efe3, 0xa59d90, 0.92));
+const rim = new THREE.DirectionalLight(0xdfe7f0, 0.55); rim.position.set(7, 6, -2); scene.add(rim);
+
+const steel = new THREE.MeshStandardMaterial({ color: '#8f9296', metalness: 1, roughness: .34, roughnessMap: brushed, envMapIntensity: 1.1 });
+const brass = new THREE.MeshStandardMaterial({ color: '#b08d4f', metalness: 1, roughness: .3, roughnessMap: brushed, envMapIntensity: 1.2 });
+const bare = new THREE.MeshStandardMaterial({ color: '#b9b8b3', metalness: .55, roughness: .5, roughnessMap: brushed, bumpMap: brushed, bumpScale: .4, side: THREE.BackSide, envMapIntensity: 1.0 });
+const hookG = new THREE.Group(); hookG.position.set(0, HOOK_Y, 0); scene.add(hookG);
+{ const pl = new THREE.Mesh(new THREE.CylinderGeometry(.13, .13, .025, 32), steel); pl.position.y = .15; hookG.add(pl);
+  const sh = new THREE.Mesh(new THREE.CylinderGeometry(.014, .014, .1, 8), steel); sh.position.y = .1; hookG.add(sh);
+  const hk = new THREE.Mesh(new THREE.TorusGeometry(.045, .012, 8, 24, Math.PI * 1.5), steel); hk.position.y = .02; hk.rotation.set(0, Math.PI / 2, -Math.PI / 4); hk.castShadow = true; hookG.add(hk); }
+
+/* grain overlay: one static tile of film grain */
+{ const g = $('grain'), c = g.getContext('2d'); g.width = g.height = 256; const im = c.createImageData(256, 256);
+  for (let i = 0; i < im.data.length; i += 4) { const v = Math.random() * 255 | 0; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; }
+  c.putImageData(im, 0, 0); g.style.width = '100%'; g.style.height = '100%'; g.style.imageRendering = 'auto';
+  g.style.background = 'none'; }
+
+function resize() {
+  const w = innerWidth, h = innerHeight; renderer.setSize(w, h, false); camera.aspect = w / h;
+  const t = Math.tan(camera.fov * Math.PI / 360), tall = w / h < 0.8, halfW = tall ? 3.7 : 5.3;
+  TARGET.set(tall ? .1 : -1.5, tall ? 2.7 : 3.75, 0);
+  camDist = Math.max(4.25 / t, halfW / (t * camera.aspect)); camera.updateProjectionMatrix();
+}
+function placeCamera() {
+  camera.position.set(TARGET.x + Math.sin(az) * camDist, 3.5, Math.cos(az) * camDist); camera.lookAt(TARGET);
+}
+addEventListener('resize', () => { resize(); if (STILL) frameOnce(); });
+
+/* ---------- physics ---------- */
+await RAPIER.init();
+const world = new RAPIER.World({ x: 0, y: -9.81, z: 0 });
+const DT = 1 / 120; world.timestep = DT;
+if ('numSolverIterations' in world.integrationParameters) world.integrationParameters.numSolverIterations = 12;
+const G_MOB = (0x0001 << 16) | 0x0002, G_FLOOR = (0x0002 << 16) | 0x0001;
+{ const b = world.createRigidBody(RAPIER.RigidBodyDesc.fixed().setTranslation(0, -1, 0));
+  world.createCollider(RAPIER.ColliderDesc.cuboid(40, 1, 40).setCollisionGroups(G_FLOOR).setFriction(.9), b); }
+const hookBody = world.createRigidBody(RAPIER.RigidBodyDesc.fixed().setTranslation(0, HOOK_Y, 0));
+
+const nodes = new Set();        // every body in the room: hanging, falling, lying
+const picks = [];               // meshes the pointer can hit
+const qY = a => new THREE.Quaternion().setFromAxisAngle(V(0, 1, 0), a);
+const tq = new THREE.Quaternion(), tv = V(), tv2 = V(), tv3 = V();
+const bq = b => { const r = b.rotation(); return tq.set(r.x, r.y, r.z, r.w); };
+const toWorld = (n, local, out = V()) => { const p = n.body.translation(); return out.copy(local).applyQuaternion(bq(n.body)).add(p); };
+const slot = (parent, x) => V(x, -parent.stem - BOW * x * x, 0);   // a point on the parent's bow
+
+function makeNode(kind, key, parent, x, spec) {
+  const n = { kind, key, parent, x, xTo: x, children: [], mass: 0, subMass: 0, yawI: 1, rest: 0, dead: 0, ...spec };
+  n.worldRest = (parent ? parent.worldRest : 0) + n.rest;
+  n.anchor = parent ? slot(parent, x) : V();
+  const pos = parent ? toWorld(parent, n.anchor) : V(0, HOOK_Y, 0);
+  const q = qY(n.worldRest); if (spec.swing) q.multiply(new THREE.Quaternion().setFromAxisAngle(V(0, 0, 1), spec.swing));
+  n.body = world.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTranslation(pos.x, pos.y, pos.z).setRotation(q)
+    .setLinearDamping(.02).setAngularDamping(kind === 'leaf' ? .12 : .3));
+  n.joint = world.createImpulseJoint(RAPIER.JointData.spherical(n.anchor, { x: 0, y: 0, z: 0 }), parent ? parent.body : hookBody, n.body, true);
+  n.group = new THREE.Group(); scene.add(n.group);
+  if (parent) parent.children.push(n);
+  nodes.add(n); return n;
+}
+function setCollider(n, desc, mass) {
+  if (n.col) world.removeCollider(n.col, true);
+  n.col = world.createCollider(desc.setMass(mass).setCollisionGroups(G_MOB).setFriction(.9).setRestitution(.05), n.body); n.mass = mass;
+}
+function reanchor(n) {
+  const a = slot(n.parent, n.x); n.anchor.copy(a);
+  if (n.joint.setAnchor1) n.joint.setAnchor1(a);
+  else { world.removeImpulseJoint(n.joint, true); n.joint = world.createImpulseJoint(RAPIER.JointData.spherical(a, { x: 0, y: 0, z: 0 }), n.parent.body, n.body, true); }
+}
+
+/* --- arms: a stem from the pivot down to a bowed wire that carries the children --- */
+const WIRE = { root: .024, person: .017, session: .0115 }, DENS = { root: 3, person: .9, session: .8 };   // m radius, kg per m
+function dressArm(n) {     // one merged wire per arm: stem, eye, bow, end beads, an eyelet where each child hangs
+  for (const m of n.dress || []) { n.group.remove(m); m.geometry.dispose(); const i = picks.indexOf(m); if (i >= 0) picks.splice(i, 1); }
+  const xs = n.children.map(c => c.x).concat(0), a = Math.min(...xs) - .07, b = Math.max(...xs) + .07, r = WIRE[n.kind];
+  const pts = []; for (let i = 0; i <= 16; i++) pts.push(slot(n, a + (b - a) * i / 16));
+  const curve = new THREE.CatmullRomCurve3(pts);
+  const parts = [new THREE.TubeGeometry(curve, 28, r, 7), new THREE.CylinderGeometry(r * .8, r * .8, n.stem, 7).translate(0, -n.stem / 2, 0),
+    new THREE.TorusGeometry(r * 2.2, r * .7, 6, 16).translate(0, -r * 2, 0),
+    new THREE.SphereGeometry(r * 1.5, 10, 8).translate(pts[0].x, pts[0].y, 0), new THREE.SphereGeometry(r * 1.5, 10, 8).translate(pts[16].x, pts[16].y, 0)];
+  for (const c of n.children) { const p = slot(n, c.x); parts.push(new THREE.TorusGeometry(r * 1.5, r * .5, 5, 12).rotateY(Math.PI / 2).translate(p.x, p.y - r * 1.4, 0)); }
+  const wire = new THREE.Mesh(mergeGeometries(parts), steel); wire.castShadow = true; parts.forEach(g => g.dispose());
+  const hit = new THREE.Mesh(new THREE.TubeGeometry(curve, 10, .09, 4)); hit.visible = false; hit.userData.node = n; picks.push(hit);
+  n.dress = [wire, hit]; n.group.add(wire, hit); n.span = b - a;
+}
+function weighArm(n) {
+  const xs = n.children.map(c => c.xTo).concat(0), a = Math.min(...xs) - .07, b = Math.max(...xs) + .07;
+  const key = a.toFixed(2) + b.toFixed(2); if (n.colKey === key) return; n.colKey = key;
+  // the collision box is deeper than the wire so the solver gets a sane inertia about the wire's own axis; nothing touches it while it hangs
+  setCollider(n, RAPIER.ColliderDesc.cuboid((b - a) / 2, n.stem / 3, .14).setTranslation((a + b) / 2, -n.stem * 2 / 3, 0), DENS[n.kind] * (b - a + n.stem));
+}
+
+/* --- leaves: one sheet of painted metal per open work item --- */
+function leafShape(id, area) {
+  const a = .05 + .15 * hash(id + 'a'), b = .1 + .2 * hash(id + 'b'), c = .08 * hash(id + 'c');
+  const p1 = 6.28 * hash(id + 'd'), p2 = 6.28 * hash(id + 'e'), p3 = 6.28 * hash(id + 'f');
+  const f = t => 1 + a * Math.cos(t - p1) + b * Math.cos(2 * (t - p2)) + c * Math.cos(3 * (t - p3));
+  let A = 0; const N = 256; for (let i = 0; i < N; i++) A += .5 * f(i / N * 6.2832) ** 2 * 6.2832 / N;
+  const k = Math.sqrt(area / A);                       // the sheet has exactly the area the comment count gives
+  return t => k * f(t);
+}
+function paintTex(n, rmax) {
+  const S = 256, c = document.createElement('canvas'); c.width = c.height = S; const g = c.getContext('2d');
+  g.fillStyle = '#b4b3ae'; g.fillRect(0, 0, S, S);
+  const path = sc => { g.beginPath(); for (let i = 0; i <= 96; i++) { const t = i / 96 * 6.2832, r = n.shape(t) * sc; g.lineTo(S / 2 + r * Math.cos(t) / (2 * rmax) * S, S / 2 - r * Math.sin(t) / (2 * rmax) * S); } g.closePath(); };
+  path(.975); g.fillStyle = n.paint; g.fill(); g.save(); g.clip();
+  let s = 1 + hash(n.key) * 9999 | 0; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 520; i++) { g.fillStyle = r() < .5 ? 'rgba(255,255,255,.035)' : 'rgba(0,0,0,.05)'; g.fillRect(r() * S - 30, r() * S, 30 + r() * 110, 1 + r() * 1.5); }
+  for (let i = 0; i < 5; i++) { g.strokeStyle = 'rgba(200,198,190,.5)'; g.lineWidth = .5; g.beginPath(); const x = r() * S, y = r() * S; g.moveTo(x, y); g.lineTo(x + r() * 40 - 20, y + r() * 14 - 7); g.stroke(); }
+  const lum = parseInt(n.paint.slice(1, 3), 16) * .3 + parseInt(n.paint.slice(3, 5), 16) * .6 + parseInt(n.paint.slice(5, 7), 16) * .1;
+  g.fillStyle = lum > 140 ? 'rgba(40,36,30,.62)' : 'rgba(240,232,214,.6)';
+  const fs = Math.max(13, Math.min(30, 15 / (rmax * 2) * 1.0)); g.font = `600 ${fs}px Archivo, sans-serif`; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText(n.key.replace('work-', ''), S / 2, S / 2 + S * .06);
+  g.restore();
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8; return t;
+}
+function dressLeaf(n) {
+  const f = n.shape, RINGS = 5, SEG = 56, rtop = f(Math.PI / 2); let rmax = 0; for (let i = 0; i < SEG; i++) rmax = Math.max(rmax, f(i / SEG * 6.2832)); rmax *= 1.04;
+  const pos = [0, 0, 0], uv = [.5, .5], idx = [], w1 = (hash(n.key + 'w') - .5) * .22, w2 = (hash(n.key + 'v') - .5) * .2;
+  for (let j = 1; j <= RINGS; j++) for (let i = 0; i < SEG; i++) {
+    const t = i / SEG * 6.2832, r = f(t) * j / RINGS, x = r * Math.cos(t), y = r * Math.sin(t);
+    pos.push(x, y, (w1 * (x * x - y * y) + w2 * x * y) / rmax + .012 * Math.sin(x * 9 + y * 5)); uv.push(x / (2 * rmax) + .5, y / (2 * rmax) + .5);
+  }
+  for (let i = 0; i < SEG; i++) idx.push(0, 1 + i, 1 + (i + 1) % SEG);
+  for (let j = 1; j < RINGS; j++) for (let i = 0; i < SEG; i++) { const a = 1 + (j - 1) * SEG + i, b = 1 + (j - 1) * SEG + (i + 1) % SEG, c = a + SEG, d = b + SEG; idx.push(a, c, b, b, c, d); }
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); geo.setIndex(idx); geo.computeVertexNormals();
+  n.mat = new THREE.MeshStandardMaterial({ map: paintTex(n, rmax), roughness: .46, metalness: .2, roughnessMap: brushed, bumpMap: brushed, bumpScale: .25, envMapIntensity: .9 });
+  const front = new THREE.Mesh(geo, n.mat), back = new THREE.Mesh(geo, bare);
+  n.center = V(0, -n.stem - rtop, 0); n.radius = Math.sqrt(n.area / Math.PI);
+  front.position.copy(n.center); back.position.copy(n.center); front.castShadow = true; front.userData.node = n; picks.push(front);
+  const sg = [new THREE.CylinderGeometry(.0065, .0065, n.stem + .03, 6).translate(0, -(n.stem + .03) / 2, 0), new THREE.TorusGeometry(.018, .006, 6, 14).translate(0, -.016, 0)];
+  const stem = new THREE.Mesh(mergeGeometries(sg), steel); stem.castShadow = true; sg.forEach(g => g.dispose());
+  n.group.add(front, back, stem); n.dress = [front, back, stem];
+  setCollider(n, RAPIER.ColliderDesc.cuboid(n.radius * .85, n.radius * .85, .012).setTranslation(0, n.center.y, 0), SHEET * n.area);
+}
+function dressBeads(n) {
+  for (const m of n.dress || []) { n.group.remove(m); m.geometry.dispose(); }
+  const k = n.count, len = .16 + k * .085, bg = [];
+  const stem = new THREE.Mesh(new THREE.CylinderGeometry(.006, .006, len, 6).translate(0, -len / 2, 0), steel);
+  for (let i = 0; i < k; i++) bg.push(new THREE.SphereGeometry(.04, 14, 10).translate(0, -.16 - i * .085, 0));
+  const beads = new THREE.Mesh(mergeGeometries(bg), brass); bg.forEach(g => g.dispose());
+  stem.castShadow = beads.castShadow = true; n.dress = [stem, beads]; n.group.add(stem, beads);
+  setCollider(n, RAPIER.ColliderDesc.cuboid(.07, Math.max(.07, k * .0425), .07).setTranslation(0, -.16 - (k - 1) * .0425, 0), BEAD * k);
+}
+
+/* ---------- the board -> the model ---------- */
+const sessKey = it => it.session || (it.who + ':' + it.agent);
+function buildModel(d, now) {
+  const day = new Date(now); day.setHours(0, 0, 0, 0);
+  const beads = {}; for (const it of d.items) if (it.kind === 'result' && Number(it.at_ns) / 1e6 >= +day) beads[sessKey(it)] = (beads[sessKey(it)] || 0) + 1;
+  const persons = {};
+  for (const it of d.items) if (it.listed === 'work') {
+    const p = persons[it.who] ||= { who: it.who, sessions: {} }, k = sessKey(it);
+    const s = p.sessions[k] ||= { sid: k, leaves: [], beads: beads[k] || 0, first: Infinity };
+    s.first = Math.min(s.first, Number(it.at_ns));
+    s.leaves.push({ id: it.id, n: Number(it.n_comments) || 0, idle: Math.max(0, (now - Number(it.active_ns) / 1e6) / 6e4), it });
+  }
+  const P = Object.values(persons).sort((a, b) => a.who < b.who ? -1 : 1);
+  for (const p of P) { p.sessions = Object.values(p.sessions).sort((a, b) => a.sid < b.sid ? -1 : 1); p.n = p.sessions.reduce((s, x) => s + x.leaves.length, 0); }
+  const fallen = d.items.filter(it => it.listed === 'work-closed' && now - Number(it.active_ns) / 1e6 < FLOOR_MIN * 6e4)
+    .sort((a, b) => Number(b.active_ns) - Number(a.active_ns)).slice(0, 14);
+  return { persons: P, fallen };
+}
+
+/* ---------- the model -> bodies ---------- */
+let root = null, model = null, items = {}, lastComments = {}, people = [];
+const leaves = new Map(), onFloor = new Map();
+const paintOf = who => PAINT[Math.max(0, people.indexOf(who)) % PAINT.length];
+const spread = (i, n, half) => n < 2 ? 0 : -half + 2 * half * i / (n - 1);
+
+function cut(n, keep) {
+  if (n.joint) world.removeImpulseJoint(n.joint, true); n.joint = null;
+  if (n.parent) { n.parent.children.splice(n.parent.children.indexOf(n), 1); n.parent.dirty = true; } n.parent = null;
+  const mark = m => { m.dead = performance.now(); m.keep = keep && m === n; m.children.forEach(mark); if (m.kind === 'leaf') leaves.delete(m.key); }; mark(n);
+  const w = n.body.angvel(); n.body.setAngvel({ x: w.x + (hash(n.key) - .5) * 3, y: w.y, z: w.z + (hash(n.key + 'z') - .5) * 3 }, true);
+  if (n.kind === 'leaf' && keep) onFloor.set(n.key, n);
+}
+function destroy(n) {
+  world.removeRigidBody(n.body); scene.remove(n.group); nodes.delete(n);
+  for (const m of n.dress || []) { const i = picks.indexOf(m); if (i >= 0) picks.splice(i, 1); if (!(n.kind === 'leaf' && m === n.dress[1])) m.geometry.dispose(); }
+  if (n.kind === 'leaf') { n.mat.map.dispose(); n.mat.dispose(); onFloor.delete(n.key); }
+}
+function newLeaf(parent, L, live) {
+  const who = L.it.who, area = LEAF_AREA(L.n);
+  const n = makeNode('leaf', L.id, parent, LEAF_OUT(L.idle), { stem: .2 + .34 * hash(L.id + 's'), area, paint: paintOf(who), shape: leafShape(L.id, area),
+    rest: (hash(L.id + 'y') - .5) * .9 - parent.worldRest, swing: live ? 1.25 : 0 });
+  dressLeaf(n); n.data = L; leaves.set(L.id, n); return n;
+}
+function lieOnFloor(it, now) {
+  const area = LEAF_AREA(Number(it.n_comments) || 0), id = it.id;
+  const n = { kind: 'leaf', key: id, parent: null, children: [], dead: performance.now(), keep: true, stem: .12, area, paint: paintOf(it.who), shape: leafShape(id, area), mass: 0 };
+  const q = new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI / 2 + .02, 0, hash(id + 'r') * 6.28));
+  n.body = world.createRigidBody(RAPIER.RigidBodyDesc.dynamic().setTranslation(-4.6 + 9.2 * hash(id + 'x'), .06 + .02 * hash(id), -1.9 + 3.6 * hash(id + 'q')).setRotation(q).setAngularDamping(.5));
+  n.group = new THREE.Group(); scene.add(n.group); dressLeaf(n); nodes.add(n); onFloor.set(id, n);
+  n.data = { id, n: Number(it.n_comments) || 0, it, closed: true };
+}
+function sync(m, now, live) {
+  model = m; items = {}; for (const p of m.persons) for (const s of p.sessions) for (const l of s.leaves) items[l.id] = l;
+  for (const who of m.persons.map(p => p.who)) if (!people.includes(who)) people.push(who);
+  if (!root) { root = makeNode('root', 'root', null, 0, { stem: ROOT_STEM }); }
+  const reconcile = (parent, kind, specs, make, update) => {
+    const want = new Set(specs.map(s => s.key));
+    for (const c of [...parent.children]) if (c.kind === kind && !want.has(c.key)) cut(c, kind === 'leaf');
+    for (const s of specs) {
+      let c = parent.children.find(c => c.kind === kind && c.key === s.key);
+      if (!c) { c = make(s); parent.dirty = true; }
+      c.xTo = s.x; if (!live) c.x = s.x; update && update(c, s);
+    }
+  };
+  reconcile(root, 'person', m.persons.map((p, i) => ({ key: p.who, x: spread(i, m.persons.length, ROOT_HALF), p })),
+    s => makeNode('person', s.key, root, s.x, { stem: .45 + .5 * hash(s.key + 's'), rest: (.6 + .5 * hash(s.key + 'y')) * (hash(s.key + 'g') < .5 ? -1 : 1) }),
+    (pn, s) => {
+      const S = s.p.sessions, gap = Math.min(.5, 4.6 / S.length);
+      reconcile(pn, 'session', S.map((x, j) => ({ key: x.sid, x: (j - (S.length - 1) / 2) * gap, s: x })),
+        q => makeNode('session', q.key, pn, q.x, { stem: [.45, .8, 1.15][hash(q.key + 't') * 3 | 0], rest: (.95 + .5 * hash(q.key + 'y')) * (hash(q.key + 'g') < .5 ? -1 : 1) }),
+        (sn, q) => {
+          reconcile(sn, 'leaf', q.s.leaves.map(l => ({ key: l.id, x: LEAF_OUT(l.idle), l })), l => newLeaf(sn, l.l, live), (ln, l) => { ln.data = l.l; });
+          reconcile(sn, 'beads', q.s.beads ? [{ key: 'beads', x: -.42, n: q.s.beads }] : [], b => makeNode('beads', 'beads', sn, b.x, { stem: 0, count: 0 }),
+            (bn, b) => { if (bn.count !== b.n) { bn.count = b.n; dressBeads(bn); } });
+        });
+    });
+  // leaves already cut: lying on the floor when the page opened, or closed while it was open
+  const fall = new Set(m.fallen.map(it => it.id));
+  for (const it of m.fallen) if (!onFloor.has(it.id) && !leaves.has(it.id)) lieOnFloor(it, now);
+  for (const [id, n] of onFloor) if (!fall.has(id) && performance.now() - n.dead > 15000) destroy(n);
+  for (const n of nodes) if (!n.dead && n.kind !== 'leaf' && n.kind !== 'beads') {
+    if (!live) n.children.forEach(c => { if (c.anchor.x !== c.x) reanchor(c); });
+    weighArm(n); n.dirty = true;
+  }
+  // weights that the springs and the hand need: what hangs below each body, and its inertia about the wire
+  const weigh = n => { n.subMass = n.mass; n.yawI = n.kind === 'leaf' ? n.mass * n.radius ** 2 / 4 : n.mass * (n.span || .5) ** 2 / 12;
+    for (const c of n.children) { weigh(c); n.subMass += c.subMass; n.yawI += c.subMass * c.xTo ** 2; } };
+  weigh(root);
+  writeSentence(now);
+}
+
+/* ---------- forces: torsion of the wires, drag on the sheets, the hand ---------- */
+const wind = V(), windAt = V(0, 4, 0); let gust = 0, clock = 0;
+const yawOf = n => { tv.set(1, 0, 0).applyQuaternion(bq(n.body)); return Math.atan2(-tv.z, tv.x); };
+const wrap = a => a - 6.283185 * Math.round(a / 6.283185);
+let grab = null;
+function forces() {
+  for (const n of nodes) { n.body.resetForces(false); n.body.resetTorques(false); }
+  // a slow draft of the room, well under a hand's breath (decoration: no data in it)
+  const dx = .16 * Math.sin(clock * .21) + .1 * Math.sin(clock * .083 + 1.3), dz = .1 * Math.sin(clock * .13 + .6);
+  for (const n of nodes) {
+    if (n.parent && !n.dead && n.kind !== 'beads') {       // the suspension wire resists twist, so the composition returns
+      const w0 = n.kind === 'leaf' ? 1.3 : .8, z = n.kind === 'leaf' ? .12 : .3;
+      const err = wrap(yawOf(n) - (n.parent === root && false ? 0 : yawOf(n.parent)) - n.rest);
+      const t = n.yawI * (-w0 * w0 * err - 2 * z * w0 * (n.body.angvel().y - n.parent.body.angvel().y));
+      n.body.addTorque({ x: 0, y: t, z: 0 }, true); n.parent.body.addTorque({ x: 0, y: -t, z: 0 }, true);
+    } else if (n === root) {
+      const t = n.yawI * (-.5 * wrap(yawOf(n)) - .5 * n.body.angvel().y); n.body.addTorque({ x: 0, y: t, z: 0 }, true);
+    }
+    if (n.kind === 'leaf') {                                // flat-plate drag: 1/2 rho Cd A (v.n)|v.n| along the normal
+      const c = toWorld(n, n.center, tv2), q = bq(n.body), nrm = tv3.set(0, 0, 1).applyQuaternion(q), v = n.body.linvel();
+      const d2 = (c.x - windAt.x) ** 2 + (c.y - windAt.y) ** 2, g = Math.exp(-d2 / 5.5) + gust;
+      const rx = wind.x * g + dx - v.x, ry = wind.y * g - v.y, rz = wind.z * g + dz - v.z;
+      const vn = rx * nrm.x + ry * nrm.y + rz * nrm.z, f = .5 * 1.2 * 1.25 * n.area * vn * Math.abs(vn);
+      // the centre of pressure sits toward the edge that meets the wind, which is what turns a sheet
+      const tx = rx - vn * nrm.x, ty = ry - vn * nrm.y, tz = rz - vn * nrm.z, tl = Math.hypot(tx, ty, tz) + 1e-6, o = .22 * n.radius * Math.min(1, tl / (Math.abs(vn) + .3));
+      n.body.addForceAtPoint({ x: f * nrm.x, y: f * nrm.y, z: f * nrm.z }, { x: c.x - tx / tl * o, y: c.y - ty / tl * o, z: c.z - tz / tl * o }, true);
+    }
+  }
+  if (grab) {
+    const n = grab.node, p = toWorld(n, grab.local, tv2), com = n.body.translation(), v = n.body.linvel(), w = n.body.angvel();
+    const rx = p.x - com.x, ry = p.y - com.y, rz = p.z - com.z;
+    const vx = v.x + w.y * rz - w.z * ry, vy = v.y + w.z * rx - w.x * rz, vz = v.z + w.x * ry - w.y * rx;
+    const M = Math.max(.3, n.subMass); let fx = M * (70 * (grab.to.x - p.x) - 9 * vx), fy = M * (70 * (grab.to.y - p.y) - 9 * vy), fz = M * (70 * (grab.to.z - p.z) - 9 * vz);
+    const fl = Math.hypot(fx, fy, fz), cap = M * 45; if (fl > cap) { fx *= cap / fl; fy *= cap / fl; fz *= cap / fl; }
+    n.body.addForceAtPoint({ x: fx, y: fy, z: fz }, p, true);
+  }
+}
+function slide(dt) {      // attachment points move along the wire to where the data now puts them
+  for (const n of nodes) if (n.parent && !n.dead && n.x !== n.xTo) {
+    const d = n.xTo - n.x, s = .25 * dt; n.x = Math.abs(d) <= s ? n.xTo : n.x + Math.sign(d) * s; reanchor(n); n.parent.dirty = true;
+  }
+}
+function settle(steps) {
+  for (const n of nodes) { n.body.setLinearDamping(1.2); n.body.setAngularDamping(3); }
+  for (let i = 0; i < steps; i++) { forces(); world.step(); }
+  for (const n of nodes) { n.body.setLinearDamping(.02); n.body.setAngularDamping(n.kind === 'leaf' ? .12 : .3); }
+}
+
+/* ---------- words ---------- */
+function writeSentence(now) {
+  const all = Object.values(items), S = model.persons.reduce((s, p) => s + p.sessions.length, 0), P = model.persons.length;
+  if (!all.length) { $('sentence').textContent = 'No open work item hangs on the board right now.'; return; }
+  const top = [...model.persons].sort((a, b) => b.n - a.n)[0], old = all.reduce((a, b) => b.idle > a.idle ? b : a);
+  let t = old.it.text.split('\n')[0]; if (t.length > 58) t = t.slice(0, 58).replace(/\s+\S*$/, '') + '…';
+  $('sentence').innerHTML = `<b>${S}</b> agent session${S > 1 ? 's' : ''} of <b>${P}</b> ${P > 1 ? 'people' : 'person'} hold <b>${all.length}</b> open work item${all.length > 1 ? 's' : ''}; ` +
+    `<b>${top.n}</b> hang from ${esc(top.who)}. Idle longest, <b>${dur(old.idle)}</b>: “${esc(t)}”`;
+  $('key').innerHTML = model.persons.map(p => `<span><i style="background:${paintOf(p.who)}"></i>${esc(p.who)} ${p.n}</span>`).join('') +
+    `<br><span>Sheet area: comments</span><span>Distance out: minutes idle</span><span class="long">Brass bead: a result closed today</span><span class="long">On the floor: closed in the last ${FLOOR_MIN} min</span>` +
+    `<br><span id="lean"></span>`;
+  writeLean();
+  $('clock').textContent = 'board at ' + new Date(now).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+function writeLean() {
+  if (!root || !$('lean')) return;
+  const q = bq(root.body), down = tv.set(0, -1, 0).applyQuaternion(q), deg = Math.acos(Math.min(1, -down.y)) * 57.2958;
+  const xa = tv2.set(1, 0, 0).applyQuaternion(q), side = xa.y < 0 ? 1 : -1;
+  const low = root.children.filter(c => c.kind === 'person' && c.x * side > .01).sort((a, b) => Math.abs(b.x) - Math.abs(a.x))[0];
+  $('lean').textContent = `The top wire hangs ${deg.toFixed(0)}° off plumb` + (low && deg >= 1 ? `, low on the side of ${low.key}` : '');
+}
+const tags = new Map(); let selected = null;
+function tag(key, html, cls) { let e = tags.get(key); if (!e) { e = document.createElement('div'); $('tags').append(e); tags.set(key, e); } e.className = 'tag ' + (cls || ''); if (e._h !== html) { e.innerHTML = html; e._h = html; } e._seen = true; return e; }
+function placeTags() {
+  for (const e of tags.values()) e._seen = false;
+  const put = (e, w, dx, dy) => { tv.copy(w).project(camera); e.style.transform = `translate(${((tv.x + 1) / 2 * innerWidth + dx).toFixed(1)}px,${((1 - tv.y) / 2 * innerHeight + dy).toFixed(1)}px)`; };
+  if (root) for (const p of root.children) if (p.kind === 'person') {
+    const m = model.persons.find(x => x.who === p.key); put(tag('p' + p.key, `${esc(p.key)}<small>${m ? m.n : ''}</small>`), toWorld(p, V(0, 0, 0)), 9, -17);
+  }
+  if (selected && nodes.has(selected)) put(tag('sel', selected.key, 'sel'), toWorld(selected, selected.center), selected.radius * 60 + 10, -10);
+  for (const [k, e] of tags) if (!e._seen) { e.remove(); tags.delete(k); }
+}
+
+/* ---------- the card: the real item, and its newest comment on demand ---------- */
+function select(n, quiet) {
+  selected = n;
+  if (!n) { $('card').classList.remove('on'); if (!quiet) history.replaceState(null, '', location.pathname + location.search); if (STILL) frameOnce(); return; }
+  const it = n.data.it, id = n.key; if (!quiet) history.replaceState(null, '', '#' + id);
+  const idle = (Date.now() - Number(it.active_ns) / 1e6) / 6e4, nc = Number(it.n_comments) || 0;
+  const show = (c) => {
+    if (selected !== n) return;
+    $('card').innerHTML = `<div class="top"><span><b>${esc(id)}</b> &nbsp;${esc(it.who)}</span><button aria-label="Close">×</button></div>` +
+      `<p class="t">${esc(it.text.length > 460 ? it.text.slice(0, 460).replace(/\s+\S*$/, '') + '…' : it.text)}</p>` +
+      `<div class="m">${n.data.closed ? 'closed ' + dur(idle) + ' ago, cut from the mobile' : 'open · idle ' + dur(idle)} · ${nc} comment${nc === 1 ? '' : 's'} · sheet ${(n.area * 1e4).toFixed(0)} cm² · ${(SHEET * n.area).toFixed(2)} kg${it.branch ? '<br>branch ' + esc(it.branch) : ''}</div>` +
+      (c ? `<div class="c"><span>Newest comment · ${esc(c.who || '')}${c.at ? ' · ' + dur((Date.now() - Date.parse(c.at)) / 6e4) + ' ago' : ''}</span>${esc(c.text.length > 420 ? c.text.slice(0, 420) + '…' : c.text)}</div>` : '');
+    $('card').classList.add('on'); $('card').querySelector('button').onclick = () => select(null);
+  };
+  show(lastComments[id]);
+  if (nc) fetch('/data/' + id).then(r => r.ok ? r.json() : null).then(d => { const c = d && d.comments && d.comments[d.comments.length - 1]; if (c) show(c); }).catch(() => {});
+  if (STILL) frameOnce();
+}
+
+/* ---------- pointer: wind, hand, tap ---------- */
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), plane = new THREE.Plane();
+let down = null, lastMove = null;
+const setNdc = e => ndc.set(e.clientX / innerWidth * 2 - 1, 1 - e.clientY / innerHeight * 2);
+function hit(e) {
+  setNdc(e); ray.setFromCamera(ndc, camera);
+  for (const m of picks) m.updateWorldMatrix(true, false);
+  const h = ray.intersectObjects(picks, false); if (!h.length) return null;
+  const leaf = h.find(x => x.object.userData.node.kind === 'leaf' && x.distance < h[0].distance + .4) || h[0];
+  return { node: leaf.object.userData.node, point: leaf.point };
+}
+canvas.addEventListener('pointerdown', e => {
+  canvas.setPointerCapture(e.pointerId); const h = hit(e);
+  down = { x: e.clientX, y: e.clientY, t: performance.now(), node: h && h.node, moved: 0 };
+  if (h && !STILL) {
+    const n = h.node, inv = bq(n.body).clone().invert(), p = n.body.translation();
+    grab = { node: n, local: h.point.clone().sub(p).applyQuaternion(inv), to: h.point.clone() };
+    camera.getWorldDirection(tv); plane.setFromNormalAndCoplanarPoint(tv.clone(), h.point); canvas.style.cursor = 'grabbing';
+  }
+});
+canvas.addEventListener('pointermove', e => {
+  const now = performance.now();
+  if (down) down.moved = Math.max(down.moved, Math.hypot(e.clientX - down.x, e.clientY - down.y));
+  if (grab) { setNdc(e); ray.setFromCamera(ndc, camera); ray.ray.intersectPlane(plane, grab.to); }
+  else {
+    if (down && !down.node) azTo = Math.max(-.42, Math.min(.5, azTo - e.movementX * .003));
+    if (lastMove && now - lastMove.t < 120) {         // the pointer's own speed, in metres per second at the mobile, is the wind
+      const dt = Math.max(8, now - lastMove.t) / 1000, upp = 2 * camDist * Math.tan(camera.fov * Math.PI / 360) / innerHeight;
+      const vx = (e.clientX - lastMove.x) * upp / dt, vy = -(e.clientY - lastMove.y) * upp / dt;
+      const right = tv.set(1, 0, 0).applyQuaternion(camera.quaternion), k = .8;
+      tv2.set(right.x * vx * k, vy * k * .6, right.z * vx * k + Math.abs(vx) * -.2); if (tv2.length() > 8) tv2.setLength(8);
+      wind.lerp(tv2, .3);
+      setNdc(e); ray.setFromCamera(ndc, camera); camera.getWorldDirection(tv3); plane.setFromNormalAndCoplanarPoint(tv3, TARGET); ray.ray.intersectPlane(plane, windAt);
+    }
+    if (!down) canvas.style.cursor = hit(e) ? 'grab' : 'default';
+  }
+  lastMove = { x: e.clientX, y: e.clientY, t: now };
+});
+const up = e => {
+  if (!down) return; const tap = down.moved < 6 && performance.now() - down.t < 500;
+  if (tap) { if (down.node && down.node.kind === 'leaf') select(down.node); else if (!down.node) select(null); }
+  down = null; grab = null; canvas.style.cursor = 'default';
+};
+canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', up);
+addEventListener('keydown', e => {
+  if (e.key === ' ') { e.preventDefault(); wind.set(4.5, .3, -1.2); gust = 1; }
+  else if (e.key === 'Escape') select(null);
+  else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+    e.preventDefault(); const L = [...leaves.values()].map(n => ({ n, x: toWorld(n, n.center).project(camera).x })).sort((a, b) => a.x - b.x).map(o => o.n);
+    if (!L.length) return; const i = L.indexOf(selected), d = e.key === 'ArrowRight' ? 1 : -1; select(L[(i < 0 ? (d > 0 ? 0 : L.length - 1) : i + d + L.length) % L.length]);
+  }
+});
+
+/* ---------- data: poll, keep the last good read ---------- */
+async function poll(first) {
+  try {
+    const r = await fetch('/data'); if (!r.ok) throw new Error('/data ' + r.status);
+    const d = await r.json(), now = Date.now(); lastComments = d.last_comments || {};
+    sync(buildModel(d, now), now, !first);
+    if (first) { settle(1400); const id = location.hash.slice(1); if (leaves.has(id)) select(leaves.get(id), true); else if (onFloor.has(id)) select(onFloor.get(id), true); }
+    else if (STILL) { settle(900); frameOnce(); }
+    setTimeout(poll, 20000);
+  } catch (err) { console.warn(err); $('clock').textContent = 'board unreachable, retrying'; setTimeout(() => poll(first), first ? 2500 : 10000); if (first && !root) $('sentence').textContent = 'Waiting for the board…'; }
+}
+
+/* ---------- frame ---------- */
+function draw() {
+  for (const n of nodes) {
+    if (n.dirty && n.kind !== 'leaf' && n.kind !== 'beads' && !n.dead) { dressArm(n); n.dirty = false; }
+    const p = n.body.translation(), r = n.body.rotation(); n.group.position.set(p.x, p.y, p.z); n.group.quaternion.set(r.x, r.y, r.z, r.w);
+  }
+  placeCamera(); key.shadow.needsUpdate = (shadowTick++ & 1) === 0 || STILL; renderer.render(scene, camera); placeTags();   // the shadow map is redrawn every second frame
+}
+function frameOnce() { for (const n of nodes) if (n.dirty && n.kind !== 'leaf' && n.kind !== 'beads') { dressArm(n); n.dirty = false; } draw(); writeLean(); }
+let shadowTick = 0, last = performance.now(), acc = 0, leanT = 0;
+function frame(t) {
+  requestAnimationFrame(frame);
+  const dt = Math.min(.05, (t - last) / 1000); last = t; acc += dt; clock += dt;
+  let k = 0; while (acc >= DT && k++ < 5) { slide(DT); forces(); world.step(); acc -= DT; } if (acc > DT) acc = 0;
+  wind.multiplyScalar(Math.exp(-dt / .9)); gust *= Math.exp(-dt / .9);
+  az += (azTo - az) * (1 - Math.exp(-dt * 4));
+  const nowp = performance.now();
+  for (const n of nodes) if (n.dead && !n.keep && nowp - n.dead > 12000 && !(n.parent && nodes.has(n.parent) && !n.parent.dead)) { if (!n.children.some(c => nodes.has(c))) destroy(n); }
+  draw(); if ((leanT += dt) > .5) { leanT = 0; writeLean(); }
+}
+resize(); placeCamera();
+try { await Promise.race([document.fonts.load('600 20px Archivo'), new Promise(r => setTimeout(r, 1500))]); } catch (e) {}
+await poll(true);
+window.__mobile = { nodes, leaves, sync: (m) => sync(m, Date.now(), true), get model() { return model; } };   // for the console
+if (STILL) frameOnce(); else requestAnimationFrame(frame);
+</script>
+</body>
+</html>

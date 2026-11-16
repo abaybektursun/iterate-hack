@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 4650,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " 54)\\) and \\((20, 53)\\):\n1. Substituting \\( x = 16 \\):\n\\[ -2(16)^2 + 16d + e = 54 \\]\n\\[ -2(256) + 16d + e = 54 \\]\n\\[ -512 + 16d + e = 54 \\]\n\\[ 16d + e = 566 \\quad \\text{(Equation 3)} \\]\n\n2. Substituting \\( x = 20 \\):\n\\[ -2(20)^2 + 20d + e = 53 \\]\n\\[ -2(400) + 20d + e = 53 \\]\n\\[ -800 + 20d + e = 53 \\]\n\\[ 20d + e = 853 \\quad \\text{(Equation 4)} \\]\n\nSubtract Equation 3 from Equation 4:\n\\[ (20d + e) - (16d + e) = 853 - 566 \\]\n\\[ 4d = 287 \\]\n\\[ d = \\frac{287}{4} \\]\n\nSubstitute \\( d \\) back into Equation 3:\n\\[ 16\\left(\\frac{287}{4}\\right) + e = 566 \\]\n\\[ 4(287) + e = 566 \\]\n\\[ 1148 + e = 566 \\]\n\\[ e = -582 \\]\n\nThus, \\( Q(x) = -2x^2 + \\frac{287}{4}x - 582 \\). Therefore, \\( Q(0) = -582 \\).\n\nFinally, we find \\( P(0) + Q(0) \\):\n\\[ P(0) + Q(0) = 698 + (-582) = 116 \\]\n\nThe answer is:\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 29,
+  "gold": "244",
+  "extracted_v3": "24",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 14409,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": ", n\\). No point strictly between \\(\\ell_A\\) and \\(\\ell_B\\) lies on more than 1 of the segments. The task is to find the number of bounded regions when \\(m = 7\\) and \\(n = 5\\).\n\n### Solution:\n\n1. **Bounded Regions Formula**:\n   The number of bounded regions formed in this configuration is given by the product \\((m-1)(n-1)\\). This formula is derived from the general setup of such geometric configurations, where each point on one line intersects with points on the other line, creating a grid of segments and regions.\n\n2. **Substitute Values**:\n   Given \\(m = 7\\) and \\(n = 5\\), we substitute these values into the formula:\n   \\[\n   (m-1)(n-1) = (7-1)(5-1) = 6 \\times 4\n   \\]\n\n3. **Calculate the Result**:\n   \\[\n   6 \\times 4 = 24\n   \\]\n\nThus, the number of bounded regions formed is \\(\\boxed{24}\\)."
+ }
+}

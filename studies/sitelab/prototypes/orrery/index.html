@@ -1,0 +1,582 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Invariant: orrery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Newsreader:opsz,wght@6..72,300..500&display=swap">
+<style>
+:root {
+  color-scheme: dark;
+  --paper: #100f0e; --sheet: #1a1816; --ink: #e8e2d6; --mute: #a39a8c; --faint: #7b7368; --rule: #2e2a25;
+  --brass: #c7a56a; --red: #c4634a; --col: 372px;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0; color: var(--ink); background: var(--paper); overflow: hidden;
+  font: 400 14px/1.5 "Archivo", ui-sans-serif, -apple-system, "Segoe UI", system-ui, sans-serif;
+  font-variant-numeric: tabular-nums; -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-align: left; }
+:focus-visible { outline: 1px solid var(--brass); outline-offset: 3px; border-radius: 2px; }
+canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; cursor: grab; }
+canvas.turn, canvas.orbit { cursor: grabbing; } canvas.pick { cursor: pointer; }
+#tags { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.grain, .shade { z-index: 1; } .col { z-index: 2; }
+.grain { position: fixed; inset: 0; pointer-events: none; opacity: .07; mix-blend-mode: overlay;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1.2 -.1'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.shade { position: fixed; inset: 0; pointer-events: none; background: linear-gradient(90deg, rgba(11, 10, 9, .94), rgba(11, 10, 9, .8) 21%, rgba(11, 10, 9, 0) 37%), radial-gradient(ellipse at 62% 52%, rgba(0, 0, 0, 0) 52%, rgba(0, 0, 0, .5) 100%); }
+
+.col { position: fixed; left: 0; top: 0; bottom: 0; width: var(--col); padding: 22px 0 18px 40px; display: flex; flex-direction: column; pointer-events: none; }
+.col > * { pointer-events: auto; }
+.top { display: flex; align-items: baseline; gap: 14px; font-size: 12px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--faint); }
+.top a { color: var(--mute); text-decoration: none; border-bottom: 1px solid var(--rule); }
+.top a:hover { color: var(--ink); }
+h1 { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 28px; line-height: 1.17; letter-spacing: -.012em; margin: 24px 0 12px; text-wrap: balance; min-height: 5.8em; }
+h1 b { font-weight: 300; color: var(--brass); font-variant-numeric: lining-nums; }
+.note { font-size: 12.5px; color: var(--mute); padding-bottom: 12px; min-height: 4.6em; }
+.note b { color: var(--ink); font-weight: 500; }
+
+.clock { display: grid; grid-template-columns: auto 1fr auto; gap: 0 12px; align-items: end; border-top: 1px solid var(--rule); padding-top: 10px; }
+.clock strong { font-family: "Newsreader", Georgia, serif; font-weight: 300; font-size: 34px; line-height: 1; font-variant-numeric: lining-nums tabular-nums; }
+.clock small { font-size: 11px; color: var(--faint); letter-spacing: .04em; line-height: 1.3; padding-bottom: 3px; }
+.clock button { font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--ink); border: 1px solid #4b443b; border-radius: 99px; padding: 4px 14px; margin-bottom: 2px; }
+.clock button:hover { border-color: var(--brass); }
+.scrub { position: relative; height: 34px; margin: 4px 0 6px; }
+.scrub svg { position: absolute; left: 0; top: 4px; width: 100%; height: 12px; overflow: visible; }
+.scrub svg line { stroke: var(--faint); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.scrub svg line.s { stroke: var(--brass); }
+.scrub input { position: absolute; left: -7px; right: -7px; top: 10px; width: calc(100% + 14px); margin: 0; height: 22px; appearance: none; -webkit-appearance: none; background: none; cursor: ew-resize; }
+.scrub input::-webkit-slider-runnable-track { height: 1px; background: var(--rule); }
+.scrub input::-moz-range-track { height: 1px; background: var(--rule); }
+.scrub input::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; margin-top: -7px; border-radius: 50%; background: #b8955a; border: 1px solid #e3cd9c; box-shadow: 0 1px 3px rgba(0, 0, 0, .7); }
+.scrub input::-moz-range-thumb { width: 13px; height: 13px; border-radius: 50%; background: #b8955a; border: 1px solid #e3cd9c; }
+
+.listhead, .list button { display: grid; grid-template-columns: 1fr 44px 46px 52px; gap: 8px; align-items: baseline; }
+.listhead { font-size: 10.5px; letter-spacing: .06em; color: var(--faint); padding: 6px 0 4px; text-align: right; border-bottom: 1px solid var(--rule); }
+.listhead span:first-child { text-align: left; }
+.list { flex: 1; min-height: 40px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #3a352f transparent; }
+.list button { width: 100%; padding: 4px 0; font-size: 13px; color: var(--mute); border-bottom: 1px solid #211e1a; }
+.list button span { display: flex; align-items: center; gap: 8px; }
+.list button span::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--c); flex: none; }
+.list button em { font-style: normal; text-align: right; font-family: "Newsreader", Georgia, serif; font-size: 16px; line-height: 1; color: var(--ink); font-variant-numeric: lining-nums tabular-nums; }
+.list button em.g { color: var(--brass); } .list button em.z { color: var(--faint); font-family: inherit; font-size: 11px; }
+.list button:hover, .list button.on { color: var(--ink); } .list button.off { opacity: .35; }
+.def { font-size: 11.5px; line-height: 1.45; color: var(--faint); padding-top: 9px; margin-top: 4px; }
+.def b { color: var(--mute); font-weight: 500; } .def i { font-style: normal; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--c); margin: 0 3px 0 5px; }
+.def summary { display: none; }
+
+.tag { position: fixed; left: 0; top: 0; pointer-events: none; white-space: nowrap; will-change: transform; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; font-weight: 600; color: var(--ink);
+  line-height: 1.2; text-align: center; background: rgba(17, 15, 13, .9); border: 1px solid #3a342c; border-radius: 2px; padding: 3px 7px 2px; transition: opacity .2s; }
+.tag:empty { display: none; }
+.tag em { font-style: normal; display: inline; margin-left: 6px; font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 15px; letter-spacing: 0; text-transform: none; color: var(--brass); font-variant-numeric: lining-nums; }
+.tag.q { color: var(--mute); }
+#tip { background: rgba(26, 24, 22, .95); border: 1px solid var(--rule); border-radius: 3px; padding: 6px 10px; opacity: 0; transition: opacity .12s; text-transform: none; letter-spacing: 0; font-weight: 400; font-size: 12.5px;
+  text-align: left; max-width: 330px; white-space: normal; z-index: 3; }
+#tip.on { opacity: 1; } #tip small { color: var(--mute); font-size: 11px; display: block; }
+
+.card { position: fixed; right: 28px; top: 24px; width: 390px; max-height: calc(100% - 60px); overflow-y: auto; background: rgba(24, 22, 20, .97); border: 1px solid var(--rule); border-radius: 3px; padding: 18px 20px 16px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .5); transform: translateY(-8px); opacity: 0; pointer-events: none; transition: opacity .2s, transform .25s cubic-bezier(.2, .7, .2, 1); scrollbar-width: thin; z-index: 4; }
+.card.on { opacity: 1; transform: none; pointer-events: auto; }
+.card .hd { display: flex; align-items: baseline; gap: 10px; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--faint); }
+.card .hd button { margin-left: auto; color: var(--mute); font-size: 12px; letter-spacing: .04em; text-transform: none; }
+.card .q { font-family: "Newsreader", Georgia, serif; font-size: 21px; line-height: 1.25; margin: 10px 0 8px; color: var(--ink); overflow-wrap: anywhere; }
+.card p { margin: 0 0 10px; font-size: 13px; color: var(--mute); overflow-wrap: anywhere; }
+.card .sc { border-top: 1px solid var(--rule); padding: 6px 0; display: grid; grid-template-columns: 74px 1fr; gap: 0 10px; font-size: 12.5px; color: var(--mute); }
+.card .sc b { font-family: "Newsreader", Georgia, serif; font-weight: 400; font-size: 18px; line-height: 1.2; color: var(--ink); font-variant-numeric: lining-nums tabular-nums; }
+.card .sc.base b { color: var(--brass); } .card .sc u { text-decoration: none; color: var(--ink); }
+.card .by { font-size: 12px; color: var(--faint); padding-top: 9px; border-top: 1px solid var(--rule); }
+.card .by b { color: var(--ink); font-weight: 500; }
+#err { position: fixed; left: 8px; bottom: 8px; color: var(--red); font-size: 12px; white-space: pre-wrap; z-index: 9; max-width: 70%; }
+
+@media (max-width: 760px) {
+  .shade { background: linear-gradient(180deg, rgba(16, 15, 14, .93), rgba(16, 15, 14, .8) 24%, rgba(16, 15, 14, 0) 40%, rgba(16, 15, 14, 0) 80%, rgba(16, 15, 14, .9)); }
+  .col { right: 0; width: auto; padding: 12px 16px 10px; }
+  h1 { font-size: 19px; margin: 10px 0 6px; min-height: 0; }
+  .note { font-size: 11.5px; padding-bottom: 8px; min-height: 0; }
+  .clock strong { font-size: 24px; }
+  .listhead, .list { display: none; }
+  .def { margin-top: auto; background: rgba(16, 15, 14, .9); border-top: 1px solid var(--rule); max-height: 45vh; overflow-y: auto; }
+  .def summary { display: block; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; font-weight: 600; color: var(--mute); cursor: pointer; }
+  .card { left: 10px; right: 10px; width: auto; top: auto; bottom: 10px; max-height: 56%; }
+  .tag { font-size: 8.5px; padding: 2px 5px 1px; } .tag em { font-size: 12px; margin-left: 4px; }
+}
+</style>
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+<body>
+<canvas id="c" aria-label="A brass orrery: one arm and one stone sphere per study, enamel beads for its board results, the RL score as the gilt sphere at the centre"></canvas>
+<div id="tags"></div>
+<div class="grain"></div>
+<div class="shade"></div>
+<div class="col" id="col">
+  <div class="top"><a href="../../">← Lab</a><span>Orrery · the studies</span></div>
+  <h1 id="line">&nbsp;</h1>
+  <div class="note" id="note"></div>
+  <div class="clock">
+    <strong id="hour">0.0</strong>
+    <small id="stamp"></small>
+    <button id="play" aria-label="Turn the crank through the hackathon">Play</button>
+  </div>
+  <div class="scrub"><svg id="ticks" preserveAspectRatio="none" viewBox="0 0 1000 12"></svg>
+    <input id="scrub" type="range" min="0" max="1000" value="1000" aria-label="Time through the hackathon"></div>
+  <div class="listhead"><span>Study</span><span>results</span><span>best base</span><span>to RL</span></div>
+  <div class="list" id="list"></div>
+  <details class="def" id="def" open></details>
+</div>
+<div class="tag" id="tip"></div>
+<div class="card" id="card"></div>
+<div id="err"></div>
+
+<script type="module">
+import * as THREE from 'three';
+
+const $ = id => document.getElementById(id);
+const fail = e => { $('err').textContent += (e && (e.stack || e.message || e.reason) || e) + '\n'; console.error(e); };
+window.addEventListener('error', e => fail(e.error || e.message));
+window.addEventListener('unhandledrejection', e => fail(e.reason));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x)), lerp = (a, b, t) => a + (b - a) * t;
+const ease = x => x * x * (3 - 2 * x);
+const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const narrow = () => innerWidth <= 760;
+const rnd = seed => () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+
+const DATA = await (await fetch('data.json')).json();
+await Promise.all([document.fonts.load('500 40px Newsreader'), document.fonts.load('600 40px Archivo')]).catch(() => 0);
+
+// ------------------------------------------------------------------ the data and its mappings
+const T0 = DATA.t0, T1 = DATA.t1, SPAN = T1 - T0, HOURS = SPAN / 3.6e6, RL = DATA.rl.right;
+const R_RL = 2.3, PER = 0.035, R_END = 5.4;                 // the RL ring, world units per problem short of RL, the end of an arm
+const Y0 = 0.68, Y_ARM = Y0 + 1.5, Y_BODY = Y0 + 2.3;      // top of the dial plate, the arms, the centres of the spheres
+const PHI0 = 120 * Math.PI / 180, SWEEP = 300 * Math.PI / 180;   // the carriage turns 300 degrees over the whole time
+const W_IN = 0.004, W_MOVE = 0.012;                        // share of the time a body takes to arrive, a sphere to slide
+const isBase = x => x[0] === 'base' && x[1] === 'MATH-500' && x[3] === 500;
+const STONE = {   // one stone per study: its colour only tells the studies apart
+  rlneurons: ['lapis', '#2a3c66'], theory: ['malachite', '#2f5c49'], cleanneurons: ['jasper', '#6f3128'], jspace: ['bone', '#cfc6b2'],
+  autobench: ['tiger', '#7a5a2c'], basins: ['agate', '#757a7b'], sitelab: ['onyx', '#1f1e1d'] };
+const ORDER = ['gpuprice', 'rlneurons', 'metaharness', 'cleanneurons', 'basins', 'jspace', 'autobench', 'theory', 'sitelab'];
+const ENAMEL = ['#ddd5c2', '#7d3a2e', '#46586a', '#8a8371'];
+const whoN = {}; for (const r of [...DATA.studies.flatMap(s => s.results), ...DATA.loose]) whoN[r.who] = (whoN[r.who] || 0) + 1;
+const WHO = Object.keys(whoN).sort((a, b) => whoN[b] - whoN[a]);
+const whoColor = w => ENAMEL[Math.min(WHO.indexOf(w), ENAMEL.length - 1)];
+const moonR = n => 0.04 + 0.07 * Math.sqrt(n / 6000), planetR = n => 0.17 + 0.048 * Math.sqrt(n);
+
+const studies = DATA.studies.slice().sort((a, b) => ORDER.indexOf(a.k) - ORDER.indexOf(b.k));
+const bodies = [];   // everything that can be picked: {kind, mesh | instance, ...}
+studies.forEach((s, i) => {
+  s.local = (20 + 40 * (ORDER.includes(s.k) ? ORDER.indexOf(s.k) : i)) * Math.PI / 180;
+  s.t = Math.max(T0, Math.min(s.first_commit, s.results.length ? s.results[0].t : Infinity));
+  s.r = planetR(s.results.length);
+  s.steps = []; let best = 0;
+  for (const r of s.results) for (const x of r.sc) if (isBase(x) && x[2] > best) { best = x[2]; s.steps.push({ t: r.t, best, x, r }); }
+  let ring = 0, slot = 0, cap = c => Math.floor(2 * Math.PI * (s.r + 0.28 + 0.24 * c) / 0.24);
+  s.rings = [];
+  for (const r of s.results) {
+    if (slot >= cap(ring)) { ring++; slot = 0; }
+    r.ring = ring; r.slot = slot++; r.study = s; s.rings[ring] = { rad: s.r + 0.28 + 0.24 * ring, n: slot, t: s.rings[ring] ? s.rings[ring].t : r.t };
+  }
+  for (const r of s.results) r.ang = 2 * Math.PI * r.slot / s.rings[r.ring].n + r.ring * 0.4;
+});
+const allResults = [...studies.flatMap(s => s.results), ...DATA.loose].sort((a, b) => a.t - b.t);
+const bestAt = (s, t) => { let b = null; for (const st of s.steps) if (st.t <= t) b = st; return b; };
+const arrived = (t0, t, w) => ease(clamp((t - t0) / (w * SPAN) + 1, 0, 1));
+const radiusAt = (s, t) => { let R = R_END; for (const st of s.steps) R = lerp(R, R_RL + (RL - st.best) * PER, arrived(st.t, t, W_MOVE)); return R; };
+
+// ------------------------------------------------------------------ renderer, room, light
+const canvas = $('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+const scene = new THREE.Scene();
+const BACK = new THREE.Color('#0b0a09');
+scene.background = BACK; scene.fog = new THREE.Fog(BACK, 30, 64);
+const camera = new THREE.PerspectiveCamera(27, 1, 1, 200);
+
+function studio() {   // a photographer's room for the metal to reflect: one large softbox, a strip, a warm bounce
+  const es = new THREE.Scene(), lit = (w, h, v, c = [1, 1, 1]) => new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: new THREE.Color(c[0] * v, c[1] * v, c[2] * v), side: THREE.DoubleSide }));
+  es.add(new THREE.Mesh(new THREE.SphereGeometry(60, 24, 12), new THREE.MeshBasicMaterial({ color: new THREE.Color(0.016, 0.014, 0.012), side: THREE.BackSide })));
+  const key = lit(30, 22, 6.5, [1, 0.95, 0.87]); key.position.set(-16, 26, 12); key.lookAt(0, 0, 0);
+  const top = lit(46, 30, 1.5, [1, 0.96, 0.9]); top.position.set(4, 34, -22); top.lookAt(0, 0, 0); es.add(top);
+  const strip = lit(5, 30, 3.2, [0.86, 0.92, 1]); strip.position.set(30, 10, -6); strip.lookAt(0, 2, 0);
+  const back = lit(40, 5, 1.6, [1, 0.9, 0.8]); back.position.set(0, 9, -34); back.lookAt(0, 2, 0);
+  const bounce = lit(50, 50, 0.1, [1, 0.8, 0.6]); bounce.position.set(0, -6, 0); bounce.rotation.x = Math.PI / 2;
+  es.add(key, strip, back, bounce);
+  const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(es, 0.02, 1, 200).texture; pm.dispose();
+}
+studio();
+const key = new THREE.SpotLight(new THREE.Color(1.0, 0.94, 0.85), 2.0, 0, 0.6, 0.62, 0);   // one lamp: its pool falls off on the felt
+key.position.set(-14, 24, 11); key.target.position.set(0, 0.5, 0.5); key.castShadow = true; key.shadow.mapSize.set(2048, 2048);
+Object.assign(key.shadow.camera, { near: 14, far: 48 }); key.shadow.bias = -0.0004; key.shadow.normalBias = 0.03; key.shadow.radius = 4;
+scene.add(key.target);
+scene.add(key, new THREE.HemisphereLight(0x8a8580, 0x1a1410, 0.25));
+
+// ------------------------------------------------------------------ surfaces drawn once: brass dial, walnut, felt, stones
+const tex = (cv, srgb, rep) => { const t = new THREE.CanvasTexture(cv); if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 16; if (rep) { t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep[0], rep[1]); } return t; };
+const cvs = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return [c, c.getContext('2d')]; };
+const R_PLATE = 6.5, HOUR_IN = 5.72, HOUR_OUT = 6.36;
+
+function dial() {
+  const S = 2048, U = S / (2 * R_PLATE), C = S / 2, rand = rnd(7);
+  const [cc, c] = cvs(S, S), [oc, o] = cvs(S, S);           // colour; and roughness (green) with metalness (blue)
+  c.fillStyle = '#a3854f'; c.fillRect(0, 0, S, S); o.fillStyle = 'rgb(0,84,215)'; o.fillRect(0, 0, S, S);
+  const band = (ctx, r0, r1, fill) => { ctx.beginPath(); ctx.arc(C, C, r1 * U, 0, 2 * Math.PI); ctx.arc(C, C, r0 * U, 2 * Math.PI, 0, true); ctx.fillStyle = fill; ctx.fill(); };
+  band(c, HOUR_IN, HOUR_OUT, '#aeaba2'); band(o, HOUR_IN, HOUR_OUT, 'rgb(0,125,215)');        // the silvered hour ring
+  for (let i = 0; i < 2600; i++) {                                                            // spun finish: fine concentric lines
+    const r = Math.sqrt(rand()) * R_PLATE * U, a = rand() * 7, l = 0.3 + rand() * 2.2, d = rand() < 0.5;
+    c.beginPath(); c.arc(C, C, r, a, a + l); c.lineWidth = 0.6 + rand(); c.strokeStyle = d ? `rgba(40,26,8,${0.05 + rand() * 0.09})` : `rgba(255,236,190,${0.04 + rand() * 0.07})`; c.stroke();
+    o.beginPath(); o.arc(C, C, r, a, a + l); o.lineWidth = 0.6 + rand(); o.strokeStyle = d ? 'rgba(0,150,215,.25)' : 'rgba(0,40,215,.25)'; o.stroke();
+  }
+  const INK = '#120d07', WAX = 'rgb(0,235,0)';              // engraving filled with black wax: dark, rough, not metal
+  const both = f => { c.fillStyle = c.strokeStyle = INK; f(c); o.fillStyle = o.strokeStyle = WAX; f(o); };
+  const circle = (r, w) => both(x => { x.beginPath(); x.arc(C, C, r * U, 0, 7); x.lineWidth = w; x.stroke(); });
+  const tick = (phi, r0, r1, w) => both(x => { x.beginPath(); x.moveTo(C + Math.cos(phi) * r0 * U, C + Math.sin(phi) * r0 * U); x.lineTo(C + Math.cos(phi) * r1 * U, C + Math.sin(phi) * r1 * U); x.lineWidth = w; x.stroke(); });
+  const arcText = (str, r, phi, px, font, track = 0) => both(x => {     // text along a circle, centred on phi, feet outward
+    x.font = `${font === serif ? 500 : 600} ${px}px ${font}`; x.textAlign = 'center'; x.textBaseline = 'middle';
+    const ws = [...str].map(ch => x.measureText(ch).width + track), tot = ws.reduce((a, b) => a + b, 0);
+    let run = 0; [...str].forEach((ch, i) => { const p = phi + (tot / 2 - run - ws[i] / 2) / (r * U); run += ws[i];
+      x.save(); x.translate(C + Math.cos(p) * r * U, C + Math.sin(p) * r * U); x.rotate(p - Math.PI / 2); x.fillText(ch, 0, 0); x.restore(); });
+  });
+  const serif = '"Newsreader", Georgia, serif', sans = '"Archivo", sans-serif';
+  // the scale: one ring every 5 problems short of the RL score, a heavier one every 10
+  for (let g = 0; g * PER + R_RL < R_END - 0.05; g += 5) circle(R_RL + g * PER, g === 0 ? 6 : g % 10 === 0 ? 3.2 : 1.5);
+  circle(R_RL - 0.05, 2);
+  for (const deg of [90, 210, 330]) {
+    for (let g = 10; g * PER + R_RL < R_END - 0.2; g += 10) arcText(String(g), R_RL + g * PER + 0.09, deg * Math.PI / 180, 30, serif);
+    arcText(`RL · ${RL} OF ${DATA.rl.n}`, R_RL + 0.09, (deg + 60) * Math.PI / 180, 22, sans, 5);
+    arcText('PROBLEMS SHORT OF RL', R_RL + 10 * PER + 0.09, (deg + 60) * Math.PI / 180, 20, sans, 5);
+    arcText('NO BASE SCORE ON MATH-500', R_END + 0.15, (deg + 60) * Math.PI / 180, 24, sans, 6);
+  }
+  circle(R_END, 3.4); circle(R_END - 0.05, 1.5);
+  // the hour ring: 300 degrees for the whole time, one long tick an hour, a short one every 15 minutes
+  circle(HOUR_IN, 3); circle(HOUR_OUT, 3);
+  for (let q = 0; q <= HOURS * 4; q++) { const phi = PHI0 + q / 4 / HOURS * SWEEP; tick(phi, HOUR_IN, HOUR_IN + (q % 4 ? 0.09 : 0.17), q % 4 ? 1.6 : 3.4); }
+  for (let h = 0; h <= HOURS; h++) arcText(String(h), HOUR_IN + 0.42, PHI0 + h / HOURS * SWEEP, 40, serif);
+  arcText('HOURS SINCE THE FIRST RESULT', HOUR_IN + 0.36, Math.PI / 2, 24, sans, 7);
+  const [ac, a] = cvs(256, 256), im = a.createImageData(256, 256);      // spun metal: the highlight spreads along the radius
+  for (let y = 0; y < 256; y++) for (let x = 0; x < 256; x++) { const dx = x - 127.5, dy = y - 127.5, l = Math.hypot(dx, dy) || 1, i = (y * 256 + x) * 4;
+    im.data[i] = 127.5 + 127.5 * dx / l; im.data[i + 1] = 127.5 - 127.5 * dy / l; im.data[i + 2] = 255; im.data[i + 3] = 255; }
+  a.putImageData(im, 0, 0);
+  return { map: tex(cc, true), orm: tex(oc, false), aniso: tex(ac, false) };
+}
+
+function walnut() {
+  const [cv, c] = cvs(1024, 256), rand = rnd(3);
+  c.fillStyle = '#3b2415'; c.fillRect(0, 0, 1024, 256);
+  for (let i = 0; i < 520; i++) {
+    const y = rand() * 256, a = 2 + rand() * 7, f = 0.004 + rand() * 0.01, p = rand() * 7;
+    c.beginPath(); for (let x = 0; x <= 1024; x += 16) c.lineTo(x, y + Math.sin(x * f + p) * a + Math.sin(x * f * 3.1 + p) * a * 0.3);
+    c.lineWidth = 0.5 + rand() * 2.4; c.strokeStyle = rand() < 0.6 ? `rgba(18,9,4,${0.08 + rand() * 0.22})` : `rgba(140,92,52,${0.05 + rand() * 0.12})`; c.stroke();
+  }
+  return tex(cv, true, [6, 1]);
+}
+function felt() {
+  const [cv, c] = cvs(256, 256), rand = rnd(5), im = c.createImageData(256, 256);
+  for (let i = 0; i < im.data.length; i += 4) { const v = 96 + rand() * 90; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; }
+  c.putImageData(im, 0, 0);
+  for (let i = 0; i < 900; i++) { const x = rand() * 256, y = rand() * 256, a = rand() * 7; c.beginPath(); c.moveTo(x, y); c.lineTo(x + Math.cos(a) * 7, y + Math.sin(a) * 7); c.strokeStyle = `rgba(${rand() < 0.5 ? '255,255,255' : '0,0,0'},.12)`; c.stroke(); }
+  return tex(cv, false, [70, 70]);
+}
+function stone(kind, base, seed) {
+  const [cv, c] = cvs(512, 256), rand = rnd(seed), W = 512, H = 256;
+  c.fillStyle = base; c.fillRect(0, 0, W, H);
+  const blob = (col, n, r0, r1, al) => { for (let i = 0; i < n; i++) { const x = rand() * W, y = rand() * H, r = r0 + rand() * (r1 - r0);
+    for (const dx of [-W, 0, W]) { const g = c.createRadialGradient(x + dx, y, 0, x + dx, y, r); g.addColorStop(0, col + al); g.addColorStop(1, col + '00'); c.fillStyle = g; c.fillRect(x + dx - r, y - r, 2 * r, 2 * r); } } };
+  const vein = (col, n, w, al) => { for (let i = 0; i < n; i++) { let x = rand() * W, y = rand() * H, a = rand() * 7; c.beginPath(); c.moveTo(x, y);
+    for (let k = 0; k < 14; k++) { a += (rand() - 0.5) * 1.1; x += Math.cos(a) * 16; y += Math.sin(a) * 9; c.lineTo(x, y); } c.lineWidth = w * (0.4 + rand()); c.strokeStyle = col; c.globalAlpha = al * (0.4 + rand() * 0.6); c.stroke(); } c.globalAlpha = 1; };
+  const bands = (cols, n, amp) => { for (let i = 0; i < n; i++) { const y = rand() * H, f = 0.008 + rand() * 0.012, p = rand() * 7; c.beginPath();
+    for (let x = 0; x <= W; x += 8) c.lineTo(x, y + Math.sin(x * f * 2 * Math.PI / (W * f) * Math.round(W * f) + p) * amp); c.lineWidth = 1 + rand() * 7; c.strokeStyle = cols[i % cols.length]; c.globalAlpha = 0.25 + rand() * 0.4; c.stroke(); } c.globalAlpha = 1; };
+  const fleck = (col, n, s) => { c.fillStyle = col; for (let i = 0; i < n; i++) { c.globalAlpha = 0.4 + rand() * 0.6; c.fillRect(rand() * W, rand() * H, s * (0.5 + rand()), s * (0.5 + rand())); } c.globalAlpha = 1; };
+  if (kind === 'lapis') { blob('#16234a', 40, 20, 70, 'cc'); blob('#3a5391', 30, 14, 50, '88'); vein('#c8cdd4', 5, 2.2, 0.35); fleck('#d2b062', 150, 1.8); }
+  if (kind === 'malachite') { bands(['#17382c', '#4a8068', '#214a3a', '#63957c'], 60, 9); blob('#16382b', 10, 20, 50, '66'); }
+  if (kind === 'jasper') { blob('#4a1c17', 40, 16, 60, 'cc'); blob('#8c4a3c', 26, 10, 44, '88'); vein('#241210', 9, 1.8, 0.6); vein('#b08a68', 4, 1.2, 0.35); }
+  if (kind === 'bone') { blob('#b3a78f', 30, 20, 70, '88'); blob('#e6dfcf', 30, 16, 60, '99'); vein('#8d8069', 10, 0.9, 0.35); }
+  if (kind === 'tiger') { bands(['#3a280f', '#a67f38', '#4f3716', '#c29a4e'], 70, 5); }
+  if (kind === 'agate') { bands(['#4d5253', '#9a9e9c', '#5e6465', '#b5b7b2'], 50, 7); blob('#3f4445', 8, 20, 50, '55'); }
+  if (kind === 'onyx') { blob('#2e2c2a', 20, 20, 60, '88'); vein('#5a5650', 4, 1, 0.35); }
+  return tex(cv, true);
+}
+
+const DIAL = dial();
+const M = {
+  brass: new THREE.MeshPhysicalMaterial({ color: '#b8935a', metalness: 1, roughness: 0.3, clearcoat: 0.35, clearcoatRoughness: 0.25 }),
+  bright: new THREE.MeshPhysicalMaterial({ color: '#c9a566', metalness: 1, roughness: 0.2, clearcoat: 0.4, clearcoatRoughness: 0.15 }),
+  gilt: new THREE.MeshPhysicalMaterial({ color: '#dcb25e', metalness: 1, roughness: 0.13, clearcoat: 0.5, clearcoatRoughness: 0.08 }),
+  steel: new THREE.MeshPhysicalMaterial({ color: '#1c2a44', metalness: 1, roughness: 0.28, clearcoat: 0.6, clearcoatRoughness: 0.2 }),
+  dial: new THREE.MeshPhysicalMaterial({ map: DIAL.map, roughnessMap: DIAL.orm, metalnessMap: DIAL.orm, metalness: 1, roughness: 1, anisotropy: 0.75, anisotropyMap: DIAL.aniso, clearcoat: 0.08, clearcoatRoughness: 0.3 }),
+  walnut: new THREE.MeshPhysicalMaterial({ map: walnut(), roughness: 0.5, clearcoat: 0.7, clearcoatRoughness: 0.22 }),
+  felt: new THREE.MeshStandardMaterial({ color: '#1b211d', roughness: 1, metalness: 0, bumpMap: felt(), bumpScale: 0.8, envMapIntensity: 0.6 }),
+  enamel: new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: 0.22, clearcoat: 1, clearcoatRoughness: 0.06 }),
+};
+const add = (parent, geo, mat, x = 0, y = 0, z = 0, shadow = 3) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = !!(shadow & 1); m.receiveShadow = !!(shadow & 2); parent.add(m); return m; };
+const lathe = (pts, seg = 96) => new THREE.LatheGeometry(pts.map(p => new THREE.Vector2(p[0], p[1])), seg);
+const rod = (len, r) => new THREE.CylinderGeometry(r, r, len, 16).rotateZ(Math.PI / 2).translate(len / 2, 0, 0);   // along +x from the origin
+
+// ------------------------------------------------------------------ the table, the plinth, the dial
+{ const f = add(scene, new THREE.PlaneGeometry(240, 240), M.felt, 0, 0, 0, 2); f.rotation.x = -Math.PI / 2; }
+add(scene, lathe([[0, 0], [7.25, 0], [7.28, 0.1], [7.16, 0.17], [7.08, 0.2], [7.02, 0.44], [6.92, 0.56], [6.74, 0.6], [6.7, 0.66], [0, 0.66]], 160), M.walnut);
+add(scene, lathe([[6.46, 0.66], [6.7, 0.66], [6.7, 0.71], [6.64, 0.77], [6.54, 0.77], [6.5, 0.71], [6.46, 0.68]], 160), M.bright);
+{ const d = add(scene, new THREE.CircleGeometry(R_PLATE, 160), M.dial, 0, Y0, 0, 2); d.rotation.x = -Math.PI / 2; }
+
+// ------------------------------------------------------------------ the carriage: column, gear, arms, the blued hour arm
+const carriage = new THREE.Group(); scene.add(carriage);
+add(carriage, lathe([[0, 0], [1.0, 0], [1.02, 0.05], [0.9, 0.1], [0.62, 0.14], [0.5, 0.2], [0.36, 0.5], [0.3, 0.62], [0.36, 0.7], [0.3, 0.78], [0.24, 1.0], [0.3, 1.24], [0.46, 1.3], [0.46, 1.7], [0.3, 1.74], [0.12, 1.8], [0.1, 2.0], [0, 2.0]]), M.brass, 0, Y0, 0);
+const sun = add(carriage, new THREE.SphereGeometry(0.6, 64, 40), M.gilt, 0, Y_BODY, 0);
+bodies.push({ kind: 'sun', mesh: sun });
+
+function gearGeo(R, teeth, hub, windows) {
+  const s = new THREE.Shape(), d = 0.055;
+  for (let i = 0; i < teeth; i++) { const a = i / teeth * 2 * Math.PI, w = Math.PI / teeth;
+    [[R - d, -0.5], [R + d, -0.22], [R + d, 0.22], [R - d, 0.5]].forEach(([r, k], j) => s[i + j ? 'lineTo' : 'moveTo'](Math.cos(a + k * w) * r, Math.sin(a + k * w) * r)); }
+  s.closePath();
+  if (windows) for (let i = 0; i < windows; i++) { const a0 = (i + 0.14) / windows * 2 * Math.PI, a1 = (i + 0.86) / windows * 2 * Math.PI, h = new THREE.Path();
+    h.absarc(0, 0, R - 0.28, a0, a1, false); h.absarc(0, 0, hub + 0.2, a1, a0, true); h.closePath(); s.holes.push(h); }
+  return new THREE.ExtrudeGeometry(s, { depth: 0.09, bevelEnabled: true, bevelThickness: 0.012, bevelSize: 0.012, bevelSegments: 1, curveSegments: 20 }).rotateX(-Math.PI / 2);
+}
+const G_R = 1.62, P_R = 0.36, G_T = 72, P_T = 16;
+add(carriage, gearGeo(G_R, G_T, 0.62, 6), M.bright, 0, Y0 + 0.2, 0);
+const CRANK = 38 * Math.PI / 180;
+const pinion = new THREE.Group(); pinion.position.set(Math.cos(CRANK) * (G_R + P_R), Y0, Math.sin(CRANK) * (G_R + P_R)); scene.add(pinion);
+add(pinion, gearGeo(P_R, P_T, 0, 0), M.bright, 0, 0.2, 0);
+add(pinion, lathe([[0, 0], [0.2, 0], [0.2, 0.04], [0.09, 0.08], [0.07, 0.2], [0.07, 0.62], [0.11, 0.64], [0.11, 0.7], [0, 0.7]], 32), M.brass);
+{ const a = add(pinion, new THREE.BoxGeometry(0.62, 0.05, 0.13), M.brass, 0.25, 0.725, 0);
+  add(pinion, lathe([[0, 0], [0.05, 0], [0.05, 0.05], [0.075, 0.1], [0.085, 0.28], [0.06, 0.4], [0, 0.42]], 24), M.walnut, 0.5, 0.75, 0); }
+
+const hourArm = new THREE.Group(); carriage.add(hourArm);
+add(hourArm, rod(HOUR_IN + 0.16 - 0.4, 0.028), M.steel, 0.4, Y_ARM + 0.14, 0);
+add(hourArm, new THREE.CylinderGeometry(0.022, 0.022, Y_ARM + 0.14 - Y0 - 0.3, 12), M.steel, HOUR_IN + 0.16, (Y_ARM + 0.14 + Y0 + 0.3) / 2, 0);
+add(hourArm, new THREE.ConeGeometry(0.07, 0.3, 4).rotateX(Math.PI), M.steel, HOUR_IN + 0.16, Y0 + 0.17, 0);
+add(hourArm, new THREE.SphereGeometry(0.06, 16, 12), M.steel, HOUR_IN + 0.16, Y_ARM + 0.14, 0);
+
+const ROD = rod(R_END - 0.4, 0.042), FINIAL = new THREE.SphereGeometry(0.075, 20, 14), COLLAR = new THREE.CylinderGeometry(0.075, 0.075, 0.26, 20).rotateZ(Math.PI / 2);
+const SPH = new THREE.SphereGeometry(1, 64, 40);
+studies.forEach((s, i) => {
+  const arm = s.arm = new THREE.Group(); arm.rotation.y = -s.local; carriage.add(arm);
+  add(arm, ROD, M.brass, 0.4, Y_ARM, 0); add(arm, FINIAL, M.brass, R_END + 0.04, Y_ARM, 0);
+  const sl = s.slider = new THREE.Group(); arm.add(sl);
+  add(sl, COLLAR, M.bright, 0, Y_ARM, 0);
+  add(sl, new THREE.CylinderGeometry(0.03, 0.045, Y_BODY - Y_ARM, 12), M.brass, 0, (Y_BODY + Y_ARM) / 2, 0);
+  const st = STONE[s.k];
+  s.css = s.results.length && st ? st[1] : '#b8935a';
+  const mat = s.results.length && st ? new THREE.MeshPhysicalMaterial({ map: stone(st[0], st[1], 11 + i), roughness: 0.28, clearcoat: 1, clearcoatRoughness: 0.07 }) : M.bright;
+  s.mesh = add(sl, SPH, mat, 0, Y_BODY, 0); s.mesh.scale.setScalar(s.r); s.mesh.rotation.set(0.3, i, 0.2);
+  bodies.push({ kind: 'study', mesh: s.mesh, s });
+  s.ringGroup = new THREE.Group(); s.ringGroup.position.y = Y_BODY; sl.add(s.ringGroup);
+  s.rings.forEach(g => { g.mesh = add(s.ringGroup, new THREE.TorusGeometry(g.rad, 0.011, 8, 96).rotateX(Math.PI / 2), M.bright); });
+  if (s.rings.length) { const L = s.rings[s.rings.length - 1].rad;
+    s.spokes = [0, 1].map(k => { const m = add(s.ringGroup, new THREE.CylinderGeometry(0.011, 0.011, 2, 8).rotateZ(Math.PI / 2), M.bright); m.rotation.y = k * Math.PI / 2 + 0.3; return m; }); }
+});
+
+// the results that name no study: beads in a tray on the felt, beside the instrument
+const TRAY = { x: -1.7, z: 9.5, rot: 0.3, cols: Math.ceil(DATA.loose.length / 3), gap: 0.36 };
+const tray = new THREE.Group(); tray.position.set(TRAY.x, 0, TRAY.z); tray.rotation.y = TRAY.rot; scene.add(tray);
+{ const w = TRAY.cols * TRAY.gap + 0.3, d = 3 * TRAY.gap + 0.3;
+  add(tray, new THREE.BoxGeometry(w + 0.24, 0.16, d + 0.24), M.walnut, 0, 0.08, 0);
+  add(tray, new THREE.BoxGeometry(w, 0.02, d), M.felt, 0, 0.165, 0, 2);
+  for (const [bw, bd, bx, bz] of [[w + 0.1, 0.05, 0, d / 2 + 0.025], [w + 0.1, 0.05, 0, -d / 2 - 0.025], [0.05, d, w / 2 + 0.025, 0], [0.05, d, -w / 2 - 0.025, 0]]) add(tray, new THREE.BoxGeometry(bw, 0.1, bd), M.bright, bx, 0.2, bz); }
+DATA.loose.forEach((r, i) => { r.pos = new THREE.Vector3((i % TRAY.cols - (TRAY.cols - 1) / 2) * TRAY.gap, 0.175 + moonR(r.n), (Math.floor(i / TRAY.cols) - 1) * TRAY.gap).applyAxisAngle(new THREE.Vector3(0, 1, 0), TRAY.rot).add(tray.position); });
+
+const moons = new THREE.InstancedMesh(new THREE.SphereGeometry(1, 20, 14), M.enamel, allResults.length);
+moons.castShadow = moons.receiveShadow = true; moons.frustumCulled = false; moons.boundingSphere = new THREE.Sphere(new THREE.Vector3(), 60); scene.add(moons);
+allResults.forEach((r, i) => { r.i = i; moons.setColorAt(i, new THREE.Color(whoColor(r.who))); });
+bodies.push({ kind: 'moons', mesh: moons });
+
+// ------------------------------------------------------------------ the page around it
+$('ticks').innerHTML = allResults.map(r => { const x = (r.t - T0) / SPAN * 1000; return `<line class="${r.sc.length ? 's' : ''}" x1="${x.toFixed(1)}" x2="${x.toFixed(1)}" y1="${r.sc.length ? 0 : 5}" y2="12"/>`; }).join('');
+$('def').innerHTML = `<summary>What each thing means</summary>
+  <b>Gilt sphere</b>: the goal, the RL checkpoint's ${RL} of ${DATA.rl.n} on MATH-500 (${esc(DATA.rl.config)}). <b>Stone sphere</b>: a study folder; it grows with the number of its results on the board
+  (plain brass: none), its stone only tells studies apart. <b>Place on the arm</b>: the engraved rings count the problems by which the study's best base-model score on MATH-500 is short of RL; at the arm's end: no such score.
+  <b>Bead</b>: one board result, in the order posted from the inner ring out; it grows with the number of problems it scored (smallest: none); its enamel is who posted it:
+  ${WHO.map(w => `<i style="--c:${whoColor(w)}"></i>${esc(w)}`).join(' ')}. <b>Tray</b>: the ${DATA.loose.length} results that name no study folder.
+  <b>Blued arm</b>: the time, on the hour ring. The angle of the other arms and of the beads on their rings means nothing.
+  Drag the dial to turn the crank, drag beside it to look around; ← → Space. Board read ${esc(DATA.built)}.`;
+if (narrow()) $('def').open = false;
+
+const tags = studies.map(s => { const e = document.createElement('div'); e.className = 'tag'; $('tags').append(e); return e; });
+const sunTag = document.createElement('div'); sunTag.className = 'tag'; sunTag.innerHTML = `RL<em>${RL}</em>`; $('tags').append(sunTag);
+const trayTag = document.createElement('div'); trayTag.className = 'tag q'; $('tags').append(trayTag);
+const words = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine'];
+const fmtT = t => new Date(t).toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+const line = x => `<div class="sc ${x[0]}"><b>${x[2]}<small>/${x[3]}</small></b><span><u>${esc(x[0])} · ${esc(x[1])}</u>${x[5] ? ` · ${x[5].toLocaleString('en-US')} tokens a problem` : ''}<br>${esc(x[4])}</span></div>`;
+
+let shownKey = '';
+function words_(t) {       // the sentence, the note and the table at time t; all counted from the data
+  const rows = studies.map(s => ({ s, here: s.t <= t, n: s.results.filter(r => r.t <= t).length, b: bestAt(s, t) }));
+  const scored = rows.filter(r => r.b).sort((a, b) => b.b.best - a.b.best), past = scored.filter(r => r.b.best >= RL);
+  const keyNow = rows.map(r => `${r.here}${r.n}${r.b ? r.b.best : ''}`).join() + Math.floor((t - T0) / 3.6e5);
+  if (keyNow === shownKey) return; shownKey = keyNow;
+  const h = Math.max(0, (t - T0) / 3.6e6), H = h >= HOURS - 0.05 ? `After ${Math.round(HOURS)} hours` : `At hour ${h.toFixed(1)}`;
+  const L = scored[0];
+  $('line').innerHTML = !L ? `${H}, no study has a base-model score on MATH‑500; the RL checkpoint stands at <b>${RL}</b> of ${DATA.rl.n}.`
+    : past.length ? `${H}, ${words[past.length].toLowerCase()} of ${studies.length} studies ${past.length > 1 ? 'have' : 'has'} taken the untrained base past the RL checkpoint’s one-sample score on MATH‑500: ${esc(L.s.k)}, <b>${L.b.best}</b> of 500 against RL’s <b>${RL}</b>.`
+    : `${H}, no study has brought the untrained base to the RL checkpoint on MATH-500: the closest, ${esc(L.s.k)}, has <b>${L.b.best}</b> of 500, <b>${RL - L.b.best}</b> short of RL’s <b>${RL}</b>.`;
+  $('note').innerHTML = L ? `<b>${L.b.best}</b>: ${esc(L.b.x[4])}${L.b.x[5] ? `, ${L.b.x[5].toLocaleString('en-US')} tokens a problem` : ''}. <b>${RL}</b>: ${esc(DATA.rl.config)}, one sample.` +
+    (scored.length > 1 ? ' Behind: ' + scored.slice(1).map(r => `${esc(r.s.k)} ${RL - r.b.best} short`).join(', ') + '.' : '') : '';
+  $('list').innerHTML = rows.slice().sort((a, b) => (b.b ? b.b.best : 0) - (a.b ? a.b.best : 0) || b.n - a.n).map(r =>
+    `<button data-k="${r.s.k}" class="${r.here ? '' : 'off'}${sel && sel.s === r.s ? ' on' : ''}"><span style="--c:${r.s.css}">${esc(r.s.k)}</span><em>${r.n}</em>` +
+    (r.b ? `<em>${r.b.best}</em><em class="g">${r.b.best >= RL ? '+' + (r.b.best - RL) : '−' + (RL - r.b.best)}</em>` : `<em class="z">none</em><em class="z"></em>`) + `</button>`).join('');
+  const n = DATA.loose.filter(r => r.t <= t).length; trayTag.textContent = n ? `${n} name no study` : '';
+  studies.forEach((s, i) => { const r = rows.find(x => x.s === s); tags[i].innerHTML = esc(s.k) + (r.b ? `<em>${r.b.best}</em>` : ''); });
+}
+
+// ------------------------------------------------------------------ state: time, camera, selection
+const q = new URLSearchParams(location.hash.slice(1));
+let frac = clamp(q.has('t') ? +q.get('t') : 1, 0, 1) || 0, shown = frac, vel = 0, playing = false;
+let az = q.has('az') ? +q.get('az') : 0.42, el = q.has('el') ? +q.get('el') : narrow() ? 0.8 : 0.6, zoom = 1, azS = az, elS = el, zoomS = zoom;
+let sel = null, hover = null, need = true, hashT = 0;
+const find = id => { const s = studies.find(s => s.k === id); if (s) return { kind: 'study', s }; if (id === 'rl') return { kind: 'sun' }; const r = allResults.find(r => r.id === id); return r ? { kind: 'result', r } : null; };
+if (q.get('s')) sel = find(q.get('s'));
+const saveHash = () => { clearTimeout(hashT); hashT = setTimeout(() => history.replaceState(null, '', '#t=' + frac.toFixed(4) + (sel ? '&s=' + (sel.kind === 'study' ? sel.s.k : sel.kind === 'sun' ? 'rl' : sel.r.id) : '') + '&az=' + az.toFixed(2) + '&el=' + el.toFixed(2)), 200); };
+const setFrac = (f, keep) => { frac = clamp(f, 0, 1); if (!keep) vel = 0; $('scrub').value = Math.round(frac * 1000); need = true; saveHash(); };
+const setPlay = p => { playing = p && !still; if (playing && frac > 0.995) { setFrac(0); shown = 0; } $('play').textContent = playing ? 'Pause' : 'Play'; need = true; };
+$('scrub').value = Math.round(frac * 1000);
+$('scrub').addEventListener('input', e => { setPlay(false); setFrac(e.target.value / 1000); });
+$('play').addEventListener('click', () => { if (still) setFrac(frac >= 1 ? 0 : (allResults.find(r => (r.t - T0) / SPAN > frac + 1e-4) || { t: T1 }).t / SPAN - T0 / SPAN); else setPlay(!playing); });
+if (still) $('play').textContent = 'Next result';
+$('list').addEventListener('click', e => { const b = e.target.closest('button'); if (b) select({ kind: 'study', s: studies.find(s => s.k === b.dataset.k) }); });
+
+function card() {
+  const c = $('card'); if (!sel) { c.classList.remove('on'); return; }
+  const x = '<button id="x" aria-label="Close">Close</button>';
+  if (sel.kind === 'result') { const r = sel.r;
+    c.innerHTML = `<div class="hd"><span>Result · ${esc(r.study ? r.study.k : 'no study')}</span>${x}</div><div class="q">${esc(r.title)}</div><p>${esc(r.what)}</p>` +
+      (r.sc.length ? r.sc.map(line).join('') : '<div class="sc"><span></span><span>No score line on the board.</span></div>') +
+      `<div class="by">Posted by <b>${esc(r.who)}</b> · ${fmtT(r.t)} · hour ${((r.t - T0) / 3.6e6).toFixed(1)} · ${esc(r.id)}</div>`; }
+  else if (sel.kind === 'study') { const s = sel.s, t = T0 + frac * SPAN, b = bestAt(s, t), n = s.results.filter(r => r.t <= t).length;
+    c.innerHTML = `<div class="hd"><span>Study · studies/${esc(s.k)}</span>${x}</div><div class="q">${esc(s.about)}</div>` +
+      `<p>${n} of its ${s.results.length} results are on the board at this time; ${s.results.reduce((a, r) => a + r.n, 0).toLocaleString('en-US')} problems scored in all. ${s.commits} commits touch its folder.</p>` +
+      (b ? line(b.x) + `<div class="sc"><b>${b.best >= RL ? '+' : '−'}${Math.abs(b.best - RL)}</b><span>problems ${b.best >= RL ? 'past' : 'short of'} RL’s ${RL}; best base-model score on MATH-500 so far, from “${esc(b.r.title)}”.</span></div>` : '<div class="sc"><span></span><span>No base-model score on MATH-500 (n 500) among its results at this time: it stays at the end of its arm.</span></div>') +
+      `<div class="by">First seen ${fmtT(s.t)}${s.results.length ? ` · results by ${[...new Set(s.results.map(r => r.who))].map(w => `<b>${esc(w)}</b>`).join(', ')}` : ' · no result names this folder'}</div>`; }
+  else { const r = allResults.find(r => r.id === DATA.rl.result);
+    c.innerHTML = `<div class="hd"><span>The goal · RL checkpoint</span>${x}</div><div class="q">${esc(r ? r.title : 'RL-Zero-Math on MATH-500')}</div><p>${esc(r ? r.what : '')}</p>` +
+      line(['rl', 'MATH-500', RL, DATA.rl.n, DATA.rl.config, null]) + `<div class="by">${r ? `Posted by <b>${esc(r.who)}</b> · ${fmtT(r.t)} · ` : ''}${esc(DATA.rl.result)}</div>`; }
+  c.classList.add('on'); $('x').onclick = () => select(null);
+}
+function select(b) { sel = b; shownKey = ''; card(); need = true; saveHash(); }
+
+// ------------------------------------------------------------------ layout and camera
+let W = 0, H = 0;
+const target = new THREE.Vector3(-0.2, 1.0, 1.0);
+function resize() {
+  W = innerWidth; H = innerHeight;
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, W * H > 1.2e6 ? 1.25 : 1.5)); renderer.setSize(W, H, false);
+  need = true;
+}
+function aim() {
+  const nar = narrow(), left = nar ? 0 : 392, top = nar ? $('line').getBoundingClientRect().bottom + 70 : 0, bot = nar ? 40 : 0;
+  const aw = W - left, ah = H - top - bot, tan = Math.tan(camera.fov * Math.PI / 360), fit = nar ? 7.6 : 8.4;
+  const d = Math.max(fit * H / (tan * aw), (fit * Math.sin(elS) + 2.0) * H / (tan * ah)) * zoomS;
+  scene.fog.near = d + 6; scene.fog.far = d + 46;
+  camera.aspect = W / H; camera.setViewOffset(W, H, -left / 2, -(top - bot) / 2, W, H);
+  camera.position.set(target.x + d * Math.cos(elS) * Math.sin(azS), target.y + d * Math.sin(elS), target.z + d * Math.cos(elS) * Math.cos(azS));
+  camera.lookAt(target); camera.updateMatrixWorld();
+}
+addEventListener('resize', resize); resize();
+
+// ------------------------------------------------------------------ one frame of the mechanism at time t
+const m4 = new THREE.Matrix4(), v3 = new THREE.Vector3(), qI = new THREE.Quaternion(), s3 = new THREE.Vector3();
+function pose(f) {
+  const t = T0 + f * SPAN, phi = PHI0 + f * SWEEP;
+  carriage.rotation.y = -phi; hourArm.rotation.y = 0;
+  pinion.rotation.y = phi * G_T / P_T + 0.11;
+  for (const s of studies) {
+    const a = arrived(s.t, t, W_IN), R = radiusAt(s, t), spin = phi * 1.5 + s.local;
+    s.slider.position.x = R; s.slider.visible = a > 0.001; s.a = a; s.R = R;
+    s.mesh.scale.setScalar(Math.max(1e-4, s.r * a));
+    s.ringGroup.rotation.y = -spin;
+    let out = 0;
+    s.rings.forEach(g => { const ga = arrived(g.t, t, W_IN); g.mesh.visible = ga > 0.001; g.mesh.scale.setScalar(Math.max(1e-4, ga)); if (ga > 0.5) out = g.rad; });
+    if (s.spokes) s.spokes.forEach(m => { m.visible = out > 0; m.scale.x = out || 1; });
+    const armPhi = phi + s.local, cx = R * Math.cos(armPhi), cz = R * Math.sin(armPhi);
+    for (const r of s.results) { const ra = arrived(r.t, t, W_IN), g = s.rings[r.ring], psi = armPhi + spin + r.ang, k = Math.max(1e-5, moonR(r.n) * ra);
+      moons.setMatrixAt(r.i, m4.compose(v3.set(cx + g.rad * Math.cos(psi), Y_BODY, cz + g.rad * Math.sin(psi)), qI, s3.set(k, k, k))); }
+  }
+  for (const r of DATA.loose) { const k = Math.max(1e-5, moonR(r.n) * arrived(r.t, t, W_IN)); moons.setMatrixAt(r.i, m4.compose(r.pos, qI, s3.set(k, k, k))); }
+  moons.instanceMatrix.needsUpdate = true;
+  words_(t);
+  $('hour').textContent = Math.max(0, (t - T0) / 3.6e6).toFixed(1); $('stamp').innerHTML = `hours since the first result<br>${fmtT(t)}`;
+}
+function place(e, p, dy) { v3.copy(p).project(camera); e.style.transform = `translate(${((v3.x + 1) / 2 * W).toFixed(1)}px, ${((1 - v3.y) / 2 * H + dy).toFixed(1)}px) translate(-50%, -100%)`; }
+function labels() {
+  const pxPer = H / (2 * Math.tan(camera.fov * Math.PI / 360));
+  studies.forEach((s, i) => { tags[i].style.opacity = s.a > 0.5 ? 1 : 0; s.mesh.getWorldPosition(v3); const d = v3.distanceTo(camera.position); const out = s.rings.length ? s.rings.filter(g => g.mesh.visible).length : 0, up = Math.max(s.r, out ? (s.rings[out - 1].rad + 0.1) * Math.sin(elS) : 0); tags[i].style.zIndex = 1000 - Math.round(d * 10); place(tags[i], v3.clone(), -up * pxPer / d - 7); });
+  place(sunTag, v3.set(0, Y_BODY + 0.6, 0), -6);
+  place(trayTag, v3.set(TRAY.x - Math.sin(TRAY.rot) * 0.9, 0.3, TRAY.z - Math.cos(TRAY.rot) * 0.9), -4);
+  const tipOf = hover || (sel && sel.kind === 'result' ? sel : null);
+  if (tipOf) { const b = tipOf, p = b.kind === 'result' ? (moons.getMatrixAt(b.r.i, m4), v3.setFromMatrixPosition(m4).clone()) : b.kind === 'study' ? b.s.mesh.getWorldPosition(new THREE.Vector3()) : new THREE.Vector3(0, Y_BODY, 0);
+    const rr = b.kind === 'result' ? moonR(b.r.n) : b.kind === 'study' ? b.s.r : 0.6; p.y -= rr; v3.copy(p).project(camera);
+    $('tip').style.transform = `translate(${clamp((v3.x + 1) / 2 * W, 170, W - 170).toFixed(1)}px, ${((1 - v3.y) / 2 * H + 10).toFixed(1)}px) translate(-50%, 0)`;
+    $('tip').innerHTML = b.kind === 'result' ? `${esc(b.r.title)}<small>${b.r.sc.length ? esc(`${b.r.sc[0][0]} ${b.r.sc[0][1]} ${b.r.sc[0][2]}/${b.r.sc[0][3]}`) + (b.r.sc.length > 1 ? ` and ${b.r.sc.length - 1} more score lines` : '') : 'no score line'} · ${esc(b.r.who)}</small>`
+      : b.kind === 'study' ? `studies/${esc(b.s.k)}<small>${esc(b.s.about)}</small>` : `The RL checkpoint: ${RL} of ${DATA.rl.n} on MATH-500<small>${esc(DATA.rl.config)}, one sample</small>`;
+    $('tip').classList.add('on'); } else $('tip').classList.remove('on');
+}
+
+// ------------------------------------------------------------------ pointer: turn the dial, look around, pick
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), -Y0), hit = new THREE.Vector3();
+const toNdc = e => ndc.set(e.clientX / W * 2 - 1, 1 - e.clientY / H * 2);
+function pickAt(e) {
+  toNdc(e); ray.setFromCamera(ndc, camera);
+  const h = ray.intersectObjects(bodies.map(b => b.mesh), false)[0]; if (!h) return null;
+  const b = bodies.find(b => b.mesh === h.object);
+  return b.kind === 'moons' ? { kind: 'result', r: allResults[h.instanceId] } : b.kind === 'study' ? (b.s.a > 0.5 ? { kind: 'study', s: b.s } : null) : { kind: 'sun' };
+}
+const dialAngle = e => { toNdc(e); ray.setFromCamera(ndc, camera); return ray.ray.intersectPlane(plane, hit) && Math.hypot(hit.x, hit.z) < 7.3 ? Math.atan2(hit.z, hit.x) : null; };
+let drag = null;
+canvas.addEventListener('pointerdown', e => {
+  canvas.setPointerCapture(e.pointerId); const a = dialAngle(e);
+  drag = { x: e.clientX, y: e.clientY, moved: 0, mode: a !== null && !e.shiftKey && e.button === 0 ? 'turn' : 'orbit', a, t: performance.now() };
+  if (drag.mode === 'turn') { setPlay(false); vel = 0; }
+});
+canvas.addEventListener('pointermove', e => {
+  if (!drag) { const h = pickAt(e); if ((h && (h.r || h.s || h.kind)) !== (hover && (hover.r || hover.s || hover.kind))) { hover = h; need = true; } canvas.classList.toggle('pick', !!h); return; }
+  drag.moved += Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y);
+  if (drag.moved > 4) canvas.classList.add(drag.mode);
+  if (drag.mode === 'turn') { const a = dialAngle(e); if (a !== null && drag.moved > 4) { let d = a - drag.a; d = Math.atan2(Math.sin(d), Math.cos(d)); const now = performance.now(), df = d / SWEEP;
+      vel = lerp(vel, df / Math.max(8, now - drag.t) * 1000, 0.5); drag.t = now; setFrac(frac + df, true); } if (a !== null) drag.a = a; }
+  else { az -= (e.clientX - drag.x) * 0.005; el = clamp(el + (e.clientY - drag.y) * 0.004, 0.2, 1.4); need = true; saveHash(); }
+  drag.x = e.clientX; drag.y = e.clientY;
+});
+const up = e => { if (!drag) return; canvas.classList.remove('turn', 'orbit');
+  if (drag.moved <= 4) { vel = 0; select(pickAt(e)); } else if (drag.mode !== 'turn' || performance.now() - drag.t > 120 || still) vel = 0;
+  drag = null; };
+canvas.addEventListener('pointerup', up); canvas.addEventListener('pointercancel', () => { drag = null; vel = 0; canvas.classList.remove('turn', 'orbit'); });
+canvas.addEventListener('pointerleave', () => { if (hover) { hover = null; need = true; } });
+canvas.addEventListener('wheel', e => { e.preventDefault(); zoom = clamp(zoom * Math.exp(e.deltaY * 0.001), 0.45, 1.5); need = true; }, { passive: false });
+addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' && e.key !== ' ' && e.key !== 'Escape') return;
+  const next = d => { const t = T0 + frac * SPAN, c = allResults.filter(r => d > 0 ? r.t > t + 1 : r.t < t - 1); return c.length ? (c[d > 0 ? 0 : c.length - 1].t - T0) / SPAN : d > 0 ? 1 : 0; };
+  if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { const d = e.key === 'ArrowRight' ? 1 : -1; setPlay(false); setFrac(e.shiftKey ? next(d) : frac + d * 0.01); }
+  else if (e.key === ' ') { e.preventDefault(); $('play').click(); }
+  else if (e.key === 'Home') { setPlay(false); setFrac(0); } else if (e.key === 'End') { setPlay(false); setFrac(1); }
+  else if (e.key === 'Escape') select(null); else return;
+});
+
+// ------------------------------------------------------------------ the loop: draw only when something moves
+canvas.addEventListener('webglcontextlost', e => { e.preventDefault(); });
+canvas.addEventListener('webglcontextrestored', () => { studio(); need = true; });
+let last = performance.now();
+function frame() {
+  requestAnimationFrame(frame);
+  const now = performance.now();
+  const dt = Math.min(0.25, (now - last) / 1000); last = now;
+  if (playing) { setFrac(frac + dt / 40, true); if (frac >= 1) setPlay(false); }
+  else if (!drag && Math.abs(vel) > 1e-4) { setFrac(frac + vel * dt, true); vel *= Math.exp(-dt * 2.2); if (frac <= 0 || frac >= 1) vel = 0; }
+  const k = still ? 1 : 1 - Math.exp(-dt * 9), near = (a, b) => Math.abs(a - b) < 2e-5;
+  shown = near(shown, frac) ? frac : lerp(shown, frac, k); azS = near(azS, az) ? az : lerp(azS, az, k); elS = near(elS, el) ? el : lerp(elS, el, k); zoomS = near(zoomS, zoom) ? zoom : lerp(zoomS, zoom, k);
+  if (shown !== frac || azS !== az || elS !== el || zoomS !== zoom) need = true;
+  if (!need || renderer.getContext().isContextLost()) return;
+  need = false;
+  aim(); pose(shown); scene.updateMatrixWorld(); labels();
+  renderer.shadowMap.needsUpdate = true;
+  renderer.render(scene, camera);
+}
+card();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

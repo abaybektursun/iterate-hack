@@ -14,7 +14,13 @@ Read-only. Sources:
                                                                   named in everyone's `gpu.py get/wait/logs/kill`
                                                                   commands, and studies/**/run.json
   commits                                                         git log --all
-All times are unix seconds (UTC).
+
+data.json is kept small (the page reads all of it before the first picture). Each table is its column names and one
+list per row. A column named @x holds whole seconds after `t0` (unix seconds, UTC); a column named $x holds an index
+into `str`, the list of repeated strings. Tool commands are grouped by agent session: the seconds between one command
+and the next, and one letter per command (a is codes[0]). Long text is cut to the length given in CUT, which keeps
+the file under 500 kB; the page shows it as a label. Email addresses, home folders and anything shaped like a key
+are replaced before writing.
 """
 import calendar
 import glob
@@ -37,6 +43,17 @@ import gpu  # noqa: E402
 import team  # noqa: E402
 
 LISTS = ("work", "result", "idea", "knowledge", "skill", "work-closed")
+CUT = {"item": 110, "comment": 64, "msg": 64, "commit": 46, "cmd": 60}  # characters kept of each kind of text
+PRIVATE = [(re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]*\w"), "[email]"), (re.compile(r"/(?:home|Users)/[^/\s\"']+"), "~"),
+           (re.compile(r"\b(?:sk|hf|ghp|gho|ak|as|xoxb|xoxp)[-_][A-Za-z0-9_-]{16,}|\bAKIA[A-Z0-9]{16}\b"), "[key]")]
+
+
+def text(s, kind=None):
+    """Text for the page: nothing private, and at most CUT[kind] characters."""
+    for pattern, word in PRIVATE:
+        s = pattern.sub(word, s)
+    n = CUT.get(kind)
+    return s if n is None or len(s) <= n else s[:n - 1].rstrip() + "…"
 
 
 def person(name):
@@ -76,7 +93,7 @@ for key, v in events:
     if code not in codes:
         codes.append(code)
     s = sid(v["who"], v.get("session"), t)
-    ev.append([round(t, 1), pid(v["who"]), s, codes.index(code)])
+    ev.append([round(t), pid(v["who"]), s, codes.index(code)])
     if v["tool"] == "gpu" and argv[0] == "submit":
         cmd = " ".join(argv[argv.index("--") + 1:]) if "--" in argv else " ".join(argv[2:])
         submits.append({"t": t, "p": pid(v["who"]), "s": s, "cls": argv[1] if len(argv) > 1 else "", "cmd": cmd,
@@ -106,27 +123,27 @@ for r in plain:  # a result's own row carries its title; rows of single scores c
 items = []
 for r in sorted(rows.values(), key=lambda r: int(r["at_ns"])):
     t = int(r["at_ns"]) / 1e9
-    items.append({"id": r["id"], "k": r["kind"], "p": pid(r["who"]), "s": sid(r["who"], r.get("session"), t), "t": round(t, 1),
-                  "c": utc(r["closed_at"]) if "closed_at" in r else None, "open": r["listed"] == "work",
-                  "text": r["text"], "title": titles.get(r["id"], ""), "branch": r.get("branch", ""),
-                  "ups": int(r.get("ups", 0)), "downs": int(r.get("downs", 0)), "nc": int(r.get("n_comments", 0))})
+    items.append({"id": r["id"], "k": r["kind"], "p": pid(r["who"]), "s": sid(r["who"], r.get("session"), t), "t": t,
+                  "c": utc(r["closed_at"]) if "closed_at" in r else None,
+                  "text": text(r["text"], "item"), "title": text(titles.get(r["id"], "")), "branch": r.get("branch", ""),
+                  "ups": int(r.get("ups", 0)), "downs": int(r.get("downs", 0))})
 
 comments = []
 for item_id, thread in zip(with_comments, threads):
     for c in thread:
         t = int(c["sk"].split("#")[1]) / 1e9
-        comments.append({"item": item_id, "p": pid(c["who"]), "s": sid(c["who"], c.get("session"), t), "t": round(t, 1), "text": c["text"]})
+        comments.append({"item": item_id, "p": pid(c["who"]), "s": sid(c["who"], c.get("session"), t), "t": t, "text": text(c["text"], "comment")})
 comments.sort(key=lambda c: c["t"])
 
 msgs = []
 for m in messages:
     t = int(m["sk"].split("#")[0]) / 1e9
-    msgs.append({"p": pid(m["who"]), "s": sid(m["who"], m.get("session"), t), "t": round(t, 1), "text": m["text"], "branch": m.get("branch", "")})
+    msgs.append({"p": pid(m["who"]), "s": sid(m["who"], m.get("session"), t), "t": t, "text": text(m["text"], "msg"), "branch": m.get("branch", "")})
 
 score_rows = []
 for s in scores:
-    score_rows.append({"t": round(int(s["sk"].split("#")[0]) / 1e9, 1), "result": s["result"], "model": s["model"], "bench": s["benchmark"],
-                       "right": int(s["right"]), "n": int(s["n"]), "config": s.get("config", ""),
+    score_rows.append({"t": int(s["sk"].split("#")[0]) / 1e9, "result": s["result"], "model": s["model"], "bench": s["benchmark"],
+                       "right": int(s["right"]), "n": int(s["n"]), "config": text(s.get("config", "")),
                        "tokens": int(s["tokens"]) if s.get("tokens") is not None else None, "p": pid(s["who"])})
 
 # ---- commits -------------------------------------------------------------------------------------------------------
@@ -140,7 +157,7 @@ for block in log.split("@@")[1:]:
     ins = int(m.group(1)) if (m := re.search(r"(\d+) insertion", stat)) else 0
     dele = int(m.group(1)) if (m := re.search(r"(\d+) deletion", stat)) else 0
     branch = re.sub(r"^refs/(heads|remotes/origin|remotes)/", "", ref)
-    commits.append({"h": sha[:7], "t": int(at), "p": pid(email), "branch": branch, "text": subject, "files": files, "ins": ins, "del": dele})
+    commits.append({"h": sha[:7], "t": int(at), "p": pid(email), "branch": branch, "text": text(subject, "commit"), "files": files, "ins": ins, "del": dele})
 commits.sort(key=lambda c: c["t"])
 
 # ---- GPU jobs ------------------------------------------------------------------------------------------------------
@@ -205,15 +222,49 @@ for n, s in enumerate(submits):  # a submit whose job id no later command named:
 for j in jobs.values():
     near = min((s for s in submits if s["p"] == j["p"]), key=lambda s: abs(s["t"] - j["t"]), default=None)
     j["s"] = near["s"] if near and abs(near["t"] - j["t"]) < 90 else -1
-    j["cmd"] = j["cmd"][:420]
-    if j["id"] in run_json:
-        j["run_json"] = run_json[j["id"]][1]
+    j["cmd"] = text(j["cmd"].split(" && ")[-1], "cmd")  # the job itself, without the set-up steps before it
+    j["run_json"] = run_json[j["id"]][1] if j["id"] in run_json else ""
 jobs = sorted(jobs.values(), key=lambda j: j["t"])
 
-out = {"built": int(time.time()), "people": people, "codes": codes,
-       "sessions": [{"p": s["p"], "a": round(s["a"], 1), "b": round(s["b"], 1), "n": s["n"], "id": k[:8]} for k, s in sessions.items()],
-       "ev": ev, "items": items, "comments": comments, "msgs": msgs, "scores": score_rows, "commits": commits, "jobs": jobs}
-(HERE / "data.json").write_text(json.dumps(out, separators=(",", ":")))
-print({k: len(v) if isinstance(v, list) else v for k, v in out.items()}, f"{(HERE / 'data.json').stat().st_size / 1e6:.2f} MB")
+T0 = min(min(e[0] for e in ev), commits[0]["t"])
+strings = {}
+
+
+def table(rows, cols):
+    """Rows as lists in the order of cols. @x: whole seconds after T0. $x: an index into strings."""
+    def cell(r, c):
+        v = r[c.lstrip("@$")]
+        if c[0] == "@":
+            return None if v is None else round(v) - T0
+        return strings.setdefault(v, len(strings)) if c[0] == "$" else v
+    return {"cols": cols, "rows": [[cell(r, c) for c in cols] for r in rows]}
+
+
+groups = {}  # the commands of one session of one person, in order of time
+for t, p, s, code in ev:
+    g = groups.setdefault((p, s), {"p": p, "s": s, "t": [], "c": "", "last": T0})
+    g["t"].append(t - g["last"])
+    g["c"] += chr(97 + code)
+    g["last"] = t
+for g in groups.values():
+    del g["last"]
+
+out = {"built": int(time.time()), "t0": T0, "people": people, "codes": codes,
+       "sessions": table([{**s, "id": k[:8]} for k, s in sessions.items()], ["p", "@a", "@b", "n", "id"]),
+       "ev": list(groups.values()),
+       "items": table(items, ["id", "$k", "p", "s", "@t", "@c", "text", "title", "$branch", "ups", "downs"]),
+       "comments": table(comments, ["item", "p", "s", "@t", "text"]),
+       "msgs": table(msgs, ["p", "s", "@t", "text", "$branch"]),
+       "scores": table(score_rows, ["@t", "result", "$model", "$bench", "right", "n", "config", "tokens", "p"]),
+       "commits": table(commits, ["h", "@t", "p", "$branch", "text", "files", "ins", "del"]),
+       "jobs": table(jobs, ["id", "p", "s", "@t", "@start", "@end", "$state", "$gpu", "cmd", "$branch", "$src", "run_json"])}
+out["str"] = list(strings)
+written = json.dumps(out, separators=(",", ":"), ensure_ascii=False)
+for pattern, _ in PRIVATE:
+    if m := pattern.search(written):
+        sys.exit(f"private text left in the data: {m[0][:12]}")
+(HERE / "data.json").write_text(written)
+print({k: len(v["rows"] if isinstance(v, dict) else v) if not isinstance(v, int) else v for k, v in out.items()},
+      f"{(HERE / 'data.json').stat().st_size / 1e3:.0f} kB")
 print("job-id clock offsets from UTC (hours):", {people[p]: h for p, h in offset.items()})
 print("job states:", {s: sum(j["state"] == s for j in jobs) for s in sorted({j["state"] for j in jobs})})

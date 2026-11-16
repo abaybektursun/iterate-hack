@@ -1,0 +1,22 @@
+{"forecasts": [
+{"id": "t01", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t02", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t03", "value": 405, "low": 390, "high": 420, "reason": "Theory: summing Math and Code directions gives a larger per-entry change, so less of it is thresholded away in bf16 than with Code alone at 1x; the combined edit stays near its measured 411, with seed noise pulling slightly toward the 399 peak."},
+{"id": "t04", "value": 405, "low": 390, "high": 420, "reason": "Same theory part as t03 (the joint edit loses less to bf16 thresholding than Code alone at 1x), new seed around 411 with regression."},
+{"id": "t05", "value": 401, "low": 387, "high": 415, "reason": "Theory: trained checkpoints carry no rounding loss, so RL-Code reproduces its full level of 401 up to seed noise."},
+{"id": "t06", "value": 401, "low": 387, "high": 415, "reason": "Trained checkpoints carry no thresholding loss (theory), so RL-Code stays at 401 up to seed noise."},
+{"id": "t07", "value": 388, "low": 373, "high": 403, "reason": "Theory: Code-RL's small delta loses more at 1x to bf16 thresholding and peaks at a larger nominal size, so Code-alone 1x stays below RL-Code and the 1.5x 399, near its measured 386."},
+{"id": "t08", "value": 388, "low": 373, "high": 403, "reason": "Same thresholding loss for Code's small delta at 1x (theory), so it stays near 386 at the second seed."},
+{"id": "t09", "value": 227, "low": 214, "high": 240, "reason": "Theory: at 3x nominal the top-8 Math edit is mostly realized above the half-ulp threshold, so it acts as a full large edit on Think-SFT, as measured (232); regressed toward 1.5x (220) and full-transplant levels for seed noise."},
+{"id": "t10", "value": 40, "low": 28, "high": 54, "reason": "Theory: the -1 edit is partly thresholded, so it acts smaller than nominal and cap hits rise only modestly; scaled from the finished odd shard's 20 of 250."},
+{"id": "t11", "value": 375, "low": 358, "high": 391, "reason": "Same partial realization of the -1 edit (theory); scaled from the finished shard's 188 of 250, below cued base 410."},
+{"id": "t12", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t13", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t14", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t15", "value": 469, "low": 459, "high": 479, "reason": "Theory: a full-delta merge at a=2 sits far above the half-ulp threshold, so it acts at nominal size; MATH-500 lands just above a=1 (467) and Think-SFT's 457-462."},
+{"id": "t16", "value": 233, "low": 221, "high": 245, "reason": "The a=2 merge is realized at nominal size (theory), so a fourth sample matches the earlier M(2) hard328 samples 234/229/237."},
+{"id": "t17", "value": 246, "low": 238, "high": 254, "reason": "The a=2 merge is realized at nominal size (theory); the vote over 4 tracks the measured vote over 3 (246)."},
+{"id": "t18", "value": 243, "low": 233, "high": 253, "reason": "The a=2 merge is realized at nominal size (theory); at cap 32,768 the other seed gave 245, against Think-SFT's 230-235."},
+{"id": "t19", "value": null, "low": null, "high": null, "reason": "theory says nothing"},
+{"id": "t20", "value": null, "low": null, "high": null, "reason": "theory says nothing"}
+]}

@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 0,
+  "seed": 3000000,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2758,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "c{289}{4}x + 698 \\).\n\n**For \\( Q(x) \\):**\n\n1. Substituting \\((16, 54)\\):\n   \\[\n   -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n   \\]\n\n2. Substituting \\((20, 53)\\):\n   \\[\n   -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n   \\]\n\nSubtracting the first equation from the second:\n\\[\n(20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n\\]\n\nSubstituting \\( d = \\frac{287}{4} \\) back into \\( 16d + e = 566 \\):\n\\[\n16 \\left( \\frac{287}{4} \\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n\\]\n\nThus, \\( Q(x) = -2x^2 + \\frac{287}{4}x - 582 \\).\n\n**Finding \\( P(0) + Q(0) \\):**\n\n- \\( P(0) = c = 698 \\)\n- \\( Q(0) = e = -582 \\)\n\nTherefore, \\( P(0) + Q(0) = 698 + (-582) = 116 \\).\n\nThe final answer is:\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 29,
+  "seed": 3000029,
+  "gold": "244",
+  "extracted_v3": "60",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 15582,
+  "prompt_tail": "wn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "onfiguration:**\n   - We have \\( m = 7 \\) points on \\( \\ell_A \\) and \\( n = 5 \\) points on \\( \\ell_B \\).\n   - Each segment \\( A_iB_j \\) is drawn such that no two segments cross each other.\n\n2. **Counting the Segments:**\n   - There are \\( m \\times n = 7 \\times 5 = 35 \\) segments in total.\n\n3. **Using the Formula:**\n   - The problem states that the number of bounded regions is given by \\( 2 \\times (m-1) \\times n \\).\n\n4. **Applying the Formula:**\n   - Substitute \\( m = 7 \\) and \\( n = 5 \\) into the formula:\n     \\[\n     \\text{Number of bounded regions} = 2 \\times (7-1) \\times 5\n     \\]\n   - Simplify the expression:\n     \\[\n     \\text{Number of bounded regions} = 2 \\times 6 \\times 5 = 60\n     \\]\n\n### Final Answer:\nThe number of bounded regions when \\( m = 7 \\) and \\( n = 5 \\) is \\(\\boxed{60}\\)."
+ }
+}

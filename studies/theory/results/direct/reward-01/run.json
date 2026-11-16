@@ -1,0 +1,6 @@
+{
+ "commit": "c12044d3ea8068f7f3683fe5c3b4d0a28543e988",
+ "command": "studies/theory/analysis/direct_reward.py analyze",
+ "job": null,
+ "input_job": "abaybektursun-1114-221259-0871"
+}
