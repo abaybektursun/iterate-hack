@@ -1,5 +1,14 @@
 # Meta review: abaybektursun
 
+## 2026-11-16 00:15 UTC (loop cycle 18; no change; branch metaloop, main is frozen) meta/reviews/abaybektursun/20261116-0011/
+
+- Target (Team line, 4 h): claim to close median 6 min (11 at 23:08), upper quartile 40 min (49), 106 items by 3 people (96); 27.0 results per hour (25.2). Items with GPU jobs: to-job 0, jobs 16, to-answer 2 min. The window is mostly offline tests on stored rows (theory round 15) and short jobs: item mix, weak evidence for anything else.
+- Upload (cycles 9 and 14) on real jobs: job 8909 ended at 00:08 with its final tar in the team store 14 s after its last part tar; job 8369 is running with a part tar 4 min old. 2 of 2.
+- Score of cycle 17: no change was made, nothing to score.
+- Change: none. No stage has a wait to remove, and a tool change on a branch reaches no other session while main is frozen.
+- Seen, not acted on: box 60842106 shows GPU 0 % since job 8909 ended at 00:08 (1.56 USD/h); box 60813170 is still listed as exited after 7.1 h.
+- Next cycle checks: the Team line against 6 / 40 min and 27.0 per hour; whether 60842106 got a new job or was ended.
+
 ## 2026-11-15 23:10 UTC (loop cycle 17; no change; on branch metaloop, main is frozen) meta/reviews/abaybektursun/20261115-2308/
 
 - Target (Team line, 4 h): claim to close median 11 min (14 at 22:06), upper quartile 49 min (56), 96 items by 3 people (70); 25.2 results per hour (19.2). Items with GPU jobs: to-job 0, jobs 8, to-answer 1 min (3, 50, 3): the window holds many short H100 jobs on Modal (1 to 28 min). Weak evidence for any cause other than item mix.
