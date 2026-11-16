@@ -34,3 +34,18 @@ common m-dimensional input subspace, and every writing matrix's to one common m-
 
 - Y1. 64 dimensions keep at least half of the edit's squared norm on both sides, and the random control keeps under 0.15 at 64.
   Refuted if either side keeps under 0.35 at 64. If Y1 holds, the next cell is the dial restricted to those 64 + 64 dimensions.
+
+## Amendment 2 (before the cells): the dial restricted to one common subspace per side
+
+run-02 (`results/xchannel/run-02/metrics.json`, job `abaybektursun-1115-184823-0976`): the best common subspace keeps, of the top-8
+edit's squared norm, 0.398 (readers) and 0.416 (writers) at 8 dimensions, 0.757 and 0.780 at 64; with random directions per matrix
+0.075 and 0.145 at 8, 0.284 and 0.476 at 64. Y1's first half held (at least half at 64); its bound on the random control (under
+0.15 at 64) was wrong: 512 writer directions cannot avoid a common 64-dimensional subspace that well.
+
+Cells: `wsp_edit --recipe glob --gdim m --scale 1.5 --other math31` (docstring: all reading matrices' additions restricted to one
+common m-dimensional input subspace, all writing matrices' to one common m-dimensional output subspace, then one factor so the
+addition norm equals the top-8 edit's at 1.5, checked in `edit.json`), m = 64 and m = 8; hard328, cue, seed 3000000, one sample.
+References at 1.5: RL's directions 203 right and 25 cap hits; random 159 and 74; pairs shifted 160 and 64; base 164 and 77.
+
+- Z1. m = 64 keeps the dial: at least 190 right and at most 40 cap hits. Refuted if at most 175 right.
+- Z2. m = 8 keeps part of it: at least 180 right. Refuted if at most 170 right.

@@ -4769,6 +4769,17 @@ two top-8 subspaces is 1 when equal and 0.00195 by chance.
   base's own), and its output subspaces 0.077 (40 times chance, 3.4 times the base's). Across 32 layers RL reads from one common
   set of residual directions and writes into another common set; half of the 1,792 directions' squared norm lies in 49 dimensions.
 
+xchannel run-02 (amendment 1, work-389689; `results/xchannel/run-02/metrics.json`, job `abaybektursun-1115-184823-0976`): the share
+of the top-8 edit's squared norm kept when all reading matrices use one common m-dimensional input subspace and all writing
+matrices one common m-dimensional output subspace (the best ones); in brackets the same with random directions per matrix.
+
+| m | 8 | 16 | 32 | 64 | 128 | 256 |
+|---|---|---|---|---|---|---|
+| readers (160 matrices) | 0.398 (0.075) | 0.521 (0.119) | 0.644 (0.184) | 0.757 (0.284) | 0.850 (0.429) | 0.922 (0.586) |
+| writers (64 matrices) | 0.416 (0.145) | 0.531 (0.214) | 0.659 (0.317) | 0.780 (0.476) | 0.882 (0.630) | 0.958 (0.810) |
+
+Y1: at least half kept at 64 on both sides held; its bound on the random control (under 0.15 at 64) was wrong.
+
 ## Drift: a switch to Chinese marks a cut-off Think-SFT answer but no label-free sign predicts one early (hard328 n = 328, fresh2026 n = 136, MATH-500 n = 500, laptop, board work-76a232, idea-e37da1)
 
 Question: Think-SFT + cue hits the 16,384 cap on 29 % (hard328) and 45.6 % (fresh2026) of its samples, and a quarter of those

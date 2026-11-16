@@ -1,0 +1,20 @@
+{
+ "status": "done",
+ "commit": "4fbed5e1af5161c0f0b29a3d0dacac76a9985cbd",
+ "command": "python -m studies.rlneurons.jobs.xchannel --commit 4fbed5e1af5161c0f0b29a3d0dacac76a9985cbd",
+ "job_id": "abaybektursun-1115-184823-0976",
+ "models": {
+  "base": {
+   "repo": "allenai/Olmo-3-1025-7B",
+   "revision": "a81bae42db3975be1671e27b9c9a56da1a9f980f"
+  },
+  "rl_math": {
+   "repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "revision": "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  }
+ },
+ "k": 8,
+ "started_utc": "2026-11-16T00:48:33Z",
+ "ended_utc": "2026-11-16T00:49:43Z",
+ "wall_s": 70.06414747238159
+}

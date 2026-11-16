@@ -21,6 +21,11 @@ loads. d = other - base in float32, one tensor at a time; d_k = U_k diag(s_k) V_
                     the next output direction (a cyclic shift).
              self   layer matrices = base + U_b diag(s_k) V_b^T: the base matrix's own top k singular vectors with the other model's
                     k singular values (no direction of the other model; the same addition norm as top8).
+             glob   top8's addition with every reading matrix (q, k, v, gate, up) restricted to one common --gdim-dimensional input
+                    subspace and every writing matrix (o, down) to one common --gdim-dimensional output subspace of the residual
+                    stream: the top left singular vectors of the stacked directions times their singular values (a first pass
+                    over all matrices). The whole addition is then multiplied by one factor (`glob_factor` in the statistics)
+                    so that its norm equals top8's at the same --scale.
              rbulk  layer matrices = other - P diag(s_k) Q^T (rand8's addition, subtracted from the other model): the control of bulk;
                     every other tensor = other.
              interp every tensor = (1 - alpha) base + alpha other (merge_weights.point); alpha 0 and 1 give the endpoints bit for bit (asserted).
@@ -69,7 +74,7 @@ from studies.rlneurons.jobs.xreward_overlap import MODELS as XMODELS
 ALL = {**MODELS, **XMODELS}                                                       # every model key of --other and --donor
 assert MODELS["base"] == XMODELS["base"]
 
-RECIPES = {"top8": 8, "bulk": 8, "rand8": 8, "late3": 3, "interp": None, "proj": 8, "projc": 8, "rbulk": 8, "rin": 8, "rout": 8, "perm": 8, "self": 8}          # recipe -> default k
+RECIPES = {"top8": 8, "bulk": 8, "rand8": 8, "late3": 3, "interp": None, "proj": 8, "projc": 8, "rbulk": 8, "rin": 8, "rout": 8, "perm": 8, "self": 8, "glob": 8}          # recipe -> default k
 LATE = range(24, 32)                                                              # late3's layers; the selftest passes its own
 JSON_KEY = "rl_math"                                                              # config and tokenizer for every model, as merge_weights
 SUMS = ("dot", "add_sq", "written_sq", "ref_sq", "top_sq", "d_sq")
@@ -129,6 +134,11 @@ def target(recipe, b, o, k=None, alpha=1.0, noise=None, scale=1.0, donor=None, s
         U, sq = torch.roll(U[:, :k], 1, dims=1), None
     if recipe == "self":
         (_, U, V), sq = spectrum(b, k), None
+    if recipe == "glob":
+        side, G, factor = noise
+        add = (U * s[:k]) @ V.T
+        add = factor * (add @ G @ G.T if side == "in" else G @ (G.T @ add))
+        return b + (scale * add).float(), (scale * add).float(), None
     add = (U[:, skip:] * s[skip:k]) @ V[:, skip:].T
     if recipe in ("proj", "projc"):
         dd = donor - b
@@ -151,7 +161,7 @@ def ratios(a):
 
 
 def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, rounding="stochastic", seed=0, device="cpu", late=LATE, scale=1.0, mods=None,
-         donor_dir=None, layers=None, onto_dir=None, skip=0):
+         donor_dir=None, layers=None, onto_dir=None, skip=0, gdim=None):
     """Writes the model of the recipe to out_dir, with the json files of json_dir; returns the statistics. Shards as merge_weights.merge:
     one output file per shard of the base, names sorted within a shard; the other model is read by its own index."""
     base_dir, other_dir, json_dir, out_dir = (pathlib.Path(d) for d in (base_dir, other_dir, json_dir, out_dir))
@@ -161,7 +171,7 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
     assert recipe in RECIPES and rounding in ("nearest", "stochastic"), (recipe, rounding)
     k = RECIPES[recipe] if k is None else k
     assert (k is None) == (recipe == "interp") and (recipe == "interp" or alpha == 1.0), f"{recipe}: k {k}, alpha {alpha}"
-    assert scale == 1.0 or recipe in ("top8", "rand8", "proj", "projc", "rin", "rout", "perm", "self"), f"--scale is not for {recipe}"
+    assert scale == 1.0 or recipe in ("top8", "rand8", "proj", "projc", "rin", "rout", "perm", "self", "glob"), f"--scale is not for {recipe}"
     assert skip == 0 or (recipe in ("top8", "rand8") and 0 < skip < k), f"--skip {skip} is not for {recipe} with k {k}"
     assert mods is None or recipe in ("top8", "rand8", "bulk", "proj", "projc"), f"--mods is not for {recipe}"
     assert (donor_dir is not None) == (recipe in ("proj", "projc")), f"{recipe}: donor {donor_dir}"
@@ -176,6 +186,24 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
         shape = {n: v[1] for shard in set(wb.values()) for n, v in header(base_dir / shard).items()}
         g = torch.Generator().manual_seed(seed)
         noise = {n: tuple(torch.randn(side, k, generator=g) for side in shape[n]) for n in sorted(sel)}
+    glob = None
+    assert (gdim is not None) == (recipe == "glob"), f"{recipe}: --gdim {gdim}"
+    if recipe == "glob":
+        cols = {"in": [], "out": []}
+        for name in sorted(sel):
+            d = read(other_dir, wo, name).to(device, torch.float32) - read(base_dir, wb, name).to(device, torch.float32)
+            if d.any():
+                s, U, V = spectrum(d, k)
+                side = "out" if kind(name)[0] in ("o", "down") else "in"
+                cols[side].append((name, (U if side == "out" else V) * s[:k]))
+        G = {side: torch.linalg.svd(torch.cat([c for _, c in v], 1), full_matrices=False).U[:, :gdim] for side, v in cols.items()}
+        full = sum(float((c ** 2).sum()) for v in cols.values() for _, c in v)
+        kept = {side: sum(float(((G[side].T @ c) ** 2).sum()) for _, c in v) for side, v in cols.items()}
+        factor = (full / sum(kept.values())) ** 0.5
+        noise = {name: (side, G[side], factor) for side, v in cols.items() for name, _ in v}
+        glob = {"gdim": gdim, "glob_factor": factor, "kept_share": sum(kept.values()) / full,
+                "kept_share_in": kept["in"] / sum(float((c ** 2).sum()) for _, c in cols["in"]),
+                "kept_share_out": kept["out"] / sum(float((c ** 2).sum()) for _, c in cols["out"])}
     gen = torch.Generator(device).manual_seed(seed + 1)
     ref = "other" if recipe in ("bulk", "rbulk") else "base"                                 # the model the statistics measure the addition from
     src = "other" if recipe in ("bulk", "rbulk") or (recipe == "interp" and alpha == 1) else "base"       # the model an unchanged tensor is copied from
@@ -218,7 +246,7 @@ def edit(base_dir, other_dir, json_dir, out_dir, recipe, k=None, alpha=1.0, roun
     for p in json_dir.glob("*.json"):
         shutil.copy(p, out_dir / p.name)
     return {"recipe": recipe, "k": k, "alpha": alpha if recipe == "interp" else None, "scale": scale, "skip": skip, "mods": None if mods is None else list(mods), "layers": None if layers is None else list(layers),
-            "rounding": rounding, "seed": seed,
+            "rounding": rounding, "seed": seed, "glob": glob,
             "late_layers": list(late) if recipe == "late3" else None, "reference": ref, "n_tensors": len(wb), "n_edited": len(per),
             "n_unchanged": sum(kept.values()), "unchanged_from": kept, "n_zero_delta": len(zero), "zero_delta": zero,
             "totals": ratios({s: sum(v["sums"][s] for v in per.values()) for s in SUMS}), "tensors": per}
@@ -360,6 +388,7 @@ def main():
     ap.add_argument("--onto")
     ap.add_argument("--scale", type=float, default=1.0)
     ap.add_argument("--skip", type=int, default=0)
+    ap.add_argument("--gdim", type=int)
     ap.add_argument("--alpha", type=float, default=1.0)
     ap.add_argument("--k", type=int)
     ap.add_argument("--rounding", default="stochastic", choices=("stochastic", "nearest"))
@@ -381,7 +410,7 @@ def main():
     snap = lambda key: snapshot_download(ALL[key][0], revision=ALL[key][1], allow_patterns=["*.json", "*.safetensors"])
     base, other, donor = snap("base"), snap(a.other), snap(a.donor) if a.donor else None
     json_dir = snapshot_download(MODELS[JSON_KEY][0], revision=MODELS[JSON_KEY][1], allow_patterns=["*.json"])
-    res = edit(base, other, json_dir, a.dir, a.recipe, a.k, a.alpha, a.rounding, a.seed, device, scale=a.scale, mods=a.mods.split(",") if a.mods else None, donor_dir=donor, skip=a.skip,
+    res = edit(base, other, json_dir, a.dir, a.recipe, a.k, a.alpha, a.rounding, a.seed, device, scale=a.scale, mods=a.mods.split(",") if a.mods else None, donor_dir=donor, skip=a.skip, gdim=a.gdim,
                layers=tuple(int(x) for x in a.layers.split("-")) if a.layers else None,
                onto_dir=None if a.onto is None else snap(a.onto) if a.onto in ALL else a.onto)
     res = {"args": vars(a), "models": {key: {"repo": ALL[key][0], "revision": ALL[key][1]} for key in ("base", a.other, a.donor) if key},
