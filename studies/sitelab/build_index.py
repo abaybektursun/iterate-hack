@@ -83,6 +83,8 @@ a { color: inherit; text-decoration: none; }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
 .top a { color: var(--mute); white-space: nowrap; transition: color .15s ease; }
 .top a:hover { color: var(--ink); }
+.top .name a, .top a[aria-current] { color: var(--ink); }
+.top { flex-wrap: wrap; row-gap: 6px; }
 
 .lab { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 0 clamp(40px, 5.5vw, 104px); align-items: start; }
 .say { margin: clamp(28px, 7vh, 76px) 0 0; max-width: 21ch; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; }
@@ -139,11 +141,13 @@ a { color: inherit; text-decoration: none; }
 <body>
 <div class="page">
   <header class="top">
-    <h1 class="name">Invariant</h1>
-    <a href="/">Board</a>
-    <a href="/architecture">Design</a>
-    <a href="/proof">Proof</a>
+    <h1 class="name"><a href="https://invariant.team/">Invariant</a></h1>
     <a href="/findings">Findings</a>
+    <a href="/papers">Papers</a>
+    <a href="/">Board</a>
+    <a href="/proof">Proof</a>
+    <a href="https://invariant.team/#s-results">All pages</a>
+    <a href="/lab/" aria-current="page">Lab</a>
   </header>
   <main class="lab">
     <div>
@@ -201,7 +205,7 @@ document.documentElement.addEventListener("pointerleave", () => { tx = ty = 0; i
 """
 
 ROW = ('<li style="--i:{i}"><a class="row" href="prototypes/{slug}/">'
-       '<img alt="" width="1120" height="700" src="data:image/webp;base64,{shot}">'
+       '<img alt="" width="960" height="600" src="data:image/webp;base64,{shot}">'
        '<span class="n">{n:02d}</span><span><h2 class="title">{name}</h2><p class="line">{line}</p></span>'
        '<span class="src">{src}</span></a></li>')
 
