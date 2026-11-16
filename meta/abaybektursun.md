@@ -1,5 +1,14 @@
 # Meta review: abaybektursun
 
+## 2026-11-16 00:55 UTC (session released, after result of work-3d4e90; on branch released, main is frozen) meta/reviews/abaybektursun/20261116-0051-released/
+
+- Previous entry asked whether a 328 cell at cap 32,768 returns in under 130 min. No: half a cell (164 problems) took 199 min of generation on one L40S.
+- Direction: work-3d4e90 closed the last unmeasured difference between the study's Think-SFT rows and the model as released (sampling). No gain on 164 problems. Three rounds in a row (cap, format, sampling) tested the conditions of one row; only the cap moved it. The next round should test a route, not a condition.
+- Turnaround (before.txt): claim to close 4 h 35 min for half a cell. 3 of 4 shard jobs were never accepted by the AWS quota, and the retry loop ended with its shell without a notice; nobody saw it for 4 h.
+- Cause: a retry loop in a laptop shell is the only thing between a refused submit and a lost run.
+- Change (step 2, delete): none made in code. Proposed to the owner of ih: a submit that waits in a queue on the AWS side when the quota is full, so no laptop loop is needed. Posted as a comment on this work item; not mine to edit (interp_research).
+- Next entry checks: whether a refused ih submit still needs a laptop loop.
+
 ## 2026-11-15 20:20 UTC (session native, after result of work-8b2ec9) meta/reviews/abaybektursun/20261115-2016-native/
 
 - Previous entry asked for one vast.ai cell fetched after its box is gone. No vast.ai job since (account at its hourly refill limit); not measured.

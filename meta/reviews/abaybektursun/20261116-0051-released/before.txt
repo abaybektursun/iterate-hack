@@ -1,0 +1,3 @@
+released cells (ih ls, task output of the submit loop):
+submit loop started 20:20 UTC for 4 shard jobs; 1 accepted at 20:20 (ih-1115-202055-0f67, 164 problems, generation 199 min at 165 tok/s);
+the other 3 were refused (VcpuLimitExceeded) every 4 min until the loop's shell ended; found at 00:50 UTC, 4 h 30 min after the claim.
