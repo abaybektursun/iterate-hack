@@ -1,0 +1,57 @@
+{
+ "test": "r16a1c3",
+ "mechanism": "round-16/account-1/c3",
+ "statistic": "D3 = Spearman rho(Code-RL 3.1, Think-SFT) - rho(Code-RL 3.1, IF-RL), per-matrix top-8 share minus module-family median (unitless)",
+ "adversary": {
+  "value": 0.4806800784629108,
+  "how": "r_CM x D_M on the same 224 family-median residuals: D_M = rho(math31, think_sft) - rho(math31, if30); r_CM = rho(code31, math31)",
+  "D_M": 0.6037913730514628,
+  "rho_math_think": 0.5937529361520394,
+  "rho_math_if": -0.010038436899423448,
+  "r_CM": 0.7961029254751228,
+  "reproduces_result_caa23d": "expected 0.594 - (-0.010) = 0.604"
+ },
+ "D3": 0.26492526158445445,
+ "D3_ci90": [
+  0.12593407004057222,
+  0.40216303651505425
+ ],
+ "n": 224,
+ "unit": "matrix",
+ "bootstrap": 10000,
+ "seed": 16,
+ "rho_code_think": 0.4828646166986975,
+ "rho_code_think_ci90": [
+  0.3738084027332907,
+  0.5806452594490712
+ ],
+ "rho_code_if": 0.21793935511424306,
+ "rho_code_if_ci90": [
+  0.10630600042707668,
+  0.32224823830877647
+ ],
+ "account_range": [
+  0.15,
+  1.0
+ ],
+ "null_range": [
+  -0.1,
+  0.1
+ ],
+ "verdict": "undecided",
+ "extra_D3_of_code_after_removing_math31_linear_rank_part": -0.2863484945547726,
+ "per_family_D3": {
+  "q": -0.07771260997067442,
+  "k": 0.24230205278592365,
+  "v": 0.06451612903225806,
+  "o": 0.10153958944281527,
+  "gate": 1.1506598240469208,
+  "up": 1.3031524926686215,
+  "down": 0.3068181818181818
+ },
+ "departures": [
+  "IF-RL key is if30 (the only IF run in the file, IF-RL 3.0), as in result-caa23d",
+  "Spearman via numpy double-argsort ranks (no ties in any of the 4 keys, asserted)"
+ ],
+ "raw_rows_read": "Read 10 rows (layer 0 q,k,v,o,gate,up,down; layer 15 down; layer 28 gate; layer 31 down) and checked all 224: one row per (layer, family), no duplicates, no zero or missing values for the 4 keys. Code 3.1 and Math 3.1 shares are near-identical row by row (e.g. L0 v 0.326 vs 0.357, L31 down 0.140 vs 0.144), which is why r_CM is 0.80. Think-SFT's delta norm is ~100x the RL deltas (8-40 vs 0.08-0.35) and its shares are lower (0.010-0.135); the family-median subtraction and ranks remove level and scale, so this does not enter D3. Per-family D3 is driven by gate (1.15) and up (1.30); q is -0.08. Removing the part of Code's ranks linear in Math 3.1's ranks leaves D3 = -0.29: what Code adds beyond Math sides with IF, not Think-SFT."
+}

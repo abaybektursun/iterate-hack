@@ -1,0 +1,19 @@
+[
+ {
+  "mechanism": "round-16/account-1/c3",
+  "claim": "Where the RL change concentrates is set by which matrices step-by-step text drives, so Code-RL 3.1's family-median-removed per-matrix top-8 share pattern follows Think-SFT's (as Math 3.1's does) and not IF-RL's.",
+  "result": "result-f861f7",
+  "verdict": "undecided",
+  "measured": "D3 0.265 [0.126, 0.402], n 224 matrices, adversary value 0.481",
+  "interval": [
+   0.12593407004057222,
+   0.40216303651505425
+  ],
+  "range": [
+   0.15,
+   1.0
+  ],
+  "adversary": 0.4806800784629108,
+  "n": 224
+ }
+]
