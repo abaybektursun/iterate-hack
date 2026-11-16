@@ -2,7 +2,7 @@
  {
   "mechanism": "round-16/account-2/c1",
   "claim": "The input side of RL top-8 pairs is fixed by base activations and the output side by the reward, so Think-SFT sits in Math 3.1 top-8 subspace much less on the output side than the input side, relative to Math 3.0 (Q in [0.05, 0.7]).",
-  "result": "work-48eb91",
+  "result": "result-54d454",
   "verdict": "refuted",
   "measured": "2.4001 [2.164, 2.6121], n 224, adversary value 1.6261",
   "interval": [
