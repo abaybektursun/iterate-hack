@@ -1,0 +1,12 @@
+{
+ "commit": "440f7759e9b7066129afe408e122db8dede22154",
+ "command": "python3 studies/theory/analysis/direct_r17a1c2.py",
+ "spec": "studies/theory/specs/SPEC_direct_r17a1c2.md",
+ "half": "test",
+ "cells": [
+  "rlneurons/xreward/dial15_math500-01",
+  "rlneurons/day1_3/math500_rl-01",
+  "rlneurons/thinkvote/math500_sft1_cue_s4-01",
+  "rlneurons/day1_3/math500_base_cue-01"
+ ]
+}
