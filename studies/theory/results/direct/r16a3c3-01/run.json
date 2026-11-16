@@ -1,0 +1,6 @@
+{
+ "commit": "5e039689abe50d76fd3fb04677ac8a9109b3fbe4",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 --with antlr4-python3-runtime==4.11 python studies/theory/analysis/direct_r16a3c3.py",
+ "job": null,
+ "input_job": "abaybektursun-1114-221259-0871"
+}

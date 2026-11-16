@@ -1,0 +1,56 @@
+{
+ "test": "round-16/account-3/c3",
+ "adversary": {
+  "value": 0.5885342261259756,
+  "expected_by_adversary": 2.5,
+  "how": "median over 224 matrices of (cap_left/cap_right of code31>general30) / (cap_left/cap_right of think_sft>general30); general30 = the RL-Zero-General top-8 entry, present, so no fallback",
+  "code_left_over_right_median": 0.3825206866584026,
+  "think_left_over_right_median": 0.8356223448944674
+ },
+ "statistic": {
+  "name": "Q_C",
+  "value": 0.49189233537388655,
+  "interval90": [
+   0.44184772283797225,
+   0.5532157811439954
+  ],
+  "n": 224,
+  "unit": "matrix",
+  "bootstrap": "10000 resamples of matrices, numpy default_rng(16), 5th-95th percentile of the median",
+  "code_left_over_right_median": 0.2505459067153579,
+  "think_left_over_right_median": 0.6253825656264326,
+  "median_q_by_module": {
+   "q": 0.9366647653427139,
+   "k": 1.069613488748037,
+   "v": 0.40441851025703945,
+   "o": 0.31617204313539926,
+   "gate": 0.4428238343799905,
+   "up": 0.5787964779732373,
+   "down": 0.20657065950572795
+  },
+  "share_q_above_1": 0.15178571428571427,
+  "min_q": 0.12289318576828359,
+  "max_q": 3.4352204373681374
+ },
+ "ranges": {
+  "account-3": [
+   1.4,
+   8.0
+  ],
+  "null": [
+   0.8,
+   1.2
+  ]
+ },
+ "verdicts": {
+  "account-3": "refuted",
+  "null": "refuted"
+ },
+ "departures": "none: n = 224 as planned; the adversary's first-choice entry general30 exists",
+ "raw_check": {
+  "duplicate_matrix_names": 0,
+  "nonpositive_or_nan_shares": 0,
+  "ten_rows_read": "layer 0 q,k,v,o,gate,up,down; 14 v; 21 o; 31 down (code31>math31, think_sft>math31, math30>math31 shares). All shares positive and finite, no duplicated matrices, shapes 4096x4096 (attention) and 11008x4096 / 4096x11008 (MLP). The ratio is below 1 because Code 3.1's input-side capture (cap_right) is raised far more than its output side in v, o, gate, up, down (e.g. layer 0 v: left 0.025, right 0.251), while Think-SFT's two sides are both low and closer to each other (layer 0 v: 0.008, 0.032). Math 3.0 shows the same input-side excess as Code 3.1 (layer 0 v: 0.018, 0.315), so this is a shared RL-Zero pattern, not a Code-specific one. Only q and k medians are near 1 (0.94, 1.07). Nothing in the rows suggests the statistic measures something other than its name."
+ },
+ "input": "studies/theory/data/direct_host/cap_v1.json"
+}
