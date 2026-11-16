@@ -87,3 +87,23 @@ Cells, no new code, same arguments as above, sample 1 (`run_cell --seed 3010000`
   below all 8 at 1.5 on the same seed (<= 190). Refuted if it is outside 176-188 or above 190.
 - C2. `swap12` sample 1 has >= 55 cap hits and is above the base's sample 1 by >= 8 problems (>= 169 right). Refuted if cap hits
   < 55 or right < 169.
+
+## Amendment 2 (2026-11-16, before the runs): review cells
+
+Same settings (hard328, cue, T 1.0 / top-p 1.0, cap 16,384, grader v3), one sample on sample 0's seeds (`run_cell --seed 3000000`).
+
+- R-1, shifted pairs at matched movement. Objection: a movement threshold explains everything (layer-24 RMS shift: shifted pairs at
+  1.5 move 1.76, true pairs 9.34, run-02). Step 1: `jobs/xshift.py` (float32, the 48 stored answers, as run-02) with arms `perm`
+  at scales 3, 6, 9, 12 (new rows of `SHIFT_ONLY`) next to `top8x1.5_math31`. s* = the scale whose layer-24 RMS shift is closest to
+  the true pairs' in the same job. Step 2: a smoke run (n 8, 1,024 tokens) at s*; if the text is not coherent (loops or non-words
+  in more than 2 of 8), the largest coherent scale of 3, 6, 9, 12 is used and its movement reported. Step 3: one sample of `perm`
+  at that scale. Prediction: at matched movement the shifted edit adds no right answers over the base (4 samples, 158.5):
+  <= +3 points (<= 168 right). Refuted if >= +6 points (>= 178). Also reported: cap hits and degenerate answers (" which " loops,
+  more than 5 % of words; answers mostly in other scripts).
+- R-2, directions 3-8 alone, correctly paired: `--recipe top8 --skip 2 --scale 1.5`. Prediction: within 6 problems of `swap12`
+  sample 0 (177 right, 68 cap hits) in right answers and in cap hits, so the swapped pairs 1 and 2 add nothing. Refuted if right
+  differs from 177 by >= 12.
+- R-3, a second draw of random directions: `--recipe rand8 --scale 1.5 --seed 1` (every random arm so far used `--seed 0`; the
+  seed also seeds the stochastic rounding, as `--seed 0` did). Prediction: 150-168 right, 60-85 cap hits.
+
+Budget 12 USD: three cells of 2 shard jobs (about 3.6 USD each) and the xshift and smoke jobs (about 0.5 USD).

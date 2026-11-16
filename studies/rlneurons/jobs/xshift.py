@@ -58,6 +58,7 @@ SHIFT_ONLY = {f"{r}x1.5_{name}_math31": (None, f"--recipe {r} --scale 1.5 --mods
               for r in ("top8", "rin", "perm", "rand8") for name, mods in (("write", WRITE), ("inner", INNER))}
 SHIFT_ONLY.update({f"{r}x1.5_write_L{l}_math31": (None, f"--recipe {r} --scale 1.5 --mods {WRITE} --layers {l}-{l} --other math31")   # amendment 4
                    for r in ("top8", "rin", "rand8", "perm") for l in (0, 8)})                                              # perm: SPEC_pairs2 P-E
+SHIFT_ONLY.update({f"permx{x}_math31": (None, f"--recipe perm --scale {x} --other math31") for x in (3, 6, 9, 12)})     # SPEC_pairs2 amendment 2
 ARMS += tuple(SHIFT_ONLY)
 EDIT_ARGS = {arm: v[1] for arm, v in {**NEW, **SHIFT_ONLY}.items()}                 # arm -> its wsp_edit arguments
 GROUPS = ("all", "cap_hit", "finished", "third0", "third1", "third2")
