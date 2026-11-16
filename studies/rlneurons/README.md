@@ -4887,7 +4887,7 @@ and the xshift job in the script; direction 1 alone is read with `git show d53d5
 | RL inputs, random outputs (`rin`) | s0, s1 | 158, 154 | 75, 72 | 9,415 | -0.8 [-3.5, 2.0] | -0.3 [-3.2, 2.6] |
 | direction 1 kept, 2-8 shifted (`permrest`) | s0 | 185 | 43 | 8,621 | +8.1 [4.8, 11.4] | +8.5 [5.0, 12.0] |
 | 1 and 2 swapped (`swap12`) | s0 | 177 | 68 | 9,199 | +5.6 [2.2, 9.2] | +6.1 [2.6, 9.8] |
-| direction 1 alone (`top8 --k 1`, normband) | s0, s1 | 182, 184 | 36, 46 | | +7.5 [4.8, 10.2] | |
+| direction 1 alone (`top8 --k 1`, normband) | s0, s1 | 184, 182 | 46, 36 | | +7.5 [4.8, 10.2] | |
 
 - `permrest` minus direction 1 alone: right +0.6 [-2.9, 4.1], cap hits +0.6 [-3.2, 4.4]; minus true pairs: right -5.5 [-9.8, -1.2].
   Directions 2-8 add +9.5 points when paired and nothing when shifted.

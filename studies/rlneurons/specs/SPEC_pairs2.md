@@ -73,3 +73,17 @@ sample per cell the resolution is about 5 points (16 problems).
 (run.json, metrics.json, examples.json, rows.jsonl) and readout.json: right, cap hits, and paired differences over the 328 problems
 against the base (4 samples, and the same seeds) and the pairing arms, with 95 % intervals from 10,000 bootstrap resamples of the
 problems.
+
+## Amendment 1 (2026-11-16, before the runs): second samples of `permrest` and `swap12`
+
+Correction to "What exists": direction 1 alone at 1.5 is 184 / 46 (sample 0) and 182 / 36 (sample 1), not 182 / 36 and 184 / 46
+(results/xreward/pairs2/readout.json, `top1x1.5_math31`). Results of the first runs: board result-aba970.
+
+Cells, no new code, same arguments as above, sample 1 (`run_cell --seed 3010000`), two shard jobs each, about 7 USD:
+`permrestx1.5_math31` and `swap12x1.5_math31`. Same-seed references, sample 1: direction 1 alone 182 / 36; all 8 at 1.5 198 / 14
+(`results/xreward/dial15_s4_vs_base_cue-01/rows.jsonl`); base + cue 161 / 66.
+
+- B2. `permrest` sample 1 is within 6 problems of direction 1 alone on the same seed (176 to 188 right) and at least 8 problems
+  below all 8 at 1.5 on the same seed (<= 190). Refuted if it is outside 176-188 or above 190.
+- C2. `swap12` sample 1 has >= 55 cap hits and is above the base's sample 1 by >= 8 problems (>= 169 right). Refuted if cap hits
+  < 55 or right < 169.
