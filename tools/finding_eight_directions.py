@@ -171,7 +171,7 @@ PAGE = r"""<!doctype html>
    upper left in both. --wash and --edge are how strongly the slab and its edge take the accent when it is lit. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #8b97a1; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
   --blue: #1f43d6; --red: #cf2338;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
@@ -179,7 +179,7 @@ PAGE = r"""<!doctype html>
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #5f6c77; --rule: #1c2630;
+    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
     --blue: #8fb1ff; --red: #ff6b7c;
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
     --rim-a: rgba(255, 255, 255, .92); --rim-b: rgba(255, 255, 255, .1); --rim-c: rgba(143, 177, 255, .45);
@@ -198,7 +198,7 @@ a { color: inherit; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
 .page {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 27vw); grid-template-rows: auto minmax(0, 1fr);
-  gap: 0; height: 100vh; min-height: 620px; max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
+  gap: 0; min-height: max(100vh, 620px); max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
 }
 .top { grid-column: 1 / -1; display: flex; align-items: center; gap: 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
@@ -207,7 +207,9 @@ a { color: inherit; }
 .top a[aria-current] { color: var(--ink); font-weight: 600; }
 
 /* The picture, and the one control that changes it */
-.stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
+/* The words can be taller than the window: then the page scrolls as a whole, and the picture, which keeps the
+   height of the window under the header, stays in view. */
+.stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; position: sticky; top: 0; align-self: start; height: calc(max(100vh, 620px) - 87.5px); }
 svg { width: 100%; max-height: calc(100vh - 250px); display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 .atmo, .shade, .spec, .bloom, .wash, .edge { pointer-events: none; }
@@ -234,7 +236,7 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 .tick { fill: var(--faint); font-weight: 500; }
 .reftext { font-weight: 600; text-anchor: middle; }
 .reftext.cue { fill: var(--ink); } .reftext.rl { fill: var(--blue); }
-.value { font-weight: 330; letter-spacing: -.03em; font-stretch: 100%; }
+.value { font-weight: 660; letter-spacing: -.03em; font-stretch: 100%; }
 .unit .u1 { fill: var(--ink); font-weight: 620; } .unit .u2 { fill: var(--mute); font-weight: 500; }
 .cap1 { fill: var(--ink); font-weight: 560; }
 .key { fill: var(--mute); font-weight: 500; text-anchor: middle; }
@@ -255,9 +257,11 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 
 /* The words */
 .side {
-  min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  min-width: 0;
+  padding: clamp(10px, 7vh - 38px, 58px) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b, .say .nw { font-weight: 620; white-space: nowrap; }
@@ -280,13 +284,14 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
-  .problem { order: 1; margin-top: 20px; max-width: none; }
+  a.back { order: 0; align-self: flex-start; margin-top: 14px; }
+  .problem { order: 1; margin-top: 0; max-width: none; }
   .say { order: 2; max-width: 22ch; }
-  .stage { order: 3; margin-top: 22px; padding: 0; }
+  .stage { order: 3; margin-top: 22px; padding: 0; position: static; height: auto; align-self: stretch; }
   .pane { order: 4; margin-top: 14px; }
   svg { max-height: none; }
-  .switch { align-self: stretch; }
-  .switch button { flex: 1 1 auto; text-align: center; padding: 9px 4px; font-size: 14px; }
+  .switch { align-self: stretch; flex-wrap: wrap; justify-content: center; border-radius: 26px; }
+  .switch button { flex: 1 1 auto; text-align: center; padding: 12px 12px; font-size: 14px; }
   .switch .long { display: none; }
   .switch .short { display: inline; }
   .note { height: 4.5em; }
@@ -312,6 +317,7 @@ svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
     <p class="note" id="note" aria-live="polite"></p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
@@ -350,7 +356,7 @@ function geo() {
     ? { w: 720, h: 850, cx: 360, cy: 216, a: 136, b: 172, th: 20, r: 20, D: 1900, yaw: -4, lw: 1.8, glow: 5.5, lead: 14, fs: 26, wide: 86, nudge: 7, x0: 40, x1: 680, kf: 26, ky: 36,
         num: 116, numY: 506, fl: 26, rows: [{ ay: 592 }, { cap: 690, ay: 780 }] }
     : { w: 1000, h: 750, cx: 500, cy: 238, a: 236, b: 236, th: 26, r: 28, D: 2100, yaw: -8, lw: 1.5, glow: 9, lead: 16, fs: 20, wide: 104, nudge: 0, x0: 130, x1: 870, kf: 18, ky: 40,
-        num: 92, numY: 528, fl: 18, rows: [{ ay: 586 }, { cap: 654, ay: 716 }] };
+        num: 104, numY: 528, fl: 18, rows: [{ ay: 586 }, { cap: 654, ay: 716 }] };
 }
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };  // the view: a slow sway, plus a few degrees toward the pointer
 function aim(yaw, pitch) { V.c1 = Math.cos(yaw * RAD); V.s1 = Math.sin(yaw * RAD); V.c2 = Math.cos(pitch * RAD); V.s2 = Math.sin(pitch * RAD); }

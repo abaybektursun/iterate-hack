@@ -722,7 +722,7 @@ a { color: inherit; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
 .page {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 27vw); grid-template-rows: auto minmax(0, 1fr);
-  gap: 0; height: 100vh; min-height: 620px; max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
+  gap: 0; min-height: max(100vh, 620px); max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
 }
 .top { grid-column: 1 / -1; display: flex; align-items: center; gap: 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
@@ -731,7 +731,9 @@ a { color: inherit; }
 .top a[aria-current] { color: var(--ink); font-weight: 600; }
 
 /* The picture: one plate with a dot per problem, and the one switch that changes it */
-.stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
+/* The words can be taller than the window: then the page scrolls as a whole, and the picture, which keeps the
+   height of the window under the header, stays in view. */
+.stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; position: sticky; top: 0; align-self: start; height: calc(max(100vh, 620px) - 87.5px); }
 svg { width: 100%; max-height: calc(100vh - 200px); display: block; overflow: visible; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 svg * { pointer-events: none; }
@@ -752,7 +754,7 @@ svg * { pointer-events: none; }
 .steps { display: flex; justify-content: space-between; margin-top: 14px; font-size: 13px; color: var(--mute); }
 .steps button:hover { color: var(--ink); }
 .klab { fill: var(--mute); font-weight: 520; }
-.big { fill: var(--red); font-weight: 660; letter-spacing: -.03em; font-stretch: 100%; }
+.big { fill: var(--ink); font-weight: 660; letter-spacing: -.03em; font-stretch: 100%; }
 .num { font-weight: 640; letter-spacing: -.01em; }
 .lab { fill: var(--mute); font-weight: 520; }
 .switch { display: inline-flex; align-self: center; margin-top: 20px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
@@ -769,9 +771,11 @@ svg * { pointer-events: none; }
 
 /* The words */
 .side {
-  min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  min-width: 0;
+  padding: clamp(10px, 7vh - 38px, 58px) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
@@ -793,13 +797,14 @@ svg * { pointer-events: none; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
-  .problem { order: 1; margin-top: 20px; max-width: none; }
+  a.back { order: 0; align-self: flex-start; margin-top: 14px; }
+  .problem { order: 1; margin-top: 0; max-width: none; }
   .say { order: 2; max-width: 22ch; }
-  .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
+  .stage { order: 3; margin-top: 22px; padding: 0; position: static; height: auto; align-self: stretch; display: block; }
   .pane { order: 4; margin-top: 22px; }
   svg { max-height: none; }
   .switch { display: flex; flex-direction: column; margin-top: 16px; border-radius: 22px; }
-  .switch button { text-align: center; padding: 10px 6px; }
+  .switch button { text-align: center; padding: 12px 12px; font-size: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
@@ -821,6 +826,7 @@ svg * { pointer-events: none; }
     <div class="switch" id="switch" role="group" aria-label="Version of the model"></div>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
@@ -849,7 +855,7 @@ function geo() {
     ? { w: 480, h: 640, cx: 240, cy: 320, D: 1900, a: [6, 8, 474, 632], r: 22, deep: 30, gx: 33.6, gy: 214, pitch: 17.2, d: [7, 3.6, 10.5, 20], z: [6, 4, 22],
         bx: 32, lx: 36, by: [120, 150], fb: 104, rx: 290, ry: [78, 100, 138, 160], fn: 32, fs: 17, kx: [36, 150, 270], ky: 592, kr: [4.2, 3.4, 6], blur: 12 }
     : { w: 1000, h: 596, cx: 500, cy: 298, D: 2100, a: [30, 22, 970, 574], r: 30, deep: 40, gx: 78, gy: 68, pitch: 21.5, d: [8.5, 4.2, 12.5, 24], z: [6, 4, 24],
-        bx: 664, lx: 668, by: [216, 254], fb: 150, rx: 668, ry: [350, 377, 444, 471], fn: 40, fs: 21, kx: [82, 196, 316], ky: 530, kr: [4.6, 3.6, 6.6], blur: 16 };
+        bx: 664, lx: 668, by: [216, 254], fb: 126, rx: 668, ry: [350, 377, 444, 471], fn: 40, fs: 21, kx: [82, 196, 316], ky: 530, kr: [4.6, 3.6, 6.6], blur: 16 };
 }
 /* The view, as in architecture.py: a slow sway, plus a few degrees toward the pointer. */
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };
@@ -887,7 +893,7 @@ function build() {
     `<ellipse class="spec" cx="${f(ax0 + aw * .32)}" cy="${f(ay0 + ah * .28)}" rx="${f(aw * .3)}" ry="${f(ah * .22)}" transform="rotate(-16 ${f(ax0 + aw * .32)} ${f(ay0 + ah * .28)})" fill="url(#spec)"/>` +
     `<g class="dots">${dots(1, "c1", g.d[1])}${dots(0, "c0", g.d[0])}${dots(2, "halo", g.d[3])}${dots(2, "c2", g.d[2])}<circle class="sel" id="sel" r="0"/></g>` +
     `<g class="key">${KEY.map((name, k) => `<circle class="k${k}" id="kd${k}" r="${g.kr[k]}"/><text class="klab" id="kt${k}" font-size="${g.fs}">${name}</text>`).join("")}</g>` +
-    `<g class="read"><text class="big" id="big" font-size="${g.fb}"></text><text class="lab" id="biglab" font-size="${g.fs}">loops in ${N} answers, temperature 0.6</text>` +
+    `<g class="read"><text class="big" id="big" font-size="${g.fb}"></text><text class="lab" id="biglab" font-size="${g.fs}"><tspan>loops in ${N} answers, </tspan><tspan dy="1.25em">temperature 0.6</tspan></text>` +
     `<text class="num" id="n-right" font-size="${g.fn}"></text><text class="lab" id="l-right" font-size="${g.fs}">right</text>` +
     `<text class="num" id="n-tok" font-size="${g.fn}"></text><text class="lab" id="l-tok" font-size="${g.fs}">tokens per problem</text></g>`;
   S.el = {};
@@ -934,6 +940,7 @@ function place(t) {
   text("n-right", String(now("right")));
   text("n-tok", now("tokens").toLocaleString("en-US"));
   at(E.big, proj(g, g.bx, g.by[0], 10)); at(E.biglab, proj(g, g.lx, g.by[1], 10));
+  E.biglab.lastChild.setAttribute("x", E.biglab.getAttribute("x"));  // the name is set in two lines, so that it stays inside the plate
   ["n-right", "l-right", "n-tok", "l-tok"].forEach((id, i) => at(E[id], proj(g, g.rx, g.ry[i], 10)));
 }
 

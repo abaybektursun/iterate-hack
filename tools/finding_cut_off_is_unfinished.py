@@ -995,7 +995,7 @@ a { color: inherit; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
 .page {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 27vw); grid-template-rows: auto minmax(0, 1fr);
-  gap: 0; height: 100vh; min-height: 620px; max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
+  gap: 0; min-height: max(100vh, 620px); max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
 }
 .top { grid-column: 1 / -1; display: flex; align-items: center; gap: 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
@@ -1004,8 +1004,10 @@ a { color: inherit; }
 .top a[aria-current] { color: var(--ink); font-weight: 600; }
 
 /* The picture: one plate with the 328 bars and the counts, and the one control under it */
-.stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
-svg { width: 100%; max-height: calc(100vh - 262px); display: block; overflow: visible; touch-action: pan-y; cursor: default; user-select: none; -webkit-user-select: none; }
+/* The words can be taller than the window: then the page scrolls as a whole, and the picture, which keeps the
+   height of the window under the header, stays in view. */
+.stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; position: sticky; top: 0; align-self: start; height: calc(max(100vh, 620px) - 87.5px); }
+svg { width: 100%; max-height: calc(100vh - 282px); display: block; overflow: visible; touch-action: pan-y; cursor: default; user-select: none; -webkit-user-select: none; }
 svg:focus:not(:focus-visible) { outline: none; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 svg * { pointer-events: none; }
@@ -1039,15 +1041,17 @@ svg * { pointer-events: none; }
 .brk { fill: none; stroke: var(--red); stroke-width: 1.2; opacity: .8; }
 .brkn { fill: var(--red) !important; font-weight: 650; }
 
-/* The control: one slider, the tokens allowed per answer, and a quiet switch between the three runs */
+/* The control: the two switches (one sample or the vote, and which run) side by side, and under them one slider, the
+   tokens allowed per answer */
 .control { align-self: center; width: min(100%, 760px); margin-top: 12px; }
-.dtop { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.dtop { display: flex; justify-content: center; align-items: center; gap: 8px 12px; flex-wrap: wrap; }
 .dlab { font-size: 15px; font-weight: 640; }
 .dlab span { color: var(--mute); font-weight: 500; }
-.others { display: flex; align-items: baseline; gap: 2px 4px; font-size: 13.5px; color: var(--mute); }
-.others button { padding: 3px 10px; border-radius: 999px; font-weight: 560; white-space: nowrap; transition: background .15s ease, color .15s ease; }
+.others { display: inline-flex; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
+.others button { padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
 .others button:hover { color: var(--blue); }
-.others button[aria-pressed="true"] { background: var(--mute); color: var(--paper); }
+.others button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.others button[aria-pressed="true"]:hover { color: var(--paper); }
 .others button[aria-disabled="true"] { opacity: .5; cursor: default; }
 .others button[aria-disabled="true"]:hover { color: inherit; }
 .dlab { display: block; margin-top: 10px; }
@@ -1076,9 +1080,11 @@ svg * { pointer-events: none; }
 
 /* The words */
 .side {
-  min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  min-width: 0;
+  padding: clamp(10px, 7vh - 38px, 58px) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b, .say .kterm { font-weight: 620; white-space: nowrap; }
@@ -1138,15 +1144,18 @@ svg * { pointer-events: none; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
-  .problem { order: 1; margin-top: 20px; max-width: none; }
+  a.back { order: 0; align-self: flex-start; margin-top: 14px; }
+  .problem { order: 1; margin-top: 0; max-width: none; }
   .say { order: 2; max-width: 22ch; }
-  .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
+  .stage { order: 3; margin-top: 22px; padding: 0; position: static; height: auto; align-self: stretch; display: block; }
   .cmp { order: 4; max-width: none; }
   .pane { order: 5; margin-top: 22px; }
   svg { max-height: none; }
   .control { width: 100%; margin-top: 16px; }
   .dtop { flex-direction: column; align-items: stretch; gap: 6px; }
-  .others { justify-content: center; }
+  .others { display: flex; }
+  .others button { flex: 1; text-align: center; padding: 12px 12px; font-size: 14px; }
+  .paper { order: 6; }
   .dlab { text-align: center; }
   .ticks { font-size: 13px; }
 }
@@ -1191,11 +1200,12 @@ svg * { pointer-events: none; }
     <p class="hint" id="hint"></p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="cmp" id="cmp" role="group" aria-label="Answers past 16,384 tokens, by run"></div>
     <div class="pane" id="pane" aria-live="polite"></div>
-    <p class="paper"><a href="/paper/two-token-limits.pdf">Read the paper (PDF) ›</a></p>
+    <p class="paper"><a href="/paper/two-token-limits.pdf" target="_blank" rel="noopener">Read the paper (PDF) ›</a></p>
   </div>
 </div>
 <script>

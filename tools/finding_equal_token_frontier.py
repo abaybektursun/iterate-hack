@@ -297,7 +297,7 @@ a { color: inherit; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
 .page {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 27vw); grid-template-rows: auto minmax(0, 1fr);
-  gap: 0; height: 100vh; min-height: 620px; max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
+  gap: 0; min-height: max(100vh, 620px); max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
 }
 .top { grid-column: 1 / -1; display: flex; align-items: center; gap: 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
@@ -306,7 +306,9 @@ a { color: inherit; }
 .top a[aria-current] { color: var(--ink); font-weight: 600; }
 
 /* The picture: one plate holding the chart, the readout and the strip of problems */
-.stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; position: relative; }
+/* The words can be taller than the window: then the page scrolls as a whole, and the picture, which keeps the
+   height of the window under the header, stays in view. */
+.stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; position: sticky; top: 0; align-self: start; height: calc(max(100vh, 620px) - 87.5px); }
 svg { width: 100%; max-height: calc(100vh - 120px); display: block; overflow: visible; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 svg * { pointer-events: none; }
@@ -345,7 +347,7 @@ svg .grab { pointer-events: all; fill: transparent; cursor: ew-resize; }
 .knob-ring.on { stroke: var(--blue); stroke-width: 2.4; opacity: 1; }
 .blab { fill: var(--ink); font-weight: 640; }
 .bhint { fill: var(--mute); font-weight: 500; }
-.big { fill: var(--ink); font-weight: 640; letter-spacing: -.035em; font-stretch: 100%; }
+.big { fill: var(--ink); font-weight: 660; letter-spacing: -.035em; font-stretch: 100%; }
 .unit { fill: var(--ink); font-weight: 480; }
 .ci, .cap, .score { fill: var(--mute); font-weight: 500; }
 .rname { fill: var(--ink); font-weight: 640; }
@@ -365,9 +367,11 @@ svg .grab { pointer-events: all; fill: transparent; cursor: ew-resize; }
 
 /* The words */
 .side {
-  min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  min-width: 0;
+  padding: clamp(10px, 7vh - 38px, 58px) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
@@ -402,9 +406,10 @@ svg .grab { pointer-events: all; fill: transparent; cursor: ew-resize; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
-  .problem { order: 1; margin-top: 20px; max-width: none; }
+  a.back { order: 0; align-self: flex-start; margin-top: 14px; }
+  .problem { order: 1; margin-top: 0; max-width: none; }
   .say { order: 2; max-width: 22ch; }
-  .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
+  .stage { order: 3; margin-top: 22px; padding: 0; position: relative; height: auto; align-self: stretch; display: block; }
   .pane { order: 4; margin-top: 22px; }
   svg { max-height: none; }
 }
@@ -428,6 +433,7 @@ svg .grab { pointer-events: all; fill: transparent; cursor: ew-resize; }
     <svg id="svg" role="group"></svg>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
@@ -467,7 +473,7 @@ function geo() {
         tick: 688, atitle: 714, ytitle: 348, sx: 36, sy: 786, sp: 8.3, rows: 10, slab: 762, cell: [2.2, 4.4], ky: [930, 962, 994], kx: [[36, 0], [36, 1], [36, 2]],
         mark: 7.2, hit: 17, near: 150 }
     : { w: 1000, h: 640, cx: 500, cy: 320, D: 2200, a: [20, 14, 980, 626], r: 30, deep: 40, blur: 16,
-        X: [100, 672], Y: [74, 420], fs: 15, fb: 92, rx: 712, ry: { big: 186, unit: 218, ci: 264, cap: 306, name: 329, lh: 21 }, wrap: 27,
+        X: [100, 672], Y: [74, 420], fs: 15, fb: 104, rx: 712, ry: { big: 186, unit: 218, ci: 264, cap: 306, name: 329, lh: 21 }, wrap: 27,
         tick: 444, atitle: 466, ytitle: 50, sx: 62, sy: 514, sp: 8.85, rows: 5, slab: 494, cell: [1.9, 3.9], ky: [598], kx: [[62, 0], [392, 0], [656, 0]],
         mark: 6.4, hit: 15, near: 66 };
 }

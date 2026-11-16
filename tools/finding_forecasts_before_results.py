@@ -684,7 +684,7 @@ a { color: inherit; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
 .page {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 27vw); grid-template-rows: auto minmax(0, 1fr);
-  gap: 0; height: 100vh; min-height: 620px; max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
+  gap: 0; min-height: max(100vh, 620px); max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
 }
 .top { grid-column: 1 / -1; display: flex; align-items: center; gap: 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
@@ -693,7 +693,9 @@ a { color: inherit; }
 .top a[aria-current] { color: var(--ink); font-weight: 600; }
 
 /* The picture: one plate holding the readout and one row per target, and the one switch under it */
-.stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: safe center; padding: 8px 40px 0 0; overflow-y: auto; scrollbar-width: thin; }
+/* The words can be taller than the window: then the page scrolls as a whole, and the picture, which keeps the
+   height of the window under the header, stays in view. */
+.stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: safe center; padding: 8px 40px 0 0; position: sticky; top: 0; align-self: start; height: calc(max(100vh, 620px) - 87.5px); overflow-y: auto; scrollbar-width: thin; }
 /* One scale in every state: the base plate (1000 x 782) fits the window; with more rows the plate grows downward and the
    stage scrolls, while the switch stays in view at its foot. */
 svg { width: min(100%, calc((100vh - 182px) * 1.2788)); flex: none; margin: 0 auto; display: block; overflow: visible; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
@@ -729,7 +731,7 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
 .mbar { stroke: var(--ink); stroke-width: 2.2; stroke-linecap: round; }
 .ripple { fill: none; stroke: var(--ink); stroke-width: 1.3; }
 .selbox { fill: var(--blue); fill-opacity: .06; stroke: var(--blue); stroke-opacity: .55; stroke-width: 1.2; }
-.big { fill: var(--ink); font-weight: 640; letter-spacing: -.035em; font-stretch: 100%; }
+.big { fill: var(--ink); font-weight: 660; letter-spacing: -.035em; font-stretch: 100%; }
 .l1 { fill: var(--ink); font-weight: 520; }
 .l2, .ccap, .cci { fill: var(--mute); font-weight: 500; }
 .cnum { fill: var(--ink); font-weight: 600; letter-spacing: -.02em; opacity: .78; font-stretch: 100%; }
@@ -738,7 +740,7 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
 .klab, .note { fill: var(--mute); font-weight: 520; }
 .switch { display: inline-flex; align-self: center; margin-top: 14px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px;
   position: sticky; bottom: 10px; z-index: 1; background: var(--paper); box-shadow: 0 6px 22px 6px var(--paper); }
-.switch button { padding: 8px 20px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; text-align: center; transition: background .15s ease, color .15s ease; }
+.switch button { padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; text-align: center; transition: background .15s ease, color .15s ease; }
 .switch button span { font-weight: 480; opacity: .7; margin-left: 6px; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
@@ -755,9 +757,11 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
 
 /* The words */
 .side {
-  min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  min-width: 0;
+  padding: clamp(10px, 7vh - 38px, 58px) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
@@ -814,13 +818,14 @@ h3 span { display: block; color: var(--mute); font-size: 13px; font-weight: 480;
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
-  .problem { order: 1; margin-top: 20px; max-width: none; }
+  a.back { order: 0; align-self: flex-start; margin-top: 14px; }
+  .problem { order: 1; margin-top: 0; max-width: none; }
   .say { order: 2; max-width: 22ch; }
-  .stage { order: 3; margin-top: 22px; padding: 0; display: flex; overflow: visible; }
+  .stage { order: 3; margin-top: 22px; padding: 0; position: static; height: auto; align-self: stretch; display: flex; overflow: visible; }
   .pane { order: 4; margin-top: 22px; }
   svg { width: 100%; }
   .switch { order: -1; display: flex; align-self: stretch; margin: 0 0 14px; position: static; box-shadow: none; }
-  .switch button { flex: 1; padding: 10px 4px; font-size: 14px; }
+  .switch button { flex: 1; padding: 12px 12px; font-size: 14px; }
   .hint { order: -1; margin: 0 0 10px; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -844,6 +849,7 @@ h3 span { display: block; color: var(--mute); font-size: 13px; font-weight: 480;
     <p class="hint" id="hint"></p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
@@ -889,7 +895,7 @@ function geo() {
     ? { w: 480, phone: true, a0: 6, r: 22, deep: 28, blur: 12, cx: 240, D: 1800, X: [34, 300], gx: 30, vx: 448, fs: 17,
         big: [28, 86, 70], l: [118, 142, 166, 190], ref: 232, top: 250, pitch: 52, gh: 34, gap: 14, tail: [34, 64, 96, 128, 160, 196] }
     : { w: 1000, phone: false, a0: 14, r: 30, deep: 40, blur: 16, cx: 500, D: 2200, X: [474, 862], gx: 52, lx: 456, vx: 880, fs: 13,
-        big: [56, 102, 76], l: [134, 156, 178], con: [668, 56, 104, 134, 156], vr: 640, ref: 216, top: 230, bottom: 704, pmax: 50, pmin: 17, gap: 10,
+        big: [56, 107, 111], l: [134, 156, 178], con: [668, 56, 104, 134, 156], vr: 640, ref: 216, top: 230, bottom: 704, pmax: 50, pmin: 17, gap: 10,
         note: 730, key: 758, h: 782 };
 }
 const sx = (g, z) => mix(g.X[0], g.X[1], (clamp(z, DOM[0], DOM[1]) - DOM[0]) / (DOM[1] - DOM[0]));

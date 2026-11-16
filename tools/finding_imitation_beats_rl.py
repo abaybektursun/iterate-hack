@@ -1292,7 +1292,7 @@ a { color: inherit; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; border-radius: 3px; }
 .page {
   display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, 27vw); grid-template-rows: auto minmax(0, 1fr);
-  gap: 0; height: 100vh; min-height: 620px; max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
+  gap: 0; min-height: max(100vh, 620px); max-width: 1840px; margin: 0 auto; padding: 20px 40px 28px;
 }
 .top { grid-column: 1 / -1; display: flex; align-items: center; gap: 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
 .name { font-weight: 740; font-stretch: 122%; font-size: 15px; letter-spacing: .02em; margin: 0 6px 0 0; }
@@ -1301,7 +1301,9 @@ a { color: inherit; }
 .top a[aria-current] { color: var(--ink); font-weight: 600; }
 
 /* The picture: one plate with three rows of marks, the difference, and the one switch */
-.stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
+/* The words can be taller than the window: then the page scrolls as a whole, and the picture, which keeps the
+   height of the window under the header, stays in view. */
+.stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; position: sticky; top: 0; align-self: start; height: calc(max(100vh, 620px) - 87.5px); }
 svg { width: 100%; max-height: calc(100vh - 200px); display: block; overflow: visible; touch-action: pan-y; cursor: default; user-select: none; -webkit-user-select: none; }
 svg:focus:not(:focus-visible) { outline: none; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
@@ -1348,9 +1350,11 @@ svg * { pointer-events: none; }
 
 /* The words */
 .side {
-  min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  min-width: 0;
+  padding: clamp(10px, 7vh - 38px, 58px) 0 0 40px; border-left: 1px solid var(--rule);
 }
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
@@ -1383,13 +1387,14 @@ svg * { pointer-events: none; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
-  .problem { order: 1; margin-top: 20px; max-width: none; }
+  a.back { order: 0; align-self: flex-start; margin-top: 14px; }
+  .problem { order: 1; margin-top: 0; max-width: none; }
   .say { order: 2; max-width: 22ch; }
-  .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
+  .stage { order: 3; margin-top: 22px; padding: 0; position: static; height: auto; align-self: stretch; display: block; }
   .pane { order: 4; margin-top: 22px; }
   svg { max-height: none; }
   .switch { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; margin-top: 14px; border-radius: 22px; }
-  .switch button { text-align: center; padding: 10px 6px; font-size: 14px; white-space: normal; line-height: 1.2; }
+  .switch button { text-align: center; padding: 12px 12px; min-height: 44px; font-size: 14px; white-space: normal; line-height: 1.2; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
@@ -1417,6 +1422,7 @@ svg * { pointer-events: none; }
     <p class="hint">Click a dot, or press Enter on the picture, to see the problem and every answer.</p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
@@ -1476,7 +1482,7 @@ function geo() {
         capY: [262, 286], bigX: 30, bigY: 118, fb: 96, fb2: 96, labY: 152, subY: [178, 202, 226], key: [[34, 936], [124, 936], [228, 936], [34, 966]], short: true }
     : { w: 1000, h: 600, cx: 500, cy: 300, D: 2200, a: [24, 18, 976, 582], r: 30, deep: 40, blur: 16,
         x0: 74, x1: 604, top: [108, 260, 412], rows: { hard328: 8, math500: 10, fresh2026: 5 }, slot: 108, fl: 17, fs: 15, fc: 20, fn: 15, nameUp: 0,
-        capY: [48, 70], bigX: 656, bigY: 254, fb: 136, fb2: 112, labY: 292, subY: [320, 344, 368], key: [[662, 440], [662, 466], [662, 492], [662, 518]] };
+        capY: [48, 70], bigX: 656, bigY: 254, fb: 126, fb2: 112, labY: 292, subY: [320, 344, 368], key: [[662, 440], [662, 466], [662, 492], [662, 518]] };
 }
 function grid(b) {  // pitch and offsets of a set's layout
   const g = S.g, rows = g.rows[b], n = PR[b].length, cols = Math.ceil(n / rows), pitch = (g.x1 - g.x0) / cols;
