@@ -1,0 +1,258 @@
+[
+ {
+  "problem_index": 5,
+  "why": "in the rows; at least one edit-RL finished-wrong pair agrees (counts toward A(E,R))",
+  "gold": "396",
+  "edit": [
+   {
+    "sample": 0,
+    "extracted_v3": "396",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 11078
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "145",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 3574
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "145",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 8063
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "145",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 4479
+   }
+  ],
+  "rl": [
+   {
+    "sample": 0,
+    "extracted_v3": "145",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 5535
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "145",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 7464
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "144",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 5525
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "1",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 2275
+   }
+  ],
+  "base": [
+   {
+    "sample": 0,
+    "extracted_v3": "257",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 16289
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "144",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 1828
+   },
+   {
+    "sample": 2,
+    "extracted_v3": null,
+    "score_v3": 0,
+    "cap_hit": true,
+    "finish_reason": "length",
+    "n_new": 16384
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "145",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 3807
+   }
+  ],
+  "edit_rl_agreeing_pairs": [
+   [
+    "145",
+    "145"
+   ],
+   [
+    "145",
+    "145"
+   ],
+   [
+    "145",
+    "145"
+   ],
+   [
+    "145",
+    "145"
+   ],
+   [
+    "145",
+    "145"
+   ],
+   [
+    "145",
+    "145"
+   ]
+  ],
+  "base_rl_agreeing_pairs": [
+   [
+    "144",
+    "144"
+   ],
+   [
+    "145",
+    "145"
+   ],
+   [
+    "145",
+    "145"
+   ]
+  ]
+ },
+ {
+  "problem_index": 2,
+  "why": "in the rows; no edit-RL finished-wrong pair agrees (adds pairs to A(E,R)'s denominator only)",
+  "gold": "70",
+  "edit": [
+   {
+    "sample": 0,
+    "extracted_v3": "70",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 9979
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "70",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 13583
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "51",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 14266
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "74",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 14432
+   }
+  ],
+  "rl": [
+   {
+    "sample": 0,
+    "extracted_v3": "65",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 8244
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "71",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 10018
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "70",
+    "score_v3": 1,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 8876
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "65",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 12352
+   }
+  ],
+  "base": [
+   {
+    "sample": 0,
+    "extracted_v3": null,
+    "score_v3": 0,
+    "cap_hit": true,
+    "finish_reason": "length",
+    "n_new": 16384
+   },
+   {
+    "sample": 1,
+    "extracted_v3": "63",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 10624
+   },
+   {
+    "sample": 2,
+    "extracted_v3": "69",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 5420
+   },
+   {
+    "sample": 3,
+    "extracted_v3": "66",
+    "score_v3": 0,
+    "cap_hit": false,
+    "finish_reason": "stop",
+    "n_new": 8598
+   }
+  ],
+  "edit_rl_agreeing_pairs": [],
+  "base_rl_agreeing_pairs": []
+ }
+]
