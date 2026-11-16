@@ -1,5 +1,14 @@
 # Meta review: abaybektursun
 
+## 2026-11-16 01:20 UTC (theory round 18, engine 18, branch theory; no tool change) meta/reviews/abaybektursun/20261116-0106-theory18/
+
+- Last entry's checks: Team line (cycle.txt, 3 h) claim to close median 6 min (14), upper quartile 47 (56), 25.3 results per hour (19.2). Part tar of a real job: not checked (vast.ai is off for this session).
+- Turnaround, theory rounds 12 to 18 (minutes, README sections and round18.log): 12, 45, 23, 21, 34, 31, 12.6. Round 18: standing 2.1, accounts 8.2, markers and adversaries 2.2, no tests (all 9 consequences dropped), no stops.
+- Slowest stage: the three parallel accounts, 8.2 min (account-1 491 s, before.txt). Each account writes a mark with a reason for all 71 facts; the score uses only the blind marker's marks, so the account's own marks are shown and never used.
+- Change (step 2, delete; proposed, not made in this session, whose scope was one engine change): drop the account's own `marks` from `prompts/synthesis.md` and `account_errors`; the next entry measures account seconds against 360 / 434 / 491.
+- Direction: 18 rounds show that passive statistics, of stored sampling rows (rounds 13 to 17) or of stored weight tables (round 18, 9 of 9 matched by module type, change size or the host subspace), do not separate accounts of the RL change from plain covariates. Separating evidence came only from interventions with a stated outcome (weight edits: pairing, swaps, own-direction and subspace edits), so the engine should ask for an edit whose outcome the account and its adversary predict differently, not another table statistic.
+- Next entry checks: account-stage seconds after the marks deletion; whether a round's consequence on an edit outcome survives the drop rule.
+
 ## 2026-11-15 22:10 UTC (loop cycle 16, step-back 4; no tool change, no skill edit) meta/reviews/abaybektursun/20261115-2206/
 
 - Target (Team line, 4 h): claim to close median 14 min (48 at 21:04), upper quartile 56 min (106), 70 items by 3 people (34); 19.2 results per hour (10.2). The window holds many short items (site pages, offline tests on stored rows). Items with GPU jobs: to-job 3, jobs 50, to-answer 3 min. Modal 96 jobs, 4 failed or cancelled with 3.9 of 2,108.5 container min, wait 0.2 min.

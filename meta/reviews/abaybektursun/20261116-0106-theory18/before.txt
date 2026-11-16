@@ -1,0 +1,27 @@
+== standing
+== direct facts
+== explore half of the stored rows
+== synthesis: 3 accounts in parallel
+  synthesis/account-2 (opus): done in 360 s
+  synthesis/account-3 (opus): done in 434 s
+  synthesis/account-1 (opus): done in 491 s
+== blind markers and adversaries
+  synthesis_adversary_weights/account-3-c1 (opus): done in 37 s
+  synthesis_cell_adversary/account-2 (opus): done in 43 s
+  synthesis_adversary_weights/account-3-c3 (opus): done in 44 s
+  synthesis_adversary_weights/account-2-c2 (opus): done in 45 s
+  synthesis_adversary_weights/account-1-c2 (opus): done in 46 s
+  synthesis_adversary_weights/account-2-c3 (opus): done in 55 s
+  synthesis_cell_adversary/account-1 (opus): done in 55 s
+  synthesis_adversary_weights/account-2-c1 (opus): done in 58 s
+  synthesis_adversary_weights/account-1-c3 (opus): done in 62 s
+  synthesis_adversary_weights/account-1-c1 (opus): done in 65 s
+  synthesis_adversary_weights/account-3-c2 (opus): done in 86 s
+  synthesis_cell_adversary/account-3 (opus): done in 93 s
+  synthesis_marks/account-3 (opus): done in 120 s
+  synthesis_marks/account-2 (opus): done in 122 s
+  synthesis_marks/account-1 (opus): done in 132 s
+== synthesis.md
+# Source: studies/theory/results/wide/round-18/round18.log (stage lines) and run.json minutes_per_stage
+# {"standing": 2.1, "accounts": 8.2, "markers and adversaries": 2.2}; round 01:05:26 to 01:18:02 UTC = 12.6 min.
+# Rounds 12 to 17 (README sections): 12, 45, 23, 21, 34, 31 minutes.

@@ -1,0 +1,1033 @@
+{
+ "scored_utc": "2026-11-16T01:06:42",
+ "measured": [
+  {
+   "id": "m20-r1",
+   "value": 10,
+   "item": "result-a74ac3",
+   "quote": "studies/theory/results/experiments/cell-m20-01/metrics.json"
+  },
+  {
+   "id": "m06-r1",
+   "value": 7,
+   "item": "result-9ce8ed",
+   "quote": "studies/theory/results/experiments/cell-m06-01/metrics.json"
+  },
+  {
+   "id": "m29-r1",
+   "value": 448,
+   "item": "result-d82083",
+   "quote": "studies/theory/results/experiments/cell-m29-01/metrics.json"
+  }
+ ],
+ "forecasters": {
+  "reader-1": {
+   "scored": 3,
+   "inside": 2,
+   "total_gain": -0.141,
+   "mean_gain": -0.047,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m06-r1",
+     "measured": 7,
+     "value": 20,
+     "low": 9,
+     "high": 34,
+     "nulls": [
+      {
+       "value": 20,
+       "low": 9,
+       "high": 34
+      },
+      {
+       "value": 22,
+       "low": 10,
+       "high": 36
+      }
+     ],
+     "gain": 0.0,
+     "inside": false,
+     "disagrees": false
+    },
+    {
+     "id": "m20-r1",
+     "measured": 10,
+     "value": 14,
+     "low": 7,
+     "high": 22,
+     "nulls": [
+      {
+       "value": 14,
+       "low": 7,
+       "high": 22
+      },
+      {
+       "value": 13,
+       "low": 6,
+       "high": 21
+      }
+     ],
+     "gain": -0.0877,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 445,
+     "low": 431,
+     "high": 458,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": -0.0536,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "reader-2": {
+   "scored": 3,
+   "inside": 2,
+   "total_gain": -0.075,
+   "mean_gain": -0.025,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m06-r1",
+     "measured": 7,
+     "value": 22,
+     "low": 10,
+     "high": 36,
+     "nulls": [
+      {
+       "value": 20,
+       "low": 9,
+       "high": 34
+      },
+      {
+       "value": 22,
+       "low": 10,
+       "high": 36
+      }
+     ],
+     "gain": -0.2063,
+     "inside": false,
+     "disagrees": false
+    },
+    {
+     "id": "m20-r1",
+     "measured": 10,
+     "value": 13,
+     "low": 6,
+     "high": 21,
+     "nulls": [
+      {
+       "value": 14,
+       "low": 7,
+       "high": 22
+      },
+      {
+       "value": 13,
+       "low": 6,
+       "high": 21
+      }
+     ],
+     "gain": 0.0806,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 448,
+     "low": 434,
+     "high": 460,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": 0.0509,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-03/f2-m01": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-03/f2-m02": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": 0.207,
+   "mean_gain": 0.207,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 447,
+     "low": 436,
+     "high": 458,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": 0.2068,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-03/f2-m03": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-03/f2-m04": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-03/f2-m05": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": -0.465,
+   "mean_gain": -0.465,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 440,
+     "low": 425,
+     "high": 453,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": -0.465,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-03/f2-m06": {
+   "scored": 1,
+   "inside": 0,
+   "total_gain": -1.976,
+   "mean_gain": -1.976,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m06-r1",
+     "measured": 7,
+     "value": 26,
+     "low": 15,
+     "high": 38,
+     "nulls": [
+      {
+       "value": 20,
+       "low": 9,
+       "high": 34
+      },
+      {
+       "value": 22,
+       "low": 10,
+       "high": 36
+      }
+     ],
+     "gain": -1.9756,
+     "inside": false,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-04/f2-m01": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-04/f2-m02": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-04/f2-m03": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": 0.09,
+   "mean_gain": 0.09,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 448,
+     "low": 435,
+     "high": 460,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": 0.0901,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-04/f2-m04": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-04/f2-m05": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-04/f2-m06": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": -0.328,
+   "mean_gain": -0.328,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 455,
+     "low": 443,
+     "high": 466,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": -0.3278,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-05/f2-m01": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": 0.207,
+   "mean_gain": 0.207,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 449,
+     "low": 438,
+     "high": 460,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": 0.2068,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-05/f2-m02": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": -0.337,
+   "mean_gain": -0.337,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 455,
+     "low": 444,
+     "high": 465,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": -0.3369,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-05/f2-m03": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-05/f2-m04": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": 2.256,
+   "mean_gain": 2.256,
+   "disagree": 1,
+   "disagree_inside": 1,
+   "rows": [
+    {
+     "id": "m06-r1",
+     "measured": 7,
+     "value": 8,
+     "low": 3,
+     "high": 16,
+     "nulls": [
+      {
+       "value": 20,
+       "low": 9,
+       "high": 34
+      },
+      {
+       "value": 22,
+       "low": 10,
+       "high": 36
+      }
+     ],
+     "gain": 2.2562,
+     "inside": true,
+     "disagrees": true
+    }
+   ]
+  },
+  "run-05/f2-m05": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-05/f2-m06": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": 0.173,
+   "mean_gain": 0.173,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 448,
+     "low": 436,
+     "high": 459,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": 0.1735,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-06/f2-m01": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-06/f2-m02": {
+   "scored": 2,
+   "inside": 1,
+   "total_gain": -0.503,
+   "mean_gain": -0.252,
+   "disagree": 2,
+   "disagree_inside": 1,
+   "rows": [
+    {
+     "id": "m06-r1",
+     "measured": 7,
+     "value": 6,
+     "low": 2,
+     "high": 12,
+     "nulls": [
+      {
+       "value": 20,
+       "low": 9,
+       "high": 34
+      },
+      {
+       "value": 22,
+       "low": 10,
+       "high": 36
+      }
+     ],
+     "gain": 2.4965,
+     "inside": true,
+     "disagrees": true
+    },
+    {
+     "id": "m20-r1",
+     "measured": 10,
+     "value": 3,
+     "low": 0,
+     "high": 8,
+     "nulls": [
+      {
+       "value": 14,
+       "low": 7,
+       "high": 22
+      },
+      {
+       "value": 13,
+       "low": 6,
+       "high": 21
+      }
+     ],
+     "gain": -3.0,
+     "inside": false,
+     "disagrees": true
+    }
+   ]
+  },
+  "run-06/f2-m03": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": 0.154,
+   "mean_gain": 0.154,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 445,
+     "low": 434,
+     "high": 455,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": 0.154,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-06/f2-m04": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-06/f2-m05": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-06/f2-m06": {
+   "scored": 1,
+   "inside": 0,
+   "total_gain": -3.0,
+   "mean_gain": -3.0,
+   "disagree": 1,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m20-r1",
+     "measured": 10,
+     "value": 2,
+     "low": 0,
+     "high": 7,
+     "nulls": [
+      {
+       "value": 14,
+       "low": 7,
+       "high": 22
+      },
+      {
+       "value": 13,
+       "low": 6,
+       "high": 21
+      }
+     ],
+     "gain": -3.0,
+     "inside": false,
+     "disagrees": true
+    }
+   ]
+  },
+  "run-07/f2-m01": {
+   "scored": 1,
+   "inside": 0,
+   "total_gain": -3.0,
+   "mean_gain": -3.0,
+   "disagree": 1,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 423,
+     "low": 410,
+     "high": 436,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": -3.0,
+     "inside": false,
+     "disagrees": true
+    }
+   ]
+  },
+  "run-07/f2-m02": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-07/f2-m03": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-07/f2-m04": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-07/f2-m05": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": 0.097,
+   "mean_gain": 0.097,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 452,
+     "low": 442,
+     "high": 462,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": 0.0968,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-07/f2-m06": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": -0.628,
+   "mean_gain": -0.628,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m20-r1",
+     "measured": 10,
+     "value": 16,
+     "low": 9,
+     "high": 23,
+     "nulls": [
+      {
+       "value": 14,
+       "low": 7,
+       "high": 22
+      },
+      {
+       "value": 13,
+       "low": 6,
+       "high": 21
+      }
+     ],
+     "gain": -0.6279,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-08/f2-m01": {
+   "scored": 2,
+   "inside": 2,
+   "total_gain": 0.092,
+   "mean_gain": 0.046,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m20-r1",
+     "measured": 10,
+     "value": 14,
+     "low": 8,
+     "high": 20,
+     "nulls": [
+      {
+       "value": 14,
+       "low": 7,
+       "high": 22
+      },
+      {
+       "value": 13,
+       "low": 6,
+       "high": 21
+      }
+     ],
+     "gain": -0.0811,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 450,
+     "low": 439,
+     "high": 461,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": 0.1732,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-08/f2-m02": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-08/f2-m03": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": 0.173,
+   "mean_gain": 0.173,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 448,
+     "low": 436,
+     "high": 459,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": 0.1735,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "run-08/f2-m04": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-08/f2-m05": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "run-08/f2-m06": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "r5-m03-rival": {
+   "scored": 1,
+   "inside": 1,
+   "total_gain": 0.252,
+   "mean_gain": 0.252,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "m29-r1",
+     "measured": 448,
+     "value": 449,
+     "low": 438,
+     "high": 459,
+     "nulls": [
+      {
+       "value": 445,
+       "low": 431,
+       "high": 458
+      },
+      {
+       "value": 448,
+       "low": 434,
+       "high": 460
+      }
+     ],
+     "gain": 0.2522,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "r6-account-rival": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "r6-m06": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "r7-m05": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "r7-m07": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "r7-m08": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "r7-m09": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  },
+  "r7-m11": {
+   "scored": 0,
+   "inside": 0,
+   "total_gain": 0,
+   "mean_gain": null,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": []
+  }
+ },
+ "outside_every_interval": [],
+ "unscored": []
+}

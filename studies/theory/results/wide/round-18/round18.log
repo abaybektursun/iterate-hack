@@ -1,0 +1,88 @@
+start 01:05:32
+== standing
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-g_4llwde
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-g_4llwde
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-g_4llwde
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-g_4llwdejob dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-g_4llwde
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-g_4llwde
+
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-g_4llwde
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-g_4llwde
+267 items before 2026-11-15T18:58:29, 157 at or after
+  running 1 jobs, 1 at a time
+315 items before 2026-11-15T21:27:03, 109 at or after231 items before 2026-11-15T14:53:16, 193 at or after
+
+285 items before 2026-11-15T20:05:26, 139 at or after351 items before 2026-11-15T22:32:36, 73 at or after
+
+248 items before 2026-11-15T16:32:52, 176 at or after
+295 items before 2026-11-15T20:38:56, 129 at or after254 items before 2026-11-15T17:45:51, 170 at or after
+
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time  running 1 jobs, 1 at a time  running 1 jobs, 1 at a time
+
+
+
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-12 (opus): done in 46 s
+248 items before 2026-11-15T16:32:52, 176 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-14 (opus): done in 47 s
+248 items before 2026-11-15T16:32:52, 176 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-13 (opus): done in 54 s
+248 items before 2026-11-15T16:32:52, 176 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-02 (opus): done in 58 s
+248 items before 2026-11-15T16:32:52, 176 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-03 (opus): done in 62 s
+248 items before 2026-11-15T16:32:52, 176 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-09 (opus): done in 68 s
+  forecast_score/measured-round-11 (opus): done in 69 s
+  forecast_score/measured-round-10 (opus): done in 70 s
+  forecast_score/measured-run-05 (opus): done in 58 s
+  forecast_score/measured-run-06 (opus): done in 59 s
+  forecast_score/measured-run-07 (opus): done in 56 s
+  forecast_score/measured-run-04 (opus): done in 72 s
+  forecast_score/measured-run-08 (opus): done in 58 s
+424 items before 9999, 0 at or after
+  standing: 101 mechanisms, 101 scored, 37 carried, 32 to the graveyard; 332 forecasts written after their result, 0 measured rows not scored
+== direct facts
+  71 direct facts (17 hold)
+424 items before 9999, 0 at or after
+== explore half of the stored rows
+== synthesis: 3 accounts in parallel
+  running 3 jobs, 3 at a time
+  synthesis/account-2 (opus): done in 360 s
+  synthesis/account-3 (opus): done in 434 s
+  synthesis/account-1 (opus): done in 491 s
+== blind markers and adversaries
+  running 15 jobs, 15 at a time
+  synthesis_adversary_weights/account-3-c1 (opus): done in 37 s
+  synthesis_cell_adversary/account-2 (opus): done in 43 s
+  synthesis_adversary_weights/account-3-c3 (opus): done in 44 s
+  synthesis_adversary_weights/account-2-c2 (opus): done in 45 s
+  synthesis_adversary_weights/account-1-c2 (opus): done in 46 s
+  synthesis_adversary_weights/account-2-c3 (opus): done in 55 s
+  synthesis_cell_adversary/account-1 (opus): done in 55 s
+  synthesis_adversary_weights/account-2-c1 (opus): done in 58 s
+  synthesis_adversary_weights/account-1-c3 (opus): done in 62 s
+  synthesis_adversary_weights/account-1-c1 (opus): done in 65 s
+  synthesis_adversary_weights/account-3-c2 (opus): done in 86 s
+  synthesis_cell_adversary/account-3 (opus): done in 93 s
+  synthesis_marks/account-3 (opus): done in 120 s
+  synthesis_marks/account-2 (opus): done in 122 s
+  synthesis_marks/account-1 (opus): done in 132 s
+== synthesis.md
+# Synthesis, round-18 (version 18)
+
+Written 2026-11-16T01:18:02 UTC. 71 direct facts; 3 accounts kept of 3. Score = consequences that hold on the test half against the adversary's test-half value minus facts the blind marker marks as contradicting the account. Fact marks are the blind marker's (`marks-<account>.json`); the account's own count is shown beside them.
+
+| account | explained | not addressed | contradicts | self-marked contradicts | new holds | new not separated | new refuted | new undecided | new rejected | dropped on explore | score |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| account-2 | 25 | 46 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 |
+| account-3 | 24 | 47 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | 0 |
+| account-1 | 25 | 45 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 3 | -1 |
+end 01:19:37: synthesis.md 01:18:02; 9 of 9 dropped on the explore matrices; no tests; top weights cell gap 0.53 widths, no job (ih ls: 6 running)

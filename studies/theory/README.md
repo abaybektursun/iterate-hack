@@ -1915,6 +1915,114 @@ Files in `results/wide/round-17/`: `standing.md` / `standing.json` / `standing/`
 (and `jobs/`), `marks-account-<k>.json`, `adversary/account-<k>-c<j>.json`, `synthesis_tests.md` / `.json`,
 `synthesis.md`, `run.json`, `round17.log`.
 
+## Round 18 (engine 18, accounts tested on weight statistics of held-out matrices)
+
+Plan `specs/SPEC_round18.md`. Board work-021070. Branch `theory` only (main is frozen). Command:
+
+```
+PYTHONUNBUFFERED=1 uv run studies/theory/lib/forecast.py synthesis studies/theory/results/wide/round-18 --from studies/theory/results/wide/round-17 studies/theory/results/wide/round-16 studies/theory/results/wide/round-15 studies/theory/results/wide/round-14 studies/theory/results/wide/round-13 studies/theory/results/wide/round-12 studies/theory/results/wide/round-11 studies/theory/results/wide/round-10 studies/theory/results/wide/round-09 studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
+```
+
+**Answer.** No consequence reached a test. All three accounts wrote 3 `weights` consequences each (none on sampling rows);
+all 9 were dropped on the 112 explore matrices: in 8 the adversary's explore value lay inside the account's explore 90 %
+interval, in 1 (a3/c1) it lay inside the account's range only, which the new rule of engine 18 drops. The adversaries'
+alternatives were plain properties of the weights: module type (the median over matrices follows the module mix), the
+host subspace (one model's top-8 subspace catches more of every change), change size and depth profile, a shared 3.1
+pipeline, or construction (cap_both is about cap_left times cap_right). The top weights cell has its two predictions
+0.53 interval widths apart, below 2, so no job ran.
+
+**Minutes per stage** (`round18.log`, `run.json`). Start 01:05:26 UTC. standing 2.1 (forecasts of 17 folders rescored);
+direct facts (71, 17 hold) and the explore copy under 0.5; three accounts in parallel 8.2 (account-2 360 s, account-3
+434 s, account-1 491 s; none sent back, none dropped); 3 markers, 9 weights adversaries and 3 weights-cell adversaries
+2.2 in parallel (37 to 132 s); `synthesis.md` at 01:18:02. Whole round 12.6 minutes (round 17: 31). No fixes, no stops.
+
+Best account, account-2 (score 0: 0 holds, 3 dropped on the explore matrices, 0 contradictions from the blind marker;
+account-3 ties on every column and sorts second), quoted in full:
+
+> RL-Math's weight change is 0.24 % of the weight norm with about 12 % of it in 8 input-output direction pairs per
+> matrix; the input sides of those pairs are shared by on-policy RL on graded reasoning text (Code-RL 3.1 sits in them
+> 5.2x more than Think-SFT, IF- and General-RL barely), are partly in place by step 100, and are new directions that
+> the base's next layers read 1.4-1.7x more than random but only half as strongly as the base's own top directions.
+> Those pairs do two separable things, both carried by the 1.5x top-8 edit as long as each direction keeps its true
+> input-output pair: they raise the share of samples that open in deliberation (Okay/Wait), and they lower the per-
+> step slip rate along the whole derivation, which is why the edit votes level with RL on hard328 (216 vs 216, cued
+> base 185) and wins 88 % of RL's per-sample lift on problems the cued base never solves. An inference-time change can
+> supply only the first part: the three-token cue, a plain answer that happens to open with Okay, or a one-tensor edit
+> that writes the cue gives the base RL's opening, which is most of the MATH-500 gain (no cue 64, cue 82, RL 93: 18 of
+> 29 points) once T 1.0 removes the repetition loops that hold about half of the long attempts at T 0.6. Votes recover
+> part of the second because the base's wrong answers are mostly one-off slips that scatter (same-problem wrong-pair
+> agreement 0.26), so a vote of 4 adds about 7-11 points to the cued base against 3 for RL, but on hard328 the base
+> has no right sample on 26 of the 36 problems RL's vote wins, so it stays at 195 against RL's 224 of 328. The pairs
+> are not a termination dial, a boxed-ending or format push, or a reward-specific output code: they change how a
+> derivation continues, so they add right answers where the base already finishes, transfer to code mainly through
+> opening and finishing, and their concentration in few directions comes from on-policy RL itself (an LM-judge reward
+> concentrates as much, 0.127 vs 0.135), while the few slips left after them are shared, systematic wrong values.
+> Think-SFT, trained with no reward on long traces, writes a 100x larger diffuse change that still lies along the same
+> input directions (4.8x chance), which is why a no-reward weight change matches or beats RL on hard328 (241 of 328)
+> while no prompt, sampling setting or vote closes the last 9-11 points.
+
+**Fact marks from the blind markers** (own marks in brackets; 71 facts). account-1 25 explained, 45 not addressed, 1
+contradicts (own 55 / 16 / 0); account-2 25 / 46 / 0 (own 49 / 22 / 0); account-3 24 / 47 / 0 (own 54 / 17 / 0).
+Contradiction: account-1, F30 (the edit's wrong answers agree with RL's more than the base's do, 0.286, against its
+sentence that the change is only a graded per-step reliability shift on the base's own routes).
+
+**Consequences** (explore value, 90 % bootstrap over explore matrices and n from the account; ranges fixed for the test
+matrices; adversary values from `adversary/account-<k>-c<j>.json`; no test ran, so no test values):
+
+| consequence | kind | statistic | explore [90 %], n | range (null) | adversary explore | adversary test | test [90 %] | n | verdict |
+|---|---|---|---|---|---|---|---|---|---|
+| a1/c1 | weights (xlisten) | median over writer matrices of f = (rl.next - rand.next) / (basew.next - rand.next), unitless | 0.259 [0.21, 0.339], 34 | [0.13, 0.45] ([-0.08, 0.08]) | 0.2127 (covariate) | - | - | 28 test matrices planned | dropped: inside the explore interval |
+| a1/c2 | weights (cap) | median over matrices of cap_right(code31>math31_s100) / cap_right(code31>general30_s100), unitless | 2.76 [2.37, 3.19], 112 | [1.9, 3.8] ([0.6, 1.4]) | 3.014 (other) | - | - | 112 test matrices planned | dropped: inside the explore interval |
+| a1/c3 | weights (top8_share) | mean over the 3 pairs (math30,math31), (math31,code31), (math30,code31) of [Spearman rho of the step-100 residual top-8 shares - Spearman rho of the final residual top-8 shares], unitless | 0.193 [0.089, 0.307], 112 | [0.06, 0.45] ([-0.3, 0.03]) | 0.1762 (covariate) | - | - | 112 test matrices planned | dropped: inside the explore interval |
+| a2/c1 | weights (cap) | median over matrices of cap_right(code31>math31) / cap_right(code31>general30), a ratio | 4.25 [3.66, 4.94], 112 | [3.0, 6.0] ([1.0, 2.6]) | 4.178 (other) | - | - | 112 test matrices planned | dropped: inside the explore interval |
+| a2/c2 | weights (top8_share) | D = Spearman rho(Math31, Code31) - Spearman rho(Math31, General30) of family-median-removed top-8 shares, unitless | 0.467 [0.35, 0.626], 112 | [0.3, 0.9] ([-0.15, 0.15]) | 0.4923 (covariate) | - | - | 112 test matrices planned | dropped: inside the explore interval |
+| a2/c3 | weights (xlisten) | median over writer matrices of rl.next / basew.next, a ratio | 0.503 [0.479, 0.587], 34 | [0.4, 0.68] ([0.9, 1.1]) | 0.5224 (covariate) | - | - | 28 test matrices planned | dropped: inside the explore interval |
+| a3/c1 | weights (cap) | median over matrices of cap_both(code31>math31) / cap_both(code31>general30), a dimensionless ratio | 10.79 [8.99, 12.27], 112 | [6.5, 14.5] ([0.5, 3.5]) | 8.203 (construction artifact) | - | - | 112 test matrices planned | dropped: inside the range (new rule) |
+| a3/c2 | weights (anatomy, cap) | median over matrices of R = cos(rl_math, rl_code) / sqrt(cap_both(code31>math31) * top8_share(rl_math)), dimensionless | 1.221 [1.155, 1.269], 112 | [1.08, 1.36] ([5.0, 60.0]) | 1.223 (covariate) | - | - | 112 test matrices planned | dropped: inside the explore interval |
+| a3/c3 | weights (top8_share) | Spearman rho(Math31, Code31) minus Spearman rho(Math31, General30) of family-median-removed per-matrix top-8 shares, a difference of correlations | 0.467 [0.35, 0.626], 112 | [0.15, 0.82] ([-0.12, 0.12]) | 0.583 (covariate) | - | - | 112 test matrices planned | dropped: inside the explore interval |
+
+Counts: 9 written (9 weights, 0 rows), 9 dropped on the explore matrices (8 by the explore interval, 1 by the range), 0
+rejected, 0 tested: 0 held, 0 refuted, 0 not separated, 0 undecided.
+
+Caveats. a2/c2 and a3/c3 are the same statistic (Spearman rho of family-median-removed top-8 shares, Math 3.1 with Code
+3.1 minus Math 3.1 with General 3.0), written independently by two accounts; a2/c1 and a3/c1 differ only in cap_right
+against cap_both. Several adversaries fit one constant on the explore matrices (a2/c3: a shrinkage alpha 0.2656 fitted on
+the 34 explore writers) and so land on the explore statistic by construction; the drop rule takes such a value at face
+value. The adversary prompt also asks for the alternative closest to the statistic, which favours fitted alternatives.
+
+**Weights cells** (`weights_cells.md`; none run):
+
+| rank | account | statistic (models, matrices) | account predicts | adversary predicts | gap (widths) |
+|---|---|---|---|---|---|
+| 1 | account-3 | median over matrices of the cosine between the rank-8 truncations of the two changes, cos(T8(RL-Math 3.1 - base), T8(Code-RL 3.1 - base)), dimensionless (base, RL-Math 3.1, RL-Code 3.1; all 224) | 0.1 [0.07, 0.13] | 0.05 [0.015, 0.11] | 0.526 |
+| 2 | account-1 | median over matrices of cap_right(Delta_late, V_s100) = \|\|Delta_late V_s100\|\|^2 / \|\|Delta_late\|\|^2, unitless (base, RL-Math 3.1 step-100 checkpoint, RL-Math 3.1 final; all 224) | 0.075 [0.055, 0.1] | 0.065 [0.035, 0.105] | 0.143 |
+| 3 | account-2 | median over the 224 matrices of the share of RL-Math 3.1 step-100 change (squared Frobenius norm) inside Code-RL 3.1's top-8 input (right singular) subspace, a fraction (base, RL-Math 3.1 step 100, RL-Code 3.1 (final); all 224) | 0.026 [0.02, 0.033] | 0.028 [0.018, 0.042] | 0.083 |
+
+Job: none. The top cell's predictions are 0.53 interval widths apart (rule: at least 2); in addition, no existing
+rlneurons weights-only job computes a rank-8-truncation cosine with existing flags (`wsp_delta_anatomy.py` and
+`xreward_overlap.py` compute full-delta cosines and top-8 subspace overlaps and captures, which are already in the
+committed tables).
+
+**SPEC_round18 hypotheses.** H1 (at least 3 weights consequences survive the drop rule): refuted, 0. H2 (at least 2 hold
+on the test matrices): refuted, 0. H3 (weights consequences survive at a higher rate than round 17's 2 of 9): refuted, 0
+of 9. H4 (top weights cell at least 2 interval widths apart): refuted, 0.53. H5 (test value inside the explore interval
+widened by sqrt(2)): not testable, no test ran. H6 (round at most 75 minutes): holds, 12.6.
+
+**What the round shows.** Moving the consequences from sampling rows to weight tables did not change the outcome: a
+passive statistic of the stored weights is reproduced by a plain property of the weights (module type, layer profile,
+change size, the host subspace, how the statistic is built), as a passive statistic of the stored rows was reproduced by
+accuracy and length. The accounts agree on what the weights show (shared input subspace, step-100 concentration, Code
+closest to Math), so their weights cells predict the same numbers as a blind reader of the tables (gaps 0.08 to 0.53
+widths). The results that separated accounts were interventions: edits of the weights with a pre-stated outcome
+(pairing, swaps, own-direction edits). A consequence that can hold needs a within-module contrast that module and size
+cannot give, or an edit whose outcome the account and its adversary predict differently.
+
+Files in `results/wide/round-18/`: `standing.md` / `standing.json` / `standing/`, `graveyard.json`, `direct_facts.json`,
+`synthesis_facts.json` (F01-F71), `explore_manifest.md` (with the Weights tables section), `account-1.json` to
+`account-3.json` (and `jobs/`), `marks-account-<k>.json`, `adversary/account-<k>-c<j>.json` and
+`adversary/account-<k>-weights_cell.json`, `synthesis_tests.md` / `.json`, `weights_cells.md` / `.json`, `synthesis.md`,
+`run.json`, `round18.log`.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
