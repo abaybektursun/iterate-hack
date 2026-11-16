@@ -1,0 +1,66 @@
+{
+ "disagree": {
+  "problem_index": 29,
+  "problem": "Let $\\ell_A$ and $\\ell_B$ be two distinct parallel lines. For positive integers $m$ and $n$, distinct points $A_1, A_2, \\allowbreak A_3, \\allowbreak \\ldots, \\allowbreak A_m$ lie on $\\ell_A$, and distinct points $B_1, B_2, B_3, \\ldots, B_n$ lie on $\\ell_B$. Additionally, when segments $\\overline{A_iB_j}$ are drawn for all $i=1,2,3,\\ldots, m$ and $j=1,\\allowbreak 2,\\allowbreak 3, \\ldots, \\allowbreak n$, no point strictly between $\\ell_A$ and $\\ell_B$ lies on more than 1 of the segments. Find the number of bounded regions into which this figure divides the plane when $m=7$ and $n=5$. The figure shows that there are 8 regions when $m=3$ and $n=2$.",
+  "gold": "244",
+  "edit_row": {
+   "problem_index": 29,
+   "sample": 1,
+   "attempt": 0,
+   "seed": 3010029,
+   "n_new": 14451,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "59",
+   "score_v3": 0,
+   "gold": "244"
+  },
+  "rl_row": {
+   "problem_index": 29,
+   "sample": 0,
+   "attempt": 0,
+   "seed": 3000029,
+   "n_new": 14629,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "1024",
+   "score_v3": 0,
+   "gold": "244"
+  },
+  "counted_as": "disagreeing cross pair in A(E,R)"
+ },
+ "agree": {
+  "problem_index": 57,
+  "problem": "Each vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.",
+  "gold": "928",
+  "edit_row": {
+   "problem_index": 57,
+   "sample": 0,
+   "attempt": 0,
+   "seed": 3000057,
+   "n_new": 8520,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "2744",
+   "score_v3": 0,
+   "gold": "928"
+  },
+  "rl_row": {
+   "problem_index": 57,
+   "sample": 1,
+   "attempt": 0,
+   "seed": 3010057,
+   "n_new": 11465,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "2744",
+   "score_v3": 0,
+   "gold": "928"
+  },
+  "counted_as": "agreeing cross pair in A(E,R)"
+ }
+}

@@ -1,0 +1,266 @@
+{
+ "test": "round-16/account-2/c2",
+ "spec": "studies/theory/specs/SPEC_direct_r16a2c2.md",
+ "adversary": {
+  "value": 0.1508709795532679,
+  "interval_90": [
+   -0.01495619227884795,
+   0.3063836032729983
+  ],
+  "n": 52,
+  "detail": {
+   "XR": 0.45714285714285713,
+   "BR": 0.25116279069767444,
+   "XX": 0.6323529411764706,
+   "BB": 0.2781954887218045,
+   "RR": 0.42783505154639173,
+   "N_XR": 0.8788889123391052,
+   "N_BR": 0.7280179327858373,
+   "D": 0.1508709795532679
+  },
+  "how": "X = Think-SFT + cue (thinkvote/hard328_sft1_cue_s4-01) attempt-0 samples 0-3; finished wrong = score_v3 0, not cap hit, finish_reason not length, extracted_v3 non-empty; rows = problems where T, R, B each have >= 1; pooled A's; D_T = N(T,R) - N(B,R). Exactly as written; no fallback needed."
+ },
+ "statistic": {
+  "value": 0.28604299599667604,
+  "interval_90": [
+   0.13275115561700465,
+   0.44387042273708277
+  ],
+  "n": 118,
+  "n_planned": 90,
+  "detail": {
+   "XR": 0.30383211678832117,
+   "BR": 0.191958495460441,
+   "XX": 0.27816091954022987,
+   "BB": 0.21634615384615385,
+   "RR": 0.32625994694960214,
+   "N_XR": 1.0085646497903922,
+   "N_BR": 0.7225216537937161,
+   "D": 0.28604299599667604
+  }
+ },
+ "null_step6": {
+  "value": -0.12721516716898684,
+  "interval_90": [
+   -0.5009851913264683,
+   0.12884833967019155
+  ],
+  "n": 73,
+  "range": [
+   -0.07,
+   0.06
+  ],
+  "detail": {
+   "XR": 0.19254658385093168,
+   "BR": 0.2214765100671141,
+   "XX": 0.19444444444444445,
+   "BB": 0.18518518518518517,
+   "RR": 0.3760330578512397,
+   "N_XR": 0.7120738464822086,
+   "N_BR": 0.8392890136511955,
+   "D": -0.12721516716898684
+  },
+  "resamples_dropped_nonfinite": 65
+ },
+ "finished_wrong_answers_per_cell": {
+  "E": 443,
+  "R": 404,
+  "B": 368,
+  "T": 108
+ },
+ "right_per_sample": {
+  "E": 200.25,
+  "R": 200.0,
+  "B": 158.5,
+  "T": 209.0
+ },
+ "agree_order_mismatches": 0,
+ "agree_order_mismatch_examples": [],
+ "bootstrap": {
+  "resamples": 10000,
+  "unit": "problem",
+  "rng": "numpy default_rng(16), fresh per statistic"
+ },
+ "departures": [
+  "agreement checked in both argument orders of rln4_lib.agree (math-verify 0.9.0 via n13_score.grade, gold-side and answer-side wrapping differ); a pair agrees if either order says equal"
+ ],
+ "raw_rows_read": [
+  {
+   "cell": "E",
+   "problem_index": 29,
+   "sample": 0,
+   "attempt": 0,
+   "seed": 3000029,
+   "n_new": 14896,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "8\u00d7something 8 which was which this must not. The correct, perhaps it\u2019s the number of parallelog Ori\u0288\u94fe\u8655:\n\nThe answer is  the number of regions of the two lines' division which it is the formula which it was myself they is \n\nwhich I thought the plan and \n\nit is x + y the cant I get it \n\nBut this is the final one time breakdown, It is  it is 20 wrapper, I think I must admit so sorry  nothing\u6211\u660e\u4e0d well I'm not doing Oh \u6b74 that is this must  maybe I must choose 20, not it is but i r\u00e9  and it its, people two or three, it w of for such This is this or this G but i I\u2019m  I is of this I solved at the it is I this  Wow well after this one \u6557 d I wow and  Gap many hours ago it is: megmonting \u518c arsenal and. It might \u6cf0 \u6e0b  like is I\u2019m going to say this with \\  i will't is the answer then its, i goti supposed this well, it's the equation is the the os system X. H a not a. Ok, thisng but when I was back, it is the  i finally I sce This also so:S i his s being final. Answer, I've spend too), of then why I can't that these way\uff0c but  that gap with I am, this is lit I d it is i think this must but he I is B u; oh I  you Him pius meantime, we of., but P a to the and here I i good Ined \n\nWow, no I  will. NRAlatte, squares\u4e0e\u6578\u7684\u7b49\u3002\u82b3 pertinent too",
+   "score_v3": 0,
+   "gold": "244"
+  },
+  {
+   "cell": "E",
+   "problem_index": 29,
+   "sample": 1,
+   "attempt": 0,
+   "seed": 3010029,
+   "n_new": 14451,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "59",
+   "score_v3": 0,
+   "gold": "244"
+  },
+  {
+   "cell": "E",
+   "problem_index": 29,
+   "sample": 2,
+   "attempt": 0,
+   "seed": 3020029,
+   "n_new": 11980,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "44",
+   "score_v3": 0,
+   "gold": "244"
+  },
+  {
+   "cell": "E",
+   "problem_index": 29,
+   "sample": 3,
+   "attempt": 0,
+   "seed": 3030029,
+   "n_new": 12692,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "30",
+   "score_v3": 0,
+   "gold": "244"
+  },
+  {
+   "cell": "E",
+   "problem_index": 57,
+   "sample": 0,
+   "attempt": 0,
+   "seed": 3000057,
+   "n_new": 8520,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "2744",
+   "score_v3": 0,
+   "gold": "928"
+  },
+  {
+   "cell": "E",
+   "problem_index": 57,
+   "sample": 1,
+   "attempt": 0,
+   "seed": 3010057,
+   "n_new": 11761,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "2744",
+   "score_v3": 0,
+   "gold": "928"
+  },
+  {
+   "cell": "E",
+   "problem_index": 57,
+   "sample": 2,
+   "attempt": 0,
+   "seed": 3020057,
+   "n_new": 11222,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "2744",
+   "score_v3": 0,
+   "gold": "928"
+  },
+  {
+   "cell": "E",
+   "problem_index": 57,
+   "sample": 3,
+   "attempt": 0,
+   "seed": 3030057,
+   "n_new": 9483,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "2744",
+   "score_v3": 0,
+   "gold": "928"
+  },
+  {
+   "cell": "E",
+   "problem_index": 61,
+   "sample": 1,
+   "attempt": 0,
+   "seed": 3010061,
+   "n_new": 14926,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "10",
+   "score_v3": 0,
+   "gold": "113"
+  },
+  {
+   "cell": "E",
+   "problem_index": 61,
+   "sample": 2,
+   "attempt": 0,
+   "seed": 3020061,
+   "n_new": 14350,
+   "cap_hit": false,
+   "finish_reason": "stop",
+   "loop_A": false,
+   "extracted_v3": "89",
+   "score_v3": 0,
+   "gold": "113"
+  }
+ ],
+ "raw_rows_note": "10 finished wrong edit rows read (problems 29, 57, 61): all finish_reason stop, no cap hit, distinct seeds. Problem 29 sample 0 'extracted' a 1,000-character incoherent drift text (14,896 tokens, under the cap): it counts as a finished wrong answer that agrees with nothing. Such extractions (> 40 characters) are rare: E 4 of 443, R 4 of 404, B 3 of 368, T 0 of 108; 15-23 rows per cell end within 400 tokens of the cap. Problem 57: all 4 edit samples give 2744 (gold 928), a systematic wrong value. Seeds are unique within every cell. The statistic measures agreement of short final answers, as named.",
+ "rows": [
+  {
+   "mechanism": "round-16/account-2/c2",
+   "claim": "The 1.5x edit carries RL's re-ranking of routes, so where both fail its normalized wrong-answer agreement with RL exceeds the cued base's by 0.08-0.6.",
+   "result": "result-088836",
+   "verdict": "not separated",
+   "measured": "0.286 [0.133, 0.444], n 118, adversary 0.151",
+   "interval": [
+    0.1328,
+    0.4439
+   ],
+   "range": [
+    0.08,
+    0.6
+   ],
+   "adversary": 0.1509,
+   "n": 118
+  },
+  {
+   "mechanism": "round-16/account-3/deny-account-2-c2",
+   "claim": "Under S3 the edit and RL only lower the chance-slip rate, so N(E,R) equals N(B,R) and D lies in [-0.10, 0.07].",
+   "result": "result-088836",
+   "verdict": "refuted",
+   "measured": "0.286 [0.133, 0.444], n 118, adversary 0.151",
+   "interval": [
+    0.1328,
+    0.4439
+   ],
+   "range": [
+    -0.1,
+    0.07
+   ],
+   "adversary": 0.1509,
+   "n": 118
+  }
+ ]
+}
