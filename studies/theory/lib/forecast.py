@@ -1364,9 +1364,9 @@ def open_forecasts(folder, accounts, facts_text, explore):
     rows.sort(key=lambda r: (not (r["best"] and r["best"]["deciding"]), -(r["best"]["gap_widths"] if r["best"] else -1)))
     (folder / "open_forecasts.json").write_text(json.dumps({"utc": now(), "snapshot": utc, "pairs": pairs, "targets": rows}, indent=1, ensure_ascii=False))
     g = lambda f: f"{f['value']:g} [{f['low']:g}, {f['high']:g}]" if f else "rejected"  # noqa: E731
-    md = [f"# Open forecasts, {folder.name} (engine 19)\n\nWritten {now()} UTC; board snapshot {utc} UTC. {len(targets)} targets from the open work items; "
-          f"{len(ks)} accounts, each against one covariate-only adversary (blind to the account, no RL sample or RL-derived edit as a predictor; "
-          "a judge rejects a forecast that is the account's claim by construction), and the two no-theory readers. Gap = |account - adversary| / the "
+    md = [f"# Open forecasts, {folder.name} (engine 20)\n\nWritten {now()} UTC; board snapshot {utc} UTC. {len(targets)} targets from the open work items; "
+          f"{len(ks)} accounts, each against one covariate-only adversary (blind to the account; stored counts of every cell, RL-derived edits included, "
+          "as data, no mechanism claim; a judge rejects a forecast that rests on one), and the two no-theory readers. Gap = |account - adversary| / the "
           "wider 90 % interval. Deciding: the two 90 % intervals do not overlap; weak: they overlap. If a side is right, the measured value lies inside "
           "its own 90 % interval with chance 90 % by definition; \"adv. right: in acc.\" is the chance it lies inside the account's interval if the "
           "adversary's forecast is right, \"acc. right: in adv.\" the reverse (normal, sd = width / 3.29). The board item named decides the target.\n",
@@ -1643,12 +1643,13 @@ def synthesis(folder, sources, row_tests=False):
     stages["accounts and targets"] = round((time.time() - t0) / 60, 1)
     jd = engine.tmp() / "synthesis"  # version 20 leak check: no account job's inputs or transcript names a test cell
     leak_check = {"transcripts_naming_a_test_cell": name_hits(p for k in range(1, ACCOUNTS + 1) for p in (jd / f"account-{k}").glob("out*.txt")),
-                  "inputs_stating_a_test_cell": [f"{x}: {leaks(common[x])[:3]}" for x in ("DIRECTION.md", "results.md", "data.md") if leaks(common[x])]
-                  + (["facts.json"] if leaks(facts_text) else []),
+                  "input_lines_stating_a_test_cell": [f"{x}: {line[:160]} -> {leaks(line)[:3]}" for x in ("DIRECTION.md", "results.md", "data.md", "jobs.md")
+                                                      for line in common[x].splitlines() if leaks(line)]  # per line: a whole file always pairs some number with some set mark
+                  + [f"facts.json: {f['id']}" for f in facts if leaks(json.dumps(f, ensure_ascii=False))],
                   "withheld_rows_in_explore_copy": [p.name for p in explore.rglob("*.jsonl") if leaks(p.stem.replace("__", "/"))],
                   "facts_withheld": withheld, "board_items_withheld": len(items) - len(shown_items)}
     print(f"  leak check: {leak_check['transcripts_naming_a_test_cell'][:3] or 'no transcript names a test cell'}; "
-          f"inputs {leak_check['inputs_stating_a_test_cell'] or 'clean'}; explore copy {leak_check['withheld_rows_in_explore_copy'] or 'clean'}")
+          f"input lines {leak_check['input_lines_stating_a_test_cell'][:3] or 'clean'}; explore copy {leak_check['withheld_rows_in_explore_copy'] or 'clean'}")
     for x in dropped:
         print(f"  dropped {x['account']}: {x['reason']}")
     print("== blind markers" + (" and adversaries" if row_tests else ""))

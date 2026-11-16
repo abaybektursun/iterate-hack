@@ -1,0 +1,438 @@
+{
+ "forecasts": [
+  {
+   "id": "h01",
+   "value": 176,
+   "low": 162,
+   "high": 190,
+   "derivation": "S3 (base at inference reaches only part, slip/cap not fixed): cued base 164 at 16k (day1) plus a share of its 77 cap hits finishing at 32k, ~20% right as in Think-SFT late answers (result-dd26fe)."
+  },
+  {
+   "id": "h02",
+   "value": 426,
+   "low": 414,
+   "high": 438,
+   "derivation": "S2 (switch done by step 100): cued base 410.5 + step-100-with-cue lead 3.1 pts (result-53ce14)."
+  },
+  {
+   "id": "h03",
+   "value": 426,
+   "low": 417,
+   "high": 435,
+   "derivation": "S2: step-100 cue = cued base 410.5 + 15.5 (result-53ce14, cue adds 8.5 over plain, result-6ecd35), 3-sample mean."
+  },
+  {
+   "id": "h04",
+   "value": 417,
+   "low": 405,
+   "high": 429,
+   "derivation": "S2: step-100 plain within +1.4 pts of cued base 410.5 (result-53ce14)."
+  },
+  {
+   "id": "h05",
+   "value": 418,
+   "low": 409,
+   "high": 427,
+   "derivation": "S2: step-100 plain ~417.5 (cued base 410.5 + 1.4 pts, result-53ce14), 3-sample mean."
+  },
+  {
+   "id": "h06",
+   "value": 439,
+   "low": 427,
+   "high": 451,
+   "derivation": "S2 (after step 100 slip rate falls, cue adds little): s0400 plain 436 (explore) + ~3 for the cue."
+  },
+  {
+   "id": "h07",
+   "value": 436,
+   "low": 427,
+   "high": 445,
+   "derivation": "S2: s0400 plain 436 single sample (explore); 3-sample mean at the same level."
+  },
+  {
+   "id": "h08",
+   "value": 202,
+   "low": 190,
+   "high": 214,
+   "derivation": "S4: RL per-sample 205 of 328 (account; rl_cue_T1 205, cap32 rl_plain 195); cue adds nothing to RL."
+  },
+  {
+   "id": "h09",
+   "value": 380,
+   "low": 362,
+   "high": 398,
+   "derivation": "S3 (T 0.6 loops): cued base 354 at top-p 0.95 with 119 cap hits; top-p 1.0 keeps 71 loops (result-c44ee2), so recover ~25 of the loop losses, below T1.0 410."
+  },
+  {
+   "id": "h10",
+   "value": 78,
+   "low": 62,
+   "high": 94,
+   "derivation": "S3 (switch is what the cue supplies): plain base runs ~0.45-0.5 of the cued base on hard problems (MATH Q4 34 vs 68, fresh 10 vs 30), times cued base 164."
+  },
+  {
+   "id": "h11",
+   "value": 395,
+   "low": 378,
+   "high": 412,
+   "derivation": "S3: base+cue with min-p 0.1 at T1.0 is 404 (explore); T1.5 under min-p truncation stays close, slightly lower."
+  },
+  {
+   "id": "h12",
+   "value": 403,
+   "low": 389,
+   "high": 417,
+   "derivation": "S3: T1.0 removes loops; top-p 0.95 trims tail slightly, between min-p 404 and plain 410."
+  },
+  {
+   "id": "h13",
+   "value": 461,
+   "low": 450,
+   "high": 472,
+   "derivation": "S2: RL insensitive to sampling (463 T1.0, 464 T0.6, 457 wdiff cue); min-p barely moves it."
+  },
+  {
+   "id": "h14",
+   "value": 428,
+   "low": 414,
+   "high": 442,
+   "derivation": "S1 (Code-RL moves along the same base directions): Code-RL hard328 cue 187 vs base 164; on MATH-500 lead over cued base 410 of ~18; code1 plain 390."
+  },
+  {
+   "id": "h15",
+   "value": 400,
+   "low": 365,
+   "high": 430,
+   "derivation": "S1/S2 (switch arrives early along base-used directions): theta0.25 cue 441; a quarter delta switches part of the plain samples, below cue."
+  },
+  {
+   "id": "h16",
+   "value": 444,
+   "low": 428,
+   "high": 458,
+   "derivation": "S2: theta0.5 cue 452 (explore); half delta switches most samples so plain is close to cued."
+  },
+  {
+   "id": "h17",
+   "value": 455,
+   "low": 444,
+   "high": 466,
+   "derivation": "S5 (saturates at RL level): between theta0.5 cue 452 and RL cue 457."
+  },
+  {
+   "id": "h18",
+   "value": 446,
+   "low": 430,
+   "high": 460,
+   "derivation": "S5: saturates at RL level; theta1.25 cue 450, mild over-extrapolation cost at 1.5."
+  },
+  {
+   "id": "h19",
+   "value": 30,
+   "low": 26,
+   "high": 34,
+   "derivation": "S3: cued base fresh2026 single samples 28-32 (result-a74ac3), mean of 4."
+  },
+  {
+   "id": "h20",
+   "value": 52,
+   "low": 46,
+   "high": 58,
+   "derivation": "S2 (RL samples agree, vote gains little): RL vote 57 on fresh2026 (result-d1f7eb), per-sample a few below."
+  },
+  {
+   "id": "h21",
+   "value": 59,
+   "low": 55,
+   "high": 63,
+   "derivation": "S5: Think-SFT cue fresh2026 per-sample at 16k 59.0 (result-dd26fe)."
+  },
+  {
+   "id": "h22",
+   "value": 360,
+   "low": 320,
+   "high": 398,
+   "derivation": "S1 (reward sets distance): Code 3.0 cue 411 ~ base, plain loses some switch; code1 plain 390 as upper anchor."
+  },
+  {
+   "id": "h23",
+   "value": 400,
+   "low": 382,
+   "high": 416,
+   "derivation": "S1: General directions do not finish math (88 vs 77 cap hits, result-82eb02); cue near cued base 410, IF cue 377."
+  },
+  {
+   "id": "h24",
+   "value": 240,
+   "low": 130,
+   "high": 350,
+   "derivation": "S1: LM-judge RL does not move along the math route far; plain near base plain 224 with format risk (IF plain 55)."
+  },
+  {
+   "id": "h25",
+   "value": 446,
+   "low": 434,
+   "high": 458,
+   "derivation": "S2: Math 3.0 plain 443 already switched; cue adds little."
+  },
+  {
+   "id": "h26",
+   "value": 436,
+   "low": 418,
+   "high": 452,
+   "derivation": "S2/S3: Mix plain 372 loses format; cue restores switch, Mix lowers slips most (result-faf15a) so near Math 3.0."
+  },
+  {
+   "id": "h27",
+   "value": 18,
+   "low": 14,
+   "high": 23,
+   "derivation": "S4: cued base ~0.8 of RL on hard328; RL 27 of 72 is inflated by training overlap, so lower."
+  },
+  {
+   "id": "h28",
+   "value": 21,
+   "low": 17,
+   "high": 26,
+   "derivation": "S1: Code-RL closes ~half the base-RL gap on hard328 (187 vs 164/205); base ~18, RL 27."
+  },
+  {
+   "id": "h29",
+   "value": 54,
+   "low": 42,
+   "high": 66,
+   "derivation": "S1: Code-RL ~0.89 of Think-SFT on hard328 (187 vs 209); hardmatch rate assumed ~0.42."
+  },
+  {
+   "id": "h30",
+   "value": 62,
+   "low": 50,
+   "high": 74,
+   "derivation": "S5: Think-SFT ~46% on hard72 (33.25), 64% on hard328; matched set in between."
+  },
+  {
+   "id": "h31",
+   "value": 162,
+   "low": 151,
+   "high": 174,
+   "derivation": "S3: self-distilled sdV plain 161 vs cue 167; sdU cue 168 -> plain ~6 lower."
+  },
+  {
+   "id": "h32",
+   "value": 412,
+   "low": 399,
+   "high": 425,
+   "derivation": "S3: in-context shots leave the cued base at ~406-417 (shots1/shots1b explore)."
+  },
+  {
+   "id": "h33",
+   "value": 164,
+   "low": 152,
+   "high": 177,
+   "derivation": "S3: shots do not add on hard328; cued base 164."
+  },
+  {
+   "id": "h34",
+   "value": 233,
+   "low": 222,
+   "high": 244,
+   "derivation": "S5 (adding directions to a switched model adds nothing): Think-SFT cap32 230, native 232; SFT+2x RL 231.5 (result-3387ce)."
+  },
+  {
+   "id": "h35",
+   "value": 184,
+   "low": 172,
+   "high": 196,
+   "derivation": "S5: layers 0-10 at 1.5x give about half, 184 (explore)."
+  },
+  {
+   "id": "h36",
+   "value": 184,
+   "low": 172,
+   "high": 196,
+   "derivation": "S5: layers 0-10 at 1.5x, 184 (explore, other seeds)."
+  },
+  {
+   "id": "h37",
+   "value": 183,
+   "low": 171,
+   "high": 195,
+   "derivation": "S5: layers 11-21 at 1.5x, 183 (explore)."
+  },
+  {
+   "id": "h38",
+   "value": 165,
+   "low": 153,
+   "high": 177,
+   "derivation": "S5: layers 22-31 give nothing, 166 (explore)."
+  },
+  {
+   "id": "h39",
+   "value": 196,
+   "low": 184,
+   "high": 208,
+   "derivation": "S5: adding directions onto RL adds nothing (193-197); RL ~200."
+  },
+  {
+   "id": "h40",
+   "value": 176,
+   "low": 163,
+   "high": 189,
+   "derivation": "S1: the part of Math 3.1's change shared with Code 3.0's subspace (input overlap ~0.22) gives partial gain."
+  },
+  {
+   "id": "h41",
+   "value": 183,
+   "low": 169,
+   "high": 197,
+   "derivation": "S1/S5: Math-specific part of the delta at 1x gives about half the gain, near top8 1x."
+  },
+  {
+   "id": "h42",
+   "value": 162,
+   "low": 151,
+   "high": 173,
+   "derivation": "S4: random rank-8 edits stay at 159-167."
+  },
+  {
+   "id": "h43",
+   "value": 163,
+   "low": 151,
+   "high": 175,
+   "derivation": "S4: random matched edits carry no gain (random difference 0.00, result-faf15a); base 164."
+  },
+  {
+   "id": "h44",
+   "value": 209,
+   "low": 197,
+   "high": 221,
+   "derivation": "S5: random edit onto Think-SFT leaves its 16k score 209 (thinkvote per-sample)."
+  },
+  {
+   "id": "h45",
+   "value": 222,
+   "low": 209,
+   "high": 235,
+   "derivation": "S5/S2: Think-SFT 209 at 16k, top8x3 onto it 232 by finishing; 1.5x in between."
+  },
+  {
+   "id": "h46",
+   "value": 231,
+   "low": 219,
+   "high": 243,
+   "derivation": "S5: sft_top8x3 seed 1 = 232 (explore)."
+  },
+  {
+   "id": "h47",
+   "value": 178,
+   "low": 166,
+   "high": 190,
+   "derivation": "S5: top-1 gives about half (181 at 1x, 182 at 1.5x) and drops at 3x (168)."
+  },
+  {
+   "id": "h48",
+   "value": 194,
+   "low": 181,
+   "high": 207,
+   "derivation": "S4/S5: more directions at 1x approach RL's 205; top8 1.5x 203."
+  },
+  {
+   "id": "h49",
+   "value": 167,
+   "low": 155,
+   "high": 179,
+   "derivation": "S1: Code 3.0 gains nothing on math (xreward X3); top-8 at 1x ~ base 164."
+  },
+  {
+   "id": "h50",
+   "value": 177,
+   "low": 164,
+   "high": 190,
+   "derivation": "S1/S6: Code 3.1 model +23 on hard328; its top-8 at 1x carries about half."
+  },
+  {
+   "id": "h51",
+   "value": 157,
+   "low": 146,
+   "high": 169,
+   "derivation": "S5: IF top-8 gives nothing (155); General directions do not finish math (result-82eb02)."
+  },
+  {
+   "id": "h52",
+   "value": 189,
+   "low": 177,
+   "high": 201,
+   "derivation": "S4/S5: dial cap hits 77/46/25 at 0/1/1.5x; accuracy between 164 and 203."
+  },
+  {
+   "id": "h53",
+   "value": 173,
+   "low": 161,
+   "high": 185,
+   "derivation": "S5: attention-only half of the top-8 edit at 1x gives part of the 1x gain."
+  },
+  {
+   "id": "h54",
+   "value": 177,
+   "low": 165,
+   "high": 189,
+   "derivation": "S5: MLP-only half of the top-8 edit at 1x gives part, slightly more than attention."
+  },
+  {
+   "id": "h55",
+   "value": 176,
+   "low": 164,
+   "high": 188,
+   "derivation": "S4: 0.5x cuts cap hits 77->50 (result-8c92fc), about a third of the gain."
+  },
+  {
+   "id": "h56",
+   "value": 200,
+   "low": 188,
+   "high": 212,
+   "derivation": "S5: saturates at RL's level; cap hits 5 at 2x."
+  },
+  {
+   "id": "h57",
+   "value": 186,
+   "low": 166,
+   "high": 204,
+   "derivation": "S5: over-scaling drops (top-1 3x 168, L22-31 3x 155); top-8 3x below the 1.5x peak."
+  },
+  {
+   "id": "h58",
+   "value": 116,
+   "low": 100,
+   "high": 134,
+   "derivation": "F04: -1x raises cap hits to 96 and cuts finished-right to 51.5% vs 70%: 164 x 0.68."
+  },
+  {
+   "id": "h59",
+   "value": 181,
+   "low": 170,
+   "high": 193,
+   "derivation": "S5: top-1 at 1.5x, 182 (explore, seed 1)."
+  },
+  {
+   "id": "h60",
+   "value": 164,
+   "low": 153,
+   "high": 175,
+   "derivation": "S5: tiny scale on one band adds nothing; base 164."
+  },
+  {
+   "id": "h61",
+   "value": 183,
+   "low": 171,
+   "high": 195,
+   "derivation": "S5: d2-8 at 1.5x = 183 (explore, seed 1)."
+  },
+  {
+   "id": "h62",
+   "value": 142,
+   "low": 122,
+   "high": 160,
+   "derivation": "S5: layers 22-31 hurt with scale (166 at 1.5x, 155 at 3x); 4.5x lower still."
+  }
+ ]
+}

@@ -1,0 +1,438 @@
+{
+ "forecasts": [
+  {
+   "id": "h01",
+   "value": 168,
+   "low": 155,
+   "high": 181,
+   "derivation": "Account s4/s5: base cue hard328 ~158-164 at 16k (day1 164, 4-sample 158.5) plus a few cap-hit rows finishing right at 32k (Think-SFT late answers ~27% right, result-dd26fe)"
+  },
+  {
+   "id": "h02",
+   "value": 426,
+   "low": 413,
+   "high": 439,
+   "derivation": "Account s4: step 100 is the cued base's stage; paper result-53ce14 puts step-100 cue 3.1 pts above cued base 410.5"
+  },
+  {
+   "id": "h03",
+   "value": 426,
+   "low": 418,
+   "high": 434,
+   "derivation": "Account s4: step-100 cue = cued base 410.5 + 3.1 pts (result-53ce14), mean of 3 samples"
+  },
+  {
+   "id": "h04",
+   "value": 417,
+   "low": 405,
+   "high": 429,
+   "derivation": "Account s4: step 100 plain within 1.4 pts of cued base 410.5 (result-53ce14); cue-plain D +8.5 (result-6ecd35)"
+  },
+  {
+   "id": "h05",
+   "value": 418,
+   "low": 410,
+   "high": 426,
+   "derivation": "Account s4: step-100 plain = cued base +1.4 pts (result-53ce14), mean of 3 samples"
+  },
+  {
+   "id": "h06",
+   "value": 439,
+   "low": 428,
+   "high": 450,
+   "derivation": "Account s5: steps 100-400 add reliability; s0400 plain 436 (explore), step400-step100 +20 (result-6ecd35), cue adds little after the opening is installed"
+  },
+  {
+   "id": "h07",
+   "value": 438,
+   "low": 431,
+   "high": 445,
+   "derivation": "Explore s0400 plain 436 and step400 = step100 plain 417.5 + 20.25 (result-6ecd35); 3-sample mean"
+  },
+  {
+   "id": "h08",
+   "value": 204,
+   "low": 195,
+   "high": 213,
+   "derivation": "Account s2: RL 200.0 per 4-sample draw on hard328; hill chart RL 62.8% and RL cue 205 single sample"
+  },
+  {
+   "id": "h09",
+   "value": 358,
+   "low": 342,
+   "high": 374,
+   "derivation": "Account s5: at T 0.6 the cued base loops (71 loops at top-p 1.0 vs 68 at 0.95, result-c44ee2), so near the 354 of top-p 0.95"
+  },
+  {
+   "id": "h10",
+   "value": 76,
+   "low": 64,
+   "high": 88,
+   "derivation": "Account s4: without the cue the base lacks the deliberative mode; paper 6 (result-bd61b5) gives plain base 75 of 328"
+  },
+  {
+   "id": "h11",
+   "value": 401,
+   "low": 384,
+   "high": 416,
+   "derivation": "Account s5: truncation cannot remove per-step slips (result-faf15a); min-p 0.1 T1 gives 404 (explore), T1.5 slightly noisier"
+  },
+  {
+   "id": "h12",
+   "value": 407,
+   "low": 395,
+   "high": 419,
+   "derivation": "Account s5: sharpening trades slips for loops; cued base T1 410, top-p 0.95 mild sharpening"
+  },
+  {
+   "id": "h13",
+   "value": 460,
+   "low": 451,
+   "high": 469,
+   "derivation": "Account s5: RL already reliable; RL cue 457 (explore), min-p barely changes it"
+  },
+  {
+   "id": "h14",
+   "value": 428,
+   "low": 415,
+   "high": 441,
+   "derivation": "Account s6/s3: Code-RL shares input side; code1 cue hard328 187 = 56% of RL gain (explore), Code 3.1 leads Code 3.0 (411) mainly on long problems (result-07f566)"
+  },
+  {
+   "id": "h15",
+   "value": 395,
+   "low": 350,
+   "high": 435,
+   "derivation": "Account s4: the opening is the stage RL installs first; theta0.25 cue 441 (explore), plain gets only part of the opening shift (a=0.25 acts ~0.12 in bf16)"
+  },
+  {
+   "id": "h16",
+   "value": 445,
+   "low": 428,
+   "high": 458,
+   "derivation": "Account s4: at half the RL change the opening is installed; theta0.5 cue 452 (explore), RL plain 463 >= cue"
+  },
+  {
+   "id": "h17",
+   "value": 456,
+   "low": 446,
+   "high": 465,
+   "derivation": "Account s3: no gain beyond RL level; theta0.5 452, RL 457 (explore)"
+  },
+  {
+   "id": "h18",
+   "value": 435,
+   "low": 398,
+   "high": 458,
+   "derivation": "Account s3: no gain beyond RL level (theta1.25 450); larger extrapolation starts to break stopping"
+  },
+  {
+   "id": "h19",
+   "value": 30,
+   "low": 27,
+   "high": 33,
+   "derivation": "Account s4: cued base on fresh2026 28-32 per sample (result-a74ac3), vote 38"
+  },
+  {
+   "id": "h20",
+   "value": 51,
+   "low": 46,
+   "high": 56,
+   "derivation": "Account s5: RL gains little from voting; RL vote 57 on fresh2026 (result-d1f7eb)"
+  },
+  {
+   "id": "h21",
+   "value": 59,
+   "low": 54,
+   "high": 64,
+   "derivation": "Think-SFT cue on fresh2026 cut at 16,384: 59.0 per sample (result-dd26fe); explore cap32 70.25"
+  },
+  {
+   "id": "h22",
+   "value": 380,
+   "low": 350,
+   "high": 405,
+   "derivation": "Account s1/s6: Code reward writes reward-specific directions; code30 cue 411 and code1 plain 390 vs its cue (explore) give a ~30-pt plain penalty"
+  },
+  {
+   "id": "h23",
+   "value": 402,
+   "low": 385,
+   "high": 418,
+   "derivation": "Account s3: General's top-8 lie outside Math's subspace (overlap 0.045) and do not finish math (result-82eb02), so near the cued base 410"
+  },
+  {
+   "id": "h24",
+   "value": 240,
+   "low": 140,
+   "high": 340,
+   "derivation": "Account s3: General's change is off Math's subspace; plain base 224, IF30 plain 55 and mix30 plain 372 (explore) bound it"
+  },
+  {
+   "id": "h25",
+   "value": 445,
+   "low": 434,
+   "high": 456,
+   "derivation": "Account s3: Math 3.0 shares Math 3.1's subspace (0.476); math30 plain 443 (explore), cue ~ equal"
+  },
+  {
+   "id": "h26",
+   "value": 420,
+   "low": 402,
+   "high": 437,
+   "derivation": "Account s3: Mix overlaps Math 3.0 only 0.197; mix30 plain 372, if30 cue 377 vs plain 55 (explore) show the cue repairing IF-type format loss"
+  },
+  {
+   "id": "h27",
+   "value": 23,
+   "low": 18,
+   "high": 28,
+   "derivation": "Account s5: cued base ~48% per sample on hard328; scaled by the hard72 difficulty ratio from RL 27.0 and Think-SFT 33.25 (explore)"
+  },
+  {
+   "id": "h28",
+   "value": 26,
+   "low": 21,
+   "high": 31,
+   "derivation": "code1 cue hard328 187/328 (explore) scaled by hard72 difficulty ratio from RL 27.0 and SFT 33.25"
+  },
+  {
+   "id": "h29",
+   "value": 46,
+   "low": 36,
+   "high": 56,
+   "derivation": "code1 per-sample rate on hard72-like difficulty (~0.36) times 130 problems"
+  },
+  {
+   "id": "h30",
+   "value": 60,
+   "low": 50,
+   "high": 70,
+   "derivation": "Think-SFT hard72 33.25/72 = 0.46 per sample (explore) times 130 matched problems"
+  },
+  {
+   "id": "h31",
+   "value": 162,
+   "low": 150,
+   "high": 174,
+   "derivation": "Self-distill U carries no RL directions; sdU cue 168, sdV plain 161 (explore)"
+  },
+  {
+   "id": "h32",
+   "value": 412,
+   "low": 400,
+   "high": 424,
+   "derivation": "Account s4: inference-only changes reach the cued-base stage; shots1 base 417, code 415, shots1b 408/406 (explore)"
+  },
+  {
+   "id": "h33",
+   "value": 160,
+   "low": 148,
+   "high": 172,
+   "derivation": "Account s4: in-context RL shots do not add RL's reliability; cued base hard328 158.5-164"
+  },
+  {
+   "id": "h34",
+   "value": 234,
+   "low": 222,
+   "high": 246,
+   "derivation": "Account s1: Think-SFT lies in RL's subspace; Think-SFT+2x RL delta 231.5 (result-8c92fc), sft_top8x3 232 and Think-SFT cap32 230-232 (explore)"
+  },
+  {
+   "id": "h35",
+   "value": 183,
+   "low": 175,
+   "high": 191,
+   "derivation": "Account s3: band 0-10 adds ~20 points; depth3 L0-10 4 samples total 734 incl. 184 and 184 (result-6f7ca3), leaving 366 for s1+s2"
+  },
+  {
+   "id": "h36",
+   "value": 183,
+   "low": 175,
+   "high": 191,
+   "derivation": "Account s3: depth3 L0-10 4-sample total 734 minus the two stored 184s = 366 for s1+s2 (result-6f7ca3)"
+  },
+  {
+   "id": "h37",
+   "value": 179,
+   "low": 174,
+   "high": 184,
+   "derivation": "Account s3: band 11-21 adds ~20; depth3 L11-21 2-sample total 362 minus stored 183 = 179 (result-6f7ca3)"
+  },
+  {
+   "id": "h38",
+   "value": 161,
+   "low": 156,
+   "high": 166,
+   "derivation": "Account s3: layers 22-31 alone add nothing; depth3 L22-31 2-sample total 327 minus stored 166 = 161 (result-6f7ca3)"
+  },
+  {
+   "id": "h39",
+   "value": 198,
+   "low": 186,
+   "high": 210,
+   "derivation": "Account s3: other top-8 help only inside Math's subspace and nothing beyond RL level; math1.5+rand1.5 197, math1+code1 193 (explore)"
+  },
+  {
+   "id": "h40",
+   "value": 170,
+   "low": 157,
+   "high": 184,
+   "derivation": "Account s3: only the part in Math 3.1's top-8 subspace helps; Math/Code overlap 0.22-0.26, so the projected edit carries a small share of the ~40-pt gain"
+  },
+  {
+   "id": "h41",
+   "value": 178,
+   "low": 162,
+   "high": 194,
+   "derivation": "Account s3: complement edit keeps part of Math's rank-8 gain; between base 160 and top-8 1x ~190"
+  },
+  {
+   "id": "h42",
+   "value": 162,
+   "low": 151,
+   "high": 173,
+   "derivation": "Account s2: equal-norm random rank-8 159-167 (explore rand8 cells)"
+  },
+  {
+   "id": "h43",
+   "value": 162,
+   "low": 150,
+   "high": 174,
+   "derivation": "Account s3: gain is in the rank, not the norm; random bulk of RL's norm ~ base (random rank-8 159-167)"
+  },
+  {
+   "id": "h44",
+   "value": 208,
+   "low": 197,
+   "high": 219,
+   "derivation": "Account s3: random directions add nothing; Think-SFT cue at cap 16k 204-211 (result-dd9239, result-dd26fe)"
+  },
+  {
+   "id": "h45",
+   "value": 222,
+   "low": 210,
+   "high": 234,
+   "derivation": "Account s1: Think-SFT host + Math top-8; x3 gives 232 (explore), Think-SFT alone ~208 at 16k"
+  },
+  {
+   "id": "h46",
+   "value": 230,
+   "low": 219,
+   "high": 241,
+   "derivation": "Second sample of sft_top8x3 (explore 232)"
+  },
+  {
+   "id": "h47",
+   "value": 177,
+   "low": 166,
+   "high": 188,
+   "derivation": "Account s3: one direction gives half; top1 1x 181, 1.5x 182, 3x 168 (explore)"
+  },
+  {
+   "id": "h48",
+   "value": 195,
+   "low": 184,
+   "high": 206,
+   "derivation": "Account s3: gain sits in the rank; top-64 at 1x carries more of RL than top-8 1x (~190) up to RL 200"
+  },
+  {
+   "id": "h49",
+   "value": 162,
+   "low": 151,
+   "high": 173,
+   "derivation": "Account s3: Code 3.0's top-8 overlap Math 3.1 only 0.218 and gain nothing (result-9d979a); ~ random rank-8"
+  },
+  {
+   "id": "h50",
+   "value": 172,
+   "low": 160,
+   "high": 184,
+   "derivation": "Account s3/s6: Code 3.1's top-8 share inputs with Math (0.22-0.26) but write code-specific directions; modest finishing gain over base"
+  },
+  {
+   "id": "h51",
+   "value": 158,
+   "low": 147,
+   "high": 169,
+   "derivation": "Account s3: General overlaps Math 0.045 and does not finish math (88 cap hits vs 77, result-82eb02); IF top-8 gave 155"
+  },
+  {
+   "id": "h52",
+   "value": 190,
+   "low": 180,
+   "high": 200,
+   "derivation": "Account s2/s3: top-8 at 1x between top1 1x 181 and 1.5x 200-203; cap hits 46 vs 25 (result-8c92fc)"
+  },
+  {
+   "id": "h53",
+   "value": 172,
+   "low": 160,
+   "high": 184,
+   "derivation": "Account s3: gain in layers 0-21 of the rank-8 edit; attention-only carries a minority of the ~30-pt 1x gain"
+  },
+  {
+   "id": "h54",
+   "value": 180,
+   "low": 168,
+   "high": 192,
+   "derivation": "Account s3: MLP-only carries the larger part of the 1x gain (~190 total)"
+  },
+  {
+   "id": "h55",
+   "value": 176,
+   "low": 165,
+   "high": 187,
+   "derivation": "Account s2: half-size edit, cap hits 50 at 0.5x (result-8c92fc), between base 160 and 1x 190"
+  },
+  {
+   "id": "h56",
+   "value": 197,
+   "low": 186,
+   "high": 208,
+   "derivation": "Account s3: no gain beyond RL level; 2x cuts cap hits to 5, right ~ 1.5x level 200"
+  },
+  {
+   "id": "h57",
+   "value": 180,
+   "low": 160,
+   "high": 198,
+   "derivation": "Account s3: overshoot loses (top1 3x 168, L22-31 3x 155); full 8 dirs at 3x lose some"
+  },
+  {
+   "id": "h58",
+   "value": 120,
+   "low": 107,
+   "high": 133,
+   "derivation": "Account s2: signed dial; -1x gives 96 cap hits and 51.5% right of finished (F04): 232 x 0.515"
+  },
+  {
+   "id": "h59",
+   "value": 183,
+   "low": 173,
+   "high": 193,
+   "derivation": "Account s3: one direction gives half; top1x1.5 s1 182 (explore), paper 6 dir-1 +7.5 pts over base 158.5"
+  },
+  {
+   "id": "h60",
+   "value": 161,
+   "low": 150,
+   "high": 172,
+   "derivation": "Account s3: 0.2x on one band is near the base (158.5-164)"
+  },
+  {
+   "id": "h61",
+   "value": 189,
+   "low": 178,
+   "high": 200,
+   "derivation": "Account s3: directions 2-8 carry the right answers; s1 183 (explore), paper 6 +9.5 pts over base 158.5 (~190)"
+  },
+  {
+   "id": "h62",
+   "value": 145,
+   "low": 127,
+   "high": 161,
+   "derivation": "Account s3: layers 22-31 add nothing and degrade with size (166 at 1.5x, 155 at 3x)"
+  }
+ ]
+}

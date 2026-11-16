@@ -1,0 +1,1368 @@
+{
+ "targets": [
+  {
+   "id": "h01",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "cap32/base_cue-01",
+    "model": "base",
+    "model_repo": "allenai/Olmo-3-1025-7B",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 32768,
+    "seed": 3000000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of base on hard328 (cap32/base_cue-01)"
+  },
+  {
+   "id": "h02",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "ckptcue/s0100_cue-01",
+    "model": "s0100",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 41000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of s0100 on math500 (ckptcue/s0100_cue-01)"
+  },
+  {
+   "id": "h03",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "ckptcue/s0100_cue_s123-01",
+    "model": "s0100",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 3,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 41010000
+   },
+   "unit": "right answers of 500 per sample (mean over 3 samples), grader v3",
+   "what": "right answers per sample of s0100 on math500 (ckptcue/s0100_cue_s123-01)"
+  },
+  {
+   "id": "h04",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "ckptcue/s0100_plain-01",
+    "model": "s0100",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "plain",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 45000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of s0100 on math500 (ckptcue/s0100_plain-01)"
+  },
+  {
+   "id": "h05",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "ckptcue/s0100_plain_s123-01",
+    "model": "s0100",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "plain",
+    "set": "math500",
+    "n": 500,
+    "samples": 3,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 45010000
+   },
+   "unit": "right answers of 500 per sample (mean over 3 samples), grader v3",
+   "what": "right answers per sample of s0100 on math500 (ckptcue/s0100_plain_s123-01)"
+  },
+  {
+   "id": "h06",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "ckptcue/s0400_cue-01",
+    "model": "s0400",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 41000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of s0400 on math500 (ckptcue/s0400_cue-01)"
+  },
+  {
+   "id": "h07",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "ckptcue/s0400_plain_s123-01",
+    "model": "s0400",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "plain",
+    "set": "math500",
+    "n": 500,
+    "samples": 3,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 45010000
+   },
+   "unit": "right answers of 500 per sample (mean over 3 samples), grader v3",
+   "what": "right answers per sample of s0400 on math500 (ckptcue/s0400_plain_s123-01)"
+  },
+  {
+   "id": "h08",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "day1/hard328_rl_plain_t10-01",
+    "model": "rl",
+    "model_repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "plain",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 3000000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of rl on hard328 (day1/hard328_rl_plain_t10-01)"
+  },
+  {
+   "id": "h09",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "day1/math500_base_cue_t06_p10-01",
+    "model": "base",
+    "model_repo": "allenai/Olmo-3-1025-7B",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 0.6,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 1000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of base on math500 (day1/math500_base_cue_t06_p10-01)"
+  },
+  {
+   "id": "h10",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "day1_hard328/base_plain_T1-01",
+    "model": "base",
+    "model_repo": "allenai/Olmo-3-1025-7B",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "plain",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 50000000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of base on hard328 (day1_hard328/base_plain_T1-01)"
+  },
+  {
+   "id": "h11",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "day1_minp/base_mp0.1_T1.5-01",
+    "model": "base",
+    "model_repo": "allenai/Olmo-3-1025-7B",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.5,
+    "top_p": 1.0,
+    "min_p": 0.1,
+    "max_tokens": 16384,
+    "seed": 41000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of base on math500 (day1_minp/base_mp0.1_T1.5-01)"
+  },
+  {
+   "id": "h12",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "day1_minp/base_p0.95_T1-01",
+    "model": "base",
+    "model_repo": "allenai/Olmo-3-1025-7B",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 0.95,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 41000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of base on math500 (day1_minp/base_p0.95_T1-01)"
+  },
+  {
+   "id": "h13",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "day1_minp/rl_mp0.1_T1-01",
+    "model": "rl",
+    "model_repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.1,
+    "max_tokens": 16384,
+    "seed": 66000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of rl on math500 (day1_minp/rl_mp0.1_T1-01)"
+  },
+  {
+   "id": "h14",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "day1_wdiff/code_cue-01",
+    "model": "code1",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 68000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of code1 on math500 (day1_wdiff/code_cue-01)"
+  },
+  {
+   "id": "h15",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "day1_wdiff/theta0.25_plain-01",
+    "model": "theta0.25",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "plain",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 64000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of theta0.25 on math500 (day1_wdiff/theta0.25_plain-01)"
+  },
+  {
+   "id": "h16",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "day1_wdiff/theta0.5_plain-01",
+    "model": "theta0.5",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "plain",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 65000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of theta0.5 on math500 (day1_wdiff/theta0.5_plain-01)"
+  },
+  {
+   "id": "h17",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "day1_wdiff/theta0.75_cue-01",
+    "model": "theta0.75",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 62000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of theta0.75 on math500 (day1_wdiff/theta0.75_cue-01)"
+  },
+  {
+   "id": "h18",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "day1_wdiff/theta1.5_cue-01",
+    "model": "theta1.5",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 63000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of theta1.5 on math500 (day1_wdiff/theta1.5_cue-01)"
+  },
+  {
+   "id": "h19",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "fresh/base_cue_s4-01",
+    "model": "base",
+    "model_repo": "allenai/Olmo-3-1025-7B",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": 136,
+    "samples": 4,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 7000000
+   },
+   "unit": "right answers of 136 per sample (mean over 4 samples), grader v3",
+   "what": "right answers per sample of base on fresh2026 (fresh/base_cue_s4-01)"
+  },
+  {
+   "id": "h20",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "fresh/rl_plain_s4-01",
+    "model": "rl",
+    "model_repo": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "plain",
+    "set": "fresh2026",
+    "n": 136,
+    "samples": 4,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 7000000
+   },
+   "unit": "right answers of 136 per sample (mean over 4 samples), grader v3",
+   "what": "right answers per sample of rl on fresh2026 (fresh/rl_plain_s4-01)"
+  },
+  {
+   "id": "h21",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "fresh/sft1_cue_s4-01",
+    "model": "sft1",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "fresh2026",
+    "n": 136,
+    "samples": 4,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 7000000
+   },
+   "unit": "right answers of 136 per sample (mean over 4 samples), grader v3",
+   "what": "right answers per sample of sft1 on fresh2026 (fresh/sft1_cue_s4-01)"
+  },
+  {
+   "id": "h22",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "reward5/code30_plain-01",
+    "model": "code30",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "plain",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 100000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of code30 on math500 (reward5/code30_plain-01)"
+  },
+  {
+   "id": "h23",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "reward5/general30_cue-01",
+    "model": "general30",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 92000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of general30 on math500 (reward5/general30_cue-01)"
+  },
+  {
+   "id": "h24",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "reward5/general30_plain-01",
+    "model": "general30",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "plain",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 97000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of general30 on math500 (reward5/general30_plain-01)"
+  },
+  {
+   "id": "h25",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "reward5/math30_cue-01",
+    "model": "math30",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 94000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of math30 on math500 (reward5/math30_cue-01)"
+  },
+  {
+   "id": "h26",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "reward5/mix30_cue-01",
+    "model": "mix30",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 93000000
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of mix30 on math500 (reward5/mix30_cue-01)"
+  },
+  {
+   "id": "h27",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "seen/base_hard72-01",
+    "model": "base",
+    "model_repo": "allenai/Olmo-3-1025-7B",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard72",
+    "n": 72,
+    "samples": 4,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000
+   },
+   "unit": "right answers of 72 per sample (mean over 4 samples), grader v3",
+   "what": "right answers per sample of base on hard72 (seen/base_hard72-01)"
+  },
+  {
+   "id": "h28",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "seen/code_hard72-01",
+    "model": "code1",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard72",
+    "n": 72,
+    "samples": 4,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000
+   },
+   "unit": "right answers of 72 per sample (mean over 4 samples), grader v3",
+   "what": "right answers per sample of code1 on hard72 (seen/code_hard72-01)"
+  },
+  {
+   "id": "h29",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "seen/code_hardmatch-01",
+    "model": "code1",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hardmatch",
+    "n": 130,
+    "samples": 4,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000
+   },
+   "unit": "right answers of 130 per sample (mean over 4 samples), grader v3",
+   "what": "right answers per sample of code1 on hardmatch (seen/code_hardmatch-01)"
+  },
+  {
+   "id": "h30",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "seen/sft_hardmatch-01",
+    "model": "sft1",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hardmatch",
+    "n": 130,
+    "samples": 4,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000
+   },
+   "unit": "right answers of 130 per sample (mean over 4 samples), grader v3",
+   "what": "right answers per sample of sft1 on hardmatch (seen/sft_hardmatch-01)"
+  },
+  {
+   "id": "h31",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "selfdistill/U_plain-01",
+    "model": "sdU",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "plain",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 83000000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of sdU on hard328 (selfdistill/U_plain-01)"
+  },
+  {
+   "id": "h32",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "shots1/rl-01",
+    "model": "base",
+    "model_repo": "allenai/Olmo-3-1025-7B",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "math500",
+    "n": 500,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 71000000,
+    "shots": "studies/rlneurons/data/shots1/rl.json"
+   },
+   "unit": "right answers of 500 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of base on math500 (shots1/rl-01)"
+  },
+  {
+   "id": "h33",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "shots1b/hard328_rl-01",
+    "model": "base",
+    "model_repo": "allenai/Olmo-3-1025-7B",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "shots": "studies/rlneurons/data/shots1/rl.json"
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of base on hard328 (shots1b/hard328_rl-01)"
+  },
+  {
+   "id": "h34",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "transplant/hard328_cap32-01",
+    "model": "sft1_rl20",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 32768,
+    "seed": 3000000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of sft1_rl20 on hard328 (transplant/hard328_cap32-01)"
+  },
+  {
+   "id": "h35",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/depth3/top8x1.5_L0-10_math31_s1-01",
+    "model": "top8x1.5_L0-10_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3010000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8x1.5_L0-10_math31 on hard328 (xreward/depth3/top8x1.5_L0-10_math31_s1-01)"
+  },
+  {
+   "id": "h36",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/depth3/top8x1.5_L0-10_math31_s2-01",
+    "model": "top8x1.5_L0-10_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3020000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8x1.5_L0-10_math31 on hard328 (xreward/depth3/top8x1.5_L0-10_math31_s2-01)"
+  },
+  {
+   "id": "h37",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/depth3/top8x1.5_L11-21_math31_s1-01",
+    "model": "top8x1.5_L11-21_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3010000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8x1.5_L11-21_math31 on hard328 (xreward/depth3/top8x1.5_L11-21_math31_s1-01)"
+  },
+  {
+   "id": "h38",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/depth3/top8x1.5_L22-31_math31_s1-01",
+    "model": "top8x1.5_L22-31_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3010000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8x1.5_L22-31_math31 on hard328 (xreward/depth3/top8x1.5_L22-31_math31_s1-01)"
+  },
+  {
+   "id": "h39",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/math1.5_code1.5-01",
+    "model": "math1.5_code1.5",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "code31",
+     "onto": "/tmp/theta1",
+     "scale": 1.5,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of math1.5_code1.5 on hard328 (xreward/edits/math1.5_code1.5-01)"
+  },
+  {
+   "id": "h40",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/proj_math31_code30-01",
+    "model": "proj_math31_code30",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "proj",
+     "other": "math31",
+     "donor": "code30",
+     "scale": 1.0,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of proj_math31_code30 on hard328 (xreward/edits/proj_math31_code30-01)"
+  },
+  {
+   "id": "h41",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/projc_math31_code30-01",
+    "model": "projc_math31_code30",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "projc",
+     "other": "math31",
+     "donor": "code30",
+     "scale": 1.0,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of projc_math31_code30 on hard328 (xreward/edits/projc_math31_code30-01)"
+  },
+  {
+   "id": "h42",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/rand8_math31-01",
+    "model": "rand8_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "rand8",
+     "other": "rl_math",
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of rand8_math31 on hard328 (xreward/edits/rand8_math31-01)"
+  },
+  {
+   "id": "h43",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/rbulk_math31-01",
+    "model": "rbulk_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "rbulk",
+     "other": "math31",
+     "scale": 1.0,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of rbulk_math31 on hard328 (xreward/edits/rbulk_math31-01)"
+  },
+  {
+   "id": "h44",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/sft_rand8x3_math31-01",
+    "model": "sft_rand8x3_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "rand8",
+     "other": "math31",
+     "onto": "think_sft",
+     "scale": 3.0,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of sft_rand8x3_math31 on hard328 (xreward/edits/sft_rand8x3_math31-01)"
+  },
+  {
+   "id": "h45",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/sft_top8x1.5_math31-01",
+    "model": "sft_top8x1.5_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "math31",
+     "onto": "think_sft",
+     "scale": 1.5,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of sft_top8x1.5_math31 on hard328 (xreward/edits/sft_top8x1.5_math31-01)"
+  },
+  {
+   "id": "h46",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/sft_top8x3_math31-02",
+    "model": "sft_top8x3_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3100000,
+    "edit": {
+     "recipe": "top8",
+     "other": "math31",
+     "onto": "think_sft",
+     "scale": 3.0,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of sft_top8x3_math31 on hard328 (xreward/edits/sft_top8x3_math31-02)"
+  },
+  {
+   "id": "h47",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/top1x2_math31-01",
+    "model": "top1x2_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "math31",
+     "scale": 2.0,
+     "alpha": 1.0,
+     "k": 1
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top1x2_math31 on hard328 (xreward/edits/top1x2_math31-01)"
+  },
+  {
+   "id": "h48",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/top64_math31-01",
+    "model": "top64_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "math31",
+     "scale": 1.0,
+     "alpha": 1.0,
+     "k": 64
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top64_math31 on hard328 (xreward/edits/top64_math31-01)"
+  },
+  {
+   "id": "h49",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/top8_code30-01",
+    "model": "top8_code30",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "code30",
+     "scale": 1.0,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8_code30 on hard328 (xreward/edits/top8_code30-01)"
+  },
+  {
+   "id": "h50",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/top8_code31-01",
+    "model": "top8_code31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "rl_code",
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8_code31 on hard328 (xreward/edits/top8_code31-01)"
+  },
+  {
+   "id": "h51",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/top8_general30-01",
+    "model": "top8_general30",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "general30",
+     "scale": 1.0,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8_general30 on hard328 (xreward/edits/top8_general30-01)"
+  },
+  {
+   "id": "h52",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/top8_math31-01",
+    "model": "top8_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "rl_math",
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8_math31 on hard328 (xreward/edits/top8_math31-01)"
+  },
+  {
+   "id": "h53",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/top8attn_math31-01",
+    "model": "top8attn_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "math31",
+     "mods": "q,k,v,o",
+     "scale": 1.0,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8attn_math31 on hard328 (xreward/edits/top8attn_math31-01)"
+  },
+  {
+   "id": "h54",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/top8mlp_math31-01",
+    "model": "top8mlp_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "math31",
+     "mods": "gate,up,down",
+     "scale": 1.0,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8mlp_math31 on hard328 (xreward/edits/top8mlp_math31-01)"
+  },
+  {
+   "id": "h55",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/top8x0.5_math31-01",
+    "model": "top8x0.5_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "math31",
+     "scale": 0.5,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8x0.5_math31 on hard328 (xreward/edits/top8x0.5_math31-01)"
+  },
+  {
+   "id": "h56",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/top8x2_math31-01",
+    "model": "top8x2_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "math31",
+     "scale": 2.0,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8x2_math31 on hard328 (xreward/edits/top8x2_math31-01)"
+  },
+  {
+   "id": "h57",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/top8x3_math31-01",
+    "model": "top8x3_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "math31",
+     "scale": 3.0,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8x3_math31 on hard328 (xreward/edits/top8x3_math31-01)"
+  },
+  {
+   "id": "h58",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/edits/top8xm1_math31-01",
+    "model": "top8xm1_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000,
+    "edit": {
+     "recipe": "top8",
+     "other": "math31",
+     "scale": -1.0,
+     "alpha": 1.0
+    }
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8xm1_math31 on hard328 (xreward/edits/top8xm1_math31-01)"
+  },
+  {
+   "id": "h59",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/normband/top1x1.5_math31_s0-01",
+    "model": "top1x1.5_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top1x1.5_math31 on hard328 (xreward/normband/top1x1.5_math31_s0-01)"
+  },
+  {
+   "id": "h60",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/normband/top8x0.2_L0-10_math31_s1-01",
+    "model": "top8x0.2_L0-10_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3010000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8x0.2_L0-10_math31 on hard328 (xreward/normband/top8x0.2_L0-10_math31_s1-01)"
+  },
+  {
+   "id": "h61",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/normband/top8x1.5_d2-8_math31_s0-01",
+    "model": "top8x1.5_d2-8_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3000000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8x1.5_d2-8_math31 on hard328 (xreward/normband/top8x1.5_d2-8_math31_s0-01)"
+  },
+  {
+   "id": "h62",
+   "item": "stored cell, count withheld",
+   "cell": {
+    "folder": "xreward/normband/top8x4.5_L22-31_math31_s1-01",
+    "model": "top8x4.5_L22-31_math31",
+    "tokenizer": "allenai/Olmo-3.1-7B-RL-Zero-Math",
+    "prompt": "cue",
+    "set": "hard328",
+    "n": 328,
+    "samples": 1,
+    "temperature": 1.0,
+    "top_p": 1.0,
+    "min_p": 0.0,
+    "max_tokens": 16384,
+    "seed": 3010000
+   },
+   "unit": "right answers of 328 per sample (mean over 1 sample), grader v3",
+   "what": "right answers per sample of top8x4.5_L22-31_math31 on hard328 (xreward/normband/top8x4.5_L22-31_math31_s1-01)"
+  }
+ ]
+}

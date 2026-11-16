@@ -1,0 +1,44 @@
+[
+ {
+  "source": "round-19",
+  "account": "round-19/account-3",
+  "adversary": "round-19/adversary-3",
+  "targets": 2,
+  "items": 1,
+  "gain_over_adversary": 0.083,
+  "account_gain": 0.994,
+  "adversary_gain": 0.912,
+  "per_target": {
+   "t03": 0.007,
+   "t04": 0.076
+  }
+ },
+ {
+  "source": "round-19",
+  "account": "round-19/account-2",
+  "adversary": "round-19/adversary-2",
+  "targets": 2,
+  "items": 1,
+  "gain_over_adversary": -0.157,
+  "account_gain": 1.019,
+  "adversary_gain": 1.175,
+  "per_target": {
+   "t03": -0.219,
+   "t04": 0.062
+  }
+ },
+ {
+  "source": "round-19",
+  "account": "round-19/account-1",
+  "adversary": "round-19/adversary-1",
+  "targets": 2,
+  "items": 1,
+  "gain_over_adversary": -0.948,
+  "account_gain": 0.612,
+  "adversary_gain": 1.56,
+  "per_target": {
+   "t03": -0.529,
+   "t04": -0.419
+  }
+ }
+]

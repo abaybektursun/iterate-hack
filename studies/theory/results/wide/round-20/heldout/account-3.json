@@ -1,0 +1,438 @@
+{
+ "forecasts": [
+  {
+   "id": "h01",
+   "value": 172,
+   "low": 158,
+   "high": 187,
+   "derivation": "Sentence 3 (a long enough cap recovers long right routes): base cue 164 at 16k with ~71 cap hits, about a third of those finish right at 32,768."
+  },
+  {
+   "id": "h02",
+   "value": 426,
+   "low": 414,
+   "high": 438,
+   "derivation": "Sentence 3/4: base cue 410.5 + 3.1 pt step-100 lead with cue (result-53ce14) = ~426."
+  },
+  {
+   "id": "h03",
+   "value": 426,
+   "low": 416,
+   "high": 436,
+   "derivation": "Sentence 3: step 100 with cue ~410.5+15.5 (result-53ce14, F07 cue +8.5 over plain), mean of 3."
+  },
+  {
+   "id": "h04",
+   "value": 417,
+   "low": 404,
+   "high": 430,
+   "derivation": "Sentence 3: step 100 plain within +1.4 pt of cued base 410.5 (result-53ce14)."
+  },
+  {
+   "id": "h05",
+   "value": 417,
+   "low": 407,
+   "high": 427,
+   "derivation": "Sentence 3: step-100 plain = 410.5 + 7 problems, 3-sample mean."
+  },
+  {
+   "id": "h06",
+   "value": 441,
+   "low": 429,
+   "high": 453,
+   "derivation": "Sentence 4 (slip reduction accrues after step 100): s0400 plain 436 explore cell plus a small cue gain."
+  },
+  {
+   "id": "h07",
+   "value": 436,
+   "low": 427,
+   "high": 445,
+   "derivation": "Sentence 4: s0400 plain explore cell 436, 3-sample mean."
+  },
+  {
+   "id": "h08",
+   "value": 200,
+   "low": 187,
+   "high": 212,
+   "derivation": "Sentence 1: RL ~200 on hard328 (RL cue 205, RL plain cap32 195)."
+  },
+  {
+   "id": "h09",
+   "value": 376,
+   "low": 358,
+   "high": 394,
+   "derivation": "Sentence 3 (T 0.6 loops): 354 at top-p 0.95 with 119 cap hits; top-p 1.0 has 71 loops so fewer losses."
+  },
+  {
+   "id": "h10",
+   "value": 77,
+   "low": 63,
+   "high": 92,
+   "derivation": "Sentence 3 (cue supplies the opening): no-cue base on hard328 75 (result-bd61b5)."
+  },
+  {
+   "id": "h11",
+   "value": 398,
+   "low": 378,
+   "high": 414,
+   "derivation": "Sentence 3: T 1.0 removes loops; min-p 0.1 at T 1.0 gives 404, T 1.5 with min-p similar."
+  },
+  {
+   "id": "h12",
+   "value": 405,
+   "low": 390,
+   "high": 419,
+   "derivation": "Sentence 3: base cue T1.0 410, top-p 0.95 lowers effective temperature slightly, a few loops."
+  },
+  {
+   "id": "h13",
+   "value": 458,
+   "low": 447,
+   "high": 468,
+   "derivation": "Sentence 4: RL cue 457 at T1.0; min-p barely moves RL."
+  },
+  {
+   "id": "h14",
+   "value": 430,
+   "low": 414,
+   "high": 445,
+   "derivation": "Sentence 6 (rewards share inputs): Code-RL hard328 187 is ~55% of the way base->RL; MATH-500 410->457."
+  },
+  {
+   "id": "h15",
+   "value": 405,
+   "low": 365,
+   "high": 440,
+   "derivation": "Sentence 2/3: theta0.25 cue 441; plain loses part of the opening the cue would supply."
+  },
+  {
+   "id": "h16",
+   "value": 435,
+   "low": 415,
+   "high": 452,
+   "derivation": "Sentence 2/3: theta0.5 cue 452; plain partially installed opening."
+  },
+  {
+   "id": "h17",
+   "value": 453,
+   "low": 441,
+   "high": 465,
+   "derivation": "Sentence 5 (saturates at RL level): theta0.5 452, theta1.25 450."
+  },
+  {
+   "id": "h18",
+   "value": 446,
+   "low": 428,
+   "high": 460,
+   "derivation": "Sentence 5: past 1x the edit saturates; theta1.25 450, slight decline at 1.5."
+  },
+  {
+   "id": "h19",
+   "value": 30,
+   "low": 24,
+   "high": 36,
+   "derivation": "Sentence 3: cued base on fresh2026 28-32 (result-a74ac3)."
+  },
+  {
+   "id": "h20",
+   "value": 51,
+   "low": 44,
+   "high": 58,
+   "derivation": "Sentence 4: RL vote 57 on fresh2026 with small vote gain over per-sample."
+  },
+  {
+   "id": "h21",
+   "value": 59,
+   "low": 53,
+   "high": 65,
+   "derivation": "Sentence 6 analog: Think-SFT cue fresh2026 at 16,384 cut 59.0 (result-dd26fe)."
+  },
+  {
+   "id": "h22",
+   "value": 383,
+   "low": 350,
+   "high": 410,
+   "derivation": "Sentence 6: Code-RL plain on MATH-500 390 (code1), code30 similar."
+  },
+  {
+   "id": "h23",
+   "value": 418,
+   "low": 400,
+   "high": 436,
+   "derivation": "Sentence 1 (any on-policy reward shares the low-rank input core): general30 cue between base 410 and math30."
+  },
+  {
+   "id": "h24",
+   "value": 365,
+   "low": 300,
+   "high": 420,
+   "derivation": "Sentence 3: plain prompt lacks the cue's opening; mix30 plain 372, code plain 390."
+  },
+  {
+   "id": "h25",
+   "value": 449,
+   "low": 437,
+   "high": 461,
+   "derivation": "Sentence 3/5: math30 plain 443 plus small cue gain."
+  },
+  {
+   "id": "h26",
+   "value": 422,
+   "low": 402,
+   "high": 440,
+   "derivation": "Sentence 3: cue supplies the opening; mix30 plain 372, code30 cue 411."
+  },
+  {
+   "id": "h27",
+   "value": 20,
+   "low": 15,
+   "high": 25,
+   "derivation": "Sentence 1: cued base ~0.8 of RL on hard328; RL hard72 27 per sample."
+  },
+  {
+   "id": "h28",
+   "value": 22,
+   "low": 17,
+   "high": 27,
+   "derivation": "Sentence 6: Code-RL between base and RL on hard72."
+  },
+  {
+   "id": "h29",
+   "value": 43,
+   "low": 33,
+   "high": 53,
+   "derivation": "Sentence 6: Code-RL on difficulty-matched set at ~hard72 rate (0.33)."
+  },
+  {
+   "id": "h30",
+   "value": 60,
+   "low": 48,
+   "high": 72,
+   "derivation": "Think-SFT hard72 rate 0.46 applied to 130 matched problems."
+  },
+  {
+   "id": "h31",
+   "value": 160,
+   "low": 146,
+   "high": 174,
+   "derivation": "Sentence 5: self-distilled LoRAs c~0; sdV plain 161."
+  },
+  {
+   "id": "h32",
+   "value": 411,
+   "low": 398,
+   "high": 424,
+   "derivation": "Sentence 3: shots add nothing beyond the cue (shots cells 406-417)."
+  },
+  {
+   "id": "h33",
+   "value": 164,
+   "low": 151,
+   "high": 177,
+   "derivation": "Sentence 3: shots leave cued base at 164 on hard328."
+  },
+  {
+   "id": "h34",
+   "value": 236,
+   "low": 222,
+   "high": 249,
+   "derivation": "Sentence 6: SFT + 2x RL delta 231.5, cap 32,768 adds a little."
+  },
+  {
+   "id": "h35",
+   "value": 183,
+   "low": 172,
+   "high": 195,
+   "derivation": "Sentence 5: L0-10 c~0.5, 4-sample mean 183.5."
+  },
+  {
+   "id": "h36",
+   "value": 183,
+   "low": 172,
+   "high": 195,
+   "derivation": "Sentence 5: L0-10 c~0.5, 4-sample mean 183.5."
+  },
+  {
+   "id": "h37",
+   "value": 179,
+   "low": 168,
+   "high": 191,
+   "derivation": "Sentence 5: L11-21 2-sample mean 181, other sample 183."
+  },
+  {
+   "id": "h38",
+   "value": 161,
+   "low": 150,
+   "high": 173,
+   "derivation": "Sentence 5: L22-31 c~0, 2-sample mean 163.5 with 166 seen."
+  },
+  {
+   "id": "h39",
+   "value": 197,
+   "low": 184,
+   "high": 210,
+   "derivation": "Sentence 6: adding directions to RL changes nothing (RL+random 197)."
+  },
+  {
+   "id": "h40",
+   "value": 180,
+   "low": 163,
+   "high": 197,
+   "derivation": "Sentence 6: shared input subspace carries part of the Math edit, c~0.4."
+  },
+  {
+   "id": "h41",
+   "value": 184,
+   "low": 167,
+   "high": 200,
+   "derivation": "Sentence 6: complement keeps Math's own outputs, c~0.5."
+  },
+  {
+   "id": "h42",
+   "value": 163,
+   "low": 151,
+   "high": 175,
+   "derivation": "Sentence 1: random rank-8 stays at cued base 159-167."
+  },
+  {
+   "id": "h43",
+   "value": 178,
+   "low": 160,
+   "high": 196,
+   "derivation": "Sentence 1: bulk carries redundant gain (bulk 190); randomized bulk lower."
+  },
+  {
+   "id": "h44",
+   "value": 211,
+   "low": 197,
+   "high": 225,
+   "derivation": "Sentence 6: random onto Think-SFT changes nothing; SFT at 16k ~209-211."
+  },
+  {
+   "id": "h45",
+   "value": 224,
+   "low": 210,
+   "high": 237,
+   "derivation": "Sentence 6: Math top-8 onto SFT cuts cap hits at 16k; 3x gave 232."
+  },
+  {
+   "id": "h46",
+   "value": 229,
+   "low": 216,
+   "high": 242,
+   "derivation": "Sentence 6: sft_top8x3 seed 1 gave 232."
+  },
+  {
+   "id": "h47",
+   "value": 177,
+   "low": 164,
+   "high": 190,
+   "derivation": "Sentence 5: direction 1 alone c~0.5 to 1.5x, decline toward 3x (168)."
+  },
+  {
+   "id": "h48",
+   "value": 199,
+   "low": 186,
+   "high": 212,
+   "derivation": "Sentence 5: more Math directions at 1x reach RL level."
+  },
+  {
+   "id": "h49",
+   "value": 173,
+   "low": 160,
+   "high": 186,
+   "derivation": "Sentence 6: other reward writes its own outputs, small gain on math."
+  },
+  {
+   "id": "h50",
+   "value": 175,
+   "low": 162,
+   "high": 188,
+   "derivation": "Sentence 6: RL-Code top-8 on math, small gain."
+  },
+  {
+   "id": "h51",
+   "value": 168,
+   "low": 155,
+   "high": 182,
+   "derivation": "Sentence 5/6: non-math reward directions c~0.1."
+  },
+  {
+   "id": "h52",
+   "value": 196,
+   "low": 183,
+   "high": 209,
+   "derivation": "Sentence 5: Math-RL top-8 at 1x c~0.8 (cap hits 46 vs 25 at 1.5x)."
+  },
+  {
+   "id": "h53",
+   "value": 173,
+   "low": 160,
+   "high": 186,
+   "derivation": "Sentence 5: attention-only part c~0.25, parts nearly adding."
+  },
+  {
+   "id": "h54",
+   "value": 184,
+   "low": 171,
+   "high": 197,
+   "derivation": "Sentence 5: MLP-only part c~0.5."
+  },
+  {
+   "id": "h55",
+   "value": 179,
+   "low": 166,
+   "high": 192,
+   "derivation": "Sentence 5: 0.5x c~0.4."
+  },
+  {
+   "id": "h56",
+   "value": 203,
+   "low": 190,
+   "high": 215,
+   "derivation": "Sentence 5: c~1 at 2x, saturates ~203."
+  },
+  {
+   "id": "h57",
+   "value": 186,
+   "low": 162,
+   "high": 206,
+   "derivation": "Sentence 5: beyond 2x right-of-finished falls; decline from 203."
+  },
+  {
+   "id": "h58",
+   "value": 150,
+   "low": 136,
+   "high": 165,
+   "derivation": "Sentence 5: -1x negative, 140-168."
+  },
+  {
+   "id": "h59",
+   "value": 181,
+   "low": 169,
+   "high": 193,
+   "derivation": "Sentence 5: direction 1 at 1.5x c~0.5; other seed 182."
+  },
+  {
+   "id": "h60",
+   "value": 165,
+   "low": 153,
+   "high": 177,
+   "derivation": "Sentence 5: tiny scale c~0."
+  },
+  {
+   "id": "h61",
+   "value": 183,
+   "low": 171,
+   "high": 195,
+   "derivation": "Sentence 5: directions 2-8 c~0.5; other seed 183."
+  },
+  {
+   "id": "h62",
+   "value": 148,
+   "low": 130,
+   "high": 165,
+   "derivation": "Sentence 5: one band at large scale negative; 3x gave 155."
+  }
+ ]
+}

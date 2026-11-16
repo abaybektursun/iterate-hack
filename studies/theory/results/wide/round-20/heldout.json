@@ -1,0 +1,4049 @@
+{
+ "utc": "2026-11-16T02:08:42",
+ "cells": 62,
+ "rejected": {
+  "1": {},
+  "2": {
+   "h40": "Rests on the claim that the projected part keeps only a small part of the math edit's gain (RL's math-specific directions carry the gain); no stored kept share or norm is used.",
+   "h41": "Rests on the claim that the math-specific complement keeps most of the 1x edit's gain, which is the account's 'math-specific part carries the gain' renamed, with no covariate fit."
+  },
+  "3": {}
+ },
+ "summary": [
+  {
+   "forecaster": "reader-1",
+   "cells": 62,
+   "inside": 49,
+   "gain_over_readers": -12.42
+  },
+  {
+   "forecaster": "reader-2",
+   "cells": 62,
+   "inside": 52,
+   "gain_over_readers": -0.093
+  },
+  {
+   "forecaster": "account-1",
+   "cells": 62,
+   "inside": 51,
+   "gain_over_readers": -7.57,
+   "gain_over_adversary": -8.841,
+   "adversary_cells": 62,
+   "account_gain": -7.57,
+   "adds": false
+  },
+  {
+   "forecaster": "account-2",
+   "cells": 62,
+   "inside": 52,
+   "gain_over_readers": -6.059,
+   "gain_over_adversary": -8.232,
+   "adversary_cells": 60,
+   "account_gain": -6.059,
+   "adds": false
+  },
+  {
+   "forecaster": "account-3",
+   "cells": 62,
+   "inside": 53,
+   "gain_over_readers": -9.234,
+   "gain_over_adversary": -6.837,
+   "adversary_cells": 62,
+   "account_gain": -9.234,
+   "adds": false
+  },
+  {
+   "forecaster": "adversary-1",
+   "cells": 62,
+   "inside": 53,
+   "gain_over_readers": -1.928
+  },
+  {
+   "forecaster": "adversary-2",
+   "cells": 62,
+   "inside": 52,
+   "gain_over_readers": -1.03
+  },
+  {
+   "forecaster": "adversary-3",
+   "cells": 62,
+   "inside": 54,
+   "gain_over_readers": 2.08
+  }
+ ],
+ "ranked": [
+  "account-2",
+  "account-1",
+  "account-3"
+ ],
+ "rows": [
+  {
+   "id": "h01",
+   "folder": "cap32/base_cue-01",
+   "family": "sampling",
+   "set": "hard328",
+   "measured": 156.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 172,
+     "low": 159,
+     "high": 185,
+     "gain_over_readers": -0.1306
+    },
+    "reader-2": {
+     "value": 173,
+     "low": 158,
+     "high": 189,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 168,
+     "low": 155,
+     "high": 181,
+     "gain_over_readers": 0.7661,
+     "gain_over_adversary": 0.274,
+     "beats_both": 0.274
+    },
+    "account-2": {
+     "value": 176,
+     "low": 162,
+     "high": 190,
+     "gain_over_readers": -0.9164,
+     "gain_over_adversary": -0.069,
+     "beats_both": -0.9164
+    },
+    "account-3": {
+     "value": 172,
+     "low": 158,
+     "high": 187,
+     "gain_over_readers": 0.0,
+     "gain_over_adversary": -0.477,
+     "beats_both": -0.477
+    },
+    "adversary-1": {
+     "value": 170,
+     "low": 156,
+     "high": 184,
+     "gain_over_readers": 0.4918
+    },
+    "adversary-2": {
+     "value": 174,
+     "low": 162,
+     "high": 187,
+     "gain_over_readers": -0.8474
+    },
+    "adversary-3": {
+     "value": 170,
+     "low": 155,
+     "high": 186,
+     "gain_over_readers": 0.6392
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h02",
+   "folder": "ckptcue/s0100_cue-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 427.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 426,
+     "low": 413,
+     "high": 439,
+     "gain_over_readers": -0.0914
+    },
+    "reader-2": {
+     "value": 427,
+     "low": 416,
+     "high": 438,
+     "gain_over_readers": 0.0837
+    },
+    "account-1": {
+     "value": 426,
+     "low": 413,
+     "high": 439,
+     "gain_over_readers": -0.0914,
+     "gain_over_adversary": -0.164,
+     "beats_both": -0.164
+    },
+    "account-2": {
+     "value": 426,
+     "low": 414,
+     "high": 438,
+     "gain_over_readers": -0.0127,
+     "gain_over_adversary": -0.096,
+     "beats_both": -0.096
+    },
+    "account-3": {
+     "value": 426,
+     "low": 414,
+     "high": 438,
+     "gain_over_readers": -0.0127,
+     "gain_over_adversary": -0.545,
+     "beats_both": -0.545
+    },
+    "adversary-1": {
+     "value": 426,
+     "low": 415,
+     "high": 437,
+     "gain_over_readers": 0.0725
+    },
+    "adversary-2": {
+     "value": 427,
+     "low": 416,
+     "high": 438,
+     "gain_over_readers": 0.0837
+    },
+    "adversary-3": {
+     "value": 427,
+     "low": 422,
+     "high": 432,
+     "gain_over_readers": 0.5322
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h03",
+   "folder": "ckptcue/s0100_cue_s123-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 425.67,
+   "forecasts": {
+    "reader-1": {
+     "value": 426,
+     "low": 418,
+     "high": 434,
+     "gain_over_readers": -0.0698
+    },
+    "reader-2": {
+     "value": 425.5,
+     "low": 419,
+     "high": 432,
+     "gain_over_readers": 0.0653
+    },
+    "account-1": {
+     "value": 426,
+     "low": 418,
+     "high": 434,
+     "gain_over_readers": -0.0698,
+     "gain_over_adversary": 0.0,
+     "beats_both": -0.0698
+    },
+    "account-2": {
+     "value": 426,
+     "low": 417,
+     "high": 435,
+     "gain_over_readers": -0.1871,
+     "gain_over_adversary": -0.253,
+     "beats_both": -0.253
+    },
+    "account-3": {
+     "value": 426,
+     "low": 416,
+     "high": 436,
+     "gain_over_readers": -0.2922,
+     "gain_over_adversary": -0.358,
+     "beats_both": -0.358
+    },
+    "adversary-1": {
+     "value": 426,
+     "low": 418,
+     "high": 434,
+     "gain_over_readers": -0.0698
+    },
+    "adversary-2": {
+     "value": 425.7,
+     "low": 419,
+     "high": 432,
+     "gain_over_readers": 0.0656
+    },
+    "adversary-3": {
+     "value": 425.7,
+     "low": 421,
+     "high": 430.5,
+     "gain_over_readers": 0.0656
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h04",
+   "folder": "ckptcue/s0100_plain-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 418.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 418,
+     "low": 405,
+     "high": 431,
+     "gain_over_readers": -0.087
+    },
+    "reader-2": {
+     "value": 418,
+     "low": 407,
+     "high": 429,
+     "gain_over_readers": 0.08
+    },
+    "account-1": {
+     "value": 417,
+     "low": 405,
+     "high": 429,
+     "gain_over_readers": -0.0164,
+     "gain_over_adversary": -0.085,
+     "beats_both": -0.085
+    },
+    "account-2": {
+     "value": 417,
+     "low": 405,
+     "high": 429,
+     "gain_over_readers": -0.0164,
+     "gain_over_adversary": -0.096,
+     "beats_both": -0.096
+    },
+    "account-3": {
+     "value": 417,
+     "low": 404,
+     "high": 430,
+     "gain_over_readers": -0.095,
+     "gain_over_adversary": -0.645,
+     "beats_both": -0.645
+    },
+    "adversary-1": {
+     "value": 417,
+     "low": 406,
+     "high": 428,
+     "gain_over_readers": 0.0689
+    },
+    "adversary-2": {
+     "value": 418,
+     "low": 407,
+     "high": 429,
+     "gain_over_readers": 0.08
+    },
+    "adversary-3": {
+     "value": 418,
+     "low": 413,
+     "high": 423,
+     "gain_over_readers": 0.5499
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h05",
+   "folder": "ckptcue/s0100_plain_s123-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 417.33,
+   "forecasts": {
+    "reader-1": {
+     "value": 418,
+     "low": 410,
+     "high": 426,
+     "gain_over_readers": -0.0846
+    },
+    "reader-2": {
+     "value": 417.3,
+     "low": 411,
+     "high": 424,
+     "gain_over_readers": 0.078
+    },
+    "account-1": {
+     "value": 418,
+     "low": 410,
+     "high": 426,
+     "gain_over_readers": -0.0846,
+     "gain_over_adversary": -0.131,
+     "beats_both": -0.131
+    },
+    "account-2": {
+     "value": 418,
+     "low": 409,
+     "high": 427,
+     "gain_over_readers": -0.2004,
+     "gain_over_adversary": -0.278,
+     "beats_both": -0.278
+    },
+    "account-3": {
+     "value": 417,
+     "low": 407,
+     "high": 427,
+     "gain_over_readers": -0.2997,
+     "gain_over_adversary": -0.378,
+     "beats_both": -0.378
+    },
+    "adversary-1": {
+     "value": 418,
+     "low": 411,
+     "high": 425,
+     "gain_over_readers": 0.0461
+    },
+    "adversary-2": {
+     "value": 417.3,
+     "low": 411,
+     "high": 424,
+     "gain_over_readers": 0.078
+    },
+    "adversary-3": {
+     "value": 417.3,
+     "low": 413,
+     "high": 421.5,
+     "gain_over_readers": 0.078
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h06",
+   "folder": "ckptcue/s0400_cue-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 431.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 440,
+     "low": 427,
+     "high": 452,
+     "gain_over_readers": 0.082
+    },
+    "reader-2": {
+     "value": 440,
+     "low": 430,
+     "high": 450,
+     "gain_over_readers": -0.0894
+    },
+    "account-1": {
+     "value": 439,
+     "low": 428,
+     "high": 450,
+     "gain_over_readers": 0.1956,
+     "gain_over_adversary": 0.19,
+     "beats_both": 0.19
+    },
+    "account-2": {
+     "value": 439,
+     "low": 427,
+     "high": 451,
+     "gain_over_readers": 0.2229,
+     "gain_over_adversary": 0.338,
+     "beats_both": 0.2229
+    },
+    "account-3": {
+     "value": 441,
+     "low": 429,
+     "high": 453,
+     "gain_over_readers": -0.1153,
+     "gain_over_adversary": -0.121,
+     "beats_both": -0.121
+    },
+    "adversary-1": {
+     "value": 440,
+     "low": 429,
+     "high": 451,
+     "gain_over_readers": 0.0055
+    },
+    "adversary-2": {
+     "value": 441,
+     "low": 429,
+     "high": 453,
+     "gain_over_readers": -0.1153
+    },
+    "adversary-3": {
+     "value": 440,
+     "low": 429,
+     "high": 451,
+     "gain_over_readers": 0.0055
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h07",
+   "folder": "ckptcue/s0400_plain_s123-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 438.33,
+   "forecasts": {
+    "reader-1": {
+     "value": 438,
+     "low": 431,
+     "high": 446,
+     "gain_over_readers": -0.0212
+    },
+    "reader-2": {
+     "value": 438.3,
+     "low": 432,
+     "high": 445,
+     "gain_over_readers": 0.0208
+    },
+    "account-1": {
+     "value": 438,
+     "low": 431,
+     "high": 445,
+     "gain_over_readers": 0.0187,
+     "gain_over_adversary": 0.139,
+     "beats_both": 0.0187
+    },
+    "account-2": {
+     "value": 436,
+     "low": 427,
+     "high": 445,
+     "gain_over_readers": -0.2916,
+     "gain_over_adversary": -0.312,
+     "beats_both": -0.312
+    },
+    "account-3": {
+     "value": 436,
+     "low": 427,
+     "high": 445,
+     "gain_over_readers": -0.2916,
+     "gain_over_adversary": -0.312,
+     "beats_both": -0.312
+    },
+    "adversary-1": {
+     "value": 437,
+     "low": 429,
+     "high": 445,
+     "gain_over_readers": -0.1205
+    },
+    "adversary-2": {
+     "value": 438.3,
+     "low": 431,
+     "high": 445,
+     "gain_over_readers": 0.0208
+    },
+    "adversary-3": {
+     "value": 438.3,
+     "low": 434,
+     "high": 443,
+     "gain_over_readers": 0.0208
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h08",
+   "folder": "day1/hard328_rl_plain_t10-01",
+   "family": "sampling",
+   "set": "hard328",
+   "measured": 206.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 205,
+     "low": 198,
+     "high": 211,
+     "gain_over_readers": 0.2037
+    },
+    "reader-2": {
+     "value": 205,
+     "low": 194,
+     "high": 215,
+     "gain_over_readers": -0.2561
+    },
+    "account-1": {
+     "value": 204,
+     "low": 195,
+     "high": 213,
+     "gain_over_readers": -0.1565,
+     "gain_over_adversary": 0.255,
+     "beats_both": -0.1565
+    },
+    "account-2": {
+     "value": 202,
+     "low": 190,
+     "high": 214,
+     "gain_over_readers": -0.5277,
+     "gain_over_adversary": -1.131,
+     "beats_both": -1.131
+    },
+    "account-3": {
+     "value": 200,
+     "low": 187,
+     "high": 212,
+     "gain_over_readers": -0.7299,
+     "gain_over_adversary": -0.261,
+     "beats_both": -0.7299
+    },
+    "adversary-1": {
+     "value": 202,
+     "low": 192,
+     "high": 212,
+     "gain_over_readers": -0.4115
+    },
+    "adversary-2": {
+     "value": 206,
+     "low": 201,
+     "high": 210,
+     "gain_over_readers": 0.6035
+    },
+    "adversary-3": {
+     "value": 202,
+     "low": 191,
+     "high": 213,
+     "gain_over_readers": -0.4693
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h09",
+   "folder": "day1/math500_base_cue_t06_p10-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 378.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 377,
+     "low": 358,
+     "high": 395,
+     "gain_over_readers": 0.1298
+    },
+    "reader-2": {
+     "value": 369,
+     "low": 353,
+     "high": 385,
+     "gain_over_readers": -0.1492
+    },
+    "account-1": {
+     "value": 358,
+     "low": 342,
+     "high": 374,
+     "gain_over_readers": -1.8352,
+     "gain_over_adversary": -1.884,
+     "beats_both": -1.884
+    },
+    "account-2": {
+     "value": 380,
+     "low": 362,
+     "high": 398,
+     "gain_over_readers": 0.1444,
+     "gain_over_adversary": -0.017,
+     "beats_both": -0.017
+    },
+    "account-3": {
+     "value": 376,
+     "low": 358,
+     "high": 394,
+     "gain_over_readers": 0.1444,
+     "gain_over_adversary": 3.0,
+     "beats_both": 0.1444
+    },
+    "adversary-1": {
+     "value": 385,
+     "low": 370,
+     "high": 400,
+     "gain_over_readers": 0.0488
+    },
+    "adversary-2": {
+     "value": 378,
+     "low": 360,
+     "high": 396,
+     "gain_over_readers": 0.1611
+    },
+    "adversary-3": {
+     "value": 354,
+     "low": 349,
+     "high": 359,
+     "gain_over_readers": -3.0
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h10",
+   "folder": "day1_hard328/base_plain_T1-01",
+   "family": "sampling",
+   "set": "hard328",
+   "measured": 76.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 76,
+     "low": 63,
+     "high": 89,
+     "gain_over_readers": 0.0223
+    },
+    "reader-2": {
+     "value": 75,
+     "low": 62,
+     "high": 89,
+     "gain_over_readers": -0.0228
+    },
+    "account-1": {
+     "value": 76,
+     "low": 64,
+     "high": 88,
+     "gain_over_readers": 0.1024,
+     "gain_over_adversary": -0.384,
+     "beats_both": -0.384
+    },
+    "account-2": {
+     "value": 78,
+     "low": 62,
+     "high": 94,
+     "gain_over_readers": -0.2065,
+     "gain_over_adversary": -0.693,
+     "beats_both": -0.693
+    },
+    "account-3": {
+     "value": 77,
+     "low": 63,
+     "high": 92,
+     "gain_over_readers": -0.0933,
+     "gain_over_adversary": -0.146,
+     "beats_both": -0.146
+    },
+    "adversary-1": {
+     "value": 75,
+     "low": 67,
+     "high": 83,
+     "gain_over_readers": 0.4867
+    },
+    "adversary-2": {
+     "value": 75,
+     "low": 67,
+     "high": 83,
+     "gain_over_readers": 0.4867
+    },
+    "adversary-3": {
+     "value": 75,
+     "low": 63,
+     "high": 88,
+     "gain_over_readers": 0.0529
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h11",
+   "folder": "day1_minp/base_mp0.1_T1.5-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 412.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 404,
+     "low": 389,
+     "high": 418,
+     "gain_over_readers": -0.0041
+    },
+    "reader-2": {
+     "value": 404,
+     "low": 390,
+     "high": 417,
+     "gain_over_readers": 0.0041
+    },
+    "account-1": {
+     "value": 401,
+     "low": 384,
+     "high": 416,
+     "gain_over_readers": -0.3302,
+     "gain_over_adversary": 0.316,
+     "beats_both": -0.3302
+    },
+    "account-2": {
+     "value": 395,
+     "low": 378,
+     "high": 412,
+     "gain_over_readers": -1.1043,
+     "gain_over_adversary": -0.885,
+     "beats_both": -1.1043
+    },
+    "account-3": {
+     "value": 398,
+     "low": 378,
+     "high": 414,
+     "gain_over_readers": -0.627,
+     "gain_over_adversary": 0.069,
+     "beats_both": -0.627
+    },
+    "adversary-1": {
+     "value": 398,
+     "low": 378,
+     "high": 413,
+     "gain_over_readers": -0.6462
+    },
+    "adversary-2": {
+     "value": 402,
+     "low": 384,
+     "high": 418,
+     "gain_over_readers": -0.2195
+    },
+    "adversary-3": {
+     "value": 398,
+     "low": 380,
+     "high": 413,
+     "gain_over_readers": -0.6955
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h12",
+   "folder": "day1_minp/base_p0.95_T1-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 409.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 401,
+     "low": 387,
+     "high": 414,
+     "gain_over_readers": -0.1186
+    },
+    "reader-2": {
+     "value": 403,
+     "low": 389,
+     "high": 415,
+     "gain_over_readers": 0.106
+    },
+    "account-1": {
+     "value": 407,
+     "low": 395,
+     "high": 419,
+     "gain_over_readers": 0.4367,
+     "gain_over_adversary": 0.557,
+     "beats_both": 0.4367
+    },
+    "account-2": {
+     "value": 403,
+     "low": 389,
+     "high": 417,
+     "gain_over_readers": 0.0716,
+     "gain_over_adversary": -0.318,
+     "beats_both": -0.318
+    },
+    "account-3": {
+     "value": 405,
+     "low": 390,
+     "high": 419,
+     "gain_over_readers": 0.1821,
+     "gain_over_adversary": -0.057,
+     "beats_both": -0.057
+    },
+    "adversary-1": {
+     "value": 401,
+     "low": 388,
+     "high": 413,
+     "gain_over_readers": -0.1207
+    },
+    "adversary-2": {
+     "value": 406,
+     "low": 394,
+     "high": 418,
+     "gain_over_readers": 0.3897
+    },
+    "adversary-3": {
+     "value": 404,
+     "low": 391,
+     "high": 415,
+     "gain_over_readers": 0.2394
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h13",
+   "folder": "day1_minp/rl_mp0.1_T1-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 460.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 457,
+     "low": 447,
+     "high": 466,
+     "gain_over_readers": -0.0382
+    },
+    "reader-2": {
+     "value": 458,
+     "low": 448,
+     "high": 467,
+     "gain_over_readers": 0.0368
+    },
+    "account-1": {
+     "value": 460,
+     "low": 451,
+     "high": 469,
+     "gain_over_readers": 0.1508,
+     "gain_over_adversary": 0.114,
+     "beats_both": 0.114
+    },
+    "account-2": {
+     "value": 461,
+     "low": 450,
+     "high": 472,
+     "gain_over_readers": -0.061,
+     "gain_over_adversary": -0.143,
+     "beats_both": -0.143
+    },
+    "account-3": {
+     "value": 458,
+     "low": 447,
+     "high": 468,
+     "gain_over_readers": -0.0524,
+     "gain_over_adversary": -0.185,
+     "beats_both": -0.185
+    },
+    "adversary-1": {
+     "value": 458,
+     "low": 448,
+     "high": 467,
+     "gain_over_readers": 0.0368
+    },
+    "adversary-2": {
+     "value": 459,
+     "low": 449,
+     "high": 468,
+     "gain_over_readers": 0.0818
+    },
+    "adversary-3": {
+     "value": 458,
+     "low": 449,
+     "high": 466,
+     "gain_over_readers": 0.1331
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h14",
+   "folder": "day1_wdiff/code_cue-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 450.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 424,
+     "low": 409,
+     "high": 438,
+     "gain_over_readers": -0.6526
+    },
+    "reader-2": {
+     "value": 428,
+     "low": 414,
+     "high": 442,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 428,
+     "low": 415,
+     "high": 441,
+     "gain_over_readers": -0.0681,
+     "gain_over_adversary": 0.027,
+     "beats_both": -0.0681
+    },
+    "account-2": {
+     "value": 428,
+     "low": 414,
+     "high": 442,
+     "gain_over_readers": 0.0,
+     "gain_over_adversary": 0.096,
+     "beats_both": 0.0
+    },
+    "account-3": {
+     "value": 430,
+     "low": 414,
+     "high": 445,
+     "gain_over_readers": 0.0,
+     "gain_over_adversary": -0.771,
+     "beats_both": -0.771
+    },
+    "adversary-1": {
+     "value": 425,
+     "low": 410,
+     "high": 440,
+     "gain_over_readers": -0.0947
+    },
+    "adversary-2": {
+     "value": 425,
+     "low": 409,
+     "high": 441,
+     "gain_over_readers": 0.0
+    },
+    "adversary-3": {
+     "value": 436,
+     "low": 423,
+     "high": 448,
+     "gain_over_readers": 0.0
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h15",
+   "folder": "day1_wdiff/theta0.25_plain-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 405.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 355,
+     "low": 285,
+     "high": 420,
+     "gain_over_readers": -0.5498
+    },
+    "reader-2": {
+     "value": 395,
+     "low": 335,
+     "high": 445,
+     "gain_over_readers": 0.3527
+    },
+    "account-1": {
+     "value": 395,
+     "low": 350,
+     "high": 435,
+     "gain_over_readers": 0.5804,
+     "gain_over_adversary": -0.018,
+     "beats_both": -0.018
+    },
+    "account-2": {
+     "value": 400,
+     "low": 365,
+     "high": 430,
+     "gain_over_readers": 0.8915,
+     "gain_over_adversary": 0.48,
+     "beats_both": 0.48
+    },
+    "account-3": {
+     "value": 405,
+     "low": 365,
+     "high": 440,
+     "gain_over_readers": 0.7804,
+     "gain_over_adversary": -0.14,
+     "beats_both": -0.14
+    },
+    "adversary-1": {
+     "value": 405,
+     "low": 350,
+     "high": 440,
+     "gain_over_readers": 0.5981
+    },
+    "adversary-2": {
+     "value": 425,
+     "low": 385,
+     "high": 450,
+     "gain_over_readers": 0.4111
+    },
+    "adversary-3": {
+     "value": 410,
+     "low": 375,
+     "high": 438,
+     "gain_over_readers": 0.9207
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h16",
+   "folder": "day1_wdiff/theta0.5_plain-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 443.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 432,
+     "low": 400,
+     "high": 455,
+     "gain_over_readers": -0.1371
+    },
+    "reader-2": {
+     "value": 438,
+     "low": 410,
+     "high": 460,
+     "gain_over_readers": 0.1206
+    },
+    "account-1": {
+     "value": 445,
+     "low": 428,
+     "high": 458,
+     "gain_over_readers": 0.6615,
+     "gain_over_adversary": 0.196,
+     "beats_both": 0.196
+    },
+    "account-2": {
+     "value": 444,
+     "low": 428,
+     "high": 458,
+     "gain_over_readers": 0.6795,
+     "gain_over_adversary": 0.106,
+     "beats_both": 0.106
+    },
+    "account-3": {
+     "value": 435,
+     "low": 415,
+     "high": 452,
+     "gain_over_readers": 0.2228,
+     "gain_over_adversary": -0.269,
+     "beats_both": -0.269
+    },
+    "adversary-1": {
+     "value": 440,
+     "low": 420,
+     "high": 456,
+     "gain_over_readers": 0.4656
+    },
+    "adversary-2": {
+     "value": 446,
+     "low": 428,
+     "high": 460,
+     "gain_over_readers": 0.5734
+    },
+    "adversary-3": {
+     "value": 440,
+     "low": 420,
+     "high": 455,
+     "gain_over_readers": 0.4916
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h17",
+   "folder": "day1_wdiff/theta0.75_cue-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 451.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 453,
+     "low": 442,
+     "high": 463,
+     "gain_over_readers": 0.0478
+    },
+    "reader-2": {
+     "value": 454,
+     "low": 443,
+     "high": 465,
+     "gain_over_readers": -0.0502
+    },
+    "account-1": {
+     "value": 456,
+     "low": 446,
+     "high": 465,
+     "gain_over_readers": -0.1778,
+     "gain_over_adversary": -0.104,
+     "beats_both": -0.1778
+    },
+    "account-2": {
+     "value": 455,
+     "low": 444,
+     "high": 466,
+     "gain_over_readers": -0.1285,
+     "gain_over_adversary": 0.029,
+     "beats_both": -0.1285
+    },
+    "account-3": {
+     "value": 453,
+     "low": 441,
+     "high": 465,
+     "gain_over_readers": -0.0742,
+     "gain_over_adversary": -0.058,
+     "beats_both": -0.0742
+    },
+    "adversary-1": {
+     "value": 453,
+     "low": 441,
+     "high": 465,
+     "gain_over_readers": -0.0742
+    },
+    "adversary-2": {
+     "value": 455,
+     "low": 443,
+     "high": 466,
+     "gain_over_readers": -0.1577
+    },
+    "adversary-3": {
+     "value": 455,
+     "low": 446,
+     "high": 464,
+     "gain_over_readers": -0.0162
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h18",
+   "folder": "day1_wdiff/theta1.5_cue-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 453.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 432,
+     "low": 385,
+     "high": 460,
+     "gain_over_readers": 0.1516
+    },
+    "reader-2": {
+     "value": 425,
+     "low": 345,
+     "high": 462,
+     "gain_over_readers": -0.1787
+    },
+    "account-1": {
+     "value": 435,
+     "low": 398,
+     "high": 458,
+     "gain_over_readers": 0.312,
+     "gain_over_adversary": -0.321,
+     "beats_both": -0.321
+    },
+    "account-2": {
+     "value": 446,
+     "low": 430,
+     "high": 460,
+     "gain_over_readers": 1.1975,
+     "gain_over_adversary": 0.192,
+     "beats_both": 0.192
+    },
+    "account-3": {
+     "value": 446,
+     "low": 428,
+     "high": 460,
+     "gain_over_readers": 1.1687,
+     "gain_over_adversary": 0.565,
+     "beats_both": 0.565
+    },
+    "adversary-1": {
+     "value": 440,
+     "low": 418,
+     "high": 458,
+     "gain_over_readers": 0.6329
+    },
+    "adversary-2": {
+     "value": 444,
+     "low": 428,
+     "high": 458,
+     "gain_over_readers": 1.0051
+    },
+    "adversary-3": {
+     "value": 440,
+     "low": 420,
+     "high": 456,
+     "gain_over_readers": 0.6041
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h19",
+   "folder": "fresh/base_cue_s4-01",
+   "family": "sampling",
+   "set": "fresh2026",
+   "measured": 29.5,
+   "forecasts": {
+    "reader-1": {
+     "value": 30,
+     "low": 26,
+     "high": 34,
+     "gain_over_readers": 0.102
+    },
+    "reader-2": {
+     "value": 30,
+     "low": 25,
+     "high": 35,
+     "gain_over_readers": -0.1136
+    },
+    "account-1": {
+     "value": 30,
+     "low": 27,
+     "high": 33,
+     "gain_over_readers": 0.3732,
+     "gain_over_adversary": 3.0,
+     "beats_both": 0.3732
+    },
+    "account-2": {
+     "value": 30,
+     "low": 26,
+     "high": 34,
+     "gain_over_readers": 0.102,
+     "gain_over_adversary": 0.0,
+     "beats_both": 0.0
+    },
+    "account-3": {
+     "value": 30,
+     "low": 24,
+     "high": 36,
+     "gain_over_readers": -0.2917,
+     "gain_over_adversary": -0.178,
+     "beats_both": -0.2917
+    },
+    "adversary-1": {
+     "value": 40,
+     "low": 33,
+     "high": 47,
+     "gain_over_readers": -3.0
+    },
+    "adversary-2": {
+     "value": 30,
+     "low": 26,
+     "high": 34,
+     "gain_over_readers": 0.102
+    },
+    "adversary-3": {
+     "value": 30,
+     "low": 25,
+     "high": 35,
+     "gain_over_readers": -0.1136
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h20",
+   "folder": "fresh/rl_plain_s4-01",
+   "family": "sampling",
+   "set": "fresh2026",
+   "measured": 50.5,
+   "forecasts": {
+    "reader-1": {
+     "value": 50,
+     "low": 45,
+     "high": 55,
+     "gain_over_readers": 0.1995
+    },
+    "reader-2": {
+     "value": 48,
+     "low": 42,
+     "high": 55,
+     "gain_over_readers": -0.2495
+    },
+    "account-1": {
+     "value": 51,
+     "low": 46,
+     "high": 56,
+     "gain_over_readers": 0.1995,
+     "gain_over_adversary": 0.0,
+     "beats_both": 0.0
+    },
+    "account-2": {
+     "value": 52,
+     "low": 46,
+     "high": 58,
+     "gain_over_readers": -0.0539,
+     "gain_over_adversary": -0.145,
+     "beats_both": -0.145
+    },
+    "account-3": {
+     "value": 51,
+     "low": 44,
+     "high": 58,
+     "gain_over_readers": -0.1303,
+     "gain_over_adversary": -0.076,
+     "beats_both": -0.1303
+    },
+    "adversary-1": {
+     "value": 50,
+     "low": 45,
+     "high": 55,
+     "gain_over_readers": 0.1995
+    },
+    "adversary-2": {
+     "value": 49,
+     "low": 44,
+     "high": 54,
+     "gain_over_readers": 0.0913
+    },
+    "adversary-3": {
+     "value": 49,
+     "low": 43,
+     "high": 55,
+     "gain_over_readers": -0.0539
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h21",
+   "folder": "fresh/sft1_cue_s4-01",
+   "family": "sampling",
+   "set": "fresh2026",
+   "measured": 60.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 59,
+     "low": 55,
+     "high": 63,
+     "gain_over_readers": 0.115
+    },
+    "reader-2": {
+     "value": 59.5,
+     "low": 54,
+     "high": 65,
+     "gain_over_readers": -0.13
+    },
+    "account-1": {
+     "value": 59,
+     "low": 54,
+     "high": 64,
+     "gain_over_readers": -0.0777,
+     "gain_over_adversary": -0.143,
+     "beats_both": -0.143
+    },
+    "account-2": {
+     "value": 59,
+     "low": 55,
+     "high": 63,
+     "gain_over_readers": 0.115,
+     "gain_over_adversary": 0.451,
+     "beats_both": 0.115
+    },
+    "account-3": {
+     "value": 59,
+     "low": 53,
+     "high": 65,
+     "gain_over_readers": -0.2434,
+     "gain_over_adversary": 0.0,
+     "beats_both": -0.2434
+    },
+    "adversary-1": {
+     "value": 59.5,
+     "low": 55,
+     "high": 64,
+     "gain_over_readers": 0.0651
+    },
+    "adversary-2": {
+     "value": 57.5,
+     "low": 53,
+     "high": 62,
+     "gain_over_readers": -0.3358
+    },
+    "adversary-3": {
+     "value": 59,
+     "low": 53,
+     "high": 65,
+     "gain_over_readers": -0.2434
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h22",
+   "folder": "reward5/code30_plain-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 360.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 390,
+     "low": 365,
+     "high": 410,
+     "gain_over_readers": -1.2166
+    },
+    "reader-2": {
+     "value": 375,
+     "low": 340,
+     "high": 405,
+     "gain_over_readers": 0.5328
+    },
+    "account-1": {
+     "value": 380,
+     "low": 350,
+     "high": 405,
+     "gain_over_readers": 0.2725,
+     "gain_over_adversary": -0.003,
+     "beats_both": -0.003
+    },
+    "account-2": {
+     "value": 360,
+     "low": 320,
+     "high": 398,
+     "gain_over_readers": 0.6387,
+     "gain_over_adversary": 0.146,
+     "beats_both": 0.146
+    },
+    "account-3": {
+     "value": 383,
+     "low": 350,
+     "high": 410,
+     "gain_over_readers": 0.1058,
+     "gain_over_adversary": -0.531,
+     "beats_both": -0.531
+    },
+    "adversary-1": {
+     "value": 380,
+     "low": 330,
+     "high": 410,
+     "gain_over_readers": 0.2752
+    },
+    "adversary-2": {
+     "value": 376,
+     "low": 340,
+     "high": 405,
+     "gain_over_readers": 0.4931
+    },
+    "adversary-3": {
+     "value": 370,
+     "low": 330,
+     "high": 400,
+     "gain_over_readers": 0.6365
+    }
+   },
+   "no_account_adds": false
+  },
+  {
+   "id": "h23",
+   "folder": "reward5/general30_cue-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 429.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 400,
+     "low": 380,
+     "high": 416,
+     "gain_over_readers": -0.7093
+    },
+    "reader-2": {
+     "value": 403,
+     "low": 383,
+     "high": 423,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 402,
+     "low": 385,
+     "high": 418,
+     "gain_over_readers": -0.7332,
+     "gain_over_adversary": 0.48,
+     "beats_both": -0.7332
+    },
+    "account-2": {
+     "value": 400,
+     "low": 382,
+     "high": 416,
+     "gain_over_readers": -1.0774,
+     "gain_over_adversary": -2.531,
+     "beats_both": -2.531
+    },
+    "account-3": {
+     "value": 418,
+     "low": 400,
+     "high": 436,
+     "gain_over_readers": 2.2974,
+     "gain_over_adversary": 2.421,
+     "beats_both": 2.2974
+    },
+    "adversary-1": {
+     "value": 395,
+     "low": 375,
+     "high": 415,
+     "gain_over_readers": -1.2128
+    },
+    "adversary-2": {
+     "value": 412,
+     "low": 395,
+     "high": 428,
+     "gain_over_readers": 0.0
+    },
+    "adversary-3": {
+     "value": 405,
+     "low": 388,
+     "high": 420,
+     "gain_over_readers": -0.1238
+    }
+   },
+   "no_account_adds": false
+  },
+  {
+   "id": "h24",
+   "folder": "reward5/general30_plain-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 323.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 280,
+     "low": 140,
+     "high": 400,
+     "gain_over_readers": 0.0178
+    },
+    "reader-2": {
+     "value": 270,
+     "low": 150,
+     "high": 390,
+     "gain_over_readers": -0.0181
+    },
+    "account-1": {
+     "value": 240,
+     "low": 140,
+     "high": 340,
+     "gain_over_readers": -0.5039,
+     "gain_over_adversary": -0.112,
+     "beats_both": -0.5039
+    },
+    "account-2": {
+     "value": 240,
+     "low": 130,
+     "high": 350,
+     "gain_over_readers": -0.4375,
+     "gain_over_adversary": -0.299,
+     "beats_both": -0.4375
+    },
+    "account-3": {
+     "value": 365,
+     "low": 300,
+     "high": 420,
+     "gain_over_readers": 0.276,
+     "gain_over_adversary": 0.387,
+     "beats_both": 0.276
+    },
+    "adversary-1": {
+     "value": 240,
+     "low": 120,
+     "high": 370,
+     "gain_over_readers": -0.3915
+    },
+    "adversary-2": {
+     "value": 260,
+     "low": 130,
+     "high": 380,
+     "gain_over_readers": -0.1387
+    },
+    "adversary-3": {
+     "value": 260,
+     "low": 150,
+     "high": 370,
+     "gain_over_readers": -0.111
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h25",
+   "folder": "reward5/math30_cue-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 448.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 445,
+     "low": 432,
+     "high": 458,
+     "gain_over_readers": 0.0
+    },
+    "reader-2": {
+     "value": 445,
+     "low": 432,
+     "high": 458,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 445,
+     "low": 434,
+     "high": 456,
+     "gain_over_readers": 0.1385,
+     "gain_over_adversary": 0.027,
+     "beats_both": 0.027
+    },
+    "account-2": {
+     "value": 446,
+     "low": 434,
+     "high": 458,
+     "gain_over_readers": 0.1145,
+     "gain_over_adversary": 0.115,
+     "beats_both": 0.1145
+    },
+    "account-3": {
+     "value": 449,
+     "low": 437,
+     "high": 461,
+     "gain_over_readers": 0.1427,
+     "gain_over_adversary": -0.011,
+     "beats_both": -0.011
+    },
+    "adversary-1": {
+     "value": 448,
+     "low": 435,
+     "high": 460,
+     "gain_over_readers": 0.1113
+    },
+    "adversary-2": {
+     "value": 445,
+     "low": 432,
+     "high": 458,
+     "gain_over_readers": 0.0
+    },
+    "adversary-3": {
+     "value": 446,
+     "low": 434,
+     "high": 457,
+     "gain_over_readers": 0.1537
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h26",
+   "folder": "reward5/mix30_cue-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 440.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 405,
+     "low": 386,
+     "high": 422,
+     "gain_over_readers": -3.0
+    },
+    "reader-2": {
+     "value": 438,
+     "low": 418,
+     "high": 454,
+     "gain_over_readers": 0.6871
+    },
+    "account-1": {
+     "value": 420,
+     "low": 402,
+     "high": 437,
+     "gain_over_readers": -1.0353,
+     "gain_over_adversary": -0.281,
+     "beats_both": -1.0353
+    },
+    "account-2": {
+     "value": 436,
+     "low": 418,
+     "high": 452,
+     "gain_over_readers": 0.686,
+     "gain_over_adversary": 1.441,
+     "beats_both": 0.686
+    },
+    "account-3": {
+     "value": 422,
+     "low": 402,
+     "high": 440,
+     "gain_over_readers": -0.5646,
+     "gain_over_adversary": 0.19,
+     "beats_both": -0.5646
+    },
+    "adversary-1": {
+     "value": 420,
+     "low": 400,
+     "high": 440,
+     "gain_over_readers": -0.7546
+    },
+    "adversary-2": {
+     "value": 420,
+     "low": 400,
+     "high": 440,
+     "gain_over_readers": -0.7546
+    },
+    "adversary-3": {
+     "value": 420,
+     "low": 400,
+     "high": 440,
+     "gain_over_readers": -0.7546
+    }
+   },
+   "no_account_adds": false
+  },
+  {
+   "id": "h27",
+   "folder": "seen/base_hard72-01",
+   "family": "sampling",
+   "set": "hard72",
+   "measured": 15.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 19,
+     "low": 15,
+     "high": 23,
+     "gain_over_readers": -0.1407
+    },
+    "reader-2": {
+     "value": 19,
+     "low": 14,
+     "high": 24,
+     "gain_over_readers": 0.1233
+    },
+    "account-1": {
+     "value": 23,
+     "low": 18,
+     "high": 28,
+     "gain_over_readers": -2.4745,
+     "gain_over_adversary": 1.725,
+     "beats_both": -2.4745
+    },
+    "account-2": {
+     "value": 18,
+     "low": 14,
+     "high": 23,
+     "gain_over_readers": 0.4932,
+     "gain_over_adversary": 2.673,
+     "beats_both": 0.4932
+    },
+    "account-3": {
+     "value": 20,
+     "low": 15,
+     "high": 25,
+     "gain_over_readers": -0.3638,
+     "gain_over_adversary": 1.299,
+     "beats_both": -0.3638
+    },
+    "adversary-1": {
+     "value": 23,
+     "low": 19,
+     "high": 27,
+     "gain_over_readers": -3.0
+    },
+    "adversary-2": {
+     "value": 22,
+     "low": 17.5,
+     "high": 26.5,
+     "gain_over_readers": -2.1794
+    },
+    "adversary-3": {
+     "value": 22,
+     "low": 17,
+     "high": 27,
+     "gain_over_readers": -1.6627
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h28",
+   "folder": "seen/code_hard72-01",
+   "family": "sampling",
+   "set": "hard72",
+   "measured": 22.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 23,
+     "low": 19,
+     "high": 27,
+     "gain_over_readers": 0.0669
+    },
+    "reader-2": {
+     "value": 22,
+     "low": 17,
+     "high": 27,
+     "gain_over_readers": -0.0717
+    },
+    "account-1": {
+     "value": 26,
+     "low": 21,
+     "high": 31,
+     "gain_over_readers": -0.9376,
+     "gain_over_adversary": 0.699,
+     "beats_both": -0.9376
+    },
+    "account-2": {
+     "value": 21,
+     "low": 17,
+     "high": 26,
+     "gain_over_readers": -0.0331,
+     "gain_over_adversary": 0.526,
+     "beats_both": -0.0331
+    },
+    "account-3": {
+     "value": 22,
+     "low": 17,
+     "high": 27,
+     "gain_over_readers": -0.0717,
+     "gain_over_adversary": 0.375,
+     "beats_both": -0.0717
+    },
+    "adversary-1": {
+     "value": 27,
+     "low": 22,
+     "high": 31,
+     "gain_over_readers": -1.6367
+    },
+    "adversary-2": {
+     "value": 25,
+     "low": 20,
+     "high": 30,
+     "gain_over_readers": -0.5588
+    },
+    "adversary-3": {
+     "value": 24.5,
+     "low": 19,
+     "high": 30,
+     "gain_over_readers": -0.4465
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h29",
+   "folder": "seen/code_hardmatch-01",
+   "family": "sampling",
+   "set": "hardmatch",
+   "measured": 74.5,
+   "forecasts": {
+    "reader-1": {
+     "value": 43,
+     "low": 33,
+     "high": 53,
+     "gain_over_readers": -0.7005
+    },
+    "reader-2": {
+     "value": 40,
+     "low": 29,
+     "high": 52,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 46,
+     "low": 36,
+     "high": 56,
+     "gain_over_readers": 0.0,
+     "gain_over_adversary": -3.0,
+     "beats_both": -3.0
+    },
+    "account-2": {
+     "value": 54,
+     "low": 42,
+     "high": 66,
+     "gain_over_readers": 0.0,
+     "gain_over_adversary": -3.0,
+     "beats_both": -3.0
+    },
+    "account-3": {
+     "value": 43,
+     "low": 33,
+     "high": 53,
+     "gain_over_readers": -0.7005,
+     "gain_over_adversary": -3.0,
+     "beats_both": -3.0
+    },
+    "adversary-1": {
+     "value": 76,
+     "low": 66,
+     "high": 85,
+     "gain_over_readers": 3.0
+    },
+    "adversary-2": {
+     "value": 77,
+     "low": 70,
+     "high": 84,
+     "gain_over_readers": 3.0
+    },
+    "adversary-3": {
+     "value": 77,
+     "low": 70,
+     "high": 85,
+     "gain_over_readers": 3.0
+    }
+   },
+   "no_account_adds": false
+  },
+  {
+   "id": "h30",
+   "folder": "seen/sft_hardmatch-01",
+   "family": "sampling",
+   "set": "hardmatch",
+   "measured": 86.25,
+   "forecasts": {
+    "reader-1": {
+     "value": 58,
+     "low": 47,
+     "high": 68,
+     "gain_over_readers": 0.0
+    },
+    "reader-2": {
+     "value": 53,
+     "low": 41,
+     "high": 65,
+     "gain_over_readers": -0.4284
+    },
+    "account-1": {
+     "value": 60,
+     "low": 50,
+     "high": 70,
+     "gain_over_readers": 0.0,
+     "gain_over_adversary": -3.0,
+     "beats_both": -3.0
+    },
+    "account-2": {
+     "value": 62,
+     "low": 50,
+     "high": 74,
+     "gain_over_readers": 0.0,
+     "gain_over_adversary": -3.0,
+     "beats_both": -3.0
+    },
+    "account-3": {
+     "value": 60,
+     "low": 48,
+     "high": 72,
+     "gain_over_readers": 0.0,
+     "gain_over_adversary": -3.0,
+     "beats_both": -3.0
+    },
+    "adversary-1": {
+     "value": 86,
+     "low": 77,
+     "high": 95,
+     "gain_over_readers": 3.0
+    },
+    "adversary-2": {
+     "value": 88.4,
+     "low": 83,
+     "high": 94,
+     "gain_over_readers": 3.0
+    },
+    "adversary-3": {
+     "value": 86,
+     "low": 80,
+     "high": 93,
+     "gain_over_readers": 3.0
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h31",
+   "folder": "selfdistill/U_plain-01",
+   "family": "sampling",
+   "set": "hard328",
+   "measured": 154.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 162,
+     "low": 150,
+     "high": 174,
+     "gain_over_readers": -0.0027
+    },
+    "reader-2": {
+     "value": 162,
+     "low": 148,
+     "high": 176,
+     "gain_over_readers": 0.0027
+    },
+    "account-1": {
+     "value": 162,
+     "low": 150,
+     "high": 174,
+     "gain_over_readers": -0.0027,
+     "gain_over_adversary": 0.0,
+     "beats_both": -0.0027
+    },
+    "account-2": {
+     "value": 162,
+     "low": 151,
+     "high": 174,
+     "gain_over_readers": -0.0136,
+     "gain_over_adversary": -0.011,
+     "beats_both": -0.0136
+    },
+    "account-3": {
+     "value": 160,
+     "low": 146,
+     "high": 174,
+     "gain_over_readers": 0.196,
+     "gain_over_adversary": 0.19,
+     "beats_both": 0.19
+    },
+    "adversary-1": {
+     "value": 162,
+     "low": 150,
+     "high": 174,
+     "gain_over_readers": -0.0027
+    },
+    "adversary-2": {
+     "value": 162,
+     "low": 150,
+     "high": 174,
+     "gain_over_readers": -0.0027
+    },
+    "adversary-3": {
+     "value": 162,
+     "low": 149,
+     "high": 176,
+     "gain_over_readers": 0.0057
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h32",
+   "folder": "shots1/rl-01",
+   "family": "sampling",
+   "set": "math500",
+   "measured": 438.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 411,
+     "low": 398,
+     "high": 422,
+     "gain_over_readers": -1.1859
+    },
+    "reader-2": {
+     "value": 412,
+     "low": 398,
+     "high": 425,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 412,
+     "low": 400,
+     "high": 424,
+     "gain_over_readers": -0.6879,
+     "gain_over_adversary": -1.215,
+     "beats_both": -1.215
+    },
+    "account-2": {
+     "value": 412,
+     "low": 399,
+     "high": 425,
+     "gain_over_readers": 0.0,
+     "gain_over_adversary": 0.424,
+     "beats_both": 0.0
+    },
+    "account-3": {
+     "value": 411,
+     "low": 398,
+     "high": 424,
+     "gain_over_readers": -0.2526,
+     "gain_over_adversary": -0.78,
+     "beats_both": -0.78
+    },
+    "adversary-1": {
+     "value": 412,
+     "low": 398,
+     "high": 425,
+     "gain_over_readers": 0.0
+    },
+    "adversary-2": {
+     "value": 411,
+     "low": 398,
+     "high": 424,
+     "gain_over_readers": -0.2526
+    },
+    "adversary-3": {
+     "value": 412,
+     "low": 398,
+     "high": 425,
+     "gain_over_readers": 0.0
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h33",
+   "folder": "shots1b/hard328_rl-01",
+   "family": "sampling",
+   "set": "hard328",
+   "measured": 164.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 162,
+     "low": 148,
+     "high": 176,
+     "gain_over_readers": 0.0
+    },
+    "reader-2": {
+     "value": 162,
+     "low": 148,
+     "high": 176,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 160,
+     "low": 148,
+     "high": 172,
+     "gain_over_readers": 0.0314,
+     "gain_over_adversary": 0.058,
+     "beats_both": 0.0314
+    },
+    "account-2": {
+     "value": 164,
+     "low": 152,
+     "high": 177,
+     "gain_over_readers": 0.1409,
+     "gain_over_adversary": 0.167,
+     "beats_both": 0.1409
+    },
+    "account-3": {
+     "value": 164,
+     "low": 151,
+     "high": 177,
+     "gain_over_readers": 0.1017,
+     "gain_over_adversary": 0.067,
+     "beats_both": 0.067
+    },
+    "adversary-1": {
+     "value": 160,
+     "low": 147,
+     "high": 173,
+     "gain_over_readers": -0.0264
+    },
+    "adversary-2": {
+     "value": 160,
+     "low": 147,
+     "high": 173,
+     "gain_over_readers": -0.0264
+    },
+    "adversary-3": {
+     "value": 162,
+     "low": 149,
+     "high": 176,
+     "gain_over_readers": 0.0343
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h34",
+   "folder": "transplant/hard328_cap32-01",
+   "family": "sampling",
+   "set": "hard328",
+   "measured": 241.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 236,
+     "low": 224,
+     "high": 248,
+     "gain_over_readers": -0.0135
+    },
+    "reader-2": {
+     "value": 237,
+     "low": 224,
+     "high": 250,
+     "gain_over_readers": 0.0133
+    },
+    "account-1": {
+     "value": 234,
+     "low": 222,
+     "high": 246,
+     "gain_over_readers": -0.239,
+     "gain_over_adversary": -0.46,
+     "beats_both": -0.46
+    },
+    "account-2": {
+     "value": 233,
+     "low": 222,
+     "high": 244,
+     "gain_over_readers": -0.4072,
+     "gain_over_adversary": -0.797,
+     "beats_both": -0.797
+    },
+    "account-3": {
+     "value": 236,
+     "low": 222,
+     "high": 249,
+     "gain_over_readers": -0.082,
+     "gain_over_adversary": -0.294,
+     "beats_both": -0.294
+    },
+    "adversary-1": {
+     "value": 241,
+     "low": 229,
+     "high": 253,
+     "gain_over_readers": 0.2214
+    },
+    "adversary-2": {
+     "value": 242,
+     "low": 232,
+     "high": 252,
+     "gain_over_readers": 0.3902
+    },
+    "adversary-3": {
+     "value": 242,
+     "low": 230,
+     "high": 254,
+     "gain_over_readers": 0.212
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h35",
+   "folder": "xreward/depth3/top8x1.5_L0-10_math31_s1-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 186.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 183,
+     "low": 172,
+     "high": 194,
+     "gain_over_readers": 0.0
+    },
+    "reader-2": {
+     "value": 183,
+     "low": 172,
+     "high": 194,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 183,
+     "low": 175,
+     "high": 191,
+     "gain_over_readers": 0.2288,
+     "gain_over_adversary": 0.0,
+     "beats_both": 0.0
+    },
+    "account-2": {
+     "value": 184,
+     "low": 172,
+     "high": 196,
+     "gain_over_readers": -0.024,
+     "gain_over_adversary": -0.024,
+     "beats_both": -0.024
+    },
+    "account-3": {
+     "value": 183,
+     "low": 172,
+     "high": 195,
+     "gain_over_readers": -0.0359,
+     "gain_over_adversary": -0.036,
+     "beats_both": -0.036
+    },
+    "adversary-1": {
+     "value": 183,
+     "low": 175,
+     "high": 191,
+     "gain_over_readers": 0.2288
+    },
+    "adversary-2": {
+     "value": 183,
+     "low": 172,
+     "high": 194,
+     "gain_over_readers": 0.0
+    },
+    "adversary-3": {
+     "value": 183,
+     "low": 172,
+     "high": 194,
+     "gain_over_readers": 0.0
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h36",
+   "folder": "xreward/depth3/top8x1.5_L0-10_math31_s2-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 180.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 183,
+     "low": 172,
+     "high": 194,
+     "gain_over_readers": 0.0
+    },
+    "reader-2": {
+     "value": 183,
+     "low": 172,
+     "high": 194,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 183,
+     "low": 175,
+     "high": 191,
+     "gain_over_readers": 0.2288,
+     "gain_over_adversary": 0.0,
+     "beats_both": 0.0
+    },
+    "account-2": {
+     "value": 184,
+     "low": 172,
+     "high": 196,
+     "gain_over_readers": -0.1367,
+     "gain_over_adversary": -0.137,
+     "beats_both": -0.137
+    },
+    "account-3": {
+     "value": 183,
+     "low": 172,
+     "high": 195,
+     "gain_over_readers": -0.0359,
+     "gain_over_adversary": -0.036,
+     "beats_both": -0.036
+    },
+    "adversary-1": {
+     "value": 183,
+     "low": 175,
+     "high": 191,
+     "gain_over_readers": 0.2288
+    },
+    "adversary-2": {
+     "value": 183,
+     "low": 172,
+     "high": 194,
+     "gain_over_readers": 0.0
+    },
+    "adversary-3": {
+     "value": 183,
+     "low": 172,
+     "high": 194,
+     "gain_over_readers": 0.0
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h37",
+   "folder": "xreward/depth3/top8x1.5_L11-21_math31_s1-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 179.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 179,
+     "low": 175,
+     "high": 183,
+     "gain_over_readers": 0.0
+    },
+    "reader-2": {
+     "value": 179,
+     "low": 175,
+     "high": 183,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 179,
+     "low": 174,
+     "high": 184,
+     "gain_over_readers": -0.2231,
+     "gain_over_adversary": 0.336,
+     "beats_both": -0.2231
+    },
+    "account-2": {
+     "value": 183,
+     "low": 171,
+     "high": 195,
+     "gain_over_readers": -1.2489,
+     "gain_over_adversary": -0.689,
+     "beats_both": -1.2489
+    },
+    "account-3": {
+     "value": 179,
+     "low": 168,
+     "high": 191,
+     "gain_over_readers": -1.0561,
+     "gain_over_adversary": -0.496,
+     "beats_both": -1.0561
+    },
+    "adversary-1": {
+     "value": 179,
+     "low": 172,
+     "high": 186,
+     "gain_over_readers": -0.5596
+    },
+    "adversary-2": {
+     "value": 179,
+     "low": 172,
+     "high": 186,
+     "gain_over_readers": -0.5596
+    },
+    "adversary-3": {
+     "value": 179,
+     "low": 172,
+     "high": 186,
+     "gain_over_readers": -0.5596
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h38",
+   "folder": "xreward/depth3/top8x1.5_L22-31_math31_s1-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 161.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 161,
+     "low": 157,
+     "high": 165,
+     "gain_over_readers": 0.0
+    },
+    "reader-2": {
+     "value": 161,
+     "low": 157,
+     "high": 165,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 161,
+     "low": 156,
+     "high": 166,
+     "gain_over_readers": -0.2231,
+     "gain_over_adversary": 0.336,
+     "beats_both": -0.2231
+    },
+    "account-2": {
+     "value": 165,
+     "low": 153,
+     "high": 177,
+     "gain_over_readers": -1.2489,
+     "gain_over_adversary": -0.689,
+     "beats_both": -1.2489
+    },
+    "account-3": {
+     "value": 161,
+     "low": 150,
+     "high": 173,
+     "gain_over_readers": -1.0561,
+     "gain_over_adversary": -0.496,
+     "beats_both": -1.0561
+    },
+    "adversary-1": {
+     "value": 161,
+     "low": 154,
+     "high": 168,
+     "gain_over_readers": -0.5596
+    },
+    "adversary-2": {
+     "value": 161,
+     "low": 154,
+     "high": 168,
+     "gain_over_readers": -0.5596
+    },
+    "adversary-3": {
+     "value": 161,
+     "low": 154,
+     "high": 168,
+     "gain_over_readers": -0.5596
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h39",
+   "folder": "xreward/edits/math1.5_code1.5-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 191.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 200,
+     "low": 188,
+     "high": 212,
+     "gain_over_readers": -0.3142
+    },
+    "reader-2": {
+     "value": 195,
+     "low": 182,
+     "high": 208,
+     "gain_over_readers": 0.2387
+    },
+    "account-1": {
+     "value": 198,
+     "low": 186,
+     "high": 210,
+     "gain_over_readers": -0.0135,
+     "gain_over_adversary": 0.168,
+     "beats_both": -0.0135
+    },
+    "account-2": {
+     "value": 196,
+     "low": 184,
+     "high": 208,
+     "gain_over_readers": 0.212,
+     "gain_over_adversary": -0.027,
+     "beats_both": -0.027
+    },
+    "account-3": {
+     "value": 197,
+     "low": 184,
+     "high": 210,
+     "gain_over_readers": 0.0786,
+     "gain_over_adversary": 0.092,
+     "beats_both": 0.0786
+    },
+    "adversary-1": {
+     "value": 199,
+     "low": 188,
+     "high": 210,
+     "gain_over_readers": -0.1818
+    },
+    "adversary-2": {
+     "value": 195,
+     "low": 182,
+     "high": 208,
+     "gain_over_readers": 0.2387
+    },
+    "adversary-3": {
+     "value": 198,
+     "low": 186,
+     "high": 210,
+     "gain_over_readers": -0.0135
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h40",
+   "folder": "xreward/edits/proj_math31_code30-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 171.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 190,
+     "low": 175,
+     "high": 205,
+     "gain_over_readers": -0.6953
+    },
+    "reader-2": {
+     "value": 185,
+     "low": 168,
+     "high": 201,
+     "gain_over_readers": 0.4062
+    },
+    "account-1": {
+     "value": 170,
+     "low": 157,
+     "high": 184,
+     "gain_over_readers": 1.5735,
+     "gain_over_adversary": 0.619,
+     "beats_both": 0.619
+    },
+    "account-2": {
+     "value": 176,
+     "low": 163,
+     "high": 189,
+     "gain_over_readers": 1.4185,
+     "gain_over_adversary": null,
+     "beats_both": null
+    },
+    "account-3": {
+     "value": 180,
+     "low": 163,
+     "high": 197,
+     "gain_over_readers": 0.9712,
+     "gain_over_adversary": -0.498,
+     "beats_both": -0.498
+    },
+    "adversary-1": {
+     "value": 180,
+     "low": 162,
+     "high": 198,
+     "gain_over_readers": 0.955
+    },
+    "adversary-2": {
+     "value": 170,
+     "low": 155,
+     "high": 187,
+     "gain_over_readers": 1.4057
+    },
+    "adversary-3": {
+     "value": 172,
+     "low": 157,
+     "high": 187,
+     "gain_over_readers": 1.4695
+    }
+   },
+   "no_account_adds": false
+  },
+  {
+   "id": "h41",
+   "folder": "xreward/edits/projc_math31_code30-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 176.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 185,
+     "low": 169,
+     "high": 201,
+     "gain_over_readers": -0.1044
+    },
+    "reader-2": {
+     "value": 182,
+     "low": 165,
+     "high": 199,
+     "gain_over_readers": 0.0945
+    },
+    "account-1": {
+     "value": 178,
+     "low": 162,
+     "high": 194,
+     "gain_over_readers": 0.3026,
+     "gain_over_adversary": 0.163,
+     "beats_both": 0.163
+    },
+    "account-2": {
+     "value": 183,
+     "low": 169,
+     "high": 197,
+     "gain_over_readers": 0.119,
+     "gain_over_adversary": null,
+     "beats_both": null
+    },
+    "account-3": {
+     "value": 184,
+     "low": 167,
+     "high": 200,
+     "gain_over_readers": -0.0251,
+     "gain_over_adversary": -0.317,
+     "beats_both": -0.317
+    },
+    "adversary-1": {
+     "value": 180,
+     "low": 162,
+     "high": 198,
+     "gain_over_readers": 0.1391
+    },
+    "adversary-2": {
+     "value": 183,
+     "low": 168,
+     "high": 198,
+     "gain_over_readers": 0.0936
+    },
+    "adversary-3": {
+     "value": 180,
+     "low": 165,
+     "high": 195,
+     "gain_over_readers": 0.292
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h42",
+   "folder": "xreward/edits/rand8_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 158.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 161,
+     "low": 149,
+     "high": 173,
+     "gain_over_readers": 0.0323
+    },
+    "reader-2": {
+     "value": 162,
+     "low": 150,
+     "high": 174,
+     "gain_over_readers": -0.0334
+    },
+    "account-1": {
+     "value": 162,
+     "low": 151,
+     "high": 173,
+     "gain_over_readers": 0.025,
+     "gain_over_adversary": -0.078,
+     "beats_both": -0.078
+    },
+    "account-2": {
+     "value": 162,
+     "low": 151,
+     "high": 173,
+     "gain_over_readers": 0.025,
+     "gain_over_adversary": 0.058,
+     "beats_both": 0.025
+    },
+    "account-3": {
+     "value": 163,
+     "low": 151,
+     "high": 175,
+     "gain_over_readers": -0.118,
+     "gain_over_adversary": -0.143,
+     "beats_both": -0.143
+    },
+    "adversary-1": {
+     "value": 161,
+     "low": 150,
+     "high": 172,
+     "gain_over_readers": 0.1033
+    },
+    "adversary-2": {
+     "value": 162,
+     "low": 150,
+     "high": 174,
+     "gain_over_readers": -0.0334
+    },
+    "adversary-3": {
+     "value": 162,
+     "low": 151,
+     "high": 173,
+     "gain_over_readers": 0.025
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h43",
+   "folder": "xreward/edits/rbulk_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 195.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 168,
+     "low": 150,
+     "high": 190,
+     "gain_over_readers": 0.0
+    },
+    "reader-2": {
+     "value": 165,
+     "low": 150,
+     "high": 182,
+     "gain_over_readers": -1.4936
+    },
+    "account-1": {
+     "value": 162,
+     "low": 150,
+     "high": 174,
+     "gain_over_readers": -3.0,
+     "gain_over_adversary": -3.0,
+     "beats_both": -3.0
+    },
+    "account-2": {
+     "value": 163,
+     "low": 151,
+     "high": 175,
+     "gain_over_readers": -3.0,
+     "gain_over_adversary": -1.902,
+     "beats_both": -3.0
+    },
+    "account-3": {
+     "value": 178,
+     "low": 160,
+     "high": 196,
+     "gain_over_readers": 1.9384,
+     "gain_over_adversary": 2.95,
+     "beats_both": 1.9384
+    },
+    "adversary-1": {
+     "value": 165,
+     "low": 150,
+     "high": 182,
+     "gain_over_readers": -1.4936
+    },
+    "adversary-2": {
+     "value": 163,
+     "low": 150,
+     "high": 177,
+     "gain_over_readers": -3.0
+    },
+    "adversary-3": {
+     "value": 165,
+     "low": 148,
+     "high": 182,
+     "gain_over_readers": -1.0111
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h44",
+   "folder": "xreward/edits/sft_rand8x3_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 213.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 209,
+     "low": 197,
+     "high": 221,
+     "gain_over_readers": 0.0285
+    },
+    "reader-2": {
+     "value": 209,
+     "low": 196,
+     "high": 222,
+     "gain_over_readers": -0.0293
+    },
+    "account-1": {
+     "value": 208,
+     "low": 197,
+     "high": 219,
+     "gain_over_readers": -0.0137,
+     "gain_over_adversary": -0.042,
+     "beats_both": -0.042
+    },
+    "account-2": {
+     "value": 209,
+     "low": 197,
+     "high": 221,
+     "gain_over_readers": 0.0285,
+     "gain_over_adversary": 0.218,
+     "beats_both": 0.0285
+    },
+    "account-3": {
+     "value": 211,
+     "low": 197,
+     "high": 225,
+     "gain_over_readers": -0.0029,
+     "gain_over_adversary": -0.031,
+     "beats_both": -0.031
+    },
+    "adversary-1": {
+     "value": 209,
+     "low": 197,
+     "high": 221,
+     "gain_over_readers": 0.0285
+    },
+    "adversary-2": {
+     "value": 207,
+     "low": 194,
+     "high": 220,
+     "gain_over_readers": -0.1894
+    },
+    "adversary-3": {
+     "value": 209,
+     "low": 197,
+     "high": 221,
+     "gain_over_readers": 0.0285
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h45",
+   "folder": "xreward/edits/sft_top8x1.5_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 220.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 223,
+     "low": 211,
+     "high": 235,
+     "gain_over_readers": 0.0332
+    },
+    "reader-2": {
+     "value": 223,
+     "low": 210,
+     "high": 236,
+     "gain_over_readers": -0.0343
+    },
+    "account-1": {
+     "value": 222,
+     "low": 210,
+     "high": 234,
+     "gain_over_readers": 0.0802,
+     "gain_over_adversary": 0.0,
+     "beats_both": 0.0
+    },
+    "account-2": {
+     "value": 222,
+     "low": 209,
+     "high": 235,
+     "gain_over_readers": 0.0057,
+     "gain_over_adversary": -0.024,
+     "beats_both": -0.024
+    },
+    "account-3": {
+     "value": 224,
+     "low": 210,
+     "high": 237,
+     "gain_over_readers": -0.1188,
+     "gain_over_adversary": -0.086,
+     "beats_both": -0.1188
+    },
+    "adversary-1": {
+     "value": 222,
+     "low": 210,
+     "high": 234,
+     "gain_over_readers": 0.0802
+    },
+    "adversary-2": {
+     "value": 221,
+     "low": 208,
+     "high": 234,
+     "gain_over_readers": 0.0297
+    },
+    "adversary-3": {
+     "value": 224,
+     "low": 212,
+     "high": 236,
+     "gain_over_readers": -0.0326
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h46",
+   "folder": "xreward/edits/sft_top8x3_math31-02",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 240.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 230,
+     "low": 219,
+     "high": 241,
+     "gain_over_readers": 0.0515
+    },
+    "reader-2": {
+     "value": 229,
+     "low": 217,
+     "high": 241,
+     "gain_over_readers": -0.0543
+    },
+    "account-1": {
+     "value": 230,
+     "low": 219,
+     "high": 241,
+     "gain_over_readers": 0.0515,
+     "gain_over_adversary": 0.492,
+     "beats_both": 0.0515
+    },
+    "account-2": {
+     "value": 231,
+     "low": 219,
+     "high": 243,
+     "gain_over_readers": 0.3216,
+     "gain_over_adversary": 0.527,
+     "beats_both": 0.3216
+    },
+    "account-3": {
+     "value": 229,
+     "low": 216,
+     "high": 242,
+     "gain_over_readers": 0.0339,
+     "gain_over_adversary": 0.147,
+     "beats_both": 0.0339
+    },
+    "adversary-1": {
+     "value": 228,
+     "low": 217,
+     "high": 239,
+     "gain_over_readers": -0.4405
+    },
+    "adversary-2": {
+     "value": 228,
+     "low": 215,
+     "high": 240,
+     "gain_over_readers": -0.2051
+    },
+    "adversary-3": {
+     "value": 229,
+     "low": 217,
+     "high": 240,
+     "gain_over_readers": -0.1127
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h47",
+   "folder": "xreward/edits/top1x2_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 184.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 180,
+     "low": 168,
+     "high": 192,
+     "gain_over_readers": 0.0896
+    },
+    "reader-2": {
+     "value": 178,
+     "low": 166,
+     "high": 190,
+     "gain_over_readers": -0.0984
+    },
+    "account-1": {
+     "value": 177,
+     "low": 166,
+     "high": 188,
+     "gain_over_readers": -0.221,
+     "gain_over_adversary": -0.369,
+     "beats_both": -0.369
+    },
+    "account-2": {
+     "value": 178,
+     "low": 166,
+     "high": 190,
+     "gain_over_readers": -0.0984,
+     "gain_over_adversary": 0.03,
+     "beats_both": -0.0984
+    },
+    "account-3": {
+     "value": 177,
+     "low": 164,
+     "high": 190,
+     "gain_over_readers": -0.2325,
+     "gain_over_adversary": -0.237,
+     "beats_both": -0.237
+    },
+    "adversary-1": {
+     "value": 180,
+     "low": 169,
+     "high": 191,
+     "gain_over_readers": 0.148
+    },
+    "adversary-2": {
+     "value": 178,
+     "low": 165,
+     "high": 191,
+     "gain_over_readers": -0.1284
+    },
+    "adversary-3": {
+     "value": 179,
+     "low": 167,
+     "high": 191,
+     "gain_over_readers": 0.005
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h48",
+   "folder": "xreward/edits/top64_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 200.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 192,
+     "low": 180,
+     "high": 204,
+     "gain_over_readers": -0.1734
+    },
+    "reader-2": {
+     "value": 195,
+     "low": 182,
+     "high": 208,
+     "gain_over_readers": 0.1477
+    },
+    "account-1": {
+     "value": 195,
+     "low": 184,
+     "high": 206,
+     "gain_over_readers": 0.2354,
+     "gain_over_adversary": 0.0,
+     "beats_both": 0.0
+    },
+    "account-2": {
+     "value": 194,
+     "low": 181,
+     "high": 207,
+     "gain_over_readers": 0.0597,
+     "gain_over_adversary": 0.476,
+     "beats_both": 0.0597
+    },
+    "account-3": {
+     "value": 199,
+     "low": 186,
+     "high": 212,
+     "gain_over_readers": 0.3399,
+     "gain_over_adversary": 0.062,
+     "beats_both": 0.062
+    },
+    "adversary-1": {
+     "value": 195,
+     "low": 184,
+     "high": 206,
+     "gain_over_readers": 0.2354
+    },
+    "adversary-2": {
+     "value": 190,
+     "low": 176,
+     "high": 204,
+     "gain_over_readers": -0.4165
+    },
+    "adversary-3": {
+     "value": 196,
+     "low": 184,
+     "high": 208,
+     "gain_over_readers": 0.2776
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h49",
+   "folder": "xreward/edits/top8_code30-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 173.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 165,
+     "low": 153,
+     "high": 178,
+     "gain_over_readers": -0.3095
+    },
+    "reader-2": {
+     "value": 172,
+     "low": 160,
+     "high": 185,
+     "gain_over_readers": 0.236
+    },
+    "account-1": {
+     "value": 162,
+     "low": 151,
+     "high": 173,
+     "gain_over_readers": -0.9805,
+     "gain_over_adversary": -1.228,
+     "beats_both": -1.228
+    },
+    "account-2": {
+     "value": 167,
+     "low": 155,
+     "high": 179,
+     "gain_over_readers": -0.0528,
+     "gain_over_adversary": -0.177,
+     "beats_both": -0.177
+    },
+    "account-3": {
+     "value": 173,
+     "low": 160,
+     "high": 186,
+     "gain_over_readers": 0.2055,
+     "gain_over_adversary": 0.005,
+     "beats_both": 0.005
+    },
+    "adversary-1": {
+     "value": 175,
+     "low": 163,
+     "high": 187,
+     "gain_over_readers": 0.2479
+    },
+    "adversary-2": {
+     "value": 172,
+     "low": 158,
+     "high": 186,
+     "gain_over_readers": 0.1244
+    },
+    "adversary-3": {
+     "value": 170,
+     "low": 158,
+     "high": 182,
+     "gain_over_readers": 0.2009
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h50",
+   "folder": "xreward/edits/top8_code31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 178.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 175,
+     "low": 162,
+     "high": 188,
+     "gain_over_readers": -0.0526
+    },
+    "reader-2": {
+     "value": 177,
+     "low": 165,
+     "high": 190,
+     "gain_over_readers": 0.05
+    },
+    "account-1": {
+     "value": 172,
+     "low": 160,
+     "high": 184,
+     "gain_over_readers": -0.2388,
+     "gain_over_adversary": -0.338,
+     "beats_both": -0.338
+    },
+    "account-2": {
+     "value": 177,
+     "low": 164,
+     "high": 190,
+     "gain_over_readers": 0.0114,
+     "gain_over_adversary": 0.189,
+     "beats_both": 0.0114
+    },
+    "account-3": {
+     "value": 175,
+     "low": 162,
+     "high": 188,
+     "gain_over_readers": -0.0526,
+     "gain_over_adversary": -0.115,
+     "beats_both": -0.115
+    },
+    "adversary-1": {
+     "value": 178,
+     "low": 166,
+     "high": 190,
+     "gain_over_readers": 0.0995
+    },
+    "adversary-2": {
+     "value": 175,
+     "low": 160,
+     "high": 190,
+     "gain_over_readers": -0.1778
+    },
+    "adversary-3": {
+     "value": 180,
+     "low": 168,
+     "high": 192,
+     "gain_over_readers": 0.0619
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h51",
+   "folder": "xreward/edits/top8_general30-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 164.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 157,
+     "low": 145,
+     "high": 169,
+     "gain_over_readers": -0.1504
+    },
+    "reader-2": {
+     "value": 160,
+     "low": 148,
+     "high": 173,
+     "gain_over_readers": 0.1307
+    },
+    "account-1": {
+     "value": 158,
+     "low": 147,
+     "high": 169,
+     "gain_over_readers": -0.0055,
+     "gain_over_adversary": -0.165,
+     "beats_both": -0.165
+    },
+    "account-2": {
+     "value": 157,
+     "low": 146,
+     "high": 169,
+     "gain_over_readers": -0.1487,
+     "gain_over_adversary": -0.056,
+     "beats_both": -0.1487
+    },
+    "account-3": {
+     "value": 168,
+     "low": 155,
+     "high": 182,
+     "gain_over_readers": 0.0735,
+     "gain_over_adversary": 0.365,
+     "beats_both": 0.0735
+    },
+    "adversary-1": {
+     "value": 160,
+     "low": 148,
+     "high": 172,
+     "gain_over_readers": 0.1597
+    },
+    "adversary-2": {
+     "value": 158,
+     "low": 144,
+     "high": 172,
+     "gain_over_readers": -0.0926
+    },
+    "adversary-3": {
+     "value": 156,
+     "low": 144,
+     "high": 168,
+     "gain_over_readers": -0.2913
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h52",
+   "folder": "xreward/edits/top8_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 192.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 190,
+     "low": 178,
+     "high": 202,
+     "gain_over_readers": 0.0
+    },
+    "reader-2": {
+     "value": 190,
+     "low": 178,
+     "high": 202,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 190,
+     "low": 180,
+     "high": 200,
+     "gain_over_readers": 0.1658,
+     "gain_over_adversary": 0.142,
+     "beats_both": 0.142
+    },
+    "account-2": {
+     "value": 189,
+     "low": 177,
+     "high": 201,
+     "gain_over_readers": -0.047,
+     "gain_over_adversary": 0.15,
+     "beats_both": -0.047
+    },
+    "account-3": {
+     "value": 196,
+     "low": 183,
+     "high": 209,
+     "gain_over_readers": -0.1706,
+     "gain_over_adversary": -0.208,
+     "beats_both": -0.208
+    },
+    "adversary-1": {
+     "value": 189,
+     "low": 178,
+     "high": 200,
+     "gain_over_readers": 0.024
+    },
+    "adversary-2": {
+     "value": 187,
+     "low": 175,
+     "high": 199,
+     "gain_over_readers": -0.1973
+    },
+    "adversary-3": {
+     "value": 192,
+     "low": 180,
+     "high": 204,
+     "gain_over_readers": 0.0376
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h53",
+   "folder": "xreward/edits/top8attn_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 178.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 166,
+     "low": 154,
+     "high": 178,
+     "gain_over_readers": -0.4492
+    },
+    "reader-2": {
+     "value": 170,
+     "low": 158,
+     "high": 183,
+     "gain_over_readers": 0.3088
+    },
+    "account-1": {
+     "value": 172,
+     "low": 160,
+     "high": 184,
+     "gain_over_readers": 0.5656,
+     "gain_over_adversary": 0.263,
+     "beats_both": 0.263
+    },
+    "account-2": {
+     "value": 173,
+     "low": 161,
+     "high": 185,
+     "gain_over_readers": 0.669,
+     "gain_over_adversary": -0.019,
+     "beats_both": -0.019
+    },
+    "account-3": {
+     "value": 173,
+     "low": 160,
+     "high": 186,
+     "gain_over_readers": 0.6237,
+     "gain_over_adversary": 0.953,
+     "beats_both": 0.6237
+    },
+    "adversary-1": {
+     "value": 170,
+     "low": 158,
+     "high": 182,
+     "gain_over_readers": 0.3025
+    },
+    "adversary-2": {
+     "value": 175,
+     "low": 161,
+     "high": 189,
+     "gain_over_readers": 0.6876
+    },
+    "adversary-3": {
+     "value": 166,
+     "low": 153,
+     "high": 179,
+     "gain_over_readers": -0.3291
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h54",
+   "folder": "xreward/edits/top8mlp_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 181.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 181,
+     "low": 169,
+     "high": 193,
+     "gain_over_readers": 0.0545
+    },
+    "reader-2": {
+     "value": 183,
+     "low": 170,
+     "high": 196,
+     "gain_over_readers": -0.0576
+    },
+    "account-1": {
+     "value": 180,
+     "low": 168,
+     "high": 192,
+     "gain_over_readers": 0.0451,
+     "gain_over_adversary": 0.0,
+     "beats_both": 0.0
+    },
+    "account-2": {
+     "value": 177,
+     "low": 165,
+     "high": 189,
+     "gain_over_readers": -0.0959,
+     "gain_over_adversary": 0.011,
+     "beats_both": -0.0959
+    },
+    "account-3": {
+     "value": 184,
+     "low": 171,
+     "high": 197,
+     "gain_over_readers": -0.0976,
+     "gain_over_adversary": -0.103,
+     "beats_both": -0.103
+    },
+    "adversary-1": {
+     "value": 182,
+     "low": 170,
+     "high": 194,
+     "gain_over_readers": 0.0451
+    },
+    "adversary-2": {
+     "value": 180,
+     "low": 166,
+     "high": 194,
+     "gain_over_readers": -0.1066
+    },
+    "adversary-3": {
+     "value": 180,
+     "low": 167,
+     "high": 192,
+     "gain_over_readers": 0.005
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h55",
+   "folder": "xreward/edits/top8x0.5_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 170.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 175,
+     "low": 163,
+     "high": 187,
+     "gain_over_readers": 0.1665
+    },
+    "reader-2": {
+     "value": 178,
+     "low": 166,
+     "high": 190,
+     "gain_over_readers": -0.1999
+    },
+    "account-1": {
+     "value": 176,
+     "low": 165,
+     "high": 187,
+     "gain_over_readers": 0.0859,
+     "gain_over_adversary": -0.358,
+     "beats_both": -0.358
+    },
+    "account-2": {
+     "value": 176,
+     "low": 164,
+     "high": 188,
+     "gain_over_readers": 0.0632,
+     "gain_over_adversary": 1.25,
+     "beats_both": 0.0632
+    },
+    "account-3": {
+     "value": 179,
+     "low": 166,
+     "high": 192,
+     "gain_over_readers": -0.3271,
+     "gain_over_adversary": -0.36,
+     "beats_both": -0.36
+    },
+    "adversary-1": {
+     "value": 172,
+     "low": 161,
+     "high": 183,
+     "gain_over_readers": 0.4437
+    },
+    "adversary-2": {
+     "value": 183,
+     "low": 171,
+     "high": 195,
+     "gain_over_readers": -1.1865
+    },
+    "adversary-3": {
+     "value": 176,
+     "low": 163,
+     "high": 189,
+     "gain_over_readers": 0.0332
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h56",
+   "folder": "xreward/edits/top8x2_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 190.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 195,
+     "low": 182,
+     "high": 208,
+     "gain_over_readers": 0.0594
+    },
+    "reader-2": {
+     "value": 196,
+     "low": 182,
+     "high": 210,
+     "gain_over_readers": -0.0631
+    },
+    "account-1": {
+     "value": 197,
+     "low": 186,
+     "high": 208,
+     "gain_over_readers": -0.1213,
+     "gain_over_adversary": -0.001,
+     "beats_both": -0.1213
+    },
+    "account-2": {
+     "value": 200,
+     "low": 188,
+     "high": 212,
+     "gain_over_readers": -0.6,
+     "gain_over_adversary": 0.247,
+     "beats_both": -0.6
+    },
+    "account-3": {
+     "value": 203,
+     "low": 190,
+     "high": 215,
+     "gain_over_readers": -1.1647,
+     "gain_over_adversary": -1.152,
+     "beats_both": -1.1647
+    },
+    "adversary-1": {
+     "value": 197,
+     "low": 185,
+     "high": 209,
+     "gain_over_readers": -0.1208
+    },
+    "adversary-2": {
+     "value": 202,
+     "low": 188,
+     "high": 215,
+     "gain_over_readers": -0.8473
+    },
+    "adversary-3": {
+     "value": 196,
+     "low": 183,
+     "high": 208,
+     "gain_over_readers": -0.013
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h57",
+   "folder": "xreward/edits/top8x3_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 117.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 180,
+     "low": 155,
+     "high": 202,
+     "gain_over_readers": -2.8493
+    },
+    "reader-2": {
+     "value": 180,
+     "low": 145,
+     "high": 205,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 180,
+     "low": 160,
+     "high": 198,
+     "gain_over_readers": -3.0,
+     "gain_over_adversary": -2.002,
+     "beats_both": -3.0
+    },
+    "account-2": {
+     "value": 186,
+     "low": 166,
+     "high": 204,
+     "gain_over_readers": -3.0,
+     "gain_over_adversary": -1.365,
+     "beats_both": -3.0
+    },
+    "account-3": {
+     "value": 186,
+     "low": 162,
+     "high": 206,
+     "gain_over_readers": -3.0,
+     "gain_over_adversary": 2.543,
+     "beats_both": -3.0
+    },
+    "adversary-1": {
+     "value": 183,
+     "low": 160,
+     "high": 203,
+     "gain_over_readers": -3.0
+    },
+    "adversary-2": {
+     "value": 185,
+     "low": 165,
+     "high": 204,
+     "gain_over_readers": -3.0
+    },
+    "adversary-3": {
+     "value": 184,
+     "low": 163,
+     "high": 202,
+     "gain_over_readers": -3.0
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h58",
+   "folder": "xreward/edits/top8xm1_math31-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 118.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 140,
+     "low": 124,
+     "high": 156,
+     "gain_over_readers": 0.0
+    },
+    "reader-2": {
+     "value": 140,
+     "low": 124,
+     "high": 156,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 120,
+     "low": 107,
+     "high": 133,
+     "gain_over_readers": 2.7337,
+     "gain_over_adversary": 0.412,
+     "beats_both": 0.412
+    },
+    "account-2": {
+     "value": 116,
+     "low": 100,
+     "high": 134,
+     "gain_over_readers": 2.4787,
+     "gain_over_adversary": -0.185,
+     "beats_both": -0.185
+    },
+    "account-3": {
+     "value": 150,
+     "low": 136,
+     "high": 165,
+     "gain_over_readers": -3.0,
+     "gain_over_adversary": -3.0,
+     "beats_both": -3.0
+    },
+    "adversary-1": {
+     "value": 120,
+     "low": 100,
+     "high": 140,
+     "gain_over_readers": 2.3214
+    },
+    "adversary-2": {
+     "value": 120,
+     "low": 106,
+     "high": 134,
+     "gain_over_readers": 2.664
+    },
+    "adversary-3": {
+     "value": 121,
+     "low": 105,
+     "high": 137,
+     "gain_over_readers": 2.5105
+    }
+   },
+   "no_account_adds": false
+  },
+  {
+   "id": "h59",
+   "folder": "xreward/normband/top1x1.5_math31_s0-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 184.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 182,
+     "low": 170,
+     "high": 194,
+     "gain_over_readers": 0.0
+    },
+    "reader-2": {
+     "value": 182,
+     "low": 170,
+     "high": 194,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 183,
+     "low": 173,
+     "high": 193,
+     "gain_over_readers": 0.2064,
+     "gain_over_adversary": -0.014,
+     "beats_both": -0.014
+    },
+    "account-2": {
+     "value": 181,
+     "low": 170,
+     "high": 193,
+     "gain_over_readers": -0.0119,
+     "gain_over_adversary": -0.012,
+     "beats_both": -0.012
+    },
+    "account-3": {
+     "value": 181,
+     "low": 169,
+     "high": 193,
+     "gain_over_readers": -0.047,
+     "gain_over_adversary": -0.172,
+     "beats_both": -0.172
+    },
+    "adversary-1": {
+     "value": 184,
+     "low": 174,
+     "high": 194,
+     "gain_over_readers": 0.2199
+    },
+    "adversary-2": {
+     "value": 182,
+     "low": 170,
+     "high": 194,
+     "gain_over_readers": 0.0
+    },
+    "adversary-3": {
+     "value": 184,
+     "low": 173,
+     "high": 195,
+     "gain_over_readers": 0.1246
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h60",
+   "folder": "xreward/normband/top8x0.2_L0-10_math31_s1-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 156.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 160,
+     "low": 148,
+     "high": 172,
+     "gain_over_readers": 0.0414
+    },
+    "reader-2": {
+     "value": 161,
+     "low": 149,
+     "high": 173,
+     "gain_over_readers": -0.0432
+    },
+    "account-1": {
+     "value": 161,
+     "low": 150,
+     "high": 172,
+     "gain_over_readers": -0.0008,
+     "gain_over_adversary": -0.101,
+     "beats_both": -0.101
+    },
+    "account-2": {
+     "value": 164,
+     "low": 153,
+     "high": 175,
+     "gain_over_readers": -0.4369,
+     "gain_over_adversary": -0.478,
+     "beats_both": -0.478
+    },
+    "account-3": {
+     "value": 165,
+     "low": 153,
+     "high": 177,
+     "gain_over_readers": -0.5693,
+     "gain_over_adversary": -0.423,
+     "beats_both": -0.5693
+    },
+    "adversary-1": {
+     "value": 160,
+     "low": 149,
+     "high": 171,
+     "gain_over_readers": 0.0998
+    },
+    "adversary-2": {
+     "value": 160,
+     "low": 148,
+     "high": 172,
+     "gain_over_readers": 0.0414
+    },
+    "adversary-3": {
+     "value": 162,
+     "low": 150,
+     "high": 174,
+     "gain_over_readers": -0.1465
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h61",
+   "folder": "xreward/normband/top8x1.5_d2-8_math31_s0-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 196.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 190,
+     "low": 179,
+     "high": 201,
+     "gain_over_readers": 0.1289
+    },
+    "reader-2": {
+     "value": 188,
+     "low": 175,
+     "high": 201,
+     "gain_over_readers": -0.148
+    },
+    "account-1": {
+     "value": 189,
+     "low": 178,
+     "high": 200,
+     "gain_over_readers": -0.0165,
+     "gain_over_adversary": -0.369,
+     "beats_both": -0.369
+    },
+    "account-2": {
+     "value": 183,
+     "low": 171,
+     "high": 195,
+     "gain_over_readers": -1.1435,
+     "gain_over_adversary": 0.0,
+     "beats_both": -1.1435
+    },
+    "account-3": {
+     "value": 183,
+     "low": 171,
+     "high": 195,
+     "gain_over_readers": -1.1435,
+     "gain_over_adversary": -1.22,
+     "beats_both": -1.22
+    },
+    "adversary-1": {
+     "value": 192,
+     "low": 181,
+     "high": 203,
+     "gain_over_readers": 0.3525
+    },
+    "adversary-2": {
+     "value": 183,
+     "low": 171,
+     "high": 195,
+     "gain_over_readers": -1.1435
+    },
+    "adversary-3": {
+     "value": 190,
+     "low": 177,
+     "high": 203,
+     "gain_over_readers": 0.0762
+    }
+   },
+   "no_account_adds": true
+  },
+  {
+   "id": "h62",
+   "folder": "xreward/normband/top8x4.5_L22-31_math31_s1-01",
+   "family": "edit",
+   "set": "hard328",
+   "measured": 102.0,
+   "forecasts": {
+    "reader-1": {
+     "value": 147,
+     "low": 127,
+     "high": 164,
+     "gain_over_readers": -0.1913
+    },
+    "reader-2": {
+     "value": 146,
+     "low": 126,
+     "high": 163,
+     "gain_over_readers": 0.0
+    },
+    "account-1": {
+     "value": 145,
+     "low": 127,
+     "high": 161,
+     "gain_over_readers": -0.7578,
+     "gain_over_adversary": -0.459,
+     "beats_both": -0.7578
+    },
+    "account-2": {
+     "value": 142,
+     "low": 122,
+     "high": 160,
+     "gain_over_readers": 0.0,
+     "gain_over_adversary": 1.286,
+     "beats_both": 0.0
+    },
+    "account-3": {
+     "value": 148,
+     "low": 130,
+     "high": 165,
+     "gain_over_readers": -1.4788,
+     "gain_over_adversary": -0.795,
+     "beats_both": -1.4788
+    },
+    "adversary-1": {
+     "value": 145,
+     "low": 125,
+     "high": 160,
+     "gain_over_readers": -0.2992
+    },
+    "adversary-2": {
+     "value": 145,
+     "low": 125,
+     "high": 162,
+     "gain_over_readers": 0.0
+    },
+    "adversary-3": {
+     "value": 146,
+     "low": 128,
+     "high": 163,
+     "gain_over_readers": -0.6836
+    }
+   },
+   "no_account_adds": true
+  }
+ ]
+}

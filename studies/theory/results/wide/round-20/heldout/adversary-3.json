@@ -1,0 +1,730 @@
+{
+ "rule": "Covariate-only nearest-cell rule: for each target I take the stored cells that share the model, set, prompt, cap and edit recipe and differ in one covariate (sample, scale, layer band, k, cap, temperature), and interpolate or extrapolate along that covariate. Where the board gives multi-sample totals or paired differences (4-sample sums, s0-minus-s123 seed differences, step-to-step differences, cap-16k vs 32k gains), I solve exactly for the withheld sample. Where nothing matches, I use the nearest family cell, adjusted by a ratio measured on another set (e.g. explore-half to whole-set, hardmatch to hard328). Intervals are about +/-2-3 problems for cells fixed by stored totals, +/-6-12 for single samples near a stored neighbour, and wider for extrapolations.",
+ "forecasts": [
+  {
+   "id": "h01",
+   "value": 170,
+   "low": 155,
+   "high": 186,
+   "predictors": [
+    "day1 base cue hard328 16k 164",
+    "base cue hard328 4-sample 158.5",
+    "Think-SFT 16k->32k +6.7 pts",
+    "RL 16k->32k +0.6 pts"
+   ],
+   "derivation": "Base cue at 16k (158.5-164) plus a cap-32k gain between RL's and Think-SFT's."
+  },
+  {
+   "id": "h02",
+   "value": 427,
+   "low": 422,
+   "high": 432,
+   "predictors": [
+    "base cue 4-sample 410.5",
+    "step100 cue minus base cue +3.1 pts",
+    "cue s0-s123 +1.3"
+   ],
+   "derivation": "Step-100 cue 4-sample mean 426 (410.5+15.5), sample 0 is +0.975 above the mean."
+  },
+  {
+   "id": "h03",
+   "value": 425.7,
+   "low": 421,
+   "high": 430.5,
+   "predictors": [
+    "base cue 410.5",
+    "step100 cue lead +3.1 pts",
+    "cue s0-s123 +1.3"
+   ],
+   "derivation": "4-sample mean 426, s123 is 0.325 below the mean."
+  },
+  {
+   "id": "h04",
+   "value": 418,
+   "low": 413,
+   "high": 423,
+   "predictors": [
+    "base cue 410.5",
+    "step100 plain within +1.4 pts",
+    "plain s0-s123 +0.7"
+   ],
+   "derivation": "Step-100 plain 4-sample mean 417.5, sample 0 +0.525."
+  },
+  {
+   "id": "h05",
+   "value": 417.3,
+   "low": 413,
+   "high": 421.5,
+   "predictors": [
+    "base cue 410.5",
+    "step100 plain +1.4 pts",
+    "plain s0-s123 +0.7"
+   ],
+   "derivation": "Step-100 plain 4-sample mean 417.5, s123 -0.175."
+  },
+  {
+   "id": "h06",
+   "value": 440,
+   "low": 429,
+   "high": 451,
+   "predictors": [
+    "s0400 plain 436",
+    "step100 cue-plain +8.5/500",
+    "RL cue 457"
+   ],
+   "derivation": "s0400 plain plus a cue gain smaller than step 100's."
+  },
+  {
+   "id": "h07",
+   "value": 438.3,
+   "low": 434,
+   "high": 443,
+   "predictors": [
+    "s0400 plain s0 436",
+    "step400-step100 plain +20.25",
+    "step100 plain 417.5"
+   ],
+   "derivation": "4-sample s0400 plain 437.75; remove sample 0 (436) to get s123 mean."
+  },
+  {
+   "id": "h08",
+   "value": 202,
+   "low": 191,
+   "high": 213,
+   "predictors": [
+    "RL plain hard328 4-sample 200.0",
+    "RL cap32 plain 195",
+    "explore-half RL samples 216/200/220/204"
+   ],
+   "derivation": "RL plain 4-sample mean 200, single-sample noise."
+  },
+  {
+   "id": "h09",
+   "value": 354,
+   "low": 349,
+   "high": 359,
+   "predictors": [
+    "board: cued base 354 at T0.6 vs 410 at T1.0 (day1 readout)",
+    "step100 leads 381 to 354 at T0.6"
+   ],
+   "derivation": "The stored day1 cued-base T0.6 count quoted on the board."
+  },
+  {
+   "id": "h10",
+   "value": 75,
+   "low": 63,
+   "high": 88,
+   "predictors": [
+    "board: no-cue base on hard328 75 (paper 6)",
+    "MATH-500 base plain 224 vs cue 410"
+   ],
+   "derivation": "Base without cue on hard328 as quoted, 75."
+  },
+  {
+   "id": "h11",
+   "value": 398,
+   "low": 380,
+   "high": 413,
+   "predictors": [
+    "base mp0.1 T1 404",
+    "base cue T1 410"
+   ],
+   "derivation": "min-p 0.1 at T1 404, small loss at T1.5."
+  },
+  {
+   "id": "h12",
+   "value": 404,
+   "low": 391,
+   "high": 415,
+   "predictors": [
+    "base cue T1 p1 410",
+    "base mp0.1 T1 404",
+    "base cue T0.6 p0.95 ~355"
+   ],
+   "derivation": "Between T1/p1.0 and truncated-sampling cells, nearer T1."
+  },
+  {
+   "id": "h13",
+   "value": 458,
+   "low": 449,
+   "high": 466,
+   "predictors": [
+    "RL cue T1 457",
+    "theta1.25 cue 450"
+   ],
+   "derivation": "RL cue T1 457; min-p roughly neutral."
+  },
+  {
+   "id": "h14",
+   "value": 436,
+   "low": 423,
+   "high": 448,
+   "predictors": [
+    "code1 plain 390",
+    "code1 hard328 cue 187 vs base 158.5/RL 205",
+    "base cue 410",
+    "RL cue 457",
+    "code30 cue 411"
+   ],
+   "derivation": "Interpolate MATH-500 by code1's hard328 position between base and RL (0.61)."
+  },
+  {
+   "id": "h15",
+   "value": 410,
+   "low": 375,
+   "high": 438,
+   "predictors": [
+    "theta0.25 cue 441",
+    "base plain 224",
+    "step100 plain 417",
+    "code1 plain-cue gap ~45"
+   ],
+   "derivation": "theta0.25 cue minus a plain-prompt gap of about 30."
+  },
+  {
+   "id": "h16",
+   "value": 440,
+   "low": 420,
+   "high": 455,
+   "predictors": [
+    "theta0.5 cue 452",
+    "theta0.25 cue 441",
+    "RL plain ~460"
+   ],
+   "derivation": "theta0.5 cue minus a small plain gap."
+  },
+  {
+   "id": "h17",
+   "value": 455,
+   "low": 446,
+   "high": 464,
+   "predictors": [
+    "theta0.5 cue 452",
+    "RL cue 457",
+    "theta1.25 cue 450"
+   ],
+   "derivation": "Interpolate theta curve between 0.5 and 1.0."
+  },
+  {
+   "id": "h18",
+   "value": 440,
+   "low": 420,
+   "high": 456,
+   "predictors": [
+    "theta1.25 cue 450",
+    "RL cue 457"
+   ],
+   "derivation": "Extrapolate declining theta curve past 1.25."
+  },
+  {
+   "id": "h19",
+   "value": 30,
+   "low": 25,
+   "high": 35,
+   "predictors": [
+    "board: base cue fresh2026 28-32",
+    "base vote 38",
+    "base plain 10"
+   ],
+   "derivation": "Stored cued-base single samples 28-32."
+  },
+  {
+   "id": "h20",
+   "value": 49,
+   "low": 43,
+   "high": 55,
+   "predictors": [
+    "explore-half RL fresh 4-sample 52.5 (x136)",
+    "SFT explore 64 vs whole 59",
+    "RL vote 57"
+   ],
+   "derivation": "Explore-half RL mean scaled by the explore/whole ratio 0.92."
+  },
+  {
+   "id": "h21",
+   "value": 59,
+   "low": 53,
+   "high": 65,
+   "predictors": [
+    "Think-SFT cue fresh 16k cut 59.0",
+    "explore-half think arm 63.5"
+   ],
+   "derivation": "Stored Think-SFT 16k single-sample mean 59."
+  },
+  {
+   "id": "h22",
+   "value": 370,
+   "low": 330,
+   "high": 400,
+   "predictors": [
+    "code30 cue 411",
+    "code1 plain 390",
+    "math30 plain 443"
+   ],
+   "derivation": "Code 3.0 plain below Code 3.1 plain 390."
+  },
+  {
+   "id": "h23",
+   "value": 405,
+   "low": 388,
+   "high": 420,
+   "predictors": [
+    "base cue 410",
+    "General wrong-step -0.14 (near base)",
+    "if30 cue 377"
+   ],
+   "derivation": "General cue near the cued base."
+  },
+  {
+   "id": "h24",
+   "value": 260,
+   "low": 150,
+   "high": 370,
+   "predictors": [
+    "base plain 224",
+    "if30 plain 55",
+    "mix30 plain 372"
+   ],
+   "derivation": "Uncertain chat-RL plain; centred near base plain."
+  },
+  {
+   "id": "h25",
+   "value": 446,
+   "low": 434,
+   "high": 457,
+   "predictors": [
+    "math30 plain 443",
+    "RL cue 457",
+    "s0400 plain 436"
+   ],
+   "derivation": "Math 3.0 plain 443 plus small cue gain."
+  },
+  {
+   "id": "h26",
+   "value": 420,
+   "low": 400,
+   "high": 440,
+   "predictors": [
+    "mix30 plain 372",
+    "if30 plain 55 -> cue 377",
+    "base cue 410"
+   ],
+   "derivation": "Mix plain 372 plus cue gain, near/above base cue."
+  },
+  {
+   "id": "h27",
+   "value": 22,
+   "low": 17,
+   "high": 27,
+   "predictors": [
+    "RL plain hard72 27",
+    "SFT hard72 33.25",
+    "hard328 base/RL 158.5/200"
+   ],
+   "derivation": "RL hard72 times base/RL hard328 ratio 0.79, nudged up."
+  },
+  {
+   "id": "h28",
+   "value": 24.5,
+   "low": 19,
+   "high": 30,
+   "predictors": [
+    "RL hard72 27",
+    "code1 hard328 187 vs RL 200"
+   ],
+   "derivation": "RL hard72 times code1/RL hard328 ratio."
+  },
+  {
+   "id": "h29",
+   "value": 77,
+   "low": 70,
+   "high": 85,
+   "predictors": [
+    "code1 hard328 cue 187 (0.57)",
+    "hardmatch/all ratio explore half 1.01-1.08"
+   ],
+   "derivation": "code1 hard328 rate times hardmatch factor ~1.04, times 130."
+  },
+  {
+   "id": "h30",
+   "value": 86,
+   "low": 80,
+   "high": 93,
+   "predictors": [
+    "SFT hard328 16k 4-sample 209-210.8",
+    "explore-half SFT hardmatch/all 1.077"
+   ],
+   "derivation": "SFT hard328 rate 0.64 times ~1.04, times 130."
+  },
+  {
+   "id": "h31",
+   "value": 162,
+   "low": 149,
+   "high": 176,
+   "predictors": [
+    "sdV plain 161",
+    "sdV cue 167",
+    "sdU cue 168"
+   ],
+   "derivation": "sdU cue minus the sdV cue-plain gap."
+  },
+  {
+   "id": "h32",
+   "value": 412,
+   "low": 398,
+   "high": 425,
+   "predictors": [
+    "shots1 base 417",
+    "shots1 code 415",
+    "shots1b base_b 408",
+    "shots1b rl_b 406"
+   ],
+   "derivation": "Mean of stored one-shot cells."
+  },
+  {
+   "id": "h33",
+   "value": 162,
+   "low": 149,
+   "high": 176,
+   "predictors": [
+    "base cue hard328 164 / 158.5",
+    "shots math500 ~= base cue"
+   ],
+   "derivation": "Base cue hard328 level."
+  },
+  {
+   "id": "h34",
+   "value": 242,
+   "low": 230,
+   "high": 254,
+   "predictors": [
+    "transplant sft1_rl20 hard328 16k 231.5",
+    "explore-half m2 32k 248 vs 16k 236",
+    "Think-SFT 32k gain +6.7 pts"
+   ],
+   "derivation": "Transplant 16k 231.5 plus a cap-32k gain of ~10."
+  },
+  {
+   "id": "h35",
+   "value": 183,
+   "low": 172,
+   "high": 194,
+   "predictors": [
+    "L0-10 4-sample sum 734",
+    "edits L0-10 184",
+    "depth3 s3 184"
+   ],
+   "derivation": "Remaining two samples sum 366, 183 each."
+  },
+  {
+   "id": "h36",
+   "value": 183,
+   "low": 172,
+   "high": 194,
+   "predictors": [
+    "L0-10 4-sample sum 734",
+    "edits 184",
+    "s3 184"
+   ],
+   "derivation": "Same as h35."
+  },
+  {
+   "id": "h37",
+   "value": 179,
+   "low": 172,
+   "high": 186,
+   "predictors": [
+    "L11-21 2-sample sum 362",
+    "edits L11-21 183"
+   ],
+   "derivation": "362 minus 183."
+  },
+  {
+   "id": "h38",
+   "value": 161,
+   "low": 154,
+   "high": 168,
+   "predictors": [
+    "L22-31 2-sample sum 327",
+    "edits L22-31 166"
+   ],
+   "derivation": "327 minus 166."
+  },
+  {
+   "id": "h39",
+   "value": 198,
+   "low": 186,
+   "high": 210,
+   "predictors": [
+    "math1_code1 193",
+    "math1.5_rand1.5 197",
+    "top8x1.5 200.25"
+   ],
+   "derivation": "Near math1.5 host cells."
+  },
+  {
+   "id": "h40",
+   "value": 172,
+   "low": 157,
+   "high": 187,
+   "predictors": [
+    "base 158.5",
+    "top8 math 1x ~192",
+    "top8_math30 182"
+   ],
+   "derivation": "Between base and the 1x edit."
+  },
+  {
+   "id": "h41",
+   "value": 180,
+   "low": 165,
+   "high": 195,
+   "predictors": [
+    "base 158.5",
+    "top8 1x ~192",
+    "bulk 190"
+   ],
+   "derivation": "Between base and the 1x edit, nearer the edit."
+  },
+  {
+   "id": "h42",
+   "value": 162,
+   "low": 151,
+   "high": 173,
+   "predictors": [
+    "rand8 1.5x 159, 2x 167, 3x 163, -1x 159",
+    "rand8 L0-10 162"
+   ],
+   "derivation": "Mean of random rank-8 cells."
+  },
+  {
+   "id": "h43",
+   "value": 165,
+   "low": 148,
+   "high": 182,
+   "predictors": [
+    "bulk 190",
+    "random controls 159-167",
+    "base 158.5"
+   ],
+   "derivation": "Random-like control near base, widened toward bulk 190."
+  },
+  {
+   "id": "h44",
+   "value": 209,
+   "low": 197,
+   "high": 221,
+   "predictors": [
+    "SFT hard328 16k 209-210.8",
+    "transplant sft1_rnd10 explore 212"
+   ],
+   "derivation": "Think-SFT level at 16k."
+  },
+  {
+   "id": "h45",
+   "value": 224,
+   "low": 212,
+   "high": 236,
+   "predictors": [
+    "sft_top8x3 232",
+    "SFT 16k 210",
+    "transplant sft1_rl10/20 230/236 explore"
+   ],
+   "derivation": "Between Think-SFT and sft_top8x3."
+  },
+  {
+   "id": "h46",
+   "value": 229,
+   "low": 217,
+   "high": 240,
+   "predictors": [
+    "sft_top8x3 -01 232",
+    "transplant sft1_rl20 231.5"
+   ],
+   "derivation": "Second sample of a 232 cell, slightly regressed."
+  },
+  {
+   "id": "h47",
+   "value": 179,
+   "low": 167,
+   "high": 191,
+   "predictors": [
+    "top1 1x 181",
+    "top1x1.5 182",
+    "top1x3 168"
+   ],
+   "derivation": "Interpolate top1 scale curve at 2x."
+  },
+  {
+   "id": "h48",
+   "value": 196,
+   "low": 184,
+   "high": 208,
+   "predictors": [
+    "top8x1.5 200.25",
+    "bulk 190",
+    "RL cue 205"
+   ],
+   "derivation": "Larger-k 1x edit near the 1.5x top8 level."
+  },
+  {
+   "id": "h49",
+   "value": 170,
+   "low": 158,
+   "high": 182,
+   "predictors": [
+    "top8_math30 182",
+    "top8_if30 155",
+    "code30 cue math500 411 ~ base"
+   ],
+   "derivation": "Code 3.0 directions below Math 3.0's."
+  },
+  {
+   "id": "h50",
+   "value": 180,
+   "low": 168,
+   "high": 192,
+   "predictors": [
+    "code1 hard328 187",
+    "top8_math30 182",
+    "math1_code1 193"
+   ],
+   "derivation": "Below full Code 3.1 model 187."
+  },
+  {
+   "id": "h51",
+   "value": 156,
+   "low": 144,
+   "high": 168,
+   "predictors": [
+    "top8_if30 155",
+    "base 158.5",
+    "General cap hits 88 vs 77"
+   ],
+   "derivation": "Near base / IF."
+  },
+  {
+   "id": "h52",
+   "value": 192,
+   "low": 180,
+   "high": 204,
+   "predictors": [
+    "top8x1.5 200.25",
+    "top8_math30 182",
+    "math1_code1 193"
+   ],
+   "derivation": "1x between base and 1.5x."
+  },
+  {
+   "id": "h53",
+   "value": 166,
+   "low": 153,
+   "high": 179,
+   "predictors": [
+    "base 158.5",
+    "top8 1x ~192"
+   ],
+   "derivation": "Attention-only part smaller than MLP part."
+  },
+  {
+   "id": "h54",
+   "value": 180,
+   "low": 167,
+   "high": 192,
+   "predictors": [
+    "base 158.5",
+    "top8 1x ~192"
+   ],
+   "derivation": "MLP-only near but below full 1x."
+  },
+  {
+   "id": "h55",
+   "value": 176,
+   "low": 163,
+   "high": 189,
+   "predictors": [
+    "base 158.5",
+    "top8 1x ~192",
+    "cap hits 50 at 0.5"
+   ],
+   "derivation": "Interpolate dial at 0.5."
+  },
+  {
+   "id": "h56",
+   "value": 196,
+   "low": 183,
+   "high": 208,
+   "predictors": [
+    "top8x1.5 200.25",
+    "code dial 2x 394 vs 1.5x 399"
+   ],
+   "derivation": "Slightly below 1.5x."
+  },
+  {
+   "id": "h57",
+   "value": 184,
+   "low": 163,
+   "high": 202,
+   "predictors": [
+    "top1x3 168 vs top1 181",
+    "top8x3 L22-31 155 vs 1.5x 163.5"
+   ],
+   "derivation": "Decline from 2x as other 3x cells show."
+  },
+  {
+   "id": "h58",
+   "value": 121,
+   "low": 105,
+   "high": 137,
+   "predictors": [
+    "-1x finished right 51.5%",
+    "cap hits 96 at -1x"
+   ],
+   "derivation": "(328-96) finished x 0.515."
+  },
+  {
+   "id": "h59",
+   "value": 184,
+   "low": 173,
+   "high": 195,
+   "predictors": [
+    "top1x1.5 s1 182",
+    "paper 6 direction 1 +7.5 pts over 158.5"
+   ],
+   "derivation": "Two-sample mean 183.1 minus s1."
+  },
+  {
+   "id": "h60",
+   "value": 162,
+   "low": 150,
+   "high": 174,
+   "predictors": [
+    "base 158.5-164",
+    "rand8 L0-10 162"
+   ],
+   "derivation": "0.2x edit ~ base."
+  },
+  {
+   "id": "h61",
+   "value": 190,
+   "low": 177,
+   "high": 203,
+   "predictors": [
+    "d2-8 s1 183",
+    "paper 6 d2-8 +9.5 pts over 158.5"
+   ],
+   "derivation": "Mean 189.7 implies s0 above s1, shrunk."
+  },
+  {
+   "id": "h62",
+   "value": 146,
+   "low": 128,
+   "high": 163,
+   "predictors": [
+    "L22-31 1.5x 163.5",
+    "L22-31 3x 155"
+   ],
+   "derivation": "Extrapolate band decline to 4.5x."
+  }
+ ]
+}

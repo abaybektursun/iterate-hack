@@ -1,0 +1,125 @@
+== standing
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-ns2f9a5q
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-ns2f9a5q
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-ns2f9a5qjob dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-ns2f9a5q
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-ns2f9a5q
+
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-ns2f9a5q
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-ns2f9a5q
+425 items before 2026-11-16T01:30:56, 4 at or after
+  running 1 jobs, 1 at a time
+231 items before 2026-11-15T14:53:16, 198 at or after
+  running 1 jobs, 1 at a time
+254 items before 2026-11-15T17:45:51, 175 at or after
+  running 1 jobs, 1 at a time
+351 items before 2026-11-15T22:32:36, 78 at or after
+267 items before 2026-11-15T18:58:29, 162 at or after
+285 items before 2026-11-15T20:05:26, 144 at or after
+  running 1 jobs, 1 at a time
+295 items before 2026-11-15T20:38:56, 134 at or after
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time
+  running 1 jobs, 1 at a time
+315 items before 2026-11-15T21:27:03, 114 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-19 (opus): done in 16 s
+248 items before 2026-11-15T16:32:52, 181 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-14 (opus): done in 49 s
+  forecast_score/measured-round-12 (opus): done in 50 s
+248 items before 2026-11-15T16:32:52, 181 at or after
+  running 1 jobs, 1 at a time
+248 items before 2026-11-15T16:32:52, 181 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-09 (opus): done in 62 s
+248 items before 2026-11-15T16:32:52, 181 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-13 (opus): done in 64 s
+248 items before 2026-11-15T16:32:52, 181 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-run-02 (opus): done in 67 s
+248 items before 2026-11-15T16:32:52, 181 at or after
+  running 1 jobs, 1 at a time
+  forecast_score/measured-round-10 (opus): done in 73 s
+  forecast_score/measured-run-03 (opus): done in 57 s
+  forecast_score/measured-round-11 (opus): done in 85 s
+  forecast_score/measured-run-04 (opus): done in 62 s
+  forecast_score/measured-run-05 (opus): done in 65 s
+  forecast_score/measured-run-07 (opus): done in 58 s
+  forecast_score/measured-run-08 (opus): done in 57 s
+  forecast_score/measured-run-06 (opus): done in 65 s
+429 items before 9999, 0 at or after
+  standing: 107 mechanisms, 107 scored, 37 carried, 32 to the graveyard; 332 forecasts written after their result, 0 measured rows not scored
+== direct facts
+429 items before 9999, 0 at or after
+  65 direct facts shown (17 hold), 6 withheld for naming a test cell; 149 of 429 board items withheld
+== explore half of the stored rows
+== synthesis: 3 accounts in parallel, targets_open beside them
+  running 3 jobs, 3 at a time
+429 items before 9999, 0 at or after
+  running 1 jobs, 1 at a time
+  forecast_targets/targets (opus): done in 32 s
+  targets.json: 2 targets from 8 open work items, board snapshot 2026-11-16T01:54:42 UTC
+  synthesis/account-2 (opus): done in 157 s
+  synthesis/account-1 (opus): done in 172 s
+  synthesis/account-3 (opus): done in 175 s
+  leak check: ['/var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-ns2f9a5q/synthesis/account-1/out.txt: reward5/general30_cue-01', '/var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-ns2f9a5q/synthesis/account-1/out.txt: reward5/general30_plain-01']; inputs ["DIRECTION.md: ['day1_hard328/base_plain_T1-01', 'day1_wdiff/code_cue-01']", "results.md: ['cap32/base_cue-01', 'day1_hard328/base_plain_T1-01', 'day1_wdiff/code_cue-01']", "data.md: ['seen/base_hard72-01', 'seen/code_hard72-01', 'xreward/edits/rbulk_math31-01']", 'facts.json']; explore copy clean
+== blind markers
+  running 3 jobs, 3 at a time
+  synthesis_marks/account-2 (opus): done in 124 s
+  synthesis_marks/account-1 (opus): done in 124 s
+  synthesis_marks/account-3 (opus): done in 129 s
+== open_forecasts
+429 items before 2026-11-16T01:54:42, 0 at or after
+  running 8 jobs, 8 at a time
+  open_forecast_account/account-3 (opus): done in 31 s
+  forecast/reader-2 (opus): done in 39 s
+  open_forecast_account/account-2 (opus): done in 43 s
+  forecast/reader-1 (opus): done in 48 s
+  open_forecast_account/account-1 (opus): done in 60 s
+  open_forecast_adversary/adversary-2 (opus): done in 66 s
+  open_forecast_adversary/adversary-3 (opus): done in 83 s
+  open_forecast_adversary/adversary-1 (opus): done in 95 s
+  running 3 jobs, 3 at a time
+  open_forecast_judge/judge-3 (opus): done in 15 s
+  open_forecast_judge/judge-1 (opus): done in 16 s
+  open_forecast_judge/judge-2 (opus): done in 21 s
+  open forecasts: 2 targets, 0 deciding; 0 adversary forecasts rejected by the judges: studies/theory/results/wide/round-20/open_forecasts.md
+== held-out stored cells
+  running 8 jobs, 8 at a time
+  heldout_forecast/account-3 (opus): done in 146 s
+  heldout_forecast/reader-1 (opus): done in 148 s
+  heldout_forecast/reader-2 (opus): done in 166 s
+  heldout_forecast/account-2 (opus): done in 175 s
+  heldout_forecast/account-1 (opus): done in 223 s
+  heldout_forecast/adversary-1 (opus): done in 255 s
+  heldout_forecast/adversary-3 (opus): done in 289 s
+  heldout_forecast/adversary-2 (opus): done in 350 s
+  running 3 jobs, 3 at a time
+  open_forecast_judge/heldout-judge-3 (opus): done in 47 s
+  open_forecast_judge/heldout-judge-1 (opus): done in 49 s
+  open_forecast_judge/heldout-judge-2 (opus): done in 53 s
+  held-out cells: 62; account-2 -8.23 over adversary, -6.06 over readers; account-1 -8.84 over adversary, -7.57 over readers; account-3 -6.84 over adversary, -9.23 over readers
+== synthesis.md
+429 items before 9999, 0 at or after
+# Synthesis, round-20 (version 20)
+
+Written 2026-11-16T02:08:43 UTC. 65 direct facts; 3 accounts kept of 3. Score = minus the facts the blind marker marks as contradicting the account. Fact marks are the blind marker's (`marks-<account>.json`); the account's own count is shown beside them. The accounts' forecasts of the open work against their covariate-only adversaries are in `open_forecasts.md`; they are scored when the results post, in the next round's section below.
+
+## Accounts of earlier rounds ranked by gain over their covariate-only adversary and over the readers
+
+On the numbers posted after their forecasts were written (`open_scores.json`); per target clip3(log density of the account - log density of the adversary) at the measured value; the last two columns are each side's gain over the two readers (standing's rule). Ranked by the smaller of the account's two gains; an account adds something only when both are positive.
+
+| source | account | targets | items | gain over its adversary (nats) | account vs readers | adversary vs readers | adds something |
+|---|---|---|---|---|---|---|---|
+| round-19 | round-19/account-3 | 2 | 1 | +0.083 | +0.994 | +0.912 | yes |
+| round-19 | round-19/account-2 | 2 | 1 | -0.157 | +1.019 | +1.175 | no |
+| round-19 | round-19/account-1 | 2 | 1 | -0.948 | +0.612 | +1.560 | no |
+
+## This round's accounts on 62 held-out stored cells (`heldout.md`)
+
+| account | gain over adversary | gain over readers | adds something |
+|---|---|---|---|
+| account-1 | -8.84 | -7.57 | no |
+| account-2 | -8.23 | -6.06 | no |
+| account-3 | -6.84 | -9.23 | no |

@@ -1,0 +1,468 @@
+{
+ "scored_utc": "2026-11-16T01:52:46",
+ "measured": [
+  {
+   "id": "t01",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t02",
+   "value": null,
+   "item": null,
+   "quote": null,
+   "note": "not posted yet"
+  },
+  {
+   "id": "t03",
+   "value": 206,
+   "item": "result-6fbdaa",
+   "quote": "Cued base, 8 samples, plurality vote: 206 of 328",
+   "note": "Same cell: untrained Olmo 3 base with the opening cue on hard328 (n = 328), plurality vote over 8 samples (T 1.0 / top-p 1.0, a setting the target leaves unstated)."
+  },
+  {
+   "id": "t04",
+   "value": 16.7,
+   "item": "result-6fbdaa",
+   "quote": "Vote over 4 is 189.3",
+   "note": "Same cued-base hard328 run: vote over 8 (206 of 328, stated in the same item) minus vote over 4 (189.3) gives 16.7; the item does not state the difference itself, so I computed it."
+  }
+ ],
+ "forecasters": {
+  "reader-1": {
+   "scored": 2,
+   "inside": 2,
+   "total_gain": 0.149,
+   "mean_gain": 0.075,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t03",
+     "measured": 206,
+     "value": 200,
+     "low": 192,
+     "high": 209,
+     "nulls": [
+      {
+       "value": 200,
+       "low": 192,
+       "high": 209
+      },
+      {
+       "value": 200,
+       "low": 192,
+       "high": 208
+      }
+     ],
+     "gain": 0.0131,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t04",
+     "measured": 16.7,
+     "value": 10,
+     "low": 3,
+     "high": 17,
+     "nulls": [
+      {
+       "value": 10,
+       "low": 3,
+       "high": 17
+      },
+      {
+       "value": 10,
+       "low": 4,
+       "high": 16
+      }
+     ],
+     "gain": 0.136,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "reader-2": {
+   "scored": 2,
+   "inside": 1,
+   "total_gain": -0.171,
+   "mean_gain": -0.085,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t03",
+     "measured": 206,
+     "value": 200,
+     "low": 192,
+     "high": 208,
+     "nulls": [
+      {
+       "value": 200,
+       "low": 192,
+       "high": 209
+      },
+      {
+       "value": 200,
+       "low": 192,
+       "high": 208
+      }
+     ],
+     "gain": -0.0132,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t04",
+     "measured": 16.7,
+     "value": 10,
+     "low": 4,
+     "high": 16,
+     "nulls": [
+      {
+       "value": 10,
+       "low": 3,
+       "high": 17
+      },
+      {
+       "value": 10,
+       "low": 4,
+       "high": 16
+      }
+     ],
+     "gain": -0.1575,
+     "inside": false,
+     "disagrees": false
+    }
+   ]
+  },
+  "round-19/account-1": {
+   "scored": 2,
+   "inside": 2,
+   "total_gain": 0.612,
+   "mean_gain": 0.306,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t03",
+     "measured": 206,
+     "value": 200,
+     "low": 191,
+     "high": 209,
+     "nulls": [
+      {
+       "value": 200,
+       "low": 192,
+       "high": 209
+      },
+      {
+       "value": 200,
+       "low": 192,
+       "high": 208
+      }
+     ],
+     "gain": 0.0287,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t04",
+     "measured": 16.7,
+     "value": 11.5,
+     "low": 5,
+     "high": 18,
+     "nulls": [
+      {
+       "value": 10,
+       "low": 3,
+       "high": 17
+      },
+      {
+       "value": 10,
+       "low": 4,
+       "high": 16
+      }
+     ],
+     "gain": 0.5837,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "round-19/adversary-1": {
+   "scored": 2,
+   "inside": 2,
+   "total_gain": 1.56,
+   "mean_gain": 0.78,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t03",
+     "measured": 206,
+     "value": 203,
+     "low": 195,
+     "high": 211,
+     "nulls": [
+      {
+       "value": 200,
+       "low": 192,
+       "high": 209
+      },
+      {
+       "value": 200,
+       "low": 192,
+       "high": 208
+      }
+     ],
+     "gain": 0.5576,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t04",
+     "measured": 16.7,
+     "value": 14,
+     "low": 5,
+     "high": 23,
+     "nulls": [
+      {
+       "value": 10,
+       "low": 3,
+       "high": 17
+      },
+      {
+       "value": 10,
+       "low": 4,
+       "high": 16
+      }
+     ],
+     "gain": 1.0024,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "round-19/account-2": {
+   "scored": 2,
+   "inside": 2,
+   "total_gain": 1.019,
+   "mean_gain": 0.509,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t03",
+     "measured": 206,
+     "value": 201,
+     "low": 194,
+     "high": 208,
+     "nulls": [
+      {
+       "value": 200,
+       "low": 192,
+       "high": 209
+      },
+      {
+       "value": 200,
+       "low": 192,
+       "high": 208
+      }
+     ],
+     "gain": 0.1911,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t04",
+     "measured": 16.7,
+     "value": 12.5,
+     "low": 7,
+     "high": 18,
+     "nulls": [
+      {
+       "value": 10,
+       "low": 3,
+       "high": 17
+      },
+      {
+       "value": 10,
+       "low": 4,
+       "high": 16
+      }
+     ],
+     "gain": 0.8277,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "round-19/adversary-2": {
+   "scored": 2,
+   "inside": 2,
+   "total_gain": 1.175,
+   "mean_gain": 0.588,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t03",
+     "measured": 206,
+     "value": 202,
+     "low": 194,
+     "high": 210,
+     "nulls": [
+      {
+       "value": 200,
+       "low": 192,
+       "high": 209
+      },
+      {
+       "value": 200,
+       "low": 192,
+       "high": 208
+      }
+     ],
+     "gain": 0.4096,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t04",
+     "measured": 16.7,
+     "value": 12,
+     "low": 5,
+     "high": 19,
+     "nulls": [
+      {
+       "value": 10,
+       "low": 3,
+       "high": 17
+      },
+      {
+       "value": 10,
+       "low": 4,
+       "high": 16
+      }
+     ],
+     "gain": 0.7656,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "round-19/account-3": {
+   "scored": 2,
+   "inside": 2,
+   "total_gain": 0.994,
+   "mean_gain": 0.497,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t03",
+     "measured": 206,
+     "value": 201,
+     "low": 193,
+     "high": 209,
+     "nulls": [
+      {
+       "value": 200,
+       "low": 192,
+       "high": 209
+      },
+      {
+       "value": 200,
+       "low": 192,
+       "high": 208
+      }
+     ],
+     "gain": 0.2193,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t04",
+     "measured": 16.7,
+     "value": 12,
+     "low": 5,
+     "high": 20,
+     "nulls": [
+      {
+       "value": 10,
+       "low": 3,
+       "high": 17
+      },
+      {
+       "value": 10,
+       "low": 4,
+       "high": 16
+      }
+     ],
+     "gain": 0.7752,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  },
+  "round-19/adversary-3": {
+   "scored": 2,
+   "inside": 2,
+   "total_gain": 0.912,
+   "mean_gain": 0.456,
+   "disagree": 0,
+   "disagree_inside": 0,
+   "rows": [
+    {
+     "id": "t03",
+     "measured": 206,
+     "value": 201,
+     "low": 192,
+     "high": 210,
+     "nulls": [
+      {
+       "value": 200,
+       "low": 192,
+       "high": 209
+      },
+      {
+       "value": 200,
+       "low": 192,
+       "high": 208
+      }
+     ],
+     "gain": 0.2125,
+     "inside": true,
+     "disagrees": false
+    },
+    {
+     "id": "t04",
+     "measured": 16.7,
+     "value": 12,
+     "low": 6,
+     "high": 18,
+     "nulls": [
+      {
+       "value": 10,
+       "low": 3,
+       "high": 17
+      },
+      {
+       "value": 10,
+       "low": 4,
+       "high": 16
+      }
+     ],
+     "gain": 0.6995,
+     "inside": true,
+     "disagrees": false
+    }
+   ]
+  }
+ },
+ "outside_every_interval": []
+}
