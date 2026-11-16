@@ -212,8 +212,8 @@ TABLE = {
                              f"held a direct test on stored data in round {m.COUNTS['round']}; {m.COUNTS['refuted']} refuted, {m.COUNTS['undecided']} undecided; the holds are weak evidence"]},
     "one-account-of-the-facts": {
         "group": THEORIES,
-        "figure": lambda m: [f"{m.COUNTS['held']} of {m.COUNTS['tested']}", "new claims",
-                             f"of three accounts of all tested facts held on stored data in round 15; a stricter retest could not separate {m.COUNTS['not_separated']} of the holds from predictions made without the account"]},
+        "figure": lambda m: [f"{m.COUNTS['rounds']['16']['held']} of {m.COUNTS['rounds']['16']['tested']}", "new claims",
+                             f"of three accounts of what RL changed held on stored data in round 16, where a claim must beat a blind adversary's prediction; under round 15's rule {m.COUNTS['held']} of {m.COUNTS['tested']} held; most of round 16 is undecided, not refuted"]},
     "forecasts-before-results": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.COUNTS['theory'][1]} of {m.COUNTS['theory'][0]}", "forecasts",
