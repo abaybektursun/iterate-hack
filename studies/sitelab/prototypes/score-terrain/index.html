@@ -117,6 +117,7 @@ canvas { position: fixed; inset: 0; width: 100%; height: 100%; display: block; t
   .tabs { gap: 14px; overflow: auto; scrollbar-width: none; } .tabs button span { display: none; } .status { display: none; }
   .panel { top: auto; bottom: 66px; height: 46vh; width: 100vw; padding: 18px 16px; background: color-mix(in srgb, var(--paper) 90%, transparent); transform: translateY(130%); }
   .panel .x { right: 16px; top: 16px; }
+  .words { transition: opacity .3s ease; } .words.away { opacity: 0; }
 }
 </style>
 <script type="importmap">
@@ -690,7 +691,7 @@ addEventListener("keydown", e => { if (e.key === "Escape") select(-1); if (e.key
 
 const seenText = {};
 async function select(i) {
-  sel = i; dirty = true; const P = $("#panel");
+  sel = i; dirty = true; const P = $("#panel"); $(".words").classList.toggle("away", i >= 0); $("#tip").style.opacity = 0;
   if (i < 0 || !M) { P.classList.remove("open"); return; }
   const s = M.S[i], pl = DATA.plain?.[s.result] || {}, sib = M.S.filter(q => q.result === s.result);
   const draw = text => {
@@ -733,16 +734,16 @@ let played = false;
 function home() { HOME.pos.set(6.5, 13.4, 32).multiplyScalar(innerWidth / innerHeight < 1 ? 1.9 : 1); if (!touched && !played) camera.position.copy(HOME.pos); }   // the opening view fits the window
 addEventListener("resize", () => { home(); resize(); dirty = true; });
 const clock = new THREE.Clock();
-let vo = .07, voNow = null;   // the picture sits right of the words, and moves left when the panel opens
-let fence = null, fenceT = 0, fenceMoving = false, gpuA = 8, gpuN = 0, lastT = 0, focusD = 30;
+let vo = .07, vy = 0, voNow = null;   // the picture sits right of the words, and moves left when the panel opens; on a phone it moves up, above the panel
+let fence = null, fenceT = 0, fenceMoving = false, gpuA = 8, gpuN = 0, focusD = 30;
 const QL = [1, .75, .6, .5, .4];
 const fp = new THREE.Vector3();
 function frame(now) {
   requestAnimationFrame(frame);
   if (document.hidden || !M) return;
   const dt = Math.min(clock.getDelta(), .1), t = clock.elapsedTime;
-  const w = innerWidth, h = innerHeight, want = w > 1000 ? (sel >= 0 ? -.1 : .07) : 0;
-  let moving = dirty || playing || flying || flyOut > 0 || !!focusOn || pinsMoving || Math.abs(want - vo) > 1e-3;
+  const w = innerWidth, h = innerHeight, want = w > 1000 ? (sel >= 0 ? -.1 : .07) : 0, wantY = w > 1000 ? -.05 : w <= 760 && sel >= 0 ? .24 : 0;
+  let moving = dirty || playing || flying || flyOut > 0 || !!focusOn || pinsMoving || Math.abs(want - vo) > 1e-3 || Math.abs(wantY - vy) > 1e-3;
   if (playing) {
     playT += dt; const f = playT / DUR;
     if (f >= 1) { setX(XEND); stop(); if (flying) { flying = false; flyOut = 1e-4; } }
@@ -772,8 +773,8 @@ function frame(now) {
   }
   if (!moving) resize(1); else if (drawQ !== quality) resize(quality);
   dirty = false;
-  vo += (want - vo) * (1 - Math.exp(-dt * 4));
-  if (voNow === null || Math.abs(vo - voNow) > 1e-4) { voNow = vo; camera.setViewOffset(w, h, -w * vo, -h * .05 * (w > 1000), w, h); }
+  vo += (want - vo) * (1 - Math.exp(-dt * 4)); vy += (wantY - vy) * (1 - Math.exp(-dt * 4));
+  if (voNow === null || Math.abs(vo + vy - voNow) > 1e-4) { voNow = vo + vy; camera.setViewOffset(w, h, -w * vo, h * vy, w, h); }
   camera.updateMatrixWorld();
   U.uTime.value = t; finish.uniforms.uT.value = playing ? t : 0;
   finish.uniforms.uInv.value.multiplyMatrices(camera.matrixWorld, camera.projectionMatrixInverse); finish.uniforms.uCam.value.copy(camera.position); finish.uniforms.uFocus.value = focusD;
@@ -784,10 +785,7 @@ function frame(now) {
   renderer.setRenderTarget(rt); renderer.render(scene, camera); renderer.setRenderTarget(null); quad.render(renderer);
 
   fence = gl.fenceSync(gl.SYNC_GPU_COMMANDS_COMPLETE, 0); gl.flush(); fenceT = now; fenceMoving = moving;
-  if (Q.has("fps") && lastT) { fpsA = fpsA * .9 + (now - lastT) * .1; $("#status").textContent = `${(1000 / fpsA).toFixed(0)} frames per second drawn, GPU ${gpuA.toFixed(0)} ms, quality ${quality}`; }
-  lastT = now;
 }
-let fpsA = 16;
 
 /* ---------- load and poll ---------- */
 async function read(first) {

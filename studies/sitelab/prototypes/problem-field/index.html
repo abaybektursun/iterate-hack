@@ -101,6 +101,7 @@ h1 .b { color: var(--blue); } h1 .a { color: var(--red); }
 
 @media (max-width: 900px) {
   .col { left: 16px; right: 16px; top: 12px; width: auto; }
+  .top { flex-wrap: wrap; row-gap: 6px; padding-bottom: 10px; }
   h1 { font-size: 19px; margin: 12px 0 6px; } .cap, .rows, .key, .swap { display: none; }
   .pick { padding: 5px 0; } .pick .sub { display: none; }
   .time { left: 16px; right: 16px; bottom: 12px; } .tl span { display: none; } .tl { justify-content: center; }
@@ -202,14 +203,14 @@ function noiseTexture() {
 }
 const NOISE = { value: noiseTexture() };
 
-// The reference is a counting tray: beads of five materials in dishes ground into a dark stone slab.
-// c: albedo (linear), r: roughness, cc: lacquer coat, band: growth lines of shell
+// The reference is a counting set on a cloth: glass and enamel beads in five glazed stoneware dishes.
+// c: albedo (linear), r: roughness, cc: clear coat, band: faint growth lines
 const LOOK = [
-  { c: [0.42, 0.385, 0.315], r: 0.34, cc: 0.4, band: 1 },      // right under both: shell
-  { c: [0.27, 0.052, 0.034], r: 0.2, cc: 1, band: 0 },       // right only under A: cinnabar lacquer
-  { c: [0.020, 0.040, 0.105], r: 0.18, cc: 1, band: 0 },       // right only under B: indigo lacquer
-  { c: [0.085, 0.090, 0.097], r: 0.55, cc: 0.12, band: 0.25 }, // wrong under both: slate
-  { c: [0.020, 0.019, 0.018], r: 0.92, cc: 0, band: 0 },      // cut off at the cap: raw basalt
+  { c: [0.5, 0.46, 0.38], r: 0.18, cc: 1, band: 0.35 },        // right under both: ivory enamel
+  { c: [0.27, 0.052, 0.034], r: 0.2, cc: 1, band: 0 },         // right only under A: cinnabar enamel
+  { c: [0.020, 0.040, 0.105], r: 0.18, cc: 1, band: 0 },       // right only under B: indigo glass
+  { c: [0.1, 0.105, 0.115], r: 0.24, cc: 1, band: 0 },         // wrong under both: grey glass
+  { c: [0.012, 0.012, 0.012], r: 0.4, cc: 0.7, band: 0 },      // cut off at the cap: black enamel, satin
 ];
 const INLAY = ['#d9d0bd', '#b5452e', '#5d74a6', '#d9d0bd', '#d9d0bd'];
 
@@ -226,7 +227,7 @@ const camera = new THREE.PerspectiveCamera(36, 1, 0.5, 260);
 camera.position.set(0.6, 14.2, 21.5);
 const controls = new OrbitControls(camera, canvas);
 controls.target.set(0, -0.4, 1.0); controls.enableDamping = true; controls.dampingFactor = 0.07;
-controls.minPolarAngle = 0.25; controls.maxPolarAngle = 1.04; controls.minAzimuthAngle = -0.75; controls.maxAzimuthAngle = 0.75;   // the print on the slab stays readable controls.minDistance = 9; controls.maxDistance = 42;
+controls.minPolarAngle = 0.25; controls.maxPolarAngle = 1.04; controls.minAzimuthAngle = -0.75; controls.maxAzimuthAngle = 0.75;   // the print on the cloth stays readable controls.minDistance = 9; controls.maxDistance = 42;
 controls.rotateSpeed = 0.6; controls.zoomSpeed = 0.7; controls.panSpeed = 0.6;
 
 const sun = new THREE.DirectionalLight('#fff0dc', 2.6);   // key, upper left
@@ -236,7 +237,7 @@ sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.03; sun.shadow.radius = 2;
 const rim = new THREE.DirectionalLight('#cddcf2', 0.55); rim.position.set(10, 5, -14);   // rim, from behind
 scene.add(sun, rim, new THREE.HemisphereLight('#aab4c0', '#1c1713', 0.42));              // soft fill
 
-// the slab: dark soapstone with five ground dishes, a fine inlaid line at each rim, and the counts printed on the stone
+// the ground: a dark woven cloth, five glazed dishes with a raised lip, and the counts printed on the cloth
 const decals = [];
 {
   const g = new THREE.PlaneGeometry(26, 21, 312, 252); g.rotateX(-Math.PI / 2); g.translate(0, 0, 0.4);
@@ -248,30 +249,39 @@ const decals = [];
     t.copy(lo).lerp(hi, Math.min(1, dep)); col.set([t.r, t.g, t.b], i * 3);
   }
   g.setAttribute('color', new THREE.BufferAttribute(col, 3)); g.computeVertexNormals();
-  const stone = sh => {
+  const ground = sh => {                // one surface, two materials: woven cloth where it is flat, a dark iron glaze where it dips into a dish
     sh.uniforms.uNoise = NOISE;
     sh.vertexShader = 'varying vec3 vTP;\n' + sh.vertexShader.replace('#include <begin_vertex>', '#include <begin_vertex>\nvTP = position;');
     sh.fragmentShader = 'varying vec3 vTP;\nuniform sampler2D uNoise;\n' + sh.fragmentShader
       .replace('#include <color_fragment>', `#include <color_fragment>
         vec4 n1 = texture2D(uNoise, vTP.xz * 0.11), n2 = texture2D(uNoise, vTP.xz * 1.3);
-        float sm = n1.r, sg = n2.b;
-        float vein = smoothstep(0.012, 0.0, abs(texture2D(uNoise, vTP.xz * 0.028 + 0.37).a - 0.5)) * smoothstep(0.45, 0.7, sm);
-        diffuseColor.rgb *= (0.8 + 0.4 * sm) * (0.88 + 0.24 * sg); diffuseColor.rgb += vein * 0.006 * vec3(1.0, 0.94, 0.84);`)
+        float dish = smoothstep(-0.004, -0.03, vTP.y);
+        vec2 th = vTP.xz * 9.0 + (n2.rg - 0.5) * 0.3, tf = abs(fract(th) - 0.5);                  // plain weave: each cell shows the crown of the thread on top
+        float crown = 1.0 - 2.0 * (mod(floor(th.x) + floor(th.y), 2.0) < 0.5 ? tf.x : tf.y);
+        float fine = 1.0 - smoothstep(0.12, 0.4, max(fwidth(th.x), fwidth(th.y)));                // the weave fades out before it is finer than a pixel
+        vec3 cloth = vec3(0.05, 0.045, 0.04) * (0.8 + 0.4 * n1.r) * mix(1.0, 0.5 + 0.75 * crown, fine) * (0.9 + 0.2 * n2.b);
+        float thin = smoothstep(-0.3, -0.03, vTP.y) * (0.4 + 0.6 * n1.a);                         // the glaze runs thin near the rim and breaks to rust
+        vec3 glaze = mix(diffuseColor.rgb * 0.6, vec3(0.085, 0.04, 0.018), thin * 0.6) * (0.85 + 0.3 * n1.r);
+        diffuseColor.rgb = mix(cloth, glaze, dish);`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
-        roughnessFactor = clamp(0.66 + (sg - 0.5) * 0.22 - smoothstep(-0.02, -0.14, vTP.y) * 0.32 - vein * 0.12, 0.05, 1.0);`);
+        roughnessFactor = mix(0.95, 0.3 + (n2.b - 0.5) * 0.1, dish);`)
+      .replace('#include <lights_physical_fragment>', `#include <lights_physical_fragment>
+        material.clearcoat *= dish; material.sheenColor *= 1.0 - dish;`);
   };
-  const tm = new THREE.MeshPhysicalMaterial({ vertexColors: true, roughness: 0.6, metalness: 0.0, envMapIntensity: 0.55 }); tm.onBeforeCompile = stone;
+  const gm = { roughness: 0.6, metalness: 0.0, envMapIntensity: 0.6, clearcoat: 1, clearcoatRoughness: 0.3, sheen: 1, sheenRoughness: 0.6, sheenColor: new THREE.Color().setRGB(0.05, 0.046, 0.042) };
+  const tm = new THREE.MeshPhysicalMaterial({ vertexColors: true, ...gm }); tm.onBeforeCompile = ground;
   const table = new THREE.Mesh(g, tm); table.receiveShadow = true; scene.add(table);
   const sh = new THREE.Shape([[-300, -300], [300, -300], [300, 300], [-300, 300]].map(p => new THREE.Vector2(...p)));
   sh.holes.push(new THREE.Path([[-12.95, -10.05], [12.95, -10.05], [12.95, 10.85], [-12.95, 10.85]].map(p => new THREE.Vector2(...p))));
-  const fm = new THREE.MeshPhysicalMaterial({ color: lo, roughness: 0.6, metalness: 0.0, envMapIntensity: 0.55, side: THREE.DoubleSide }); fm.onBeforeCompile = stone;
+  const fm = new THREE.MeshPhysicalMaterial({ side: THREE.DoubleSide, ...gm }); fm.onBeforeCompile = ground;
   const far = new THREE.Mesh(new THREE.ShapeGeometry(sh).rotateX(Math.PI / 2), fm); far.position.y = -0.004; far.receiveShadow = true; scene.add(far);
+  const rimMat = new THREE.MeshPhysicalMaterial({ color: new THREE.Color().setRGB(0.034, 0.021, 0.014), roughness: 0.3, clearcoat: 1, clearcoatRoughness: 0.14 });
   BASIN.forEach((b, k) => {
-    for (const [s, op] of [[1, 0.5], [1.035, 0.16]]) {   // the inlaid line at the rim and a fainter one outside it
-      const pts = []; for (let i = 0; i <= 200; i++) { const a = i / 200 * Math.PI * 2; pts.push(new THREE.Vector3(b.x + Math.cos(a) * b.R * s, 0.012, b.z + Math.sin(a) * b.R * s)); }
-      scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: INLAY[k], transparent: true, opacity: op })));
-    }
-    // the count and the name, printed flat on the stone: behind the three far dishes, in front of the two near ones
+    const rim = new THREE.Mesh(new THREE.TorusGeometry(b.R * 1.012, 0.13, 12, 160).rotateX(Math.PI / 2).scale(1, 0.62, 1), rimMat);   // the lip of the dish: it takes the highlight and drops a shadow on the cloth
+    rim.position.set(b.x, 0, b.z); rim.castShadow = rim.receiveShadow = true; scene.add(rim);
+    const pts = []; for (let i = 0; i <= 200; i++) { const a = i / 200 * Math.PI * 2; pts.push(new THREE.Vector3(b.x + Math.cos(a) * b.R * 1.012, 0.083, b.z + Math.sin(a) * b.R * 1.012)); }   // a fine painted line on the lip, in the dish's colour
+    scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({ color: INLAY[k], transparent: true, opacity: 0.5 })));
+    // the count and the name, printed flat on the cloth: behind the three far dishes, in front of the two near ones
     const cv = document.createElement('canvas'); cv.width = 1024; cv.height = 360;
     const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
     const m = new THREE.Mesh(new THREE.PlaneGeometry(k <= ONLYB ? 7.4 : 5.0, (k <= ONLYB ? 7.4 * 1.5 : 5.0 * 1.15) * 360 / 1024).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false }));
@@ -297,7 +307,7 @@ const curC = new Float32Array(NMAX * 3), curE = new Float32Array(NMAX * 4);
 let N = 0, R0 = 0.2;
 
 const mat = new THREE.MeshPhysicalMaterial({ color: '#ffffff', roughness: 0.3, metalness: 0.0, clearcoat: 1, clearcoatRoughness: 0.07, envMapIntensity: 0.8 });
-mat.onBeforeCompile = sh => {            // surface per bead: mottling, shell lines, speckle and pitting on the raw stones, occlusion from below
+mat.onBeforeCompile = sh => {            // surface per bead: mottling, shell lines, speckle and pitting where the coat is thin, occlusion from below
   sh.uniforms.uNoise = NOISE;
   sh.vertexShader = 'attribute vec4 aMat;\nvarying vec4 vMat;\nvarying vec2 vBU;\n' + sh.vertexShader
     .replace('#include <begin_vertex>', '#include <begin_vertex>\nvMat = aMat; vBU = uv * vec2(2.0, 1.0) + vec2(float(gl_InstanceID) * 0.137, float(gl_InstanceID) * 0.071);');
@@ -352,9 +362,7 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure
 
 // quality steps down by itself when frames run slow: depth of field, then bloom and shadow size, then internal resolution
 const gl = renderer.getContext(), dbg = gl.getExtension('WEBGL_debug_renderer_info'), gpu = dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : '';
-let tier = -1, slow = 0, counted = 0, drawn = 0;
-let lost = 0;
-window.__pf = () => ({ tier, drawn, awake, lost });   // for a measurement from outside   // for a measurement from outside
+let tier = -1, slow = 0, counted = 0;
 function setTier(t) {
   tier = t; bokeh.enabled = t < 1; bloom.enabled = t < 2;
   const size = t < 2 ? 2048 : 1024; if (sun.shadow.mapSize.x !== size) { sun.shadow.mapSize.set(size, size); if (sun.shadow.map) { sun.shadow.map.dispose(); sun.shadow.map = null; } }
@@ -714,23 +722,14 @@ function frame() {
   update();
   bokeh.uniforms.focus.value = camera.position.distanceTo(controls.target) - 0.5;
   if (!still && awake) film.uniforms.t.value = T;
-  composer.render(); drawn++;
+  composer.render();
   placeCard();
   // more than 18 of 30 drawn frames in a row came later than 25 ms after the one before: one quality step down
   if (++counted > 30) { if (slow > 18 && tier < 5) setTier(tier + 1); counted = 0; slow = 0; }
 }
-const q = new URLSearchParams(location.search);
-loadSet(q.get('set') || 'hard328');
-if (q.get('a') || q.get('b')) setPair(S.byKey[q.get('a')], S.byKey[q.get('b')]);
-if (q.get('then')) {                     // ?then=<key of B>&t=<seconds>: a later moment of a change, for a still
-  update(); setPair(null, S.byKey[q.get('then')]);
-  for (let i = 0, n = (+q.get('t') || 1) * 60; i < n; i++) { step(1 / 120); step(1 / 120); update(); }
-}
-for (let i = 0, n = +q.get('frames') || 0; i < n; i++) { step(1 / 120); step(1 / 120); update(); }
-if (q.get('dbg')) { let m = 0, mx = 0; for (let i = 0; i < N; i++) { const v = Math.hypot(V[i * 3], V[i * 3 + 1], V[i * 3 + 2]); m += v / N; mx = Math.max(mx, v); } document.title = `speed mean ${m.toFixed(4)} max ${mx.toFixed(3)} transit ${transit.reduce((a, b) => a + b, 0)}`; }
-if (q.get('pin')) { pin = +q.get('pin'); showCard(pin); }
+loadSet('hard328');
 canvas.addEventListener('webglcontextlost', ev => ev.preventDefault());
-canvas.addEventListener('webglcontextrestored', () => { lost++; room(); NOISE.value.needsUpdate = true; for (const d of decals) d.tex.needsUpdate = true; dirty = 60; });
+canvas.addEventListener('webglcontextrestored', () => { room(); NOISE.value.needsUpdate = true; for (const d of decals) d.tex.needsUpdate = true; dirty = 60; });
 update();
 if (renderer.compileAsync) await Promise.race([renderer.compileAsync(scene, camera), new Promise(r => setTimeout(r, 4000))]);   // shaders compile off the main thread where the driver can
 requestAnimationFrame(frame);

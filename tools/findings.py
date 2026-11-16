@@ -92,7 +92,7 @@ TABLE = {
         "steps": lambda m: [step("Base + cue, restart", "free", m.T10["restart"], m.D["n"], m.T10["artifact"])]},
     "vote-over-four": {
         "group": NO_REWARD,
-        "figure": lambda m: [f"{m.K[6][1]}", "of 500", f"MATH-500, Base + cue with a vote over 6 samples; the RL model with one sample scores {m.RL1['lo']} to {m.RL1['hi']}; a vote over 4 samples adds {m.BASE['gain']} points"],
+        "figure": lambda m: [f"{m.K[6][1]}", "of 500", f"MATH-500, Base + cue with a vote over 6 samples; RL with one sample scores {m.RL1['lo']} to {m.RL1['hi']}. On the 328 harder problems: {m.KH[6][1]:.0f} of 328, RL {m.RL1H['lo']} to {m.RL1H['hi']}, and most misses have no right sample among the 6"],
         "steps": lambda m: [step("Vote over 4 samples", "free", m.BASE["vote"], m.N, m.DATA["artifact"], vote=True),
                             board_step("Vote over 4 samples, restart", "base", "result-5d032f", "cue, " + AFTER_RESTART, vote=True),
                             board_step("RL, vote over 4 samples, restart", "rl", "result-5d032f", "plain, " + AFTER_RESTART, vote=True)]},
@@ -210,6 +210,10 @@ TABLE = {
         "group": THEORIES,
         "figure": lambda m: [f"{m.COUNTS['held']} of {m.COUNTS['tested']}", "proposed causes",
                              f"held a direct test on stored data in round {m.COUNTS['round']}; {m.COUNTS['refuted']} refuted, {m.COUNTS['undecided']} undecided; the holds are weak evidence"]},
+    "one-account-of-the-facts": {
+        "group": THEORIES,
+        "figure": lambda m: [f"{m.COUNTS['held']} of {m.COUNTS['tested']}", "new claims",
+                             f"of three accounts of all tested facts held on stored data in round 15; a stricter retest could not separate {m.COUNTS['not_separated']} of the holds from predictions made without the account"]},
     "forecasts-before-results": {
         "group": THEORIES,
         "figure": lambda m: [f"{m.COUNTS['theory'][1]} of {m.COUNTS['theory'][0]}", "forecasts",

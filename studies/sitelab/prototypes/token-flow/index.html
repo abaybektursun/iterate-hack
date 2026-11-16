@@ -88,7 +88,7 @@ h1 i { font-style: normal; color: var(--ink); border-bottom: 1px solid var(--blu
   .models { display: flex; flex-wrap: wrap; gap: 0 16px; } .models button { width: auto; } .models button em, .lab, .detail, .foot, .note, .replay { display: none; }
   .row { padding: 6px 0; } .status { display: none; }
   .caption { left: 12px; right: 12px; bottom: 10px; font-size: 12px; } .key { gap: 10px; flex-wrap: wrap; justify-content: center; }
-  .grp strong { font-size: 19px; } .grp { font-size: 9px; } .grp small { display: none; }
+  .grp strong { font-size: 19px; } .grp { font-size: 9px; width: 50px; white-space: normal; } .grp small { display: none; }
 }
 </style>
 <script type="importmap">
@@ -133,7 +133,7 @@ const MODELS = DATA.sets.filter(s => s.per === 4);
 
 // ---- constants shared by the shader and the picking code
 const NS = 1312, YS = 13 / 16384, SPEED = 5200, CYCLE = 32768 * 1.09, R = 22, SPAN = 1.22;
-const PER = +(Q.get('p') || 600);                       // particles per slot
+const PER = 600;                       // particles per slot
 const COL = { ok: [0.80, 0.75, 0.64], bad: [0.20, 0.185, 0.17], cap: [0.44, 0.105, 0.055] };   // bone, slate, iron oxide
 
 // ---- state
@@ -452,7 +452,7 @@ const clock = new THREE.Clock(); let last = 0, lastW = -1;
 layout(st.wallCur); for (let s = 0; s < NS; s++) { tex[s * 4] = T.u[s]; tex[s * 4 + 1] = T.len[s]; for (let q = 0; q < 3; q++) { tex[NS * 4 + s * 4 + q] = T.c[s * 3 + q]; tex[NS * 8 + s * 4 + q] = T.e[s * 3 + q]; } }
 words(); detail(-1);
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const STILL = Q.get('t') || (RM ? '20' : null), DROP = Q.get('drop');   // ?t=seconds, or reduced motion: one composed still frame, no replay
+const STILL = Q.get('t') || (RM ? '20' : null);   // ?t=seconds, or reduced motion: one composed still frame, no replay
 let dirty = 60; for (const ev of ['pointermove', 'pointerdown', 'pointerup', 'wheel', 'keydown', 'resize', 'click']) addEventListener(ev, () => { dirty = 60; }, { passive: true });
 if (STILL) { perNow = PER; $('replay').style.display = 'none'; }                                     // ?t=seconds renders one fixed moment (for checks)
 function frame() {
@@ -464,16 +464,14 @@ function frame() {
     if (avg > 17.6) { if (perNow > 90) { perNow = Math.max(80, perNow * .78); perCeil = perNow; } else if (dpr > .75) { dpr = Math.max(.75, dpr - .25); renderer.setPixelRatio(dpr); resize(); } }
     else if (avg < 17.1 && perNow < perCeil * .97) perNow = Math.min(perCeil, perNow * 1.2); } }
   grains.geometry.setDrawRange(0, NS * Math.round(perNow));
-  const now = STILL ? +STILL : clock.getElapsedTime(), dt = STILL ? .5 : Math.min(Q.has('fast') ? .4 : .05, now - last); last = now;
+  const now = STILL ? +STILL : clock.getElapsedTime(), dt = STILL ? .5 : Math.min(.05, now - last); last = now;
   // the cap moves at the speed the answers fall, so answers held by it fall with it
   if (!hdrag && Math.abs(st.wallV) > 40 && st.run === 32) { st.wall = st.wallCur = Math.min(32768, Math.max(16384, st.wallCur + st.wallV * dt)); st.wallV *= Math.exp(-dt * 3.5); if (st.wallCur <= 16384 || st.wallCur >= 32768) st.wallV = 0; }   // the plate keeps the speed it was let go with
   else if (!hdrag && st.wallCur !== st.wall) { const d = st.wall - st.wallCur, sp = SPEED * (d > 0 ? 1 : 3) * dt; st.wallCur = Math.abs(d) <= sp ? st.wall : st.wallCur + Math.sign(d) * sp; }
   if (STILL) st.wallCur = st.wall;
-  if (DROP && now > +DROP && st.run !== 32) setCap(32768);
   if (st.wallCur !== lastW) { lastW = st.wallCur; if (st.run === 32) { layout(st.wallCur); words(); if (st.pin >= 0) detail(st.pin); } }
   for (let i = 0; i < (STILL ? 30 : 1); i++) stepSlots(dt);
   const u = partMat.uniforms; u.uTime.value = now; u.uFront.value = STILL ? 1e9 : (now - st.t0) * SPEED;
-  if (Q.get('pin') && st.pin < 0 && now > .2) { st.pin = +Q.get('pin'); detail(st.pin); }
   const hs = st.hot >= 0 ? st.hot : st.pin, per = cur().per;
   u.uHotA.value = hs < 0 ? -1 : per === 4 ? hs : hs * 4; u.uHotB.value = hs < 0 ? -1 : per === 4 ? hs + 1 : hs * 4 + 4;
   u.uDim.value += ((hs < 0 ? 1 : .45) - u.uDim.value) * (STILL ? 1 : .1);
@@ -485,7 +483,7 @@ function frame() {
   if (!ptr.size) { cam.yaw += cam.vy; cam.pitch += cam.vp; cam.vy *= .92; cam.vp *= .92; cam.yaw += (.2 - cam.yaw) * .003; }
   cam.yaw = Math.max(-1.25, Math.min(1.25, cam.yaw)); cam.pitch = Math.max(-.18, Math.min(.95, cam.pitch));
   cam.depth += (Math.max(16384, st.wallCur) - cam.depth) * (1 - Math.exp(-dt * 2.2));
-  const th = Math.tan(camera.fov * Math.PI / 360), sh = cam.depth * YS + 7 + (cam.depth - 16384) / 16384 * 3.5, sw = 33, asp = (W - colW) / H;
+  const th = Math.tan(camera.fov * Math.PI / 360), sh = cam.depth * YS + 7 + (cam.depth - 16384) / 16384 * 3.5, sw = W > 860 ? 33 : 39, asp = (W - colW) / H;
   const dist = (Math.max(sh / 2 / th, sw / 2 / (th * asp)) + 4) * cam.zoom;
   cam.sx += (cam.lx - cam.sx) * .03; cam.sy += (cam.ly - cam.sy) * .03;
   const yaw = cam.yaw + (STILL ? 0 : Math.sin(now * .11) * .03) + cam.sx * .06, pitch = cam.pitch + cam.sy * .03, ty = -cam.depth * YS / 2 - .2;
