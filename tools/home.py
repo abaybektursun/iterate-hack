@@ -186,7 +186,7 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
 .sec { border-top: 1px solid var(--rule); }
 .sec-in { max-width: 1840px; margin: 0 auto; padding: clamp(56px, 9vh, 96px) 40px clamp(48px, 8vh, 80px); display: grid; grid-template-columns: minmax(360px, min(32%, 560px)) minmax(0, 1fr); column-gap: 48px; }
 .sec-n { margin: 0 0 10px; font-size: 13px; font-weight: 600; color: var(--mute); }
-.sec-head h2 { margin: 0; font-size: 22px; line-height: 1.15; font-weight: 400; letter-spacing: -.012em; }
+.sec-head h2 { margin: 0; font-size: clamp(18px, 1.3vw, 21px); line-height: 1.15; font-weight: 400; letter-spacing: -.012em; }
 .sec-head p { margin: 10px 0 0; text-wrap: pretty; color: var(--mute); font-size: 15.5px; line-height: 1.5; max-width: 30ch; }
 .sec-head { position: sticky; top: 32px; align-self: start; }
 .rows { list-style: none; margin: 0; padding: 0; border-bottom: 1px solid var(--rule); align-self: start; }
@@ -231,7 +231,8 @@ svg text { font-family: inherit; fill: var(--ink); text-anchor: middle; font-str
   .said { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }  /* two lines */
   .key { display: none; }
 }
-@media (max-width: 500px) { .pic, .top a[href^="#"] { display: none; } }  /* the dial is too small to read there, and the sections just below list the same pages */
+@media (max-width: 500px) { .pic, .top a[href^="#"] { display: none; } }
+@media (max-width: 500px) { .cap { min-height: 7.68em; } .who { min-height: 8.7em; } }  /* the room of the filled sentences (6 lines each at 375), so nothing moves when the numbers arrive */  /* the dial is too small to read there, and the sections just below list the same pages */
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
   .status.read::before { animation: none; }
@@ -476,7 +477,10 @@ function draw() {
        bead, so it is beside the bead at the sides, below it at the front, above it at the back, and changes smoothly. */
     let nx = Math.cos((a - y) * RAD) * V.sp, ny = near; const len = Math.hypot(nx, ny); nx /= len; ny /= len;
     const lim = v => Math.max(-1, Math.min(1, v * 2.5)), d = r + 10;
-    const tx = x + nx * d + lim(nx) * p.w * fs / 2, ty = yy + ny * d + (lim(ny) + 1) * fs * .36;
+    let tx = x + nx * d + lim(nx) * p.w * fs / 2, ty = yy + ny * d + (lim(ny) + 1) * fs * .36;
+    /* A long name at the side would leave the picture: it is held inside, and moved off its bead by as much, down at the front and up at the back. */
+    const half = p.w * fs / 2, held = Math.max(half + 6, Math.min(G.w - half - 6, tx)), over = Math.abs(held - tx);
+    tx = held; ty += (near >= 0 ? 1 : -1) * Math.min(over, r + fs);
     c0.setAttribute("cx", f(x)); c0.setAttribute("cy", f(yy)); c0.setAttribute("r", f(r + 26));
     c1.setAttribute("cx", f(x)); c1.setAttribute("cy", f(yy)); c1.setAttribute("r", f(r));
     t.setAttribute("x", f(tx)); t.setAttribute("y", f(ty));

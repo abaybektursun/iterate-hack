@@ -526,7 +526,8 @@ p, h1, h2, h3, dl, dd { margin: 0; }
 .skip { position: fixed; left: 12px; top: 12px; z-index: 6; padding: 8px 12px; background: var(--paper); font-size: 13px; font-weight: 600; }
 .skip:not(:focus) { width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 #main { display: contents; }  /* the landmark has no box: its sections stay children of the page column */
-.wrap { max-width: 1520px; margin: 0 auto; padding: 20px 40px 56px; }
+.wrap { max-width: 1840px; margin: 0 auto; padding: 20px 40px 56px; }
+#main > * { max-width: 1440px; }  /* on a wide screen the lists stay readable; the header keeps the edges it has on every page */
 
 /* Header, as on the Design and Findings tabs */
 .top { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 26px; font-size: 13px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
