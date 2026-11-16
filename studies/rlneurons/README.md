@@ -4866,3 +4866,48 @@ problems the base does not solve in any of 6 samples; a vote cannot fix those.
 
 Limits: 6 samples, not 12; tokens are 55,364 per problem at 6 samples, about 6 times RL's one sample on this set (RL vote over
 4: 221 at 37,299 tokens).
+
+### The 328: vote over 8 (samples 6 and 7 added, board work-e340a2)
+
+Answer: the vote over 8 samples of the cued base has 206 of 328 [188, 223], inside RL's one-sample range (200 to 206), at
+73,604 tokens per problem, about 8 times RL's one sample. It stays under RL's vote over 4 (221 at 37,299 tokens) and under
+Think-SFT + cue with one sample by 3 (209). So on the 328 the vote reaches RL's one sample at 8 samples, not at 6 as on MATH-500.
+
+Samples 6 and 7: `jobs/run_cell.py --model base --prompt cue --set hard328 --temperature 1.0 --top-p 1.0 --seed 3060000
+--samples 2`, no restarts, commit 9c4650b, AWS L40S shards `ih-1115-234319-403b` (0/5), `-234841-693f` (1/5), `-234917-71fc`
+(2/5), `-234659-48b1` (3/5), `-235114-4b73` (4/5), all status done. Output `results/votek/hard328_base_cue-02/`.
+
+```
+uv run --no-project --with numpy --with math-verify==0.9.0 python -m studies.rlneurons.analysis.votek --runs runs/abaybektursun-1114-200457-e8e6 runs/ih-1115-203301-1311+runs/ih-1115-203536-158f+runs/ih-1115-223413-8a08+runs/ih-1115-223311-1a89+runs/ih-1115-203831-efdf+runs/ih-1115-204016-2f14 runs/ih-1115-234319-403b+runs/ih-1115-234841-693f+runs/ih-1115-234917-71fc+runs/ih-1115-234659-48b1+runs/ih-1115-235114-4b73 --out studies/rlneurons/results/votek/hard328_base_cue-02
+```
+
+| k | vote right of 328 [95 %] | lowest, highest subset | at least one of k right | tokens per problem |
+|---|---|---|---|---|
+| 1 | 161.1 [145.3, 176.4] | 152, 168 | 161.1 | 9,202 |
+| 2 | 167.9 [152.3, 183.3] | 160, 177 | 189.6 | 18,405 |
+| 3 | 182.3 [165.4, 198.3] | 176, 188 | 202.4 | 27,589 |
+| 4 | 189.3 [172.3, 205.7] | 184, 196 | 210.0 | 36,830 |
+| 5 | 194.2 [177.0, 210.6] | 188, 200 | 215.6 | 46,005 |
+| 6 | 198.2 [180.6, 214.8] | 192, 202 | 219.6 | 55,198 |
+| 7 | 201.9 [184.1, 218.6] | 197, 205 | 222.5 | 64,404 |
+| 8 | 206 [188.0, 223.0] | one subset | 225 | 73,604 |
+
+Rows 1 to 6 differ a little from the table above because the subsets are now drawn from 8 samples.
+
+Predictions: W1 (vote over 8 inside [185, 199], below 200): refuted, 206. W2 (vote over 8 minus vote over 4 at least 6
+problems): holds, 206 - 189.3 = 16.7. The curve does not flatten between 4 and 8: about +4 problems per added sample.
+
+Early stop: stop at 2 agreeing answers has 200.6 at 47,665 tokens, against the vote over 6 (55,198 tokens) +2.4 problems
+[-1.3, 6.2]; stop at 3 has 204.1 at 58,782 tokens, against the vote over 7 +2.2 [-1.6, 6.0]; stop at 4 has 204.2 at 64,673
+tokens, against the vote over 8 -1.8 [-6.1, 2.3]. No interval excludes 0: on the 328 the stop rule saves 9 to 14 % of the
+tokens at equal score and does not gain problems, unlike MATH-500 (+9.9 [6.1, 14.1]).
+
+What is left: 122 problems are wrong under the vote over 8; 103 have no right sample among 8, 12 have one, 6 have two, 1 has
+three; 7 have a wrong answer held by more than 4 samples. At least one of 8 is right on 225 problems, so no way of choosing
+among these 8 samples passes 225.
+
+Examples (`examples.json`): problem 0, gold 116, 6 of 8 samples answer 116, vote right; problem 29, gold 244, 5 of 8 samples
+give no answer, the others 37, "9." and 24, vote wrong.
+
+Limits: one draw of 8 samples; the interval [188, 223] contains RL's one-sample scores and both ends of the claim "reaches RL".
+The comparison with RL is not at equal tokens.

@@ -1,0 +1,337 @@
+{
+ "problems": 328,
+ "samples": 8,
+ "runs": [
+  {
+   "run": "runs/abaybektursun-1114-200457-e8e6",
+   "job_id": "abaybektursun-1114-200457-e8e6",
+   "shard": null,
+   "commit": "2c58f34e156212e79ecfc3e13c460cd6fb4bd02a",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3000000,
+   "samples": 4
+  },
+  {
+   "run": "runs/ih-1115-203301-1311",
+   "job_id": "ih-1115-203301-1311",
+   "shard": "0/5",
+   "commit": "8c2a3c056da6e8a401880bad3ade47faa172999d",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3040000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-203536-158f",
+   "job_id": "ih-1115-203536-158f",
+   "shard": "1/5",
+   "commit": "8c2a3c056da6e8a401880bad3ade47faa172999d",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3040000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-223413-8a08",
+   "job_id": "ih-1115-223413-8a08",
+   "shard": "2/10",
+   "commit": "478869c29a3c24f6e125e9e30d87f7453caac12e",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3040000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-223311-1a89",
+   "job_id": "ih-1115-223311-1a89",
+   "shard": "7/10",
+   "commit": "478869c29a3c24f6e125e9e30d87f7453caac12e",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3040000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-203831-efdf",
+   "job_id": "ih-1115-203831-efdf",
+   "shard": "3/5",
+   "commit": "8c2a3c056da6e8a401880bad3ade47faa172999d",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3040000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-204016-2f14",
+   "job_id": "ih-1115-204016-2f14",
+   "shard": "4/5",
+   "commit": "8c2a3c056da6e8a401880bad3ade47faa172999d",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3040000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-234319-403b",
+   "job_id": "ih-1115-234319-403b",
+   "shard": "0/5",
+   "commit": "9c4650b893eb633a074016f16cd570609ed9d262",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3060000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-234841-693f",
+   "job_id": "ih-1115-234841-693f",
+   "shard": "1/5",
+   "commit": "9c4650b893eb633a074016f16cd570609ed9d262",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3060000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-234917-71fc",
+   "job_id": "ih-1115-234917-71fc",
+   "shard": "2/5",
+   "commit": "9c4650b893eb633a074016f16cd570609ed9d262",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3060000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-234659-48b1",
+   "job_id": "ih-1115-234659-48b1",
+   "shard": "3/5",
+   "commit": "9c4650b893eb633a074016f16cd570609ed9d262",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3060000,
+   "samples": 2
+  },
+  {
+   "run": "runs/ih-1115-235114-4b73",
+   "job_id": "ih-1115-235114-4b73",
+   "shard": "4/5",
+   "commit": "9c4650b893eb633a074016f16cd570609ed9d262",
+   "model": "base",
+   "prompt": "cue",
+   "set": "hard328",
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "max_tokens": 16384,
+   "seed": 3060000,
+   "samples": 2
+  }
+ ],
+ "k": {
+  "1": {
+   "vote_right": 161.1,
+   "ci95": [
+    145.3,
+    176.4
+   ],
+   "subset_min_max": [
+    152,
+    168
+   ],
+   "any_right": 161.1,
+   "tokens_per_problem": 9202
+  },
+  "2": {
+   "vote_right": 167.9,
+   "ci95": [
+    152.3,
+    183.3
+   ],
+   "subset_min_max": [
+    160,
+    177
+   ],
+   "any_right": 189.6,
+   "tokens_per_problem": 18405
+  },
+  "3": {
+   "vote_right": 182.3,
+   "ci95": [
+    165.4,
+    198.3
+   ],
+   "subset_min_max": [
+    176,
+    188
+   ],
+   "any_right": 202.4,
+   "tokens_per_problem": 27589
+  },
+  "4": {
+   "vote_right": 189.3,
+   "ci95": [
+    172.3,
+    205.7
+   ],
+   "subset_min_max": [
+    184,
+    196
+   ],
+   "any_right": 210.0,
+   "tokens_per_problem": 36830
+  },
+  "5": {
+   "vote_right": 194.2,
+   "ci95": [
+    177.0,
+    210.6
+   ],
+   "subset_min_max": [
+    188,
+    200
+   ],
+   "any_right": 215.6,
+   "tokens_per_problem": 46005
+  },
+  "6": {
+   "vote_right": 198.2,
+   "ci95": [
+    180.6,
+    214.8
+   ],
+   "subset_min_max": [
+    192,
+    202
+   ],
+   "any_right": 219.6,
+   "tokens_per_problem": 55198
+  },
+  "7": {
+   "vote_right": 201.9,
+   "ci95": [
+    184.1,
+    218.6
+   ],
+   "subset_min_max": [
+    197,
+    205
+   ],
+   "any_right": 222.5,
+   "tokens_per_problem": 64404
+  },
+  "8": {
+   "vote_right": 206.0,
+   "ci95": [
+    188.0,
+    223.0
+   ],
+   "subset_min_max": [
+    206,
+    206
+   ],
+   "any_right": 225.0,
+   "tokens_per_problem": 73604
+  }
+ },
+ "vote_over_first_4_in_order": 192,
+ "stop_at_m_votes": {
+  "2": {
+   "vote_right": 200.6,
+   "samples_per_problem": 4.16,
+   "tokens_per_problem": 47665,
+   "minus_fixed_vote": {
+    "k": 6,
+    "tokens_per_problem": 55198,
+    "problems": 2.4,
+    "ci95": [
+     -1.3,
+     6.2
+    ]
+   }
+  },
+  "3": {
+   "vote_right": 204.1,
+   "samples_per_problem": 5.37,
+   "tokens_per_problem": 58782,
+   "minus_fixed_vote": {
+    "k": 7,
+    "tokens_per_problem": 64404,
+    "problems": 2.2,
+    "ci95": [
+     -1.6,
+     6.0
+    ]
+   }
+  },
+  "4": {
+   "vote_right": 204.2,
+   "samples_per_problem": 6.19,
+   "tokens_per_problem": 64673,
+   "minus_fixed_vote": {
+    "k": 8,
+    "tokens_per_problem": 73604,
+    "problems": -1.8,
+    "ci95": [
+     -6.1,
+     2.3
+    ]
+   }
+  }
+ },
+ "vote_all_wrong_by_right_samples": {
+  "0": 103,
+  "1": 12,
+  "2": 6,
+  "3": 1,
+  "4": 0,
+  "5": 0,
+  "6": 0,
+  "7": 0,
+  "8": 0
+ },
+ "vote_all_wrong_with_majority_group": 7
+}
