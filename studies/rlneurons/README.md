@@ -3309,6 +3309,27 @@ cap 32,768, scored also at 16,384 from the same answers; paired by problem with 
 - Jobs ih-1115-163313-7486 and ih-1115-163401-a4ba (AWS L40S, 2 shards, joined with `analysis/shard_join.py`); raw answers in
   `runs/` on the laptop and in S3 under results/ih/<job>/, not in git.
 
+## Think-SFT at its released sampling setting: no gain on half of the 328 (board work-3d4e90; branch `released`, not on main)
+
+Spec `specs/SPEC_released.md` (written before the run). The model's `generation_config.json` sets T 0.6 / top-p 0.95 and
+32,768 new tokens. `run_cell --prompt native --temperature 0.6 --top-p 0.95 --max-tokens 32768`, seed 3000000, grader v3, one
+sample, paired by problem with the T 1.0 cell of the same format and seed (`results/native/hard328-01/`). Only shard 0 of 2 ran
+(164 problems: every second problem of the 328), job ih-1115-202055-0f67 on an AWS L40S; the other shard and MATH-500 were
+not accepted by the AWS quota and were then dropped. Readout `analysis/released.py`,
+`results/released/hard328_shard0of2-01/readout.json`.
+
+| cap | T 0.6 / top-p 0.95 | T 1.0 / top-p 1.0 | difference, points [95 %] | tokens per problem |
+|---|---|---|---|---|
+| 32,768 | 122 of 164 | 121 of 164 | +0.6 [-4.9, 6.1] | 12,048 / 12,098 |
+| 16,384 (same answers) | 104 | 106 | -1.2 [-7.3, 4.9] | |
+
+- H1 (released setting at least 8 problems better on the 328) is not supported on this half: +1 problem, and a gain of more than
+  6.1 points is outside the interval. Not a full cell: 164 problems, one sample.
+- At T 0.6 the cell has 10 cap hits at 32,768 and 7 answers the runner counts as loops, against 2 and 0 at T 1.0 on the whole
+  set: some looping returns at the lower temperature, as for the base, without a change in right answers.
+- Together with `results/native/` and `results/cap32/`: of the three differences between this study's Think-SFT rows and the
+  model as released (format, sampling, cap), only the cap changes the score.
+
 ## How to run
 
 Laptop checks (no GPU, no weights):

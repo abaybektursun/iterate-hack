@@ -1,0 +1,45 @@
+{
+ "run": "ih-1115-202055-0f67",
+ "commit": "58ef8d49d6ccc51544b2f5142d8d2cfce604d842",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "sft1",
+  "prompt": "native",
+  "native_tokenizer": "allenai/Olmo-3-7B-Think-SFT@6ff857587e040d6d523a3d5f3a56e918f5401d66",
+  "set": "hard328",
+  "temperature": 0.6,
+  "top_p": 0.95,
+  "min_p": 0.0,
+  "max_tokens": 32768,
+  "seed": 3000000,
+  "shots": null,
+  "n": null,
+  "shard": "0/2",
+  "samples": 1,
+  "restarts": 0,
+  "out": "/work/out",
+  "dry_run": false,
+  "commit": "58ef8d49d6ccc51544b2f5142d8d2cfce604d842",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 0.6,
+   "top_p": 0.95,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 164,
+  "native_prompt_example": "<|im_start|>system\nYou are Olmo, a helpful AI assistant built by Ai2. Your date cutoff is December 2024, and your model weights are available at https://huggingface.co/allenai.<|im_end|>\n<|im_start|>user\nSolve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"<|im_end|>\n<|im_start|>assistant\n<think>",
+  "native_end_id": 100265,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "raw_answers": "runs/ih-1115-202055-0f67/answers.jsonl (ih get of the shard jobs, then shard_join; not in git)"
+}

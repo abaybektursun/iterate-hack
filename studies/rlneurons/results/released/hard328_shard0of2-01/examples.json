@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 15,
+  "gold": "154",
+  "extracted_v3": "154",
+  "score_v3": 1,
+  "n_new": 4535,
+  "cap_hit": false,
+  "prompt_tail": "After a bus carrying $50$ more people arrived, adults made up $\\frac{11}{25}$ of the people at the concert. Find the minimum number of adults who could have been at the concert after the bus arrived.\n\nRemember to put your answer on its own line after \"Answer:\"<|im_end|>\n<|im_start|>assistant\n<think>",
+  "answer_head": "Okay, so I need to solve this problem where adults made up 5/12 of the crowd at a concert, and then after a bus with 50 more people arrives, adults make up 11/25 of the crowd. I need to find the minimum number of adults after the bus arrived. Hmm, let me think step by step.\n\nFirst, let me parse the ",
+  "answer_tail": "{25} \\implies 12k \\equiv 0 \\pmod{25}\n\\]\nSince \\( \\gcd(12, 25) = 1 \\), \\( k \\) must be a multiple of 25. Let \\( k = 25m \\). Then \\( P = 12 \\times 25m = 300m \\).\n\nSubstituting \\( P = 300m \\) into the equation for the number of adults after the bus arrives:\n\\[\n\\frac{11}{25}(300m + 50) = \\frac{11}{25} \\times 300m + \\frac{11}{25} \\times 50 = 132m + 22\n\\]\n\nThe number of adults on the bus is:\n\\[\nx = 132m + 22 - 125m = 7m + 22\n\\]\n\nSince \\( x \\) must be between 0 and 50:\n\\[\n0 \\leq 7m + 22 \\leq 50 \\implies 7m \\leq 28 \\implies m \\leq 4\n\\]\n\nThe minimum value of \\( m \\) is 1, leading to:\n\\[\nP = 300 \\times 1 = 300\n\\]\nThe number of adults after the bus arrives is:\n\\[\n132 \\times 1 + 22 = 154\n\\]\n\nThus, the minimum number of adults who could have been at the concert after the bus arrived is \\(\\boxed{154}\\)."
+ },
+ "wrong": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "111",
+  "score_v3": 0,
+  "n_new": 3279,
+  "cap_hit": false,
+  "prompt_tail": "\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"<|im_end|>\n<|im_start|>assistant\n<think>",
+  "answer_head": "Okay, so I have this problem here about two quadratic polynomials, P(x) and Q(x). Their leading coefficients are 2 and -2 respectively. Both graphs pass through the points (16, 54) and (20, 53). I need to find P(0) + Q(0). Hmm, let me think step by step.\n\nFirst, since both are quadratic polynomials,",
+  "answer_tail": "= -\\frac{289}{4}\n\\]\nSubstituting \\( b \\) back into \\( 16b + c = -458 \\):\n\\[\n16 \\left( -\\frac{289}{4} \\right) + c = -458 \\implies -1156 + c = -458 \\implies c = 698\n\\]\nThus, \\( P(0) = c = 698 \\).\n\nFor \\( Q(x) \\), substituting the points \\((16, 53)\\) and \\((20, 53)\\) gives the system of equations:\n\\[\n-2(16)^2 + 16d + e = 53 \\quad \\text{and} \\quad -2(20)^2 + 20d + e = 53\n\\]\nSimplifying these:\n\\[\n-512 + 16d + e = 53 \\implies 16d + e = 565\n\\]\n\\[\n-800 + 20d + e = 53 \\implies 20d + e = 853\n\\]\nSubtracting the first equation from the second:\n\\[\n4d = 288 \\implies d = 72\n\\]\nSubstituting \\( d \\) back into \\( 16d + e = 565 \\):\n\\[\n16(72) + e = 565 \\implies 1152 + e = 565 \\implies e = -587\n\\]\nThus, \\( Q(0) = e = -587 \\).\n\nAdding the constant terms:\n\\[\nP(0) + Q(0) = 698 + (-587) = 111\n\\]\n\n\\[\n\\boxed{111}\n\\]"
+ }
+}

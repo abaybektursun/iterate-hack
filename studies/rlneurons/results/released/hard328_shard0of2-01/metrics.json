@@ -1,0 +1,85 @@
+{
+ "status": "done",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "sft1",
+  "prompt": "native",
+  "native_tokenizer": "allenai/Olmo-3-7B-Think-SFT@6ff857587e040d6d523a3d5f3a56e918f5401d66",
+  "set": "hard328",
+  "temperature": 0.6,
+  "top_p": 0.95,
+  "min_p": 0.0,
+  "max_tokens": 32768,
+  "seed": 3000000,
+  "shots": null,
+  "n": null,
+  "shard": "0/2",
+  "samples": 1,
+  "restarts": 0,
+  "out": "/work/out",
+  "dry_run": false,
+  "commit": "58ef8d49d6ccc51544b2f5142d8d2cfce604d842",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [],
+  "sampling": {
+   "temperature": 0.6,
+   "top_p": 0.95,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 164,
+  "native_prompt_example": "<|im_start|>system\nYou are Olmo, a helpful AI assistant built by Ai2. Your date cutoff is December 2024, and your model weights are available at https://huggingface.co/allenai.<|im_end|>\n<|im_start|>user\nSolve the following problem step by step. The last line of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"<|im_end|>\n<|im_start|>assistant\n<think>",
+  "native_end_id": 100265,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "commit": "58ef8d49d6ccc51544b2f5142d8d2cfce604d842",
+ "job_id": "ih-1115-202055-0f67",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-15T20:34:46Z",
+ "updated_utc": "2026-11-15T23:58:18Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 12816,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 34816,
+  "load_s": 211.71784853935242,
+  "model_dir": "/tmp/theta",
+  "tok_dir": "/opt/hf-cache/hf/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 164,
+  "tok_p_lt_1e2": 9,
+  "tok_p_lt_1e3": 0,
+  "correct_v3": 122,
+  "correct_v1": 124,
+  "cap_hits": 10,
+  "loop_A": 7,
+  "generated_tokens": 1975898,
+  "restarts": 0,
+  "n_planned": 164,
+  "mean_generated_tokens": 12048.158536585366,
+  "generation_s": 11967.272428035736,
+  "tokens_per_s": 165.1084666018852
+ },
+ "memory": {
+  "gpu_memory_used_mib": 40847,
+  "gpu_memory_total_mib": 46068,
+  "gpu": "NVIDIA L40S"
+ },
+ "wall_s": 12212.84299993515
+}
