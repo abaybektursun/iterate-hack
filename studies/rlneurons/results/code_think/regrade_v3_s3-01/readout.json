@@ -1,0 +1,68 @@
+{
+ "rule": "v3",
+ "job_id": "ih-1116-004942-f50b",
+ "instrument_check": {
+  "rule": "v3",
+  "n": 538,
+  "bad": []
+ },
+ "cells": {
+  "rl_s51": {
+   "seed": 51000000,
+   "passed_v1": 401,
+   "passed_v3": 401
+  },
+  "rl_s52": {
+   "seed": 52000000,
+   "passed_v1": 395,
+   "passed_v3": 395
+  },
+  "rl_s53": {
+   "seed": 53000000,
+   "passed_v1": 403,
+   "passed_v3": 403
+  },
+  "sft1_s51": {
+   "seed": 51000000,
+   "passed_v1": 301,
+   "passed_v3": 381
+  },
+  "sft1_s52": {
+   "seed": 52000000,
+   "passed_v1": 291,
+   "passed_v3": 374
+  },
+  "sft1_s53": {
+   "seed": 53000000,
+   "passed_v1": 311,
+   "passed_v3": 381
+  }
+ },
+ "models": {
+  "rl": {
+   "cells": [
+    "rl_s51",
+    "rl_s52",
+    "rl_s53"
+   ],
+   "mean_passed_v3": 399.66666666666663
+  },
+  "sft1": {
+   "cells": [
+    "sft1_s51",
+    "sft1_s52",
+    "sft1_s53"
+   ],
+   "mean_passed_v3": 378.66666666666663
+  }
+ },
+ "differences_points": {
+  "rl - sft1": {
+   "points": 3.903345724907063,
+   "bootstrap95": [
+    1.3011152416356884,
+    6.443618339529121
+   ]
+  }
+ }
+}

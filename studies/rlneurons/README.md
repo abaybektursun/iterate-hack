@@ -5076,3 +5076,20 @@ Reading: on code the no-reward model is 10.8 points above the cued base and 3.7 
 it is ahead of RL. The v1 count measured its answer format: 126 of its 538 programs change under v3, 14 of the base's, 0 of
 RL-Code's. The rules were written after seeing Think-SFT's rows, so v3 is a fit to that model's format; all three columns are
 reported, and v3 was fixed as the last rule before it ran. One sample per cell.
+
+### Three samples of Think-SFT + Code cue against RL-Code (2026-11-15, work-a6ffcd; `specs/SPEC_code_think.md` amendment 3)
+
+Think-SFT + Code cue at seeds 52000000 and 53000000 (jobs ih-1115-225828-7066, ih-1115-225859-8281, commit fa46a00), with RL-Code's
+stored cells at the same seeds (abaybektursun-1115-143247-929d, -143331-10da). All six cells regraded v3 in job
+ih-1116-004942-f50b (instrument check passed on 538; inputs `s3://pg-lineage-769063704696/inputs/code_regrade_s3/`). Readout
+`python -m studies.rlneurons.analysis.code_regrade_means v3 ih-1116-004942-f50b regrade_v3_s3-01` ->
+`results/code_think/regrade_v3_s3-01/readout.json`.
+
+| model | seed 51000000 | 52000000 | 53000000 | mean of 538 |
+|---|---|---|---|---|
+| Think-SFT + Code cue, v3 (v1) | 381 (301) | 374 (291) | 381 (311) | 378.7 |
+| RL-Code 3.1 plain, v3 = v1 | 401 | 395 | 403 | 399.7 |
+
+RL-Code minus Think-SFT, per-problem means of 3 samples, paired bootstrap (5,000): +3.9 points [1.3, 6.4]. Predictions 12 (each
+new sample 370 to 392) and 13 (interval excludes 0) hold. On code the no-reward model is about 4 points below the RL model of
+the domain; on math it is ahead of RL-Math.
