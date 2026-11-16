@@ -1,0 +1,19 @@
+{
+ "command": "python -m studies.rlneurons.analysis.lenedge_read --table /home/abay/Projects/iterate-hack/runs/lenedge/train-01 --features /home/abay/Projects/iterate-hack/runs/drift_features --out studies/rlneurons/results/lenedge/train-01",
+ "pass": {
+  "dataset": "allenai/Dolci-Think-SFT-7B",
+  "revision": "83f618e2fe0aed29ee3440a3658a0326c175d09d",
+  "tokenizer": [
+   "allenai/Olmo-3-7B-Think-SFT",
+   "6ff857587e040d6d523a3d5f3a56e918f5401d66"
+  ],
+  "rows": 2268178,
+  "assistant_turns": 2368984,
+  "shards": 156,
+  "wall_s": 1637
+ },
+ "where": "laptop, CPU only",
+ "job_id": null,
+ "date_utc": "2026-11-16T00:49:10+00:00",
+ "commit": "f80f8fd4284d4b8b843ab513c11afbf2da9f2671"
+}

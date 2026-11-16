@@ -20,6 +20,7 @@ All code runs from the repository root with the root on `PYTHONPATH` (`python -m
 | `specs/SPEC_fresh.md`, `specs/fresh_jobs.txt` | Fresh held-out set: cutoffs with sources, selection rules, hypotheses, predictions; the 12 job commands. |
 | `data/fresh/`, `prep/fresh_prep.py`, `jobs/run_fresh.py` | `fresh2026_v1.json`: 136 competition problems published in 2026 (AIME, HMMT Feb and Nov), the transcribed PDF problems, the prep script, and `run_cell` with `--set fresh2026`. |
 | `specs/SPEC_drift.md`, `analysis/drift.py`, `analysis/drift_test.py`, `analysis/drift_read.py` | Drift: label-free signs in a sample's text per token position (switch to a non-Latin script, repeated 50-token windows, rule A on the prefix, "wait", restart phrases), planted tests, and the readout Q1 to Q4 with the stop-at-first-sign replay. Results `results/drift/`. |
+| `specs/SPEC_lenedge.md`, `analysis/lenedge.py`, `analysis/lenedge_read.py` | Length edge: one pass over the Think-SFT training rows (tokens and Chinese characters per assistant turn, by source) and its comparison with the generated answers' lengths, precision and language switches. |
 | `analysis/fresh_read.py`, `analysis/fresh_sft_overlap.py` | Readout of the three models on the fresh set; scan of the Think-SFT training data for the fresh set. |
 | `lib/n13_score.py` | Prompt template (`TEMPLATE["pair1"]` inside the model's chat template), answer extraction and grader v1 (`extract`, `grade`, rule `dollar_both`), `wilson`, `paired_bootstrap`, `selfcheck`. |
 | `lib/rln4_lib.py` | Grader v2 (`extract_v2`, `grade_v2`), grader v3 (`extract_v3`, `norm_v3`, `grade_v3`), loop-onset detectors (rule A `onset_lines`, rule B `onset_period`, `zratio`), `agree`, prefix encoding. |
@@ -4902,6 +4903,156 @@ uv run --no-project --with numpy --with math-verify==0.9.0 --with tokenizers pyt
 
 Run folders `results/drift/{describe,predict,stop}-01/` (`run.json`, `readout.json`, `table.md`, `examples.json`;
 `describe-01/hand_read.md`). The per-sample signs (`runs/drift_features/<cell>.jsonl`) are on the laptop, not in git.
+
+## Length edge: Think-SFT does not leave its training lengths; its training traces switch to Chinese at the same place (training data, 2,268,178 rows, laptop, board work-63892a, idea-d82c84)
+
+Question: Think-SFT + cue switches to Chinese in 12 % of its hard328 samples (median first switch at token 13,589) and its
+finished answers are right 97 to 99 % of the time under 8,000 tokens, 68 % over 12,000 and 27 % past 16,384 (Drift,
+risk-coverage, vote at a cap of 32,768 above). Does it fall apart where its training traces end? Answer: no. 36.7 % of the
+assistant turns it was trained on are at least 12,000 tokens long, and 87.7 % of the math turns (OpenThoughts3 math,
+752,997 rows: median 18,703 tokens, 60.4 % at least 16,384); the traces end at 32,768 tokens (0.03 % longer), which is also
+the training sequence length. The switch is in the training data: 266,162 of the 2,365,585 assistant turns that answer a
+prompt without Chinese (11.3 %) hold more than 20 Chinese characters, 26.2 % of the math turns, and the first Chinese
+character sits late (math: token 15,803 / 19,282 / 22,200, quartiles; 81 % of the turn before it at the median). By
+length the two sides agree in shape: of generated answers that end at 20,000 to 24,000 tokens 71.5 % hold Chinese, of
+math training turns of that length 31.9 %; at 28,000 to 32,768, 96.0 % and 76.3 %. So H1 (length edge) is refuted, and
+H2a (the model repeats a training mode) holds: the traces of the QwQ-32B teacher drift into Chinese late in long
+derivations, the data filter removes only responses with at least 5 % Chinese characters, and the median flagged turn has
+0.41 %. Spec with predictions, committed before the pass: `specs/SPEC_lenedge.md` (commit `90ec1160`; addendum 1 on the
+token sample, `7aeba5ef`). No GPU, no generation.
+
+Method. `analysis/lenedge.py`: one pass over all 156 shards of `allenai/Dolci-Think-SFT-7B` @ `83f618e` (shard list, turn
+reader, dataset name and revision imported from `analysis/wsp1_sft_overlap.py`; script detector `drift.episodes`). Per
+assistant turn: characters, Chinese characters (U+4E00 to U+9FFF, `drift.py`'s `chinese_chars`), first Chinese character,
+episodes, `</think>`, Chinese characters of the user turn before it, a math keyword flag. Tokens (the `tokenizer.json` of
+`allenai/Olmo-3-7B-Think-SFT` @ `6ff8575`, no weights) are exact for every message of a fixed 5 % of rows chosen by the
+SHA-1 of the row id (118,463 assistant turns), for every turn with more than 20 Chinese characters or an episode, and for
+the 40 longest turns of each shard: the first pass, with every turn tokenized, ran at 1,800 s per large shard and was
+stopped after 37 shards (addendum 1). Every length statistic below is on the 5 % sample; every Chinese count is on all
+turns. `analysis/lenedge_read.py` writes the tables and reads the generated side from
+`results/cap32vote/hard328_sft1_cue_s4-01/rows.jsonl` (Think-SFT + cue, hard328, 4 samples, cap 32,768) and from the
+per-sample signs `runs/drift_features` (laptop). Run folder `results/lenedge/train-01/`: `run.json`, `readout.json`,
+`table.md` (every source), `examples.json`, `hand_read.md`. The per-turn table is in `runs/lenedge/train-01/` on the laptop
+(not in git; shards 0 to 30 of it, 24 shards, were written at commit `7aeba5ef`, which also tokenized turns with 1 to 20
+Chinese characters; no table uses those counts).
+
+Instrument checks. `lenedge --selftest`: the 10 planted positives of `drift_test.py` and one planted late in a
+120,000-character turn, written as assistant turns of a parquet file in the dataset's schema, are each found inside the
+planted passage (first Chinese character within 12 tokens of its start); the 10 negatives (LaTeX, Greek, diacritics,
+mathematical letters, full-width punctuation, four stray letters, emoji, code) are not flagged; token counts equal the
+tokenizer's; the prefilter that skips `drift.episodes` matches every letter the detector counts (all code points); the
+first version of the position check failed on a passage with mathematics between the letters and was corrected to the
+passage's span. The pass read 2,268,178 rows and 2,368,984 assistant turns, as `results/wsp1/sft_overlap-03`. The sample
+holds 1.103 billion assistant tokens, so all turns hold about 22.1 billion; the Olmo 3 paper trains 45.4 billion tokens in
+two epochs (Table 47). On the 37 fully tokenized shards (636,291 turns) the sample's (32,001 turns) percentiles are 12,994
+/ 24,370 / 30,517 against 13,162 / 24,414 / 30,501 for all turns (50th / 90th / 99th), and 55.0 % against 55.9 % at
+least 12,000 tokens (a one-off check, not in a script). The generated bins reproduce the posted late answers: 368 past
+16,384 tokens, 362 finished, 99 right (96 of the finished), 249 with Chinese. An estimate from characters would have
+been wrong by 9 % at the median and 33 % at the 95th percentile of turns (`readout.json`, `characters_per_token`); no table
+uses it.
+
+Tokens per assistant turn, the 5 % sample (`table.md` has all 16 sources):
+
+| Group | Turns | 50th | 90th | 99th | 99.9th | Max | at least 8,000 | 12,000 | 16,384 | 32,768 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| all | 118,463 | 5,698 | 23,558 | 30,365 | 32,372 | 33,293 | 44.8 % | 36.7 % | 23.6 % | 0.03 % |
+| OpenThoughts3 math (the math subset) | 37,523 | 18,703 | 27,483 | 31,395 | 32,663 | 33,230 | 97.6 % | 87.7 % | 60.4 % | 0.06 % |
+| OpenThoughts3 code | 4,358 | 15,919 | 25,632 | 31,574 | 32,868 | 33,293 | 94.9 % | 84.9 % | 41.4 % | 0.30 % |
+| OpenThoughts3 science | 4,946 | 7,562 | 16,039 | 26,234 | 30,982 | 32,842 | 47.2 % | 26.0 % | 8.7 % | 0.04 % |
+| Nemotron code | 5,672 | 11,954 | 24,917 | 31,333 | 32,645 | 32,767 | 65.9 % | 49.8 % | 34.8 % | 0.00 % |
+| Python (correct-python-sft) | 23,270 | 2,814 | 9,344 | 18,547 | 25,782 | 31,330 | 14.1 % | 5.3 % | 1.8 % | 0.00 % |
+| neither math subset nor math keyword | 75,519 | 1,741 | 12,605 | 26,048 | 31,608 | 32,969 | 17.2 % | 10.8 % | 5.3 % | 0.02 % |
+
+Chinese in assistant turns, all turns (flagged: more than 20 Chinese characters; all but 3,399 turns answer a prompt
+without Chinese):
+
+| Source (teacher by the Olmo 3 paper) | Turns | Flagged | First Chinese character at token, quartiles | Chinese share of the turn's characters, median |
+|---|---|---|---|---|
+| all | 2,368,984 | 269,096 (11.4 %) | 12,753 / 17,493 / 21,219 | 0.41 % |
+| OpenThoughts3 math (QwQ-32B) | 752,997 | 197,543 (26.2 %) | 15,803 / 19,282 / 22,200 | 0.42 % |
+| OpenThoughts3 code (QwQ-32B) | 88,900 | 44,424 (50.0 %) | 8,899 / 11,715 / 14,385 | 0.30 % |
+| OpenThoughts3 science (QwQ-32B) | 99,269 | 8,721 (8.8 %) | 5,314 / 10,117 / 14,315 | 0.50 % |
+| Python (QwQ-32B) | 466,677 | 7,828 (1.7 %) | 9,431 / 11,685 / 13,910 | 0.21 % |
+| Precise IF (QwQ-32B) | 135,792 | 2,110 (1.6 %) | 503 / 7,279 / 14,252 | 0.60 % |
+| Aya (DeepSeek R1; multilingual prompts) | 98,597 | 5,671 (5.8 %) | 3 / 6 / 13 | 55.9 % |
+| WildChat, two sources (DeepSeek R1) | 181,365 | 2,450 (1.4 %) | 0 / 3 / 19 and 0 / 3 / 14 | 36 % and 39 % |
+| the 8 other sources | 545,387 | 349 (0.06 %) | | |
+
+The late switch inside an English derivation is a property of the QwQ-32B traces (math, code, science, Python). In the
+DeepSeek R1 sources the flagged turns are Chinese from their first tokens (answers in Chinese).
+
+Generated answers against training turns by length (`table.md`; generated: finished answers of the 1,312 samples at a cap
+of 32,768; training: the 5 % sample, S = share of turns at least as long as the bin's lower edge):
+
+| Tokens | Generated: right / finished | Generated: with Chinese | Training S, all | Training S, math | Math training turns ending in the bin: flagged |
+|---|---|---|---|---|---|
+| 0 to 2,000 | 68 / 68, 100.0 % | 0.0 % | 100.0 % | 100.0 % | 0.0 % |
+| 2,000 to 4,000 | 189 / 191, 99.0 % | 0.0 % | 65.6 % | 100.0 % | 0.0 % |
+| 4,000 to 6,000 | 165 / 167, 98.8 % | 0.6 % | 55.1 % | 99.9 % | 0.0 % |
+| 6,000 to 8,000 | 120 / 127, 94.5 % | 0.0 % | 49.3 % | 99.4 % | 0.3 % |
+| 8,000 to 10,000 | 83 / 96, 86.5 % | 0.0 % | 44.8 % | 97.6 % | 0.1 % |
+| 10,000 to 12,000 | 81 / 94, 86.2 % | 3.2 % | 40.8 % | 94.1 % | 1.3 % |
+| 12,000 to 14,000 | 65 / 80, 81.2 % | 7.5 % | 36.7 % | 87.7 % | 3.9 % |
+| 14,000 to 16,384 | 61 / 121, 50.4 % | 23.1 % | 31.5 % | 77.5 % | 10.9 % |
+| 16,384 to 20,000 | 54 / 130, 41.5 % | 46.9 % | 23.6 % | 60.4 % | 13.8 % |
+| 20,000 to 24,000 | 28 / 137, 20.4 % | 71.5 % | 16.9 % | 44.3 % | 31.9 % |
+| 24,000 to 28,000 | 11 / 70, 15.7 % | 88.6 % | 9.2 % | 24.7 % | 56.5 % |
+| 28,000 to 32,768 | 3 / 25, 12.0 % | 96.0 % | 3.1 % | 8.2 % | 76.3 % |
+
+First switch by position (`drift.episodes`; first switches in the bin over answers or turns that reach it unswitched):
+Think-SFT at a cap of 16,384 0.9 % at 8,000 to 10,000 tokens, 3.0 %, 6.5 % and 16.7 % (70 of 419) at 14,000 to 16,384;
+its math training turns 0.3 %, 0.8 %, 2.1 % and 4.1 % (1,157 of 28,152) in the same bins, 12.5 % at 16,384 to 20,000 and
+26.7 % at 20,000 to 24,000 (Think-SFT at a cap of 32,768, one sample per problem: 25 of 69 and 18 of 30). RL: 3 of 283 and
+the cued base 2 of 416 at 14,000 to 16,384.
+
+- H1 refuted. Precision first falls under 90 % in the bin from 8,000 tokens, where 44.8 % of all training turns and 97.6 %
+  of the math turns are still running; Chinese first passes 10 % of answers in the bin from 14,000, where 77.5 % of the
+  math turns are still running. Neither length is near the end of the training lengths. Spearman of S with precision over
+  the 12 bins is 1.0, and so is the Spearman of the bin index with precision: as the spec said, the test cannot separate
+  the training lengths from anything else that grows with length.
+- H2a holds. The switch is copied in kind and place: late, inside the thinking, Chinese connectives inside an English
+  derivation that goes on. The model switches more often than its math traces of the same length (1.3 to 3.4 times the
+  share from 12,000 tokens on; hazard 3 to 4 times at 8,000 to 16,384), so the rate is not copied one to one; hard328 is
+  also harder than the average training problem, which this comparison does not hold fixed.
+- H3: math turns are longer than the rest (median 18,703 against 1,741) and hold Chinese more often (26.2 % against
+  4.3 %).
+- H4. RL-Zero-Math was not trained on these traces: its card gives `base_model: allenai/Olmo-3-1025-7B`, and the Olmo 3
+  paper (arXiv 2512.13961) says "RL-Zero 7B, a variant of Olmo 3 trained using RL directly from Olmo 3 Base" (p. 4). It
+  and the cued base switch in 12 and 9 of 1,312 samples. Not testable here: the base's pretraining text.
+- What the cards and the paper say (read by a subagent: dataset card and both model cards in full, the paper's Think-SFT
+  sections; findings added with `tools/paper.py`). Teacher: "we generate full reasoning chains and solutions using
+  QwQ-32B, the original model used for the completions, and the same generation settings as OpenThoughts3, except up to
+  32K tokens instead of the original 16K" (Sec. 4.2, p. 40); the chat sources use "DeepSeek R1" (p. 41). Filter: "we
+  remove any post-training responses with 5% or higher prevalence of Chinese characters" (A.7.1 item 6, p. 108); it
+  removed 0.04 % of OpenThoughts3 (Table 50). Training: "a 32,768 sequence length" (A.6.1, p. 105).
+- Hand read, one reader (`results/lenedge/train-01/hand_read.md`): 15 flagged turns chosen by the lowest hash (13 math, 1
+  code, 1 Python): in all 15 the same working goes on with Chinese words inside it ("因此， a² b =0, 因为a ≠0, 所以 b=0,
+  然而，problem states that b非零", "therefore a²b = 0, because a ≠ 0, so b = 0, however the problem states that b is
+  non-zero"; "SF must still assigned to David? 不可, so only one way", "not possible"; "these lead to 矛盾 the condition",
+  "contradict"). Of the 15 longest turns 11 are loops of one character in DeepSeek R1 traces (42,496 to 101,636 tokens,
+  zlib ratio under 0.06, longer than the training sequence), 4 are ordinary derivations at the 32K limit.
+- Predictions (spec): 50th / 90th / 99th / 99.9th percentile 3,500 / 14,000 / 24,000 / 32,000 against 5,698 / 23,558 /
+  30,365 / 32,372: the direction (H1 refuted) held, the first three were too low. Share at least 12,000 tokens: 13 %
+  predicted, 36.7 %. Math median: 9,000 predicted, 18,703. Chinese: 1.0 % of turns predicted, 11.4 %; 0.3 % after a prompt
+  without Chinese, 11.3 %; math 0.5 %, 26.2 %: wrong by a factor of 11 to 52. Position of the first Chinese character: 0.5
+  of the turn predicted, 0.78.
+- Not concluded. Why precision falls with length: the pass has no label of whether a training trace is right, and RL and
+  the base lose precision with length too (24.4 % and 16.7 % over 12,000 tokens). Whether removing the Chinese from the
+  traces would remove the switch or change accuracy: that needs a model trained on filtered traces. Whether the Chinese
+  marks traces that are already failing in the training data, as it does in the generated answers (1 of 24 right).
+
+Literature (WebSearch by the subagent, no Exa key; passages read, not full texts, so these are leads): 2507.15849 and
+2505.14815 report language mixing in QwQ and DeepSeek R1 and that distillation raises it, and say the composition of the
+distillation data is unknown. No paper found that measures the mixing inside a released SFT set and compares its position
+with the student's.
+
+```
+PYTHONPATH=. uv run --no-project --python 3.12 --with huggingface_hub==2.4.0 --with pyarrow --with numpy --with tokenizers python -m studies.rlneurons.analysis.lenedge --selftest --tmp <dir outside the repo>
+PYTHONPATH=. uv run --no-project --python 3.12 --with huggingface_hub==2.4.0 --with pyarrow --with numpy --with tokenizers python -m studies.rlneurons.analysis.lenedge --tmp <dir outside the repo> --out runs/lenedge/train-01
+PYTHONPATH=. uv run --no-project --python 3.12 --with huggingface_hub==2.4.0 --with pyarrow --with numpy --with tokenizers python -m studies.rlneurons.analysis.lenedge_read --table runs/lenedge/train-01 --features runs/drift_features --out studies/rlneurons/results/lenedge/train-01
+```
+
+The pass takes about 40 minutes on 30 processes (27 minutes for the last 132 shards) and downloads 36 GB, one shard at a time.
 
 ## Paper: The Finish Dial (`paper/`, board work-0a1b10)
 
