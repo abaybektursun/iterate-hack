@@ -26,7 +26,7 @@ import json
 
 PEOPLE = [
     {"login": "abaybektursun", "name": "Abay Bektursun",
-     "work": "Abay posted the team's first result, the opening cue, which takes the untrained base model from 224 to 410 "
+     "work": "Abay posted the team's first result, the opening cue, which takes the base model from 224 to 410 "
              "of 500 on MATH-500, and wrote the engine of the theory study, which tests explanations of the results on "
              "stored data. They also showed that enlarging the 8 largest directions of RL's weight change makes the base "
              "model finish its answers, forecast GPU rental prices for the hackathon's challenge, and ran the design "
