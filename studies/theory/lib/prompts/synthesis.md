@@ -22,6 +22,11 @@ Files here:
 - data.md: the team's stored data as the READMEs describe it (what each results folder holds; use it to understand
   the cells, but compute only from rows/).
 - jobs.md: the GPU job files, their flags (no others exist) and how to run them.
+- explore_cells.json: half of the team's stored cells (weight-edit cells of the xreward family and sampling or vote
+  cells), each with its description (folder, model or edit label and arguments, prompt, set, n, samples, sampling,
+  token cap) and its count (right answers per sample). The other half was withheld from you, and every board item
+  and fact that names one of those cells or states its count was removed; your account will forecast their counts
+  from their descriptions alone.
 
 Use Bash with python3 (standard library only: json, statistics, random) to read the rows and compute.
 

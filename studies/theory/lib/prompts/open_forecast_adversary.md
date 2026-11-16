@@ -15,26 +15,24 @@ Files here:
 Use Bash with python3 (standard library only) to read the rows and compute.
 
 You are a COVARIATE-ONLY forecaster. Someone's account of what the RL weight change does will forecast the same targets;
-you do not see it. Your forecasts must come from plain covariates, so that a gap between the account and you measures
-what the account adds.
+you do not see it. Your forecasts must come from stored numbers and plain covariates, with no mechanism, so that a gap
+between the account and you measures what the account's mechanism adds.
 
-Allowed predictors: stored rows and board numbers of the untrained base model (any prompt, cue, sampling setting, vote
-or sample count), of Think-SFT and other models trained without RL, and of random weight edits of a stated norm; and
-plain covariates: accuracy, answer length, cap hits, problem difficulty (the base's solve rate per problem), number of
-samples, token cap, edit norm (as a number), module type and layer, matrix shape, the dimension of a subspace (chance
-overlap k / d).
+Allowed predictors: every stored outcome as DATA: the counts, accuracies, lengths and cap hits of every stored cell
+(the untrained base, Think-SFT, RL-trained models, random edits, and edits built from an RL weight change such as the
+dial, top-k direction edits, transplants and subspace restrictions) together with their plain covariates: edit norm or
+scale, the share of the edit kept, the number of directions (rank k), layers and module types edited, matrix shape,
+subspace dimension (chance overlap k / d), problem difficulty, number of samples, token cap, sampling settings. You may
+fit, interpolate or take the nearest stored cell along these covariates.
 
-Forbidden predictors (you may read them, you may not use them in a forecast): anything that embodies a claim about what
-the RL change does: a sample, an accuracy, a length or a count of any RL-trained model (RL-Zero-Math, RL-Math 3.0 /
-3.1 and their checkpoints, RL-Code, IF-RL, General-RL, the Think model's DPO + RLVR step); the outcome of any edit built
-from an RL weight change or its directions (the dial, top-k direction edits, transplants, swaps, pairings, subspace
-restrictions of the RL change); any statement about what RL's directions do. A forecast that says "the edit acts like
-RL" or "like another RL draw" uses the account's claim and is rejected. A judge reads each forecast's predictors and
-derivation, and rejects any forecast that uses a forbidden predictor or is the account's claimed quantity renamed; a
-rejected forecast does not count.
+Forbidden: any claim about what the RL change does or why (a mechanism): "RL's directions carry the gain", "the later
+layers amplify RL's pairs", "direction 1 is a finishing dial", "the edit acts like RL". Your derivation must say which
+stored numbers and which covariate give the value, never why the RL change works. A judge reads each forecast's
+predictors and derivation and rejects any forecast whose derivation rests on such a claim; a rejected forecast does not
+count.
 
-First write your rule: one paragraph saying which covariates give which kind of target and how (for example "an edit's
-accuracy follows the base's accuracy plus a slope in edit norm fitted on the random edits of item X"). Then apply the
+First write your rule: one paragraph saying which stored numbers and covariates give which kind of target and how (for
+example "an edit's count follows a fit of the stored edit counts against edit scale and kept share, item X"). Then apply the
 rule to every target: a value and a 90 % interval (low, high), the predictors used, and one sentence of derivation.
 
 How it is scored: as a normal distribution (mean value, sd (high - low) / 3.29) by its density at the measured value,

@@ -8,6 +8,7 @@ consequence before fixing a range, and the test still decides on problems the wr
   python3 studies/theory/lib/rows.py copy <dir> explore  write that half of every available cell to <dir>
   python3 studies/theory/lib/rows.py split-matrices      write data/split_matrices_v1.json once (engine 18)
   python3 studies/theory/lib/rows.py weights             print every per-matrix weights table (engine 18)
+  python3 studies/theory/lib/rows.py split-cells         write data/split_cells_v1.json once (engine 20)
 
 Engine 18: the committed per-matrix tables of the weights studies (WEIGHTS) are split by MATRIX: 
 data/split_matrices_v1.json assigns each of the 224 weight matrices (q, k, v, o, gate, up, down of 32 layers) to explore
@@ -16,6 +17,10 @@ with "matrix" (the parameter name). `copy` also writes the explore matrices of e
 
 In Python: `from rows import load, manifest`; `load("hard328", "rlneurons/day1_3/hard328_base_cue_s4r2-01", "test")`
 returns that cell's rows of the test half, each with "pid" (the problem id the split uses).
+
+Engine 20: data/split_cells_v1.json assigns each stored run_cell folder of studies/rlneurons/results (the xreward edit
+cells and every sampling or vote cell, `run_cells()`) to explore or test by the sha256 of its folder name (folders that
+share a job are one group). `copy` leaves out the rows of test cells; their counts are forecast blind and scored at once.
 
 Cells: committed rows.jsonl and per_problem.json (a list with problem_index) under studies/*/results whose set is
 named in run.json or whose problem ids equal a whole set; autobench finals (index); and the code cells of every
@@ -40,6 +45,14 @@ MATRIX_RULE = ("Sort the 224 weight-matrix names (model.layers.<l>.self_attn.{q,
                "model.layers.<l>.mlp.{gate,up,down}_proj.weight, l = 0..31) by the sha256 hex digest of the name; the first 112 "
                "are explore, the rest test. No seed. Never changed after its first commit.")
 MODULES = ("q", "k", "v", "o", "gate", "up", "down")
+CELL_SPLIT = ROOT / "studies/theory/data/split_cells_v1.json"
+RLN = ROOT / "studies/rlneurons/results"
+CELL_RULE = ("Every run_cell folder under studies/rlneurons/results (metrics.json with config and counts.correct_v3, the whole "
+             "set, not a dry run): the edit cells of the xreward family and every other sampling or vote cell. Folders that "
+             "share a job id (job_id or joined_from) form one group, named by its alphabetically first folder; groups are "
+             "sorted by the sha256 hex digest of that name and the first floor(G / 2) are explore, the rest test. No seed. "
+             "Never changed after its first commit.")
+EDIT_ARGS = ("recipe", "other", "donor", "mods", "layers", "onto", "scale", "alpha", "k")
 # Engine 18: committed per-matrix tables of the weights studies, {name: (path, what one row holds)}. Model keys:
 # math31 / rl_math = Olmo-3.1-7B-RL-Zero-Math, code31 / rl_code = Olmo-3.1-7B-RL-Zero-Code, math30 / code30 / if30 /
 # general30 / mix30 = the Olmo-3 RL-Zero runs, *_s100 = their step-100 checkpoints, think_sft = Olmo-3-7B-Think-SFT,
@@ -137,6 +150,66 @@ def weights(table, half):
 
 
 @functools.cache
+def run_cells():
+    """Engine 20: every stored run_cell folder (CELL_RULE) as {folder (relative to studies/rlneurons/results), family
+    (edit: the xreward folders; sampling: the rest), set, n, samples, count (right answers per sample, grader v3), jobs,
+    description (config and edit arguments, never a count)}."""
+    out = []
+    for f in sorted(RLN.glob("**/metrics.json")):
+        d = json.loads(f.read_text())
+        if not (isinstance(d, dict) and isinstance(d.get("config"), dict) and isinstance(d.get("counts"), dict) and "correct_v3" in d["counts"]):
+            continue
+        c, k, s = d["config"], d["counts"], d["config"].get("samples") or 1
+        if c.get("n") is not None or c.get("dry_run") or k["n"] % s:
+            continue
+        folder = str(f.parent.relative_to(RLN))
+        edit = f.parent / "edit.json"
+        args = json.loads(edit.read_text())["args"] if edit.exists() else {}
+        desc = {"folder": folder, "model": c.get("model_label") or c.get("model"), "model_repo": c.get("model_repo"),
+                "tokenizer": (c.get("tokenizer") or [None])[0], "prompt": c.get("prompt"), "set": c.get("set"), "n": k["n"] // s,
+                "samples": s, "temperature": c.get("temperature"), "top_p": c.get("top_p"), "min_p": c.get("min_p"),
+                "max_tokens": c.get("max_tokens"), "seed": c.get("seed"), "shots": c.get("shots"),
+                "edit": {a: args[a] for a in EDIT_ARGS if args.get(a) not in (None, False)} or None}
+        jobs = str(d.get("job_id")).split("+") + [j["job_id"] for j in d.get("joined_from") or [] if isinstance(j, dict) and j.get("job_id")]
+        out.append({"folder": folder, "family": "edit" if folder.startswith("xreward/") else "sampling", "set": c.get("set"),
+                    "n": k["n"] // s, "samples": s, "count": round(k["correct_v3"] / s, 2), "jobs": jobs,
+                    "label": c.get("model_label"), "description": {x: v for x, v in desc.items() if v is not None}})
+    return tuple(out)
+
+
+def make_cell_split():
+    assert not CELL_SPLIT.exists(), f"{CELL_SPLIT} exists and never changes"
+    cells = run_cells()
+    group = {c["folder"]: c["folder"] for c in cells}  # union by shared job id
+    find = lambda x: x if group[x] == x else find(group[x])  # noqa: E731
+    owner = {}
+    for c in cells:
+        for j in c["jobs"]:
+            if j in owner:
+                a, b = sorted((find(owner[j]), find(c["folder"])))
+                group[b] = a
+            owner.setdefault(j, c["folder"])
+    names = sorted({find(c["folder"]) for c in cells}, key=lambda n: hashlib.sha256(n.encode()).hexdigest())
+    explore = set(names[:len(names) // 2])
+    out = {"version": 1, "rule": CELL_RULE, "groups": len(names),
+           "cells": {c["folder"]: {"half": "explore" if find(c["folder"]) in explore else "test", "group": find(c["folder"])} for c in cells}}
+    CELL_SPLIT.write_text(json.dumps(out, indent=1) + "\n")
+    print(f"{CELL_SPLIT}: {len(cells)} cells in {len(names)} groups; {sum(v['half'] == 'test' for v in out['cells'].values())} test cells")
+
+
+@functools.cache
+def cell_half():
+    """{folder: explore | test} of data/split_cells_v1.json ({} before the split exists)."""
+    return {f: v["half"] for f, v in json.loads(CELL_SPLIT.read_text())["cells"].items()} if CELL_SPLIT.exists() else {}
+
+
+def withheld(m):
+    """Engine 20: a manifest cell whose rows are a test cell of the cell split; its rows go to no writer."""
+    p = (ROOT / m["path"]).parent
+    return p.is_relative_to(RLN) and cell_half().get(str(p.relative_to(RLN))) == "test"
+
+
+@functools.cache
 def split():
     return json.loads(SPLIT.read_text())["sets"]
 
@@ -224,6 +297,8 @@ def copy(dest, half):
              "Cells with the same set share problem ids. `cell` is the name a test loads with rows.py.\n",
              "| file | cell | set | rows | source path |", "|---|---|---|---|---|"]
     for m in manifest():
+        if withheld(m):  # engine 20: a test cell of the cell split is neither copied nor named
+            continue
         if m["source"] == "s3 (not cached)":
             lines.append(f"| (not here: S3, not cached) | {m['cell']} | {m['set']} | - | {m['path']} |")
             continue
@@ -253,6 +328,8 @@ if __name__ == "__main__":
     elif cmd == "manifest":
         for m in manifest():
             print(f"{m['set']:9s} {m['source']:16s} {m['cell']}  ({m['path']})")
+    elif cmd == "split-cells":
+        make_cell_split()
     elif cmd == "split-matrices":
         make_matrix_split()
     elif cmd == "weights":

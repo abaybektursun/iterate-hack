@@ -1,0 +1,515 @@
+{
+ "version": 1,
+ "rule": "Every run_cell folder under studies/rlneurons/results (metrics.json with config and counts.correct_v3, the whole set, not a dry run): the edit cells of the xreward family and every other sampling or vote cell. Folders that share a job id (job_id or joined_from) form one group, named by its alphabetically first folder; groups are sorted by the sha256 hex digest of that name and the first floor(G / 2) are explore, the rest test. No seed. Never changed after its first commit.",
+ "groups": 124,
+ "cells": {
+  "cap32/base_cue-01": {
+   "half": "test",
+   "group": "cap32/base_cue-01"
+  },
+  "cap32/rl_plain-01": {
+   "half": "explore",
+   "group": "cap32/rl_plain-01"
+  },
+  "cap32/sft_cue-01": {
+   "half": "explore",
+   "group": "cap32/sft_cue-01"
+  },
+  "cap32vote/fresh2026_sft1_cue_s4-01": {
+   "half": "explore",
+   "group": "cap32vote/fresh2026_sft1_cue_s4-01"
+  },
+  "cap32vote/hard328_sft1_cue_s4-01": {
+   "half": "explore",
+   "group": "cap32/sft_cue-01"
+  },
+  "ckptcue/s0100_cue-01": {
+   "half": "test",
+   "group": "ckptcue/s0100_cue-01"
+  },
+  "ckptcue/s0100_cue_s123-01": {
+   "half": "test",
+   "group": "ckptcue/s0100_cue_s123-01"
+  },
+  "ckptcue/s0100_plain-01": {
+   "half": "test",
+   "group": "ckptcue/s0100_plain-01"
+  },
+  "ckptcue/s0100_plain_s123-01": {
+   "half": "test",
+   "group": "ckptcue/s0100_plain_s123-01"
+  },
+  "ckptcue/s0400_cue-01": {
+   "half": "test",
+   "group": "ckptcue/s0400_cue-01"
+  },
+  "ckptcue/s0400_plain-01": {
+   "half": "explore",
+   "group": "ckptcue/s0400_plain-01"
+  },
+  "ckptcue/s0400_plain_s123-01": {
+   "half": "test",
+   "group": "ckptcue/s0400_plain_s123-01"
+  },
+  "day1/hard328_base_cue_t10-01": {
+   "half": "explore",
+   "group": "day1/hard328_base_cue_t10-01"
+  },
+  "day1/hard328_rl_plain_t10-01": {
+   "half": "test",
+   "group": "day1/hard328_rl_plain_t10-01"
+  },
+  "day1/math500_base_cue_t06_p10-01": {
+   "half": "test",
+   "group": "day1/math500_base_cue_t06_p10-01"
+  },
+  "day1_3/hard328_top8x1.5_cue_s4-01": {
+   "half": "explore",
+   "group": "day1_3/hard328_top8x1.5_cue_s4-01"
+  },
+  "day1_hard328/base_plain_T1-01": {
+   "half": "test",
+   "group": "day1_hard328/base_plain_T1-01"
+  },
+  "day1_hard328/rl_cue_T1-01": {
+   "half": "explore",
+   "group": "day1_hard328/rl_cue_T1-01"
+  },
+  "day1_minp/base_mp0.1_T1-01": {
+   "half": "explore",
+   "group": "day1_minp/base_mp0.1_T1-01"
+  },
+  "day1_minp/base_mp0.1_T1.5-01": {
+   "half": "test",
+   "group": "day1_minp/base_mp0.1_T1.5-01"
+  },
+  "day1_minp/base_p0.95_T1-01": {
+   "half": "test",
+   "group": "day1_minp/base_p0.95_T1-01"
+  },
+  "day1_minp/rl_mp0.1_T1-01": {
+   "half": "test",
+   "group": "day1_minp/rl_mp0.1_T1-01"
+  },
+  "day1_wdiff/code_cue-01": {
+   "half": "test",
+   "group": "day1_wdiff/code_cue-01"
+  },
+  "day1_wdiff/code_plain-01": {
+   "half": "explore",
+   "group": "day1_wdiff/code_plain-01"
+  },
+  "day1_wdiff/random_cue-01": {
+   "half": "explore",
+   "group": "day1_wdiff/random_cue-01"
+  },
+  "day1_wdiff/rl_cue-01": {
+   "half": "explore",
+   "group": "day1_wdiff/rl_cue-01"
+  },
+  "day1_wdiff/theta0.25_cue-01": {
+   "half": "explore",
+   "group": "day1_wdiff/theta0.25_cue-01"
+  },
+  "day1_wdiff/theta0.25_plain-01": {
+   "half": "test",
+   "group": "day1_wdiff/theta0.25_plain-01"
+  },
+  "day1_wdiff/theta0.5_cue-01": {
+   "half": "explore",
+   "group": "day1_wdiff/theta0.5_cue-01"
+  },
+  "day1_wdiff/theta0.5_plain-01": {
+   "half": "test",
+   "group": "day1_wdiff/theta0.5_plain-01"
+  },
+  "day1_wdiff/theta0.75_cue-01": {
+   "half": "test",
+   "group": "day1_wdiff/theta0.75_cue-01"
+  },
+  "day1_wdiff/theta1.25_cue-01": {
+   "half": "explore",
+   "group": "day1_wdiff/theta1.25_cue-01"
+  },
+  "day1_wdiff/theta1.5_cue-01": {
+   "half": "test",
+   "group": "day1_wdiff/theta1.5_cue-01"
+  },
+  "day1_wdiff328/code1_cue-01": {
+   "half": "explore",
+   "group": "day1_wdiff328/code1_cue-01"
+  },
+  "day1_wdiff328/theta0.25_cue-01": {
+   "half": "explore",
+   "group": "day1_wdiff328/theta0.25_cue-01"
+  },
+  "day1_wdiff328/theta0.5_cue-01": {
+   "half": "explore",
+   "group": "day1_wdiff328/theta0.5_cue-01"
+  },
+  "fresh/base_cue_s4-01": {
+   "half": "test",
+   "group": "fresh/base_cue_s4-01"
+  },
+  "fresh/rl_plain_s4-01": {
+   "half": "test",
+   "group": "fresh/rl_plain_s4-01"
+  },
+  "fresh/sft1_cue_s4-01": {
+   "half": "test",
+   "group": "fresh/sft1_cue_s4-01"
+  },
+  "native/hard328-01": {
+   "half": "explore",
+   "group": "native/hard328-01"
+  },
+  "native/math500-01": {
+   "half": "explore",
+   "group": "native/math500-01"
+  },
+  "reward5/code30_cue-01": {
+   "half": "explore",
+   "group": "reward5/code30_cue-01"
+  },
+  "reward5/code30_plain-01": {
+   "half": "test",
+   "group": "reward5/code30_plain-01"
+  },
+  "reward5/general30_cue-01": {
+   "half": "test",
+   "group": "reward5/general30_cue-01"
+  },
+  "reward5/general30_plain-01": {
+   "half": "test",
+   "group": "reward5/general30_plain-01"
+  },
+  "reward5/if30_cue-01": {
+   "half": "explore",
+   "group": "reward5/if30_cue-01"
+  },
+  "reward5/if30_plain-01": {
+   "half": "explore",
+   "group": "reward5/if30_plain-01"
+  },
+  "reward5/math30_cue-01": {
+   "half": "test",
+   "group": "reward5/math30_cue-01"
+  },
+  "reward5/math30_plain-01": {
+   "half": "explore",
+   "group": "reward5/math30_plain-01"
+  },
+  "reward5/mix30_cue-01": {
+   "half": "test",
+   "group": "reward5/mix30_cue-01"
+  },
+  "reward5/mix30_plain-01": {
+   "half": "explore",
+   "group": "reward5/mix30_plain-01"
+  },
+  "seen/base_hard72-01": {
+   "half": "test",
+   "group": "seen/base_hard72-01"
+  },
+  "seen/code_hard72-01": {
+   "half": "test",
+   "group": "seen/code_hard72-01"
+  },
+  "seen/code_hardmatch-01": {
+   "half": "test",
+   "group": "seen/code_hardmatch-01"
+  },
+  "seen/rl_hard72-01": {
+   "half": "explore",
+   "group": "seen/rl_hard72-01"
+  },
+  "seen/sft_hard72-01": {
+   "half": "explore",
+   "group": "seen/sft_hard72-01"
+  },
+  "seen/sft_hardmatch-01": {
+   "half": "test",
+   "group": "seen/sft_hardmatch-01"
+  },
+  "selfdistill/S_cue-01": {
+   "half": "explore",
+   "group": "selfdistill/S_cue-01"
+  },
+  "selfdistill/U_cue-01": {
+   "half": "explore",
+   "group": "selfdistill/U_cue-01"
+  },
+  "selfdistill/U_plain-01": {
+   "half": "test",
+   "group": "selfdistill/U_plain-01"
+  },
+  "selfdistill/V_cue-01": {
+   "half": "explore",
+   "group": "selfdistill/V_cue-01"
+  },
+  "selfdistill/V_plain-01": {
+   "half": "explore",
+   "group": "selfdistill/V_plain-01"
+  },
+  "shots1/base-01": {
+   "half": "explore",
+   "group": "shots1/base-01"
+  },
+  "shots1/code-01": {
+   "half": "explore",
+   "group": "shots1/code-01"
+  },
+  "shots1/rl-01": {
+   "half": "test",
+   "group": "shots1/rl-01"
+  },
+  "shots1b/base_b-01": {
+   "half": "explore",
+   "group": "shots1b/base_b-01"
+  },
+  "shots1b/hard328_rl-01": {
+   "half": "test",
+   "group": "shots1b/hard328_rl-01"
+  },
+  "shots1b/rl_b-01": {
+   "half": "explore",
+   "group": "shots1b/rl_b-01"
+  },
+  "signed1/G-01": {
+   "half": "explore",
+   "group": "signed1/G-01"
+  },
+  "signed1/P-01": {
+   "half": "explore",
+   "group": "signed1/P-01"
+  },
+  "thinkvote/hard328_sft1_cue_s4-01": {
+   "half": "explore",
+   "group": "thinkvote/hard328_sft1_cue_s4-01"
+  },
+  "thinkvote/math500_sft1_cue_s4-01": {
+   "half": "explore",
+   "group": "thinkvote/math500_sft1_cue_s4-01"
+  },
+  "transplant/hard328_cap32-01": {
+   "half": "test",
+   "group": "transplant/hard328_cap32-01"
+  },
+  "xreward/depth3/rand8x1.5_L0-10_math31_s1-01": {
+   "half": "explore",
+   "group": "xreward/depth3/rand8x1.5_L0-10_math31_s1-01"
+  },
+  "xreward/depth3/top8x1.5_L0-10_math31_s1-01": {
+   "half": "test",
+   "group": "xreward/depth3/top8x1.5_L0-10_math31_s1-01"
+  },
+  "xreward/depth3/top8x1.5_L0-10_math31_s2-01": {
+   "half": "test",
+   "group": "xreward/depth3/top8x1.5_L0-10_math31_s2-01"
+  },
+  "xreward/depth3/top8x1.5_L0-10_math31_s3-01": {
+   "half": "explore",
+   "group": "xreward/depth3/top8x1.5_L0-10_math31_s3-01"
+  },
+  "xreward/depth3/top8x1.5_L11-21_math31_s1-01": {
+   "half": "test",
+   "group": "xreward/depth3/top8x1.5_L11-21_math31_s1-01"
+  },
+  "xreward/depth3/top8x1.5_L22-31_math31_s1-01": {
+   "half": "test",
+   "group": "xreward/depth3/top8x1.5_L22-31_math31_s1-01"
+  },
+  "xreward/depth3/top8x1.5_d2-8_math31_s1-01": {
+   "half": "explore",
+   "group": "xreward/depth3/top8x1.5_d2-8_math31_s1-01"
+  },
+  "xreward/dial15_math500-01": {
+   "half": "explore",
+   "group": "xreward/dial15_math500-01"
+  },
+  "xreward/dial15_s4_vs_base_cue-01": {
+   "half": "explore",
+   "group": "day1_3/hard328_top8x1.5_cue_s4-01"
+  },
+  "xreward/dial15_s4_vs_rl_plain-01": {
+   "half": "explore",
+   "group": "day1_3/hard328_top8x1.5_cue_s4-01"
+  },
+  "xreward/edits/bulk_math31-01": {
+   "half": "explore",
+   "group": "xreward/edits/bulk_math31-01"
+  },
+  "xreward/edits/math1.5_code1.5-01": {
+   "half": "test",
+   "group": "xreward/edits/math1.5_code1.5-01"
+  },
+  "xreward/edits/math1.5_rand1.5-01": {
+   "half": "explore",
+   "group": "xreward/edits/math1.5_rand1.5-01"
+  },
+  "xreward/edits/math1_code1-01": {
+   "half": "explore",
+   "group": "xreward/edits/math1_code1-01"
+  },
+  "xreward/edits/proj_math31_code30-01": {
+   "half": "test",
+   "group": "xreward/edits/proj_math31_code30-01"
+  },
+  "xreward/edits/projc_math31_code30-01": {
+   "half": "test",
+   "group": "xreward/edits/projc_math31_code30-01"
+  },
+  "xreward/edits/rand8_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/rand8_math31-01"
+  },
+  "xreward/edits/rand8x1.5_math31-01": {
+   "half": "explore",
+   "group": "xreward/edits/rand8x1.5_math31-01"
+  },
+  "xreward/edits/rand8x2_math31-01": {
+   "half": "explore",
+   "group": "xreward/edits/rand8x2_math31-01"
+  },
+  "xreward/edits/rand8x3_math31-01": {
+   "half": "explore",
+   "group": "xreward/edits/rand8x3_math31-01"
+  },
+  "xreward/edits/rand8xm1_math31-01": {
+   "half": "explore",
+   "group": "xreward/edits/rand8xm1_math31-01"
+  },
+  "xreward/edits/rbulk_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/rbulk_math31-01"
+  },
+  "xreward/edits/sft_rand8x3_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/sft_rand8x3_math31-01"
+  },
+  "xreward/edits/sft_top8x1.5_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/sft_top8x1.5_math31-01"
+  },
+  "xreward/edits/sft_top8x3_math31-01": {
+   "half": "explore",
+   "group": "xreward/edits/sft_top8x3_math31-01"
+  },
+  "xreward/edits/sft_top8x3_math31-02": {
+   "half": "test",
+   "group": "xreward/edits/sft_top8x3_math31-02"
+  },
+  "xreward/edits/top1_math31-01": {
+   "half": "explore",
+   "group": "xreward/edits/top1_math31-01"
+  },
+  "xreward/edits/top1x2_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/top1x2_math31-01"
+  },
+  "xreward/edits/top1x3_math31-01": {
+   "half": "explore",
+   "group": "xreward/edits/top1x3_math31-01"
+  },
+  "xreward/edits/top64_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/top64_math31-01"
+  },
+  "xreward/edits/top8_code30-01": {
+   "half": "test",
+   "group": "xreward/edits/top8_code30-01"
+  },
+  "xreward/edits/top8_code31-01": {
+   "half": "test",
+   "group": "xreward/edits/top8_code31-01"
+  },
+  "xreward/edits/top8_general30-01": {
+   "half": "test",
+   "group": "xreward/edits/top8_general30-01"
+  },
+  "xreward/edits/top8_if30-01": {
+   "half": "explore",
+   "group": "xreward/edits/top8_if30-01"
+  },
+  "xreward/edits/top8_math30-01": {
+   "half": "explore",
+   "group": "xreward/edits/top8_math30-01"
+  },
+  "xreward/edits/top8_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/top8_math31-01"
+  },
+  "xreward/edits/top8_think_sft-01": {
+   "half": "explore",
+   "group": "xreward/edits/top8_think_sft-01"
+  },
+  "xreward/edits/top8attn_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/top8attn_math31-01"
+  },
+  "xreward/edits/top8mlp_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/top8mlp_math31-01"
+  },
+  "xreward/edits/top8x0.02_think_sft-01": {
+   "half": "explore",
+   "group": "xreward/edits/top8x0.02_think_sft-01"
+  },
+  "xreward/edits/top8x0.5_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/top8x0.5_math31-01"
+  },
+  "xreward/edits/top8x1.5_L0-10_math31-01": {
+   "half": "explore",
+   "group": "xreward/edits/top8x1.5_L0-10_math31-01"
+  },
+  "xreward/edits/top8x1.5_L11-21_math31-01": {
+   "half": "explore",
+   "group": "xreward/edits/top8x1.5_L11-21_math31-01"
+  },
+  "xreward/edits/top8x1.5_L22-31_math31-01": {
+   "half": "explore",
+   "group": "xreward/edits/top8x1.5_L22-31_math31-01"
+  },
+  "xreward/edits/top8x1.5_math31-01": {
+   "half": "explore",
+   "group": "xreward/edits/top8x1.5_math31-01"
+  },
+  "xreward/edits/top8x2_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/top8x2_math31-01"
+  },
+  "xreward/edits/top8x3_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/top8x3_math31-01"
+  },
+  "xreward/edits/top8xm1_math31-01": {
+   "half": "test",
+   "group": "xreward/edits/top8xm1_math31-01"
+  },
+  "xreward/normband/top1x1.5_math31_s0-01": {
+   "half": "test",
+   "group": "xreward/normband/top1x1.5_math31_s0-01"
+  },
+  "xreward/normband/top1x1.5_math31_s1-01": {
+   "half": "explore",
+   "group": "xreward/normband/top1x1.5_math31_s1-01"
+  },
+  "xreward/normband/top8x0.2_L0-10_math31_s1-01": {
+   "half": "test",
+   "group": "xreward/normband/top8x0.2_L0-10_math31_s1-01"
+  },
+  "xreward/normband/top8x1.5_d2-8_math31_s0-01": {
+   "half": "test",
+   "group": "xreward/normband/top8x1.5_d2-8_math31_s0-01"
+  },
+  "xreward/normband/top8x3_L22-31_math31_s1-01": {
+   "half": "explore",
+   "group": "xreward/normband/top8x3_L22-31_math31_s1-01"
+  },
+  "xreward/normband/top8x4.5_L22-31_math31_s1-01": {
+   "half": "test",
+   "group": "xreward/normband/top8x4.5_L22-31_math31_s1-01"
+  }
+ }
+}

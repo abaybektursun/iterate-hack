@@ -3,7 +3,7 @@ name: theory
 description: Score the team's fixed forecasts, collect the direct facts (offline tests of mechanisms' causes), put every direct fact into three single accounts written in parallel, which measure their consequences on the explore half of the stored rows and are tested on the test half against an adversary's alternative (forecast.py synthesis), find the numbers both no-theory readers got wrong, write rival pairs only about those, each pair with one shared direct test on stored data (one statistic, disjoint ranges for the two rivals), and let only mechanisms that hold a direct test (90 % interval inside the range, n of 50 or more) forecast, and only holders that forecast something the readers do not design cells. One round runs studies/theory/lib/forecast.py round twice: the first run scores (once per number, only forecasts written before the result), writes direct_facts.json, surprises.md, direct_tests.md (plans for the top untested carried mechanisms and one per rival pair) and stops; subagents run the tests offline and add rows to results/refuted.json or direct_tested.json; the second run has the holders and two readers forecast the open work, lists holders that forecast nothing new, and turns the others' pairs into blind-forecast cells. Use when the user asks for a theory, what the results mean together, which result nobody expected, and after every fifth closed result. Writes studies/theory/results/wide/round-<nn>/ and updates studies/theory/README.md.
 ---
 
-# Theory round (version 19: accounts and covariate-only adversaries forecast the team's open work)
+# Theory round (version 20: accounts, adversaries and readers forecast held-out stored cells, scored at once)
 
 Why this order: in rounds 9 to 12 forecast gain ranked mechanisms whose causes then failed a direct test (5 of the top 6
 failed their own claim, 1 held only against a weak null; README "Direct tests"). So a mechanism now earns the right to
@@ -54,6 +54,15 @@ edit as predictor) and both readers forecast each target; a judge per pair rejec
 account's claim by construction. 2. `open_forecasts.md` ranks targets by gap in interval widths (deciding: no overlap).
 Commit `forecasts.json` at once. 3. The next round's standing scores them; its `synthesis.md` ranks accounts by gain
 over their adversary (nats). 4. Explore-half consequence tests only with `--with-row-tests`.
+
+Version 20 rules (round 19: 1 of 4 open targets deciding, results post hours later): 1. The adversary may use stored
+outcomes of RL models and RL-derived edits as data (counts, edit norms, shares, ranks), never a mechanism claim; the
+judge rejects only that. 2. `data/split_cells_v1.json` (`rows.py split-cells`) splits the stored run_cell folders of
+studies/rlneurons/results (xreward edits, sampling and vote cells; one group per shared job) by a hash of the folder
+name; writers get explore cells' counts and rows only, and facts, board items and README lines that name a test cell or
+state its count are removed (`leaks()`); run.json's `leak_check` scans the account transcripts. 3. Stage `heldout`:
+accounts, adversaries and readers forecast the test cells from their descriptions; scored at once (`heldout.md`). 4.
+Accounts rank by gain over their adversary AND the readers; "adds something" needs both positive.
 
 ## What a round is
 

@@ -21,8 +21,9 @@ interval (low, high), and one sentence of derivation that names the sentence of 
 (board item ids or cells) that give the number.
 
 How it is scored: as a normal distribution (mean value, sd (high - low) / 3.29) by its density at the measured value,
-against a covariate-only forecaster who may use the stored rows and plain covariates (accuracy, length, difficulty,
-edit norm, module type) but no claim about what the RL directions do, and against two forecasters with no theory.
+against a covariate-only forecaster who may use every stored outcome as data (RL models' and RL-derived edits' counts
+included) with plain covariates (edit norm, kept share, rank, layers, module type, difficulty) but no claim about what
+the RL directions do, and against two forecasters with no theory.
 The account gains only where what it says about the RL change moves the number away from what those covariates give.
 Too wide earns little; a measured value outside your interval loses. Give the value in the target's unit.
 

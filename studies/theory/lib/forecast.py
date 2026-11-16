@@ -71,6 +71,7 @@ adversaries: also Bash, in a directory holding the explore rows), the model roun
 cross_predict (--model-all <model> overrides it, for smoke tests).
 """
 import argparse
+import functools
 import json
 import math
 import random
@@ -114,7 +115,7 @@ THEORY = ("- theory.json: a theory of the team's results. Derive each forecast f
 NOTHING = (' For a target the theory says nothing about, write {"id": "t02", "value": null, "low": null, "high": null, '
            '"reason": "theory says nothing"}.')
 engine.args = engine.args or argparse.Namespace(model_all=None, workers=8)  # round.py sets its own
-for stage in ("forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast", "routes_propose", "duplicates", "surprise_propose", "cells_check", "direct_test_plan", "synthesis", "synthesis_marks", "synthesis_adversary", "synthesis_adversary_weights", "synthesis_cell_adversary", "open_forecast_account", "open_forecast_adversary", "open_forecast_judge"):
+for stage in ("heldout_forecast", "forecast_targets", "forecast", "forecast_propose", "forecast_score", "cells_propose", "cells_merge", "cells_forecast", "routes_propose", "duplicates", "surprise_propose", "cells_check", "direct_test_plan", "synthesis", "synthesis_marks", "synthesis_adversary", "synthesis_adversary_weights", "synthesis_cell_adversary", "open_forecast_account", "open_forecast_adversary", "open_forecast_judge"):
     engine.MODELS[stage] = engine.MODELS["cross_predict"]
 
 
@@ -1358,7 +1359,8 @@ def open_forecasts(folder, accounts, facts_text, explore):
                 {"gap_widths": round(gap_widths(a, b), 3), "deciding": C.apart(a, b), "adversary_right_inside_account": round(inside_chance(b, a), 3),
                  "account_right_inside_adversary": round(inside_chance(a, b), 3)} if b else {"gap_widths": None, "deciding": False}))
         best = max((x for x in ps if x["gap_widths"] is not None), key=lambda x: (x["deciding"], x["gap_widths"]), default=None)
-        rows.append({"target": t, "readers": {r: by[r] for r in READERS}, "pairs": ps, "best": best})
+        rows.append({"target": t, "readers": {r: by[r] for r in READERS}, "pairs": ps, "best": best,
+                     "no_account_adds": agrees(t, [by[p["account"]] for p in pairs], [by[r] for r in READERS])})
     rows.sort(key=lambda r: (not (r["best"] and r["best"]["deciding"]), -(r["best"]["gap_widths"] if r["best"] else -1)))
     (folder / "open_forecasts.json").write_text(json.dumps({"utc": now(), "snapshot": utc, "pairs": pairs, "targets": rows}, indent=1, ensure_ascii=False))
     g = lambda f: f"{f['value']:g} [{f['low']:g}, {f['high']:g}]" if f else "rejected"  # noqa: E731
@@ -1371,12 +1373,14 @@ def open_forecasts(folder, accounts, facts_text, explore):
           "| rank | target | deciding item | class | best pair | account | adversary | gap (widths) | reader-1 | reader-2 |\n|---|---|---|---|---|---|---|---|---|---|"]
     for i, r in enumerate(rows, 1):
         b, t = r["best"], r["target"]
-        md.append(f"| {i} | {t['id']}: {flat(t['what'])[:120]} | {t['item']} | {'deciding' if b and b['deciding'] else 'weak'} | "
+        md.append(f"| {i} | {t['id']}: {flat(t['what'])[:120]} | {t['item']} | {'deciding' if b and b['deciding'] else 'weak'}"
+                  + ("; no account adds a prediction here" if r["no_account_adds"] else "") + " | "
                   + (f"account-{b['pair']} | {g(b['account'])} | {g(b['adversary'])} | {b['gap_widths']}" if b else "- | - | - | -")
                   + f" | {g(r['readers']['reader-1'])} | {g(r['readers']['reader-2'])} |")
     for r in rows:
         t = r["target"]
-        md.append(f"\n## {t['id']} ({t['item']}): {t['what']}\n\nUnit: {t['unit']}. Cell: {json.dumps(t['cell'])}\n\n"
+        md.append(f"\n## {t['id']} ({t['item']}): {t['what']}\n\n" + ("No account adds a prediction here: every account's value lies inside both readers' 90 % intervals.\n\n" if r["no_account_adds"] else "")
+                  + f"Unit: {t['unit']}. Cell: {json.dumps(t['cell'])}\n\n"
                   "| pair | account | adversary | gap (widths) | class | adv. right: in acc. | acc. right: in adv. |\n|---|---|---|---|---|---|---|")
         for x in r["pairs"]:
             md.append(f"| {x['pair']} | {g(x['account'])} | {g(x['adversary'])} | {x['gap_widths'] if x['gap_widths'] is not None else '-'} | "
@@ -1403,13 +1407,13 @@ def pair_gains(src, s, posted):
         out.append({"source": src.name, "account": p["account"], "adversary": p["adversary"], "targets": len(ts), "items": len({item[t] for t in ts}),
                     "gain_over_adversary": round(sum(g.values()), 3), "account_gain": round(sum(a[t]["gain"] for t in ts), 3),
                     "adversary_gain": round(sum(b[t]["gain"] for t in ts), 3), "per_target": g})
-    return sorted(out, key=lambda r: -r["gain_over_adversary"])
+    return sorted(out, key=lambda r: -min(r["gain_over_adversary"], r["account_gain"]))
 
 
 def pair_md(rows):
-    head = ("| source | account | targets | items | gain over its adversary (nats) | account vs readers | adversary vs readers |\n|---|---|---|---|---|---|---|")
+    head = ("| source | account | targets | items | gain over its adversary (nats) | account vs readers | adversary vs readers | adds something |\n|---|---|---|---|---|---|---|---|")
     return "\n".join([head] + [f"| {r['source']} | {r['account']} | {r['targets']} | {r['items']} | {r['gain_over_adversary']:+.3f} | {r['account_gain']:+.3f} | "
-                               f"{r['adversary_gain']:+.3f} |" for r in rows]) + "\n" if rows else "none\n"
+                               f"{r['adversary_gain']:+.3f} | {'yes' if adds(r) else 'no'} |" for r in rows]) + "\n" if rows else "none\n"
 
 
 def open_scores(folder, sources):
@@ -1417,6 +1421,163 @@ def open_scores(folder, sources):
     posted = {i["id"]: i["at"].rstrip("Z")[:19] for i in board("posted-open", "9999")[0]}
     return [r for src in sources if (src / "open_forecasts.json").exists() and (folder / "standing" / f"forecasts-{src.name}.json").exists()
             for r in pair_gains(src, json.loads((folder / "standing" / f"forecasts-{src.name}.json").read_text()), posted)]
+
+
+# ---- version 20: held-out stored cells, accounts ranked over adversary and readers ----
+
+SET_MARKS = {"hard328": r"328", "math500": r"500", "fresh2026": r"fresh|136", "hard72": r"hard72|\b72\b", "hardmatch": r"hardmatch|match"}
+ROLES = {
+    "reader": ("", "You have no theory. Forecast from the board's numbers and the explore cells' counts for the same models, sets and settings.", "", ""),
+    "account": ("- account.json: one account of the RL weight change (\"account\", sentences). You forecast AS THIS ACCOUNT.\n"
+                "- facts.json: the team's direct facts (offline tests with their measured numbers).\n"
+                "- rows/: the stored problem rows of the explore cells only (rows/MANIFEST.md); Bash with python3 (standard library).",
+                "Derive each forecast from the account: the derivation names the sentence of the account and the explore cells or board "
+                "items that give the number. You are scored against a forecaster that fits the stored counts with plain covariates and "
+                "has no mechanism, and against two forecasters with no theory: the account gains only where what it says about the RL "
+                "change moves the number away from such a fit.", "", ""),
+    "adversary": ("- facts.json: the team's direct facts (offline tests with their measured numbers).\n"
+                  "- rows/: the stored problem rows of the explore cells only (rows/MANIFEST.md); Bash with python3 (standard library).",
+                  "You are a COVARIATE-ONLY forecaster with no mechanism. Use every stored count as DATA (explore_cells.json and the board: "
+                  "base, Think-SFT, RL models, random edits and edits built from an RL change, with their edit scale, kept share, rank k, "
+                  "layers, modules, prompt, temperature, token cap, samples): fit, interpolate or take the nearest stored cell along these "
+                  "covariates. Never rest a forecast on a claim about what the RL change does or why; a judge rejects such forecasts. "
+                  "Write your rule first (one paragraph) and list each forecast's predictors (the stored numbers used).",
+                  '"rule": "<your rule, one paragraph>",\n ', '\n                "predictors": ["<each stored number used>"],'),
+}
+
+
+@functools.cache
+def test_cells():
+    """The test cells of data/split_cells_v1.json (rows.run_cells), in folder order."""
+    return tuple(c for c in R.run_cells() if R.cell_half()[c["folder"]] == "test")
+
+
+@functools.cache
+def leak_patterns():
+    """Per test cell: patterns of its names (folder, leaf folder, job ids, a label with a digit) and of its count (the
+    count, or its percentage of n), the count counting only beside its set's mark."""
+    def names(c):
+        leaf = c["folder"].split("/")[-1]
+        return {c["folder"], leaf, *(j for j in c["jobs"] if len(j) > 8)} | {
+            x for x in (re.sub(r"-\d\d$", "", leaf), c["label"]) if x and re.search(r"\d", x) and len(x) >= 6}
+    shared = {x for c in R.run_cells() if R.cell_half()[c["folder"]] == "explore" for x in names(c)}  # a label an explore cell also has names neither
+    out = []
+    for c in test_cells():
+        v = c["count"]
+        nums = {f"{v:g}"} | ({f"{v:.1f}"} if v != int(v) else set())
+        out.append((c["folder"], [re.compile(r"(?<![\w.])" + re.escape(x) + r"(?!\w)") for x in [c["folder"], *sorted(names(c) - shared - {c["folder"]})]],
+                    [re.compile(r"(?<![\d.])" + re.escape(x) + r"(?!\d|\.\d)") for x in nums] + [re.compile(r"(?<![\d.])" + re.escape(f"{100 * v / c['n']:.1f}") + r"\s?%")],
+                    re.compile(SET_MARKS[c["set"]])))
+    return out
+
+
+def leaks(text):
+    """Engine 20: the test cells a text names, or whose count (or percentage) it states beside its set's mark."""
+    return [f for f, names, nums, mark in leak_patterns() if any(r.search(text) for r in names) or (mark.search(text) and any(r.search(text) for r in nums))]
+
+
+def shown_lines(text):
+    """The lines of a text that name no test cell and state no test cell's count."""
+    return "\n".join(x for x in text.splitlines() if not leaks(x)) + "\n"
+
+
+def explore_cells():
+    return json.dumps([{**c["description"], "count": c["count"]} for c in R.run_cells() if R.cell_half()[c["folder"]] == "explore"], indent=1)
+
+
+def name_hits(paths):
+    """Engine 20 leak check: files (transcripts, inputs) that name a test cell (folder, leaf folder, job id or label)."""
+    hits = []
+    for p in paths:
+        text = Path(p).read_text(errors="replace")
+        hits += [f"{p}: {f}" for f, names, _, _ in leak_patterns() if any(r.search(text) for r in names)]
+    return hits
+
+
+def agrees(t, accounts, readers):
+    """Version 20: every account's value lies inside both readers' 90 % intervals: no account adds a prediction here."""
+    return all(all(r["low"] <= a["value"] <= r["high"] for r in readers) for a in accounts)
+
+
+def adds(r):
+    """Version 20: an account adds something only with positive gain over its adversary and over the two readers."""
+    return r["gain_over_adversary"] > 0 and r["account_gain"] > 0
+
+
+def heldout(folder, accounts, facts_text, explore, items):
+    """Version 20: the test cells of data/split_cells_v1.json, forecast from their descriptions alone by every account,
+    one adversary per account (stored counts as data, no mechanism), the two readers, on the explore cells' counts and
+    the board without items that name a test cell or state its count; a judge per pair; scored at once. Writes
+    heldout_cells.json, heldout/, heldout.json and heldout.md."""
+    out, cells = folder / "heldout", test_cells()
+    targets = [{"id": f"h{k:02d}", "item": "stored cell, count withheld", "cell": c["description"],
+                "unit": f"right answers of {c['n']} per sample (mean over {c['samples']} sample{'s' if c['samples'] > 1 else ''}), grader v3",
+                "what": f"right answers per sample of {c['description'].get('model')} on {c['set']} ({c['folder']})"} for k, c in enumerate(cells, 1)]
+    (folder / "heldout_cells.json").write_text(json.dumps({"targets": targets}, indent=1, ensure_ascii=False))
+    tids, measured = [t["id"] for t in targets], {t["id"]: c["count"] for t, c in zip(targets, cells)}
+    common = {"DIRECTION.md": shown_lines((ROOT / "DIRECTION.md").read_text()), "board.jsonl": "".join(json.dumps(i) + "\n" for i in items),
+              "explore_cells.json": explore_cells(), "cells.json": folder / "heldout_cells.json"}
+    role = lambda k: dict(zip(("files", "role", "rule_key", "predictors_key"), ROLES[k]))  # noqa: E731
+    ks = [n.split("-")[1] for n in accounts]
+    jobs = [engine.job("heldout_forecast", r, common, {"forecasts.json": out / f"{r}.json"}, lambda d: open_errors(d, tids, False), **role("reader"))
+            for r in READERS]
+    jobs += [engine.job("heldout_forecast", n, {**common, "facts.json": facts_text, "rows": explore, "account.json": json.dumps({"account": a["account"]}, indent=1, ensure_ascii=False)},
+                        {"forecasts.json": out / f"{n}.json"}, lambda d: open_errors(d, tids, False), mode="rows", **role("account")) for n, a in accounts.items()]
+    jobs += [engine.job("heldout_forecast", f"adversary-{k}", {**common, "facts.json": facts_text, "rows": explore},
+                        {"forecasts.json": out / f"adversary-{k}.json"}, lambda d: open_errors(d, tids, True), mode="rows", **role("adversary")) for k in ks]
+    engine.run(jobs, folder, len(jobs))
+    fc = {n: json.loads((out / f"{n}.json").read_text()) for n in READERS + list(accounts) + [f"adversary-{k}" for k in ks]}
+    engine.run([engine.job("open_forecast_judge", f"heldout-judge-{k}", {"targets.json": folder / "heldout_cells.json",
+                                                                         "account.json": json.dumps({"account": accounts[f"account-{k}"]["account"], "forecasts": fc[f"account-{k}"]["forecasts"]}, indent=1, ensure_ascii=False),
+                                                                         "adversary.json": json.dumps(fc[f"adversary-{k}"], indent=1, ensure_ascii=False)},
+                           {"judge.json": out / f"judge-{k}.json"}, lambda d: judge_errors(d, tids)) for k in ks], folder, len(ks))
+    rejected = {k: {v["id"]: v["why"] for v in json.loads((out / f"judge-{k}.json").read_text())["verdicts"] if v["by_construction"]} for k in ks}
+    by = {n: {f["id"]: {x: f[x] for x in ("value", "low", "high")} | {"id": f["id"], "derivation": f.get("derivation", "")} for f in j["forecasts"]} for n, j in fc.items()}
+    nulls = [by[r] for r in READERS]
+    gain = {n: {r["id"]: r["gain"] for r in engine.gain_rows(list(f.values()), measured, nulls)} for n, f in by.items()}
+    rows, summary = [], []
+    for t, c in zip(targets, cells):
+        x, row = measured[t["id"]], {"id": t["id"], "folder": c["folder"], "family": c["family"], "set": c["set"], "measured": measured[t["id"]], "forecasts": {}}
+        for n in by:
+            row["forecasts"][n] = {**{y: by[n][t["id"]][y] for y in ("value", "low", "high")}, "gain_over_readers": gain[n][t["id"]]}
+        for k in ks:
+            a, b = by[f"account-{k}"][t["id"]], by[f"adversary-{k}"][t["id"]]
+            g = None if t["id"] in rejected[k] else round(engine.clip3(engine.log_density(x, a) - engine.log_density(x, b)), 3)
+            row["forecasts"][f"account-{k}"] |= {"gain_over_adversary": g, "beats_both": min(g, gain[f"account-{k}"][t["id"]]) if g is not None else None}
+        row["no_account_adds"] = agrees(t, [by[n][t["id"]] for n in accounts], [by[r][t["id"]] for r in READERS])
+        rows.append(row)
+    for n in by:
+        s = {"forecaster": n, "cells": len(rows), "inside": sum(r["forecasts"][n]["low"] <= r["measured"] <= r["forecasts"][n]["high"] for r in rows),
+             "gain_over_readers": round(sum(r["forecasts"][n]["gain_over_readers"] for r in rows), 3)}
+        if n in accounts:
+            gs = [r["forecasts"][n]["gain_over_adversary"] for r in rows if r["forecasts"][n]["gain_over_adversary"] is not None]
+            s |= {"gain_over_adversary": round(sum(gs), 3), "adversary_cells": len(gs)}
+        summary.append(s)
+    accs = sorted((s for s in summary if s["forecaster"] in accounts), key=lambda s: -min(s["gain_over_adversary"], s["gain_over_readers"]))
+    for s in accs:
+        s |= {"account_gain": s["gain_over_readers"], "adds": adds({"gain_over_adversary": s["gain_over_adversary"], "account_gain": s["gain_over_readers"]})}
+    (folder / "heldout.json").write_text(json.dumps({"utc": now(), "cells": len(rows), "rejected": rejected, "summary": summary, "ranked": [s["forecaster"] for s in accs],
+                                                     "rows": rows}, indent=1, ensure_ascii=False))
+    g = lambda f: f"{f['value']:g} [{f['low']:g}, {f['high']:g}]"  # noqa: E731
+    md = [f"# Held-out stored cells, {folder.name} (engine 20)\n\nWritten {now()} UTC. {len(rows)} test cells of `data/split_cells_v1.json` "
+          f"({sum(r['family'] == 'edit' for r in rows)} xreward edit cells, {sum(r['family'] == 'sampling' for r in rows)} sampling cells), forecast "
+          "from their descriptions alone and scored at once. Gain over readers: log density against the equal mixture of the two readers "
+          "(clipped to [-3, 3], at most 0 outside the forecaster's own interval); gain over adversary: clip3(log density of the account - "
+          "of its adversary). An account adds something only with positive summed gain over both. Judges rejected: "
+          + ("; ".join(f"adversary-{k} {', '.join(sorted(rejected[k]))}" for k in ks if rejected[k]) or "none") + ".\n",
+          "## Accounts ranked by the smaller of their two summed gains\n", "| account | cells | inside | gain over adversary | gain over readers | adds something |\n|---|---|---|---|---|---|"]
+    md += [f"| {s['forecaster']} | {s['cells']} | {s['inside']} | {s['gain_over_adversary']:+.2f} | {s['gain_over_readers']:+.2f} | {'yes' if s['adds'] else 'no'} |" for s in accs]
+    md += ["\n## Every forecaster's summed gain over the readers' mixture\n", "| forecaster | cells | inside its interval | gain over readers |\n|---|---|---|---|"]
+    md += [f"| {s['forecaster']} | {s['cells']} | {s['inside']} | {s['gain_over_readers']:+.2f} |" for s in summary]
+    names = READERS + [n for k in ks for n in (f"account-{k}", f"adversary-{k}")]
+    md += ["\n## Per cell\n", "| id | cell | measured | " + " | ".join(names) + " | account gains over adversary / readers | note |\n|---|---|---|" + "---|" * len(names) + "---|---|"]
+    for r in rows:
+        md.append(f"| {r['id']} | {r['folder']} ({r['set']}) | {r['measured']:g} | " + " | ".join(g(r["forecasts"][n]) for n in names) + " | "
+                  + "; ".join(f"a{k} {r['forecasts'][f'account-{k}']['gain_over_adversary'] if r['forecasts'][f'account-{k}']['gain_over_adversary'] is not None else 'rej'}"
+                              f" / {r['forecasts'][f'account-{k}']['gain_over_readers']:+.2f}" for k in ks)
+                  + f" | {'no account adds a prediction here' if r['no_account_adds'] else ''} |")
+    (folder / "heldout.md").write_text("\n".join(md) + "\n")
+    print(f"  held-out cells: {len(rows)}; " + "; ".join(f"{s['forecaster']} {s['gain_over_adversary']:+.2f} over adversary, {s['gain_over_readers']:+.2f} over readers" for s in accs))
 
 
 def synthesis(folder, sources, row_tests=False):
@@ -1439,15 +1600,21 @@ def synthesis(folder, sources, row_tests=False):
     (folder / "direct_facts.json").write_text(json.dumps(direct_facts(), indent=1))
     facts = numbered_facts(folder)
     ids, facts_text = [f["id"] for f in facts], json.dumps(facts, indent=1, ensure_ascii=False)
-    print(f"  {len(facts)} direct facts ({sum(f['verdict'] == 'holds' for f in facts)} hold)")
     items = board("board", "9999")[0]
     board_ids = {i["id"] for i in items}
+    shown_items = [i for i in items if not leaks(i["text"])]  # version 20: no item that names a test cell or states its count
+    withheld = [f["id"] for f in facts if leaks(json.dumps(f, ensure_ascii=False))]
+    facts = [f for f in facts if f["id"] not in withheld]
+    ids, facts_text = [f["id"] for f in facts], json.dumps(facts, indent=1, ensure_ascii=False)
+    print(f"  {len(facts)} direct facts shown ({sum(f['verdict'] == 'holds' for f in facts)} hold), {len(withheld)} withheld for naming a test cell; "
+          f"{len(items) - len(shown_items)} of {len(items)} board items withheld")
     explore = engine.tmp() / "explore_rows"
     if not explore.exists():
         print("== explore half of the stored rows")
         R.copy(explore, "explore")
     (folder / "explore_manifest.md").write_text((explore / "MANIFEST.md").read_text())
-    common = {"DIRECTION.md": ROOT / "DIRECTION.md", "results.md": recent_md(items), "data.md": data_md(), "jobs.md": C.jobs_md(), "rows": explore}
+    common = {"DIRECTION.md": shown_lines((ROOT / "DIRECTION.md").read_text()), "results.md": recent_md(shown_items), "data.md": shown_lines(data_md()),
+              "jobs.md": C.jobs_md(), "explore_cells.json": explore_cells(), "rows": explore}
     t0, thirds = time.time(), [facts[k * len(facts) // ACCOUNTS:(k + 1) * len(facts) // ACCOUNTS] for k in range(ACCOUNTS)]
     consequences = string.Template((LIB / "prompts" / "synthesis_consequences.md").read_text()).substitute(
         range_width=RANGE_WIDTH, min_n_weights=MIN_N_WEIGHTS) if row_tests else OPEN_NOTE
@@ -1474,6 +1641,14 @@ def synthesis(folder, sources, row_tests=False):
         accounts[name] = j
         (folder / f"{name}.json").write_text(json.dumps(j, indent=1, ensure_ascii=False))
     stages["accounts and targets"] = round((time.time() - t0) / 60, 1)
+    jd = engine.tmp() / "synthesis"  # version 20 leak check: no account job's inputs or transcript names a test cell
+    leak_check = {"transcripts_naming_a_test_cell": name_hits(p for k in range(1, ACCOUNTS + 1) for p in (jd / f"account-{k}").glob("out*.txt")),
+                  "inputs_stating_a_test_cell": [f"{x}: {leaks(common[x])[:3]}" for x in ("DIRECTION.md", "results.md", "data.md") if leaks(common[x])]
+                  + (["facts.json"] if leaks(facts_text) else []),
+                  "withheld_rows_in_explore_copy": [p.name for p in explore.rglob("*.jsonl") if leaks(p.stem.replace("__", "/"))],
+                  "facts_withheld": withheld, "board_items_withheld": len(items) - len(shown_items)}
+    print(f"  leak check: {leak_check['transcripts_naming_a_test_cell'][:3] or 'no transcript names a test cell'}; "
+          f"inputs {leak_check['inputs_stating_a_test_cell'] or 'clean'}; explore copy {leak_check['withheld_rows_in_explore_copy'] or 'clean'}")
     for x in dropped:
         print(f"  dropped {x['account']}: {x['reason']}")
     print("== blind markers" + (" and adversaries" if row_tests else ""))
@@ -1502,7 +1677,12 @@ def synthesis(folder, sources, row_tests=False):
     if not (folder / "open_forecasts.json").exists():
         open_forecasts(folder, accounts, facts_text, explore)
     stages["open_forecasts"] = round((time.time() - t0) / 60, 1)
-    info = {"commit": sh("git", "rev-parse", "--short", "HEAD").strip(), "command": " ".join(sys.argv), "utc": now(), "version": 19, "facts": len(facts),
+    print("== held-out stored cells")
+    t0 = time.time()
+    if not (folder / "heldout.json").exists():
+        heldout(folder, accounts, facts_text, explore, shown_items)
+    stages["heldout"] = round((time.time() - t0) / 60, 1)
+    info = {"commit": sh("git", "rev-parse", "--short", "HEAD").strip(), "command": " ".join(sys.argv), "utc": now(), "version": 20, "facts": len(facts), "leak_check": leak_check,
             "accounts": list(accounts), "dropped": dropped, "row_tests": row_tests, "targets": len(json.loads((folder / "targets.json").read_text())["targets"]),
             "job_dirs": str(engine.tmp())}
     prior = json.loads((folder / "run.json").read_text()).get("minutes_per_stage", {}) if (folder / "run.json").exists() else {}
@@ -1546,15 +1726,20 @@ def synthesis(folder, sources, row_tests=False):
     cols = list(score[ranked[0]]) if ranked else []
     earlier = open_scores(folder, sources)
     (folder / "open_scores.json").write_text(json.dumps(earlier, indent=1))
-    md = [f"# Synthesis, {folder.name} (version 19)\n\nWritten {now()} UTC. {len(facts)} direct facts; {len(names)} accounts kept of {ACCOUNTS}"
+    ho = json.loads((folder / "heldout.json").read_text())
+    md = [f"# Synthesis, {folder.name} (version 20)\n\nWritten {now()} UTC. {len(facts)} direct facts; {len(names)} accounts kept of {ACCOUNTS}"
           f"{' (dropped: ' + ', '.join(x['account'] for x in dropped) + ')' if dropped else ''}. "
           "Score = " + ("consequences that hold on the test half against the adversary's test-half value minus " if row_tests else "minus the ")
           + "facts the blind marker marks as contradicting the account. Fact marks are the blind marker's (`marks-<account>.json`); the account's own "
           "count is shown beside them. The accounts' forecasts of the open work against their covariate-only adversaries are in `open_forecasts.md`; "
           "they are scored when the results post, in the next round's section below.\n",
-          "## Accounts of earlier rounds ranked by gain over their covariate-only adversary\n\nOn the numbers posted after their forecasts "
+          "## Accounts of earlier rounds ranked by gain over their covariate-only adversary and over the readers\n\nOn the numbers posted after their forecasts "
           "were written (`open_scores.json`); per target clip3(log density of the account - log density of the adversary) at the measured value; "
-          "the last two columns are each side's gain over the two readers (standing's rule).\n", pair_md(earlier),
+          "the last two columns are each side's gain over the two readers (standing's rule). Ranked by the smaller of the account's two gains; "
+          "an account adds something only when both are positive.\n", pair_md(earlier),
+          f"## This round's accounts on {ho['cells']} held-out stored cells (`heldout.md`)\n\n| account | gain over adversary | gain over readers | adds something |\n|---|---|---|---|",
+          *[f"| {s['forecaster']} | {s['gain_over_adversary']:+.2f} | {s['gain_over_readers']:+.2f} | {'yes' if s['adds'] else 'no'} |" for s in ho["summary"] if s["forecaster"] in accounts],
+          "",
           "## Accounts of this round\n", "| account | " + " | ".join(cols) + " |\n|---|" + "---|" * len(cols)]
     md += [f"| {n} | " + " | ".join(str(score[n][c]) for c in cols) + " |" for n in ranked]
     for n in ranked:

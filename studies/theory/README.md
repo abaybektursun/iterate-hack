@@ -2155,6 +2155,35 @@ every RL-derived edit by construction; the readers are the stronger baseline the
 `mechanisms.json`, `open_forecasts.md` / `.json`, `open_scores.json` (empty: no earlier open forecasts), `synthesis.md`,
 `run.json`, `round19.log`.
 
+## Engine 20 (held-out stored cells, scored at once)
+
+Skill version 20, branch `theory` only (main is frozen). Why: round 19 had 1 deciding target of 4, and open work posts
+hours later; the covariate-only adversary was barred from the RL-edit outcomes the readers used, so it was weak by
+construction on every RL-derived edit.
+
+1. Adversary rule (`prompts/open_forecast_adversary.md`, `open_forecast_judge.md`): stored outcomes of RL models and of
+   RL-derived edits are allowed as data (counts, edit norms, kept shares, ranks, layers, modules: fits, interpolation,
+   nearest stored cell); a claim about what the RL change does or why is not. The judge rejects only the latter.
+2. `data/split_cells_v1.json` (`rows.py split-cells`, fixed once): the 127 run_cell folders of
+   `studies/rlneurons/results` (metrics.json with config and counts, whole set, no dry run): 54 xreward edit cells and
+   73 sampling or vote cells; folders sharing a job id (job_id or joined_from) are one group (124 groups); groups sorted
+   by the sha256 of their first folder name, first half explore, the rest test: 65 explore, 62 test (28 edit, 34
+   sampling). `rows.copy` leaves out the 18 manifest cells whose rows are test cells.
+3. What writers see (`leaks()`, `shown_lines()` in `forecast.py`): facts, board items and README / DIRECTION lines that
+   name a test cell (folder, leaf folder, job id, a label no explore cell shares) or state its count (or its percentage)
+   beside its set's mark are removed; `explore_cells.json` gives every explore cell's description and count. run.json's
+   `leak_check` lists account transcripts that name a test cell, inputs that still state one, and withheld rows in the
+   explore copy.
+4. Stage `heldout` (`heldout()`, `prompts/heldout_forecast.md`): every account (Bash on the explore rows), one adversary
+   per account (stored counts as data, no mechanism) and the two readers forecast every test cell from its description
+   (config and edit arguments, no count); one judge per pair; scored at once against the stored count: gain over the
+   readers' mixture (engine rule) and over the adversary (clip3 of the log-density difference). `heldout.md` /
+   `heldout.json`.
+5. Ranking: `synthesis.md` (earlier rounds' open forecasts and this round's held-out cells) and `heldout.md` rank accounts
+   by the smaller of their gain over the adversary and over the readers; an account adds something only when both are
+   positive. `open_forecasts.md` and `heldout.md` label targets where every account's value lies inside both readers'
+   90 % intervals "no account adds a prediction here".
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in
