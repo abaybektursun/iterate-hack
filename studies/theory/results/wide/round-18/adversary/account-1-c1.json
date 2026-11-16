@@ -1,0 +1,7 @@
+{"kind": "covariate",
+ "alternative": "Writer module type alone sets f. Down writers come out near 0.34 and o writers near 0.21 on the explore matrices, whatever the RL delta holds. The median over a test half is then fixed by its mix of o and down rows. Next-layer readers amplify any structured direction of a writer partway between random and the base's own top-8, and how far depends on the writer type, not on what RL learned.",
+ "tables": ["xlisten"],
+ "computation": "1) Over the explore rows of xlisten, compute f = (rl.next - rand.next) / (basew.next - rand.next) per row. Take its median within each writer type: o = 0.2127 (19 rows), down = 0.3388 (15 rows). These are fixed constants. 2) For each test row of xlisten, give the predicted value 0.2127 if writer == 'o' and 0.3388 if writer == 'down'. Use no other field of the row. 3) The alternative's value is the median of these predicted values over the test rows: 0.2127 if o rows are the majority, 0.3388 if down rows are, and 0.2758 if the counts are equal.",
+ "explore_value": 0.2127,
+ "explore_statistic": 0.259,
+ "already_shown": null}

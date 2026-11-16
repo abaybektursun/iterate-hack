@@ -1,0 +1,7 @@
+{"kind": "construction artifact",
+ "alternative": "cap_both is built from the same left and right top-8 subspaces as cap_left and cap_right; if the change's input and output sides are captured independently, cap_both ~ cap_left * cap_right, so the ratio of two-sided captures is just the product of the one-sided capture ratios (left ~2x, right ~4x for Math 3.1 vs General 3.0 targets). Multiplying two modest one-sided excesses gives a ~8-11x two-sided ratio by construction, without any claim about paired input-output directions.",
+ "tables": ["cap"],
+ "computation": "1) For each matrix of table cap, read cap['code31>math31'] and cap['code31>general30'] cap_left and cap_right. 2) Per matrix compute (cap_left(code31>math31) * cap_right(code31>math31)) / (cap_left(code31>general30) * cap_right(code31>general30)). 3) Take the median over the matrices. That median is the predicted value of the statistic.",
+ "explore_value": 8.203,
+ "explore_statistic": 10.786,
+ "already_shown": null}

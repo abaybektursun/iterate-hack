@@ -1,0 +1,7 @@
+{"kind": "covariate",
+ "alternative": "At step 100 the deltas are tiny (norms ~0.01-0.05, 5-8x below final) and a matrix's top-8 share is set mostly by the size of its change: on the explore matrices the module-median-removed top-8 share at step 100 has Spearman 0.76-0.83 with the matrix's own module-median-removed log delta norm (versus 0.08-0.54 for the final models). So the step-100 cross-model share correlation is just the cross-model correlation of step-100 change sizes (which matrices move most in the first 100 steps), not any shared concentration mechanism. Replacing the step-100 shares by the step-100 log norms in the statistic predicts its value: 0.176 vs the actual 0.192 on explore.",
+ "tables": ["top8_share"],
+ "computation": "1) Over the rows of top8_share in the matrix set, for each key k in math30, math31, code31: resid_share[k] = top8_share[k] minus the median of top8_share[k] over rows of the same module (q,k,v,o,gate,up,down). 2) For each key k_s100 in math30_s100, math31_s100, code31_s100: resid_norm[k_s100] = log(norm[k_s100]) minus the median of log(norm[k_s100]) over rows of the same module (norm is the 'norm' field of the same top8_share row). 3) For each pair (a,b) in (math30,math31), (math31,code31), (math30,code31): d_alt = Spearman(resid_norm[a_s100], resid_norm[b_s100]) - Spearman(resid_share[a], resid_share[b]) (ranks with average ties). 4) Alternative value = mean of the 3 d_alt.",
+ "explore_value": 0.1762,
+ "explore_statistic": 0.1925,
+ "already_shown": null}

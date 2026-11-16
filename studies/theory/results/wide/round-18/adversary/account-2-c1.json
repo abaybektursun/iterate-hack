@@ -1,0 +1,7 @@
+{"kind": "other",
+ "alternative": "Generic host effect, not a code31-math31 link: general30's top-8 input subspace sits off-axis from the changes made by any verifiable-reward RL run, while those runs' own top-8 subspaces catch about 4x more of each other's changes whichever pair is used. Swap the pair for one that leaves out both code31's change and math31's subspace: Math 3.0's change, captured by Code 3.1's top-8 input subspace and by General's. That ratio comes out at about the same value (4.18 on explore, against 4.25). Code31's change in math30 or mix30 gives 4.51 and 4.37 too, so the value is set by the general30 denominator and the reasoning-RL host family, not by anything specific to math31 and code31.",
+ "tables": ["cap"],
+ "computation": "1) Use the rows of table cap (the test matrices). 2) For each matrix compute r_alt = cap['math30>code31']['cap_right'] / cap['math30>general30']['cap_right']. 3) Take the median of r_alt over the matrices. That median is the predicted value of the median of cap_right(code31>math31) / cap_right(code31>general30).",
+ "explore_value": 4.178,
+ "explore_statistic": 4.248,
+ "already_shown": null}

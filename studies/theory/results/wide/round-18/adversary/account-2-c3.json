@@ -1,0 +1,11 @@
+{
+ "kind": "covariate",
+ "alternative": "The base matrix's own anisotropy sets the ratio: any 8 written directions that are not the base's top-8 get a gain of roughly 1 + alpha*(basew.next - 1), where alpha is one fixed shrinkage constant (0.2656, fit once on the explore writers). The ratio rl/basew then is (1 + alpha*(basew-1))/basew, a value fixed by how strongly the next-layer readers favor the base's own top directions, i.e. by basew.next alone. Writers with large basew.next get small ratios and writers with basew near 1 get ratios near 1, without any claim about what RL writes. This gives 0.522 on explore, against the statistic's 0.503.",
+ "tables": [
+  "xlisten"
+ ],
+ "computation": "1) Fix alpha = 0.26556886780040767, the median over the 34 explore writer rows of xlisten of (rl.next - 1)/(basew.next - 1). 2) For each test writer row (o and down) of xlisten, compute r_hat = (1 + alpha*(basew['next'] - 1)) / basew['next'], using basew.next only. 3) The prediction is the median of r_hat over the test writer rows (n 28). Explore: the same median over the 34 explore rows = 0.5224.",
+ "explore_value": 0.5224096810487324,
+ "explore_statistic": 0.5032478896500653,
+ "already_shown": null
+}

@@ -1,0 +1,12 @@
+{
+ "kind": "covariate",
+ "alternative": "Module type alone sets R. Per-matrix R depends strongly on module (explore medians: q 0.479, k 0.733, v 1.202, o 1.223, down 1.289, up 1.617, gate 1.677), and the median over a set of matrices is just the module value at the middle of the module mix. In both halves, q+k+v together make up just under half the matrices (explore 47, test 49 of 112), so the median falls on the o/v/down plateau near 1.22 whatever the account says about how rl_math and rl_code share directions.",
+ "tables": [
+  "anatomy",
+  "cap"
+ ],
+ "computation": "1) Fixed module constants, fitted on the explore matrices as the median of cos(rl_math-rl_code)/sqrt(cap_both(code31>math31)*top8_share(rl_math)) per module: q 0.479, k 0.733, v 1.202, o 1.223, down 1.289, up 1.617, gate 1.677. 2) For each test matrix in both anatomy and cap (all 112), read only its `module` field and give it its module's constant. Do not use cos, cap or top8_share of the test matrices. 3) Take the median of these 112 assigned values. Test module counts are q 17, k 16, v 16, o 13, up 15, down 17, gate 18. In sorted order q+k+v fill ranks 1-49 and o fills ranks 50-62, so ranks 56 and 57 are both o, giving 1.223.",
+ "explore_value": 1.2228,
+ "explore_statistic": 1.2209,
+ "already_shown": null
+}

@@ -1,0 +1,34 @@
+# Weights cells, round-18 (version 18)
+
+One weights-only computation per account, in no committed table: the account's prediction and a blind adversary's (it sees the computation, not the account), ranked by the gap between the two values in widths of the wider 90 % interval. The engine runs none of them.
+
+
+## 1. account-3: gap 0.526 interval widths
+
+- Statistic: median over matrices of the cosine between the rank-8 truncations of the two changes, cos(T8(RL-Math 3.1 - base), T8(Code-RL 3.1 - base)), dimensionless
+- Models: base, RL-Math 3.1, RL-Code 3.1
+- Matrices: all 224 (q, k, v, o, gate, up, down of 32 layers)
+- Computation: 1) Per matrix, dm = W_math31 - W_base and dc = W_code31 - W_base in float32. 2) Per delta, SVD; T8 = sum of the top 8 singular triplets sigma_i u_i v_i^T. 3) cos = <T8(dm), T8(dc)>_F / (||T8(dm)||_F ||T8(dc)||_F). 4) Median over the 224 matrices.
+- Account predicts 0.1 [0.07, 0.13]: S1-S2 put the shared Math/Code mode in the few strengthened directions, so most of the full-delta cosine (median 0.012) lies in the top-8 parts, whose share of the norm is about 0.10 each: 0.012/sqrt(0.10*0.106) is about 0.12, minus the part outside the block (R about 1.2), giving about 0.10. A blind alternative (shared component diffuse, or size/chance alone) predicts the truncations are no more aligned than the whole deltas, about 0.012, and chance gives about 0.002.
+- Adversary predicts 0.05 [0.015, 0.11]: Two independent RL updates from the same base that share mainly input-side (right) directions and only weakly share output-side (left) directions. The top-8 cosine is capped by Cauchy-Schwarz at sqrt(cap_both(code31>math31)/top8_share(code)), whose median is 0.118. The real value should be roughly half of that cap: right overlap is high (0.27) but left overlap is low (0.065), so only some of the captured block lines up in sign with math's singular values. The full-delta cosine (median 0.012) is positive on almost every matrix, which keeps the value above chance (about 0). (Explore matrices (n=112): anatomy pair rl_math-rl_code median full cos 0.012, overlap_left 0.065, overlap_right 0.27; cap code31>math31 median cap_both 0.0017; median Cauchy-Schwarz cap 0.118 (10-90% range 0.044-0.183); median cos/sqrt(top8_m*top8_c) 0.117, and that ratio is often above the cap, so the shared dot product is spread beyond the top 8 directions.)
+
+
+## 2. account-1: gap 0.143 interval widths
+
+- Statistic: median over matrices of cap_right(Delta_late, V_s100) = ||Delta_late V_s100||^2 / ||Delta_late||^2, unitless
+- Models: base, RL-Math 3.1 step-100 checkpoint, RL-Math 3.1 final
+- Matrices: all 224 (q, k, v, o, gate, up, down of 32 layers)
+- Computation: For each matrix: D100 = W(step 100) - W(base); Delta_late = W(final) - W(step 100); V_s100 = top-8 right (input-side) singular vectors of D100 from its SVD; cap = ||Delta_late V_s100||_F^2 / ||Delta_late||_F^2. Report the median over the 224 matrices.
+- Account predicts 0.075 [0.055, 0.1]: Sentences 2-4 say steps 100-2,800 write the graded part through the same base-driven inputs the first 100 steps found, so the late update lies in step 100's input subspace far above chance (8/4096 = 0.002), at least as much as another Math run's change does (math30>math31_s100 0.054). The alternative (late training writes new directions, or only the size of the change matters) predicts about the base-spectrum level of 0.01.
+- Adversary predicts 0.065 [0.035, 0.105]: The late change (step 100 to final) makes up about 98.6 % of the final RL-Math 3.1 change by squared norm (median ||D100||^2/||D_final||^2 = 0.014), so cap_right(Delta_late, V_s100) is about the final change's capture by the step-100 top-8 input subspace. I estimate that per matrix from how well Math 3.0 and Code 3.1 fit the step-100 subspace compared with the final one, scaled by RL-Math 3.1's own top-8 share (its capture by its own subspace). The result is well above chance (8/4096 = 0.002) and above base_w (about 0.01), but below the self top-8 share of 0.10. (Per-matrix medians from the cap table: math30>math31_s100 cap_right is 0.054 against math30>math31 0.070, and code31>math31_s100 is 0.025 against code31>math31 0.040. Multiplying each ratio by the math31 top8_share (median 0.100) gives 0.068 and 0.059.)
+
+
+## 3. account-2: gap 0.083 interval widths
+
+- Statistic: median over the 224 matrices of the share of RL-Math 3.1 step-100 change (squared Frobenius norm) inside Code-RL 3.1's top-8 input (right singular) subspace, a fraction
+- Models: base, RL-Math 3.1 step 100, RL-Code 3.1 (final)
+- Matrices: all 224 (q, k, v, o, gate, up, down of 32 layers)
+- Computation: For each matrix: d_s = W(RL-Math 3.1 step 100) - W(base); d_c = W(RL-Code 3.1) - W(base); V_c = top-8 right singular vectors of d_c (truncated SVD); share = ||d_s V_c||_F^2 / ||d_s||_F^2. Report the median over 224 matrices.
+- Account predicts 0.026 [0.02, 0.033]: S1: the input sides are shared across math and code RL and partly in place by step 100. Final Math-like changes sit in Code 3.1's input subspace at ~0.04, and the step-100 change carries ~0.66x the final concentration, which gives ~0.026. An account where step 100 is size-limited noise predicts chance (8/d_in, ~0.002) or the base-spectrum level (~0.009).
+- Adversary predicts 0.028 [0.018, 0.042]: Plain cross-run overlap: any two math/code RL deltas share ~4% of squared norm in each other's top-8 right subspace (far above the 8/4096 chance level, driven by v/o and shared input directions). The step-100 math delta is noisier and less low-rank (top8_share median 0.065 vs 0.10 for final math31), so its capture in code31's subspace is scaled down by roughly 0.65-0.75. (cap_right medians on explore matrices: code31>math31 0.040, math30>code31 0.037, code31>math31_s100 0.025, math30>math31_s100 0.054 vs math30>math31 0.070; top8_share math31_s100 0.065 vs math31 0.100)
+

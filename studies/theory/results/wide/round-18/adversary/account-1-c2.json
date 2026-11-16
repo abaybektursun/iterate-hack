@@ -1,0 +1,7 @@
+{"kind": "other",
+ "alternative": "Host receptivity, not anything about Code 3.1: the math31_s100 delta's top-8 right subspace just catches more of any model's change than the general30_s100 subspace does. So the ratio is set by the two hosts, whatever the source. Measure it with the two other sources in the cap table (math30 and think_sft) and Code 3.1 is not needed. Per matrix, the geometric mean of their ratios gives a median of 3.01 on the explore matrices; the statistic itself is 2.76, and both fall inside [1.9, 3.8].",
+ "tables": ["cap"],
+ "computation": "1) For each cap row, rm = cap['math30>math31_s100']['cap_right'] / cap['math30>general30_s100']['cap_right'] and rt = cap['think_sft>math31_s100']['cap_right'] / cap['think_sft>general30_s100']['cap_right']. 2) g = sqrt(rm * rt) per row. 3) Prediction = median of g over all rows (q, k, v, o, gate, up, down of all layers). Explore: 3.014.",
+ "explore_value": 3.014,
+ "explore_statistic": 2.760,
+ "already_shown": null}

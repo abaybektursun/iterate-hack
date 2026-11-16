@@ -1,0 +1,7 @@
+{"kind": "covariate",
+ "alternative": "Training length / shared pipeline: the 3.1 Math and Code runs share a recipe and start, so their family-median-removed top-8 share patterns already line up after only 100 RL steps (the _s100 checkpoints), before any long task-specific training. General 3.0 comes from a different release. The difference D is therefore set by which pipeline and early steps the models share, not by what the full runs learn. The same statistic computed on the step-100 checkpoints (math31_s100, code31_s100, general30_s100) gives 0.58 on the explore matrices, inside [0.15, 0.82].",
+ "tables": ["top8_share"],
+ "computation": "1) From table top8_share, over the test matrices, take top8_share.math31_s100, top8_share.code31_s100 and top8_share.general30_s100. 2) For each of these keys, subtract from each matrix's value the median of that key over the matrices of the same module family (q,k,v,o,gate,up,down). 3) Spearman rho(math31_s100 residuals, code31_s100 residuals) minus Spearman rho(math31_s100 residuals, general30_s100 residuals), using average ranks for ties. 4) This difference is the predicted D for the full-length models (one number on the statistic's scale).",
+ "explore_value": 0.583,
+ "explore_statistic": 0.468,
+ "already_shown": null}

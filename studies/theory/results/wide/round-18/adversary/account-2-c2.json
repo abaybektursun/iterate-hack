@@ -1,0 +1,11 @@
+{
+ "kind": "covariate",
+ "alternative": "Depth profile plus change size: Math 3.1 and Code 3.1 come from the same 3.1 pipeline and change by similar amounts, so their top-8 shares have the same smooth curve over depth. General 3.0's curve over depth is different. Inside each module family, a model that knows only module, a quadratic in layer and log norm_delta already gives rho(math31,code31) of about 0.89 against rho(math31,general30) of about 0.40. That puts D near 0.49 with no reference to the account's mechanism.",
+ "tables": [
+  "top8_share"
+ ],
+ "computation": "1) For each key k in {math31, code31, general30}, fit by OLS over the 112 explore rows of top8_share: top8_share[k] ~ module dummies (q,k,v,o,gate,up,down, no intercept) + (layer/31) + (layer/31)^2 + ln(norm[k]). 2) Apply these coefficients to each test row of top8_share (its module, its layer, its norm[k]) to get the fitted share fit_k. 3) For each k, subtract from fit_k its median over the test matrices of the same module. 4) D_alt = Spearman(math31 residual, code31 residual) - Spearman(math31 residual, general30 residual). One number. On explore, where the fit is in-sample, D_alt = 0.492. Layer quadratic alone gives 0.519.",
+ "explore_value": 0.4923,
+ "explore_statistic": 0.4677,
+ "already_shown": null
+}
