@@ -1,0 +1,130 @@
+{
+ "status": "done",
+ "config": {
+  "model": null,
+  "model_path": "/tmp/theta",
+  "model_label": "swap12x1.5_math31",
+  "prompt": "cue",
+  "native_tokenizer": null,
+  "set": "hard328",
+  "temperature": 1.0,
+  "top_p": 1.0,
+  "min_p": 0.0,
+  "max_tokens": 16384,
+  "seed": 3010000,
+  "shots": null,
+  "n": null,
+  "shard": null,
+  "samples": 1,
+  "restarts": 0,
+  "out": "/runs/abaybektursun-1115-180829-ce8b",
+  "resume": null,
+  "dry_run": false,
+  "commit": "c689db2ff65d93c9a18ae5a68b96da9014978f08",
+  "model_repo": null,
+  "model_revision": null,
+  "tokenizer": [
+   "allenai/Olmo-3.1-7B-RL-Zero-Math",
+   "364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+  ],
+  "prefix_ids": [
+   1584,
+   2268,
+   33413
+  ],
+  "sampling": {
+   "temperature": 1.0,
+   "top_p": 1.0,
+   "repetition_penalty": 1.0
+  },
+  "seed_rule": "seed + 10000 * sample + 1000 * attempt + index",
+  "n_problems": 328,
+  "shots_arm": null,
+  "shots_sha256": null,
+  "shots_tokens": 0
+ },
+ "commit": "c689db2ff65d93c9a18ae5a68b96da9014978f08",
+ "job_id": "abaybektursun-1115-180829-ce8b+abaybektursun-1115-180850-dfcd",
+ "versions": {
+  "vllm": "0.32.0",
+  "math-verify": "0.9.0",
+  "transformers": "5.19.0",
+  "tokenizers": "0.23.3"
+ },
+ "started_utc": "2026-11-16T00:09:53Z",
+ "updated_utc": "2026-11-16T00:36:27Z",
+ "engine": {
+  "vllm": "0.32.0",
+  "max_num_seqs": 128,
+  "max_num_batched_tokens": 2048,
+  "num_gpu_blocks": 28749,
+  "gpu_memory_utilization": 0.9,
+  "max_model_len": 18432,
+  "load_s": 95.60664010047913,
+  "model_dir": "/tmp/theta",
+  "tok_dir": "/__modal/volumes/vo-rul9XKaAuhEZE7QxFIdPN3/hub/models--allenai--Olmo-3.1-7B-RL-Zero-Math/snapshots/364820b002fc8e81d11a81c7fc9dd6b49c83cd05"
+ },
+ "counts": {
+  "n": 328,
+  "correct_v3": 166,
+  "correct_v1": 165,
+  "cap_hits": 66,
+  "loop_A": 1,
+  "generated_tokens": 2985989,
+  "restarts": 0,
+  "n_planned": 328,
+  "tok_p_lt_1e2": 37229,
+  "tok_p_lt_1e3": 9588,
+  "mean_generated_tokens": 9103.625,
+  "generation_s": 1489.7425653934479,
+  "tokens_per_s": 2449.0932431954157
+ },
+ "memory": {
+  "gpu_memory_used_mib": 73101,
+  "gpu_memory_total_mib": 81559,
+  "gpu": "NVIDIA H100 80GB HBM3"
+ },
+ "wall_s": 1593.9046597480774,
+ "joined_from": [
+  {
+   "job_id": "abaybektursun-1115-180829-ce8b",
+   "shard": "0/2",
+   "counts": {
+    "n": 164,
+    "tok_p_lt_1e2": 18587,
+    "tok_p_lt_1e3": 4820,
+    "correct_v3": 85,
+    "correct_v1": 84,
+    "cap_hits": 32,
+    "loop_A": 0,
+    "generated_tokens": 1499119,
+    "restarts": 0,
+    "n_planned": 164,
+    "mean_generated_tokens": 9140.969512195123,
+    "generation_s": 1489.7425653934479,
+    "tokens_per_s": 1006.2939965765668
+   },
+   "wall_s": 1593.9046597480774
+  },
+  {
+   "job_id": "abaybektursun-1115-180850-dfcd",
+   "shard": "1/2",
+   "counts": {
+    "n": 164,
+    "tok_p_lt_1e2": 18642,
+    "tok_p_lt_1e3": 4768,
+    "correct_v3": 81,
+    "correct_v1": 81,
+    "cap_hits": 34,
+    "loop_A": 1,
+    "generated_tokens": 1486870,
+    "restarts": 0,
+    "n_planned": 164,
+    "mean_generated_tokens": 9066.280487804877,
+    "generation_s": 1030.545312166214,
+    "tokens_per_s": 1442.7992466188489
+   },
+   "wall_s": 1144.7736904621124
+  }
+ ]
+}

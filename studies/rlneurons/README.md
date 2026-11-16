@@ -4905,6 +4905,38 @@ and the xshift job in the script; direction 1 alone is read with `git show d53d5
 - Raw outputs: coherent in every cell (no " which " loops; 0 to 2 answers mostly in CJK). Limits: one sample for `permrest` and
   `swap12`; xshift is float32 on 48 stored base answers. Cost: 10 shard jobs, about 18 USD; smoke `abaybektursun-1115-171457-5619`.
 
+Amendments 1 and 2 (work-cce3c1, work-160a5e): second samples of `permrest` and `swap12` (seed 3010000); shifted pairs scaled to
+RL's layer-24 movement (`perm --scale 12`); directions 3-8 alone (`top8 --skip 2`); a second random draw (`rand8 --seed 1`). Same
+readout; the readout now also gives 99 % intervals, the 4-sample all-8 reference `top8x1.5_s4` (dial15 rows) and a count of
+degenerate answers (rule in `degenerate`: " which " over 5 % of words, over 30 % of characters at or above U+2E80, or `loop_A`).
+Movement sweep: `results/xshift/permscale-01/readout.json` (job `abaybektursun-1115-181246-b2c5`): layer-24 RMS shift of `perm` at
+1.5, 3, 6, 9, 12: 1.76, 3.06, 5.05, 7.13, 9.21; true pairs at 1.5: 9.34. Scale 12 chosen; smoke `abaybektursun-1115-181848-431a`,
+8 of 8 coherent at 1,024 tokens.
+
+| Cell | Samples | Right of 328 | Cap hits | Mean tokens | Degenerate |
+|---|---|---|---|---|---|
+| `permrest` | s0, s1 | 185, 175 | 43, 33 | 8,621, 8,276 | 1, 0 |
+| `swap12` | s0, s1 | 177, 166 | 68, 66 | 9,199, 9,104 | 0, 1 |
+| shifted pairs at 12 (`perm`) | s0 | 101 | 23 | 7,077 | 24 (30 by a looser rule: the last 20 characters repeat 5 times in the last 1,000) |
+| directions 3-8 alone | s0 | 170 | 74 | 9,339 | 0 |
+| random, second draw | s0 | 152 | 74 | 9,048 | 0 |
+
+Differences, points of 328, 95 % [99 %] intervals:
+- `permrest` (2 samples) minus direction 1 alone (2): right -0.9 [-3.7, 1.8] [-4.4, 2.6]; cap hits -0.9 [-3.8, 2.0]. Minus all 8
+  (4 samples): right -6.2 [-9.0, -3.4] [-10.1, -2.5]; cap hits +5.8 [3.2, 8.4].
+- `swap12` (2) minus base (4): right +4.0 [1.3, 6.7] [0.4, 7.6]; cap hits -1.4 [-4.3, 1.5]. Minus all 8 (4): right -8.8
+  [-11.6, -6.1] [-12.5, -5.3]; cap hits +14.6 [11.6, 17.9]. Minus directions 3-8 alone: right +0.5 [-3.0, 3.8] [-4.1, 5.2];
+  cap hits -2.1 [-6.0, 1.7].
+- Shifted pairs at 12 minus base: right -17.5 [-21.7, -13.3] [-23.3, -12.1]; cap hits -14.8 [-19.1, -10.6]. Minus random:
+  right -17.1 [-21.7, -12.5]. At RL's movement the shifted edit cuts cap hits (23, near all 8's
+  25) and loses 57 right answers; many of its stopped answers end in number loops ("881 is 881, which is 881").
+- Second random draw minus the first: right -1.5 [-5.2, 2.1]; cap hits +0.9 [-3.5, 5.3].
+- Predictions: B2 refuted by one problem (`permrest` s1 175, outside 176-188; <= 190 held). C2 refuted (cap hits 66 held; right
+  166 < 169). R-1 held (-17.5 points, not >= +6): matched movement without RL's pairing adds no right answers. R-2: not refuted
+  (difference 7 problems < 12), the within-6 part missed by one problem; pooled `swap12` equals directions 3-8 alone (+0.5). R-3
+  held (152, 74).
+- Cost: 10 shard jobs, 1 xshift job, 2 smoke jobs, about 19 USD.
+
 #### xlisten (specs/SPEC_xlisten.md, work-4846d5): the next layer's weights read RL's written directions 1.67 times an average one, less than the base's own
 
 Branch `sharedsub` only. Weights only, `jobs/xlisten.py`, job `abaybektursun-1115-170332-2668` (smoke on 3 layers:

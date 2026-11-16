@@ -1,0 +1,24 @@
+{
+ "right": {
+  "problem_index": 23,
+  "seed": 3000023,
+  "gold": "021",
+  "extracted_v3": "21",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 10867,
+  "prompt_tail": "ould be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nA right square pyramid with volume $54$ has a base with side length $6.$ The five vertices of the pyramid all lie on a sphere with radius $\\frac mn$, where $m$ and $n$ are relatively prime positive integers. Find $m+n$.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "- 0)^2 + (3 - 0)^2 + k^2} = \\sqrt{18 + k^2}\n\\]\n\nThe distance from the center to the apex \\((3, 3, \\frac{9}{2})\\) is:\n\n\\[\n\\sqrt{(k - \\frac{9}{2})^2}\n\\]\n\nEquating these distances and squaring both sides:\n\n\\[\n18 + k^2 = (k - \\frac{9}{2})^2\n\\]\n\nExpanding and simplifying:\n\n\\[\n18 + k^2 = k^2 - 9k + \\frac{81}{4} \\implies 18 = -9k + \\frac{81}{4} \\implies 72 = -36k + 81 \\implies -36k = -9 \\implies k = \\frac{1}{4}\n\\]\n\nThus, the center of the sphere is \\((3, 3, \\frac{1}{4})\\). The radius squared is:\n\n\\[\nsqrt{18 + \\left(\\frac{1}{4}\\right)^2} = \\sqrt{18 + \\frac{1}{16}} = \\sqrt{\\frac{289}{16}} = \\frac{17}{4}\n\\]\n\nThe radius is \\(\\frac{17}{4}\\), where the numerator is 17 and the denominator is 4. These are relatively prime, so \\(m = 17\\) and \\(n = 4\\). Therefore, \\(m + n = 17 + 4 = 21\\).\n\n\\[\n\\boxed{21}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 0,
+  "seed": 3000000,
+  "gold": "116",
+  "extracted_v3": "1996",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 3115,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "-747 - (-458) \\implies 4b = -789 \\implies b = -189.75\n   \\]\n4. Substituting \\( b = -189.75 \\) back:\n   \\[\n   16(-189.75) + c = -458 \\implies -3036 + c = -458 \\implies c = 2578\n   \\]\nThus, \\( P(0) = 2578 \\).\n\nFor \\( Q(x) = -2x^2 + dx + e \\):\n1. Substituting (16, 54):\n   \\[\n   -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n   \\]\n2. Substituting (20, 53):\n   \\[\n   -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n   \\]\n3. Subtracting equations:\n   \\[\n   (20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = 71.75\n   \\]\n4. Substituting \\( d = 71.75 \\) back:\n   \\[\n   16(71.75) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n   \\]\nThus, \\( Q(0) = -582 \\).\n\nTherefore, \\( P(0) + Q(0) = 2578 + (-582) = 1996 \\).\n\n\\[\n\\boxed{1996}\n\\]"
+ }
+}
