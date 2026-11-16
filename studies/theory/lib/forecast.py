@@ -1295,7 +1295,7 @@ def synthesis(folder, sources):
                     "self-marked contradicts": [x["mark"] for x in a["marks"]].count("contradicts"), **{f"new {v}": own.count(v) for v in verdicts},
                     "new rejected": sum(p["owner"] == n and "rejected" in p for p in plans), "denials held": den.count("holds"),
                     "denials refuted": den.count("refuted"), "score": own.count("holds") + den.count("holds") - mk.count("contradicts")}
-    ranked = sorted(score, key=lambda n: (-score[n]["score"], score[n]["contradicts"]))
+    ranked = sorted(score, key=lambda n: (-score[n]["score"], score[n]["contradicts"], score[n]["new refuted"] + score[n]["denials refuted"]))
     cols = list(score[ranked[0]]) if ranked else []
     md = [f"# Synthesis, {folder.name} (version 16)\n\nWritten {now()} UTC. {len(facts)} direct facts; {len(names)} accounts kept of {ACCOUNTS}"
           f"{' (dropped: ' + ', '.join(x['account'] for x in dropped if not x.get('cell_only')) + ')' if any(not x.get('cell_only') for x in dropped) else ''}. "
@@ -1306,7 +1306,7 @@ def synthesis(folder, sources):
 
     def row_md(m):
         r = rows[m]
-        return f"measured {r['measured']}; adversary {r.get('adversary')}; {r['verdict']} ({r['result']})"
+        return f"measured {r['measured']}; adversary's value {r['adversary']:.4g}; {r['verdict']} ({r['result']})"
     for n in ranked:
         a, marks = accounts[n], json.loads((folder / f"marks-{n}.json").read_text())["marks"]
         md.append(f"\n## {n}\n\n" + " ".join(a["account"]) + "\n\nContradicts (blind marker): "

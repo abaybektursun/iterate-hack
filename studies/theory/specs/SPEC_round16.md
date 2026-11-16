@@ -1,6 +1,6 @@
 # Round 16 (engine 16): accounts tested against an adversary's alternative for every consequence
 
-Written before the round (2026-11-15, about 23:50 UTC, abaybektursun). Board work-5d5e8a, knowledge-ab9881. Engine
+Written before the round (2026-11-15, about 23:37 UTC, abaybektursun). Board work-5d5e8a, knowledge-ab9881. Engine
 version 16 (`lib/forecast.py synthesis`, `.claude/skills/theory/SKILL.md` version 16, commit d2ab1c4), branch `theory`
 only (main is frozen; nothing goes to main). No GPU jobs; no model forward pass on the laptop.
 

@@ -1614,6 +1614,132 @@ wrote their own nulls and marked their own facts, and the three accounts barely 
    and the facts, not the account's marks): `marks-<account>.json`. The account's own count is shown beside it.
 5. Score = consequences and denials that hold minus the marker's contradictions.
 
+## Round 16 (engine 16, accounts tested against an adversary's alternative)
+
+Plan `specs/SPEC_round16.md`. Board work-5d5e8a, knowledge-ab9881. Branch `theory` only (main is frozen). Command (run
+twice: to the gate, then for `synthesis.md`):
+
+```
+PYTHONUNBUFFERED=1 uv run studies/theory/lib/forecast.py synthesis studies/theory/results/wide/round-16 --from studies/theory/results/wide/round-15 studies/theory/results/wide/round-14 studies/theory/results/wide/round-13 studies/theory/results/wide/round-12 studies/theory/results/wide/round-11 studies/theory/results/wide/round-10 studies/theory/results/wide/round-09 studies/theory/results/forecast/run-0{2,3,4,5,6,7,8} studies/theory/results/forecast/cells-01
+```
+
+**Answer.** No consequence of any account holds against its adversary: of 9 consequences, 0 hold, 1 is not
+separated, 2 are refuted and 6 are undecided. Of the 4 denials, 3 were decided, and every one went against the account
+that denied. Under the new rule, round 15's audited consequences (merge328, s100vote, d1) are all not separated.
+
+**Minutes per stage** (`run.json`, `round16.log`). Start 23:39:19. standing 2.3 (101 mechanisms, 36 carried); direct
+facts 0.0 (53 facts, 17 hold); account-1 8.2, account-2 9.9, account-3 6.5 (in sequence, none sent back, none dropped);
+markers and 9 adversaries 1.6 (in parallel, 37 to 98 s each); gate at 00:07:51, 28.5 minutes after the start (round 15:
+12.8, with the accounts in parallel). Nine offline tests ran in 9 opus agents at once, 1.8 to 4.1 minutes each; last
+row 00:12:41. Whole round 33.5 minutes. The round-15 retest (one agent, 4.7 minutes) ran while account-1 was written.
+
+**Fixes.** (1) `synthesis.md` broke score ties by file order; now fewer marker contradictions, then fewer
+refutations. It also printed the adversary's value twice; now once. (2) Not fixed: three tests (a1/c1, a3/c1, a3/c2)
+found that the "deliberative opening" flag of result-1f98b0 misreads answers that echo prompt text with `$`, `=` or
+"Answer" before "Okay" (114 of 200 and 86 of 151 "non-deliberative" samples are deliberative). The accounts built
+statistics on a flag that no planted failure had checked.
+
+Best account, account-1 (score 0: 3 undecided, 0 refuted, 0 contradictions from the marker; it ranks first only on
+the tie-break), quoted in full:
+
+> RL-Zero's weight change is small (0.24 % of the base's weight norm) and, as in every on-policy RL run whatever the
+> reward (top-8 share of each matrix's change: LM-judge General 0.127, Math 0.118-0.135, against 0.030 for
+> imitation-trained Think-SFT), concentrated in 8 input-output pairs per matrix whose inputs are directions the base's
+> own activations already drive strongly in any step-by-step text (8-11x a random subspace; code text 0.87 as much as
+> math), which is why Think-SFT's diffuse change also sits there (4.8x chance) and why Math's per-matrix concentration
+> pattern follows Think-SFT's (rho 0.59) and not IF-RL's (-0.01). The base's later layers amplify those pairs (95x a
+> random edit's residual shift, and only while each input stays paired with its own reward-specific output), and in
+> every sample they do two graded things: they raise the probability that the answer opens and stays in the base's own
+> deliberative mode ('Okay', 'Wait'; near 1 for Math's pairs at 1x, 427 against plain 224 of 500, only partly for
+> Code's pairs, whose unswitched answers look like plain-base answers), and they lower the per-step slip and cap-hit
+> rates, which adds right answers even where the base finishes wrong (+13.5 points). At 1.5x, which stands in for the
+> diffuse 88 % of the change left out (not for a bf16 loss: the written change is 0.99996 of the intended one), the 8
+> pairs reproduce RL per sample, under the vote and past the base's reach (456 against 457 on MATH-500; 200.25 against
+> 200.0, vote 216.25 against 215.92, and 0.88 of RL's lift on hard328 problems the base never solves), but they carry
+> RL's gains, not its losses: where RL fails problems the base solves, the edit passes at the base's resample rate
+> (code 0.45 against 0.44, RL 0.22). Inference gets the first part almost free because the mode is already in the base:
+> a three-token cue, a self-chosen 'Okay' opening or a one-tensor hand edit gives 397-411 of 500, the level of RL step
+> 100 (417.5, same cap-hit rate, same +7-point vote gain, right answers only 15 % longer), which holds the mode in most
+> samples but not all, so the cue still adds +8.5 problems there. The second part inference recovers only by
+> selection, which works because the base's slips are chance events whose wrong answers split (same-problem agreement
+> 0.26, so a right answer held by under half the samples still wins the plurality), so votes over 4-12 samples recover
+> RL's reliability on problems the base solves at least once (81 % of the MATH-500 gap; a vote over 6 equals one RL
+> sample), provided sampling keeps the base's long right routes (T 1.0, not T 0.6 where 52-63 % of long answers loop,
+> and no 4,096-token cap). Selection cannot reach problems the base never solves (it has no right sample on 26 of the
+> 36 hard328 problems RL's vote wins), so the cued base's vote stays 8.8 points under RL on the 328 while the 1.5x
+> edit, which lowers the slip rate there too, does not.
+
+**Fact marks from the blind markers** (`marks-account-<k>.json`; the account's own marks in brackets). account-1 28
+explained, 25 not addressed, 0 contradicts (own 43 / 10 / 0). account-2 31 / 21 / 1 (own 38 / 14 / 1). account-3 32 /
+21 / 0 (own 40 / 13 / 0). The markers count far fewer facts as explained (8 to 15 fewer per account). They found no
+contradiction that an account had hidden: the only one is F29, which account-2 itself named (direction 1 alone adds
++7.2 [0.7, 13.6] of right answers where the base finished wrong, which goes against its sentence that direction 1
+mostly sets stopping).
+
+**Tests** (specs `specs/SPEC_direct_r16<a><c>.md`, scripts `analysis/direct_r16<a><c>.py`, outputs
+`results/direct/r16<a><c>-01/`; rows in `results/direct_tested.json`; the verdict is recomputed by `verdict16`). The
+adversary's value was computed first in every test. Denied consequences are listed first.
+
+| test | statistic | ranges | adversary's value (alternative) | measured [90 %], n | verdict |
+|---|---|---|---|---|---|
+| a1/c1 r16a1c1, result-f89757 | step-100 cue right rate minus non-deliberative step-100 plain right rate, MATH-500 | a1 [0.15, 0.75]; a2 denies [-0.10, 0.12] | 0.534 (answer-first format: the base's T1-minus-T3 gap plus the cue's step-100 gain) | 0.175 [0.120, 0.230], n 174 | a1 undecided; a2 refuted (low end 0.1202 just above 0.12) |
+| a1/c2 r16a1c2, result-0f40ff | m21 deliberative minus non-deliberative right rate, problems the cued base solves | a1 [0.20, 0.65]; a2 denies [-0.10, 0.17] | 0.498 (the same split in the plain base's T3 answers, no edit) | 0.574 [0.478, 0.665], n 201 | a1 undecided (top past 0.65, also contains the adversary's value); a2 refuted |
+| a2/c2 r16a2c2, result-088836 | wrong-answer agreement with RL: N(edit, RL) - N(cued base, RL), hard328 | a2 [0.08, 0.60]; a3 denies [-0.10, 0.07] | 0.151 (accuracy: Think-SFT + cue in place of the edit) | 0.286 [0.133, 0.444], n 118 | a2 not separated; a3 refuted |
+| a2/c3 r16a2c3, result-13c355 | the same on fresh2026 | a2 [0.08, 0.60]; a3 denies [-0.10, 0.07] | 0.017 (accuracy, Think-SFT + cue; n 32) | 0.179 [-0.033, 0.334], n 69 | both undecided |
+| a1/c3 r16a1c3, result-f861f7 | rho(Code, Think-SFT) - rho(Code, IF-RL) of per-matrix top-8 share | a1 [0.15, 1.0] | 0.481 (Code tracks Math 3.1: rho(Code, Math) 0.796 x Math's own 0.604) | 0.265 [0.126, 0.402], n 224 matrices | undecided |
+| a2/c1 r16a2c1, result-54d454 | Think-SFT's left/right capture in Math 3.1's top-8 over Math 3.0's | a2 [0.05, 0.70] | 1.63 (Think-SFT's output capture at chance) | 2.40 [2.16, 2.61], n 224 | refuted |
+| a3/c1 r16a3c1, result-739c31 | non-deliberative step-100 plain right minus plain base T3 right | a3 [0.10, 0.38] | 0.473 (accuracy: all step-100 samples, any opening) | 0.359 [0.272, 0.444], n 131 | undecided |
+| a3/c2 r16a3c2, result-9cf361 | m21 minus T3 right where both are non-deliberative | a3 [0.10, 0.40] | 0.352 (m21 is more accurate, opening ignored) | 0.105 [-0.013, 0.224], n 76 | undecided |
+| a3/c3 r16a3c3, result-9f2b30 | Code 3.1's left/right capture over Think-SFT's in Math 3.1's top-8 | a3 [1.4, 8.0] | 0.589 (the same ratio against RL-General's top-8) | 0.492 [0.442, 0.553], n 224 | refuted (also below the null [0.8, 1.2]) |
+
+The adversary's value lay inside the measured interval in 2 of 9 tests (a1/c2, a2/c2). In the other 7 the alternative
+was itself wrong: the adversaries could not read the stored rows, so they guessed. Five of the 9 consequences are
+undecided because the interval crosses an edge of the account's range: the ranges were narrower than the data's noise.
+
+**Denials: who was right.** account-2 denied a1/c1 and a1/c2, saying the step-100 and m21 answers that skip the
+deliberative opening carry the RL shift anyway, so opening type says little about rightness. Both denials were refuted:
+opening type still separates right from wrong (+0.175 and +0.574), although by less than account-1's ranges needed in
+c1 and more in c2. account-3 denied a2/c2 and a2/c3, saying the edit and RL share no wrong-answer preference beyond
+accuracy. a2/c2 refuted the denial (0.286 [0.133, 0.444]), but accuracy alone (Think-SFT + cue) predicts 0.151, inside
+the interval, so account-2 did not win either. a2/c3 is undecided. So the earlier account was closer in every decided
+denial, but no denial decided an account's claim against the adversary.
+
+**Round 15 under the new rule** (`results/direct/retest15-01/`, result-61c569, branch `syn-retest15` merged): merge328
+0.109 [0.078, 0.142], n 88, adversary's value 0.102 (shared wrong values at the measured pair agreement 0.218): not
+separated (fully independent wrong answers give 0.139, also inside). s100vote +7.18 [6.03, 8.37], n 500, adversary's
+value +6.24 (final RL's vote gain per right count, weighted by step 100's): not separated. edit0of4: rejected, the same
+rows and files as d1 (one measurement, one credit). d1 0.880 [0.686, 1.132], n 120, adversary's value 1.006 (S from
+overall hard328 accuracy alone: edit 0.611, RL 0.610, cued base 0.483): not separated. Round 15's 6 holds become 3
+(hostcap, t3open and editvote, which had no adversary).
+
+**The GPU cell account-1 proposes (not run).** The untrained base, plain prompt, with a different deliberative
+opening prefilled (' Hmm, let me work through this carefully.' instead of the cue), first 164 hard328 problems, 1
+sample, T 1.0 / top-p 1.0, cap 16,384, seeds 3000000 + index, grader v3: predicted 65 [55, 76] right of 164 (the cued
+base scored 65 on these problems and seeds; plain base about 35), 60 GPU minutes. Wrap the command in `tools/gpu.py
+submit l40s --hours 2 -- "bash studies/rlneurons/jobs/setup_vllm.sh && ..."` and run `free_cell.py` for a minute with
+`--n 4` first: `python -m studies.theory.jobs.free_cell --model base --opening-text ' Hmm, let me work through this
+carefully.' --set hard328 --n 164 --temperature 1.0 --top-p 1.0 --samples 1 --seed 3000000 --commit COMMIT_SHA`.
+
+**SPEC_round16 hypotheses.** H1 (2 consequences of one account hold against the adversary): refuted, 0 hold. H2 (at
+least 2 not separated): refuted, 1 (a2/c2). The adversaries' values missed in 7 of 9, so the bar was rarely the
+binding one. H3 (at least 4 testable disagreements): holds, exactly 4 denials, which is the code's minimum. H4 (at
+least 2 denials decided): holds, 3 decided, all against the denier. H5 (blind markers stricter than self-marking for
+2 of 3 accounts): holds for 3 of 3 on "explained" (8 to 15 fewer); there were no new contradictions. H6 (round 15's
+three audited consequences lose credit): holds, merge328 and s100vote not separated, edit0of4 rejected, and d1 also not
+separated. H7 (gate under 35 minutes): holds, 28.5.
+
+**What the round shows.** Once the adversary rule applies, no account earns a hold. The accounts' new
+consequences either fail (2 refuted), sit at a range edge (5 undecided), or are matched by accuracy alone (a2/c2, and
+round 15's three). The sequence made the accounts deny each other, but all 3 decided denials lost: the later accounts
+denied for the sake of denying, against claims the data supports in direction. Two engine faults showed up: the
+adversaries guess without data, and the accounts' ranges and the opening flag were never checked against the stored
+rows' noise and instrument.
+
+Files in `results/wide/round-16/`: `standing.md` / `standing.json` / `standing/`, `graveyard.json`,
+`direct_facts.json`, `synthesis_facts.json` (F01-F53), `account-1.json` to `account-3.json` (and `jobs/`),
+`marks-account-<k>.json`, `adversary/account-<k>-c<j>.json`, `synthesis_tests.md` / `.json`, `synthesis.md`,
+`run.json`, `round16.log`.
+
 ## Theories
 
 Status after round 04. Full text in `results/engine/round-04/theories/<name>.json` for the round-04 theories, in

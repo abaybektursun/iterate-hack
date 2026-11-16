@@ -75,3 +75,69 @@ job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-5yn
   synthesis_marks/account-3 (opus): done in 93 s
   synthesis_marks/account-2 (opus): done in 98 s
   gate: 13 mechanisms without a row (round-16/account-1/c1, round-16/account-2/deny-account-1-c1, round-16/account-1/c2, round-16/account-2/deny-account-1-c2, round-16/account-2/c2, round-16/account-3/deny-account-2-c2, round-16/account-2/c3, round-16/account-3/deny-account-2-c3, round-16/account-1/c3, round-16/account-2/c1, round-16/account-3/c1, round-16/account-3/c2, round-16/account-3/c3): run the tests from studies/theory/results/wide/round-16/synthesis_tests.md, add rows, rerun
+== direct facts
+  53 direct facts (17 hold)
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-ck76dq5x
+405 items before 9999, 0 at or after
+== synthesis: account-1
+  skip synthesis/account-1: its outputs exist
+== synthesis: account-2, sees account-1
+  skip synthesis/account-2: its outputs exist
+== synthesis: account-3, sees account-1, account-2
+  skip synthesis/account-3: its outputs exist
+== blind markers and adversaries
+  skip synthesis_marks/account-1: its outputs exist
+  skip synthesis_marks/account-2: its outputs exist
+  skip synthesis_marks/account-3: its outputs exist
+  skip synthesis_adversary/account-1-c1: its outputs exist
+  skip synthesis_adversary/account-1-c2: its outputs exist
+  skip synthesis_adversary/account-1-c3: its outputs exist
+  skip synthesis_adversary/account-2-c1: its outputs exist
+  skip synthesis_adversary/account-2-c2: its outputs exist
+  skip synthesis_adversary/account-2-c3: its outputs exist
+  skip synthesis_adversary/account-3-c1: its outputs exist
+  skip synthesis_adversary/account-3-c2: its outputs exist
+  skip synthesis_adversary/account-3-c3: its outputs exist
+== synthesis.md
+# Synthesis, round-16 (version 16)
+
+Written 2026-11-16T00:12:48 UTC. 53 direct facts; 3 accounts kept of 3. Score = consequences and denials that hold against the adversary's value minus facts the blind marker marks as contradicting the account. Fact marks are the blind marker's (`marks-<account>.json`); the account's own count of contradictions is shown beside them.
+
+| account | explained | not addressed | contradicts | self-marked contradicts | new holds | new not separated | new refuted | new undecided | new rejected | denials held | denials refuted | score |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| account-1 | 28 | 25 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 0 |
+| account-3 | 32 | 21 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 1 | 0 |
+| account-2 | 31 | 21 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 0 | 2 | -1 |
+== direct facts
+  53 direct facts (17 hold)
+job dirs under /var/folders/9j/yjj9b3jj47v01_299q09_nc40000gn/T/theory-round-abyv0j0n
+405 items before 9999, 0 at or after
+== synthesis: account-1
+  skip synthesis/account-1: its outputs exist
+== synthesis: account-2, sees account-1
+  skip synthesis/account-2: its outputs exist
+== synthesis: account-3, sees account-1, account-2
+  skip synthesis/account-3: its outputs exist
+== blind markers and adversaries
+  skip synthesis_marks/account-1: its outputs exist
+  skip synthesis_marks/account-2: its outputs exist
+  skip synthesis_marks/account-3: its outputs exist
+  skip synthesis_adversary/account-1-c1: its outputs exist
+  skip synthesis_adversary/account-1-c2: its outputs exist
+  skip synthesis_adversary/account-1-c3: its outputs exist
+  skip synthesis_adversary/account-2-c1: its outputs exist
+  skip synthesis_adversary/account-2-c2: its outputs exist
+  skip synthesis_adversary/account-2-c3: its outputs exist
+  skip synthesis_adversary/account-3-c1: its outputs exist
+  skip synthesis_adversary/account-3-c2: its outputs exist
+  skip synthesis_adversary/account-3-c3: its outputs exist
+== synthesis.md
+# Synthesis, round-16 (version 16)
+
+Written 2026-11-16T00:13:22 UTC. 53 direct facts; 3 accounts kept of 3. Score = consequences and denials that hold against the adversary's value minus facts the blind marker marks as contradicting the account. Fact marks are the blind marker's (`marks-<account>.json`); the account's own count of contradictions is shown beside them.
+
+| account | explained | not addressed | contradicts | self-marked contradicts | new holds | new not separated | new refuted | new undecided | new rejected | denials held | denials refuted | score |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| account-1 | 28 | 25 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0 | 0 |
+| account-3 | 32 | 21 | 0 | 0 | 0 | 0 | 1 | 2 | 0 | 0 | 1 | 0 |
+| account-2 | 31 | 21 | 1 | 1 | 0 | 1 | 1 | 1 | 0 | 0 | 2 | -1 |

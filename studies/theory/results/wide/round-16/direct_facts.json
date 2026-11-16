@@ -182,6 +182,41 @@
   "result": "result-b90743"
  },
  {
+  "mechanism": "round-16/account-2/c1",
+  "claim": "The input side of RL top-8 pairs is fixed by base activations and the output side by the reward, so Think-SFT sits in Math 3.1 top-8 subspace much less on the output side than the input side, relative to Math 3.0 (Q in [0.05, 0.7]).",
+  "verdict": "refuted",
+  "measured": "2.4001 [2.164, 2.6121], n 224, adversary value 1.6261",
+  "result": "result-54d454"
+ },
+ {
+  "mechanism": "round-16/account-3/c3",
+  "claim": "On-policy RL shares the output side of the deliberation pairs whatever the reward while Think-SFT overlaps only the driven inputs, so relative to its input-side capture Code-RL 3.1 sits on Math 3.1 top-8 output side far more than Think-SFT (Q_C in [1.4, 8.0]).",
+  "verdict": "refuted",
+  "measured": "0.492 [0.442, 0.553], n 224, adversary value 0.589",
+  "result": "result-9f2b30"
+ },
+ {
+  "mechanism": "round-16/account-2/deny-account-1-c2",
+  "claim": "Code's pairs at 1x shift every sample by a graded amount, so on cued-solved problems m21's deliberative and non-deliberative answers differ little, G in [-0.10, 0.17].",
+  "verdict": "refuted",
+  "measured": "0.574 [0.478, 0.665], n 201, adversary value 0.498",
+  "result": "result-0f40ff"
+ },
+ {
+  "mechanism": "round-16/account-3/deny-account-2-c2",
+  "claim": "Under S3 the edit and RL only lower the chance-slip rate, so N(E,R) equals N(B,R) and D lies in [-0.10, 0.07].",
+  "verdict": "refuted",
+  "measured": "0.286 [0.133, 0.444], n 118, adversary 0.151",
+  "result": "result-088836"
+ },
+ {
+  "mechanism": "round-16/account-2/deny-account-1-c1",
+  "claim": "After 100 RL steps the shift is graded and present in every sample, so the step-100 cue samples beat the non-deliberative plain samples by little (D1 in [-0.10, 0.12]).",
+  "verdict": "refuted",
+  "measured": "0.175 [0.120, 0.230], n 174, adversary value 0.534",
+  "result": "result-f89757"
+ },
+ {
   "mechanism": "round-10/weights-m03",
   "claim": "Think-SFT's own weight change lies along RL-Math 3.1's top-8 input directions at least 2x more than a random rank-8 subspace (sharpened: and 1.5x more than the top-8 input subspaces of IF-RL, General-RL and the base matrix)",
   "verdict": "holds",
@@ -502,5 +537,117 @@
   "verdict": "holds",
   "measured": "S = (E - B) / (R - B) = 0.88 [0.69, 1.13] (90 % bootstrap), n 120 problems (480 edit samples), null value 0 (null range [-0.15, 0.08]), range [0.60, 1.40]: the interval lies wholly inside it. R - B 0.104 [0.065, 0.146]; edit minus RL -0.013 [-0.037, 0.010]. Supersedes editreach-01 (result-fe30d5)",
   "result": "result-b90743"
+ },
+ {
+  "mechanism": "round-15/account-2/c1@16",
+  "claim": "Cued-base wrong answers on hard328 are independent one-off slips that scatter, so a vote of 4 with the real wrong answers is right more often than with every finished wrong answer merged into one (D 0.06 to 0.40).",
+  "verdict": "not separated",
+  "measured": "D = 0.109 [0.078, 0.142] (90 % bootstrap over problems), n 88; adversary (wrong answers are shared attractor values at the measured pair agreement 0.218 of 257 pairs, q 0.467, 2,000 simulations) 0.102; fully independent wrong answers would give 0.139",
+  "result": "result-61c569"
+ },
+ {
+  "mechanism": "round-15/account-2/c2@16",
+  "claim": "RL step 100 plain on MATH-500 gains as much from a vote over its 4 samples (vote right minus mean single-sample right) as the cued base does, 5 to 10 points, not as little as final RL.",
+  "verdict": "not separated",
+  "measured": "G = +7.18 points [6.03, 8.37] (90 % bootstrap over problems), n 500; adversary (final RL's vote gain per right count k, weighted by step 100's k distribution) +6.24, inside the interval; G minus adversary +0.95 [-0.09, 2.00]",
+  "result": "result-61c569"
+ },
+ {
+  "mechanism": "round-15/account-2/d1@16",
+  "claim": "The 1.5x top-8 edit lowers the per-step slip rate the way RL does, so on hard328 problems outside the cued base's 4-sample reach it captures most or all (0.60-1.40) of RL plain's per-sample advantage over a fresh base sample.",
+  "verdict": "not separated",
+  "measured": "S = (E - B) / (R - B) = 0.880 [0.686, 1.132] (90 % bootstrap over problems), n 120; adversary (S from overall hard328 accuracy alone: edit 0.611, RL 0.610, cued base 0.483) 1.006. edit0of4 (c3) is the same measurement on the same rows: no separate row",
+  "result": "result-61c569"
+ },
+ {
+  "mechanism": "round-16/account-2/c1",
+  "claim": "The input side of RL top-8 pairs is fixed by base activations and the output side by the reward, so Think-SFT sits in Math 3.1 top-8 subspace much less on the output side than the input side, relative to Math 3.0 (Q in [0.05, 0.7]).",
+  "verdict": "refuted",
+  "measured": "2.4001 [2.164, 2.6121], n 224, adversary value 1.6261",
+  "result": "result-54d454"
+ },
+ {
+  "mechanism": "round-16/account-1/c3",
+  "claim": "Where the RL change concentrates is set by which matrices step-by-step text drives, so Code-RL 3.1's family-median-removed per-matrix top-8 share pattern follows Think-SFT's (as Math 3.1's does) and not IF-RL's.",
+  "verdict": "undecided",
+  "measured": "D3 0.265 [0.126, 0.402], n 224 matrices, adversary value 0.481",
+  "result": "result-f861f7"
+ },
+ {
+  "mechanism": "round-16/account-3/c3",
+  "claim": "On-policy RL shares the output side of the deliberation pairs whatever the reward while Think-SFT overlaps only the driven inputs, so relative to its input-side capture Code-RL 3.1 sits on Math 3.1 top-8 output side far more than Think-SFT (Q_C in [1.4, 8.0]).",
+  "verdict": "refuted",
+  "measured": "0.492 [0.442, 0.553], n 224, adversary value 0.589",
+  "result": "result-9f2b30"
+ },
+ {
+  "mechanism": "round-16/account-1/c2",
+  "claim": "On cued-solved problems, m21 answers that open deliberatively are right at about the cued base's rate and the others at about the plain base's rate, a gap G in [0.20, 0.65].",
+  "verdict": "undecided",
+  "measured": "0.574 [0.478, 0.665], n 201, adversary value 0.498",
+  "result": "result-0f40ff"
+ },
+ {
+  "mechanism": "round-16/account-2/deny-account-1-c2",
+  "claim": "Code's pairs at 1x shift every sample by a graded amount, so on cued-solved problems m21's deliberative and non-deliberative answers differ little, G in [-0.10, 0.17].",
+  "verdict": "refuted",
+  "measured": "0.574 [0.478, 0.665], n 201, adversary value 0.498",
+  "result": "result-0f40ff"
+ },
+ {
+  "mechanism": "round-16/account-3/c2",
+  "claim": "An m21 answer (base + Code-RL top-8 at 1x, plain) that does not open deliberatively is still right more often than the plain base's non-deliberative answer to the same problem, by 0.1-0.4.",
+  "verdict": "undecided",
+  "measured": "0.105 [-0.013, 0.224], n 76, adversary value 0.352",
+  "result": "result-9cf361"
+ },
+ {
+  "mechanism": "round-16/account-2/c2",
+  "claim": "The 1.5x edit carries RL's re-ranking of routes, so where both fail its normalized wrong-answer agreement with RL exceeds the cued base's by 0.08-0.6.",
+  "verdict": "not separated",
+  "measured": "0.286 [0.133, 0.444], n 118, adversary 0.151",
+  "result": "result-088836"
+ },
+ {
+  "mechanism": "round-16/account-3/deny-account-2-c2",
+  "claim": "Under S3 the edit and RL only lower the chance-slip rate, so N(E,R) equals N(B,R) and D lies in [-0.10, 0.07].",
+  "verdict": "refuted",
+  "measured": "0.286 [0.133, 0.444], n 118, adversary 0.151",
+  "result": "result-088836"
+ },
+ {
+  "mechanism": "round-16/account-2/c3",
+  "claim": "The 1.5x top-8 edit shares RL's route re-ranking, so on fresh2026 problems where edit, RL and cued base all fail, the edit's wrong answers are closer to RL's than the base's are after normalizing each model's own concentration (D_fresh in [0.08, 0.6]).",
+  "verdict": "undecided",
+  "measured": "0.179 [-0.033, 0.334], n 69, adversary value 0.0168",
+  "result": "result-13c355"
+ },
+ {
+  "mechanism": "round-16/account-3/deny-account-2-c3",
+  "claim": "The edit has no route preference beyond fewer slips, so its normalized wrong-answer agreement with RL on fresh2026 is no higher than the cued base's (D_fresh in [-0.10, 0.07]).",
+  "verdict": "undecided",
+  "measured": "0.179 [-0.033, 0.334], n 69, adversary value 0.0168",
+  "result": "result-13c355"
+ },
+ {
+  "mechanism": "round-16/account-3/c1",
+  "claim": "By step 100 the hold-on shift is partly in the weights, so a step-100 plain sample that does not open deliberatively is right more often than the plain base T3 answer on the same problem, by less than the full cue gain (D in [0.10, 0.38]).",
+  "verdict": "undecided",
+  "measured": "0.359 [0.272, 0.444], n 131, adversary value 0.473",
+  "result": "result-739c31"
+ },
+ {
+  "mechanism": "round-16/account-1/c1",
+  "claim": "At RL step 100 the plain samples that do not open deliberatively are unswitched plain-base answers, so on the same problem the cued step-100 model is right far more often than they are.",
+  "verdict": "undecided",
+  "measured": "0.175 [0.120, 0.230], n 174, adversary value 0.534",
+  "result": "result-f89757"
+ },
+ {
+  "mechanism": "round-16/account-2/deny-account-1-c1",
+  "claim": "After 100 RL steps the shift is graded and present in every sample, so the step-100 cue samples beat the non-deliberative plain samples by little (D1 in [-0.10, 0.12]).",
+  "verdict": "refuted",
+  "measured": "0.175 [0.120, 0.230], n 174, adversary value 0.534",
+  "result": "result-f89757"
  }
 ]
