@@ -1,0 +1,36 @@
+[
+ {
+  "mechanism": "round-16/account-1/c2",
+  "claim": "On cued-solved problems, m21 answers that open deliberatively are right at about the cued base's rate and the others at about the plain base's rate, a gap G in [0.20, 0.65].",
+  "result": "result-0f40ff",
+  "verdict": "undecided",
+  "measured": "0.574 [0.478, 0.665], n 201, adversary value 0.498",
+  "interval": [
+   0.47779466911576873,
+   0.6653481600542775
+  ],
+  "range": [
+   0.2,
+   0.65
+  ],
+  "adversary": 0.49770525242223357,
+  "n": 201
+ },
+ {
+  "mechanism": "round-16/account-2/deny-account-1-c2",
+  "claim": "Code's pairs at 1x shift every sample by a graded amount, so on cued-solved problems m21's deliberative and non-deliberative answers differ little, G in [-0.10, 0.17].",
+  "result": "result-0f40ff",
+  "verdict": "refuted",
+  "measured": "0.574 [0.478, 0.665], n 201, adversary value 0.498",
+  "interval": [
+   0.47779466911576873,
+   0.6653481600542775
+  ],
+  "range": [
+   -0.1,
+   0.17
+  ],
+  "adversary": 0.49770525242223357,
+  "n": 201
+ }
+]
