@@ -194,6 +194,10 @@ TABLE = {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.RATIO:.0f}×", "the shift",
                              f"of the activations at layer 24 (root mean square): 8 RL directions {m.DATA['edits']['top8_math31']['rms_shift']:.2f}, 8 random directions of equal weight norm {m.DATA['edits']['rand8_math31']['rms_shift']:.3f}"]},
+    "past-the-base-reach": {
+        "group": WEIGHTS,
+        "figure": lambda m: [f"{m.DATA['edit']} of {m.DATA['samples']}", "samples right",
+                             f"on {m.DATA['n']} harder problems where Base + cue got 0 of 4 right: Base + 8 RL directions; RL {m.DATA['rl']} of {m.DATA['samples']}, a fresh Base + cue sample {m.DATA['fresh']} of {m.DATA['n']}; nearly half of the base's failures there are cut-off answers"]},
     "the-base-amplifies-rl": {
         "group": WEIGHTS,
         "figure": lambda m: [f"{m.HEADLINE}×", "growth",
