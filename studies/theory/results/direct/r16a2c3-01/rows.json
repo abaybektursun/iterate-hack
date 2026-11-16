@@ -1,0 +1,36 @@
+[
+ {
+  "mechanism": "round-16/account-2/c3",
+  "claim": "The 1.5x top-8 edit shares RL's route re-ranking, so on fresh2026 problems where edit, RL and cued base all fail, the edit's wrong answers are closer to RL's than the base's are after normalizing each model's own concentration (D_fresh in [0.08, 0.6]).",
+  "result": "result-13c355",
+  "verdict": "undecided",
+  "measured": "0.179 [-0.033, 0.334], n 69, adversary value 0.0168",
+  "interval": [
+   -0.033,
+   0.3339
+  ],
+  "range": [
+   0.08,
+   0.6
+  ],
+  "adversary": 0.0168,
+  "n": 69
+ },
+ {
+  "mechanism": "round-16/account-3/deny-account-2-c3",
+  "claim": "The edit has no route preference beyond fewer slips, so its normalized wrong-answer agreement with RL on fresh2026 is no higher than the cued base's (D_fresh in [-0.10, 0.07]).",
+  "result": "result-13c355",
+  "verdict": "undecided",
+  "measured": "0.179 [-0.033, 0.334], n 69, adversary value 0.0168",
+  "interval": [
+   -0.033,
+   0.3339
+  ],
+  "range": [
+   -0.1,
+   0.07
+  ],
+  "adversary": 0.0168,
+  "n": 69
+ }
+]
