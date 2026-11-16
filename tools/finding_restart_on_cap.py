@@ -173,7 +173,7 @@ PAGE = r"""<!doctype html>
    --halo is how strongly a mark that a restart turned right glows. */
 :root {
   color-scheme: light dark;
-  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #8b97a1; --rule: #d3d9de;
+  --paper: #eceef0; --sheet: #fbfcfc; --ink: #101820; --mute: #56636d; --faint: #606c76; --rule: #d3d9de;
   --blue: #1f43d6; --red: #cf2338;
   --glass-hi: #ffffff; --glass: #f9fafb; --glass-lo: #dfe4e8;
   --rim-a: rgba(16, 24, 32, .28); --rim-b: rgba(16, 24, 32, .58); --rim-c: rgba(16, 24, 32, .9);
@@ -181,7 +181,7 @@ PAGE = r"""<!doctype html>
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #5f6c77; --rule: #1c2630;
+    --paper: #080c11; --sheet: #111922; --ink: #e9eff3; --mute: #93a1ad; --faint: #788590; --rule: #1c2630;
     --blue: #8fb1ff; --red: #ff6b7c;
     --glass-hi: #34485e; --glass: #152029; --glass-lo: #090e14;
     --rim-a: rgba(255, 255, 255, .92); --rim-b: rgba(255, 255, 255, .1); --rim-c: rgba(143, 177, 255, .45);
@@ -211,7 +211,7 @@ a { color: inherit; }
 /* The picture, and the one control that changes it */
 .stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
 .count { align-self: center; display: flex; align-items: baseline; gap: 14px; margin: 0 0 6px; color: var(--mute); font-size: clamp(15px, 1.3vw, 20px); line-height: 1.2; }
-.count b { color: var(--ink); font-size: clamp(54px, 5.6vw, 92px); line-height: 1; font-weight: 620; font-stretch: 104%; letter-spacing: -.02em; min-width: 3ch; text-align: right; }
+.count b { color: var(--ink); font-size: clamp(54px, 6.67vw, 104px); line-height: 1; font-weight: 660; font-stretch: 100%; letter-spacing: -.02em; min-width: 3ch; text-align: right; }
 .count .lab { display: flex; flex-direction: column; }
 .count em { font-style: normal; font-size: .86em; }
 svg { width: 100%; max-height: 50vh; display: block; overflow: visible; }
@@ -254,7 +254,7 @@ svg { width: 100%; max-height: 50vh; display: block; overflow: visible; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: calc(clamp(20px, 7vh, 96px) - 39.5px) 0 0 40px; border-left: 1px solid var(--rule);
 }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
@@ -273,17 +273,28 @@ svg { width: 100%; max-height: 50vh; display: block; overflow: visible; }
 .facts li { padding: 8px 0; border-top: 1px solid var(--rule); }
 @keyframes fade { from { opacity: 0; } }
 svg { animation: fade 1s both; }
+/* The way back to the grid of findings: the first line of the side column */
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
+/* Nothing in the side column is cut: a column taller than the window scrolls the whole page, and the picture stays in view */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 620px); }
+  .stage { position: sticky; top: 0; align-self: start; height: calc(100vh - 87.5px); min-height: 532.5px; }
+  .side { overflow-y: visible; }
+}
 @media (max-width: 900px) {
   /* On a phone the order is: the problem, the finding, the picture, the depth. */
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; margin-top: 14px; align-self: flex-start; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; }
   .pane { order: 4; margin-top: 22px; }
   svg { max-height: none; }
+  .switch button { padding: 12px 12px; font-size: 14px; }
   .ring { stroke-width: 3; }
   .key { min-height: 3.2em; align-content: flex-start; }
 }
@@ -314,6 +325,7 @@ svg { animation: fade 1s both; }
     <div class="switch" id="switch" role="group" aria-label="Restart"></div>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>

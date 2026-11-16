@@ -648,7 +648,7 @@ a { color: inherit; }
 
 /* The picture: one plate with every mechanism, the counts and the one control */
 .stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
-svg { width: 100%; max-height: calc(100vh - 190px); display: block; overflow: visible; cursor: default; user-select: none; -webkit-user-select: none; }
+svg { width: 100%; max-height: calc(100vh - 250px); display: block; overflow: visible; cursor: default; user-select: none; -webkit-user-select: none; }
 svg:focus:not(:focus-visible) { outline: none; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 svg * { pointer-events: none; }
@@ -679,10 +679,10 @@ svg * { pointer-events: none; }
 .fh { font-weight: 660; font-stretch: 110%; }
 .kt { fill: var(--mute) !important; font-weight: 520; }
 .rp { fill: var(--mute) !important; font-weight: 500; transition: opacity .4s ease; }
-.ctl { display: flex; align-items: center; gap: 12px; align-self: center; margin-top: 14px; }
-.ctl .lbl { font-size: 13px; color: var(--mute); }
+.ctl { display: flex; flex-direction: column; align-items: center; gap: 4px; align-self: center; margin-top: 12px; }
+.ctl .lbl { font-size: 13px; font-weight: 560; color: var(--mute); }
 .switch { display: inline-flex; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
-.switch button { min-width: 40px; padding: 8px 16px; border-radius: 999px; font-weight: 600; font-size: 14.5px; text-align: center; white-space: nowrap; transition: background .15s ease, color .15s ease; }
+.switch button { min-width: 40px; padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; text-align: center; white-space: nowrap; transition: background .15s ease, color .15s ease; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .switch button[aria-pressed="true"]:hover { color: var(--paper); }
@@ -698,7 +698,7 @@ svg * { pointer-events: none; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: calc(clamp(20px, 7vh, 96px) - 39.5px) 0 0 40px; border-left: 1px solid var(--rule);
 }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
@@ -737,20 +737,30 @@ h3 { margin: 22px 0 0; font-size: 14px; font-weight: 660; font-stretch: 110%; pa
 .g-t { fill: var(--mute) !important; font-weight: 520; }
 .steps { display: flex; justify-content: space-between; margin-top: 16px; font-size: 13px; color: var(--mute); }
 .steps button:hover { color: var(--ink); }
+/* The way back to the grid of findings: the first line of the side column */
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
+/* Nothing in the side column is cut: a column taller than the window scrolls the whole page, and the picture stays in view */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 620px); }
+  .stage { position: sticky; top: 0; align-self: start; height: calc(100vh - 87.5px); min-height: 532.5px; }
+  .side { overflow-y: visible; }
+}
 @media (max-width: 900px) {
   /* On a phone the order is: the problem, the finding, the picture, the depth. */
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; margin-top: 14px; align-self: flex-start; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
   .pane { order: 4; margin-top: 22px; }
   svg { max-height: none; }
-  .ctl { flex-direction: column; gap: 8px; margin-top: 14px; }
+  .ctl { gap: 8px; margin-top: 14px; }
   .switch { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); width: 100%; border-radius: 18px; }
-  .switch button { min-width: 0; padding: 10px 0; font-size: 14px; border-radius: 14px; }
+  .switch button { min-width: 0; padding: 12px 12px; font-size: 14px; border-radius: 14px; }
   .hint { text-align: center; }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -760,7 +770,7 @@ h3 { margin: 22px 0 0; font-size: 14px; font-weight: 660; font-stretch: 110%; pa
 .pl { fill: none; stroke: var(--ring); stroke-width: 1; }
 .kl { fill: none; stroke: var(--ring); stroke-width: 1; opacity: .6; }
 .pk { fill: var(--faint) !important; font-weight: 500; }
-.rounds { display: inline-flex; gap: 16px; margin-right: 22px; }
+.rounds { display: inline-flex; gap: 16px; margin-bottom: 4px; }
 .rounds button { font-size: 13.5px; color: var(--mute); padding: 6px 1px 4px; border-bottom: 1px solid transparent; transition: color .15s ease; white-space: nowrap; }
 .rounds button:hover { color: var(--ink); }
 .rounds button[aria-pressed="true"] { color: var(--ink); font-weight: 640; border-bottom-color: var(--ink); }
@@ -791,6 +801,7 @@ h3 { margin: 22px 0 0; font-size: 14px; font-weight: 660; font-stretch: 110%; pa
     <p class="hint">Click a cause, or press Enter on the picture, to see its claim and its test.</p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
@@ -843,7 +854,7 @@ function geo() {
         setX: 26, setY: 52, bigX: 22, bigY: 140, fb: 88, labX: 26, labY: [178, 202], top: 262, cols: [[30, 450]], pitch: 30,
         ghead: 62, ggap: 26, dot: 6.5, small: 4.6, per: 13, gp: 31, park: [38, 14, 29, 26] }
     : { w: 1000, cx: 500, D: 2200, r: 30, deep: 40, blur: 16, phone: false, fs: 14, fl: 13.5, fc: 34, fh: 15, fk: 13,
-        setX: 58, setY: 66, bigX: 52, bigY: 150, fb: 92, labX: 372, labY: [124, 146], top: 214, cols: [[62, 330], [362, 630], [662, 950]],
+        setX: 58, setY: 66, bigX: 52, bigY: 150, fb: 104, labX: 424, labY: [124, 146], top: 214, cols: [[62, 330], [362, 630], [662, 950]],
         pitch: 22, ghead: 50, ggap: 22, dot: 5.4, small: 3.8, per: 12, gp: 21, park: [70, 40, 14, 18] };
 }
 const V = { c1: 1, s1: 0, c2: 1, s2: 0, px: 0, py: 0, tx: 0, ty: 0 };

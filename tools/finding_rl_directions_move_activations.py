@@ -328,7 +328,7 @@ a { color: inherit; }
 /* The picture: one plate with one mark per weight edit, the readout beside the chart, and the one control under it */
 .stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
 .cap0 { margin: 0 0 4px 2.4%; font-size: 13px; line-height: 1.4; color: var(--mute); max-width: 76ch; }
-svg { width: 100%; max-height: calc(100vh - 250px); display: block; overflow: visible; touch-action: pan-y; cursor: default; user-select: none; -webkit-user-select: none; }
+svg { width: 100%; max-height: calc(100vh - 254px); display: block; overflow: visible; touch-action: pan-y; cursor: default; user-select: none; -webkit-user-select: none; }
 svg:focus:not(:focus-visible) { outline: none; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 svg * { pointer-events: none; }
@@ -374,8 +374,8 @@ svg * { pointer-events: none; }
 
 /* The control: one switch of three views */
 .control { align-self: center; display: flex; flex-direction: column; align-items: center; margin-top: 14px; }
-.switch { display: inline-flex; border: 1px solid var(--ink); border-radius: 999px; padding: 3px; }
-.switch button { padding: 7px 18px; border-radius: 999px; font-weight: 600; font-size: 14.5px; white-space: nowrap; transition: background .2s ease, color .2s ease; }
+.switch { display: inline-flex; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
+.switch button { padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .2s ease, color .2s ease; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .hint { margin: 10px 0 0; font-size: 13.5px; color: var(--mute); text-align: center; max-width: 70ch; min-height: 2.8em; }
@@ -391,7 +391,7 @@ svg * { pointer-events: none; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: calc(clamp(20px, 7vh, 96px) - 39.5px) 0 0 40px; border-left: 1px solid var(--rule);
 }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
@@ -425,12 +425,22 @@ svg * { pointer-events: none; }
 .toks.up li { border-color: color-mix(in oklab, var(--blue) 45%, transparent); }
 .steps { display: flex; justify-content: space-between; margin-top: 16px; font-size: 13px; color: var(--mute); }
 .steps button:hover { color: var(--ink); }
+/* The way back to the grid of findings: the first line of the side column */
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
+/* Nothing in the side column is cut: a column taller than the window scrolls the whole page, and the picture stays in view */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 620px); }
+  .stage { position: sticky; top: 0; align-self: start; height: calc(100vh - 87.5px); min-height: 532.5px; }
+  .side { overflow-y: visible; }
+}
 @media (max-width: 900px) {
   /* On a phone the order is: the problem, the finding, the picture, the depth. */
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; margin-top: 14px; align-self: flex-start; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
@@ -440,7 +450,7 @@ svg * { pointer-events: none; }
   svg { max-height: none; }
   .control { width: 100%; }
   .switch { display: grid; grid-template-columns: 1fr 1fr 1fr; border-radius: 22px; width: 100%; }
-  .switch button { text-align: center; white-space: normal; line-height: 1.2; padding: 8px 6px; font-size: 14px; }
+  .switch button { text-align: center; white-space: normal; line-height: 1.2; padding: 12px 12px; font-size: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
@@ -470,6 +480,7 @@ svg * { pointer-events: none; }
     </div>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>

@@ -281,7 +281,7 @@ a { color: inherit; }
 
 /* The picture: one plate holding the readout and the AUROC scale, and the controls under it */
 .stage { min-height: 0; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 40px 0 0; }
-svg { width: 100%; max-height: calc(100vh - 190px); display: block; overflow: visible; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+svg { width: 100%; max-height: calc(100vh - 280px); display: block; overflow: visible; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
 svg text { font-family: inherit; fill: var(--ink); font-stretch: 106%; }
 svg * { pointer-events: none; }
 svg .hit { pointer-events: all; fill: var(--ink); fill-opacity: 0; stroke: none; cursor: pointer; outline: none; }
@@ -314,7 +314,7 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
 .sel { fill: none; stroke: var(--blue); stroke-width: 1.8; }
 .val { fill: var(--ink); font-weight: 600; }
 .lead .val { fill: var(--blue); }
-.big { fill: var(--ink); font-weight: 640; letter-spacing: -.035em; font-stretch: 100%; }
+.big { fill: var(--ink); font-weight: 660; letter-spacing: -.035em; font-stretch: 100%; }
 .l1 { fill: var(--ink); font-weight: 520; }
 .l2 { fill: var(--mute); font-weight: 500; }
 .ccap, .cci { fill: var(--mute); font-weight: 500; }
@@ -325,16 +325,14 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
 .cring { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.4; }
 .clab { fill: var(--mute); font-weight: 520; }
 .vrule { stroke: var(--ink); stroke-width: 1; opacity: .12; }
-.controls { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 10px 26px; margin-top: 14px; }
-.ctl { display: inline-flex; align-items: center; gap: 10px; }
-.ctl > span { font-size: 13px; color: var(--mute); font-weight: 520; }
+.controls { display: flex; flex-direction: column; align-items: center; gap: 8px; margin-top: 12px; }
+.ctl { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.ctl > span { font-size: 13px; line-height: 1.2; color: var(--mute); font-weight: 560; }
 .switch { display: inline-flex; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
-.switch button { padding: 7px 16px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
+.switch button { padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .switch button[aria-pressed="true"]:hover { color: var(--paper); }
-.switch.quiet { border-color: var(--rule); }
-.switch.quiet button { font-size: 13.5px; padding: 5px 13px; font-weight: 560; }
 .hint { align-self: center; margin: 10px 0 0; font-size: 13px; color: var(--mute); text-align: center; max-width: 72ch; min-height: 1.5em; }
 
 /* One drawn entrance, then only the slow sway and what the reader changes */
@@ -348,7 +346,7 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: calc(clamp(20px, 7vh, 96px) - 39.5px) 0 0 40px; border-left: 1px solid var(--rule);
 }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
@@ -382,21 +380,28 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
 .quote .now { display: inline-block; width: 2px; height: 1.15em; margin: 0 2px -0.2em; background: var(--blue); border-radius: 1px; }
 .quote .aft { color: var(--ink); }
 .note { margin: 14px 0 0; font-size: 13.5px; color: var(--mute); max-width: 44ch; }
+/* The way back to the grid of findings: the first line of the side column */
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
+/* Nothing in the side column is cut: a column taller than the window scrolls the whole page, and the picture stays in view */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 620px); }
+  .stage { position: sticky; top: 0; align-self: start; height: calc(100vh - 87.5px); min-height: 532.5px; }
+  .side { overflow-y: visible; }
+}
 @media (max-width: 900px) {
   /* On a phone the order is: the problem, the finding, the picture, the depth. */
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; margin-top: 14px; align-self: flex-start; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: flex; }
   .pane { order: 4; margin-top: 22px; }
   svg { max-height: none; }
-  .controls { order: -1; margin: 0 0 12px; flex-direction: column; align-items: stretch; gap: 8px; }
-  .ctl { justify-content: space-between; }
-  .switch button { padding: 8px 12px; font-size: 14px; }
-  .hint { order: -1; margin: 0 0 10px; text-align: left; }
+  .switch button { padding: 12px 12px; font-size: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
@@ -425,10 +430,11 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
     <p class="hint" id="hint"></p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
-    <p class="paper"><a href="/paper/no-early-warning.pdf">Read the paper (PDF) ›</a></p>
+    <p class="paper"><a href="/paper/no-early-warning.pdf" target="_blank" rel="noopener">Read the paper (PDF) ›</a></p>
   </div>
 </div>
 <script>
@@ -457,7 +463,7 @@ function geo() {
         big: [28, 92, 80], l: [124, 148, 172], fs: 17, con: { x: 28, cap: 236, num: 284, line: 318, lab: 346, ci: 374, x1: 444 },
         ref: 440, top: 456, pitch: 60, sep: 14, tail: 50 }
     : { w: 1000, h: 664, phone: false, a0: 14, r: 30, deep: 40, blur: 16, cx: 500, D: 2200, X: [330, 950],
-        big: [56, 104, 92], l: [136, 158, 180], fs: 14.5, con: { x: 664, cap: 54, num: 98, line: 128, lab: 150, ci: 176, x1: 944 }, vr: 632,
+        big: [56, 104, 111], l: [136, 158, 180], fs: 14.5, con: { x: 664, cap: 54, num: 98, line: 128, lab: 150, ci: 176, x1: 944 }, vr: 632,
         ref: 226, top: 240, pitch: 46, sep: 14, tail: 50, lx: 52 };
 }
 const sx = (g, v) => mix(g.X[0], g.X[1], (v - DOM[0]) / (DOM[1] - DOM[0]));

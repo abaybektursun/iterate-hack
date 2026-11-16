@@ -818,7 +818,7 @@ svg * { pointer-events: none; }
 .bsub { fill: var(--mute) !important; font-weight: 480; }
 .cnt { font-weight: 680; }
 .of { fill: var(--mute) !important; font-weight: 480; }
-.big { font-weight: 660; letter-spacing: -.035em; font-stretch: 100%; fill: var(--blue) !important; }
+.big { font-weight: 660; letter-spacing: -.035em; font-stretch: 100%; }
 .lab { font-weight: 600; }
 .sub { fill: var(--mute) !important; font-weight: 480; }
 .dif { font-weight: 620; }
@@ -845,7 +845,7 @@ svg * { pointer-events: none; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: calc(clamp(20px, 7vh, 96px) - 39.5px) 0 0 40px; border-left: 1px solid var(--rule);
 }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
@@ -883,12 +883,16 @@ svg * { pointer-events: none; }
 .note { margin: 10px 0 0; font-size: 13px; color: var(--mute); max-width: 46ch; }
 .steps { display: flex; justify-content: space-between; margin-top: 16px; font-size: 13px; color: var(--mute); }
 .steps button:hover { color: var(--ink); }
+/* The way back to the grid of findings: the first line of the side column */
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
 @media (max-width: 900px) {
   /* On a phone the order is: the problem, the finding, the picture, the depth. */
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; margin-top: 14px; align-self: flex-start; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
@@ -896,7 +900,7 @@ svg * { pointer-events: none; }
   svg { max-height: none; }
   .control { width: 100%; }
   .switch { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; border-radius: 22px; width: 100%; }
-  .switch button { text-align: center; padding: 10px 6px; font-size: 14px; white-space: normal; line-height: 1.2; }
+  .switch button { text-align: center; padding: 12px 12px; font-size: 14px; white-space: normal; line-height: 1.2; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
@@ -925,6 +929,7 @@ svg * { pointer-events: none; }
     </div>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
@@ -986,7 +991,7 @@ function geo() {
         capY: 352, bigX: 30, bigY: 124, fb: 104, labY: [160, 184], difY: [226, 250, 284, 308], key: [[36, 940], [36, 966], [190, 940]] }
     : { w: 1000, h: 600, cx: 500, cy: 300, D: 2200, a: [24, 18, 976, 582], r: 30, deep: 40, blur: 16,
         x0: 66, x1: 606, rows: 10, top: [120, 272, 424], fn: 16, fs: 15, fc: 18, nameUp: 14,
-        capY: 62, bigX: 650, bigY: 230, fb: 136, labY: [266, 290], difY: [336, 358, 394, 416], key: [[658, 482], [658, 508], [658, 534]] };
+        capY: 62, bigX: 650, bigY: 230, fb: 126, labY: [266, 290], difY: [336, 358, 394, 416], key: [[658, 482], [658, 508], [658, 534]] };
 }
 const pitch = g => (g.x1 - g.x0) / Math.ceil(N / g.rows);
 const place = (g, m, s) => { const p = pitch(g); return [g.x0 + (Math.floor(s / g.rows) + .5) * p, g.top[m] + (s % g.rows + .5) * p]; };
@@ -1025,7 +1030,7 @@ function build() {
       `<text id="bc${k}" font-size="${g.fs}" text-anchor="end"><tspan class="cnt" id="bv${k}" font-size="${g.fc}"></tspan><tspan class="of" id="bo${k}"></tspan></text>`).join("") +
     T("big", "big", g.fb) + T("lab", "lab0", g.fs + 2) + T("sub", "lab1", g.fs) +
     [0, 1, 2, 3].map(i => T(i % 2 ? "sub" : "dif", "d" + i, g.fs)).join("") +
-    CLS.map((c, i) => `<circle class="kd ${c}" id="kd${i}" r="${c === "f" ? 3.2 : 4.4}"/>${T("kl", "kt" + i, g.fs)}`).join("") + "</g>";
+    CLS.map((c, i) => `<circle class="kd ${c}" id="kd${i}" r="${c === "f" ? 3.2 : 4.4}"/>${T("kl", "kt" + i, g.fs)}`).join("") + T("kl", "kt3", g.fs) + "</g>";
   S.el = {}; S.shown = {};
   svg.querySelectorAll("[id]").forEach(e => { S.el[e.id] = e; });
 }
@@ -1088,11 +1093,13 @@ function draw(now) {
   text("d3", done ? iv(ds.rl_plain) : "");
   E.d0.setAttribute("class", pts(0) > 0 ? "dif lit" : "dif");
   [0, 1, 2, 3].forEach(i => at(E["d" + i], proj(g, g.bigX + 4, g.difY[i], 14)));
-  const keys = ["passed the tests", "failed", shown === 0 ? (g.phone ? "program not read" : "program written, not read by the first rule") : (g.phone ? "not read: none now" : "program not read: none under the second rule")];
+  const keys = ["passed the tests", "failed", shown === 0 ? (g.phone ? "program not read" : "program written,\nnot read by the first rule") : (g.phone ? "not read: none now" : "program not read:\nnone under the second rule")];  // the third key takes two lines, so it stays inside the plate
   keys.forEach((label, i) => {
     const q = proj(g, g.key[i][0], g.key[i][1], 8);
     E["kd" + i].setAttribute("cx", f(q[0])); E["kd" + i].setAttribute("cy", f(q[1]));
-    text("kt" + i, label); at(E["kt" + i], [q[0] + 11, q[1]], g.fs * .35);
+    const two = label.split("\n");
+    text("kt" + i, two[0]); at(E["kt" + i], [q[0] + 11, q[1]], g.fs * .35);
+    if (i === 2) { text("kt3", two[1] || ""); at(E.kt3, [q[0] + 11, q[1]], g.fs * 1.6); }
   });
 }
 

@@ -352,7 +352,7 @@ a { color: inherit; }
 
 /* The result of the test, shown from the start */
 .score { position: relative; min-width: 0; display: flex; flex-direction: column; }
-.big { margin: 4px 0 0; font-size: clamp(60px, 6vw, 104px); line-height: .98; font-weight: 660; letter-spacing: -.035em; white-space: nowrap; }
+.big { margin: 4px 0 0; font-size: clamp(60px, 6.67vw, 104px); line-height: .98; font-weight: 660; letter-spacing: -.035em; white-space: nowrap; }
 .big small { font-size: .5em; font-weight: 560; letter-spacing: 0; margin-left: .08em; }
 .blab { margin: 8px 0 0; font-size: 15px; line-height: 1.35; font-weight: 500; max-width: 30ch; }
 .strip { margin-top: 18px; }
@@ -384,7 +384,7 @@ a { color: inherit; }
 .enter .score { animation: fade .8s .5s both; }
 
 /* The words */
-.side { min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none; padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule); }
+.side { min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none; padding: calc(clamp(20px, 7vh, 96px) - 39.5px) 0 0 40px; border-left: 1px solid var(--rule); }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
 .say b { font-weight: 620; white-space: nowrap; }
@@ -402,12 +402,22 @@ a { color: inherit; }
 .facts li { padding: 8px 0; border-top: 1px solid var(--rule); }
 .facts b { color: var(--ink); font-weight: 620; }
 .facts .tryit { color: var(--blue); font-weight: 600; }
+/* The way back to the grid of findings: the first line of the side column */
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; position: static; transform: none; background: none; border: 0; animation: none; }  /* .back is also the plate's back face */
+a.back:hover { color: var(--ink); }
+/* Nothing in the side column is cut: a column taller than the window scrolls the whole page, and the picture stays in view */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 820px); }
+  .stage { position: sticky; top: 0; align-self: start; height: calc(100vh - 83.5px); min-height: 736.5px; }
+  .side { overflow-y: visible; }
+}
 @media (max-width: 900px) {
   /* On a phone: the problem, the finding, the result of the test, the test, the depth. */
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; margin-top: 14px; align-self: flex-start; border-radius: 0; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
@@ -467,6 +477,7 @@ a { color: inherit; }
     </div>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>

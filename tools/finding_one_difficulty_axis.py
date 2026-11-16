@@ -1465,7 +1465,7 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
 .dhalo { fill: var(--blue); fill-opacity: calc(var(--bloom) * .16); }
 .pred { stroke: var(--ink); stroke-width: 1.6; }
 .plab { fill: var(--ink); font-weight: 600; }
-.big { fill: var(--ink); font-weight: 640; letter-spacing: -.035em; font-stretch: 100%; }
+.big { fill: var(--ink); font-weight: 660; letter-spacing: -.035em; font-stretch: 100%; }
 .unit { fill: var(--ink); font-weight: 480; }
 .sub { fill: var(--mute); font-weight: 500; }
 .hd { fill: var(--dot, var(--ink)); }
@@ -1487,7 +1487,7 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: calc(clamp(20px, 7vh, 96px) - 39.5px) 0 0 40px; border-left: 1px solid var(--rule);
 }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
@@ -1515,12 +1515,22 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
 .samples li .ok { color: var(--blue); font-weight: 600; }
 .facts .ans { display: block; color: var(--ink); margin-top: 2px; overflow-wrap: anywhere; }
 .note { margin: 6px 0 0; font-size: 13px; color: var(--faint); max-width: 40ch; }
+/* The way back to the grid of findings: the first line of the side column */
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
+/* Nothing in the side column is cut: a column taller than the window scrolls the whole page, and the picture stays in view */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 640px); }
+  .stage { position: sticky; top: 0; align-self: start; height: calc(100vh - 87.5px); min-height: 552.5px; }
+  .side { overflow-y: visible; }
+}
 @media (max-width: 900px) {
   /* On a phone the order is: the problem, the finding, the control, the picture, the depth. */
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; margin-top: 14px; align-self: flex-start; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
@@ -1555,6 +1565,7 @@ svg .hit:focus-visible { stroke: var(--blue); stroke-width: 1.5; }
     <svg id="svg" role="img"></svg>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
@@ -1604,7 +1615,7 @@ function geo() {
         hx: [36, 440], hy: [292, 430], htitle: 268, hlab: 486, hsame: 506, dot: 2.0, hcols: 3,
         X: [36, 450], fy: 588, fp: 4.4, fh: 3.4, ftitle: 564, fax: 588 + 36 * 4.4 + 24,
         lab: [816, 886, 956], mk: [828, 898, 968], mh: 16, addl: 1032, addy: 1060, addp: 414 / 68, predl: 1096, pr: [1144, 1170] }
-    : { w: 1000, h: 664, cx: 500, cy: 332, D: 2200, a: [20, 14, 980, 650], r: 30, deep: 40, blur: 16, fs: 14, fb: 100,
+    : { w: 1000, h: 664, cx: 500, cy: 332, D: 2200, a: [20, 14, 980, 650], r: 30, deep: 40, blur: 16, fs: 14, fb: 103,
         X: [72, 650], fy: 78, fp: 5.6, fh: 4.2, ftitle: 54, fax: 78 + 36 * 5.6 + 20,
         lab: [342, 394, 446], mk: [352, 404, 456], mh: 14, addl: 506, addy: 530, addp: 578 / 68, predl: 556, pr: [600, 622],
         rx: 704, ry: { cap: 54, big: 146, unit: 182, unit2: 201, sub: 234 },

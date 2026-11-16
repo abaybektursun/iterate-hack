@@ -791,7 +791,7 @@ svg * { pointer-events: none; }
 .flipg { opacity: calc(var(--bloom) * .26 + .06); }
 .kd2 { fill: var(--blue); opacity: calc(var(--bloom) * .26 + .06); }
 .sel { fill: none; stroke: var(--ink); stroke-width: 2; }
-.big { font-weight: 330; letter-spacing: -.035em; font-stretch: 100%; }
+.big { font-weight: 660; letter-spacing: -.035em; font-stretch: 100%; }
 .lab { fill: var(--mute) !important; font-weight: 520; }
 .lab2 { fill: var(--ink) !important; font-weight: 600; }
 .track { stroke: var(--faint); stroke-width: 1.4; opacity: .5; }
@@ -804,7 +804,7 @@ svg * { pointer-events: none; }
 .reftext.b { fill: var(--mute) !important; }
 .kd0 { fill: var(--ink); opacity: .92; } .kd1 { fill: var(--ink); opacity: var(--dot-off); }
 .switch { display: inline-flex; align-self: center; margin-top: 18px; border: 1px solid var(--faint); border-radius: 999px; padding: 3px; }
-.switch button { padding: 8px 20px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
+.switch button { padding: 8px 18px; border-radius: 999px; font-weight: 600; font-size: 15px; white-space: nowrap; transition: background .15s ease, color .15s ease; }
 .switch button:hover { color: var(--blue); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .hint { align-self: center; margin: 10px 0 0; font-size: 13px; color: var(--mute); text-align: center; }
@@ -818,7 +818,7 @@ svg * { pointer-events: none; }
 /* The words */
 .side {
   min-width: 0; min-height: 0; overflow-y: auto; scrollbar-width: none;
-  padding: clamp(20px, 7vh, 96px) 0 0 40px; border-left: 1px solid var(--rule);
+  padding: calc(clamp(20px, 7vh, 96px) - 39.5px) 0 0 40px; border-left: 1px solid var(--rule);
 }
 .problem { margin: 0; color: var(--mute); font-size: clamp(16px, 1.25vw, 20px); line-height: 1.3; max-width: 26ch; }
 .say { margin: 14px 0 0; font-size: clamp(25px, 2.15vw, 40px); line-height: 1.14; font-weight: 300; font-stretch: 102%; letter-spacing: -.016em; max-width: 17ch; }
@@ -845,19 +845,29 @@ svg * { pointer-events: none; }
 .txt .c { color: var(--blue); font-weight: 650; background: var(--chip); border-radius: 3px; }
 .steps { display: flex; justify-content: space-between; margin-top: 14px; font-size: 13px; color: var(--mute); }
 .steps button:hover { color: var(--ink); }
+/* The way back to the grid of findings: the first line of the side column */
+a.back { display: inline-block; font-size: 13px; color: var(--mute); padding: 10px 0; margin: -10px 0 6px; }
+a.back:hover { color: var(--ink); }
+/* Nothing in the side column is cut: a column taller than the window scrolls the whole page, and the picture stays in view */
+@media (min-width: 901px) {
+  .page { height: auto; min-height: max(100vh, 620px); }
+  .stage { position: sticky; top: 0; align-self: start; height: calc(100vh - 87.5px); min-height: 532.5px; }
+  .side { overflow-y: visible; }
+}
 @media (max-width: 900px) {
   /* On a phone the order is: the problem, the finding, the picture, the depth. */
   .page { display: flex; flex-direction: column; height: auto; min-height: 0; padding: 16px 16px 40px; }
   .top { gap: 13px; padding-bottom: 12px; flex-wrap: wrap; }
   .name { font-stretch: 112%; margin-right: 0; }
   .side { display: contents; }
+  a.back { order: 0; margin-top: 14px; align-self: flex-start; }
   .problem { order: 1; margin-top: 20px; max-width: none; }
   .say { order: 2; max-width: 22ch; }
   .stage { order: 3; margin-top: 22px; padding: 0; display: block; }
   .pane { order: 4; margin-top: 22px; }
   svg { max-height: none; }
   .switch { display: flex; margin-top: 16px; }
-  .switch button { flex: 1; text-align: center; padding: 10px 6px; }
+  .switch button { flex: 1; text-align: center; padding: 12px 12px; font-size: 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .enter * { animation: none !important; }
@@ -883,6 +893,7 @@ svg * { pointer-events: none; }
     <p class="hint">Click a dot to see its problem and how both answers begin.</p>
   </div>
   <div class="side">
+    <a class="back" href="/findings">‹ All findings</a>
     <p class="problem" id="problem"></p>
     <p class="say" id="say"></p>
     <div class="pane" id="pane" aria-live="polite"></div>
