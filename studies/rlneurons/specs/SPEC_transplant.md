@@ -151,3 +151,23 @@ coefficient chosen on Think-SFT; nothing is chosen on this host.
   difference whose interval includes 0 is reported as undecided.
 
 Outputs: `results/transplant/host_think-01/` by `analysis/transplant.py` (arms H(0), H(2); references as before).
+
+## Amendment 6 (2026-11-16 00:45 UTC, before the job below): is the Think lineage's reward step aligned with the RL-Zero delta? (board work-001ff1)
+
+Seen in amendment 5: the final Think model (Think-SFT after DPO and RLVR) has more cap hits than Think-SFT (113 against 94.5)
+and a higher share of finished answers right (94.9 % against 88.0 %); the RL-Zero delta moves Think-SFT the other way on both
+(fewer cap hits, lower share). From the two `delta_sum.json` files, ||Think - base||^2 - ||Think-SFT - base||^2 = 2.7, so the
+reward step of the Think lineage, D_T = Think - Think-SFT, is small, of the order of the RL-Zero delta (norm 4.12).
+
+Job: `jobs/delta_align.py --a allenai/Olmo-3-7B-Think@d97e442... --a0 think_sft --b rl_math --b0 base`, weights only.
+
+- H-opposite (the two reward trainings move along shared directions with opposite sign, as their effects on cap hits
+  suggest): overall cosine of D_T with the RL-Zero delta below -0.02, and the median share of D_T inside the RL delta's top-8
+  directions at least 10 times chance.
+- H-unrelated: |overall cosine| under 0.01 and the median share within 3 times chance (the value for Think-SFT - base against
+  the RL delta is -0.002).
+- H-same-sign: cosine above +0.02: both reward trainings move the weights the same way and the opposite effect on cap hits
+  has another cause.
+- Anything between is reported with its numbers and no label.
+
+Output: `results/transplant/align_think-01/delta_align.json` and a readout of the per-matrix medians.
