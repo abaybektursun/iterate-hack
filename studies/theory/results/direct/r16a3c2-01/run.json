@@ -1,0 +1,6 @@
+{
+ "commit_of_inputs_and_spec": "2df6722d32c2439f39e18d06c4ec72bec6521dac",
+ "command": "PYTHONPATH=. uv run --no-project --with numpy --with math-verify==0.9.0 --with antlr4-python3-runtime==4.11 python studies/theory/analysis/direct_r16a3c2.py",
+ "raw_input": "runs/abaybektursun-1115-103050-eae1/answers.jsonl (m21 job abaybektursun-1115-103050-eae1, sha256 2900bc85a4e971128dfe4132d017bb5825ff9888a6a4fdfbe00b8334e3da29d4; copy also in ../iterate-hack-dt-m21q/runs/)",
+ "gpu": "none (offline, stored rows)"
+}
