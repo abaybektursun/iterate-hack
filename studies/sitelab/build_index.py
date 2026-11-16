@@ -43,6 +43,15 @@ PICTURES = [
     ("library", "The reading list, shelved", "One book for each paper the agents read before running anything. Pull one out and it opens on the findings recorded from it. Yes, they did the reading.", "Paper records"),
 ]
 
+# The order of the page: a heading, then the pictures under it.
+GROUPS = [
+    ("The scores", "one-take derby score-terrain tide cabinet problem-field vote-machine token-flow ledger"),
+    ("Inside the model", "model-interior weight-space"),
+    ("The theories", "forecast-range call-it"),
+    ("The work", "crystal physics-board lineage orrery mobile switchboard library gazette"),
+    ("The two days", "time-helix recorder music-box loom repo-city trace-ribbons"),
+]
+
 PAGE = r"""<!doctype html>
 <html lang="en">
 <head>
@@ -94,6 +103,8 @@ a { color: inherit; text-decoration: none; }
 
 .rows { list-style: none; margin: clamp(30px, 6vh, 60px) 0 0; padding: 0; border-bottom: 1px solid var(--rule); }
 .rows li { border-top: 1px solid var(--rule); animation: fade .7s calc(var(--i) * 50ms) both; }
+.rows .group { border-top: 0; padding: 34px 0 10px; font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); }
+.rows .group:first-child { padding-top: 0; }
 .row { display: grid; grid-template-columns: 3.4ch minmax(0, 1fr) auto; gap: 0 18px; align-items: baseline; padding: 15px 0 17px; }
 .row:focus-visible { outline-offset: 2px; border-radius: 4px; }
 .n { color: var(--faint); font-size: 12.5px; transition: color .15s ease; }
@@ -210,9 +221,17 @@ ROW = ('<li style="--i:{i}"><a class="row" href="prototypes/{slug}/">'
        '<span class="src">{src}</span></a></li>')
 
 if __name__ == "__main__":
-    rows = "".join(ROW.format(i=i, n=i + 1, slug=slug, name=name, line=line, src=src,
-                              shot=base64.b64encode((HERE / "prototypes" / slug / "shot.webp").read_bytes()).decode())
-                   for i, (slug, name, line, src) in enumerate(PICTURES))
+    by_slug = {p[0]: p for p in PICTURES}
+    order = [slug for _, slugs in GROUPS for slug in slugs.split()]
+    assert sorted(order) == sorted(by_slug), "every picture belongs to exactly one group"
+    rows, i = "", 0
+    for heading, slugs in GROUPS:
+        rows += f'<li class="group" style="--i:{i}">{heading}</li>'
+        for slug in slugs.split():
+            _, name, line, src = by_slug[slug]
+            shot = base64.b64encode((HERE / "prototypes" / slug / "shot.webp").read_bytes()).decode()
+            rows += ROW.format(i=i, n=i + 1, slug=slug, name=name, line=line, src=src, shot=shot)
+            i += 1
     count = {12: "twelve", 20: "twenty", 21: "twenty-one", 24: "twenty-four", 27: "twenty-seven"}.get(len(PICTURES), str(len(PICTURES)))
     (HERE / "index.html").write_text(PAGE.replace("__ROWS__", rows).replace("__COUNT__", count))
     print(f"wrote index.html, {len(PICTURES)} pictures, {(HERE / 'index.html').stat().st_size // 1024} kB")
