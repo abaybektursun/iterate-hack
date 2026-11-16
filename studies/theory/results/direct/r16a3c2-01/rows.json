@@ -1,0 +1,19 @@
+[
+ {
+  "mechanism": "round-16/account-3/c2",
+  "claim": "An m21 answer (base + Code-RL top-8 at 1x, plain) that does not open deliberatively is still right more often than the plain base's non-deliberative answer to the same problem, by 0.1-0.4.",
+  "result": "result-9cf361",
+  "verdict": "undecided",
+  "measured": "0.105 [-0.013, 0.224], n 76, adversary value 0.352",
+  "interval": [
+   -0.013157894736842105,
+   0.2236842105263158
+  ],
+  "range": [
+   0.1,
+   0.4
+  ],
+  "adversary": 0.3519553072625698,
+  "n": 76
+ }
+]
