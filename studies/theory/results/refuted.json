@@ -246,5 +246,23 @@
   "adversary": 0.49770525242223357,
   "n": 201,
   "added": "2026-11-16T00:11:25Z"
+ },
+ {
+  "mechanism": "round-16/account-3/deny-account-2-c2",
+  "claim": "Under S3 the edit and RL only lower the chance-slip rate, so N(E,R) equals N(B,R) and D lies in [-0.10, 0.07].",
+  "result": "result-088836",
+  "verdict": "refuted",
+  "measured": "0.286 [0.133, 0.444], n 118, adversary 0.151",
+  "interval": [
+   0.1328,
+   0.4439
+  ],
+  "range": [
+   -0.1,
+   0.07
+  ],
+  "adversary": 0.1509,
+  "n": 118,
+  "added": "2026-11-16T00:12:18Z"
  }
 ]
