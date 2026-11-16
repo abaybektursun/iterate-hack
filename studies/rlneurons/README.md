@@ -3327,6 +3327,9 @@ not accepted by the AWS quota and were then dropped. Readout `analysis/released.
   6.1 points is outside the interval. Not a full cell: 164 problems, one sample.
 - At T 0.6 the cell has 10 cap hits at 32,768 and 7 answers the runner counts as loops, against 2 and 0 at T 1.0 on the whole
   set: some looping returns at the lower temperature, as for the base, without a change in right answers.
+- Chinese text (a character in U+4E00 to U+9FFF anywhere in the answer), same 164 problems: 39 answers at T 1.0, 1 at T 0.6,
+  with 121 and 122 right. The switch to Chinese in long answers goes away at the lower temperature and the score does not move,
+  so it is a sign of a failing long answer at T 1.0, not its cause. Counted from the two answers.jsonl files, not in the readout.
 - Together with `results/native/` and `results/cap32/`: of the three differences between this study's Think-SFT rows and the
   model as released (format, sampling, cap), only the cap changes the score.
 
