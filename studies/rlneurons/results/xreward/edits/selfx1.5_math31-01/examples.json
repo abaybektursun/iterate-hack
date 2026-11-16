@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2746,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": ") + c = -458 \\implies -1156 + c = -458 \\implies c = 698\n     \\]\n\n### For Polynomial \\(Q(x)\\):\n1. The general form is \\(Q(x) = -2x^2 + dx + e\\).\n2. Using the points \\((16, 54)\\) and \\((20, 53)\\):\n   - For \\(x = 16\\):\n     \\[\n     -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n     \\]\n   - For \\(x = 20\\):\n     \\[\n     -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n     \\]\n   - Subtracting these equations:\n     \\[\n     (20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = 71.75\n     \\]\n   - Substituting \\(d = 71.75\\) back:\n     \\[\n     16(71.75) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n     \\]\n\n### Final Answer:\n- \\(P(0) = 698\\)\n- \\(Q(0) = -582\\)\n- Therefore, \\(P(0) + Q(0) = 698 + (-582) = 116\\)\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 7,
+  "gold": "227",
+  "extracted_v3": "242",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 13546,
+  "prompt_tail": "roblem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nFind the three-digit positive integer $\\underline{a}\\,\\underline{b}\\,\\underline{c}$ whose representation in base nine is $\\underline{b}\\,\\underline{c}\\,\\underline{a}_{\\,\\text{nine}},$ where $a,$ $b,$ and $c$ are (not necessarily distinct) digits.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": " + 8c\\) by checking possible values of \\(a\\) and finding corresponding \\(b\\) and \\(c\\):\n\n- For \\(a = 2\\), the equation becomes \\(198 = 71b + 8c\\).\n- Solving \\(71b + 8c = 198\\), we find \\(b = 2\\) and \\(c = 7\\) as valid digits.\n\nConverting the number \\(222\\) (base ten) to base nine:\n- \\(222 \\div 9 = 24\\) remainder 6\n- \\(24 \\div 9 = 2\\) remainder 6\n- \\(2 \\div 9 = 0\\) remainder 2\n\nThus, \\(222\\) in base ten is \\(266\\) in base nine. However, the problem states that the base nine representation should be \\(\\underline{b}\\,\\underline{c}\\,\\underline{a}\\), which would be \\(272\\) in base nine. Despite the numerical conversion discrepancy, solving the equation \\(99a = 71b + 8c\\) yields the digits \\(a = 2\\), \\(b = 2\\), and \\(c = 7\\), leading us to conclude that the intended answer is:\n\n\\[\n\\boxed{242}\n\\]"
+ }
+}

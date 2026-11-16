@@ -1,0 +1,22 @@
+{
+ "right": {
+  "problem_index": 0,
+  "gold": "116",
+  "extracted_v3": "116",
+  "score_v3": 1,
+  "cap_hit": false,
+  "n_new": 2886,
+  "prompt_tail": "ne of your response should be the answer to the problem in form Answer: $Answer (without quotes) where $Answer is the answer to the problem.\n\nQuadratic polynomials $P(x)$ and $Q(x)$ have leading coefficients $2$ and $-2,$ respectively. The graphs of both polynomials pass through the two points $(16,54)$ and $(20,53).$ Find $P(0) + Q(0).$\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "plies -1156 + c = -458 \\implies c = 698\n\\]\n\nThus, \\( P(x) = 2x^2 - \\frac{289}{4}x + 698 \\).\n\nFor \\( Q(x) \\):\n1. At \\( x = 16 \\):\n   \\[\n   -2(16)^2 + 16d + e = 54 \\implies -512 + 16d + e = 54 \\implies 16d + e = 566\n   \\]\n2. At \\( x = 20 \\):\n   \\[\n   -2(20)^2 + 20d + e = 53 \\implies -800 + 20d + e = 53 \\implies 20d + e = 853\n   \\]\n\nSubtracting the first equation from the second:\n\\[\n(20d + e) - (16d + e) = 853 - 566 \\implies 4d = 287 \\implies d = \\frac{287}{4}\n\\]\n\nSubstituting \\( d \\) back into the first equation:\n\\[\n16\\left(\\frac{287}{4}\\right) + e = 566 \\implies 1148 + e = 566 \\implies e = -582\n\\]\n\nThus, \\( Q(x) = -2x^2 + \\frac{287}{4}x - 582 \\).\n\nFinally, evaluating \\( P(0) + Q(0) \\):\n\\[\nP(0) = 698 \\quad \\text{and} \\quad Q(0) = -582\n\\]\n\\[\nP(0) + Q(0) = 698 - 582 = 116\n\\]\n\n\\[\n\\boxed{116}\n\\]"
+ },
+ "wrong": {
+  "problem_index": 57,
+  "gold": "928",
+  "extracted_v3": "2744",
+  "score_v3": 0,
+  "cap_hit": false,
+  "n_new": 16047,
+  "prompt_tail": "r: $Answer (without quotes) where $Answer is the answer to the problem.\n\nEach vertex of a regular dodecagon ($12$-gon) is to be colored either red or blue, and thus there are $2^{12}$ possible colorings. Find the number of these colorings with the property that no four vertices colored the same color are the four vertices of a rectangle.\n\nRemember to put your answer on its own line after \"Answer:\"",
+  "answer_tail": "asible. Instead, each pair of rectangles contributes \\(2 \\times 2 \\times 2^4 = 128\\) colorings. For three pairs, this gives \\(3 \\times 128 = 384\\).\n   - **Three Rectangles (|A_i \u2229 A_j \u2229 A_k|)**: All three rectangles must be monochromatic. This gives \\(2^3 = 8\\) colorings.\n\n4. **Applying Inclusion-Exclusion**:\n   \\[\n   \\begin{align*}\n   \\text{Number of invalid colorings} &= \\sum |A_i| - \\sum |A_i \\cap A_j| + \\sum |A_i \\cap A_j \\cap A_k| \\\\\n   &= 1536 - 384 + 8 = 1152.\n   \\end{align*}\n   \\]\n\n5. **Valid Colorings**:\n   Subtract the number of invalid colorings from the total colorings:\n   \\[\n   4096 - 1152 = 2944.\n   \\]\n\nHowever, upon reevaluation and considering the correct application of inclusion-exclusion principles, the correct number of valid colorings is found to be:\n\n\\[\n\\boxed{2744}\n\\]"
+ }
+}

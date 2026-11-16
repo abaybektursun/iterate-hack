@@ -4561,6 +4561,21 @@ in each `edit.json`). Differences are paired over problems, bootstrap 95 %.
   problems is lost. The base scores 164 with 77 cap hits.
 - Not measured: the residual shift of these three edits (xshift ran only the full and random edits), and a second sample.
 
+#### No dial from the base's own top directions (amendment 13, work-c967ad)
+
+Branch `sharedsub` only. Recipe `self`: the base matrix's own top 8 singular vectors with RL-Zero Math 3.1's singular values, so
+the addition norm is the top-8 edit's (1.9038, 0.111 %; `edit.json`). hard328 (n = 328), cue, seed 3000000, one sample each;
+paired bootstrap 95 %; per-problem rows `results/xreward/pairing/rows_self.jsonl`.
+
+| Edit | Right | Cap hits | Minus random edit, points | Minus RL's 8 directions, points | Run folder under `results/xreward/edits/`, job |
+|---|---|---|---|---|---|
+| base's own top 8 at 1.5 | 155 | 78 | -1.2 [-5.5, 3.0] | -14.6 [-19.2, -9.8] | `selfx1.5_math31-01/`, `abaybektursun-1115-173055-e06a` |
+| base's own top 8 at -1.5 | 168 | 66 | +2.7 [-1.5, 6.7] | -10.7 [-14.9, -6.7] | `selfxm1.5_math31-01/`, `abaybektursun-1115-173111-3e47` |
+
+- V1 held: both cells are in the predicted ranges (150 to 172 right, 60 to 90 cap hits); references: RL's directions 203 and 25,
+  random 159 and 74, base 164 and 77. Directions that the next layer reads strongly (xlisten: 3.25) do not give the dial; RL's
+  specific pairs do.
+
 #### xshift: the edits in activation space (spec `specs/SPEC_xshift.md`, branch `trace`)
 
 The claim "edits that are orthogonal in weight space shift the residual stream along one shared direction, whose projection
