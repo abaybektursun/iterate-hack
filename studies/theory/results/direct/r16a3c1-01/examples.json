@@ -1,0 +1,37 @@
+{
+ "note": "Rows of the statistic. 'right': a non-deliberative step-100 sample scored right (T3 wrong, u-t > 0); 'wrong': one scored wrong.",
+ "right": {
+  "problem_index": 12,
+  "gold": "284",
+  "t3": {
+   "right": 0,
+   "extracted_v3": null,
+   "start": " without quotes, and now you can locate your answer and see it."
+  },
+  "step100_quick_sample": {
+   "sample": 2,
+   "right": 1,
+   "extracted_v3": "284",
+   "first_240": " (do not write \"$Answer: 122$\" but \"Answer: $122$\")\n\nOkay, let's see. The problem is asking for the sum of the proper divisors of the sum of the proper divisors of 284. Hmm. First, I need to figure out what the proper divisors of 284 are, t",
+   "last_300": "2, 44, 55, and 110.\n   - Proper divisors (excluding 220) are 1, 2, 4, 5, 10, 11, 20, 22, 44, 55, and 110.\n   - Sum of these proper divisors: \\(1 + 2 + 4 + 5 + 10 + 11 + 20 + 22 + 44 + 55 + 110 = 284\\).\n\nThus, the sum of the proper divisors of the sum of the proper divisors of 284 is \\(\\boxed{284}\\).",
+   "n_new": 3148
+  }
+ },
+ "wrong": {
+  "problem_index": 5,
+  "gold": "42",
+  "t3": {
+   "right": 1,
+   "extracted_v3": "42",
+   "start": " (ex: Answer: 15/2)\n\nTo determine the perimeter of the regular hexagon, we need to find the length of one side of the hexagon first.\n\n1. **Understand the relationship between the equilateral triangle and the hexagon:**\n   - A regular hexago"
+  },
+  "step100_quick_sample": {
+   "sample": 0,
+   "right": 0,
+   "extracted_v3": null,
+   "first_240": "",
+   "last_300": "",
+   "n_new": 0
+  }
+ }
+}

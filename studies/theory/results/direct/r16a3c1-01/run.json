@@ -1,0 +1,12 @@
+{
+ "commit": "f96f2bd237f57e2fc257db58fb752ebe8f667edf",
+ "where": "laptop, stored rows only, no model forward pass",
+ "command": "PYTHONPATH=. uv run --no-project --with numpy --with math-verify==0.9.0 --with antlr4-python3-runtime==4.11 python studies/theory/analysis/direct_r16a3c1.py",
+ "inputs": [
+  "studies/rlneurons/results/rln4/t1_t3_items-01/per_problem.json",
+  "studies/rlneurons/results/ckptcue/s0100_plain-01/per_problem.json",
+  "studies/rlneurons/results/ckptcue/s0100_plain_s123-01/rows.jsonl",
+  "/Users/abaybektursun/projects/iterate-hack-ckpt/runs/abaybektursun-1115-064532-6a2f/answers.jsonl",
+  "runs/abaybektursun-1115-102945-9b20/answers.jsonl (Modal Volume, gpu.py get)"
+ ]
+}
