@@ -1,0 +1,81 @@
+{
+ "test": "round-16/account-2/c1",
+ "statistic": "Q = median over matrices of [cap_left(TS>M31)/cap_right(TS>M31)] / [cap_left(M30>M31)/cap_right(M30>M31)]",
+ "adversary": {
+  "value": 1.626146392763311,
+  "how": "per matrix q_alt = ((8/d_out)/cap_right(TS>M31)) / (cap_left(M30>M31)/cap_right(M30>M31)), d_out = shape[0]; median over 224 matrices; cap_left of Think-SFT not read. Exactly as the plan."
+ },
+ "value": 2.4001432254183754,
+ "interval90": [
+  2.1639500624937185,
+  2.612089459527002
+ ],
+ "n": 224,
+ "unit": "matrix (bootstrap 10000, default_rng(16))",
+ "ranges": {
+  "account-2": [
+   0.05,
+   0.7
+  ],
+  "null": [
+   0.85,
+   1.25
+  ]
+ },
+ "matrices_with_q_le_0.7": 2,
+ "by_module": {
+  "q": {
+   "Q": 1.4687865686782047,
+   "Q_alt": 0.26129068256839005,
+   "n": 32
+  },
+  "k": {
+   "Q": 1.5775257330661225,
+   "Q_alt": 0.26760531650042796,
+   "n": 32
+  },
+  "v": {
+   "Q": 4.424862373888766,
+   "Q_alt": 2.330213349484264,
+   "n": 32
+  },
+  "o": {
+   "Q": 5.91939207976097,
+   "Q_alt": 2.6643707097832863,
+   "n": 32
+  },
+  "gate": {
+   "Q": 2.170950177789571,
+   "Q_alt": 2.016767183808212,
+   "n": 32
+  },
+  "up": {
+   "Q": 1.7979744785500613,
+   "Q_alt": 1.5540403408727133,
+   "n": 32
+  },
+  "down": {
+   "Q": 8.139504248026345,
+   "Q_alt": 3.0496783306998188,
+   "n": 32
+  }
+ },
+ "chance_multiples": {
+  "think_sft": {
+   "median_left_x_chance": 2.16750592,
+   "median_right_x_chance": 4.193344
+  },
+  "math30": {
+   "median_left_x_chance": 7.94157744,
+   "median_right_x_chance": 39.6399616
+  },
+  "code31": {
+   "median_left_x_chance": 7.1882928,
+   "median_right_x_chance": 22.605542399999997
+  }
+ },
+ "code31_in_place_of_think_sft_Q": 1.3963008975787075,
+ "departures": "none",
+ "raw_rows_read": "10 rows (every 23rd matrix) printed and read: all 4 capture shares positive and finite in all 224, no duplicated matrix names, shapes [d_out, d_in] as expected. Generation checks (cap hits, empty answers, extraction) do not apply: inputs are weight-change capture shares from one job. Q > 1 because Math 3.0's capture is input-heavy (median right 39.6x chance vs left 7.9x), more than Think-SFT's (4.2x vs 2.2x); q is above 1 in v, o, down, gate, up and near 1.5 in q, k. One cap_left value of Think-SFT (layer 0 q) was seen while inspecting the file layout before the adversary run.",
+ "input": "studies/theory/data/direct_host/cap_v1.json"
+}

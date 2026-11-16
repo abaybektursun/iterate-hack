@@ -1,0 +1,10 @@
+{
+ "spec": "studies/theory/specs/SPEC_direct_r16a2c1.md",
+ "commit": "c0e5918bfaa9b06df183e4da9233b796ca9ef1e9",
+ "board": "work-48eb91",
+ "command": "uv run --no-project --with numpy --with math-verify==0.9.0 --with antlr4-python3-runtime==4.11 python studies/theory/analysis/direct_r16a2c1.py",
+ "inputs": [
+  "studies/theory/data/direct_host/cap_v1.json"
+ ],
+ "note": "commit is the spec commit; the script and results are committed together in the next commit"
+}

@@ -1,0 +1,58 @@
+[
+ {
+  "counted": "q at or below 0.7 (inside account-2's range)",
+  "name": "model.layers.0.self_attn.k_proj.weight",
+  "shape": [
+   4096,
+   4096
+  ],
+  "input": {
+   "think_sft>math31": {
+    "cap_left": 0.0597743,
+    "cap_right": 0.0310063,
+    "cap_both": 0.000929963
+   },
+   "math30>math31": {
+    "cap_left": 0.175476,
+    "cap_right": 0.0565339,
+    "cap_both": 0.0100448
+   }
+  },
+  "output": {
+   "r_TS": 1.9278114447709014,
+   "r_M30": 3.103907566964246
+  },
+  "score": {
+   "q": 0.6210917700285717,
+   "q_alt": 0.02029417096205316
+  }
+ },
+ {
+  "counted": "q near 1 (inside the null's range)",
+  "name": "model.layers.3.self_attn.k_proj.weight",
+  "shape": [
+   4096,
+   4096
+  ],
+  "input": {
+   "think_sft>math31": {
+    "cap_left": 0.0276233,
+    "cap_right": 0.0136146,
+    "cap_both": 0.000307462
+   },
+   "math30>math31": {
+    "cap_left": 0.0915448,
+    "cap_right": 0.044982,
+    "cap_both": 0.00527121
+   }
+  },
+  "output": {
+   "r_TS": 2.0289468658645866,
+   "r_M30": 2.0351429460673156
+  },
+  "score": {
+   "q": 0.9969554570037932,
+   "q_alt": 0.07049044201672261
+  }
+ }
+]
