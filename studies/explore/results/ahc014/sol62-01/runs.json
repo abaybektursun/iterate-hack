@@ -1,0 +1,104 @@
+{
+ "fnf-s0": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "fnf",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-6.2-sol",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/sol62-01/fnf-s0",
+   "commit": "92715754d85c03cf172997ebe127a5f62c783e28",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy fnf --budget 40 --seed 0 --model gpt-6.2-sol --out runs/explore/ahc014/sol62-01/fnf-s0"
+  },
+  "metrics": {
+   "strategy": "fnf",
+   "task": "ahc014",
+   "seed": 0,
+   "model": "gpt-6.2-sol",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.831869,
+   "best_id": "s0036",
+   "best_test": 0.795906,
+   "spent": {
+    "prompt_tokens": 626423,
+    "completion_tokens": 235138,
+    "usd": 3.6042259999999997
+   },
+   "valid_share": 0.975
+  }
+ },
+ "forget-s0": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "forget",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-6.2-sol",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/sol62-01/forget-s0",
+   "commit": "92715754d85c03cf172997ebe127a5f62c783e28",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy forget --budget 40 --seed 0 --model gpt-6.2-sol --out runs/explore/ahc014/sol62-01/forget-s0"
+  },
+  "metrics": {
+   "strategy": "forget",
+   "task": "ahc014",
+   "seed": 0,
+   "model": "gpt-6.2-sol",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.845553,
+   "best_id": "s0035",
+   "best_test": 0.76435,
+   "spent": {
+    "prompt_tokens": 356817,
+    "completion_tokens": 227424,
+    "usd": 2.987874
+   },
+   "valid_share": 0.875
+  }
+ },
+ "single-s0": {
+  "run": {
+   "task": "ahc014",
+   "strategy": "single",
+   "budget": 40,
+   "seed": 0,
+   "model": "gpt-6.2-sol",
+   "k": 4,
+   "branch_steps": null,
+   "flushes": 0,
+   "list_model": null,
+   "out": "runs/explore/ahc014/sol62-01/single-s0",
+   "commit": "92715754d85c03cf172997ebe127a5f62c783e28",
+   "command": "/Users/ali/code/iterate-hack-ali-explore/studies/explore/jobs/run_strategy.py --task ahc014 --strategy single --budget 40 --seed 0 --model gpt-6.2-sol --out runs/explore/ahc014/sol62-01/single-s0"
+  },
+  "metrics": {
+   "strategy": "single",
+   "task": "ahc014",
+   "seed": 0,
+   "model": "gpt-6.2-sol",
+   "budget": 40,
+   "n": 40,
+   "starter_score": 0.221686,
+   "best_val": 0.83681,
+   "best_id": "s0019",
+   "best_test": 0.80841,
+   "spent": {
+    "prompt_tokens": 4792985,
+    "completion_tokens": 271024,
+    "usd": 12.296210000000002
+   },
+   "valid_share": 1.0
+  }
+ }
+}

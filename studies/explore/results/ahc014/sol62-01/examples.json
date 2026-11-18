@@ -1,0 +1,18 @@
+{
+ "scored_right": {
+  "run": "forget-s0",
+  "id": "s0035",
+  "branch": "e3",
+  "idea": "This version searches several distinct layouts in parallel and makes removed rectangles compete with new moves during regrowth, so a repair can recover useful branches without immediately restoring their blockers.",
+  "score": 0.845553,
+  "msg": "per-case V/V_best: 0.866, 0.693, 0.940, 0.884, 0.844"
+ },
+ "scored_wrong": {
+  "run": "forget-s0",
+  "id": "s0001",
+  "branch": "e0",
+  "idea": "Replace the empty baseline with a bitset-based rectangle generator, then search randomized greedy orders and rebuild promising suffixes under a measured time budget.",
+  "score": null,
+  "msg": "case 1: exit 1; stderr: ers/br/22g183rn3978_vgc7djdlvf00000gn/T/tmp0xoeo3iz/solution.py\", line 241, in main\n    score, ops = run(prefix, params)\n                 ^^^^^^^^^^^^^^^^^^^\n  File \"/var/folders/br/22g183rn3978_vgc7djdlvf00000gn/T/tmp0xoeo3iz/solution.py\", line 65, in run\n    dil = [k ** (-exponent) for k in range(2 * n + 1)]\n           ~~^^~~~~~~~~~~~~\nZeroDivisionError: 0.0 cannot be raised to a negative power\n"
+ }
+}

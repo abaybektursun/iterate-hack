@@ -145,6 +145,27 @@ Plan written before the runs: `specs/seeds-ahc014-swe2.md`. Seed 0 from swe2-01 
   rule fired once; basin (1 flush) and randflush (1 flush) are the same arm in practice (0.571 vs 0.573). The
   basin trigger is not tested until the judge's granularity is calibrated (it lumped all 40 into one basin before).
 
+### ahc014/sol62-01 (gpt-6.2-sol, 3 arms, 1 seed, 40 submissions, 18.88 USD, 2026-11-17)
+
+Spec `specs/frontier-ahc014-sol62.md` (before the runs). `results/ahc014/sol62-01/` (compare.json, runs.json);
+examples: best forget-s0 s0035 0.8456, invalid forget-s0 (crash). Starter 0.2217; best of every earlier
+40-submission run of this study (SWE-2) 0.637.
+
+| Arm | Best (val) | Held-out test | Best at 10 / 20 / 30 / 40 | Last new best | At 2.99 USD | Valid | USD |
+|---|---|---|---|---|---|---|---|
+| single | 0.837 | 0.808 | 0.815 / 0.837 / 0.837 / 0.837 | submission 20 | 0.820 | 40/40 | 12.30 |
+| fnf | 0.832 | 0.796 | 0.784 / 0.808 / 0.810 / 0.832 | submission 37 | 0.810 | 39/40 | 3.60 |
+| forget | 0.846 | 0.764 | 0.798 / 0.821 / 0.824 / 0.846 | submission 36 | 0.846 | 35/40 | 2.99 |
+
+- Prediction (anchoring account) refuted: the single chat ends within 0.02 of both flush arms (0.837 vs 0.832 and
+  0.846) and has the best held-out test score. The three arms differ by 0.014 on validation, 1 seed each.
+- What does differ: the single chat set no new best in submissions 21-40 and its last six scores fall (0.811 to
+  0.783), while both flush arms still improved at 36-37; and it cost 3.4 to 4.1 times more (its last prompt was
+  260k tokens, forget's 21k). Its second 20 submissions cost about 9 USD and gained nothing.
+- forget's validation lead does not hold on the held-out cases (0.764, the lowest), so its 0.846 is partly a fit
+  to the 5 validation cases.
+- Weak points: 1 seed; one task; the plateau of the single chat is one run.
+
 ### label/pilot-01 (label pilot, 4 model tiers, 2 tasks, 80 calls, 2.29 USD, 2026-11-17)
 
 Spec `specs/label-pilot.md` (before the runs). Every call shows the same two programs A and B (different methods,
