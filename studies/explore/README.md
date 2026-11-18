@@ -145,7 +145,7 @@ Plan written before the runs: `specs/seeds-ahc014-swe2.md`. Seed 0 from swe2-01 
   rule fired once; basin (1 flush) and randflush (1 flush) are the same arm in practice (0.571 vs 0.573). The
   basin trigger is not tested until the judge's granularity is calibrated (it lumped all 40 into one basin before).
 
-### label/pilot-01 (label pilot, 4 model tiers, 2 tasks, 80 calls, 2.24 USD, 2026-11-17)
+### label/pilot-01 (label pilot, 4 model tiers, 2 tasks, 80 calls, 2.29 USD, 2026-11-17)
 
 Spec `specs/label-pilot.md` (before the runs). Every call shows the same two programs A and B (different methods,
 close scores, `data/label_pilot_v1/`); only which one is called "the CURRENT PROGRAM" changes. Per task and label:
