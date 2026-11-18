@@ -1,0 +1,20 @@
+{
+ "ahc014": {
+  "scores": {"A": 0.5706, "B": 0.5515},
+  "source": {"A": "runs/explore/ahc014/swe2-01/basin-s0 s0039", "B": "runs/explore/ahc014/swe2-01/basin-s0 s0038"},
+  "menu": {
+   "A": "Destroy-and-repair local search: keep one complete solution, repeatedly remove a random subset of its rectangles (and those that depend on them) and regrow greedily; keep the result if it is better.",
+   "B": "Randomized greedy restarts: build many complete solutions from scratch, choosing each next rectangle at random with a bias toward short perimeters; keep the best solution.",
+   "C": "Beam search over partial constructions: keep several partial solutions, expand each with a few candidate rectangles, and prune by accumulated weight.",
+   "D": "Simulated annealing over the sequence of operations with insert and delete moves and a temperature schedule."}
+ },
+ "circles26": {
+  "scores": {"A": 2.5832, "B": 2.5936},
+  "source": {"A": "runs/explore/circles26/ksweep-01/assign-k8-s0 s0001", "B": "runs/explore/circles26/assign-01/assign_mini-s0 s0029"},
+  "menu": {
+   "A": "Simulated annealing over centers and radii: random local moves of one or a few circles from a structured start, accepting by a temperature rule, with radius tightening.",
+   "B": "Template library: build packings from structured templates (boundary layers and interior rings), fit a few template parameters, then relax and polish locally.",
+   "C": "Constrained nonlinear optimization of all centers and radii (for example SLSQP) from several starting layouts.",
+   "D": "Greedy insertion: place circles one at a time, each the largest that fits in the largest remaining gap, then repair locally."}
+ }
+}
