@@ -38,7 +38,8 @@ CLAUDE_SLOTS = 4  # concurrent Claude Code CLI calls
 DEVIN_SLOTS = 6  # concurrent Devin CLI calls (the Pro plan allows 10 sessions)
 SLOTS = 6  # programs scored at once across all runs on this machine (8 cores), so CPU contention is the same for every arm
 SLOT_DIR = pathlib.Path(tempfile.gettempdir()) / "explore-score-slots"
-PRICES = {"gpt-5.4-mini": (0.75, 4.5), "gpt-5.4-nano": (0.2, 1.25), "gpt-6.1-sol": (2.0, 10.0),  # $/1M in, out; unverified
+PRICES = {"gpt-5.4-mini": (0.75, 4.5), "gpt-5.4-nano": (0.2, 1.25), "gpt-6.1-sol": (2.0, 10.0), "gpt-6.2-sol": (2.0, 10.0),  # 6.2: developers.openai.com/api/docs/pricing, read 2026-11-17
+           # $/1M in, out; unverified
           "swe-1.7": (0.5, 2.5), "swe-1.6": (0.5, 2.5)}  # Cognition, from the LiteLLM cost map; unverified
 
 
