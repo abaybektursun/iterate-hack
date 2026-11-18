@@ -145,6 +145,35 @@ Plan written before the runs: `specs/seeds-ahc014-swe2.md`. Seed 0 from swe2-01 
   rule fired once; basin (1 flush) and randflush (1 flush) are the same arm in practice (0.571 vs 0.573). The
   basin trigger is not tested until the judge's granularity is calibrated (it lumped all 40 into one basin before).
 
+### label/pilot-01 (label pilot, 4 model tiers, 2 tasks, 80 calls, 2.24 USD, 2026-11-17)
+
+Spec `specs/label-pilot.md` (before the runs). Every call shows the same two programs A and B (different methods,
+close scores, `data/label_pilot_v1/`); only which one is called "the CURRENT PROGRAM" changes. Per task and label:
+1 ranking call over a 4-method menu, 2 free calls, 1 call assigned the top-ranked method, 1 the runner-up.
+`results/label/pilot-01/summary.json` (every call without reply text; `analysis/label_pilot_summary.py`), one free
+program per model and task saved next to it. Raw: `runs/explore/<task>/label-pilot-01[-<model>]/`. Methods of the
+free calls read by hand from code and idea lines (16 programs per task).
+
+| Model | ahc014: top-ranked (A current / B current) | ahc014: free calls implement | ahc014 free scores | circles26: top-ranked | circles26: free calls implement |
+|---|---|---|---|---|---|
+| gpt-5.4-nano | B / A | A, B, A, A (all invalid) | none valid | B / B | B, B, other, other |
+| gpt-5.4-mini | A / A | B, B, B, B | 0.538, 0.530, 0.533, invalid | B / B | B, B, B, one unclear |
+| gpt-6.1-sol | A / A | A, A, A, A | 0.680, 0.643, 0.694, 0.709 | C / C | C, C, C, C (2.631-2.636) |
+| gpt-6.2-sol | A / A | A, A, A, A | 0.752, 0.757, 0.751, 0.772 | C / C | C, C, C, C (2.636) |
+
+(ahc014 A = destroy-and-repair 0.571, B = randomized greedy restarts 0.552; circles26 A = simulated annealing 2.583,
+B = template library 2.594, C = constrained optimizer, not shown as a program.)
+
+- H2 (label) refuted at every tier: no model's free calls follow the label. Each model builds on the same program
+  under both labels. The label only changes the wording of the IDEA line ("replace the current sweeps ...").
+- H1 (own advice): gpt-6.1-sol and gpt-6.2-sol implement their top-ranked method in 16 of 16 free calls. Only
+  gpt-5.4-mini on ahc014 departs from it: ranks A first twice, builds on B in 4 of 4 free calls (0.530-0.538);
+  assigned A it scores 0.577 once and is invalid once. Stop rule not met: no 12-task run of this design.
+- One call of gpt-6.2-sol reaches 0.75-0.77 on ahc014 from two programs at 0.55-0.57. The best of all 40-submission
+  SWE-2 runs of this study is 0.637.
+- Weak points: 2 tasks, 2 free calls per cell; circles26 is at its ceiling for both sol models; the similarity
+  measure reads "neither" for every sol program (they rewrite everything), so their methods are hand-read.
+
 ### circles26/ksweep-01 (agent-count sweep of assigned methods, gpt-5.4-mini, 1 seed per cell, 40 submissions, 2.4 USD)
 
 Spec `specs/ksweep-circles26-assign.md` (written before the runs). Files `results/circles26/ksweep-01/`; examples:
